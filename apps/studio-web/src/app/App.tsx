@@ -1192,6 +1192,7 @@ export default function App() {
             setModal("");
           }}
           onStart={start}
+          projectId={project.projectId}
           startBlockedReason={
             startBlocked(project.projectId) ? unresolvedStartReason : undefined
           }

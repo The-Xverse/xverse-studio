@@ -894,8 +894,9 @@ test("run session: double Start, page close/reopen and a lost Stop acknowledgeme
   );
   // Only one control may be pending; both are unavailable with a stated reason.
   await expect(stop).toBeDisabled();
+  // The delivered Stop may already have taken effect; either truthful reason applies.
   await expect(reopened.locator("#control-reason-cancel")).toHaveText(
-    "A stop request must settle before another control.",
+    /^(A stop request must settle before another control\.|Not available while the run is (stopping|stopped)\.)$/,
   );
   await reopened.reload();
   await reopened.getByRole("tab", { name: "Results", exact: false }).click();

@@ -4,6 +4,7 @@ import type { Data, Preflight } from "../../api/types";
 import { ApiError } from "../../api/client";
 import { Badge, Json, KeyValues, Modal, statusTone } from "../../app/ui";
 import { admittedStatuses, planIdentity, readinessFacts } from "./readiness";
+import { DiagnosticExplanations } from "../diagnostics/DiagnosticExplanations";
 function text(value: unknown) {
   return typeof value === "string"
     ? value
@@ -27,6 +28,7 @@ export function PreflightReview({
   onRecheck,
   currentRevision,
   startBlockedReason,
+  projectId,
 }: {
   currentRevision: number;
   preflight: Preflight;
@@ -35,6 +37,7 @@ export function PreflightReview({
   onStart: () => Promise<unknown>;
   onRecheck: (providerId: string) => Promise<unknown>;
   startBlockedReason?: string;
+  projectId: string;
 }) {
   const [selectedProvider, setSelectedProvider] = useState(
       typeof preflight.providerId === "string"
@@ -393,6 +396,16 @@ export function PreflightReview({
             <p>No diagnostics reported for this request.</p>
           )}
         </section>
+        <DiagnosticExplanations
+          title="Readiness explanation"
+          emptyText="No blocking findings were recorded for this frozen preflight. Readiness is not runtime health."
+          url={`/projects/${encodeURIComponent(projectId)}/preflights/${encodeURIComponent(preflight.preflightId)}/diagnostics`}
+          refreshKey={`${preflight.preflightId}:${expired}:${currentRevision}`}
+          actions={{
+            recheck_preflight: () =>
+              void perform(() => onRecheck(selectedProvider)),
+          }}
+        />
         <section className="frozen-plan-preview">
           <div className="section-heading">
             <h3>Compiled plan</h3>

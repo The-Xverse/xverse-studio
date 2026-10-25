@@ -22,7 +22,12 @@ from xverse_studio.storage.core import Store, Problem, atomic, canonical, digest
 from xverse_studio.security.files import MAX_BYTES, check_text
 from xverse_studio.projects.service import Projects
 from xverse_studio.runs.service import Runs, ACTIVE
-from xverse_studio.providers.registry import capabilities, descriptors
+from xverse_studio.providers.registry import (
+    capabilities,
+    capability_digest,
+    descriptors,
+)
+from xverse_studio.diagnostics import explain_preflight, explain_run
 from xverse_studio.evidence.reader import read_journal
 from xverse_studio.events import EventStreams
 from xverse_studio.evidence.query import (
@@ -571,6 +576,39 @@ def create_app(
             runId,
             "history",
             evidence_scope=r.get("evidenceScope", "unknown"),
+        )
+
+    @app.get("/api/v1/runs/{runId}/diagnostics")
+    def run_diagnostics(runId: str):
+        r = runs.read(runId)
+        records, integrity = read_journal(runs.directory(runId), r)
+        try:
+            configuration = store.get("snapshot", r["snapshotId"]).get("configuration")
+        except Problem:
+            configuration = None
+        configuration = configuration or {}
+        observer = configuration.get("observerRef")
+        element_refs = configuration.get("elementRefs")
+        return explain_run(
+            r,
+            records,
+            integrity,
+            expected_observers=[observer] if isinstance(observer, str) else [],
+            operations=store.find("operation", "runId", runId),
+            element_refs=[ref for ref in element_refs if isinstance(ref, str)]
+            if isinstance(element_refs, list)
+            else [],
+        )
+
+    @app.get("/api/v1/projects/{projectId}/preflights/{preflightId}/diagnostics")
+    def preflight_diagnostics(projectId: str, preflightId: str):
+        pf = store.get("preflight", preflightId)
+        if store.get("snapshot", pf["snapshotId"]).get("projectId") != projectId:
+            raise Problem("NOT_FOUND", "Requested record was not found.", 404)
+        return explain_preflight(
+            pf,
+            current_revision=projects.read(projectId)["revision"],
+            capability_digest=capability_digest(),
         )
 
     @app.get("/api/v1/runs/{runId}/resync")

@@ -15,6 +15,7 @@ import { ObservationPlot, ObservationTable } from "./ObservationDisplay";
 import { RetentionDialog } from "../retention/RetentionDialog";
 import { FrozenInputs } from "./FrozenInputs";
 import { RunControls } from "../runs/RunControls";
+import { DiagnosticExplanations } from "../diagnostics/DiagnosticExplanations";
 import { projectDisplay } from "../model/projection";
 import type { Project } from "../../api/types";
 export function ResultsView({
@@ -548,6 +549,7 @@ export function ResultsView({
         {[
           "Observations",
           "Events & logs",
+          "Diagnosis",
           "Evidence",
           "Compare",
           "Annotations",
@@ -1015,6 +1017,20 @@ export function ResultsView({
             </div>
           )}
         </section>
+      ) : tab === "Diagnosis" ? (
+        <DiagnosticExplanations
+          title="Run diagnosis"
+          url={`/runs/${encodeURIComponent(run.runId)}/diagnostics`}
+          refreshKey={`${run.stateVersion}:${run.state}:${run.evidence}:${run.cleanup}:${events[events.length - 1]?.sequence ?? ""}`}
+          emptyText="No findings for the evaluated classes. Completion and liveness are not evidence of functional health."
+          actions={{
+            inspect_events: () => setTab("Events & logs"),
+            reconcile_ownership: async () =>
+              onRunUpdated(
+                await api<Run>(`/runs/${encodeURIComponent(run.runId)}`),
+              ),
+          }}
+        />
       ) : tab === "Evidence" ? (
         <section className="panel">
           <div className="section-heading">

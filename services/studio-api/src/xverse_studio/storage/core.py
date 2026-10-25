@@ -145,6 +145,22 @@ class Store:
             )
         ]
 
+    def find(self, kind, field, value, db=None):
+        """Records of one kind whose top-level JSON field equals value."""
+        if db is None:
+            with self.tx() as db:
+                return self.find(kind, field, value, db)
+        if not field.isidentifier():
+            raise ValueError("field must be a plain identifier")
+        return [
+            json.loads(r[0])
+            for r in db.execute(
+                "SELECT body FROM records WHERE kind=? AND json_extract(body, ?)=? "
+                "ORDER BY rowid DESC",
+                (kind, "$." + field, value),
+            )
+        ]
+
     def idempotent(self, principal, route, key, payload, fn):
         if not key or len(key) > 128:
             raise Problem(

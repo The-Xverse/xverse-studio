@@ -1,0 +1,62 @@
+{
+  "candidateBase": "5b8a957",
+  "applicationSourceDigest": "sha256:5a1ffe946c0ebde860b0227358a1ca36bc5162b3e60fd552470caa351f6d5a37",
+  "digestDefinition": "Canonical sorted backend/frontend source hash map; excludes tests/docs",
+  "testHashes": {
+    "tests/contract/test_diagnostics.py": "cf1428a94d502ecb4a9e54e96c24dff691a5007b2c6dc23114c1cf9ef384d132",
+    "tests/e2e/diagnostics.spec.ts": "5165133825957e183ae154ea2b309101a1a8dd7d8bffb523e04fd03b0d3206ed",
+    "tests/e2e/run-reconnect.spec.ts": "3f68c53d5d5fbd02c811fe37de164829a0779cd2aacb4c8e19f5f68cbee71119"
+  },
+  "backend": {
+    "passed": 531,
+    "failed": 0,
+    "command": "validate_spec_package; ruff F821; run_checks.py"
+  },
+  "frontend": {
+    "typecheck": "passed",
+    "build": "passed"
+  },
+  "browser": {
+    "passed": 47,
+    "failed": 0,
+    "mode": "--performance",
+    "candidateUnchangedDuringRun": true,
+    "measurements": {
+      "history-performance": {
+        "repetitions": 30,
+        "medianMs": 429.9,
+        "p95Ms": 461.5
+      },
+      "model-performance.openAndValidationPresentation": {
+        "repetitions": 30,
+        "medianMs": 484.8,
+        "p95Ms": 534.9
+      },
+      "model-performance.selectionAndInspector": {
+        "repetitions": 30,
+        "medianMs": 21.6,
+        "p95Ms": 33.6
+      }
+    },
+    "thresholdsMs": {
+      "history": 2000,
+      "modelOpen": 3000,
+      "selection": 150
+    }
+  },
+  "independentReview": "independent-review.md (9 confirmed findings repaired before this run)",
+  "tasksCompleted": [
+    "T031",
+    "T032"
+  ],
+  "componentCompleted": 24,
+  "scope": "Owned reference and recorded-fixture evidence on Linux. 'lost_connection' explains loss of verified ownership of the owned workload; communication-link loss explanations need an admitted provider emitting connection.observed (none admitted). Live failure repetition (US4 independent test), AC-005/007/011 environment clauses, Windows and physical evidence remain open.",
+  "milestonesAccepted": [],
+  "windows": "BLOCKED_USER_REQUEST",
+  "environment": {
+    "os": "linux x64",
+    "python": "3.13.13",
+    "node": "24.22.1",
+    "browser": "Chromium 156.0.8078.4"
+  }
+}

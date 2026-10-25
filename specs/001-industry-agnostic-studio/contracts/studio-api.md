@@ -41,6 +41,8 @@
 | `GET /runs/{runId}/events?after={cursor}` | SSE stream; see [run-events.md](run-events.md) | M1 |
 | `GET /runs/{runId}/evidence` | Cursor-paged evidence metadata, integrity/availability and authorized download handles | M1 |
 | `GET /runs/{runId}/observations` | Bounded observer/time range; explicit clock/mapping and reduction metadata | M1/M4 |
+| `GET /runs/{runId}/diagnostics` | Read-only explanation 1.0: evidence-linked facts, consequences, unconfirmed hypotheses, unknowns and closed next actions; see ADR-0012 | M1 |
+| `GET /projects/{projectId}/preflights/{preflightId}/diagnostics` | Read-only explanation 1.0 of a frozen preflight's coded readiness findings and stale-plan assumptions | M1 |
 | `POST /runs/{runId}/evaluations` | Snapshot-bound definition reference/digest and exact evidence selection; returns immutable evaluation ID and operation | M4 |
 | `GET /runs/{runId}/evaluations` | Cursor-paged definition/input identities, execution status and pass/fail/indeterminate verdicts | M4 |
 | `GET /evaluations/{evaluationId}` | Immutable definition/evaluator/evidence identities, values/units, execution status, verdict and reasons | M4 |
