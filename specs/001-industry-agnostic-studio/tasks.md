@@ -145,3 +145,5 @@ The final task assembles a reviewable release dossier; it does not authorize uns
 ## Current implementation evidence
 
 See [current status](../../docs/implementation/STATUS.md) and each task’s `implementation_evidence` / `implementation_note` in traceability.json. Component completion does not imply a milestone release. Hardware, live providers, native Windows and first-time-user measurements retain their own gates.
+
+Windows installation and test obligations are explicitly **BLOCKED at user request**. The Linux lane continues; original Windows install failure evidence is retained and the CI matrix excludes Windows until resumed.

@@ -8,8 +8,8 @@ own native installation, persistence, process ownership and browser acceptance l
 | Linux backend | Ubuntu 22.04.5 LTS, x86_64; Python 3.13.13; uv 0.12.17 | Available host. Executed test records qualify actual supported scope. |
 | Linux frontend tooling | Selected Node 24.22.1 LTS; official distribution checksum verified during provisioning | Frontend builds use the selected LTS toolchain. Exact commands and package versions are in the retained verification evidence and lockfile. |
 | Linux browser | Chromium 156.0.8078.4, Playwright browser revision 1248 | Browser tests are being recorded against the native Linux backend. Only executed results establish the verified workflow scope. |
-| Windows backend | Native x64 target; edition/release/filesystem/browser environment unavailable | NOT_RUN. No WSL, container or remote-Linux substitute is admitted. |
-| Windows browser | No Windows desktop/browser environment available | NOT_RUN. Linux browser evidence is not native Windows backend evidence. |
+| Windows backend | Windows Server 2022 Datacenter 10.0.20348 x64 native CI was attempted | BLOCKED at user request. Initial dependency checkout failed on an upstream nonportable filename; backend/browser checks NOT_RUN. No WSL/container substitute. |
+| Windows browser | Native Windows browser lane held at user request | BLOCKED; application/browser workflow NOT_RUN. Linux evidence is not Windows evidence. |
 
 No particular Windows edition/release or browser version is advertised as verified without a record
 from that environment. Selecting an edition and documenting its exact installation remains an open
@@ -36,3 +36,5 @@ a PID by itself is not ownership.
 The native launcher is the product entry point. Bash Spec Kit helpers remain optional contributor
 tools and are not called by application startup. OS service registration, remote exposure, automatic
 WSL setup and container runtime setup are not supplied native-core requirements.
+
+Windows installation and tests are explicitly blocked at user request (2026-10-25). The successor CI matrix runs Linux only. Preserve the initial failed install record and require resumed scope before re-enabling the Windows lane.

@@ -28,25 +28,16 @@ On the implementation host all repository, data, build and temporary files resid
 selected loop10 filesystem. Set tool caches and temporary roots there too when provisioning on
 that host; do not redirect application data into another filesystem.
 
-## Provision native Windows (verification pending)
+## Native Windows — blocked
 
-These commands are supplied for native PowerShell; they have not passed the required Windows lane
-in this session. They do not invoke WSL or Bash. Install native Python 3.13.13, Node 24.22.1 and Git,
-then install uv 0.12.17 through the approved native installer or Python package:
+Windows installation and testing are blocked at the user's request. The initial native Server 2022
+installation attempt failed while checking out the pinned XDL dependency repository, which contains
+Windows-invalid filenames. Backend and browser workflows did not run. A prepared public XDL wheel
+workaround is held for later admission; the current dependency lock is unchanged.
 
-```powershell
-py -3.13 -m pip install uv==0.12.17
-uv sync --frozen
-npm ci
-npm run build
-uv run xverse-studio --data-dir .studio-local/data --port 8876
-```
-
-Read the sign-in bootstrap locally with `Get-Content .studio-local/data/bootstrap.json`.
-A Windows browser pointed at the Linux backend does not establish this native lane. The CI matrix
-requests Ubuntu 24.04 and Windows Server 2022; only actual successful jobs qualify those exact hosts.
-Windows desktop/driver support requires separately recorded evidence. Provider availability remains
-independent of Studio support.
+No verified Windows installation procedure is advertised for this candidate. Resume the Windows scope,
+complete native package admission and rerun installation/startup/browser/process/persistence/exchange
+checks before claiming Windows support. WSL or a browser pointed at Linux cannot satisfy that gate.
 
 ## Guided prepared example
 

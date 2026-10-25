@@ -1,4 +1,4 @@
-# ADR-0003: Owned native reference and bounded evidence
+# ADR-0005: Owned native reference and bounded evidence
 
 Status: implemented reference scope; native Windows admission remains pending actual execution.
 

@@ -55,3 +55,51 @@ separately. M2-I02–I05 remain open in this report until their authors repair a
 independent affected verification succeeds. Native Windows, actual independent
 industry implementations, performance and usability gates remain NOT_RUN/BLOCKED;
 this component review cannot declare M2 complete.
+
+## Linux successor closure — 2026-10-25
+
+**Result: all five scoped findings closed on product commit
+`0dd3ea89f6b158849499d0b506b1919d05dfa953`.**
+
+The independent successor probe reran the original owned cases in a fresh,
+uniquely named loop10 temporary directory on native Linux (kernel
+`6.8.0-138-generic`, Python `3.13.13`). No application implementation files were
+changed. All nine reviewed source hashes, including the export, path boundary and
+rerun facade, were unchanged before/after execution. Original failure evidence in
+`composition-probes.json` is retained unchanged. Successor evidence is separate:
+`composition-successor-probes-0dd.json`; its reproducible runner is
+`reproduce_composition_successor.py`.
+
+Executed command from repository root:
+
+```text
+PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 TMPDIR=<loop10-cache>/tmp PYTHONPATH=services/studio-api/src .venv/bin/python evidence/studio/M2-review/reproduce_composition_successor.py
+```
+
+| Finding | Successor outcome |
+|---|---|
+| M2-I01 | Exact profile-bound project export returned HTTP 202 and produced its archive. |
+| M2-I02 | The unchanged hostile imported lock/schema case remained inspectable after import; preflight returned HTTP 422 `PROFILE_CONFLICT`, with no run created. |
+| M2-I03 | Variant generation returned typed `PROJECT_PATH_COLLISION` before commit. Revision remained 1, all original source bytes were unchanged, no duplicate paths existed and the committed project remained intact. |
+| M2-I04 | Ambiguous binding selection returned `SELECTION_AMBIGUOUS` before commit. Revision remained 1 and all source bytes were unchanged. |
+| M2-I05 | Malformed artifact URI returned HTTP 422 `ARTIFACT_ORIGIN_UNSUPPORTED`; normal inert metadata registration remained unavailable for execution. |
+
+Retained positive checks also passed: layout-only changes kept source revision,
+semantic digest and plan digest unchanged; refused unknown-profile binding
+preserved exact source bytes/revision; artifact registration created no run or
+provider/device effect. The successor result is `PASS` for five repair checks and
+three retained boundary checks.
+
+The rerun facade was independently inspected read-only at the recorded source
+hash. It verifies the original snapshot/plan bytes, frozen admitted profile locks
+and current compiler/provider compatibility, persists child identity before any
+native effect, scopes retries by principal and stable operation key, and reconciles
+without replaying unknown starts. Imported evidence and physical/live provider
+labels confer no rerun authority. No new critical issue was found in that inspected
+boundary. Its author's actual rerun tests and the root full-suite results remain
+separate evidence; they were not repeated or claimed as this review's execution.
+
+This closure is **Linux only**. Windows installation and testing were intentionally
+not run, as explicitly directed by the user. It closes M2-I01–M2-I05 only; it does
+not satisfy the remaining M2 milestone gates, independent industry demonstrations,
+performance/usability acceptance, or any hardware/provider claim.

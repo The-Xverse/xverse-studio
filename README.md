@@ -31,9 +31,10 @@ users add elements, connect interfaces, choose realizations, run experiments, an
 ECUs, PLCs, robot controllers, and energy equipment are profile specializations. XDL is canonical;
 Maestro owns execution, X-COM communication contracts, and Argus observation/evidence boundaries.
 
-Studio is a **web application**: a browser UI served by a backend that runs natively on **Linux and
-Windows**. Local operation does not require WSL or a cloud account. Runtime/device providers declare
-their own OS support; an unavailable provider must not prevent editing or inspection.
+Studio targets a **browser UI and native Linux/Windows backends**. This candidate is verified on
+recorded Linux hosts; Windows installation and tests are currently **blocked at user request**, after
+an initial dependency-checkout failure. Local Linux operation needs no WSL or cloud account. Provider
+OS support is declared separately, and unavailable providers preserve authoring/inspection workflows.
 
 ## Specification and implementation evidence
 

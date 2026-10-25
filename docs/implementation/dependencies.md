@@ -37,5 +37,7 @@ This Linux host has a ROS `PYTHONPATH`/pytest plugin environment. Verification r
 path and disables ambient pytest plugin auto-discovery to avoid loading ROS Python 3.10 plugins into
 the pinned Python 3.13 application environment. This is test isolation, not a product dependency.
 
-Native Windows dependency installation is NOT_RUN; locks and a CI lane cannot substitute for its
-actual install/build/start/stop/browser evidence.
+Native Windows dependency installation was attempted on Server 2022 and failed because the full
+pinned Git tree contains nonportable filenames. Windows installation/testing are now BLOCKED at
+user request; backend/browser checks remain NOT_RUN. A portable wheel preparation is held locally
+and is not integrated or a passing native result.

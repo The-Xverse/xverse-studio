@@ -1,7 +1,7 @@
 # Native installation scope
 
-Use [getting started](getting-started.md) for source-checkout Linux commands and native PowerShell
-instructions, with their actual verification status. The foreground launcher installs no OS service.
+Use [getting started](getting-started.md) for source-checkout Linux commands and the current Windows
+hold status. Windows installation/testing are blocked at user request. The foreground launcher installs no OS service.
 No WSL, Bash, container or remote Linux host is part of its runtime startup.
 
 For a reviewed source bundle produced by `scripts/package_studio.py`, verify the distributed archive

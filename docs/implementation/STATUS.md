@@ -58,3 +58,24 @@ and actual native CI results are required for publication/release claims.
 The archive, repository, caches, browser binaries, test scratch directories, built assets and evidence
 on the implementation machine reside on the user's loop10 filesystem. Companion repositories stayed
 read-only; no physical device or arbitrary imported command was operated.
+
+
+## Committed candidate verification and current Windows hold
+
+Candidate `0dd3ea89f6b158849499d0b506b1919d05dfa953`: **224 backend tests passed** on
+native Ubuntu 22.04.5, with captured application/test source hashes unchanged. Its three real browser
+tests passed against the same source: selection p95 32.2 ms, open/validation 587.5 ms and 50,000-event
+history presentation 194.4 ms. The exact commands/environment/raw samples are under
+`evidence/studio/release/`. Native Ubuntu 24.04 CI also passed dependency installation, build, backend
+checks, browser journeys, packaging and clean extraction/startup on that candidate.
+
+The initial Windows Server 2022 Datacenter 10.0.20348 lane **failed installation** because the pinned
+platform repository includes a filename invalid on Windows. Application/browser checks were NOT_RUN.
+At the user's explicit instruction, Windows installation and testing are now **BLOCKED**. The CI matrix
+excludes Windows until that scope is resumed. Its original failure remains in
+`evidence/studio/native-ci/windows-initial-install-failure.json`; passing Linux jobs do not close it.
+
+A byte-verified pure XDL wheel, license/provenance and preparation helper were preserved locally under
+`.studio-local/held-windows-packaging/2026-10-25/` on loop10. They are held work, not integrated into
+`pyproject.toml`/`uv.lock` and not presented as a verified Windows installation. No companion repository
+was modified. The current Linux dependency pin remains unchanged.
