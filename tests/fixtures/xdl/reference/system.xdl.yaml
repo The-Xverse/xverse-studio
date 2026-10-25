@@ -1,0 +1,91 @@
+apiVersion: xverse.io/xdl/v1alpha1
+kind: System
+metadata:
+  namespace: org.xverse.studio.process-control
+  name: reference-loop
+  version: 1.0.0
+  description: Explore a normalized process response, tune the setpoint and
+    compare measured reference observations.
+  provenance:
+    source: urn:xverse:studio:reference
+    revision: 1.0.0
+    maturity: prototype
+    limitations:
+    - Owned executable reference only; no external simulator, device or
+      scientific fidelity claim.
+spec:
+  nodes:
+  - id: controller-node
+    roles:
+    - controller
+  - id: plant-node
+    roles:
+    - plant
+  - id: observer-node
+    roles:
+    - observer
+  componentInstances:
+  - id: controller
+    componentRef:
+      apiVersion: xverse.io/xdl/v1alpha1
+      kind: Component
+      namespace: org.xverse.studio.process-control
+      name: reference-controller
+    nodeId: controller-node
+  - id: plant
+    componentRef:
+      apiVersion: xverse.io/xdl/v1alpha1
+      kind: Component
+      namespace: org.xverse.studio.process-control
+      name: reference-plant
+    nodeId: plant-node
+  interfaces:
+  - id: command
+    direction: bidirectional
+    payloadSchema: urn:xverse:studio:normalized-scalar:v1
+    unitSemantics: '1'
+    compatibility: exact
+  - id: state
+    direction: bidirectional
+    payloadSchema: urn:xverse:studio:normalized-scalar:v1
+    unitSemantics: '1'
+    compatibility: exact
+  endpoints:
+  - id: controller-out
+    ownerId: controller
+    interfaceId: command
+    direction: output
+  - id: plant-in
+    ownerId: plant
+    interfaceId: command
+    direction: input
+  - id: plant-out
+    ownerId: plant
+    interfaceId: state
+    direction: output
+  - id: observer-in
+    ownerId: observer-node
+    interfaceId: state
+    direction: input
+  flows:
+  - id: command-flow
+    sourceEndpointId: controller-out
+    destinationEndpointIds:
+    - plant-in
+    interfaceId: command
+    deliveryIntent: ordered
+    timeDomainId: simulation-time
+  - id: state-flow
+    sourceEndpointId: plant-out
+    destinationEndpointIds:
+    - observer-in
+    interfaceId: state
+    deliveryIntent: ordered
+    timeDomainId: simulation-time
+  timeDomains:
+  - id: simulation-time
+    clockClass: simulation
+    epoch: '0'
+    rate: '1'
+    monotonic: true
+  defaultTimeDomainId: simulation-time

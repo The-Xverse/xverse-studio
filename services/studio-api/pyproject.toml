@@ -1,0 +1,25 @@
+[build-system]
+requires = ["hatchling==1.28.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "xverse-studio"
+version = "0.1.0.dev0"
+description = "Native local X-Verse Studio control service"
+requires-python = ">=3.13,<3.14"
+dependencies = [
+ "fastapi==0.135.1",
+ "uvicorn==0.41.0",
+ "pydantic==2.12.5",
+ "psutil==7.2.2",
+ "xverse-xdl @ git+https://github.com/The-Xverse/xverse-platform.git@7fab6a290c3731533c2b88517158055c768b9d4e",
+]
+
+[project.scripts]
+xverse-studio = "xverse_studio.host.launcher:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/xverse_studio"]
+
+[tool.hatch.metadata]
+allow-direct-references = true

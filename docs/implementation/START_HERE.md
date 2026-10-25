@@ -1,7 +1,8 @@
 # Implement X-Verse Studio with Codex or Claude
 
-The complete product plan is `specs/001-industry-agnostic-studio`. This delivery contains planning
-and workflow assets, not an implemented application. Both agents use the same files.
+The complete product plan is `specs/001-industry-agnostic-studio`. The original delivery contained planning
+and workflow assets. The current branch adds a runnable, explicitly scoped reference implementation;
+full milestone acceptance remains open. Both agents use the same plan and evidence.
 
 ## Read and verify
 
@@ -17,8 +18,8 @@ SPECIFY_FEATURE_DIRECTORY=specs/001-industry-agnostic-studio bash .specify/scrip
 
 On Windows PowerShell, use `py -3 scripts/validate_spec_package.py`. The optional upstream helper
 requires Bash contributor tooling; neither Bash nor WSL is a Studio product requirement.
-No Studio launch command exists yet. Add and verify native Linux and Windows setup/run/test commands
-when implemented; show OS-specific runtime/device availability separately.
+The native launcher now exists. Follow `docs/user/getting-started.md` and `docs/user/recovery.md`
+for actual commands and their per-OS verification limits; show runtime/device availability separately.
 
 ## Shared implementation prompt
 

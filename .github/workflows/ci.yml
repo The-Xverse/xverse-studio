@@ -1,0 +1,50 @@
+name: native-studio
+on:
+  push:
+    branches: [main, 'implement/**']
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  native:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, windows-2022]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 25
+    env:
+      PYTEST_DISABLE_PLUGIN_AUTOLOAD: '1'
+      UV_CACHE_DIR: ${{ github.workspace }}/.studio-local/uv
+      PLAYWRIGHT_BROWSERS_PATH: ${{ github.workspace }}/.studio-local/browsers
+      npm_config_cache: ${{ github.workspace }}/.studio-local/npm
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.13.13'
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '24.22.1'
+      - run: python -m pip install uv==0.12.17
+      - run: uv sync --frozen
+      - run: npm ci
+      - run: npm run build
+      - run: uv run python scripts/record_environment.py --output evidence/studio/native-ci/environment.json
+      - run: uv run ruff check --select F821 services/studio-api/src scripts tests
+      - run: uv run python scripts/run_checks.py
+      - run: npx playwright install chromium
+      - run: uv run python scripts/test_browser.py
+      - run: uv run python scripts/package_studio.py
+      - run: uv run python scripts/smoke_package.py --output evidence/studio/native-ci/package.json
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: native-${{ matrix.os }}-${{ github.sha }}
+          path: |
+            test-results/
+            playwright-report/
+            dist/
+            evidence/studio/
+          if-no-files-found: warn

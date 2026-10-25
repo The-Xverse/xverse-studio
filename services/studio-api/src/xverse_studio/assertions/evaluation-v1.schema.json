@@ -1,0 +1,376 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.xverse.io/studio/experiments/1.0/evaluation.schema.json",
+  "title": "Studio bounded experiment evaluation extension v1",
+  "description": "Inert declarations; XDL admission does not itself execute or evaluate them.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "version": {
+      "const": "1.0"
+    },
+    "definitions": {
+      "type": "array",
+      "maxItems": 32,
+      "items": {
+        "$ref": "#/$defs/definition"
+      }
+    }
+  },
+  "required": [
+    "version",
+    "definitions"
+  ],
+  "$defs": {
+    "node": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "literal"
+            },
+            "value": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "kind",
+            "value"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "literal"
+            },
+            "value": {
+              "type": "number"
+            },
+            "unit": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 512
+            }
+          },
+          "required": [
+            "kind",
+            "value",
+            "unit"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "signal"
+            },
+            "observerRef": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 512
+            },
+            "field": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 512
+            }
+          },
+          "required": [
+            "kind",
+            "observerRef",
+            "field"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "metric"
+            },
+            "evaluationRef": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "evaluationId": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 512
+                },
+                "version": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 512
+                },
+                "definitionDigest": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 512
+                }
+              },
+              "required": [
+                "evaluationId",
+                "version",
+                "definitionDigest"
+              ]
+            }
+          },
+          "required": [
+            "kind",
+            "evaluationRef"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "convert"
+            },
+            "input": {
+              "$ref": "#/$defs/node"
+            },
+            "conversionRef": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 512
+            }
+          },
+          "required": [
+            "kind",
+            "input",
+            "conversionRef"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "compare"
+            },
+            "operator": {
+              "enum": [
+                "lt",
+                "le",
+                "gt",
+                "ge",
+                "eq",
+                "ne"
+              ]
+            },
+            "left": {
+              "$ref": "#/$defs/node"
+            },
+            "right": {
+              "$ref": "#/$defs/node"
+            },
+            "tolerance": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "value": {
+                  "type": "number",
+                  "minimum": 0
+                },
+                "unit": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 512
+                }
+              },
+              "required": [
+                "value",
+                "unit"
+              ]
+            }
+          },
+          "required": [
+            "kind",
+            "operator",
+            "left",
+            "right"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "boolean"
+            },
+            "operator": {
+              "enum": [
+                "and",
+                "or",
+                "not"
+              ]
+            },
+            "inputs": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 128,
+              "items": {
+                "$ref": "#/$defs/node"
+              }
+            }
+          },
+          "required": [
+            "kind",
+            "operator",
+            "inputs"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "aggregate"
+            },
+            "operator": {
+              "enum": [
+                "min",
+                "max",
+                "mean",
+                "last",
+                "all",
+                "any",
+                "count"
+              ]
+            },
+            "input": {
+              "$ref": "#/$defs/node"
+            }
+          },
+          "required": [
+            "kind",
+            "operator",
+            "input"
+          ]
+        }
+      ]
+    },
+    "definition": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "evaluationId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        },
+        "version": {
+          "const": "1.0"
+        },
+        "kind": {
+          "enum": [
+            "metric",
+            "assertion"
+          ]
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        },
+        "systemRef": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        },
+        "scenarioRef": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        },
+        "expression": {
+          "$ref": "#/$defs/node"
+        },
+        "window": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "clockDomainRef": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 512
+            },
+            "startTick": {
+              "type": "string",
+              "pattern": "^-?(0|[1-9][0-9]*)$",
+              "maxLength": 32
+            },
+            "endTick": {
+              "type": "string",
+              "pattern": "^-?(0|[1-9][0-9]*)$",
+              "maxLength": 32
+            }
+          },
+          "required": [
+            "clockDomainRef",
+            "startTick",
+            "endTick"
+          ]
+        },
+        "coveragePolicy": {
+          "const": "complete"
+        },
+        "resultUnit": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        },
+        "maxUncertaintyTicks": {
+          "type": "string",
+          "pattern": "^-?(0|[1-9][0-9]*)$",
+          "maxLength": 32
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 4096
+        },
+        "traceability": {
+          "type": "array",
+          "maxItems": 32,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "uri": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 512
+              },
+              "revision": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 512
+              }
+            },
+            "required": [
+              "uri",
+              "revision"
+            ]
+          }
+        }
+      },
+      "required": [
+        "evaluationId",
+        "version",
+        "kind",
+        "name",
+        "systemRef",
+        "scenarioRef",
+        "expression",
+        "window",
+        "coveragePolicy"
+      ]
+    }
+  }
+}

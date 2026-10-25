@@ -184,7 +184,7 @@ Use the actual measurements. The targets above are not benchmark results, a simu
 
 ### AC-012 — First-time prepared-example study
 
-**Milestone:** M1; retained through M4. **Status:** NOT_RUN.\
+**Milestone:** M1; retained through M4. **Status:** BLOCKED.\
 **Environment:** prepared workstation; representative novice users.\
 **Requirements:** FR-002, FR-005, NFR-012.\
 **Success criteria:** SC-001.\
@@ -296,7 +296,7 @@ Use the actual measurements. The targets above are not benchmark results, a simu
 
 ### AC-020 — Two-domain executable blueprint proof
 
-**Milestone:** M2; retained through M4. **Status:** NOT_RUN.\
+**Milestone:** M2; retained through M4. **Status:** BLOCKED.\
 **Environment:** admitted vehicle-loop and process-control model providers.\
 **Requirements:** FR-046, FR-047, NFR-001.\
 **Success criteria:** SC-004.\
@@ -310,7 +310,7 @@ Use the actual measurements. The targets above are not benchmark results, a simu
 
 ### AC-021 — Physical inventory and asset binding
 
-**Milestone:** M3; retained through M4. **Status:** NOT_RUN.\
+**Milestone:** M3; retained through M4. **Status:** BLOCKED.\
 **Environment:** one actual supported device/provider; owned inventory fixture.\
 **Requirements:** FR-048.\
 **Success criteria:** SC-005.\
@@ -324,7 +324,7 @@ Use the actual measurements. The targets above are not benchmark results, a simu
 
 ### AC-022 — Reservations and observation/stimulation separation
 
-**Milestone:** M3; retained through M4. **Status:** NOT_RUN.\
+**Milestone:** M3; retained through M4. **Status:** BLOCKED.\
 **Environment:** actual supported asset; reservation fixture.\
 **Requirements:** FR-049, FR-050.\
 **Success criteria:** SC-005.\
@@ -338,7 +338,7 @@ Use the actual measurements. The targets above are not benchmark results, a simu
 
 ### AC-023 — Hardware disconnect and cleanup boundaries
 
-**Milestone:** M3; retained through M4. **Status:** NOT_RUN.\
+**Milestone:** M3; retained through M4. **Status:** BLOCKED.\
 **Environment:** actual supported asset with nonhazardous test setup.\
 **Requirements:** FR-049, FR-050, FR-051.\
 **Success criteria:** SC-005.\
@@ -352,7 +352,7 @@ Use the actual measurements. The targets above are not benchmark results, a simu
 
 ### AC-024 — Virtual-to-physical substitution and time quality
 
-**Milestone:** M3; retained through M4. **Status:** NOT_RUN.\
+**Milestone:** M3; retained through M4. **Status:** BLOCKED.\
 **Environment:** compatible virtual and real provider pair.\
 **Requirements:** FR-040, FR-051, FR-052.\
 **Success criteria:** SC-005.\
@@ -481,3 +481,7 @@ Use the actual measurements. The targets above are not benchmark results, a simu
 M0 evidence establishes contracts and declared compatibility. M1 adds guided execution for its admitted runtime scope. M2 requires the independent two-domain demonstration and semantic/performance evidence. M3 requires an actual identified physical device and permitted operations. M4 requires the scenario/assertion/campaign/exchange behaviour and retained earlier obligations. A user-interface screenshot, parsed schema, fixture run or unexecuted test file cannot substitute for these distinct claims.
 
 A blocker does not erase independent successful work. Report the exact supported release scope, pending task/case IDs and remaining dependency. Keep release acceptance separate from checking task boxes and from the application asserting that an experiment passed.
+
+## Current execution evidence scope
+
+Targeted native Linux reference-provider, contract, browser and performance records are linked from [implementation status](../../docs/implementation/STATUS.md). They do not establish a complete acceptance case by themselves. Native Windows remains NOT_RUN until its actual lane succeeds; live Lite/two-industry, physical-device and first-time-user cases remain blocked. Existing historical failures and partial lanes are retained.

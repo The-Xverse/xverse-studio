@@ -1,0 +1,142 @@
+apiVersion: xverse.io/xdl/v1alpha1
+kind: Scenario
+metadata:
+  namespace: org.xverse.studio.process-control
+  name: reference-response
+  version: 1.0.0
+  description: Studio-owned reference fixture.
+  provenance:
+    source: urn:xverse:studio:reference
+    revision: 1.0.0
+    maturity: prototype
+    limitations:
+    - Owned executable reference only; no external simulator, device or
+      scientific fidelity claim.
+spec:
+  systemRef:
+    apiVersion: xverse.io/xdl/v1alpha1
+    kind: System
+    namespace: org.xverse.studio.process-control
+    name: reference-loop
+  deploymentRef:
+    apiVersion: xverse.io/xdl/v1alpha1
+    kind: Deployment
+    namespace: org.xverse.studio.process-control
+    name: local-reference
+  initialConditions:
+    stateParameterRef: initial
+  steps:
+  - id: start-reference
+    actionKind: start
+    targetRef:
+      apiVersion: xverse.io/xdl/v1alpha1
+      kind: System
+      namespace: org.xverse.studio.process-control
+      name: reference-loop
+      element: plant
+    timeDomainId: simulation-time
+    schedule:
+      at: 0
+      unit: s
+    action:
+      operation: reference-response
+  observers:
+  - id: state-observer
+    targetRef:
+      apiVersion: xverse.io/xdl/v1alpha1
+      kind: System
+      namespace: org.xverse.studio.process-control
+      name: reference-loop
+      element: state-flow
+    timeDomainId: simulation-time
+    samplingIntent: every fixed model step including initial state
+    payloadSchema: urn:xverse:studio:normalized-scalar:v1
+    unitSemantics: '1'
+    evidenceSinkRef: urn:xverse:studio:reference:evidence
+  metrics:
+  - id: final-state
+    observerIds:
+    - state-observer
+    calculationRef: urn:xverse:studio:metric:last
+    unitSemantics: '1'
+    acceptance: Opaque intent only; use an admitted bounded assertion definition
+      to assess evidence.
+  acceptanceIntent: Exercise the owned reference provider; completion alone is
+    not an assertion pass.
+extensions:
+  io.xverse.experiment:
+    schemaVersion: '0.1'
+    kind: scenario-intent
+    target:
+      apiVersion: xverse.io/xdl/v1alpha1
+      kind: Scenario
+      namespace: org.xverse.studio.process-control
+      name: reference-response
+    seed:
+      value: 7
+      unitSemantics: reference-seed
+    parameters:
+    - id: target
+      valueType: number
+      value: 1.0
+      unitSemantics: '1'
+      mutability: configuration
+    - id: gain
+      valueType: number
+      value: 0.8
+      unitSemantics: '1'
+      mutability: configuration
+    - id: initial
+      valueType: number
+      value: 0.0
+      unitSemantics: '1'
+      mutability: configuration
+    - id: duration
+      valueType: number
+      value: 5.0
+      unitSemantics: s
+      mutability: configuration
+    - id: timestep
+      valueType: number
+      value: 0.1
+      unitSemantics: s
+      mutability: configuration
+    - id: fault
+      valueType: string
+      value: none
+      unitSemantics: '1'
+      mutability: configuration
+    fidelityLimitations:
+    - Normalized first-order scalar response only; no automotive, industrial,
+      simulator or hardware fidelity.
+  io.xverse.studio.experiments:
+    version: '1.0'
+    definitions:
+    - evaluationId: state-within-bound
+      version: '1.0'
+      kind: assertion
+      name: Reference state within bound
+      systemRef: xdl://org.xverse.studio.process-control/system/reference-loop
+      scenarioRef:
+        xdl://org.xverse.studio.process-control/scenario/reference-response
+      coveragePolicy: complete
+      window:
+        clockDomainRef: simulation-time
+        startTick: '0'
+        endTick: '5000000'
+      expression:
+        kind: compare
+        operator: le
+        left:
+          kind: aggregate
+          operator: max
+          input:
+            kind: signal
+            observerRef: state-observer
+            field: value
+        right:
+          kind: literal
+          value: 1.2
+          unit: '1'
+      description: Owned model check only. Changing the time horizon can make
+        coverage indeterminate.

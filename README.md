@@ -2,7 +2,29 @@
 
 Model, connect, execute, and observe cyber-physical systems across simulated and physical environments.
 
-**Status: specification and implementation plan. Application code is not implemented by this package.**
+**Status: runnable development reference implementation; M0–M4 acceptance is incomplete.**
+
+The React/TypeScript browser application and native Python/FastAPI backend implement project/source
+editing, graph projections, preflight, durable reference-run control, observations, bounded assertions,
+finite campaigns, comparisons, annotations, safe exchange and retention. The executable reference model
+is explicitly scoped; it does not establish CARLA, physical-device, Argus or native X-COM integration.
+Native Windows, real hardware and first-time usability gates remain unverified or blocked.
+
+After provisioning the pinned Python 3.13.13/uv 0.12.17 and Node 24.22.1 toolchain:
+
+```text
+uv sync --frozen
+npm ci
+npm run build
+uv run xverse-studio --data-dir .studio-local/data --port 8876
+```
+
+Open http://127.0.0.1:8876 and enter the one-use token from `.studio-local/data/bootstrap.json`.
+See [native setup and the guided example](docs/user/getting-started.md),
+[recovery/update procedures](docs/user/recovery.md), and [provider limits](docs/providers/README.md).
+Run `uv run python scripts/run_checks.py` for backend checks and
+`uv run python scripts/test_browser.py` after provisioning Playwright Chromium for real browser checks.
+All workspace, cache, build, temporary and evidence files on the implementation machine use loop10.
 
 Studio is an industry-agnostic engineering workbench over X-Verse. Its primary workspace is a System;
 users add elements, connect interfaces, choose realizations, run experiments, and inspect evidence.
@@ -13,7 +35,7 @@ Studio is a **web application**: a browser UI served by a backend that runs nati
 Windows**. Local operation does not require WSL or a cloud account. Runtime/device providers declare
 their own OS support; an unavailable provider must not prevent editing or inspection.
 
-## Start implementation
+## Specification and implementation evidence
 
 Read [the Codex / Claude handoff](docs/implementation/START_HERE.md), [engineering rules](AGENTS.md),
 and [the constitution](.specify/memory/constitution.md).

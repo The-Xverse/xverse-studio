@@ -1,0 +1,47 @@
+{
+  "scope": "owned_reference_native_Linux_review_regressions",
+  "date": "2026-10-25",
+  "python": "3.13.13",
+  "command": [
+    "python",
+    "-m",
+    "pytest",
+    "tests/contract/test_review_regressions.py",
+    "tests/integration/test_project_store.py",
+    "tests/platform/test_native_recovery.py",
+    "-q",
+    "-o",
+    "cache_dir=<scratch>/pytest-review-final"
+  ],
+  "exitCode": 0,
+  "elapsedSeconds": 14.736,
+  "sourceHashesBefore": {
+    "security/files.py": "c98f8206d391d024925fbb782f9e106d2e0f3ddee5abd8f19160236e137a7b1c",
+    "projects/service.py": "4684b3b48cb560cdc5e8b4ea9616a0aaece08242ecb582b4629b4f412cb6194a",
+    "storage/core.py": "4d71f3fd2b44fb2c6b048a311928764f233edc4c600b8fbd7d36cc4e3079ea1a",
+    "api/exchange.py": "1addd0ff9487c9d9ce9321978ce6b551978586e920d1a48f3c901a950846db95",
+    "host/launcher.py": "e4781c3450c60ba5fd5dcd1fc3b22dd6ae106ec8831db6ada51d13c3d5b258a7",
+    "runs/service.py": "b4c2125ba5b57ab8d91788dc3725e1eaa41620e06ce1ff031cf4eba424154c9c",
+    "providers/worker.py": "9f2fafae2954a999031c9d98077a499afb587fe1701872027a7faf83309edc9f",
+    "providers/registry.py": "5406c47ee49e63a01e5a2e520a5195793688147080bcb7d3246c12d3e1271654",
+    "api/app.py": "52ec6c3eaf4d40291c16aa5b380fa19b9d3dd8ae288ad79d08410dc910e9b7c8"
+  },
+  "sourceHashesAfter": {
+    "security/files.py": "c98f8206d391d024925fbb782f9e106d2e0f3ddee5abd8f19160236e137a7b1c",
+    "projects/service.py": "4684b3b48cb560cdc5e8b4ea9616a0aaece08242ecb582b4629b4f412cb6194a",
+    "storage/core.py": "4d71f3fd2b44fb2c6b048a311928764f233edc4c600b8fbd7d36cc4e3079ea1a",
+    "api/exchange.py": "83f5043fe8b3d01afbde4b7c775051dc54a39fdcbf7b973b5679dc64547372e4",
+    "host/launcher.py": "e4781c3450c60ba5fd5dcd1fc3b22dd6ae106ec8831db6ada51d13c3d5b258a7",
+    "runs/service.py": "b4c2125ba5b57ab8d91788dc3725e1eaa41620e06ce1ff031cf4eba424154c9c",
+    "providers/worker.py": "9f2fafae2954a999031c9d98077a499afb587fe1701872027a7faf83309edc9f",
+    "providers/registry.py": "5406c47ee49e63a01e5a2e520a5195793688147080bcb7d3246c12d3e1271654",
+    "api/app.py": "52ec6c3eaf4d40291c16aa5b380fa19b9d3dd8ae288ad79d08410dc910e9b7c8"
+  },
+  "sourceUnchangedDuringVerification": false,
+  "output": ".................                                                        [100%]\n=============================== warnings summary ===============================\n.venv/lib/python3.13/site-packages/fastapi/testclient.py:1\n  <workspace>/.venv/lib/python3.13/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.\n    from starlette.testclient import TestClient as TestClient  # noqa\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n17 passed, 1 warning in 14.00s\n",
+  "limitations": [
+    "Native Windows NOT_RUN",
+    "No live external runtime, device, simulator or native X-COM acceptance",
+    "Native owned reference worker and launcher only"
+  ]
+}

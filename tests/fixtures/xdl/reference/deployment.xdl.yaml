@@ -1,0 +1,69 @@
+apiVersion: xverse.io/xdl/v1alpha1
+kind: Deployment
+metadata:
+  namespace: org.xverse.studio.process-control
+  name: local-reference
+  version: 1.0.0
+  description: Studio-owned reference fixture.
+  provenance:
+    source: urn:xverse:studio:reference
+    revision: 1.0.0
+    maturity: prototype
+    limitations:
+    - Owned executable reference only; no external simulator, device or
+      scientific fidelity claim.
+spec:
+  systemRef:
+    apiVersion: xverse.io/xdl/v1alpha1
+    kind: System
+    namespace: org.xverse.studio.process-control
+    name: reference-loop
+  targets:
+  - id: reference-target
+    targetClass: model-unit
+    capabilities:
+    - reference-response
+    lifecycle: &id001
+      prepare: verify-owned-reference
+      ready: reference-ready
+      start: start-reference
+      stop: stop-reference
+      failure: record-reference-failure
+  artifacts:
+  - id: reference-model
+    artifactKind: model
+    version: 1.0.0
+    digest:
+      sha256:5e166063f7d506c139b9c3a9f2545ba2983c82b6035af67e68051e90feef0095
+    sourceRef: urn:xverse:studio:reference:first-order:v1
+    maturity: prototype
+  bindings:
+  - id: controller-binding
+    logicalRef:
+      apiVersion: xverse.io/xdl/v1alpha1
+      kind: System
+      namespace: org.xverse.studio.process-control
+      name: reference-loop
+      element: controller
+    realizationClass: simulated
+    targetId: reference-target
+    artifactIds:
+    - reference-model
+    lifecycle: *id001
+  - id: plant-binding
+    logicalRef:
+      apiVersion: xverse.io/xdl/v1alpha1
+      kind: System
+      namespace: org.xverse.studio.process-control
+      name: reference-loop
+      element: plant
+    realizationClass: simulated
+    targetId: reference-target
+    artifactIds:
+    - reference-model
+    lifecycle: *id001
+  readiness:
+    requiredConditions:
+    - owned-reference-provider-installed
+    - requested-input-equality
+    failurePolicy: fail-fast
