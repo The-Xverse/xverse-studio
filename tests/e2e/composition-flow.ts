@@ -197,11 +197,20 @@ export async function exerciseComposition(page: Page, testInfo: TestInfo) {
       exact: true,
     }),
   ).toBeVisible();
+  // Scoped to this test's own entry: the shared catalog may list other registrations.
   await expect(
-    page.getByText(
-      "Registered reference only. Availability and provider execution remain unresolved.",
-      { exact: true },
-    ),
+    page
+      .locator("article.panel")
+      .filter({
+        has: page.getByRole("heading", {
+          name: "Browser metadata reference",
+          exact: true,
+        }),
+      })
+      .getByText(
+        "Registered reference only. Availability and provider execution remain unresolved.",
+        { exact: true },
+      ),
   ).toBeVisible();
   await page.screenshot({
     path: testInfo.outputPath("artifact-catalog.png"),

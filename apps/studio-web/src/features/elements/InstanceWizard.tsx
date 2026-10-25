@@ -29,6 +29,8 @@ interface Definition {
   digest?: string;
   availability?: string;
   source: "project" | "catalog";
+  /** Declared XDL API version; a non-admitted version stays inspectable only. */
+  apiVersion?: string;
 }
 
 const resourceDefinition = (
@@ -55,6 +57,7 @@ const resourceDefinition = (
   digest: entry?.digest,
   availability: entry?.availability,
   source,
+  apiVersion: resource.apiVersion,
 });
 
 function parse(parameter: Data, raw: string | boolean) {
@@ -74,12 +77,15 @@ export function InstanceWizard({
   catalog,
   projection,
   initialTemplate = "",
+  admittedApiVersions,
   onSubmit,
   doAction,
 }: {
   catalog: CatalogEntry[];
   projection: Projection;
   initialTemplate?: string;
+  /** Unknown (undefined) means the backend did not advertise them. */
+  admittedApiVersions?: string[];
   onSubmit: (edits: Data[]) => Promise<void>;
   doAction: DoAction;
 }) {
@@ -174,21 +180,26 @@ export function InstanceWizard({
       else if (value !== parameter.default)
         parameterValues[parameter.id] = value;
     }
+  const unsupported = (d: Definition) =>
+    Boolean(admittedApiVersions) &&
+    !admittedApiVersions!.includes(String(d.apiVersion));
   const blocked = !definition
     ? "Choose a reusable definition."
     : definition.source !== "project"
       ? "This catalog definition is not in the project; it can be inspected but not instantiated."
-      : !validId(identifier)
-        ? "Enter a lowercase, hyphenated instance identifier of at most 63 characters."
-        : invalidParameters.length
-          ? `Enter valid values for: ${invalidParameters.join(", ")}.`
-          : deployment && !realization
-            ? "Choose a realization class, or choose no realization yet."
-            : deployment && !target
-              ? "Choose a deployment target, or choose no realization yet."
-              : deployment && !validId(effectiveBinding)
-                ? "Enter a lowercase, hyphenated binding identifier of at most 63 characters."
-                : "";
+      : unsupported(definition)
+        ? `XDL version ${definition.apiVersion} is not admitted; the definition can be inspected in source but not instantiated.`
+        : !validId(identifier)
+          ? "Enter a lowercase, hyphenated instance identifier of at most 63 characters."
+          : invalidParameters.length
+            ? `Enter valid values for: ${invalidParameters.join(", ")}.`
+            : deployment && !realization
+              ? "Choose a realization class, or choose no realization yet."
+              : deployment && !target
+                ? "Choose a deployment target, or choose no realization yet."
+                : deployment && !validId(effectiveBinding)
+                  ? "Enter a lowercase, hyphenated binding identifier of at most 63 characters."
+                  : "";
   const edits: Data[] = blocked
     ? []
     : [
@@ -296,7 +307,10 @@ export function InstanceWizard({
                 {d.maturity && <Badge>{d.maturity}</Badge>}{" "}
                 <Badge tone={d.source === "project" ? "info" : "warning"}>
                   {d.source === "project" ? "in project" : "catalog only"}
-                </Badge>
+                </Badge>{" "}
+                {unsupported(d) && (
+                  <Badge tone="warning">unsupported version</Badge>
+                )}
                 <small>
                   {d.roles.length
                     ? `Suggested role: ${d.roles.join(", ")}`

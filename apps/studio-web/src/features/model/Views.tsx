@@ -1008,7 +1008,7 @@ export function ConnectionsView({
                 value={id}
                 onChange={(e) => setId(e.target.value)}
                 required
-                pattern="[a-zA-Z0-9_-]+"
+                pattern="[a-zA-Z0-9_\-]+"
               />
             </label>
             <label>

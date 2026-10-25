@@ -103,6 +103,7 @@ def capabilities():
         REPLAY_WINDOW, PENDING_EVENTS, PENDING_BYTES, MAX_FRAME_BYTES,
         GLOBAL_SUBSCRIBERS, PER_RUN_SUBSCRIBERS, EVENT_KINDS, CONTROL_RESERVE,
     )
+    from xverse_studio.xdl import SUPPORTED_API_VERSIONS
     from xverse_studio.xdl import (
         VALIDATION_CACHE_ENTRIES,
         VALIDATION_CACHE_BYTES,
@@ -113,6 +114,8 @@ def capabilities():
         "apiVersion": "1.0",
         "schemaVersion": "1.0",
         "contracts": {"readiness": "1.0", "annotations": "1.1", "evidenceQuery": "1.0", "events": "1.1"},
+        # XDL resource API versions the authoritative adapter admits for authoring.
+        "xdl": {"apiVersions": list(SUPPORTED_API_VERSIONS)},
         "host": {
             "os": platform.system(),
             "release": platform.release(),

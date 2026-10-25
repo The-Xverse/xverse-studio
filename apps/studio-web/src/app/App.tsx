@@ -1395,6 +1395,7 @@ export default function App() {
           ) : (
             <InstanceWizard
               initialTemplate={addTemplate}
+              admittedApiVersions={capabilities.xdl?.apiVersions}
               catalog={catalog}
               projection={projection}
               onSubmit={async (edits) => {

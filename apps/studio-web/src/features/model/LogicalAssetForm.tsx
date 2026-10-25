@@ -190,7 +190,7 @@ export function LogicalAssetForm({
         Element identifier
         <input
           required
-          pattern="[a-zA-Z0-9_-]+"
+          pattern="[a-zA-Z0-9_\-]+"
           maxLength={80}
           disabled={!!element}
           value={id}
@@ -265,7 +265,7 @@ export function LogicalAssetForm({
                     <input
                       required
                       value={portId}
-                      pattern="[a-zA-Z0-9_-]+"
+                      pattern="[a-zA-Z0-9_\-]+"
                       onChange={(e) => setPortId(e.target.value)}
                     />
                   </label>

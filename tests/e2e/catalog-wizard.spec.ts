@@ -1,4 +1,10 @@
 import { test, expect } from "@playwright/test";
+import { execFileSync } from "node:child_process";
+import { createHash } from "node:crypto";
+import { createServer } from "node:http";
+import type { AddressInfo } from "node:net";
+import { readFileSync, readdirSync, statSync } from "node:fs";
+import path from "node:path";
 import { connectStudio } from "./connect-studio";
 
 test("instance wizard: role, placement and realization are separate choices committed as existing XDL", async ({
@@ -199,4 +205,231 @@ test("instance wizard: configuration follows the definition's typed parameters a
   expect(system).toMatch(
     /- id: scaled-plant\n\s+componentRef:[\s\S]*?parameterValues:\n\s+response-scale: 2\.5/,
   );
+});
+
+async function importFixture(
+  page: import("@playwright/test").Page,
+  variant: string,
+) {
+  const archive = execFileSync(
+    path.resolve(".venv/bin/python"),
+    [
+      "-I",
+      "tests/fixtures/projects/create_catalog_archive.py",
+      "--variant",
+      variant,
+    ],
+    { encoding: "utf8" },
+  ).trim();
+  const project = await page.evaluate(async (archiveBase64) => {
+    const { csrfToken } = await fetch("/api/v1/session").then((r) => r.json());
+    const r = await fetch("/api/v1/projects/imports", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRF-Token": csrfToken,
+      },
+      body: JSON.stringify({ archiveBase64 }),
+    });
+    if (!r.ok) throw Error(await r.text());
+    const project = await r.json();
+    localStorage.setItem("studio.projectId", project.projectId);
+    return project;
+  }, archive);
+  await page.reload();
+  return project;
+}
+
+test("instance wizard: representative service and controller instances are generic roles, not core types", async ({
+  page,
+}, testInfo) => {
+  test.setTimeout(60000);
+  await connectStudio(page, testInfo);
+  const project = await importFixture(page, "service");
+  const add = async (
+    definition: RegExp,
+    id: string,
+    role: string,
+    node: string,
+  ) => {
+    await page
+      .getByRole("button", { name: "Add element", exact: true })
+      .click();
+    const dialog = page.getByRole("dialog");
+    await dialog
+      .getByRole("radiogroup", { name: "Definitions" })
+      .getByRole("radio", { name: definition })
+      .check();
+    await dialog.getByLabel("Instance identifier").fill(id);
+    await dialog.getByLabel("Role filter").selectOption(role);
+    await dialog.getByLabel("Placement node").selectOption(node);
+    await dialog.getByRole("button", { name: "Add instance" }).click();
+    await expect(dialog).toHaveCount(0);
+  };
+  await add(
+    /telemetry-service org\.xverse\.studio\.process-control/,
+    "telemetry-gateway",
+    "service",
+    "service-node",
+  );
+  await add(
+    /reference-controller org\.xverse\.studio\.process-control/,
+    "backup-controller",
+    "controller",
+    "controller-node",
+  );
+  const saved = await page.request
+    .get(`/api/v1/projects/${project.projectId}`)
+    .then((r) => r.json());
+  const system = (Object.values(saved.documents) as any[]).find((d) =>
+    d.path.endsWith("/system.xdl.yaml"),
+  ).content as string;
+  expect(system).toMatch(
+    /- id: telemetry-gateway\n[\s\S]*?name: telemetry-service\n\s+nodeId: service-node/,
+  );
+  expect(system).toMatch(
+    /- id: backup-controller\n[\s\S]*?name: reference-controller\n\s+nodeId: controller-node/,
+  );
+  const valid = await page.evaluate(
+    async ({ projectId, revision }) => {
+      const { csrfToken } = await fetch("/api/v1/session").then((r) =>
+        r.json(),
+      );
+      return fetch(`/api/v1/projects/${projectId}/validations`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRF-Token": csrfToken,
+        },
+        body: JSON.stringify({ revision }),
+      }).then((r) => r.json());
+    },
+    { projectId: project.projectId, revision: saved.revision },
+  );
+  expect(valid.valid).toBe(true);
+});
+
+test("instance wizard: a definition in a non-admitted XDL version stays inspectable but cannot be instantiated", async ({
+  page,
+}, testInfo) => {
+  test.setTimeout(60000);
+  await connectStudio(page, testInfo);
+  const project = await importFixture(page, "unsupported");
+  const writes: string[] = [];
+  page.on("request", (r) => {
+    if (["POST", "PUT", "PATCH", "DELETE"].includes(r.method()))
+      writes.push(r.method() + " " + new URL(r.url()).pathname);
+  });
+  await page.getByRole("button", { name: "Add element", exact: true }).click();
+  const dialog = page.getByRole("dialog");
+  const option = dialog
+    .getByRole("radiogroup", { name: "Definitions" })
+    .getByRole("radio", { name: /telemetry-service/ });
+  await option.check();
+  await expect(
+    dialog.locator(".wizard-option", { hasText: "telemetry-service" }),
+  ).toContainText("unsupported version");
+  await dialog.getByLabel("Instance identifier").fill("telemetry-gateway");
+  await expect(dialog.getByRole("region", { name: "Review" })).toContainText(
+    "XDL version xverse.io/xdl/v9 is not admitted",
+  );
+  await expect(
+    dialog.getByRole("button", { name: "Add instance" }),
+  ).toBeDisabled();
+  await dialog.getByRole("button", { name: "Close dialog" }).click();
+  // The original bytes remain readable.
+  const current = await page.request
+    .get(`/api/v1/projects/${project.projectId}`)
+    .then((r) => r.json());
+  expect(
+    (Object.values(current.documents) as any[]).find((d) =>
+      d.path.endsWith("/service.xdl.yaml"),
+    ).content,
+  ).toContain("apiVersion: xverse.io/xdl/v9");
+  expect(writes).toEqual([]);
+});
+
+test("implementation registration: invalid versions are refused and a registered artifact stays inert metadata", async ({
+  page,
+}, testInfo) => {
+  test.setTimeout(60000);
+  await connectStudio(page, testInfo);
+  const data = process.env.STUDIO_BROWSER_DATA!;
+  // Every file outside the database (and this test's session) with its content digest.
+  const files = () =>
+    (readdirSync(data, { recursive: true }) as string[])
+      .filter((name) => !/^studio\.sqlite|browser-session/.test(name))
+      .filter((name) => statSync(path.join(data, name)).isFile())
+      .sort()
+      .map(
+        (name) =>
+          name +
+          ":" +
+          createHash("sha256")
+            .update(readFileSync(path.join(data, name)))
+            .digest("hex"),
+      );
+  // A fetchable origin: registration must never contact it.
+  let originHits = 0;
+  const origin = createServer((_, response) => {
+    originHits++;
+    response.end("artifact bytes");
+  });
+  await new Promise<void>((resolve) => origin.listen(0, "127.0.0.1", resolve));
+  const originUrl = `http://127.0.0.1:${(origin.address() as AddressInfo).port}/firmware.bin`;
+  const before = files();
+  const runsBefore = await page.request
+    .get("/api/v1/runs")
+    .then((r) => r.json());
+  const writes: string[] = [];
+  page.on("request", (r) => {
+    if (["POST", "PUT", "PATCH", "DELETE"].includes(r.method()))
+      writes.push(r.method() + " " + new URL(r.url()).pathname);
+  });
+  await page.getByRole("button", { name: "Catalog", exact: true }).click();
+  await page
+    .getByRole("button", { name: "Register artifact metadata", exact: true })
+    .click();
+  const dialog = page.getByRole("dialog");
+  await dialog.getByLabel("Artifact name").fill("neutral-firmware-image");
+  await dialog.getByLabel("Artifact version").fill("1.0");
+  await dialog.getByLabel("Artifact kind").selectOption("firmware");
+  await dialog
+    .getByLabel("Declared SHA-256 digest")
+    .fill("sha256:" + "a1".repeat(32));
+  await dialog.getByLabel("Portable origin reference").fill(originUrl);
+  await dialog.getByRole("button", { name: "Register metadata only" }).click();
+  // The malformed version is refused before any request is sent.
+  await expect(dialog.getByLabel("Artifact version")).toHaveJSProperty(
+    "validity.valid",
+    false,
+  );
+  expect(writes).toEqual([]);
+  await dialog.getByLabel("Artifact version").fill("1.0.0-rc.1");
+  await dialog.getByRole("button", { name: "Register metadata only" }).click();
+  await expect(
+    page.getByText(
+      "Artifact metadata registered. No artifact was downloaded or executed.",
+    ),
+  ).toBeVisible();
+  expect(writes).toEqual(["POST /api/v1/catalog/artifacts"]);
+  const entry = (
+    await page.request.get("/api/v1/catalog").then((r) => r.json())
+  ).items.find((e: any) => e.name === "neutral-firmware-image");
+  expect(entry).toMatchObject({
+    kind: "artifact",
+    version: "1.0.0-rc.1",
+    availability: "unavailable",
+    executionAllowed: false,
+    provenance: { registration: "metadata_only" },
+  });
+  // No build, flash or execution: no runs and no new files beside the database.
+  const runsAfter = await page.request
+    .get("/api/v1/runs")
+    .then((r) => r.json());
+  expect(runsAfter.items.length).toBe(runsBefore.items.length);
+  expect(files()).toEqual(before);
+  expect(entry.originRef).toBe(originUrl);
+  expect(originHits).toBe(0);
+  await new Promise((resolve) => origin.close(resolve));
 });

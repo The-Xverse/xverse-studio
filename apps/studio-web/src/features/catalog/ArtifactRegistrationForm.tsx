@@ -72,7 +72,7 @@ export function ArtifactRegistrationForm({
           <input
             required
             value={version}
-            pattern="[0-9]+\.[0-9]+\.[0-9]+([-+][A-Za-z0-9.-]+)?"
+            pattern="[0-9]+\.[0-9]+\.[0-9]+([\-+][A-Za-z0-9.\-]+)?"
             maxLength={64}
             onChange={(event) => {
               key.current = mutationKey();

@@ -80,7 +80,7 @@ After M0 owned contracts pass, guided operation (T015–T033), visual authoring 
 - [ ] T049 [P] [US6] Specify catalog/wizard contract tests for versions, role-realization-placement independence, definition/instance identity, inert artifacts and untrusted form metadata. Paths: `tests/contract/test_catalog.py`, `tests/fixtures/catalog/`. Depends on: T014. (FR-029; FR-030; FR-031; FR-032; FR-033; NFR-004; AC-015)
 - [x] T050 [US6] Implement local catalog admission/filtering with immutable artifact references, schema/provenance/maturity records and explicit unavailable versions. Expose admitted catalog discovery through the specified API so the UI and external contract tests consume the same versioned entries. Paths: `services/studio-api/src/xverse_studio/catalog/`. Depends on: T049, T004, T008. (FR-029; FR-031; FR-033; AC-015)
 - [x] T051 [US6] Build Add element and instance wizards for generic roles/devices/model references, separate realization/placement and schema-backed configuration without hard-coded ECU core entities. Paths: `apps/studio-web/src/features/catalog/`, `apps/studio-web/src/features/elements/`. Depends on: T050, T043. (FR-030; FR-032; FR-033; AC-015)
-- [ ] T052 [US6] Verify representative controller/sensor/actuator/service/model/observer creation, invalid versions and implementation registration without build/flash/execute side effects. Paths: `tests/e2e/catalog-wizard.spec.ts`, `evidence/studio/M2-catalog/`. Depends on: T051. (FR-029; FR-030; FR-031; FR-032; FR-033; NFR-004; AC-015)
+- [x] T052 [US6] Verify representative controller/sensor/actuator/service/model/observer creation, invalid versions and implementation registration without build/flash/execute side effects. Paths: `tests/e2e/catalog-wizard.spec.ts`, `evidence/studio/M2-catalog/`. Depends on: T051. (FR-029; FR-030; FR-031; FR-032; FR-033; NFR-004; AC-015)
 - [ ] T053 [P] [US7] Add compatible/mismatched port, explicit converter, multiplicity, timing/QoS, physical-coupling and valid/invalid feedback fixtures with declared expected semantics. Paths: `tests/contract/test_connections.py`, `tests/fixtures/connections/`. Depends on: T014. (FR-034; FR-035; FR-037; FR-038; AC-016; AC-017)
 - [ ] T054 [US7] Implement connection admission using platform/profile/provider contracts; require explicit conversions and validate supported feedback causality without a universal acyclic-graph rule. Paths: `services/studio-api/src/xverse_studio/connections/`. Depends on: T053, T042, T050. (FR-034; FR-035; FR-038; AC-016)
 - [ ] T055 [US7] Implement compatible-target guidance, inspectable mapping forms and distinct relation styles/actions for communication, model coupling, deployment and traceability. Paths: `apps/studio-web/src/features/connections/`. Depends on: T054, T043. (FR-034; FR-035; FR-037; FR-038; AC-016; AC-017)
@@ -247,3 +247,9 @@ T051 owned component is complete: an instance wizard keeps definition, identity,
 configuration and realization separate and commits existing XDL kinds atomically through `add_element`
 and the new `add_binding` edit. Independent review found seven defects, all repaired; 567 backend tests
 and 56 browser/performance checks pass. Component completion is 28/100. See `evidence/studio/M2-wizard/`.
+
+T052 owned verification is complete: representative controller, neutral service, device/sensor/
+actuator/model and observer creation; malformed artifact versions and non-admitted XDL versions; and
+inert implementation registration without build, flash, execution, file changes or origin requests.
+Four silently ignored HTML input patterns were repaired with a guard test. 575 backend tests and 60
+browser/performance checks pass. Component completion is 29/100. See `evidence/studio/M2-catalog/`.
