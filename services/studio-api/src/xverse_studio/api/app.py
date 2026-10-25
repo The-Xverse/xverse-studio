@@ -24,12 +24,27 @@ from xverse_studio.projects.service import Projects
 from xverse_studio.runs.service import Runs, ACTIVE
 from xverse_studio.providers.registry import capabilities, descriptors
 from xverse_studio.evidence.reader import read_journal
+from xverse_studio.events import EventStreams
 from xverse_studio.evidence.query import (
     HistoryQuery,
     ObservationQuery,
     project_evidence,
 )
 from xverse_studio.xdl import XDLAdapter, XDLRejected, examples
+
+
+class EventStreamingResponse(StreamingResponse):
+    """Release admission even if ASGI startup fails before iterator entry."""
+
+    def __init__(self, content, *, release, **options):
+        super().__init__(content, **options)
+        self.release_subscription = release
+
+    async def __call__(self, scope, receive, send):
+        try:
+            await super().__call__(scope, receive, send)
+        finally:
+            self.release_subscription()
 
 
 def revision(request):
@@ -68,6 +83,7 @@ def create_app(
     adapter = XDLAdapter()
     projects = Projects(store, adapter)
     runs = Runs(store, projects, adapter)
+    event_streams = EventStreams(store, runs)
     hosts = allowed_hosts or ["127.0.0.1:8765", "localhost:8765"]
     token = bootstrap_token or secrets.token_urlsafe(32)
     bootstrap = {
@@ -112,6 +128,7 @@ def create_app(
         try:
             yield
         finally:
+            event_streams.close()
             scheduler.cancel()
             try:
                 await scheduler
@@ -128,7 +145,7 @@ def create_app(
         lifespan=lifespan,
     )
     app.state.studio = SimpleNamespace(
-        store=store, projects=projects, runs=runs, adapter=adapter
+        store=store, projects=projects, runs=runs, adapter=adapter, events=event_streams
     )
 
     def error(code, message, status, request, **details):
@@ -556,54 +573,57 @@ def create_app(
             evidence_scope=r.get("evidenceScope", "unknown"),
         )
 
+    @app.get("/api/v1/runs/{runId}/resync")
+    def resynchronize(runId: str, request: Request):
+        if request.query_params:
+            raise Problem(
+                "CURSOR_INVALID",
+                "Recovery uses the unfiltered original stream watermark.",
+            )
+        return event_streams.resync(runId)
+
     @app.get("/api/v1/runs/{runId}/events")
-    async def events(runId: str, request: Request, after: str | None = None):
-        runs.read(runId)
+    async def events(
+        runId: str,
+        request: Request,
+        after: str | None = None,
+        streamVersion: str = "1.0",
+    ):
+        if set(request.query_params) - {"after", "streamVersion"} or len(
+            request.query_params.multi_items()
+        ) != len(request.query_params):
+            raise Problem(
+                "CURSOR_INVALID", "Event selectors must be supported and unambiguous."
+            )
         header = request.headers.get("last-event-id")
-        if header and after and header != after:
+        if len(request.headers.getlist("last-event-id")) > 1 or (
+            header is not None and after is not None and header != after
+        ):
             raise Problem(
                 "CURSOR_INVALID", "The query and Last-Event-ID cursors must agree."
             )
-        cursor = after or header
-        try:
-            sequence = int(cursor.split(":")[-1]) if cursor else 0
-        except ValueError:
-            raise Problem("CURSOR_INVALID", "The event cursor is invalid.") from None
-        if (
-            sequence < 0
-            or cursor
-            and ":" in cursor
-            and not cursor.startswith(runId + ":")
-        ):
-            raise Problem("CURSOR_INVALID", "The cursor belongs to another run.")
-        initial = runs.read(runId)
-        initial_records, _ = read_journal(runs.directory(runId), initial)
-        if sequence > len(initial_records):
+        cursor = after if after is not None else header
+        if cursor is not None and (not cursor or len(cursor) > 2048):
             raise Problem(
-                "CURSOR_INVALID", "The cursor is ahead of this run stream.", 409
+                "CURSOR_INVALID", "The event cursor exceeds its supported shape."
             )
-
-        async def stream():
-            nonlocal sequence
-            while not await request.is_disconnected():
-                r = await asyncio.to_thread(runs.read, runId)
-                records, _ = await asyncio.to_thread(
-                    read_journal, runs.directory(runId), r
-                )
-                for item in records[sequence : sequence + 200]:
-                    sequence = int(item["sequence"])
-                    yield f"id: {runId}:{sequence}\nevent: {item['type']}\ndata: {canonical(item)}\n\n"
-                if r["state"] in ("stopped", "failed", "unknown") and sequence >= len(
-                    records
-                ):
-                    return
-                yield ": heartbeat\n\n"
-                await asyncio.sleep(0.2)
-
-        return StreamingResponse(
-            stream(),
+        lease = event_streams.reserve(runId)
+        try:
+            prepared = await asyncio.to_thread(
+                event_streams.prepare, runId, cursor, streamVersion
+            )
+        except BaseException:
+            event_streams.release(lease)
+            raise
+        return EventStreamingResponse(
+            event_streams.iterate(runId, prepared, lease, request),
+            release=lambda: event_streams.release(lease),
             media_type="text/event-stream",
-            headers={"X-Accel-Buffering": "no"},
+            headers={
+                "X-Accel-Buffering": "no",
+                "Cache-Control": "no-store",
+                "X-Studio-Stream-Version": streamVersion,
+            },
         )
 
     from xverse_studio.api.composition import install_composition

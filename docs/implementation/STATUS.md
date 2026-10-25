@@ -3,6 +3,27 @@
 Scope: runnable development reference implementation on `implement/studio-m0-m4`. No M0–M4 milestone
 or Studio 1.0 release is accepted. The supplied requirements/task IDs and acceptance targets remain.
 
+Latest recorded task completion: **22/100 components**, including T028's explicit private-log
+exclusion and advancing-producer/slow-consumer evidence fixtures. This is an audited task count,
+not an estimate of remaining effort. T026 transport implementation is substantially repaired but
+remains open pending a complete current native/browser successor. Windows installation/testing
+remains blocked at user request, and native Windows secure I/O remains unimplemented/unavailable.
+
+The latest full Linux backend run passed **493 tests**, with source unchanged. All current backend
+code and Python tests still match that receipt. The first combined browser run passed 35/failed 3.
+After repair, the focused 22 successor passed 18/failed 4: both early modal-Escape cases, the native
+known-gap recovery fixture and all 15 protocol checks passed; creation/input/screenshot timeouts and
+the native expiry timing window remain failed checks. Host-wide full I/O stall pressure was measured
+around 53–71percent during the latter run; this is context, not proof of every failure's cause or a
+waiver. No successful current full browser/performance or clean-package successor is claimed.
+Exact logs, original failures, scope corrections and candidate hashes are retained in
+`evidence/studio/release/linux-stream-recovery-2026-10-25/`, `M1-event-stream/`, `M1-session/` and
+`M1-modal-keyboard/`. Publication and clean-host CI outcomes are recorded separately.
+Subsequent test-only request diagnostics and an admitted 30-second expiry workload await their own
+native verification; they do not inherit the earlier 16-second receipt. The latter workload retains
+the 12-second pause, more than 1,000 new records, actual HTTP 410, recovery while running, unchanged
+byte proofs and existing assertion budgets, and additionally checks all 3,000 expected observations.
+
 The React/TypeScript browser UI and native FastAPI backend support System projects, inert import,
 source-preserving edits, graph/table projections, typed parameters/connections, explicit authored
 Deployment/Scenario variants, catalog/profile locks, preflight, immutable owned runs, recovery,
@@ -13,7 +34,7 @@ private Linux backup/restore uses anchored acquisition and preserves immutable e
 Physical-provider inventory is empty.
 
 Component-complete task IDs, with the exact component scope/evidence in traceability.json:
-T003, T006, T013, T017, T018, T019, T020, T022, T024, T029, T030, T036, T041, T042, T044, T050, T085, T086, T087, T092, T094.
+T003, T006, T013, T017, T018, T019, T020, T022, T024, T028, T029, T030, T036, T041, T042, T044, T050, T085, T086, T087, T092, T094.
 T044 was reopened after review, then repaired and reverified for selected-source navigation, empty
 draft retention, atomic document switching and external-source inspection.
 Other tasks remain unchecked; implemented subparts are recorded as in progress instead of implying
@@ -26,6 +47,15 @@ that their native, integration, review or acceptance obligations passed.
 | M2 | Round-trip semantic edits, graph/source, catalog, profile locks, named authored variants and actual selected-variant runs. Independent composition repairs and successor browser/performance records are retained; live two-industry and bidirectional Windows exchange remain open. |
 | M3 | Scoped inventory/authority/lease/clock/recovery fixtures and explicit unsupported production controls. Actual device/provider/driver/permission and physical evidence are BLOCKED. |
 | M4 | Bounded evaluator with snapshot-bound metric dependencies, Scenario intent authoring, campaigns, comparison, immutable exchange, annotations and dependency-aware project/run/artifact-registration retention. Reported trace claims and frozen subject links are verified; broader provider effects and complete retained release gates remain open. |
+
+Ready Linux work remains independent of hardware/Windows: T025 needs durable pending Start/command
+receipts, actual two-tab/lost-ack and accepted-command failure coverage; T027 needs operation-status,
+capability-aware controls and actionable ownership/cleanup uncertainty views. T031/T032's complete
+evidence-linked diagnostic explanation matrix is also open. T026's current browser/native successor
+must pass without weakening its replay-expiry, running-prefix, no-duplicate and immutable-byte checks.
+
+The verification descriptions below retain earlier checkpoint results. Their counts, clean packages
+and passing CI do not establish the latest candidate's still-open browser/performance gates.
 
 Actual verification records include `evidence/studio/backend-suite.txt` (an earlier 116-test candidate),
 M0/M1 independent reviews and their successor regressions, `M2-composition/verification.json`,
@@ -85,7 +115,7 @@ A byte-verified pure XDL wheel, license/provenance and preparation helper were p
 `pyproject.toml`/`uv.lock` and not presented as a verified Windows installation. No companion repository
 was modified. The current Linux dependency pin remains unchanged.
 
-## Current authoring, retention and recovery successor
+## Earlier authoring, retention and recovery checkpoint
 
 The current source cohort passed **350 backend tests**, with application/test source unchanged during
 verification, and **nine Playwright checks** (six real browser journeys and three pure projection
@@ -138,7 +168,7 @@ owned browser/recorded-fixture scope. Evidence is under
 its own recorded result. Clean product commit 180d026 passed the fresh offline package smoke;
 publication/CI state is reported separately. Native Windows and all unmet milestone gates remain unchanged.
 
-## Current evidence-selection successor
+## Earlier evidence-selection checkpoint
 
 Twenty-one task components are complete, including T018/T019's independently reviewed admission
 matrix and T029/T030's owned evidence query and Results views. Evidence query 1.0 applies exact

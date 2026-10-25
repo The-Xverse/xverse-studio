@@ -81,13 +81,64 @@ event payloads remain inspectable through history. Missing source ticks are null
 their original identities/reasons regardless of display filtering, with `gapCount` and `gapsComplete`
 for bounded enumeration. This does not establish canonical collection coverage. New cursors reject
 another route/run/filter context; old numeric history cursors are restricted to the legacy selectors.
-T026's retention-expiry/resynchronization requirements above remain open. See ADR-0010 for the
-reader acquisition, precision, compatibility and native-platform boundary.
+See ADR-0010 for the reader acquisition, precision, compatibility and native-platform boundary,
+and the negotiated transport recovery contract below for retention-expiry/resynchronization.
 
 The owned v1 stream uses unique event IDs and canonical nonnegative decimal-string sequences
 (`0|[1-9][0-9]*`, at most 32 characters; actual first sequence is `1`). Malformed digest/identity/sequence
 proof invalidates the read; missing digest proof retains verified-prefix status. This clarification
 does not rewrite existing canonical events or introduce a new external runtime admission.
+
+## Owned presentation transport 1.1
+
+The current application selects `GET /runs/{runId}/events?streamVersion=1.1&after={cursor}`.
+Default `streamVersion=1.0` retains the legacy run-prefixed/integer read-position compatibility.
+Unknown or duplicate selectors reject. Query `after` and `Last-Event-ID` must agree. Cursors are
+bounded to 2,048 characters. Version 1.1 uses opaque `st1.` proof-bound run/snapshot/sequence/digest
+positions. A legacy position under 1.1 requires 410 `STREAM_RESYNC_REQUIRED`, because an index cannot
+establish historical source continuity. Canonical data envelopes and their original digests stay 1.0.
+
+Capabilities advertise `contracts.events: "1.1"` and `limits.eventStream`: replay window 1,000,
+pending canonical frames 200, pending encoded bytes 1,048,576 including a 4,096-byte control reserve,
+maximum frame bytes 262,144, global subscribers 16 and per-run subscribers four. A reserved extra
+control slot reports presentation gaps. Quota refusal is retryable 429 `STREAM_SUBSCRIBER_LIMIT`.
+Legacy delivery preserves consecutive prefixes under byte pressure; an oversized next legacy frame
+rejects 413 `STREAM_FRAME_TOO_LARGE` before headers, with recovery/history routes.
+
+Before headers, an expired proof-bound position returns 410 `CURSOR_EXPIRED`, exact missing range/
+count, `earliestAvailableCursor`, `resumeAfterCursor` (the boundary before the first retained event),
+and `stateUrl`, `historyUrl`, `resyncUrl`, `evidenceUrl`. `earliestCursor` aliases that resume boundary.
+Source discontinuity returns 410 `STREAM_RESYNC_REQUIRED` with null unknown loss counts. Unavailable
+acquisition is retryable 503 `STREAM_SOURCE_UNAVAILABLE`; invalid original proof is 422
+`EVIDENCE_INVALID`. Unsupported canonical kinds reject 422 `STREAM_ENVELOPE_UNSUPPORTED`, without
+changing the original cryptographic verdict or retained bytes.
+
+After headers, notices use `event: studio.stream_control`, no `id`, and a JSON object containing
+`streamVersion: "1.1"`, `type` (`stream.gap|stream.resync_required|stream.error|stream.end`),
+`runId`, `snapshotId`, `reason`, nullable `firstMissingSequence`, `lastMissingSequence`, `missingCount`,
+and the retrieval routes. A gap includes its exact contiguous range/count and proof-bound
+`resumeAfterCursor`; an error retains the original error code as reason. Slow-consumer/byte/oversized
+presentation omissions never delete canonical evidence or manufacture `observation.gap` records.
+Terminal end is emitted only after reading stopped/failed source state through its final watermark.
+Unknown lifecycle remains pollable/reconnectable.
+
+`GET /runs/{runId}/resync` accepts no query selectors. Its response is
+`{streamVersion, runId, snapshotId, run, history, resumeCursor, watermark, stateUrl, historyUrl,
+resyncUrl, evidenceUrl}`. `history` contains at most 200 original items within the encoded byte/frame
+bounds, `nextCursor: null`, original `integrity`, total `omittedRecords`, and
+`oversizedOrBudgetOmissions`; its retrieval route exposes paged retained history. `watermark` binds
+the current canonical sequence/digest even when the display tail is bounded. The response is
+unfiltered recovery state, never a replacement for canonical evidence or a filtered evidence cursor.
+Missing terminal proof may retain `verified_prefix` and is displayed as such; invalid/unavailable
+sources cannot be upgraded by recovery. No recovery operation issues Start or another mutation.
+The 1,048,576-byte recovery budget applies to the complete encoded UTF-8 response, including
+`run`, the history tail and envelope. Metadata is accounted before selecting records. If metadata
+alone exceeds the response budget, 413 `STREAM_RECOVERY_TOO_LARGE` returns current-state and paged
+history routes; no successful recovery watermark is acknowledged by the browser.
+
+The browser acknowledges only accepted envelopes, awaits state/history recovery before reconnect,
+and retains unknown omission counts as unknown. Transport disposal releases its bounded resources
+without stopping backend execution. See ADR-0011 for exact scope, compatibility and verification.
 
 ## Verification obligations
 

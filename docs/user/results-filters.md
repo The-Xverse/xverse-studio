@@ -27,3 +27,15 @@ value columns are counted. Focus the named table region and use the arrow keys t
 Integrity, collection gaps, display paging and assertion verdicts are independent. A display selection
 does not repair missing evidence, validate a provider, pass an assertion or start/stop a run. Switching
 runs or filters discards obsolete read responses; browser cancellation affects the read only.
+
+When live delivery disconnects, Studio reconnects using the last accepted event position. If that
+position is outside the 1,000-record replay window, it reads the current run and a bounded history
+tail before resuming. The notice distinguishes exact presentation omissions from an unknown loss
+count. Use **Retained history** and its pages to inspect records outside the live tail. This recovery
+does not issue another Start, stop the worker or change original evidence.
+
+A running journal may report **verified_prefix** while collection continues. That limited reader
+verdict remains visible; it does not mean that final evidence is complete. Invalid evidence requires
+inspection rather than automatic recovery. If recovery reports a **presentation limit**, automatic
+retries stop: inspect the current run and paged retained history. The 1 MiB recovery-response limit
+includes run metadata as well as history; omitted display records remain in the retained journal.

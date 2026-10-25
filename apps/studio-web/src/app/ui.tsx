@@ -1,4 +1,4 @@
-import { useEffect, useRef, type ReactNode } from "react";
+import { useLayoutEffect, useRef, type ReactNode } from "react";
 import type { Data, Diagnostic } from "../api/types";
 export function Icon({ name, size = 18 }: { name: string; size?: number }) {
   const paths: Record<string, ReactNode> = {
@@ -224,7 +224,7 @@ export function Modal({
     section = useRef<HTMLElement | null>(null),
     close = useRef(onClose);
   close.current = onClose;
-  useEffect(() => {
+  useLayoutEffect(() => {
     const handle = (event: KeyboardEvent) => {
       const dialogs = document.querySelectorAll(
         '[role="dialog"][aria-modal="true"]',

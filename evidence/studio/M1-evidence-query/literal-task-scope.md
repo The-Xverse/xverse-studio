@@ -23,3 +23,9 @@ The remaining software obligations are concrete: add the restriction/redaction/p
 - ObservationDisplay.tsx: `19a4fae4cbfc75bd818df753d6e888bf1263707a8698730290b63807ca84aca6`
 
 See the independent successor review for the closed reader metadata/identity findings and exact semantics probe receipts, and M1-evidence-filters/independent-frontend-review.md for the read-only frontend review and keyboard successor amendment.
+
+## Successor after the explicit fixture gaps were implemented
+
+The earlier T028 recommendation above records the state before the new stream fixtures. The separately retained M1-event-stream/final receipt now records 16 passing cases in 15.02 seconds with identical before/after product and owned-test source hashes. The advancing journal explicitly verifies a digestless live prefix, then holds the consumer while 20 records are appended; the bounded three-event tail reports the exact dropped delivery interval and an independent canonical read retains all records. The restriction fixture observes actual file opens for a protected backing file and an excluded provider-private file inside the run, while admitted public reads and export succeed without exposing or opening either source. It claims an admitted-public-only boundary, not a generic sanitizer for private stderr.
+
+These concrete additions address the two literal T028 fixture gaps identified above. T028 can now be considered for closure after the independent successor review and root candidate checks. T025 remains a broader test task with explicit both-native-backend/browser wording, and T026's new end-to-end browser reconnect/resync lane must be assessed on its own receipt. This amendment does not close either by inference and does not change the Windows hold or milestone gates.

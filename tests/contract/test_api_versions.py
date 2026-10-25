@@ -16,6 +16,7 @@ def test_capability_host_provider_separation(client):
         "readiness": "1.0",
         "annotations": "1.1",
         "evidenceQuery": "1.0",
+        "events": "1.1",
     }
     assert c["host"]["os"] in ("Linux", "Windows")
     ref = next(p for p in c["providers"] if p["providerId"] == "studio.reference")

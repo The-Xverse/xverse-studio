@@ -1341,6 +1341,43 @@
         }
       }
     },
+    "/api/v1/runs/{runId}/resync": {
+      "get": {
+        "summary": "Resynchronize",
+        "operationId": "resynchronize_api_v1_runs__runId__resync_get",
+        "parameters": [
+          {
+            "name": "runId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Runid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/runs/{runId}/events": {
       "get": {
         "summary": "Events",
@@ -1369,6 +1406,16 @@
                 }
               ],
               "title": "After"
+            }
+          },
+          {
+            "name": "streamVersion",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "1.0",
+              "title": "Streamversion"
             }
           }
         ],

@@ -1,0 +1,22 @@
+{
+  "command": "env -u PYTHONPATH PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest tests/integration/test_stream_recovery.py -q -k \"legacy_byte_budget or legacy_oversized_first or legacy_index_requires\" --basetemp=<cache>/pytest/stream-legacy-before",
+  "result": "2 failed, 1 passed, 19 deselected",
+  "seconds": 1.96,
+  "sourceBefore": {
+    "services/studio-api/src/xverse_studio/events/__init__.py": "c018d66dcf4d6cc9858ac3bb5b4ce83cd94a28b4f6b1eb1098841a17988d403d",
+    "services/studio-api/src/xverse_studio/api/app.py": "682eb0ca1e9963a3e5b0df32ce6c467e2f592663a64d616234daa49d07d330a2",
+    "tests/integration/test_stream_recovery.py": "343df106e2b5b55fabd3d90d1014520736e437a4c531a522df402009bc3775c1"
+  },
+  "sourceAfter": {
+    "services/studio-api/src/xverse_studio/events/__init__.py": "c018d66dcf4d6cc9858ac3bb5b4ce83cd94a28b4f6b1eb1098841a17988d403d",
+    "services/studio-api/src/xverse_studio/api/app.py": "682eb0ca1e9963a3e5b0df32ce6c467e2f592663a64d616234daa49d07d330a2",
+    "tests/integration/test_stream_recovery.py": "343df106e2b5b55fabd3d90d1014520736e437a4c531a522df402009bc3775c1"
+  },
+  "sourceUnchanged": true,
+  "findings": [
+    "Five consecutive 800-char records deliver only4,5 without a gap in legacy1.0",
+    "Oversized first legacy API frame returns200 empty instead of typed413 beforeheaders"
+  ],
+  "positive": "Legacy1.1 index requires explicit resync, while1.0 index remains supported",
+  "scope": "Only newly allocated disposable fixture bytes; no existing provider journals modified"
+}

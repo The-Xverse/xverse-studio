@@ -1,0 +1,34 @@
+{
+  "sourceBefore": {
+    "services/studio-api/src/xverse_studio/events/__init__.py": "fd966aabbe1e339636326c739003f96e5a315e1e9edb28120230b48dd1c8261a",
+    "services/studio-api/src/xverse_studio/api/app.py": "f7233b4f06044313059ef0cf3b82a702244e3d09e9e79f0a7cbed8be12034e59"
+  },
+  "sourceAfter": {
+    "services/studio-api/src/xverse_studio/events/__init__.py": "fd966aabbe1e339636326c739003f96e5a315e1e9edb28120230b48dd1c8261a",
+    "services/studio-api/src/xverse_studio/api/app.py": "f7233b4f06044313059ef0cf3b82a702244e3d09e9e79f0a7cbed8be12034e59"
+  },
+  "cases": [
+    {
+      "mode": "headers_oserror",
+      "admitted": 1,
+      "sendCalls": [
+        "http.response.start"
+      ],
+      "responseError": "ClientDisconnect",
+      "remainingAfterResponse": 1,
+      "remainingAfterIteratorClose": 1
+    },
+    {
+      "mode": "headers_cancelled",
+      "admitted": 1,
+      "sendCalls": [
+        "http.response.start"
+      ],
+      "responseError": "CancelledError",
+      "remainingAfterResponse": 1,
+      "remainingAfterIteratorClose": 1
+    }
+  ],
+  "originalJournalUnchanged": true,
+  "scope": "Real API endpoint and Starlette response invoked directly; synthetic transport disconnect; no server/runtime process launched."
+}

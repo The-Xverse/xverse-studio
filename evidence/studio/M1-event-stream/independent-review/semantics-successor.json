@@ -1,0 +1,54 @@
+{
+  "sourceBefore": {
+    "services/studio-api/src/xverse_studio/events/__init__.py": "c018d66dcf4d6cc9858ac3bb5b4ce83cd94a28b4f6b1eb1098841a17988d403d",
+    "services/studio-api/src/xverse_studio/api/app.py": "682eb0ca1e9963a3e5b0df32ce6c467e2f592663a64d616234daa49d07d330a2",
+    "services/studio-api/src/xverse_studio/evidence/reader.py": "d8be82d6adf8fd8ba353a97730f0f1afc1fa25556a7790934b67b6b8f1bab2f2"
+  },
+  "sourceAfter": {
+    "services/studio-api/src/xverse_studio/events/__init__.py": "c018d66dcf4d6cc9858ac3bb5b4ce83cd94a28b4f6b1eb1098841a17988d403d",
+    "services/studio-api/src/xverse_studio/api/app.py": "682eb0ca1e9963a3e5b0df32ce6c467e2f592663a64d616234daa49d07d330a2",
+    "services/studio-api/src/xverse_studio/evidence/reader.py": "d8be82d6adf8fd8ba353a97730f0f1afc1fa25556a7790934b67b6b8f1bab2f2"
+  },
+  "cases": [
+    {
+      "case": "unicode_record_byte_pressure",
+      "result": "PASS",
+      "gap": {
+        "firstMissingSequence": "1",
+        "lastMissingSequence": "11",
+        "missingCount": 11,
+        "reason": "PENDING_BYTE_LIMIT"
+      },
+      "batchBytes": 3560,
+      "canonicalFrames": 1
+    },
+    {
+      "case": "resync_omissions_keep_exact_source_watermark",
+      "result": "PASS",
+      "omittedRecords": 11
+    },
+    {
+      "case": "valid_hashchain_fork_after_ack",
+      "result": "PASS",
+      "reason": "SOURCE_DISCONTINUITY",
+      "missingCount": null
+    },
+    {
+      "case": "unknown_is_live_and_iterator_close_releases",
+      "result": "PASS",
+      "integrity": "verified_prefix",
+      "heartbeatOnly": true
+    },
+    {
+      "case": "embedded_newline_event_kind",
+      "typedRejection": true,
+      "code": "STREAM_ENVELOPE_UNSUPPORTED",
+      "status": 422,
+      "integrity": "valid",
+      "readerIntegrity": "valid",
+      "originalJournalUnchanged": true
+    }
+  ],
+  "normalSourceUnchanged": true,
+  "scope": "Direct production EventStreams with newly created synthetic fixture journals; no process/device/browser operations."
+}

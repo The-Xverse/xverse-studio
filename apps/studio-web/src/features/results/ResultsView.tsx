@@ -277,7 +277,15 @@ export function ResultsView({
       observationGeneration.current++;
       observationRequest.current?.abort();
     };
-  }, [run?.runId, run?.snapshotId, run?.state, queryIdentity]);
+  }, [
+    run?.runId,
+    run?.snapshotId,
+    run?.state,
+    run?.evidence,
+    run?.evidenceStatus,
+    run?.evidenceAvailability,
+    queryIdentity,
+  ]);
   useEffect(() => {
     void api("/runs")
       .then((r) => setHistory(items(r)))
@@ -528,9 +536,11 @@ export function ResultsView({
         <StatusCard
           label="Evidence"
           value={
-            typeof run.evidenceStatus === "string"
-              ? run.evidenceStatus
-              : evidence.status || evidence.integrity || "pending"
+            typeof run.evidence === "string"
+              ? run.evidence
+              : typeof run.evidenceStatus === "string"
+                ? run.evidenceStatus
+                : evidence.status || "unknown"
           }
           detail="Integrity and completeness"
         />

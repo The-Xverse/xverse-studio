@@ -1,0 +1,726 @@
+{
+  "config": {
+    "argv": [
+      "<loop10-cache>/node-v24.22.1-linux-x64/bin/node",
+      "<workspace>/node_modules/.bin/playwright",
+      "test",
+      "-c",
+      "tests/e2e/playwright.config.ts",
+      "--grep",
+      "session contract:|run session:"
+    ],
+    "configFile": "<workspace>/tests/e2e/playwright.config.ts",
+    "rootDir": "<workspace>/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "<workspace>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "<workspace>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "*.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "<workspace>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "<workspace>/tests/e2e",
+        "snapshotDir": "<workspace>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": "*.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "baseURL": "http://127.0.0.1:60087",
+          "browserName": "chromium",
+          "actionTimeout": 15000,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "trace": "off",
+          "screenshot": "only-on-failure",
+          "video": "off"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "<workspace>/test-results/browser-report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "run-reconnect.spec.ts",
+      "file": "run-reconnect.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "run session: unknown recorded state awaits actual bounded resync and reconnects read-only",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4017,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-25T15:24:19.311Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "recorded-fixture-scope",
+                      "contentType": "application/json",
+                      "body": "eyJwcm9qZWN0SWQiOiJwcmotYzM5ZmRkNmQtN2YyYy00MmM4LTk5ZDctMzMzNzZhODA3NjI1IiwicnVuSWQiOiJydW4tcmVhZGVyLWZpeHR1cmUtNDk0Nzg2MzctNjJjZS00ZmU5LTljZDctMmU0ODBmMjhlMjI2Iiwic25hcHNob3RJZCI6InNuYXAtZGQ0MThiMDUtZDdlZC00YjMwLTg1ODEtYjRjOGQzODFjMzIzIiwicmVjb3JkQ291bnQiOjEyMTUsImpvdXJuYWxEaWdlc3QiOiJzaGEyNTY6ZmIwODIyNzczNjA5MTQ3ZTU2M2U1ZDBiNWUyNTE0MGIyZGRkNGE4NTBkMGJhYmZlZTQ5MGVkMWEyYWY4ZDNkNyIsImV2ZW50cyI6eyJodWdlQmVmb3JlIjoicnVuLXJlYWRlci1maXh0dXJlLTQ5NDc4NjM3LTYyY2UtNGZlOS05Y2Q3LTJlNDgwZjI4ZTIyNjpodWdlQmVmb3JlIiwiaHVnZUluc2lkZSI6InJ1bi1yZWFkZXItZml4dHVyZS00OTQ3ODYzNy02MmNlLTRmZTktOWNkNy0yZTQ4MGYyOGUyMjY6aHVnZUluc2lkZSIsImh1Z2VFbmQiOiJydW4tcmVhZGVyLWZpeHR1cmUtNDk0Nzg2MzctNjJjZS00ZmU5LTljZDctMmU0ODBmMjhlMjI2Omh1Z2VFbmQiLCJuZWdhdGl2ZSI6InJ1bi1yZWFkZXItZml4dHVyZS00OTQ3ODYzNy02MmNlLTRmZTktOWNkNy0yZTQ4MGYyOGUyMjY6bmVnYXRpdmUiLCJ6ZXJvIjoicnVuLXJlYWRlci1maXh0dXJlLTQ5NDc4NjM3LTYyY2UtNGZlOS05Y2Q3LTJlNDgwZjI4ZTIyNjp6ZXJvIiwibWlzc2luZ1RpbWUiOiJydW4tcmVhZGVyLWZpeHR1cmUtNDk0Nzg2MzctNjJjZS00ZmU5LTljZDctMmU0ODBmMjhlMjI2Om1pc3NpbmdUaW1lIiwibWFsZm9ybWVkVGltZSI6InJ1bi1yZWFkZXItZml4dHVyZS00OTQ3ODYzNy02MmNlLTRmZTktOWNkNy0yZTQ4MGYyOGUyMjY6bWFsZm9ybWVkVGltZSIsIm90aGVyQ2xvY2siOiJydW4tcmVhZGVyLWZpeHR1cmUtNDk0Nzg2MzctNjJjZS00ZmU5LTljZDctMmU0ODBmMjhlMjI2Om90aGVyQ2xvY2siLCJ1bmtub3duUmVjZWlwdCI6InJ1bi1yZWFkZXItZml4dHVyZS00OTQ3ODYzNy02MmNlLTRmZTktOWNkNy0yZTQ4MGYyOGUyMjY6dW5rbm93blJlY2VpcHQiLCJtaXNzaW5nUmVjZWlwdCI6InJ1bi1yZWFkZXItZml4dHVyZS00OTQ3ODYzNy02MmNlLTRmZTktOWNkNy0yZTQ4MGYyOGUyMjY6bWlzc2luZ1JlY2VpcHQiLCJnYXAiOiJydW4tcmVhZGVyLWZpeHR1cmUtNDk0Nzg2MzctNjJjZS00ZmU5LTljZDctMmU0ODBmMjhlMjI2OmdhcCIsImxvZ0FscGhhIjoicnVuLXJlYWRlci1maXh0dXJlLTQ5NDc4NjM3LTYyY2UtNGZlOS05Y2Q3LTJlNDgwZjI4ZTIyNjpsb2dBbHBoYSIsImxvZ0JldGEiOiJydW4tcmVhZGVyLWZpeHR1cmUtNDk0Nzg2MzctNjJjZS00ZmU5LTljZDctMmU0ODBmMjhlMjI2OmxvZ0JldGEiLCJsYXRlIjoicnVuLXJlYWRlci1maXh0dXJlLTQ5NDc4NjM3LTYyY2UtNGZlOS05Y2Q3LTJlNDgwZjI4ZTIyNjpsYXRlIiwibGF0ZUxvZyI6InJ1bi1yZWFkZXItZml4dHVyZS00OTQ3ODYzNy02MmNlLTRmZTktOWNkNy0yZTQ4MGYyOGUyMjY6bGF0ZUxvZyJ9LCJ0aWNrcyI6eyJzdGFydCI6IjkwMDcxOTkyNTQ3NDA5OTMiLCJlbmQiOiI5MDA3MTk5MjU0NzQwOTk0In0sImNsb2NrRG9tYWlucyI6WyJjbG9jay1hbHBoYSIsImNsb2NrLWJldGEiXSwib2JzZXJ2ZXJSZWZzIjpbInN0YXRlLW9ic2VydmVyIiwiZXh0ZXJuYWwtb2JzZXJ2ZXIiLCJub2lzZS1vYnNlcnZlciJdLCJzb3VyY2VQcm92aWRlcklkcyI6WyJzdHVkaW8ucmVmZXJlbmNlIiwiZml4dHVyZS5hbHBoYSIsImZpeHR1cmUuYmV0YSIsImZpeHR1cmUudW5rbm93biIsImZpeHR1cmUubm9pc2UiLCJmaXh0dXJlLmxhdGUiXSwiZXZpZGVuY2VTY29wZSI6InJlY29yZGVkX2ZpeHR1cmUiLCJnYXBSZWFzb24iOiJTeW50aGV0aWMgZGVjbGFyZWQgY29sbGVjdGlvbiBnYXAiLCJzdGF0ZSI6InVua25vd24iLCJzdHJlYW1WZXJzaW9uIjoiMS4xIiwicnVudGltZUF1dGhvcml0eSI6ZmFsc2V9"
+                    },
+                    {
+                      "name": "read-only-stream-requests",
+                      "contentType": "application/json",
+                      "body": "eyJzdHJlYW1zIjpbImh0dHA6Ly8xMjcuMC4wLjE6NjAwODcvYXBpL3YxL3J1bnMvcnVuLXJlYWRlci1maXh0dXJlLTQ5NDc4NjM3LTYyY2UtNGZlOS05Y2Q3LTJlNDgwZjI4ZTIyNi9ldmVudHM/c3RyZWFtVmVyc2lvbj0xLjEiLCJodHRwOi8vMTI3LjAuMC4xOjYwMDg3L2FwaS92MS9ydW5zL3J1bi1yZWFkZXItZml4dHVyZS00OTQ3ODYzNy02MmNlLTRmZTktOWNkNy0yZTQ4MGYyOGUyMjYvZXZlbnRzP3N0cmVhbVZlcnNpb249MS4xJmFmdGVyPXN0MS5leUprSWpvaU5HSXdNV015TWpGak5XSTBPRFZqTldZNU1USXpZelZrWVRrNFlXTTJOV1V3TnpCbFltVXdNelZpTWpjNU5HTm1aREZqWkRsak1HVmlOVGxpTW1ZNU15SXNJbkVpT2lJeE1qRTFJaXdpY2lJNkluSjFiaTF5WldGa1pYSXRabWw0ZEhWeVpTMDBPVFEzT0RZek55MDJNbU5sTFRSbVpUa3RPV05rTnkweVpUUTRNR1l5T0dVeU1qWWlMQ0p6SWpvaWMyNWhjQzFrWkRReE9HSXdOUzFrTjJWa0xUUmlNekF0T0RVNE1TMWlOR000WkRNNE1XTXpNak1pZlEiLCJodHRwOi8vMTI3LjAuMC4xOjYwMDg3L2FwaS92MS9ydW5zL3J1bi1yZWFkZXItZml4dHVyZS00OTQ3ODYzNy02MmNlLTRmZTktOWNkNy0yZTQ4MGYyOGUyMjYvZXZlbnRzP3N0cmVhbVZlcnNpb249MS4xJmFmdGVyPXN0MS5leUprSWpvaU5HSXdNV015TWpGak5XSTBPRFZqTldZNU1USXpZelZrWVRrNFlXTTJOV1V3TnpCbFltVXdNelZpTWpjNU5HTm1aREZqWkRsak1HVmlOVGxpTW1ZNU15SXNJbkVpT2lJeE1qRTFJaXdpY2lJNkluSjFiaTF5WldGa1pYSXRabWw0ZEhWeVpTMDBPVFEzT0RZek55MDJNbU5sTFRSbVpUa3RPV05rTnkweVpUUTRNR1l5T0dVeU1qWWlMQ0p6SWpvaWMyNWhjQzFrWkRReE9HSXdOUzFrTjJWa0xUUmlNekF0T0RVNE1TMWlOR000WkRNNE1XTXpNak1pZlEiXSwid3JpdGVzIjpbXSwiZmF1bHQiOiJFeHBsaWNpdCBicm93c2VyIGZldGNoIGNhbmNlbGxhdGlvbjsgYWxsIHNlcnZlciBmcmFtZXMgYW5kIHJlc3luYyBkYXRhIHJlbWFpbiBhY3R1YWwgbmF0aXZlIEFQSSByZXNwb25zZXMuIn0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "46919d8b7dee4b05863c-9efca6a6eaccf8e5cb9b",
+          "file": "run-reconnect.spec.ts",
+          "line": 88,
+          "column": 5
+        },
+        {
+          "title": "run session: native owned execution survives real replay-window expiry while running without duplicate Start",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 21599,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m\n\nCall Log:\n- Timeout 4000ms exceeded while waiting on the predicate",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m\n\nCall Log:\n- Timeout 4000ms exceeded while waiting on the predicate\n    at <workspace>/tests/e2e/run-reconnect.spec.ts:368:6",
+                    "location": {
+                      "file": "<workspace>/tests/e2e/run-reconnect.spec.ts",
+                      "column": 6,
+                      "line": 368
+                    },
+                    "snippet": "  366 |   await expect\n  367 |     .poll(() => expiredResponses.length, { timeout: 4000 })\n> 368 |     .toBeGreaterThan(0);\n      |      ^\n  369 |   await expect\n  370 |     .poll(\n  371 |       () =>"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<workspace>/tests/e2e/run-reconnect.spec.ts",
+                        "column": 6,
+                        "line": 368
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m\n\nCall Log:\n- Timeout 4000ms exceeded while waiting on the predicate\n\n  366 |   await expect\n  367 |     .poll(() => expiredResponses.length, { timeout: 4000 })\n> 368 |     .toBeGreaterThan(0);\n      |      ^\n  369 |   await expect\n  370 |     .poll(\n  371 |       () =>\n    at <workspace>/tests/e2e/run-reconnect.spec.ts:368:6"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-25T15:24:23.833Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<workspace>/test-results/browser/run-reconnect-run-session--94045-ing-without-duplicate-Start/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<workspace>/test-results/browser/run-reconnect-run-session--94045-ing-without-duplicate-Start/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<workspace>/tests/e2e/run-reconnect.spec.ts",
+                    "column": 6,
+                    "line": 368
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "46919d8b7dee4b05863c-29a825d2fbae1e074500",
+          "file": "run-reconnect.spec.ts",
+          "line": 222,
+          "column": 5
+        },
+        {
+          "title": "run session: UI metadata fixture updates evidence at the same lifecycle version without altering evidence",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 7872,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-25T15:24:46.160Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "same-version-ui-negative-scope",
+                      "contentType": "application/json",
+                      "body": "eyJzY29wZSI6ImNvbnRyb2xsZWQgSFRUUCBtZXRhZGF0YSBVSSBuZWdhdGl2ZSBvbmx5OyBzb3VyY2Ugam91cm5hbCBhbmQgc25hcHNob3QgdW5jaGFuZ2VkIiwiZXZpZGVuY2VTY29wZSI6InJlY29yZGVkX2ZpeHR1cmUiLCJyZXF1ZXN0ZWRTdGF0ZXMiOlsicGFydGlhbCIsImludmFsaWQiLCJ1bmF2YWlsYWJsZSJdLCJzdGF0ZVZlcnNpb25zIjpbMSwxLDFdLCJqb3VybmFsU2hhMjU2IjoiOGY5ODY1NmM5N2QwYzFkZDk2YzQwYTc3MjFlYmY1Mjg2Y2FhN2FlNTUwYmZmOGY5MDVlZjMzYmM1ZjVhZmE2MCIsInNuYXBzaG90U2hhMjU2IjoiY2ZiMTZjYjdhYzg3YTZlY2ZjZTQ4MDZmMjU5MTE2Y2UzOTRjNTMzMDlhNDZhNTgxNmRmN2E4OWZiNTRjMDk5ZSIsImJhY2tlbmRFdmlkZW5jZSI6InBhcnRpYWwiLCJtdXRhdGlvbnMiOltdfQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "46919d8b7dee4b05863c-463182eb88dd6ad8b890",
+          "file": "run-reconnect.spec.ts",
+          "line": 453,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "session-contract.spec.ts",
+      "file": "session-contract.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "session contract: callback acceptance precedes acknowledged reconnect cursor",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1621,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-25T15:24:54.184Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "867a6ceef9ff0fe48626-4aec27e276939246f457",
+          "file": "session-contract.spec.ts",
+          "line": 56,
+          "column": 5
+        },
+        {
+          "title": "session contract: expiry awaits full state and history resynchronization before reconnect",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 857,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-25T15:24:55.813Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "867a6ceef9ff0fe48626-e3555cc3def078e57e97",
+          "file": "session-contract.spec.ts",
+          "line": 90,
+          "column": 5
+        },
+        {
+          "title": "session contract: SSE CRLF split across chunks preserves one canonical frame",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 206,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-25T15:24:56.681Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "867a6ceef9ff0fe48626-3d47ee258a052ebc81d3",
+          "file": "session-contract.spec.ts",
+          "line": 136,
+          "column": 5
+        },
+        {
+          "title": "session contract: unknown presentation loss stays unknown and outside canonical records",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 104,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-25T15:24:56.932Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "867a6ceef9ff0fe48626-ee36a51cf2800a701ac7",
+          "file": "session-contract.spec.ts",
+          "line": 173,
+          "column": 5
+        },
+        {
+          "title": "session contract: retry timers remove completed abort listeners",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1857,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-25T15:24:57.048Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "867a6ceef9ff0fe48626-6ffd5e8d6ced62320410",
+          "file": "session-contract.spec.ts",
+          "line": 227,
+          "column": 5
+        },
+        {
+          "title": "session contract: disposal cancels an idle reader without another request",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-25T15:24:58.915Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "867a6ceef9ff0fe48626-3e28e2b2b52a3387afff",
+          "file": "session-contract.spec.ts",
+          "line": 282,
+          "column": 5
+        },
+        {
+          "title": "session contract: equal lifecycle version keeps state while fresh cleanup and evidence advance",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-25T15:24:58.923Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "867a6ceef9ff0fe48626-1c8664d59d41da4bf6c9",
+          "file": "session-contract.spec.ts",
+          "line": 315,
+          "column": 5
+        },
+        {
+          "title": "session contract: invalid recovery cannot acknowledge a replacement watermark",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 855,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-25T15:24:58.937Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "867a6ceef9ff0fe48626-cc888b0895177856bd5b",
+          "file": "session-contract.spec.ts",
+          "line": 353,
+          "column": 5
+        },
+        {
+          "title": "session contract: duplicate delivery deduplicates before consumer acceptance",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 152,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-25T15:24:59.800Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "867a6ceef9ff0fe48626-7d399eb10ccb428c6d83",
+          "file": "session-contract.spec.ts",
+          "line": 391,
+          "column": 5
+        },
+        {
+          "title": "session contract: mismatched cursor proof rejects frame before consumer acceptance",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 103,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-25T15:24:59.962Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "867a6ceef9ff0fe48626-2d0e83814b95ee3401de",
+          "file": "session-contract.spec.ts",
+          "line": 414,
+          "column": 5
+        },
+        {
+          "title": "session contract: incompatible schema and oversized frames require verified recovery",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 102,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-25T15:25:00.074Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "867a6ceef9ff0fe48626-810bde9f5d799fa07b4c",
+          "file": "session-contract.spec.ts",
+          "line": 451,
+          "column": 5
+        },
+        {
+          "title": "session contract: running verified-prefix recovery preserves limited integrity and resumes",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 103,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-25T15:25:00.186Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "867a6ceef9ff0fe48626-23b48bc591fefd5938f7",
+          "file": "session-contract.spec.ts",
+          "line": 488,
+          "column": 5
+        },
+        {
+          "title": "session contract: invalid and unavailable recovery bodies remain unaccepted",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1710,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-25T15:25:00.297Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "867a6ceef9ff0fe48626-b419b2092f4e2024f483",
+          "file": "session-contract.spec.ts",
+          "line": 524,
+          "column": 5
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-25T15:24:18.709Z",
+    "duration": 43377.409999999996,
+    "expected": 15,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

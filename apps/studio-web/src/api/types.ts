@@ -67,6 +67,8 @@ export interface Run {
   [key: string]: any;
 }
 export interface RunEvent {
+  digest?: string;
+  previousDigest?: string;
   schemaVersion?: string;
   eventId: string;
   runId: string;

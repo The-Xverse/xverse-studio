@@ -1,0 +1,176 @@
+FFFF                                                                     [100%]
+=================================== FAILURES ===================================
+_______ test_v11_source_proof_resume_and_resync_watermark_are_read_only ________
+
+client = <starlette.testclient.TestClient object at 0x723f7f13ae40>
+recorded = {'clockDomains': ['clock-alpha', 'clock-beta'], 'events': {'gap': 'run-reader-fixture-19257482-ebc6-4a3f-9183-f5dd4e7b...4e7ba1b8:hugeInside', ...}, 'evidenceScope': 'recorded_fixture', 'gapReason': 'Synthetic declared collection gap', ...}
+
+    def test_v11_source_proof_resume_and_resync_watermark_are_read_only(client, recorded):
+        rid, sid = recorded["runId"], recorded["snapshotId"]
+        studio = client.app.state.studio
+        root = studio.runs.directory(rid)
+        original = (root / "evidence.jsonl").read_bytes()
+        expected, integrity = read_journal(root, studio.runs.read(rid))
+        response = client.get(f"/api/v1/runs/{rid}/events", params={"streamVersion": "1.1"})
+        assert response.status_code == 200, response.text
+        delivered = frames(response.text)
+        events = [
+            frame for frame in delivered if frame.get("event") != "studio.stream_control"
+        ]
+        assert [item["data"] for item in events] == expected
+>       assert all(item["id"].startswith("st1.") for item in events)
+E       assert False
+E        +  where False = all(<generator object test_v11_source_proof_resume_and_resync_watermark_are_read_only.<locals>.<genexpr> at 0x723f7e6f3e00>)
+
+tests/integration/test_stream_recovery.py:80: AssertionError
+______ test_v11_digest_fork_requires_resynchronization_not_empty_success _______
+
+client = <starlette.testclient.TestClient object at 0x723f7d51ccd0>
+recorded = {'clockDomains': ['clock-alpha', 'clock-beta'], 'events': {'gap': 'run-reader-fixture-3add199e-1482-4d8f-b631-b7182629...26293df7:hugeInside', ...}, 'evidenceScope': 'recorded_fixture', 'gapReason': 'Synthetic declared collection gap', ...}
+
+    def test_v11_digest_fork_requires_resynchronization_not_empty_success(client, recorded):
+        rid, sid = recorded["runId"], recorded["snapshotId"]
+        response = client.get(
+            f"/api/v1/runs/{rid}/events",
+            params={"streamVersion": "1.1", "after": cursor(rid, sid, "1", "f" * 64)},
+        )
+>       assert response.status_code == 410, response.text
+E       AssertionError: {"code":"CURSOR_INVALID","message":"The event cursor is invalid.","requestId":"req-a33594b8-4de0-4c23-935a-5a36666ac575","retryable":false}
+E       assert 422 == 410
+E        +  where 422 = <Response [422 Unprocessable Entity]>.status_code
+
+tests/integration/test_stream_recovery.py:121: AssertionError
+_ test_v11_unavailable_and_invalid_never_look_like_empty_valid_stream[missing-503-STREAM_SOURCE_UNAVAILABLE] _
+
+client = <starlette.testclient.TestClient object at 0x723f7cc5a5d0>
+recorded = {'clockDomains': ['clock-alpha', 'clock-beta'], 'events': {'gap': 'run-reader-fixture-2b1e6fbb-678c-460d-9ff8-35410e9d...0e9d4f78:hugeInside', ...}, 'evidenceScope': 'recorded_fixture', 'gapReason': 'Synthetic declared collection gap', ...}
+kind = 'missing', status = 503, code = 'STREAM_SOURCE_UNAVAILABLE'
+
+    @pytest.mark.parametrize(
+        "kind,status,code",
+        [
+            ("missing", 503, "STREAM_SOURCE_UNAVAILABLE"),
+            ("invalid", 422, "EVIDENCE_INVALID"),
+        ],
+    )
+    def test_v11_unavailable_and_invalid_never_look_like_empty_valid_stream(
+        client, recorded, kind, status, code
+    ):
+        studio = client.app.state.studio
+        rid = recorded["runId"]
+        path = studio.runs.directory(rid) / "evidence.jsonl"
+        if kind == "missing":
+            path.rename(path.with_name("owned-fixture-missing-source.jsonl"))
+        else:
+            # Only this newly allocated disposable fixture is corrupted.
+            path.write_bytes(path.read_bytes() + b"bad-new-fixture-tail\n")
+        response = client.get(f"/api/v1/runs/{rid}/events", params={"streamVersion": "1.1"})
+>       assert response.status_code == status, response.text
+E       AssertionError:
+E       assert 200 == 503
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/integration/test_stream_recovery.py:148: AssertionError
+_ test_v11_unavailable_and_invalid_never_look_like_empty_valid_stream[invalid-422-EVIDENCE_INVALID] _
+
+client = <starlette.testclient.TestClient object at 0x723f7d528d60>
+recorded = {'clockDomains': ['clock-alpha', 'clock-beta'], 'events': {'gap': 'run-reader-fixture-9c1879c7-9d6a-4e3f-8146-fc688a3e...8a3e2c49:hugeInside', ...}, 'evidenceScope': 'recorded_fixture', 'gapReason': 'Synthetic declared collection gap', ...}
+kind = 'invalid', status = 422, code = 'EVIDENCE_INVALID'
+
+    @pytest.mark.parametrize(
+        "kind,status,code",
+        [
+            ("missing", 503, "STREAM_SOURCE_UNAVAILABLE"),
+            ("invalid", 422, "EVIDENCE_INVALID"),
+        ],
+    )
+    def test_v11_unavailable_and_invalid_never_look_like_empty_valid_stream(
+        client, recorded, kind, status, code
+    ):
+        studio = client.app.state.studio
+        rid = recorded["runId"]
+        path = studio.runs.directory(rid) / "evidence.jsonl"
+        if kind == "missing":
+            path.rename(path.with_name("owned-fixture-missing-source.jsonl"))
+        else:
+            # Only this newly allocated disposable fixture is corrupted.
+            path.write_bytes(path.read_bytes() + b"bad-new-fixture-tail\n")
+        response = client.get(f"/api/v1/runs/{rid}/events", params={"streamVersion": "1.1"})
+>       assert response.status_code == status, response.text
+E       AssertionError: id: run-reader-fixture-9c1879c7-9d6a-4e3f-8146-fc688a3e2c49:1
+E         event: observation.available
+E         data: {"digest":"a4711d8c34bfada8b358d79706193009d35dc970570f3d41b774a625948e4234","elementRefs":["xdl://org.xverse.studio.process-control/system/reference-loop#plant"],"eventId":"run-reader-fixture-9c1879c7-9d6a-4e3f-8146-fc688a3e2c49:hugeBefore","evidenceClass":"unknown","evidenceRefs":["run-reader-fixture-9c1879c7-9d6a-4e3f-8146-fc688a3e2c49:reference-journal"],"payload":{"observerRef":"state-observer","units":{"flag":"1","value":"1"},"values":{"flag":false,"value":0}},"previousDigest":"0000000000000000000000000000000000000000000000000000000000000000","recordedAt":1767225600.25,"runId":"run-reader-fixture-9c1879c7-9d6a-4e3f-8146-fc688a3e2c49","schemaVersion":"1.0","sequence":"1","snapshotId":"snap-0e681d01-4c66-4b04-8933-222820f01c8b","source":{"kind":"trusted-synthetic-reader-fixture","providerId":"studio.reference","version":"1.0.0"},"sourceTime":{"clockDomain":"clock-alpha","resolution":"nanosecond","tick":"9007199254740992","uncertainty":0},"type":"observation.available"}
+E
+E         id: run-reader-fixture-9c1879c7-9d6a-4e3f-8146-fc688a3e2c49:2
+E         event: observation.available
+E         data: {"digest":"e9f3cb75a222f59d32600c4754d79727aa385a20318c9c08b71f6093333e1593","elementRefs":["xdl://org.xverse.studio.process-control/system/reference-loop#plant"],"eventId":"run-reader-fixture-9c1879c7-9d6a-4e3f-8146-fc688a3e2c49:hugeInside","evidenceClass":"unknown","evidenceRefs":["run-reader-fixture-9c1879c7-9d6a-4e3f-8146-fc688a3e2c49:reference-journal"],"payload":{"observerRef":"state-observer","units":{"flag":"1","value":"1"},"values":{"flag":false,"value":0.25}},"previousDigest":"a4711d8c34bfada8b358d79706193009d35dc970570f3d41b774a625948e4234","recordedAt":"2026-01-01T01:00:01+01:00","runId":"run-reader-fixture-9c1879c7-9d6a-4e3f-8146-fc688a3e2c49","schemaVersion":"1.0","sequence":"2","snapshotId":"snap-0e681d01-4c66-4b04-8933-222820f01c8b","source":{"kind":"trusted-synthetic-reader-fixture","providerId":"fixture.alpha","version":"1.0.0"},"sourceTime":{"clockDomain":"clock-alpha","resolution":"nanosecond","tick":"9007199254740993","uncertainty":0},"type":"observation.available"}
+E
+E         id: run-reader-fixture-9c1879c7-9d6a-4e3f-8146-fc688a3e2c49:3
+E         event: observation.available
+E         data: {"digest":"ff3f0f3c0ce1967358dfd781ea6e0853905ca83d10f0b705f02af5c41b8a2eb0","elementRefs":["xdl://org.xverse.studio.process-control/system/reference-loop#plant"],"eventId":"run-reader-fixture-9c1879c7-9d6a-4e3f-8146-fc688a3e2c49:hugeEnd","evidenceClass":"unknown","evidenceRefs":["run-reader-fixture-9c1879c7-9d6a-4e3f-8146-fc688a3e2c49:reference-journal"],"payload":{"observerRef":"state-observer","units":{"flag":"1","value":"1"},"values":{"value":3}},"previousDigest":"e9f3cb75a222f59d32600c4754d79727aa385a20318c9c08b71f6093333e1593","recordedAt":"2026-01-01T00:00:02Z","runId":"run-reader-fixture-9c1879c7-9d6a-4e3f-8146-fc688a3e2c49","schemaVersion":"1.0","sequence":"3","snapshotId":"snap-0e681d01-4c66-4b04-8933-222820f01c8b","source":{"kind":"trusted-synthetic-reader-fixture","providerId":"fixture.alpha","version":"1.0.0"},"sourceTime":{"clockDomain":"clock-alpha","resolution":"nanosecond","tick":"9007199254740994","uncertainty":0},"type":"observation.available"}
+E
+E         id: run-reader-fixture-9c1879c7-9d6a-4e3f-8146-fc688a3e2c49:4
+E         event: observation.available
+E         data: {"digest":"c7a46f8fdc26bfe715d294399b364cf34ae12d76bd5416460ac27de76e043e75","elementRefs":["xdl://org.xverse.studio.process-control/system/reference-loop#plant"],"eventId":"run-reader-fixture-9c1879c7-9d6a-4e3f-8146-fc688a3e2c49:negative","evidenceClass":"unknown","evidenceRefs":["run-reader-fixture-9c1879c7-9d6a-4e3f-8146-fc688a3e2c49:reference-journal"],"payload":{"observerRef":"state-observer","units":{"flag":"1","value":"1"},"values":{"value":-2}},"previousDigest":"ff3f0f3c0ce1967358dfd781ea6e0853905ca83d10f0b705f02af5c41b8a2eb0","recordedAt":"2026-01-01T00:00:03Z","runId":"run-reader-fixture-9c1879c7-9d6a-4e3f-8146-fc688a3e2c49","schemaVersion":"1.0","sequence":"4","snapshotId":"snap-0e681d01-4c66-4b04-8933-222820f01c8b","source":{"kind":"trusted-synthetic-reader-fixture","providerId":"fixture.alpha","version":"1.0.0"},"sourceTime":{"clockDomain":"clock-alpha","resolution":"nanosecond","tick":"-2","uncertainty":0},"type":"observation.available"}
+E
+E         id: run-reader-fixture-9c1879c7-9d6a-4e3f-8146-fc688a3e2c49:5
+E         event: observation.available
+E         data: {"digest":"5e73616691ebc2a2966d9503cbcfd9be8b625d28d370790d0595ad1329d3b3de","elementRefs":["xdl://org.xverse.studio.process-control/system/reference-loop#plant"],"eventId":"run-reader-fixture-9c1879c7-9d6a-4e3f-8146-fc688a3e2c49:zero","evidenceClass":"unknown","evidenceRefs":["run-reader-fixture-9c1879c7-9d6a-4e3f-8146-fc688a3e2c49:reference-journal"],"payload":{"observerRef":"state-observer","units":{"flag":"1","value":"1"},"values":{"flag":false,"value":0}},"previousDigest":"c7a46f8fdc26bfe715d294399b364cf34ae12d76bd5416460ac27de76e043e75","recordedAt":"2026-01-01T00:00:04Z","runId":"run-reader-fixture-9c1879c7-9d6a-4e3f-8146-fc688a3e2c49","schemaVersion":"1.0","sequence":"5","snapshotId":"snap-0e681d01-4c66-4b04-8933-222820f01c8b","source":{"kind":"trusted-synthetic-reader-fixture","providerId":"fixture.alpha","version":"1.0.0"},"sourceTime":{"clockDomain":"clock-alpha","resolution":"nanosecond","tick":"0","uncertainty":0},"type":"observation.available"}
+E
+E         id: run-reader-fixture-9c1879c7-9d6a-4e3f-8146-fc688a3e2c49:6
+E         event: observation.available
+E         data: {"digest":"529296029c029ea44584643260acec9cb8cedb50d640db71623cb85ae1f3104a","elementRefs":["xdl://org.xverse.studio.process-control/system/reference-loop#plant"],"eventId":"run-reader-fixture-9c1879c7-9d6a-4e3f-8146-fc688a3e2c49:missingTime","evidenceClass":"unknown","evidenceRefs":["run-reader-fixture-9c1879c7-9d6a-4e3f-8146-fc688a3e2c49:reference-journal"],"payload":{"observerRef":"state-observer","units":{"flag":"1","value":"1"},"values":{"value":7}},"previousDigest":"5e73616691ebc2a2966d9503cbcfd9be8b625d28d370790d0595ad1329d3b3de","recordedAt":"2026-01-01T00:00:05Z","runId":"run-reader-fixture-9c1879c7-9d6a-4e3f-8146-fc688a3e2c49","schemaVersion":"1.0","sequence":"6","snapshotId":"snap-0e681d01-4c66-4b04-8933-222820f01c8b","source":{"kind":"trusted-synthetic-reader-fixture","providerId":"fixture.alpha","version":"1.0.0"},"sourceTime":null,"type":"observation.available"}
+E
+E         id: run-reader-fixture-9c1879c7-9d6a-4e3f-8146-fc688a3e2c49:7
+E         event: observation.available
+E         data: {"digest":"c1b128c7996b7eeed2fb455f153972217dc4bc1c9030388dbde1f74656ee36cc","elementRefs":["xdl://org.xverse.studio.process-control/system/reference-loop#plant"],"eventId":"run-reader-fixture-9c1879c7-9d6a-4e3f-8146-fc688a3e2c49:malformedTime","evidenceClass":"unknown","evidenceRefs":["run-reader-fixture-9c1879c7-9d6a-4e3f-8146-fc688a3e2c49:reference-journal"],"payload":{"observerRef":"state-observer","units":{"flag":"1","value":"1"},"values":{"value":8}},"previousDigest":"529296029c029ea44584643260acec9cb8cedb50d640db71623cb85ae1f3104a","recordedAt":"2026-01-01T00:00:06Z","runId":"run-reader-fixture-9c1879c7-9d6a-4e3f-8146-fc688a3e2c49","schemaVersion":"1.0","sequence":"7","snapshotId":"snap-0e681d01-4c66-4b04-8933-222820f01c8b","source":{"kind":"trusted-synthetic-reader-fixture","providerId":"fixture.alpha","version":"1.0.0"},"sourceTime":{"clockDomain":"clock-alpha","resolution":"nanosecond","tick":"not-a-tick","uncertainty":0},"type":"observation.available"}
+E
+E         id: run-reader-fixture-9c1879c7-9d6a-4e3f-8146-fc688a3e2c49:8
+E         event: observation.available
+E         data: {"digest":"687e195ef1fe247febe292b659162f9f37a17a0c21265c6a679f2c0a00fc9c18","elementRefs":["xdl://org.xverse.studio.process-control/system/reference-loop#plant"],"eventId":"run-reader-fixture-9c1879c7-9d6a-4e3f-8146-fc688a3e2c49:otherClock","evidenceClass":"unknown","evidenceRefs":["run-reader-fixture-9c1879c7-9d6a-4e3f-8146-fc688a3e2c49:reference-journal"],"payload":{"observerRef":"external-observer","units":{"flag":"1","value":"1"},"values":{"value":11}},"previousDigest":"c1b128c7996b7eeed2fb455f153972217dc4bc1c9030388dbde1f74656ee36cc","recordedAt":"2026-01-01T00:00:07Z","runId":"run-reader-fixture-9c1879c7-9d6a-4e3f-8146-fc688a3e2c49","schemaVersion":"1.0","sequence":"8","snapshotId":"snap-0e681d01-4c66-4b04-8933-222820f01c8b","source":{"kind":"trusted-synthetic-reader-fixture","providerId":"fixture.beta","version":"1.0.0"},"sourceTime":{"clockDomain":"clock-beta","resolution":"microsecond","tick":"9007199254740993","uncertainty":0},"type":"observation.available"}
+E
+E         id: run-reader-fixture-9c1879c7-9d6a-4e3f-8146-fc688a3e2c49:9
+E         event: observation.available
+E         data: {"digest":"142cff0cab88ca728cbe9ace564f79b36286eaa5d80cc9e86cf0cb93c7cd84b6","elementRefs":["xdl://org.xverse.studio.process-control/system/reference-loop#plant"],"eventId":"run-reader-fixture-9c1879c7-9d6a-4e3f-8146-fc688a3e2c49:unknownReceipt","evidenceClass":"unknown","evidenceRefs":["run-reader-fixture-9c1879c7-9d6a-4e3f-8146-fc688a3e2c49:reference-journal"],"payload":{"observerRef":"state-observer","units":{"flag":"1","value":"1"},"values":{"value":1}},"previousDigest":"687e195ef1fe247febe292b659162f9f37a17a0c21265c6a679f2c0a00fc9c18","recordedAt":1767225600.5,"runId":"run-reader-fixture-9c1879c7-9d6a-4e3f-8146-fc688a3e2c49","schemaVersion":"1.0","sequence":"9","snapshotId":"snap-0e681d01-4c66-4b04-8933-222820f01c8b","source":{"kind":"trusted-synthetic-reader-fixture","providerId":"fixture.unknown","version":"1.0.0"},"sourceTime":{"clockDomain":"clock-alpha","resolution":"nanosecond","tick":"4","uncertainty":0},"type":"observation.available"}
+E
+E         id: run-reader-fixture-9c1879c7-9d6a-4e3f-8146-fc688a3e2c49:10
+E         event: observation.available
+E         data: {"digest":"7d9ac2bdeb12ab96481e4b8867ab6e6d695187d7c24804fd2be5febb2ec03dbf","elementRefs":["xdl://org.xverse.studio.process-control/system/reference-loop#plant"],"eventId":"run-reader-fixture-9c1879c7-9d6a-4e3f-8146-fc688a3e2c49:missingReceipt","evidenceClass":"unknown","evidenceRefs":["run-reader-fixture-9c1879c7-9d6a-4e3f-8146-fc688a3e2c49:reference-journal"],"payload":{"observerRef":"state-observer","units":{"flag":"1","value":"1"},"values":{"value":1}},"previousDigest":"142cff0cab88ca728cbe9ace564f79b36286eaa5d80cc9e86cf0cb93c7cd84b6","recordedAt":null,"runId":"run-reader-fixture-9c1879c7-9d6a-4e3f-8146-fc688a3e2c49","schemaVersion":"1.0","sequence":"10","snapshotId":"snap-0e681d01-4c66-4b04-8933-222820f01c8b","source":{"kind":"trusted-synthetic-reader-fixture","providerId":"fixture.alpha","version":"1.0.0"},"sourceTime":{"clockDomain":"clock-alpha","resolution":"nanosecond","tick":"5","uncertainty":0},"type":"observation.available"}
+E
+E         id: run-reader-fixture-9c1879c7-9d6a-4e3f-8146-fc688a3e2c49:11
+E         event: observation.gap
+E         data: {"digest":"3332238b6cc4dd107782034d343182c5791a81c46cfcfa5f5f9be6a64f6e940f","elementRefs":["xdl://org.xverse.studio.process-control/system/reference-loop#plant"],"eventId":"run-reader-fixture-9c1879c7-9d6a-4e3f-8146-fc688a3e2c49:gap","evidenceClass":"unknown","evidenceRefs":["run-reader-fixture-9c1879c7-9d6a-4e3f-8146-fc688a3e2c49:reference-journal"],"payload":{"clockDomain":"clock-alpha","endTick":"2","reason":"Synthetic declared collection gap","startTick":"1"},"previousDigest":"7d9ac2bdeb12ab96481e4b8867ab6e6d695187d7c24804fd2be5febb2ec03dbf","recordedAt":"2026-01-01T00:00:10Z","runId":"run-reader-fixture-9c1879c7-9d6a-4e3f-8146-fc688a3e2c49","schemaVersion":"1.0","sequence":"11","snapshotId":"snap-0e681d01-4c66-4b04-8933-222820f01c8b","source":{"kind":"trusted-synthetic-reader-fixture","providerId":"fixture.alpha","version":"1.0.0"},"sourceTime":null,"type":"observation.gap"}
+E
+E         id: run-reader-fixture-9c1879c7-9d6a-4e3f-8146-fc688a3e2c49:12
+E         event: log.appended
+E         data: {"digest":"147d6c18c2b2ac068f1daebd7ec31f9dc7a32cee6e0578d44e2225f26188e9a1","elementRefs":["xdl://org.xverse.studio.process-control/system/reference-loop#plant"],"eventId":"run-reader-fixture-9c1879c7-9d6a-4e3f-8146-fc688a3e2c49:logAlpha","evidenceClass":"unknown","evidenceRefs":["run-reader-fixture-9c1879c7-9d6a-4e3f-8146-fc688a3e2c49:reference-journal"],"payload":{"message":"Synthetic recorded reader fixture logAlpha","severity":"info"},"previousDigest":"3332238b6cc4dd107782034d343182c5791a81c46cfcfa5f5f9be6a64f6e940f","recordedAt":"2026-01-01T00:00:11Z","runId":"run-reader-fixture-9c1879c7-9d6a-4e3f-8146-fc688a3e2c49","schemaVersion":"1.0","sequence":"12","snapshotId":"snap-0e681d01-4c66-4b04-8933-222820f01c8b","source":{"kind":"trusted-synthetic-reader-fixture","providerId":"fixture.alpha","version":"1.0.0"},"sourceTime":{"clockDomain":"clock-alpha","resolution":"nanosecond","tick":"6","uncertainty":0},"type":"log.appended"}
+E
+E         id: run-reader-fixture-9c1879c7-9d6a-4e3f-8146-fc688a3e2c49:13
+E         event: log.appended
+E         data: {"digest":"3a4c485482bcd43173e275853283e75720e26ae6066a8b31d2afcb9342308ce2","elementRefs":["xdl://org.xverse.studio.process-control/system/reference-loop#controller"],"eventId":"run-reader-fixture-9c1879c7-9d6a-4e3f-8146-fc688a3e2c49:logBeta","evidenceClass":"unknown","evidenceRefs":["run-reader-fixture-9c1879c7-9d6a-4e3f-8146-fc688a3e2c49:reference-journal"],"payload":{"message":"Synthetic recorded reader fixture logBeta","severity":"warning"},"previousDigest":"147d6c18c2b2ac068f1daebd7ec31f9dc7a32cee6e0578d44e2225f26188e9a1","recordedAt":"2026-01-01T00:00:12Z","runId":"run-reader-fixture-9c1879c7-9d6a-4e3f-8146-fc688a3e2c49","schemaVersion":"1.0","sequence":"13","snapshotId":"snap-0e681d01-4c66-4b04-8933-222820f01c8b","source":{"kind":"trusted-synthetic-reader-fixture","providerId":"fixture.beta","version":"1.0.0"},"sourceTime":{"clockDomain":"clock-beta","resolution":"microsecond","tick":"7","uncertainty":0},"type":"log.appended"}
+E
+E         id: run-reader-fixture-9c1879c7-9d6a-4e3f-8146-fc688a3e2c49:14
+E         event: observation.available
+E         data: {"digest":"5f4ebb38c225e6938d88e9987a5df0e350b7f38823a805d4601bda79d9856f44","elementRefs":["xdl://org.xverse.studio.process-control/system/reference-loop#plant"],"eventId":"run-reader-fixture-9c1879c7-9d6a-4e3f-8146-fc688a3e2c49:late","evidenceClass":"unknown","evidenceRefs":["run-reader-fixture-9c1879c7-9d6a-4e3f-8146-fc688a3e2c49:reference-journal"],"payload":{"observerRef":"state-observer","units":{"flag":"1","value":"1"},"values":{"selected":false}},"previousDigest":"3a4c485482bcd43173e275853283e75720e26ae6066a8b31d2afcb9342308ce2","recordedAt":"2026-01-01T00:02:00Z","runId":"run-reader-fixture-9c1879c7-9d6a-4e3f-8146-fc688a3e2c49","schemaVersion":"1.0","sequence":"14","snapshotId":"snap-0e681d01-4c66-4b04-8933-222820f01c8b","source":{"kind":"trusted-synthetic-reader-fixture","providerId":"fixture.late","version":"1.0.0"},"sourceTime":{"clockDomain":"clock-alpha","resolution":"nanosecond","tick":"999","uncertainty":0},"type":"observation.available"}
+E
+E         id: run-reader-fixture-9c1879c7-9d6a-4e3f-8146-fc688a3e2c49:15
+E         event: log.appended
+E         data: {"digest":"e1bbe6f5de10e37501de147e11f5145dd8436be8a861a8c0fff52aa2cc212e04","elementRefs":["xdl://org.xverse.studio.process-control/system/reference-loop#plant"],"eventId":"run-reader-fixture-9c1879c7-9d6a-4e3f-8146-fc688a3e2c49:lateLog","evidenceClass":"unknown","evidenceRefs":["run-reader-fixture-9c1879c7-9d6a-4e3f-8146-fc688a3e2c49:reference-journal"],"payload":{"message":"Synthetic recorded reader fixture lateLog","severity":"error"},"previousDigest":"5f4ebb38c225e6938d88e9987a5df0e350b7f38823a805d4601bda79d9856f44","recordedAt":"2026-01-01T00:02:01Z","runId":"run-reader-fixture-9c1879c7-9d6a-4e3f-8146-fc688a3e2c49","schemaVersion":"1.0","sequence":"15","snapshotId":"snap-0e681d01-4c66-4b04-8933-222820f01c8b","source":{"kind":"trusted-synthetic-reader-fixture","providerId":"fixture.late","version":"1.0.0"},"sourceTime":{"clockDomain":"clock-alpha","resolution":"nanosecond","tick":"1000","uncertainty":0},"type":"log.appended"}
+E
+E
+E       assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/integration/test_stream_recovery.py:148: AssertionError
+=============================== warnings summary ===============================
+.venv/lib/python3.13/site-packages/fastapi/testclient.py:1
+  <workspace>/.venv/lib/python3.13/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/integration/test_stream_recovery.py::test_v11_source_proof_resume_and_resync_watermark_are_read_only
+FAILED tests/integration/test_stream_recovery.py::test_v11_digest_fork_requires_resynchronization_not_empty_success
+FAILED tests/integration/test_stream_recovery.py::test_v11_unavailable_and_invalid_never_look_like_empty_valid_stream[missing-503-STREAM_SOURCE_UNAVAILABLE]
+FAILED tests/integration/test_stream_recovery.py::test_v11_unavailable_and_invalid_never_look_like_empty_valid_stream[invalid-422-EVIDENCE_INVALID]
+4 failed, 2 deselected, 1 warning in 4.85s

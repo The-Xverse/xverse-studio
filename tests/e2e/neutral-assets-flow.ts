@@ -1,21 +1,108 @@
 import { parse } from "yaml";
-import { expect, type Page, type TestInfo } from "@playwright/test";
+import {
+  expect,
+  type Page,
+  type TestInfo,
+  type Request,
+} from "@playwright/test";
 export async function exerciseNeutralAssets(page: Page, testInfo: TestInfo) {
-  await page
-    .getByRole("button", { name: "X-Verse Studio home", exact: true })
-    .click();
-  await page.getByRole("button", { name: "New project", exact: true }).focus();
-  await page.keyboard.press("Enter");
-  await page
-    .getByLabel("Project name", { exact: true })
-    .fill("Neutral asset authoring");
-  await page
-    .getByRole("button", { name: "Create project", exact: true })
-    .focus();
-  await page.keyboard.press("Enter");
-  await expect(
-    page.getByRole("heading", { name: "Neutral asset authoring", exact: true }),
-  ).toBeVisible();
+  // Passive diagnostics only: do not delay, retry or alter project requests.
+  const diagnosticStart = Date.now(),
+    requestLog: Record<string, unknown>[] = [],
+    byRequest = new Map<Request, Record<string, unknown>>();
+  let creationFailed = false,
+    afterKeyboard: unknown;
+  const started = (request: Request) => {
+    const path = new URL(request.url()).pathname;
+    if (!/^\/api\/v1\/projects(?:\/[^/]+)?$/.test(path)) return;
+    const row = {
+      method: request.method(),
+      path,
+      startedMs: Date.now() - diagnosticStart,
+    };
+    if (requestLog.length < 64) {
+      requestLog.push(row);
+      byRequest.set(request, row);
+    }
+  };
+  const responded = (response: import("@playwright/test").Response) => {
+    const row = byRequest.get(response.request());
+    if (row)
+      Object.assign(row, {
+        status: response.status(),
+        responseMs: Date.now() - diagnosticStart,
+      });
+  };
+  const finished = (request: Request) => {
+    const row = byRequest.get(request);
+    if (row) Object.assign(row, { finishedMs: Date.now() - diagnosticStart });
+  };
+  const failed = (request: Request) => {
+    const row = byRequest.get(request);
+    if (row)
+      Object.assign(row, {
+        failedMs: Date.now() - diagnosticStart,
+        failure: request.failure()?.errorText,
+      });
+  };
+  page.on("request", started);
+  page.on("response", responded);
+  page.on("requestfinished", finished);
+  page.on("requestfailed", failed);
+  try {
+    await page
+      .getByRole("button", { name: "X-Verse Studio home", exact: true })
+      .click();
+    await page
+      .getByRole("button", { name: "New project", exact: true })
+      .focus();
+    await page.keyboard.press("Enter");
+    await page
+      .getByLabel("Project name", { exact: true })
+      .fill("Neutral asset authoring");
+    const createProject = page.getByRole("button", {
+      name: "Create project",
+      exact: true,
+    });
+    await expect(createProject).toBeEnabled();
+    await createProject.focus();
+    await expect(createProject).toBeFocused();
+    await page.keyboard.press("Enter");
+    afterKeyboard = await page.evaluate(() => ({
+      activeTag: document.activeElement?.tagName,
+      activeText: document.activeElement?.textContent?.trim().slice(0, 120),
+      createDisabled:
+        [...document.querySelectorAll<HTMLButtonElement>("button")].find(
+          (button) => button.textContent?.trim() === "Create project",
+        )?.disabled ?? null,
+      observedAt: Date.now(),
+    }));
+    await expect(
+      page.getByRole("heading", {
+        name: "Neutral asset authoring",
+        exact: true,
+      }),
+    ).toBeVisible();
+  } catch (error) {
+    creationFailed = true;
+    throw error;
+  } finally {
+    page.off("request", started);
+    page.off("response", responded);
+    page.off("requestfinished", finished);
+    page.off("requestfailed", failed);
+    if (creationFailed)
+      await testInfo.attach("neutral-create-request-lifecycle", {
+        body: JSON.stringify({
+          scope:
+            "passive native browser request diagnostics; heading timeout unchanged",
+          elapsedMs: Date.now() - diagnosticStart,
+          afterKeyboard,
+          requests: requestLog,
+        }),
+        contentType: "application/json",
+      });
+  }
   const before = await page.evaluate(async () => ({
     projectId: localStorage.getItem("studio.projectId"),
     runs: (await fetch("/api/v1/runs").then((r) => r.json())).items.length,

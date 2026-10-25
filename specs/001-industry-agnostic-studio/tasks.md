@@ -53,7 +53,7 @@ After M0 owned contracts pass, guided operation (T015–T033), visual authoring 
 - [ ] T025 [P] [US3] Add duplicate-Start, two-tab retry, UI-disconnect, event-order, cursor-expiry and resynchronization tests; test changed-payload idempotency conflicts. Verify command.failed events, command acceptance versus execution failure, and browser reconnection on both supported native backend/browser combinations. Paths: `tests/e2e/run-reconnect.spec.ts`, `tests/contract/test_run_events.py`. Depends on: T021. (FR-012; FR-013; FR-021; AC-008; AC-010)
 - [ ] T026 [US3] Implement resumable cursor events, explicit gap/resync responses and session reconnection independent of backend run ownership. Paths: `services/studio-api/src/xverse_studio/events/`, `apps/studio-web/src/features/runs/session.ts`. Depends on: T022, T023, T025. (FR-013; FR-021; AC-008; AC-010)
 - [ ] T027 [US3] Implement run-plan/start/control views with startup, stop, cleanup, evidence and optional-operation states, clearly identifying current immutable inputs. Paths: `apps/studio-web/src/features/runs/`. Depends on: T020, T024, T026. (FR-011; FR-014; FR-015; FR-016; FR-020; AC-006; AC-007; AC-027)
-- [ ] T028 [P] [US4] Add verified-prefix/read-only evidence fixtures with gaps, redaction restrictions, differing clocks, measured zero versus missing data and a slow UI consumer. Paths: `tests/integration/test_evidence_projection.py`, `tests/fixtures/evidence/`. Depends on: T014. (FR-017; FR-018; FR-020; FR-021; FR-022; NFR-008; AC-010; AC-011)
+- [x] T028 [P] [US4] Add verified-prefix/read-only evidence fixtures with gaps, redaction restrictions, differing clocks, measured zero versus missing data and a slow UI consumer. Paths: `tests/integration/test_evidence_projection.py`, `tests/fixtures/evidence/`. Depends on: T014. (FR-017; FR-018; FR-020; FR-021; FR-022; NFR-008; AC-010; AC-011)
 - [x] T029 [US4] Implement admitted Argus/evidence projections, bounded filtering/pagination and cursor delivery without reading private provider streams or changing authoritative evidence. Paths: `services/studio-api/src/xverse_studio/evidence/`. Depends on: T028. (FR-017; FR-018; FR-021; FR-022; NFR-008; AC-010; AC-011)
 - [x] T030 [US4] Implement selected-element logs/signals/events, source/severity/time filters, clock/quality markers and explicit display gaps with bounded rendering. Paths: `apps/studio-web/src/features/results/`. Depends on: T029, T026. (FR-017; FR-018; FR-020; FR-021; AC-010; AC-011)
 - [ ] T031 [P] [US4] Specify evidence-linked explanation tests for every required diagnostic class, facts versus hypotheses, no-traffic ambiguity and liveness-only health. Paths: `tests/contract/test_diagnostics.py`, `tests/e2e/diagnostics.spec.ts`. Depends on: T028. (FR-019; FR-020; NFR-011; AC-005; AC-007; AC-011)
@@ -204,3 +204,13 @@ are not hidden behind Windows/hardware blockers. See `evidence/studio/release/li
 Clean product candidate 829d428 additionally passed prepared-cache offline package installation,
 startup, browser-index serving, Unicode persistence and public compilation. Its 86-file clean manifest
 and archive digest are retained with the final466/21 cohort; publication/CI outcomes are separate.
+
+T028 owned fixture component is complete after explicit private-log exclusion and advancing-producer/
+slow-consumer evidence, 28 focused stream cases and 493 full backend tests on unchanged backend source,
+with independent literal review. Component completion is 22/100. T026 remains open: current focused
+browser successor is 18 passed/4 failed; the full browser/performance gate has not passed. Both early
+modal-input cases and reserved-control-slot boundaries have successor proof; creation/input/screenshot
+latencies and the native expiry timing window remain recorded failures under observed host I/O stalls.
+T025/T027 retain their concrete pending receipt/control-operation/failure-view obligations. See
+`evidence/studio/release/linux-stream-recovery-2026-10-25/candidate-verification.json`. No milestone
+or Windows/physical/live-provider acceptance is claimed.

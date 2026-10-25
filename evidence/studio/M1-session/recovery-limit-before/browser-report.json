@@ -1,0 +1,186 @@
+{
+  "config": {
+    "argv": [
+      "<loop10-cache>/node-v24.22.1-linux-x64/bin/node",
+      "<workspace>/node_modules/@playwright/test/cli.js",
+      "test",
+      "-c",
+      "tests/e2e/playwright.config.ts",
+      "--grep",
+      "session contract: typed oversized recovery"
+    ],
+    "configFile": "<workspace>/tests/e2e/playwright.config.ts",
+    "rootDir": "<workspace>/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "<workspace>/tests/e2e/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "<workspace>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "*.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "<workspace>/tests/e2e/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "<workspace>/tests/e2e",
+        "snapshotDir": "<workspace>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": "*.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "baseURL": "http://127.0.0.1:8876",
+          "browserName": "chromium",
+          "actionTimeout": 15000,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "trace": "off",
+          "screenshot": "only-on-failure",
+          "video": "off"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results/browser-report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "session-contract.spec.ts",
+      "file": "session-contract.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "session contract: typed oversized recovery stops without acknowledgement or retry and releases its body",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 766,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoHaveLength\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected length: \u001b[32m2\u001b[39m\nReceived length: \u001b[31m4\u001b[39m\nReceived array:  \u001b[31m[\"/api/v1/runs/run-session-fixture/events?streamVersion=1.1\", \"/api/v1/runs/run-session-fixture/resync\", \"/api/v1/runs/run-session-fixture/events?streamVersion=1.1\", \"/api/v1/runs/run-session-fixture/resync\"]\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoHaveLength\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected length: \u001b[32m2\u001b[39m\nReceived length: \u001b[31m4\u001b[39m\nReceived array:  \u001b[31m[\"/api/v1/runs/run-session-fixture/events?streamVersion=1.1\", \"/api/v1/runs/run-session-fixture/resync\", \"/api/v1/runs/run-session-fixture/events?streamVersion=1.1\", \"/api/v1/runs/run-session-fixture/resync\"]\u001b[39m\n    at <workspace>/tests/e2e/session-contract.spec.ts:567:118",
+                    "location": {
+                      "file": "<workspace>/tests/e2e/session-contract.spec.ts",
+                      "column": 118,
+                      "line": 567
+                    },
+                    "snippet": "  565 |  globalThis.fetch=async input=>{const url=String(input);requests.push(url);if(url.includes('/resync'))return new Response(new ReadableStream({start(controller){controller.enqueue(new TextEncoder().encode(JSON.stringify({code:'STREAM_RECOVERY_TOO_LARGE',message:'Recovery metadata exceeds the bounded response limit; use paged retained history.'})));},cancel(){cancelled=true;}}),{status:413,headers:{'Content-Type':'application/json'}});return Response.json({code:'CURSOR_EXPIRED',runId,snapshotId},{status:410});};\n  566 |  const stop=subscribe(runId,()=>{accepted++;},state=>{states.push(state);},async()=>{accepted++;},{snapshotId});\n> 567 |  try{await expect.poll(()=>requests.some(url=>url.includes('/resync'))).toBe(true);await pause(650);expect(requests).toHaveLength(2);expect(accepted).toBe(0);expect(cancelled).toBe(true);expect(states.at(-1)).toMatch(/recovery.*limit.*paged retained history/i);expect(requests.every(url=>!new URL(url,'http://fixture').searchParams.has('after'))).toBe(true);}finally{stop();globalThis.fetch=original;}\n      |                                                                                                                      ^\n  568 | });\n  569 |"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<workspace>/tests/e2e/session-contract.spec.ts",
+                        "column": 118,
+                        "line": 567
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoHaveLength\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected length: \u001b[32m2\u001b[39m\nReceived length: \u001b[31m4\u001b[39m\nReceived array:  \u001b[31m[\"/api/v1/runs/run-session-fixture/events?streamVersion=1.1\", \"/api/v1/runs/run-session-fixture/resync\", \"/api/v1/runs/run-session-fixture/events?streamVersion=1.1\", \"/api/v1/runs/run-session-fixture/resync\"]\u001b[39m\n\n  565 |  globalThis.fetch=async input=>{const url=String(input);requests.push(url);if(url.includes('/resync'))return new Response(new ReadableStream({start(controller){controller.enqueue(new TextEncoder().encode(JSON.stringify({code:'STREAM_RECOVERY_TOO_LARGE',message:'Recovery metadata exceeds the bounded response limit; use paged retained history.'})));},cancel(){cancelled=true;}}),{status:413,headers:{'Content-Type':'application/json'}});return Response.json({code:'CURSOR_EXPIRED',runId,snapshotId},{status:410});};\n  566 |  const stop=subscribe(runId,()=>{accepted++;},state=>{states.push(state);},async()=>{accepted++;},{snapshotId});\n> 567 |  try{await expect.poll(()=>requests.some(url=>url.includes('/resync'))).toBe(true);await pause(650);expect(requests).toHaveLength(2);expect(accepted).toBe(0);expect(cancelled).toBe(true);expect(states.at(-1)).toMatch(/recovery.*limit.*paged retained history/i);expect(requests.every(url=>!new URL(url,'http://fixture').searchParams.has('after'))).toBe(true);}finally{stop();globalThis.fetch=original;}\n      |                                                                                                                      ^\n  568 | });\n  569 |\n    at <workspace>/tests/e2e/session-contract.spec.ts:567:118"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-25T15:41:14.412Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<workspace>/tests/e2e/test-results/browser/session-contract-session-c-37163-retry-and-releases-its-body/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<workspace>/tests/e2e/session-contract.spec.ts",
+                    "column": 118,
+                    "line": 567
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "867a6ceef9ff0fe48626-de3e0f9bade0fc5b8e5e",
+          "file": "session-contract.spec.ts",
+          "line": 563,
+          "column": 5
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-25T15:41:13.776Z",
+    "duration": 1451.449,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

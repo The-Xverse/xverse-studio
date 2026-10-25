@@ -12,6 +12,7 @@ import {
   items,
   mutationKey,
   subscribe,
+  mergeRun,
 } from "../api/client";
 import type {
   Project,
@@ -249,12 +250,13 @@ export default function App() {
     catalog,
   ]);
   const terminalStream =
-    !!run &&
-    ["stopped", "failed", "unknown"].includes(String(run.status || run.state));
+    !!run && ["stopped", "failed"].includes(String(run.status || run.state));
   useEffect(() => {
     if (!run?.runId) return;
-    if (streamIdentity.current !== run.runId) {
-      streamIdentity.current = run.runId;
+    const runId = run.runId,
+      snapshotId = run.snapshotId;
+    if (streamIdentity.current !== runId) {
+      streamIdentity.current = runId;
       setEvents([]);
       setOmitted(0);
     }
@@ -262,14 +264,17 @@ export default function App() {
       setStreamState("Retained history available");
       return;
     }
-    let seen = new Set<string>();
-    let pending: RunEvent[] = [],
+    let active = true,
+      readGeneration = 0,
+      displayed = 0,
       dropped = 0,
-      displayed = 0;
-    let flushTimer: number | undefined;
+      lossNotice = "";
+    let pending: RunEvent[] = [],
+      flushTimer: number | undefined;
+    let stateRequest: AbortController | undefined;
     const flush = () => {
       flushTimer = undefined;
-      if (!pending.length && !dropped) return;
+      if (!active || (!pending.length && !dropped)) return;
       const batch = pending;
       pending = [];
       const overflow = Math.max(0, displayed + batch.length - 200) + dropped;
@@ -278,12 +283,29 @@ export default function App() {
       if (overflow) setOmitted((value) => value + overflow);
       setEvents((old) => [...old, ...batch].slice(-200));
     };
+    const refreshState = async () => {
+      const generation = ++readGeneration;
+      stateRequest?.abort();
+      stateRequest = new AbortController();
+      try {
+        const value = await api<Run>(`/runs/${runId}`, {
+          signal: stateRequest.signal,
+        });
+        if (
+          active &&
+          generation === readGeneration &&
+          value.snapshotId === snapshotId
+        )
+          setRun((old) => mergeRun(old, value));
+      } catch {
+        /* Reconnection never infers a new lifecycle outcome from a failed read. */
+      }
+    };
+    const pollTimer = window.setInterval(() => void refreshState(), 2000);
     const stop = subscribe(
-      run.runId,
+      runId,
       (event) => {
-        if (seen.has(event.eventId)) return;
-        seen.add(event.eventId);
-        if (seen.size > 2000) seen = new Set([...seen].slice(-1000));
+        if (!active) throw Error("Obsolete run session");
         if (pending.length >= 200) {
           pending.shift();
           dropped++;
@@ -299,65 +321,62 @@ export default function App() {
             "run.ownership_unknown",
           ].includes(event.type)
         )
-          void api<Run>(`/runs/${event.runId}`)
-            .then((value) =>
-              setRun((old) =>
-                old?.runId === value.runId &&
-                value.stateVersion >= old.stateVersion
-                  ? value
-                  : old,
-              ),
-            )
-            .catch(() => {});
+          void refreshState();
       },
-      setStreamState,
-      () => {
-        setOmitted((n) => n + 1);
+      (state) => {
+        if (active) setStreamState(state);
+      },
+      async (recovery) => {
+        if (!active) throw Error("Obsolete recovery");
+        ++readGeneration;
+        stateRequest?.abort();
+        if (flushTimer !== undefined) clearTimeout(flushTimer);
+        flushTimer = undefined;
+        pending = [];
+        dropped = 0;
+        displayed = recovery.history.items.length;
+        setRun((old) => mergeRun(old, recovery.run));
+        setEvents(recovery.history.items.slice(-200));
+        setOmitted(recovery.history.omittedRecords);
         setNotice(
-          "The retained event cursor expired. Current state has been resynchronized; the missing interval remains unavailable.",
+          `${lossNotice} Current run state and a bounded history tail were resynchronized. Reader integrity: ${recovery.history.integrity}. Display omissions remain inspectable through retained history; this does not restore missing canonical evidence.`,
         );
-        void api<Run>(`/runs/${run.runId}`)
-          .then((value) =>
-            setRun((old) => (old?.runId === value.runId ? value : old)),
-          )
-          .catch(() => {});
+      },
+      {
+        snapshotId,
+        onControl: (control) => {
+          if (!active) return;
+          if (control.type === "stream.end") {
+            flush();
+            clearInterval(pollTimer);
+            void refreshState();
+            return;
+          }
+          if (
+            control.type === "stream.gap" ||
+            control.type === "stream.resync_required"
+          ) {
+            lossNotice =
+              control.missingCount === null
+                ? "The presentation loss count is unknown."
+                : `${control.missingCount} presentation record(s) are unavailable in this delivery interval.`;
+            setNotice(
+              `${lossNotice} State and retained history resynchronization is pending. ${control.reason}`,
+            );
+          }
+        },
       },
     );
     return () => {
+      active = false;
+      ++readGeneration;
+      stateRequest?.abort();
       stop();
+      clearInterval(pollTimer);
       if (flushTimer !== undefined) clearTimeout(flushTimer);
-      flush();
+      pending = [];
     };
-  }, [run?.runId, terminalStream]);
-  useEffect(() => {
-    if (
-      !run?.runId ||
-      ![
-        "running",
-        "starting",
-        "preparing",
-        "accepted",
-        "stopping",
-        "reconciling",
-      ].includes(String(run.status || run.state))
-    )
-      return;
-    const timer = setInterval(
-      () =>
-        void api<Run>(`/runs/${run.runId}`)
-          .then((value) =>
-            setRun((old) =>
-              old?.runId === value.runId &&
-              value.stateVersion >= old.stateVersion
-                ? value
-                : old,
-            ),
-          )
-          .catch(() => {}),
-      2000,
-    );
-    return () => clearInterval(timer);
-  }, [run?.runId, run?.status, run?.state]);
+  }, [run?.runId, run?.snapshotId, terminalStream]);
   async function createProject(blueprintRef?: string) {
     const value = await api<Project>("/projects", {
       method: "POST",
