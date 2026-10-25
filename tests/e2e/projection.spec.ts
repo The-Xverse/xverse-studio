@@ -52,3 +52,52 @@ test("unknown extension payload is retained while the presentation uses stable i
     content,
   );
 });
+
+test("declared logical roles remain separate from Component capabilities and source bytes", () => {
+  const system = JSON.stringify({
+    apiVersion: "xverse.io/xdl/v1alpha1",
+    kind: "System",
+    metadata: { namespace: "org.example", name: "system" },
+    spec: {
+      nodes: [{ id: "logical-node", roles: ["plant"] }],
+      componentInstances: [
+        {
+          id: "logical-instance",
+          nodeId: "logical-node",
+          componentRef: {
+            kind: "Component",
+            namespace: "org.example",
+            name: "definition",
+          },
+        },
+      ],
+    },
+  });
+  const definition = JSON.stringify({
+    apiVersion: "xverse.io/xdl/v1alpha1",
+    kind: "Component",
+    metadata: { namespace: "org.example", name: "definition" },
+    spec: { capabilities: ["response-model"] },
+  });
+  const project = {
+    projectId: "display-only",
+    name: "Role display",
+    revision: 1,
+    documents: {
+      system: { content: system, format: "json", path: "system.xdl.json" },
+      definition: {
+        content: definition,
+        format: "json",
+        path: "component.xdl.json",
+      },
+    },
+  } as Project;
+  const display = projectDisplay(project);
+  expect(display.elements[0].role).toBe("plant");
+  expect(display.elements[0].definition?.spec.capabilities).toEqual([
+    "response-model",
+  ]);
+  expect((project.documents.system as { content: string }).content).toBe(
+    system,
+  );
+});

@@ -1,36 +1,16 @@
 import { test, expect } from "@playwright/test";
-import { readFileSync } from "node:fs";
-import path from "node:path";
+import { connectStudio } from "./connect-studio";
 import { measureModel } from "../performance/browser-model";
 import { measureHistory } from "../performance/browser-history";
 import { exerciseComposition } from "./composition-flow";
 import { exerciseFrozenRerun } from "./frozen-rerun-flow";
-const dataRoot =
-  process.env.STUDIO_BROWSER_DATA || path.resolve("test-results/backend");
 test("owned reference browser workflow: author, preflight, execute, reconnect, inspect and annotate", async ({
   page,
 }, testInfo) => {
   test.setTimeout(240000);
   const errors: string[] = [];
   page.on("pageerror", (e) => errors.push(e.message));
-  await page.goto("/");
-  await expect(
-    page.getByRole("heading", { name: "Connect to Studio" }),
-  ).toBeVisible();
-  await page.screenshot({
-    path: testInfo.outputPath("login.png"),
-    fullPage: true,
-  });
-  const bootstrap = JSON.parse(
-    readFileSync(path.join(dataRoot, "bootstrap.json"), "utf8"),
-  );
-  await page.getByLabel("Bootstrap token").fill(bootstrap.bootstrapToken);
-  await page
-    .getByRole("button", { name: "Open workspace", exact: true })
-    .click();
-  await expect(
-    page.getByRole("heading", { name: "Start with an example" }),
-  ).toBeVisible();
+  await connectStudio(page, testInfo);
   await page.screenshot({
     path: testInfo.outputPath("home.png"),
     fullPage: true,
@@ -45,10 +25,11 @@ test("owned reference browser workflow: author, preflight, execute, reconnect, i
       exact: true,
     }),
   ).toBeVisible();
-  await expect(
-    page.getByRole("button", { name: "plant reference-response" }),
-  ).toBeVisible();
-  await page.getByRole("button", { name: "plant reference-response" }).click();
+  await expect(page.getByRole("button", { name: "plant plant" })).toBeVisible();
+  await page.getByRole("button", { name: "plant plant" }).click();
+  await expect(page.locator(".inspector .key-values")).toContainText(
+    "reference-response",
+  );
   await expect(
     page.getByRole("heading", { name: "Element inspector" }),
   ).toBeVisible();

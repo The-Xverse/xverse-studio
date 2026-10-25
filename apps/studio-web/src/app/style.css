@@ -756,7 +756,7 @@ hr {
   grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
   gap: 12px;
 }
-.project-list button {
+.project-list .project-open {
   display: flex;
   align-items: center;
   gap: 14px;
@@ -767,7 +767,7 @@ hr {
   text-align: left;
   color: var(--ink);
 }
-.project-list button:hover {
+.project-list .project-open:hover {
   border-color: #b4c9ec;
   background: #fafcff;
 }
@@ -2847,4 +2847,132 @@ p,
 .results-view > .section-heading .header-actions {
   flex-wrap: wrap;
   justify-content: flex-end;
+}
+
+.project-list-row {
+  display: flex;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: white;
+  min-width: 0;
+}
+.project-list .project-open {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+}
+.project-list .project-retention {
+  align-self: center;
+  margin-right: 12px;
+  padding: 7px 9px;
+  font-size: 11px;
+}
+.retention-review {
+  display: grid;
+  gap: 14px;
+  padding: 22px;
+}
+.retention-review > .button {
+  justify-self: start;
+}
+.retention-review h3,
+.retention-review p {
+  margin: 0;
+}
+.retention-review code {
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+.retention-review .key-values dd {
+  overflow-wrap: anywhere;
+}
+.retention-edges {
+  max-height: 300px;
+  overflow: auto;
+}
+.retention-protected > li {
+  margin-bottom: 12px;
+}
+
+.logical-asset-form {
+  padding-top: 12px;
+}
+.logical-asset-form fieldset {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  margin: 14px 0;
+  padding: 12px;
+}
+.logical-asset-form .check-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 8px 0;
+}
+.logical-asset-form .check-label input {
+  width: auto;
+}
+.inspector-actions {
+  display: grid;
+  gap: 8px;
+  margin: 14px 0;
+}
+.source-context {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  font-size: 11px;
+  margin: 12px 0;
+  overflow-wrap: anywhere;
+}
+
+.scenario-authoring {
+  margin-bottom: 20px;
+}
+.scenario-item-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin: 18px 0;
+}
+.scenario-item-group {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 14px;
+}
+.scenario-item-group h4 {
+  margin: 0;
+}
+.scenario-item-group article {
+  border-top: 1px solid var(--line);
+  padding: 12px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.scenario-row-actions {
+  display: flex;
+  gap: 6px;
+}
+.scenario-item-form fieldset {
+  border: 1px solid var(--line);
+  padding: 12px;
+  margin: 14px 0;
+  border-radius: 6px;
+}
+.scenario-item-form .check-label {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.scenario-item-form .check-label input {
+  width: auto;
+}
+@media (max-width: 1100px) {
+  .scenario-item-grid {
+    grid-template-columns: 1fr;
+  }
 }

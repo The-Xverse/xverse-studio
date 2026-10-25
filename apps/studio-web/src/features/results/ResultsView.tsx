@@ -3,6 +3,7 @@ import { api, items, mutationKey } from "../../api/client";
 import type { Data, Run, RunEvent } from "../../api/types";
 import type { DoAction } from "../../app/App";
 import { Icon, Badge, Empty, Json, KeyValues, statusTone } from "../../app/ui";
+import { RetentionDialog } from "../retention/RetentionDialog";
 import { FrozenInputs } from "./FrozenInputs";
 export function ResultsView({
   run,
@@ -1199,8 +1200,8 @@ function ObservationTable({ samples }: { samples: Data[] }) {
   );
 }
 
-function RetentionPanel({ run, doAction }: { run: Run; doAction: DoAction }) {
-  const [plan, setPlan] = useState<Data | null>(null);
+function RetentionPanel({ run }: { run: Run; doAction: DoAction }) {
+  const [review, setReview] = useState(false);
   return (
     <div className="retention-panel">
       <h3>Explicit retention</h3>
@@ -1209,59 +1210,14 @@ function RetentionPanel({ run, doAction }: { run: Run; doAction: DoAction }) {
         evaluations, annotations, and campaign references can protect run files.
         Historical outcomes and snapshot identities remain recorded.
       </p>
-      <button
-        className="button"
-        onClick={() =>
-          void doAction("Planning retention without changes", async () =>
-            setPlan(
-              await api("/retention/plans", {
-                method: "POST",
-                body: { runIds: [run.runId] },
-              }),
-            ),
-          )
-        }
-      >
-        Preview removal dependencies
+      <button className="button" onClick={() => setReview(true)}>
+        Review run file retention
       </button>
-      {plan && (
-        <>
-          <KeyValues
-            values={{
-              Plan: plan.planId,
-              "Eligible removals": plan.removals?.length || 0,
-              "Protected runs": plan.protected?.length || 0,
-              Expires: new Date(Number(plan.expiresAt) * 1000).toLocaleString(),
-              Status: plan.status,
-            }}
-          />
-          {(plan.protected || []).map((p: Data) => (
-            <div className="notice" key={p.runId}>
-              <Icon name="info" />
-              <span>{(p.reasons || []).join(" · ")}</span>
-            </div>
-          ))}
-          <Json value={plan} />
-          <button
-            className="button danger-button"
-            disabled={!plan.removals?.length || plan.status !== "planned"}
-            onClick={() =>
-              void doAction(
-                "Applying the selected retention plan",
-                async () => {
-                  await api(`/retention/plans/${plan.planId}/apply`, {
-                    method: "POST",
-                    body: { fingerprint: plan.fingerprint },
-                    key: mutationKey(),
-                  });
-                  setPlan(await api(`/retention/plans/${plan.planId}`));
-                },
-              )
-            }
-          >
-            Delete {plan.removals?.length || 0} eligible run file set(s)
-          </button>
-        </>
+      {review && (
+        <RetentionDialog
+          target={{ kind: "run", id: run.runId, name: "Run " + run.runId }}
+          onClose={() => setReview(false)}
+        />
       )}
     </div>
   );

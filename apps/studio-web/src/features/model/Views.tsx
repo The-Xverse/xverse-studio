@@ -1,3 +1,6 @@
+import { parseDocument, isMap, isSeq } from "yaml";
+import { LogicalAssetForm } from "./LogicalAssetForm";
+import { Modal } from "../../app/ui";
 import { useState, useEffect, useMemo, useRef } from "react";
 import {
   ReactFlow,
@@ -16,6 +19,29 @@ import type { DoAction } from "../../app/App";
 import { Icon, Badge, Empty, Json, KeyValues } from "../../app/ui";
 import type { Projection, ElementProjection } from "./projection";
 import { documentContent, textRef } from "./projection";
+export type SourceTarget = {
+  documentId: string;
+  ref?: string;
+  elementId?: string;
+  collection?: string;
+};
+export function sourceTarget(element: ElementProjection): SourceTarget {
+  return {
+    documentId: element.documentId,
+    ref: element.ref,
+    elementId: element.id,
+    collection: (
+      {
+        device: "devices",
+        sensor: "sensors",
+        actuator: "actuators",
+        model: "models",
+        node: "nodes",
+        componentInstance: "componentInstances",
+      } as Record<string, string>
+    )[element.kind],
+  };
+}
 function ElementNode({ data, selected }: NodeProps<Node<Data>>) {
   return (
     <div className={`element-node ${selected ? "selected" : ""}`}>
@@ -65,20 +91,22 @@ export function ModelView({
   setSelected: (id: string) => void;
   edit: (edits: Data[]) => Promise<unknown>;
   saveLayout: (layout: Data) => Promise<unknown>;
-  onSource: () => void;
+  onSource: (target?: SourceTarget) => void;
   onCatalog: () => void;
 }) {
   const [search, setSearch] = useState(""),
     [structured, setStructured] = useState(false),
-    [inspectorTab, setInspectorTab] = useState("Properties");
+    [inspectorTab, setInspectorTab] = useState("Properties"),
+    [editingAsset, setEditingAsset] = useState(false);
   const system = projection.resources.find((r) => r.kind === "System"),
     endpoints: Data[] = system?.spec?.endpoints || [];
   const initialNodes = useMemo(
     () =>
       projection.elements.map((e, i) => ({
-        id: e.id,
+        id: e.ref,
         type: "element",
-        position: project.layout?.positions?.[e.id] ||
+        position: project.layout?.positions?.[e.ref] ||
+          project.layout?.positions?.[e.id] ||
           project.layout?.layout?.positions?.[e.id] || {
             x:
               75 +
@@ -99,9 +127,12 @@ export function ModelView({
           },
         data: {
           ...e,
-          ports: endpoints.filter((p) => p.ownerId === e.id).length,
+          ports: (
+            projection.resources.find((r) => r.documentId === e.documentId)
+              ?.spec.endpoints || []
+          ).filter((p: Data) => p.ownerId === e.id).length,
         },
-        selected: e.id === selected,
+        selected: e.ref === selected || e.id === selected,
       })),
     [project.revision, project.presentationRevision, projection.elements],
   );
@@ -119,11 +150,9 @@ export function ModelView({
       projection.connections.flatMap((flow) =>
         (flow.destinationEndpointIds || []).map(
           (target: string, index: number) => ({
-            id: `${flow.id}-${index}`,
-            source:
-              endpoints.find((e) => e.id === flow.sourceEndpointId)?.ownerId ||
-              "",
-            target: endpoints.find((e) => e.id === target)?.ownerId || "",
+            id: `${flow.systemRef}#${flow.id}-${index}`,
+            source: `${flow.systemRef}#${(projection.resources.find((r) => r.documentId === flow.documentId)?.spec.endpoints || []).find((e: Data) => e.id === flow.sourceEndpointId)?.ownerId || ""}`,
+            target: `${flow.systemRef}#${(projection.resources.find((r) => r.documentId === flow.documentId)?.spec.endpoints || []).find((e: Data) => e.id === target)?.ownerId || ""}`,
             label: flow.id,
             type: "smoothstep",
             markerEnd: { type: MarkerType.ArrowClosed, color: "#8b9aaf" },
@@ -136,7 +165,12 @@ export function ModelView({
       ),
     [projection.connections, endpoints],
   );
-  const element = projection.elements.find((e) => e.id === selected);
+  const element = projection.elements.find(
+    (e) => e.ref === selected || e.id === selected,
+  );
+  const selectedEndpoints: Data[] =
+    projection.resources.find((r) => r.documentId === element?.documentId)?.spec
+      .endpoints || endpoints;
   async function persistLayout() {
     await saveLayout({
       formatVersion: "1.0",
@@ -159,7 +193,15 @@ export function ModelView({
           <button
             className="icon-button"
             aria-label="View XDL source"
-            onClick={onSource}
+            onClick={() =>
+              onSource(
+                element
+                  ? sourceTarget(element)
+                  : system
+                    ? { documentId: system.documentId }
+                    : undefined,
+              )
+            }
           >
             <Icon name="code" size={16} />
           </button>
@@ -187,9 +229,11 @@ export function ModelView({
             )
             .map((e) => (
               <button
-                key={e.id}
-                className={selected === e.id ? "selected" : ""}
-                onClick={() => setSelected(e.id)}
+                key={e.ref}
+                className={
+                  selected === e.ref || selected === e.id ? "selected" : ""
+                }
+                onClick={() => setSelected(e.ref)}
               >
                 <Icon
                   name={e.role.includes("observer") ? "results" : "model"}
@@ -203,7 +247,15 @@ export function ModelView({
         <div className="tree-section">
           <span>RESOURCES</span>
           {projection.resources.map((r) => (
-            <button key={r.documentId} onClick={onSource}>
+            <button
+              key={r.documentId + r.kind + r.metadata.name}
+              onClick={() =>
+                onSource({
+                  documentId: r.documentId,
+                  ref: `xdl://${r.metadata.namespace}/${r.kind.toLowerCase()}/${r.metadata.name}`,
+                })
+              }
+            >
               <Icon name="code" size={14} />
               <span>{r.metadata?.name || r.documentId}</span>
               <small>{r.kind}</small>
@@ -285,24 +337,24 @@ export function ModelView({
                 <tr>
                   <th>Element</th>
                   <th>Role</th>
-                  <th>Placement</th>
+                  <th>Logical containing node</th>
                   <th>Definition</th>
                 </tr>
               </thead>
               <tbody>
                 {projection.elements.map((e) => (
-                  <tr key={e.id}>
+                  <tr key={e.ref}>
                     <td>
                       <button
                         className="text-button"
-                        onClick={() => setSelected(e.id)}
+                        onClick={() => setSelected(e.ref)}
                       >
                         {e.name}
                       </button>
                     </td>
                     <td>{e.role}</td>
                     <td>{e.nodeId}</td>
-                    <td>{e.componentRef?.name || "System node"}</td>
+                    <td>{e.componentRef?.name || e.kind}</td>
                   </tr>
                 ))}
               </tbody>
@@ -380,18 +432,56 @@ export function ModelView({
               <KeyValues
                 values={{
                   "Element ID": element.id,
+                  "Qualified identity": element.ref,
+                  Kind: element.kind,
                   Role: element.role,
-                  Realization:
-                    projection.deployments
-                      .flatMap((d) => d.spec?.bindings || [])
-                      .find((b: Data) => b.logicalRef?.element === element.id)
-                      ?.realizationClass || "Unbound",
-                  Placement: element.nodeId,
+                  Capabilities:
+                    element.definition?.spec.capabilities ||
+                    element.raw.capabilities ||
+                    "Not declared",
+                  "Supported realization capabilities":
+                    element.raw.supportedRealizationClasses || "Not declared",
+                  "Deployment bindings": projection.deployments.flatMap(
+                    (deployment) =>
+                      (deployment.spec.bindings || [])
+                        .filter(
+                          (binding: Data) =>
+                            binding.logicalRef?.kind === "System" &&
+                            binding.logicalRef?.element === element.id &&
+                            element.systemRef ===
+                              `xdl://${binding.logicalRef.namespace}/system/${binding.logicalRef.name}`,
+                        )
+                        .map((binding: Data) => ({
+                          variant: deployment.metadata.name,
+                          bindingId: binding.id,
+                          realization: binding.realizationClass,
+                          target: binding.targetId || "Unplaced",
+                        })),
+                  ),
+                  "Logical containing node": element.nodeId,
                   Definition: textRef(element.componentRef),
                 }}
               />
+              <div className="inspector-actions">
+                <button
+                  className="button"
+                  onClick={() => onSource(sourceTarget(element))}
+                >
+                  View selected declaration
+                </button>
+                {["device", "sensor", "actuator", "model"].includes(
+                  element.kind,
+                ) && (
+                  <button
+                    className="button"
+                    onClick={() => setEditingAsset(true)}
+                  >
+                    Edit logical asset
+                  </button>
+                )}
+              </div>
               <h4>Named ports</h4>
-              {endpoints
+              {selectedEndpoints
                 .filter((p) => p.ownerId === element.id)
                 .map((p) => (
                   <div className="port-row" key={p.id}>
@@ -403,7 +493,7 @@ export function ModelView({
               <h4>Provenance</h4>
               <p className="field-hint">
                 {element.definition?.metadata?.description ||
-                  "System node from the current XDL revision."}
+                  "Logical System member from the current XDL revision."}
               </p>
               <Json value={element.raw} />
             </>
@@ -439,6 +529,21 @@ export function ModelView({
           </span>
         </div>
       </aside>
+      {editingAsset && element && (
+        <Modal
+          title="Edit a logical asset"
+          onClose={() => setEditingAsset(false)}
+        >
+          <LogicalAssetForm
+            projection={projection}
+            element={element}
+            onSave={async (edits) => {
+              await edit(edits);
+              setEditingAsset(false);
+            }}
+          />
+        </Modal>
+      )}
     </div>
   );
 }
@@ -855,37 +960,157 @@ export function SourceEditor({
   project,
   doAction,
   onSaved,
+  target,
 }: {
+  target?: SourceTarget;
   project: Project;
   doAction: DoAction;
   onSaved: () => Promise<void>;
 }) {
-  const ids = Object.keys(project.documents),
-    [id, setId] = useState(ids[0] || ""),
-    [content, setContent] = useState(""),
-    [history, setHistory] = useState<string[]>([]),
-    [future, setFuture] = useState<string[]>([]),
-    [compare, setCompare] = useState(false),
-    [recovered, setRecovered] = useState(false);
-  const baseline = documentContent(project.documents[id] || "");
-  const draftKey = `studio.draft.${project.projectId}.${id}`;
+  type Draft = {
+    projectId: string;
+    id: string;
+    content: string;
+    history: string[];
+    future: string[];
+    recovered: boolean;
+  };
+  const ids = Object.keys(project.documents);
+  function loadDraft(id: string): Draft {
+    const original = documentContent(project.documents[id] ?? ""),
+      saved = sessionStorage.getItem(`studio.draft.${project.projectId}.${id}`);
+    return {
+      projectId: project.projectId,
+      id,
+      content: saved ?? original,
+      history: [],
+      future: [],
+      recovered: saved !== null && saved !== original,
+    };
+  }
+  const [draft, setDraft] = useState<Draft>(() =>
+    loadDraft(
+      target?.documentId && ids.includes(target.documentId)
+        ? target.documentId
+        : ids[0] || "",
+    ),
+  );
+  const activeDraft = useRef(draft);
+  const { id, content, history, future, recovered } = draft;
+  const [compare, setCompare] = useState(false),
+    [saving, setSaving] = useState(false),
+    [recoveryError, setRecoveryError] = useState("");
+  function replaceDraft(next: Draft) {
+    activeDraft.current = next;
+    setDraft(next);
+  }
+  function persistDraft(value: Draft) {
+    const original = documentContent(project.documents[value.id] ?? ""),
+      key = `studio.draft.${value.projectId}.${value.id}`;
+    if (
+      value.projectId !== project.projectId ||
+      !Object.hasOwn(project.documents, value.id)
+    )
+      return;
+    if (value.content === original) sessionStorage.removeItem(key);
+    else if (value.content.length <= 524288)
+      sessionStorage.setItem(key, value.content);
+  }
+  function switchDocument(nextId: string) {
+    if (saving || !Object.hasOwn(project.documents, nextId)) return;
+    try {
+      persistDraft(activeDraft.current);
+    } catch {
+      setRecoveryError(
+        "Browser draft recovery is unavailable. Keep a local copy before closing this editor.",
+      );
+    }
+    replaceDraft(loadDraft(nextId));
+    anchored.current = false;
+    setAnchorNotice("");
+  }
+  const textarea = useRef<HTMLTextAreaElement>(null),
+    anchored = useRef(false);
+  const [anchorNotice, setAnchorNotice] = useState("");
+  function goToDeclaration() {
+    if (id !== target?.documentId || (!target.ref && !target.elementId)) return;
+    try {
+      const doc = parseDocument(content),
+        roots = isSeq(doc.contents) ? doc.contents.items : [doc.contents];
+      for (const root of roots) {
+        if (!isMap(root)) continue;
+        const metadata = root.get("metadata", true),
+          resourceKind = root.get("kind");
+        if (target.ref && isMap(metadata)) {
+          const resourceRef = `xdl://${metadata.get("namespace")}/${String(resourceKind).toLowerCase()}/${metadata.get("name")}`;
+          if (target.ref.split("#")[0] !== resourceRef) continue;
+        }
+        let entry: unknown = root;
+        if (target.elementId && target.collection) {
+          const spec = root.get("spec", true);
+          if (!isMap(spec)) continue;
+          const entries = spec.get(target.collection, true);
+          if (!isSeq(entries)) continue;
+          entry = entries.items.find(
+            (item) => isMap(item) && item.get("id") === target.elementId,
+          );
+        }
+        if (isMap(entry) && entry.range && textarea.current) {
+          textarea.current.focus();
+          textarea.current.setSelectionRange(entry.range[0], entry.range[1]);
+          const line = content.slice(0, entry.range[0]).split("\n").length - 1;
+          textarea.current.scrollTop = Math.max(
+            0,
+            line * parseFloat(getComputedStyle(textarea.current).lineHeight) -
+              40,
+          );
+          setAnchorNotice("Selected declaration highlighted in this draft.");
+          return;
+        }
+      }
+    } catch {
+      /* Invalid drafts remain editable; never infer an approximate semantic anchor. */
+    }
+    setAnchorNotice(
+      "The selected declaration could not be located in this draft. Inspect the source or compare it with the saved revision.",
+    );
+  }
   useEffect(() => {
-    const original = documentContent(project.documents[id] || ""),
-      saved = sessionStorage.getItem(draftKey);
-    setContent(saved || original);
-    setRecovered(!!saved && saved !== original);
-    setHistory([]);
-    setFuture([]);
-  }, [id, project.projectId]);
-  const dirty = content !== baseline;
+    if (!anchored.current && content && (target?.elementId || target?.ref)) {
+      anchored.current = true;
+      goToDeclaration();
+    }
+  }, [content, id]);
+  const externalSource = project.sourceIntegrity === "modified";
+  const identityMatches =
+    draft.projectId === project.projectId &&
+    Object.hasOwn(project.documents, id);
+  const baseline = documentContent(project.documents[id] ?? "");
+  const dirty = identityMatches && content !== baseline;
   useEffect(() => {
     const timer = setTimeout(() => {
-      if (dirty && content.length <= 524288)
-        sessionStorage.setItem(draftKey, content);
-      else sessionStorage.removeItem(draftKey);
+      try {
+        persistDraft(draft);
+        setRecoveryError(
+          content.length > 524288 && dirty
+            ? "This draft exceeds the 512 KiB browser recovery limit. Keep a local copy before closing."
+            : "",
+        );
+      } catch {
+        setRecoveryError(
+          "Browser draft recovery is unavailable. Keep a local copy before closing this editor.",
+        );
+      }
     }, 500);
-    return () => clearTimeout(timer);
-  }, [content, dirty, draftKey]);
+    return () => {
+      clearTimeout(timer);
+      try {
+        persistDraft(activeDraft.current);
+      } catch {
+        /* Storage quota cannot make source text executable or target another document. */
+      }
+    };
+  }, [draft, baseline]);
   useEffect(() => {
     const handle = (e: BeforeUnloadEvent) => {
       if (dirty) {
@@ -897,21 +1122,33 @@ export function SourceEditor({
     return () => window.removeEventListener("beforeunload", handle);
   }, [dirty]);
   function change(value: string) {
-    setHistory((h) => [...h.slice(-49), content]);
-    setFuture([]);
-    setContent(value);
+    const current = activeDraft.current;
+    replaceDraft({
+      ...current,
+      history: [...current.history.slice(-49), current.content],
+      future: [],
+      content: value,
+    });
   }
   function undo() {
-    if (!history.length) return;
-    setFuture((f) => [content, ...f].slice(0, 50));
-    setContent(history[history.length - 1]);
-    setHistory((h) => h.slice(0, -1));
+    const current = activeDraft.current;
+    if (!current.history.length || saving) return;
+    replaceDraft({
+      ...current,
+      future: [current.content, ...current.future].slice(0, 50),
+      content: current.history[current.history.length - 1],
+      history: current.history.slice(0, -1),
+    });
   }
   function redo() {
-    if (!future.length) return;
-    setHistory((h) => [...h.slice(-49), content]);
-    setContent(future[0]);
-    setFuture((f) => f.slice(1));
+    const current = activeDraft.current;
+    if (!current.future.length || saving) return;
+    replaceDraft({
+      ...current,
+      history: [...current.history.slice(-49), current.content],
+      content: current.future[0],
+      future: current.future.slice(1),
+    });
   }
   return (
     <div className="source-editor">
@@ -921,7 +1158,8 @@ export function SourceEditor({
           <select
             aria-label="Resource"
             value={id}
-            onChange={(e) => setId(e.target.value)}
+            disabled={saving || !identityMatches}
+            onChange={(e) => switchDocument(e.target.value)}
           >
             {ids.map((id) => (
               <option key={id} value={id}>
@@ -932,20 +1170,24 @@ export function SourceEditor({
             ))}
           </select>
         </label>
-        <Badge tone={dirty ? "warning" : "success"}>
-          {dirty ? "Unsaved draft" : "Saved revision"}
+        <Badge tone={externalSource || dirty ? "warning" : "success"}>
+          {externalSource
+            ? "Inspected external bytes"
+            : dirty
+              ? "Unsaved draft"
+              : "Saved revision"}
         </Badge>
         <div className="source-tools">
           <button
             className="small-button"
-            disabled={!history.length}
+            disabled={saving || !history.length}
             onClick={undo}
           >
             Undo
           </button>
           <button
             className="small-button"
-            disabled={!future.length}
+            disabled={saving || !future.length}
             onClick={redo}
           >
             Redo
@@ -955,6 +1197,44 @@ export function SourceEditor({
           </button>
         </div>
       </div>
+      {target && id === target.documentId && (
+        <div className="source-context">
+          <code>{target.ref || target.documentId}</code>
+          {target.elementId && (
+            <>
+              <span>
+                spec.{target.collection}[id={target.elementId}]
+              </span>
+            </>
+          )}
+          {(target.ref || target.elementId) && (
+            <button className="small-button" onClick={goToDeclaration}>
+              Go to selected declaration
+            </button>
+          )}
+          <span role="status">{anchorNotice}</span>
+        </div>
+      )}
+      {externalSource && (
+        <div className="notice" role="alert">
+          Source files changed outside Studio. These are inspected external
+          bytes, not an admitted saved revision. Keep a local copy before
+          recovery. Local drafts remain editable; saving and execution are
+          blocked.
+          <Json value={project.sourceDiagnostics || []} />
+        </div>
+      )}
+      {recoveryError && (
+        <p role="alert" className="notice">
+          {recoveryError}
+        </p>
+      )}
+      {!identityMatches && (
+        <p role="alert" className="error-banner">
+          The selected document belongs to a different project revision. Reopen
+          the editor before saving.
+        </p>
+      )}
       {recovered && (
         <p className="notice">
           Recovered an uncommitted draft from this browser tab. Review it before
@@ -969,7 +1249,9 @@ export function SourceEditor({
       <div className={`source-panels ${compare ? "compare" : ""}`}>
         {compare && (
           <div>
-            <span className="source-pane-label">Saved revision</span>
+            <span className="source-pane-label">
+              {externalSource ? "Inspected external bytes" : "Saved revision"}
+            </span>
             <pre className="source-baseline">{baseline}</pre>
           </div>
         )}
@@ -978,8 +1260,10 @@ export function SourceEditor({
             {compare ? "Edited draft" : "XDL source"}
           </label>
           <textarea
+            ref={textarea}
             id="xdl-source"
             className="source-textarea"
+            disabled={saving || !identityMatches}
             spellCheck={false}
             value={content}
             onChange={(e) => change(e.target.value)}
@@ -998,12 +1282,15 @@ export function SourceEditor({
       </div>
       <div className="source-footer">
         <span>
-          Draft revision <code>{String(project.revision).slice(0, 12)}</code> ·
-          UTF-8 · {content.length.toLocaleString()} characters
+          {externalSource
+            ? "Recorded revision (externally modified source)"
+            : "Draft revision"}{" "}
+          <code>{String(project.revision).slice(0, 12)}</code> · UTF-8 ·{" "}
+          {content.length.toLocaleString()} characters
         </span>
         <button
           className="button primary"
-          disabled={!dirty}
+          disabled={saving || externalSource || !dirty || !identityMatches}
           onClick={() => void save()}
         >
           <Icon name="check" />
@@ -1013,23 +1300,43 @@ export function SourceEditor({
     </div>
   );
   async function save() {
-    await doAction("Saving source revision", async () => {
-      const document = project.documents[id];
-      await api(
-        `/projects/${project.projectId}/documents/${encodeURIComponent(id)}`,
-        {
-          method: "PUT",
-          revision: project.revision,
-          body: {
-            content,
-            format: typeof document === "string" ? "yaml" : document.format,
+    const submitted = activeDraft.current,
+      document = project.documents[submitted.id];
+    if (
+      saving ||
+      externalSource ||
+      submitted.projectId !== project.projectId ||
+      !Object.hasOwn(project.documents, submitted.id) ||
+      submitted.content === documentContent(document)
+    )
+      return;
+    setSaving(true);
+    try {
+      await doAction("Saving source revision", async () => {
+        await api(
+          `/projects/${submitted.projectId}/documents/${encodeURIComponent(submitted.id)}`,
+          {
+            method: "PUT",
+            revision: project.revision,
+            body: {
+              content: submitted.content,
+              format: typeof document === "string" ? "yaml" : document.format,
+            },
           },
-        },
-      );
-      sessionStorage.removeItem(draftKey);
-      setRecovered(false);
-      await onSaved();
-    });
+        );
+        const key = `studio.draft.${submitted.projectId}.${submitted.id}`;
+        if (sessionStorage.getItem(key) === submitted.content)
+          sessionStorage.removeItem(key);
+        if (
+          activeDraft.current.id === submitted.id &&
+          activeDraft.current.content === submitted.content
+        )
+          replaceDraft({ ...activeDraft.current, recovered: false });
+        await onSaved();
+      });
+    } finally {
+      setSaving(false);
+    }
   }
 }
 

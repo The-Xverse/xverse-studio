@@ -21,6 +21,8 @@ export interface Project {
   documents: Record<string, Document | string>;
   layout?: Data;
   presentationRevision?: number;
+  sourceIntegrity?: "intact" | "modified";
+  sourceDiagnostics?: Diagnostic[];
   manifest?: Data;
   [key: string]: any;
 }

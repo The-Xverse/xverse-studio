@@ -33,6 +33,7 @@ import {
   ConnectionsView,
   DeploymentView,
   SourceEditor,
+  type SourceTarget,
 } from "../features/model/Views";
 import {
   DeploymentComposer,
@@ -40,6 +41,11 @@ import {
 } from "../features/deployments/DeploymentComposer";
 import { ProfileBindingsPanel } from "../features/profiles/ProfileBindingsPanel";
 import { ArtifactRegistrationForm } from "../features/catalog/ArtifactRegistrationForm";
+import { LogicalAssetForm } from "../features/model/LogicalAssetForm";
+import {
+  RetentionDialog,
+  type RetentionTarget,
+} from "../features/retention/RetentionDialog";
 import { ResultsView } from "../features/results/ResultsView";
 import { ExperimentsView, LabView } from "./OperationsViews";
 import {
@@ -75,6 +81,16 @@ export default function App() {
       {},
     ),
     [addTemplate, setAddTemplate] = useState("");
+  const [sourceContext, setSourceContext] = useState<
+      SourceTarget | undefined
+    >(),
+    [addKind, setAddKind] = useState("component");
+  const openSource = (target?: SourceTarget) => {
+    setSourceContext(target);
+    setModal("source");
+  };
+  const [retentionTarget, setRetentionTarget] =
+    useState<RetentionTarget | null>(null);
   const [project, setProject] = useState<Project | null>(null),
     [view, setView] = useState<View>("Model"),
     [section, setSection] = useState<
@@ -653,6 +669,20 @@ export default function App() {
                 </button>
               </div>
             )}
+            {project?.sourceIntegrity === "modified" && (
+              <div className="notice error" role="alert">
+                <Icon name="info" />
+                <div>
+                  <strong>Source files changed outside Studio</strong>
+                  <p>
+                    Inspect and copy the source before recovery. The recorded
+                    revision has not admitted these bytes; saving, validation
+                    and execution are blocked.
+                  </p>
+                  <Diagnostics diagnostics={project.sourceDiagnostics || []} />
+                </div>
+              </div>
+            )}
             {error && (
               <div className="notice error" role="alert">
                 <Icon name="info" />
@@ -713,12 +743,27 @@ export default function App() {
               onRegister={() => setModal("artifact")}
               onTemplate={(template) => {
                 setAddTemplate(template);
+                setAddKind("component");
                 setModal("add");
               }}
+              onRetention={(entry) =>
+                setRetentionTarget({
+                  kind: "artifact",
+                  id: entry.entryId || entry.id || "",
+                  name: entry.name,
+                })
+              }
               hasProject={!!project}
             />
           ) : !project ? (
             <Home
+              onRetention={(value) =>
+                setRetentionTarget({
+                  kind: "project",
+                  id: value.projectId,
+                  name: value.name,
+                })
+              }
               projects={projects}
               catalog={catalog}
               onOpen={(id) =>
@@ -815,10 +860,7 @@ export default function App() {
                   </button>
                 ))}
                 <span className="tab-fill" />
-                <button
-                  className="source-toggle"
-                  onClick={() => setModal("source")}
-                >
+                <button className="source-toggle" onClick={() => openSource()}>
                   <Icon name="code" size={17} />
                   XDL source
                 </button>
@@ -869,7 +911,7 @@ export default function App() {
                       setNotice("Layout saved separately from executable XDL.");
                     })
                   }
-                  onSource={() => setModal("source")}
+                  onSource={openSource}
                   onCatalog={() => {
                     setAddTemplate("");
                     setModal("add");
@@ -897,11 +939,13 @@ export default function App() {
                   project={project}
                   projection={projection}
                   selection={executionSelection}
+                  edit={edit}
+                  authoringLimits={capabilities.limits?.scenarioAuthoring || {}}
                   preflight={preflight}
                   run={run}
                   doAction={doAction}
                   refresh={refreshProject}
-                  onSource={() => setModal("source")}
+                  onSource={openSource}
                 />
               ) : (
                 <ResultsView
@@ -938,7 +982,10 @@ export default function App() {
               <footer className="workspace-footer">
                 <span>
                   <Icon name="folder" size={13} />
-                  Local project · Saved on backend
+                  Local project ·{" "}
+                  {project.sourceIntegrity === "modified"
+                    ? "External source changes"
+                    : "Saved on backend"}
                 </span>
                 <span>Authoritative XDL · Layout stored separately</span>
                 <span>
@@ -1013,10 +1060,39 @@ export default function App() {
           </form>
         </Modal>
       )}
+      {retentionTarget && (
+        <RetentionDialog
+          target={retentionTarget}
+          onClose={() => setRetentionTarget(null)}
+          restoreFocusSelector={
+            retentionTarget.kind === "project"
+              ? "#recent-projects-heading"
+              : "#catalog-heading"
+          }
+          onChanged={async (result) => {
+            const removed = result.outcomes?.some(
+              (row: Data) =>
+                row.projectId === project?.projectId &&
+                row.status === "removed",
+            );
+            if (removed) {
+              setProject(null);
+              setRun(null);
+              setPreflight(null);
+              selectedProjectRef.current = "";
+              localStorage.removeItem("studio.projectId");
+            }
+            await refreshProjects();
+            setCatalog(items<CatalogEntry>(await api("/catalog")));
+          }}
+        />
+      )}
       {modal === "source" && project && (
         <Modal title="Authored XDL source" wide onClose={() => setModal("")}>
           <SourceEditor
+            key={project.projectId}
             project={project}
+            target={sourceContext}
             doAction={doAction}
             onSaved={async () => {
               await refreshProject();
@@ -1088,24 +1164,49 @@ export default function App() {
       )}
       {modal === "add" && (
         <Modal title="Add an element" onClose={() => setModal("")}>
-          <AddElement
-            initialTemplate={addTemplate}
-            catalog={[
-              ...catalog,
-              {
-                name: "Current component definitions",
-                templates: projection.resources
-                  .filter((r) => r.kind === "Component")
-                  .map((r) => ({ id: r.metadata.name, name: r.metadata.name })),
-              },
-            ]}
-            onSubmit={async (templateId, elementId) => {
-              await edit([{ kind: "add_element", templateId, elementId }]);
-              setModal("");
-              setView("Model");
-            }}
-            doAction={doAction}
-          />
+          <label>
+            Element family
+            <select
+              aria-label="Element family"
+              value={addKind}
+              onChange={(e) => setAddKind(e.target.value)}
+            >
+              <option value="component">Reusable component instance</option>
+              <option value="logical">Device, Sensor, Actuator or Model</option>
+            </select>
+          </label>
+          {addKind === "logical" ? (
+            <LogicalAssetForm
+              projection={projection}
+              onSave={async (edits) => {
+                await edit(edits);
+                setModal("");
+                setView("Model");
+              }}
+            />
+          ) : (
+            <AddElement
+              initialTemplate={addTemplate}
+              catalog={[
+                ...catalog,
+                {
+                  name: "Current component definitions",
+                  templates: projection.resources
+                    .filter((r) => r.kind === "Component")
+                    .map((r) => ({
+                      id: r.metadata.name,
+                      name: r.metadata.name,
+                    })),
+                },
+              ]}
+              onSubmit={async (templateId, elementId) => {
+                await edit([{ kind: "add_element", templateId, elementId }]);
+                setModal("");
+                setView("Model");
+              }}
+              doAction={doAction}
+            />
+          )}
         </Modal>
       )}
     </div>
@@ -1202,7 +1303,9 @@ function Home({
   onNew,
   onImport,
   onImportEvidence,
+  onRetention,
 }: {
+  onRetention: (project: Project) => void;
   projects: Project[];
   catalog: CatalogEntry[];
   onOpen: (id: string) => void;
@@ -1328,7 +1431,9 @@ function Home({
       <section className="home-section">
         <div className="section-heading">
           <div>
-            <h2>Recent projects</h2>
+            <h2 id="recent-projects-heading" tabIndex={-1}>
+              Recent projects
+            </h2>
             <p>Continue from your last saved draft.</p>
           </div>
           <span className="muted">
@@ -1338,20 +1443,32 @@ function Home({
         {projects.length ? (
           <div className="project-list">
             {projects.map((p) => (
-              <button key={p.projectId} onClick={() => onOpen(p.projectId)}>
-                <span className="project-list-icon">
-                  <Icon name="model" size={22} />
-                </span>
-                <span>
-                  <strong>{p.name}</strong>
-                  <small>
-                    System workspace · rev{" "}
-                    {String(p.revision || "").slice(0, 8)}
-                  </small>
-                </span>
-                <Badge>Local</Badge>
-                <Icon name="chevron" size={17} />
-              </button>
+              <div className="project-list-row" key={p.projectId}>
+                <button
+                  className="project-open"
+                  onClick={() => onOpen(p.projectId)}
+                >
+                  <span className="project-list-icon">
+                    <Icon name="model" size={22} />
+                  </span>
+                  <span>
+                    <strong>{p.name}</strong>
+                    <small>
+                      System workspace · rev{" "}
+                      {String(p.revision || "").slice(0, 8)}
+                    </small>
+                  </span>
+                  <Badge>Local</Badge>
+                  <Icon name="chevron" size={17} />
+                </button>
+                <button
+                  className="button project-retention"
+                  aria-label={`Review retention for project ${p.name}`}
+                  onClick={() => onRetention(p)}
+                >
+                  Retention
+                </button>
+              </div>
             ))}
           </div>
         ) : (
@@ -1373,7 +1490,9 @@ function Catalog({
   onRegister,
   onTemplate,
   hasProject,
+  onRetention,
 }: {
+  onRetention: (entry: CatalogEntry) => void;
   onRegister: () => void;
   onTemplate: (template: string) => void;
   hasProject: boolean;
@@ -1388,7 +1507,9 @@ function Catalog({
       <div className="page-heading">
         <div>
           <span className="eyebrow">ADMITTED CONTENT</span>
-          <h1>Catalog</h1>
+          <h1 id="catalog-heading" tabIndex={-1}>
+            Catalog
+          </h1>
           <p>
             Blueprints compose examples. Profiles provide semantics. Providers
             implement integration.
@@ -1471,10 +1592,19 @@ function Catalog({
                   Add to current System
                 </button>
               ) : (
-                <p className="field-hint">
-                  Registered reference only. Availability and provider execution
-                  remain unresolved.
-                </p>
+                <div>
+                  <p className="field-hint">
+                    Registered reference only. Availability and provider
+                    execution remain unresolved.
+                  </p>
+                  <button
+                    className="button"
+                    aria-label={`Review retention for artifact ${e.name}`}
+                    onClick={() => onRetention(e)}
+                  >
+                    Review registration retention
+                  </button>
+                </div>
               )}
             </article>
           ))}

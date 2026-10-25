@@ -111,6 +111,29 @@ export async function exerciseComposition(page: Page, testInfo: TestInfo) {
   await expect(
     page.getByLabel("Associated Scenario", { exact: true }),
   ).toHaveValue(chosenScenario);
+  await page.getByRole("tab", { name: "Model", exact: true }).click();
+  await page
+    .locator(".tree-list")
+    .getByRole("button", { name: "plant plant", exact: true })
+    .click();
+  await page.getByRole("button", { name: "Properties", exact: true }).click();
+  const bindingsRow = page
+    .locator(".inspector .key-values > div")
+    .filter({ has: page.getByText("Deployment bindings", { exact: true }) });
+  const displayedBindings = JSON.parse(
+    await bindingsRow.locator("dd").innerText(),
+  );
+  expect(displayedBindings.map((value: any) => value.variant).sort()).toEqual(
+    [
+      originalDeployment.split("/").at(-1),
+      chosenDeployment.split("/").at(-1),
+    ].sort(),
+  );
+  expect(
+    displayedBindings.every(
+      (value: any) => value.realization === "simulated" && value.target,
+    ),
+  ).toBe(true);
   await page.getByRole("button", { name: "Catalog", exact: true }).click();
   await page
     .getByLabel("Catalog kind", { exact: true })

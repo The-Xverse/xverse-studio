@@ -1,3 +1,5 @@
+import { ScenarioAuthoring } from "../features/experiments/ScenarioAuthoring";
+import type { SourceTarget } from "../features/model/Views";
 import { useEffect, useState, useRef } from "react";
 import type { Campaign, Evaluation } from "../../../../packages/contracts/api";
 import { api, items, mutationKey } from "../api/client";
@@ -23,6 +25,8 @@ export function ExperimentsView({
   doAction,
   refresh,
   onSource,
+  edit,
+  authoringLimits,
 }: {
   project: Project;
   projection: Projection;
@@ -31,7 +35,9 @@ export function ExperimentsView({
   run: Run | null;
   doAction: DoAction;
   refresh: () => Promise<unknown>;
-  onSource: () => void;
+  onSource: (target?: SourceTarget) => void;
+  edit: (edits: Data[]) => Promise<unknown>;
+  authoringLimits: Data;
 }) {
   const [tab, setTab] = useState("Scenario"),
     [matrix, setMatrix] = useState('{"gain": [0.5, 0.8, 1.2]}'),
@@ -102,7 +108,19 @@ export function ExperimentsView({
             evidence.
           </p>
         </div>
-        <button className="button" onClick={onSource}>
+        <button
+          className="button"
+          onClick={() =>
+            onSource(
+              scenario
+                ? {
+                    documentId: scenario.documentId,
+                    ref: `xdl://${scenario.metadata.namespace}/scenario/${scenario.metadata.name}`,
+                  }
+                : undefined,
+            )
+          }
+        >
           <Icon name="code" />
           Edit scenario XDL
         </button>
@@ -123,6 +141,13 @@ export function ExperimentsView({
       {tab === "Scenario" ? (
         scenario ? (
           <>
+            <ScenarioAuthoring
+              scenario={scenario}
+              projection={projection}
+              limits={authoringLimits}
+              edit={edit}
+              onSource={onSource}
+            />
             <div className="deployment-summary">
               <section className="panel">
                 <span className="eyebrow">SCENARIO INTENT</span>

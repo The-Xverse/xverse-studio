@@ -2,6 +2,9 @@ import { parse } from "yaml";
 import type { Project, Data, Parameter } from "../../api/types";
 export interface ElementProjection {
   id: string;
+  ref: string;
+  systemRef: string;
+  kind: string;
   name: string;
   role: string;
   nodeId: string;
@@ -82,6 +85,7 @@ export function projectDisplay(project: Project | null): Projection {
   for (const resource of result.resources) {
     const spec = resource.spec;
     if (resource.kind === "System") {
+      const systemRef = `xdl://${resource.metadata.namespace}/system/${resource.metadata.name}`;
       const instances = records(spec.componentInstances),
         nodes = records(spec.nodes),
         endpoints = records(spec.endpoints).filter(
@@ -106,10 +110,11 @@ export function projectDisplay(project: Project | null): Projection {
         const node = nodes.find((n) => n.id === instance.nodeId);
         result.elements.push({
           id: instance.id,
+          ref: `${systemRef}#${instance.id}`,
+          systemRef,
+          kind: "componentInstance",
           name: text(instance.displayName, instance.id),
-          role:
-            strings(definition?.spec?.capabilities || node?.roles).join(", ") ||
-            "component",
+          role: strings(node?.roles).join(", ") || "component",
           nodeId: text(instance.nodeId, "Unplaced"),
           componentRef: instance.componentRef,
           documentId: resource.documentId,
@@ -125,6 +130,9 @@ export function projectDisplay(project: Project | null): Projection {
         )
           result.elements.push({
             id: node.id,
+            ref: `${systemRef}#${node.id}`,
+            systemRef,
+            kind: "node",
             name: node.id,
             role: strings(node.roles).join(", ") || "node",
             nodeId: node.id,
@@ -133,6 +141,33 @@ export function projectDisplay(project: Project | null): Projection {
             parameters: [],
           });
       }
+      for (const [collection, kind] of [
+        ["devices", "device"],
+        ["sensors", "sensor"],
+        ["actuators", "actuator"],
+        ["models", "model"],
+      ]) {
+        for (const asset of records(spec[collection])) {
+          if (typeof asset.id !== "string") {
+            result.parseErrors.push(resource.documentId);
+            continue;
+          }
+          result.elements.push({
+            id: asset.id,
+            ref: `${systemRef}#${asset.id}`,
+            systemRef,
+            kind,
+            name: text(asset.displayName, asset.id),
+            role: kind,
+            nodeId: text(asset.nodeId, "Unplaced"),
+            documentId: resource.documentId,
+            raw: asset,
+            parameters: [],
+          });
+        }
+        if (spec[collection] && !Array.isArray(spec[collection]))
+          result.parseErrors.push(resource.documentId);
+      }
       for (const flow of records(spec.flows)) {
         if (typeof flow.id !== "string") {
           result.parseErrors.push(resource.documentId);
@@ -140,6 +175,7 @@ export function projectDisplay(project: Project | null): Projection {
         }
         result.connections.push({
           ...flow,
+          systemRef,
           id: flow.id,
           sourceEndpointId: text(flow.sourceEndpointId),
           destinationEndpointIds: strings(flow.destinationEndpointIds),

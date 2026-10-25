@@ -14,6 +14,10 @@ import httpx
 root = Path(__file__).resolve().parents[1]
 parser = argparse.ArgumentParser()
 parser.add_argument("--performance", action="store_true")
+parser.add_argument(
+    "--grep",
+    help="Run matching Playwright test names against the isolated native backend.",
+)
 args = parser.parse_args()
 data = root / ".studio-local" / "browser-tests" / uuid.uuid4().hex
 data.mkdir(parents=True)
@@ -68,7 +72,10 @@ try:
     )
     if args.performance:
         env["STUDIO_PERFORMANCE"] = "1"
-    result = subprocess.run([node, str(cli), "run", "test:e2e"], cwd=root, env=env)
+    command = [node, str(cli), "run", "test:e2e"]
+    if args.grep:
+        command.extend(["--", "--grep", args.grep])
+    result = subprocess.run(command, cwd=root, env=env)
     raise SystemExit(result.returncode)
 finally:
     process.terminate()

@@ -220,41 +220,65 @@ export function Modal({
   wide?: boolean;
   restoreFocusSelector?: string;
 }) {
-  const returnFocus = useRef(document.activeElement as HTMLElement | null);
-  useEffect(
-    () => () => {
-      const target = restoreFocusSelector
-        ? document.querySelector<HTMLElement>(restoreFocusSelector)
-        : returnFocus.current;
-      target?.focus();
-    },
-    [],
-  );
+  const returnFocus = useRef(document.activeElement as HTMLElement | null),
+    section = useRef<HTMLElement | null>(null),
+    close = useRef(onClose);
+  close.current = onClose;
+  useEffect(() => {
+    const handle = (event: KeyboardEvent) => {
+      const dialogs = document.querySelectorAll(
+        '[role="dialog"][aria-modal="true"]',
+      );
+      if (dialogs[dialogs.length - 1] !== section.current) return;
+      if (event.key === "Escape") {
+        event.preventDefault();
+        event.stopPropagation();
+        close.current();
+      }
+      if (event.key === "Tab") {
+        const nodes = section.current?.querySelectorAll<HTMLElement>(
+          'button:not(:disabled),input:not([type=hidden]):not(:disabled),select:not(:disabled),textarea:not(:disabled),summary,a[href],[tabindex="0"]',
+        );
+        const visible = Array.from(nodes || []).filter(
+            (node) => node.getClientRects().length,
+          ),
+          first = visible[0],
+          last = visible[visible.length - 1];
+        if (
+          !section.current?.contains(document.activeElement) ||
+          (event.shiftKey && document.activeElement === first)
+        ) {
+          event.preventDefault();
+          (event.shiftKey ? last : first)?.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first?.focus();
+        }
+      }
+    };
+    document.addEventListener("keydown", handle, true);
+    return () => {
+      document.removeEventListener("keydown", handle, true);
+      // StrictMode simulates cleanup while the dialog is still connected.
+      queueMicrotask(() => {
+        if (section.current?.isConnected) return;
+        const target = restoreFocusSelector
+          ? document.querySelector<HTMLElement>(restoreFocusSelector)
+          : returnFocus.current;
+        target?.focus();
+      });
+    };
+  }, []);
   return (
     <div className="modal-scrim" onClick={onClose}>
       <section
+        ref={section}
         className={`modal ${wide ? "wide" : ""}`}
         role="dialog"
         aria-modal="true"
+        aria-label={title}
         aria-labelledby="modal-heading"
         onClick={(e) => e.stopPropagation()}
-        onKeyDown={(e) => {
-          if (e.key === "Escape") onClose();
-          if (e.key === "Tab") {
-            const nodes = e.currentTarget.querySelectorAll<HTMLElement>(
-              'button:not(:disabled),input:not([type=hidden]),select,textarea,summary,a[href],[tabindex="0"]',
-            );
-            const first = nodes[0],
-              last = nodes[nodes.length - 1];
-            if (e.shiftKey && document.activeElement === first) {
-              e.preventDefault();
-              last?.focus();
-            } else if (!e.shiftKey && document.activeElement === last) {
-              e.preventDefault();
-              first?.focus();
-            }
-          }
-        }}
       >
         <header>
           <h2 id="modal-heading">{title}</h2>
