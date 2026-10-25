@@ -154,7 +154,9 @@ repetitions after one warm-up passed: selection p95 36.6 ms, open/validation 1,1
 history presentation over 50,000 retained fixture events 929.8 ms (limit 2,000 ms). New whole-run
 metadata and filter scans add query work; these are measured browser/read workloads, not provider
 scalability or physical-clock evidence. The exact receipts are under
-`evidence/studio/release/linux-evidence-query-2026-10-25/`. Packaging/publication has its own result.
+`evidence/studio/release/linux-evidence-query-2026-10-25/`. Clean product829d428 passed native Linux
+fresh offline package provisioning/start/UI/persistence/public compilation; publication/CI outcomes
+are reported separately.
 
 T028 still needs explicit restriction/private-log and advancing-producer/slow-consumer gap fixtures.
 T026 expired-cursor resynchronization and T031/T032 explanations remain ready software work. The

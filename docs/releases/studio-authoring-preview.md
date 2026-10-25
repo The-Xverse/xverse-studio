@@ -34,7 +34,7 @@ T041, T042, T044, T050, T085, T086, T087, T092, T020, T094, T018, T019, T029, T0
 
 Evidence: `evidence/studio/release/linux-evidence-query-2026-10-25/`, the component review folders and
 `traceability.json`. Counts overlap and are not added. Backend/application/test source remained unchanged during the final full-suite/browser checks.
-Clean product commit 180d026 passed the fresh-package smoke. Earlier cohort and packaging findings
+Clean product commit 829d428 passed the fresh-package smoke. Earlier cohort and packaging findings
 remain retained separately. Publication redactions retain raw receipts
 privately on loop10 without changing verification outcomes or product source hashes.
 

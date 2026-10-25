@@ -200,3 +200,7 @@ cohort on unchanged source, with independent reader/UI review. Component complet
 T028 remains open for explicit restriction/private-log and advancing-producer/slow-consumer gap
 fixtures; T026 expired-cursor resynchronization remains open. These concrete software obligations
 are not hidden behind Windows/hardware blockers. See `evidence/studio/release/linux-evidence-query-2026-10-25/`.
+
+Clean product candidate 829d428 additionally passed prepared-cache offline package installation,
+startup, browser-index serving, Unicode persistence and public compilation. Its 86-file clean manifest
+and archive digest are retained with the final466/21 cohort; publication/CI outcomes are separate.
