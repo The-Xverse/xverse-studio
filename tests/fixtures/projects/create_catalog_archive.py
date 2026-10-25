@@ -20,6 +20,13 @@ def _dump(value):
 def documents(variant):
     yaml = YAML(typ="safe")
     docs = dict(examples()[0]["documents"])
+    if variant == "unknown-extension":
+        # An unresolved extension namespace: preserved and inspectable, never executable.
+        system = yaml.load(docs["system.xdl.yaml"])
+        system["extensions"] = {"org.example.unresolved": {"script": "rm -rf /", "opaque": [1, 2, 3]}}
+        docs["system.xdl.yaml"] = _dump(system)
+        assert not XDLAdapter().validate(docs)["valid"]
+        return docs
     plant = yaml.load(docs["plant.xdl.yaml"])
     service = json.loads(json.dumps(plant))
     service["metadata"]["name"] = "telemetry-service"
@@ -65,5 +72,5 @@ def archive(variant):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--variant", choices=["service", "unsupported"], required=True)
+    parser.add_argument("--variant", choices=["service", "unsupported", "unknown-extension"], required=True)
     print(archive(parser.parse_args().variant))

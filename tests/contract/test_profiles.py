@@ -260,3 +260,67 @@ def test_malicious_presentation_is_never_admitted_even_with_a_matching_digest(cl
     else:
         assert response.status_code == 422 and response.json()["code"] == "PROFILE_CONFLICT"
     assert client.get("/api/v1/runs").json()["items"] == []
+
+
+def test_api_profile_discovery_is_exact_and_independent_of_providers_and_blueprints(client):
+    from importlib.resources import files
+    from pathlib import Path
+
+    from xverse_studio.storage.core import digest
+    from xverse_studio.xdl.examples import examples
+
+    import xverse_studio.assertions as assertions
+
+    # Exact identities come from the packaged schemas and the blueprints' declared profile versions.
+    sources = {
+        "io.xverse.experiment": files("xverse_xdl").joinpath("profiles", "experiment-lite-v0.1.schema.json").read_bytes(),
+        "io.xverse.studio.experiments": (Path(assertions.__file__).parent / "evaluation-v1.schema.json").read_bytes(),
+    }
+    declared = {ref["namespace"]: ref["version"] for example in examples() for ref in example["profileRefs"]}
+    listing = client.get("/api/v1/profiles").json()["items"]
+    assert {entry["namespace"] for entry in listing} == set(sources)
+    forbidden = {"os", "operatingSystems", "supportedHostOS", "hostCompatible", "architectures", "providerId", "providerIds"}
+
+    def keys(value):
+        if isinstance(value, dict):
+            for key, item in value.items():
+                yield key
+                yield from keys(item)
+        elif isinstance(value, list):
+            for item in value:
+                yield from keys(item)
+
+    for entry in listing:
+        detail = client.get("/api/v1/profiles/" + entry["profileId"]).json()
+        assert detail["version"] == declared[detail["namespace"]]
+        assert detail["schemaDigest"] == digest(sources[detail["namespace"]])
+        assert detail["maturity"] == "admitted_integration" and detail["limitations"]
+        for field in ("namespace", "version", "maturity", "limitations", "schemaDigest", "presentationDigest"):
+            assert detail[field] == entry[field]
+        # A profile never claims OS support, provider identity or execution authority.
+        assert not forbidden & set(keys({k: v for k, v in detail.items() if k not in {"schema", "schemaText"}}))
+        assert detail["executionAllowed"] is False
+    assert client.get("/api/v1/profiles/org.unknown.profile").status_code == 404
+    # OS compatibility is a provider-binding fact.
+    providers_before = client.get("/api/v1/providers").json()
+    assert all("supportedHostOS" in p and "hostCompatible" in p for p in providers_before["items"])
+    # Profiles bind to a blueprint-composed project without changing provider availability or its plan.
+    blueprint = examples()[-1]
+    project = client.post("/api/v1/projects", json={"name": "profile independence", "blueprintRef": blueprint["id"]}).json()
+    plan_before = client.post(f"/api/v1/projects/{project['projectId']}/compilations",
+                              json={"revision": project["revision"]}).json()["planDigest"]
+    response = client.post(
+        f"/api/v1/projects/{project['projectId']}/profile-bindings",
+        headers={"If-Match": str(project["revision"])},
+        json={"baseRevision": project["revision"], "profiles": [
+            {k: e[k] for k in ("profileId", "version", "schemaDigest", "presentationDigest")} for e in listing]},
+    )
+    assert response.status_code == 200, response.text
+    bound = response.json()
+    assert bound["revision"] > project["revision"]
+    assert client.get("/api/v1/providers").json() == providers_before
+    plan_after = client.post(f"/api/v1/projects/{project['projectId']}/compilations",
+                             json={"revision": bound["revision"]}).json()["planDigest"]
+    assert plan_after == plan_before
+    # Profile discovery is unchanged by composing projects from blueprints.
+    assert client.get("/api/v1/profiles").json()["items"] == listing

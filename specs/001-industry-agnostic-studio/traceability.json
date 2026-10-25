@@ -2347,8 +2347,14 @@
         "AC-003",
         "AC-004"
       ],
-      "status": "in_progress",
-      "implementation_note": "Owned native reference/browser workflows exercised, with exact input identity and failure regressions. Actual Lite, five-person usability and full native Windows gates remain open."
+      "status": "completed",
+      "implementation_note": "Owned component complete: prepared-example onboarding (exact bytes, scope/maturity/limitations, ready preflight, no execution, recent-project reopen), import refusal without side effects, unknown-extension preservation across import/save/layout/export with the unresolved namespace identified and blocking, and parameter validation (browser refusal before any request; backend admission for numeric bounds, categorical domain and types). 635 backend / 67 browser checks pass on an unchanged candidate. Live Lite onboarding, the five-person usability study and native Windows remain open under their own gates.",
+      "implementation_evidence": [
+        "tests/integration/test_project_import.py",
+        "tests/e2e/project-onboarding.spec.ts",
+        "evidence/studio/M1-onboarding/README.md",
+        "evidence/studio/M1-onboarding/verification.json"
+      ]
     },
     {
       "id": "T016",
@@ -3824,8 +3830,15 @@
       "acceptance_ids": [
         "AC-019"
       ],
-      "status": "in_progress",
-      "implementation_note": "Owned graph/source/catalog/profile/variant work implemented and tested; independent composition repair verification and final UI successor are being retained. External two-industry/live and cross-OS gates remain open."
+      "status": "completed",
+      "implementation_note": "Owned component complete: profile admission/composition in profiles/ (registry locks, authored-profile PROFILE_UNRESOLVED/PROFILE_CONFLICT preflight findings, binding requires the core API version) independent of provider execution and blueprint composition; versioned discovery returns exact namespace/version/maturity/limitation/digest metadata pinned to packaged schemas, with no OS/provider claims (OS compatibility is a provider-binding fact). 635 backend / 67 browser checks pass. Two-industry live admission remains under T064-T067.",
+      "implementation_evidence": [
+        "services/studio-api/src/xverse_studio/profiles/__init__.py",
+        "tests/contract/test_profiles.py",
+        "evidence/studio/M2-profiles-catalog/verification.json",
+        "evidence/studio/M1-onboarding/README.md",
+        "evidence/studio/M1-onboarding/verification.json"
+      ]
     },
     {
       "id": "T062",
@@ -6161,15 +6174,15 @@
     "status_document": "../../docs/implementation/STATUS.md",
     "native_windows": "BLOCKED at user request. Initial native Server 2022 install failed on upstream Git filenames; application/browser NOT_RUN.",
     "m5": "deferred",
-    "code_candidate": "working-tree product sha256 recorded in evidence/studio/M2-profiles-catalog/verification.json on fa5355a",
-    "component_completed": 33,
+    "code_candidate": "working-tree product sha256 recorded in evidence/studio/M1-onboarding/verification.json on 90c11c4",
+    "component_completed": 35,
     "verification": {
-      "backend_tests_passed": 618,
-      "playwright_checks_passed": 66,
+      "backend_tests_passed": 635,
+      "playwright_checks_passed": 67,
       "playwright_checks_failed": 0,
       "playwright_scope": "full Linux browser suite with performance measurements on an unchanged candidate",
       "milestones_accepted": 0,
-      "evidence": "evidence/studio/M2-profiles-catalog/"
+      "evidence": "evidence/studio/M1-onboarding/"
     }
   }
 }
