@@ -98,6 +98,7 @@ def capabilities():
     from xverse_studio.xdl.edit_limits import MAX_EDIT_BYTES, MAX_EDIT_DEPTH, MAX_EDIT_NODES
     from xverse_studio.experiments.authoring import COLLECTIONS, SCENARIO_ITEM_BYTES, SCENARIO_ITEM_LIMITS
     from xverse_studio.assertions.evaluator import LIMITS
+    from xverse_studio.evidence.query import MAX_FACETS, MAX_GAPS, MAX_IDENTIFIER, MAX_TICK_CHARACTERS
     from xverse_studio.xdl import (
         VALIDATION_CACHE_ENTRIES,
         VALIDATION_CACHE_BYTES,
@@ -107,7 +108,7 @@ def capabilities():
     return {
         "apiVersion": "1.0",
         "schemaVersion": "1.0",
-        "contracts": {"readiness": "1.0", "annotations": "1.1"},
+        "contracts": {"readiness": "1.0", "annotations": "1.1", "evidenceQuery": "1.0"},
         "host": {
             "os": platform.system(),
             "release": platform.release(),
@@ -132,6 +133,15 @@ def capabilities():
             "maxElements": 200,
             "maxConnections": 400,
             "eventPageSize": 200,
+            "evidenceQuery": {
+                "pageSize": 200,
+                "identifierCharacters": MAX_IDENTIFIER,
+                "tickCharacters": MAX_TICK_CHARACTERS,
+                "facetsPerKind": MAX_FACETS,
+                "gapDescriptors": MAX_GAPS,
+                "timeInterval": "half_open",
+                "sourceClockMapping": "none; select the original clock domain",
+            },
             "journalBytes": 64 * 1024 * 1024,
             "journalRecords": 100000,
             "evidenceProjectionCacheSourceBytes": 64 * 1024 * 1024,

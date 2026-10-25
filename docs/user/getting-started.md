@@ -59,6 +59,7 @@ checks before claiming Windows support. WSL or a browser pointed at Linux cannot
 7. Use Results definitions/evaluations, annotations and finite campaigns only within advertised limits.
    Compare exact input/configuration differences before interpreting observation differences.
    See [external references](evidence-and-references.md) for separate reported claims and revision history.
+   Use [Results filters](results-filters.md) to select sources, exact time windows and recorded evidence.
 
 The Model, Connections, Deployment, Experiments and Results views share the same XDL identities.
 Source edits and typed semantic edits use the public pinned XDL APIs. Unsupported topology, profiles,

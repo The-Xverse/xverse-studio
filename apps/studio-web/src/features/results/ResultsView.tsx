@@ -3,6 +3,15 @@ import { api, items, mutationKey } from "../../api/client";
 import type { Data, Run, RunEvent } from "../../api/types";
 import type { DoAction } from "../../app/App";
 import { Icon, Badge, Empty, Json, KeyValues, statusTone } from "../../app/ui";
+import { EvidenceFilterControls } from "./EvidenceFilterControls";
+import {
+  emptyFilters,
+  queryFilters,
+  liveMatches,
+  receipt,
+  type EvidenceFilters,
+} from "./evidenceFilters";
+import { ObservationPlot, ObservationTable } from "./ObservationDisplay";
 import { RetentionDialog } from "../retention/RetentionDialog";
 import { FrozenInputs } from "./FrozenInputs";
 import { projectDisplay } from "../model/projection";
@@ -12,7 +21,7 @@ export function ResultsView({
   events,
   omitted,
   streamState,
-  selected,
+  selected: selectedModel,
   setSelected,
   doAction,
   command,
@@ -32,10 +41,11 @@ export function ResultsView({
   rerunEnabled: boolean;
   onSelectRun: (run: Run) => void;
 }) {
-  const [tab, setTab] = useState("Observations"),
+  const [selected, setEvidenceSelected] = useState(selectedModel),
+    [tab, setTab] = useState("Observations"),
     [filter, setFilter] = useState(""),
-    [observations, setObservations] = useState<Data>({}),
-    [evidence, setEvidence] = useState<Data>({}),
+    [observationData, setObservations] = useState<Data>({}),
+    [evidenceData, setEvidence] = useState<Data>({}),
     [history, setHistory] = useState<Run[]>([]),
     [annotations, setAnnotations] = useState<Data[]>([]),
     [annotation, setAnnotation] = useState(""),
@@ -47,19 +57,58 @@ export function ResultsView({
     [editingAnnotation, setEditingAnnotation] = useState<Data | null>(null),
     [editingTrace, setEditingTrace] = useState<Data | null>(null),
     [eventSource, setEventSource] = useState<"retained" | "live">("retained"),
-    [retainedEvents, setRetainedEvents] = useState<RunEvent[]>([]),
+    [retainedData, setRetainedEvents] = useState<RunEvent[]>([]),
     [historyLoading, setHistoryLoading] = useState(false),
-    [historyIntegrity, setHistoryIntegrity] = useState("unknown"),
+    [historyIntegrityData, setHistoryIntegrity] = useState("unknown"),
+    [historyIdentity, setHistoryIdentity] = useState(""),
     [historyEpoch, setHistoryEpoch] = useState(0),
-    [historyError, setHistoryError] = useState(""),
-    [nextCursor, setNextCursor] = useState<string | null>(null),
+    [historyErrorData, setHistoryError] = useState(""),
+    [nextCursorData, setNextCursor] = useState<string | null>(null),
     [cursorTrail, setCursorTrail] = useState<string[]>([""]),
     [eventType, setEventType] = useState(""),
     [severity, setSeverity] = useState(""),
+    [readFilters, setReadFilters] = useState<EvidenceFilters>(emptyFilters),
+    [historyProjectionData, setHistoryProjection] = useState<Data>({}),
+    [observationIdentity, setObservationIdentity] = useState(""),
+    [observationLoading, setObservationLoading] = useState(false),
+    [observationError, setObservationError] = useState(""),
+    [observationNext, setObservationNext] = useState<string | null>(null),
+    [observationTrail, setObservationTrail] = useState<string[]>([""]),
     [frozenInputs, setFrozenInputs] = useState<Data | null>(null),
     [rerunBusy, setRerunBusy] = useState(false),
     [rerunOperation, setRerunOperation] = useState<Data | null>(null);
-  const historyRequest = useRef<AbortController | null>(null);
+  useEffect(() => {
+    setEvidenceSelected(selectedModel);
+  }, [selectedModel]);
+  const historyRequest = useRef<AbortController | null>(null),
+    observationRequest = useRef<AbortController | null>(null),
+    observationGeneration = useRef(0),
+    readContext = useRef(""),
+    historyContext = useRef("");
+  const queryIdentity = JSON.stringify([
+    run?.runId,
+    run?.snapshotId,
+    readFilters,
+    selected,
+  ]);
+  readContext.current = queryIdentity;
+  const observations =
+      observationIdentity === queryIdentity ? observationData : {},
+    evidence = observationIdentity === queryIdentity ? evidenceData : {};
+  const historyQueryIdentity = JSON.stringify([
+    queryIdentity,
+    eventType,
+    severity,
+    eventSource,
+    tab,
+  ]);
+  historyContext.current = historyQueryIdentity;
+  const historyCurrent = historyIdentity === historyQueryIdentity,
+    retainedEvents = historyCurrent ? retainedData : [],
+    historyProjection = historyCurrent ? historyProjectionData : {},
+    historyIntegrity = historyCurrent ? historyIntegrityData : "unknown",
+    nextCursor = historyCurrent ? nextCursorData : null,
+    historyError = historyCurrent ? historyErrorData : "";
   const annotationContext = useRef({ runId: run?.runId });
   if (annotationContext.current.runId !== run?.runId)
     annotationContext.current = { runId: run?.runId };
@@ -113,36 +162,45 @@ export function ResultsView({
     historyRequest.current?.abort();
     const request = new AbortController();
     historyRequest.current = request;
+    const context = historyQueryIdentity;
+    setHistoryIdentity("");
     setHistoryLoading(true);
     setHistoryError("");
+    setHistoryProjection({});
+    setHistoryIntegrity("unknown");
+    setNextCursor(null);
     setRetainedEvents([]);
-    const query = new URLSearchParams({ limit: "200" });
+    const query = queryFilters(readFilters, selected, false);
     if (after) query.set("cursor", after);
     if (eventType) query.set("type", eventType);
     if (severity) query.set("severity", severity);
-    if (selected) query.set("elementRef", selected);
+
     try {
       const page = await api(`/runs/${run.runId}/history?${query}`, {
         signal: request.signal,
       });
-      if (request.signal.aborted) return;
+      if (request.signal.aborted || historyContext.current !== context) return;
       const records = items<RunEvent>(page);
       if (records.length > 200)
         throw new Error(
           "The server returned an incompatible oversized history page.",
         );
+      setHistoryIdentity(context);
       setRetainedEvents(records);
+      setHistoryProjection(page);
       setNextCursor(page.nextCursor || null);
       setHistoryIntegrity(page.integrity || "unknown");
       setHistoryEpoch((epoch) => epoch + 1);
     } catch (error) {
-      if (request.signal.aborted) return;
+      if (request.signal.aborted || historyContext.current !== context) return;
+      setHistoryIdentity(context);
       setHistoryError(
         error instanceof Error ? error.message : "History unavailable.",
       );
       setNextCursor(null);
     } finally {
-      if (!request.signal.aborted) setHistoryLoading(false);
+      if (!request.signal.aborted && historyContext.current === context)
+        setHistoryLoading(false);
     }
   }
   useEffect(() => {
@@ -150,16 +208,76 @@ export function ResultsView({
     setCursorTrail([""]);
     void loadHistory();
     return () => historyRequest.current?.abort();
-  }, [run?.runId, tab, eventSource, eventType, severity, selected]);
-  async function loadEvidence() {
+  }, [
+    run?.runId,
+    tab,
+    eventSource,
+    eventType,
+    severity,
+    selected,
+    readFilters,
+  ]);
+  async function loadEvidence(after = "") {
     if (!run) return;
-    const [obs, ev] = await Promise.all([
-      api(`/runs/${run.runId}/observations`),
-      api(`/runs/${run.runId}/evidence`),
-    ]);
-    setObservations(obs);
-    setEvidence(ev);
+    observationRequest.current?.abort();
+    const request = new AbortController();
+    observationRequest.current = request;
+    const generation = ++observationGeneration.current,
+      context = queryIdentity,
+      runId = run.runId;
+    setObservationLoading(true);
+    setObservationIdentity("");
+    setObservationError("");
+    setObservations({});
+    setEvidence({});
+    setObservationNext(null);
+    const query = queryFilters(readFilters, selected, true);
+    if (after) query.set("cursor", after);
+    try {
+      const [obs, ev] = await Promise.all([
+        api(`/runs/${runId}/observations?${query}`, { signal: request.signal }),
+        api(`/runs/${runId}/evidence`, { signal: request.signal }),
+      ]);
+      if (
+        request.signal.aborted ||
+        generation !== observationGeneration.current ||
+        context !== readContext.current
+      )
+        return;
+      if (!Array.isArray(obs.items) || obs.items.length > 200)
+        throw new Error(
+          "The reader returned an incompatible oversized observation page.",
+        );
+      setObservationIdentity(context);
+      setObservations(obs);
+      setEvidence(ev);
+      setObservationNext(obs.nextCursor || null);
+    } catch (error) {
+      if (
+        !request.signal.aborted &&
+        generation === observationGeneration.current &&
+        context === readContext.current
+      )
+        setObservationError(
+          error instanceof Error ? error.message : "Evidence unavailable.",
+        );
+    } finally {
+      if (
+        !request.signal.aborted &&
+        generation === observationGeneration.current &&
+        context === readContext.current
+      )
+        setObservationLoading(false);
+    }
   }
+  useEffect(() => {
+    setObservationTrail([""]);
+    void loadEvidence();
+    return () => {
+      observationGeneration.current++;
+      observationRequest.current?.abort();
+    };
+  }, [run?.runId, run?.snapshotId, run?.state, queryIdentity]);
   useEffect(() => {
     void api("/runs")
       .then((r) => setHistory(items(r)))
@@ -174,7 +292,6 @@ export function ResultsView({
   useEffect(() => {
     if (!run) return;
     let current = true;
-    void doAction("Reading immutable evidence", loadEvidence);
     void api(`/runs/${run.runId}/annotations`)
       .then((r) => {
         if (current) setAnnotations(items(r));
@@ -189,10 +306,28 @@ export function ResultsView({
       (eventSource === "retained" ? retainedEvents : events).filter(
         (e) =>
           (!selected || e.elementRefs?.includes(selected)) &&
+          (eventSource !== "live" ||
+            liveMatches(
+              e,
+              readFilters,
+              eventType,
+              severity,
+              historyProjection.presentation,
+            )) &&
           (!filter ||
             JSON.stringify(e).toLowerCase().includes(filter.toLowerCase())),
       ),
-    [events, retainedEvents, eventSource, filter, selected],
+    [
+      events,
+      retainedEvents,
+      eventSource,
+      filter,
+      selected,
+      readFilters,
+      eventType,
+      severity,
+      historyProjection.presentation,
+    ],
   );
   const samples = useMemo(() => {
     const source =
@@ -259,6 +394,40 @@ export function ResultsView({
           </p>
         </div>
         <div className="header-actions">
+          <label>
+            Recorded run
+            <select
+              aria-label="Recorded run"
+              value={run.runId}
+              onChange={(event) => {
+                const chosen = history.find(
+                  (item) =>
+                    item.runId === event.target.value &&
+                    item.projectId === run.projectId,
+                );
+                if (chosen) {
+                  setReplay(false);
+                  setReadFilters(emptyFilters());
+                  onSelectRun(chosen);
+                }
+              }}
+            >
+              {[
+                ...new Map(
+                  [
+                    run,
+                    ...history.filter(
+                      (item) => item.projectId === run.projectId,
+                    ),
+                  ].map((item) => [item.runId, item]),
+                ).values(),
+              ].map((item) => (
+                <option key={item.runId} value={item.runId}>
+                  {item.runId} · {item.state}
+                </option>
+              ))}
+            </select>
+          </label>
           <button
             className="button"
             data-frozen-inputs-trigger=""
@@ -290,7 +459,10 @@ export function ResultsView({
             )}
           <button
             className="button"
-            onClick={() => void doAction("Refreshing evidence", loadEvidence)}
+            onClick={() => {
+              setObservationTrail([""]);
+              void loadEvidence();
+            }}
           >
             <Icon name="refresh" />
             Refresh
@@ -429,6 +601,41 @@ export function ResultsView({
                 </button>
               </div>
             </div>
+            <EvidenceFilterControls
+              value={readFilters}
+              selected={selected}
+              onApply={(value, elementRef) => {
+                setEvidenceSelected(elementRef);
+                setReplay(false);
+                setReadFilters(value);
+              }}
+              facets={observations.facets || {}}
+              complete={observations.facetsComplete}
+              observation
+              loading={observationLoading}
+            />
+            {observationLoading && (
+              <p role="status">
+                Loading observations for this exact run and filter…
+              </p>
+            )}
+            {observationError && (
+              <p className="notice error observation-query-error" role="alert">
+                {observationError}
+              </p>
+            )}
+            {selected && (
+              <p className="field-hint">
+                Selected element: <code>{selected}</code>{" "}
+                <button
+                  className="text-button"
+                  onClick={() => setEvidenceSelected("")}
+                >
+                  Clear selected element filter
+                </button>
+              </p>
+            )}
+            <ReadQuality projection={observations} />
             {replay && (
               <div className="notice">
                 <Icon name="info" />
@@ -438,7 +645,10 @@ export function ResultsView({
             )}
             {samples.length ? (
               showTable ? (
-                <ObservationTable samples={samples.slice(0, 200)} />
+                <ObservationTable
+                  samples={samples.slice(0, 200)}
+                  observations={observations}
+                />
               ) : (
                 <ObservationPlot
                   samples={replay ? samples.slice(0, cursor) : samples}
@@ -458,14 +668,42 @@ export function ResultsView({
                 evidence rather than this display selection.
               </p>
             )}
+            <div className="history-pagination">
+              <button
+                className="small-button"
+                disabled={observationLoading || observationTrail.length < 2}
+                onClick={() => {
+                  const trail = observationTrail.slice(0, -1);
+                  setObservationTrail(trail);
+                  void loadEvidence(trail.at(-1));
+                }}
+              >
+                Previous observation page
+              </button>
+              <button
+                className="small-button"
+                disabled={observationLoading || !observationNext}
+                onClick={() => {
+                  if (observationNext) {
+                    setObservationTrail((trail) => [
+                      ...trail.slice(-127),
+                      observationNext,
+                    ]);
+                    void loadEvidence(observationNext);
+                  }
+                }}
+              >
+                Next observation page
+              </button>
+            </div>
             <div className="plot-metadata">
               <span>
                 Clock:{" "}
                 <strong>
                   {observations.clockDomain ||
-                    observations.clockDomainRef ||
-                    samples[0]?.clockDomain ||
-                    "Source clock not declared"}
+                    (observations.facets?.clockDomains?.length > 1
+                      ? "Multiple original clocks; not aligned"
+                      : "Source clock not declared")}
                 </strong>
               </span>
               <span>
@@ -521,7 +759,7 @@ export function ResultsView({
           data-testid="retained-history"
           data-history-epoch={historyEpoch}
           data-integrity={historyIntegrity}
-          aria-busy={historyLoading}
+          aria-busy={eventSource === "retained" && historyLoading}
         >
           <div className="section-heading">
             <div>
@@ -545,7 +783,7 @@ export function ResultsView({
             <div
               className="history-source"
               role="group"
-              aria-label="Event source"
+              aria-label="Delivery view"
             >
               <button
                 className={
@@ -622,6 +860,30 @@ export function ResultsView({
               </>
             )}
           </div>
+          <EvidenceFilterControls
+            value={readFilters}
+            selected={selected}
+            onApply={(value, elementRef) => {
+              setEvidenceSelected(elementRef);
+              setReplay(false);
+              setReadFilters(value);
+            }}
+            facets={historyProjection.facets || observations.facets || {}}
+            complete={
+              historyProjection.facetsComplete ?? observations.facetsComplete
+            }
+            observation={false}
+            loading={eventSource === "retained" && historyLoading}
+          />
+          {eventSource === "live" && (
+            <p className="notice">
+              Emitter/time predicates apply only to the current live buffer (at
+              most 200). Numeric receipt times without reader metadata remain
+              unavailable for receipt filtering. Use retained history for a
+              complete query.
+            </p>
+          )}
+          <ReadQuality projection={historyProjection} />
           {eventSource === "retained" && (
             <div className="history-page-status" aria-live="polite">
               <span>
@@ -633,8 +895,9 @@ export function ResultsView({
                 Integrity: <strong>{historyIntegrity}</strong>
               </span>
               <span>
-                Text search applies to the displayed page; kind, severity, and
-                element filters apply on the backend.
+                Text search applies to the displayed page. Emitter, observer,
+                kind, severity, element and time filters apply before backend
+                pagination.
               </span>
             </div>
           )}
@@ -653,7 +916,10 @@ export function ResultsView({
             </div>
           )}
           {selected && (
-            <button className="small-button" onClick={() => setSelected("")}>
+            <button
+              className="small-button"
+              onClick={() => setEvidenceSelected("")}
+            >
               Clear selected element filter: {selected}
             </button>
           )}
@@ -677,7 +943,15 @@ export function ResultsView({
                   data-sequence={e.sequence}
                 >
                   <span className="event-marker" />
-                  <time>{new Date(e.recordedAt).toLocaleTimeString()}</time>
+                  <time
+                    className="evidence-time"
+                    dateTime={
+                      receipt(e, historyProjection.presentation).utc ||
+                      undefined
+                    }
+                  >
+                    {receipt(e, historyProjection.presentation).label}
+                  </time>
                   <div>
                     <div>
                       <strong>{e.type}</strong>
@@ -1573,216 +1847,38 @@ function StatusCard({
     </section>
   );
 }
-function numericValues(sample: Data): Data {
-  const payload = sample.values ?? sample.value ?? sample.payload ?? sample;
-  return typeof payload === "number"
-    ? { value: payload }
-    : payload && typeof payload === "object"
-      ? payload
-      : {};
-}
-function sourceTick(sample: Data, index: number): number {
-  const value =
-    sample.time ?? sample.t ?? sample.sourceTime?.tick ?? sample.tick ?? index;
-  return Number(value);
-}
-function ObservationPlot({
-  samples,
-  observations,
-}: {
-  samples: Data[];
-  observations: Data;
-}) {
-  const keys = Array.from(
-    new Set(
-      samples.flatMap((sample) =>
-        Object.entries(numericValues(sample))
-          .filter(
-            ([key, value]) =>
-              typeof value === "number" &&
-              ![
-                "time",
-                "t",
-                "tick",
-                "sequence",
-                "index",
-                "sourceTick",
-              ].includes(key),
-          )
-          .map(([key]) => key),
-      ),
-    ),
-  ).slice(0, 4);
-  const all = samples.flatMap((sample) =>
-    keys
-      .map((key) => numericValues(sample)[key])
-      .filter((value) => typeof value === "number" && Number.isFinite(value)),
-  );
-  if (!keys.length || !all.length)
-    return <ObservationTable samples={samples.slice(0, 200)} />;
-  const min = Math.min(0, ...all),
-    max = Math.max(...all, 1),
-    range = max - min || 1,
-    width = 900,
-    height = 270,
-    left = 55,
-    right = 25,
-    top = 20,
-    bottom = 38,
-    lastTime = Math.max(...samples.map(sourceTick), 1),
-    firstTime = Math.min(...samples.map(sourceTick), 0),
-    timeRange = lastTime - firstTime || 1,
-    colors = ["#477ee7", "#2aa396", "#c89330", "#9769c3"];
-  const sx = (value: number) =>
-      left + ((value - firstTime) / timeRange) * (width - left - right),
-    sy = (value: number) =>
-      height - bottom - ((value - min) / range) * (height - top - bottom);
+function ReadQuality({ projection }: { projection: Data }) {
   return (
-    <div className="plot-wrap">
-      <svg
-        viewBox={`0 0 ${width} ${height}`}
-        role="img"
-        aria-label={`Recorded observation chart. Series ${keys.join(", ")}. Use Table view for exact data.`}
+    <>
+      <div
+        role="status"
+        aria-label="Evidence read quality"
+        className="evidence-quality"
       >
-        {[0, 0.25, 0.5, 0.75, 1].map((f) => (
-          <g key={f}>
-            <line
-              x1={left}
-              x2={width - right}
-              y1={sy(min + f * range)}
-              y2={sy(min + f * range)}
-              stroke="#e7edf5"
-            />
-            <text
-              x={left - 10}
-              y={sy(min + f * range) + 4}
-              textAnchor="end"
-              fill="#76859a"
-              fontSize={11}
-            >
-              {(min + f * range).toFixed(2)}
-            </text>
-          </g>
-        ))}
-        {[0, 0.2, 0.4, 0.6, 0.8, 1].map((f) => (
-          <g key={f}>
-            <text
-              x={sx(firstTime + f * timeRange)}
-              y={height - 15}
-              textAnchor="middle"
-              fill="#76859a"
-              fontSize={11}
-            >
-              {(firstTime + f * timeRange).toFixed(1)}
-            </text>
-          </g>
-        ))}
-        {keys.map((key, k) => {
-          if (
-            (observations.gaps || []).some(
-              (g: Data) => g.startTick === undefined && g.start === undefined,
-            )
-          )
-            return (
-              <g key={key}>
-                {samples.map((sample, index) => {
-                  const value = numericValues(sample)[key];
-                  return typeof value === "number" && Number.isFinite(value) ? (
-                    <circle
-                      key={index}
-                      cx={sx(sourceTick(sample, index))}
-                      cy={sy(value)}
-                      r={2}
-                      fill={colors[k]}
-                    />
-                  ) : null;
-                })}
-              </g>
-            );
-          const segments: string[][] = [[]];
-          const gaps = observations.gaps || [];
-          samples.forEach((sample, index) => {
-            const values = numericValues(sample),
-              v = values[key],
-              t = sourceTick(sample, index);
-            if (
-              typeof v !== "number" ||
-              !Number.isFinite(v) ||
-              sample.gap ||
-              gaps.some(
-                (g: Data) =>
-                  t >= Number(g.startTick ?? g.start) &&
-                  t < Number(g.endTick ?? g.end),
-              )
-            ) {
-              if (segments[segments.length - 1].length) segments.push([]);
-              return;
-            }
-            segments[segments.length - 1].push(`${sx(t)},${sy(v)}`);
-          });
-          return segments
-            .filter((s) => s.length)
-            .map((segment, i) => (
-              <polyline
-                key={`${key}-${i}`}
-                points={segment.join(" ")}
-                fill="none"
-                stroke={colors[k]}
-                strokeWidth={2.4}
-              />
-            ));
-        })}
-      </svg>
-      <div className="plot-legend">
-        {keys.map((key, i) => (
+        {projection.counts && (
+          <span>
+            Matched: {projection.counts.matchedRecords} · Returned:{" "}
+            {projection.counts.returnedRecords} · Omitted from page:{" "}
+            {projection.counts.omittedRecords}
+          </span>
+        )}
+        {Object.entries(projection.quality || {}).map(([key, value]) => (
           <span key={key}>
-            <i style={{ background: colors[i] }} />
-            {key}
+            {key}: {String(value)}
           </span>
         ))}
+        {projection.integrity && (
+          <span>Reader integrity: {projection.integrity}</span>
+        )}
       </div>
-    </div>
-  );
-}
-function ObservationTable({ samples }: { samples: Data[] }) {
-  const keys = Array.from(
-    new Set(samples.flatMap((s) => Object.keys(numericValues(s)))),
-  ).slice(0, 8);
-  return (
-    <div className="table-scroll">
-      <table>
-        <thead>
-          <tr>
-            <th>Source tick</th>
-            {keys.map((key) => (
-              <th key={key}>{key}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {samples.map((s, i) => (
-            <tr key={i}>
-              <td>
-                {String(
-                  s.time ??
-                    s.t ??
-                    s.sourceTime?.tick ??
-                    s.tick ??
-                    "Unavailable",
-                )}
-              </td>
-              {keys.map((key) => (
-                <td key={key}>
-                  {typeof numericValues(s)[key] === "object"
-                    ? JSON.stringify(numericValues(s)[key])
-                    : String(numericValues(s)[key] ?? "Missing")}
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+      {projection.gaps?.length > 0 && (
+        <div className="notice">
+          The reader reports collection gaps. Filtering does not restore
+          canonical coverage.
+          <Json value={projection.gaps} />
+        </div>
+      )}
+    </>
   );
 }
 

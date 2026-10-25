@@ -13,7 +13,7 @@ private Linux backup/restore uses anchored acquisition and preserves immutable e
 Physical-provider inventory is empty.
 
 Component-complete task IDs, with the exact component scope/evidence in traceability.json:
-T003, T006, T013, T017, T022, T024, T036, T041, T042, T044, T050, T085, T086, T087, T092, T020, T094.
+T003, T006, T013, T017, T018, T019, T020, T022, T024, T029, T030, T036, T041, T042, T044, T050, T085, T086, T087, T092, T094.
 T044 was reopened after review, then repaired and reverified for selected-source navigation, empty
 draft retention, atomic document switching and external-source inspection.
 Other tasks remain unchecked; implemented subparts are recorded as in progress instead of implying
@@ -137,3 +137,27 @@ owned browser/recorded-fixture scope. Evidence is under
 `evidence/studio/release/linux-readiness-claims-2026-10-25/`; packaging/publication evidence follows
 its own recorded result. Clean product commit 180d026 passed the fresh offline package smoke;
 publication/CI state is reported separately. Native Windows and all unmet milestone gates remain unchanged.
+
+## Current evidence-selection successor
+
+Twenty-one task components are complete, including T018/T019's independently reviewed admission
+matrix and T029/T030's owned evidence query and Results views. Evidence query 1.0 applies exact
+element/emitter/observer/field/severity/time predicates before bounded paging. Source ticks remain
+exact signed strings; receipt codecs and original metadata are separate. Missing/invalid time never
+becomes zero or an array index. Unknown/mixed clock, resolution or numeric-unit interpretations stay
+in the table. Facets, omitted rows/columns, original gaps and integrity remain explicit. Obsolete reads
+cannot overwrite a newly selected run/filter, and wide raw tables support keyboard scrolling.
+
+The current full cohort passed 466 backend tests and 21 browser checks (16 real browser journeys,
+five display/projection checks), with unchanged source hashes and no failures/skips/flakes. Thirty
+repetitions after one warm-up passed: selection p95 36.6 ms, open/validation 1,100.4 ms, and 200-row
+history presentation over 50,000 retained fixture events 929.8 ms (limit 2,000 ms). New whole-run
+metadata and filter scans add query work; these are measured browser/read workloads, not provider
+scalability or physical-clock evidence. The exact receipts are under
+`evidence/studio/release/linux-evidence-query-2026-10-25/`. Packaging/publication has its own result.
+
+T028 still needs explicit restriction/private-log and advancing-producer/slow-consumer gap fixtures.
+T026 expired-cursor resynchronization and T031/T032 explanations remain ready software work. The
+previous published de395ff checkpoint passed both native Ubuntu24 CI runs; that evidence does not
+stand in for new uncommitted work. Windows installation/testing remains held, native Windows secure
+I/O is unavailable, all M0–M4 milestone gates remain open, and M5 stays deferred.

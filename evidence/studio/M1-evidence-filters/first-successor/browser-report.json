@@ -1,0 +1,339 @@
+{
+  "config": {
+    "argv": [
+      "<loop10-cache>/node-v24.22.1-linux-x64/bin/node",
+      "<workspace>/node_modules/.bin/playwright",
+      "test",
+      "-c",
+      "tests/e2e/playwright.config.ts",
+      "--grep",
+      "evidence filters:"
+    ],
+    "configFile": "<workspace>/tests/e2e/playwright.config.ts",
+    "rootDir": "<workspace>/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "<workspace>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "<workspace>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "*.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "<workspace>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "<workspace>/tests/e2e",
+        "snapshotDir": "<workspace>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": "*.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "baseURL": "http://127.0.0.1:50905",
+          "browserName": "chromium",
+          "actionTimeout": 15000,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "trace": "off",
+          "screenshot": "only-on-failure",
+          "video": "off"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "<workspace>/test-results/browser-report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "evidence-filters.spec.ts",
+      "file": "evidence-filters.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "evidence filters: native receipt UTC, explicit source window and read-only emitter filtering",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 16435,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('group', { name: 'Delivery view', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('group', { name: 'Delivery view', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('group', { name: 'Delivery view', exact: true })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('group', { name: 'Delivery view', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('group', { name: 'Delivery view', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('group', { name: 'Delivery view', exact: true })\u001b[22m\n\n    at <workspace>/tests/e2e/evidence-filters.spec.ts:111:5",
+                    "location": {
+                      "file": "<workspace>/tests/e2e/evidence-filters.spec.ts",
+                      "column": 5,
+                      "line": 111
+                    },
+                    "snippet": "  109 |   await expect(\n  110 |     page.getByRole(\"group\", { name: \"Delivery view\", exact: true }),\n> 111 |   ).toBeVisible();\n      |     ^\n  112 |   await page.getByLabel(\"Time basis\", { exact: true }).selectOption(\"source\");\n  113 |   await page\n  114 |     .getByLabel(\"Source clock\", { exact: true })"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<workspace>/tests/e2e/evidence-filters.spec.ts",
+                        "column": 5,
+                        "line": 111
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('group', { name: 'Delivery view', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('group', { name: 'Delivery view', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('group', { name: 'Delivery view', exact: true })\u001b[22m\n\n\n  109 |   await expect(\n  110 |     page.getByRole(\"group\", { name: \"Delivery view\", exact: true }),\n> 111 |   ).toBeVisible();\n      |     ^\n  112 |   await page.getByLabel(\"Time basis\", { exact: true }).selectOption(\"source\");\n  113 |   await page\n  114 |     .getByLabel(\"Source clock\", { exact: true })\n    at <workspace>/tests/e2e/evidence-filters.spec.ts:111:5"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-25T13:49:03.231Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<workspace>/test-results/browser/evidence-filters-evidence--7046b-read-only-emitter-filtering/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<workspace>/test-results/browser/evidence-filters-evidence--7046b-read-only-emitter-filtering/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<workspace>/tests/e2e/evidence-filters.spec.ts",
+                    "column": 5,
+                    "line": 111
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "5b4b93849f30d092e1b8-1e728275a14c358e7c94",
+          "file": "evidence-filters.spec.ts",
+          "line": 69,
+          "column": 5
+        },
+        {
+          "title": "evidence filters: display fixture never plots missing source time as zero or array index",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4645,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-25T13:49:20.505Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "5b4b93849f30d092e1b8-df0810c8dfb0996e028a",
+          "file": "evidence-filters.spec.ts",
+          "line": 141,
+          "column": 5
+        },
+        {
+          "title": "evidence filters: late original-run observations cannot overwrite an explicitly selected rerun",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 7069,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-25T13:49:25.249Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "obsolete-observation-read",
+                      "contentType": "application/json",
+                      "body": "eyJvbGRSdW5JZCI6InJ1bi0yMzU0NmJlNy04MjA1LTQyMWQtODFjMi0wMGVhNjZlYzliNGUiLCJuZXdSdW5JZCI6InJ1bi1jYmIwNDA3MS1hOGM1LTQ0ZDUtYTg1OC0zNWU0N2I2OWIwNzAiLCJ0cmFuc2l0aW9uIjoiZXhwbGljaXQgb3duZWQgcmVydW47IG5vIGZpbHRlciB0cmlnZ2VycyBsaWZlY3ljbGUgbXV0YXRpb24ifQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "5b4b93849f30d092e1b8-73083be58cfc29f94e82",
+          "file": "evidence-filters.spec.ts",
+          "line": 237,
+          "column": 5
+        },
+        {
+          "title": "evidence filters: sealed recorded fixture exact clocks, whole-run facets and bounded read-only pages at both viewports",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 12289,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('[data-observation-id]')\nExpected: \u001b[32m1\u001b[39m\nReceived: \u001b[31m0\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveCount\" locator('[data-observation-id]') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-observation-id]')\u001b[22m\n\u001b[2m    24 × locator resolved to 0 elements\u001b[22m\n\u001b[2m       - unexpected value \"0\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('[data-observation-id]')\nExpected: \u001b[32m1\u001b[39m\nReceived: \u001b[31m0\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveCount\" locator('[data-observation-id]') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-observation-id]')\u001b[22m\n\u001b[2m    24 × locator resolved to 0 elements\u001b[22m\n\u001b[2m       - unexpected value \"0\"\u001b[22m\n\n    at <workspace>/tests/e2e/evidence-filters.spec.ts:378:57",
+                    "location": {
+                      "file": "<workspace>/tests/e2e/evidence-filters.spec.ts",
+                      "column": 57,
+                      "line": 378
+                    },
+                    "snippet": "  376 |       .selectOption(\"selected\");\n  377 |     await apply();\n> 378 |     await expect(page.locator(\"[data-observation-id]\")).toHaveCount(1);\n      |                                                         ^\n  379 |     await expect(\n  380 |       page.locator(`[data-observation-id=\"${fixture.events.late}\"]`),\n  381 |     ).toContainText(\"false\");"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<workspace>/tests/e2e/evidence-filters.spec.ts",
+                        "column": 57,
+                        "line": 378
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('[data-observation-id]')\nExpected: \u001b[32m1\u001b[39m\nReceived: \u001b[31m0\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveCount\" locator('[data-observation-id]') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-observation-id]')\u001b[22m\n\u001b[2m    24 × locator resolved to 0 elements\u001b[22m\n\u001b[2m       - unexpected value \"0\"\u001b[22m\n\n\n  376 |       .selectOption(\"selected\");\n  377 |     await apply();\n> 378 |     await expect(page.locator(\"[data-observation-id]\")).toHaveCount(1);\n      |                                                         ^\n  379 |     await expect(\n  380 |       page.locator(`[data-observation-id=\"${fixture.events.late}\"]`),\n  381 |     ).toContainText(\"false\");\n    at <workspace>/tests/e2e/evidence-filters.spec.ts:378:57"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-25T13:49:32.334Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "fixture-scope",
+                      "contentType": "application/json",
+                      "body": "eyJwcm9qZWN0SWQiOiJwcmotNzM3ZjM4NDctZDMxOC00YzFlLThhODItMTZlMjMwYjM4YWIzIiwicnVuSWQiOiJydW4tcmVhZGVyLWZpeHR1cmUtZDFmODRiNDQtMmY2OS00MDg1LWJiZTItNGI1MDhlMzdlY2UzIiwic25hcHNob3RJZCI6InNuYXAtYWFhOWMyOTAtNDM1MS00ZmFhLWJlMGEtM2FhYWY5MTExYzgwIiwicmVjb3JkQ291bnQiOjIyMCwiam91cm5hbERpZ2VzdCI6InNoYTI1NjpkNzlkNmMxOGJjNGVlOWE1NTdkMjNmN2RlNmJkMTRlMDVjYzJlNGNmMDhiMzAxYTBmZWI2MDFkZmZlZjZlZDYxIiwiZXZlbnRzIjp7Imh1Z2VCZWZvcmUiOiJydW4tcmVhZGVyLWZpeHR1cmUtZDFmODRiNDQtMmY2OS00MDg1LWJiZTItNGI1MDhlMzdlY2UzOmh1Z2VCZWZvcmUiLCJodWdlSW5zaWRlIjoicnVuLXJlYWRlci1maXh0dXJlLWQxZjg0YjQ0LTJmNjktNDA4NS1iYmUyLTRiNTA4ZTM3ZWNlMzpodWdlSW5zaWRlIiwiaHVnZUVuZCI6InJ1bi1yZWFkZXItZml4dHVyZS1kMWY4NGI0NC0yZjY5LTQwODUtYmJlMi00YjUwOGUzN2VjZTM6aHVnZUVuZCIsIm5lZ2F0aXZlIjoicnVuLXJlYWRlci1maXh0dXJlLWQxZjg0YjQ0LTJmNjktNDA4NS1iYmUyLTRiNTA4ZTM3ZWNlMzpuZWdhdGl2ZSIsInplcm8iOiJydW4tcmVhZGVyLWZpeHR1cmUtZDFmODRiNDQtMmY2OS00MDg1LWJiZTItNGI1MDhlMzdlY2UzOnplcm8iLCJtaXNzaW5nVGltZSI6InJ1bi1yZWFkZXItZml4dHVyZS1kMWY4NGI0NC0yZjY5LTQwODUtYmJlMi00YjUwOGUzN2VjZTM6bWlzc2luZ1RpbWUiLCJtYWxmb3JtZWRUaW1lIjoicnVuLXJlYWRlci1maXh0dXJlLWQxZjg0YjQ0LTJmNjktNDA4NS1iYmUyLTRiNTA4ZTM3ZWNlMzptYWxmb3JtZWRUaW1lIiwib3RoZXJDbG9jayI6InJ1bi1yZWFkZXItZml4dHVyZS1kMWY4NGI0NC0yZjY5LTQwODUtYmJlMi00YjUwOGUzN2VjZTM6b3RoZXJDbG9jayIsInVua25vd25SZWNlaXB0IjoicnVuLXJlYWRlci1maXh0dXJlLWQxZjg0YjQ0LTJmNjktNDA4NS1iYmUyLTRiNTA4ZTM3ZWNlMzp1bmtub3duUmVjZWlwdCIsIm1pc3NpbmdSZWNlaXB0IjoicnVuLXJlYWRlci1maXh0dXJlLWQxZjg0YjQ0LTJmNjktNDA4NS1iYmUyLTRiNTA4ZTM3ZWNlMzptaXNzaW5nUmVjZWlwdCIsImdhcCI6InJ1bi1yZWFkZXItZml4dHVyZS1kMWY4NGI0NC0yZjY5LTQwODUtYmJlMi00YjUwOGUzN2VjZTM6Z2FwIiwibG9nQWxwaGEiOiJydW4tcmVhZGVyLWZpeHR1cmUtZDFmODRiNDQtMmY2OS00MDg1LWJiZTItNGI1MDhlMzdlY2UzOmxvZ0FscGhhIiwibG9nQmV0YSI6InJ1bi1yZWFkZXItZml4dHVyZS1kMWY4NGI0NC0yZjY5LTQwODUtYmJlMi00YjUwOGUzN2VjZTM6bG9nQmV0YSIsImxhdGUiOiJydW4tcmVhZGVyLWZpeHR1cmUtZDFmODRiNDQtMmY2OS00MDg1LWJiZTItNGI1MDhlMzdlY2UzOmxhdGUiLCJsYXRlTG9nIjoicnVuLXJlYWRlci1maXh0dXJlLWQxZjg0YjQ0LTJmNjktNDA4NS1iYmUyLTRiNTA4ZTM3ZWNlMzpsYXRlTG9nIn0sInRpY2tzIjp7InN0YXJ0IjoiOTAwNzE5OTI1NDc0MDk5MyIsImVuZCI6IjkwMDcxOTkyNTQ3NDA5OTQifSwiY2xvY2tEb21haW5zIjpbImNsb2NrLWFscGhhIiwiY2xvY2stYmV0YSJdLCJvYnNlcnZlclJlZnMiOlsic3RhdGUtb2JzZXJ2ZXIiLCJleHRlcm5hbC1vYnNlcnZlciIsIm5vaXNlLW9ic2VydmVyIl0sInNvdXJjZVByb3ZpZGVySWRzIjpbInN0dWRpby5yZWZlcmVuY2UiLCJmaXh0dXJlLmFscGhhIiwiZml4dHVyZS5iZXRhIiwiZml4dHVyZS51bmtub3duIiwiZml4dHVyZS5ub2lzZSIsImZpeHR1cmUubGF0ZSJdLCJldmlkZW5jZVNjb3BlIjoicmVjb3JkZWRfZml4dHVyZSIsImdhcFJlYXNvbiI6IlN5bnRoZXRpYyBkZWNsYXJlZCBjb2xsZWN0aW9uIGdhcCJ9"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<workspace>/test-results/browser/evidence-filters-evidence--3c676-nly-pages-at-both-viewports/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<workspace>/test-results/browser/evidence-filters-evidence--3c676-nly-pages-at-both-viewports/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<workspace>/tests/e2e/evidence-filters.spec.ts",
+                    "column": 57,
+                    "line": 378
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "5b4b93849f30d092e1b8-522e92cd4afb5f17142c",
+          "file": "evidence-filters.spec.ts",
+          "line": 308,
+          "column": 5
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-25T13:49:02.584Z",
+    "duration": 42091.46,
+    "expected": 2,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  }
+}

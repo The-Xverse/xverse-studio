@@ -13,6 +13,9 @@
 | `EVIDENCE_INVALID` | Preserve original bytes; do not use corrupted evidence to establish a verdict. |
 | `PHYSICAL_PROVIDER_NOT_ADMITTED` | No device/provider/permission has been admitted. Offline authoring remains available. |
 | `LIMIT_EXCEEDED` | Reduce the declared input/workload to the advertised bounds. |
+| `EVIDENCE_FILTER_INVALID` | Use a supported source or receipt interval, exact integer source ticks, and one occurrence of each selector. |
+| `CLOCK_SELECTION_REQUIRED` | Choose the original source clock explicitly; receipt time does not supply a clock mapping. |
+| `CURSOR_INVALID` | Reset Results paging after changing a run, route or filter; do not reuse a previous selection's cursor. |
 | `XDL1-PLAN-DEPENDENCY-CYCLE` | The selected platform compiler cannot compile this feedback plan. A compatible admitted path is required. |
 
 An open port is not process ownership. If the chosen port is busy, select another unprivileged port

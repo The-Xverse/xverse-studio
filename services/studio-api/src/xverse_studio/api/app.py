@@ -10,8 +10,9 @@ from pathlib import Path
 import secrets
 import time
 from types import SimpleNamespace
+from typing import Annotated
 import zipfile
-from fastapi import FastAPI, Request, Response
+from fastapi import FastAPI, Request, Response, Query
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse, StreamingResponse, FileResponse
 from starlette.exceptions import HTTPException
@@ -22,7 +23,12 @@ from xverse_studio.security.files import MAX_BYTES, check_text
 from xverse_studio.projects.service import Projects
 from xverse_studio.runs.service import Runs, ACTIVE
 from xverse_studio.providers.registry import capabilities, descriptors
-from xverse_studio.evidence.reader import read_journal, observation_projection
+from xverse_studio.evidence.reader import read_journal
+from xverse_studio.evidence.query import (
+    HistoryQuery,
+    ObservationQuery,
+    project_evidence,
+)
 from xverse_studio.xdl import XDLAdapter, XDLRejected, examples
 
 
@@ -500,7 +506,7 @@ def create_app(
                     "status": r["evidence"],
                     "recordCount": len(records),
                     "reader": "studio.reference.hash-chain-v1",
-                    "evidenceScope": "owned_reference",
+                    "evidenceScope": r.get("evidenceScope", "unknown"),
                 }
             ],
             "nextCursor": None,
@@ -511,36 +517,44 @@ def create_app(
     @app.get("/api/v1/runs/{runId}/observations")
     def observations(
         runId: str,
-        observerRef: str | None = None,
-        field: str | None = None,
-        startTick: int | None = None,
-        endTick: int | None = None,
+        query: Annotated[ObservationQuery, Query()],
+        request: Request,
     ):
+        if len(request.query_params.multi_items()) != len(request.query_params):
+            raise Problem(
+                "EVIDENCE_FILTER_INVALID", "Each evidence selector may occur only once."
+            )
         r = runs.read(runId)
         records, integrity = read_journal(runs.directory(runId), r)
-        return observation_projection(
-            records, integrity, observerRef, field, startTick, endTick
+        return project_evidence(
+            records,
+            integrity,
+            query,
+            runId,
+            "observations",
+            evidence_scope=r.get("evidenceScope", "unknown"),
         )
 
     @app.get("/api/v1/runs/{runId}/history")
     def history(
         runId: str,
-        cursor: str | None = None,
-        limit: int = 200,
-        type: str | None = None,
-        severity: str | None = None,
-        elementRef: str | None = None,
+        query: Annotated[HistoryQuery, Query()],
+        request: Request,
     ):
+        if len(request.query_params.multi_items()) != len(request.query_params):
+            raise Problem(
+                "EVIDENCE_FILTER_INVALID", "Each evidence selector may occur only once."
+            )
         r = runs.read(runId)
         records, integrity = read_journal(runs.directory(runId), r)
-        records = [
-            x
-            for x in records
-            if (not type or x["type"] == type)
-            and (not severity or x["payload"].get("severity") == severity)
-            and (not elementRef or elementRef in x["elementRefs"])
-        ]
-        return {**page(records, cursor, limit), "integrity": integrity}
+        return project_evidence(
+            records,
+            integrity,
+            query,
+            runId,
+            "history",
+            evidence_scope=r.get("evidenceScope", "unknown"),
+        )
 
     @app.get("/api/v1/runs/{runId}/events")
     async def events(runId: str, request: Request, after: str | None = None):

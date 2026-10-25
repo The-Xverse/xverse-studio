@@ -73,8 +73,8 @@ export interface RunEvent {
   snapshotId: string;
   sequence: string;
   type: string;
-  recordedAt: string;
-  sourceTime?: Data;
+  recordedAt?: string | number | null;
+  sourceTime?: Data | null;
   source?: Data;
   elementRefs?: string[];
   evidenceClass: string;

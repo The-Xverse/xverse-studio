@@ -1,0 +1,272 @@
+.......................................F...............FFFFFFF           [100%]
+=================================== FAILURES ===================================
+_______ test_api_projection_preserves_journal_snapshot_and_declared_gap ________
+
+client = <starlette.testclient.TestClient object at 0x7653bad655b0>
+recorded = {'clockDomains': ['clock-alpha', 'clock-beta'], 'events': {'gap': 'run-reader-fixture-8ab3d5da-0279-462e-b6aa-2a61d125...d125a760:hugeInside', ...}, 'evidenceScope': 'recorded_fixture', 'gapReason': 'Synthetic declared collection gap', ...}
+
+    def test_api_projection_preserves_journal_snapshot_and_declared_gap(client, recorded):
+        studio = client.app.state.studio
+        journal = studio.runs.directory(recorded["runId"]) / "evidence.jsonl"
+        snapshot = (
+            studio.store.root / "snapshots" / recorded["snapshotId"] / "snapshot.json"
+        )
+        before = {
+            "journal": hashlib.sha256(journal.read_bytes()).hexdigest(),
+            "snapshot": hashlib.sha256(snapshot.read_bytes()).hexdigest(),
+        }
+        filtered = client.get(
+            endpoint(recorded, "observations"), params={"field": "selected", "limit": 1}
+        ).json()
+        assert filtered["integrity"] == "valid"
+        assert any(
+            gap.get("eventId") == recorded["events"]["gap"] for gap in filtered["gaps"]
+        )
+        assert filtered["gapCount"] == 1 and filtered["gapsComplete"] is True
+        assert filtered["reduction"]["canonical"] is False and filtered["mapping"] is None
+        client.get(
+            endpoint(recorded, "history"),
+            params={"type": "log.appended", "severity": "error"},
+        ).raise_for_status()
+        assert before == {
+            "journal": hashlib.sha256(journal.read_bytes()).hexdigest(),
+            "snapshot": hashlib.sha256(snapshot.read_bytes()).hexdigest(),
+        }
+        assert (
+            client.get("/api/v1/runs/" + recorded["runId"]).json()["evidence"] == "partial"
+        )
+        catalog = client.get(endpoint(recorded, "evidence")).json()
+>       assert catalog["items"][0]["evidenceScope"] == recorded["evidenceScope"]
+E       AssertionError: assert 'owned_reference' == 'recorded_fixture'
+E
+E         - recorded_fixture
+E         + owned_reference
+
+tests/integration/test_evidence_projection.py:198: AssertionError
+__ test_reader_duplicate_event_identity_cannot_overwrite_receipt_presentation __
+
+tmp_path = PosixPath('<loop10-cache>/pytest/evidence-query-successor/test_reader_duplicate_event_id0')
+
+    def test_reader_duplicate_event_identity_cannot_overwrite_receipt_presentation(
+        tmp_path,
+    ):
+        from copy import deepcopy
+        from xverse_studio.evidence.query import (
+            HistoryQuery,
+            project_evidence,
+            receipt_time,
+        )
+
+        base, _ = _fixture.fixture_records(noise=0)
+        rows = [deepcopy(base[0]), deepcopy(base[1])]
+        rows[1]["eventId"] = rows[0]["eventId"]
+        root = tmp_path / "new-duplicate-event-fixture"
+        declared = _fixture.write_journal(root, rows)
+        original = (root / "evidence.jsonl").read_bytes()
+        read, integrity = read_journal(
+            root,
+            {
+                "runId": "recorded-reader-fixture",
+                "snapshotId": "fixture-snapshot",
+                "state": "stopped",
+                "journalDigest": declared,
+            },
+        )
+>       assert integrity == "invalid"
+E       AssertionError: assert 'valid' == 'invalid'
+E
+E         - invalid
+E         ? --
+E         + valid
+
+tests/integration/test_evidence_projection.py:344: AssertionError
+_________ test_reader_sequence_requires_canonical_decimal_string[True] _________
+
+tmp_path = PosixPath('<loop10-cache>/pytest/evidence-query-successor/test_reader_sequence_requires_0')
+sequence = True
+
+    @pytest.mark.parametrize("sequence", [True, 1, 1.5, "01", "+1", " 1 "])
+    def test_reader_sequence_requires_canonical_decimal_string(tmp_path, sequence):
+        rows, _ = _fixture.fixture_records(noise=0)
+        first = {**rows[0], "sequence": sequence}
+        root = tmp_path / "new-sequence-fixture"
+        declared = _fixture.write_journal(root, [first])
+        original = (root / "evidence.jsonl").read_bytes()
+        _, integrity = read_journal(
+            root,
+            {
+                "runId": "recorded-reader-fixture",
+                "snapshotId": "fixture-snapshot",
+                "state": "stopped",
+                "journalDigest": declared,
+            },
+        )
+>       assert integrity == "invalid"
+E       AssertionError: assert 'valid' == 'invalid'
+E
+E         - invalid
+E         ? --
+E         + valid
+
+tests/integration/test_evidence_projection.py:376: AssertionError
+__________ test_reader_sequence_requires_canonical_decimal_string[1] ___________
+
+tmp_path = PosixPath('<loop10-cache>/pytest/evidence-query-successor/test_reader_sequence_requires_1')
+sequence = 1
+
+    @pytest.mark.parametrize("sequence", [True, 1, 1.5, "01", "+1", " 1 "])
+    def test_reader_sequence_requires_canonical_decimal_string(tmp_path, sequence):
+        rows, _ = _fixture.fixture_records(noise=0)
+        first = {**rows[0], "sequence": sequence}
+        root = tmp_path / "new-sequence-fixture"
+        declared = _fixture.write_journal(root, [first])
+        original = (root / "evidence.jsonl").read_bytes()
+        _, integrity = read_journal(
+            root,
+            {
+                "runId": "recorded-reader-fixture",
+                "snapshotId": "fixture-snapshot",
+                "state": "stopped",
+                "journalDigest": declared,
+            },
+        )
+>       assert integrity == "invalid"
+E       AssertionError: assert 'valid' == 'invalid'
+E
+E         - invalid
+E         ? --
+E         + valid
+
+tests/integration/test_evidence_projection.py:376: AssertionError
+_________ test_reader_sequence_requires_canonical_decimal_string[1.5] __________
+
+tmp_path = PosixPath('<loop10-cache>/pytest/evidence-query-successor/test_reader_sequence_requires_2')
+sequence = 1.5
+
+    @pytest.mark.parametrize("sequence", [True, 1, 1.5, "01", "+1", " 1 "])
+    def test_reader_sequence_requires_canonical_decimal_string(tmp_path, sequence):
+        rows, _ = _fixture.fixture_records(noise=0)
+        first = {**rows[0], "sequence": sequence}
+        root = tmp_path / "new-sequence-fixture"
+        declared = _fixture.write_journal(root, [first])
+        original = (root / "evidence.jsonl").read_bytes()
+        _, integrity = read_journal(
+            root,
+            {
+                "runId": "recorded-reader-fixture",
+                "snapshotId": "fixture-snapshot",
+                "state": "stopped",
+                "journalDigest": declared,
+            },
+        )
+>       assert integrity == "invalid"
+E       AssertionError: assert 'valid' == 'invalid'
+E
+E         - invalid
+E         ? --
+E         + valid
+
+tests/integration/test_evidence_projection.py:376: AssertionError
+__________ test_reader_sequence_requires_canonical_decimal_string[01] __________
+
+tmp_path = PosixPath('<loop10-cache>/pytest/evidence-query-successor/test_reader_sequence_requires_3')
+sequence = '01'
+
+    @pytest.mark.parametrize("sequence", [True, 1, 1.5, "01", "+1", " 1 "])
+    def test_reader_sequence_requires_canonical_decimal_string(tmp_path, sequence):
+        rows, _ = _fixture.fixture_records(noise=0)
+        first = {**rows[0], "sequence": sequence}
+        root = tmp_path / "new-sequence-fixture"
+        declared = _fixture.write_journal(root, [first])
+        original = (root / "evidence.jsonl").read_bytes()
+        _, integrity = read_journal(
+            root,
+            {
+                "runId": "recorded-reader-fixture",
+                "snapshotId": "fixture-snapshot",
+                "state": "stopped",
+                "journalDigest": declared,
+            },
+        )
+>       assert integrity == "invalid"
+E       AssertionError: assert 'valid' == 'invalid'
+E
+E         - invalid
+E         ? --
+E         + valid
+
+tests/integration/test_evidence_projection.py:376: AssertionError
+__________ test_reader_sequence_requires_canonical_decimal_string[+1] __________
+
+tmp_path = PosixPath('<loop10-cache>/pytest/evidence-query-successor/test_reader_sequence_requires_4')
+sequence = '+1'
+
+    @pytest.mark.parametrize("sequence", [True, 1, 1.5, "01", "+1", " 1 "])
+    def test_reader_sequence_requires_canonical_decimal_string(tmp_path, sequence):
+        rows, _ = _fixture.fixture_records(noise=0)
+        first = {**rows[0], "sequence": sequence}
+        root = tmp_path / "new-sequence-fixture"
+        declared = _fixture.write_journal(root, [first])
+        original = (root / "evidence.jsonl").read_bytes()
+        _, integrity = read_journal(
+            root,
+            {
+                "runId": "recorded-reader-fixture",
+                "snapshotId": "fixture-snapshot",
+                "state": "stopped",
+                "journalDigest": declared,
+            },
+        )
+>       assert integrity == "invalid"
+E       AssertionError: assert 'valid' == 'invalid'
+E
+E         - invalid
+E         ? --
+E         + valid
+
+tests/integration/test_evidence_projection.py:376: AssertionError
+_________ test_reader_sequence_requires_canonical_decimal_string[ 1 ] __________
+
+tmp_path = PosixPath('<loop10-cache>/pytest/evidence-query-successor/test_reader_sequence_requires_5')
+sequence = ' 1 '
+
+    @pytest.mark.parametrize("sequence", [True, 1, 1.5, "01", "+1", " 1 "])
+    def test_reader_sequence_requires_canonical_decimal_string(tmp_path, sequence):
+        rows, _ = _fixture.fixture_records(noise=0)
+        first = {**rows[0], "sequence": sequence}
+        root = tmp_path / "new-sequence-fixture"
+        declared = _fixture.write_journal(root, [first])
+        original = (root / "evidence.jsonl").read_bytes()
+        _, integrity = read_journal(
+            root,
+            {
+                "runId": "recorded-reader-fixture",
+                "snapshotId": "fixture-snapshot",
+                "state": "stopped",
+                "journalDigest": declared,
+            },
+        )
+>       assert integrity == "invalid"
+E       AssertionError: assert 'valid' == 'invalid'
+E
+E         - invalid
+E         ? --
+E         + valid
+
+tests/integration/test_evidence_projection.py:376: AssertionError
+=============================== warnings summary ===============================
+.venv/lib/python3.13/site-packages/fastapi/testclient.py:1
+  <workspace>/.venv/lib/python3.13/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/integration/test_evidence_projection.py::test_api_projection_preserves_journal_snapshot_and_declared_gap
+FAILED tests/integration/test_evidence_projection.py::test_reader_duplicate_event_identity_cannot_overwrite_receipt_presentation
+FAILED tests/integration/test_evidence_projection.py::test_reader_sequence_requires_canonical_decimal_string[True]
+FAILED tests/integration/test_evidence_projection.py::test_reader_sequence_requires_canonical_decimal_string[1]
+FAILED tests/integration/test_evidence_projection.py::test_reader_sequence_requires_canonical_decimal_string[1.5]
+FAILED tests/integration/test_evidence_projection.py::test_reader_sequence_requires_canonical_decimal_string[01]
+FAILED tests/integration/test_evidence_projection.py::test_reader_sequence_requires_canonical_decimal_string[+1]
+FAILED tests/integration/test_evidence_projection.py::test_reader_sequence_requires_canonical_decimal_string[ 1 ]
+8 failed, 54 passed, 1 warning in 13.74s
