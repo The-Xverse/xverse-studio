@@ -22,6 +22,12 @@ import type { Projection, ElementProjection } from "./projection";
 import { documentContent, groupByNode, textRef } from "./projection";
 import { groupLabel, ModelTree, placementLabel } from "./tree/ModelTree";
 import {
+  AdmissionCell,
+  AdmissionSummary,
+  targetGuidance,
+  useConnectionAdmission,
+} from "../connections/ConnectionAdmission";
+import {
   DefinitionInspector,
   ModelBreadcrumb,
   NodeInspector,
@@ -919,15 +925,23 @@ function ParameterForm({
 export function ConnectionsView({
   projection,
   edit,
+  projectId,
+  revision,
 }: {
   projection: Projection;
   edit: (edits: Data[]) => Promise<unknown>;
+  projectId: string;
+  revision: number;
 }) {
   const [source, setSource] = useState(""),
     [target, setTarget] = useState(""),
     [id, setId] = useState("");
   const system = projection.resources.find((r) => r.kind === "System"),
-    endpoints: Data[] = system?.spec?.endpoints || [];
+    endpoints: Data[] = system?.spec?.endpoints || [],
+    interfaces: Data[] = system?.spec?.interfaces || [];
+  const { report, failure } = useConnectionAdmission(projectId, revision),
+    guidance = targetGuidance(endpoints, interfaces, source),
+    chosen = guidance.find((g) => g.endpoint.id === target);
   return (
     <div className="view-page">
       <div className="section-heading">
@@ -950,6 +964,7 @@ export function ConnectionsView({
                   <th>Source → destination</th>
                   <th>Interface</th>
                   <th>Clock</th>
+                  <th>Admission</th>
                   <th>Observed</th>
                 </tr>
               </thead>
@@ -967,7 +982,26 @@ export function ConnectionsView({
                       </code>
                     </td>
                     <td>{flow.interfaceId}</td>
-                    <td>{flow.timeDomainId || "Unknown"}</td>
+                    <td>
+                      {flow.timeDomainId ||
+                        (report?.connections
+                          .find(
+                            (c: Data) =>
+                              c.ref === `${flow.systemRef}#${flow.id}`,
+                          )
+                          ?.checks.some(
+                            (check: Data) => check.code === "CLOCK_AMBIGUOUS",
+                          )
+                          ? "Ambiguous"
+                          : "System default")}
+                    </td>
+                    <td>
+                      <AdmissionCell
+                        connection={report?.connections.find(
+                          (c: Data) => c.ref === `${flow.systemRef}#${flow.id}`,
+                        )}
+                      />
+                    </td>
                     <td>
                       <Badge>Not observed</Badge>
                     </td>
@@ -976,6 +1010,7 @@ export function ConnectionsView({
               </tbody>
             </table>
           </div>
+          <AdmissionSummary report={report} failure={failure} />
           <div className="scope-note">
             <Icon name="info" />
             <span>
@@ -999,9 +1034,10 @@ export function ConnectionsView({
         <aside className="panel">
           <h3>Connect endpoints</h3>
           <p className="field-hint">
-            The backend checks direction, schema, unit, multiplicity, clock, and
-            provider compatibility. Conversions require an explicit admitted
-            mapping.
+            The authoritative validator checks direction and interface identity;
+            admission then reports multiplicity, clock, compatibility and
+            feedback. Studio never converts: a conversion requires an admitted
+            converter contract, and none is admitted.
           </p>
           <form
             onSubmit={(e) => {
@@ -1055,24 +1091,30 @@ export function ConnectionsView({
                 value={target}
                 onChange={(e) => setTarget(e.target.value)}
                 required
+                aria-describedby="target-guidance"
               >
                 <option value="">Choose an input</option>
-                {endpoints
-                  .filter(
-                    (p) =>
-                      p.direction === "input" ||
-                      p.direction === "bidirectional",
-                  )
-                  .map((p) => (
-                    <option key={p.id} value={p.id}>
-                      {p.id} · {p.interfaceId}
-                    </option>
-                  ))}
+                {guidance.map(({ endpoint, compatible, reason }) => (
+                  <option
+                    key={endpoint.id}
+                    value={endpoint.id}
+                    disabled={!compatible}
+                  >
+                    {endpoint.id} · {endpoint.interfaceId}
+                    {compatible ? "" : ` — ${reason}`}
+                  </option>
+                ))}
               </select>
             </label>
+            <p className="field-hint" id="target-guidance" role="status">
+              {!source
+                ? "Choose a source to see compatible destinations first."
+                : chosen?.reason ||
+                  `${guidance.filter((g) => g.compatible).length} compatible destination(s); incompatible ones are listed with their reason.`}
+            </p>
             <button
               className="button primary"
-              disabled={!source || !target || !id}
+              disabled={!source || !target || !id || !chosen?.compatible}
             >
               <Icon name="connection" />
               Validate & connect

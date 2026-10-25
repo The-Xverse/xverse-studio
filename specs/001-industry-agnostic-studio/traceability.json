@@ -3591,8 +3591,13 @@
         "AC-016",
         "AC-017"
       ],
-      "status": "in_progress",
-      "implementation_note": "Owned graph/source/catalog/profile/variant work implemented and tested; independent composition repair verification and final UI successor are being retained. External two-industry/live and cross-OS gates remain open."
+      "status": "completed",
+      "implementation_note": "Owned component complete after independent review and an unchanged-candidate 599 backend / 66 browser-performance run: fixtures with declared expected semantics for compatible, mismatched direction/interface, explicit converter, backward version, multiplicity (satisfied/violated/uninterpreted/inverted/unmet lower bound), ambiguous clock, declared quality, XDL-valid feedback cycle, model coupling, coupling extension and network link; contract tests verify validator verdict, per-flow admission, blocking codes, cycles, couplings and API/preflight integration.",
+      "implementation_evidence": [
+        "docs/architecture/ADR-0014-connection-admission.md",
+        "evidence/studio/M2-connections/verification.json",
+        "evidence/studio/M2-connections/independent-review.md"
+      ]
     },
     {
       "id": "T054",
@@ -3618,7 +3623,12 @@
         "AC-016"
       ],
       "status": "in_progress",
-      "implementation_note": "Owned graph/source/catalog/profile/variant work implemented and tested; independent composition repair verification and final UI successor are being retained. External two-industry/live and cross-OS gates remain open."
+      "implementation_note": "In progress: connection admission 1.0 (ADR-0014) checks declared semantics and blocks explicit converters, backward version compatibility, declared quality, uninterpretable multiplicity, model couplings and feedback cycles because no provider/profile admits the needed contracts; preflight receives blocking diagnostics. Open: admission driven by actual provider/profile contracts and a supported causality path, which cannot be exercised until such a contract is admitted.",
+      "implementation_evidence": [
+        "docs/architecture/ADR-0014-connection-admission.md",
+        "evidence/studio/M2-connections/verification.json",
+        "evidence/studio/M2-connections/independent-review.md"
+      ]
     },
     {
       "id": "T055",
@@ -3645,7 +3655,12 @@
         "AC-017"
       ],
       "status": "in_progress",
-      "implementation_note": "Owned graph/source/catalog/profile/variant work implemented and tested; independent composition repair verification and final UI successor are being retained. External two-industry/live and cross-OS gates remain open."
+      "implementation_note": "In progress: Connections view shows per-flow admission with checks, cycles, model couplings, endpoint issues, network links as communication-only, admitted-contract status, and compatible-target guidance with reasons. Open: inspectable converter mapping forms (need an admitted converter contract) and distinct actions for coupling, deployment and traceability relations.",
+      "implementation_evidence": [
+        "docs/architecture/ADR-0014-connection-admission.md",
+        "evidence/studio/M2-connections/verification.json",
+        "evidence/studio/M2-connections/independent-review.md"
+      ]
     },
     {
       "id": "T056",
@@ -6140,15 +6155,15 @@
     "status_document": "../../docs/implementation/STATUS.md",
     "native_windows": "BLOCKED at user request. Initial native Server 2022 install failed on upstream Git filenames; application/browser NOT_RUN.",
     "m5": "deferred",
-    "code_candidate": "working-tree product sha256 recorded in evidence/studio/M2-run-overlay/verification.json on e0b69c5",
-    "component_completed": 30,
+    "code_candidate": "working-tree product sha256 recorded in evidence/studio/M2-connections/verification.json on 0350ea5",
+    "component_completed": 31,
     "verification": {
-      "backend_tests_passed": 575,
-      "playwright_checks_passed": 64,
+      "backend_tests_passed": 599,
+      "playwright_checks_passed": 66,
       "playwright_checks_failed": 0,
       "playwright_scope": "full Linux browser suite with performance measurements on an unchanged candidate",
       "milestones_accepted": 0,
-      "evidence": "evidence/studio/M2-run-overlay/"
+      "evidence": "evidence/studio/M2-connections/"
     }
   }
 }

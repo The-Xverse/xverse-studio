@@ -388,6 +388,17 @@ def create_app(
         result["layout"] = p["layout"]
         return result
 
+    @app.get("/api/v1/projects/{projectId}/connections")
+    def connections(projectId: str):
+        from xverse_studio.connections import admit_connections
+
+        p = projects.read(projectId)
+        documents = projects.sources(p)
+        return {
+            **admit_connections(documents, adapter.validate(documents)),
+            "revision": p["revision"],
+        }
+
     @app.post("/api/v1/projects/{projectId}/validations")
     def validate(projectId: str, body: Selection):
         p = projects.read(projectId)

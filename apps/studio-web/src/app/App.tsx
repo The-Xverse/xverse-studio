@@ -1203,6 +1203,8 @@ export default function App() {
               ) : view === "Connections" ? (
                 <ConnectionsView
                   projection={projection}
+                  projectId={project.projectId}
+                  revision={project.revision}
                   edit={(edits) =>
                     doAction("Validating connection", () => edit(edits))
                   }

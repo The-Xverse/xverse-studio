@@ -3,15 +3,15 @@
 Scope: runnable development reference implementation on `implement/studio-m0-m4`. No M0–M4 milestone
 or Studio 1.0 release is accepted. The supplied requirements/task IDs and acceptance targets remain.
 
-Latest recorded task completion: **30/100 components**, most recently T047's draft/run snapshot
-overlay (`evidence/studio/M2-run-overlay/`). This is an audited task count,
+Latest recorded task completion: **31/100 components**, most recently T053's connection fixtures with
+admission 1.0 progressing T054/T055 (`evidence/studio/M2-connections/`). This is an audited task count,
 not an estimate of remaining effort. T026 transport implementation is substantially repaired but
 remains open pending a complete current native/browser successor. Windows installation/testing
 remains blocked at user request, and native Windows secure I/O remains unimplemented/unavailable.
 
-The latest full Linux backend run passed **575 tests**; typecheck/build and the full **64-check
-browser/performance gate passed** on the current candidate (`evidence/studio/M2-run-overlay/`).
-Fresh-host CI for b61c7ec, 6070d30, 0469482, 68b8eec and e0b69c5 passed (push and PR).
+The latest full Linux backend run passed **599 tests**; typecheck/build and the full **66-check
+browser/performance gate passed** on the current candidate (`evidence/studio/M2-connections/`).
+Fresh-host CI for b61c7ec, 6070d30, 0469482, 68b8eec, e0b69c5 and 0350ea5 passed (push and PR).
 That includes the 30-second native expiry case with actual HTTP 410 and running verified-prefix
 recovery. Fresh-host push CI for checkpoint fb8ddb6 had failed that case (a history read racing a
 journal append); the PR run passed. Both outcomes are retained in `evidence/studio/native-ci/`.
@@ -34,7 +34,7 @@ private Linux backup/restore uses anchored acquisition and preserves immutable e
 Physical-provider inventory is empty.
 
 Component-complete task IDs, with the exact component scope/evidence in traceability.json:
-T003, T006, T013, T017, T018, T019, T020, T022, T024, T028, T029, T030, T031, T032, T036, T041, T042, T043, T044, T045, T046, T047, T050, T051, T052, T085, T086, T087, T092, T094.
+T003, T006, T013, T017, T018, T019, T020, T022, T024, T028, T029, T030, T031, T032, T036, T041, T042, T043, T044, T045, T046, T047, T050, T051, T052, T053, T085, T086, T087, T092, T094.
 T044 was reopened after review, then repaired and reverified for selected-source navigation, empty
 draft retention, atomic document switching and external-source inspection.
 Other tasks remain unchecked; implemented subparts are recorded as in progress instead of implying

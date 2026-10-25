@@ -81,6 +81,18 @@ class Runs:
             documents, compiled, provider_id, provider, active_count
         )
         diagnostics.extend(admission_diagnostics)
+        if compiled["valid"]:
+            # Declared connection semantics without an admitted contract block execution.
+            from xverse_studio.connections import admission_diagnostics as blocking
+            from xverse_studio.connections import admit_connections
+
+            diagnostics.extend(
+                blocking(
+                    admit_connections(
+                        documents, {"diagnostics": compiled.get("diagnostics", [])}
+                    )
+                )
+            )
         snapid = uid("snap-")
         pfid = uid("pf-")
         snapshot = {
