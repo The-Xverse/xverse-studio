@@ -1,0 +1,5753 @@
+{
+  "schema_version": "1.0",
+  "feature_id": "001-industry-agnostic-studio",
+  "status": "planned",
+  "milestones": [
+    {
+      "id": "M0",
+      "title": "Foundation and integration contracts",
+      "depends_on": [],
+      "exit_acceptance_ids": [
+        "AC-001",
+        "AC-002",
+        "AC-003"
+      ]
+    },
+    {
+      "id": "M1",
+      "title": "Guided operation / Studio 0.1",
+      "depends_on": [
+        "M0"
+      ],
+      "exit_acceptance_ids": [
+        "AC-004",
+        "AC-005",
+        "AC-006",
+        "AC-007",
+        "AC-008",
+        "AC-009",
+        "AC-010",
+        "AC-011",
+        "AC-012",
+        "AC-027",
+        "AC-031",
+        "AC-032"
+      ]
+    },
+    {
+      "id": "M2",
+      "title": "Visual composition / Studio 0.2",
+      "depends_on": [
+        "M1"
+      ],
+      "exit_acceptance_ids": [
+        "AC-013",
+        "AC-014",
+        "AC-015",
+        "AC-016",
+        "AC-017",
+        "AC-018",
+        "AC-019",
+        "AC-020",
+        "AC-030",
+        "AC-031"
+      ]
+    },
+    {
+      "id": "M3",
+      "title": "Hybrid laboratory / Studio 0.3",
+      "depends_on": [
+        "M2"
+      ],
+      "exit_acceptance_ids": [
+        "AC-021",
+        "AC-022",
+        "AC-023",
+        "AC-024"
+      ]
+    },
+    {
+      "id": "M4",
+      "title": "Experiment management / Studio 1.0",
+      "depends_on": [
+        "M3"
+      ],
+      "exit_acceptance_ids": [
+        "AC-025",
+        "AC-026",
+        "AC-027",
+        "AC-028",
+        "AC-029",
+        "AC-030",
+        "AC-031",
+        "AC-032"
+      ]
+    }
+  ],
+  "requirements": [
+    {
+      "id": "FR-001",
+      "kind": "functional",
+      "story": "US1",
+      "milestone": "M0",
+      "design_refs": [
+        "plan.md",
+        "data-model.md",
+        "contracts/project-format.md"
+      ],
+      "task_ids": [
+        "T005",
+        "T006",
+        "T007",
+        "T008",
+        "T014"
+      ],
+      "acceptance_ids": [
+        "AC-002",
+        "AC-013"
+      ]
+    },
+    {
+      "id": "FR-002",
+      "kind": "functional",
+      "story": "US1",
+      "milestone": "M1",
+      "design_refs": [
+        "plan.md",
+        "data-model.md",
+        "contracts/project-format.md"
+      ],
+      "task_ids": [
+        "T015",
+        "T016",
+        "T036",
+        "T037"
+      ],
+      "acceptance_ids": [
+        "AC-004",
+        "AC-012"
+      ]
+    },
+    {
+      "id": "FR-003",
+      "kind": "functional",
+      "story": "US1",
+      "milestone": "M1",
+      "design_refs": [
+        "plan.md",
+        "data-model.md",
+        "contracts/project-format.md"
+      ],
+      "task_ids": [
+        "T015",
+        "T016"
+      ],
+      "acceptance_ids": [
+        "AC-002",
+        "AC-003"
+      ]
+    },
+    {
+      "id": "FR-004",
+      "kind": "functional",
+      "story": "US1",
+      "milestone": "M1",
+      "design_refs": [
+        "plan.md",
+        "data-model.md",
+        "contracts/project-format.md"
+      ],
+      "task_ids": [
+        "T015",
+        "T016"
+      ],
+      "acceptance_ids": [
+        "AC-003"
+      ]
+    },
+    {
+      "id": "FR-005",
+      "kind": "functional",
+      "story": "US1",
+      "milestone": "M1",
+      "design_refs": [
+        "plan.md",
+        "data-model.md",
+        "contracts/project-format.md"
+      ],
+      "task_ids": [
+        "T015",
+        "T017",
+        "T036",
+        "T037"
+      ],
+      "acceptance_ids": [
+        "AC-004",
+        "AC-012"
+      ]
+    },
+    {
+      "id": "FR-006",
+      "kind": "functional",
+      "story": "US2",
+      "milestone": "M0",
+      "design_refs": [
+        "plan.md",
+        "data-model.md",
+        "contracts/studio-api.md",
+        "contracts/provider-contract.md"
+      ],
+      "task_ids": [
+        "T001",
+        "T003",
+        "T004",
+        "T011",
+        "T012",
+        "T014"
+      ],
+      "acceptance_ids": [
+        "AC-001",
+        "AC-005",
+        "AC-032"
+      ]
+    },
+    {
+      "id": "FR-007",
+      "kind": "functional",
+      "story": "US2",
+      "milestone": "M0",
+      "design_refs": [
+        "plan.md",
+        "data-model.md",
+        "contracts/studio-api.md",
+        "contracts/provider-contract.md"
+      ],
+      "task_ids": [
+        "T001",
+        "T003",
+        "T004",
+        "T006",
+        "T009",
+        "T010",
+        "T011",
+        "T012",
+        "T014"
+      ],
+      "acceptance_ids": [
+        "AC-001"
+      ]
+    },
+    {
+      "id": "FR-008",
+      "kind": "functional",
+      "story": "US2",
+      "milestone": "M1",
+      "design_refs": [
+        "plan.md",
+        "data-model.md",
+        "contracts/studio-api.md",
+        "contracts/provider-contract.md"
+      ],
+      "task_ids": [
+        "T004",
+        "T018",
+        "T019",
+        "T020",
+        "T035"
+      ],
+      "acceptance_ids": [
+        "AC-005",
+        "AC-032"
+      ]
+    },
+    {
+      "id": "FR-009",
+      "kind": "functional",
+      "story": "US2",
+      "milestone": "M1",
+      "design_refs": [
+        "plan.md",
+        "data-model.md",
+        "contracts/studio-api.md",
+        "contracts/provider-contract.md"
+      ],
+      "task_ids": [
+        "T018",
+        "T019",
+        "T020",
+        "T035"
+      ],
+      "acceptance_ids": [
+        "AC-005"
+      ]
+    },
+    {
+      "id": "FR-010",
+      "kind": "functional",
+      "story": "US2",
+      "milestone": "M1",
+      "design_refs": [
+        "plan.md",
+        "data-model.md",
+        "contracts/studio-api.md",
+        "contracts/provider-contract.md"
+      ],
+      "task_ids": [
+        "T018",
+        "T019",
+        "T020",
+        "T035"
+      ],
+      "acceptance_ids": [
+        "AC-005"
+      ]
+    },
+    {
+      "id": "FR-011",
+      "kind": "functional",
+      "story": "US3",
+      "milestone": "M1",
+      "design_refs": [
+        "plan.md",
+        "data-model.md",
+        "contracts/studio-api.md",
+        "contracts/provider-contract.md",
+        "contracts/run-events.md"
+      ],
+      "task_ids": [
+        "T021",
+        "T022",
+        "T027",
+        "T033",
+        "T034",
+        "T035"
+      ],
+      "acceptance_ids": [
+        "AC-006",
+        "AC-007"
+      ]
+    },
+    {
+      "id": "FR-012",
+      "kind": "functional",
+      "story": "US3",
+      "milestone": "M1",
+      "design_refs": [
+        "plan.md",
+        "data-model.md",
+        "contracts/studio-api.md",
+        "contracts/provider-contract.md",
+        "contracts/run-events.md"
+      ],
+      "task_ids": [
+        "T021",
+        "T022",
+        "T025",
+        "T033",
+        "T035"
+      ],
+      "acceptance_ids": [
+        "AC-008",
+        "AC-009"
+      ]
+    },
+    {
+      "id": "FR-013",
+      "kind": "functional",
+      "story": "US3",
+      "milestone": "M1",
+      "design_refs": [
+        "plan.md",
+        "data-model.md",
+        "contracts/studio-api.md",
+        "contracts/provider-contract.md",
+        "contracts/run-events.md"
+      ],
+      "task_ids": [
+        "T021",
+        "T023",
+        "T025",
+        "T026",
+        "T033",
+        "T035"
+      ],
+      "acceptance_ids": [
+        "AC-008",
+        "AC-009"
+      ]
+    },
+    {
+      "id": "FR-014",
+      "kind": "functional",
+      "story": "US3",
+      "milestone": "M1",
+      "design_refs": [
+        "plan.md",
+        "data-model.md",
+        "contracts/studio-api.md",
+        "contracts/provider-contract.md",
+        "contracts/run-events.md"
+      ],
+      "task_ids": [
+        "T021",
+        "T023",
+        "T027",
+        "T033",
+        "T034",
+        "T035"
+      ],
+      "acceptance_ids": [
+        "AC-006",
+        "AC-007",
+        "AC-009"
+      ]
+    },
+    {
+      "id": "FR-015",
+      "kind": "functional",
+      "story": "US3",
+      "milestone": "M1",
+      "design_refs": [
+        "plan.md",
+        "data-model.md",
+        "contracts/studio-api.md",
+        "contracts/provider-contract.md",
+        "contracts/run-events.md"
+      ],
+      "task_ids": [
+        "T021",
+        "T022",
+        "T027",
+        "T033",
+        "T047"
+      ],
+      "acceptance_ids": [
+        "AC-006",
+        "AC-027"
+      ]
+    },
+    {
+      "id": "FR-016",
+      "kind": "functional",
+      "story": "US3",
+      "milestone": "M1",
+      "design_refs": [
+        "plan.md",
+        "data-model.md",
+        "contracts/studio-api.md",
+        "contracts/provider-contract.md",
+        "contracts/run-events.md"
+      ],
+      "task_ids": [
+        "T021",
+        "T024",
+        "T027",
+        "T033",
+        "T059"
+      ],
+      "acceptance_ids": [
+        "AC-018",
+        "AC-027"
+      ]
+    },
+    {
+      "id": "FR-017",
+      "kind": "functional",
+      "story": "US4",
+      "milestone": "M1",
+      "design_refs": [
+        "plan.md",
+        "data-model.md",
+        "contracts/run-events.md"
+      ],
+      "task_ids": [
+        "T028",
+        "T029",
+        "T030",
+        "T033"
+      ],
+      "acceptance_ids": [
+        "AC-010",
+        "AC-011"
+      ]
+    },
+    {
+      "id": "FR-018",
+      "kind": "functional",
+      "story": "US4",
+      "milestone": "M1",
+      "design_refs": [
+        "plan.md",
+        "data-model.md",
+        "contracts/run-events.md"
+      ],
+      "task_ids": [
+        "T028",
+        "T029",
+        "T030",
+        "T033"
+      ],
+      "acceptance_ids": [
+        "AC-011"
+      ]
+    },
+    {
+      "id": "FR-019",
+      "kind": "functional",
+      "story": "US4",
+      "milestone": "M1",
+      "design_refs": [
+        "plan.md",
+        "data-model.md",
+        "contracts/run-events.md"
+      ],
+      "task_ids": [
+        "T031",
+        "T032",
+        "T033"
+      ],
+      "acceptance_ids": [
+        "AC-011"
+      ]
+    },
+    {
+      "id": "FR-020",
+      "kind": "functional",
+      "story": "US4",
+      "milestone": "M1",
+      "design_refs": [
+        "plan.md",
+        "data-model.md",
+        "contracts/run-events.md"
+      ],
+      "task_ids": [
+        "T027",
+        "T028",
+        "T030",
+        "T031",
+        "T032",
+        "T033",
+        "T035"
+      ],
+      "acceptance_ids": [
+        "AC-006",
+        "AC-007",
+        "AC-011"
+      ]
+    },
+    {
+      "id": "FR-021",
+      "kind": "functional",
+      "story": "US4",
+      "milestone": "M1",
+      "design_refs": [
+        "plan.md",
+        "data-model.md",
+        "contracts/run-events.md"
+      ],
+      "task_ids": [
+        "T025",
+        "T026",
+        "T028",
+        "T029",
+        "T030",
+        "T033"
+      ],
+      "acceptance_ids": [
+        "AC-008",
+        "AC-010"
+      ]
+    },
+    {
+      "id": "FR-022",
+      "kind": "functional",
+      "story": "US4",
+      "milestone": "M1",
+      "design_refs": [
+        "plan.md",
+        "data-model.md",
+        "contracts/run-events.md"
+      ],
+      "task_ids": [
+        "T028",
+        "T029",
+        "T033",
+        "T034",
+        "T035"
+      ],
+      "acceptance_ids": [
+        "AC-006",
+        "AC-010",
+        "AC-011"
+      ]
+    },
+    {
+      "id": "FR-023",
+      "kind": "functional",
+      "story": "US5",
+      "milestone": "M2",
+      "design_refs": [
+        "plan.md",
+        "data-model.md",
+        "contracts/project-format.md"
+      ],
+      "task_ids": [
+        "T041",
+        "T042",
+        "T043",
+        "T044",
+        "T048"
+      ],
+      "acceptance_ids": [
+        "AC-013"
+      ]
+    },
+    {
+      "id": "FR-024",
+      "kind": "functional",
+      "story": "US5",
+      "milestone": "M2",
+      "design_refs": [
+        "plan.md",
+        "data-model.md",
+        "contracts/project-format.md"
+      ],
+      "task_ids": [
+        "T041",
+        "T042",
+        "T048"
+      ],
+      "acceptance_ids": [
+        "AC-013"
+      ]
+    },
+    {
+      "id": "FR-025",
+      "kind": "functional",
+      "story": "US5",
+      "milestone": "M2",
+      "design_refs": [
+        "plan.md",
+        "data-model.md",
+        "contracts/project-format.md"
+      ],
+      "task_ids": [
+        "T041",
+        "T042",
+        "T044",
+        "T048"
+      ],
+      "acceptance_ids": [
+        "AC-013"
+      ]
+    },
+    {
+      "id": "FR-026",
+      "kind": "functional",
+      "story": "US5",
+      "milestone": "M2",
+      "design_refs": [
+        "plan.md",
+        "data-model.md",
+        "contracts/project-format.md"
+      ],
+      "task_ids": [
+        "T045",
+        "T046",
+        "T048"
+      ],
+      "acceptance_ids": [
+        "AC-014"
+      ]
+    },
+    {
+      "id": "FR-027",
+      "kind": "functional",
+      "story": "US5",
+      "milestone": "M2",
+      "design_refs": [
+        "plan.md",
+        "data-model.md",
+        "contracts/project-format.md"
+      ],
+      "task_ids": [
+        "T043",
+        "T048",
+        "T067"
+      ],
+      "acceptance_ids": [
+        "AC-013",
+        "AC-031"
+      ]
+    },
+    {
+      "id": "FR-028",
+      "kind": "functional",
+      "story": "US5",
+      "milestone": "M2",
+      "design_refs": [
+        "plan.md",
+        "data-model.md",
+        "contracts/project-format.md"
+      ],
+      "task_ids": [
+        "T045",
+        "T047",
+        "T048"
+      ],
+      "acceptance_ids": [
+        "AC-014",
+        "AC-027"
+      ]
+    },
+    {
+      "id": "FR-029",
+      "kind": "functional",
+      "story": "US6",
+      "milestone": "M2",
+      "design_refs": [
+        "plan.md",
+        "data-model.md",
+        "contracts/project-format.md"
+      ],
+      "task_ids": [
+        "T049",
+        "T050",
+        "T052"
+      ],
+      "acceptance_ids": [
+        "AC-015"
+      ]
+    },
+    {
+      "id": "FR-030",
+      "kind": "functional",
+      "story": "US6",
+      "milestone": "M2",
+      "design_refs": [
+        "plan.md",
+        "data-model.md",
+        "contracts/project-format.md"
+      ],
+      "task_ids": [
+        "T049",
+        "T051",
+        "T052"
+      ],
+      "acceptance_ids": [
+        "AC-015"
+      ]
+    },
+    {
+      "id": "FR-031",
+      "kind": "functional",
+      "story": "US6",
+      "milestone": "M2",
+      "design_refs": [
+        "plan.md",
+        "data-model.md",
+        "contracts/project-format.md"
+      ],
+      "task_ids": [
+        "T049",
+        "T050",
+        "T052"
+      ],
+      "acceptance_ids": [
+        "AC-015"
+      ]
+    },
+    {
+      "id": "FR-032",
+      "kind": "functional",
+      "story": "US6",
+      "milestone": "M2",
+      "design_refs": [
+        "plan.md",
+        "data-model.md",
+        "contracts/project-format.md"
+      ],
+      "task_ids": [
+        "T049",
+        "T051",
+        "T052"
+      ],
+      "acceptance_ids": [
+        "AC-015"
+      ]
+    },
+    {
+      "id": "FR-033",
+      "kind": "functional",
+      "story": "US6",
+      "milestone": "M2",
+      "design_refs": [
+        "plan.md",
+        "data-model.md",
+        "contracts/project-format.md"
+      ],
+      "task_ids": [
+        "T049",
+        "T050",
+        "T051",
+        "T052"
+      ],
+      "acceptance_ids": [
+        "AC-015"
+      ]
+    },
+    {
+      "id": "FR-034",
+      "kind": "functional",
+      "story": "US7",
+      "milestone": "M2",
+      "design_refs": [
+        "plan.md",
+        "data-model.md"
+      ],
+      "task_ids": [
+        "T053",
+        "T054",
+        "T055",
+        "T068"
+      ],
+      "acceptance_ids": [
+        "AC-016"
+      ]
+    },
+    {
+      "id": "FR-035",
+      "kind": "functional",
+      "story": "US7",
+      "milestone": "M2",
+      "design_refs": [
+        "plan.md",
+        "data-model.md"
+      ],
+      "task_ids": [
+        "T053",
+        "T054",
+        "T055",
+        "T068"
+      ],
+      "acceptance_ids": [
+        "AC-016"
+      ]
+    },
+    {
+      "id": "FR-036",
+      "kind": "functional",
+      "story": "US7",
+      "milestone": "M2",
+      "design_refs": [
+        "plan.md",
+        "data-model.md"
+      ],
+      "task_ids": [
+        "T056",
+        "T068"
+      ],
+      "acceptance_ids": [
+        "AC-017"
+      ]
+    },
+    {
+      "id": "FR-037",
+      "kind": "functional",
+      "story": "US7",
+      "milestone": "M2",
+      "design_refs": [
+        "plan.md",
+        "data-model.md"
+      ],
+      "task_ids": [
+        "T053",
+        "T055",
+        "T056",
+        "T068"
+      ],
+      "acceptance_ids": [
+        "AC-017"
+      ]
+    },
+    {
+      "id": "FR-038",
+      "kind": "functional",
+      "story": "US7",
+      "milestone": "M2",
+      "design_refs": [
+        "plan.md",
+        "data-model.md"
+      ],
+      "task_ids": [
+        "T053",
+        "T054",
+        "T055",
+        "T068"
+      ],
+      "acceptance_ids": [
+        "AC-016"
+      ]
+    },
+    {
+      "id": "FR-039",
+      "kind": "functional",
+      "story": "US8",
+      "milestone": "M2",
+      "design_refs": [
+        "plan.md",
+        "data-model.md",
+        "contracts/project-format.md"
+      ],
+      "task_ids": [
+        "T057",
+        "T058",
+        "T059",
+        "T068"
+      ],
+      "acceptance_ids": [
+        "AC-018"
+      ]
+    },
+    {
+      "id": "FR-040",
+      "kind": "functional",
+      "story": "US8",
+      "milestone": "M2",
+      "design_refs": [
+        "plan.md",
+        "data-model.md",
+        "contracts/project-format.md"
+      ],
+      "task_ids": [
+        "T057",
+        "T058",
+        "T059",
+        "T068",
+        "T076",
+        "T078"
+      ],
+      "acceptance_ids": [
+        "AC-018",
+        "AC-024"
+      ]
+    },
+    {
+      "id": "FR-041",
+      "kind": "functional",
+      "story": "US8",
+      "milestone": "M2",
+      "design_refs": [
+        "plan.md",
+        "data-model.md",
+        "contracts/project-format.md"
+      ],
+      "task_ids": [
+        "T057",
+        "T058",
+        "T059",
+        "T068"
+      ],
+      "acceptance_ids": [
+        "AC-018"
+      ]
+    },
+    {
+      "id": "FR-042",
+      "kind": "functional",
+      "story": "US8",
+      "milestone": "M2",
+      "design_refs": [
+        "plan.md",
+        "data-model.md",
+        "contracts/project-format.md"
+      ],
+      "task_ids": [
+        "T057",
+        "T058",
+        "T059",
+        "T068"
+      ],
+      "acceptance_ids": [
+        "AC-018"
+      ]
+    },
+    {
+      "id": "FR-043",
+      "kind": "functional",
+      "story": "US9",
+      "milestone": "M2",
+      "design_refs": [
+        "plan.md",
+        "data-model.md",
+        "contracts/project-format.md"
+      ],
+      "task_ids": [
+        "T060",
+        "T061",
+        "T063"
+      ],
+      "acceptance_ids": [
+        "AC-019"
+      ]
+    },
+    {
+      "id": "FR-044",
+      "kind": "functional",
+      "story": "US9",
+      "milestone": "M2",
+      "design_refs": [
+        "plan.md",
+        "data-model.md",
+        "contracts/project-format.md"
+      ],
+      "task_ids": [
+        "T060",
+        "T061",
+        "T063"
+      ],
+      "acceptance_ids": [
+        "AC-019"
+      ]
+    },
+    {
+      "id": "FR-045",
+      "kind": "functional",
+      "story": "US9",
+      "milestone": "M2",
+      "design_refs": [
+        "plan.md",
+        "data-model.md",
+        "contracts/project-format.md"
+      ],
+      "task_ids": [
+        "T060",
+        "T062",
+        "T063"
+      ],
+      "acceptance_ids": [
+        "AC-019"
+      ]
+    },
+    {
+      "id": "FR-046",
+      "kind": "functional",
+      "story": "US9",
+      "milestone": "M2",
+      "design_refs": [
+        "plan.md",
+        "data-model.md",
+        "contracts/project-format.md"
+      ],
+      "task_ids": [
+        "T064",
+        "T065",
+        "T066"
+      ],
+      "acceptance_ids": [
+        "AC-020"
+      ]
+    },
+    {
+      "id": "FR-047",
+      "kind": "functional",
+      "story": "US9",
+      "milestone": "M2",
+      "design_refs": [
+        "plan.md",
+        "data-model.md",
+        "contracts/project-format.md"
+      ],
+      "task_ids": [
+        "T060",
+        "T061",
+        "T063",
+        "T064",
+        "T065",
+        "T066"
+      ],
+      "acceptance_ids": [
+        "AC-019",
+        "AC-020"
+      ]
+    },
+    {
+      "id": "FR-048",
+      "kind": "functional",
+      "story": "US10",
+      "milestone": "M3",
+      "design_refs": [
+        "plan.md",
+        "data-model.md",
+        "contracts/studio-api.md",
+        "contracts/provider-contract.md"
+      ],
+      "task_ids": [
+        "T070",
+        "T071",
+        "T072",
+        "T075",
+        "T079",
+        "T080"
+      ],
+      "acceptance_ids": [
+        "AC-021"
+      ]
+    },
+    {
+      "id": "FR-049",
+      "kind": "functional",
+      "story": "US10",
+      "milestone": "M3",
+      "design_refs": [
+        "plan.md",
+        "data-model.md",
+        "contracts/studio-api.md",
+        "contracts/provider-contract.md"
+      ],
+      "task_ids": [
+        "T070",
+        "T073",
+        "T074",
+        "T075",
+        "T079",
+        "T080"
+      ],
+      "acceptance_ids": [
+        "AC-022",
+        "AC-023"
+      ]
+    },
+    {
+      "id": "FR-050",
+      "kind": "functional",
+      "story": "US10",
+      "milestone": "M3",
+      "design_refs": [
+        "plan.md",
+        "data-model.md",
+        "contracts/studio-api.md",
+        "contracts/provider-contract.md"
+      ],
+      "task_ids": [
+        "T070",
+        "T071",
+        "T073",
+        "T074",
+        "T075",
+        "T079",
+        "T080"
+      ],
+      "acceptance_ids": [
+        "AC-022",
+        "AC-023"
+      ]
+    },
+    {
+      "id": "FR-051",
+      "kind": "functional",
+      "story": "US10",
+      "milestone": "M3",
+      "design_refs": [
+        "plan.md",
+        "data-model.md",
+        "contracts/studio-api.md",
+        "contracts/provider-contract.md"
+      ],
+      "task_ids": [
+        "T070",
+        "T076",
+        "T077",
+        "T078",
+        "T079",
+        "T080"
+      ],
+      "acceptance_ids": [
+        "AC-023",
+        "AC-024"
+      ]
+    },
+    {
+      "id": "FR-052",
+      "kind": "functional",
+      "story": "US10",
+      "milestone": "M3",
+      "design_refs": [
+        "plan.md",
+        "data-model.md",
+        "contracts/studio-api.md",
+        "contracts/provider-contract.md"
+      ],
+      "task_ids": [
+        "T071",
+        "T076",
+        "T078",
+        "T080",
+        "T081"
+      ],
+      "acceptance_ids": [
+        "AC-024"
+      ]
+    },
+    {
+      "id": "FR-053",
+      "kind": "functional",
+      "story": "US11",
+      "milestone": "M4",
+      "design_refs": [
+        "plan.md",
+        "data-model.md",
+        "contracts/run-events.md"
+      ],
+      "task_ids": [
+        "T082",
+        "T083",
+        "T084",
+        "T095"
+      ],
+      "acceptance_ids": [
+        "AC-025"
+      ]
+    },
+    {
+      "id": "FR-054",
+      "kind": "functional",
+      "story": "US11",
+      "milestone": "M4",
+      "design_refs": [
+        "plan.md",
+        "data-model.md",
+        "contracts/run-events.md"
+      ],
+      "task_ids": [
+        "T082",
+        "T083",
+        "T084",
+        "T095"
+      ],
+      "acceptance_ids": [
+        "AC-025"
+      ]
+    },
+    {
+      "id": "FR-055",
+      "kind": "functional",
+      "story": "US11",
+      "milestone": "M4",
+      "design_refs": [
+        "plan.md",
+        "data-model.md",
+        "contracts/run-events.md"
+      ],
+      "task_ids": [
+        "T082",
+        "T083",
+        "T084",
+        "T095"
+      ],
+      "acceptance_ids": [
+        "AC-025"
+      ]
+    },
+    {
+      "id": "FR-056",
+      "kind": "functional",
+      "story": "US11",
+      "milestone": "M4",
+      "design_refs": [
+        "plan.md",
+        "data-model.md",
+        "contracts/run-events.md"
+      ],
+      "task_ids": [
+        "T085",
+        "T086",
+        "T087",
+        "T088",
+        "T095"
+      ],
+      "acceptance_ids": [
+        "AC-026"
+      ]
+    },
+    {
+      "id": "FR-057",
+      "kind": "functional",
+      "story": "US11",
+      "milestone": "M4",
+      "design_refs": [
+        "plan.md",
+        "data-model.md",
+        "contracts/run-events.md"
+      ],
+      "task_ids": [
+        "T082",
+        "T084",
+        "T088",
+        "T095"
+      ],
+      "acceptance_ids": [
+        "AC-025"
+      ]
+    },
+    {
+      "id": "FR-058",
+      "kind": "functional",
+      "story": "US12",
+      "milestone": "M4",
+      "design_refs": [
+        "plan.md",
+        "data-model.md",
+        "contracts/run-events.md"
+      ],
+      "task_ids": [
+        "T089",
+        "T090",
+        "T095"
+      ],
+      "acceptance_ids": [
+        "AC-028"
+      ]
+    },
+    {
+      "id": "FR-059",
+      "kind": "functional",
+      "story": "US12",
+      "milestone": "M4",
+      "design_refs": [
+        "plan.md",
+        "data-model.md",
+        "contracts/run-events.md"
+      ],
+      "task_ids": [
+        "T091",
+        "T095"
+      ],
+      "acceptance_ids": [
+        "AC-029"
+      ]
+    },
+    {
+      "id": "FR-060",
+      "kind": "functional",
+      "story": "US12",
+      "milestone": "M4",
+      "design_refs": [
+        "plan.md",
+        "data-model.md",
+        "contracts/run-events.md"
+      ],
+      "task_ids": [
+        "T091",
+        "T095"
+      ],
+      "acceptance_ids": [
+        "AC-029"
+      ]
+    },
+    {
+      "id": "FR-061",
+      "kind": "functional",
+      "story": "US12",
+      "milestone": "M4",
+      "design_refs": [
+        "plan.md",
+        "data-model.md",
+        "contracts/run-events.md"
+      ],
+      "task_ids": [
+        "T092",
+        "T093",
+        "T095"
+      ],
+      "acceptance_ids": [
+        "AC-029"
+      ]
+    },
+    {
+      "id": "FR-062",
+      "kind": "functional",
+      "story": "US12",
+      "milestone": "M4",
+      "design_refs": [
+        "plan.md",
+        "data-model.md",
+        "contracts/run-events.md"
+      ],
+      "task_ids": [
+        "T092",
+        "T094",
+        "T095"
+      ],
+      "acceptance_ids": [
+        "AC-029"
+      ]
+    },
+    {
+      "id": "FR-063",
+      "kind": "functional",
+      "story": "US12",
+      "milestone": "M4",
+      "design_refs": [
+        "plan.md",
+        "data-model.md",
+        "contracts/run-events.md"
+      ],
+      "task_ids": [
+        "T092",
+        "T094",
+        "T095"
+      ],
+      "acceptance_ids": [
+        "AC-029"
+      ]
+    },
+    {
+      "id": "NFR-001",
+      "kind": "nonfunctional",
+      "story": "cross_cutting",
+      "milestone": "M0",
+      "design_refs": [
+        "plan.md",
+        "data-model.md"
+      ],
+      "task_ids": [
+        "T002",
+        "T013",
+        "T014",
+        "T060",
+        "T061",
+        "T063",
+        "T064",
+        "T066",
+        "T069",
+        "T099"
+      ],
+      "acceptance_ids": [
+        "AC-001",
+        "AC-019",
+        "AC-020"
+      ]
+    },
+    {
+      "id": "NFR-002",
+      "kind": "nonfunctional",
+      "story": "cross_cutting",
+      "milestone": "M0",
+      "design_refs": [
+        "plan.md",
+        "data-model.md"
+      ],
+      "task_ids": [
+        "T001",
+        "T005",
+        "T006",
+        "T012",
+        "T014",
+        "T041",
+        "T048",
+        "T068",
+        "T099"
+      ],
+      "acceptance_ids": [
+        "AC-001",
+        "AC-002",
+        "AC-013"
+      ]
+    },
+    {
+      "id": "NFR-003",
+      "kind": "nonfunctional",
+      "story": "cross_cutting",
+      "milestone": "M1",
+      "design_refs": [
+        "plan.md",
+        "data-model.md"
+      ],
+      "task_ids": [
+        "T001",
+        "T002",
+        "T009",
+        "T010",
+        "T038",
+        "T039",
+        "T067",
+        "T095",
+        "T096",
+        "T098",
+        "T099"
+      ],
+      "acceptance_ids": [
+        "AC-001",
+        "AC-004",
+        "AC-030",
+        "AC-031",
+        "AC-032"
+      ]
+    },
+    {
+      "id": "NFR-004",
+      "kind": "nonfunctional",
+      "story": "cross_cutting",
+      "milestone": "M1",
+      "design_refs": [
+        "plan.md",
+        "data-model.md"
+      ],
+      "task_ids": [
+        "T009",
+        "T010",
+        "T039",
+        "T049",
+        "T052",
+        "T062",
+        "T085",
+        "T086",
+        "T092",
+        "T093",
+        "T095",
+        "T098",
+        "T099"
+      ],
+      "acceptance_ids": [
+        "AC-003",
+        "AC-015",
+        "AC-018",
+        "AC-026",
+        "AC-029",
+        "AC-032"
+      ]
+    },
+    {
+      "id": "NFR-005",
+      "kind": "nonfunctional",
+      "story": "cross_cutting",
+      "milestone": "M1",
+      "design_refs": [
+        "plan.md",
+        "data-model.md"
+      ],
+      "task_ids": [
+        "T021",
+        "T023",
+        "T033",
+        "T073",
+        "T079",
+        "T099"
+      ],
+      "acceptance_ids": [
+        "AC-007",
+        "AC-008",
+        "AC-009",
+        "AC-032"
+      ]
+    },
+    {
+      "id": "NFR-006",
+      "kind": "nonfunctional",
+      "story": "cross_cutting",
+      "milestone": "M1",
+      "design_refs": [
+        "plan.md",
+        "data-model.md"
+      ],
+      "task_ids": [
+        "T017",
+        "T038",
+        "T043",
+        "T067",
+        "T097",
+        "T099"
+      ],
+      "acceptance_ids": [
+        "AC-031",
+        "AC-032"
+      ]
+    },
+    {
+      "id": "NFR-007",
+      "kind": "nonfunctional",
+      "story": "cross_cutting",
+      "milestone": "M2",
+      "design_refs": [
+        "plan.md",
+        "data-model.md"
+      ],
+      "task_ids": [
+        "T067",
+        "T096",
+        "T099"
+      ],
+      "acceptance_ids": [
+        "AC-030"
+      ]
+    },
+    {
+      "id": "NFR-008",
+      "kind": "nonfunctional",
+      "story": "cross_cutting",
+      "milestone": "M1",
+      "design_refs": [
+        "plan.md",
+        "data-model.md"
+      ],
+      "task_ids": [
+        "T028",
+        "T029",
+        "T038",
+        "T067",
+        "T096",
+        "T099"
+      ],
+      "acceptance_ids": [
+        "AC-010",
+        "AC-030"
+      ]
+    },
+    {
+      "id": "NFR-009",
+      "kind": "nonfunctional",
+      "story": "cross_cutting",
+      "milestone": "M0",
+      "design_refs": [
+        "plan.md",
+        "data-model.md"
+      ],
+      "task_ids": [
+        "T001",
+        "T002",
+        "T003",
+        "T004",
+        "T005",
+        "T007",
+        "T008",
+        "T012",
+        "T014",
+        "T039",
+        "T045",
+        "T046",
+        "T048",
+        "T060",
+        "T061",
+        "T063",
+        "T067",
+        "T068",
+        "T093",
+        "T095",
+        "T098",
+        "T099"
+      ],
+      "acceptance_ids": [
+        "AC-001",
+        "AC-002",
+        "AC-009",
+        "AC-013",
+        "AC-014",
+        "AC-019",
+        "AC-029",
+        "AC-032"
+      ]
+    },
+    {
+      "id": "NFR-010",
+      "kind": "nonfunctional",
+      "story": "cross_cutting",
+      "milestone": "M0",
+      "design_refs": [
+        "plan.md",
+        "data-model.md"
+      ],
+      "task_ids": [
+        "T001",
+        "T002",
+        "T011",
+        "T013",
+        "T014",
+        "T035",
+        "T040",
+        "T069",
+        "T081",
+        "T098",
+        "T099",
+        "T100"
+      ],
+      "acceptance_ids": [
+        "AC-001",
+        "AC-032"
+      ]
+    },
+    {
+      "id": "NFR-011",
+      "kind": "nonfunctional",
+      "story": "cross_cutting",
+      "milestone": "M1",
+      "design_refs": [
+        "plan.md",
+        "data-model.md"
+      ],
+      "task_ids": [
+        "T018",
+        "T020",
+        "T031",
+        "T032",
+        "T033",
+        "T038",
+        "T067",
+        "T096",
+        "T099"
+      ],
+      "acceptance_ids": [
+        "AC-005",
+        "AC-007",
+        "AC-011"
+      ]
+    },
+    {
+      "id": "NFR-012",
+      "kind": "nonfunctional",
+      "story": "cross_cutting",
+      "milestone": "M1",
+      "design_refs": [
+        "plan.md",
+        "data-model.md"
+      ],
+      "task_ids": [
+        "T001",
+        "T036",
+        "T037",
+        "T039",
+        "T040",
+        "T081",
+        "T097",
+        "T098",
+        "T099",
+        "T100"
+      ],
+      "acceptance_ids": [
+        "AC-001",
+        "AC-004",
+        "AC-012",
+        "AC-032"
+      ]
+    }
+  ],
+  "success_criteria": [
+    {
+      "id": "SC-001",
+      "acceptance_ids": [
+        "AC-004",
+        "AC-012"
+      ],
+      "task_ids": [
+        "T015",
+        "T016",
+        "T017",
+        "T036",
+        "T037",
+        "T040",
+        "T100"
+      ]
+    },
+    {
+      "id": "SC-002",
+      "acceptance_ids": [
+        "AC-002",
+        "AC-013",
+        "AC-014"
+      ],
+      "task_ids": [
+        "T005",
+        "T006",
+        "T007",
+        "T008",
+        "T014",
+        "T015",
+        "T016",
+        "T041",
+        "T042",
+        "T043",
+        "T044",
+        "T045",
+        "T046",
+        "T047",
+        "T048",
+        "T068",
+        "T069",
+        "T099",
+        "T100"
+      ]
+    },
+    {
+      "id": "SC-003",
+      "acceptance_ids": [
+        "AC-006",
+        "AC-007",
+        "AC-008",
+        "AC-009"
+      ],
+      "task_ids": [
+        "T021",
+        "T022",
+        "T023",
+        "T025",
+        "T026",
+        "T027",
+        "T031",
+        "T032",
+        "T033",
+        "T034",
+        "T035",
+        "T039",
+        "T040",
+        "T099",
+        "T100"
+      ]
+    },
+    {
+      "id": "SC-004",
+      "acceptance_ids": [
+        "AC-020"
+      ],
+      "task_ids": [
+        "T013",
+        "T064",
+        "T065",
+        "T066",
+        "T069",
+        "T099",
+        "T100"
+      ]
+    },
+    {
+      "id": "SC-005",
+      "acceptance_ids": [
+        "AC-021",
+        "AC-022",
+        "AC-023",
+        "AC-024"
+      ],
+      "task_ids": [
+        "T070",
+        "T071",
+        "T072",
+        "T073",
+        "T074",
+        "T075",
+        "T076",
+        "T077",
+        "T078",
+        "T079",
+        "T080",
+        "T081",
+        "T099",
+        "T100"
+      ]
+    },
+    {
+      "id": "SC-006",
+      "acceptance_ids": [
+        "AC-025",
+        "AC-026",
+        "AC-028"
+      ],
+      "task_ids": [
+        "T082",
+        "T083",
+        "T084",
+        "T085",
+        "T086",
+        "T087",
+        "T088",
+        "T089",
+        "T090",
+        "T095",
+        "T099",
+        "T100"
+      ]
+    },
+    {
+      "id": "SC-007",
+      "acceptance_ids": [
+        "AC-029"
+      ],
+      "task_ids": [
+        "T091",
+        "T092",
+        "T093",
+        "T094",
+        "T095",
+        "T098",
+        "T099",
+        "T100"
+      ]
+    },
+    {
+      "id": "SC-008",
+      "acceptance_ids": [
+        "AC-005",
+        "AC-010",
+        "AC-011",
+        "AC-030",
+        "AC-031",
+        "AC-032"
+      ],
+      "task_ids": [
+        "T002",
+        "T009",
+        "T010",
+        "T017",
+        "T018",
+        "T019",
+        "T020",
+        "T025",
+        "T026",
+        "T028",
+        "T029",
+        "T030",
+        "T031",
+        "T032",
+        "T033",
+        "T035",
+        "T036",
+        "T038",
+        "T039",
+        "T040",
+        "T043",
+        "T067",
+        "T069",
+        "T092",
+        "T096",
+        "T097",
+        "T098",
+        "T099",
+        "T100"
+      ]
+    }
+  ],
+  "tasks": [
+    {
+      "id": "T001",
+      "milestone": "M0",
+      "story": "SETUP",
+      "kind": "design",
+      "parallel": false,
+      "description": "Inspect and pin the actual platform/compat/blueprints revisions, API/profile surface, dependency identities, runtime limits and execution boundary; record missing supported-wrapper work without importing private classes. Record applicability and source dispositions for public SADS allocations XVE-SYS-0159–0178; absent normative text is an evidence gap, not permission to invent detailed matches or a blocker to user-derived requirements. Establish the native platform-support matrix: exact supported Linux distribution/release and Windows edition/release, architecture, browser and Python/Node versions. Separate Studio backend support from each provider/driver/runtime OS capability.",
+      "paths": [
+        "docs/implementation/baseline.md",
+        "docs/implementation/dependencies.md",
+        "docs/implementation/sads-dispositions.md",
+        "docs/implementation/platform-support.md"
+      ],
+      "depends_on": [],
+      "requirements": [
+        "FR-006",
+        "FR-007",
+        "NFR-002",
+        "NFR-009",
+        "NFR-010",
+        "NFR-003",
+        "NFR-012"
+      ],
+      "acceptance_ids": [
+        "AC-001"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T002",
+      "milestone": "M0",
+      "story": "SETUP",
+      "kind": "implementation",
+      "parallel": true,
+      "description": "Create the planned frontend/backend workspace and exact dependency locks; select supported versions from verified package sources and record the reference environment rather than inventing version pins. Make dependency resolution, build tooling and CI run on both native Linux and Windows; do not make Bash, WSL, a VM, Docker or a remote Linux machine an undeclared core dependency.",
+      "paths": [
+        "apps/studio-web/package.json",
+        "services/studio-api/pyproject.toml",
+        "package-lock.json",
+        "uv.lock",
+        ".github/workflows/ci.yml"
+      ],
+      "depends_on": [
+        "T001"
+      ],
+      "requirements": [
+        "NFR-001",
+        "NFR-003",
+        "NFR-010",
+        "NFR-009"
+      ],
+      "acceptance_ids": [
+        "AC-001",
+        "AC-032"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T003",
+      "milestone": "M0",
+      "story": "SETUP",
+      "kind": "test",
+      "parallel": true,
+      "description": "Specify failing contract tests for capability/version negotiation, unsupported operations, error envelopes and frontend/backend schema compatibility.",
+      "paths": [
+        "tests/contract/test_capabilities.py",
+        "tests/contract/test_api_versions.py"
+      ],
+      "depends_on": [
+        "T001"
+      ],
+      "requirements": [
+        "FR-006",
+        "FR-007",
+        "NFR-009"
+      ],
+      "acceptance_ids": [
+        "AC-001"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T004",
+      "milestone": "M0",
+      "story": "SETUP",
+      "kind": "implementation",
+      "parallel": false,
+      "description": "Implement versioned API models, capability registry and generated frontend contracts; preserve ownership boundaries and reject incompatible providers before operations. Advertise host OS/architecture and provider-specific OS support separately; unsupported simulator/device providers remain unavailable without disabling the native Studio application.",
+      "paths": [
+        "services/studio-api/src/xverse_studio/api/",
+        "services/studio-api/src/xverse_studio/providers/",
+        "packages/contracts/"
+      ],
+      "depends_on": [
+        "T002",
+        "T003"
+      ],
+      "requirements": [
+        "FR-006",
+        "FR-007",
+        "NFR-009",
+        "FR-008"
+      ],
+      "acceptance_ids": [
+        "AC-001"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T005",
+      "milestone": "M0",
+      "story": "SETUP",
+      "kind": "test",
+      "parallel": true,
+      "description": "Build the minimal supported XDL corpus and CLI/library equivalence tests, including explicit dependencies, invalid inputs and semantic/source identity distinctions. Run authoritative validation/compilation fixtures through the selected native platform-library installation on both supported operating systems.",
+      "paths": [
+        "tests/contract/test_xdl_adapter.py",
+        "tests/fixtures/xdl/"
+      ],
+      "depends_on": [
+        "T001"
+      ],
+      "requirements": [
+        "FR-001",
+        "NFR-002",
+        "NFR-009"
+      ],
+      "acceptance_ids": [
+        "AC-002"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T006",
+      "milestone": "M0",
+      "story": "SETUP",
+      "kind": "implementation",
+      "parallel": false,
+      "description": "Implement the pinned platform validation/normalization/compilation adapter and source-location diagnostics without recreating XDL rules in the frontend.",
+      "paths": [
+        "services/studio-api/src/xverse_studio/xdl/"
+      ],
+      "depends_on": [
+        "T002",
+        "T005"
+      ],
+      "requirements": [
+        "FR-001",
+        "FR-007",
+        "NFR-002"
+      ],
+      "acceptance_ids": [
+        "AC-002"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T007",
+      "milestone": "M0",
+      "story": "SETUP",
+      "kind": "test",
+      "parallel": true,
+      "description": "Specify project revision, atomic persistence, stable references and backup-preserving migration tests using isolated project roots. Cover spaces/non-ASCII paths, drive/UNC paths, case collisions, reserved names, locks, replacement semantics and line endings; portable project identity must survive bidirectional Linux/Windows exchange.",
+      "paths": [
+        "tests/integration/test_project_store.py",
+        "tests/fixtures/projects/"
+      ],
+      "depends_on": [
+        "T001"
+      ],
+      "requirements": [
+        "FR-001",
+        "NFR-009"
+      ],
+      "acceptance_ids": [
+        "AC-002"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T008",
+      "milestone": "M0",
+      "story": "SETUP",
+      "kind": "implementation",
+      "parallel": false,
+      "description": "Implement project metadata storage, XDL resource ownership and separate layout/binding sidecars, with atomic revision-checked writes and explicit migration versions. Use host-correct atomic/locking behaviour and a portable path representation for project data; preserve environment-specific paths only in the appropriate local binding.",
+      "paths": [
+        "services/studio-api/src/xverse_studio/projects/",
+        "services/studio-api/src/xverse_studio/storage/"
+      ],
+      "depends_on": [
+        "T002",
+        "T006",
+        "T007"
+      ],
+      "requirements": [
+        "FR-001",
+        "NFR-009"
+      ],
+      "acceptance_ids": [
+        "AC-002"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T009",
+      "milestone": "M0",
+      "story": "SETUP",
+      "kind": "test",
+      "parallel": true,
+      "description": "Add negative API/import tests for untrusted origins, unauthorized mutations, traversal, symlink escapes, unsafe archives, oversized input, secrets and script-like profile content. Exercise Windows drive/UNC/device-path and junction escapes, case collisions and reserved-name attacks as well as Linux path/symlink cases.",
+      "paths": [
+        "tests/contract/test_security_boundary.py",
+        "tests/fixtures/imports/"
+      ],
+      "depends_on": [
+        "T001"
+      ],
+      "requirements": [
+        "FR-007",
+        "NFR-003",
+        "NFR-004"
+      ],
+      "acceptance_ids": [
+        "AC-003",
+        "AC-032"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T010",
+      "milestone": "M0",
+      "story": "SETUP",
+      "kind": "implementation",
+      "parallel": false,
+      "description": "Implement local binding/session/origin controls, bounded project-file access, inert import and redaction; only installed admitted provider operations can cross the execution boundary. Enforce these boundaries on both native platforms using OS-aware path APIs rather than POSIX-only assumptions.",
+      "paths": [
+        "services/studio-api/src/xverse_studio/security/",
+        "services/studio-api/src/xverse_studio/imports/"
+      ],
+      "depends_on": [
+        "T004",
+        "T008",
+        "T009"
+      ],
+      "requirements": [
+        "FR-007",
+        "NFR-003",
+        "NFR-004"
+      ],
+      "acceptance_ids": [
+        "AC-003",
+        "AC-032"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T011",
+      "milestone": "M0",
+      "story": "SETUP",
+      "kind": "implementation",
+      "parallel": true,
+      "description": "Create an owned executable reference provider plus separate fake-provider and recorded-evidence fixtures, with deterministic lifecycle failure points, clocks, capability versions and explicit scope labels. The executable reference must produce its own observations under native Linux and Windows ownership; replayed/mock data cannot substitute for executing that reference.",
+      "paths": [
+        "tests/fixtures/providers/",
+        "tests/fixtures/runs/"
+      ],
+      "depends_on": [
+        "T004"
+      ],
+      "requirements": [
+        "FR-006",
+        "FR-007",
+        "NFR-010"
+      ],
+      "acceptance_ids": [
+        "AC-001"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T012",
+      "milestone": "M0",
+      "story": "SETUP",
+      "kind": "integration",
+      "parallel": false,
+      "description": "Define and implement the supported Lite-wrapper binding only when its public contract/admission is established; otherwise record the exact blocked external dependency and keep the binding unavailable. For a wrapper that generates XDL internally, expose and compare the effective generated model/plan to the requested immutable inputs before admission; reject unsupported edits instead of claiming a fixed harness executed them.",
+      "paths": [
+        "services/studio-api/src/xverse_studio/integrations/lite/",
+        "docs/implementation/dependencies.md"
+      ],
+      "depends_on": [
+        "T001",
+        "T004"
+      ],
+      "requirements": [
+        "FR-006",
+        "FR-007",
+        "NFR-002",
+        "NFR-009"
+      ],
+      "acceptance_ids": [
+        "AC-001"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T013",
+      "milestone": "M0",
+      "story": "SETUP",
+      "kind": "test",
+      "parallel": true,
+      "description": "Add architecture-boundary checks preventing core imports or industry branches on profile/provider/blueprint packages while allowing declared extension contracts.",
+      "paths": [
+        "tests/contract/test_architecture_boundaries.py",
+        "scripts/check_architecture.py"
+      ],
+      "depends_on": [
+        "T002"
+      ],
+      "requirements": [
+        "NFR-001",
+        "NFR-010"
+      ],
+      "acceptance_ids": [
+        "AC-001",
+        "AC-019",
+        "AC-020"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T014",
+      "milestone": "M0",
+      "story": "SETUP",
+      "kind": "verification",
+      "parallel": false,
+      "description": "Run M0 contract/security/project checks, record candidate/environment identities, and classify the real Lite binding as available or blocked; fixture completion must not imply T012/live completion.",
+      "paths": [
+        "evidence/studio/M0/",
+        "docs/implementation/dependencies.md"
+      ],
+      "depends_on": [
+        "T004",
+        "T006",
+        "T008",
+        "T010",
+        "T011",
+        "T013"
+      ],
+      "requirements": [
+        "FR-001",
+        "FR-006",
+        "FR-007",
+        "NFR-001",
+        "NFR-002",
+        "NFR-009",
+        "NFR-010"
+      ],
+      "acceptance_ids": [
+        "AC-001",
+        "AC-002",
+        "AC-003"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T015",
+      "milestone": "M1",
+      "story": "US1",
+      "kind": "test",
+      "parallel": true,
+      "description": "Add prepared-example onboarding, import, unknown-extension preservation and parameter-validation scenarios before UI implementation.",
+      "paths": [
+        "tests/e2e/project-onboarding.spec.ts",
+        "tests/integration/test_project_import.py"
+      ],
+      "depends_on": [
+        "T014"
+      ],
+      "requirements": [
+        "FR-002",
+        "FR-003",
+        "FR-004",
+        "FR-005"
+      ],
+      "acceptance_ids": [
+        "AC-002",
+        "AC-003",
+        "AC-004"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T016",
+      "milestone": "M1",
+      "story": "US1",
+      "kind": "implementation",
+      "parallel": false,
+      "description": "Implement create/open/recent/example journeys, explicit dependency import and unresolved-content inspection with clearly scoped example claims.",
+      "paths": [
+        "apps/studio-web/src/features/projects/",
+        "services/studio-api/src/xverse_studio/projects/"
+      ],
+      "depends_on": [
+        "T015"
+      ],
+      "requirements": [
+        "FR-002",
+        "FR-003",
+        "FR-004"
+      ],
+      "acceptance_ids": [
+        "AC-002",
+        "AC-003",
+        "AC-004"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T017",
+      "milestone": "M1",
+      "story": "US1",
+      "kind": "implementation",
+      "parallel": true,
+      "description": "Implement guided schema-backed parameter forms, units/constraints/provenance, actionable errors and advanced read-only XDL display with accessible controls.",
+      "paths": [
+        "apps/studio-web/src/features/inspector/",
+        "apps/studio-web/src/features/source/"
+      ],
+      "depends_on": [
+        "T015"
+      ],
+      "requirements": [
+        "FR-005",
+        "NFR-006"
+      ],
+      "acceptance_ids": [
+        "AC-004",
+        "AC-031"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T018",
+      "milestone": "M1",
+      "story": "US2",
+      "kind": "test",
+      "parallel": true,
+      "description": "Add admission tests for stale inputs/capabilities, missing artifacts, unknown limits, exceeded budgets, missing clock mappings and ownership conflicts.",
+      "paths": [
+        "tests/integration/test_preflight.py"
+      ],
+      "depends_on": [
+        "T014"
+      ],
+      "requirements": [
+        "FR-008",
+        "FR-009",
+        "FR-010",
+        "NFR-011"
+      ],
+      "acceptance_ids": [
+        "AC-005"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T019",
+      "milestone": "M1",
+      "story": "US2",
+      "kind": "implementation",
+      "parallel": false,
+      "description": "Implement digest-bound plan previews and immediate pre-Start re-admission of mutable target/capability/resource/authority facts. Require the adapter to confirm its effective configuration/plan matches the selected snapshot; unavailable input injection leaves unsupported authoring changes unexecutable.",
+      "paths": [
+        "services/studio-api/src/xverse_studio/preflight/"
+      ],
+      "depends_on": [
+        "T018",
+        "T006",
+        "T004"
+      ],
+      "requirements": [
+        "FR-008",
+        "FR-009",
+        "FR-010"
+      ],
+      "acceptance_ids": [
+        "AC-005"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T020",
+      "milestone": "M1",
+      "story": "US2",
+      "kind": "implementation",
+      "parallel": false,
+      "description": "Implement separate readiness dimensions, exact blocked elements, advertised limits and supported remediation without a misleading aggregate health badge.",
+      "paths": [
+        "apps/studio-web/src/features/preflight/"
+      ],
+      "depends_on": [
+        "T019",
+        "T016"
+      ],
+      "requirements": [
+        "FR-008",
+        "FR-009",
+        "FR-010",
+        "NFR-011"
+      ],
+      "acceptance_ids": [
+        "AC-005"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T021",
+      "milestone": "M1",
+      "story": "US3",
+      "kind": "test",
+      "parallel": true,
+      "description": "Add lifecycle, immutable-snapshot, idempotency, optional-control, partial-start, cancellation and backend-restart conformance tests against the owned provider. Run owned-process lifecycle and service-restart cases on native Linux and Windows; process ownership and termination must not assume POSIX signals or process groups.",
+      "paths": [
+        "tests/contract/test_runtime_lifecycle.py",
+        "tests/integration/test_run_recovery.py"
+      ],
+      "depends_on": [
+        "T014"
+      ],
+      "requirements": [
+        "FR-011",
+        "FR-012",
+        "FR-013",
+        "FR-014",
+        "FR-015",
+        "FR-016",
+        "NFR-005"
+      ],
+      "acceptance_ids": [
+        "AC-006",
+        "AC-007",
+        "AC-008",
+        "AC-009",
+        "AC-027"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T022",
+      "milestone": "M1",
+      "story": "US3",
+      "kind": "implementation",
+      "parallel": false,
+      "description": "Implement persistent immutable run snapshots, scoped request fingerprints and durable idempotent dispatch through admitted provider bindings. Bind dispatch to the adapter-confirmed effective input/plan identity, not merely the requested GUI document.",
+      "paths": [
+        "services/studio-api/src/xverse_studio/runs/",
+        "services/studio-api/src/xverse_studio/commands/"
+      ],
+      "depends_on": [
+        "T021",
+        "T019"
+      ],
+      "requirements": [
+        "FR-011",
+        "FR-012",
+        "FR-015"
+      ],
+      "acceptance_ids": [
+        "AC-006",
+        "AC-008",
+        "AC-027"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T023",
+      "milestone": "M1",
+      "story": "US3",
+      "kind": "implementation",
+      "parallel": false,
+      "description": "Implement restart reconciliation and ownership-verified cleanup; keep uncertain ownership and cleanup outcome separate from run termination and never blindly respawn. Reconcile platform-specific owned process handles/identities on Windows and Linux, including PID reuse and lost handles; uncertain ownership stays blocked instead of inferring a process match.",
+      "paths": [
+        "services/studio-api/src/xverse_studio/runs/reconcile.py",
+        "services/studio-api/src/xverse_studio/runs/cleanup.py"
+      ],
+      "depends_on": [
+        "T022"
+      ],
+      "requirements": [
+        "FR-013",
+        "FR-014",
+        "NFR-005"
+      ],
+      "acceptance_ids": [
+        "AC-007",
+        "AC-008",
+        "AC-009"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T024",
+      "milestone": "M1",
+      "story": "US3",
+      "kind": "implementation",
+      "parallel": false,
+      "description": "Enforce optional-operation capability/authority checks in the API and record permitted live mutations with original/new value and outcome provenance.",
+      "paths": [
+        "services/studio-api/src/xverse_studio/runs/controls.py"
+      ],
+      "depends_on": [
+        "T022"
+      ],
+      "requirements": [
+        "FR-016"
+      ],
+      "acceptance_ids": [
+        "AC-018",
+        "AC-027"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T025",
+      "milestone": "M1",
+      "story": "US3",
+      "kind": "test",
+      "parallel": true,
+      "description": "Add duplicate-Start, two-tab retry, UI-disconnect, event-order, cursor-expiry and resynchronization tests; test changed-payload idempotency conflicts. Verify command.failed events, command acceptance versus execution failure, and browser reconnection on both supported native backend/browser combinations.",
+      "paths": [
+        "tests/e2e/run-reconnect.spec.ts",
+        "tests/contract/test_run_events.py"
+      ],
+      "depends_on": [
+        "T021"
+      ],
+      "requirements": [
+        "FR-012",
+        "FR-013",
+        "FR-021"
+      ],
+      "acceptance_ids": [
+        "AC-008",
+        "AC-010"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T026",
+      "milestone": "M1",
+      "story": "US3",
+      "kind": "implementation",
+      "parallel": false,
+      "description": "Implement resumable cursor events, explicit gap/resync responses and session reconnection independent of backend run ownership.",
+      "paths": [
+        "services/studio-api/src/xverse_studio/events/",
+        "apps/studio-web/src/features/runs/session.ts"
+      ],
+      "depends_on": [
+        "T022",
+        "T023",
+        "T025"
+      ],
+      "requirements": [
+        "FR-013",
+        "FR-021"
+      ],
+      "acceptance_ids": [
+        "AC-008",
+        "AC-010"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T027",
+      "milestone": "M1",
+      "story": "US3",
+      "kind": "implementation",
+      "parallel": false,
+      "description": "Implement run-plan/start/control views with startup, stop, cleanup, evidence and optional-operation states, clearly identifying current immutable inputs.",
+      "paths": [
+        "apps/studio-web/src/features/runs/"
+      ],
+      "depends_on": [
+        "T020",
+        "T024",
+        "T026"
+      ],
+      "requirements": [
+        "FR-011",
+        "FR-014",
+        "FR-015",
+        "FR-016",
+        "FR-020"
+      ],
+      "acceptance_ids": [
+        "AC-006",
+        "AC-007",
+        "AC-027"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T028",
+      "milestone": "M1",
+      "story": "US4",
+      "kind": "test",
+      "parallel": true,
+      "description": "Add verified-prefix/read-only evidence fixtures with gaps, redaction restrictions, differing clocks, measured zero versus missing data and a slow UI consumer.",
+      "paths": [
+        "tests/integration/test_evidence_projection.py",
+        "tests/fixtures/evidence/"
+      ],
+      "depends_on": [
+        "T014"
+      ],
+      "requirements": [
+        "FR-017",
+        "FR-018",
+        "FR-020",
+        "FR-021",
+        "FR-022",
+        "NFR-008"
+      ],
+      "acceptance_ids": [
+        "AC-010",
+        "AC-011"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T029",
+      "milestone": "M1",
+      "story": "US4",
+      "kind": "implementation",
+      "parallel": false,
+      "description": "Implement admitted Argus/evidence projections, bounded filtering/pagination and cursor delivery without reading private provider streams or changing authoritative evidence.",
+      "paths": [
+        "services/studio-api/src/xverse_studio/evidence/"
+      ],
+      "depends_on": [
+        "T028"
+      ],
+      "requirements": [
+        "FR-017",
+        "FR-018",
+        "FR-021",
+        "FR-022",
+        "NFR-008"
+      ],
+      "acceptance_ids": [
+        "AC-010",
+        "AC-011"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T030",
+      "milestone": "M1",
+      "story": "US4",
+      "kind": "implementation",
+      "parallel": false,
+      "description": "Implement selected-element logs/signals/events, source/severity/time filters, clock/quality markers and explicit display gaps with bounded rendering.",
+      "paths": [
+        "apps/studio-web/src/features/results/"
+      ],
+      "depends_on": [
+        "T029",
+        "T026"
+      ],
+      "requirements": [
+        "FR-017",
+        "FR-018",
+        "FR-020",
+        "FR-021"
+      ],
+      "acceptance_ids": [
+        "AC-010",
+        "AC-011"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T031",
+      "milestone": "M1",
+      "story": "US4",
+      "kind": "test",
+      "parallel": true,
+      "description": "Specify evidence-linked explanation tests for every required diagnostic class, facts versus hypotheses, no-traffic ambiguity and liveness-only health.",
+      "paths": [
+        "tests/contract/test_diagnostics.py",
+        "tests/e2e/diagnostics.spec.ts"
+      ],
+      "depends_on": [
+        "T028"
+      ],
+      "requirements": [
+        "FR-019",
+        "FR-020",
+        "NFR-011"
+      ],
+      "acceptance_ids": [
+        "AC-005",
+        "AC-007",
+        "AC-011"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T032",
+      "milestone": "M1",
+      "story": "US4",
+      "kind": "implementation",
+      "parallel": false,
+      "description": "Implement structured diagnostic codes, affected references, evidence sources and supported next actions; root causes remain unknown unless evidenced.",
+      "paths": [
+        "services/studio-api/src/xverse_studio/diagnostics/",
+        "apps/studio-web/src/features/diagnostics/"
+      ],
+      "depends_on": [
+        "T031",
+        "T029"
+      ],
+      "requirements": [
+        "FR-019",
+        "FR-020",
+        "NFR-011"
+      ],
+      "acceptance_ids": [
+        "AC-005",
+        "AC-007",
+        "AC-011"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T033",
+      "milestone": "M1",
+      "story": "SETUP",
+      "kind": "verification",
+      "parallel": false,
+      "description": "Run the owned-fixture guided vertical slice and lifecycle fault matrix; keep fixture results explicitly separate from the live integration lane.",
+      "paths": [
+        "evidence/studio/M1-fixture/"
+      ],
+      "depends_on": [
+        "T016",
+        "T017",
+        "T020",
+        "T027",
+        "T030",
+        "T032"
+      ],
+      "requirements": [
+        "FR-011",
+        "FR-012",
+        "FR-013",
+        "FR-014",
+        "FR-015",
+        "FR-016",
+        "FR-017",
+        "FR-018",
+        "FR-019",
+        "FR-020",
+        "FR-021",
+        "FR-022",
+        "NFR-005",
+        "NFR-011"
+      ],
+      "acceptance_ids": [
+        "AC-005",
+        "AC-006",
+        "AC-007",
+        "AC-008",
+        "AC-009",
+        "AC-010",
+        "AC-011",
+        "AC-027"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T034",
+      "milestone": "M1",
+      "story": "US3",
+      "kind": "test",
+      "parallel": false,
+      "description": "Prepare actual installed-wrapper conformance and permitted nominal/failure scenarios using pinned environment inputs; record blocked state if T012 or the runtime environment is unavailable. Include a fixed-wrapper negative that ignores a requested edit and must be rejected, plus a supported edit whose actual generated XDL/plan equals the requested snapshot. Treat the historical run-live.sh candidate as Linux-only unless separately verified otherwise. On native Windows verify explicit unavailable-provider responses; never substitute WSL or report that rejection test as Windows simulator execution.",
+      "paths": [
+        "tests/integration/test_lite_live_adapter.py",
+        "docs/implementation/live-lane.md"
+      ],
+      "depends_on": [
+        "T012",
+        "T021",
+        "T033"
+      ],
+      "requirements": [
+        "FR-011",
+        "FR-014",
+        "FR-022"
+      ],
+      "acceptance_ids": [
+        "AC-006",
+        "AC-007"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T035",
+      "milestone": "M1",
+      "story": "US3",
+      "kind": "verification",
+      "parallel": false,
+      "description": "Execute only the admitted Lite live scenarios and retain exact provider/input/evidence identities; do not count fixture or dry-run output as live evidence. Record the actual host OS for every live provider and test a native Windows live lane only when that provider has separate compatible admission; core Windows support is established by its owned reference-runtime lane.",
+      "paths": [
+        "evidence/studio/M1-live/"
+      ],
+      "depends_on": [
+        "T034"
+      ],
+      "requirements": [
+        "FR-008",
+        "FR-009",
+        "FR-010",
+        "FR-011",
+        "FR-012",
+        "FR-013",
+        "FR-014",
+        "FR-020",
+        "FR-022",
+        "NFR-010"
+      ],
+      "acceptance_ids": [
+        "AC-005",
+        "AC-006",
+        "AC-007",
+        "AC-008"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T036",
+      "milestone": "M1",
+      "story": "US1",
+      "kind": "documentation",
+      "parallel": true,
+      "description": "Write prepared-example setup/operation/recovery documentation and the scripted first-time-user study with explicit prerequisites, prompts and assistance accounting.",
+      "paths": [
+        "docs/user/getting-started.md",
+        "docs/user/troubleshooting.md",
+        "docs/user/recovery.md"
+      ],
+      "depends_on": [
+        "T016",
+        "T017",
+        "T027",
+        "T032"
+      ],
+      "requirements": [
+        "FR-002",
+        "FR-005",
+        "NFR-012"
+      ],
+      "acceptance_ids": [
+        "AC-004",
+        "AC-012",
+        "AC-032"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T037",
+      "milestone": "M1",
+      "story": "US1",
+      "kind": "verification",
+      "parallel": false,
+      "description": "Run SC-001 with five first-time users on the prepared environment and retain anonymized timing/completion/assistance records; address failures and rerun affected checks. Record each participant's native platform; the five-user usability cohort is distinct from the mandatory automated Linux/Windows platform smoke matrix.",
+      "paths": [
+        "evidence/studio/M1-usability/"
+      ],
+      "depends_on": [
+        "T035",
+        "T036"
+      ],
+      "requirements": [
+        "FR-002",
+        "FR-005",
+        "NFR-012"
+      ],
+      "acceptance_ids": [
+        "AC-012"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T038",
+      "milestone": "M1",
+      "story": "SETUP",
+      "kind": "verification",
+      "parallel": true,
+      "description": "Verify keyboard/focus/status alternatives at 1024×768 and 1440×900 and measure the 50,000-event/200-row workload over the specified repetitions. Execute the supported browser/accessibility and event-query matrix on both native Linux and Windows, retaining each platform's results independently.",
+      "paths": [
+        "tests/e2e/accessibility.spec.ts",
+        "tests/performance/evidence-query.spec.ts",
+        "evidence/studio/M1-operability/"
+      ],
+      "depends_on": [
+        "T030",
+        "T032"
+      ],
+      "requirements": [
+        "NFR-006",
+        "NFR-008",
+        "NFR-011",
+        "NFR-003"
+      ],
+      "acceptance_ids": [
+        "AC-010",
+        "AC-011",
+        "AC-031"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T039",
+      "milestone": "M1",
+      "story": "SETUP",
+      "kind": "implementation",
+      "parallel": true,
+      "description": "Add native launcher/install/start/stop/restart tests first, then package the web UI and local backend for Linux and Windows with a cross-platform launcher and documented offline, backup, migration and retention procedures. Support foreground or launcher-managed background operation without requiring WSL, a VM, Docker or a remote Linux host. OS service-manager registration/autostart is optional, explicit and separately tested if offered. Execute AC-032 natively on both platforms and report provider-specific limits separately.",
+      "paths": [
+        "docs/user/installation.md",
+        "docs/user/retention.md",
+        "scripts/package_studio.py",
+        "services/studio-api/src/xverse_studio/launcher.py",
+        "tests/integration/test_native_launcher.py"
+      ],
+      "depends_on": [
+        "T010",
+        "T023",
+        "T036"
+      ],
+      "requirements": [
+        "NFR-003",
+        "NFR-004",
+        "NFR-009",
+        "NFR-012"
+      ],
+      "acceptance_ids": [
+        "AC-003",
+        "AC-009",
+        "AC-032"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T040",
+      "milestone": "M1",
+      "story": "SETUP",
+      "kind": "verification",
+      "parallel": false,
+      "description": "Review M1 against its requirements and actual fixture/live/usability evidence; record gaps and accurate release scope instead of marking unavailable lanes passed. Require SC-008 native platform smoke evidence for both Linux and Windows; a Windows browser pointed at Linux, WSL or a fixture-only provider claim is not evidence of a native Windows backend install.",
+      "paths": [
+        "evidence/studio/M1-review/"
+      ],
+      "depends_on": [
+        "T033",
+        "T035",
+        "T037",
+        "T038",
+        "T039"
+      ],
+      "requirements": [
+        "NFR-010",
+        "NFR-012"
+      ],
+      "acceptance_ids": [
+        "AC-004",
+        "AC-005",
+        "AC-006",
+        "AC-007",
+        "AC-008",
+        "AC-009",
+        "AC-010",
+        "AC-011",
+        "AC-012",
+        "AC-027",
+        "AC-031",
+        "AC-032"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T041",
+      "milestone": "M2",
+      "story": "US5",
+      "kind": "test",
+      "parallel": true,
+      "description": "Extend the supported XDL corpus with graph/source-equivalent edits, layout-only changes, unknown payload preservation and explicit comment/format normalization disclosure.",
+      "paths": [
+        "tests/integration/test_model_roundtrip.py",
+        "tests/fixtures/xdl/roundtrip/"
+      ],
+      "depends_on": [
+        "T014"
+      ],
+      "requirements": [
+        "FR-023",
+        "FR-024",
+        "FR-025",
+        "NFR-002"
+      ],
+      "acceptance_ids": [
+        "AC-013"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T042",
+      "milestone": "M2",
+      "story": "US5",
+      "kind": "implementation",
+      "parallel": false,
+      "description": "Implement typed model edits through the authoritative XDL service and separate stable-ID layout updates; validate before promoting an executable revision.",
+      "paths": [
+        "services/studio-api/src/xverse_studio/models/"
+      ],
+      "depends_on": [
+        "T041",
+        "T008"
+      ],
+      "requirements": [
+        "FR-023",
+        "FR-024",
+        "FR-025"
+      ],
+      "acceptance_ids": [
+        "AC-013"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T043",
+      "milestone": "M2",
+      "story": "US5",
+      "kind": "implementation",
+      "parallel": false,
+      "description": "Build the system canvas and structured keyboard editor with named ports, subsystem navigation, search, grouping, zoom and automatic layout mapped to supported XDL semantics.",
+      "paths": [
+        "apps/studio-web/src/features/model/",
+        "apps/studio-web/src/features/model/tree/"
+      ],
+      "depends_on": [
+        "T042",
+        "T017"
+      ],
+      "requirements": [
+        "FR-023",
+        "FR-027",
+        "NFR-006"
+      ],
+      "acceptance_ids": [
+        "AC-013",
+        "AC-031"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T044",
+      "milestone": "M2",
+      "story": "US5",
+      "kind": "implementation",
+      "parallel": false,
+      "description": "Enable source authoring and synchronized selection/diagnostics; retain invalid drafts and unsupported extension content without dropping data or overwriting active run inputs.",
+      "paths": [
+        "apps/studio-web/src/features/source/",
+        "apps/studio-web/src/features/inspector/"
+      ],
+      "depends_on": [
+        "T042",
+        "T043"
+      ],
+      "requirements": [
+        "FR-023",
+        "FR-025"
+      ],
+      "acceptance_ids": [
+        "AC-013"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T045",
+      "milestone": "M2",
+      "story": "US5",
+      "kind": "test",
+      "parallel": true,
+      "description": "Add external-write races, interrupted saves, undo/redo reference integrity and simultaneous draft/run inspection cases.",
+      "paths": [
+        "tests/integration/test_edit_conflicts.py",
+        "tests/e2e/draft-run-isolation.spec.ts"
+      ],
+      "depends_on": [
+        "T041"
+      ],
+      "requirements": [
+        "FR-026",
+        "FR-028",
+        "NFR-009"
+      ],
+      "acceptance_ids": [
+        "AC-014"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T046",
+      "milestone": "M2",
+      "story": "US5",
+      "kind": "implementation",
+      "parallel": false,
+      "description": "Implement bounded autosave/recovery, undo/redo transactions and revision conflict resolution with recoverable source backups.",
+      "paths": [
+        "services/studio-api/src/xverse_studio/projects/revisions.py",
+        "apps/studio-web/src/features/model/history.ts"
+      ],
+      "depends_on": [
+        "T042",
+        "T045"
+      ],
+      "requirements": [
+        "FR-026",
+        "NFR-009"
+      ],
+      "acceptance_ids": [
+        "AC-014"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T047",
+      "milestone": "M2",
+      "story": "US5",
+      "kind": "implementation",
+      "parallel": false,
+      "description": "Show the editable draft revision and immutable selected run snapshot distinctly, including divergence badges and evidence navigation to snapshot identities.",
+      "paths": [
+        "apps/studio-web/src/features/model/run-overlay.tsx"
+      ],
+      "depends_on": [
+        "T027",
+        "T044",
+        "T046"
+      ],
+      "requirements": [
+        "FR-028",
+        "FR-015"
+      ],
+      "acceptance_ids": [
+        "AC-014",
+        "AC-027"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T048",
+      "milestone": "M2",
+      "story": "US5",
+      "kind": "verification",
+      "parallel": false,
+      "description": "Execute round-trip/layout/conflict scenarios against the pinned CLI/library and inspect resulting source/digest differences, including failed-edit recovery. Execute bidirectional Linux-to-Windows and Windows-to-Linux project exchange with spaces, non-ASCII names, line-ending changes and host-specific bindings, preserving executable semantic identity.",
+      "paths": [
+        "evidence/studio/M2-roundtrip/"
+      ],
+      "depends_on": [
+        "T043",
+        "T044",
+        "T046",
+        "T047"
+      ],
+      "requirements": [
+        "FR-023",
+        "FR-024",
+        "FR-025",
+        "FR-026",
+        "FR-027",
+        "FR-028",
+        "NFR-002",
+        "NFR-009"
+      ],
+      "acceptance_ids": [
+        "AC-013",
+        "AC-014"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T049",
+      "milestone": "M2",
+      "story": "US6",
+      "kind": "test",
+      "parallel": true,
+      "description": "Specify catalog/wizard contract tests for versions, role-realization-placement independence, definition/instance identity, inert artifacts and untrusted form metadata.",
+      "paths": [
+        "tests/contract/test_catalog.py",
+        "tests/fixtures/catalog/"
+      ],
+      "depends_on": [
+        "T014"
+      ],
+      "requirements": [
+        "FR-029",
+        "FR-030",
+        "FR-031",
+        "FR-032",
+        "FR-033",
+        "NFR-004"
+      ],
+      "acceptance_ids": [
+        "AC-015"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T050",
+      "milestone": "M2",
+      "story": "US6",
+      "kind": "implementation",
+      "parallel": false,
+      "description": "Implement local catalog admission/filtering with immutable artifact references, schema/provenance/maturity records and explicit unavailable versions. Expose admitted catalog discovery through the specified API so the UI and external contract tests consume the same versioned entries.",
+      "paths": [
+        "services/studio-api/src/xverse_studio/catalog/"
+      ],
+      "depends_on": [
+        "T049",
+        "T004",
+        "T008"
+      ],
+      "requirements": [
+        "FR-029",
+        "FR-031",
+        "FR-033"
+      ],
+      "acceptance_ids": [
+        "AC-015"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T051",
+      "milestone": "M2",
+      "story": "US6",
+      "kind": "implementation",
+      "parallel": false,
+      "description": "Build Add element and instance wizards for generic roles/devices/model references, separate realization/placement and schema-backed configuration without hard-coded ECU core entities.",
+      "paths": [
+        "apps/studio-web/src/features/catalog/",
+        "apps/studio-web/src/features/elements/"
+      ],
+      "depends_on": [
+        "T050",
+        "T043"
+      ],
+      "requirements": [
+        "FR-030",
+        "FR-032",
+        "FR-033"
+      ],
+      "acceptance_ids": [
+        "AC-015"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T052",
+      "milestone": "M2",
+      "story": "US6",
+      "kind": "verification",
+      "parallel": false,
+      "description": "Verify representative controller/sensor/actuator/service/model/observer creation, invalid versions and implementation registration without build/flash/execute side effects.",
+      "paths": [
+        "tests/e2e/catalog-wizard.spec.ts",
+        "evidence/studio/M2-catalog/"
+      ],
+      "depends_on": [
+        "T051"
+      ],
+      "requirements": [
+        "FR-029",
+        "FR-030",
+        "FR-031",
+        "FR-032",
+        "FR-033",
+        "NFR-004"
+      ],
+      "acceptance_ids": [
+        "AC-015"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T053",
+      "milestone": "M2",
+      "story": "US7",
+      "kind": "test",
+      "parallel": true,
+      "description": "Add compatible/mismatched port, explicit converter, multiplicity, timing/QoS, physical-coupling and valid/invalid feedback fixtures with declared expected semantics.",
+      "paths": [
+        "tests/contract/test_connections.py",
+        "tests/fixtures/connections/"
+      ],
+      "depends_on": [
+        "T014"
+      ],
+      "requirements": [
+        "FR-034",
+        "FR-035",
+        "FR-037",
+        "FR-038"
+      ],
+      "acceptance_ids": [
+        "AC-016",
+        "AC-017"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T054",
+      "milestone": "M2",
+      "story": "US7",
+      "kind": "implementation",
+      "parallel": false,
+      "description": "Implement connection admission using platform/profile/provider contracts; require explicit conversions and validate supported feedback causality without a universal acyclic-graph rule.",
+      "paths": [
+        "services/studio-api/src/xverse_studio/connections/"
+      ],
+      "depends_on": [
+        "T053",
+        "T042",
+        "T050"
+      ],
+      "requirements": [
+        "FR-034",
+        "FR-035",
+        "FR-038"
+      ],
+      "acceptance_ids": [
+        "AC-016"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T055",
+      "milestone": "M2",
+      "story": "US7",
+      "kind": "implementation",
+      "parallel": false,
+      "description": "Implement compatible-target guidance, inspectable mapping forms and distinct relation styles/actions for communication, model coupling, deployment and traceability.",
+      "paths": [
+        "apps/studio-web/src/features/connections/"
+      ],
+      "depends_on": [
+        "T054",
+        "T043"
+      ],
+      "requirements": [
+        "FR-034",
+        "FR-035",
+        "FR-037",
+        "FR-038"
+      ],
+      "acceptance_ids": [
+        "AC-016",
+        "AC-017"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T056",
+      "milestone": "M2",
+      "story": "US7",
+      "kind": "implementation",
+      "parallel": false,
+      "description": "Implement declared/resolved/observed communication projections with provider scope, freshness and limitation labels; preserve Lite/native X-COM distinction.",
+      "paths": [
+        "services/studio-api/src/xverse_studio/connections/projections.py",
+        "apps/studio-web/src/features/connections/projections.tsx"
+      ],
+      "depends_on": [
+        "T055",
+        "T030"
+      ],
+      "requirements": [
+        "FR-036",
+        "FR-037"
+      ],
+      "acceptance_ids": [
+        "AC-017"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T057",
+      "milestone": "M2",
+      "story": "US8",
+      "kind": "test",
+      "parallel": true,
+      "description": "Add compatible/incompatible rebinding, logical identity preservation, resource/time/network constraints, effective-value precedence and portable/private binding tests.",
+      "paths": [
+        "tests/integration/test_deployment_variants.py"
+      ],
+      "depends_on": [
+        "T014"
+      ],
+      "requirements": [
+        "FR-039",
+        "FR-040",
+        "FR-041",
+        "FR-042"
+      ],
+      "acceptance_ids": [
+        "AC-018"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T058",
+      "milestone": "M2",
+      "story": "US8",
+      "kind": "implementation",
+      "parallel": false,
+      "description": "Implement named deployment variants and authoritative compatibility/effective-value resolution; reject undefined override precedence and keep environment addresses/secret handles separate. Resolve host-specific paths/resources against the selected provider OS contract while keeping portable deployment intent and secret references separate.",
+      "paths": [
+        "services/studio-api/src/xverse_studio/deployments/"
+      ],
+      "depends_on": [
+        "T057",
+        "T042",
+        "T054"
+      ],
+      "requirements": [
+        "FR-039",
+        "FR-040",
+        "FR-041",
+        "FR-042"
+      ],
+      "acceptance_ids": [
+        "AC-018"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T059",
+      "milestone": "M2",
+      "story": "US8",
+      "kind": "implementation",
+      "parallel": false,
+      "description": "Build realization/placement comparison, binding and resource/time forms with visible provenance/fidelity limits and provider-supported controls.",
+      "paths": [
+        "apps/studio-web/src/features/deployments/"
+      ],
+      "depends_on": [
+        "T058",
+        "T051"
+      ],
+      "requirements": [
+        "FR-039",
+        "FR-040",
+        "FR-041",
+        "FR-042",
+        "FR-016"
+      ],
+      "acceptance_ids": [
+        "AC-018"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T060",
+      "milestone": "M2",
+      "story": "US9",
+      "kind": "test",
+      "parallel": true,
+      "description": "Add compatible mixed-profile, namespace collision, core-semantic redefinition, malicious presentation and unsupported-version cases.",
+      "paths": [
+        "tests/contract/test_profiles.py",
+        "tests/fixtures/profiles/"
+      ],
+      "depends_on": [
+        "T014"
+      ],
+      "requirements": [
+        "FR-043",
+        "FR-044",
+        "FR-045",
+        "FR-047",
+        "NFR-001",
+        "NFR-009"
+      ],
+      "acceptance_ids": [
+        "AC-019"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T061",
+      "milestone": "M2",
+      "story": "US9",
+      "kind": "implementation",
+      "parallel": false,
+      "description": "Implement profile admission and composition independently from provider execution and blueprint composition; retain exact namespace/version/maturity/limitation metadata. Expose admitted profile discovery through the versioned API; OS compatibility comes from provider bindings rather than from the industry name.",
+      "paths": [
+        "services/studio-api/src/xverse_studio/profiles/"
+      ],
+      "depends_on": [
+        "T060",
+        "T050"
+      ],
+      "requirements": [
+        "FR-043",
+        "FR-044",
+        "FR-047",
+        "NFR-001",
+        "NFR-009"
+      ],
+      "acceptance_ids": [
+        "AC-019"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T062",
+      "milestone": "M2",
+      "story": "US9",
+      "kind": "implementation",
+      "parallel": false,
+      "description": "Render sanitized profile-provided terminology/forms/icons/documentation through shared workflows and allow compatible cross-industry selections.",
+      "paths": [
+        "apps/studio-web/src/features/profiles/"
+      ],
+      "depends_on": [
+        "T061",
+        "T051",
+        "T059"
+      ],
+      "requirements": [
+        "FR-045",
+        "NFR-004"
+      ],
+      "acceptance_ids": [
+        "AC-019"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T063",
+      "milestone": "M2",
+      "story": "US9",
+      "kind": "verification",
+      "parallel": false,
+      "description": "Run profile conflict/security/architecture checks and inspect dependency direction; reject domain conditionals or executable presentation hooks in core modules.",
+      "paths": [
+        "evidence/studio/M2-profiles/"
+      ],
+      "depends_on": [
+        "T062",
+        "T013"
+      ],
+      "requirements": [
+        "FR-043",
+        "FR-044",
+        "FR-045",
+        "FR-047",
+        "NFR-001",
+        "NFR-009"
+      ],
+      "acceptance_ids": [
+        "AC-019"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T064",
+      "milestone": "M2",
+      "story": "US9",
+      "kind": "integration",
+      "parallel": false,
+      "description": "Nominate exact automotive and independent process-control blueprint/provider artifacts; prepare a minimal reference process model and contract fixtures, and record any missing companion capability as external work before real admission.",
+      "paths": [
+        "docs/implementation/blueprint-admission.md",
+        "tests/fixtures/blueprints/process-control/"
+      ],
+      "depends_on": [
+        "T001",
+        "T004",
+        "T061"
+      ],
+      "requirements": [
+        "FR-046",
+        "FR-047",
+        "NFR-001"
+      ],
+      "acceptance_ids": [
+        "AC-020"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T065",
+      "milestone": "M2",
+      "story": "US9",
+      "kind": "implementation",
+      "parallel": false,
+      "description": "Integrate the admitted example bundles and their declared observations/fidelity into the catalog; fixtures may demonstrate only their explicit scope and cannot masquerade as unavailable live providers.",
+      "paths": [
+        "tests/fixtures/blueprints/automotive/",
+        "tests/fixtures/blueprints/process-control/",
+        "apps/studio-web/src/features/projects/examples.ts"
+      ],
+      "depends_on": [
+        "T064",
+        "T059",
+        "T062"
+      ],
+      "requirements": [
+        "FR-046",
+        "FR-047"
+      ],
+      "acceptance_ids": [
+        "AC-020"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T066",
+      "milestone": "M2",
+      "story": "US9",
+      "kind": "verification",
+      "parallel": false,
+      "description": "Execute author/validate/deploy/run/inspect for both independent blueprints using their admitted implementations, recording provider scope and proving the core needs no domain-specific branch.",
+      "paths": [
+        "tests/e2e/cross-industry.spec.ts",
+        "evidence/studio/M2-domains/"
+      ],
+      "depends_on": [
+        "T065",
+        "T035",
+        "T048",
+        "T052",
+        "T056"
+      ],
+      "requirements": [
+        "FR-046",
+        "FR-047",
+        "NFR-001"
+      ],
+      "acceptance_ids": [
+        "AC-020"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T067",
+      "milestone": "M2",
+      "story": "SETUP",
+      "kind": "verification",
+      "parallel": true,
+      "description": "Measure the 200-element/400-connection workload and retained evidence-query target over 30 repetitions after one warm-up; verify keyboard alternatives and the required viewports. Run the declared reference workloads and keyboard/browser checks on both supported native platform environments; retain per-OS measurements rather than averaging platforms together.",
+      "paths": [
+        "tests/performance/model-canvas.spec.ts",
+        "tests/e2e/accessibility.spec.ts",
+        "evidence/studio/M2-operability/"
+      ],
+      "depends_on": [
+        "T043",
+        "T044",
+        "T059",
+        "T062"
+      ],
+      "requirements": [
+        "FR-027",
+        "NFR-006",
+        "NFR-007",
+        "NFR-008",
+        "NFR-011",
+        "NFR-003",
+        "NFR-009"
+      ],
+      "acceptance_ids": [
+        "AC-030",
+        "AC-031"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T068",
+      "milestone": "M2",
+      "story": "SETUP",
+      "kind": "verification",
+      "parallel": false,
+      "description": "Run combined authoring/deployment/connection regression and direct API negatives, including unsupported physical coupling and version migration without semantic loss.",
+      "paths": [
+        "evidence/studio/M2-integration/"
+      ],
+      "depends_on": [
+        "T048",
+        "T052",
+        "T056",
+        "T059",
+        "T063"
+      ],
+      "requirements": [
+        "FR-034",
+        "FR-035",
+        "FR-036",
+        "FR-037",
+        "FR-038",
+        "FR-039",
+        "FR-040",
+        "FR-041",
+        "FR-042",
+        "NFR-002",
+        "NFR-009"
+      ],
+      "acceptance_ids": [
+        "AC-013",
+        "AC-014",
+        "AC-015",
+        "AC-016",
+        "AC-017",
+        "AC-018",
+        "AC-019"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T069",
+      "milestone": "M2",
+      "story": "SETUP",
+      "kind": "verification",
+      "parallel": false,
+      "description": "Review M2 and retained M1 evidence, record measured SC-002/SC-004/SC-008 and publish only the demonstrated profile/provider compatibility envelope.",
+      "paths": [
+        "evidence/studio/M2-review/"
+      ],
+      "depends_on": [
+        "T040",
+        "T066",
+        "T067",
+        "T068"
+      ],
+      "requirements": [
+        "NFR-001",
+        "NFR-010"
+      ],
+      "acceptance_ids": [
+        "AC-013",
+        "AC-014",
+        "AC-015",
+        "AC-016",
+        "AC-017",
+        "AC-018",
+        "AC-019",
+        "AC-020",
+        "AC-030",
+        "AC-031"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T070",
+      "milestone": "M3",
+      "story": "US10",
+      "kind": "test",
+      "parallel": true,
+      "description": "Add physical-provider fixtures for identity/metadata, unresolved assets, exclusivity, leases, observe-only access, denied stimulation, disconnect and unknown cleanup.",
+      "paths": [
+        "tests/contract/test_physical_provider.py",
+        "tests/fixtures/providers/physical/"
+      ],
+      "depends_on": [
+        "T063"
+      ],
+      "requirements": [
+        "FR-048",
+        "FR-049",
+        "FR-050",
+        "FR-051"
+      ],
+      "acceptance_ids": [
+        "AC-021",
+        "AC-022",
+        "AC-023"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T071",
+      "milestone": "M3",
+      "story": "US10",
+      "kind": "integration",
+      "parallel": false,
+      "description": "Nominate one actual device/provider, exact identities, permitted nonhazardous test actions, reservation/clock/stop contract and required external capability work; record unavailable inputs as blockers. Record the provider's supported native OS/architecture and driver requirements; a provider verified only on Linux remains explicitly unavailable on Windows.",
+      "paths": [
+        "docs/implementation/physical-provider-admission.md"
+      ],
+      "depends_on": [
+        "T001",
+        "T070"
+      ],
+      "requirements": [
+        "FR-048",
+        "FR-050",
+        "FR-052"
+      ],
+      "acceptance_ids": [
+        "AC-021",
+        "AC-024"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T072",
+      "milestone": "M3",
+      "story": "US10",
+      "kind": "implementation",
+      "parallel": false,
+      "description": "Implement lab inventory and logical-device-to-asset binding with explicit identity, metadata availability and active-operation readiness checks.",
+      "paths": [
+        "services/studio-api/src/xverse_studio/lab/assets.py",
+        "services/studio-api/src/xverse_studio/lab/bindings.py"
+      ],
+      "depends_on": [
+        "T070",
+        "T058",
+        "T061"
+      ],
+      "requirements": [
+        "FR-048"
+      ],
+      "acceptance_ids": [
+        "AC-021"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T073",
+      "milestone": "M3",
+      "story": "US10",
+      "kind": "test",
+      "parallel": true,
+      "description": "Exercise concurrent claims, lease renewal/expiry, stale handles, interruption and repeated release; verify API-level observe/stimulate/destructive-action distinctions.",
+      "paths": [
+        "tests/integration/test_lab_reservations.py"
+      ],
+      "depends_on": [
+        "T070"
+      ],
+      "requirements": [
+        "FR-049",
+        "FR-050",
+        "NFR-005"
+      ],
+      "acceptance_ids": [
+        "AC-022",
+        "AC-023"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T074",
+      "milestone": "M3",
+      "story": "US10",
+      "kind": "implementation",
+      "parallel": false,
+      "description": "Implement provider-backed reservations/reconciliation and action authority checks; expired or uncertain ownership cannot enable active commands.",
+      "paths": [
+        "services/studio-api/src/xverse_studio/lab/reservations.py",
+        "services/studio-api/src/xverse_studio/lab/authority.py"
+      ],
+      "depends_on": [
+        "T073",
+        "T072",
+        "T023"
+      ],
+      "requirements": [
+        "FR-049",
+        "FR-050"
+      ],
+      "acceptance_ids": [
+        "AC-022",
+        "AC-023"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T075",
+      "milestone": "M3",
+      "story": "US10",
+      "kind": "implementation",
+      "parallel": false,
+      "description": "Build inventory, binding, reservation and connection-test views with simulation/hardware indication, observe-only default and explicit unsupported-operation explanations.",
+      "paths": [
+        "apps/studio-web/src/features/lab/"
+      ],
+      "depends_on": [
+        "T072",
+        "T074",
+        "T059"
+      ],
+      "requirements": [
+        "FR-048",
+        "FR-049",
+        "FR-050"
+      ],
+      "acceptance_ids": [
+        "AC-021",
+        "AC-022"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T076",
+      "milestone": "M3",
+      "story": "US10",
+      "kind": "test",
+      "parallel": true,
+      "description": "Specify virtual/physical substitution, mismatched interfaces, missing clock evidence, unplug, refused stop and failed restore outcomes without assuming physical pause or rewind.",
+      "paths": [
+        "tests/integration/test_hybrid_time_and_loss.py"
+      ],
+      "depends_on": [
+        "T070"
+      ],
+      "requirements": [
+        "FR-051",
+        "FR-052",
+        "FR-040"
+      ],
+      "acceptance_ids": [
+        "AC-023",
+        "AC-024"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T077",
+      "milestone": "M3",
+      "story": "US10",
+      "kind": "implementation",
+      "parallel": false,
+      "description": "Implement provider-declared disconnect/recovery/stop integration and expose physical-state uncertainty and original timestamp/synchronization evidence.",
+      "paths": [
+        "services/studio-api/src/xverse_studio/lab/recovery.py",
+        "services/studio-api/src/xverse_studio/lab/time_quality.py"
+      ],
+      "depends_on": [
+        "T076",
+        "T029",
+        "T074"
+      ],
+      "requirements": [
+        "FR-051"
+      ],
+      "acceptance_ids": [
+        "AC-023",
+        "AC-024"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T078",
+      "milestone": "M3",
+      "story": "US10",
+      "kind": "implementation",
+      "parallel": false,
+      "description": "Show compatible substitution, unchanged logical topology, changed time/control/fidelity capabilities and uncertain physical/cleanup outcomes.",
+      "paths": [
+        "apps/studio-web/src/features/lab/hybrid-inspector.tsx",
+        "apps/studio-web/src/features/results/"
+      ],
+      "depends_on": [
+        "T075",
+        "T077",
+        "T030"
+      ],
+      "requirements": [
+        "FR-051",
+        "FR-052",
+        "FR-040"
+      ],
+      "acceptance_ids": [
+        "AC-023",
+        "AC-024"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T079",
+      "milestone": "M3",
+      "story": "US10",
+      "kind": "verification",
+      "parallel": false,
+      "description": "Run physical contract and failure-path fixtures, label results as fixtures and confirm that absent device access cannot pass the actual hardware case.",
+      "paths": [
+        "evidence/studio/M3-fixture/"
+      ],
+      "depends_on": [
+        "T075",
+        "T077",
+        "T078"
+      ],
+      "requirements": [
+        "FR-048",
+        "FR-049",
+        "FR-050",
+        "FR-051",
+        "NFR-005"
+      ],
+      "acceptance_ids": [
+        "AC-021",
+        "AC-022",
+        "AC-023",
+        "AC-024"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T080",
+      "milestone": "M3",
+      "story": "US10",
+      "kind": "verification",
+      "parallel": false,
+      "description": "Execute the admitted physical inventory/reservation/substitution/loss cases on the identified device, retaining permission scope, clocks, actions and actual shutdown outcomes. Bind physical evidence to the actual supported host OS and driver. Missing Windows hardware-provider support must not be advertised as universal device support, nor treated as failure of the separately verified native Studio core.",
+      "paths": [
+        "evidence/studio/M3-physical/"
+      ],
+      "depends_on": [
+        "T071",
+        "T079"
+      ],
+      "requirements": [
+        "FR-048",
+        "FR-049",
+        "FR-050",
+        "FR-051",
+        "FR-052"
+      ],
+      "acceptance_ids": [
+        "AC-021",
+        "AC-022",
+        "AC-023",
+        "AC-024"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T081",
+      "milestone": "M3",
+      "story": "SETUP",
+      "kind": "verification",
+      "parallel": false,
+      "description": "Document the demonstrated physical provider and limits, review SC-005 and retain explicit gaps; do not release a hardware-support claim from fixture-only results.",
+      "paths": [
+        "docs/user/hybrid-lab.md",
+        "evidence/studio/M3-review/"
+      ],
+      "depends_on": [
+        "T069",
+        "T080"
+      ],
+      "requirements": [
+        "FR-052",
+        "NFR-010",
+        "NFR-012"
+      ],
+      "acceptance_ids": [
+        "AC-021",
+        "AC-022",
+        "AC-023",
+        "AC-024"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T082",
+      "milestone": "M4",
+      "story": "US11",
+      "kind": "test",
+      "parallel": true,
+      "description": "Specify scenario/observer/fault tests for target references, typed time/stimuli, bounds, conflicting schedules, unsupported operations and intended versus observed effects.",
+      "paths": [
+        "tests/contract/test_scenarios.py",
+        "tests/fixtures/scenarios/"
+      ],
+      "depends_on": [
+        "T068"
+      ],
+      "requirements": [
+        "FR-053",
+        "FR-054",
+        "FR-055",
+        "FR-057"
+      ],
+      "acceptance_ids": [
+        "AC-025"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T083",
+      "milestone": "M4",
+      "story": "US11",
+      "kind": "implementation",
+      "parallel": false,
+      "description": "Implement scenario authoring/compilation using admitted XDL/profile semantics and provider checks for stimuli, observation cost and activation/recovery schedules.",
+      "paths": [
+        "services/studio-api/src/xverse_studio/experiments/"
+      ],
+      "depends_on": [
+        "T082",
+        "T042",
+        "T019"
+      ],
+      "requirements": [
+        "FR-053",
+        "FR-054",
+        "FR-055"
+      ],
+      "acceptance_ids": [
+        "AC-025"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T084",
+      "milestone": "M4",
+      "story": "US11",
+      "kind": "implementation",
+      "parallel": false,
+      "description": "Build scenario/stimulus/fault/observer forms and timeline with explicit clock selection, intent/observation markers and unavailable-capability explanations.",
+      "paths": [
+        "apps/studio-web/src/features/experiments/"
+      ],
+      "depends_on": [
+        "T083",
+        "T044",
+        "T030"
+      ],
+      "requirements": [
+        "FR-053",
+        "FR-054",
+        "FR-055",
+        "FR-057"
+      ],
+      "acceptance_ids": [
+        "AC-025"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T085",
+      "milestone": "M4",
+      "story": "US11",
+      "kind": "design",
+      "parallel": true,
+      "description": "Refine the existing contracts/experiment-evaluation.md bounded typed/temporal JSON-AST contract into implementation schemas and detailed design, preserving its versioned operators, half-open run-relative windows, full-data coverage, resource caps, units/time rules and pass/fail/indeterminate outcomes. Record a versioned contract decision before any necessary semantic change; define the admitted XDL/profile mapping without inventing a competing language.",
+      "paths": [
+        "docs/architecture/assertion-language.md",
+        "packages/contracts/assertions/"
+      ],
+      "depends_on": [
+        "T082"
+      ],
+      "requirements": [
+        "FR-056",
+        "NFR-004"
+      ],
+      "acceptance_ids": [
+        "AC-026"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T086",
+      "milestone": "M4",
+      "story": "US11",
+      "kind": "test",
+      "parallel": false,
+      "description": "Add evaluator examples and adversarial negatives for missing/gapped/stale inputs, clock incompatibility, unit errors, unknown operators, nested limits and attempted arbitrary execution.",
+      "paths": [
+        "tests/contract/test_assertions.py",
+        "tests/fixtures/assertions/"
+      ],
+      "depends_on": [
+        "T085"
+      ],
+      "requirements": [
+        "FR-056",
+        "NFR-004"
+      ],
+      "acceptance_ids": [
+        "AC-026"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T087",
+      "milestone": "M4",
+      "story": "US11",
+      "kind": "implementation",
+      "parallel": false,
+      "description": "Implement or integrate the compatible bounded evaluator and explicit expression-to-contract mapping; preserve opaque unsupported expressions unevaluated and never call eval or execute arbitrary code. Implement the contract's evaluation create/result operations with separate evaluation-execution status and assertion verdict.",
+      "paths": [
+        "services/studio-api/src/xverse_studio/assertions/"
+      ],
+      "depends_on": [
+        "T086",
+        "T083"
+      ],
+      "requirements": [
+        "FR-056"
+      ],
+      "acceptance_ids": [
+        "AC-026"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T088",
+      "milestone": "M4",
+      "story": "US11",
+      "kind": "implementation",
+      "parallel": false,
+      "description": "Display assertion definitions/results with input provenance, clock assumptions, indeterminate reasons and correlated scenario/fault markers.",
+      "paths": [
+        "apps/studio-web/src/features/experiments/assertions.tsx",
+        "apps/studio-web/src/features/results/"
+      ],
+      "depends_on": [
+        "T087",
+        "T084"
+      ],
+      "requirements": [
+        "FR-056",
+        "FR-057"
+      ],
+      "acceptance_ids": [
+        "AC-025",
+        "AC-026"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T089",
+      "milestone": "M4",
+      "story": "US12",
+      "kind": "test",
+      "parallel": true,
+      "description": "Specify bounded matrix/cardinality, per-run snapshots, reservations/concurrency, retry deduplication, cancellation and crash/reconciliation cases.",
+      "paths": [
+        "tests/integration/test_campaigns.py"
+      ],
+      "depends_on": [
+        "T023",
+        "T027"
+      ],
+      "requirements": [
+        "FR-058"
+      ],
+      "acceptance_ids": [
+        "AC-028"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T090",
+      "milestone": "M4",
+      "story": "US12",
+      "kind": "implementation",
+      "parallel": false,
+      "description": "Implement finite campaign preview/scheduling/history with explicit budgets, immutable child identities and pending-only recovery under current admission limits.",
+      "paths": [
+        "services/studio-api/src/xverse_studio/campaigns/",
+        "apps/studio-web/src/features/campaigns/"
+      ],
+      "depends_on": [
+        "T089",
+        "T083",
+        "T022",
+        "T023"
+      ],
+      "requirements": [
+        "FR-058"
+      ],
+      "acceptance_ids": [
+        "AC-028"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T091",
+      "milestone": "M4",
+      "story": "US12",
+      "kind": "implementation",
+      "parallel": false,
+      "description": "Add incompatible-quantity, gap, clock and replay/rerun regression cases first, then implement baseline comparison with configuration/clock/quantity compatibility and distinguish recorded observation playback from freshly admitted rerun.",
+      "paths": [
+        "tests/integration/test_comparison.py",
+        "services/studio-api/src/xverse_studio/comparison/",
+        "apps/studio-web/src/features/comparison/"
+      ],
+      "depends_on": [
+        "T030",
+        "T059",
+        "T088"
+      ],
+      "requirements": [
+        "FR-059",
+        "FR-060"
+      ],
+      "acceptance_ids": [
+        "AC-029"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T092",
+      "milestone": "M4",
+      "story": "US12",
+      "kind": "test",
+      "parallel": true,
+      "description": "Add export/import integrity, missing/restricted dependency, malicious archive, credentials, revisioned trace links, annotation separation and dependency-aware retention tests.",
+      "paths": [
+        "tests/integration/test_exchange_and_retention.py",
+        "tests/fixtures/bundles/"
+      ],
+      "depends_on": [
+        "T068"
+      ],
+      "requirements": [
+        "FR-061",
+        "FR-062",
+        "FR-063",
+        "NFR-004"
+      ],
+      "acceptance_ids": [
+        "AC-029",
+        "AC-032"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T093",
+      "milestone": "M4",
+      "story": "US12",
+      "kind": "implementation",
+      "parallel": false,
+      "description": "Implement sanitized manifests and project/evidence/report exchange with exact identities, unavailable references and integrity status; imports remain inert and local by explicit selection. Test portable package import/export in both native directions and refuse incompatible host-local bindings without rewriting portable model identity.",
+      "paths": [
+        "services/studio-api/src/xverse_studio/exchange/",
+        "apps/studio-web/src/features/exchange/"
+      ],
+      "depends_on": [
+        "T092",
+        "T008",
+        "T029"
+      ],
+      "requirements": [
+        "FR-061",
+        "NFR-004",
+        "NFR-009"
+      ],
+      "acceptance_ids": [
+        "AC-029"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T094",
+      "milestone": "M4",
+      "story": "US12",
+      "kind": "implementation",
+      "parallel": false,
+      "description": "Implement revisioned external requirement/test references, separate annotations/derived reports and explicit dependency-aware retention/deletion without rewriting historical evidence. Enforce revision-checked annotation updates and the contract's retention dry-run/apply sequence, rechecking dependencies before a destructive retention action.",
+      "paths": [
+        "services/studio-api/src/xverse_studio/annotations/",
+        "services/studio-api/src/xverse_studio/retention/",
+        "apps/studio-web/src/features/results/"
+      ],
+      "depends_on": [
+        "T092",
+        "T029",
+        "T091"
+      ],
+      "requirements": [
+        "FR-062",
+        "FR-063"
+      ],
+      "acceptance_ids": [
+        "AC-029"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T095",
+      "milestone": "M4",
+      "story": "SETUP",
+      "kind": "verification",
+      "parallel": false,
+      "description": "Run positive/negative assertion and supported fault cases, bounded campaign recovery, baseline comparison and clean-environment exchange; record actual provider scope and SC-006/SC-007. Run owned experiment/campaign/exchange lanes on native Linux and Windows; record live-provider lanes separately by actual OS support.",
+      "paths": [
+        "tests/e2e/experiment-campaign.spec.ts",
+        "evidence/studio/M4-experiments/"
+      ],
+      "depends_on": [
+        "T088",
+        "T090",
+        "T091",
+        "T093",
+        "T094",
+        "T035"
+      ],
+      "requirements": [
+        "FR-053",
+        "FR-054",
+        "FR-055",
+        "FR-056",
+        "FR-057",
+        "FR-058",
+        "FR-059",
+        "FR-060",
+        "FR-061",
+        "FR-062",
+        "FR-063",
+        "NFR-004",
+        "NFR-003",
+        "NFR-009"
+      ],
+      "acceptance_ids": [
+        "AC-025",
+        "AC-026",
+        "AC-027",
+        "AC-028",
+        "AC-029"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T096",
+      "milestone": "M4",
+      "story": "SETUP",
+      "kind": "verification",
+      "parallel": true,
+      "description": "Repeat declared canvas/history/event workloads with campaign/analysis features enabled, preserving bounded queues and meaningful control responsiveness evidence. Retain separate native Linux and Windows reference measurements and verify that queue/control behaviour is independent of POSIX-specific process assumptions.",
+      "paths": [
+        "tests/performance/",
+        "evidence/studio/M4-performance/"
+      ],
+      "depends_on": [
+        "T090",
+        "T091",
+        "T093",
+        "T094"
+      ],
+      "requirements": [
+        "NFR-007",
+        "NFR-008",
+        "NFR-011",
+        "NFR-003"
+      ],
+      "acceptance_ids": [
+        "AC-010",
+        "AC-011",
+        "AC-030"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T097",
+      "milestone": "M4",
+      "story": "SETUP",
+      "kind": "verification",
+      "parallel": true,
+      "description": "Verify all added authoring/lab/campaign/export flows with keyboard, focus, labelled diagnostics, status alternatives and both required desktop viewports. Use the declared supported browser matrix on both native Linux and Windows backends.",
+      "paths": [
+        "tests/e2e/accessibility.spec.ts",
+        "evidence/studio/M4-accessibility/"
+      ],
+      "depends_on": [
+        "T084",
+        "T088",
+        "T090",
+        "T091",
+        "T093",
+        "T094"
+      ],
+      "requirements": [
+        "NFR-006",
+        "NFR-012"
+      ],
+      "acceptance_ids": [
+        "AC-031"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T098",
+      "milestone": "M4",
+      "story": "SETUP",
+      "kind": "documentation",
+      "parallel": false,
+      "description": "Complete clean-host packaging, upgrade/backup/retention/provider guides and release compatibility/evidence manifest; preserve unsupported/M5 limitations and exact dependency identities. Document and smoke-test native installation, start, browser connection, stop, update, backup and recovery on both supported OS families. Declare optional systemd/Windows-service installation separately; package the native launcher and explain OS-specific provider gaps without silently recommending WSL as required.",
+      "paths": [
+        "docs/user/",
+        "docs/providers/",
+        "docs/releases/studio-1.0.md",
+        "scripts/package_studio.py"
+      ],
+      "depends_on": [
+        "T095",
+        "T096",
+        "T097",
+        "T081"
+      ],
+      "requirements": [
+        "NFR-003",
+        "NFR-004",
+        "NFR-009",
+        "NFR-010",
+        "NFR-012"
+      ],
+      "acceptance_ids": [
+        "AC-029",
+        "AC-032"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T099",
+      "milestone": "M4",
+      "story": "SETUP",
+      "kind": "verification",
+      "parallel": false,
+      "description": "Perform a separate read-only architecture/requirements/security/evidence review; record findings before repairs, then retest only affected behaviour and dependencies on the successor candidate. Audit the native Linux/Windows evidence matrix, platform path/process/security cases, package locks and provider-specific OS claims.",
+      "paths": [
+        "evidence/studio/M4-review/"
+      ],
+      "depends_on": [
+        "T098"
+      ],
+      "requirements": [
+        "NFR-001",
+        "NFR-002",
+        "NFR-003",
+        "NFR-004",
+        "NFR-005",
+        "NFR-006",
+        "NFR-007",
+        "NFR-008",
+        "NFR-009",
+        "NFR-010",
+        "NFR-011",
+        "NFR-012"
+      ],
+      "acceptance_ids": [
+        "AC-001",
+        "AC-002",
+        "AC-003",
+        "AC-006",
+        "AC-007",
+        "AC-008",
+        "AC-009",
+        "AC-010",
+        "AC-011",
+        "AC-013",
+        "AC-014",
+        "AC-019",
+        "AC-020",
+        "AC-021",
+        "AC-022",
+        "AC-023",
+        "AC-024",
+        "AC-025",
+        "AC-026",
+        "AC-027",
+        "AC-028",
+        "AC-029",
+        "AC-030",
+        "AC-031",
+        "AC-032"
+      ],
+      "status": "not_started"
+    },
+    {
+      "id": "T100",
+      "milestone": "M4",
+      "story": "SETUP",
+      "kind": "verification",
+      "parallel": false,
+      "description": "Assemble the exact-candidate M0–M4 acceptance dossier with all measured success criteria, tasks/evidence traceability and remaining dependencies; report truthful completion and release scope for review. Require both native-platform core smoke/packaging results and explicit per-OS provider availability in the release dossier; browser-only Windows access or WSL execution cannot satisfy native Windows backend support.",
+      "paths": [
+        "evidence/studio/release/",
+        "docs/releases/studio-1.0.md"
+      ],
+      "depends_on": [
+        "T040",
+        "T069",
+        "T081",
+        "T095",
+        "T096",
+        "T097",
+        "T098",
+        "T099"
+      ],
+      "requirements": [
+        "NFR-010",
+        "NFR-012"
+      ],
+      "acceptance_ids": [
+        "AC-001",
+        "AC-002",
+        "AC-003",
+        "AC-004",
+        "AC-005",
+        "AC-006",
+        "AC-007",
+        "AC-008",
+        "AC-009",
+        "AC-010",
+        "AC-011",
+        "AC-012",
+        "AC-013",
+        "AC-014",
+        "AC-015",
+        "AC-016",
+        "AC-017",
+        "AC-018",
+        "AC-019",
+        "AC-020",
+        "AC-021",
+        "AC-022",
+        "AC-023",
+        "AC-024",
+        "AC-025",
+        "AC-026",
+        "AC-027",
+        "AC-028",
+        "AC-029",
+        "AC-030",
+        "AC-031",
+        "AC-032"
+      ],
+      "status": "not_started"
+    }
+  ],
+  "acceptance_cases": [
+    {
+      "id": "AC-001",
+      "title": "Baseline, contracts and capability discovery",
+      "milestone": "M0",
+      "required_environment": "owned fixtures; selected installed platform",
+      "requirements": [
+        "FR-006",
+        "FR-007",
+        "NFR-001",
+        "NFR-002",
+        "NFR-009",
+        "NFR-010",
+        "NFR-003",
+        "NFR-012"
+      ],
+      "success_criteria": [],
+      "given": "An exact platform/profile/package set and owned provider fixtures with supported, unsupported and incompatible capabilities. The selected Linux and Windows native support matrix records distribution/edition/release, architecture, browser and language-runtime versions.",
+      "actions": "Inspect version/capability responses; change a provider or profile version; request an unsupported operation directly through the API. Inspect Studio-host capability and provider OS/driver capability independently on each native host.",
+      "expected": "Record immutable baseline identities and admitted limits; incompatible semantics remain unresolved; unsupported operations fail in the backend before effects. No generic runtime service is inferred from private Lite classes. Core Studio capability does not disappear because a simulator is unsupported on that OS; provider operations correctly remain unavailable and their platform limits are explicit.",
+      "status": "NOT_RUN",
+      "retained_in": [
+        "M1",
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "task_ids": [
+        "T001",
+        "T002",
+        "T003",
+        "T004",
+        "T011",
+        "T012",
+        "T013",
+        "T014",
+        "T099",
+        "T100"
+      ]
+    },
+    {
+      "id": "AC-002",
+      "title": "Authoritative XDL import and semantic identity",
+      "milestone": "M0",
+      "required_environment": "owned XDL fixtures; installed validator/compiler",
+      "requirements": [
+        "FR-001",
+        "FR-003",
+        "NFR-002",
+        "NFR-009"
+      ],
+      "success_criteria": [
+        "SC-002"
+      ],
+      "given": "Valid YAML/JSON representations of one system and equivalent CLI compiler inputs.",
+      "actions": "Import, validate, compile, save and reopen; vary comments, file ordering and source formatting; compare canonical semantics and plan identity using the platform rules. Repeat native validation and persistence on Linux and Windows and exchange supported portable inputs in both directions.",
+      "expected": "Equivalent declared inputs produce equivalent plans. Source and semantic identity are distinguished; no second graph configuration overrides XDL; required profile files and references are explicit. Path and line-ending differences do not create unintended executable semantic changes; host-local bindings are resolved separately.",
+      "status": "NOT_RUN",
+      "retained_in": [
+        "M1",
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "task_ids": [
+        "T005",
+        "T006",
+        "T007",
+        "T008",
+        "T014",
+        "T015",
+        "T016",
+        "T099",
+        "T100"
+      ]
+    },
+    {
+      "id": "AC-003",
+      "title": "Untrusted project/package input remains inert",
+      "milestone": "M0",
+      "required_environment": "hostile owned import fixtures",
+      "requirements": [
+        "FR-003",
+        "FR-004",
+        "NFR-004"
+      ],
+      "success_criteria": [],
+      "given": "Archives containing traversal, symlink escapes, oversized inputs, duplicate entries, unknown extensions, credentials and command-like content. Inputs also include Windows drive/UNC/device paths, reserved names, case collisions, junction escapes, spaces and non-ASCII names.",
+      "actions": "Attempt import and project export within an allowlisted workspace, including direct API requests. Run the hostile-input and file-boundary suite natively on both OS families.",
+      "expected": "Unsafe paths and limits are rejected; imports never run scripts or providers; unknown extension content is preserved but cannot become executable valid content; credentials are rejected/redacted according to the project contract and never appear in exports or diagnostics. Platform-specific path/locking behaviour cannot escape the project root or bypass admission; portable and host-local path meanings remain distinct.",
+      "status": "NOT_RUN",
+      "retained_in": [
+        "M1",
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "task_ids": [
+        "T009",
+        "T010",
+        "T014",
+        "T015",
+        "T016",
+        "T039",
+        "T099",
+        "T100"
+      ]
+    },
+    {
+      "id": "AC-004",
+      "title": "Prepared example and actionable onboarding",
+      "milestone": "M1",
+      "required_environment": "owned blueprint fixture; admitted live blueprint for live claim",
+      "requirements": [
+        "FR-002",
+        "FR-005",
+        "NFR-012",
+        "NFR-003"
+      ],
+      "success_criteria": [
+        "SC-001"
+      ],
+      "given": "A prepared example, an offline environment and a separately prepared admitted live environment.",
+      "actions": "Open the example, inspect purpose/interfaces, edit an allowed parameter and follow environment diagnostics. Run the prepared reference example through a native Linux backend and a native Windows backend in their supported browsers.",
+      "expected": "Useful project/evidence views work offline; prerequisites identify exact remediation and unsupported operations. An admitted owned executable reference provider offers Run with explicit reference scope. Only an admitted live provider can claim live integration; unavailable live providers remain disabled, and previews or replayed/mock outputs are never reported as live execution. Required settings have units, bounds and defaults with provenance. The core workflow works without WSL, VM, container or remote-Linux prerequisites. An unavailable live provider has an actionable OS-specific message; reference execution is labelled with its actual scope.",
+      "status": "NOT_RUN",
+      "retained_in": [
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "task_ids": [
+        "T015",
+        "T016",
+        "T017",
+        "T036",
+        "T040",
+        "T100"
+      ]
+    },
+    {
+      "id": "AC-005",
+      "title": "Preflight binds the exact execution request",
+      "milestone": "M1",
+      "required_environment": "owned runtime fixture; admitted wrapper for live lane",
+      "requirements": [
+        "FR-008",
+        "FR-009",
+        "FR-010",
+        "NFR-011",
+        "FR-006"
+      ],
+      "success_criteria": [
+        "SC-008"
+      ],
+      "given": "A valid project with known artifact identities, resource limits, target health and a preflight result.",
+      "actions": "Change model, deployment, artifact, capability version or resource availability before Start; exceed admitted unit/time limits; retry with unchanged admissible inputs. Exercise a fixed workflow that generates its own XDL and ignores a requested parameter/model edit. Request the Linux-only historical shell-wrapper candidate from native Windows, and separately exercise a supported native reference provider.",
+      "expected": "Preflight is invalidated or refreshed on relevant changes and Start verifies the same snapshot. Model-valid, artifacts-available, target-ready and permits are separate facts. Limits block execution before acquiring or starting resources. The adapter exposes its effective normalized inputs/plan for comparison before Start. Unsupported edits are rejected until a compatible config-input integration exists; unchanged fixed workflows remain explicitly scoped. Studio/backend availability and runtime/provider compatibility are separate findings; the unsupported shell wrapper is rejected without starting WSL, a remote host or another unrequested execution environment.",
+      "status": "NOT_RUN",
+      "retained_in": [
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "task_ids": [
+        "T018",
+        "T019",
+        "T020",
+        "T031",
+        "T032",
+        "T033",
+        "T035",
+        "T040",
+        "T100"
+      ]
+    },
+    {
+      "id": "AC-006",
+      "title": "Normal lifecycle and evidence closure",
+      "milestone": "M1",
+      "required_environment": "owned runtime fixture and admitted real Lite lane",
+      "requirements": [
+        "FR-011",
+        "FR-014",
+        "FR-015",
+        "FR-020",
+        "FR-022"
+      ],
+      "success_criteria": [
+        "SC-003"
+      ],
+      "given": "An admitted supported experiment with explicit ownership and observers.",
+      "actions": "Start, observe startup, finish normally, request stop where supported and read the final run. Repeat owned reference-runtime start/finish/stop and evidence readback on both native platforms; run live variants only on their admitted OS.",
+      "expected": "One run ID anchors state/events and immutable inputs. Startup respects dependencies. Completion, cleanup and evidence-integrity states are independent; a completed process does not assert functional success. The real lane records actual provider and scope. The actual effective generated XDL/plan recorded by the adapter equals the requested admitted immutable snapshot; a wrapper ignoring input edits cannot pass this case.",
+      "status": "NOT_RUN",
+      "retained_in": [
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "task_ids": [
+        "T021",
+        "T022",
+        "T027",
+        "T033",
+        "T034",
+        "T035",
+        "T040",
+        "T099",
+        "T100"
+      ]
+    },
+    {
+      "id": "AC-007",
+      "title": "Partial start, cancellation and cleanup failure",
+      "milestone": "M1",
+      "required_environment": "faultable owned runtime fixture; supported live negatives",
+      "requirements": [
+        "FR-011",
+        "FR-014",
+        "FR-020",
+        "NFR-005",
+        "NFR-011"
+      ],
+      "success_criteria": [
+        "SC-003"
+      ],
+      "given": "A run with failure points during prepare, startup, active operation, stop and evidence finalization.",
+      "actions": "Inject failures at each boundary; repeat cancellation; fail cleanup or evidence collection. Exercise platform-specific process termination/cleanup using verified owned resources on native Linux and Windows.",
+      "expected": "Only owned resources are stopped; commands are idempotent; bounded stop policy is respected. Cleanup uncertainty/failure remains visible and actionable, evidence gaps remain visible, and no state is promoted to a success merely to close the UI. No POSIX-only signal or process-group assumption is required for native Windows run ownership and cleanup.",
+      "status": "NOT_RUN",
+      "retained_in": [
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "task_ids": [
+        "T021",
+        "T023",
+        "T027",
+        "T031",
+        "T032",
+        "T033",
+        "T034",
+        "T035",
+        "T040",
+        "T099",
+        "T100"
+      ]
+    },
+    {
+      "id": "AC-008",
+      "title": "Browser reconnection and duplicate command handling",
+      "milestone": "M1",
+      "required_environment": "owned runtime fixture; browser automation",
+      "requirements": [
+        "FR-012",
+        "FR-013",
+        "FR-021",
+        "NFR-005"
+      ],
+      "success_criteria": [
+        "SC-003"
+      ],
+      "given": "An active run and two browser sessions sharing one project.",
+      "actions": "Double-click Start; retry identical command after response loss; refresh/close/reopen the browser; reconnect with old, valid and expired event cursors. Repeat with each supported browser/native backend combination and include a failed accepted command event.",
+      "expected": "One accepted command creates one run; payload-changing reuse of an idempotency key is rejected. Browser loss does not transfer ownership or restart a run. Reconnection reconstructs state; an expired cursor produces explicit resynchronization and gap information. command.failed remains an execution failure, not a successful mutation or invented lifecycle outcome.",
+      "status": "NOT_RUN",
+      "retained_in": [
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "task_ids": [
+        "T021",
+        "T022",
+        "T023",
+        "T025",
+        "T026",
+        "T033",
+        "T035",
+        "T040",
+        "T099",
+        "T100"
+      ]
+    },
+    {
+      "id": "AC-009",
+      "title": "Backend restart and uncertain ownership",
+      "milestone": "M1",
+      "required_environment": "owned process/provider fixture",
+      "requirements": [
+        "FR-012",
+        "FR-013",
+        "FR-014",
+        "NFR-005",
+        "NFR-009"
+      ],
+      "success_criteria": [
+        "SC-003"
+      ],
+      "given": "Persisted runs with known owned handles, an external resource and an uncertain in-flight command.",
+      "actions": "Restart or kill/relaunch the control service at lifecycle boundaries, then reconcile. Repeat native backend stop/restart on both OS families, including held files and stale process identities/handles.",
+      "expected": "Runs are reconciled against recorded ownership and provider facts. Unknown outcomes remain unknown pending reconciliation; no blind respawn, process-name kill or port-based ownership inference occurs; duplicate starts remain prevented across restart. Windows handle/locking differences and Linux process semantics are covered explicitly; only validated ownership permits mutation after restart.",
+      "status": "NOT_RUN",
+      "retained_in": [
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "task_ids": [
+        "T021",
+        "T023",
+        "T033",
+        "T039",
+        "T040",
+        "T099",
+        "T100"
+      ]
+    },
+    {
+      "id": "AC-010",
+      "title": "Bounded event and log delivery",
+      "milestone": "M1",
+      "required_environment": "owned high-volume event fixture",
+      "requirements": [
+        "FR-017",
+        "FR-021",
+        "FR-022",
+        "NFR-008"
+      ],
+      "success_criteria": [
+        "SC-008"
+      ],
+      "given": "A fast producer, slow/disconnected browser and finite retention/queue budgets.",
+      "actions": "Flood logs and signals, reconnect after retention expires and compare persisted evidence with UI delivery.",
+      "expected": "Backend memory and queues remain bounded; rendering/transport sampling never silently alters retained evidence. Dropped or unavailable UI records are labelled with gaps/cursors; control and cancellation remain responsive within declared budgets.",
+      "status": "NOT_RUN",
+      "retained_in": [
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "task_ids": [
+        "T025",
+        "T026",
+        "T028",
+        "T029",
+        "T030",
+        "T033",
+        "T038",
+        "T040",
+        "T096",
+        "T099",
+        "T100"
+      ]
+    },
+    {
+      "id": "AC-011",
+      "title": "Signals, clocks and factual diagnosis",
+      "milestone": "M1",
+      "required_environment": "owned evidence with clock uncertainty and missing intervals",
+      "requirements": [
+        "FR-017",
+        "FR-018",
+        "FR-019",
+        "FR-020",
+        "FR-022",
+        "NFR-011"
+      ],
+      "success_criteria": [
+        "SC-008"
+      ],
+      "given": "Observed events, diagnostic hypotheses, live-only process liveness, differing time domains and incomplete records.",
+      "actions": "Select a component, flow and time interval; align signals/logs; inspect the explanation panel.",
+      "expected": "The view traces each fact to evidence and marks hypotheses/unknowns. Unsynchronized times are not combined into false causal order or latency. Liveness is distinct from functional health; absence of traffic alone is not automatically failure.",
+      "status": "NOT_RUN",
+      "retained_in": [
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "task_ids": [
+        "T028",
+        "T029",
+        "T030",
+        "T031",
+        "T032",
+        "T033",
+        "T038",
+        "T040",
+        "T096",
+        "T099",
+        "T100"
+      ]
+    },
+    {
+      "id": "AC-012",
+      "title": "First-time prepared-example study",
+      "milestone": "M1",
+      "required_environment": "prepared workstation; representative novice users",
+      "requirements": [
+        "FR-002",
+        "FR-005",
+        "NFR-012"
+      ],
+      "success_criteria": [
+        "SC-001"
+      ],
+      "given": "The prepared environment and participants who have not previously operated X-Verse; technical experiment literacy may be present.",
+      "actions": "Use the scripted study in spec.md: open the prepared example, change one permitted parameter, run it, locate its result and identify the injected supported failure. Record assistance, time, errors and completion.",
+      "expected": "Apply the specified success threshold without coaching or excluding failed participants. Record setup separately, anonymize participant records and disclose sample size. No simulated user result or developer self-test substitutes for this case.",
+      "status": "NOT_RUN",
+      "retained_in": [
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "task_ids": [
+        "T036",
+        "T037",
+        "T040",
+        "T100"
+      ]
+    },
+    {
+      "id": "AC-013",
+      "title": "Graph/source synchronization and layout isolation",
+      "milestone": "M2",
+      "required_environment": "owned project fixtures; browser automation",
+      "requirements": [
+        "FR-001",
+        "FR-023",
+        "FR-024",
+        "FR-025",
+        "FR-027",
+        "NFR-002",
+        "NFR-009"
+      ],
+      "success_criteria": [
+        "SC-002"
+      ],
+      "given": "A valid project with stable IDs, multiple subsystems and a saved layout sidecar.",
+      "actions": "Edit through graph, inspector and XDL source; move/recolour/group nodes; save/reopen; compare platform semantic/plan identities. Round-trip portable projects from Linux to Windows and back with supported source names and line endings.",
+      "expected": "Semantic edits agree across views and compiler; presentation-only edits leave executable semantics unchanged. Identity survives labels and layout. Source extensions are not dropped; invalid source keeps a clear draft state and cannot execute. Host-specific paths remain outside portable semantic identity and valid project content survives both directions.",
+      "status": "NOT_RUN",
+      "retained_in": [
+        "M3",
+        "M4"
+      ],
+      "task_ids": [
+        "T041",
+        "T042",
+        "T043",
+        "T044",
+        "T048",
+        "T068",
+        "T069",
+        "T099",
+        "T100"
+      ]
+    },
+    {
+      "id": "AC-014",
+      "title": "Undo, autosave and external-edit conflicts",
+      "milestone": "M2",
+      "required_environment": "owned filesystem/projects; browser automation",
+      "requirements": [
+        "FR-026",
+        "FR-028",
+        "NFR-009"
+      ],
+      "success_criteria": [
+        "SC-002"
+      ],
+      "given": "Two editors or sessions and a project with unsaved valid/invalid changes.",
+      "actions": "Undo/redo add-connect-delete operations, interrupt autosave, change files externally and save with a stale revision. Exercise each platform's file-locking, atomic replacement and case/name collision rules.",
+      "expected": "Operations preserve reference integrity; atomic saves do not corrupt the last saved revision; stale writes return a conflict and preserve both recoverable versions. Autosave never rewrites the active run snapshot. An unsupported portable name or conflicting path is reported before data loss; neither platform silently aliases distinct project resources.",
+      "status": "NOT_RUN",
+      "retained_in": [
+        "M3",
+        "M4"
+      ],
+      "task_ids": [
+        "T045",
+        "T046",
+        "T047",
+        "T048",
+        "T068",
+        "T069",
+        "T099",
+        "T100"
+      ]
+    },
+    {
+      "id": "AC-015",
+      "title": "Catalog and role-realization-placement wizard",
+      "milestone": "M2",
+      "required_environment": "owned catalog/provider/profile fixtures",
+      "requirements": [
+        "FR-029",
+        "FR-030",
+        "FR-031",
+        "FR-032",
+        "FR-033",
+        "NFR-004"
+      ],
+      "success_criteria": [],
+      "given": "Components with independent roles, realizations, requirements, versions and provider capabilities.",
+      "actions": "Instantiate a template, import an existing implementation and register a logical device. Change role filter, realization and placement.",
+      "expected": "The wizard produces existing XDL kinds with stable component/device identities. It distinguishes reusable definition from instance, artifact requirement from chosen artifact, physical asset from logical device, and definition creation from firmware/build completion.",
+      "status": "NOT_RUN",
+      "retained_in": [
+        "M3",
+        "M4"
+      ],
+      "task_ids": [
+        "T049",
+        "T050",
+        "T051",
+        "T052",
+        "T068",
+        "T069",
+        "T100"
+      ]
+    },
+    {
+      "id": "AC-016",
+      "title": "Typed communication and feedback loops",
+      "milestone": "M2",
+      "required_environment": "owned interface and connection fixtures",
+      "requirements": [
+        "FR-034",
+        "FR-035",
+        "FR-038"
+      ],
+      "success_criteria": [],
+      "given": "Compatible and incompatible directions, types, units, versions, coordinate frames, rates and clock assumptions; a valid feedback loop.",
+      "actions": "Connect ports, inspect suggested compatible targets, request an explicit supported conversion and create valid/invalid feedback configurations.",
+      "expected": "Each accepted edge has defined semantics; incompatible links and unavailable converters are diagnosed. Valid control feedback is admitted under its time/causality contract; cycles are not universally prohibited and unsupported causal assumptions are not inferred.",
+      "status": "NOT_RUN",
+      "retained_in": [
+        "M3",
+        "M4"
+      ],
+      "task_ids": [
+        "T053",
+        "T054",
+        "T055",
+        "T068",
+        "T069",
+        "T100"
+      ]
+    },
+    {
+      "id": "AC-017",
+      "title": "Connection kinds and X-COM evidence scope",
+      "milestone": "M2",
+      "required_environment": "owned communication/model-coupling fixtures",
+      "requirements": [
+        "FR-036",
+        "FR-037"
+      ],
+      "success_criteria": [],
+      "given": "Declared flows, resolved provider routes, observed traffic, deployment and traceability relationships, plus an unavailable physical-model coupling provider.",
+      "actions": "Switch perspectives; inspect source/provider/evidence labels; attempt the unsupported coupling.",
+      "expected": "Declared/resolved/observed states remain distinct. Lite evidence is identified as Lite, not activated native X-COM. Communication, physical coupling, placement and traceability cannot be connected interchangeably; unsupported physical solver semantics block execution.",
+      "status": "NOT_RUN",
+      "retained_in": [
+        "M3",
+        "M4"
+      ],
+      "task_ids": [
+        "T053",
+        "T055",
+        "T056",
+        "T068",
+        "T069",
+        "T100"
+      ]
+    },
+    {
+      "id": "AC-018",
+      "title": "Deployment variants and capability-aware controls",
+      "milestone": "M2",
+      "required_environment": "owned multi-deployment fixtures",
+      "requirements": [
+        "FR-016",
+        "FR-039",
+        "FR-040",
+        "FR-041",
+        "FR-042",
+        "NFR-004"
+      ],
+      "success_criteria": [],
+      "given": "One logical system with compatible software/emulated/physical declarations and varied operation capabilities.",
+      "actions": "Change selected realization and placement, alter resource/time/network bindings, compare variants and invoke a disabled operation through the API.",
+      "expected": "Logical identity/topology survives compatible rebinding; target/artifact/resource constraints and clock mappings are revalidated. Pause, step, reset, live tune and faults require explicit backend capability; a preserved identity does not assert behavioural equivalence.",
+      "status": "NOT_RUN",
+      "retained_in": [
+        "M3",
+        "M4"
+      ],
+      "task_ids": [
+        "T024",
+        "T057",
+        "T058",
+        "T059",
+        "T068",
+        "T069",
+        "T100"
+      ]
+    },
+    {
+      "id": "AC-019",
+      "title": "Profiles compose without domain branches",
+      "milestone": "M2",
+      "required_environment": "owned profile packages with conflicting and compatible namespaces",
+      "requirements": [
+        "FR-043",
+        "FR-044",
+        "FR-045",
+        "FR-047",
+        "NFR-001",
+        "NFR-009"
+      ],
+      "success_criteria": [],
+      "given": "Automotive and process-control profiles plus a mixed-domain project and incompatible profile revisions.",
+      "actions": "Load compatible profiles together; inspect vocabulary/forms; introduce namespace/schema conflicts and unresolved bindings.",
+      "expected": "Compatible profiles share core objects and workflows; profile content supplies vocabulary/validation/presentation without executable hooks. Conflicts and unknown semantics are surfaced and blocked. No industry switch replaces core runtime or identity rules.",
+      "status": "NOT_RUN",
+      "retained_in": [
+        "M3",
+        "M4"
+      ],
+      "task_ids": [
+        "T013",
+        "T060",
+        "T061",
+        "T062",
+        "T063",
+        "T068",
+        "T069",
+        "T099",
+        "T100"
+      ]
+    },
+    {
+      "id": "AC-020",
+      "title": "Two-domain executable blueprint proof",
+      "milestone": "M2",
+      "required_environment": "admitted vehicle-loop and process-control model providers",
+      "requirements": [
+        "FR-046",
+        "FR-047",
+        "NFR-001"
+      ],
+      "success_criteria": [
+        "SC-004"
+      ],
+      "given": "Two independently meaningful blueprints: a vehicle loop and a small process-control system, each with declared model fidelity and expected observations.",
+      "actions": "Compose/edit/save/reopen/execute both through the same Studio workflow, collect evidence and inspect core changes needed for the second.",
+      "expected": "Both satisfy their own declared observations; the second is not a renamed vehicle diagram. Domain content lives in profiles/blueprints/providers; the core requires no domain conditionals. Fixture-only evidence is labelled and does not claim either live provider works.",
+      "status": "NOT_RUN",
+      "retained_in": [
+        "M3",
+        "M4"
+      ],
+      "task_ids": [
+        "T013",
+        "T064",
+        "T065",
+        "T066",
+        "T069",
+        "T099",
+        "T100"
+      ]
+    },
+    {
+      "id": "AC-021",
+      "title": "Physical inventory and asset binding",
+      "milestone": "M3",
+      "required_environment": "one actual supported device/provider; owned inventory fixture",
+      "requirements": [
+        "FR-048"
+      ],
+      "success_criteria": [
+        "SC-005"
+      ],
+      "given": "A real asset with recorded identifier, supported interfaces and observable firmware/provider versions.",
+      "actions": "Register a logical device, discover or enter its permitted external binding, probe supported metadata and bind it to a deployment.",
+      "expected": "Physical identity/availability is resolved before readiness; endpoint details stay out of logical IDs and public exports. Unsupported metadata remains unknown. Missing hardware leaves the real case not run/blocked, never passed by its fixture. The inventory reports the actual provider OS/architecture/driver support; a device supported only on one platform is not advertised as universally operable.",
+      "status": "NOT_RUN",
+      "retained_in": [
+        "M4"
+      ],
+      "task_ids": [
+        "T070",
+        "T071",
+        "T072",
+        "T075",
+        "T079",
+        "T080",
+        "T081",
+        "T099",
+        "T100"
+      ]
+    },
+    {
+      "id": "AC-022",
+      "title": "Reservations and observation/stimulation separation",
+      "milestone": "M3",
+      "required_environment": "actual supported asset; reservation fixture",
+      "requirements": [
+        "FR-049",
+        "FR-050"
+      ],
+      "success_criteria": [
+        "SC-005"
+      ],
+      "given": "Two competing clients, read-only access and explicitly authorized supported stimulation.",
+      "actions": "Attempt concurrent exclusive reservations, unauthorized stimulation, stale-lease use and allowed observation; retry reservation/release commands.",
+      "expected": "Backend enforces exclusivity and capability/authority checks; no UI bypass grants stimulation. Lease expiry and uncertain release are visible; observation and actuation privileges are distinct and audit records identify actual operations.",
+      "status": "NOT_RUN",
+      "retained_in": [
+        "M4"
+      ],
+      "task_ids": [
+        "T070",
+        "T073",
+        "T074",
+        "T075",
+        "T079",
+        "T080",
+        "T081",
+        "T099",
+        "T100"
+      ]
+    },
+    {
+      "id": "AC-023",
+      "title": "Hardware disconnect and cleanup boundaries",
+      "milestone": "M3",
+      "required_environment": "actual supported asset with nonhazardous test setup",
+      "requirements": [
+        "FR-049",
+        "FR-050",
+        "FR-051"
+      ],
+      "success_criteria": [
+        "SC-005"
+      ],
+      "given": "A supported bounded operation and documented provider-specific stop/restore behaviour.",
+      "actions": "Disconnect the asset or provider during run; fail a supported stop/restore action; reconnect and inspect reconciliation.",
+      "expected": "Studio stops issuing unsupported commands, preserves ownership/evidence and reports unknown physical state where appropriate. UI Stop does not claim a physical safe state without provider evidence. Recovery follows the explicit adapter contract.",
+      "status": "NOT_RUN",
+      "retained_in": [
+        "M4"
+      ],
+      "task_ids": [
+        "T070",
+        "T073",
+        "T074",
+        "T076",
+        "T077",
+        "T078",
+        "T079",
+        "T080",
+        "T081",
+        "T099",
+        "T100"
+      ]
+    },
+    {
+      "id": "AC-024",
+      "title": "Virtual-to-physical substitution and time quality",
+      "milestone": "M3",
+      "required_environment": "compatible virtual and real provider pair",
+      "requirements": [
+        "FR-040",
+        "FR-051",
+        "FR-052"
+      ],
+      "success_criteria": [
+        "SC-005"
+      ],
+      "given": "The same logical device and compatible interfaces with distinct clock/control/fidelity capabilities.",
+      "actions": "Rebind the device, rerun the supported scenario, inspect unchanged logical connections and changed capabilities/time mappings.",
+      "expected": "Topology is retained where contracts agree; incompatible bindings are rejected. Physical pause/rewind/determinism are never assumed; measured synchronization quality/uncertainty and fidelity differences are visible in comparison. Physical acceptance identifies its host OS/driver; native Studio support on the other OS does not imply availability of this physical provider.",
+      "status": "NOT_RUN",
+      "retained_in": [
+        "M4"
+      ],
+      "task_ids": [
+        "T071",
+        "T076",
+        "T077",
+        "T078",
+        "T079",
+        "T080",
+        "T081",
+        "T099",
+        "T100"
+      ]
+    },
+    {
+      "id": "AC-025",
+      "title": "Scenario, stimulus and supported fault schedules",
+      "milestone": "M4",
+      "required_environment": "owned deterministic model/provider; permitted live fault subset",
+      "requirements": [
+        "FR-053",
+        "FR-054",
+        "FR-055",
+        "FR-057"
+      ],
+      "success_criteria": [
+        "SC-006"
+      ],
+      "given": "Scenario initial conditions, typed stimuli, time mappings, observation requirements and a supported/unsupported fault vocabulary.",
+      "actions": "Author schedules with activation/recovery, invalid time references and conflicting operations; compile and execute the supported subset.",
+      "expected": "Only admitted semantics execute. Fault timing and recovery are recorded against their actual clocks; unsupported targets/operations fail preflight. Determinism is claimed only for the evidenced provider/configuration envelope.",
+      "status": "NOT_RUN",
+      "retained_in": [],
+      "task_ids": [
+        "T082",
+        "T083",
+        "T084",
+        "T088",
+        "T095",
+        "T099",
+        "T100"
+      ]
+    },
+    {
+      "id": "AC-026",
+      "title": "Bounded assertion evaluator and missing evidence",
+      "milestone": "M4",
+      "required_environment": "owned evaluator fixtures; no arbitrary code execution",
+      "requirements": [
+        "FR-056",
+        "NFR-004"
+      ],
+      "success_criteria": [
+        "SC-006"
+      ],
+      "given": "Versioned typed predicates, valid/invalid units, gaps, missing inputs, unsynchronized clocks and adversarial expressions.",
+      "actions": "Evaluate true/false/indeterminate examples, apply time windows, reject unknown operators and exercise resource limits.",
+      "expected": "The defined bounded language produces pass/fail/indeterminate as specified. Missing data never yields a pass; unit/time incompatibility is diagnosed. No eval, arbitrary imports, filesystem/network access or silent execution of opaque XDL strings occurs.",
+      "status": "NOT_RUN",
+      "retained_in": [],
+      "task_ids": [
+        "T085",
+        "T086",
+        "T087",
+        "T088",
+        "T095",
+        "T099",
+        "T100"
+      ]
+    },
+    {
+      "id": "AC-027",
+      "title": "Immutable runs and recorded live parameter changes",
+      "milestone": "M1",
+      "required_environment": "owned snapshot and live-tune-capable fixtures",
+      "requirements": [
+        "FR-015",
+        "FR-016",
+        "FR-028"
+      ],
+      "success_criteria": [],
+      "given": "A running snapshot and a separately editable project draft, with both mutable and immutable parameter declarations.",
+      "actions": "Edit project/source/deployment during a run; request unsupported live changes; apply an explicitly supported live change.",
+      "expected": "The existing run retains exact inputs; edits form the next draft. Supported live changes record command, old/new values, time, authority and outcome; immutable/unsupported changes are rejected without side effects.",
+      "status": "NOT_RUN",
+      "retained_in": [
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "task_ids": [
+        "T021",
+        "T022",
+        "T024",
+        "T027",
+        "T033",
+        "T040",
+        "T047",
+        "T095",
+        "T099",
+        "T100"
+      ]
+    },
+    {
+      "id": "AC-028",
+      "title": "Campaign bounds, cancellation and restart",
+      "milestone": "M4",
+      "required_environment": "owned campaign runtime; admitted provider for live scope",
+      "requirements": [
+        "FR-058"
+      ],
+      "success_criteria": [
+        "SC-006"
+      ],
+      "given": "A finite parameter matrix, explicit seeds, budgets, hardware exclusivity and accepted per-run limits.",
+      "actions": "Preview cardinality; exceed budgets; execute, cancel and restart/reconcile the campaign across a failed run.",
+      "expected": "Expansion is bounded before execution; each run has immutable inputs and identity. Cancellation/recovery do not duplicate runs or violate reservations. Failed/indeterminate runs remain in results; physical repetition is not advertised as deterministic replay.",
+      "status": "NOT_RUN",
+      "retained_in": [],
+      "task_ids": [
+        "T089",
+        "T090",
+        "T095",
+        "T099",
+        "T100"
+      ]
+    },
+    {
+      "id": "AC-029",
+      "title": "Baseline comparison, replay and exchange",
+      "milestone": "M4",
+      "required_environment": "owned runs with matching/mismatching identities and tampered exports",
+      "requirements": [
+        "FR-059",
+        "FR-060",
+        "FR-061",
+        "FR-062",
+        "FR-063",
+        "NFR-004",
+        "NFR-009"
+      ],
+      "success_criteria": [
+        "SC-007"
+      ],
+      "given": "Runs with different configurations, clocks, observations and integrity states; a portable project/evidence package.",
+      "actions": "Compare baselines, replay observations, request a real rerun, export/import and tamper with referenced evidence. Export/import the supported portable package in both native Linux/Windows directions, test stale annotation revisions, and revalidate retention dry-run plans before apply.",
+      "expected": "Comparison exposes configuration and time differences. Replay only re-presents recorded data; rerun requires fresh admission. Export includes provenance and hashes, excludes secrets, reports missing/restricted artifacts and detects integrity problems without rewriting original evidence. A stale annotation or changed retention dependency is rejected; platform-local bindings cannot leak into or silently reinterpret a portable package.",
+      "status": "NOT_RUN",
+      "retained_in": [],
+      "task_ids": [
+        "T091",
+        "T092",
+        "T093",
+        "T094",
+        "T095",
+        "T098",
+        "T099",
+        "T100"
+      ]
+    },
+    {
+      "id": "AC-030",
+      "title": "Performance and retention envelope",
+      "milestone": "M2",
+      "required_environment": "recorded reference hardware; repeatable load fixtures",
+      "requirements": [
+        "NFR-007",
+        "NFR-008",
+        "NFR-003"
+      ],
+      "success_criteria": [
+        "SC-008"
+      ],
+      "given": "The exact reference environment, workload sizes, warm/cold conditions and thresholds defined by spec.md.",
+      "actions": "Run declared canvas, API, streaming/backpressure and history workloads; record distributions, resource consumption, dropped-display counts and evidence retention. Execute the workload on both recorded native Linux and Windows reference environments and retain each result independently.",
+      "expected": "Apply every specified threshold to measured results; failures remain failures. Report capacity/provider limitations and test command/configuration hashes. Do not extrapolate fixture throughput to simulator or hardware capacity. Every platform meets its applicable threshold; aggregate averages cannot conceal a failed native-platform result.",
+      "status": "NOT_RUN",
+      "retained_in": [
+        "M3",
+        "M4"
+      ],
+      "task_ids": [
+        "T067",
+        "T069",
+        "T096",
+        "T099",
+        "T100"
+      ]
+    },
+    {
+      "id": "AC-031",
+      "title": "Keyboard access and accessible diagnostics",
+      "milestone": "M1",
+      "required_environment": "supported browsers; keyboard and assistive-technology checks",
+      "requirements": [
+        "FR-027",
+        "NFR-006",
+        "NFR-003"
+      ],
+      "success_criteria": [
+        "SC-008"
+      ],
+      "given": "The model, forms, errors, operation controls, diagnostics and results views.",
+      "actions": "Complete critical flows without a pointing device; inspect focus, labels, contrast, non-colour status, dynamic announcements and resizing at the specified viewports. Repeat the declared supported browser/accessibility matrix against native Linux and Windows backends.",
+      "expected": "Critical operations and validation findings remain usable through an accessible alternative to drag-only canvas interaction. Focus and error locations are meaningful; no essential state depends only on colour, hover or animation.",
+      "status": "NOT_RUN",
+      "retained_in": [
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "task_ids": [
+        "T017",
+        "T038",
+        "T040",
+        "T043",
+        "T067",
+        "T069",
+        "T097",
+        "T099",
+        "T100"
+      ]
+    },
+    {
+      "id": "AC-032",
+      "title": "Offline packaging, migration and release evidence",
+      "milestone": "M1",
+      "required_environment": "clean recorded native Linux and native Windows hosts; supported browsers; owned reference provider; previous/current project fixtures",
+      "requirements": [
+        "NFR-003",
+        "NFR-004",
+        "NFR-009",
+        "NFR-010",
+        "NFR-012",
+        "FR-006",
+        "FR-008",
+        "NFR-005",
+        "NFR-006"
+      ],
+      "success_criteria": [
+        "SC-008"
+      ],
+      "given": "A packaged candidate with pinned dependencies, documented install/start/backup/recovery steps and locally available admitted artifacts. There is one clean supported native Linux host and one clean supported native Windows host; neither Windows browser access to Linux nor WSL substitutes for the Windows host.",
+      "actions": "Install/start in the documented offline envelope, migrate/restore projects, run compatibility/regression checks and audit the release manifest. On each OS install the package, start the native backend, open its browser UI, import/save/reopen XDL, validate, run/cancel the owned reference provider, inspect results, reconnect the browser, restart/reconcile the backend, and stop cleanly. Exercise documented update/recovery and portable exchange paths. Verify optional service-manager registration only if offered.",
+      "expected": "Core operation requires no cloud or AI service; absent dependencies produce actionable errors. Migrations preserve originals and identities. Evidence binds commands, versions, sanitized environment, exit status, hashes and limitations to the exact candidate; incomplete external lanes remain explicit. Both native core smoke lanes pass independently without undeclared Bash/WSL/VM/Docker/remote-Linux dependencies. Foreground or launcher-managed background operation is documented. Provider-specific live limitations remain visible and are not misreported as native runtime support.",
+      "status": "NOT_RUN",
+      "retained_in": [
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "task_ids": [
+        "T002",
+        "T009",
+        "T010",
+        "T036",
+        "T039",
+        "T040",
+        "T092",
+        "T098",
+        "T099",
+        "T100"
+      ],
+      "platform_lanes": [
+        {
+          "platform": "linux_native",
+          "status": "NOT_RUN"
+        },
+        {
+          "platform": "windows_native",
+          "status": "NOT_RUN"
+        }
+      ]
+    }
+  ]
+}
