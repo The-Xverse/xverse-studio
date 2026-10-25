@@ -96,7 +96,10 @@ class AnnotationUpdate(Annotation):
 
 
 class Retention(Body):
-    runIds: list[str] = Field(max_length=128)
+    runIds: list[str] = Field(default_factory=list, max_length=128)
+    projectIds: list[str] = Field(default_factory=list, max_length=128)
+    artifactIds: list[str] = Field(default_factory=list, max_length=128)
+    rule: Literal["explicit"] = "explicit"
 
 
 class RetentionApply(Body):

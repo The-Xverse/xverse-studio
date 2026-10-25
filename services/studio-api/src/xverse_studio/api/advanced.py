@@ -3,8 +3,6 @@ from __future__ import annotations
 
 import json
 from collections import OrderedDict
-from pathlib import Path
-import shutil
 import threading
 import time
 
@@ -20,9 +18,7 @@ from xverse_studio.assertions.evaluator import evaluator_identity
 from xverse_studio.comparison import compare_runs
 from xverse_studio.evidence.reader import read_journal
 from xverse_studio.lab import LabError, LabRegistry
-from xverse_studio.retention import check_plan, plan_retention
-from xverse_studio.runs.service import ACTIVE
-from xverse_studio.storage.core import Problem, atomic, canonical, contained, digest, uid
+from xverse_studio.storage.core import Problem, atomic, canonical, digest, uid
 from xverse_studio.xdl import XDLRejected, reference_configuration
 from xverse_studio.xdl.edits import semantic_edits
 
@@ -487,7 +483,7 @@ def install_advanced(app, store, projects, runs, adapter):
 
     @app.post("/api/v1/runs/{runId}/annotations", status_code=201)
     def annotate(runId: str, body: Annotation, request: Request, response: Response):
-        run = runs.read(runId)
+        runs.read(runId)
         annotation_refs(runId, body)
         try:
             row = create_annotation(runId, body.model_dump(), author=request.state.principal)
@@ -526,20 +522,22 @@ def install_advanced(app, store, projects, runs, adapter):
             store.put("annotation", annotationId, updated, db)
         return updated
 
-    def retention_state(db=None):
-        return {"runs": store.all("run", db), "evaluations": store.all("evaluation", db), "annotations": store.all("annotation", db), "campaigns": store.all("campaign", db)}
+    from xverse_studio.retention.service import RetentionService
+    from xverse_studio.retention.files import ProofLimit
+    retention_service = RetentionService(store, projects, runs)
+    app.state.studio.retention = retention_service
+
+    def retention_error(exc):
+        if isinstance(exc, ProofLimit) or str(exc) == "RETENTION_DEPENDENCY_LIMIT":
+            raise Problem("LIMIT_EXCEEDED", "Retention proof exceeds its advertised bounded scan. Reduce the selected scope or resolve retained dependencies before retrying.", 413) from None
+        _failure(exc)
 
     @app.post("/api/v1/retention/plans")
     def retention(body: Retention):
-        for run in store.all("run"):
-            runs.read(run["runId"])
         try:
-            with store.tx() as db:
-                plan = plan_retention(body.runIds, retention_state(db))
-                store.put("retention", plan["planId"], plan, db)
-        except ValueError as exc:
-            _failure(exc)
-        return plan
+            return retention_service.plan(body.model_dump())
+        except (ValueError, ProofLimit) as exc:
+            retention_error(exc)
 
     @app.get("/api/v1/retention/plans/{planId}")
     def retention_plan(planId: str):
@@ -547,54 +545,7 @@ def install_advanced(app, store, projects, runs, adapter):
 
     @app.post("/api/v1/retention/plans/{planId}/apply", status_code=202)
     def apply_retention(planId: str, body: RetentionApply, request: Request):
-        for run in store.all("run"):
-            runs.read(run["runId"])
-        def accepted(db):
-            plan = store.get("retention", planId, db)
-            try:
-                check_plan(plan, retention_state(db), body.fingerprint)
-            except ValueError as exc:
-                _failure(exc)
-            if plan["status"] != "planned":
-                raise Problem("RETENTION_PLAN_STALE", "This plan already has an accepted apply operation.", 409)
-            operation_id = uid("op-")
-            plan.update(status="applying", operationId=operation_id, outcomes=[])
-            store.put("retention", planId, plan, db)
-            store.put("operation", operation_id, {"operationId": operation_id, "kind": "retention", "planId": planId, "status": "accepted"}, db)
-            return {"planId": planId, "operationId": operation_id}
-        result, is_new = store.idempotent(request.state.principal, "POST /retention/" + planId + "/apply", request.headers.get("idempotency-key"), body.model_dump(), accepted)
-        if is_new:
-            # Intent/idempotency are committed before the first filesystem effect.
-            # Per-item outcomes commit independently. Interrupted apply remains
-            # unknown on restart and is never automatically replayed.
-            with store.lock:
-                plan = store.get("retention", planId)
-                operation = store.get("operation", result["operationId"])
-                try:
-                    removals = check_plan(plan, retention_state(), body.fingerprint)
-                except ValueError:
-                    plan.update(status="rejected", reason="RETENTION_PLAN_STALE")
-                    operation.update(status="rejected", code="RETENTION_PLAN_STALE", result={"planId": planId, "status": "rejected", "outcomes": []})
-                    store.put("retention", planId, plan)
-                    store.put("operation", operation["operationId"], operation)
-                    return {**result, **operation["result"]}
-                operation["status"] = "delegated"
-                store.put("operation", operation["operationId"], operation)
-                for selection in removals:
-                    rid = selection["runId"]
-                    root = contained(store.root, runs.directory(rid))
-                    outcome = {"runId": rid, "status": "failed", "reason": "UNSAFE_RUN_DIRECTORY"}
-                    if not root.is_symlink():
-                        try:
-                            if root.exists(): shutil.rmtree(root)
-                            outcome = {"runId": rid, "status": "removed", "snapshotPreserved": True}
-                        except OSError:
-                            outcome = {"runId": rid, "status": "failed", "reason": "FILESYSTEM_REMOVAL_FAILED"}
-                    plan["outcomes"].append(outcome)
-                    store.put("retention", planId, plan)
-                plan.update(status="applied", appliedAt=time.time())
-                store.put("retention", planId, plan)
-                operation.update(status="completed", result={"planId": planId, "status": "complete" if all(o["status"] == "removed" for o in plan["outcomes"]) else "partial", "outcomes": plan["outcomes"], "protected": plan["protected"]})
-                store.put("operation", operation["operationId"], operation)
-        operation = store.get("operation", result["operationId"])
-        return {**result, **operation.get("result", {}), "operationStatus": operation["status"]}
+        try:
+            return retention_service.apply(planId, body.fingerprint, request.state.principal, request.headers.get("idempotency-key"))
+        except (ValueError, ProofLimit) as exc:
+            retention_error(exc)

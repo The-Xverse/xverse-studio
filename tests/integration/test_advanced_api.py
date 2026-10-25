@@ -1,6 +1,5 @@
 """Actual local HTTP/provider checks. These establish owned reference scope only."""
 import time
-from copy import deepcopy
 from io import StringIO
 
 from ruamel.yaml import YAML
@@ -145,7 +144,7 @@ def test_restart_marks_interrupted_evaluation_and_retention_unknown_without_repl
     store.put('retention','ret-interrupted',{'planId':'ret-interrupted','operationId':'op-retention','status':'applying','outcomes':[{'runId':'owned','status':'removed'}]})
     store.put('operation','op-retention',{'operationId':'op-retention','status':'delegated'})
     store.put('operation','op-cancel',{'operationId':'op-cancel','kind':'campaign_cancel','campaignId':'c','status':'accepted'})
-    app = create_app(tmp_path, allowed_hosts=['testserver'], bootstrap_token='restart-token')
+    create_app(tmp_path, allowed_hosts=['testserver'], bootstrap_token='restart-token')
     interrupted = store.get('evaluation','eval-interrupted')
     assert interrupted['status'] == 'error' and interrupted['verdict'] is None
     assert store.get('operation','op-evaluation')['status'] == 'failed'
@@ -185,13 +184,13 @@ def test_cancelled_campaign_does_not_schedule_pending_children(client):
 
 
 def test_retention_partial_filesystem_failure_does_not_claim_complete(client, monkeypatch):
-    import xverse_studio.api.advanced as advanced
+    import xverse_studio.retention.service as retention_service
     _, pf = prepared(client)
     rid = start(client,pf)
     assert wait_run(client,rid)['state'] == 'stopped'
     plan = client.post('/api/v1/retention/plans',json={'runIds':[rid]}).json()
     def refuse(path): raise OSError('owned injected filesystem refusal')
-    monkeypatch.setattr(advanced.shutil,'rmtree',refuse)
+    monkeypatch.setattr(retention_service.shutil,'rmtree',refuse)
     response = client.post('/api/v1/retention/plans/' + plan['planId'] + '/apply',headers={'Idempotency-Key':'failed-removal'},json={'fingerprint':plan['fingerprint']})
     assert response.status_code == 202, response.text
     assert response.json()['status'] == 'partial'
