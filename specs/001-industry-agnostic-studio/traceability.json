@@ -3332,8 +3332,13 @@
       "acceptance_ids": [
         "AC-014"
       ],
-      "status": "in_progress",
-      "implementation_note": "Owned graph/source/catalog/profile/variant work implemented and tested; independent composition repair verification and final UI successor are being retained. External two-industry/live and cross-OS gates remain open."
+      "status": "completed",
+      "implementation_note": "Owned component complete: tests/integration/test_edit_conflicts.py (history, add/connect/disconnect/remove undo-redo with exact bytes and validation, stale restore, concurrent saves, lost/tampered copies, external writes and sidecars, unreadable sources, interrupted staging and sealing, leftover staged revision, paging, private full backup/restore, active-run snapshot isolation) and tests/e2e/draft-run-isolation.spec.ts. Per-platform locking/case clauses remain T048.",
+      "implementation_evidence": [
+        "docs/architecture/ADR-0013-revision-history-and-recovery.md",
+        "evidence/studio/M2-revisions/verification.json",
+        "evidence/studio/M2-revisions/independent-review.md"
+      ]
     },
     {
       "id": "T046",
@@ -3357,8 +3362,13 @@
       "acceptance_ids": [
         "AC-014"
       ],
-      "status": "in_progress",
-      "implementation_note": "Owned graph/source/catalog/profile/variant work implemented and tested; independent composition repair verification and final UI successor are being retained. External two-industry/live and cross-OS gates remain open."
+      "status": "completed",
+      "implementation_note": "Owned component complete after independent review (six findings repaired) and an unchanged-candidate 547 backend / 51 browser-performance run: revision records with verified content copies, restore transactions for graph undo/redo with continuity-checked per-tab history, explicit recovery with digest-named backups, sidecar integrity, bounded per-tab source autosave. Windows behavior remains T048.",
+      "implementation_evidence": [
+        "docs/architecture/ADR-0013-revision-history-and-recovery.md",
+        "evidence/studio/M2-revisions/verification.json",
+        "evidence/studio/M2-revisions/independent-review.md"
+      ]
     },
     {
       "id": "T047",
@@ -6117,15 +6127,15 @@
     "status_document": "../../docs/implementation/STATUS.md",
     "native_windows": "BLOCKED at user request. Initial native Server 2022 install failed on upstream Git filenames; application/browser NOT_RUN.",
     "m5": "deferred",
-    "code_candidate": "working-tree product sha256:5a1ffe946c0ebde860b0227358a1ca36bc5162b3e60fd552470caa351f6d5a37 on 5b8a957",
-    "component_completed": 24,
+    "code_candidate": "working-tree product sha256 recorded in evidence/studio/M2-revisions/verification.json on b61c7ec",
+    "component_completed": 26,
     "verification": {
-      "backend_tests_passed": 531,
-      "playwright_checks_passed": 47,
+      "backend_tests_passed": 547,
+      "playwright_checks_passed": 51,
       "playwright_checks_failed": 0,
       "playwright_scope": "full Linux browser suite with performance measurements on an unchanged candidate",
       "milestones_accepted": 0,
-      "evidence": "evidence/studio/M1-diagnostics/"
+      "evidence": "evidence/studio/M2-revisions/"
     }
   }
 }

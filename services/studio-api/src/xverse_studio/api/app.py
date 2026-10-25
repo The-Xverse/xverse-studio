@@ -446,7 +446,61 @@ def create_app(
                 for path, content in updated.items()
             }
 
-        return projects.mutate(projectId, expected, change)
+        return projects.mutate(
+            projectId,
+            expected,
+            change,
+            {
+                "kind": "semantic_edit",
+                "edits": [str(e.get("kind")) for e in body.edits][:64],
+            },
+        )
+
+    @app.get("/api/v1/projects/{projectId}/revisions")
+    def revisions(
+        projectId: str,
+        before: Annotated[int | None, Query(ge=1)] = None,
+        limit: Annotated[int, Query(ge=1, le=200)] = 50,
+    ):
+        return projects.history.list(projectId, before, limit)
+
+    @app.post("/api/v1/projects/{projectId}/revisions/{targetRevision}/restore")
+    def restore_revision(
+        projectId: str, targetRevision: int, request: Request, response: Response
+    ):
+        p = projects.history.restore(projectId, revision(request), targetRevision)
+        response.headers["ETag"] = f'"{p["revision"]}"'
+        return p
+
+    @app.post("/api/v1/projects/{projectId}/recoveries")
+    def recover(projectId: str, body: Recovery, request: Request):
+        expected = revision(request)
+        if expected is None:
+            raise Problem(
+                "REVISION_REQUIRED", "Supply If-Match with the current revision.", 428
+            )
+        if expected != body.expectedRevision:
+            raise Problem(
+                "REVISION_CONFLICT", "If-Match and expectedRevision must agree.", 412
+            )
+        if (body.action == "restore_revision") != (body.revision is not None):
+            raise Problem(
+                "RECOVERY_ACTION_UNSUPPORTED",
+                "Name a revision only when restoring a revision.",
+            )
+        return projects.history.recover(projectId, expected, body.action, body.revision)
+
+    @app.get("/api/v1/projects/{projectId}/recoveries")
+    def recoveries(projectId: str):
+        return projects.history.recoveries(projectId)
+
+    @app.get("/api/v1/projects/{projectId}/recoveries/{recoveryId}/preserved")
+    def recovered_source(
+        projectId: str,
+        recoveryId: str,
+        key: Annotated[str, Query(min_length=1, max_length=600)],
+    ):
+        return projects.history.recovered(projectId, recoveryId, key)
 
     @app.post("/api/v1/projects/{projectId}/preflights")
     def preflight(projectId: str, body: Selection):

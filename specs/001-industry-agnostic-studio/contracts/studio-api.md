@@ -26,6 +26,10 @@
 | `POST /projects/imports` | Bounded archive/upload handle; returns inspectable import report and newly allocated project only after safe extraction | M0/M2 |
 | `POST /projects/{projectId}/exports` | Exact revision, inclusion policy; returns operation for a bounded credential-free archive | M2 |
 | `POST /projects/{projectId}/validations` | `revision`; returns typed report tied to input/validator identities | M0 |
+| `GET /projects/{projectId}/revisions?before=&limit=` | Append-only revision history, newest first, cursor-paged (≤200): origin, document digests; unrecorded legacy revisions are reported; see ADR-0013 | M2 |
+| `POST /projects/{projectId}/revisions/{revision}/restore` | `If-Match`; new forward revision from verified copies of an earlier revision (undo/redo transaction) | M2 |
+| `POST /projects/{projectId}/recoveries` | `If-Match`, `expectedRevision`, `adopt_external` or `restore_revision`; preserves observed external bytes before committing | M2 |
+| `GET /projects/{projectId}/recoveries[/{recoveryId}/preserved?key=]` | Recovery backups and one preserved, digest-verified document or sidecar | M2 |
 | `POST /projects/{projectId}/compilations` | `revision`, deployment/scenario refs; returns plan reference/digest or diagnostics | M0 |
 | `GET /catalog` | Cursor-paged admitted templates/components/models/blueprints; filters by kind, role, profile, interface and provider availability | M2 |
 | `GET /catalog/{entryId}` | Immutable entry identity/version/digest, XDL resource/template refs, parameter schema, provenance, maturity and dependencies | M2 |

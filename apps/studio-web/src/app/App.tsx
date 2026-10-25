@@ -45,6 +45,16 @@ import {
 import { PreflightReview } from "../features/preflight/PreflightReview";
 import { ResultsView } from "../features/results/ResultsView";
 import { PendingStartNotice } from "../features/runs/PendingStartNotice";
+import { RecoveryPanel } from "../features/model/RecoveryPanel";
+import {
+  applyStep,
+  HistoryStale,
+  readHistory,
+  reconcileHistory,
+  recordEdit,
+  writeHistory,
+  type EditHistory,
+} from "../features/model/history";
 import {
   clearPendingStart,
   isDefinitiveRejection,
@@ -116,6 +126,10 @@ export default function App() {
     [streamState, setStreamState] = useState("Disconnected"),
     [evidenceImport, setEvidenceImport] = useState<Data | null>(null),
     [pendingStart, setPendingStart] = useState<PendingStart | null>(null),
+    [editHistory, setEditHistory] = useState<EditHistory>({
+      undo: [],
+      redo: [],
+    }),
     [startSending, setStartSending] = useState(false);
   const startKey = useRef(mutationKey()),
     preflightRequestSequence = useRef(0),
@@ -153,6 +167,11 @@ export default function App() {
     );
     if (sequence !== projectLoadSequence.current) return value;
     setProject(value);
+    {
+      const history = reconcileHistory(readHistory(projectId), value.revision);
+      writeHistory(projectId, history);
+      setEditHistory(history);
+    }
     localStorage.setItem("studio.projectId", projectId);
     setSection("workspace");
     setPreflight(null);
@@ -227,6 +246,46 @@ export default function App() {
   }, []);
   const refreshProject = async () =>
     project ? loadProject(project.projectId) : null;
+  const historyShortcut = useRef<(direction: "undo" | "redo") => void>(
+    () => undefined,
+  );
+  historyShortcut.current = (direction) => {
+    if (
+      !project ||
+      busy ||
+      modal ||
+      section !== "workspace" ||
+      !editHistory[direction].length
+    )
+      return;
+    void doAction(
+      direction === "undo" ? "Undoing graph edit" : "Redoing graph edit",
+      () => stepHistory(direction),
+    );
+  };
+  useEffect(() => {
+    // Text fields keep their own undo; graph history applies elsewhere.
+    const handle = (event: KeyboardEvent) => {
+      if (
+        !(event.ctrlKey || event.metaKey) ||
+        event.altKey ||
+        event.isComposing ||
+        event.key.toLowerCase() !== "z"
+      )
+        return;
+      const target = event.target as HTMLElement | null;
+      if (
+        target?.closest(
+          "input, textarea, select, [contenteditable='true'], [role='dialog']",
+        )
+      )
+        return;
+      event.preventDefault();
+      historyShortcut.current(event.shiftKey ? "redo" : "undo");
+    };
+    window.addEventListener("keydown", handle);
+    return () => window.removeEventListener("keydown", handle);
+  }, []);
   const projection = useMemo(() => projectDisplay(project), [project]);
   const entry =
     catalog.find(
@@ -511,13 +570,41 @@ export default function App() {
         : edit,
     );
     if (!project) return;
-    await api(`/projects/${project.projectId}/edits`, {
+    const saved = await api<Project>(`/projects/${project.projectId}/edits`, {
       method: "POST",
       revision: project.revision,
       body: { baseRevision: project.revision, edits },
     });
+    const history = recordEdit(
+      readHistory(project.projectId),
+      project.revision,
+      saved.revision,
+      edits.map((edit) => String(edit.kind).replace(/_/g, " ")).join(", "),
+    );
+    writeHistory(project.projectId, history);
+    setEditHistory(history);
     await refreshProject();
     setNotice("Draft saved. Existing run snapshots remain unchanged.");
+  }
+  async function stepHistory(direction: "undo" | "redo") {
+    if (!project) return;
+    const history = readHistory(project.projectId);
+    try {
+      const result = await applyStep(project, history, direction);
+      if (!result) return;
+      writeHistory(project.projectId, result.history);
+      setEditHistory(result.history);
+      await refreshProject();
+      setNotice(
+        `${direction === "undo" ? "Undid" : "Redid"} a graph edit as new revision ${result.project.revision}. Earlier revisions and run snapshots are unchanged.`,
+      );
+    } catch (error) {
+      if (error instanceof HistoryStale) {
+        writeHistory(project.projectId, { undo: [], redo: [] });
+        setEditHistory({ undo: [], redo: [] });
+      }
+      throw error;
+    }
   }
   async function validate() {
     if (!project) return;
@@ -761,6 +848,16 @@ export default function App() {
                     and execution are blocked.
                   </p>
                   <Diagnostics diagnostics={project.sourceDiagnostics || []} />
+                  <RecoveryPanel
+                    project={project}
+                    doAction={doAction}
+                    onRecovered={async (recovery) => {
+                      await refreshProject();
+                      setNotice(
+                        `Recovered as revision ${recovery.project.revision}. The observed external bytes are preserved in backup ${recovery.recovery.recoveryId}.`,
+                      );
+                    }}
+                  />
                 </div>
               </div>
             )}
@@ -775,6 +872,27 @@ export default function App() {
                   <Diagnostics
                     diagnostics={(error as ApiError).details?.diagnostics}
                   />
+                  {(error as ApiError).code === "PROJECT_UNAVAILABLE" &&
+                    (() => {
+                      // Unreadable committed sources can still be restored from history.
+                      const listed = projects.find(
+                        (p) => p.projectId === selectedProjectRef.current,
+                      );
+                      return listed ? (
+                        <RecoveryPanel
+                          project={listed}
+                          adoptable={false}
+                          doAction={doAction}
+                          onRecovered={async (recovery) => {
+                            await loadProject(listed.projectId);
+                            await refreshProjects();
+                            setNotice(
+                              `Recovered as revision ${recovery.project.revision}. Observed bytes are preserved in backup ${recovery.recovery.recoveryId}.`,
+                            );
+                          }}
+                        />
+                      ) : null;
+                    })()}
                   {(error as ApiError).status === 412 && (
                     <button
                       onClick={() =>
@@ -891,6 +1009,40 @@ export default function App() {
                   </div>
                 </div>
                 <div className="header-actions">
+                  <button
+                    className="button"
+                    disabled={!!busy || !editHistory.undo.length}
+                    aria-keyshortcuts="Control+Z"
+                    title={
+                      editHistory.undo.length
+                        ? `Undo ${editHistory.undo[editHistory.undo.length - 1].label}`
+                        : "No graph edit to undo in this tab"
+                    }
+                    onClick={() =>
+                      void doAction("Undoing graph edit", () =>
+                        stepHistory("undo"),
+                      )
+                    }
+                  >
+                    Undo
+                  </button>
+                  <button
+                    className="button"
+                    disabled={!!busy || !editHistory.redo.length}
+                    aria-keyshortcuts="Control+Shift+Z"
+                    title={
+                      editHistory.redo.length
+                        ? `Redo ${editHistory.redo[editHistory.redo.length - 1].label}`
+                        : "No graph edit to redo in this tab"
+                    }
+                    onClick={() =>
+                      void doAction("Redoing graph edit", () =>
+                        stepHistory("redo"),
+                      )
+                    }
+                  >
+                    Redo
+                  </button>
                   <button
                     className="button"
                     onClick={() =>

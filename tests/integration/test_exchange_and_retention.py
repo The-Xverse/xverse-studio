@@ -255,6 +255,12 @@ def test_project_retention_is_explicit_and_preserves_unselected_projects(client)
         )["resourceId"]
         == first["projectId"]
     )
+    store = client.app.state.studio.store
+    # Revision history goes with its project; the kept project's history stays.
+    assert store.find("revision", "projectId", first["projectId"]) == []
+    assert [
+        r["revision"] for r in store.find("revision", "projectId", second["projectId"])
+    ] == [1]
 
 
 def test_project_retention_protects_every_historical_snapshot_without_cascade(client):

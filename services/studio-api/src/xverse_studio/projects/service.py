@@ -19,7 +19,10 @@ from xverse_studio.security.managed_io import open_read, SafeIOError
 
 class Projects:
     def __init__(self, store, adapter):
+        from xverse_studio.projects.revisions import RevisionHistory
+
         self.store, self.adapter = store, adapter
+        self.history = RevisionHistory(self)
 
     def _dir(self, pid, rev):
         return contained(
@@ -132,6 +135,22 @@ class Projects:
                 **d,
                 "content": content,
             }
+        revision_dir = self._dir(pid, p["revision"])
+        for name, expected in p.get("supportingFiles", {}).items():
+            data, status = self.history._read(
+                contained(revision_dir, revision_dir / name)
+            )
+            if status != "present" or data != expected.encode():
+                result["sourceIntegrity"] = "modified"
+                result["sourceDiagnostics"].append(
+                    {
+                        "code": "REVISION_CONFLICT",
+                        "severity": "error",
+                        "sidecar": name,
+                        "observed": status,
+                        "message": "A committed sidecar changed outside the committed revision. Preserve it and recover before saving or execution.",
+                    }
+                )
         return result
 
     def sources(self, p):
@@ -170,7 +189,7 @@ class Projects:
                     currentRevision=p["revision"],
                 )
 
-    def _commit(self, p, documents, db):
+    def _commit(self, p, documents, db, origin=None):
         names = [
             "project.studio.json",
             *[d["path"] for d in documents.values()],
@@ -234,6 +253,7 @@ class Projects:
                 db, lambda: shutil.rmtree(target) if target.exists() else None
             )
             self.store.put("project", p["projectId"], metadata, db)
+            self.history.seal(p, documents, db, origin)
         except BaseException:
             if stage.exists():
                 shutil.rmtree(stage)
@@ -324,9 +344,14 @@ class Projects:
                 "provenance": provenance or {},
             }
         with self.store.tx() as db:
-            return self._commit(p, normalized, db)
+            return self._commit(
+                p,
+                normalized,
+                db,
+                {"kind": "import" if (provenance or {}).get("imported") else "create"},
+            )
 
-    def mutate(self, pid, revision, transform):
+    def mutate(self, pid, revision, transform, origin=None):
         with self.store.tx() as db:
             p = self.read(pid, db)
             if revision is None:
@@ -342,22 +367,24 @@ class Projects:
                     412,
                     currentRevision=p["revision"],
                 )
-            for d in p["documents"].values():
-                if digest(d["content"].encode()) != d["digest"]:
-                    raise Problem(
-                        "REVISION_CONFLICT",
-                        "A committed source was edited externally. Preserve and compare it before recovery.",
-                        412,
-                        currentRevision=p["revision"],
-                    )
-            docs = transform(p)
-            p["revision"] += 1
-            p["manifest"]["resources"] = [
-                {"path": d["path"], "format": d["format"]}
-                for d in docs.values()
-                if d["path"].startswith("xdl/")
-            ]
-            return self._commit(p, docs, db)
+            if p["sourceIntegrity"] == "modified":
+                raise Problem(
+                    "REVISION_CONFLICT",
+                    "A committed source was edited externally. Preserve and compare it before recovery.",
+                    412,
+                    currentRevision=p["revision"],
+                )
+            return self.advance(p, transform(p), db, origin)
+
+    def advance(self, p, docs, db, origin=None):
+        """Commit the next revision; callers have already checked expectations."""
+        p["revision"] += 1
+        p["manifest"]["resources"] = [
+            {"path": d["path"], "format": d["format"]}
+            for d in docs.values()
+            if d["path"].startswith("xdl/")
+        ]
+        return self._commit(p, docs, db, origin)
 
     def save(self, pid, docid, revision, content, format):
         def change(p):
@@ -371,7 +398,9 @@ class Projects:
             }
             return docs
 
-        return self.mutate(pid, revision, change)
+        return self.mutate(
+            pid, revision, change, {"kind": "source_save", "documentId": docid}
+        )
 
     def layout(self, pid, revision, layout):
         with self.store.tx() as db:

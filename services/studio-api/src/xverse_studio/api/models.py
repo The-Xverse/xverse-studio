@@ -63,6 +63,12 @@ class Edits(Body):
     edits: list[dict[str, Any]] = Field(min_length=1, max_length=128)
 
 
+class Recovery(Body):
+    expectedRevision: int
+    action: Literal["adopt_external", "restore_revision"]
+    revision: int | None = Field(default=None, ge=1)
+
+
 class Export(Body):
     revision: int
     inclusionPolicy: Literal["project"] = "project"

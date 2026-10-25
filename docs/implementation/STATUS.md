@@ -3,14 +3,15 @@
 Scope: runnable development reference implementation on `implement/studio-m0-m4`. No M0–M4 milestone
 or Studio 1.0 release is accepted. The supplied requirements/task IDs and acceptance targets remain.
 
-Latest recorded task completion: **24/100 components**, most recently T031/T032's evidence-linked
-diagnostic explanations (`evidence/studio/M1-diagnostics/`). This is an audited task count,
+Latest recorded task completion: **26/100 components**, most recently T045/T046's revision history,
+undo/redo transactions and source recovery (`evidence/studio/M2-revisions/`). This is an audited task count,
 not an estimate of remaining effort. T026 transport implementation is substantially repaired but
 remains open pending a complete current native/browser successor. Windows installation/testing
 remains blocked at user request, and native Windows secure I/O remains unimplemented/unavailable.
 
-The latest full Linux backend run passed **531 tests**; typecheck/build and the full **47-check
-browser/performance gate passed** on the current candidate (`evidence/studio/M1-diagnostics/`).
+The latest full Linux backend run passed **547 tests**; typecheck/build and the full **51-check
+browser/performance gate passed** on the current candidate (`evidence/studio/M2-revisions/`).
+Fresh-host CI for b61c7ec passed (push and PR).
 That includes the 30-second native expiry case with actual HTTP 410 and running verified-prefix
 recovery. Fresh-host push CI for checkpoint fb8ddb6 had failed that case (a history read racing a
 journal append); the PR run passed. Both outcomes are retained in `evidence/studio/native-ci/`.
@@ -33,7 +34,7 @@ private Linux backup/restore uses anchored acquisition and preserves immutable e
 Physical-provider inventory is empty.
 
 Component-complete task IDs, with the exact component scope/evidence in traceability.json:
-T003, T006, T013, T017, T018, T019, T020, T022, T024, T028, T029, T030, T031, T032, T036, T041, T042, T044, T050, T085, T086, T087, T092, T094.
+T003, T006, T013, T017, T018, T019, T020, T022, T024, T028, T029, T030, T031, T032, T036, T041, T042, T044, T045, T046, T050, T085, T086, T087, T092, T094.
 T044 was reopened after review, then repaired and reverified for selected-source navigation, empty
 draft retention, atomic document switching and external-source inspection.
 Other tasks remain unchecked; implemented subparts are recorded as in progress instead of implying
@@ -47,8 +48,8 @@ that their native, integration, review or acceptance obligations passed.
 | M3 | Scoped inventory/authority/lease/clock/recovery fixtures and explicit unsupported production controls. Actual device/provider/driver/permission and physical evidence are BLOCKED. |
 | M4 | Bounded evaluator with snapshot-bound metric dependencies, Scenario intent authoring, campaigns, comparison, immutable exchange, annotations and dependency-aware project/run/artifact-registration retention. Reported trace claims and frozen subject links are verified; broader provider effects and complete retained release gates remain open. |
 
-Ready Linux work remains independent of hardware/Windows: T045/T046 conflict, recovery and undo/redo
-transactions. T025 still needs both-native repetition (Windows held); T026
+Ready Linux work remains independent of hardware/Windows: T043's node grouping and drill-down
+navigation on the canvas. T025 still needs both-native repetition (Windows held); T026
 depends on T025; T027 retains its AC-006/007/027 environment clauses and observed partial-start/
 cleanup-failure transitions.
 
