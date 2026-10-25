@@ -63,7 +63,8 @@ class Runs:
                 currentRevision=p["revision"],
             )
         self.projects.assert_intact(p)
-        profile_locks = ProfileRegistry(self.adapter).validate_project(p)
+        registry = ProfileRegistry(self.adapter)
+        profile_locks = registry.validate_project(p)
         documents = self.projects.sources(p)
         project_documents = documents
         compiled = self.compilation(documents, selection)
@@ -81,6 +82,8 @@ class Runs:
             documents, compiled, provider_id, provider, active_count
         )
         diagnostics.extend(admission_diagnostics)
+        # Authored profiles that are unadmitted or differ from admitted semantics never execute.
+        diagnostics.extend(registry.authored_findings(project_documents))
         if compiled["valid"]:
             # Declared connection semantics without an admitted contract block execution.
             from xverse_studio.connections import admission_diagnostics as blocking

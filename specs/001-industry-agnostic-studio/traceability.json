@@ -3462,12 +3462,14 @@
       "acceptance_ids": [
         "AC-015"
       ],
-      "status": "in_progress",
-      "implementation_note": "Neutral logical asset contracts cover Device/Sensor/Actuator/Model, independent supported realization and optional logical containment, ports/interfaces, opaque payload preservation and atomic negatives. Broader representative catalog/provider/realization gates remain open; Windows held.",
+      "status": "completed",
+      "implementation_note": "Owned component complete: catalog/wizard contract cases for artifact and component versions, role/realization/placement independence, definition versus instance identity (including identity reuse refusal), inert artifact registration and untrusted form/configuration metadata stored as inert data, with fixtures under tests/fixtures/catalog/. 618 backend / 66 browser checks pass on an unchanged candidate.",
       "implementation_evidence": [
         "tests/contract/test_neutral_assets.py",
         "tests/integration/test_neutral_asset_authoring.py",
-        "evidence/studio/M2-neutral-assets/verification.json"
+        "evidence/studio/M2-neutral-assets/verification.json",
+        "evidence/studio/M2-profiles-catalog/README.md",
+        "evidence/studio/M2-profiles-catalog/verification.json"
       ]
     },
     {
@@ -3791,8 +3793,12 @@
       "acceptance_ids": [
         "AC-019"
       ],
-      "status": "in_progress",
-      "implementation_note": "Owned graph/source/catalog/profile/variant work implemented and tested; independent composition repair verification and final UI successor are being retained. External two-industry/live and cross-OS gates remain open."
+      "status": "completed",
+      "implementation_note": "Owned component complete: compatible mixed-profile binding, namespace collisions (bind and lock validation), core-semantic redefinition of admitted profiles (blocking PROFILE_CONFLICT) and unadmitted core-looking namespaces (blocking PROFILE_UNRESOLVED), malicious presentations refused even with self-consistent digests, and unsupported versions, with fixtures under tests/fixtures/profiles/. Preflight now reports authored profile findings. 618 backend / 66 browser checks pass.",
+      "implementation_evidence": [
+        "evidence/studio/M2-profiles-catalog/README.md",
+        "evidence/studio/M2-profiles-catalog/verification.json"
+      ]
     },
     {
       "id": "T061",
@@ -6155,15 +6161,15 @@
     "status_document": "../../docs/implementation/STATUS.md",
     "native_windows": "BLOCKED at user request. Initial native Server 2022 install failed on upstream Git filenames; application/browser NOT_RUN.",
     "m5": "deferred",
-    "code_candidate": "working-tree product sha256 recorded in evidence/studio/M2-connections/verification.json on 0350ea5",
-    "component_completed": 31,
+    "code_candidate": "working-tree product sha256 recorded in evidence/studio/M2-profiles-catalog/verification.json on fa5355a",
+    "component_completed": 33,
     "verification": {
-      "backend_tests_passed": 599,
+      "backend_tests_passed": 618,
       "playwright_checks_passed": 66,
       "playwright_checks_failed": 0,
       "playwright_scope": "full Linux browser suite with performance measurements on an unchanged candidate",
       "milestones_accepted": 0,
-      "evidence": "evidence/studio/M2-connections/"
+      "evidence": "evidence/studio/M2-profiles-catalog/"
     }
   }
 }

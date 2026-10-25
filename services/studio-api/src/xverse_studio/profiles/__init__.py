@@ -67,6 +67,49 @@ class ProfileRegistry:
                     raise Problem("PROFILE_CONFLICT", "Declared profile sidecars must be explicit portable JSON files under profiles/.")
         return entry
 
+    def authored_findings(self, documents):
+        """Blocking findings for authored Profile resources that the registry does not admit as declared.
+
+        Unadmitted namespaces stay intact and unresolved; an authored resource for an admitted
+        namespace must match its admitted version, schema, conflict policy and API compatibility.
+        """
+        yaml = YAML(typ="safe")
+        admitted = {entry["namespace"]: entry for entry in self._entries()}
+        findings = []
+        for source in documents.values():
+            try:
+                resource = yaml.load(source)
+            except Exception:  # Unparseable sources are the validator's to report.
+                continue
+            if not isinstance(resource, dict) or resource.get("kind") != "Profile":
+                continue
+            spec, meta = resource.get("spec") or {}, resource.get("metadata") or {}
+            namespace = spec.get("extensionNamespace")
+            ref = f"xdl://{meta.get('namespace')}/profile/{meta.get('name')}"
+            entry = admitted.get(namespace)
+            if entry is None:
+                findings.append({
+                    "code": "PROFILE_UNRESOLVED", "severity": "error", "elementRef": ref, "elementRefs": [ref],
+                    "message": f"Profile namespace {namespace} has no admitted schema or presentation; it remains intact and unresolved and cannot execute.",
+                    "remediation": "Use an admitted profile, or keep this content for inspection only.",
+                })
+                continue
+            differences = [
+                field for field, ok in (
+                    ("version", meta.get("version") == entry["version"]),
+                    ("schemaRef", spec.get("schemaRef") == entry["schemaRef"]),
+                    ("conflictPolicy", spec.get("conflictPolicy") == entry["conflictPolicy"]),
+                    ("compatibleApiVersions", API_VERSION in (spec.get("compatibleApiVersions") or [])),
+                ) if not ok
+            ]
+            if differences:
+                findings.append({
+                    "code": "PROFILE_CONFLICT", "severity": "error", "elementRef": ref, "elementRefs": [ref],
+                    "message": f"The authored profile for {namespace} differs from its admitted semantics ({', '.join(differences)}); source is preserved and execution is blocked.",
+                    "remediation": "Restore the admitted profile declaration or use a separately admitted profile version.",
+                })
+        return findings
+
     def validate_project(self, project):
         locks = project.get("manifest", {}).get("profiles", [])
         if not isinstance(locks, list) or len(locks) > 16:
@@ -132,7 +175,8 @@ class ProfileRegistry:
             locks = {lock["namespace"]: lock for lock in project["manifest"].get("profiles", [])}
             for entry in selected:
                 current = existing.get(entry["namespace"])
-                if current and (current["metadata"]["version"] != entry["version"] or current["spec"].get("schemaRef") != entry["schemaRef"] or current["spec"].get("conflictPolicy") != "reject"):
+                if current and (current["metadata"]["version"] != entry["version"] or current["spec"].get("schemaRef") != entry["schemaRef"]
+                                or current["spec"].get("conflictPolicy") != "reject" or API_VERSION not in (current["spec"].get("compatibleApiVersions") or [])):
                     raise Problem("PROFILE_CONFLICT", "The authored profile resource conflicts with the selected admitted semantics; source is preserved.")
                 if not current:
                     name = "experiment-lite" if entry["namespace"] == PROFILE_NAMESPACE else "studio-experiments"
