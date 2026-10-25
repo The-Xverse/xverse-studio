@@ -3101,3 +3101,181 @@ p,
   flex-wrap: wrap;
   gap: 6px;
 }
+.node-ports {
+  list-style: none;
+  margin: 4px 10px 0;
+  padding: 0;
+  display: grid;
+  gap: 2px;
+}
+.node-ports li {
+  display: flex;
+  gap: 5px;
+  align-items: baseline;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.node-ports code {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.node-ports small {
+  color: var(--muted);
+}
+.node-group-frame {
+  /* Drawn above the graph layer: outline only, never intercepting pointer input. */
+  border: 1.5px dashed #9fb3cf;
+  border-radius: 10px;
+  pointer-events: none;
+}
+.node-group-frame.undeclared {
+  border-color: #d39a45;
+}
+.node-group-frame span {
+  display: flex;
+  gap: 6px;
+  align-items: baseline;
+  padding: 8px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #4d6283;
+}
+.node-group-frame small {
+  font-weight: 400;
+  color: var(--muted);
+}
+.model-tree-nodes,
+.model-tree-nodes ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.model-tree-nodes {
+  padding: 0 8px 14px;
+}
+.tree-group-label,
+.tree-member {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 9px;
+  border-radius: 4px;
+  color: #6f86a6;
+  cursor: pointer;
+}
+.tree-member {
+  padding-left: 30px;
+}
+.tree-group-label span,
+.tree-member span {
+  color: var(--ink);
+}
+.tree-group-label small,
+.tree-member small {
+  color: var(--muted);
+  margin-left: auto;
+}
+.tree-group-label .tree-count {
+  margin-left: 4px;
+}
+.tree-group-label.selected,
+.tree-member.selected {
+  background: var(--blue-light);
+}
+.tree-group[aria-expanded="true"] > .tree-group-label .tree-twisty {
+  transform: rotate(90deg);
+}
+.tree-twisty {
+  display: inline-flex;
+  transition: transform 0.1s;
+}
+.model-tree-nodes [role="treeitem"]:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: -2px;
+}
+.model-breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  padding: 6px 16px;
+  font-size: 11px;
+  color: var(--muted);
+}
+.node-members {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 4px;
+}
+.tree-root:has(> [aria-pressed]) {
+  flex-wrap: wrap;
+}
+.tree-root > [aria-pressed] {
+  margin-left: auto;
+}
+.tree-root > [aria-pressed="true"] {
+  background: var(--blue-light);
+  color: var(--blue);
+}
+.tree-group-label,
+.tree-member {
+  min-width: 0;
+}
+.tree-group-label span,
+.tree-member span,
+.tree-group-label small,
+.tree-member small {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.tree-group-label span,
+.tree-member span {
+  flex: 0 1 auto;
+}
+.tree-group-label small,
+.tree-member small {
+  flex: 0 2 auto;
+}
+.tree-group-label .tree-roles {
+  display: none;
+}
+.tree-group-label span,
+.tree-member span {
+  flex: 1 1 auto;
+}
+.tree-member small {
+  max-width: 40%;
+}
+.node-group-frame.unplaced {
+  border-color: #b9c2cf;
+  border-style: dotted;
+}
+.tree-marker {
+  font-size: 10px;
+  color: #85601d;
+  white-space: nowrap;
+}
+.tree-empty {
+  padding: 8px 9px;
+  color: var(--muted);
+  font-size: 11px;
+}
+.tree-group-label.selected,
+.tree-member.selected {
+  box-shadow: inset 3px 0 0 var(--blue);
+  font-weight: 600;
+}
+.model-tree-nodes [role="treeitem"]:focus-visible {
+  outline: none;
+}
+.model-tree-nodes [role="treeitem"]:focus-visible > .tree-group-label,
+.model-tree-nodes .tree-member:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: -2px;
+}
+.frame-overlap {
+  color: #85601d;
+}

@@ -71,7 +71,7 @@ After M0 owned contracts pass, guided operation (T015–T033), visual authoring 
 
 - [x] T041 [P] [US5] Extend the supported XDL corpus with graph/source-equivalent edits, layout-only changes, unknown payload preservation and explicit comment/format normalization disclosure. Paths: `tests/integration/test_model_roundtrip.py`, `tests/fixtures/xdl/roundtrip/`. Depends on: T014. (FR-023; FR-024; FR-025; NFR-002; AC-013)
 - [x] T042 [US5] Implement typed model edits through the authoritative XDL service and separate stable-ID layout updates; validate before promoting an executable revision. Paths: `services/studio-api/src/xverse_studio/models/`. Depends on: T041, T008. (FR-023; FR-024; FR-025; AC-013)
-- [ ] T043 [US5] Build the system canvas and structured keyboard editor with named ports, subsystem navigation, search, grouping, zoom and automatic layout mapped to supported XDL semantics. Paths: `apps/studio-web/src/features/model/`, `apps/studio-web/src/features/model/tree/`. Depends on: T042, T017. (FR-023; FR-027; NFR-006; AC-013; AC-031)
+- [x] T043 [US5] Build the system canvas and structured keyboard editor with named ports, subsystem navigation, search, grouping, zoom and automatic layout mapped to supported XDL semantics. Paths: `apps/studio-web/src/features/model/`, `apps/studio-web/src/features/model/tree/`. Depends on: T042, T017. (FR-023; FR-027; NFR-006; AC-013; AC-031)
 - [x] T044 [US5] Enable source authoring and synchronized selection/diagnostics; retain invalid drafts and unsupported extension content without dropping data or overwriting active run inputs. Paths: `apps/studio-web/src/features/source/`, `apps/studio-web/src/features/inspector/`. Depends on: T042, T043. (FR-023; FR-025; AC-013)
 - [x] T045 [P] [US5] Add external-write races, interrupted saves, undo/redo reference integrity and simultaneous draft/run inspection cases. Paths: `tests/integration/test_edit_conflicts.py`, `tests/e2e/draft-run-isolation.spec.ts`. Depends on: T041. (FR-026; FR-028; NFR-009; AC-014)
 - [x] T046 [US5] Implement bounded autosave/recovery, undo/redo transactions and revision conflict resolution with recoverable source backups. Paths: `services/studio-api/src/xverse_studio/projects/revisions.py`, `apps/studio-web/src/features/model/history.ts`. Depends on: T042, T045. (FR-026; NFR-009; AC-014)
@@ -236,3 +236,9 @@ sources and sidecars first, and bounded per-tab autosave. Independent review fou
 repaired; 547 backend tests and 51 browser/performance checks pass on an unchanged candidate. Component
 completion is 26/100. Per-platform locking/case behavior and Windows exchange remain T048. See
 `evidence/studio/M2-revisions/`.
+
+T043 owned component is complete: node-placement grouping as a keyboard tree, presentation-only canvas
+frames and node-aware layout, named ports, and System › node › element › definition drill-down.
+Independent review found eight defects and the first full run two browser regressions, all repaired;
+547 backend tests and 54 browser/performance checks pass. Component completion is 27/100. See
+`evidence/studio/M2-structure/`.

@@ -11,6 +11,7 @@ import {
   Position,
   useNodesState,
   MarkerType,
+  ViewportPortal,
 } from "@xyflow/react";
 import type { NodeProps, Node } from "@xyflow/react";
 import type { Data, Project, Parameter } from "../../api/types";
@@ -18,7 +19,13 @@ import { api } from "../../api/client";
 import type { DoAction } from "../../app/App";
 import { Icon, Badge, Empty, Json, KeyValues } from "../../app/ui";
 import type { Projection, ElementProjection } from "./projection";
-import { documentContent, textRef } from "./projection";
+import { documentContent, groupByNode, textRef } from "./projection";
+import { groupLabel, ModelTree, placementLabel } from "./tree/ModelTree";
+import {
+  DefinitionInspector,
+  ModelBreadcrumb,
+  NodeInspector,
+} from "./StructureInspectors";
 export type SourceTarget = {
   documentId: string;
   ref?: string;
@@ -64,6 +71,26 @@ function ElementNode({ data, selected }: NodeProps<Node<Data>>) {
       </div>
       <strong>{data.name}</strong>
       <code>{data.id}</code>
+      {data.portList?.length > 0 && (
+        <ul className="node-ports" aria-label="Named ports">
+          {data.portList.slice(0, 4).map((port: Data) => (
+            <li key={port.id}>
+              <span aria-hidden="true">
+                {port.direction === "input"
+                  ? "→"
+                  : port.direction === "output"
+                    ? "←"
+                    : "↔"}
+              </span>
+              <code>{port.id}</code>
+              <small>{port.direction}</small>
+            </li>
+          ))}
+          {data.portList.length > 4 && (
+            <li>+{data.portList.length - 4} more</li>
+          )}
+        </ul>
+      )}
       <div className="node-bottom">
         <span>{data.realization || "Logical element"}</span>
         <span>{data.ports || 0} ports</span>
@@ -73,6 +100,43 @@ function ElementNode({ data, selected }: NodeProps<Node<Data>>) {
   );
 }
 const nodeTypes = { element: ElementNode };
+// Deterministic presentation layouts; positions never enter executable identity.
+function gridPosition(index: number, count: number) {
+  const columns = count > 12 ? Math.ceil(Math.sqrt(count * 1.5)) : 3;
+  return {
+    x: 75 + (index % columns) * 270,
+    y: 105 + Math.floor(index / columns) * 210,
+  };
+}
+// Each node's members tile a near-square block; blocks wrap into rows of groups.
+function groupedPositions(groups: ReturnType<typeof groupByNode>) {
+  const positions: Record<string, { x: number; y: number }> = {},
+    perRow = Math.max(1, Math.ceil(Math.sqrt(groups.length)));
+  let x = 75,
+    y = 125,
+    rowHeight = 0;
+  groups.forEach((group, index) => {
+    if (index && index % perRow === 0) {
+      x = 75;
+      y += rowHeight + 90;
+      rowHeight = 0;
+    }
+    const columns = Math.max(1, Math.ceil(Math.sqrt(group.members.length)));
+    group.members.forEach((member, i) => {
+      // An element listed by several nodes keeps its first position.
+      positions[member.ref] ??= {
+        x: x + (i % columns) * 230,
+        y: y + Math.floor(i / columns) * 210,
+      };
+    });
+    x += columns * 230 + 70;
+    rowHeight = Math.max(
+      rowHeight,
+      Math.ceil(group.members.length / columns) * 210,
+    );
+  });
+  return positions;
+}
 export function ModelView({
   project,
   projection,
@@ -97,10 +161,45 @@ export function ModelView({
   const [search, setSearch] = useState(""),
     [structured, setStructured] = useState(false),
     [inspectorTab, setInspectorTab] = useState("Properties"),
-    [editingAsset, setEditingAsset] = useState(false);
+    [editingAsset, setEditingAsset] = useState(false),
+    [grouped, setGrouped] = useState(() => {
+      try {
+        return localStorage.getItem("studio.model.groupByNode") === "1";
+      } catch {
+        return false;
+      }
+    }),
+    [selectedGroup, setSelectedGroup] = useState(""),
+    [definitionOf, setDefinitionOf] = useState("");
+  const groups = useMemo(() => groupByNode(projection), [projection]);
+  function chooseGrouping(value: boolean) {
+    setGrouped(value);
+    // Arrange by node so frames describe placement; the layout is saved only on request.
+    if (value) {
+      const byNode = groupedPositions(groups);
+      setNodes((old) =>
+        old.map((n) => (byNode[n.id] ? { ...n, position: byNode[n.id] } : n)),
+      );
+    }
+    try {
+      localStorage.setItem("studio.model.groupByNode", value ? "1" : "0");
+    } catch {
+      /* The preference only affects this browser's presentation. */
+    }
+  }
+  function selectElement(ref: string) {
+    setSelectedGroup("");
+    setDefinitionOf("");
+    setSelected(ref);
+  }
+  function selectGroup(key: string) {
+    setSelected("");
+    setDefinitionOf("");
+    setSelectedGroup(key);
+  }
   const system = projection.resources.find((r) => r.kind === "System"),
     endpoints: Data[] = system?.spec?.endpoints || [];
-  const initialNodes = useMemo(
+  const initialNodes = useMemo<Node<Data>[]>(
     () =>
       projection.elements.map((e, i) => ({
         id: e.ref,
@@ -127,10 +226,13 @@ export function ModelView({
           },
         data: {
           ...e,
-          ports: (
-            projection.resources.find((r) => r.documentId === e.documentId)
-              ?.spec.endpoints || []
-          ).filter((p: Data) => p.ownerId === e.id).length,
+          ...(() => {
+            const portList = (
+              projection.resources.find((r) => r.documentId === e.documentId)
+                ?.spec.endpoints || []
+            ).filter((p: Data) => p.ownerId === e.id);
+            return { ports: portList.length, portList };
+          })(),
         },
         selected: e.ref === selected || e.id === selected,
       })),
@@ -165,8 +267,68 @@ export function ModelView({
       ),
     [projection.connections, endpoints],
   );
+  // Frames follow their members' current positions; they are never saved.
+  const frames = useMemo(() => {
+    if (!grouped) return [];
+    const membership = new Map<string, string[]>();
+    for (const group of groups)
+      for (const member of group.members)
+        membership.set(member.ref, [
+          ...(membership.get(member.ref) || []),
+          group.key,
+        ]);
+    const boxes = new Map<
+      string,
+      { left: number; top: number; right: number; bottom: number }
+    >();
+    for (const n of nodes)
+      for (const key of membership.get(n.id) || []) {
+        const box = boxes.get(key),
+          right = n.position.x + (n.measured?.width ?? 194),
+          bottom = n.position.y + (n.measured?.height ?? 150);
+        boxes.set(
+          key,
+          box
+            ? {
+                left: Math.min(box.left, n.position.x),
+                top: Math.min(box.top, n.position.y),
+                right: Math.max(box.right, right),
+                bottom: Math.max(box.bottom, bottom),
+              }
+            : { left: n.position.x, top: n.position.y, right, bottom },
+        );
+      }
+    return groups.flatMap((group) => {
+      const box = boxes.get(group.key);
+      if (!box) return [];
+      const left = box.left - 22,
+        top = box.top - 42;
+      return [
+        {
+          group,
+          left,
+          top,
+          width: box.right - left + 22,
+          height: box.bottom - top + 22,
+          // A frame that also covers other elements misdescribes placement.
+          overlaps: nodes.some(
+            (n) =>
+              !(membership.get(n.id) || []).includes(group.key) &&
+              n.position.x + 97 > left &&
+              n.position.x + 97 < left + box.right - left + 22 &&
+              n.position.y + 60 > top &&
+              n.position.y + 60 < top + box.bottom - top + 22,
+          ),
+        },
+      ];
+    });
+  }, [grouped, groups, nodes]);
   const element = projection.elements.find(
     (e) => e.ref === selected || e.id === selected,
+  );
+  const group = groups.find((g) => g.key === selectedGroup);
+  const definitionElement = projection.elements.find(
+    (e) => e.ref === definitionOf,
   );
   const selectedEndpoints: Data[] =
     projection.resources.find((r) => r.documentId === element?.documentId)?.spec
@@ -219,31 +381,49 @@ export function ModelView({
           <Icon name="model" size={16} />
           <strong>{system?.metadata?.name || "System"}</strong>
           <span>{projection.elements.length}</span>
+          <button
+            className="small-button"
+            aria-pressed={grouped}
+            onClick={() => chooseGrouping(!grouped)}
+          >
+            Group by node
+          </button>
         </div>
-        <div className="tree-list">
-          {projection.elements
-            .filter((e) =>
-              `${e.name} ${e.id} ${e.role}`
-                .toLowerCase()
-                .includes(search.toLowerCase()),
-            )
-            .map((e) => (
-              <button
-                key={e.ref}
-                className={
-                  selected === e.ref || selected === e.id ? "selected" : ""
-                }
-                onClick={() => setSelected(e.ref)}
-              >
-                <Icon
-                  name={e.role.includes("observer") ? "results" : "model"}
-                  size={15}
-                />
-                <span>{e.name}</span>
-                <small>{e.role}</small>
-              </button>
-            ))}
-        </div>
+        {grouped ? (
+          <ModelTree
+            groups={groups}
+            search={search}
+            selected={element?.ref || ""}
+            selectedGroup={selectedGroup}
+            onSelectElement={selectElement}
+            onSelectGroup={selectGroup}
+          />
+        ) : (
+          <div className="tree-list">
+            {projection.elements
+              .filter((e) =>
+                `${e.name} ${e.id} ${e.role}`
+                  .toLowerCase()
+                  .includes(search.toLowerCase()),
+              )
+              .map((e) => (
+                <button
+                  key={e.ref}
+                  className={
+                    selected === e.ref || selected === e.id ? "selected" : ""
+                  }
+                  onClick={() => selectElement(e.ref)}
+                >
+                  <Icon
+                    name={e.role.includes("observer") ? "results" : "model"}
+                    size={15}
+                  />
+                  <span>{e.name}</span>
+                  <small>{e.role}</small>
+                </button>
+              ))}
+          </div>
+        )}
         <div className="tree-section">
           <span>RESOURCES</span>
           {projection.resources.map((r) => (
@@ -290,35 +470,18 @@ export function ModelView({
             </button>
             <button
               className="small-button"
-              onClick={() =>
+              onClick={() => {
+                const byNode = groupedPositions(groups);
                 setNodes((old) =>
                   old.map((n, i) => ({
                     ...n,
-                    position: {
-                      x:
-                        75 +
-                        (i %
-                          (projection.elements.length > 12
-                            ? Math.ceil(
-                                Math.sqrt(projection.elements.length * 1.5),
-                              )
-                            : 3)) *
-                          270,
-                      y:
-                        105 +
-                        Math.floor(
-                          i /
-                            (projection.elements.length > 12
-                              ? Math.ceil(
-                                  Math.sqrt(projection.elements.length * 1.5),
-                                )
-                              : 3),
-                        ) *
-                          210,
-                    },
+                    position:
+                      grouped && byNode[n.id]
+                        ? byNode[n.id]
+                        : gridPosition(i, projection.elements.length),
                   })),
-                )
-              }
+                );
+              }}
             >
               Auto layout
             </button>
@@ -366,8 +529,10 @@ export function ModelView({
             edges={edges}
             nodeTypes={nodeTypes}
             onNodesChange={onNodesChange}
-            onNodeClick={(_, node) => setSelected(node.id)}
-            onPaneClick={() => setSelected("")}
+            onNodeClick={(_, node) => {
+              if (node.type === "element") selectElement(node.id);
+            }}
+            onPaneClick={() => selectElement("")}
             nodesConnectable={false}
             fitView
             fitViewOptions={{ padding: 0.15, minZoom: 0.01, maxZoom: 1.2 }}
@@ -377,6 +542,30 @@ export function ModelView({
             aria-label="Logical System graph. Use the System explorer for keyboard selection."
           >
             <Background color="#dbe3ee" gap={20} size={1.1} />
+            <ViewportPortal>
+              {frames.map(({ group, left, top, width, height }) => (
+                <div
+                  key={group.key}
+                  className={`node-group-frame ${group.placement}`}
+                  style={{
+                    position: "absolute",
+                    transform: `translate(${left}px, ${top}px)`,
+                    width,
+                    height,
+                  }}
+                  aria-hidden="true"
+                >
+                  <span>
+                    {groupLabel(group)}
+                    <small>
+                      {placementLabel(group) ||
+                        group.roles.join(", ") ||
+                        "node"}
+                    </small>
+                  </span>
+                </div>
+              ))}
+            </ViewportPortal>
             <Controls showInteractive={false} />
             <MiniMap nodeColor="#c8d7e9" maskColor="rgba(244,247,251,.75)" />
           </ReactFlow>
@@ -391,23 +580,80 @@ export function ModelView({
             Logical element
           </span>
           <span>Graph positions are presentation only</span>
+          {frames.some((frame) => frame.overlaps) && (
+            <span role="status" className="frame-overlap">
+              Some node frames also cover other elements; use Auto layout to
+              arrange by node.
+            </span>
+          )}
         </div>
       </section>
       <aside className="inspector" aria-label="Element inspector">
         <div className="pane-title">
-          <h2>{element ? "Element inspector" : "System inspector"}</h2>
+          <h2>
+            {definitionElement
+              ? "Definition inspector"
+              : group
+                ? "Node inspector"
+                : element
+                  ? "Element inspector"
+                  : "System inspector"}
+          </h2>
           <Icon name="settings" size={16} />
         </div>
         <div className="inspector-summary">
           <span className="inspector-symbol">
-            <Icon name={element ? "model" : "deployment"} size={23} />
+            <Icon
+              name={
+                definitionElement || element
+                  ? "model"
+                  : group
+                    ? "folder"
+                    : "deployment"
+              }
+              size={23}
+            />
           </span>
-          <h3>{element?.name || system?.metadata?.name || project.name}</h3>
-          <p>{element?.role || "Authoritative XDL System"}</p>
+          <h3>
+            {definitionElement?.definition?.metadata?.name ||
+              (group && groupLabel(group)) ||
+              element?.name ||
+              system?.metadata?.name ||
+              project.name}
+          </h3>
+          <p>
+            {definitionElement
+              ? "Component definition"
+              : group
+                ? group.roles.join(", ") || "Node"
+                : element?.role || "Authoritative XDL System"}
+          </p>
           <Badge tone="info">
-            {element ? "Logical identity" : "Draft model"}
+            {definitionElement
+              ? "Read-only definition"
+              : group
+                ? "XDL node placement"
+                : element
+                  ? "Logical identity"
+                  : "Draft model"}
           </Badge>
         </div>
+        <ModelBreadcrumb
+          systemName={system?.metadata?.name || project.name}
+          group={
+            group ||
+            groups.find((g) =>
+              g.members.some(
+                (m) => m.ref === (definitionElement || element)?.ref,
+              ),
+            )
+          }
+          element={definitionElement || element}
+          definition={definitionElement?.definition}
+          onSystem={() => selectElement("")}
+          onGroup={selectGroup}
+          onElement={selectElement}
+        />
         <div className="inspector-tabs">
           {["Properties", "Parameters"].map((t) => (
             <button
@@ -426,6 +672,18 @@ export function ModelView({
               onSave={async (parameterId, value) => {
                 await edit([{ kind: "set_parameter", parameterId, value }]);
               }}
+            />
+          ) : definitionElement?.definition ? (
+            <DefinitionInspector
+              element={definitionElement}
+              onBack={() => selectElement(definitionElement.ref)}
+              onSource={onSource}
+            />
+          ) : group ? (
+            <NodeInspector
+              group={group}
+              onSelectElement={selectElement}
+              onSource={onSource}
             />
           ) : element ? (
             <>
@@ -469,6 +727,17 @@ export function ModelView({
                 >
                   View selected declaration
                 </button>
+                {element.definition && (
+                  <button
+                    className="button"
+                    onClick={() => {
+                      setSelectedGroup("");
+                      setDefinitionOf(element.ref);
+                    }}
+                  >
+                    Open component definition
+                  </button>
+                )}
                 {["device", "sensor", "actuator", "model"].includes(
                   element.kind,
                 ) && (

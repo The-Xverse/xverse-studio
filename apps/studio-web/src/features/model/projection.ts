@@ -289,3 +289,96 @@ export function textRef(value: unknown): string {
 export function documentContent(document: Project["documents"][string]) {
   return typeof document === "string" ? document : document.content;
 }
+
+export interface ElementGroup {
+  key: string;
+  systemRef: string;
+  /** Null for elements the System does not place on any node. */
+  nodeId: string | null;
+  roles: string[];
+  /** declared: the System declares the node; undeclared: referenced only; unplaced: no node. */
+  placement: "declared" | "undeclared" | "unplaced";
+  members: ElementProjection[];
+  /** Members listed by the node's memberIds but placed elsewhere or not placed. */
+  listedOnly: string[];
+}
+
+const placementOf = (element: ElementProjection) =>
+  element.kind === "node"
+    ? element.id
+    : typeof element.raw?.nodeId === "string"
+      ? element.raw.nodeId
+      : null;
+
+/** Presentation grouping by XDL node placement (nodeId and memberIds); it adds no semantics. */
+export function groupByNode(projection: Projection): ElementGroup[] {
+  const declared = new Map<string, ElementGroup>(),
+    listed = new Map<string, string[]>();
+  for (const resource of projection.resources) {
+    if (resource.kind !== "System") continue;
+    const systemRef = `xdl://${resource.metadata?.namespace}/system/${resource.metadata?.name}`;
+    for (const node of records(resource.spec?.nodes)) {
+      if (typeof node.id !== "string") continue;
+      const key = `${systemRef}#${node.id}`;
+      declared.set(key, {
+        key,
+        systemRef,
+        nodeId: node.id,
+        roles: strings(node.roles),
+        placement: "declared",
+        members: [],
+        listedOnly: [],
+      });
+      listed.set(key, strings(node.memberIds));
+    }
+  }
+  const undeclared = new Map<string, ElementGroup>(),
+    unplaced = new Map<string, ElementGroup>();
+  for (const element of projection.elements) {
+    const nodeId = placementOf(element);
+    if (nodeId === null) {
+      const key = `${element.systemRef}#unplaced`;
+      if (!unplaced.has(key))
+        unplaced.set(key, {
+          key,
+          systemRef: element.systemRef,
+          nodeId: null,
+          roles: [],
+          placement: "unplaced",
+          members: [],
+          listedOnly: [],
+        });
+      unplaced.get(key)!.members.push(element);
+      continue;
+    }
+    const key = `${element.systemRef}#${nodeId}`;
+    const group =
+      declared.get(key) ||
+      undeclared.get(key) ||
+      undeclared
+        .set(key, {
+          key,
+          systemRef: element.systemRef,
+          nodeId,
+          roles: [],
+          placement: "undeclared",
+          members: [],
+          listedOnly: [],
+        })
+        .get(key)!;
+    group.members.push(element);
+  }
+  for (const [key, ids] of listed) {
+    const group = declared.get(key)!;
+    for (const id of ids) {
+      const element = projection.elements.find(
+        (e) => e.systemRef === group.systemRef && e.id === id,
+      );
+      if (element && !group.members.includes(element)) {
+        group.members.push(element);
+        group.listedOnly.push(element.ref);
+      }
+    }
+  }
+  return [...declared.values(), ...undeclared.values(), ...unplaced.values()];
+}

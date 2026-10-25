@@ -1,5 +1,8 @@
 import { test, expect } from "@playwright/test";
-import { projectDisplay } from "../../apps/studio-web/src/features/model/projection";
+import {
+  groupByNode,
+  projectDisplay,
+} from "../../apps/studio-web/src/features/model/projection";
 import type { Project } from "../../apps/studio-web/src/api/types";
 test("malformed imported source stays inspectable without becoming a graph or changing bytes", () => {
   const content =
@@ -100,4 +103,107 @@ test("declared logical roles remain separate from Component capabilities and sou
   expect((project.documents.system as { content: string }).content).toBe(
     system,
   );
+});
+
+test("node grouping follows declared placement and memberIds, and never invents a node for unplaced elements", () => {
+  const system = (name: string, spec: object) =>
+    JSON.stringify({
+      apiVersion: "xverse.io/xdl/v1alpha1",
+      kind: "System",
+      metadata: { namespace: "org.example", name },
+      spec,
+    });
+  const instance = (id: string, nodeId?: string) => ({
+    id,
+    ...(nodeId ? { nodeId } : {}),
+    componentRef: { kind: "Component", name: "c" },
+  });
+  const project = {
+    projectId: "fixture",
+    name: "Fixture",
+    revision: 1,
+    documents: {
+      a: {
+        format: "json",
+        path: "xdl/a.json",
+        content: system("first", {
+          nodes: [
+            {
+              id: "edge",
+              roles: ["gateway", "observer"],
+              memberIds: ["probe"],
+            },
+            { id: "Unplaced", roles: ["literal"] },
+          ],
+          componentInstances: [
+            instance("one", "edge"),
+            instance("two", "missing"),
+            instance("loose"),
+            instance("literal", "Unplaced"),
+          ],
+          sensors: [{ id: "probe" }],
+        }),
+      },
+      b: {
+        format: "json",
+        path: "xdl/b.json",
+        content: system("second", {
+          nodes: [{ id: "edge", roles: ["host"] }],
+          componentInstances: [instance("three", "edge")],
+        }),
+      },
+    },
+  } as Project;
+  const groups = groupByNode(projectDisplay(project));
+  const summary = groups.map((g) => ({
+    key: g.key,
+    nodeId: g.nodeId,
+    placement: g.placement,
+    roles: g.roles,
+    members: g.members.map((m) => m.id),
+    listedOnly: g.listedOnly.map((ref) => ref.split("#")[1]),
+  }));
+  expect(summary).toEqual([
+    {
+      key: "xdl://org.example/system/first#edge",
+      nodeId: "edge",
+      placement: "declared",
+      roles: ["gateway", "observer"],
+      members: ["one", "probe"],
+      listedOnly: ["probe"],
+    },
+    {
+      // A node literally named "Unplaced" is still a declared node.
+      key: "xdl://org.example/system/first#Unplaced",
+      nodeId: "Unplaced",
+      placement: "declared",
+      roles: ["literal"],
+      members: ["literal"],
+      listedOnly: [],
+    },
+    {
+      key: "xdl://org.example/system/second#edge",
+      nodeId: "edge",
+      placement: "declared",
+      roles: ["host"],
+      members: ["three"],
+      listedOnly: [],
+    },
+    {
+      key: "xdl://org.example/system/first#missing",
+      nodeId: "missing",
+      placement: "undeclared",
+      roles: [],
+      members: ["two"],
+      listedOnly: [],
+    },
+    {
+      key: "xdl://org.example/system/first#unplaced",
+      nodeId: null,
+      placement: "unplaced",
+      roles: [],
+      members: ["loose", "probe"],
+      listedOnly: [],
+    },
+  ]);
 });
