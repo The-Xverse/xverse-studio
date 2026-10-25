@@ -95,7 +95,7 @@ A retention plan is side-effect-free. It names exact IDs, dependency edges, prot
 
 ## Semantic edit envelope
 
-`POST .../edits` accepts a bounded transaction: `baseRevision`, `edits[]`. Each edit has an operation kind and schema-validated arguments referring to stable XDL resources/elements. Initial operations are `add_element`, `remove_element`, `set_parameter`, `connect_endpoints`, `disconnect_flow`, `set_binding`, and `rename_display_label`. Adding an element selects a declared semantic kind and catalog template; it does not submit an arbitrary browser node blob. Removal reports impacted references and requires an explicit replacement/removal set. Unsupported schema/profile content is never discarded to make an edit succeed.
+`POST .../edits` accepts a bounded transaction: `baseRevision`, `edits[]`. Each edit has an operation kind and schema-validated arguments referring to stable XDL resources/elements. Initial operations are `add_element`, `remove_element`, `set_parameter`, `connect_endpoints`, `disconnect_flow`, `set_binding`, and `rename_display_label`. Adding an element selects a declared semantic kind and catalog template; it does not submit an arbitrary browser node blob. Removal reports impacted references and requires an explicit replacement/removal set. Unsupported schema/profile content is never discarded to make an edit succeed. `add_binding` (amendment) creates a Deployment binding for an element of that Deployment's System: binding ID, element ID, declared realization class, an existing target whose declared lifecycle is copied, and optional declared artifact choices; it is the realization choice of the instance wizard, separate from role and placement (`add_element` `nodeId`).
 
 ## Preflight and start
 

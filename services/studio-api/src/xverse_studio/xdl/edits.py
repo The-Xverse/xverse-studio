@@ -17,17 +17,21 @@ REGISTRY = {
     "update_scenario_item": {"documentId", "elementRef", "itemKind", "itemId", "properties"},
     "remove_scenario_item": {"documentId", "elementRef", "itemKind", "itemId"},
     "set_parameter": {"documentId", "parameterId", "parameter", "value", "elementRef", "elementId"},
-    "add_element": {"documentId", "templateId", "elementId", "nodeId"},
+    "add_element": {"documentId", "templateId", "elementId", "nodeId", "parameterValues"},
     "add_logical_asset": {"documentId", "assetKind", "elementId", "elementRef", "properties", "endpoints"},
     "update_logical_asset": {"documentId", "assetKind", "elementId", "elementRef", "properties", "unsetProperties"},
     "remove_element": {"documentId", "elementId", "elementRef", "removalSet"},
     "connect_endpoints": {"documentId", "flowId", "sourceEndpointId", "destinationEndpointIds", "interfaceId", "timeDomainId", "deliveryIntent"},
     "disconnect_flow": {"documentId", "flowId", "elementRef"},
     "set_binding": {"documentId", "bindingId", "targetId", "realizationClass", "artifactIds", "resourceIds"},
+    "add_binding": {"documentId", "bindingId", "elementId", "targetId", "realizationClass", "artifactIds"},
     "rename_display_label": {"documentId", "label", "name", "elementRef"},
 }
 IDENTIFIER = re.compile(r"^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$")
 ASSET_COLLECTIONS = {"device": "devices", "sensor": "sensors", "actuator": "actuators", "model": "models"}
+REALIZATION_CLASSES = ("simulated", "virtual", "physical", "hybrid")
+# Only System members that can be realized by a deployment binding.
+REALIZABLE = ("componentInstances", "devices", "sensors", "actuators", "models")
 ASSET_OPTIONAL_FIELDS = {"device": {"nodeId", "extensions"}, "sensor": {"deviceId", "samplingIntent"},
                          "actuator": {"deviceId", "limits"}, "model": {"limitations"}}
 
@@ -191,6 +195,20 @@ def semantic_edits(documents: dict[str, str], edits: list[dict]) -> dict[str, st
                         "namespace": definition["metadata"]["namespace"], "name": definition["metadata"]["name"]}}
             if edit.get("nodeId"):
                 instance["nodeId"] = edit["nodeId"]
+            values = edit.get("parameterValues")
+            if values is not None:
+                # Configuration names declared definition parameters with values of their declared type.
+                declared = {p.get("id"): p for p in definition["spec"].get("parameters", []) if isinstance(p, dict)}
+                types = {"number": (int, float), "integer": (int,), "string": (str,), "boolean": (bool,)}
+                if not isinstance(values, dict) or not values or not set(values) <= set(declared):
+                    raise XDLRejected("Configure only parameters the definition declares.", "PARAMETER_UNRESOLVED")
+                for key, value in values.items():
+                    expected = types.get(declared[key].get("valueType"))
+                    if expected and (not isinstance(value, expected) or (bool not in expected and isinstance(value, bool))):
+                        raise XDLRejected(f"Parameter {key} needs a {declared[key].get('valueType')} value.", "INVALID_EDIT")
+                    if declared[key].get("mutability") == "constant":
+                        raise XDLRejected(f"Parameter {key} is constant.", "PARAMETER_IMMUTABLE")
+                instance["parameterValues"] = deepcopy(values)
             system["spec"].setdefault("componentInstances", []).append(instance)
             touched.add(name)
         elif kind in {"remove_element", "disconnect_flow"}:
@@ -263,6 +281,54 @@ def semantic_edits(documents: dict[str, str], edits: list[dict]) -> dict[str, st
             for field in ("targetId", "realizationClass", "artifactIds", "resourceIds"):
                 if field in edit:
                     bindings[0][field] = deepcopy(edit[field])
+            touched.add(name)
+        elif kind == "add_binding":
+            # Realization is a Deployment binding, chosen separately from role and placement.
+            name, deployment = select("Deployment", explicit)
+            spec = deployment["spec"]
+            binding_id, element_id = edit.get("bindingId"), edit.get("elementId")
+            if not all(isinstance(v, str) and IDENTIFIER.fullmatch(v) and len(v) <= 63 for v in (binding_id, element_id)):
+                raise XDLRejected("A binding needs valid binding and element identifiers.", "INVALID_EDIT")
+            if edit.get("realizationClass") not in REALIZATION_CLASSES:
+                raise XDLRejected("Choose a declared realization class.", "INVALID_EDIT")
+            if any(v.get("id") == binding_id for v in spec.get("bindings", []) if isinstance(v, dict)):
+                raise XDLRejected("The binding ID already belongs to this Deployment.", "IDENTITY_CONFLICT")
+            targets = [v for v in spec.get("targets", []) if isinstance(v, dict) and v.get("id") == edit.get("targetId")]
+            if len(targets) != 1 or not isinstance(targets[0].get("lifecycle"), dict):
+                raise XDLRejected("Select an existing deployment target with a declared lifecycle.", "SELECTION_UNRESOLVED")
+            system_ref = spec.get("systemRef") or {}
+            systems = [v for v in parsed.values() if v.get("kind") == "System"
+                       and v["metadata"].get("namespace") == system_ref.get("namespace")
+                       and v["metadata"].get("name") == system_ref.get("name")]
+            if len(systems) != 1 or not any(
+                isinstance(v, dict) and v.get("id") == element_id
+                for collection in REALIZABLE for v in systems[0]["spec"].get(collection, []) or []
+            ):
+                raise XDLRejected("Choose a realizable element (component instance, device, sensor, actuator or model) "
+                                  "declared by the Deployment's System.", "SELECTION_UNRESOLVED")
+            if any(isinstance(v, dict) and (v.get("logicalRef") or {}).get("element") == element_id
+                   and (v.get("logicalRef") or {}).get("name") == system_ref.get("name")
+                   and (v.get("logicalRef") or {}).get("namespace") == system_ref.get("namespace")
+                   for v in spec.get("bindings", [])):
+                raise XDLRejected("This element is already realized in this Deployment; change that binding instead.",
+                                  "REALIZATION_CONFLICT")
+            artifacts = edit.get("artifactIds", [])
+            known = {v.get("id") for v in spec.get("artifacts", []) if isinstance(v, dict)}
+            if (not isinstance(artifacts, list) or not all(isinstance(a, str) for a in artifacts)
+                    or len(set(artifacts)) != len(artifacts) or not set(artifacts) <= known):
+                raise XDLRejected("Choose declared Deployment artifacts; requirement is not choice.", "SELECTION_UNRESOLVED")
+            binding = {
+                "id": binding_id,
+                "logicalRef": {"apiVersion": system_ref.get("apiVersion"), "kind": "System",
+                               "namespace": system_ref.get("namespace"), "name": system_ref.get("name"),
+                               "element": element_id},
+                "realizationClass": edit["realizationClass"],
+                "targetId": targets[0]["id"],
+                "lifecycle": deepcopy(targets[0]["lifecycle"]),
+            }
+            if artifacts:
+                binding["artifactIds"] = list(artifacts)
+            spec.setdefault("bindings", []).append(binding)
             touched.add(name)
         elif kind == "rename_display_label":
             # XDL metadata.description is a display label; logical metadata.name is never renamed implicitly.

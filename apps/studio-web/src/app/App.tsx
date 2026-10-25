@@ -46,6 +46,7 @@ import { PreflightReview } from "../features/preflight/PreflightReview";
 import { ResultsView } from "../features/results/ResultsView";
 import { PendingStartNotice } from "../features/runs/PendingStartNotice";
 import { RecoveryPanel } from "../features/model/RecoveryPanel";
+import { InstanceWizard } from "../features/elements/InstanceWizard";
 import {
   applyStep,
   HistoryStale,
@@ -1392,22 +1393,12 @@ export default function App() {
               }}
             />
           ) : (
-            <AddElement
+            <InstanceWizard
               initialTemplate={addTemplate}
-              catalog={[
-                ...catalog,
-                {
-                  name: "Current component definitions",
-                  templates: projection.resources
-                    .filter((r) => r.kind === "Component")
-                    .map((r) => ({
-                      id: r.metadata.name,
-                      name: r.metadata.name,
-                    })),
-                },
-              ]}
-              onSubmit={async (templateId, elementId) => {
-                await edit([{ kind: "add_element", templateId, elementId }]);
+              catalog={catalog}
+              projection={projection}
+              onSubmit={async (edits) => {
+                await edit(edits);
                 setModal("");
                 setView("Model");
               }}
@@ -1903,80 +1894,5 @@ function Environment({
         doAction={doAction}
       />
     </div>
-  );
-}
-function AddElement({
-  catalog,
-  onSubmit,
-  doAction,
-  initialTemplate = "",
-}: {
-  initialTemplate?: string;
-  catalog: CatalogEntry[];
-  onSubmit: (template: string, id: string) => Promise<void>;
-  doAction: DoAction;
-}) {
-  const [template, setTemplate] = useState(initialTemplate),
-    [id, setId] = useState("");
-  const templates = [
-    ...new Map(
-      catalog
-        .flatMap((c) =>
-          c.kind === "component"
-            ? [{ id: c.templateId, name: c.name }]
-            : c.templates || [],
-        )
-        .map((template: Data) => [template.id, template]),
-    ).values(),
-  ];
-  return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        void doAction("Adding element", () => onSubmit(template, id));
-      }}
-    >
-      <p>
-        Choose an admitted reusable component. The backend allocates a distinct
-        logical instance and validates its references.
-      </p>
-      <label>
-        Template
-        <select
-          value={template}
-          onChange={(e) => setTemplate(e.target.value)}
-          required
-        >
-          <option value="">Select a template</option>
-          {templates.map((t: Data) => (
-            <option key={t.id} value={t.id}>
-              {t.name || t.id}
-            </option>
-          ))}
-        </select>
-      </label>
-      <label>
-        Element identifier
-        <input
-          required
-          pattern="[a-zA-Z0-9_-]+"
-          maxLength={80}
-          value={id}
-          onChange={(e) => setId(e.target.value)}
-          placeholder="new-element"
-        />
-      </label>
-      {!templates.length && (
-        <p className="field-hint">
-          No catalog templates are admitted in this environment. Inspect the
-          blueprint’s XDL to see its component definitions.
-        </p>
-      )}
-      <div className="form-actions">
-        <button disabled={!template} className="button primary">
-          Add element
-        </button>
-      </div>
-    </form>
   );
 }
