@@ -225,11 +225,16 @@ def reference_readiness(documents, compiled, provider_id, provider, active_count
         else "",
         element_refs=unsupported_refs or refs,
     )
-    artifacts = [a for b in plan.get("bindings", []) for a in b.get("artifactRefs", [])]
-    artifacts_ok = bool(artifacts) and all(
-        a.get("digest") == MODEL_DIGEST
-        and a.get("sourceRef") == "urn:xverse:studio:reference:first-order:v1"
-        for a in artifacts
+    bindings = plan.get("bindings", [])
+    artifacts = [a for b in bindings for a in b.get("artifactRefs", [])]
+    artifacts_ok = (
+        bool(bindings)
+        and all(b.get("artifactRefs") for b in bindings)
+        and all(
+            a.get("digest") == MODEL_DIGEST
+            and a.get("sourceRef") == "urn:xverse:studio:reference:first-order:v1"
+            for a in artifacts
+        )
     )
     models = [
         model

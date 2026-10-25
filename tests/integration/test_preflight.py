@@ -366,3 +366,458 @@ def test_start_rechecks_admission_before_any_dispatch(
                     "DELETE FROM records WHERE kind=? AND id=?",
                     ("run", f"occupied-{index}"),
                 )
+
+
+def _admission_save_resource(client, project, kind, change):
+    from io import StringIO
+    from ruamel.yaml import YAML
+
+    parser = YAML()
+    document_id, document = next(
+        (key, value)
+        for key, value in project["documents"].items()
+        if parser.load(value["content"])["kind"] == kind
+    )
+    resource = parser.load(document["content"])
+    change(resource)
+    output = StringIO()
+    parser.dump(resource, output)
+    response = client.put(
+        f"/api/v1/projects/{project['projectId']}/documents/{document_id}",
+        headers={"If-Match": str(project["revision"])},
+        json={"content": output.getvalue(), "format": "yaml"},
+    )
+    assert response.status_code == 200, response.text
+    return response.json()
+
+
+def _admission_assert_publicly_valid(client, project):
+    for operation in ("validations", "compilations"):
+        response = client.post(
+            f"/api/v1/projects/{project['projectId']}/{operation}",
+            json={"revision": project["revision"]},
+        )
+        assert response.status_code == 200, response.text
+        assert response.json()["valid"] is True, response.text
+
+
+def _admission_check(client, project):
+    response = client.post(
+        f"/api/v1/projects/{project['projectId']}/preflights",
+        json={"revision": project["revision"]},
+    )
+    assert response.status_code == 200, response.text
+    return response.json()
+
+
+def _admission_refuses_start(client, preflight, key):
+    store = client.app.state.studio.store
+    before_runs, before_operations = store.all("run"), store.all("operation")
+    response = client.post(
+        "/api/v1/runs",
+        headers={"Idempotency-Key": key},
+        json={
+            "snapshotId": preflight["snapshotId"],
+            "preflightId": preflight["preflightId"],
+        },
+    )
+    assert response.status_code == 422, response.text
+    assert response.json()["code"] == "ADMISSION_REJECTED", response.text
+    assert store.all("run") == before_runs
+    assert store.all("operation") == before_operations
+
+
+@pytest.mark.parametrize("limit,value", [("maxDurationSeconds", 4), ("maxSamples", 1)])
+def test_exceeded_advertised_duration_and_sample_budgets_block_valid_inputs(
+    client, monkeypatch, limit, value
+):
+    from xverse_studio.runs import service
+    from xverse_studio.storage.core import digest
+
+    project = new_project(client)
+    _admission_assert_publicly_valid(client, project)
+    source_before = digest(client.app.state.studio.projects.sources(project))
+    rows = deepcopy(service.descriptors())
+    provider = next(row for row in rows if row["providerId"] == "studio.reference")
+    provider["limits"][limit] = value
+    monkeypatch.setattr(service, "descriptors", lambda: rows)
+    monkeypatch.setattr(
+        subprocess,
+        "Popen",
+        lambda *args, **kwargs: pytest.fail("No budget overrun may dispatch"),
+    )
+    preflight = _admission_check(client, project)
+    parameters = {
+        item["id"]: item["value"]
+        for item in preflight["planPreview"]["plan"]["parameters"]
+    }
+    required = (
+        parameters["duration"]
+        if limit == "maxDurationSeconds"
+        else parameters["duration"] / parameters["timestep"]
+    )
+    assert required > preflight["limits"][limit] == value
+    assert preflight["status"] == "blocked", preflight
+    assert preflight["readiness"]["model"]["status"] == "valid"
+    assert preflight["readiness"]["capabilities"]["status"] == "compatible"
+    assert preflight["readiness"]["resources"]["status"] == "blocked"
+    assert "LIMIT_EXCEEDED" in preflight["readiness"]["resources"]["diagnosticCodes"]
+    assert (
+        client.app.state.studio.store.get("snapshot", preflight["snapshotId"])[
+            "configuration"
+        ]
+        is None
+    )
+    _admission_refuses_start(client, preflight, "exceeded-advertised-" + limit)
+    reopened = client.get(f"/api/v1/projects/{project['projectId']}")
+    assert reopened.status_code == 200, reopened.text
+    assert (
+        digest(client.app.state.studio.projects.sources(reopened.json()))
+        == source_before
+    )
+
+
+def test_required_clock_admission_absence_blocks_publicly_valid_inputs(
+    client, monkeypatch
+):
+    from xverse_studio.runs import service
+
+    project = new_project(client)
+    _admission_assert_publicly_valid(client, project)
+    rows = deepcopy(service.descriptors())
+    next(row for row in rows if row["providerId"] == "studio.reference")[
+        "clockDomains"
+    ] = []
+    monkeypatch.setattr(service, "descriptors", lambda: rows)
+    monkeypatch.setattr(
+        subprocess,
+        "Popen",
+        lambda *args, **kwargs: pytest.fail("No unadmitted clock may dispatch"),
+    )
+    preflight = _admission_check(client, project)
+    assert preflight["status"] == "blocked", preflight
+    assert preflight["readiness"]["model"]["status"] == "valid"
+    assert preflight["readiness"]["capabilities"]["status"] == "compatible"
+    assert preflight["readiness"]["clocks"]["status"] == "unknown"
+    assert preflight["readiness"]["clocks"]["facts"]["domains"] == ["simulation-time"]
+    assert (
+        "CLOCK_MAPPING_UNAVAILABLE"
+        in preflight["readiness"]["clocks"]["diagnosticCodes"]
+    )
+    assert (
+        client.app.state.studio.store.get("snapshot", preflight["snapshotId"])[
+            "configuration"
+        ]
+        is None
+    )
+    _admission_refuses_start(client, preflight, "missing-clock-admission")
+
+
+@pytest.mark.parametrize("phase", ["preflight", "before_start"])
+def test_conflicting_authority_scope_blocks_before_dispatch(client, monkeypatch, phase):
+    from xverse_studio.runs import service
+
+    project = new_project(client)
+    _admission_assert_publicly_valid(client, project)
+    original = _admission_check(client, project)
+    assert original["status"] == "ready"
+    rows = deepcopy(service.descriptors())
+    provider = next(row for row in rows if row["providerId"] == "studio.reference")
+    capability = next(
+        row for row in provider["capabilityRecords"] if row["kind"] == "start"
+    )
+    # An administrative failure fixture, not a physical permit or observed asset owner.
+    capability["authorityRequirements"] = [
+        "native-backend-owned",
+        "reserved-by-another-owner",
+    ]
+    monkeypatch.setattr(service, "descriptors", lambda: rows)
+    monkeypatch.setattr(
+        subprocess,
+        "Popen",
+        lambda *args, **kwargs: pytest.fail("Conflicting authority must not dispatch"),
+    )
+    store = client.app.state.studio.store
+    if phase == "preflight":
+        blocked = _admission_check(client, project)
+        assert blocked["status"] == "blocked", blocked
+        assert blocked["readiness"]["model"]["status"] == "valid"
+        assert blocked["readiness"]["authority"]["status"] == "unknown"
+        assert (
+            "AUTHORITY_UNAVAILABLE"
+            in blocked["readiness"]["authority"]["diagnosticCodes"]
+        )
+        assert store.get("snapshot", blocked["snapshotId"])["configuration"] is None
+        _admission_refuses_start(client, blocked, "conflicting-authority-preflight")
+    else:
+        response = client.post(
+            "/api/v1/runs",
+            headers={"Idempotency-Key": "authority-changed-after-preflight"},
+            json={
+                "snapshotId": original["snapshotId"],
+                "preflightId": original["preflightId"],
+            },
+        )
+        assert (
+            response.status_code == 409 and response.json()["code"] == "PREFLIGHT_STALE"
+        ), response.text
+        assert store.all("run") == [] and store.all("operation") == []
+
+
+@pytest.mark.parametrize(
+    "change", ["one_binding_missing", "all_bindings_missing", "digest_mismatch"]
+)
+def test_missing_binding_or_mismatched_artifact_is_distinct_from_model_uri(
+    client, monkeypatch, change
+):
+    from ruamel.yaml import YAML
+
+    parser = YAML()
+    project = new_project(client)
+    component_sources = {
+        key: value["content"]
+        for key, value in project["documents"].items()
+        if parser.load(value["content"])["kind"] == "Component"
+    }
+
+    def mutate(resource):
+        if change == "one_binding_missing":
+            resource["spec"]["bindings"][0]["artifactIds"] = []
+        elif change == "all_bindings_missing":
+            for binding in resource["spec"]["bindings"]:
+                binding["artifactIds"] = []
+        else:
+            resource["spec"]["artifacts"][0]["digest"] = "sha256:" + "0" * 64
+
+    project = _admission_save_resource(client, project, "Deployment", mutate)
+    assert component_sources == {
+        key: project["documents"][key]["content"] for key in component_sources
+    }
+    _admission_assert_publicly_valid(client, project)
+    monkeypatch.setattr(
+        subprocess,
+        "Popen",
+        lambda *args, **kwargs: pytest.fail(
+            "Missing or mismatched artifacts must not dispatch"
+        ),
+    )
+    preflight = _admission_check(client, project)
+    assert preflight["readiness"]["model"]["status"] == "valid"
+    assert preflight["status"] == "blocked", preflight
+    if change == "one_binding_missing":
+        counts = [
+            len(binding.get("artifactRefs", []))
+            for binding in preflight["planPreview"]["plan"]["bindings"]
+        ]
+        assert sorted(counts) == [0, 1]
+    assert preflight["readiness"]["artifacts"]["status"] in {
+        "unknown",
+        "unavailable",
+        "unsupported",
+    }, preflight
+    assert (
+        "ARTIFACT_UNAVAILABLE" in preflight["readiness"]["artifacts"]["diagnosticCodes"]
+    )
+    assert (
+        client.app.state.studio.store.get("snapshot", preflight["snapshotId"])[
+            "configuration"
+        ]
+        is None
+    )
+    _admission_refuses_start(client, preflight, "artifact-admission-" + change)
+
+
+def test_removed_required_cross_clock_mapping_is_publicly_rejected_before_start(
+    client, monkeypatch
+):
+    project = new_project(client)
+    project = _admission_save_resource(
+        client,
+        project,
+        "System",
+        lambda resource: resource["spec"]["timeDomains"].append(
+            {
+                "id": "other-time",
+                "clockClass": "simulation",
+                "epoch": "0",
+                "rate": "1",
+                "monotonic": True,
+            }
+        ),
+    )
+
+    def add_mapping(resource):
+        resource["spec"]["observers"][0]["timeDomainId"] = "other-time"
+        resource["spec"]["timeMappings"] = [
+            {
+                "sourceTimeDomainId": "simulation-time",
+                "targetTimeDomainId": "other-time",
+                "mapping": "declared-fixture-identity",
+                "tolerance": {"value": 0, "unit": "s"},
+            }
+        ]
+
+    project = _admission_save_resource(client, project, "Scenario", add_mapping)
+    _admission_assert_publicly_valid(client, project)
+    project = _admission_save_resource(
+        client,
+        project,
+        "Scenario",
+        lambda resource: resource["spec"].pop("timeMappings"),
+    )
+    # This is intentionally a public semantic-validation failure. It is not
+    # claimed as valid-model runtime mapping admission or a mapping implementation.
+    public = client.post(
+        f"/api/v1/projects/{project['projectId']}/validations",
+        json={"revision": project["revision"]},
+    )
+    assert public.status_code == 200 and public.json()["valid"] is False, public.text
+    assert any(
+        row["code"] == "XDL-SEMANTIC-TIME-MAPPING"
+        for row in public.json()["diagnostics"]
+    )
+    monkeypatch.setattr(
+        subprocess,
+        "Popen",
+        lambda *args, **kwargs: pytest.fail(
+            "Missing required clock mapping must not dispatch"
+        ),
+    )
+    preflight = _admission_check(client, project)
+    assert (
+        preflight["status"] == "blocked"
+        and preflight["readiness"]["model"]["status"] == "invalid"
+    ), preflight
+    assert any(
+        row["code"] == "XDL-SEMANTIC-TIME-MAPPING" for row in preflight["diagnostics"]
+    )
+    _admission_refuses_start(client, preflight, "absent-required-clock-mapping")
+
+
+def test_unknown_execution_owner_keeps_capacity_reserved_before_start(
+    client, monkeypatch
+):
+    from xverse_studio.runs import service
+
+    project = new_project(client)
+    _admission_assert_publicly_valid(client, project)
+    rows = deepcopy(service.descriptors())
+    next(row for row in rows if row["providerId"] == "studio.reference")["limits"][
+        "maxConcurrentRuns"
+    ] = 1
+    monkeypatch.setattr(service, "descriptors", lambda: rows)
+    monkeypatch.setattr(
+        subprocess,
+        "Popen",
+        lambda *args, **kwargs: pytest.fail(
+            "An unknown owner must not lose its reserved capacity"
+        ),
+    )
+    ready = _admission_check(client, project)
+    assert ready["status"] == "ready"
+    store = client.app.state.studio.store
+    # Explicit ownership-uncertainty metadata fixture: no provider process exists,
+    # no physical asset is reserved, and no live-provider result is claimed.
+    store.put(
+        "operation",
+        "fixture-owner-op",
+        {"operationId": "fixture-owner-op", "kind": "start", "status": "unknown"},
+    )
+    store.put(
+        "run",
+        "fixture-owner-run",
+        {
+            "runId": "fixture-owner-run",
+            "operationId": "fixture-owner-op",
+            "snapshotId": ready["snapshotId"],
+            "projectId": project["projectId"],
+            "state": "unknown",
+            "stateVersion": 1,
+            "cleanup": "unknown",
+            "evidence": "partial",
+            "evaluation": "not_started",
+            "verdict": None,
+            "createdAt": 0,
+            "evidenceScope": "synthetic_ownership_failure_fixture",
+            "providerId": "studio.reference",
+        },
+    )
+    try:
+        blocked = _admission_check(client, project)
+        assert blocked["status"] == "blocked", blocked
+        assert blocked["readiness"]["model"]["status"] == "valid"
+        assert "RESOURCE_BUSY" in blocked["readiness"]["resources"]["diagnosticCodes"]
+        response = client.post(
+            "/api/v1/runs",
+            headers={"Idempotency-Key": "unknown-owner-capacity"},
+            json={
+                "snapshotId": ready["snapshotId"],
+                "preflightId": ready["preflightId"],
+            },
+        )
+        assert (
+            response.status_code == 409 and response.json()["code"] == "RESOURCE_BUSY"
+        ), response.text
+        assert store.get("run", "fixture-owner-run")["state"] == "unknown"
+        assert len(store.all("run")) == 1
+        assert store.get("operation", "fixture-owner-op")["status"] == "unknown"
+    finally:
+        with store.tx() as db:
+            db.execute(
+                "DELETE FROM records WHERE kind=? AND id=?",
+                ("run", "fixture-owner-run"),
+            )
+            db.execute(
+                "DELETE FROM records WHERE kind=? AND id=?",
+                ("operation", "fixture-owner-op"),
+            )
+
+
+def test_unsupported_parameter_unit_cannot_be_silently_converted_or_run_as_preset(
+    client, monkeypatch
+):
+    from xverse_studio.xdl.examples import PROFILE_NAMESPACE
+
+    project = new_project(client)
+
+    def change_unit(resource):
+        parameter = next(
+            row
+            for row in resource["extensions"][PROFILE_NAMESPACE]["parameters"]
+            if row["id"] == "duration"
+        )
+        parameter["unitSemantics"] = "ms"
+
+    project = _admission_save_resource(client, project, "Scenario", change_unit)
+    # The public declared-intent contract admits a unit string; the selected
+    # executable must separately refuse this unsupported input interpretation.
+    _admission_assert_publicly_valid(client, project)
+    monkeypatch.setattr(
+        subprocess,
+        "Popen",
+        lambda *args, **kwargs: pytest.fail(
+            "Unsupported units must not execute a fixed preset"
+        ),
+    )
+    preflight = _admission_check(client, project)
+    assert preflight["readiness"]["model"]["status"] == "valid"
+    assert preflight["status"] == "blocked", preflight
+    assert preflight["readiness"]["capabilities"]["status"] == "unsupported"
+    requested = next(
+        row
+        for row in preflight["planPreview"]["plan"]["parameters"]
+        if row["id"] == "duration"
+    )
+    assert requested["unitSemantics"] == "ms"
+    assert (
+        "CAPABILITY_UNSUPPORTED"
+        in preflight["readiness"]["capabilities"]["diagnosticCodes"]
+    )
+    assert preflight["readiness"]["capabilities"]["remediation"]
+    assert (
+        client.app.state.studio.store.get("snapshot", preflight["snapshotId"])[
+            "configuration"
+        ]
+        is None
+    )
+    _admission_refuses_start(client, preflight, "unsupported-duration-unit")

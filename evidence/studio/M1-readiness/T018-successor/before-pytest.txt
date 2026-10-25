@@ -1,0 +1,72 @@
+.....F....                                                               [100%]
+=================================== FAILURES ===================================
+_ test_missing_binding_or_mismatched_artifact_is_distinct_from_model_uri[one_binding_missing] _
+
+client = <starlette.testclient.TestClient object at 0x7b48fc524290>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7b48fe2a7450>
+change = 'one_binding_missing'
+
+    @pytest.mark.parametrize(
+        "change", ["one_binding_missing", "all_bindings_missing", "digest_mismatch"]
+    )
+    def test_missing_binding_or_mismatched_artifact_is_distinct_from_model_uri(
+        client, monkeypatch, change
+    ):
+        from ruamel.yaml import YAML
+
+        parser = YAML()
+        project = new_project(client)
+        component_sources = {
+            key: value["content"]
+            for key, value in project["documents"].items()
+            if parser.load(value["content"])["kind"] == "Component"
+        }
+
+        def mutate(resource):
+            if change == "one_binding_missing":
+                resource["spec"]["bindings"][0]["artifactIds"] = []
+            elif change == "all_bindings_missing":
+                for binding in resource["spec"]["bindings"]:
+                    binding["artifactIds"] = []
+            else:
+                resource["spec"]["artifacts"][0]["digest"] = "sha256:" + "0" * 64
+
+        project = _admission_save_resource(client, project, "Deployment", mutate)
+        assert component_sources == {
+            key: project["documents"][key]["content"] for key in component_sources
+        }
+        _admission_assert_publicly_valid(client, project)
+        monkeypatch.setattr(
+            subprocess,
+            "Popen",
+            lambda *args, **kwargs: pytest.fail(
+                "Missing or mismatched artifacts must not dispatch"
+            ),
+        )
+        preflight = _admission_check(client, project)
+        assert preflight["readiness"]["model"]["status"] == "valid"
+        assert preflight["status"] == "blocked", preflight
+        if change == "one_binding_missing":
+            counts = [
+                len(binding.get("artifactRefs", []))
+                for binding in preflight["planPreview"]["plan"]["bindings"]
+            ]
+            assert sorted(counts) == [0, 1]
+>       assert preflight["readiness"]["artifacts"]["status"] in {
+            "unknown",
+            "unavailable",
+            "unsupported",
+        }, preflight
+E       AssertionError: {'capabilityDigest': 'sha256:bce965062c6d3655583597c1e3e79ad2c9d3ef28384ee3c7e354be8930c76d29', 'contributingDocuments... {'artifacts': 'available', 'authority': 'available', 'backend': 'available', 'capabilities': 'unsupported', ...}, ...}
+E       assert 'available' in {'unavailable', 'unknown', 'unsupported'}
+
+tests/integration/test_preflight.py:608: AssertionError
+=============================== warnings summary ===============================
+.venv/lib/python3.13/site-packages/fastapi/testclient.py:1
+  <workspace>/.venv/lib/python3.13/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/integration/test_preflight.py::test_missing_binding_or_mismatched_artifact_is_distinct_from_model_uri[one_binding_missing]
+1 failed, 9 passed, 19 deselected, 1 warning in 16.81s
