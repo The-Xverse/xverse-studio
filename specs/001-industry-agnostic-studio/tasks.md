@@ -214,3 +214,11 @@ latencies and the native expiry timing window remain recorded failures under obs
 T025/T027 retain their concrete pending receipt/control-operation/failure-view obligations. See
 `evidence/studio/release/linux-stream-recovery-2026-10-25/candidate-verification.json`. No milestone
 or Windows/physical/live-provider acceptance is claimed.
+
+Control receipts successor: fresh-host push CI for fb8ddb6 failed the native expiry check because one
+history read raced a journal append; bounded reader re-acquisition repairs it. Durable Start/Stop/Cancel
+receipts, two-tab/lost-ack/close-reopen browser cases, a canonical accepted-command `command.failed`
+producer, capability-aware controls and operation/ownership views are implemented with independent
+review. 499 backend tests and the 44-check Linux browser/performance gate pass. T025/T026/T027 stay
+open (both-native repetition, T025 dependency, AC environment clauses); completion remains 22/100. See
+`evidence/studio/M1-control-receipts/`.

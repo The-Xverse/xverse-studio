@@ -14,6 +14,9 @@ _CACHE = OrderedDict()
 _CACHE_LOCK = threading.RLock()
 MAX_JOURNAL_BYTES = 64 * 1024 * 1024
 MAX_JOURNAL_RECORDS = 100000
+# A running journal is appended continuously; re-acquire a bounded number of
+# times before reporting the source as currently unavailable.
+MAX_ACQUIRE_ATTEMPTS = 4
 
 
 def read_journal(root, state):
@@ -32,40 +35,44 @@ def read_journal(root, state):
     ):
         return [], "invalid"
     path = root / "evidence.jsonl"
-    try:
-        with open_read(root, path) as stream:
-            info = os.fstat(stream.fileno())
-            if info.st_size > MAX_JOURNAL_BYTES:
-                return [], "invalid"
-            key = (
-                str(path.absolute()),
-                info.st_dev,
-                info.st_ino,
-                info.st_size,
-                info.st_mtime_ns,
-                info.st_ctime_ns,
-                state.get("journalDigest"),
-                state.get("runId"),
-                state.get("snapshotId"),
-                state.get("state") in ("stopped", "failed"),
-            )
-            with _CACHE_LOCK:
-                if key in _CACHE:
-                    _CACHE.move_to_end(key)
-                    return _CACHE[key][0], _CACHE[key][1]
-            data = stream.read(MAX_JOURNAL_BYTES + 1)
-            if len(data) > MAX_JOURNAL_BYTES:
-                return [], "invalid"
-    except SafeIOError as exc:
-        # An append concurrent with acquisition is not proof of corruption.
-        # Refuse that observation and retry later without upgrading integrity.
-        return [], "unavailable" if exc.code in {
-            "FILE_MISSING",
-            "SOURCE_CHANGED",
-            "SECURE_IO_UNAVAILABLE",
-        } else "invalid"
-    except OSError:
-        return [], "unavailable"
+    for attempt in range(MAX_ACQUIRE_ATTEMPTS):
+        try:
+            with open_read(root, path) as stream:
+                info = os.fstat(stream.fileno())
+                if info.st_size > MAX_JOURNAL_BYTES:
+                    return [], "invalid"
+                key = (
+                    str(path.absolute()),
+                    info.st_dev,
+                    info.st_ino,
+                    info.st_size,
+                    info.st_mtime_ns,
+                    info.st_ctime_ns,
+                    state.get("journalDigest"),
+                    state.get("runId"),
+                    state.get("snapshotId"),
+                    state.get("state") in ("stopped", "failed"),
+                )
+                with _CACHE_LOCK:
+                    if key in _CACHE:
+                        _CACHE.move_to_end(key)
+                        return _CACHE[key][0], _CACHE[key][1]
+                data = stream.read(MAX_JOURNAL_BYTES + 1)
+                if len(data) > MAX_JOURNAL_BYTES:
+                    return [], "invalid"
+            break
+        except SafeIOError as exc:
+            # An append concurrent with acquisition is not proof of corruption.
+            # Refuse that observation and retry without upgrading integrity.
+            if exc.code == "SOURCE_CHANGED" and attempt + 1 < MAX_ACQUIRE_ATTEMPTS:
+                continue
+            return [], "unavailable" if exc.code in {
+                "FILE_MISSING",
+                "SOURCE_CHANGED",
+                "SECURE_IO_UNAVAILABLE",
+            } else "invalid"
+        except OSError:
+            return [], "unavailable"
     records = []
     identities = set()
     previous = "0" * 64

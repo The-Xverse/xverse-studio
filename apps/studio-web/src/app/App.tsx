@@ -1,10 +1,5 @@
 import { useState, useEffect, useMemo, useRef, useCallback } from "react";
-import type {
-  NewProject,
-  Selection,
-  Start,
-  Command,
-} from "../../../../packages/contracts/api";
+import type { NewProject, Selection } from "../../../../packages/contracts/api";
 import {
   api,
   ApiError,
@@ -49,6 +44,15 @@ import {
 } from "../features/retention/RetentionDialog";
 import { PreflightReview } from "../features/preflight/PreflightReview";
 import { ResultsView } from "../features/results/ResultsView";
+import { PendingStartNotice } from "../features/runs/PendingStartNotice";
+import {
+  clearPendingStart,
+  isDefinitiveRejection,
+  readPendingStart,
+  startRequest,
+  writePendingStart,
+  type PendingStart,
+} from "../features/runs/control";
 import { ExperimentsView, LabView } from "./OperationsViews";
 import {
   Icon,
@@ -110,7 +114,9 @@ export default function App() {
     [events, setEvents] = useState<RunEvent[]>([]),
     [omitted, setOmitted] = useState(0),
     [streamState, setStreamState] = useState("Disconnected"),
-    [evidenceImport, setEvidenceImport] = useState<Data | null>(null);
+    [evidenceImport, setEvidenceImport] = useState<Data | null>(null),
+    [pendingStart, setPendingStart] = useState<PendingStart | null>(null),
+    [startSending, setStartSending] = useState(false);
   const startKey = useRef(mutationKey()),
     preflightRequestSequence = useRef(0),
     lastRun = useRef(localStorage.getItem("studio.lastRun") || ""),
@@ -130,6 +136,11 @@ export default function App() {
       setBusy("");
     }
   }, []);
+  const runUpdated = useCallback(
+    (updated: Run) =>
+      setRun((old) => (old?.runId === updated.runId ? updated : old)),
+    [],
+  );
   async function refreshProjects() {
     setProjects(items<Project>(await api("/projects")));
   }
@@ -165,6 +176,7 @@ export default function App() {
         setExecutionSelection({});
       }
     }
+    setPendingStart(readPendingStart(projectId));
     const storedRun = localStorage.getItem("studio.lastRun." + projectId);
     if (storedRun) {
       try {
@@ -423,18 +435,55 @@ export default function App() {
     startKey.current = mutationKey();
     setModal("preflight");
   }
+  // A Start with a fresh request identity is withheld while an earlier Start's
+  // acknowledgement is unresolved: it could otherwise admit a second run.
+  const unresolvedStartReason =
+    "An earlier Start acknowledgement is unresolved. Retry that same Start or dismiss its receipt before starting a new snapshot.";
+  function startBlocked(projectId: string) {
+    const existing = readPendingStart(projectId);
+    return Boolean(existing && existing.key !== startKey.current);
+  }
   async function start() {
-    if (!preflight || preflight.status !== "ready") return;
-    const value = await api<Run>("/runs", {
-      method: "POST",
-      body: {
-        snapshotId: preflight.snapshotId,
-        preflightId: preflight.preflightId,
-      } satisfies Start,
+    if (!preflight || preflight.status !== "ready" || !project) return;
+    if (startBlocked(project.projectId)) throw new Error(unresolvedStartReason);
+    const pending: PendingStart = {
       key: startKey.current,
-    });
+      projectId: project.projectId,
+      snapshotId: preflight.snapshotId,
+      preflightId: preflight.preflightId,
+      sentAt: Date.now(),
+    };
+    // Persist the request identity first: a lost acknowledgement stays retryable after refresh.
+    writePendingStart(pending);
+    setPendingStart(pending);
+    await deliverStart(pending);
+  }
+  async function deliverStart(pending: PendingStart) {
+    const settle = () => {
+      clearPendingStart(pending.projectId);
+      setPendingStart((current) =>
+        current?.key === pending.key ? null : current,
+      );
+    };
+    setStartSending(true);
+    let value: Run;
+    try {
+      value = await startRequest(pending);
+    } catch (error) {
+      if (isDefinitiveRejection(error)) settle();
+      throw error;
+    } finally {
+      setStartSending(false);
+    }
+    if (value.runId) {
+      // Keep a pointer to the accepted run before the receipt is released.
+      localStorage.setItem("studio.lastRun." + pending.projectId, value.runId);
+      if (selectedProjectRef.current === pending.projectId)
+        localStorage.setItem("studio.lastRun", value.runId);
+    }
+    settle();
     const current = value.runId
-      ? await api<Run>(`/runs/${value.runId}`)
+      ? await api<Run>(`/runs/${encodeURIComponent(value.runId)}`)
       : value;
     if (selectedProjectRef.current === current.projectId) setRun(current);
     lastRun.current = current.runId;
@@ -449,20 +498,6 @@ export default function App() {
     setNotice(
       "Run accepted by the backend. Browser disconnection will not duplicate or terminate it.",
     );
-  }
-  async function command(kind: string) {
-    if (!run) return;
-    await api(`/runs/${run.runId}/commands`, {
-      method: "POST",
-      body: {
-        kind: kind as Command["kind"],
-        expectedStateVersion: run.stateVersion,
-        parameters: {},
-      } satisfies Command,
-      key: mutationKey(),
-    });
-    const updated = await api<Run>(`/runs/${run.runId}`);
-    setRun((old) => (old?.runId === updated.runId ? updated : old));
   }
   async function edit(edits: Data[]) {
     const selectedScenario = projection.scenarios.find(
@@ -699,6 +734,21 @@ export default function App() {
                   <Icon name="close" size={14} />
                 </button>
               </div>
+            )}
+            {pendingStart && pendingStart.projectId === project?.projectId && (
+              <PendingStartNotice
+                pending={pendingStart}
+                sending={startSending}
+                onRetry={() =>
+                  void doAction("Resolving the pending Start", () =>
+                    deliverStart(pendingStart),
+                  )
+                }
+                onDismiss={() => {
+                  clearPendingStart(pendingStart.projectId);
+                  setPendingStart(null);
+                }}
+              />
             )}
             {project?.sourceIntegrity === "modified" && (
               <div className="notice error" role="alert">
@@ -990,7 +1040,7 @@ export default function App() {
                     setView("Model");
                   }}
                   doAction={doAction}
-                  command={command}
+                  onRunUpdated={runUpdated}
                   onRun={checkPreflight}
                   rerunEnabled={Boolean(
                     capabilities.supportedOperations?.includes("rerun"),
@@ -1142,6 +1192,9 @@ export default function App() {
             setModal("");
           }}
           onStart={start}
+          startBlockedReason={
+            startBlocked(project.projectId) ? unresolvedStartReason : undefined
+          }
           onRecheck={checkPreflight}
         />
       )}

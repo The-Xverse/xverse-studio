@@ -14,6 +14,7 @@ import {
 import { ObservationPlot, ObservationTable } from "./ObservationDisplay";
 import { RetentionDialog } from "../retention/RetentionDialog";
 import { FrozenInputs } from "./FrozenInputs";
+import { RunControls } from "../runs/RunControls";
 import { projectDisplay } from "../model/projection";
 import type { Project } from "../../api/types";
 export function ResultsView({
@@ -24,7 +25,7 @@ export function ResultsView({
   selected: selectedModel,
   setSelected,
   doAction,
-  command,
+  onRunUpdated,
   onRun,
   rerunEnabled,
   onSelectRun,
@@ -36,7 +37,7 @@ export function ResultsView({
   selected: string;
   setSelected: (id: string) => void;
   doAction: DoAction;
-  command: (kind: string) => Promise<void>;
+  onRunUpdated: (run: Run) => void;
   onRun: () => Promise<void>;
   rerunEnabled: boolean;
   onSelectRun: (run: Run) => void;
@@ -475,29 +476,9 @@ export function ResultsView({
             <Icon name="refresh" />
             Refresh
           </button>
-          {active && (
-            <>
-              <button
-                className="button"
-                onClick={() =>
-                  void doAction("Stopping owned run", () => command("stop"))
-                }
-              >
-                <Icon name="stop" />
-                Stop
-              </button>
-              <button
-                className="button danger-button"
-                onClick={() =>
-                  void doAction("Cancelling owned run", () => command("cancel"))
-                }
-              >
-                Cancel
-              </button>
-            </>
-          )}
         </div>
       </div>
+      <RunControls run={run} onRunUpdated={onRunUpdated} />
       {rerunOperation && (
         <section className="panel">
           <div className="section-heading">

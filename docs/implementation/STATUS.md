@@ -9,20 +9,19 @@ not an estimate of remaining effort. T026 transport implementation is substantia
 remains open pending a complete current native/browser successor. Windows installation/testing
 remains blocked at user request, and native Windows secure I/O remains unimplemented/unavailable.
 
-The latest full Linux backend run passed **493 tests**, with source unchanged. All current backend
-code and Python tests still match that receipt. The first combined browser run passed 35/failed 3.
-After repair, the focused 22 successor passed 18/failed 4: both early modal-Escape cases, the native
-known-gap recovery fixture and all 15 protocol checks passed; creation/input/screenshot timeouts and
-the native expiry timing window remain failed checks. Host-wide full I/O stall pressure was measured
-around 53–71percent during the latter run; this is context, not proof of every failure's cause or a
-waiver. No successful current full browser/performance or clean-package successor is claimed.
-Exact logs, original failures, scope corrections and candidate hashes are retained in
-`evidence/studio/release/linux-stream-recovery-2026-10-25/`, `M1-event-stream/`, `M1-session/` and
-`M1-modal-keyboard/`. Publication and clean-host CI outcomes are recorded separately.
-Subsequent test-only request diagnostics and an admitted 30-second expiry workload await their own
-native verification; they do not inherit the earlier 16-second receipt. The latter workload retains
-the 12-second pause, more than 1,000 new records, actual HTTP 410, recovery while running, unchanged
-byte proofs and existing assertion budgets, and additionally checks all 3,000 expected observations.
+The latest full Linux backend run passed **499 tests**; typecheck/build and the full **44-check
+browser/performance gate passed** on the current candidate (`evidence/studio/M1-control-receipts/`).
+That includes the 30-second native expiry case with actual HTTP 410 and running verified-prefix
+recovery. Fresh-host push CI for checkpoint fb8ddb6 had failed that case (a history read racing a
+journal append); the PR run passed. Both outcomes are retained in `evidence/studio/native-ci/`.
+Earlier failed browser runs remain recorded under `M1-session/`, `M1-modal-keyboard/` and
+`release/linux-stream-recovery-2026-10-25/`; they are not rewritten.
+
+Run controls now keep durable Start/Stop/Cancel receipts across lost acknowledgements, refresh,
+page close/reopen and a second tab; offer only admitted controls with stated unavailable reasons;
+show accepted/delegated/completed/rejected/failed/unknown operation outcomes; and explain unresolved
+ownership/cleanup without targeting processes by name, PID or port. The owned worker records a
+canonical `command.failed` for an accepted command it never applied.
 
 The React/TypeScript browser UI and native FastAPI backend support System projects, inert import,
 source-preserving edits, graph/table projections, typed parameters/connections, explicit authored
@@ -48,11 +47,10 @@ that their native, integration, review or acceptance obligations passed.
 | M3 | Scoped inventory/authority/lease/clock/recovery fixtures and explicit unsupported production controls. Actual device/provider/driver/permission and physical evidence are BLOCKED. |
 | M4 | Bounded evaluator with snapshot-bound metric dependencies, Scenario intent authoring, campaigns, comparison, immutable exchange, annotations and dependency-aware project/run/artifact-registration retention. Reported trace claims and frozen subject links are verified; broader provider effects and complete retained release gates remain open. |
 
-Ready Linux work remains independent of hardware/Windows: T025 needs durable pending Start/command
-receipts, actual two-tab/lost-ack and accepted-command failure coverage; T027 needs operation-status,
-capability-aware controls and actionable ownership/cleanup uncertainty views. T031/T032's complete
-evidence-linked diagnostic explanation matrix is also open. T026's current browser/native successor
-must pass without weakening its replay-expiry, running-prefix, no-duplicate and immutable-byte checks.
+Ready Linux work remains independent of hardware/Windows: T031/T032's complete evidence-linked
+diagnostic explanation matrix is open. T025 still needs both-native repetition (Windows held); T026
+depends on T025; T027 retains its AC-006/007/027 environment clauses and observed partial-start/
+cleanup-failure transitions.
 
 The verification descriptions below retain earlier checkpoint results. Their counts, clean packages
 and passing CI do not establish the latest candidate's still-open browser/performance gates.

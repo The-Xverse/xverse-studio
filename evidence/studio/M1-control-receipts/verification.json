@@ -1,0 +1,76 @@
+{
+  "candidateBase": "fb8ddb652caf1ba36f2c1ee7cd437a487aa39978",
+  "applicationSourceDigest": "sha256:e819c35d8d333331899f47f6e3968d684ed2902012551ba2e4d23aad424286c2",
+  "digestDefinition": "Canonical sorted backend/frontend source hash map; excludes tests/docs",
+  "backend": {
+    "passed": 499,
+    "failed": 0,
+    "command": "scripts/validate_spec_package.py; ruff F821; scripts/run_checks.py",
+    "sourceUnchangedDuringRun": true,
+    "note": "Backend source and Python tests are unchanged since this run; later edits were frontend/e2e only: apps/studio-web/src/features/runs/RunControls.tsx"
+  },
+  "frontend": {
+    "typecheck": "passed",
+    "build": "passed"
+  },
+  "browser": {
+    "postReviewFull": {
+      "passed": 44,
+      "failed": 0,
+      "note": "Superseded by the performance run after one UI repair"
+    },
+    "performanceFirst": {
+      "passed": 43,
+      "failed": 1,
+      "failedCheck": "tests/performance/browser-history.ts expected no Stop button for a recorded fixture; RunControls rendered a disabled one",
+      "retained": "private loop10 .studio-local/claude-control-final/performance.log"
+    },
+    "performanceSuccessor": {
+      "passed": 44,
+      "failed": 0,
+      "candidateUnchangedDuringRun": true,
+      "measurements": {
+        "history50000Records200RowPage": {
+          "repetitions": 30,
+          "medianMs": 443.7,
+          "p95Ms": 458.3,
+          "thresholdMs": 2000
+        },
+        "model200Elements400ConnectionsOpen": {
+          "repetitions": 30,
+          "medianMs": 453.1,
+          "p95Ms": 487.3,
+          "thresholdMs": 3000
+        },
+        "selectionAndInspector": {
+          "repetitions": 30,
+          "medianMs": 19.9,
+          "p95Ms": 25.7,
+          "thresholdMs": 150
+        }
+      }
+    }
+  },
+  "redGreen": {
+    "readerReacquisition": "new integration test fails on original reader (unavailable), passes after",
+    "commandOutcomes": "3 of 4 new contract tests fail on original worker/service (operation stays delegated)",
+    "delegationRace": "fails with guard reverted (command.json written, settled outcome reopened)",
+    "browserReceipts": "lost-Start and lost-Stop browser tests fail against the original UI"
+  },
+  "independentReview": "independent-review.md",
+  "tasks": {
+    "closed": [],
+    "T025": "in_progress (Windows/both-native repetition held)",
+    "T026": "in_progress (depends on T025)",
+    "T027": "in_progress (AC-006/007/027 environment clauses open)"
+  },
+  "componentCompleted": 22,
+  "milestonesAccepted": [],
+  "windows": "BLOCKED_USER_REQUEST",
+  "environment": {
+    "os": "linux x64",
+    "python": "3.13.13",
+    "node": "24.22.1",
+    "browser": "Chromium 156.0.8078.4"
+  }
+}

@@ -26,6 +26,7 @@ export function PreflightReview({
   onStart,
   onRecheck,
   currentRevision,
+  startBlockedReason,
 }: {
   currentRevision: number;
   preflight: Preflight;
@@ -33,6 +34,7 @@ export function PreflightReview({
   onClose: () => void;
   onStart: () => Promise<unknown>;
   onRecheck: (providerId: string) => Promise<unknown>;
+  startBlockedReason?: string;
 }) {
   const [selectedProvider, setSelectedProvider] = useState(
       typeof preflight.providerId === "string"
@@ -455,13 +457,21 @@ export function PreflightReview({
               changed facts.
             </p>
           )}
+        {startBlockedReason && (
+          <p role="status" className="notice warning" id="start-blocked-reason">
+            {startBlockedReason}
+          </p>
+        )}
         <div className="form-actions preflight-actions">
           <button className="button" onClick={onClose}>
             Back to draft
           </button>
           <button
             className="button primary"
-            disabled={!canStart || pending}
+            disabled={!canStart || pending || Boolean(startBlockedReason)}
+            aria-describedby={
+              startBlockedReason ? "start-blocked-reason" : undefined
+            }
             onClick={() => void perform(onStart)}
           >
             {pending ? "Checking request…" : "Start frozen snapshot"}

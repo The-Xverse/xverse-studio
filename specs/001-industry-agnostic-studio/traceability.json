@@ -1931,7 +1931,7 @@
       "story": "SETUP",
       "kind": "design",
       "parallel": false,
-      "description": "Inspect and pin the actual platform/compat/blueprints revisions, API/profile surface, dependency identities, runtime limits and execution boundary; record missing supported-wrapper work without importing private classes. Record applicability and source dispositions for public SADS allocations XVE-SYS-0159\u20130178; absent normative text is an evidence gap, not permission to invent detailed matches or a blocker to user-derived requirements. Establish the native platform-support matrix: exact supported Linux distribution/release and Windows edition/release, architecture, browser and Python/Node versions. Separate Studio backend support from each provider/driver/runtime OS capability.",
+      "description": "Inspect and pin the actual platform/compat/blueprints revisions, API/profile surface, dependency identities, runtime limits and execution boundary; record missing supported-wrapper work without importing private classes. Record applicability and source dispositions for public SADS allocations XVE-SYS-0159–0178; absent normative text is an evidence gap, not permission to invent detailed matches or a blocker to user-derived requirements. Establish the native platform-support matrix: exact supported Linux distribution/release and Windows edition/release, architecture, browser and Python/Node versions. Separate Studio backend support from each provider/driver/runtime OS capability.",
       "paths": [
         "docs/implementation/baseline.md",
         "docs/implementation/dependencies.md",
@@ -2651,10 +2651,11 @@
         "AC-010"
       ],
       "status": "in_progress",
-      "implementation_note": "In progress: owned Linux duplicate-delivery/proof/expiry/recovery and backend idempotency scopes have evidence. Remaining distinct obligations include actual two-tab/lost-ack Start retry, active page close/reopen, accepted-command execution failure plus command.failed conformance, and both-native backend/browser repetition. Windows remains held; ready Linux gaps are not classified as hardware blockers.",
+      "implementation_note": "In progress: owned Linux evidence now covers lost-ack Start retried from a refreshed page and a second tab (one run, one request identity), Recheck-after-loss refusal, double Start, active page close/reopen, lost-ack Stop retry (one command), and accepted-command failure: canonical command.failed plus failed/unknown operation outcomes distinct from lifecycle (API contract tests; browser views use a presentation-only operation fixture). Remaining: repetition on both supported native backend/browser combinations; Windows remains held.",
       "implementation_evidence": [
         "evidence/studio/M1-session/literal-scope.md",
-        "evidence/studio/M1-session/expiry-green/verification.json"
+        "evidence/studio/M1-session/expiry-green/verification.json",
+        "evidence/studio/M1-control-receipts/verification.json"
       ]
     },
     {
@@ -2682,14 +2683,15 @@
         "AC-010"
       ],
       "status": "in_progress",
-      "implementation_note": "In progress: negotiated 1.1 proof-bound cursor/replay expiry, bounded gap/resync/error/end controls, read-only state/history recovery, quotas and cleanup, acknowledged browser delivery, retained verified-prefix scope, whole-response limits and reserved-control-slot parser alignment are implemented/reviewed.493 backend tests pass. Earlier real 16-second nativeHTTP 410 evidence is retained; current focused 22 browser successor passes18/fails4 amid observed I/O stalls. Current full browser/performance and native expiry successor remain unproven; do not close from partial results.",
+      "implementation_note": "In progress: negotiated 1.1 proof-bound cursor/replay expiry, bounded gap/resync, read-only recovery, quotas/cleanup and acknowledged browser delivery are implemented. The Linux full 44-check browser/performance successor, including the 30-second native HTTP 410 running-prefix expiry case, passes after the bounded reader re-acquisition repair (fresh-host push CI failure for fb8ddb6 retained). Remains open behind T025's both-native obligation.",
       "implementation_evidence": [
         "docs/architecture/ADR-0011-resumable-presentation-stream.md",
         "evidence/studio/M1-event-stream/independent-review/successor-review.md",
         "evidence/studio/M1-session/expiry-green/verification.json",
         "evidence/studio/M1-session/unknown-fixture-scope-erratum.md",
         "evidence/studio/M1-session/full-browser-findings.md",
-        "evidence/studio/release/linux-stream-recovery-2026-10-25/candidate-verification.json"
+        "evidence/studio/release/linux-stream-recovery-2026-10-25/candidate-verification.json",
+        "evidence/studio/M1-control-receipts/verification.json"
       ]
     },
     {
@@ -2720,10 +2722,11 @@
         "AC-027"
       ],
       "status": "in_progress",
-      "implementation_note": "In progress: frozen plan/input views and independent lifecycle/verdict/cleanup/evidence cards exist; same-state-version evidence-facet repair is implemented and scoped UI assertions are retained. Remaining concrete UI work: durable pending Start/Stop/Cancel receipts, accepted/delegated/failed/unknown operation tracking, admitted capability/state gating with unavailable reasons, and actionable unresolved ownership/cleanup details. Full current browser successor remains open.",
+      "implementation_note": "In progress: capability-admitted Stop/Cancel with stated unavailable reasons, durable control receipts, accepted/delegated/completed/rejected/failed/unknown operation views, and an unresolved-ownership/cleanup view are implemented and browser-verified on Linux. Remaining: AC-006/007/027 environment clauses, observed partial-start/cleanup-failure transitions, and optional controls from an admitted provider.",
       "implementation_evidence": [
         "evidence/studio/M1-session/literal-scope.md",
-        "evidence/studio/M1-session/evidence-card-before-repair.md"
+        "evidence/studio/M1-session/evidence-card-before-repair.md",
+        "evidence/studio/M1-control-receipts/verification.json"
       ]
     },
     {
@@ -3069,7 +3072,7 @@
       "story": "SETUP",
       "kind": "verification",
       "parallel": true,
-      "description": "Verify keyboard/focus/status alternatives at 1024\u00d7768 and 1440\u00d7900 and measure the 50,000-event/200-row workload over the specified repetitions. Execute the supported browser/accessibility and event-query matrix on both native Linux and Windows, retaining each platform's results independently.",
+      "description": "Verify keyboard/focus/status alternatives at 1024×768 and 1440×900 and measure the 50,000-event/200-row workload over the specified repetitions. Execute the supported browser/accessibility and event-query matrix on both native Linux and Windows, retaining each platform's results independently.",
       "paths": [
         "tests/e2e/accessibility.spec.ts",
         "tests/performance/evidence-query.spec.ts",
@@ -4942,7 +4945,7 @@
       "story": "SETUP",
       "kind": "verification",
       "parallel": false,
-      "description": "Assemble the exact-candidate M0\u2013M4 acceptance dossier with all measured success criteria, tasks/evidence traceability and remaining dependencies; report truthful completion and release scope for review. Require both native-platform core smoke/packaging results and explicit per-OS provider availability in the release dossier; browser-only Windows access or WSL execution cannot satisfy native Windows backend support.",
+      "description": "Assemble the exact-candidate M0–M4 acceptance dossier with all measured success criteria, tasks/evidence traceability and remaining dependencies; report truthful completion and release scope for review. Require both native-platform core smoke/packaging results and explicit per-OS provider availability in the release dossier; browser-only Windows access or WSL execution cannot satisfy native Windows backend support.",
       "paths": [
         "evidence/studio/release/",
         "docs/releases/studio-1.0.md"
@@ -4997,7 +5000,7 @@
       ],
       "status": "blocked",
       "implementation_note": "Owned bounded evaluator/metric/campaign/comparison/exchange/annotation/retention slices exercised. Release completeness, broader provider scenarios, shared-artifact retention and native Windows gates remain open.",
-      "blocker": "Retained M0\u2013M4 acceptance gates, native Windows verification, live runtime, hardware and human usability are incomplete."
+      "blocker": "Retained M0–M4 acceptance gates, native Windows verification, live runtime, hardware and human usability are incomplete."
     }
   ],
   "acceptance_cases": [
@@ -6099,7 +6102,7 @@
     }
   ],
   "implementation_record": {
-    "scope": "Owned reference implementation; no accepted M0\u2013M4 milestone claimed.",
+    "scope": "Owned reference implementation; no accepted M0–M4 milestone claimed.",
     "branch": "implement/studio-m0-m4",
     "status_document": "../../docs/implementation/STATUS.md",
     "native_windows": "BLOCKED at user request. Initial native Server 2022 install failed on upstream Git filenames; application/browser NOT_RUN.",

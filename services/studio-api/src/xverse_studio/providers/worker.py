@@ -96,6 +96,38 @@ def main():
         state["updatedAt"] = time.time()
         atomic(root / "state.json", canonical(state).encode())
 
+    def owned_command():
+        # Only an owner-signed stop/cancel request is attributable to an operation.
+        command_path = root / "command.json"
+        if not command_path.exists():
+            return None
+        cmd = json.loads(command_path.read_text())
+        signature = cmd.pop("signature", "")
+        if not hmac.compare_digest(
+            signature,
+            hmac.new(secret, canonical(cmd).encode(), hashlib.sha256).hexdigest(),
+        ) or cmd["kind"] not in ("stop", "cancel"):
+            return None
+        if cmd["operationId"] in state["commandResults"]:
+            return None
+        return cmd
+
+    def fail_pending_command(code, message):
+        # An accepted command that this workload never applied failed; it was not executed.
+        cmd = owned_command()
+        if cmd is None:
+            return
+        state["commandResults"][cmd["operationId"]] = {"status": "failed", "code": code}
+        emit(
+            "command.failed",
+            {
+                "operationId": cmd["operationId"],
+                "kind": cmd["kind"],
+                "code": code,
+                "message": message,
+            },
+        )
+
     try:
         emit(
             "run.state_changed",
@@ -121,28 +153,20 @@ def main():
         fault_emitted = False
         for i in range(n):
             tick = round(i * step * 1_000_000)
-            command_path = root / "command.json"
-            if command_path.exists():
-                cmd = json.loads(command_path.read_text())
-                signature = cmd.pop("signature", "")
-                if hmac.compare_digest(
-                    signature,
-                    hmac.new(
-                        secret, canonical(cmd).encode(), hashlib.sha256
-                    ).hexdigest(),
-                ) and cmd["kind"] in ("stop", "cancel"):
-                    operation = cmd["operationId"]
-                    state["state"] = "stopping"
-                    state["stateVersion"] += 1
-                    save()
-                    emit(
-                        "command.delegated",
-                        {"operationId": operation, "kind": cmd["kind"]},
-                        tick,
-                    )
-                    state["commandResults"][operation] = {"status": "completed"}
-                    stopped = True
-                    break
+            cmd = owned_command()
+            if cmd is not None:
+                operation = cmd["operationId"]
+                state["state"] = "stopping"
+                state["stateVersion"] += 1
+                save()
+                emit(
+                    "command.delegated",
+                    {"operationId": operation, "kind": cmd["kind"]},
+                    tick,
+                )
+                state["commandResults"][operation] = {"status": "completed"}
+                stopped = True
+                break
             fault = config.get("fault", "none") == "stuck-sensor" and i >= n // 2
             if fault and not fault_emitted:
                 emit(
@@ -198,8 +222,14 @@ def main():
             round(duration * 1e6),
         )
         emit("cleanup.updated", {"status": "complete", "resources": []})
-        for op in state["commandResults"]:
-            emit("command.completed", {"operationId": op})
+        for op, result in state["commandResults"].items():
+            if result["status"] == "completed":
+                emit("command.completed", {"operationId": op})
+        if not stopped:
+            fail_pending_command(
+                "RUN_COMPLETED_BEFORE_COMMAND",
+                "The run reached its declared duration before this accepted command could take effect.",
+            )
         emit(
             "evidence.updated",
             {
@@ -237,6 +267,14 @@ def main():
             )
             save()
         except OSError:
+            pass
+        try:
+            fail_pending_command(
+                "REFERENCE_WORKER_ERROR",
+                "The reference workload failed before this accepted command took effect.",
+            )
+            save()
+        except (OSError, ValueError, KeyError, TypeError):
             pass
         return 1
     finally:

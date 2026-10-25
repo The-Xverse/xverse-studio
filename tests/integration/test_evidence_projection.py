@@ -224,6 +224,47 @@ def test_reader_missing_and_changed_acquisition_are_unavailable(tmp_path, monkey
     assert read_journal(root, state) == ([], "unavailable")
 
 
+def test_reader_reacquires_running_journal_after_bounded_concurrent_appends(
+    tmp_path, monkeypatch
+):
+    from xverse_studio.evidence import reader
+
+    records, _ = _fixture.fixture_records(noise=0)
+    root = tmp_path / "new-running-append-fixture"
+    _fixture.write_journal(root, records)
+    state = {
+        "runId": "recorded-reader-fixture",
+        "snapshotId": "fixture-snapshot",
+        "state": "running",
+    }
+    actual = reader.open_read
+    attempts = []
+
+    @contextmanager
+    def appending(directory, path, *, transient):
+        attempts.append(path)
+        with actual(directory, path) as stream:
+            yield stream
+            if transient is None or len(attempts) <= transient:
+                with path.open("ab") as appended:
+                    appended.write(b"{")
+
+    monkeypatch.setattr(
+        reader, "open_read", lambda d, p: appending(d, p, transient=2)
+    )
+    rows, integrity = read_journal(root, state)
+    assert integrity == "verified_prefix" and len(attempts) == 3
+    assert [row["eventId"] for row in rows] == [row["eventId"] for row in records]
+
+    # A source that changes on every acquisition stays unavailable after the bound.
+    attempts.clear()
+    monkeypatch.setattr(
+        reader, "open_read", lambda d, p: appending(d, p, transient=None)
+    )
+    assert read_journal(root, state) == ([], "unavailable")
+    assert len(attempts) == reader.MAX_ACQUIRE_ATTEMPTS
+
+
 def test_reader_oversized_file_refuses_before_read(tmp_path, monkeypatch):
     from xverse_studio.evidence import reader
 

@@ -439,9 +439,23 @@ test("run session: native owned execution survives real replay-window expiry whi
     await expect
       .poll(() => page.locator(".event-row").count())
       .toBeGreaterThan(2);
-    const before = await page.request
-      .get(`/api/v1/runs/${runId}/history?limit=200`)
-      .then((r) => r.json());
+    // A concurrent append may leave one acquisition unavailable; never count it as history.
+    const readHistory = async () => {
+      let projection: any;
+      await expect
+        .poll(
+          async () => {
+            projection = await page.request
+              .get(`/api/v1/runs/${runId}/history?limit=200`)
+              .then((r) => r.json());
+            return projection.integrity;
+          },
+          { timeout: 4000 },
+        )
+        .toBe("verified_prefix");
+      return projection;
+    };
+    const before = await readHistory();
     const initialJournal = readFileSync(journalPath),
       prefixBytes = initialJournal.subarray(
         0,
@@ -464,9 +478,7 @@ test("run session: native owned execution survives real replay-window expiry whi
     await new Promise((resolve) => setTimeout(resolve, 12000));
     observe("pause_completed");
     await delivery(page, false);
-    const during = await page.request
-      .get(`/api/v1/runs/${runId}/history?limit=200`)
-      .then((r) => r.json());
+    const during = await readHistory();
     observe("during_history_received", { records: during.counts.totalRecords });
     expect(
       during.counts.totalRecords - before.counts.totalRecords,
@@ -688,5 +700,328 @@ test("run session: UI metadata fixture updates evidence at the same lifecycle ve
       "same-version-evidence-unavailable-ui-fixture.png",
     ),
     fullPage: true,
+  });
+});
+async function openTimedProject(page: Page, name: string, duration: number) {
+  const project = await makeProject(page, name);
+  await page.evaluate(
+    async ({ project, duration }) => {
+      const { csrfToken } = await fetch("/api/v1/session").then((r) =>
+        r.json(),
+      );
+      const r = await fetch(`/api/v1/projects/${project.projectId}/edits`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRF-Token": csrfToken,
+          "If-Match": String(project.revision),
+        },
+        body: JSON.stringify({
+          baseRevision: project.revision,
+          edits: [
+            { kind: "set_parameter", parameterId: "duration", value: duration },
+          ],
+        }),
+      });
+      if (!r.ok) throw Error(await r.text());
+      localStorage.setItem("studio.projectId", project.projectId);
+    },
+    { project, duration },
+  );
+  await page.reload();
+  await expect(page.locator(".project-header h1")).toHaveText(name);
+  return project;
+}
+/** Records the Idempotency-Key of every Start request this page sends. */
+function recordStarts(page: Page, keys: string[]) {
+  page.on("request", (request) => {
+    if (
+      request.method() === "POST" &&
+      new URL(request.url()).pathname === "/api/v1/runs"
+    )
+      keys.push(request.headers()["idempotency-key"]);
+  });
+}
+async function projectRuns(page: Page, projectId: string) {
+  const list = await page.request.get("/api/v1/runs").then((r) => r.json());
+  return list.items.filter((r: any) => r.projectId === projectId);
+}
+test("run session: lost Start acknowledgement survives refresh and resolves one run from two tabs", async ({
+  page,
+  context,
+}, testInfo) => {
+  test.setTimeout(90000);
+  await connectStudio(page, testInfo);
+  const project = await openTimedProject(page, "Lost Start acknowledgement", 3);
+  const keys: string[] = [];
+  recordStarts(page, keys);
+  let dropped = 0;
+  // Fault injection: the backend receives and accepts Start; only its response is lost.
+  await page.route("**/api/v1/runs", async (route) => {
+    if (route.request().method() !== "POST" || dropped) return route.fallback();
+    dropped++;
+    await route.fetch();
+    await route.abort("connectionreset");
+  });
+  await page
+    .getByRole("button", { name: "Preflight & run", exact: true })
+    .click();
+  await page
+    .getByRole("button", { name: "Start frozen snapshot", exact: true })
+    .click();
+  await expect(page.getByText("REQUEST_UNAVAILABLE")).toBeVisible();
+  expect(dropped).toBe(1);
+  const accepted = await projectRuns(page, project.projectId);
+  expect(accepted).toHaveLength(1);
+  await page.reload();
+  const notice = page.locator("[data-pending-start]");
+  await expect(notice).toHaveAttribute("data-pending-start", "unacknowledged");
+  await expect(notice).toContainText("Start acknowledgement not received");
+  // A fresh preflight carries a new request identity; it cannot Start meanwhile.
+  await page
+    .getByRole("button", { name: "Preflight & run", exact: true })
+    .click();
+  const freshStart = page.getByRole("button", {
+    name: "Start frozen snapshot",
+    exact: true,
+  });
+  await expect(page.locator("#start-blocked-reason")).toContainText(
+    "An earlier Start acknowledgement is unresolved",
+  );
+  await expect(freshStart).toBeDisabled();
+  await page
+    .getByRole("button", { name: "Back to draft", exact: true })
+    .click();
+  const second = await context.newPage();
+  recordStarts(second, keys);
+  await second.goto("/");
+  await expect(second.locator("[data-pending-start]")).toContainText(
+    "Retry same Start",
+  );
+  await Promise.all(
+    [page, second].map((tab) =>
+      tab
+        .getByRole("button", { name: "Retry same Start", exact: true })
+        .click(),
+    ),
+  );
+  for (const tab of [page, second]) {
+    await expect(
+      tab.getByRole("heading", { name: /Run results/ }),
+    ).toBeVisible();
+    await expect(tab.locator(".run-identity code").first()).toHaveText(
+      accepted[0].runId,
+    );
+  }
+  await expect(page.locator("[data-pending-start]")).toHaveCount(0);
+  // Three Start deliveries of one request identity; the backend owns exactly one run.
+  expect(keys).toHaveLength(3);
+  expect(new Set(keys).size).toBe(1);
+  expect(await projectRuns(page, project.projectId)).toHaveLength(1);
+  await second.close();
+  await page.screenshot({
+    path: testInfo.outputPath("lost-start-two-tab-retry.png"),
+    fullPage: true,
+  });
+});
+test("run session: double Start, page close/reopen and a lost Stop acknowledgement keep one run and one command", async ({
+  page,
+  context,
+}, testInfo) => {
+  test.setTimeout(90000);
+  await connectStudio(page, testInfo);
+  const project = await openTimedProject(page, "Owned control receipts", 20);
+  const keys: string[] = [];
+  recordStarts(page, keys);
+  await page
+    .getByRole("button", { name: "Preflight & run", exact: true })
+    .click();
+  await page
+    .getByRole("button", { name: "Start frozen snapshot", exact: true })
+    .dblclick();
+  await expect(
+    page.getByRole("heading", { name: /Run results/ }),
+  ).toBeVisible();
+  expect(new Set(keys).size).toBe(1);
+  const [run] = await projectRuns(page, project.projectId);
+  expect(await projectRuns(page, project.projectId)).toHaveLength(1);
+  await expect(page.locator(".stream-indicator")).toHaveText("Connected");
+  // Closing the only page does not stop the backend-owned run.
+  await page.close();
+  const reopened = await context.newPage(),
+    reopenedWrites: string[] = [];
+  reopened.on("request", (r) => {
+    if (r.method() !== "GET")
+      reopenedWrites.push(r.method() + " " + new URL(r.url()).pathname);
+  });
+  await reopened.goto("/");
+  await reopened.getByRole("tab", { name: "Results", exact: false }).click();
+  await expect(reopened.locator(".run-identity code").first()).toHaveText(
+    run.runId,
+  );
+  await expect(
+    reopened.getByRole("heading", { name: /Run results/ }),
+  ).toContainText("running");
+  expect(reopenedWrites).toEqual([]);
+  const stop = reopened.getByRole("button", { name: "Stop", exact: true });
+  await expect(stop).toBeEnabled();
+  await expect(reopened.locator("#control-reason-stop")).toHaveText(
+    "Request the declared orderly shutdown.",
+  );
+  const commandKeys: string[] = [];
+  reopened.on("request", (request) => {
+    if (
+      request.method() === "POST" &&
+      request.url().includes(`/runs/${run.runId}/commands`)
+    )
+      commandKeys.push(request.headers()["idempotency-key"]);
+  });
+  let dropped = 0;
+  await reopened.route(
+    `**/api/v1/runs/${run.runId}/commands`,
+    async (route) => {
+      if (dropped) return route.fallback();
+      dropped++;
+      await route.fetch();
+      await route.abort("connectionreset");
+    },
+  );
+  await stop.click();
+  const operation = reopened.locator("[data-control-operation]");
+  await expect(operation).toHaveAttribute(
+    "data-control-operation",
+    "unacknowledged",
+  );
+  // Only one control may be pending; both are unavailable with a stated reason.
+  await expect(stop).toBeDisabled();
+  await expect(reopened.locator("#control-reason-cancel")).toHaveText(
+    "A stop request must settle before another control.",
+  );
+  await reopened.reload();
+  await reopened.getByRole("tab", { name: "Results", exact: false }).click();
+  await expect(operation).toHaveAttribute(
+    "data-control-operation",
+    "unacknowledged",
+  );
+  await reopened
+    .getByRole("button", { name: "Retry same request", exact: true })
+    .click();
+  await expect(operation).toHaveAttribute(
+    "data-control-operation",
+    "completed",
+    { timeout: 10000 },
+  );
+  await expect(operation).toContainText(
+    "confirmed that this request took effect",
+  );
+  await expect(
+    reopened.getByRole("heading", { name: /Run results/ }),
+  ).toContainText("stopped");
+  expect(commandKeys).toHaveLength(2);
+  expect(new Set(commandKeys).size).toBe(1);
+  await expect(stop).toBeDisabled();
+  await expect(reopened.locator("#control-reason-stop")).toHaveText(
+    "Not available while the run is stopped.",
+  );
+  const history = await reopened.request
+    .get(`/api/v1/runs/${run.runId}/history?limit=200&type=command.delegated`)
+    .then((r) => r.json());
+  expect(history.integrity).toBe("valid");
+  expect(history.counts.matchedRecords).toBe(1);
+  const ended = await reopened.request
+    .get(`/api/v1/runs/${run.runId}`)
+    .then((r) => r.json());
+  expect(ended.state).toBe("stopped");
+  expect(await projectRuns(reopened, project.projectId)).toHaveLength(1);
+  await reopened.screenshot({
+    path: testInfo.outputPath("lost-stop-retry-completed.png"),
+    fullPage: true,
+  });
+});
+test("run controls: UI fixture renders failed and unknown command outcomes and unresolved ownership without sending controls", async ({
+  page,
+}, testInfo) => {
+  test.setTimeout(60000);
+  await connectStudio(page, testInfo);
+  const project = await makeProject(page, "Control outcome UI fixture");
+  const fixture = JSON.parse(
+    execFileSync(
+      path.resolve(".venv/bin/python"),
+      [
+        "tests/fixtures/evidence/create_stream_recovery_fixture.py",
+        "--data-dir",
+        process.env.STUDIO_BROWSER_DATA!,
+        "--project-id",
+        project.projectId,
+        "--noise",
+        "1000",
+      ],
+      { encoding: "utf8" },
+    ),
+  );
+  const writes: string[] = [];
+  page.on("request", (r) => {
+    if (["POST", "PUT", "PATCH", "DELETE"].includes(r.method()))
+      writes.push(r.method() + " " + r.url());
+  });
+  // Presentation-only fixture: the backend producer is proven by contract tests.
+  let outcome: Record<string, string> = {
+    status: "failed",
+    code: "RUN_COMPLETED_BEFORE_COMMAND",
+  };
+  await page.route("**/api/v1/operations/op-ui-fixture", (route) =>
+    route.fulfill({
+      json: {
+        operationId: "op-ui-fixture",
+        runId: fixture.runId,
+        kind: "stop",
+        ...outcome,
+      },
+    }),
+  );
+  const seed = () =>
+    page.evaluate((runId) => {
+      localStorage.setItem(
+        "studio.pendingCommand." + runId,
+        JSON.stringify({
+          key: "ui-fixture-key",
+          runId,
+          kind: "stop",
+          expectedStateVersion: 1,
+          sentAt: Date.now(),
+          operationId: "op-ui-fixture",
+          status: "delegated",
+        }),
+      );
+    }, fixture.runId);
+  await seed();
+  await showRun(page, project.projectId, fixture.runId);
+  const operation = page.locator("[data-control-operation]");
+  await expect(operation).toHaveAttribute("data-control-operation", "failed");
+  await expect(operation).toContainText("Accepted, but it did not take effect");
+  await expect(operation).toContainText("RUN_COMPLETED_BEFORE_COMMAND");
+  outcome = { status: "unknown" };
+  await seed();
+  await showRun(page, project.projectId, fixture.runId);
+  await expect(operation).toHaveAttribute("data-control-operation", "unknown");
+  await expect(operation).toContainText("cannot prove whether");
+  const ownership = page.locator(".ownership-unresolved");
+  await expect(ownership).toContainText("Unresolved owned resources");
+  await expect(ownership).toContainText("PID reuse is not ownership");
+  // The recorded fixture admits no controls: none is offered, and the scope says so.
+  for (const name of ["Stop", "Cancel"])
+    await expect(page.getByRole("button", { name, exact: true })).toHaveCount(
+      0,
+    );
+  await expect(page.locator(".run-controls-scope")).toContainText(
+    "Not admitted for this run: stop, cancel, pause",
+  );
+  await page
+    .getByRole("button", { name: "Reconcile ownership", exact: true })
+    .click();
+  await expect(ownership).toBeVisible();
+  expect(writes).toEqual([]);
+  await page.locator(".run-controls").screenshot({
+    path: testInfo.outputPath("control-outcome-ownership-ui-fixture.png"),
   });
 });

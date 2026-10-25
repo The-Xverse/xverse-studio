@@ -565,6 +565,7 @@ class Runs:
                 if op["status"] not in ("completed", "failed"):
                     op["status"] = "unknown"
                     self.store.put("operation", op["operationId"], op)
+            self._reconcile_command(run, observed)
             _, integrity = read_journal(root, observed or run)
             run["evidenceAvailability"] = (
                 "unavailable" if integrity == "unavailable" else "available"
@@ -581,6 +582,23 @@ class Runs:
             if rid in self.children and self.children[rid].poll() is not None:
                 self.children.pop(rid)
             return run
+
+    def _reconcile_command(self, run, observed):
+        # An accepted stop/cancel never stays delegated past the evidence that settles it.
+        oid = run.get("pendingCommandId")
+        if not oid:
+            return
+        op = self.store.get("operation", oid)
+        if op["status"] not in ("accepted", "delegated", "unknown"):
+            run.pop("pendingCommandId")
+        elif observed and observed.get("state") in ("stopped", "failed"):
+            # The worker has finished and did not apply this request: it failed, unexecuted.
+            op.update(status="failed", code="RUN_TERMINAL_BEFORE_COMMAND")
+            self.store.put("operation", oid, op)
+            run.pop("pendingCommandId")
+        elif run["state"] == "unknown" and op["status"] != "unknown":
+            op["status"] = "unknown"
+            self.store.put("operation", oid, op)
 
     def command(self, rid, principal, key, payload):
         # Reconciliation precedes state/authority enforcement; retries still resolve before a new mutation.
@@ -627,6 +645,8 @@ class Runs:
                 "status": "accepted",
             }
             self.store.put("operation", oid, op, db)
+            run["pendingCommandId"] = oid
+            self.store.put("run", rid, run, db)
             return {"operationId": oid, "runId": rid, "status": "accepted"}
 
         result, new = self.store.idempotent(
@@ -639,10 +659,18 @@ class Runs:
             cmd["signature"] = hmac.new(
                 secret, canonical(cmd).encode(), hashlib.sha256
             ).hexdigest()
-            atomic(root / "command.json", canonical(cmd).encode())
-            op = self.store.get("operation", result["operationId"])
-            op["status"] = "delegated"
-            self.store.put("operation", op["operationId"], op)
+            # Serialized with reconciliation: a concurrent read may already have
+            # settled this request, and delegation must never reopen that outcome.
+            with self.store.lock:
+                op = self.store.get("operation", result["operationId"])
+                if (
+                    op["status"] == "accepted"
+                    and self.store.get("run", rid).get("pendingCommandId")
+                    == op["operationId"]
+                ):
+                    atomic(root / "command.json", canonical(cmd).encode())
+                    op["status"] = "delegated"
+                    self.store.put("operation", op["operationId"], op)
         return result
 
     def shutdown(self):
