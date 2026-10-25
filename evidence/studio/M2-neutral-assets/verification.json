@@ -1,0 +1,24 @@
+{
+  "phase": "focused_linux_verification_complete",
+  "capturedAt": "2026-10-25T10:20:59.352459+00:00",
+  "baseCommit": "ba5ef0a33c8d161096420cad4b868205830ba1fd",
+  "python": "3.13.13",
+  "upstreamXdlCommit": "7fab6a290c3731533c2b88517158055c768b9d4e",
+  "sourceDigests": {
+    "services/studio-api/src/xverse_studio/xdl/edits.py": "sha256:b6547b5374b3a900981b632099901a4544be32370c4207308cc751d0383ce4cf",
+    "tests/contract/test_neutral_assets.py": "sha256:1378b218af2cac0b9b65482d2940c33a05e589331d2b1c076c82fe5bd844018e",
+    "tests/integration/test_neutral_asset_authoring.py": "sha256:8cbe60eb844554857f6eab86f1442d014db669b8e5a788b8cbb3b7421cbc05ee"
+  },
+  "command": "env -u PYTHONPATH PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 TMPDIR=<loop10-cache>/tmp .venv/bin/python -m pytest tests/contract/test_neutral_assets.py tests/contract/test_semantic_edits.py tests/integration/test_neutral_asset_authoring.py -q --basetemp=<loop10-cache>/pytest/neutral-assets-unset-final",
+  "ruff": "PASS",
+  "limitations": [
+    "Browser neutral-asset integration pending",
+    "Windows installation/testing blocked at user request",
+    "Owned reference executable topology remains unchanged; no external/physical acceptance claimed"
+  ],
+  "result": "PASS",
+  "tests": 41,
+  "durationSeconds": 41.06,
+  "warning": "Existing Starlette TestClient/httpx deprecation warning; no skipped tests",
+  "reviewSuccessor": "Explicit schema-optional unsetProperties; placed-to-unplaced Device test and required/identity/conflict negatives"
+}

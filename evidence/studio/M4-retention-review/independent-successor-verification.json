@@ -1,0 +1,35 @@
+{
+  "capturedAt": "2026-10-25T10:47:41.315721+00:00",
+  "result": "PASS",
+  "findingsRepaired": [
+    "RET-I01",
+    "RET-I02",
+    "RET-I03"
+  ],
+  "sourceDigests": {
+    "services/studio-api/src/xverse_studio/retention/__init__.py": "sha256:b9c6e8d746da2fc843ff2cb6cbdb9d7ba2166671ebb8d421a889042dcb7cdb80",
+    "services/studio-api/src/xverse_studio/retention/files.py": "sha256:552593c394248c6a45a7ab8e97601592fc893a867ed2fc3c0b3bfe075f54abe6",
+    "services/studio-api/src/xverse_studio/retention/service.py": "sha256:0cd2f51b7e19c15e418b9acab8fbf8f90dc5ff429e88070ae06b8b05c021e845",
+    "services/studio-api/src/xverse_studio/api/advanced.py": "sha256:84ffb65a4a73fd7e2204df045d58dee053c144d5fa4fe885207d772ada286169",
+    "services/studio-api/src/xverse_studio/api/models.py": "sha256:22bbcc18c1e078636af7fe3b00a58760ccd10b7af095fd3eb1ae5794e4871533",
+    "tests/integration/test_retention_failures.py": "sha256:d012f2389ce5ecbe2d11b05909cdc8b8905b5ddec027d4aada94fec58378f6ba"
+  },
+  "independentProbes": {
+    "http": 5,
+    "boundedIO": 4,
+    "malformedDependencies": 6,
+    "providerProcessStarts": 0
+  },
+  "failureTests": {
+    "passed": 5,
+    "deselected": 4,
+    "skipped": 0,
+    "durationSeconds": 1.26,
+    "command": "env -u PYTHONPATH PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 TMPDIR=<loop10-cache>/tmp .venv/bin/python -m pytest tests/integration/test_retention_failures.py -q -k 'real_sqlite or interrupted_uncommitted or purge_failure or recovery_never' --basetemp=<loop10-cache>/pytest/retention-independent-failure"
+  },
+  "limitations": [
+    "Windows installation/testing blocked at user request",
+    "Whole candidate suite handled by root; this receipt covers reviewed retention boundaries only",
+    "No external device, origin fetch or provider execution performed"
+  ]
+}

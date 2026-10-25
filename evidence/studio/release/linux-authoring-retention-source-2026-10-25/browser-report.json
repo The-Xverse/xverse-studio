@@ -1,0 +1,414 @@
+{
+  "config": {
+    "argv": [
+      "<loop10-cache>/node-v24.22.1-linux-x64/bin/node",
+      "<workspace>/node_modules/.bin/playwright",
+      "test",
+      "-c",
+      "tests/e2e/playwright.config.ts"
+    ],
+    "configFile": "<workspace>/tests/e2e/playwright.config.ts",
+    "rootDir": "<workspace>/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "<workspace>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "<workspace>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "*.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "<workspace>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "<workspace>/tests/e2e",
+        "snapshotDir": "<workspace>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": "*.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "baseURL": "http://127.0.0.1:44305",
+          "browserName": "chromium",
+          "actionTimeout": 15000,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "trace": "off",
+          "screenshot": "only-on-failure",
+          "video": "off"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "<workspace>/test-results/browser-report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "authoring-retention.spec.ts",
+      "file": "authoring-retention.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "neutral logical assets: keyboard author, inspect, source anchor and reload without execution",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 10651,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-25T10:50:58.862Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "neutral-asset-admission-refusal",
+                      "contentType": "application/json",
+                      "body": "ewogICJwcmVmbGlnaHRJZCI6ICJwZi01OWIxNWFkZC04MjEyLTQ0NGItODZjNy05ZjczYmU4NDBmYmUiLAogICJzbmFwc2hvdElkIjogInNuYXAtZjhlOWU2M2MtMjFhYy00Mzc4LTllNDktODBjYzQ2MzQ1MWI2IiwKICAic3RhdHVzIjogImJsb2NrZWQiLAogICJwbGFuRGlnZXN0IjogInNoYTI1Njo2ZjAyNmRlMmYwMTgyMjE3MmIzMDVkMmFjMjQzNmU4ZmNkYzRmYzgwYzY3MWFiMWQ4YTQyNWVjZjFjYzNkMDMwIiwKICAic2VtYW50aWNEaWdlc3QiOiAic2hhMjU2OmYyODQyZGZmZjQ0NzI0YjU3NDk3OTM3YzIyN2IxM2JkNDdjNjU1YmNhNTRiZTdhYzJmNjg0MWE3YzE3MWI4NDAiLAogICJjYXBhYmlsaXR5RGlnZXN0IjogInNoYTI1NjpiY2U5NjUwNjJjNmQzNjU1NTgzNTk3YzFlM2U3OWFkMmM5ZDNlZjI4Mzg0ZWUzYzdlMzU0YmU4OTMwYzc2ZDI5IiwKICAiZXhwaXJlc0F0IjogMTc5MjkyNTUyOS45MjA0NjAyLAogICJkaWFnbm9zdGljcyI6IFsKICAgIHsKICAgICAgImNvZGUiOiAiQ0FQQUJJTElUWV9VTlNVUFBPUlRFRCIsCiAgICAgICJzZXZlcml0eSI6ICJlcnJvciIsCiAgICAgICJtZXNzYWdlIjogIlRoZSBvd25lZCByZWZlcmVuY2UgcHJvdmlkZXIgY2Fubm90IGV4ZWN1dGUgdGhpcyB0b3BvbG9neSwgZGVwbG95bWVudCwgc2NoZWR1bGUgb3IgZXh0ZW5zaW9uLiBTZWxlY3QgaXRzIGFkbWl0dGVkIHRlbXBsYXRlIG9yIGFub3RoZXIgY29tcGF0aWJsZSBwcm92aWRlci4iLAogICAgICAicmVtZWRpYXRpb24iOiAiU2VsZWN0IHRoZSBvd25lZCByZWZlcmVuY2UgYmx1ZXByaW50IG9yIGluc3RhbGwgYW4gaW5kZXBlbmRlbnRseSBhZG1pdHRlZCBwcm92aWRlci4iCiAgICB9CiAgXSwKICAiZGltZW5zaW9ucyI6IHsKICAgICJtb2RlbCI6ICJ2YWxpZCIsCiAgICAidGFyZ2V0IjogImJsb2NrZWQiLAogICAgIm93bmVyc2hpcCI6ICJhdmFpbGFibGUiLAogICAgImV2aWRlbmNlU2NvcGUiOiAib3duZWRfcmVmZXJlbmNlIgogIH0sCiAgImxpbWl0cyI6IHsKICAgICJtYXhEdXJhdGlvblNlY29uZHMiOiAzMCwKICAgICJtYXhTYW1wbGVzIjogMzAwMCwKICAgICJtYXhDb25jdXJyZW50UnVucyI6IDQsCiAgICAibWF4RWxlbWVudHMiOiAyMDAsCiAgICAibWF4Q29ubmVjdGlvbnMiOiA0MDAKICB9LAogICJzZWxlY3Rpb24iOiB7CiAgICAic3lzdGVtUmVmIjogInhkbDovL29yZy54dmVyc2Uuc3R1ZGlvLnByb2Nlc3MtY29udHJvbC9zeXN0ZW0vcmVmZXJlbmNlLWxvb3AiLAogICAgImRlcGxveW1lbnRSZWYiOiAieGRsOi8vb3JnLnh2ZXJzZS5zdHVkaW8ucHJvY2Vzcy1jb250cm9sL2RlcGxveW1lbnQvbG9jYWwtcmVmZXJlbmNlIiwKICAgICJzY2VuYXJpb1JlZiI6ICJ4ZGw6Ly9vcmcueHZlcnNlLnN0dWRpby5wcm9jZXNzLWNvbnRyb2wvc2NlbmFyaW8vcmVmZXJlbmNlLXJlc3BvbnNlIgogIH0sCiAgImNvbnRyaWJ1dGluZ0RvY3VtZW50cyI6IFsKICAgICJ4ZGwvY29udHJvbGxlci54ZGwueWFtbCIsCiAgICAieGRsL3BsYW50LnhkbC55YW1sIiwKICAgICJ4ZGwvc3lzdGVtLnhkbC55YW1sIiwKICAgICJ4ZGwvZGVwbG95bWVudC54ZGwueWFtbCIsCiAgICAieGRsL3NjZW5hcmlvLnhkbC55YW1sIiwKICAgICJ4ZGwvcHJvZmlsZS54ZGwueWFtbCIsCiAgICAieGRsL2V2YWx1YXRpb24tcHJvZmlsZS54ZGwueWFtbCIKICBdCn0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "ade4916359991fa5aa58-06d8421dc6c75b68a300",
+          "file": "authoring-retention.spec.ts",
+          "line": 5,
+          "column": 5
+        },
+        {
+          "title": "explicit retention: protected project, disposable project and artifact metadata-only deletion",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4253,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-25T10:51:10.052Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "retention-resources",
+                      "contentType": "application/json",
+                      "body": "ewogICJwcm90ZWN0ZWRQcm9qZWN0IjogewogICAgInByb2plY3RJZCI6ICJwcmotOTQ2N2IyMzUtYjNlYi00ODAzLWE0N2QtY2ExMzliMGM5YjU4IiwKICAgICJuYW1lIjogIlByb2Nlc3MgY29udHJvbCByZWZlcmVuY2UiCiAgfSwKICAiY2FuZGlkYXRlSWQiOiAicHJqLTk5NzFmNDgyLTA3ZDQtNGYxMS1hYzJlLTM5ZjM1ZjBiNGYwNiIsCiAgImFydGlmYWN0SWQiOiAiYXJ0aWZhY3QtNjk5YmFhMWU5ZWRmNThkZTM1MmEzNjVkIiwKICAib3V0Y29tZSI6IHsKICAgICJjYW5kaWRhdGUiOiA0MDQsCiAgICAicHJvdGVjdGVkIjogMjAwCiAgfQp9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "ade4916359991fa5aa58-bbfb795b56123f664092",
+          "file": "authoring-retention.spec.ts",
+          "line": 15,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "projection.spec.ts",
+      "file": "projection.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "malformed imported source stays inspectable without becoming a graph or changing bytes",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-25T10:51:14.351Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "58e229ed439352e96ebb-ab4c0afae2e52956cea2",
+          "file": "projection.spec.ts",
+          "line": 4,
+          "column": 5
+        },
+        {
+          "title": "unknown extension payload is retained while the presentation uses stable instance references",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-25T10:51:14.366Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "58e229ed439352e96ebb-4464758a066053601488",
+          "file": "projection.spec.ts",
+          "line": 21,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "scenario-authoring.spec.ts",
+      "file": "scenario-authoring.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "scenario intent: typed stimulus, fault, observer and metric forms preserve opaque source and block unsupported execution",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 12563,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-25T10:51:14.389Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "scenario-admission-refusal",
+                      "contentType": "application/json",
+                      "body": "ewogICJwcmVmbGlnaHRJZCI6ICJwZi1kNjk3MTQ1OS00YzA4LTQwZGYtOTQ1Ni03NDgzMDk0NjZhYjkiLAogICJzbmFwc2hvdElkIjogInNuYXAtMDE4MzYxYzYtMDdkYy00Y2M4LTk3OWYtM2YwZTk4ZmE3N2YzIiwKICAic3RhdHVzIjogImJsb2NrZWQiLAogICJwbGFuRGlnZXN0IjogbnVsbCwKICAic2VtYW50aWNEaWdlc3QiOiBudWxsLAogICJjYXBhYmlsaXR5RGlnZXN0IjogInNoYTI1NjpiY2U5NjUwNjJjNmQzNjU1NTgzNTk3YzFlM2U3OWFkMmM5ZDNlZjI4Mzg0ZWUzYzdlMzU0YmU4OTMwYzc2ZDI5IiwKICAiZXhwaXJlc0F0IjogMTc5MjkyNTU0NC45MDYzMDU2LAogICJkaWFnbm9zdGljcyI6IFsKICAgIHsKICAgICAgImNvZGUiOiAiWERMMS1QTEFOLUZBVUxULURVUkFUSU9OLUlOVkFMSUQiLAogICAgICAic2V2ZXJpdHkiOiAiZXJyb3IiLAogICAgICAiZ2F0ZSI6IDQsCiAgICAgICJtZXNzYWdlIjogImZhdWx0ICdicm93c2VyLWZhdWx0JyBkZWNsYXJlcyBubyBkdXJhdGlvbiIsCiAgICAgICJjb3JyZWN0aW9uIjogIkRlY2xhcmUgYW4gZXhwbGljaXQgbm9uLW5lZ2F0aXZlIGR1cmF0aW9uLiIsCiAgICAgICJwb2ludGVyIjogIiIsCiAgICAgICJlbGVtZW50UmVmIjogInhkbDovL29yZy54dmVyc2Uuc3R1ZGlvLnByb2Nlc3MtY29udHJvbC9zY2VuYXJpby9yZWZlcmVuY2UtcmVzcG9uc2UiLAogICAgICAibG9jYXRpb24iOiBudWxsCiAgICB9LAogICAgewogICAgICAiY29kZSI6ICJYREwxLVBMQU4tRkFVTFQtVFJJR0dFUi1NSVNTSU5HIiwKICAgICAgInNldmVyaXR5IjogImVycm9yIiwKICAgICAgImdhdGUiOiA0LAogICAgICAibWVzc2FnZSI6ICJmYXVsdCAnYnJvd3Nlci1mYXVsdCcgY2FycmllcyBubyByZXNvbHZhYmxlIHRyaWdnZXIiLAogICAgICAiY29ycmVjdGlvbiI6ICJEZWNsYXJlIGV4YWN0bHkgb25lIHRpbWUgb3IgZGVjbGFyZWQtb3JkZXIgdHJpZ2dlci4iLAogICAgICAicG9pbnRlciI6ICIiLAogICAgICAiZWxlbWVudFJlZiI6ICJ4ZGw6Ly9vcmcueHZlcnNlLnN0dWRpby5wcm9jZXNzLWNvbnRyb2wvc2NlbmFyaW8vcmVmZXJlbmNlLXJlc3BvbnNlIiwKICAgICAgImxvY2F0aW9uIjogbnVsbAogICAgfSwKICAgIHsKICAgICAgImNvZGUiOiAiTU9ERUxfSU5WQUxJRCIsCiAgICAgICJzZXZlcml0eSI6ICJlcnJvciIsCiAgICAgICJtZXNzYWdlIjogIkNvcnJlY3QgYXV0aG9yaXRhdGl2ZSBYREwgZGlhZ25vc3RpY3MgYmVmb3JlIGV4ZWN1dGluZy4iLAogICAgICAicmVtZWRpYXRpb24iOiAiU2VsZWN0IHRoZSBvd25lZCByZWZlcmVuY2UgYmx1ZXByaW50IG9yIGluc3RhbGwgYW4gaW5kZXBlbmRlbnRseSBhZG1pdHRlZCBwcm92aWRlci4iCiAgICB9CiAgXSwKICAiZGltZW5zaW9ucyI6IHsKICAgICJtb2RlbCI6ICJpbnZhbGlkIiwKICAgICJ0YXJnZXQiOiAiYmxvY2tlZCIsCiAgICAib3duZXJzaGlwIjogImF2YWlsYWJsZSIsCiAgICAiZXZpZGVuY2VTY29wZSI6ICJvd25lZF9yZWZlcmVuY2UiCiAgfSwKICAibGltaXRzIjogewogICAgIm1heER1cmF0aW9uU2Vjb25kcyI6IDMwLAogICAgIm1heFNhbXBsZXMiOiAzMDAwLAogICAgIm1heENvbmN1cnJlbnRSdW5zIjogNCwKICAgICJtYXhFbGVtZW50cyI6IDIwMCwKICAgICJtYXhDb25uZWN0aW9ucyI6IDQwMAogIH0sCiAgInNlbGVjdGlvbiI6IHsKICAgICJzeXN0ZW1SZWYiOiAieGRsOi8vb3JnLnh2ZXJzZS5zdHVkaW8ucHJvY2Vzcy1jb250cm9sL3N5c3RlbS9yZWZlcmVuY2UtbG9vcCIsCiAgICAiZGVwbG95bWVudFJlZiI6ICJ4ZGw6Ly9vcmcueHZlcnNlLnN0dWRpby5wcm9jZXNzLWNvbnRyb2wvZGVwbG95bWVudC9sb2NhbC1yZWZlcmVuY2UiLAogICAgInNjZW5hcmlvUmVmIjogInhkbDovL29yZy54dmVyc2Uuc3R1ZGlvLnByb2Nlc3MtY29udHJvbC9zY2VuYXJpby9yZWZlcmVuY2UtcmVzcG9uc2UiCiAgfSwKICAiY29udHJpYnV0aW5nRG9jdW1lbnRzIjogWwogICAgInhkbC9jb250cm9sbGVyLnhkbC55YW1sIiwKICAgICJ4ZGwvcGxhbnQueGRsLnlhbWwiLAogICAgInhkbC9zeXN0ZW0ueGRsLnlhbWwiLAogICAgInhkbC9kZXBsb3ltZW50LnhkbC55YW1sIiwKICAgICJ4ZGwvc2NlbmFyaW8ueGRsLnlhbWwiLAogICAgInhkbC9wcm9maWxlLnhkbC55YW1sIiwKICAgICJ4ZGwvZXZhbHVhdGlvbi1wcm9maWxlLnhkbC55YW1sIgogIF0KfQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1af33152dd6ab0fc700b-7c593d5b491e80739cb4",
+          "file": "scenario-authoring.spec.ts",
+          "line": 4,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "source-drafts.spec.ts",
+      "file": "source-drafts.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "source drafts: preserve empty recovery and atomically bind rapid resource switches to their own text",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 928,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-25T10:51:26.969Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "source-draft-isolation",
+                      "contentType": "application/json",
+                      "body": "ewogICJwcm9qZWN0SWQiOiAicHJqLTJlMjBkMTEzLWI5NTUtNDc5ZS1hNGViLTE3YmU4YjgyOWM3NyIsCiAgImZpcnN0SWQiOiAiZG9jLTAiLAogICJzZWNvbmRJZCI6ICJkb2MtMSIsCiAgImF0dGVtcHRlZFJhcGlkU3dpdGNoZXMiOiAyLAogICJhY3R1YWxXcml0ZXMiOiAxLAogICJiZWZvcmVSZXZpc2lvbiI6IDEsCiAgImFmdGVyUmV2aXNpb24iOiAyCn0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "ed4b9b3fce5f817fdbd9-73ea3bec647c8a222f96",
+          "file": "source-drafts.spec.ts",
+          "line": 3,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "studio.spec.ts",
+      "file": "studio.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "owned reference browser workflow: author, preflight, execute, reconnect, inspect and annotate",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 39029,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-25T10:51:27.920Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "64bdea7002f9c9cea9f4-91bcfbd9fd29249843db",
+          "file": "studio.spec.ts",
+          "line": 7,
+          "column": 5
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-25T10:50:58.330Z",
+    "duration": 68766.621,
+    "expected": 7,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

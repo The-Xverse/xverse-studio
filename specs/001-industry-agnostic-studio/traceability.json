@@ -1931,7 +1931,7 @@
       "story": "SETUP",
       "kind": "design",
       "parallel": false,
-      "description": "Inspect and pin the actual platform/compat/blueprints revisions, API/profile surface, dependency identities, runtime limits and execution boundary; record missing supported-wrapper work without importing private classes. Record applicability and source dispositions for public SADS allocations XVE-SYS-0159–0178; absent normative text is an evidence gap, not permission to invent detailed matches or a blocker to user-derived requirements. Establish the native platform-support matrix: exact supported Linux distribution/release and Windows edition/release, architecture, browser and Python/Node versions. Separate Studio backend support from each provider/driver/runtime OS capability.",
+      "description": "Inspect and pin the actual platform/compat/blueprints revisions, API/profile surface, dependency identities, runtime limits and execution boundary; record missing supported-wrapper work without importing private classes. Record applicability and source dispositions for public SADS allocations XVE-SYS-0159\u20130178; absent normative text is an evidence gap, not permission to invent detailed matches or a blocker to user-derived requirements. Establish the native platform-support matrix: exact supported Linux distribution/release and Windows edition/release, architecture, browser and Python/Node versions. Separate Studio backend support from each provider/driver/runtime OS capability.",
       "paths": [
         "docs/implementation/baseline.md",
         "docs/implementation/dependencies.md",
@@ -2541,8 +2541,14 @@
         "AC-008",
         "AC-027"
       ],
-      "status": "in_progress",
-      "implementation_note": "Owned native reference/browser workflows exercised, with exact input identity and failure regressions. Actual Lite, five-person usability and full native Windows gates remain open."
+      "status": "completed",
+      "implementation_note": "Immutable owned-reference snapshots, effective-input/plan equality and durable idempotent dispatch are implemented. Direct principal/resource-route isolation, same-scope replay, changed-payload409 and reopen negatives close the remaining component verification gap. Native restart/same-key retains one worker; full Linux350-test suite passed. This does not complete T019/T021 or external/native milestone gates.",
+      "implementation_evidence": [
+        "tests/contract/test_idempotency_scope.py",
+        "tests/platform/test_native_recovery.py",
+        "evidence/studio/release/linux-cohort-2026-10-25/backend-verification.json"
+      ],
+      "completion_scope": "Literal task component implemented and verified by cited owned/Linux evidence; no milestone or external/native acceptance gate is waived."
     },
     {
       "id": "T023",
@@ -3001,7 +3007,7 @@
       "story": "SETUP",
       "kind": "verification",
       "parallel": true,
-      "description": "Verify keyboard/focus/status alternatives at 1024×768 and 1440×900 and measure the 50,000-event/200-row workload over the specified repetitions. Execute the supported browser/accessibility and event-query matrix on both native Linux and Windows, retaining each platform's results independently.",
+      "description": "Verify keyboard/focus/status alternatives at 1024\u00d7768 and 1440\u00d7900 and measure the 50,000-event/200-row workload over the specified repetitions. Execute the supported browser/accessibility and event-query matrix on both native Linux and Windows, retaining each platform's results independently.",
       "paths": [
         "tests/e2e/accessibility.spec.ts",
         "tests/performance/evidence-query.spec.ts",
@@ -3056,7 +3062,17 @@
         "AC-032"
       ],
       "status": "in_progress",
-      "implementation_note": "Owned native reference/browser workflows exercised, with exact input identity and failure regressions. Actual Lite, five-person usability and full native Windows gates remain open."
+      "implementation_note": "Linux native launcher, full private backup/restore and source-package provisioning are implemented. Independent acquisition/SQLite/root-continuity/restore-marker findings repaired; native recovery and full350-test suite passed. Current package offline fresh install/start/UI/persistence/compiler smoke passed using prepared cache. Windows installation/testing is user-held; an admitted native Windows secure file implementation is still missing.",
+      "implementation_evidence": [
+        "docs/architecture/ADR-0006-private-full-recovery.md",
+        "tests/platform/test_full_recovery.py",
+        "tests/platform/test_native_recovery.py",
+        "evidence/studio/M0-full-recovery/focused-verification.json",
+        "docs/architecture/ADR-0008-managed-data-integrity.md",
+        "evidence/studio/M4-recovery-review/final-independent-review.md",
+        "evidence/studio/release/linux-cohort-2026-10-25/backend-verification.json",
+        "evidence/studio/release/linux-cohort-2026-10-25/package-smoke.json"
+      ]
     },
     {
       "id": "T040",
@@ -3150,10 +3166,12 @@
         "AC-013"
       ],
       "status": "completed",
-      "implementation_note": "Owned graph/source/catalog/profile/variant work implemented and tested; independent composition repair verification and final UI successor are being retained. External two-industry/live and cross-OS gates remain open.",
+      "implementation_note": "Typed source transactions now include logical Device/Sensor/Actuator/Model edits and bounded Scenario conditions/items/assessment definitions. Public full-set validation plus owned profile reference checks preserve immutable identity and unselected payloads. Independent successor probes passed; final combined candidate verification pending.",
       "implementation_evidence": [
         "tests/contract/test_semantic_edits.py",
-        "tests/contract/test_review_regressions.py"
+        "tests/contract/test_review_regressions.py",
+        "evidence/studio/M2-neutral-assets/verification.json",
+        "evidence/studio/M4-scenario-authoring/independent-review-successor.md"
       ],
       "completion_scope": "Task component implemented and verified by the cited owned/Linux evidence; this does not close retained milestone or external/native acceptance gates."
     },
@@ -3207,12 +3225,15 @@
         "AC-013"
       ],
       "status": "completed",
-      "implementation_note": "Owned graph/source/catalog/profile/variant work implemented and tested; independent composition repair verification and final UI successor are being retained. External two-industry/live and cross-OS gates remain open.",
+      "implementation_note": "Selected resource/item opens its exact source document and AST declaration. Empty invalid drafts survive immediate close/reopen; atomic document identity prevents rapid switch/Save crossing files. Externally modified source stays readable with explicit integrity warning and blocked authoritative Save. Current nine-test Playwright/performance suite passed, including immutable snapshot/draft isolation. Reopened review findings are repaired; native milestone gates remain separate.",
       "implementation_evidence": [
         "evidence/studio/M1-browser/history-successor-summary-linux.json",
-        "tests/integration/test_project_store.py"
+        "tests/integration/test_project_store.py",
+        "evidence/studio/M2-neutral-assets/root-review.md",
+        "evidence/studio/release/linux-cohort-2026-10-25/browser-verification.json",
+        "evidence/studio/release/linux-role-source-integrity-2026-10-25/footer-successor/verification.json"
       ],
-      "completion_scope": "Task component implemented and verified by the cited owned/Linux evidence; this does not close retained milestone or external/native acceptance gates."
+      "completion_scope": "Literal task component implemented and verified by cited owned/Linux evidence; no milestone or external/native acceptance gate is waived."
     },
     {
       "id": "T045",
@@ -3349,7 +3370,12 @@
         "AC-015"
       ],
       "status": "in_progress",
-      "implementation_note": "Owned graph/source/catalog/profile/variant work implemented and tested; independent composition repair verification and final UI successor are being retained. External two-industry/live and cross-OS gates remain open."
+      "implementation_note": "Neutral logical asset contracts cover Device/Sensor/Actuator/Model, independent supported realization and optional logical containment, ports/interfaces, opaque payload preservation and atomic negatives. Broader representative catalog/provider/realization gates remain open; Windows held.",
+      "implementation_evidence": [
+        "tests/contract/test_neutral_assets.py",
+        "tests/integration/test_neutral_asset_authoring.py",
+        "evidence/studio/M2-neutral-assets/verification.json"
+      ]
     },
     {
       "id": "T050",
@@ -3406,7 +3432,10 @@
         "AC-015"
       ],
       "status": "in_progress",
-      "implementation_note": "Owned graph/source/catalog/profile/variant work implemented and tested; independent composition repair verification and final UI successor are being retained. External two-industry/live and cross-OS gates remain open."
+      "implementation_note": "Neutral asset forms and exact qualified graph/table/source projection exercised on Linux. Domain-specific specializations remain metadata/profile responsibilities. Broader catalog/role/provider admission and native acceptance remain open.",
+      "implementation_evidence": [
+        "evidence/studio/release/linux-authoring-retention-source-2026-10-25/verification.json"
+      ]
     },
     {
       "id": "T052",
@@ -3434,7 +3463,11 @@
         "AC-015"
       ],
       "status": "in_progress",
-      "implementation_note": "Owned graph/source/catalog/profile/variant work implemented and tested; independent composition repair verification and final UI successor are being retained. External two-industry/live and cross-OS gates remain open."
+      "implementation_note": "Device/Sensor/Actuator/Model authoring and inspection added with independent Device capability set and explicit unplacement. Added topology remains reference-provider unsupported. Full multi-realization/live gates remain open.",
+      "implementation_evidence": [
+        "evidence/studio/M2-neutral-assets/root-review.md",
+        "evidence/studio/release/linux-authoring-retention-source-2026-10-25/verification.json"
+      ]
     },
     {
       "id": "T053",
@@ -4278,7 +4311,12 @@
         "AC-025"
       ],
       "status": "in_progress",
-      "implementation_note": "Owned bounded evaluator/metric/campaign/comparison/exchange/annotation/retention slices exercised. Release completeness, broader provider scenarios, shared-artifact retention and native Windows gates remain open."
+      "implementation_note": "Scenario authoring contracts and HTTP negatives added for stable identity, schedules/clocks/targets, observer dependencies, bounded/deep/malformed inputs and no dispatch. Provider-specific scheduled-effect/recovery matrices remain open.",
+      "implementation_evidence": [
+        "tests/contract/test_scenario_authoring.py",
+        "tests/integration/test_scenario_authoring_http.py",
+        "evidence/studio/M4-scenario-authoring/independent-review-successor.md"
+      ]
     },
     {
       "id": "T083",
@@ -4304,7 +4342,12 @@
         "AC-025"
       ],
       "status": "in_progress",
-      "implementation_note": "Owned bounded evaluator/metric/campaign/comparison/exchange/annotation/retention slices exercised. Release completeness, broader provider scenarios, shared-artifact retention and native Windows gates remain open."
+      "implementation_note": "Transactional public-XDL Scenario edits implemented for conditions, steps, faults, observers, metrics and owned assessment definitions. Pure profile reference checks run after complete transaction; strings/action objects remain inert. Only admitted exact reference execution is supported; broader actual effect/recovery schedules remain blocked on provider admission.",
+      "implementation_evidence": [
+        "services/studio-api/src/xverse_studio/experiments/authoring.py",
+        "docs/architecture/ADR-0007-typed-scenario-authoring.md",
+        "evidence/studio/M4-scenario-authoring/independent-review-successor.md"
+      ]
     },
     {
       "id": "T084",
@@ -4331,7 +4374,11 @@
         "AC-025"
       ],
       "status": "in_progress",
-      "implementation_note": "Owned bounded evaluator/metric/campaign/comparison/exchange/annotation/retention slices exercised. Release completeness, broader provider scenarios, shared-artifact retention and native Windows gates remain open."
+      "implementation_note": "Scenario conditions, step/fault/observer/metric forms and source selection now have Linux browser evidence, including failed dependency deletion preserving revision/source and explicit metric-first removal. Opaque timing/activation intent is not executed; actual live schedule/clock and Windows gates remain open.",
+      "implementation_evidence": [
+        "apps/studio-web/src/features/experiments/ScenarioAuthoring.tsx",
+        "evidence/studio/release/linux-authoring-retention-source-2026-10-25/verification.json"
+      ]
     },
     {
       "id": "T085",
@@ -4547,8 +4594,15 @@
         "AC-029",
         "AC-032"
       ],
-      "status": "in_progress",
-      "implementation_note": "Owned bounded evaluator/metric/campaign/comparison/exchange/annotation/retention slices exercised. Release completeness, broader provider scenarios, shared-artifact retention and native Windows gates remain open."
+      "status": "completed",
+      "implementation_note": "Listed owned exchange/archive/integrity/credential/revisioned-trace/annotation-separation/dependency-retention test obligations are implemented and verified. Fifty focused tests, separate malformed-dependency/bounded-I/O/HTTP/commit/recovery probes, and full Linux350-test suite passed. This test component does not close native bidirectional exchange or live-provider acceptance.",
+      "implementation_evidence": [
+        "tests/integration/test_retention_failures.py",
+        "evidence/studio/M4-retention/verification.json",
+        "evidence/studio/M4-retention-review/independent-successor-verification.json",
+        "evidence/studio/release/linux-cohort-2026-10-25/backend-verification.json"
+      ],
+      "completion_scope": "Literal task component implemented and verified by cited owned/Linux evidence; no milestone or external/native acceptance gate is waived."
     },
     {
       "id": "T093",
@@ -4602,7 +4656,13 @@
         "AC-029"
       ],
       "status": "in_progress",
-      "implementation_note": "Owned bounded evaluator/metric/campaign/comparison/exchange/annotation/retention slices exercised. Release completeness, broader provider scenarios, shared-artifact retention and native Windows gates remain open."
+      "implementation_note": "Retention and revisioned-reference/annotation separation portions are implemented and verified, including explicit project/run/artifact-registration dry-run/apply, shared/historical dependency protection and partial/unknown outcomes. Literal FR062 gap remains: annotation targets and assertion traceability retain URI/revision but do not yet store claim status. Optional campaign/snapshot garbage collection is not a task blocker. Native/external acceptance stays separate.",
+      "implementation_evidence": [
+        "evidence/studio/M4-retention/verification.json",
+        "evidence/studio/M4-retention-review/independent-successor-review.md",
+        "evidence/studio/release/linux-authoring-retention-source-2026-10-25/verification.json",
+        "evidence/studio/release/linux-cohort-2026-10-25/browser-verification.json"
+      ]
     },
     {
       "id": "T095",
@@ -4740,7 +4800,16 @@
         "AC-032"
       ],
       "status": "in_progress",
-      "implementation_note": "Owned bounded evaluator/metric/campaign/comparison/exchange/annotation/retention slices exercised. Release completeness, broader provider scenarios, shared-artifact retention and native Windows gates remain open."
+      "implementation_note": "Linux packaging and guides cover native startup/stop, exact-root ownership, private complete backup/restore, explicit retention, immutable input recovery and unsupported providers. Current full backend/browser/performance and prepared-cache fresh-package smoke passed; an initial PATH omission is retained separately. Windows secure I/O implementation, held native tests/exchange, and complete release gates remain open.",
+      "implementation_evidence": [
+        "docs/architecture/ADR-0006-private-full-recovery.md",
+        "tests/platform/test_full_recovery.py",
+        "tests/platform/test_native_recovery.py",
+        "evidence/studio/M0-full-recovery/focused-verification.json",
+        "docs/user/scenario-authoring.md",
+        "docs/architecture/ADR-0008-managed-data-integrity.md",
+        "evidence/studio/release/linux-cohort-2026-10-25/package-smoke.json"
+      ]
     },
     {
       "id": "T099",
@@ -4805,7 +4874,7 @@
       "story": "SETUP",
       "kind": "verification",
       "parallel": false,
-      "description": "Assemble the exact-candidate M0–M4 acceptance dossier with all measured success criteria, tasks/evidence traceability and remaining dependencies; report truthful completion and release scope for review. Require both native-platform core smoke/packaging results and explicit per-OS provider availability in the release dossier; browser-only Windows access or WSL execution cannot satisfy native Windows backend support.",
+      "description": "Assemble the exact-candidate M0\u2013M4 acceptance dossier with all measured success criteria, tasks/evidence traceability and remaining dependencies; report truthful completion and release scope for review. Require both native-platform core smoke/packaging results and explicit per-OS provider availability in the release dossier; browser-only Windows access or WSL execution cannot satisfy native Windows backend support.",
       "paths": [
         "evidence/studio/release/",
         "docs/releases/studio-1.0.md"
@@ -4860,7 +4929,7 @@
       ],
       "status": "blocked",
       "implementation_note": "Owned bounded evaluator/metric/campaign/comparison/exchange/annotation/retention slices exercised. Release completeness, broader provider scenarios, shared-artifact retention and native Windows gates remain open.",
-      "blocker": "Retained M0–M4 acceptance gates, native Windows verification, live runtime, hardware and human usability are incomplete."
+      "blocker": "Retained M0\u2013M4 acceptance gates, native Windows verification, live runtime, hardware and human usability are incomplete."
     }
   ],
   "acceptance_cases": [
@@ -5962,10 +6031,18 @@
     }
   ],
   "implementation_record": {
-    "scope": "Owned reference implementation; no accepted M0–M4 milestone claimed.",
+    "scope": "Owned reference implementation; no accepted M0\u2013M4 milestone claimed.",
     "branch": "implement/studio-m0-m4",
     "status_document": "../../docs/implementation/STATUS.md",
     "native_windows": "BLOCKED at user request. Initial native Server 2022 install failed on upstream Git filenames; application/browser NOT_RUN.",
-    "m5": "deferred"
+    "m5": "deferred",
+    "code_candidate": "a207ad6d9dec853a8f3558b398985dd55ef5bb2f",
+    "component_completed": 15,
+    "verification": {
+      "backend_tests_passed": 350,
+      "playwright_checks_passed": 9,
+      "milestones_accepted": 0,
+      "evidence": "evidence/studio/release/linux-cohort-2026-10-25/"
+    }
   }
 }

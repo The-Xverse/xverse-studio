@@ -90,3 +90,41 @@ capture was terminated externally with SIGTERM (exit 143) before producing a
 pytest result; it is retained as incomplete in `interrupted-48-check.json`, with
 no passing or application-failure claim. Root complete-candidate verification is
 separate from these scoped checks.
+
+## Explicit project/artifact retention implementation
+
+M4-R16/R17 are implemented in the owned local scope. The shared versioned request
+now accepts bounded explicit `runIds`, `projectIds`, `artifactIds` and rule
+`explicit`. Plans show exact removals, protected reasons, dependency edges, inspected
+logical byte counts, expiry and a state/filesystem fingerprint. There is no safe
+truncated dependency report: incomplete, malformed, unavailable or over-limit
+proofs refuse a plan before effects. Limits are 128 selected IDs, 10,000 retained
+dependency records, 4,096 edges, 20,000 inspected paths and 64 MiB charged proof
+bytes per proof step.
+
+Historical snapshots, run/evaluation/annotation/campaign/evidence references
+protect their required project/artifact identities. Project retirement moves only
+its managed root into a server-owned quarantine, commits index removal plus an
+audit tombstone, and then purges. A genuine uncommitted metadata failure restores
+original bytes; a confirmed successful SQLite commit is never incorrectly undone.
+Interrupted staging never overwrites an existing path. Partial purge is reported
+with retained managed residue and requires a new explicit residue plan. Artifact
+retirement deletes registration metadata only; origin URLs and external bytes are
+never opened or deleted. There are no implicit cascades or snapshot migrations.
+
+Independent RET-I01/I02/I03 findings and original probes are retained in
+`../M4-retention-review/findings-before-repair.md`. Repairs validate retained-link
+shapes before indexing, reject unrecognized source as an absence proof, reserve
+metadata/file byte budgets before materialization, and stream through bounded
+opened descriptors. The independent successor review closed those findings;
+see `../M4-retention-review/independent-successor-review.md`.
+
+Owned verification passed **50 tests** in **38.27 seconds**, including retained
+run-only API behavior, project/artifact dry-run/apply, historical protection,
+filesystem staleness, actual SQLite before/after-commit failure fixtures, rollback
+byte recovery, interrupted staging/no overwrite, partial purge plus explicit
+residue retry, symlink refusal and bounded reads. Exact commands, environment,
+source hashes and output are in `../M4-retention/verification.json`; owned source
+hashes were unchanged during that run. Ruff F checks also passed for changed code.
+Windows tests remain intentionally not run under the user's hold; this component
+verification does not close any full milestone/native-platform acceptance gate.

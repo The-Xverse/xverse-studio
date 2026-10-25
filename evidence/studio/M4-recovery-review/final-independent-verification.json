@@ -1,0 +1,48 @@
+{
+  "capturedAt": "2026-10-25T11:26:27.187845+00:00",
+  "result": "PASS",
+  "sourceAfterMatchesDeclaredFreeze": true,
+  "sourceDigests": {
+    "services/studio-api/src/xverse_studio/security/managed_io.py": "sha256:f5c5798cbb23a6948c2ee3df21ab3c25d83f0bf8850fd247d632aef9ea48bcee",
+    "services/studio-api/src/xverse_studio/host/recovery.py": "sha256:cc3d4a71b33ea626233583d7b0f4abd64317ab12443b15e4b673fac98cb1170a",
+    "tests/platform/test_recovery_safe_io.py": "sha256:ce7b04632019ec450f32e3f7d6c5248138ef6146742c58167a53ffb80aad682a",
+    "tests/platform/test_full_recovery.py": "sha256:f01b4ad54d845aca6c0e2dfe8a1f851965d6431ddd9e057fa3d51cf1429fbf51",
+    "services/studio-api/src/xverse_studio/projects/service.py": "sha256:b0d981453a99a6019d3bcde7bc663b6e3da73797d94dc641fa26f28d8f3ab545"
+  },
+  "existingFixtureTests": {
+    "passed": 12,
+    "failed": 0,
+    "skipped": 0,
+    "durationSeconds": 0.6,
+    "receipt": "final-existing-fixtures.txt",
+    "selection": [
+      "tests/platform/test_full_recovery.py::test_full_backup_restore_bytes_database_and_fresh_sessions",
+      "tests/platform/test_full_recovery.py::test_interrupted_restore_keeps_marker_and_original_backup",
+      "tests/platform/test_recovery_safe_io.py::test_sqlite_original_path_is_never_reopened_during_backup",
+      "tests/platform/test_recovery_safe_io.py::test_stopped_root_committed_wal_is_preserved_without_source_sqlite_writes",
+      "tests/platform/test_recovery_safe_io.py::test_actual_openat_parent_swap_keeps_acquired_directory",
+      "tests/platform/test_recovery_safe_io.py::test_actual_target_parent_swap_never_writes_outside",
+      "tests/platform/test_recovery_safe_io.py::test_locked_root_identity_survives_ordinary_directory_replacement",
+      "tests/platform/test_recovery_safe_io.py::test_reserved_output_identity_survives_ordinary_directory_replacement",
+      "tests/platform/test_recovery_safe_io.py::test_stage_exit_preserves_still_active_output_anchor",
+      "tests/platform/test_recovery_safe_io.py::test_permanently_replaced_output_never_reports_success",
+      "tests/platform/test_recovery_safe_io.py::test_late_restore_namespace_change_recreates_owned_marker",
+      "tests/platform/test_recovery_safe_io.py::test_late_input_namespace_change_recreates_restore_marker"
+    ],
+    "commandTemplate": "env -u PYTHONPATH PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 TMPDIR=<loop10-cache>/tmp .venv/bin/python -m pytest -q <selection> --basetemp=<loop10-cache>/pytest/recovery-independent-final"
+  },
+  "reviewedBoundaries": [
+    "named backup/restore output identity before success",
+    "incomplete marker retained after interrupted restore including late input/output namespace change",
+    "original source and committed WAL preservation",
+    "source and output directory identity continuity through retained anchors",
+    "private SQLite staging and original-path reopen prevention",
+    "anchor lifetime after non-LIFO stage closure"
+  ],
+  "limitations": [
+    "Linux disposable file fixtures only",
+    "No network/external systems/devices/production data accessed",
+    "Windows installation/testing held at user request",
+    "Whole candidate regression and publication handled separately by root"
+  ]
+}

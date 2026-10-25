@@ -47,3 +47,10 @@ confirmed the numeric-overflow case without runtime/device effects.
 | ID | Severity | Finding before repair | Affected verification |
 |---|---|---|---|
 | M4-R14 | High | The pure evaluator supports pinned metric references, but the HTTP evaluation facade supplies no resolved metric results and snapshot extraction checks only individual definitions. Valid cross-definition dependencies are unusable; missing/pin-conflicting/cyclic definition sets are not checked as a complete bounded graph. | Admit a bounded acyclic frozen definition set, persist metric jobs before evaluation, evaluate in topological order against the same snapshot/canonical evidence, retain immutable dependency result identities, and test actual reference pass, unavailable evidence and rejected dependency pins/cycles. |
+
+## Explicit project/artifact retention follow-up (before implementation)
+
+| ID | Severity | Finding before repair | Affected verification |
+|---|---|---|---|
+| M4-R16 | High | Retention requests and plans currently support run files only. Explicit project/artifact selections, their historical dependency edges and shared-reference protection are absent. | Inert dry-run plans for exact project/catalog-artifact IDs, historical snapshot/evidence protection, no implicit cascades or external artifact deletion, stale dependency refusal and per-item outcomes. |
+| M4-R17 | High | The current plan fingerprint contains metadata but no filesystem identity proof. External source changes between plan and apply need explicit stale detection before deleting authored inputs. Project deletion also requires safe metadata/filesystem commit ordering and recoverable failure handling. | Source edits invalidate apply; symlink/path escapes reject; quarantine before index retirement; rollback restores an uncommitted project; actual committed retirement is never incorrectly undone; failed cleanup remains partial/visible. |

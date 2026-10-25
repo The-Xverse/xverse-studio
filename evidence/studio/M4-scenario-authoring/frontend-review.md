@@ -1,0 +1,7 @@
+# Scenario authoring frontend review
+
+Before repair: Experiments displays scheduled actions, observers and metrics but provides only generic source editing for their authorship. There are no guided create/update/remove forms for stimulus steps, faults, observers or metric intent, and Edit scenario XDL loses the selected Scenario file context. This is an outstanding browser authoring gap, despite authoritative backend/source support.
+
+Implement exact admitted public Scenario fields with explicit System/Deployment targets, declared clock domain and numeric schedule. Fault activation/recovery and metric acceptance are opaque intent strings under the actual public schema. The UI must not promote these strings or action payloads into executable commands or evaluated assertions. Added schedules remain outside the closed reference provider and must produce nonready preflight, with no run or equipment side effect. Linux browser verification pending; Windows and hardware are outside this slice.
+
+Latest combined native Linux regression after WEB-SOURCE-002 repair: 7 passed, 0 failed/skipped, 1.1m; includes source empty-draft recovery and two rapid switch/Save no-write attempts. See evidence/studio/release/linux-authoring-retention-source-2026-10-25/verification.json and sanitized browser report for exact frontend source hashes and screenshot evidence. This supersedes earlier source-initialization evidence; milestone/native Windows/live integration gates remain open.

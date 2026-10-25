@@ -7,10 +7,15 @@ The React/TypeScript browser UI and native FastAPI backend support System projec
 source-preserving edits, graph/table projections, typed parameters/connections, explicit authored
 Deployment/Scenario variants, catalog/profile locks, preflight, immutable owned runs, recovery,
 recorded observations, bounded assertions/metrics, finite campaigns, comparisons, annotations,
-project/evidence exchange and explicit run-file retention. Physical-provider inventory is empty.
+project/evidence exchange and explicit run/project/artifact-registration retention. Neutral
+Device/Sensor/Actuator/Model and Scenario intent forms now share source/graph identities. Complete
+private Linux backup/restore uses anchored acquisition and preserves immutable evidence.
+Physical-provider inventory is empty.
 
 Component-complete task IDs, with the exact component scope/evidence in traceability.json:
-T003, T006, T013, T017, T024, T036, T041, T042, T044, T050, T085, T086, T087.
+T003, T006, T013, T017, T022, T024, T036, T041, T042, T044, T050, T085, T086, T087, T092.
+T044 was reopened after review, then repaired and reverified for selected-source navigation, empty
+draft retention, atomic document switching and external-source inspection.
 Other tasks remain unchecked; implemented subparts are recorded as in progress instead of implying
 that their native, integration, review or acceptance obligations passed.
 
@@ -20,7 +25,7 @@ that their native, integration, review or acceptance obligations passed.
 | M1 | Actual native worker lifecycle/idempotence, exact requested/effective plan, backend crash recovery and real browser/keyboard workflows. Live Lite, five-person usability, full failure matrix and native Windows remain open. |
 | M2 | Round-trip semantic edits, graph/source, catalog, profile locks, named authored variants and actual selected-variant runs. Independent composition repairs and successor browser/performance records are retained; live two-industry and bidirectional Windows exchange remain open. |
 | M3 | Scoped inventory/authority/lease/clock/recovery fixtures and explicit unsupported production controls. Actual device/provider/driver/permission and physical evidence are BLOCKED. |
-| M4 | Bounded evaluator with snapshot-bound metric dependencies and separate verdicts, campaigns, comparison, immutable exchange and revisioned annotations/run retention. Broader provider scenarios, broad shared-dependency retention and complete retained release gates remain open. |
+| M4 | Bounded evaluator with snapshot-bound metric dependencies, Scenario intent authoring, campaigns, comparison, immutable exchange, annotations and dependency-aware project/run/artifact-registration retention. Trace claim-status preservation, broader provider effects and complete retained release gates remain open. |
 
 Actual verification records include `evidence/studio/backend-suite.txt` (an earlier 116-test candidate),
 M0/M1 independent reviews and their successor regressions, `M2-composition/verification.json`,
@@ -79,3 +84,34 @@ A byte-verified pure XDL wheel, license/provenance and preparation helper were p
 `.studio-local/held-windows-packaging/2026-10-25/` on loop10. They are held work, not integrated into
 `pyproject.toml`/`uv.lock` and not presented as a verified Windows installation. No companion repository
 was modified. The current Linux dependency pin remains unchanged.
+
+## Current authoring, retention and recovery successor
+
+The current source cohort passed **350 backend tests**, with application/test source unchanged during
+verification, and **nine Playwright checks** (six real browser journeys and three pure projection
+checks), with no failures/skips. Chromium measured 30 repetitions after one warm-up: selection/inspector
+p95 **38.4 ms**, open/authoritative validation **1,010 ms**, and 200-row history presentation over the
+50,000-record recorded fixture **247.8 ms**. Exact logs, samples, hashes and limitations are under
+`evidence/studio/release/linux-cohort-2026-10-25/`. These results overlap component runs and are not
+added together. History fixture results are not external simulator/device evidence.
+
+A fresh source-package extraction provisioned offline from the prepared dependency cache, served its
+UI, persisted a project and compiled authoritatively. Its first attempt omitted the installed Python
+from the child PATH and failed; the original receipt is retained alongside the successful environment
+correction. The package includes its support-matrix document. Full contributor checks require the
+repository checkout; the runnable application bundle does not contain the complete test/spec corpus.
+
+Independent reviews recorded and repaired malformed dependency proofs, bounded source reads,
+observer/assertion references, deep edit handling, descriptor acquisition, SQLite/WAL staging,
+operation-wide directory continuity and incomplete-restore marker ordering. Original findings and
+intermediate failures remain retained. Source inspection distinguishes external bytes from committed
+source, preserves the bytes, and blocks authoritative save/execution until recovery.
+
+The current secure managed-reader implementation is Linux-only and explicitly fails unavailable on
+other native hosts. An admitted Windows implementation is still an owned gap, separate from the
+upstream Git filename issue; Windows installation/testing stays held. No WSL/container substitution
+or Windows success is claimed.
+
+Next ready work includes T020's missing readiness-dimension/limit display, FR-062 trace claim-status
+preservation in T094, source/time filtering, cursor resynchronization and diagnostic explanation cases.
+No M0–M4 milestone is accepted; M5 remains deferred.

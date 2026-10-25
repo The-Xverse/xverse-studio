@@ -1,0 +1,69 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_ test_explicit_unplacement_preserves_device_identity_and_supported_realizations _
+
+documents = {'controller.xdl.yaml': 'apiVersion: xverse.io/xdl/v1alpha1\nkind: Component\nmetadata:\n  namespace: org.xverse.studi...ernalRef: urn:xverse:studio:reference:first-order:v1\n    inputs: []\n    outputs: []\n    maturity: prototype\n', ...}
+
+    def test_explicit_unplacement_preserves_device_identity_and_supported_realizations(documents):
+        added = semantic_edits(documents, [device()])
+>       changed = semantic_edits(added, [{"kind": "update_logical_asset", "assetKind": "device",
+            "elementId": "measurement-device", "properties": {}, "unsetProperties": ["nodeId"]}])
+
+tests/contract/test_neutral_assets.py:137: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+documents = {'controller.xdl.yaml': 'apiVersion: xverse.io/xdl/v1alpha1\nkind: Component\nmetadata:\n  namespace: org.xverse.studi...ernalRef: urn:xverse:studio:reference:first-order:v1\n    inputs: []\n    outputs: []\n    maturity: prototype\n', ...}
+edits = [{'assetKind': 'device', 'elementId': 'measurement-device', 'kind': 'update_logical_asset', 'properties': {}, ...}]
+
+    def semantic_edits(documents: dict[str, str], edits: list[dict]) -> dict[str, str]:
+        """Return a new complete source transaction, or refuse without altering the inputs.
+    
+        Semantic authoring requires an already valid set. Unknown/unresolved extensions remain
+        available through exact source editing, but cannot be silently rewritten by this helper.
+        """
+        if not isinstance(edits, list) or not 0 < len(edits) <= 100:
+            raise XDLRejected("A semantic transaction needs one to 100 edits.", "LIMIT_EXCEEDED")
+        report = XDLAdapter().validate(documents)
+        if not report["valid"]:
+            raise XDLRejected("Resolve authoritative source diagnostics before applying semantic edits; original source is preserved.", "MODEL_INVALID")
+        yaml = YAML()
+        yaml.preserve_quotes = True
+        parsed = {name: yaml.load(source) for name, source in documents.items()}
+        touched = set()
+        asset_targets = []
+    
+        def resource_uri(resource):
+            return f"xdl://{resource['metadata']['namespace']}/{resource['kind'].lower()}/{resource['metadata']['name']}"
+    
+        def check_target(edit, resource, identifier=None):
+            target = edit.get("elementRef")
+            allowed = {resource_uri(resource)}
+            if identifier:
+                allowed.add(resource_uri(resource) + "#" + identifier)
+            if target is not None and target not in allowed:
+                raise XDLRejected("The selected stable reference does not identify this edit target.", "SELECTION_UNRESOLVED")
+    
+        def select(kind: str, explicit: str | None) -> tuple[str, dict]:
+            found = [(name, value) for name, value in parsed.items() if value.get("kind") == kind and (not explicit or name == explicit)]
+            if len(found) != 1:
+                raise XDLRejected("Select exactly one existing " + kind + " document.", "SELECTION_UNRESOLVED")
+            return found[0]
+    
+        for edit in edits:
+            if not isinstance(edit, dict) or edit.get("kind") not in REGISTRY:
+                raise XDLRejected("This semantic edit operation is unsupported.")
+            kind = edit["kind"]
+            if set(edit) - REGISTRY[kind] - {"kind"}:
+>               raise XDLRejected("Unknown fields in the semantic edit envelope.", "INVALID_EDIT")
+E               xverse_studio.xdl.XDLRejected: Unknown fields in the semantic edit envelope.
+
+services/studio-api/src/xverse_studio/xdl/edits.py:88: XDLRejected
+=============================== warnings summary ===============================
+.venv/lib/python3.13/site-packages/fastapi/testclient.py:1
+  <workspace>/.venv/lib/python3.13/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/contract/test_neutral_assets.py::test_explicit_unplacement_preserves_device_identity_and_supported_realizations
+1 failed, 29 deselected, 1 warning in 1.77s

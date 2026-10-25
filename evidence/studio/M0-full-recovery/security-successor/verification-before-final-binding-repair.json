@@ -1,0 +1,33 @@
+{
+  "scope": "Linux owned local fixture and native launcher only; no Windows/provider/hardware",
+  "python": "3.13.13 (main, May 29 2026, 21:59:41) [GCC 11.4.0]",
+  "platform": "Linux-6.8.0-138-generic-x86_64-with-glibc2.35",
+  "command": [
+    "<workspace>/.venv/bin/python",
+    "-m",
+    "pytest",
+    "tests/platform/test_recovery_safe_io.py",
+    "tests/platform/test_full_recovery.py",
+    "tests/platform/test_native_recovery.py",
+    "-q",
+    "-o",
+    "cache_dir=<loop10-cache>/pytest",
+    "--basetemp=<loop10-cache>/tmp/recovery-safe-final"
+  ],
+  "startedAt": 1792926921.1690993,
+  "elapsedSeconds": 23.141178846359253,
+  "sourceBefore": {
+    "services/studio-api/src/xverse_studio/security/managed_io.py": "f5c5798cbb23a6948c2ee3df21ab3c25d83f0bf8850fd247d632aef9ea48bcee",
+    "services/studio-api/src/xverse_studio/host/recovery.py": "1dc6ce8cf2890c623f6dc28b1596d9a613a97348d5b537f80a6b307df90cdd39",
+    "tests/platform/test_recovery_safe_io.py": "9f78f11ba0f97c13955b6f58b4209b0f3c72ed5b7caa11ee8b3eceb45a8dcb71"
+  },
+  "sourceAfter": {
+    "services/studio-api/src/xverse_studio/security/managed_io.py": "f5c5798cbb23a6948c2ee3df21ab3c25d83f0bf8850fd247d632aef9ea48bcee",
+    "services/studio-api/src/xverse_studio/host/recovery.py": "1dc6ce8cf2890c623f6dc28b1596d9a613a97348d5b537f80a6b307df90cdd39",
+    "tests/platform/test_recovery_safe_io.py": "9f78f11ba0f97c13955b6f58b4209b0f3c72ed5b7caa11ee8b3eceb45a8dcb71"
+  },
+  "exitCode": 0,
+  "stdout": "..................................                                       [100%]\n=============================== warnings summary ===============================\n.venv/lib/python3.13/site-packages/fastapi/testclient.py:1\n  <workspace>/.venv/lib/python3.13/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.\n    from starlette.testclient import TestClient as TestClient  # noqa\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n34 passed, 1 warning in 22.26s\n",
+  "stderr": "",
+  "independentReview": "separate reviewer pending; this is author verification"
+}

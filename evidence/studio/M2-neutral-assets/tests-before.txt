@@ -1,0 +1,235 @@
+FFF..........F.                                                          [100%]
+=================================== FAILURES ===================================
+_ test_create_all_asset_kinds_projects_qualified_identities_and_preserves_source _
+
+documents = {'controller.xdl.yaml': 'apiVersion: xverse.io/xdl/v1alpha1\nkind: Component\nmetadata:\n  namespace: org.xverse.studi...ernalRef: urn:xverse:studio:reference:first-order:v1\n    inputs: []\n    outputs: []\n    maturity: prototype\n', ...}
+
+    def test_create_all_asset_kinds_projects_qualified_identities_and_preserves_source(documents):
+        documents["system.xdl.yaml"] = "# preserve author intent\n" + documents["system.xdl.yaml"]
+        original = deepcopy(documents)
+>       updated = semantic_edits(documents, [device(),
+            asset("sensor", "measurement", {"deviceId": "measurement-device", "observedQuantity": "state",
+                  "outputEndpointId": "plant-out", "unitSemantics": "1", "maturity": "prototype"}),
+            asset("actuator", "command-actuator", {"deviceId": "measurement-device", "controlledQuantity": "command",
+                  "inputEndpointId": "plant-in", "unitSemantics": "1", "limits": {"vendorOpaque": {"kept": True}}}),
+            asset("model", "external-model", {"modelKind": "opaque-reference", "externalRef": "urn:example:model:1",
+                  "inputs": ["plant-in"], "outputs": ["plant-out"], "maturity": "architectural-target"})])
+
+tests/contract/test_neutral_assets.py:29: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+documents = {'controller.xdl.yaml': 'apiVersion: xverse.io/xdl/v1alpha1\nkind: Component\nmetadata:\n  namespace: org.xverse.studi...ernalRef: urn:xverse:studio:reference:first-order:v1\n    inputs: []\n    outputs: []\n    maturity: prototype\n', ...}
+edits = [{'assetKind': 'device', 'documentId': 'system.xdl.yaml', 'elementId': 'measurement-device', 'kind': 'add_logical_asse...assetKind': 'model', 'documentId': 'system.xdl.yaml', 'elementId': 'external-model', 'kind': 'add_logical_asset', ...}]
+
+    def semantic_edits(documents: dict[str, str], edits: list[dict]) -> dict[str, str]:
+        """Return a new complete source transaction, or refuse without altering the inputs.
+    
+        Semantic authoring requires an already valid set. Unknown/unresolved extensions remain
+        available through exact source editing, but cannot be silently rewritten by this helper.
+        """
+        if not isinstance(edits, list) or not 0 < len(edits) <= 100:
+            raise XDLRejected("A semantic transaction needs one to 100 edits.", "LIMIT_EXCEEDED")
+        report = XDLAdapter().validate(documents)
+        if not report["valid"]:
+            raise XDLRejected("Resolve authoritative source diagnostics before applying semantic edits; original source is preserved.", "MODEL_INVALID")
+        yaml = YAML()
+        yaml.preserve_quotes = True
+        parsed = {name: yaml.load(source) for name, source in documents.items()}
+        touched = set()
+    
+        def resource_uri(resource):
+            return f"xdl://{resource['metadata']['namespace']}/{resource['kind'].lower()}/{resource['metadata']['name']}"
+    
+        def check_target(edit, resource, identifier=None):
+            target = edit.get("elementRef")
+            allowed = {resource_uri(resource)}
+            if identifier:
+                allowed.add(resource_uri(resource) + "#" + identifier)
+            if target is not None and target not in allowed:
+                raise XDLRejected("The selected stable reference does not identify this edit target.", "SELECTION_UNRESOLVED")
+    
+        def select(kind: str, explicit: str | None) -> tuple[str, dict]:
+            found = [(name, value) for name, value in parsed.items() if value.get("kind") == kind and (not explicit or name == explicit)]
+            if len(found) != 1:
+                raise XDLRejected("Select exactly one existing " + kind + " document.", "SELECTION_UNRESOLVED")
+            return found[0]
+    
+        for edit in edits:
+            if not isinstance(edit, dict) or edit.get("kind") not in REGISTRY:
+>               raise XDLRejected("This semantic edit operation is unsupported.")
+E               xverse_studio.xdl.XDLRejected: This semantic edit operation is unsupported.
+
+services/studio-api/src/xverse_studio/xdl/edits.py:59: XDLRejected
+________ test_device_and_endpoint_bundle_are_one_validated_transaction _________
+
+documents = {'controller.xdl.yaml': 'apiVersion: xverse.io/xdl/v1alpha1\nkind: Component\nmetadata:\n  namespace: org.xverse.studi...ernalRef: urn:xverse:studio:reference:first-order:v1\n    inputs: []\n    outputs: []\n    maturity: prototype\n', ...}
+
+    def test_device_and_endpoint_bundle_are_one_validated_transaction(documents):
+>       changed = semantic_edits(documents, [device() | {"endpoints": [{"id": "measurement-out", "ownerId": "measurement-device",
+            "interfaceId": "state", "direction": "output"}]},
+            asset("sensor", "measurement", {"deviceId": "measurement-device", "observedQuantity": "state",
+                "outputEndpointId": "measurement-out", "unitSemantics": "1", "maturity": "prototype"})])
+
+tests/contract/test_neutral_assets.py:50: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+documents = {'controller.xdl.yaml': 'apiVersion: xverse.io/xdl/v1alpha1\nkind: Component\nmetadata:\n  namespace: org.xverse.studi...ernalRef: urn:xverse:studio:reference:first-order:v1\n    inputs: []\n    outputs: []\n    maturity: prototype\n', ...}
+edits = [{'assetKind': 'device', 'documentId': 'system.xdl.yaml', 'elementId': 'measurement-device', 'endpoints': [{'direction...{'assetKind': 'sensor', 'documentId': 'system.xdl.yaml', 'elementId': 'measurement', 'kind': 'add_logical_asset', ...}]
+
+    def semantic_edits(documents: dict[str, str], edits: list[dict]) -> dict[str, str]:
+        """Return a new complete source transaction, or refuse without altering the inputs.
+    
+        Semantic authoring requires an already valid set. Unknown/unresolved extensions remain
+        available through exact source editing, but cannot be silently rewritten by this helper.
+        """
+        if not isinstance(edits, list) or not 0 < len(edits) <= 100:
+            raise XDLRejected("A semantic transaction needs one to 100 edits.", "LIMIT_EXCEEDED")
+        report = XDLAdapter().validate(documents)
+        if not report["valid"]:
+            raise XDLRejected("Resolve authoritative source diagnostics before applying semantic edits; original source is preserved.", "MODEL_INVALID")
+        yaml = YAML()
+        yaml.preserve_quotes = True
+        parsed = {name: yaml.load(source) for name, source in documents.items()}
+        touched = set()
+    
+        def resource_uri(resource):
+            return f"xdl://{resource['metadata']['namespace']}/{resource['kind'].lower()}/{resource['metadata']['name']}"
+    
+        def check_target(edit, resource, identifier=None):
+            target = edit.get("elementRef")
+            allowed = {resource_uri(resource)}
+            if identifier:
+                allowed.add(resource_uri(resource) + "#" + identifier)
+            if target is not None and target not in allowed:
+                raise XDLRejected("The selected stable reference does not identify this edit target.", "SELECTION_UNRESOLVED")
+    
+        def select(kind: str, explicit: str | None) -> tuple[str, dict]:
+            found = [(name, value) for name, value in parsed.items() if value.get("kind") == kind and (not explicit or name == explicit)]
+            if len(found) != 1:
+                raise XDLRejected("Select exactly one existing " + kind + " document.", "SELECTION_UNRESOLVED")
+            return found[0]
+    
+        for edit in edits:
+            if not isinstance(edit, dict) or edit.get("kind") not in REGISTRY:
+>               raise XDLRejected("This semantic edit operation is unsupported.")
+E               xverse_studio.xdl.XDLRejected: This semantic edit operation is unsupported.
+
+services/studio-api/src/xverse_studio/xdl/edits.py:59: XDLRejected
+_____ test_update_keeps_identity_and_independent_capability_and_placement ______
+
+documents = {'controller.xdl.yaml': 'apiVersion: xverse.io/xdl/v1alpha1\nkind: Component\nmetadata:\n  namespace: org.xverse.studi...ernalRef: urn:xverse:studio:reference:first-order:v1\n    inputs: []\n    outputs: []\n    maturity: prototype\n', ...}
+
+    def test_update_keeps_identity_and_independent_capability_and_placement(documents):
+>       added = semantic_edits(documents, [device()])
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/contract/test_neutral_assets.py:58: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+documents = {'controller.xdl.yaml': 'apiVersion: xverse.io/xdl/v1alpha1\nkind: Component\nmetadata:\n  namespace: org.xverse.studi...ernalRef: urn:xverse:studio:reference:first-order:v1\n    inputs: []\n    outputs: []\n    maturity: prototype\n', ...}
+edits = [{'assetKind': 'device', 'documentId': 'system.xdl.yaml', 'elementId': 'measurement-device', 'kind': 'add_logical_asset', ...}]
+
+    def semantic_edits(documents: dict[str, str], edits: list[dict]) -> dict[str, str]:
+        """Return a new complete source transaction, or refuse without altering the inputs.
+    
+        Semantic authoring requires an already valid set. Unknown/unresolved extensions remain
+        available through exact source editing, but cannot be silently rewritten by this helper.
+        """
+        if not isinstance(edits, list) or not 0 < len(edits) <= 100:
+            raise XDLRejected("A semantic transaction needs one to 100 edits.", "LIMIT_EXCEEDED")
+        report = XDLAdapter().validate(documents)
+        if not report["valid"]:
+            raise XDLRejected("Resolve authoritative source diagnostics before applying semantic edits; original source is preserved.", "MODEL_INVALID")
+        yaml = YAML()
+        yaml.preserve_quotes = True
+        parsed = {name: yaml.load(source) for name, source in documents.items()}
+        touched = set()
+    
+        def resource_uri(resource):
+            return f"xdl://{resource['metadata']['namespace']}/{resource['kind'].lower()}/{resource['metadata']['name']}"
+    
+        def check_target(edit, resource, identifier=None):
+            target = edit.get("elementRef")
+            allowed = {resource_uri(resource)}
+            if identifier:
+                allowed.add(resource_uri(resource) + "#" + identifier)
+            if target is not None and target not in allowed:
+                raise XDLRejected("The selected stable reference does not identify this edit target.", "SELECTION_UNRESOLVED")
+    
+        def select(kind: str, explicit: str | None) -> tuple[str, dict]:
+            found = [(name, value) for name, value in parsed.items() if value.get("kind") == kind and (not explicit or name == explicit)]
+            if len(found) != 1:
+                raise XDLRejected("Select exactly one existing " + kind + " document.", "SELECTION_UNRESOLVED")
+            return found[0]
+    
+        for edit in edits:
+            if not isinstance(edit, dict) or edit.get("kind") not in REGISTRY:
+>               raise XDLRejected("This semantic edit operation is unsupported.")
+E               xverse_studio.xdl.XDLRejected: This semantic edit operation is unsupported.
+
+services/studio-api/src/xverse_studio/xdl/edits.py:59: XDLRejected
+__________ test_update_never_ignores_incompatible_qualified_identity ___________
+
+documents = {'controller.xdl.yaml': 'apiVersion: xverse.io/xdl/v1alpha1\nkind: Component\nmetadata:\n  namespace: org.xverse.studi...ernalRef: urn:xverse:studio:reference:first-order:v1\n    inputs: []\n    outputs: []\n    maturity: prototype\n', ...}
+
+    def test_update_never_ignores_incompatible_qualified_identity(documents):
+>       added = semantic_edits(documents, [device()])
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/contract/test_neutral_assets.py:87: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+documents = {'controller.xdl.yaml': 'apiVersion: xverse.io/xdl/v1alpha1\nkind: Component\nmetadata:\n  namespace: org.xverse.studi...ernalRef: urn:xverse:studio:reference:first-order:v1\n    inputs: []\n    outputs: []\n    maturity: prototype\n', ...}
+edits = [{'assetKind': 'device', 'documentId': 'system.xdl.yaml', 'elementId': 'measurement-device', 'kind': 'add_logical_asset', ...}]
+
+    def semantic_edits(documents: dict[str, str], edits: list[dict]) -> dict[str, str]:
+        """Return a new complete source transaction, or refuse without altering the inputs.
+    
+        Semantic authoring requires an already valid set. Unknown/unresolved extensions remain
+        available through exact source editing, but cannot be silently rewritten by this helper.
+        """
+        if not isinstance(edits, list) or not 0 < len(edits) <= 100:
+            raise XDLRejected("A semantic transaction needs one to 100 edits.", "LIMIT_EXCEEDED")
+        report = XDLAdapter().validate(documents)
+        if not report["valid"]:
+            raise XDLRejected("Resolve authoritative source diagnostics before applying semantic edits; original source is preserved.", "MODEL_INVALID")
+        yaml = YAML()
+        yaml.preserve_quotes = True
+        parsed = {name: yaml.load(source) for name, source in documents.items()}
+        touched = set()
+    
+        def resource_uri(resource):
+            return f"xdl://{resource['metadata']['namespace']}/{resource['kind'].lower()}/{resource['metadata']['name']}"
+    
+        def check_target(edit, resource, identifier=None):
+            target = edit.get("elementRef")
+            allowed = {resource_uri(resource)}
+            if identifier:
+                allowed.add(resource_uri(resource) + "#" + identifier)
+            if target is not None and target not in allowed:
+                raise XDLRejected("The selected stable reference does not identify this edit target.", "SELECTION_UNRESOLVED")
+    
+        def select(kind: str, explicit: str | None) -> tuple[str, dict]:
+            found = [(name, value) for name, value in parsed.items() if value.get("kind") == kind and (not explicit or name == explicit)]
+            if len(found) != 1:
+                raise XDLRejected("Select exactly one existing " + kind + " document.", "SELECTION_UNRESOLVED")
+            return found[0]
+    
+        for edit in edits:
+            if not isinstance(edit, dict) or edit.get("kind") not in REGISTRY:
+>               raise XDLRejected("This semantic edit operation is unsupported.")
+E               xverse_studio.xdl.XDLRejected: This semantic edit operation is unsupported.
+
+services/studio-api/src/xverse_studio/xdl/edits.py:59: XDLRejected
+=============================== warnings summary ===============================
+.venv/lib/python3.13/site-packages/fastapi/testclient.py:1
+  <workspace>/.venv/lib/python3.13/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/contract/test_neutral_assets.py::test_create_all_asset_kinds_projects_qualified_identities_and_preserves_source
+FAILED tests/contract/test_neutral_assets.py::test_device_and_endpoint_bundle_are_one_validated_transaction
+FAILED tests/contract/test_neutral_assets.py::test_update_keeps_identity_and_independent_capability_and_placement
+FAILED tests/contract/test_neutral_assets.py::test_update_never_ignores_incompatible_qualified_identity
+4 failed, 11 passed, 1 warning in 7.21s

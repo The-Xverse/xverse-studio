@@ -27,3 +27,15 @@ requirement duplication requiring consolidation; zero unresolved critical docume
 The complete inverse coverage tables remain in `traceability.json`, checked by the package validator.
 Next action is implementation in the existing dependency order with explicit external/native gates,
 followed by separate milestone reviews and actual retained acceptance evidence.
+
+## Successor implementation audit
+
+FR-062 requires preserving external reference revision **and claim status**. Current annotation targets
+and owned assertion traceability admit only URI/revision, so claim status is not yet retained. The
+"link is not proof" disclaimer does not substitute for that field. T094 remains open for a versioned,
+compatible representation and round-trip verification; no requirement/task ID is changed. Optional
+campaign/snapshot garbage collection is not a literal T092/T094 obligation and is not used as a blocker.
+
+The support guide's stale future-CI paragraph was reconciled with retained actual Ubuntu24 receipts
+and the user-held Windows lane. Current owned native Windows secure I/O is also explicitly unavailable;
+source-code presence or Linux tests do not establish native Windows acceptance.
