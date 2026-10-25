@@ -5,14 +5,53 @@ root: `studio.sqlite`, authored project revisions, immutable snapshots, run jour
 The database alone is not a full backup. Sessions and ownership secrets in that private root are
 local material; never place the root in a portable project bundle or public evidence attachment.
 
-The launcher can create a consistent metadata-only backup while it exclusively owns the root:
+For a complete private backup on the verified Linux lane, stop Studio and wait for all runs,
+campaigns and operations to reach settled terminal states. Unknown ownership or pending work
+must be reconciled in the original root first. Choose a new destination outside that root:
+
+```text
+.venv/bin/python -I -m xverse_studio.host.launcher --data-dir .studio-local/data --backup-full .studio-local/backups/before-update
+```
+
+The command verifies SQLite schema/integrity, copies matching project revisions, snapshots,
+journals and private ownership files, and writes `manifest.json` plus `files/`. Every file has
+an exact size and SHA-256 identity. Transient bootstrap, launcher lock and SQLite WAL/SHM files
+are excluded; committed WAL transactions are included through SQLite's backup API. Limits:
+100,000 files, 64 GiB total and a 32 MiB manifest. Keep the **entire private directory** together.
+It contains secrets; never publish it or use it as portable project/evidence exchange. Its
+checksums establish integrity, not authenticity.
+
+Restore using the same pinned candidate into another **new** data root:
+
+```text
+.venv/bin/python -I -m xverse_studio.host.launcher --data-dir .studio-local/recovered-data --restore-from .studio-local/backups/before-update
+.venv/bin/python -I -m xverse_studio.host.launcher --data-dir .studio-local/recovered-data --port 8876
+```
+
+The restore command verifies exact membership, digests, database version and settled execution
+before creating the destination. It preserves original source/snapshot/journal bytes and historical
+identities, invalidates browser sessions and starts no processes. Read the newly generated bootstrap
+file after launching. Existing destinations, nested destinations, symlinks and special files are
+refused. A failed/interrupted restore retains `.recovery-incomplete`; the launcher refuses that root.
+Preserve it for diagnosis and restore into a different new destination. Never remove the marker to
+promote a partial restore. Failed backups without a verified manifest are unusable.
+
+Full recovery is covered by native Linux subprocess tests, including a completed reference run,
+byte-identical evidence, unchanged compiled plan and absence of run replay. Native Windows installation
+and testing remain **BLOCKED at user request**; these Linux results do not establish that lane.
+
+The secure acquisition successor requires admitted native directory/handle primitives. The current
+implementation supplies Linux descriptor traversal and fails explicitly on unsupported hosts; it
+does not silently fall back to path-only checks. Native Windows secure file acquisition remains an
+implementation/verification gap under the held Windows lane. See the [support matrix](../implementation/platform-support.md).
+
+The launcher also retains the smaller metadata-only backup:
 
 ```text
 uv run xverse-studio --data-dir .studio-local/data --backup .studio-local/backups/metadata.sqlite
 ```
 
-The destination must not already exist. For full recovery restore the matching complete stopped data
-root and restart the same pinned candidate. Existing source revisions and run snapshots are never
+The destination must not already exist. Metadata alone is insufficient for full recovery. Existing source revisions and run snapshots are never
 migrated in place. Database version 1 is supported; unknown versions refuse startup with an explicit
 migration requirement. No unverified forward migration or arbitrary downgrade is advertised.
 

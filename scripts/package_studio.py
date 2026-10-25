@@ -38,7 +38,7 @@ for directory in [
             and p.suffix not in (".pyc", ".log")
         ):
             files.append(p)
-for name in ["pyproject.toml", "uv.lock", ".python-version", "README.md", "LICENSE"]:
+for name in ["pyproject.toml", "uv.lock", ".python-version", "README.md", "LICENSE", "docs/implementation/platform-support.md"]:
     files.append(root / name)
 manifest = {
     "formatVersion": "1.0",
@@ -48,7 +48,7 @@ manifest = {
     ).strip(),
     "nativeVerification": {
         "Linux": "see candidate evidence",
-        "Windows": "NOT_RUN unless separate CI evidence proves this candidate",
+        "Windows": "BLOCKED at user request; native installation and tests are on hold",
     },
     "files": {
         str(p.relative_to(root)).replace("\\", "/"): "sha256:"

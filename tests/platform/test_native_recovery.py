@@ -1,8 +1,6 @@
 """Runs on a real native backend subprocess; fixture scope never implies live integration."""
 
 import json
-import os
-from pathlib import Path
 import socket
 import subprocess
 import sys
@@ -13,7 +11,6 @@ import psutil
 
 def eventually(fn, timeout=10):
     end = time.monotonic() + timeout
-    last = None
     while time.monotonic() < end:
         try:
             value = fn()
@@ -139,3 +136,82 @@ def test_native_backend_crash_reconcile_and_clean_shutdown(tmp_path):
                 ),
                 timeout=6,
             )
+
+
+def test_native_full_backup_restore_preserves_completed_run_without_replay(tmp_path):
+    root, saved, restored = (
+        tmp_path / name for name in ["source Ω", "backup Ω", "restored Ω"]
+    )
+    with socket.socket() as sock:
+        sock.bind(("127.0.0.1", 0))
+        port = sock.getsockname()[1]
+    client = httpx.Client(
+        base_url=f"http://127.0.0.1:{port}",
+        headers={"Origin": f"http://127.0.0.1:{port}"},
+        timeout=5,
+    )
+    proc = launch(root, port)
+    try:
+        eventually(lambda: client.get("/api/v1/session").status_code == 401)
+        token = json.loads((root / "bootstrap.json").read_text())["bootstrapToken"]
+        session = client.post("/api/v1/session", json={"bootstrapToken": token})
+        assert session.status_code == 200, session.text
+        client.headers["X-CSRF-Token"] = session.json()["csrfToken"]
+        project = client.post(
+            "/api/v1/projects", json={"name": "Recovery System Ω"}
+        ).json()
+        pf = client.post(
+            f"/api/v1/projects/{project['projectId']}/preflights",
+            json={"revision": project["revision"]},
+        ).json()
+        assert pf["status"] == "ready", pf
+        accepted = client.post(
+            "/api/v1/runs",
+            json={"snapshotId": pf["snapshotId"], "preflightId": pf["preflightId"]},
+            headers={"Idempotency-Key": "recovery-completed-run"},
+        )
+        assert accepted.status_code == 202, accepted.text
+        rid = accepted.json()["runId"]
+        eventually(
+            lambda: client.get("/api/v1/runs/" + rid).json().get("state") == "stopped"
+        )
+        original = client.get(f"/api/v1/runs/{rid}/snapshot").json()
+        assert original["integrity"] == "valid"
+        journal = (root / "runs" / rid / "evidence.jsonl").read_bytes()
+        proc.terminate()
+        proc.wait(timeout=10)
+        command = [sys.executable, "-I", "-m", "xverse_studio.host.launcher"]
+        for args in [
+            ["--data-dir", str(root), "--backup-full", str(saved)],
+            ["--data-dir", str(restored), "--restore-from", str(saved)],
+        ]:
+            result = subprocess.run(
+                command + args, capture_output=True, text=True, timeout=15
+            )
+            assert result.returncode == 0, result.stderr
+            assert json.loads(result.stdout)["integrity"] == "valid"
+        proc = launch(restored, port)
+        eventually(lambda: client.get("/api/v1/session").status_code == 401)
+        token = json.loads((restored / "bootstrap.json").read_text())["bootstrapToken"]
+        session = client.post("/api/v1/session", json={"bootstrapToken": token})
+        assert session.status_code == 200, session.text
+        client.headers["X-CSRF-Token"] = session.json()["csrfToken"]
+        assert (
+            client.get(f"/api/v1/projects/{project['projectId']}").json()["documents"]
+            == project["documents"]
+        )
+        assert client.get(f"/api/v1/runs/{rid}/snapshot").json() == original
+        assert (restored / "runs" / rid / "evidence.jsonl").read_bytes() == journal
+        assert client.get("/api/v1/runs").json()["items"][0]["state"] == "stopped"
+        assert len(client.get("/api/v1/runs").json()["items"]) == 1
+        pf_again = client.post(
+            f"/api/v1/projects/{project['projectId']}/preflights",
+            json={"revision": project["revision"]},
+        ).json()
+        assert pf_again["status"] == "ready", pf_again
+        assert pf_again["planDigest"] == pf["planDigest"]
+    finally:
+        client.close()
+        if proc.poll() is None:
+            proc.terminate()
+            proc.wait(timeout=10)

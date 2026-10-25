@@ -24,3 +24,7 @@ requires an existing frontend build, excludes caches/secrets and records exact c
 Git candidate and dirty-tree state. A dirty package is an explicitly identified development artifact,
 not an exact committed release. Native Windows acceptance and OS-specific process/ACL behaviour require
 actual native verification; the presence of a Windows-targeted command or CI file does not pass it.
+
+The bundled recovery guide includes its local native support matrix. Contributor verification with
+`scripts/run_checks.py` requires the complete repository checkout and development dependencies;
+the application bundle contains runnable backend/UI sources, not the full specification/test corpus.

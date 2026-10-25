@@ -15,10 +15,19 @@ No particular Windows edition/release or browser version is advertised as verifi
 from that environment. Selecting an edition and documenting its exact installation remains an open
 native support-matrix obligation under T001/T002/AC-001/AC-032.
 
-CI declares Ubuntu 24 and Windows Server 2022 lanes for future verification. They remain unexecuted
-until the implementation branch is pushed and the actual workflow results are available. CI target
-names are not a claim that those hosts have already passed. The initially available Node 20.20.2/npm
-10.8.2 environment was superseded by the explicitly selected Node 24 LTS toolchain.
+The current secure-file acquisition successor uses admitted Linux directory descriptors and refuses
+unsupported primitives. It has **no admitted Windows implementation yet**; project file operations
+return `PLATFORM_IO_UNAVAILABLE` on that host rather than use an unsafe path fallback. This is an
+additional owned implementation gap, separate from the upstream Windows-invalid Git filename and
+from provider OS compatibility. Native Windows installation/testing stays held; no Bash/WSL/container
+workaround is implied. Its acceptance cannot close until a native Windows implementation and evidence
+are supplied when that scope resumes.
+
+The current CI matrix runs Ubuntu 24 only. Candidate `0dd3ea89` passed its actual native Ubuntu
+24.04.5 install/build/backend/browser/package lane, and `ba5ef0a` passed the Linux-only successor
+workflow. Receipts are under `evidence/studio/native-ci/`; the initial Windows installation failure
+is retained separately. Current uncommitted changes require their own candidate checks. The initially
+available Node 20.20.2/npm 10.8.2 environment was superseded by Node 24.22.1.
 
 | Provider | Linux | Windows | Meaning |
 |---|---|---|---|

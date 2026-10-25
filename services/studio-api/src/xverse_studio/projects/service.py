@@ -1,7 +1,8 @@
 from __future__ import annotations
 import json
-from pathlib import Path
+import os
 import shutil
+import stat
 import time
 import unicodedata
 from xverse_studio.storage.core import (
@@ -13,6 +14,7 @@ from xverse_studio.storage.core import (
     contained,
 )
 from xverse_studio.security.files import safe_name, check_text, read_archive
+from xverse_studio.security.managed_io import open_read, SafeIOError
 
 
 class Projects:
@@ -33,20 +35,102 @@ class Projects:
             self._dir(pid, p["revision"]) / p["documents"][docid]["path"],
         )
 
+    def _read_file(self, path, *, max_bytes=1024 * 1024):
+        """Bound opened source bytes even when a committed file changed externally."""
+        try:
+            limit = min(1024 * 1024, max_bytes)
+            with open_read(self.store.root, path) as source:
+                info = os.fstat(source.fileno())
+                if not stat.S_ISREG(info.st_mode):
+                    raise OSError("Source is not a regular file")
+                if info.st_size > limit:
+                    raise Problem(
+                        "REVISION_CONFLICT",
+                        "External source bytes exceed the document or complete-project read bound. Preserve them before recovery.",
+                        412,
+                    )
+                data = source.read(limit + 1)
+        except SafeIOError as exc:
+            if exc.code == "SECURE_IO_UNAVAILABLE":
+                raise Problem(
+                    "PLATFORM_IO_UNAVAILABLE",
+                    "Secure native file acquisition is not admitted on this host. Its native platform acceptance remains open; see the support matrix.",
+                    503,
+                ) from None
+            if exc.code == "SOURCE_CHANGED":
+                raise Problem(
+                    "REVISION_CONFLICT",
+                    "The opened source changed during inspection. Preserve its bytes before recovery.",
+                    412,
+                ) from None
+            raise Problem(
+                "PROJECT_UNAVAILABLE",
+                "A committed source or sidecar is unavailable or unsafe. Preserve the selected data root before recovery.",
+                409,
+            ) from None
+        except (OSError, ValueError):
+            raise Problem(
+                "PROJECT_UNAVAILABLE",
+                "A committed source or sidecar is unavailable or unsafe. Preserve the selected data root before recovery.",
+                409,
+            ) from None
+        if len(data) > limit:
+            raise Problem(
+                "REVISION_CONFLICT",
+                "External source bytes exceed the document or complete-project read bound. Preserve them before recovery.",
+                412,
+            )
+        return data
+
     def read(self, pid, db=None):
         p = self.store.get("project", pid, db)
-        result = {**p, "documents": {}}
+        result = {
+            **p,
+            "documents": {},
+            "sourceIntegrity": "intact",
+            "sourceDiagnostics": [],
+        }
+        source_bytes = sum(
+            len(value.encode("utf-8"))
+            for value in p.get("supportingFiles", {}).values()
+        )
         for id, d in p["documents"].items():
-            file = contained(self.store.root, self._dir(pid, p["revision"]) / d["path"])
-            if not file.is_file():
+            file = (
+                self.store.root
+                / "projects"
+                / pid
+                / "revisions"
+                / str(p["revision"])
+                / d["path"]
+            )
+            try:
+                data = self._read_file(
+                    file, max_bytes=max(0, 16 * 1024 * 1024 - source_bytes)
+                )
+                source_bytes += len(data)
+                content = data.decode("utf-8")
+            except UnicodeError:
                 raise Problem(
                     "PROJECT_UNAVAILABLE",
-                    "A committed project document is unavailable.",
+                    "Committed source bytes are not UTF-8. Preserve them before recovery.",
                     409,
+                ) from None
+            actual_digest = digest(content.encode("utf-8"))
+            if actual_digest != d["digest"]:
+                result["sourceIntegrity"] = "modified"
+                result["sourceDiagnostics"].append(
+                    {
+                        "code": "REVISION_CONFLICT",
+                        "severity": "error",
+                        "documentId": id,
+                        "expectedDigest": d["digest"],
+                        "actualDigest": actual_digest,
+                        "message": "Source bytes changed outside the committed revision. They remain available for inspection; preserve them and recover before saving or execution.",
+                    }
                 )
             result["documents"][id] = {
                 **d,
-                "content": file.read_bytes().decode("utf-8"),
+                "content": content,
             }
         return result
 
@@ -70,10 +154,15 @@ class Projects:
                 or name == p.get("manifest", {}).get("artifactLock")
             ):
                 continue
-            file = contained(
-                self.store.root, self._dir(p["projectId"], p["revision"]) / name
+            file = (
+                self.store.root
+                / "projects"
+                / p["projectId"]
+                / "revisions"
+                / str(p["revision"])
+                / name
             )
-            if not file.is_file() or file.read_bytes() != expected.encode():
+            if self._read_file(file) != expected.encode():
                 raise Problem(
                     "REVISION_CONFLICT",
                     "A pinned profile or artifact sidecar changed externally; preserve it before recovery.",
@@ -126,7 +215,11 @@ class Projects:
                 safe_name(name)
                 check_text(content)
                 atomic(contained(stage, stage / name), content.encode())
-            metadata = {k: v for k, v in p.items() if k != "documents"}
+            metadata = {
+                k: v
+                for k, v in p.items()
+                if k not in {"documents", "sourceIntegrity", "sourceDiagnostics"}
+            }
             metadata["documents"] = {
                 id: {k: v for k, v in d.items() if k != "content"}
                 | {"digest": digest(d["content"].encode())}
