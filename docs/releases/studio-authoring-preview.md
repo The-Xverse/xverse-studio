@@ -16,14 +16,14 @@ T041, T042, T044, T050, T085, T086, T087, T092, T020, T094. This does not waive 
 
 ## Executed verification
 
-- Native Ubuntu 22.04.5 x86_64, Python 3.13.13: **350 backend tests passed**, one existing dependency
+- Native Ubuntu 22.04.5 x86_64, Python 3.13.13: **393 backend tests passed**, one existing dependency
   deprecation warning; recorded application/test source hashes unchanged during the run.
-- Node 24.22.1, Chromium 156.0.8078.4: **nine Playwright checks passed**, no failures/skips/flakes.
-  Six are actual browser journeys; three are pure projection checks. The journeys include actual
+- Node 24.22.1, Chromium 156.0.8078.4: **15 Playwright checks passed**, no failures/skips/flakes.
+  Ten are actual browser journeys; five are pure projection/display checks. The journeys include actual
   reference execution/reconnect/rerun/campaign controls, both required viewports, keyboard/focus,
   source isolation, dependency refusal, retention effects and external-byte inspection.
-- After one warm-up, 30 repetitions: selection/inspector p95 **38.4 ms**; open/authoritative validation
-  **1,010 ms**; first 200 history records from 50,000 canonical fixture events **247.8 ms**. Recorded
+- After one warm-up, 30 repetitions: selection/inspector p95 **29.5 ms**; open/authoritative validation
+  **590.4 ms**; first 200 history records from 50,000 canonical fixture events **196.2 ms**. Recorded
   history identities/integrity stayed unchanged. This fixture is not external simulator/device evidence.
 - A fresh package provisioned offline from the prepared dependency cache, started natively, served
   its UI, persisted a project and compiled authoritatively. An initial restricted test PATH omitted
@@ -32,10 +32,10 @@ T041, T042, T044, T050, T085, T086, T087, T092, T020, T094. This does not waive 
   observer/assertion references, deep edit handling, source/SQLite acquisition, directory continuity,
   and restore-marker ordering. Original findings and intermediate failures remain retained.
 
-Evidence: `evidence/studio/release/linux-cohort-2026-10-25/`, the component review folders and
-`traceability.json`. Counts overlap and are not added. Backend/application/test files did not change
-after the full suite; one packaging file-list correction includes the locally linked support matrix,
-and that corrected packager passed the fresh-package smoke. Publication redactions retain raw receipts
+Evidence: `evidence/studio/release/linux-readiness-claims-2026-10-25/`, the component review folders and
+`traceability.json`. Counts overlap and are not added. Backend/application/test source remained unchanged during the final full-suite/browser checks.
+Clean product commit 180d026 passed the fresh-package smoke. Earlier cohort and packaging findings
+remain retained separately. Publication redactions retain raw receipts
 privately on loop10 without changing verification outcomes or product source hashes.
 
 ## Remaining scope
@@ -73,8 +73,8 @@ reported status and frozen model/Scenario/definition/evidence subjects. A report
 changes the actual assertion verdict. Review repairs isolate annotation editors/callbacks across runs
 and route snapshot display through bounded canonical acquisition.
 
-The local 388-test backend cohort passed before the final display-reader repair; 13 affected reader
-and rerun checks passed afterward. The final browser candidate passed 15 checks, including ten actual
+The final full backend cohort passed 393 tests after the display-reader repair; earlier predecessor
+and focused reader/rerun receipts remain retained separately. The final browser candidate passed 15 checks, including ten actual
 journeys, with source unchanged. Final 30-repetition p95 values: selection 29.5 ms, open/validation
 590.4 ms, and recorded-fixture history 196.2 ms. Counts overlap and are not added. See
 `evidence/studio/release/linux-readiness-claims-2026-10-25/` and independent component reviews.

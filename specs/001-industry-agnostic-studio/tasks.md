@@ -184,3 +184,8 @@ trace exchange and the two-check context-switch/delayed-refresh successor passed
 route now reuses bounded canonical acquisition (13 reader/rerun checks plus independent successor).
 Retention evidence remains applicable. Full M4 and native/live acceptance remain open; see
 `evidence/studio/M4-trace-claims/` and traceability.json.
+
+Final readiness/claim candidate 180d026: 393 backend tests and 15 combined browser checks passed
+on unchanged source, with 30-repetition performance checks and a clean committed-package offline
+installation/startup/persistence/compilation smoke. Seventeen task components are complete; all five
+milestone acceptance gates remain open. See `evidence/studio/release/linux-readiness-claims-2026-10-25/cohort-summary.json`.

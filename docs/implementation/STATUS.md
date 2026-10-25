@@ -127,12 +127,13 @@ input/provider identity and durable idempotency. Annotation sidecar 1.1 preserve
 reported claim text and frozen model/Scenario/definition/evidence subjects, without changing assertion
 v1 schema or canonical evidence. Run switches and delayed annotation responses cannot retarget edits.
 
-The 388-test native Linux backend cohort passed with source unchanged. A subsequent snapshot display
-route repair delegates to the bounded canonical verifier; 13 affected reader/rerun tests and an
-independent successor passed. These overlapping checks are not added into a final full-suite count.
+The final native Linux backend cohort passed 393 tests with source unchanged, including the bounded
+snapshot-display repair. Its earlier 388-test predecessor, 13 focused reader/rerun checks and
+independent successors are retained separately; overlapping counts are not added.
 The final browser source passed 15 checks (ten browser journeys and five display/projection checks),
 with no failures/skips/flakes and unchanged source hashes. Thirty repetitions after one warm-up passed:
 selection p95 29.5 ms, open/validation 590.4 ms, and history presentation 196.2 ms. These retain their
 owned browser/recorded-fixture scope. Evidence is under
 `evidence/studio/release/linux-readiness-claims-2026-10-25/`; packaging/publication evidence follows
-its own recorded result. Native Windows and all unmet milestone gates remain unchanged.
+its own recorded result. Clean product commit 180d026 passed the fresh offline package smoke;
+publication/CI state is reported separately. Native Windows and all unmet milestone gates remain unchanged.
