@@ -107,6 +107,7 @@ def capabilities():
     return {
         "apiVersion": "1.0",
         "schemaVersion": "1.0",
+        "contracts": {"readiness": "1.0", "annotations": "1.1"},
         "host": {
             "os": platform.system(),
             "release": platform.release(),

@@ -46,7 +46,9 @@ checks before claiming Windows support. WSL or a browser pointed at Linux cannot
 2. Select an element and inspect role, source reference, interfaces and parameter provenance.
    Change **Target**, **Response gain** or **Duration** and apply the edit. Units and bounds are shown.
 3. Validate, then select **Preflight & run**. Static model validity and target readiness are distinct.
-   Inspect the frozen plan identity and diagnostic details. Only a ready preflight enables Start.
+   Review each readiness row, its affected elements, advertised limits and remediation. Use
+   **Inspect compiled plan** to read the frozen declared-intent plan. Changing provider requires a
+   recheck; expired or changed inputs prevent Start. A check does not start a runtime or reserve equipment.
 4. Start the frozen snapshot. Results report lifecycle, cleanup, evidence and evaluations separately.
    Browser refresh/reconnect reads the existing backend-owned run; it does not issue Start again.
 5. Use **Reference fault → stuck-sensor** in the scenario parameters to run a supported owned failure
@@ -56,6 +58,7 @@ checks before claiming Windows support. WSL or a browser pointed at Linux cannot
    and moving graph elements does not modify the executable plan. Invalid drafts remain inspectable.
 7. Use Results definitions/evaluations, annotations and finite campaigns only within advertised limits.
    Compare exact input/configuration differences before interpreting observation differences.
+   See [external references](evidence-and-references.md) for separate reported claims and revision history.
 
 The Model, Connections, Deployment, Experiments and Results views share the same XDL identities.
 Source edits and typed semantic edits use the public pinned XDL APIs. Unsupported topology, profiles,

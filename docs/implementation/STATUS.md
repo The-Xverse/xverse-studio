@@ -13,7 +13,7 @@ private Linux backup/restore uses anchored acquisition and preserves immutable e
 Physical-provider inventory is empty.
 
 Component-complete task IDs, with the exact component scope/evidence in traceability.json:
-T003, T006, T013, T017, T022, T024, T036, T041, T042, T044, T050, T085, T086, T087, T092.
+T003, T006, T013, T017, T022, T024, T036, T041, T042, T044, T050, T085, T086, T087, T092, T020, T094.
 T044 was reopened after review, then repaired and reverified for selected-source navigation, empty
 draft retention, atomic document switching and external-source inspection.
 Other tasks remain unchecked; implemented subparts are recorded as in progress instead of implying
@@ -25,7 +25,7 @@ that their native, integration, review or acceptance obligations passed.
 | M1 | Actual native worker lifecycle/idempotence, exact requested/effective plan, backend crash recovery and real browser/keyboard workflows. Live Lite, five-person usability, full failure matrix and native Windows remain open. |
 | M2 | Round-trip semantic edits, graph/source, catalog, profile locks, named authored variants and actual selected-variant runs. Independent composition repairs and successor browser/performance records are retained; live two-industry and bidirectional Windows exchange remain open. |
 | M3 | Scoped inventory/authority/lease/clock/recovery fixtures and explicit unsupported production controls. Actual device/provider/driver/permission and physical evidence are BLOCKED. |
-| M4 | Bounded evaluator with snapshot-bound metric dependencies, Scenario intent authoring, campaigns, comparison, immutable exchange, annotations and dependency-aware project/run/artifact-registration retention. Trace claim-status preservation, broader provider effects and complete retained release gates remain open. |
+| M4 | Bounded evaluator with snapshot-bound metric dependencies, Scenario intent authoring, campaigns, comparison, immutable exchange, annotations and dependency-aware project/run/artifact-registration retention. Reported trace claims and frozen subject links are verified; broader provider effects and complete retained release gates remain open. |
 
 Actual verification records include `evidence/studio/backend-suite.txt` (an earlier 116-test candidate),
 M0/M1 independent reviews and their successor regressions, `M2-composition/verification.json`,
@@ -112,6 +112,27 @@ other native hosts. An admitted Windows implementation is still an owned gap, se
 upstream Git filename issue; Windows installation/testing stays held. No WSL/container substitution
 or Windows success is claimed.
 
-Next ready work includes T020's missing readiness-dimension/limit display, FR-062 trace claim-status
-preservation in T094, source/time filtering, cursor resynchronization and diagnostic explanation cases.
+Readiness display and reported trace-claim components now have successor evidence below. Next ready
+work includes remaining T018 admission negatives, source/time filtering, cursor resynchronization and
+diagnostic explanation cases.
 No M0–M4 milestone is accepted; M5 remains deferred.
+
+## Readiness and reported-claim successor
+
+T020 and T094 are component-complete after independent review and native browser repairs, bringing
+the total to 17 of 100 tasks. Readiness exposes ten independent facts, exact selected-provider limits,
+affected subjects/remediation and a frozen declared-intent plan. Unsupported selected providers stay
+unavailable without reference substitution. Immediate Start admission and campaign replay preserve
+input/provider identity and durable idempotency. Annotation sidecar 1.1 preserves exact optional
+reported claim text and frozen model/Scenario/definition/evidence subjects, without changing assertion
+v1 schema or canonical evidence. Run switches and delayed annotation responses cannot retarget edits.
+
+The 388-test native Linux backend cohort passed with source unchanged. A subsequent snapshot display
+route repair delegates to the bounded canonical verifier; 13 affected reader/rerun tests and an
+independent successor passed. These overlapping checks are not added into a final full-suite count.
+The final browser source passed 15 checks (ten browser journeys and five display/projection checks),
+with no failures/skips/flakes and unchanged source hashes. Thirty repetitions after one warm-up passed:
+selection p95 29.5 ms, open/validation 590.4 ms, and history presentation 196.2 ms. These retain their
+owned browser/recorded-fixture scope. Evidence is under
+`evidence/studio/release/linux-readiness-claims-2026-10-25/`; packaging/publication evidence follows
+its own recorded result. Native Windows and all unmet milestone gates remain unchanged.

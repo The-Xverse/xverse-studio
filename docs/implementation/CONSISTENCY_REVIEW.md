@@ -39,3 +39,18 @@ campaign/snapshot garbage collection is not a literal T092/T094 obligation and i
 The support guide's stale future-CI paragraph was reconciled with retained actual Ubuntu24 receipts
 and the user-held Windows lane. Current owned native Windows secure I/O is also explicitly unavailable;
 source-code presence or Linux tests do not establish native Windows acceptance.
+
+## Readiness and trace-claim repair
+
+ADR-0009 records additive readiness 1.0 and annotation sidecar 1.1 contracts. The existing assertion
+v1 schema and profile/evaluator identities are unchanged. Optional reported claim text and exact frozen
+definition subjects now have backend preservation/round-trip evidence; the prior FR-062 finding above
+remains retained as the before-repair record. UI and full-candidate results are recorded separately.
+
+Concrete implementation contradictions were reproduced before repair: preflight silently recorded an
+unavailable selected Lite provider as the reference provider; a blocked snapshot could enter campaigns;
+missing limits and unsupported clocks/model references still appeared ready; campaign retries consulted
+mutable files before saved idempotency; operation target/XDL scope and unknown availability facts were
+not enforced. Findings and successor checks under `evidence/studio/M1-readiness/` repair these behaviors
+without changing stable requirement/task IDs or weakening AC-005. The read-only plan describes compiled
+intent, and reported external claims remain separate from observed assertion verdicts and evidence.

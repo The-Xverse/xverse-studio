@@ -12,6 +12,7 @@ def test_error_envelope_version_and_unknown_fields(client):
 def test_capability_host_provider_separation(client):
     c = client.get("/api/v1/capabilities").json()
     assert c["apiVersion"] == "1.0"
+    assert c["contracts"] == {"readiness": "1.0", "annotations": "1.1"}
     assert c["host"]["os"] in ("Linux", "Windows")
     ref = next(p for p in c["providers"] if p["providerId"] == "studio.reference")
     lite = next(p for p in c["providers"] if p["providerId"] == "xverse.lite")

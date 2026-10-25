@@ -5,6 +5,8 @@ import type { DoAction } from "../../app/App";
 import { Icon, Badge, Empty, Json, KeyValues, statusTone } from "../../app/ui";
 import { RetentionDialog } from "../retention/RetentionDialog";
 import { FrozenInputs } from "./FrozenInputs";
+import { projectDisplay } from "../model/projection";
+import type { Project } from "../../api/types";
 export function ResultsView({
   run,
   events,
@@ -43,6 +45,7 @@ export function ResultsView({
     [showTable, setShowTable] = useState(false),
     [cursor, setCursor] = useState(0),
     [editingAnnotation, setEditingAnnotation] = useState<Data | null>(null),
+    [editingTrace, setEditingTrace] = useState<Data | null>(null),
     [eventSource, setEventSource] = useState<"retained" | "live">("retained"),
     [retainedEvents, setRetainedEvents] = useState<RunEvent[]>([]),
     [historyLoading, setHistoryLoading] = useState(false),
@@ -57,6 +60,10 @@ export function ResultsView({
     [rerunBusy, setRerunBusy] = useState(false),
     [rerunOperation, setRerunOperation] = useState<Data | null>(null);
   const historyRequest = useRef<AbortController | null>(null);
+  const annotationContext = useRef({ runId: run?.runId });
+  if (annotationContext.current.runId !== run?.runId)
+    annotationContext.current = { runId: run?.runId };
+  const renderedAnnotationContext = annotationContext.current;
   async function inspectFrozenInputs() {
     if (!run) return;
     const response = await api(`/runs/${run.runId}/snapshot`);
@@ -159,11 +166,23 @@ export function ResultsView({
       .catch(() => {});
   }, [run?.runId]);
   useEffect(() => {
+    setEditingTrace(null);
+    setEditingAnnotation(null);
+    setAnnotation("");
+    setAnnotations([]);
+  }, [run?.runId]);
+  useEffect(() => {
     if (!run) return;
+    let current = true;
     void doAction("Reading immutable evidence", loadEvidence);
     void api(`/runs/${run.runId}/annotations`)
-      .then((r) => setAnnotations(items(r)))
+      .then((r) => {
+        if (current) setAnnotations(items(r));
+      })
       .catch(() => {});
+    return () => {
+      current = false;
+    };
   }, [run?.runId, run?.status, run?.state]);
   const filtered = useMemo(
     () =>
@@ -839,7 +858,15 @@ export function ResultsView({
               evidence.
             </p>
             {annotations.map((a) => (
-              <article className="annotation" key={a.annotationId}>
+              <article
+                className="annotation"
+                key={a.annotationId}
+                aria-label={
+                  a.kind === "trace_link"
+                    ? `External reference ${a.target?.uri || a.annotationId}`
+                    : undefined
+                }
+              >
                 <div>
                   <strong>{a.kind || "comment"}</strong>
                   <span>rev {a.revision}</span>
@@ -850,6 +877,9 @@ export function ResultsView({
                     : a.text || a.content}
                 </p>
                 <small>{a.createdAt || a.timestamp}</small>
+                {a.kind === "trace_link" && (
+                  <TraceReferenceDetails annotation={a} />
+                )}
                 {!a.deleted && a.kind === "comment" && (
                   <div className="annotation-actions">
                     <button
@@ -869,15 +899,72 @@ export function ResultsView({
                             method: "DELETE",
                             revision: String(a.revision),
                           });
-                          setAnnotations(
-                            items(await api(`/runs/${run.runId}/annotations`)),
+                          const rows = items<Data>(
+                            await api(`/runs/${run.runId}/annotations`),
                           );
+                          if (
+                            annotationContext.current ===
+                            renderedAnnotationContext
+                          )
+                            setAnnotations(rows);
                         })
                       }
                     >
                       Remove note
                     </button>
                   </div>
+                )}
+                {!a.deleted && a.kind === "trace_link" && (
+                  <div className="annotation-actions">
+                    <button
+                      className="small-button"
+                      onClick={() => setEditingTrace(a)}
+                    >
+                      Edit external reference
+                    </button>
+                    <button
+                      className="small-button"
+                      onClick={() =>
+                        void doAction(
+                          "Removing external reference",
+                          async () => {
+                            await api(`/annotations/${a.annotationId}`, {
+                              method: "DELETE",
+                              revision: String(a.revision),
+                            });
+                            const rows = items<Data>(
+                              await api(`/runs/${run.runId}/annotations`),
+                            );
+                            if (
+                              annotationContext.current !==
+                              renderedAnnotationContext
+                            )
+                              return;
+                            setAnnotations(rows);
+                            if (editingTrace?.annotationId === a.annotationId)
+                              setEditingTrace(null);
+                          },
+                        )
+                      }
+                    >
+                      Remove external reference
+                    </button>
+                  </div>
+                )}
+                {!!a.history?.length && (
+                  <details>
+                    <summary>Revision history ({a.history.length})</summary>
+                    {a.history.map((previous: Data) => (
+                      <section key={previous.revision}>
+                        <strong>Revision {previous.revision}</strong>
+                        {previous.kind === "trace_link" ? (
+                          <TraceReferenceDetails annotation={previous} />
+                        ) : (
+                          <p>{previous.text}</p>
+                        )}
+                      </section>
+                    ))}
+                  </details>
                 )}
                 <Json value={a} />
               </article>
@@ -914,10 +1001,15 @@ export function ResultsView({
                       key: mutationKey(),
                     });
                   }
-                  setEditingAnnotation(null);
-                  setAnnotations(
-                    items(await api(`/runs/${run.runId}/annotations`)),
+                  if (annotationContext.current !== renderedAnnotationContext)
+                    return;
+                  const rows = items<Data>(
+                    await api(`/runs/${run.runId}/annotations`),
                   );
+                  if (annotationContext.current !== renderedAnnotationContext)
+                    return;
+                  setEditingAnnotation(null);
+                  setAnnotations(rows);
                   setAnnotation("");
                 });
               }}
@@ -954,6 +1046,27 @@ export function ResultsView({
               An external requirement reference is traceability, not proof that
               the requirement passed.
             </p>
+            <TraceLinkEditor
+              key={run.runId}
+              run={run}
+              editing={editingTrace?.runId === run.runId ? editingTrace : null}
+              doAction={doAction}
+              onCancel={() => {
+                if (annotationContext.current === renderedAnnotationContext)
+                  setEditingTrace(null);
+              }}
+              onSaved={async () => {
+                if (annotationContext.current !== renderedAnnotationContext)
+                  return;
+                const rows = items<Data>(
+                  await api(`/runs/${run.runId}/annotations`),
+                );
+                if (annotationContext.current !== renderedAnnotationContext)
+                  return;
+                setEditingTrace(null);
+                setAnnotations(rows);
+              }}
+            />
           </aside>
         </div>
       )}
@@ -964,6 +1077,479 @@ export function ResultsView({
         />
       )}
     </div>
+  );
+}
+function TraceReferenceDetails({ annotation }: { annotation: Data }) {
+  return (
+    <section
+      className="trace-reference-details"
+      style={{ overflowWrap: "anywhere" }}
+    >
+      <dl className="key-values">
+        <div>
+          <dt>External URI</dt>
+          <dd>{annotation.target?.uri}</dd>
+        </div>
+        <div>
+          <dt>Referenced revision</dt>
+          <dd>{annotation.target?.revision}</dd>
+        </div>
+        <div>
+          <dt>Reported claim status</dt>
+          <dd>
+            <span
+              className="trace-reported-status"
+              style={{ whiteSpace: "pre-wrap" }}
+            >
+              {annotation.target?.claimStatus ?? "Not supplied"}
+            </span>
+          </dd>
+        </div>
+      </dl>
+      <p className="field-hint">
+        Reported metadata only. Studio has not verified this external claim.
+      </p>
+      {!!annotation.elementRefs?.length && (
+        <p>Model / Scenario: {annotation.elementRefs.join(", ")}</p>
+      )}
+      {!!annotation.definitionRefs?.length && (
+        <p>
+          Frozen definitions:{" "}
+          {annotation.definitionRefs
+            .map(
+              (ref: Data) => `${ref.definitionRef} (${ref.definitionDigest})`,
+            )
+            .join(", ")}
+        </p>
+      )}
+      {!!annotation.evidenceRefs?.length && (
+        <p>Evidence: {annotation.evidenceRefs.join(", ")}</p>
+      )}
+    </section>
+  );
+}
+function TraceLinkEditor({
+  run,
+  editing,
+  doAction,
+  onSaved,
+  onCancel,
+}: {
+  run: Run;
+  editing: Data | null;
+  doAction: DoAction;
+  onSaved: () => Promise<void>;
+  onCancel: () => void;
+}) {
+  const [open, setOpen] = useState(false),
+    [uri, setUri] = useState(""),
+    [revision, setRevision] = useState(""),
+    [includeClaim, setIncludeClaim] = useState(false),
+    [claim, setClaim] = useState(""),
+    [note, setNote] = useState(""),
+    [elements, setElements] = useState<string[]>([]),
+    [definitions, setDefinitions] = useState<string[]>([]),
+    [journal, setJournal] = useState(true),
+    [subjects, setSubjects] = useState<Data[]>([]),
+    [definitionOptions, setDefinitionOptions] = useState<Data[]>([]),
+    [snapshotId, setSnapshotId] = useState(""),
+    [loading, setLoading] = useState(false),
+    [error, setError] = useState(""),
+    [saving, setSaving] = useState(false);
+  const uriInput = useRef<HTMLInputElement | null>(null),
+    addButton = useRef<HTMLButtonElement | null>(null);
+  const hasOpened = useRef(false);
+  useEffect(() => {
+    if (!editing) return;
+    setUri(editing.target.uri);
+    setRevision(editing.target.revision);
+    setIncludeClaim(Object.hasOwn(editing.target, "claimStatus"));
+    setClaim(editing.target.claimStatus ?? "");
+    setNote(editing.text || "");
+    setElements(editing.elementRefs || []);
+    setDefinitions(
+      (editing.definitionRefs || []).map((ref: Data) => ref.definitionRef),
+    );
+    setJournal(
+      (editing.evidenceRefs || []).includes(run.runId + ":reference-journal"),
+    );
+    setOpen(true);
+  }, [editing?.annotationId, editing?.revision]);
+  useEffect(() => {
+    if (open) {
+      hasOpened.current = true;
+      uriInput.current?.focus();
+    } else if (hasOpened.current) addButton.current?.focus();
+  }, [open, editing?.annotationId]);
+  useEffect(() => {
+    if (!open) return;
+    let current = true;
+    setLoading(true);
+    setError("");
+    setSnapshotId("");
+    setSubjects([]);
+    setDefinitionOptions([]);
+    void Promise.all([
+      api(`/runs/${run.runId}/snapshot`),
+      api(`/runs/${run.runId}/definitions`),
+    ])
+      .then(([response, admitted]) => {
+        if (!current) return;
+        const snapshot = response.snapshot;
+        if (
+          response.integrity !== "valid" ||
+          response.readOnly !== true ||
+          snapshot?.snapshotId !== run.snapshotId
+        )
+          throw new Error(
+            "The backend could not verify the selected run's frozen subjects.",
+          );
+        const projection = projectDisplay({
+          projectId: run.projectId || "",
+          name: "Frozen inputs",
+          revision: snapshot.projectRevision || 1,
+          documents: snapshot.documents,
+        } as Project);
+        if (projection.parseErrors.length)
+          throw new Error("Frozen subject source is unavailable for display.");
+        const options = new Map<string, Data>();
+        for (const resource of projection.resources) {
+          const ref = `xdl://${resource.metadata.namespace}/${resource.kind.toLowerCase()}/${resource.metadata.name}`;
+          options.set(ref, {
+            ref,
+            label: `${resource.kind} · ${resource.metadata.name}`,
+          });
+          if (resource.kind === "System")
+            for (const [collection, kind] of [
+              ["nodes", "node"],
+              ["componentInstances", "componentInstance"],
+              ["devices", "device"],
+              ["sensors", "sensor"],
+              ["actuators", "actuator"],
+              ["models", "model"],
+              ["flows", "flow"],
+            ])
+              for (const item of resource.spec[collection] || [])
+                options.set(ref + "#" + item.id, {
+                  ref: ref + "#" + item.id,
+                  label: `${kind} · ${item.id}`,
+                });
+        }
+        setSubjects([...options.values()]);
+        setDefinitionOptions(items(admitted));
+        setSnapshotId(snapshot.snapshotId);
+      })
+      .catch((reason) => {
+        if (current)
+          setError(
+            reason instanceof Error
+              ? reason.message
+              : "Frozen subjects are unavailable.",
+          );
+      })
+      .finally(() => {
+        if (current) setLoading(false);
+      });
+    return () => {
+      current = false;
+    };
+  }, [open, run.runId, run.snapshotId]);
+  function reset() {
+    setUri("");
+    setRevision("");
+    setIncludeClaim(false);
+    setClaim("");
+    setNote("");
+    setElements([]);
+    setDefinitions([]);
+    setJournal(true);
+  }
+  function close() {
+    setOpen(false);
+    reset();
+    onCancel();
+    addButton.current?.focus();
+  }
+  const toggle = (values: string[], value: string, checked: boolean) =>
+    checked ? [...values, value] : values.filter((item) => item !== value);
+  const unavailable =
+    elements.some((ref) => !subjects.some((item) => item.ref === ref)) ||
+    definitions.some(
+      (ref) => !definitionOptions.some((item) => item.definitionRef === ref),
+    ) ||
+    (editing?.definitionRefs || []).some(
+      (saved: Data) =>
+        definitions.includes(saved.definitionRef) &&
+        !definitionOptions.some(
+          (item) =>
+            item.definitionRef === saved.definitionRef &&
+            item.definitionDigest === saved.definitionDigest,
+        ),
+    );
+  const requiresSource = elements.length > 0 || definitions.length > 0;
+  return (
+    <section>
+      <h3>
+        {editing
+          ? "Edit external reference"
+          : "External requirement / test reference"}
+      </h3>
+      {!open ? (
+        <button
+          ref={addButton}
+          className="button"
+          onClick={() => {
+            reset();
+            setOpen(true);
+          }}
+        >
+          Add external reference
+        </button>
+      ) : (
+        <form
+          onSubmit={(event) => {
+            event.preventDefault();
+            if (saving) return;
+            setSaving(true);
+            void doAction("Saving external reference", async () => {
+              try {
+                if (loading || unavailable || (requiresSource && !snapshotId))
+                  throw new Error("Verified frozen subjects are required.");
+                const body: Data = {
+                  kind: "trace_link",
+                  text: note,
+                  target: {
+                    uri,
+                    revision,
+                    ...(includeClaim ? { claimStatus: claim } : {}),
+                  },
+                  elementRefs: elements,
+                  definitionRefs: definitions.map((ref) => {
+                    const item = definitionOptions.find(
+                      (value) => value.definitionRef === ref,
+                    )!;
+                    return {
+                      definitionRef: ref,
+                      definitionDigest: item.definitionDigest,
+                    };
+                  }),
+                  evidenceRefs: journal
+                    ? [run.runId + ":reference-journal"]
+                    : [],
+                };
+                if (editing)
+                  await api(`/annotations/${editing.annotationId}`, {
+                    method: "PUT",
+                    revision: String(editing.revision),
+                    body: { ...body, revision: editing.revision },
+                  });
+                else
+                  await api(`/runs/${run.runId}/annotations`, {
+                    method: "POST",
+                    body,
+                    key: mutationKey(),
+                  });
+                await onSaved();
+                close();
+              } finally {
+                setSaving(false);
+              }
+            });
+          }}
+        >
+          <p className="field-hint">
+            These associations use this run's immutable inputs. They do not
+            change source, definitions, evaluation verdicts or evidence.
+          </p>
+          <label>
+            Requirement or test URI
+            <input
+              ref={uriInput}
+              value={uri}
+              onChange={(event) => setUri(event.target.value)}
+              required
+              maxLength={2048}
+              placeholder="urn:requirements:example:17"
+            />
+          </label>
+          <label>
+            Referenced revision
+            <input
+              value={revision}
+              onChange={(event) => setRevision(event.target.value)}
+              required
+              maxLength={256}
+              placeholder="Pinned revision, or unknown"
+            />
+          </label>
+          <label className="checkbox-label">
+            <input
+              type="checkbox"
+              checked={includeClaim}
+              onChange={(event) => setIncludeClaim(event.target.checked)}
+            />
+            Include reported claim status
+          </label>
+          {includeClaim && (
+            <>
+              <label>
+                Reported claim status
+                <input
+                  value={claim}
+                  onChange={(event) => setClaim(event.target.value)}
+                  required
+                  maxLength={256}
+                  aria-describedby="reported-claim-hint"
+                />
+              </label>
+              <small id="reported-claim-hint">
+                Preserved as reported text. Studio does not verify it or infer a
+                pass.
+              </small>
+            </>
+          )}
+          <label>
+            Reference note (optional)
+            <textarea
+              value={note}
+              onChange={(event) => setNote(event.target.value)}
+              maxLength={4096}
+              rows={2}
+            />
+          </label>
+          {loading && <p role="status">Reading verified frozen subjects…</p>}
+          {error && (
+            <p role="alert">
+              Frozen model/assertion references are unavailable: {error}{" "}
+              Journal-only references remain available. Close and reopen to
+              retry subject inspection.
+            </p>
+          )}
+          {snapshotId && (
+            <p className="field-hint">Frozen snapshot: {snapshotId}</p>
+          )}
+          <fieldset className="provider-checkboxes">
+            <legend>Frozen model and Scenario references</legend>
+            {subjects.map((item) => (
+              <label key={item.ref} className="checkbox-label">
+                <input
+                  type="checkbox"
+                  checked={elements.includes(item.ref)}
+                  disabled={
+                    !elements.includes(item.ref) && elements.length >= 32
+                  }
+                  onChange={(event) =>
+                    setElements(
+                      toggle(elements, item.ref, event.target.checked),
+                    )
+                  }
+                />
+                {item.label}
+              </label>
+            ))}
+            {!loading &&
+              elements
+                .filter((ref) => !subjects.some((item) => item.ref === ref))
+                .map((ref) => (
+                  <label key={ref} className="checkbox-label">
+                    <input
+                      type="checkbox"
+                      checked
+                      onChange={() =>
+                        setElements(elements.filter((value) => value !== ref))
+                      }
+                    />
+                    Retained unavailable subject · {ref}
+                  </label>
+                ))}
+          </fieldset>
+          <fieldset className="provider-checkboxes">
+            <legend>Frozen assertions and metrics</legend>
+            {definitionOptions.map((item) => (
+              <label key={item.definitionRef} className="checkbox-label">
+                <input
+                  type="checkbox"
+                  checked={definitions.includes(item.definitionRef)}
+                  disabled={
+                    !definitions.includes(item.definitionRef) &&
+                    definitions.length >= 32
+                  }
+                  onChange={(event) =>
+                    setDefinitions(
+                      toggle(
+                        definitions,
+                        item.definitionRef,
+                        event.target.checked,
+                      ),
+                    )
+                  }
+                />
+                {item.definition?.kind || "Definition"} ·{" "}
+                {item.definition?.name || item.definitionRef}
+              </label>
+            ))}
+            {!loading &&
+              definitions
+                .filter(
+                  (ref) =>
+                    !definitionOptions.some(
+                      (item) => item.definitionRef === ref,
+                    ),
+                )
+                .map((ref) => (
+                  <label key={ref} className="checkbox-label">
+                    <input
+                      type="checkbox"
+                      checked
+                      onChange={() =>
+                        setDefinitions(
+                          definitions.filter((value) => value !== ref),
+                        )
+                      }
+                    />
+                    Retained unavailable definition · {ref}
+                  </label>
+                ))}
+            {!loading && !definitionOptions.length && (
+              <p>No admitted frozen definitions were reported.</p>
+            )}
+          </fieldset>
+          <label className="checkbox-label">
+            <input
+              type="checkbox"
+              checked={journal}
+              onChange={(event) => setJournal(event.target.checked)}
+            />
+            Owned run journal
+          </label>
+          {unavailable && !loading && (
+            <p role="alert">
+              A saved subject is unavailable or its digest differs. Cancel to
+              preserve it, or explicitly remove that association before saving.
+            </p>
+          )}
+          <div className="form-actions">
+            <button
+              className="button primary"
+              disabled={
+                saving ||
+                loading ||
+                unavailable ||
+                (requiresSource && !snapshotId) ||
+                !uri ||
+                !revision ||
+                (includeClaim && !claim.trim())
+              }
+            >
+              {editing ? "Save reference revision" : "Save external reference"}
+            </button>
+            <button type="button" className="button" onClick={close}>
+              Cancel reference edit
+            </button>
+          </div>
+        </form>
+      )}
+    </section>
   );
 }
 function StatusCard({

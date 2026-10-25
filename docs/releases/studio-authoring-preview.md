@@ -11,8 +11,8 @@ project/run/artifact-registration retention. Unsupported reference topology or s
 execution. Artifact removal is registration metadata only. Private complete backup/restore preserves
 canonical source, snapshots and journals, clears restored browser sessions and never replays work.
 
-Fifteen component tasks are complete with cited evidence: T003, T006, T013, T017, T022, T024, T036,
-T041, T042, T044, T050, T085, T086, T087, T092. This does not waive their milestone acceptance gates.
+Seventeen component tasks are complete with cited evidence: T003, T006, T013, T017, T022, T024, T036,
+T041, T042, T044, T050, T085, T086, T087, T092, T020, T094. This does not waive their milestone acceptance gates.
 
 ## Executed verification
 
@@ -46,9 +46,8 @@ Windows-invalid Git filename. No WSL/container substitute or verified Windows in
 
 External Lite still needs an admitted effective-input/plan contract and permitted environment.
 Feedback compilation, independent live industry providers, physical provider/device/permission,
-clock/shutdown evidence and five first-time users remain blocked. Ready Linux work includes readiness
-dimension/limit display, trace claim-status preservation, source/time filters, cursor resynchronization
-and diagnostic explanation coverage. M5 remains deferred.
+clock/shutdown evidence and five first-time users remain blocked. Ready Linux work includes remaining admission negatives, source/time filters, cursor resynchronization
+and diagnostic explanation coverage. Readiness and trace-claim successor evidence is recorded below. M5 remains deferred.
 
 ## Launch and recovery
 
@@ -63,3 +62,20 @@ Open http://127.0.0.1:8876 and read the one-use token locally from
 browser closure does not own or terminate runs. Follow `docs/user/recovery.md` for stopped-root full
 backup/restore, `docs/user/retention.md` for explicit deletion, and `docs/user/scenario-authoring.md`
 for authored intent versus admitted execution. All local implementation artifacts remain on loop10.
+
+## Readiness and trace-claim successor
+
+Ten independent readiness facts, exact selected-provider limits/remediation and frozen plan inspection
+now support informed admission. Backend fixes reject selected-provider substitution, unknown facts,
+incompatible operation/XDL scope and blocked-snapshot campaign promotion, while resolving accepted
+idempotent retries before mutable readmission. Revisioned external claims preserve exact optional
+reported status and frozen model/Scenario/definition/evidence subjects. A reported external pass never
+changes the actual assertion verdict. Review repairs isolate annotation editors/callbacks across runs
+and route snapshot display through bounded canonical acquisition.
+
+The local 388-test backend cohort passed before the final display-reader repair; 13 affected reader
+and rerun checks passed afterward. The final browser candidate passed 15 checks, including ten actual
+journeys, with source unchanged. Final 30-repetition p95 values: selection 29.5 ms, open/validation
+590.4 ms, and recorded-fixture history 196.2 ms. Counts overlap and are not added. See
+`evidence/studio/release/linux-readiness-claims-2026-10-25/` and independent component reviews.
+No M0–M4 milestone is accepted from these Linux component results.

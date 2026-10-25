@@ -89,6 +89,7 @@ class Annotation(Body):
     target: dict[str, Any] | None = None
     elementRefs: list[str] = Field(default_factory=list, max_length=32)
     evidenceRefs: list[str] = Field(default_factory=list, max_length=32)
+    definitionRefs: list[dict[str, str]] = Field(default_factory=list, max_length=32)
 
 
 class AnnotationUpdate(Annotation):

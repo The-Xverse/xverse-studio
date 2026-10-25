@@ -1,0 +1,36 @@
+
+> xverse-studio-workspace@0.1.0 test:e2e
+> playwright test -c tests/e2e/playwright.config.ts --grep reported external claims
+
+
+Running 1 test using 1 worker
+
+(node:2647703) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 tests/e2e/trace-claims.spec.ts:5:5 › reported external claims: frozen subjects, revision history, neutral PASS label and immutable exchange (5.7s)
+
+
+  1) tests/e2e/trace-claims.spec.ts:5:5 › reported external claims: frozen subjects, revision history, neutral PASS label and immutable exchange
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    Expected: {"capabilityDigest": "sha256:bce965062c6d3655583597c1e3e79ad2c9d3ef28384ee3c7e354be8930c76d29", "compiler": [Object], "configuration": [Object], "createdAt": 1792932743.7360792, "documents": [Object], "plan": [Object], "planDigest": "sha256:c10e033f4525b0a3fc545e5e0c3b5a872a6b209b4727b494b8da09638c586330", "profileLocks": [Array], "projectDocuments": [Object], "projectId": "prj-499509cc-eda8-4433-9659-73b7503ece4b", "projectRevisionInputsDigest": "sha256:39ca25a02b9935c27cdbb9b2704faa3d722c6e511c9ff58e96dabace4c075f7a", "providerId": "studio.reference", "providerIdentity": [Object], "revision": 2, "selection": [Object], "semanticDigest": "sha256:810dab17895a904694f192f664e9622b021f1775fb0619c05fcd870011217604", "snapshotDigest": "sha256:3cea6daffd06c35179cff49a5a6a4b3dc9e9cc83206d070502caef8a857b22ad", "snapshotId": "snap-2952fc7e-d799-45dd-b664-9d19be6507c3"}
+    Received: undefined
+
+      212 |   expect(
+      213 |     (await traceApi(page, `/runs/${runId}/snapshot`)).body.snapshot,
+    > 214 |   ).toEqual(beforeSnapshot);
+          |     ^
+      215 |   expect((await traceApi(page, `/runs/${runId}/evidence`)).body).toEqual(
+      216 |     beforeEvidence,
+      217 |   );
+        at <workspace>/tests/e2e/trace-claims.spec.ts:214:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/trace-claims-reported-exte-6d91d-abel-and-immutable-exchange/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/trace-claims-reported-exte-6d91d-abel-and-immutable-exchange/error-context.md
+
+  1 failed
+    tests/e2e/trace-claims.spec.ts:5:5 › reported external claims: frozen subjects, revision history, neutral PASS label and immutable exchange

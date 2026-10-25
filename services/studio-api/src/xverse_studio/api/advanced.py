@@ -314,10 +314,9 @@ def install_advanced(app, store, projects, runs, adapter):
     def evaluation(evaluationId: str):
         return store.get("evaluation", evaluationId)
 
-    def campaign_preview(body):
-        snapshot = store.get("snapshot", body.snapshotId)
-        if not snapshot.get("configuration") or not snapshot.get("planDigest"):
-            raise Problem("ADMISSION_REJECTED", "Campaigns need an admitted frozen reference snapshot.")
+    def campaign_preview(body, db=None):
+        snapshot = store.get("snapshot", body.snapshotId, db)
+        runs.require_campaign_snapshot(snapshot, db)
         try:
             maximum_duration = max([snapshot["configuration"]["duration"], *body.matrix.get("duration", [])])
             return planner.preview(snapshot, body.matrix, budget=body.budget, concurrency=body.concurrency, duration_seconds=maximum_duration, stop_policy=body.stopPolicy)
@@ -397,8 +396,8 @@ def install_advanced(app, store, projects, runs, adapter):
 
     @app.post("/api/v1/campaigns", status_code=202)
     def new_campaign(body: Campaign, request: Request):
-        preview = campaign_preview(body)
         def accepted(db):
+            preview = campaign_preview(body, db)
             if len(store.all("campaign", db)) >= 128:
                 raise Problem("LIMIT_EXCEEDED", "The retained campaign limit is 128; export and apply an admitted retention policy before scheduling more.", 413)
             campaign_id, operation_id = uid("campaign-"), uid("op-")
@@ -473,13 +472,25 @@ def install_advanced(app, store, projects, runs, adapter):
     def annotation_refs(run_id, body):
         if set(body.evidenceRefs) - {run_id + ":reference-journal"}:
             raise Problem("EVIDENCE_SELECTION_INVALID", "Annotation evidence references must belong to this run.")
-        if body.elementRefs:
+        if body.elementRefs or body.definitionRefs:
             run = runs.read(run_id)
             snapshot = store.get("snapshot", run["snapshotId"])
-            graph = adapter.project(snapshot["documents"])
-            known = {r["ref"] for r in graph.get("resources", []) + graph.get("elements", []) + graph.get("connections", [])}
-            if set(body.elementRefs) - known:
-                raise Problem("MODEL_REFERENCE_UNRESOLVED", "Annotation model references must resolve in this run's frozen inputs.")
+            if snapshot.get("snapshotDigest") != digest({key: value for key, value in snapshot.items() if key != "snapshotDigest"}):
+                raise Problem("SNAPSHOT_INTEGRITY_INVALID", "Annotation subjects require the unchanged frozen run snapshot.")
+            runs.verify_snapshot(snapshot)
+            if body.elementRefs:
+                graph = adapter.project(snapshot["documents"])
+                known = {r["ref"] for r in graph.get("resources", []) + graph.get("elements", []) + graph.get("connections", [])}
+                if set(body.elementRefs) - known:
+                    raise Problem("MODEL_REFERENCE_UNRESOLVED", "Annotation model references must resolve in this run's frozen inputs.")
+            if body.definitionRefs:
+                try:
+                    definitions = {d["definitionRef"]: d["definitionDigest"] for d in snapshot_definitions(snapshot, adapter)}
+                except EvaluationError as exc:
+                    _failure(exc)
+                for ref in body.definitionRefs:
+                    if set(ref) != {"definitionRef", "definitionDigest"} or definitions.get(ref.get("definitionRef")) != ref.get("definitionDigest"):
+                        raise Problem("DEFINITION_REFERENCE_UNRESOLVED", "Annotation assertion/metric subjects must resolve with their exact definition digest in this run's frozen inputs.")
 
     @app.post("/api/v1/runs/{runId}/annotations", status_code=201)
     def annotate(runId: str, body: Annotation, request: Request, response: Response):

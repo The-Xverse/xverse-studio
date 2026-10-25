@@ -1,0 +1,53 @@
+{
+  "capturedAt": "2026-10-25T13:13:18.770873+00:00",
+  "result": "PASS",
+  "sourceDigests": {
+    "apps/studio-web/src/features/results/ResultsView.tsx": "sha256:2504172d35c12b56158b674d4b9c062f5b97421341b9939eadb8e6d02a6faba1",
+    "tests/e2e/annotation-context.spec.ts": "sha256:574197dc8f090d2b3a923e1d0a3147d7dce9c01f523eb0c72752ebbda3076826",
+    "tests/e2e/trace-claims.spec.ts": "sha256:ecac324f151391d44e5072ad5a6313d34900891507312494e2dc7a33963ff5f9",
+    "tests/e2e/trace-claims-flow.ts": "sha256:198c9b1e2feafa0ade55c6294927d5d1aa8e3ead8a1fd8f8c053f72234a40b89"
+  },
+  "build": "PASS TypeScript and Vite (build-context.txt)",
+  "nativeBrowser": {
+    "passed": 2,
+    "failed": 0,
+    "skipped": 0,
+    "durationSeconds": 17.7,
+    "caseDurationsSeconds": {
+      "annotationContext": 10.4,
+      "reportedClaim": 6.6
+    },
+    "wrapperExitCode": 0,
+    "command": "env -u PYTHONPATH PATH=<pinned-node-24.22.1>/bin:$PATH TMPDIR=<loop10-cache>/tmp PLAYWRIGHT_BROWSERS_PATH=<loop10-cache>/playwright .venv/bin/python scripts/test_browser.py --grep \"reported external claims|annotation run context\""
+  },
+  "contextRepair": [
+    "clear note editing record/text on run identity change",
+    "ignore stale annotation read/write completions from prior rendered run contexts",
+    "retain existing per-run TraceLinkEditor key guard",
+    "do not change loadEvidence or backend behavior"
+  ],
+  "contextVerified": [
+    "same-view frozen rerun clears prior note edit/text and unsaved trace form",
+    "original prior annotation remains unchanged",
+    "a deliberately delayed real old save/read refresh cannot overwrite a newly selected run draft or list",
+    "intended old-run save is retained in its original run; new run has no annotation write"
+  ],
+  "selectorDiagnostic": {
+    "labelTexts": [
+      "CommentIntentionally saved on second run"
+    ],
+    "value": "Intentionally saved on second run"
+  },
+  "selectorExplanation": "Implicit label textContent includes its textarea value after editing; browser accessible textbox name remains Comment. Regression uses getByRole(textbox,name=Comment) and records the DOM label text rather than adding sleeps or weakening state assertions.",
+  "boundaries": [
+    "All execution uses the owned Linux reference provider",
+    "Only reader-unavailable response and delayed refresh delivery are browser transport fixtures; metadata writes/execution/export/import use real backend",
+    "No external requirement fetched or interpreted as proof",
+    "Windows installation/testing held at user request"
+  ],
+  "rawArchives": [
+    ".studio-local/evidence-raw/trace-context-final/",
+    ".studio-local/evidence-raw/trace-context-selector-failure/",
+    ".studio-local/evidence-raw/annotation-context-green-before-final-browser/"
+  ]
+}

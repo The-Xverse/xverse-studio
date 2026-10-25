@@ -1,0 +1,118 @@
+{
+  "sourceBefore": {
+    "services/studio-api/src/xverse_studio/preflight/__init__.py": "09d7ad0db237991d7a5444ff4ad9a3bc1ad34cdfdd3746b7a9f7bc71543c4330",
+    "services/studio-api/src/xverse_studio/runs/service.py": "ead5c3b2f96edecfbd69f3d819b5ad35280b9832b1980fa4c9fb51576e3dca8e"
+  },
+  "cases": [
+    {
+      "case": "start_target_mismatch",
+      "httpStatus": 200,
+      "status": "blocked",
+      "capabilities": {
+        "status": "unsupported",
+        "message": "The descriptor does not admit this model/control contract.",
+        "elementRefs": [
+          "xdl://org.xverse.studio.process-control/system/reference-loop"
+        ],
+        "diagnosticCodes": [
+          "CAPABILITY_UNSUPPORTED"
+        ],
+        "remediation": "Select the owned reference template or another independently admitted compatible provider."
+      },
+      "target": {
+        "status": "blocked",
+        "message": "This target cannot accept execution under the current source/provider/resource facts.",
+        "elementRefs": [
+          "xdl://org.xverse.studio.process-control/system/reference-loop"
+        ],
+        "diagnosticCodes": [],
+        "remediation": "Resolve the independent blocked/unknown dimensions, then recheck."
+      },
+      "configurationPresent": false
+    },
+    {
+      "case": "unsupported_xdl_version",
+      "httpStatus": 200,
+      "status": "blocked",
+      "capabilities": {
+        "status": "unsupported",
+        "message": "The descriptor does not admit this model/control contract.",
+        "elementRefs": [
+          "xdl://org.xverse.studio.process-control/system/reference-loop"
+        ],
+        "diagnosticCodes": [
+          "CAPABILITY_UNSUPPORTED"
+        ],
+        "remediation": "Select the owned reference template or another independently admitted compatible provider."
+      },
+      "target": {
+        "status": "blocked",
+        "message": "This target cannot accept execution under the current source/provider/resource facts.",
+        "elementRefs": [
+          "xdl://org.xverse.studio.process-control/system/reference-loop"
+        ],
+        "diagnosticCodes": [],
+        "remediation": "Resolve the independent blocked/unknown dimensions, then recheck."
+      },
+      "configurationPresent": false
+    },
+    {
+      "case": "availability_not_boolean",
+      "httpStatus": 200,
+      "status": "blocked",
+      "capabilities": {
+        "status": "unknown",
+        "message": "This fact has no admitted read-only check for the selected unavailable provider.",
+        "elementRefs": [
+          "xdl://org.xverse.studio.process-control/system/reference-loop"
+        ],
+        "diagnosticCodes": [],
+        "remediation": "Admit the selected provider before checking this dimension."
+      },
+      "target": {
+        "status": "unknown",
+        "message": "This fact has no admitted read-only check for the selected unavailable provider.",
+        "elementRefs": [
+          "xdl://org.xverse.studio.process-control/system/reference-loop"
+        ],
+        "diagnosticCodes": [],
+        "remediation": "Admit the selected provider before checking this dimension."
+      },
+      "configurationPresent": false
+    },
+    {
+      "case": "host_compatibility_not_boolean",
+      "httpStatus": 200,
+      "status": "blocked",
+      "capabilities": {
+        "status": "unknown",
+        "message": "This fact has no admitted read-only check for the selected unavailable provider.",
+        "elementRefs": [
+          "xdl://org.xverse.studio.process-control/system/reference-loop"
+        ],
+        "diagnosticCodes": [],
+        "remediation": "Admit the selected provider before checking this dimension."
+      },
+      "target": {
+        "status": "unknown",
+        "message": "This fact has no admitted read-only check for the selected unavailable provider.",
+        "elementRefs": [
+          "xdl://org.xverse.studio.process-control/system/reference-loop"
+        ],
+        "diagnosticCodes": [],
+        "remediation": "Admit the selected provider before checking this dimension."
+      },
+      "configurationPresent": false
+    }
+  ],
+  "scope": "isolated Linux fixtures; no Windows/hardware/providers launched",
+  "runCount": 0,
+  "sourceAfter": {
+    "services/studio-api/src/xverse_studio/preflight/__init__.py": "09d7ad0db237991d7a5444ff4ad9a3bc1ad34cdfdd3746b7a9f7bc71543c4330",
+    "services/studio-api/src/xverse_studio/runs/service.py": "ead5c3b2f96edecfbd69f3d819b5ad35280b9832b1980fa4c9fb51576e3dca8e"
+  },
+  "redactionNotes": [
+    "Machine-specific workspace/cache prefixes normalized; raw original retained outside Git under .studio-local/evidence-raw/readiness-claims.",
+    "Outcome fields and recorded product source digests are unchanged."
+  ]
+}

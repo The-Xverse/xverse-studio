@@ -466,17 +466,7 @@ def create_app(
     def frozen_snapshot(runId: str):
         run = store.get("run", runId)
         snapshot = store.get("snapshot", run["snapshotId"])
-        original = store.root / "snapshots" / snapshot["snapshotId"] / "snapshot.json"
-        if (
-            digest({k: v for k, v in snapshot.items() if k != "snapshotDigest"})
-            != snapshot.get("snapshotDigest")
-            or not original.is_file()
-            or original.read_bytes() != canonical(snapshot).encode()
-        ):
-            raise Problem(
-                "SNAPSHOT_INTEGRITY",
-                "The immutable source snapshot cannot be verified.",
-            )
+        runs.verify_snapshot(snapshot)
         return {"snapshot": snapshot, "integrity": "valid", "readOnly": True}
 
     @app.post("/api/v1/runs/{runId}/commands", status_code=202)

@@ -3,7 +3,6 @@ import hashlib
 import hmac
 import json
 import os
-from pathlib import Path
 import secrets
 import subprocess
 import sys
@@ -19,14 +18,12 @@ from xverse_studio.storage.core import (
 )
 from xverse_studio.providers.registry import (
     capability_digest,
-    REFERENCE,
     descriptors,
-    admit_descriptor,
 )
-from xverse_studio.xdl import XDLRejected, reference_configuration
 from xverse_studio.evidence.reader import read_journal
 from xverse_studio.deployments import compile_selection
 from xverse_studio.profiles import ProfileRegistry
+from xverse_studio.preflight import reference_readiness
 
 ACTIVE = {
     "requested",
@@ -74,39 +71,16 @@ class Runs:
         if compiled["valid"]:
             documents = compiled["contributingDocuments"]
         diagnostics = list(compiled["diagnostics"])
-        configuration = None
+        provider_id = selection.get("providerId", "studio.reference")
         provider = next(
-            value
-            for value in descriptors()
-            if value["providerId"] == "studio.reference"
+            (value for value in descriptors() if value["providerId"] == provider_id),
+            None,
         )
-        try:
-            if not provider.get("available") or not provider.get("hostCompatible"):
-                raise XDLRejected(
-                    "The selected provider has no admitted native operation on this host.",
-                    "PROVIDER_UNAVAILABLE",
-                )
-            admit_descriptor(provider)
-            if not compiled["valid"]:
-                raise XDLRejected(
-                    "Correct authoritative XDL diagnostics before executing.",
-                    "MODEL_INVALID",
-                )
-            configuration = reference_configuration(documents, compiled)
-            if selection.get("providerId", "studio.reference") != "studio.reference":
-                raise XDLRejected(
-                    "This provider has no admitted execution path on this host.",
-                    "PROVIDER_UNAVAILABLE",
-                )
-        except XDLRejected as e:
-            diagnostics.append(
-                {
-                    "code": e.code,
-                    "severity": "error",
-                    "message": str(e),
-                    "remediation": "Select the owned reference blueprint or install an independently admitted provider.",
-                }
-            )
+        active_count = sum(row["state"] in ACTIVE for row in self.store.all("run"))
+        readiness, admission_diagnostics, configuration, limits = reference_readiness(
+            documents, compiled, provider_id, provider, active_count
+        )
+        diagnostics.extend(admission_diagnostics)
         snapid = uid("snap-")
         pfid = uid("pf-")
         snapshot = {
@@ -121,7 +95,7 @@ class Runs:
             "planDigest": compiled.get("planDigest"),
             "semanticDigest": compiled.get("semanticDigest"),
             "configuration": configuration,
-            "providerId": "studio.reference",
+            "providerId": provider_id,
             "providerIdentity": provider,
             "capabilityDigest": capability_digest(),
             "createdAt": time.time(),
@@ -135,6 +109,12 @@ class Runs:
         pf = {
             "preflightId": pfid,
             "snapshotId": snapid,
+            "snapshotDigest": snapshot["snapshotDigest"],
+            "revision": p["revision"],
+            "providerId": provider_id,
+            "providerIdentity": provider,
+            "readinessVersion": "1.0",
+            "readiness": readiness,
             "status": "ready" if ready else "blocked",
             "planDigest": compiled.get("planDigest"),
             "semanticDigest": compiled.get("semanticDigest"),
@@ -142,14 +122,28 @@ class Runs:
             "expiresAt": time.time() + 60,
             "diagnostics": diagnostics,
             "dimensions": {
-                "model": "valid" if compiled["valid"] else "invalid",
-                "target": "ready" if ready else "blocked",
-                "ownership": "available",
-                "evidenceScope": "owned_reference",
+                **{name: fact["status"] for name, fact in readiness.items()},
+                "evidenceScope": provider.get("evidenceScope", "unavailable")
+                if provider
+                else "unavailable",
             },
-            "limits": REFERENCE["limits"],
+            "limits": limits,
             "selection": refs,
             "contributingDocuments": list(documents),
+            "planPreview": {
+                "snapshotId": snapid,
+                "snapshotDigest": snapshot["snapshotDigest"],
+                "revision": p["revision"],
+                "selection": refs,
+                "planDigest": compiled.get("planDigest"),
+                "semanticDigest": compiled.get("semanticDigest"),
+                "compiler": compiled.get("compiler"),
+                "contributingDocuments": list(documents),
+                "plan": compiled["plan"],
+                "scope": "declared_intent_only",
+            }
+            if compiled.get("plan")
+            else None,
         }
         with self.store.tx() as db:
             self.store.put("snapshot", snapid, snapshot, db)
@@ -160,23 +154,85 @@ class Runs:
         )
         return pf
 
+    def require_campaign_snapshot(self, snapshot, db=None):
+        """Prior admission is required; a compiled blocked draft is not authority.
+
+        Legacy snapshots remain immutable. Resolve their existing matching ready
+        preflight with a bounded parameterized metadata query instead of upgrading
+        a historical blocked snapshot to an owned reference configuration.
+        """
+        if db is None:
+            with self.store.tx() as connection:
+                return self.require_campaign_snapshot(snapshot, connection)
+        if (
+            snapshot.get("providerId") != "studio.reference"
+            or not snapshot.get("configuration")
+            or not snapshot.get("planDigest")
+        ):
+            raise Problem(
+                "ADMISSION_REJECTED",
+                "Campaigns require a previously admitted owned-reference snapshot.",
+            )
+        self.verify_snapshot(snapshot)
+        needle = '"snapshotId":' + canonical(snapshot["snapshotId"])
+        candidates = []
+        for row in db.execute(
+            "SELECT body FROM records WHERE kind=? AND instr(body,?)>0 LIMIT 32",
+            ("preflight", needle),
+        ):
+            pf = json.loads(row[0])
+            if pf.get("snapshotId") == snapshot["snapshotId"]:
+                candidates.append(pf)
+        if (
+            len(candidates) != 1
+            or candidates[0].get("status") != "ready"
+            or candidates[0].get("planDigest") != snapshot["planDigest"]
+            or candidates[0].get("capabilityDigest") != snapshot.get("capabilityDigest")
+        ):
+            raise Problem(
+                "ADMISSION_REJECTED",
+                "A matching original ready preflight is required; blocked drafts confer no campaign authority.",
+            )
+
+    def verify_snapshot(self, snapshot):
+        from xverse_studio.security.managed_io import open_read, SafeIOError
+
+        if digest(
+            {k: v for k, v in snapshot.items() if k != "snapshotDigest"}
+        ) != snapshot.get("snapshotDigest"):
+            raise Problem(
+                "SNAPSHOT_INTEGRITY", "The frozen snapshot digest cannot be verified."
+            )
+        try:
+            with open_read(
+                self.store.root,
+                self.store.root
+                / "snapshots"
+                / snapshot["snapshotId"]
+                / "snapshot.json",
+            ) as source:
+                if os.fstat(source.fileno()).st_size > 64 * 1024 * 1024:
+                    raise Problem(
+                        "SNAPSHOT_INTEGRITY",
+                        "The frozen snapshot exceeds its read bound.",
+                    )
+                raw = source.read(64 * 1024 * 1024 + 1)
+            if len(raw) > 64 * 1024 * 1024 or raw != canonical(snapshot).encode():
+                raise Problem(
+                    "SNAPSHOT_INTEGRITY",
+                    "The immutable snapshot bytes cannot be verified.",
+                )
+        except (OSError, SafeIOError):
+            raise Problem(
+                "SNAPSHOT_INTEGRITY",
+                "The frozen snapshot file is unavailable or changed during inspection.",
+            ) from None
+
     def start(self, principal, key, payload, *, allow_frozen=False):
         def accepted(db):
             pf = self.store.get("preflight", payload["preflightId"], db)
             snap = self.store.get("snapshot", payload["snapshotId"], db)
-            frozen = (
-                self.store.root / "snapshots" / snap["snapshotId"] / "snapshot.json"
-            )
-            if (
-                digest({k: v for k, v in snap.items() if k != "snapshotDigest"})
-                != snap.get("snapshotDigest")
-                or not frozen.is_file()
-                or frozen.read_bytes() != canonical(snap).encode()
-            ):
-                raise Problem(
-                    "SNAPSHOT_INTEGRITY",
-                    "The frozen snapshot identity or immutable bytes cannot be verified.",
-                )
+            self.verify_snapshot(snap)
             if pf["snapshotId"] != snap["snapshotId"] or pf["status"] != "ready":
                 raise Problem(
                     "ADMISSION_REJECTED",
@@ -212,7 +268,48 @@ class Runs:
                     "PREFLIGHT_STALE", "Project inputs changed after preflight.", 409
                 )
             compiled = self.adapter.compile(snap["documents"])
-            config = reference_configuration(snap["documents"], compiled)
+            current_provider = next(
+                (
+                    value
+                    for value in descriptors()
+                    if value["providerId"] == snap.get("providerId")
+                ),
+                None,
+            )
+            if snap.get("providerId") != "studio.reference":
+                raise Problem(
+                    "ADMISSION_REJECTED",
+                    "This runtime cannot substitute an owned provider for the selected provider.",
+                )
+            if digest(current_provider) != digest(snap.get("providerIdentity")):
+                raise Problem(
+                    "PREFLIGHT_STALE",
+                    "Selected provider identity or native compatibility changed; preflight again.",
+                    409,
+                )
+            current_active = sum(
+                row["state"] in ACTIVE for row in self.store.all("run", db)
+            )
+            checks, errors, config, _ = reference_readiness(
+                snap["documents"],
+                compiled,
+                snap["providerId"],
+                current_provider,
+                current_active,
+            )
+            if config is None:
+                code = (
+                    "RESOURCE_BUSY"
+                    if any(error["code"] == "RESOURCE_BUSY" for error in errors)
+                    else "ADMISSION_REJECTED"
+                )
+                raise Problem(
+                    code,
+                    "Current read-only admission facts no longer allow this execution. Recheck the independent readiness dimensions.",
+                    409 if code == "RESOURCE_BUSY" else 422,
+                    diagnostics=errors,
+                    readiness=checks,
+                )
             if (
                 digest(config) != digest(snap["configuration"])
                 or compiled["planDigest"] != snap["planDigest"]

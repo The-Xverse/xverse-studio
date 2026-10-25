@@ -46,6 +46,7 @@ import {
   RetentionDialog,
   type RetentionTarget,
 } from "../features/retention/RetentionDialog";
+import { PreflightReview } from "../features/preflight/PreflightReview";
 import { ResultsView } from "../features/results/ResultsView";
 import { ExperimentsView, LabView } from "./OperationsViews";
 import {
@@ -80,7 +81,8 @@ export default function App() {
     [executionSelection, setExecutionSelection] = useState<ExecutionSelection>(
       {},
     ),
-    [addTemplate, setAddTemplate] = useState("");
+    [addTemplate, setAddTemplate] = useState(""),
+    [executionProvider, setExecutionProvider] = useState("studio.reference");
   const [sourceContext, setSourceContext] = useState<
       SourceTarget | undefined
     >(),
@@ -109,6 +111,7 @@ export default function App() {
     [streamState, setStreamState] = useState("Disconnected"),
     [evidenceImport, setEvidenceImport] = useState<Data | null>(null);
   const startKey = useRef(mutationKey()),
+    preflightRequestSequence = useRef(0),
     lastRun = useRef(localStorage.getItem("studio.lastRun") || ""),
     selectedProjectRef = useRef(""),
     projectLoadSequence = useRef(0),
@@ -142,6 +145,7 @@ export default function App() {
     setSection("workspace");
     setPreflight(null);
     if (changed) {
+      setExecutionProvider("studio.reference");
       setSelected("");
       setView("Model");
       try {
@@ -375,19 +379,27 @@ export default function App() {
       "Project created. Review its scope and validate the XDL before running.",
     );
   }
-  async function checkPreflight() {
+  async function checkPreflight(providerId = executionProvider) {
     if (!project) return;
+    const sequence = ++preflightRequestSequence.current;
     const value = await api<Preflight>(
       `/projects/${project.projectId}/preflights`,
       {
         method: "POST",
         body: {
           revision: project.revision,
+          providerId,
           ...executionSelection,
         } satisfies Selection,
         key: mutationKey(),
       },
     );
+    if (
+      sequence !== preflightRequestSequence.current ||
+      selectedProjectRef.current !== project.projectId
+    )
+      return;
+    setExecutionProvider(providerId);
     setPreflight(value);
     startKey.current = mutationKey();
     setModal("preflight");
@@ -1101,48 +1113,18 @@ export default function App() {
           />
         </Modal>
       )}
-      {modal === "preflight" && preflight && (
-        <Modal
-          title="Execution preflight"
-          restoreFocusSelector="[data-preflight-trigger]"
-          wide
-          onClose={() => setModal("")}
-        >
-          <div className="preflight-heading">
-            <Badge tone={statusTone(preflight.status)}>
-              {preflight.status}
-            </Badge>
-            <p>
-              Validity, readiness, ownership, and evidence are checked
-              separately.
-            </p>
-          </div>
-          <KeyValues
-            values={{
-              "Frozen snapshot": preflight.snapshotId,
-              "Compiled plan": preflight.planDigest || "Unavailable",
-              Expires: preflight.expiresAt || "Not declared",
-              Scope:
-                preflight.evidenceScope ||
-                "Owned reference; no simulator or physical-device claim",
-            }}
-          />
-          {preflight.checks && <Json value={preflight.checks} expanded />}
-          <Diagnostics diagnostics={preflight.diagnostics} />
-          <div className="form-actions">
-            <button className="button" onClick={() => setModal("")}>
-              Back to draft
-            </button>
-            <button
-              className="button primary"
-              disabled={preflight.status !== "ready" || !!busy}
-              onClick={() => void doAction("Starting admitted run", start)}
-            >
-              <Icon name="play" />
-              Start frozen snapshot
-            </button>
-          </div>
-        </Modal>
+      {modal === "preflight" && preflight && project && (
+        <PreflightReview
+          preflight={preflight}
+          currentRevision={project.revision}
+          providers={providers}
+          onClose={() => {
+            preflightRequestSequence.current++;
+            setModal("");
+          }}
+          onStart={start}
+          onRecheck={checkPreflight}
+        />
       )}
       {modal === "artifact" && (
         <Modal

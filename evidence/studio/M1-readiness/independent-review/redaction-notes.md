@@ -1,0 +1,3 @@
+# Portable evidence copies
+
+Machine-specific workspace/cache prefixes were normalized in the committed receipts. Raw originals, with content hashes recorded in the readiness review redaction manifest, remain outside Git under `.studio-local/evidence-raw/readiness-claims/` on the selected workspace filesystem. Outcome fields, timing and environment values, and recorded product source hashes were preserved. Replay drivers now derive `.studio-local/review-temp/` from the repository location; no mount or account prefix is embedded. This portability edit did not rerun tests or change backend/test source.

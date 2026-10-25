@@ -75,6 +75,16 @@ An evaluation request supplies `snapshotId`, `definitionRef`, `definitionDigest`
 
 Annotations are separate presentation/audit records with an ID, revision, author/session identity, timestamp, `kind` (`comment` or `trace_link`), text or typed target reference, and optional model/evidence references. Trace targets record URI and pinned revision or explicit unknown; a link is never proof of target validity or a passed requirement. Render inert escaped text or an allowlisted Markdown subset. Updates/deletes require expected revision and retain historical revisions/tombstones; canonical evidence bytes are never patched.
 
+Annotation sidecar version 1.1 adds optional `target.claimStatus`: an opaque nonblank reported string
+(maximum 256 characters; no C0/DEL controls), preserved exactly rather than interpreted as a verdict.
+Legacy `{uri, revision}` targets remain valid and retain absent status. Optional `definitionRefs`
+contains at most 32 unique `{definitionRef, definitionDigest}` pairs resolved against the run's frozen
+definitions; the digest is `sha256:` followed by 64 lowercase hexadecimal digits. `elementRefs` may
+identify frozen XDL resources such as Scenario as well as model elements; `evidenceRefs` identifies
+same-run evidence. Model/definition associations require the intact canonical snapshot. Invalid,
+cross-run or unavailable subject identities reject rather than silently dropping the association.
+The existing assertion v1/profile schema is unchanged. See ADR-0009 for compatibility and evidence.
+
 A retention plan is side-effect-free. It names exact IDs, dependency edges, protected active-run inputs, expiry and a fingerprint of the observed state. Apply is a separate explicit idempotent operation: recheck active ownership, references, permission and fingerprint before any deletion. Stale plans return `409 RETENTION_PLAN_STALE`. Block deletion of active-run inputs, shared required artifacts or protected evidence; report partial filesystem failures without claiming complete removal. No API accepts a glob or host path as a deletion target. Existing run/campaign state cannot be made successful by deleting its failed evidence.
 
 ## Semantic edit envelope
@@ -100,6 +110,20 @@ Compilation is side-effect-free. Preflight performs only admitted read-only prob
 This is a shape illustration, not a valid runnable fixture. Only `status=ready` is start-eligible. A start rechecks expiry, input identities, provider compatibility, reservation/authority, artifact integrity and target readiness. Any changed assumption rejects with `409 PREFLIGHT_STALE` or `422 ADMISSION_REJECTED`; it never silently substitutes a target or model. The preflight TTL is bounded by the minimum freshness window of its dependent capabilities/reservations.
 
 Provider launch receives the persisted run ID and operation ID. A start retry cannot create a second run. If the provider cannot prove whether the first start happened, expose `unknown` and reconcile; do not replay start.
+
+The additive `readinessVersion: "1.0"` response contains independent records named `backend`,
+`provider`, `model`, `artifacts`, `capabilities`, `target`, `resources`, `ownership`, `clocks` and
+`authority`. Each has `status`, `message`, `elementRefs`, `diagnosticCodes`, `remediation` and optional
+`facts`. Missing or unknown facts are not positive admission. Legacy `dimensions` strings are derived
+from these same records. `limits` is the exact selected provider's limits object, or empty when not
+advertised. An unavailable provider never inherits another provider's execution configuration.
+
+`planPreview` is null without compilation, otherwise contains `snapshotId`, `snapshotDigest`,
+`revision`, `selection`, `planDigest`, `semanticDigest`, `compiler`, `contributingDocuments`, `plan`
+and `scope: "declared_intent_only"`. The preview grants no runtime-health or physical authority claim.
+Start verifies canonical snapshot bytes and current provider identity/facts. Campaign creation rejects
+snapshots lacking an originally ready matching preflight; existing idempotent requests resolve their
+saved operation or payload conflict before new mutable admission is evaluated.
 
 The selected adapter must also prove that its effective generated XDL/plan matches the requested snapshot before admission, and record effective identities after execution. The inspected Lite harness generates its own documents; if it cannot accept a requested edit, reject it rather than run a fixed preset under the edited snapshot's identity. See DEP-RUN-CONFIG in the plan and the provider contract.
 
