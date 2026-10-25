@@ -23,7 +23,11 @@ def snapshot_definitions(snapshot: dict, adapter) -> list[dict]:
     original = {k: v for k, v in snapshot.items() if k != "snapshotDigest"}
     if not isinstance(expected_digest, str) or definition_digest(original) != expected_digest:
         raise EvaluationError("SNAPSHOT_INTEGRITY_INVALID")
-    documents = snapshot.get("documents")
+    return source_definitions(snapshot.get("documents"), adapter)
+
+
+def source_definitions(documents, adapter) -> list[dict]:
+    """Check owned assessment references in authored data without granting execution."""
     if not isinstance(documents, dict):
         raise EvaluationError("SNAPSHOT_INPUTS_UNAVAILABLE")
     report = adapter.validate(documents)

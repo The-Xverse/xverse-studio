@@ -8,10 +8,18 @@ from ruamel.yaml import YAML
 
 from . import XDLAdapter, XDLRejected
 from .examples import PROFILE_NAMESPACE
+from .edit_limits import check_edit_payload
 
 REGISTRY = {
+    "set_scenario_conditions": {"documentId", "elementRef", "properties"},
+    "set_assessment_definitions": {"documentId", "elementRef", "definitions"},
+    "add_scenario_item": {"documentId", "elementRef", "itemKind", "itemId", "properties"},
+    "update_scenario_item": {"documentId", "elementRef", "itemKind", "itemId", "properties"},
+    "remove_scenario_item": {"documentId", "elementRef", "itemKind", "itemId"},
     "set_parameter": {"documentId", "parameterId", "parameter", "value", "elementRef", "elementId"},
     "add_element": {"documentId", "templateId", "elementId", "nodeId"},
+    "add_logical_asset": {"documentId", "assetKind", "elementId", "elementRef", "properties", "endpoints"},
+    "update_logical_asset": {"documentId", "assetKind", "elementId", "elementRef", "properties", "unsetProperties"},
     "remove_element": {"documentId", "elementId", "elementRef", "removalSet"},
     "connect_endpoints": {"documentId", "flowId", "sourceEndpointId", "destinationEndpointIds", "interfaceId", "timeDomainId", "deliveryIntent"},
     "disconnect_flow": {"documentId", "flowId", "elementRef"},
@@ -19,6 +27,31 @@ REGISTRY = {
     "rename_display_label": {"documentId", "label", "name", "elementRef"},
 }
 IDENTIFIER = re.compile(r"^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$")
+ASSET_COLLECTIONS = {"device": "devices", "sensor": "sensors", "actuator": "actuators", "model": "models"}
+ASSET_OPTIONAL_FIELDS = {"device": {"nodeId", "extensions"}, "sensor": {"deviceId", "samplingIntent"},
+                         "actuator": {"deviceId", "limits"}, "model": {"limitations"}}
+
+
+def _has_identifier(spec, identifier):
+    return any(value.get("id") == identifier for values in spec.values() if isinstance(values, list)
+               for value in values if isinstance(value, dict))
+
+
+def _check_asset_ports(spec, asset_kind, asset):
+    """Guide typed authoring without replacing the public full-document validator."""
+    ports = {value["id"]: value for value in spec.get("endpoints", []) if isinstance(value, dict) and "id" in value}
+    references = []
+    if asset_kind == "sensor":
+        references = [(asset.get("outputEndpointId"), "output")]
+    elif asset_kind == "actuator":
+        references = [(asset.get("inputEndpointId"), "input")]
+    # Model inputs/outputs reference interfaces, not endpoints; the public
+    # validator checks their membership without inventing endpoint semantics.
+    for identifier, direction in references:
+        if not isinstance(identifier, str) or identifier not in ports:
+            raise XDLRejected("Select an existing declared endpoint for this logical asset.", "ENDPOINT_UNRESOLVED")
+        if ports[identifier].get("direction") not in (direction, "bidirectional"):
+            raise XDLRejected("The selected endpoint direction is incompatible with this logical asset port.", "ENDPOINT_INCOMPATIBLE")
 
 
 def semantic_edits(documents: dict[str, str], edits: list[dict]) -> dict[str, str]:
@@ -29,13 +62,16 @@ def semantic_edits(documents: dict[str, str], edits: list[dict]) -> dict[str, st
     """
     if not isinstance(edits, list) or not 0 < len(edits) <= 100:
         raise XDLRejected("A semantic transaction needs one to 100 edits.", "LIMIT_EXCEEDED")
-    report = XDLAdapter().validate(documents)
+    adapter = XDLAdapter()
+    report = adapter.validate(documents)
     if not report["valid"]:
         raise XDLRejected("Resolve authoritative source diagnostics before applying semantic edits; original source is preserved.", "MODEL_INVALID")
     yaml = YAML()
     yaml.preserve_quotes = True
     parsed = {name: yaml.load(source) for name, source in documents.items()}
     touched = set()
+    asset_targets = []
+    check_assessments = False
 
     def resource_uri(resource):
         return f"xdl://{resource['metadata']['namespace']}/{resource['kind'].lower()}/{resource['metadata']['name']}"
@@ -45,7 +81,7 @@ def semantic_edits(documents: dict[str, str], edits: list[dict]) -> dict[str, st
         allowed = {resource_uri(resource)}
         if identifier:
             allowed.add(resource_uri(resource) + "#" + identifier)
-        if target is not None and target not in allowed:
+        if target is not None and (not isinstance(target, str) or target not in allowed):
             raise XDLRejected("The selected stable reference does not identify this edit target.", "SELECTION_UNRESOLVED")
 
     def select(kind: str, explicit: str | None) -> tuple[str, dict]:
@@ -55,13 +91,14 @@ def semantic_edits(documents: dict[str, str], edits: list[dict]) -> dict[str, st
         return found[0]
 
     for edit in edits:
-        if not isinstance(edit, dict) or edit.get("kind") not in REGISTRY:
+        if not isinstance(edit, dict) or not isinstance(edit.get("kind"), str) or edit.get("kind") not in REGISTRY:
             raise XDLRejected("This semantic edit operation is unsupported.")
         kind = edit["kind"]
+        check_edit_payload(edit)
         if set(edit) - REGISTRY[kind] - {"kind"}:
             raise XDLRejected("Unknown fields in the semantic edit envelope.", "INVALID_EDIT")
         explicit = edit.get("documentId")
-        if explicit is not None and explicit not in parsed:
+        if explicit is not None and (not isinstance(explicit, str) or explicit not in parsed):
             raise XDLRejected("The requested document does not belong to this project.", "SELECTION_UNRESOLVED")
         if kind == "set_parameter":
             parameter_id = edit.get("parameterId", edit.get("parameter"))
@@ -88,6 +125,56 @@ def semantic_edits(documents: dict[str, str], edits: list[dict]) -> dict[str, st
             check_target(edit, parsed[name], parameter_id)
             if edit.get("elementId") not in (None, parameter_id):
                 raise XDLRejected("Instance-targeted parameter editing is unavailable for this declaration.", "SELECTION_UNRESOLVED")
+            touched.add(name)
+        elif kind in {"set_scenario_conditions", "set_assessment_definitions", "add_scenario_item", "update_scenario_item", "remove_scenario_item"}:
+            from xverse_studio.experiments.authoring import edit_scenario
+            name, resource = select("Scenario", explicit)
+            check_target(edit, resource, edit.get("itemId"))
+            edit_scenario(resource, edit)
+            check_assessments = True
+            touched.add(name)
+        elif kind in {"add_logical_asset", "update_logical_asset"}:
+            name, system = select("System", explicit)
+            spec = system["spec"]
+            asset_kind, identifier, properties = edit.get("assetKind"), edit.get("elementId"), edit.get("properties")
+            if not isinstance(asset_kind, str) or asset_kind not in ASSET_COLLECTIONS:
+                raise XDLRejected("Choose a supported logical device, sensor, actuator or model reference.", "INVALID_EDIT")
+            if not isinstance(identifier, str) or not IDENTIFIER.fullmatch(identifier) or len(identifier) > 63:
+                raise XDLRejected("Choose a valid stable logical asset ID.", "INVALID_EDIT")
+            unset = edit.get("unsetProperties", [])
+            if (not isinstance(unset, list) or len(unset) > 8 or any(not isinstance(field, str) for field in unset)
+                    or len(set(unset)) != len(unset) or any(field not in ASSET_OPTIONAL_FIELDS[asset_kind] for field in unset)):
+                raise XDLRejected("Only schema-optional properties of this asset kind can be explicitly unset.", "INVALID_EDIT")
+            if not isinstance(properties, dict) or (not properties and not unset) or "id" in properties or any(field in properties for field in unset):
+                raise XDLRejected("Supply XDL properties separately from the immutable element ID.", "INVALID_EDIT")
+            check_target(edit, system, identifier)
+            collection = ASSET_COLLECTIONS[asset_kind]
+            if kind == "add_logical_asset":
+                if _has_identifier(spec, identifier):
+                    raise XDLRejected("The element ID already belongs to this System.", "IDENTITY_CONFLICT")
+                asset = {"id": identifier, **deepcopy(properties)}
+                spec.setdefault(collection, []).append(asset)
+                endpoints = edit.get("endpoints", [])
+                if not isinstance(endpoints, list) or len(endpoints) > 64 or (endpoints and asset_kind != "device"):
+                    raise XDLRejected("Only a logical device can declare a bounded bundle of owned endpoints.", "INVALID_EDIT")
+                for endpoint in endpoints:
+                    if not isinstance(endpoint, dict) or endpoint.get("ownerId") != identifier:
+                        raise XDLRejected("Bundled endpoints must belong to the new logical device.", "INVALID_EDIT")
+                    endpoint_id = endpoint.get("id")
+                    if not isinstance(endpoint_id, str) or not IDENTIFIER.fullmatch(endpoint_id) or len(endpoint_id) > 63:
+                        raise XDLRejected("Choose a valid stable endpoint ID.", "INVALID_EDIT")
+                    if _has_identifier(spec, endpoint_id):
+                        raise XDLRejected("An endpoint ID already belongs to this System.", "IDENTITY_CONFLICT")
+                    spec.setdefault("endpoints", []).append(deepcopy(endpoint))
+            else:
+                matches = [value for value in spec.get(collection, []) if value.get("id") == identifier]
+                if len(matches) != 1:
+                    raise XDLRejected("Select an existing logical asset of the specified kind.", "SELECTION_UNRESOLVED")
+                asset = matches[0]
+                asset.update(deepcopy(properties))
+                for field in unset:
+                    asset.pop(field, None)
+            asset_targets.append((spec, asset_kind, asset))
             touched.add(name)
         elif kind == "add_element":
             name, system = select("System", explicit)
@@ -188,13 +275,22 @@ def semantic_edits(documents: dict[str, str], edits: list[dict]) -> dict[str, st
             parsed[explicit]["metadata"]["description"] = label
             touched.add(explicit)
 
+    for spec, asset_kind, asset in asset_targets:
+        _check_asset_ports(spec, asset_kind, asset)
     result = dict(documents)
     for name in touched:
         stream = StringIO()
         yaml.dump(parsed[name], stream)
         result[name] = stream.getvalue()
-    after = XDLAdapter().validate(result)
+    after = adapter.validate(result)
     if not after["valid"]:
         codes = ", ".join(dict.fromkeys(d["code"] for d in after["diagnostics"][:5]))
         raise XDLRejected("The authoritative validator rejected this edit transaction: " + codes, "MODEL_INVALID")
+    if check_assessments:
+        from xverse_studio.assertions.snapshot import source_definitions
+        from xverse_studio.assertions import EvaluationError
+        try:
+            source_definitions(result, adapter)
+        except EvaluationError as exc:
+            raise XDLRejected("The retained assessment references are unresolved: " + str(exc), str(exc)) from None
     return result

@@ -95,6 +95,8 @@ def capability_digest():
 
 
 def capabilities():
+    from xverse_studio.xdl.edit_limits import MAX_EDIT_BYTES, MAX_EDIT_DEPTH, MAX_EDIT_NODES
+    from xverse_studio.experiments.authoring import COLLECTIONS, SCENARIO_ITEM_BYTES, SCENARIO_ITEM_LIMITS
     from xverse_studio.assertions.evaluator import LIMITS
     from xverse_studio.xdl import (
         VALIDATION_CACHE_ENTRIES,
@@ -114,12 +116,15 @@ def capabilities():
         "studio": {
             "nativeTargets": ["Linux", "Windows"],
             "verifiedNativeOS": ["Linux"],
-            "windowsAcceptance": "NOT_RUN",
+            "windowsAcceptance": "BLOCKED_USER_REQUEST",
         },
         "providers": descriptors(),
         "limits": {
             "requestBytes": 8 * 1024 * 1024,
             "documentBytes": 1024 * 1024,
+            "typedEditPayloadBytes": MAX_EDIT_BYTES,
+            "typedEditDepth": MAX_EDIT_DEPTH,
+            "typedEditNodes": MAX_EDIT_NODES,
             "archiveExpandedBytes": 16 * 1024 * 1024,
             "archiveFiles": 256,
             "pageSize": 200,
@@ -139,6 +144,11 @@ def capabilities():
             "preflightTTLSeconds": 60,
             "campaignRuns": 32,
             "campaignConcurrency": 1,
+            "scenarioAuthoring": {
+                **{COLLECTIONS[kind]: limit for kind, limit in SCENARIO_ITEM_LIMITS.items()},
+                "editPayloadBytes": SCENARIO_ITEM_BYTES,
+                "scope": "authored_intent; execution requires separate provider admission",
+            },
             "evaluator": {
                 **LIMITS,
                 "budgetSeconds": 2,
