@@ -75,7 +75,7 @@ After M0 owned contracts pass, guided operation (T015–T033), visual authoring 
 - [x] T044 [US5] Enable source authoring and synchronized selection/diagnostics; retain invalid drafts and unsupported extension content without dropping data or overwriting active run inputs. Paths: `apps/studio-web/src/features/source/`, `apps/studio-web/src/features/inspector/`. Depends on: T042, T043. (FR-023; FR-025; AC-013)
 - [x] T045 [P] [US5] Add external-write races, interrupted saves, undo/redo reference integrity and simultaneous draft/run inspection cases. Paths: `tests/integration/test_edit_conflicts.py`, `tests/e2e/draft-run-isolation.spec.ts`. Depends on: T041. (FR-026; FR-028; NFR-009; AC-014)
 - [x] T046 [US5] Implement bounded autosave/recovery, undo/redo transactions and revision conflict resolution with recoverable source backups. Paths: `services/studio-api/src/xverse_studio/projects/revisions.py`, `apps/studio-web/src/features/model/history.ts`. Depends on: T042, T045. (FR-026; NFR-009; AC-014)
-- [ ] T047 [US5] Show the editable draft revision and immutable selected run snapshot distinctly, including divergence badges and evidence navigation to snapshot identities. Paths: `apps/studio-web/src/features/model/run-overlay.tsx`. Depends on: T027, T044, T046. (FR-028; FR-015; AC-014; AC-027)
+- [x] T047 [US5] Show the editable draft revision and immutable selected run snapshot distinctly, including divergence badges and evidence navigation to snapshot identities. Paths: `apps/studio-web/src/features/model/run-overlay.tsx`. Depends on: T027, T044, T046. (FR-028; FR-015; AC-014; AC-027)
 - [ ] T048 [US5] Execute round-trip/layout/conflict scenarios against the pinned CLI/library and inspect resulting source/digest differences, including failed-edit recovery. Execute bidirectional Linux-to-Windows and Windows-to-Linux project exchange with spaces, non-ASCII names, line-ending changes and host-specific bindings, preserving executable semantic identity. Paths: `evidence/studio/M2-roundtrip/`. Depends on: T043, T044, T046, T047. (FR-023; FR-024; FR-025; FR-026; FR-027; FR-028; NFR-002; NFR-009; AC-013; AC-014)
 - [ ] T049 [P] [US6] Specify catalog/wizard contract tests for versions, role-realization-placement independence, definition/instance identity, inert artifacts and untrusted form metadata. Paths: `tests/contract/test_catalog.py`, `tests/fixtures/catalog/`. Depends on: T014. (FR-029; FR-030; FR-031; FR-032; FR-033; NFR-004; AC-015)
 - [x] T050 [US6] Implement local catalog admission/filtering with immutable artifact references, schema/provenance/maturity records and explicit unavailable versions. Expose admitted catalog discovery through the specified API so the UI and external contract tests consume the same versioned entries. Paths: `services/studio-api/src/xverse_studio/catalog/`. Depends on: T049, T004, T008. (FR-029; FR-031; FR-033; AC-015)
@@ -253,3 +253,9 @@ actuator/model and observer creation; malformed artifact versions and non-admitt
 inert implementation registration without build, flash, execution, file changes or origin requests.
 Four silently ignored HTML input patterns were repaired with a guard test. 575 backend tests and 60
 browser/performance checks pass. Component completion is 29/100. See `evidence/studio/M2-catalog/`.
+
+T047 owned component is complete: the draft revision and the selected run's immutable snapshot are
+shown together with a divergence comparison of the executed run inputs, navigation to elements, draft
+sources and verified frozen inputs, and canvas badges. Independent review found six defects, all
+repaired; 575 backend tests and 64 browser/performance checks pass. Component completion is 30/100.
+See `evidence/studio/M2-run-overlay/`.

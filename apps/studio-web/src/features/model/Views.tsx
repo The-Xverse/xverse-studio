@@ -71,6 +71,11 @@ function ElementNode({ data, selected }: NodeProps<Node<Data>>) {
       </div>
       <strong>{data.name}</strong>
       <code>{data.id}</code>
+      {data.runChange && (
+        <span className={`run-change ${data.runChange}`}>
+          {data.runChange === "added" ? "new in draft" : "changed since run"}
+        </span>
+      )}
       {data.portList?.length > 0 && (
         <ul className="node-ports" aria-label="Named ports">
           {data.portList.slice(0, 4).map((port: Data) => (
@@ -100,6 +105,8 @@ function ElementNode({ data, selected }: NodeProps<Node<Data>>) {
   );
 }
 const nodeTypes = { element: ElementNode };
+// Stable identity: a fresh default object per render would reset node positions.
+const NO_RUN_CHANGES: Record<string, string> = {};
 // Deterministic presentation layouts; positions never enter executable identity.
 function gridPosition(index: number, count: number) {
   const columns = count > 12 ? Math.ceil(Math.sqrt(count * 1.5)) : 3;
@@ -147,7 +154,10 @@ export function ModelView({
   saveLayout,
   onSource,
   onCatalog,
+  runChanges = NO_RUN_CHANGES,
 }: {
+  /** Element ref → change since the selected run's snapshot (presentation only). */
+  runChanges?: Record<string, string>;
   project: Project;
   projection: Projection;
   parameters: Parameter[];
@@ -199,6 +209,7 @@ export function ModelView({
   }
   const system = projection.resources.find((r) => r.kind === "System"),
     endpoints: Data[] = system?.spec?.endpoints || [];
+  const runChangesKey = JSON.stringify(runChanges);
   const initialNodes = useMemo<Node<Data>[]>(
     () =>
       projection.elements.map((e, i) => ({
@@ -233,10 +244,16 @@ export function ModelView({
             ).filter((p: Data) => p.ownerId === e.id);
             return { ports: portList.length, portList };
           })(),
+          runChange: runChanges[e.ref],
         },
         selected: e.ref === selected || e.id === selected,
       })),
-    [project.revision, project.presentationRevision, projection.elements],
+    [
+      project.revision,
+      project.presentationRevision,
+      projection.elements,
+      runChangesKey,
+    ],
   );
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   useEffect(() => setNodes(initialNodes), [initialNodes]);

@@ -46,6 +46,12 @@ import { PreflightReview } from "../features/preflight/PreflightReview";
 import { ResultsView } from "../features/results/ResultsView";
 import { PendingStartNotice } from "../features/runs/PendingStartNotice";
 import { RecoveryPanel } from "../features/model/RecoveryPanel";
+import { FrozenInputs } from "../features/results/FrozenInputs";
+import {
+  RunDivergenceBadge,
+  RunDivergencePanel,
+  useRunDivergence,
+} from "../features/model/run-overlay";
 import { InstanceWizard } from "../features/elements/InstanceWizard";
 import {
   applyStep,
@@ -288,6 +294,19 @@ export default function App() {
     return () => window.removeEventListener("keydown", handle);
   }, []);
   const projection = useMemo(() => projectDisplay(project), [project]);
+  const {
+      divergence,
+      snapshot: runSnapshot,
+      state: snapshotState,
+      retry: retrySnapshot,
+    } = useRunDivergence(project, projection, run),
+    [divergenceOpen, setDivergenceOpen] = useState(false),
+    [frozenOpen, setFrozenOpen] = useState(false);
+  // The comparison panel belongs to one run; a different run starts closed.
+  useEffect(() => {
+    setDivergenceOpen(false);
+    setFrozenOpen(false);
+  }, [run?.runId]);
   const entry =
     catalog.find(
       (c) =>
@@ -1114,7 +1133,14 @@ export default function App() {
                   {run ? (
                     <>
                       Run snapshot <code>{run.snapshotId.slice(0, 12)}</code>{" "}
-                      <Badge tone={statusTone(runStatus)}>{runStatus}</Badge>
+                      <Badge tone={statusTone(runStatus)}>{runStatus}</Badge>{" "}
+                      <RunDivergenceBadge
+                        divergence={divergence}
+                        state={snapshotState}
+                        open={divergenceOpen}
+                        onToggle={() => setDivergenceOpen((open) => !open)}
+                        onRetry={retrySnapshot}
+                      />
                     </>
                   ) : (
                     <>
@@ -1123,8 +1149,31 @@ export default function App() {
                   )}
                 </span>
               </div>
+              {divergenceOpen && divergence && (
+                <RunDivergencePanel
+                  divergence={divergence}
+                  onSelectElement={(ref) => {
+                    setSelected(ref);
+                    setView("Model");
+                  }}
+                  onOpenDocument={(path) => {
+                    const documentId = Object.entries(project.documents).find(
+                      ([, d]: [string, any]) => d.path === path,
+                    )?.[0];
+                    if (documentId) openSource({ documentId });
+                  }}
+                  onFrozenInputs={() => setFrozenOpen(true)}
+                />
+              )}
+              {frozenOpen && runSnapshot && (
+                <FrozenInputs
+                  snapshot={runSnapshot}
+                  onClose={() => setFrozenOpen(false)}
+                />
+              )}
               {view === "Model" ? (
                 <ModelView
+                  runChanges={divergence?.byElement}
                   project={project}
                   projection={projection}
                   parameters={parameters}
