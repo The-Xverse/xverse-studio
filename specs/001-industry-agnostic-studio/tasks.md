@@ -356,3 +356,6 @@ remains unchecked and component completion remains 47/100, with no milestone acc
 The fresh unchanged-source contributor gate passed 851 backend tests plus baseline consistency,
 architecture and spec structure. Prior 89 browser checks and compiled UI bytes remain applicable by
 exact unchanged-source comparison; no browser rerun is claimed for this descriptive artifact.
+Clean 13ff409 passed fresh offline native Linux package extraction, startup/UI, Unicode persistence,
+authoritative compilation and owned shutdown. Its clean 100-file manifest includes the descriptive
+baseline and checker; archive hashes and tested UI bytes were verified. See the dossier's package/.

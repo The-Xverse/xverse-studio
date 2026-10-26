@@ -42,3 +42,11 @@ Full contributor results, source identity, inherited browser scope and package r
 in `verification.json`. Native Windows remains held; normative SADS wording and admitted live
 effective-input/runtime compatibility remain unavailable. T001 stays in progress, component count
 stays 47/100 and no milestone is accepted.
+
+Clean product `13ff409d2d593218d059b3a1ab8df74ec14eb3f0` passed the fresh offline Linux package
+smoke with prepared dependencies: native startup/UI HTTP 200, Unicode persistence, authoritative
+compilation and owned shutdown. Its clean 100-file manifest includes the descriptive baseline and
+contributor checker. All archive/file hashes and the unchanged tested frontend bytes were verified;
+see `package/`. The packaged baseline still grants no runtime authority. Repository-only evidence
+and contributor prerequisites are explicit; this does not claim the full checker can run in the
+application-only bundle. Fresh-host CI remains a separate per-candidate outcome.

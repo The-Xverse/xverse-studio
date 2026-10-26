@@ -29,7 +29,9 @@ identities and limits from source-only compat/blueprint pins, descriptor declara
 Linux evidence, held Windows and unavailable live integrations. The admitted live set is null;
 normative SADS satisfaction is unclaimed. Original failures/review repairs and 18 consistency controls
 are retained under `evidence/studio/M0-compatibility-manifest/`. The fresh contributor gate passed 851 backend tests plus baseline/architecture/spec checks,
-with source and fixed inputs unchanged. The artifact grants no runtime authority and does not close T001. Both 944a875 product and d421c23 package-metadata CI runs passed;
+with source and fixed inputs unchanged. Clean 13ff409 also passed offline Linux package smoke,
+with its manifest/checker included, clean 100-file hash proof and unchanged tested UI. The artifact
+grants no runtime authority and does not close T001. Both 944a875 product and d421c23 package-metadata CI runs passed;
 those outcomes predate this descriptive artifact.
 
 The latest frontend successor passed typecheck/build, architecture and the full **89-check native
