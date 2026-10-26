@@ -324,3 +324,6 @@ passes with unchanged source. Backend/services/scripts/Python tests are byte-ide
 851-test b2cf71a cohort, not rerun here. Separate final-source viewport performance refresh and
 independent review are retained in `evidence/studio/M1-accessible-diagnostics/`. Native Windows,
 assistive-technology and complete accessibility acceptance remain open; component count stays 47/100.
+Clean product commit e6c9de0 passed a fresh offline Linux package extraction with the tested frontend,
+native startup/UI, Unicode persistence and authoritative compilation; receipt and clean 98-file
+manifest are under `M1-accessible-diagnostics/package/`. Fresh-host CI remains a separate outcome.

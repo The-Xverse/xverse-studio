@@ -54,6 +54,13 @@ covers selected normal-size text and supported paint, not arbitrary masks, text-
 complex backdrop composition or global WCAG conformance. Visible focus is asserted in the existing
 operability journeys; no overall AAA focus-appearance claim is made.
 
+Clean committed candidate `e6c9de00b0c66ec4c04626a75caf1ef5ce164539` also passed a fresh offline
+package extraction with the prepared cache, native startup, UI HTTP 200, Unicode project persistence,
+authoritative compilation and owned shutdown. `package/` retains its receipt, 98-file manifest and
+clean-source proof. All bundle hashes were verified and its built UI is byte-identical to the tested
+frontend. Source/cache/tool/temp paths were resolved physically. Browser interaction is covered by
+the separate browser run; native Windows was not run.
+
 The final source also has a separate performance refresh under `performance/`: one warm-up and
 30 measurements per viewport for 200 elements/400 connections and the first 200 rows of 50,000
 recorded events. These are Studio/browser fixture measurements, not simulator or device performance.

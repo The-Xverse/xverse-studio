@@ -33,6 +33,10 @@ rendered text pairs pass the scoped contrast check; focus, stale Start/Recheck a
 defects are repaired. Separate viewport performance measurements are retained in the successor dossier.
 Native Windows, assistive-technology and complete accessibility acceptance remain open. The earlier
 full 77-check browser/performance gate passed with unchanged source (`M3-assets/`).
+Clean diagnostic product commit `e6c9de0` also passed fresh offline Linux package provisioning,
+native startup/UI, Unicode persistence and authoritative compilation, with its tested frontend bytes
+and a clean 98-file source manifest (`M1-accessible-diagnostics/package/`). Its fresh-host CI is
+recorded separately; the earlier CI receipts do not establish this candidate's outcome.
 Both viewport performance workloads and duplicate-name project retention now pass in the same full
 cohort. A clean b2cf71a package extraction also passed offline native Linux provisioning,
 startup/UI serving, Unicode persistence and authoritative compilation (`M3-assets/package/`);
