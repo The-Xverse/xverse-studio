@@ -216,8 +216,17 @@ def resolve_deployment(documents, deployment_ref, host_os=None, provider=None):
         target = targets.get(binding["targetId"], {})
         definition = parsed.get(_authored(element["componentRef"])) if element and element.get("componentRef") else None
         realization, target_class = binding["realizationClass"], target.get("targetClass")
-        # Realization and placement are independent XDL dimensions; the provider judges the pair.
-        checks = [_check("realization", "declared", f"{realization} realization placed on a {target_class} target; their combination is judged by the provider.")]
+        # Realization and placement are independent XDL dimensions; only a selected provider's
+        # declared realization/target classes can rule on them.
+        offered_classes = {"realization": ((provider or {}).get("realizationClasses"), realization),
+                           "target": ((provider or {}).get("targetClasses"), target_class)}
+        if provider is None or not any(declared is not None for declared, _ in offered_classes.values()):
+            checks = [_check("realization", "declared", f"{realization} realization placed on a {target_class} target; no selected provider declares which classes it supports.")]
+        else:
+            missing = [f"{kind} class {value}" for kind, (declared, value) in offered_classes.items() if declared is not None and value not in declared]
+            checks = [_check("realization", "unsupported", f"Provider {provider.get('providerId')} does not declare support for {' or '.join(missing)}.", "CAPABILITY_UNSUPPORTED")
+                      if missing else
+                      _check("realization", "pass", f"Provider {provider.get('providerId')} declares support for {realization} realization on {target_class} targets.")]
         if binding.get("resourceIds") and "offeredResourceIds" not in target:
             checks.append(_check("placement", "unknown", f"Target {binding['targetId']} does not declare the resources it offers.", "COMPATIBILITY_UNKNOWN"))
         else:
@@ -254,7 +263,8 @@ def resolve_deployment(documents, deployment_ref, host_os=None, provider=None):
                 checks.append(_check("resource", "unknown", f"Some bound capacity uses a unit other than {minimum['unit']}; no unit conversion is admitted.", "COMPATIBILITY_UNKNOWN", **facts))
             else:
                 checks.append(_check("resource", "fail", f"Bound capacity is below the required {minimum['value']} {minimum['unit']}.", "RESOURCE_REQUIREMENT_UNMET", **facts))
-        status = "fail" if any(c["status"] == "fail" for c in checks) else "unknown" if any(c["status"] == "unknown" for c in checks) else "compatible"
+        statuses = {c["status"] for c in checks}
+        status = next((s for s in ("fail", "unsupported", "unknown") if s in statuses), "compatible")
         binding_rows.append({"bindingId": binding["id"], "elementId": binding["logicalRef"].get("element"),
                              "elementRef": _authored(binding["logicalRef"]) + "#" + str(binding["logicalRef"].get("element")),
                              "realizationClass": realization, "targetId": binding["targetId"], "targetClass": target_class,
@@ -384,6 +394,7 @@ def resolve_deployment(documents, deployment_ref, host_os=None, provider=None):
             "documentId": deployment["_path"], "bindings": binding_rows, "constraints": constraints, "parameters": parameters,
             "portableIntent": intent, "environment": environment, "portability": portability, "hostOS": host_os,
             "providerId": (provider or {}).get("providerId"),
+            "provider": {k: provider.get(k) for k in ("providerId", "maturity", "realizationClasses", "targetClasses", "limitations")} if provider else None,
             "limitations": ["Compatibility covers declared requirements only; a preserved logical identity never implies behavioural equivalence or fidelity.",
                             "Values without an admitted precedence are rejected, never ordered by Studio."]}
 

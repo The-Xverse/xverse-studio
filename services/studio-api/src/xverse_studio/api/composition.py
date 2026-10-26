@@ -100,8 +100,9 @@ def install_composition(app, store, projects, runs, adapter):
         return result
 
     @app.patch("/api/v1/projects/{projectId}/deployment-variants/{documentId}")
-    def update_binding(projectId: str, documentId: str, body: BindingUpdate, request: Request, response: Response):
+    def update_binding(projectId: str, documentId: str, body: BindingUpdate, request: Request, response: Response,
+                       providerId: str = Query("studio.reference", max_length=128)):
         result = deployments.update_binding(projectId, _expected(request, body.baseRevision), documentId,
-                                            body.model_dump(exclude={"baseRevision"}, exclude_none=True))
+                                            body.model_dump(exclude={"baseRevision"}, exclude_none=True), providerId)
         response.headers["ETag"] = f'"{result["project"]["revision"]}"'
         return result

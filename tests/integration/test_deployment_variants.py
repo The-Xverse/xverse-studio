@@ -243,6 +243,19 @@ def _checks(report, binding_id):
     return row, {(c["check"], c.get("requirementId") or c.get("resourceId")): (c["status"], c.get("code")) for c in row["checks"]}
 
 
+def test_provider_declared_classes_rule_on_realization_and_placement():
+    from xverse_studio.providers.registry import descriptors
+
+    provider = next(p for p in descriptors() if p["providerId"] == "studio.reference")
+    report, codes = _report(provider=provider)
+    assert codes == set()
+    assert _checks(report, "plant-binding")[1][("realization", None)] == ("pass", None)
+    report, codes = _report(lambda r: _binding(r, "plant-binding").update(realizationClass="virtual"), provider=provider)
+    row, checks = _checks(report, "plant-binding")
+    assert (row["status"], checks[("realization", None)]) == ("unsupported", ("unsupported", "CAPABILITY_UNSUPPORTED"))
+    assert codes == {"CAPABILITY_UNSUPPORTED"}
+
+
 def test_reference_deployment_resolves_without_blocking_and_reports_its_layers():
     report, codes = _report()
     assert report["resolutionVersion"] == "1.0" and codes == set()
@@ -289,14 +302,22 @@ def test_compatible_rebinding_preserves_logical_identity_and_meets_declared_requ
     before_graph, after_graph = adapter.project(sources), adapter.project(updated)
     for collection in ("elements", "connections"):
         assert [e["ref"] for e in after_graph[collection]] == [e["ref"] for e in before_graph[collection]]
-    resolution = result["resolution"]
-    row, checks = _checks(resolution, "plant-binding")
+    # Declared requirements are met independently of any provider...
+    neutral = resolve_deployment(updated, result["variant"]["ref"])
+    row, checks = _checks(neutral, "plant-binding")
     assert row["status"] == "compatible" and row["targetClass"] == "emulator"
+    assert checks[("realization", None)] == ("declared", None)
     assert checks[("artifact", "model")] == ("pass", None) and checks[("artifact", "any-model")] == ("pass", None)
     assert checks[("resource", "cpu")] == ("pass", None) and checks[("placement", "emulator-cpu")] == ("pass", None)
-    assert resolution["diagnostics"] == []
-    assert any("behavioural equivalence" in limitation for limitation in resolution["limitations"])
-    # Readiness is recomputed: the owned reference provider refuses changed placement on its own.
+    assert resolution_diagnostics(neutral) == []
+    assert any("behavioural equivalence" in limitation for limitation in neutral["limitations"])
+    # ...while the selected owned reference provider declares only simulated model-unit realization.
+    resolution = result["resolution"]
+    _, checks = _checks(resolution, "plant-binding")
+    assert checks[("realization", None)] == ("unsupported", "CAPABILITY_UNSUPPORTED")
+    assert {d["code"] for d in resolution["diagnostics"]} == {"CAPABILITY_UNSUPPORTED"}
+    assert resolution["provider"]["realizationClasses"] == ["simulated"] and resolution["provider"]["limitations"]
+    # Readiness is recomputed and blocked for the same declared reason.
     assert result["compatibility"]["status"] == "blocked"
     assert {d["code"] for d in result["compatibility"]["diagnostics"]} == {"CAPABILITY_UNSUPPORTED"}
     # An incompatible rebinding commits as a draft and names the unmet contract.
@@ -522,3 +543,44 @@ def test_http_resolution_rebinding_and_preflight_block_ambiguous_effective_value
     assert broken.status_code == 200, broken.text
     invalid = client.get(url)
     assert invalid.status_code == 200 and invalid.json()["sourceValid"] is False and invalid.json()["diagnostics"]
+
+
+def test_time_mapping_edit_adds_replaces_and_removes_through_the_validator(client):
+    project = client.post("/api/v1/projects", json={"name": "Clock mappings"}).json()
+    pid, revision = project["projectId"], project["revision"]
+    system_id = next(i for i, d in project["documents"].items() if d["path"].endswith("/system.xdl.yaml"))
+    system = YAML(typ="safe").load(project["documents"][system_id]["content"])
+    system["spec"]["timeDomains"].append({"id": "wall-time", "clockClass": "wall", "epoch": "unix", "rate": "1", "monotonic": False})
+    revision = client.put(f"/api/v1/projects/{pid}/documents/{system_id}", headers={"If-Match": str(revision)},
+                          json={"content": dump_yaml(system)}).json()["revision"]
+
+    def apply(edit):
+        return client.post(f"/api/v1/projects/{pid}/edits", headers={"If-Match": str(revision)},
+                           json={"baseRevision": revision, "edits": [{"kind": "set_time_mapping", "documentId": "xdl/deployment.xdl.yaml", **edit}]})
+    mapping = {"mappingId": "wall-to-sim", "sourceTimeDomainId": "wall-time", "targetTimeDomainId": "simulation-time",
+               "mapping": "offset-at-start", "tolerance": {"value": 0.01, "unit": "s"}}
+    response = apply(mapping)
+    assert response.status_code == 200, response.text
+    revision = response.json()["revision"]
+    variant = client.get(f"/api/v1/projects/{pid}/deployment-variants").json()["items"][0]
+    url = f"/api/v1/projects/{pid}/deployment-variants/{variant['documentId']}/resolution"
+    report = client.get(url).json()
+    assert [(c["mappingId"], c["status"]) for c in report["constraints"] if c["check"] == "time"] == [("wall-to-sim", "declared")]
+    replaced = apply({**mapping, "tolerance": {"value": 0.5, "unit": "s"}})
+    assert replaced.status_code == 200, replaced.text
+    revision = replaced.json()["revision"]
+    deployment = next(d for d in replaced.json()["documents"].values() if d["path"] == "xdl/deployment.xdl.yaml")
+    mappings = YAML(typ="safe").load(deployment["content"])["spec"]["timeMappings"]
+    assert len(mappings) == 1 and mappings[0]["tolerance"] == {"value": 0.5, "unit": "s"}
+    # Undeclared domains are refused by the authoritative validator; invalid payloads before it.
+    for bad, code in (({**mapping, "sourceTimeDomainId": "missing-time"}, None), ({**mapping, "tolerance": {"value": -1, "unit": "s"}}, "INVALID_EDIT"),
+                      ({**mapping, "targetTimeDomainId": "wall-time"}, "INVALID_EDIT"), ({"mappingId": "absent", "remove": True}, "SELECTION_UNRESOLVED")):
+        refused = apply(bad)
+        assert refused.status_code in (409, 422), refused.text
+        if code:
+            assert refused.json()["code"] == code
+        assert client.get(f"/api/v1/projects/{pid}").json()["revision"] == revision
+    removed = apply({"mappingId": "wall-to-sim", "remove": True})
+    assert removed.status_code == 200, removed.text
+    deployment = next(d for d in removed.json()["documents"].values() if d["path"] == "xdl/deployment.xdl.yaml")
+    assert "timeMappings" not in YAML(typ="safe").load(deployment["content"])["spec"]

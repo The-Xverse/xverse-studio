@@ -88,6 +88,7 @@ class Deployments:
         yaml = YAML(typ="safe")
         resources = {identifier: yaml.load(document["content"]) for identifier, document in project["documents"].items()}
         scenarios = [resource for resource in resources.values() if resource["kind"] == "Scenario"]
+        systems = {resource_ref(resource): resource for resource in resources.values() if resource["kind"] == "System"}
         result = []
         for identifier, resource in resources.items():
             if resource["kind"] != "Deployment":
@@ -97,7 +98,10 @@ class Deployments:
             result.append({"variantId": identifier, "documentId": identifier, "ref": ref, "name": resource["metadata"]["name"],
                            "description": resource["metadata"].get("description", ""), "systemRef": authored_ref(resource["spec"]["systemRef"]),
                            "bindings": resource["spec"].get("bindings", []), "targets": resource["spec"].get("targets", []),
-                           "artifacts": resource["spec"].get("artifacts", []), "scenarioRefs": matches,
+                           "artifacts": resource["spec"].get("artifacts", []), "resources": resource["spec"].get("resources", []),
+                           "timeMappings": resource["spec"].get("timeMappings", []),
+                           "timeDomains": [d.get("id") for d in systems.get(authored_ref(resource["spec"]["systemRef"]), {}).get("spec", {}).get("timeDomains", []) or []],
+                           "scenarioRefs": matches,
                            "readiness": "preflight_required", "limitations": ["Static XDL compatibility does not establish artifact availability, provider support or behavioural equivalence."]})
         return {"items": result, "revision": project["revision"], "diagnostics": [], "nextCursor": None}
 
@@ -207,7 +211,7 @@ class Deployments:
         variant = next(item for item in self.list(project_id)["items"] if item["documentId"] == created["documentId"])
         return {"project": project, "variant": variant}
 
-    def update_binding(self, project_id, revision, document_id, value):
+    def update_binding(self, project_id, revision, document_id, value, provider_id="studio.reference"):
         if not isinstance(value, dict) or set(value) - {"bindingId", "targetId", "realizationClass", "artifactIds", "resourceIds", "scenarioRef"}:
             raise Problem("BINDING_INVALID", "Unsupported binding fields.")
         readiness, resolution = {}, {}
@@ -228,7 +232,7 @@ class Deployments:
             compiled = compile_selection(updated, selection, self.adapter)
             readiness.update(status="blocked", diagnostics=compiled["diagnostics"])
             if compiled["valid"]:
-                resolution.update(self._resolve(updated, selection["deploymentRef"]))
+                resolution.update(self._resolve(updated, selection["deploymentRef"], provider_id))
             if compiled["valid"]:
                 try:
                     reference_configuration(compiled["contributingDocuments"], compiled)

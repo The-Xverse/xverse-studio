@@ -9,6 +9,11 @@ import type { DoAction } from "../../app/App";
 import type { Projection } from "../model/projection";
 import { DeploymentView } from "../model/Views";
 import { Icon, Badge, Diagnostics, Empty, KeyValues } from "../../app/ui";
+import {
+  ResolutionPanel,
+  VariantComparison,
+  useResolution,
+} from "./ResolutionPanel";
 export interface ExecutionSelection {
   deploymentRef?: string;
   scenarioRef?: string;
@@ -17,6 +22,7 @@ export function DeploymentComposer({
   project,
   projection,
   providers,
+  providerId,
   selection,
   onSelection,
   refresh,
@@ -25,6 +31,7 @@ export function DeploymentComposer({
   project: Project;
   projection: Projection;
   providers: Data[];
+  providerId: string;
   selection: ExecutionSelection;
   onSelection: (selection: ExecutionSelection) => void;
   refresh: () => Promise<unknown>;
@@ -33,7 +40,21 @@ export function DeploymentComposer({
   const [variants, setVariants] = useState<Data[]>([]),
     [name, setName] = useState(""),
     [diagnostics, setDiagnostics] = useState<Data[]>([]),
-    [compatibility, setCompatibility] = useState<Data | null>(null);
+    [compatibility, setCompatibility] = useState<Data | null>(null),
+    [compareRef, setCompareRef] = useState(""),
+    [resourceBinding, setResourceBinding] = useState(""),
+    [mappingForm, setMappingForm] = useState({
+      mappingId: "",
+      sourceTimeDomainId: "",
+      targetTimeDomainId: "",
+      mapping: "",
+      toleranceValue: "",
+      toleranceUnit: "s",
+    }),
+    [resourceDraft, setResourceDraft] = useState<{
+      key: string;
+      ids: string[];
+    } | null>(null);
   useEffect(() => {
     let active = true;
     void api(`/projects/${project.projectId}/deployment-variants`)
@@ -70,6 +91,69 @@ export function DeploymentComposer({
   const document = projection.deployments.find(
     (resource) => resource.documentId === chosen?.documentId,
   );
+  const resolved = useResolution(
+      project.projectId,
+      project.revision,
+      chosen?.documentId,
+      providerId,
+    ),
+    compareVariant = variants.find(
+      (variant) => variant.ref === compareRef && variant.ref !== chosen?.ref,
+    ),
+    compared = useResolution(
+      project.projectId,
+      project.revision,
+      compareVariant?.documentId,
+      providerId,
+    );
+  const binding = chosen?.bindings.find(
+      (value: Data) => value.id === resourceBinding,
+    ),
+    bindingTarget = chosen?.targets.find(
+      (target: Data) => target.id === binding?.targetId,
+    ),
+    offered = new Set<string>(bindingTarget?.offeredResourceIds || []),
+    declaredResources = new Set<string>(
+      (chosen?.resources || []).map((resource: Data) => resource.id),
+    ),
+    // Unsaved choices belong to one variant, binding and revision; anything else shows the authored binding.
+    draftKey = `${chosen?.documentId}:${resourceBinding}:${project.revision}`,
+    resourceChoice: string[] =
+      resourceDraft?.key === draftKey
+        ? resourceDraft.ids
+        : binding?.resourceIds || [];
+  async function timeMappingEdit(edit: Data) {
+    const result = await api(`/projects/${project.projectId}/edits`, {
+      method: "POST",
+      revision: project.revision,
+      body: {
+        baseRevision: project.revision,
+        edits: [
+          {
+            kind: "set_time_mapping",
+            documentId: (
+              project.documents[chosen!.documentId] as { path: string }
+            ).path,
+            ...edit,
+          },
+        ],
+      },
+    });
+    await refresh();
+    return result;
+  }
+  async function patchBinding(change: Partial<BindingUpdate>) {
+    const result = await api(
+      `/projects/${project.projectId}/deployment-variants/${chosen!.documentId}?providerId=${encodeURIComponent(providerId)}`,
+      {
+        method: "PATCH",
+        revision: project.revision,
+        body: { baseRevision: project.revision, ...change } as BindingUpdate,
+      },
+    );
+    setCompatibility(result.compatibility);
+    await refresh();
+  }
   return (
     <div className="view-page deployment-composer">
       <div className="section-heading">
@@ -106,6 +190,8 @@ export function DeploymentComposer({
                     : {},
                 );
                 setCompatibility(null);
+                setResourceBinding("");
+                if (variant?.ref === compareRef) setCompareRef("");
               }}
             >
               <option value="">Choose an authored deployment</option>
@@ -223,6 +309,272 @@ export function DeploymentComposer({
           </div>
         </form>
       </section>
+      {chosen && (
+        <section className="panel" aria-labelledby="resolution-heading">
+          <h3 id="resolution-heading">
+            Resolution and effective configuration
+          </h3>
+          <ResolutionPanel
+            report={resolved?.value}
+            failure={resolved?.failure}
+          />
+        </section>
+      )}
+      {chosen && (chosen.resources || []).length > 0 && (
+        <section className="panel" aria-labelledby="resource-heading">
+          <h3 id="resource-heading">Bound resources</h3>
+          <form
+            onSubmit={(event) => {
+              event.preventDefault();
+              void doAction("Saving bound resources", () =>
+                patchBinding({
+                  bindingId: resourceBinding,
+                  resourceIds: resourceChoice.filter((id) =>
+                    declaredResources.has(id),
+                  ),
+                }),
+              );
+            }}
+          >
+            <label>
+              Binding
+              <select
+                aria-label="Binding for resources"
+                value={resourceBinding}
+                onChange={(event) => setResourceBinding(event.target.value)}
+              >
+                <option value="">Choose a binding</option>
+                {chosen.bindings.map((value: Data) => (
+                  <option key={value.id} value={value.id}>
+                    {value.id} ({value.logicalRef?.element})
+                  </option>
+                ))}
+              </select>
+            </label>
+            <fieldset disabled={!binding}>
+              <legend>Resources declared by this deployment</legend>
+              {(chosen.resources || []).map((resource: Data) => (
+                <label key={resource.id} className="resource-choice">
+                  <input
+                    type="checkbox"
+                    checked={resourceChoice.includes(resource.id)}
+                    onChange={(event) =>
+                      setResourceDraft({
+                        key: draftKey,
+                        ids: event.target.checked
+                          ? [...resourceChoice, resource.id]
+                          : resourceChoice.filter((id) => id !== resource.id),
+                      })
+                    }
+                  />
+                  {resource.id} — {resource.resourceClass},{" "}
+                  {resource.capacity?.value} {resource.capacity?.unit},{" "}
+                  {resource.allocationPolicy}
+                  {binding &&
+                    (!bindingTarget?.offeredResourceIds ? (
+                      <small>
+                        {" "}
+                        ({binding.targetId} declares no offered resources;
+                        placement stays unknown)
+                      </small>
+                    ) : (
+                      !offered.has(resource.id) && (
+                        <small> (not offered by {binding.targetId})</small>
+                      )
+                    ))}
+                </label>
+              ))}
+            </fieldset>
+            <p className="field-hint">
+              Studio records the binding exactly; placement and requirement
+              checks are shown in the resolution above. Time mappings are edited
+              in XDL source.
+            </p>
+            <button className="button" disabled={!binding}>
+              Save bound resources
+            </button>
+          </form>
+        </section>
+      )}
+      {chosen && (
+        <section className="panel" aria-labelledby="time-heading">
+          <h3 id="time-heading">Time mappings</h3>
+          {(chosen.timeMappings || []).length ? (
+            <ul className="time-mappings">
+              {chosen.timeMappings.map((value: Data) => (
+                <li key={value.id}>
+                  <code>{value.id}</code>: {value.sourceTimeDomainRef?.element}{" "}
+                  → {value.targetTimeDomainRef?.element} ({value.mapping}, ±
+                  {value.tolerance?.value} {value.tolerance?.unit}){" "}
+                  <button
+                    type="button"
+                    className="small-button"
+                    aria-label={`Remove time mapping ${value.id}`}
+                    onClick={() =>
+                      void doAction("Removing time mapping", () =>
+                        timeMappingEdit({ mappingId: value.id, remove: true }),
+                      )
+                    }
+                  >
+                    Remove
+                  </button>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="muted">
+              No time mappings. Elements share the System's declared clocks.
+            </p>
+          )}
+          <form
+            className="time-mapping-form"
+            onSubmit={(event) => {
+              event.preventDefault();
+              void doAction("Saving time mapping", async () => {
+                await timeMappingEdit({
+                  mappingId: mappingForm.mappingId,
+                  sourceTimeDomainId: mappingForm.sourceTimeDomainId,
+                  targetTimeDomainId: mappingForm.targetTimeDomainId,
+                  mapping: mappingForm.mapping,
+                  tolerance: {
+                    value: Number(mappingForm.toleranceValue),
+                    unit: mappingForm.toleranceUnit,
+                  },
+                });
+                setMappingForm({ ...mappingForm, mappingId: "", mapping: "" });
+              });
+            }}
+          >
+            <label>
+              Mapping identifier
+              <input
+                required
+                pattern="[a-z][a-z0-9]*(-[a-z0-9]+)*"
+                maxLength={63}
+                value={mappingForm.mappingId}
+                onChange={(event) =>
+                  setMappingForm({
+                    ...mappingForm,
+                    mappingId: event.target.value,
+                  })
+                }
+              />
+            </label>
+            {(["sourceTimeDomainId", "targetTimeDomainId"] as const).map(
+              (field) => (
+                <label key={field}>
+                  {field === "sourceTimeDomainId"
+                    ? "Source clock"
+                    : "Target clock"}
+                  <select
+                    required
+                    value={mappingForm[field]}
+                    onChange={(event) =>
+                      setMappingForm({
+                        ...mappingForm,
+                        [field]: event.target.value,
+                      })
+                    }
+                  >
+                    <option value="">Choose a declared time domain</option>
+                    {(chosen.timeDomains || []).map((domain: string) => (
+                      <option key={domain} value={domain}>
+                        {domain}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              ),
+            )}
+            <label>
+              Mapping description
+              <input
+                required
+                maxLength={200}
+                value={mappingForm.mapping}
+                onChange={(event) =>
+                  setMappingForm({
+                    ...mappingForm,
+                    mapping: event.target.value,
+                  })
+                }
+              />
+            </label>
+            <label>
+              Tolerance
+              <input
+                required
+                type="number"
+                min={0}
+                step="any"
+                value={mappingForm.toleranceValue}
+                onChange={(event) =>
+                  setMappingForm({
+                    ...mappingForm,
+                    toleranceValue: event.target.value,
+                  })
+                }
+              />
+            </label>
+            <label>
+              Tolerance unit
+              <input
+                required
+                maxLength={32}
+                value={mappingForm.toleranceUnit}
+                onChange={(event) =>
+                  setMappingForm({
+                    ...mappingForm,
+                    toleranceUnit: event.target.value,
+                  })
+                }
+              />
+            </label>
+            <p className="field-hint">
+              A mapping with an existing identifier replaces it. Studio records
+              the declared relation; its accuracy is never evaluated.
+            </p>
+            <button className="button">Save time mapping</button>
+          </form>
+        </section>
+      )}
+      {chosen && variants.length > 1 && (
+        <section className="panel" aria-labelledby="compare-heading">
+          <h3 id="compare-heading">Compare with another variant</h3>
+          <label>
+            Comparison variant
+            <select
+              aria-label="Comparison variant"
+              value={compareVariant?.ref || ""}
+              onChange={(event) => setCompareRef(event.target.value)}
+            >
+              <option value="">Choose a variant</option>
+              {variants
+                .filter((variant) => variant.ref !== chosen.ref)
+                .map((variant) => (
+                  <option key={variant.documentId} value={variant.ref}>
+                    {variant.name}
+                  </option>
+                ))}
+            </select>
+          </label>
+          {compareVariant &&
+            (resolved?.value?.sourceValid && compared?.value?.sourceValid ? (
+              <VariantComparison
+                left={resolved.value}
+                right={compared.value}
+                leftName={chosen.name}
+                rightName={compareVariant.name}
+              />
+            ) : (
+              <p className="muted" role="status">
+                {resolved?.failure ||
+                  compared?.failure ||
+                  "Resolving both variants…"}
+              </p>
+            ))}
+        </section>
+      )}
       {compatibility && (
         <section className="panel">
           <h3>Binding compatibility</h3>
@@ -240,19 +592,7 @@ export function DeploymentComposer({
           edit={async (edits) =>
             doAction("Saving selected deployment binding", async () => {
               const { kind, documentId, ...change } = edits[0];
-              const result = await api(
-                `/projects/${project.projectId}/deployment-variants/${chosen!.documentId}`,
-                {
-                  method: "PATCH",
-                  revision: project.revision,
-                  body: {
-                    baseRevision: project.revision,
-                    ...change,
-                  } as BindingUpdate,
-                },
-              );
-              setCompatibility(result.compatibility);
-              await refresh();
+              await patchBinding(change);
             })
           }
         />

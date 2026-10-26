@@ -34,8 +34,16 @@ structurally valid source set. It is exposed in three places:
 
 It only evaluates what declarations state. An undecidable requirement is `unknown`
 (`COMPATIBILITY_UNKNOWN`) and blocks execution; it is never a pass. Studio defines no rule the schema
-lacks: realization class and target class are recorded as `declared` and judged by the provider, and a
-hard limit is not compared with capacity.
+lacks:
+
+- Realization class and target class are `declared` when no provider is selected.
+- When a provider is selected, they are checked against that provider's descriptor. Its declared
+  `realizationClasses` and `targetClasses` either `pass` or are `unsupported`
+  (`CAPABILITY_UNSUPPORTED`). The report carries the provider's maturity and fidelity limitations.
+- A hard limit is not compared with capacity.
+
+The route and the rebinding `PATCH` take `providerId`, defaulting to `studio.reference`; preflight
+uses the selected provider.
 
 ### Bindings
 
@@ -53,6 +61,12 @@ Each binding gets per-check results:
   - If none does and some capacity is in another unit, the result is `unknown`: no unit conversion is
     admitted.
   - Otherwise it fails.
+
+### Time-mapping edit
+
+Deployment time mappings are authored with the `set_time_mapping` semantic edit (a contract
+amendment). It adds a mapping, replaces one by its id, or removes one. The authoritative validator
+checks the referenced domains.
 
 ### Deployment constraints
 
@@ -112,5 +126,6 @@ contains asset references, secret references or binding values.
 - A preserved logical identity never implies behavioural equivalence or fidelity.
 - The reference blueprints declare none of these layers, so their readiness is unchanged.
 
-Verification: `tests/integration/test_deployment_variants.py`. Variant comparison and the resolution
-forms are T059. The T054 converter/causality contracts and the native Windows host remain open.
+Verification: `tests/integration/test_deployment_variants.py` and `tests/e2e/deployment-resolution.spec.ts`.
+The resolution panel, variant comparison and resource/time forms (T059) live in
+`apps/studio-web/src/features/deployments/`. The T054 converter/causality contracts and the native Windows host remain open.

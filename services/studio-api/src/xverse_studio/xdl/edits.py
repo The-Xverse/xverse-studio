@@ -2,6 +2,7 @@
 
 from copy import deepcopy
 from io import StringIO
+import math
 import re
 
 from ruamel.yaml import YAML
@@ -26,6 +27,7 @@ REGISTRY = {
     "set_binding": {"documentId", "bindingId", "targetId", "realizationClass", "artifactIds", "resourceIds"},
     "add_binding": {"documentId", "bindingId", "elementId", "targetId", "realizationClass", "artifactIds"},
     "rename_display_label": {"documentId", "label", "name", "elementRef"},
+    "set_time_mapping": {"documentId", "mappingId", "sourceTimeDomainId", "targetTimeDomainId", "mapping", "tolerance", "remove"},
 }
 IDENTIFIER = re.compile(r"^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$")
 ASSET_COLLECTIONS = {"device": "devices", "sensor": "sensors", "actuator": "actuators", "model": "models"}
@@ -329,6 +331,45 @@ def semantic_edits(documents: dict[str, str], edits: list[dict]) -> dict[str, st
             if artifacts:
                 binding["artifactIds"] = list(artifacts)
             spec.setdefault("bindings", []).append(binding)
+            touched.add(name)
+        elif kind == "set_time_mapping":
+            # Adds, replaces (by id) or removes one Deployment clock mapping; the validator checks the domains.
+            name, deployment = select("Deployment", explicit)
+            spec = deployment["spec"]
+            mapping_id = edit.get("mappingId")
+            if not isinstance(mapping_id, str) or not IDENTIFIER.fullmatch(mapping_id) or len(mapping_id) > 63:
+                raise XDLRejected("A time mapping needs a valid identifier.", "INVALID_EDIT")
+            mappings = spec.get("timeMappings", [])
+            existing = [index for index, value in enumerate(mappings) if isinstance(value, dict) and value.get("id") == mapping_id]
+            if edit.get("remove") is True:
+                if set(edit) - {"kind", "documentId", "mappingId", "remove"}:
+                    raise XDLRejected("Removing a time mapping takes only its identifier.", "INVALID_EDIT")
+                if not existing:
+                    raise XDLRejected("Select an existing time mapping to remove.", "SELECTION_UNRESOLVED")
+                spec["timeMappings"] = [value for index, value in enumerate(mappings) if index not in existing]
+                if not spec["timeMappings"]:
+                    del spec["timeMappings"]
+            else:
+                source, target = edit.get("sourceTimeDomainId"), edit.get("targetTimeDomainId")
+                tolerance, text = edit.get("tolerance"), edit.get("mapping")
+                if "remove" in edit and edit["remove"] is not False:
+                    raise XDLRejected("remove must be a boolean.", "INVALID_EDIT")
+                if not all(isinstance(v, str) and IDENTIFIER.fullmatch(v) and len(v) <= 63 for v in (source, target)) or source == target:
+                    raise XDLRejected("Choose two different declared time domains.", "INVALID_EDIT")
+                if not isinstance(text, str) or not 1 <= len(text) <= 200:
+                    raise XDLRejected("Describe the mapping in one to 200 characters.", "INVALID_EDIT")
+                if (not isinstance(tolerance, dict) or set(tolerance) != {"value", "unit"} or isinstance(tolerance["value"], bool)
+                        or not isinstance(tolerance["value"], (int, float)) or not math.isfinite(tolerance["value"]) or tolerance["value"] < 0
+                        or not isinstance(tolerance["unit"], str) or not 1 <= len(tolerance["unit"]) <= 32):
+                    raise XDLRejected("A tolerance is a finite non-negative value with a unit.", "INVALID_EDIT")
+                system_ref = spec["systemRef"]
+                ref = {"apiVersion": system_ref.get("apiVersion"), "kind": "System", "namespace": system_ref.get("namespace"), "name": system_ref.get("name")}
+                value = {"id": mapping_id, "sourceTimeDomainRef": {**ref, "element": source}, "targetTimeDomainRef": {**ref, "element": target},
+                         "mapping": text, "tolerance": {"value": tolerance["value"], "unit": tolerance["unit"]}}
+                if existing:
+                    mappings[existing[0]] = value
+                else:
+                    spec.setdefault("timeMappings", []).append(value)
             touched.add(name)
         elif kind == "rename_display_label":
             # XDL metadata.description is a display label; logical metadata.name is never renamed implicitly.

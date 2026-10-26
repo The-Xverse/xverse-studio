@@ -1224,6 +1224,7 @@ export default function App() {
                   project={project}
                   projection={projection}
                   providers={providers}
+                  providerId={executionProvider}
                   selection={executionSelection}
                   onSelection={chooseExecution}
                   refresh={refreshProject}

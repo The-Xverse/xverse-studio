@@ -3790,7 +3790,14 @@
         "AC-018"
       ],
       "status": "in_progress",
-      "implementation_note": "Owned graph/source/catalog/profile/variant work implemented and tested; independent composition repair verification and final UI successor are being retained. External two-industry/live and cross-OS gates remain open."
+      "implementation_note": "Component implemented: resolution panel (binding checks, constraints, effective-value source chains, portable intent vs environment, provider maturity/classes/fidelity limits), realization/placement variant comparison, bound-resource and time-mapping forms (set_time_mapping amendment) and provider-declared realization/target classes. 661 backend / 69 browser checks pass. Remains open: depends on T058, which waits on T054.",
+      "implementation_evidence": [
+        "apps/studio-web/src/features/deployments/ResolutionPanel.tsx",
+        "apps/studio-web/src/features/deployments/DeploymentComposer.tsx",
+        "tests/e2e/deployment-resolution.spec.ts",
+        "evidence/studio/M2-deployment-forms/README.md",
+        "evidence/studio/M2-deployment-forms/verification.json"
+      ]
     },
     {
       "id": "T060",
@@ -6192,15 +6199,15 @@
     "status_document": "../../docs/implementation/STATUS.md",
     "native_windows": "BLOCKED at user request. Initial native Server 2022 install failed on upstream Git filenames; application/browser NOT_RUN.",
     "m5": "deferred",
-    "code_candidate": "working-tree product sha256 recorded in evidence/studio/M2-deployments/verification.json on f7db660",
+    "code_candidate": "working-tree product sha256 recorded in evidence/studio/M2-deployment-forms/verification.json on 1ff8ce9",
     "component_completed": 37,
     "verification": {
-      "backend_tests_passed": 659,
-      "playwright_checks_passed": 68,
+      "backend_tests_passed": 661,
+      "playwright_checks_passed": 69,
       "playwright_checks_failed": 0,
       "playwright_scope": "full Linux browser suite with performance measurements on an unchanged candidate",
       "milestones_accepted": 0,
-      "evidence": "evidence/studio/M2-deployments/"
+      "evidence": "evidence/studio/M2-deployment-forms/"
     }
   }
 }
