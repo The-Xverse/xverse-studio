@@ -48,6 +48,11 @@ runtime, reservation or clock accuracy; the ready lane uses the exact admitted r
 remain partial; count 47/100, no milestone accepted. Both e76b969 and 2e27c3f push/PR CI passed before
 this deployment repair.
 
+Clean 1c8e937 also passed offline native Linux package extraction/provisioning, startup/UI,
+Unicode persistence, authoritative compilation and owned shutdown. Its clean 100-file manifest,
+archive/file hashes and exact tested UI bytes are retained under `M2-keyboard-deployment/package/`.
+Fresh-host CI remains a separate per-candidate outcome.
+
 The preceding connection-authoring successor passed both required native Linux keyboard viewports,
 reproducing and repairing browser/backend flow-ID grammar drift with associated guidance and native
 constraint focus. Independent backend rejection preserves exact documents/revision; one successful

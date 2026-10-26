@@ -90,3 +90,9 @@ Studio/browser presentation, not provider or simulator capacity.
 | --- | --- | --- | --- |
 | 1024x768 | 24.3 ms | 1655.2 ms | 445.1 ms |
 | 1440x900 | 24.5 ms | 1657.6 ms | 445.8 ms |
+
+Clean product `1c8e9375313469c4fa2ded0b190b4567c320e1bd` passed fresh offline native Linux package extraction with
+prepared dependencies, startup/UI HTTP 200, Unicode persistence, authoritative public
+compilation and owned shutdown. `package/` retains its clean 100-file manifest, receipt
+and verification of all archive/file hashes and exact tested UI bytes. Browser scope
+remains the separate checks above; native Windows was not run.

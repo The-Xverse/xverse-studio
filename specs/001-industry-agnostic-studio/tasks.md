@@ -399,3 +399,5 @@ actual assistive-technology assessment and full acceptance remain open.
 Evidence: `evidence/studio/M2-keyboard-deployment/`; count 47/100, no milestone accepted.
 T057/T058/T059 component traces also retain the ADR-0015 client-completion amendment and final
 regression; their completed component status is unchanged.
+Clean 1c8e937 package smoke passes; clean 100-file manifest, archive/file hashes and tested UI
+bytes are verified under `M2-keyboard-deployment/package/`. Native Windows remains held.
