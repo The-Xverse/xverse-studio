@@ -26,14 +26,17 @@ remains blocked at user request, and native Windows secure I/O remains unimpleme
 The latest full Linux backend run passed **851 tests**; typecheck/build and the full **77-check
 browser/performance gate passed** with unchanged source (`evidence/studio/M3-assets/`).
 Both viewport performance workloads and duplicate-name project retention now pass in the same full
-cohort. T023's direct identity/shutdown failure fixtures are repaired, but native Windows stays held.
+cohort. A clean b2cf71a package extraction also passed offline native Linux provisioning,
+startup/UI serving, Unicode persistence and authoritative compilation (`M3-assets/package/`);
+failed symlink-relative-path attempts and successful physical-path controls are retained. T023's direct identity/shutdown failure fixtures are repaired, but native Windows stays held.
 T073 has 30 passing registry cases and five detected mutations; positive HTTP authority awaits T074,
 whose T023 dependency remains open. T038/T067 retain their native Windows and broader accessibility
 gates. T001's five installed XDL file hashes match the selected baseline.
-Fresh-host CI passed (push and PR) through 04293b8. Both abd5acc jobs failed a name-only retention-test
+Both fresh-host CI runs for b2cf71a passed, following the earlier 04293b8 passes. Both abd5acc jobs failed a name-only retention-test
 selector after the new viewport tests created valid duplicate names; the resulting artifact failure
 was a cascade. Original logs are retained under `M1-operability/ci-regression/`. The successor uses
-exact project IDs and passes the full local cohort; fresh-host successor CI is recorded separately.
+exact project IDs and passes both the full local cohort and fresh-host CI; receipts are retained
+under `evidence/studio/native-ci/`.
 That includes the 30-second native expiry case with actual HTTP 410 and running verified-prefix
 recovery. Fresh-host push CI for checkpoint fb8ddb6 had failed that case (a history read racing a
 journal append); the PR run passed. Both outcomes are retained in `evidence/studio/native-ci/`.

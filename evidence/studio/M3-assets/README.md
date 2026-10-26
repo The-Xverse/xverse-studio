@@ -23,6 +23,7 @@ metadata/privacy, malformed/failing inventory, limits/completeness, source-chang
 and no-delegation cases. The primary agent's independent audit and repaired findings are retained
 in `independent-review.md`. Final whole-candidate verification is recorded separately.
 
-This completes only the owned backend component once final verification is retained. Live physical
+The owned backend component is complete; `verification.json` retains the unchanged-source
+851-backend / 77-browser cohort. Live physical
 AC-021–AC-024 still require a nominated device/provider, driver, explicit permitted environment and
 actual observations. Native Windows installation/testing remains held at user request.

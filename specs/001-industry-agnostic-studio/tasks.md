@@ -309,3 +309,7 @@ three direct identity/shutdown fixture gaps are repaired, with native Windows st
 Both CI failures on abd5acc are retained: duplicate project names exposed a retention-test selector
 assumption; the successor scopes actions by exact project ID and passes the full regression.
 Component completion is 47/100; no milestone is accepted.
+
+Committed b2cf71a passed both native Ubuntu 24.04 CI jobs and a clean local package extraction smoke.
+The latter uses resolved physical cache/tool/temp paths; failed logical-symlink-path attempts and
+successful controls with both Python interpreter choices are retained in `M3-assets/package/`.
