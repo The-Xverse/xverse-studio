@@ -34,7 +34,23 @@ with its manifest/checker included, clean 100-file hash proof and unchanged test
 grants no runtime authority and does not close T001. Both 944a875 product and d421c23 package-metadata CI runs passed;
 those outcomes predate this descriptive artifact.
 
-The latest source-editor successor passed 26 native keyboard checks and the complete 171-check
+The latest source-recovery successor passed 38 native keyboard cases and full 209 browser checks
+with frozen source/compiled UI/fixed inputs. History lookup distinguishes unavailable observations
+from absence, supports retry and rejects malformed/out-of-window replies. Real recovery preserves
+exact observed backup bytes and canonical identities, handles unreadable/previous project contexts
+and blocks repeated pending submission. Returned Projects preserve navigation/newer history/readiness;
+current errors and completion receive guarded focus. Type/build/architecture/compatibility/spec and
+separate identical-input performance pass. Backend 851 is inherited through exact unchanged 164-input
+proof for this frozen UI candidate. ADR-0013, tasks and traces are amended together; T038/T067 remain
+partial, count 47/100 and no milestone accepted. `evidence/studio/M2-keyboard-source-recovery/` retains
+actual reds, scoped history fixtures, review and raw outcomes. Native Windows/AT/full gates remain open.
+
+The predecessor 7ec222b/a950572 push/PR Ubuntu24 jobs were cancelled at the 25-minute total limit during
+browser checks, with 161–170 logged passes and no logged assertion failures before cancellation. Their browser
+cohorts and package stages did not complete. Retained native-CI receipts preserve those outcomes;
+a job-budget amendment is separate from the local browser result.
+
+The preceding source-editor successor passed 26 native keyboard checks and the complete 171-check
 browser suite with unchanged application/test inputs. Source saves use authoritative returned
 Projects with project/load/intent/head guards, preserve newer navigation/history/drafts/readiness
 and restore focus conditionally. Real 412 conflict comparison/retry and real 413 size refusal retain

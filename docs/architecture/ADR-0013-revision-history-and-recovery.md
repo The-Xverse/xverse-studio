@@ -139,3 +139,43 @@ cache boundary and real backend size refusal. Scoped browser-storage read-failur
 canonical fallback and unread-cache preservation; they do not establish platform-filesystem failure
 handling. Native Linux evidence belongs in `evidence/studio/M2-keyboard-source/`; Windows, actual
 assistive technology, external-file adoption and complete milestone acceptance remain separate.
+
+Recovery-panel completion amendment (2026-10-26): revision history is an observation with
+loading, recorded, absent and unavailable states. Only a successful, bounded, well-formed reply
+within the requested revision window can establish a recorded copy or its absence. HTTP/transport
+failure, malformed data and an out-of-window revision leave restoration availability unknown and
+provide an explicit history retry. An absent reply says no recorded copy is available for that
+revision; it does not invent a historical reason. Adoption remains independently available when
+the inspected source is adoptable. The backend still verifies restoration copies and expected
+revision when the user submits the recovery transaction.
+
+Recovery submits once per pending panel context, with a synchronous guard and disabled controls.
+The App owns completion context because an unreadable project's error panel can unmount as soon as
+the action clears its old error. A valid response can initialize that selected project's context
+even when no Project is rendered or the previous project is still visible. The authoritative
+returned Project applies only to the initiating selected project/load generation and cannot replace
+a known equal or newer head. This preserves newer readiness and history. Feedback and focus also
+require the initiating intent. Completion starts no captured project refresh or new project load.
+
+When recovery changes the rendered project identity, view/selection/provider and pending-Start
+context initialize for that project. The previous project's run is cleared; a retained run lookup
+may restore only the matching project's run while the project/load/intent remain current. This is
+a read of existing metadata, never Start or replay. The cached project summary advances without
+recapturing navigation intent. Same-project recovery preserves its selected run's frozen identity.
+
+Current success can focus the enabled XDL source control after the recovery controls disappear.
+Current refusal can focus the labelled operation error; an obsolete refusal cannot appear in a
+departed workspace. Restoration requires current context, no modal, and focus still on the origin
+or BODY. History retry similarly restores its relevant enabled control or absence notice, without
+overriding deliberately moved focus. Group guidance is associated with the controls' source-recovery
+group. Native pending-Enter cases establish disabled controls and one actual request; the same-tick
+synchronous guard is separately source-reviewed.
+
+Verification: `tests/e2e/source-recovery-accessibility.spec.ts` uses only isolated owned files under
+the declared browser-test data root. Actual adopt/restore transactions check exact requests,
+canonical and backup bytes/digests, revision increments, other document identities, authoritative
+validation and unchanged run sets. Unreadable boot and previous-project cases, held real replies,
+repeated Enter and actual second-session stale refusal cover completion. History failure, malformed,
+out-of-window and absent-response fixtures are explicitly labelled; absence fixtures do not prove
+actual legacy-project acceptance. Native Linux evidence belongs in
+`evidence/studio/M2-keyboard-source-recovery/`; Windows and complete milestone gates remain open.

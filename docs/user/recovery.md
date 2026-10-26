@@ -91,6 +91,17 @@ again. A size refusal requires correcting the source; reloading cannot raise the
 Saving changes the project's draft revision and never changes an active run's frozen inputs. These
 browser recovery journeys have native Linux evidence; Windows verification remains held.
 
+For files changed outside Studio, **Source recovery** offers explicit adoption or restoration.
+Adoption requires readable UTF-8 source. Restoration requires a recorded revision whose saved copies
+pass the backend's integrity checks; unavailable or corrupt copies produce an error without a new
+revision. Recovery preserves the observed external bytes in the named backup before committing.
+The original revision stays in history, and existing run snapshots remain unchanged.
+
+If Studio cannot check revision history, restoration availability is **unknown**. Use **Retry revision
+history**; a failed lookup does not mean the project has no history. A successful lookup with no
+recorded copy reports that absence separately. Keep a copy of your data before choosing adoption or
+restoration. Wait for the current request to finish; pending controls prevent repeated submission.
+
 Campaign recovery reconciles existing child identities before scheduling pending work. An uncertain
 start is never replayed. Interrupted evaluation/retention operations report uncertainty or error rather
 than synthesizing success. Historical canonical journal bytes are read-only; annotations and derived

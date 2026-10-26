@@ -50,7 +50,7 @@ import {
 import { PreflightReview } from "../features/preflight/PreflightReview";
 import { ResultsView } from "../features/results/ResultsView";
 import { PendingStartNotice } from "../features/runs/PendingStartNotice";
-import { RecoveryPanel } from "../features/model/RecoveryPanel";
+import { RecoveryPanel, type RecoveryResult } from "../features/model/RecoveryPanel";
 import { FrozenInputs } from "../features/results/FrozenInputs";
 import {
   RunDivergenceBadge,
@@ -189,6 +189,147 @@ export default function App() {
     setEditHistory(history);
     setPreflight(null);
     return visible;
+  }
+  const sourceControl = useRef<HTMLButtonElement>(null),
+    operationError = useRef<HTMLDivElement>(null);
+  const [recoveryFocus, setRecoveryFocus] = useState<{
+    projectId: string;
+    loadSequence: number;
+    intentSequence: number;
+    origin: Element | null;
+    target: "source" | "error";
+  } | null>(null);
+  useEffect(() => {
+    if (busy || !recoveryFocus) return;
+    setRecoveryFocus(null);
+    if (
+      selectedProjectRef.current !== recoveryFocus.projectId ||
+      projectLoadSequence.current !== recoveryFocus.loadSequence ||
+      preflightRequestSequence.current !== recoveryFocus.intentSequence ||
+      modal ||
+      document.querySelector('[role="dialog"]') ||
+      (document.activeElement !== document.body &&
+        document.activeElement !== recoveryFocus.origin)
+    )
+      return;
+    if (recoveryFocus.target === "error") operationError.current?.focus();
+    else if (
+      project?.projectId === recoveryFocus.projectId &&
+      section === "workspace"
+    )
+      sourceControl.current?.focus();
+  }, [busy, recoveryFocus, project?.projectId, section, modal]);
+  function recoveryAction(
+    projectId: string,
+    label: string,
+    action: () => Promise<unknown>,
+  ) {
+    const origin = document.activeElement;
+    return doAction(label, async () => {
+      try {
+        return await action();
+      } catch (error) {
+        if (
+          selectedProjectRef.current === projectId &&
+          projectLoadSequence.current === renderedLoadSequence &&
+          preflightRequestSequence.current === renderedIntentSequence
+        ) {
+          setRecoveryFocus({
+            projectId,
+            loadSequence: renderedLoadSequence,
+            intentSequence: renderedIntentSequence,
+            origin,
+            target: "error",
+          });
+          throw error;
+        }
+      }
+    });
+  }
+  function completeRecovery(
+    projectId: string,
+    result: RecoveryResult,
+    origin: HTMLButtonElement,
+  ) {
+    const saved = result.project,
+      known = latestProject.current;
+    if (
+      saved.projectId !== projectId ||
+      selectedProjectRef.current !== projectId ||
+      projectLoadSequence.current !== renderedLoadSequence ||
+      (known?.projectId === projectId && saved.revision <= known.revision)
+    )
+      return;
+    const visible = preflightRequestSequence.current === renderedIntentSequence,
+      changed = known?.projectId !== projectId;
+    preflightRequestSequence.current++;
+    setProject(saved);
+    const history = reconcileHistory(readHistory(projectId), saved.revision);
+    writeHistory(projectId, history);
+    setEditHistory(history);
+    setPreflight(null);
+    localStorage.setItem("studio.projectId", projectId);
+    setProjects((values) =>
+      values.map((value) =>
+        value.projectId === projectId
+          ? { ...value, name: saved.name, revision: saved.revision }
+          : value,
+      ),
+    );
+    if (changed) {
+      setExecutionProvider("studio.reference");
+      setSelected("");
+      setView("Model");
+      try {
+        const cached = JSON.parse(
+          localStorage.getItem("studio.selection." + projectId) || "{}",
+        );
+        setExecutionSelection({
+          ...(typeof cached?.deploymentRef === "string"
+            ? { deploymentRef: cached.deploymentRef }
+            : {}),
+          ...(typeof cached?.scenarioRef === "string"
+            ? { scenarioRef: cached.scenarioRef }
+            : {}),
+        });
+      } catch {
+        setExecutionSelection({});
+      }
+      setPendingStart(readPendingStart(projectId));
+      setRun(null);
+      localStorage.removeItem("studio.lastRun");
+      const storedRun = localStorage.getItem("studio.lastRun." + projectId),
+        intent = preflightRequestSequence.current;
+      if (storedRun)
+        void api<Run>(`/runs/${storedRun}`)
+          .then((value) => {
+            if (
+              selectedProjectRef.current !== projectId ||
+              projectLoadSequence.current !== renderedLoadSequence ||
+              preflightRequestSequence.current !== intent
+            )
+              return;
+            setRun(value.projectId === projectId ? value : null);
+            if (value.projectId === projectId)
+              localStorage.setItem("studio.lastRun", storedRun);
+          })
+          .catch(() => {
+            /* Missing retained run metadata does not start or replay a run. */
+          });
+    }
+    if (visible) {
+      setSection("workspace");
+      setNotice(
+        `Recovered as revision ${saved.revision}. The observed external bytes are preserved in backup ${result.recovery.recoveryId}.`,
+      );
+      setRecoveryFocus({
+        projectId,
+        loadSequence: renderedLoadSequence,
+        intentSequence: preflightRequestSequence.current,
+        origin,
+        target: "source",
+      });
+    }
   }
   const undoControl = useRef<HTMLButtonElement | null>(null),
     redoControl = useRef<HTMLButtonElement | null>(null);
@@ -1043,20 +1184,26 @@ export default function App() {
                       diagnostics={project.sourceDiagnostics || []}
                     />
                     <RecoveryPanel
+                      key={`${project.projectId}:${project.revision}`}
                       project={project}
-                      doAction={doAction}
-                      onRecovered={async (recovery) => {
-                        await refreshProject();
-                        setNotice(
-                          `Recovered as revision ${recovery.project.revision}. The observed external bytes are preserved in backup ${recovery.recovery.recoveryId}.`,
-                        );
+                      doAction={(label, action) =>
+                        recoveryAction(project.projectId, label, action)
+                      }
+                      onRecovered={(recovery, origin) => {
+                        completeRecovery(project.projectId, recovery, origin);
                       }}
                     />
                   </div>
                 </div>
               )}
               {error && (
-                <div className="notice error" role="alert">
+                <div
+                  className="notice error"
+                  role="alert"
+                  aria-label="Operation error"
+                  tabIndex={-1}
+                  ref={operationError}
+                >
                   <Icon name="info" />
                   <div>
                     <strong>
@@ -1074,14 +1221,17 @@ export default function App() {
                         );
                         return listed ? (
                           <RecoveryPanel
+                            key={`${listed.projectId}:${listed.revision}`}
                             project={listed}
                             adoptable={false}
-                            doAction={doAction}
-                            onRecovered={async (recovery) => {
-                              await loadProject(listed.projectId);
-                              await refreshProjects();
-                              setNotice(
-                                `Recovered as revision ${recovery.project.revision}. Observed bytes are preserved in backup ${recovery.recovery.recoveryId}.`,
+                            doAction={(label, action) =>
+                              recoveryAction(listed.projectId, label, action)
+                            }
+                            onRecovered={(recovery, origin) => {
+                              completeRecovery(
+                                listed.projectId,
+                                recovery,
+                                origin,
                               );
                             }}
                           />
@@ -1296,6 +1446,7 @@ export default function App() {
                   ))}
                   <span className="tab-fill" />
                   <button
+                    ref={sourceControl}
                     className="source-toggle"
                     onClick={() => openSource()}
                   >

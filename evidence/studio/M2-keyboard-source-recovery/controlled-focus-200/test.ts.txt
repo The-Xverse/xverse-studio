@@ -1,0 +1,26 @@
+import {test,expect} from '@playwright/test';
+import {readFileSync,writeFileSync,realpathSync} from 'node:fs';
+import path from 'node:path';
+import {connectStudio} from './connect-studio';
+for(const viewport of [{width:1024,height:768},{width:1440,height:900}])for(const direction of ['Tab','Shift+Tab'] as const){
+ test(`recovery focus probe: ${direction} through long recent list at ${viewport.width}x${viewport.height}`,async({page},info)=>{
+  test.setTimeout(90000);await page.setViewportSize(viewport);await connectStudio(page,info);
+  const project=await page.evaluate(async()=>{const {csrfToken}=await fetch('/api/v1/session').then(r=>r.json());const r=await fetch('/api/v1/projects',{method:'POST',headers:{'Content-Type':'application/json','X-CSRF-Token':csrfToken},body:JSON.stringify({name:'Owned recovery focus probe'})});if(!r.ok)throw Error('Owned project failed');const p=await r.json();localStorage.setItem('studio.projectId',p.projectId);return p;});
+  await page.reload();await expect(page.getByRole('heading',{name:project.name,exact:true})).toBeVisible();
+  const id=Object.keys(project.documents).find(id=>project.documents[id].path.endsWith('/system.xdl.yaml'))!,doc=project.documents[id],data=realpathSync(process.env.STUDIO_BROWSER_DATA!);const file=path.resolve(data,'projects',project.projectId,'revisions',String(project.revision),doc.path);expect(file.startsWith(data+path.sep)).toBe(true);expect(realpathSync(file)).toBe(file);expect(readFileSync(file,'utf8')).toBe(doc.content);writeFileSync(file,Buffer.from([0xff,0xfe,0x00,0x63]));
+  const listPattern='**/api/v1/projects',postPattern=`**/api/v1/projects/${project.projectId}/recoveries`;let release!:()=>void,ready=false,finished:Promise<void>|undefined;
+  const gate=new Promise<void>(r=>release=r);
+  await page.route(listPattern,async route=>{if(route.request().method()!=='GET'){await route.continue();return;}const response=await route.fetch(),body=await response.json(),real=body.items.find((p:any)=>p.projectId===project.projectId);expect(real).toBeTruthy();await route.fulfill({response,json:{items:[real,...Array.from({length:199},(_,i)=>({...real,projectId:`presentation-only-${i}`,name:`Navigation-only list row ${i}`}))],nextCursor:null}});});
+  await page.route(postPattern,async route=>{if(route.request().method()!=='POST'){await route.continue();return;}let finish!:()=>void;finished=new Promise(r=>finish=r);try{const response=await route.fetch();expect(response.status()).toBe(200);ready=true;await gate;await route.fulfill({response});}finally{finish();}});
+  try{
+   await page.reload();const restore=page.getByRole('group',{name:'Source recovery',exact:true}).getByRole('button',{name:`Restore committed revision ${project.revision}`,exact:true});await expect(restore).toBeEnabled();
+   for(let i=0;i<220&&!(await restore.evaluate(n=>document.activeElement===n));i++)await page.keyboard.press('Tab');await expect(restore).toBeFocused();await page.keyboard.press('Enter');await expect.poll(()=>ready).toBe(true);await expect(page.locator('.project-list-row')).toHaveCount(200);
+   const home=page.getByRole('button',{name:'X-Verse Studio home',exact:true});const start=await page.evaluate(()=>({tag:document.activeElement?.tagName,text:document.activeElement?.textContent?.trim().slice(0,80)}));let pressed=0;
+   while(pressed<220&&!(await home.evaluate(n=>document.activeElement===n))){await page.keyboard.press(direction);pressed++;}
+   const reached=await home.evaluate(n=>document.activeElement===n);
+   await info.attach('recovery-focus-direction.json',{body:JSON.stringify({viewport,direction,start,pressed,reachedHome:reached,recentRows:200,fixture:'Controlled navigation-only additional recent-list metadata; only the actual owned target is read/recovered; no fake row activated',scope:'Handoff focus diagnosis, not project-list persistence/legacy acceptance'}),contentType:'application/json'});
+   expect(reached).toBe(direction==='Shift+Tab');if(reached){await expect(home).toBeFocused();await page.keyboard.press('Enter');}
+   release();await finished;await page.waitForLoadState('networkidle');if(reached)await expect(page.getByRole('heading',{name:'Recent projects',exact:true})).toBeVisible();
+  }finally{release();await finished;await page.unroute(listPattern);await page.unroute(postPattern);writeFileSync(file,doc.content);}
+ });
+}

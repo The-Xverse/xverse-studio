@@ -1,0 +1,126 @@
+
+> xverse-studio-workspace@0.1.0 test:e2e
+> playwright test -c tests/e2e/playwright.config.ts --grep recovery accessibility: unreadable target
+
+
+Running 2 tests using 1 worker
+
+(node:1933952) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 tests/e2e/source-recovery-accessibility.spec.ts:700:7 › recovery accessibility: unreadable target replaces previous project context at 1024x768 (23.3s)
+(node:1934213) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 tests/e2e/source-recovery-accessibility.spec.ts:700:7 › recovery accessibility: unreadable target replaces previous project context at 1440x900 (23.0s)
+
+
+  1) tests/e2e/source-recovery-accessibility.spec.ts:700:7 › recovery accessibility: unreadable target replaces previous project context at 1024x768
+
+    Error: expect(locator).toHaveAttribute(expected) failed
+
+    Locator:  getByRole('tab', { name: 'Model', exact: true })
+    Expected: "true"
+    Received: "false"
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "soft toHaveAttribute" getByRole('tab', { name: 'Model', exact: true }) with timeout 10000ms
+      - waiting for getByRole('tab', { name: 'Model', exact: true })
+        24 × locator resolved to <button class="" role="tab" aria-selected="false">…</button>
+           - unexpected value "false"
+
+
+      719 |       await activate(page,page.getByRole("button",{name:"Back to workspace",exact:true}));await expect(page.getByRole("heading",{name:previous.name,exact:true})).toBeVisible();await expect(page.getByRole("tab",{name:"Deployment",exact:true})).toHaveAttribute("aria-selected","true");
+      720 |       const reply=page.waitForResponse(r=>new URL(r.url()).pathname===`/api/v1/projects/${owned.pid}/recoveries`&&r.request().method()==="POST");await activate(page,recoverButton(page,owned.project.revision,"restore_revision"));const result=await (await reply).json();await page.waitForLoadState("networkidle");
+    > 721 |       await expect(page.getByRole("heading",{name:owned.project.name,exact:true})).toBeVisible();await expect.soft(page.getByRole("tab",{name:"Model",exact:true})).toHaveAttribute("aria-selected","true");await expect.soft(source(page)).toBeFocused();
+          |                                                                                                                                                                     ^
+      722 |       const current=await read(page,owned.pid);expect(current.revision).toBe(owned.project.revision+1);for(const id of Object.keys(owned.project.documents))expect(current.documents[id].content).toBe(owned.project.documents[id].content);
+      723 |       expect((await read(page,previous.projectId)).documents).toEqual(previous.documents);expect(await runs(page,previous.projectId)).toEqual(previousRuns);expect(await runs(page,owned.pid)).toEqual([]);await backup(page,owned,result);
+      724 |       await info.attach("recovery-previous-project.json",{body:JSON.stringify({viewport,previousProjectId:previous.projectId,recoveredProjectId:owned.pid,distinctIdentities:previous.projectId!==owned.pid,previousCanonicalDocumentsUnchanged:true,recoveredInitialView:"Model",actualCreationThenUnreadableLoad:true,scope:"Owned fixture breaks only the newly created project's source before its first UI read; previous workspace remains rendered; no Start"}),contentType:"application/json"});
+        at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:721:165
+
+    Error: expect(locator).toBeFocused() failed
+
+    Locator:  getByRole('button', { name: 'XDL source', exact: true })
+    Expected: focused
+    Received: inactive
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "soft toBeFocused" getByRole('button', { name: 'XDL source', exact: true }) with timeout 10000ms
+      - waiting for getByRole('button', { name: 'XDL source', exact: true })
+        24 × locator resolved to <button class="source-toggle">…</button>
+           - unexpected value "inactive"
+
+
+      719 |       await activate(page,page.getByRole("button",{name:"Back to workspace",exact:true}));await expect(page.getByRole("heading",{name:previous.name,exact:true})).toBeVisible();await expect(page.getByRole("tab",{name:"Deployment",exact:true})).toHaveAttribute("aria-selected","true");
+      720 |       const reply=page.waitForResponse(r=>new URL(r.url()).pathname===`/api/v1/projects/${owned.pid}/recoveries`&&r.request().method()==="POST");await activate(page,recoverButton(page,owned.project.revision,"restore_revision"));const result=await (await reply).json();await page.waitForLoadState("networkidle");
+    > 721 |       await expect(page.getByRole("heading",{name:owned.project.name,exact:true})).toBeVisible();await expect.soft(page.getByRole("tab",{name:"Model",exact:true})).toHaveAttribute("aria-selected","true");await expect.soft(source(page)).toBeFocused();
+          |                                                                                                                                                                                                                                             ^
+      722 |       const current=await read(page,owned.pid);expect(current.revision).toBe(owned.project.revision+1);for(const id of Object.keys(owned.project.documents))expect(current.documents[id].content).toBe(owned.project.documents[id].content);
+      723 |       expect((await read(page,previous.projectId)).documents).toEqual(previous.documents);expect(await runs(page,previous.projectId)).toEqual(previousRuns);expect(await runs(page,owned.pid)).toEqual([]);await backup(page,owned,result);
+      724 |       await info.attach("recovery-previous-project.json",{body:JSON.stringify({viewport,previousProjectId:previous.projectId,recoveredProjectId:owned.pid,distinctIdentities:previous.projectId!==owned.pid,previousCanonicalDocumentsUnchanged:true,recoveredInitialView:"Model",actualCreationThenUnreadableLoad:true,scope:"Owned fixture breaks only the newly created project's source before its first UI read; previous workspace remains rendered; no Start"}),contentType:"application/json"});
+        at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:721:237
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/source-recovery-accessibil-e66d2-project-context-at-1024x768/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/source-recovery-accessibil-e66d2-project-context-at-1024x768/error-context.md
+
+  2) tests/e2e/source-recovery-accessibility.spec.ts:700:7 › recovery accessibility: unreadable target replaces previous project context at 1440x900
+
+    Error: expect(locator).toHaveAttribute(expected) failed
+
+    Locator:  getByRole('tab', { name: 'Model', exact: true })
+    Expected: "true"
+    Received: "false"
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "soft toHaveAttribute" getByRole('tab', { name: 'Model', exact: true }) with timeout 10000ms
+      - waiting for getByRole('tab', { name: 'Model', exact: true })
+        24 × locator resolved to <button class="" role="tab" aria-selected="false">…</button>
+           - unexpected value "false"
+
+
+      719 |       await activate(page,page.getByRole("button",{name:"Back to workspace",exact:true}));await expect(page.getByRole("heading",{name:previous.name,exact:true})).toBeVisible();await expect(page.getByRole("tab",{name:"Deployment",exact:true})).toHaveAttribute("aria-selected","true");
+      720 |       const reply=page.waitForResponse(r=>new URL(r.url()).pathname===`/api/v1/projects/${owned.pid}/recoveries`&&r.request().method()==="POST");await activate(page,recoverButton(page,owned.project.revision,"restore_revision"));const result=await (await reply).json();await page.waitForLoadState("networkidle");
+    > 721 |       await expect(page.getByRole("heading",{name:owned.project.name,exact:true})).toBeVisible();await expect.soft(page.getByRole("tab",{name:"Model",exact:true})).toHaveAttribute("aria-selected","true");await expect.soft(source(page)).toBeFocused();
+          |                                                                                                                                                                     ^
+      722 |       const current=await read(page,owned.pid);expect(current.revision).toBe(owned.project.revision+1);for(const id of Object.keys(owned.project.documents))expect(current.documents[id].content).toBe(owned.project.documents[id].content);
+      723 |       expect((await read(page,previous.projectId)).documents).toEqual(previous.documents);expect(await runs(page,previous.projectId)).toEqual(previousRuns);expect(await runs(page,owned.pid)).toEqual([]);await backup(page,owned,result);
+      724 |       await info.attach("recovery-previous-project.json",{body:JSON.stringify({viewport,previousProjectId:previous.projectId,recoveredProjectId:owned.pid,distinctIdentities:previous.projectId!==owned.pid,previousCanonicalDocumentsUnchanged:true,recoveredInitialView:"Model",actualCreationThenUnreadableLoad:true,scope:"Owned fixture breaks only the newly created project's source before its first UI read; previous workspace remains rendered; no Start"}),contentType:"application/json"});
+        at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:721:165
+
+    Error: expect(locator).toBeFocused() failed
+
+    Locator:  getByRole('button', { name: 'XDL source', exact: true })
+    Expected: focused
+    Received: inactive
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "soft toBeFocused" getByRole('button', { name: 'XDL source', exact: true }) with timeout 10000ms
+      - waiting for getByRole('button', { name: 'XDL source', exact: true })
+        24 × locator resolved to <button class="source-toggle">…</button>
+           - unexpected value "inactive"
+
+
+      719 |       await activate(page,page.getByRole("button",{name:"Back to workspace",exact:true}));await expect(page.getByRole("heading",{name:previous.name,exact:true})).toBeVisible();await expect(page.getByRole("tab",{name:"Deployment",exact:true})).toHaveAttribute("aria-selected","true");
+      720 |       const reply=page.waitForResponse(r=>new URL(r.url()).pathname===`/api/v1/projects/${owned.pid}/recoveries`&&r.request().method()==="POST");await activate(page,recoverButton(page,owned.project.revision,"restore_revision"));const result=await (await reply).json();await page.waitForLoadState("networkidle");
+    > 721 |       await expect(page.getByRole("heading",{name:owned.project.name,exact:true})).toBeVisible();await expect.soft(page.getByRole("tab",{name:"Model",exact:true})).toHaveAttribute("aria-selected","true");await expect.soft(source(page)).toBeFocused();
+          |                                                                                                                                                                                                                                             ^
+      722 |       const current=await read(page,owned.pid);expect(current.revision).toBe(owned.project.revision+1);for(const id of Object.keys(owned.project.documents))expect(current.documents[id].content).toBe(owned.project.documents[id].content);
+      723 |       expect((await read(page,previous.projectId)).documents).toEqual(previous.documents);expect(await runs(page,previous.projectId)).toEqual(previousRuns);expect(await runs(page,owned.pid)).toEqual([]);await backup(page,owned,result);
+      724 |       await info.attach("recovery-previous-project.json",{body:JSON.stringify({viewport,previousProjectId:previous.projectId,recoveredProjectId:owned.pid,distinctIdentities:previous.projectId!==owned.pid,previousCanonicalDocumentsUnchanged:true,recoveredInitialView:"Model",actualCreationThenUnreadableLoad:true,scope:"Owned fixture breaks only the newly created project's source before its first UI read; previous workspace remains rendered; no Start"}),contentType:"application/json"});
+        at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:721:237
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/source-recovery-accessibil-ab1cf-project-context-at-1440x900/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/source-recovery-accessibil-ab1cf-project-context-at-1440x900/error-context.md
+
+  2 failed
+    tests/e2e/source-recovery-accessibility.spec.ts:700:7 › recovery accessibility: unreadable target replaces previous project context at 1024x768
+    tests/e2e/source-recovery-accessibility.spec.ts:700:7 › recovery accessibility: unreadable target replaces previous project context at 1440x900

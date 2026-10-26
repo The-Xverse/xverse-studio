@@ -1,0 +1,2216 @@
+{
+  "config": {
+    "argv": [
+      "<loop-cache>/node-v24.22.1-linux-x64/bin/node",
+      "<repo>/node_modules/.bin/playwright",
+      "test",
+      "-c",
+      "tests/e2e/playwright.config.ts",
+      "--grep",
+      "recovery accessibility:"
+    ],
+    "configFile": "<repo>/tests/e2e/playwright.config.ts",
+    "rootDir": "<repo>/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "<repo>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "<repo>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "*.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "<repo>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "<repo>/tests/e2e",
+        "snapshotDir": "<repo>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": "*.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "baseURL": "http://127.0.0.1:53539",
+          "browserName": "chromium",
+          "actionTimeout": 15000,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "trace": "off",
+          "screenshot": "only-on-failure",
+          "video": "off"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "<repo>/test-results/browser-report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "source-recovery-accessibility.spec.ts",
+      "file": "source-recovery-accessibility.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "recovery accessibility: native adopt at 1024x768",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 21938,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAccessibleDescription\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('group', { name: 'Source recovery', exact: true })\nExpected pattern: \u001b[32m/Recovery first preserves/\u001b[39m\nReceived string:  \u001b[31m\"\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveAccessibleDescription\" getByRole('group', { name: 'Source recovery', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('group', { name: 'Source recovery', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <div role=\"group\" class=\"recovery-panel\" aria-label=\"Source recovery\">\u2026</div>\u001b[22m\n\u001b[2m       - unexpected value \"\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAccessibleDescription\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('group', { name: 'Source recovery', exact: true })\nExpected pattern: \u001b[32m/Recovery first preserves/\u001b[39m\nReceived string:  \u001b[31m\"\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveAccessibleDescription\" getByRole('group', { name: 'Source recovery', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('group', { name: 'Source recovery', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <div role=\"group\" class=\"recovery-panel\" aria-label=\"Source recovery\">\u2026</div>\u001b[22m\n\u001b[2m       - unexpected value \"\"\u001b[22m\n\n    at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:240:12",
+                    "location": {
+                      "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                      "column": 12,
+                      "line": 240
+                    },
+                    "snippet": "  238 |         await expect\n  239 |           .soft(group(page))\n> 240 |           .toHaveAccessibleDescription(/Recovery first preserves/);\n      |            ^\n  241 |         const contrast = await renderedContrast(\n  242 |           group(page).locator(\":scope > p\").first(),\n  243 |           \"Source recovery preservation guidance\","
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                        "column": 12,
+                        "line": 240
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAccessibleDescription\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('group', { name: 'Source recovery', exact: true })\nExpected pattern: \u001b[32m/Recovery first preserves/\u001b[39m\nReceived string:  \u001b[31m\"\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveAccessibleDescription\" getByRole('group', { name: 'Source recovery', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('group', { name: 'Source recovery', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <div role=\"group\" class=\"recovery-panel\" aria-label=\"Source recovery\">\u2026</div>\u001b[22m\n\u001b[2m       - unexpected value \"\"\u001b[22m\n\n\n  238 |         await expect\n  239 |           .soft(group(page))\n> 240 |           .toHaveAccessibleDescription(/Recovery first preserves/);\n      |            ^\n  241 |         const contrast = await renderedContrast(\n  242 |           group(page).locator(\":scope > p\").first(),\n  243 |           \"Source recovery preservation guidance\",\n    at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:240:12"
+                    },
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                        "column": 41,
+                        "line": 271
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('button', { name: 'XDL source', exact: true })\nExpected: focused\nReceived: inactive\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toBeFocused\" getByRole('button', { name: 'XDL source', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: 'XDL source', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <button class=\"source-toggle\">\u2026</button>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n\n\n  269 |         );\n  270 |         await expect(group(page)).toHaveCount(0);\n> 271 |         await expect.soft(source(page)).toBeFocused();\n      |                                         ^\n  272 |         const current = await read(page, pid);\n  273 |         expect(current.revision).toBe(project.revision + 1);\n  274 |         expect(current.sourceIntegrity).toBe(\"intact\");\n    at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:271:41"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T20:08:43.260Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "recovery-keyboard.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJtb2RlIjoiYWRvcHQiLCJhY3Rpb24iOiJhZG9wdF9leHRlcm5hbCIsInJldmlzaW9uQmVmb3JlIjoxLCJyZXZpc2lvbkFmdGVyIjoyLCJ3cml0ZXMiOlt7ImJvZHkiOnsiZXhwZWN0ZWRSZXZpc2lvbiI6MSwiYWN0aW9uIjoiYWRvcHRfZXh0ZXJuYWwifSwiaWZNYXRjaCI6IlwiMVwiIn1dLCJwcmVzZXJ2ZWQiOnsicmVjb3ZlcnlJZCI6InJlYy0zYWNhZmY4ZS1iNjY5LTRmNjYtOWFhNC0wOGVkOThlOTQ3NzUiLCJjb21taXR0ZWREaWdlc3QiOiJzaGEyNTY6MzlhZTE0M2NkN2Q4NTFiZDZkNGYxOGY3YTcwYjBlMGM0ZDJlYmIzN2RkODZmOWFhOGMxN2Y2ZDg2M2Y0ODk3OSIsIm9ic2VydmVkRGlnZXN0Ijoic2hhMjU2OjhiNjRjOWYwZWFmNzc4NWNlNjg3OGE0Zjk5OWVjNjlmZGQ4NWM3M2UyZTk2OTA0OGI0YzVmMzQ1YTFkNTVlMGIiLCJwcmVzZXJ2ZWRFbmNvZGluZyI6InV0Zi04IiwiZXhhY3RCYWNrdXBCeXRlcyI6dHJ1ZSwib2xkUmV2aXNpb25EaXJlY3RvcnlVbmNoYW5nZWQiOnRydWV9LCJjYW5vbmljYWxCeXRlc0FuZE90aGVySWRlbnRpdGllcyI6dHJ1ZSwiYXV0aG9yaXRhdGl2ZVZhbGlkYXRpb24iOnRydWUsIm93blByb2plY3RSdW5TZXRVbmNoYW5nZWQiOnRydWUsIm1lYXN1cmVtZW50cyI6W3sibGFiZWwiOiJTb3VyY2UgcmVjb3ZlcnkgcHJlc2VydmF0aW9uIGd1aWRhbmNlIiwidGV4dCI6IlJlY292ZXJ5IGZpcnN0IHByZXNlcnZlcyB0aGUgYnl0ZXMgbm93IG9uIGRpc2sgaW4gYSByZWNvdmVyeSBiYWNrdXAgYW5kIHRoZW4gY29tbWl0cyBhIG5ldyByZXZpc2lvbjsgcmV2aXNpb24gMSBzdGF5cyBpbiBoaXN0b3J5LiBTaWRlY2FycyBrZWVwIHRoZWlyIHJlY29yZGVkIGNvbnRlbnQuIiwiY29sb3IiOiJyZ2IoMTYxLCA4OSwgODEpIiwiZm9udFNpemUiOiIxMnB4IiwiZm9udFdlaWdodCI6IjQwMCIsInRocmVzaG9sZCI6NC41LCJzY29wZSI6IlNlbGVjdGVkIG5vcm1hbC1zaXplIHJlbmRlcmVkIHRleHQ7IG5vIG92ZXJhbGwgYWNjZXNzaWJpbGl0eSBjZXJ0aWZpY2F0aW9uIiwic3VwcG9ydGVkIjp0cnVlLCJsYXllcnMiOlsicmdiYSgwLCAwLCAwLCAwKSIsInJnYmEoMCwgMCwgMCwgMCkiLCJyZ2JhKDAsIDAsIDAsIDApIiwicmdiKDI1NSwgMjQzLCAyNDIpIl0sImJhY2tncm91bmQiOlsxLDAuOTUyOTQxMTc2NDcwNTg4MiwwLjk0OTAxOTYwNzg0MzEzNzIsMV0sImNvbXBvc2l0ZWRGb3JlZ3JvdW5kIjpbMC42MzEzNzI1NDkwMTk2MDc4LDAuMzQ5MDE5NjA3ODQzMTM3MjQsMC4zMTc2NDcwNTg4MjM1Mjk0LDFdLCJyYXRpbyI6NC43NjMzNjA5MTYxNTU3NzIsInBhc3NlZCI6dHJ1ZSwiYXNzdW1wdGlvbnMiOiJDU1Mgc1JHQiBjb2xvcnM7IGFscGhhIGNvbXBvc2l0ZWQgdGhyb3VnaCBleHBsaWNpdCBiYWNrZ3JvdW5kczsgbm8gYW50aS1hbGlhc2luZyBhcHByb3hpbWF0aW9uIn1dLCJzY29wZSI6IkFjdHVhbCBvd25lZCBmaWxlIG1vZGlmaWNhdGlvbiBhbmQgZXhwbGljaXQgcmVjb3Zlcnk7IG5hdGl2ZSBrZXlzOyBubyBTdGFydCBvciBkZXZpY2UgYWNjZXNzIn0="
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/source-recovery-accessibil-f7129-ty-native-adopt-at-1024x768/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/source-recovery-accessibil-f7129-ty-native-adopt-at-1024x768/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                    "column": 12,
+                    "line": 240
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "62943bf3acd23bb0ef02-c8d8b42db27d3f553e50",
+          "file": "source-recovery-accessibility.spec.ts",
+          "line": 223,
+          "column": 9
+        },
+        {
+          "title": "recovery accessibility: native restore at 1024x768",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 21751,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAccessibleDescription\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('group', { name: 'Source recovery', exact: true })\nExpected pattern: \u001b[32m/Recovery first preserves/\u001b[39m\nReceived string:  \u001b[31m\"\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveAccessibleDescription\" getByRole('group', { name: 'Source recovery', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('group', { name: 'Source recovery', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <div role=\"group\" class=\"recovery-panel\" aria-label=\"Source recovery\">\u2026</div>\u001b[22m\n\u001b[2m       - unexpected value \"\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAccessibleDescription\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('group', { name: 'Source recovery', exact: true })\nExpected pattern: \u001b[32m/Recovery first preserves/\u001b[39m\nReceived string:  \u001b[31m\"\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveAccessibleDescription\" getByRole('group', { name: 'Source recovery', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('group', { name: 'Source recovery', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <div role=\"group\" class=\"recovery-panel\" aria-label=\"Source recovery\">\u2026</div>\u001b[22m\n\u001b[2m       - unexpected value \"\"\u001b[22m\n\n    at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:240:12",
+                    "location": {
+                      "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                      "column": 12,
+                      "line": 240
+                    },
+                    "snippet": "  238 |         await expect\n  239 |           .soft(group(page))\n> 240 |           .toHaveAccessibleDescription(/Recovery first preserves/);\n      |            ^\n  241 |         const contrast = await renderedContrast(\n  242 |           group(page).locator(\":scope > p\").first(),\n  243 |           \"Source recovery preservation guidance\","
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                        "column": 12,
+                        "line": 240
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAccessibleDescription\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('group', { name: 'Source recovery', exact: true })\nExpected pattern: \u001b[32m/Recovery first preserves/\u001b[39m\nReceived string:  \u001b[31m\"\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveAccessibleDescription\" getByRole('group', { name: 'Source recovery', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('group', { name: 'Source recovery', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <div role=\"group\" class=\"recovery-panel\" aria-label=\"Source recovery\">\u2026</div>\u001b[22m\n\u001b[2m       - unexpected value \"\"\u001b[22m\n\n\n  238 |         await expect\n  239 |           .soft(group(page))\n> 240 |           .toHaveAccessibleDescription(/Recovery first preserves/);\n      |            ^\n  241 |         const contrast = await renderedContrast(\n  242 |           group(page).locator(\":scope > p\").first(),\n  243 |           \"Source recovery preservation guidance\",\n    at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:240:12"
+                    },
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                        "column": 41,
+                        "line": 271
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('button', { name: 'XDL source', exact: true })\nExpected: focused\nReceived: inactive\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toBeFocused\" getByRole('button', { name: 'XDL source', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: 'XDL source', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <button class=\"source-toggle\">\u2026</button>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n\n\n  269 |         );\n  270 |         await expect(group(page)).toHaveCount(0);\n> 271 |         await expect.soft(source(page)).toBeFocused();\n      |                                         ^\n  272 |         const current = await read(page, pid);\n  273 |         expect(current.revision).toBe(project.revision + 1);\n  274 |         expect(current.sourceIntegrity).toBe(\"intact\");\n    at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:271:41"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T20:09:05.601Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "recovery-keyboard.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJtb2RlIjoicmVzdG9yZSIsImFjdGlvbiI6InJlc3RvcmVfcmV2aXNpb24iLCJyZXZpc2lvbkJlZm9yZSI6MSwicmV2aXNpb25BZnRlciI6Miwid3JpdGVzIjpbeyJib2R5Ijp7ImV4cGVjdGVkUmV2aXNpb24iOjEsImFjdGlvbiI6InJlc3RvcmVfcmV2aXNpb24iLCJyZXZpc2lvbiI6MX0sImlmTWF0Y2giOiJcIjFcIiJ9XSwicHJlc2VydmVkIjp7InJlY292ZXJ5SWQiOiJyZWMtMGE1MTg5Y2YtY2FkNy00MGU5LTg0N2ItZDhjY2FjMGYyYmE1IiwiY29tbWl0dGVkRGlnZXN0Ijoic2hhMjU2OjM5YWUxNDNjZDdkODUxYmQ2ZDRmMThmN2E3MGIwZTBjNGQyZWJiMzdkZDg2ZjlhYThjMTdmNmQ4NjNmNDg5NzkiLCJvYnNlcnZlZERpZ2VzdCI6InNoYTI1Njo4YjY0YzlmMGVhZjc3ODVjZTY4NzhhNGY5OTllYzY5ZmRkODVjNzNlMmU5NjkwNDhiNGM1ZjM0NWExZDU1ZTBiIiwicHJlc2VydmVkRW5jb2RpbmciOiJ1dGYtOCIsImV4YWN0QmFja3VwQnl0ZXMiOnRydWUsIm9sZFJldmlzaW9uRGlyZWN0b3J5VW5jaGFuZ2VkIjp0cnVlfSwiY2Fub25pY2FsQnl0ZXNBbmRPdGhlcklkZW50aXRpZXMiOnRydWUsImF1dGhvcml0YXRpdmVWYWxpZGF0aW9uIjp0cnVlLCJvd25Qcm9qZWN0UnVuU2V0VW5jaGFuZ2VkIjp0cnVlLCJtZWFzdXJlbWVudHMiOlt7ImxhYmVsIjoiU291cmNlIHJlY292ZXJ5IHByZXNlcnZhdGlvbiBndWlkYW5jZSIsInRleHQiOiJSZWNvdmVyeSBmaXJzdCBwcmVzZXJ2ZXMgdGhlIGJ5dGVzIG5vdyBvbiBkaXNrIGluIGEgcmVjb3ZlcnkgYmFja3VwIGFuZCB0aGVuIGNvbW1pdHMgYSBuZXcgcmV2aXNpb247IHJldmlzaW9uIDEgc3RheXMgaW4gaGlzdG9yeS4gU2lkZWNhcnMga2VlcCB0aGVpciByZWNvcmRlZCBjb250ZW50LiIsImNvbG9yIjoicmdiKDE2MSwgODksIDgxKSIsImZvbnRTaXplIjoiMTJweCIsImZvbnRXZWlnaHQiOiI0MDAiLCJ0aHJlc2hvbGQiOjQuNSwic2NvcGUiOiJTZWxlY3RlZCBub3JtYWwtc2l6ZSByZW5kZXJlZCB0ZXh0OyBubyBvdmVyYWxsIGFjY2Vzc2liaWxpdHkgY2VydGlmaWNhdGlvbiIsInN1cHBvcnRlZCI6dHJ1ZSwibGF5ZXJzIjpbInJnYmEoMCwgMCwgMCwgMCkiLCJyZ2JhKDAsIDAsIDAsIDApIiwicmdiYSgwLCAwLCAwLCAwKSIsInJnYigyNTUsIDI0MywgMjQyKSJdLCJiYWNrZ3JvdW5kIjpbMSwwLjk1Mjk0MTE3NjQ3MDU4ODIsMC45NDkwMTk2MDc4NDMxMzcyLDFdLCJjb21wb3NpdGVkRm9yZWdyb3VuZCI6WzAuNjMxMzcyNTQ5MDE5NjA3OCwwLjM0OTAxOTYwNzg0MzEzNzI0LDAuMzE3NjQ3MDU4ODIzNTI5NCwxXSwicmF0aW8iOjQuNzYzMzYwOTE2MTU1NzcyLCJwYXNzZWQiOnRydWUsImFzc3VtcHRpb25zIjoiQ1NTIHNSR0IgY29sb3JzOyBhbHBoYSBjb21wb3NpdGVkIHRocm91Z2ggZXhwbGljaXQgYmFja2dyb3VuZHM7IG5vIGFudGktYWxpYXNpbmcgYXBwcm94aW1hdGlvbiJ9XSwic2NvcGUiOiJBY3R1YWwgb3duZWQgZmlsZSBtb2RpZmljYXRpb24gYW5kIGV4cGxpY2l0IHJlY292ZXJ5OyBuYXRpdmUga2V5czsgbm8gU3RhcnQgb3IgZGV2aWNlIGFjY2VzcyJ9"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/source-recovery-accessibil-84fda--native-restore-at-1024x768/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/source-recovery-accessibil-84fda--native-restore-at-1024x768/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                    "column": 12,
+                    "line": 240
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "62943bf3acd23bb0ef02-19a022c8fc2a1cd4a784",
+          "file": "source-recovery-accessibility.spec.ts",
+          "line": 223,
+          "column": 9
+        },
+        {
+          "title": "recovery accessibility: native unreadable restore at 1024x768",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 21194,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAccessibleDescription\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('group', { name: 'Source recovery', exact: true })\nExpected pattern: \u001b[32m/Recovery first preserves/\u001b[39m\nReceived string:  \u001b[31m\"\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveAccessibleDescription\" getByRole('group', { name: 'Source recovery', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('group', { name: 'Source recovery', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <div role=\"group\" class=\"recovery-panel\" aria-label=\"Source recovery\">\u2026</div>\u001b[22m\n\u001b[2m       - unexpected value \"\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAccessibleDescription\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('group', { name: 'Source recovery', exact: true })\nExpected pattern: \u001b[32m/Recovery first preserves/\u001b[39m\nReceived string:  \u001b[31m\"\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveAccessibleDescription\" getByRole('group', { name: 'Source recovery', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('group', { name: 'Source recovery', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <div role=\"group\" class=\"recovery-panel\" aria-label=\"Source recovery\">\u2026</div>\u001b[22m\n\u001b[2m       - unexpected value \"\"\u001b[22m\n\n    at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:240:12",
+                    "location": {
+                      "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                      "column": 12,
+                      "line": 240
+                    },
+                    "snippet": "  238 |         await expect\n  239 |           .soft(group(page))\n> 240 |           .toHaveAccessibleDescription(/Recovery first preserves/);\n      |            ^\n  241 |         const contrast = await renderedContrast(\n  242 |           group(page).locator(\":scope > p\").first(),\n  243 |           \"Source recovery preservation guidance\","
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                        "column": 12,
+                        "line": 240
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAccessibleDescription\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('group', { name: 'Source recovery', exact: true })\nExpected pattern: \u001b[32m/Recovery first preserves/\u001b[39m\nReceived string:  \u001b[31m\"\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveAccessibleDescription\" getByRole('group', { name: 'Source recovery', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('group', { name: 'Source recovery', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <div role=\"group\" class=\"recovery-panel\" aria-label=\"Source recovery\">\u2026</div>\u001b[22m\n\u001b[2m       - unexpected value \"\"\u001b[22m\n\n\n  238 |         await expect\n  239 |           .soft(group(page))\n> 240 |           .toHaveAccessibleDescription(/Recovery first preserves/);\n      |            ^\n  241 |         const contrast = await renderedContrast(\n  242 |           group(page).locator(\":scope > p\").first(),\n  243 |           \"Source recovery preservation guidance\",\n    at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:240:12"
+                    },
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                        "column": 41,
+                        "line": 271
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('button', { name: 'XDL source', exact: true })\nExpected: focused\nReceived: inactive\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toBeFocused\" getByRole('button', { name: 'XDL source', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: 'XDL source', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <button class=\"source-toggle\">\u2026</button>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n\n\n  269 |         );\n  270 |         await expect(group(page)).toHaveCount(0);\n> 271 |         await expect.soft(source(page)).toBeFocused();\n      |                                         ^\n  272 |         const current = await read(page, pid);\n  273 |         expect(current.revision).toBe(project.revision + 1);\n  274 |         expect(current.sourceIntegrity).toBe(\"intact\");\n    at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:271:41"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T20:09:27.729Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "recovery-keyboard.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJtb2RlIjoidW5yZWFkYWJsZSByZXN0b3JlIiwiYWN0aW9uIjoicmVzdG9yZV9yZXZpc2lvbiIsInJldmlzaW9uQmVmb3JlIjoxLCJyZXZpc2lvbkFmdGVyIjoyLCJ3cml0ZXMiOlt7ImJvZHkiOnsiZXhwZWN0ZWRSZXZpc2lvbiI6MSwiYWN0aW9uIjoicmVzdG9yZV9yZXZpc2lvbiIsInJldmlzaW9uIjoxfSwiaWZNYXRjaCI6IlwiMVwiIn1dLCJwcmVzZXJ2ZWQiOnsicmVjb3ZlcnlJZCI6InJlYy1lN2NhMmM4My00ZWE1LTRiYzctOWI5YS1hYTZhMGZlZWI0NGIiLCJjb21taXR0ZWREaWdlc3QiOiJzaGEyNTY6MzlhZTE0M2NkN2Q4NTFiZDZkNGYxOGY3YTcwYjBlMGM0ZDJlYmIzN2RkODZmOWFhOGMxN2Y2ZDg2M2Y0ODk3OSIsIm9ic2VydmVkRGlnZXN0Ijoic2hhMjU2OjVmMjEwZDVlNDU0NzM5OWM1OTRhNGExZmNhNzdiYTM1OGZiOTA1N2FiNmI0ZjQyMWJmNTI5Mjk0ZGM3ZDk1YzYiLCJwcmVzZXJ2ZWRFbmNvZGluZyI6ImJpbmFyeSIsImV4YWN0QmFja3VwQnl0ZXMiOnRydWUsIm9sZFJldmlzaW9uRGlyZWN0b3J5VW5jaGFuZ2VkIjp0cnVlfSwiY2Fub25pY2FsQnl0ZXNBbmRPdGhlcklkZW50aXRpZXMiOnRydWUsImF1dGhvcml0YXRpdmVWYWxpZGF0aW9uIjp0cnVlLCJvd25Qcm9qZWN0UnVuU2V0VW5jaGFuZ2VkIjp0cnVlLCJtZWFzdXJlbWVudHMiOlt7ImxhYmVsIjoiU291cmNlIHJlY292ZXJ5IHByZXNlcnZhdGlvbiBndWlkYW5jZSIsInRleHQiOiJSZWNvdmVyeSBmaXJzdCBwcmVzZXJ2ZXMgdGhlIGJ5dGVzIG5vdyBvbiBkaXNrIGluIGEgcmVjb3ZlcnkgYmFja3VwIGFuZCB0aGVuIGNvbW1pdHMgYSBuZXcgcmV2aXNpb247IHJldmlzaW9uIDEgc3RheXMgaW4gaGlzdG9yeS4gU2lkZWNhcnMga2VlcCB0aGVpciByZWNvcmRlZCBjb250ZW50LiIsImNvbG9yIjoicmdiKDE2MSwgODksIDgxKSIsImZvbnRTaXplIjoiMTJweCIsImZvbnRXZWlnaHQiOiI0MDAiLCJ0aHJlc2hvbGQiOjQuNSwic2NvcGUiOiJTZWxlY3RlZCBub3JtYWwtc2l6ZSByZW5kZXJlZCB0ZXh0OyBubyBvdmVyYWxsIGFjY2Vzc2liaWxpdHkgY2VydGlmaWNhdGlvbiIsInN1cHBvcnRlZCI6dHJ1ZSwibGF5ZXJzIjpbInJnYmEoMCwgMCwgMCwgMCkiLCJyZ2JhKDAsIDAsIDAsIDApIiwicmdiYSgwLCAwLCAwLCAwKSIsInJnYigyNTUsIDI0MywgMjQyKSJdLCJiYWNrZ3JvdW5kIjpbMSwwLjk1Mjk0MTE3NjQ3MDU4ODIsMC45NDkwMTk2MDc4NDMxMzcyLDFdLCJjb21wb3NpdGVkRm9yZWdyb3VuZCI6WzAuNjMxMzcyNTQ5MDE5NjA3OCwwLjM0OTAxOTYwNzg0MzEzNzI0LDAuMzE3NjQ3MDU4ODIzNTI5NCwxXSwicmF0aW8iOjQuNzYzMzYwOTE2MTU1NzcyLCJwYXNzZWQiOnRydWUsImFzc3VtcHRpb25zIjoiQ1NTIHNSR0IgY29sb3JzOyBhbHBoYSBjb21wb3NpdGVkIHRocm91Z2ggZXhwbGljaXQgYmFja2dyb3VuZHM7IG5vIGFudGktYWxpYXNpbmcgYXBwcm94aW1hdGlvbiJ9XSwic2NvcGUiOiJBY3R1YWwgb3duZWQgZmlsZSBtb2RpZmljYXRpb24gYW5kIGV4cGxpY2l0IHJlY292ZXJ5OyBuYXRpdmUga2V5czsgbm8gU3RhcnQgb3IgZGV2aWNlIGFjY2VzcyJ9"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/source-recovery-accessibil-c763a-eadable-restore-at-1024x768/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/source-recovery-accessibil-c763a-eadable-restore-at-1024x768/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                    "column": 12,
+                    "line": 240
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "62943bf3acd23bb0ef02-8919a8d648d2fd218676",
+          "file": "source-recovery-accessibility.spec.ts",
+          "line": 223,
+          "column": 9
+        },
+        {
+          "title": "recovery accessibility: history failed lookup at 1024x768",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 31493,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).not.\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('group', { name: 'Source recovery', exact: true })\nExpected substring: not \u001b[32m\"predates recorded history\"\u001b[39m\nReceived string: \u001b[31m\"Recovery first preserves the bytes now on disk in a recovery backup and then commits a new revision; revision 1 stays in history. Sidecars keep their recorded content.Adopt external changes as a new revisionRevision 1 \u001b[7mpredates recorded history\u001b[27m, so it cannot be restored here. Adopting the external changes remains available.\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft not toContainText\" getByRole('group', { name: 'Source recovery', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('group', { name: 'Source recovery', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <div role=\"group\" class=\"recovery-panel\" aria-label=\"Source recovery\">\u2026</div>\u001b[22m\n\u001b[2m       - unexpected value \"Recovery first preserves the bytes now on disk in a recovery backup and then commits a new revision; revision 1 stays in history. Sidecars keep their recorded content.Adopt external changes as a new revisionRevision 1 predates recorded history, so it cannot be restored here. Adopting the external changes remains available.\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).not.\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('group', { name: 'Source recovery', exact: true })\nExpected substring: not \u001b[32m\"predates recorded history\"\u001b[39m\nReceived string: \u001b[31m\"Recovery first preserves the bytes now on disk in a recovery backup and then commits a new revision; revision 1 stays in history. Sidecars keep their recorded content.Adopt external changes as a new revisionRevision 1 \u001b[7mpredates recorded history\u001b[27m, so it cannot be restored here. Adopting the external changes remains available.\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft not toContainText\" getByRole('group', { name: 'Source recovery', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('group', { name: 'Source recovery', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <div role=\"group\" class=\"recovery-panel\" aria-label=\"Source recovery\">\u2026</div>\u001b[22m\n\u001b[2m       - unexpected value \"Recovery first preserves the bytes now on disk in a recovery backup and then commits a new revision; revision 1 stays in history. Sidecars keep their recorded content.Adopt external changes as a new revisionRevision 1 predates recorded history, so it cannot be restored here. Adopting the external changes remains available.\"\u001b[22m\n\n    at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:385:18",
+                    "location": {
+                      "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                      "column": 18,
+                      "line": 385
+                    },
+                    "snippet": "  383 |           await expect\n  384 |             .soft(group(page))\n> 385 |             .not.toContainText(\"predates recorded history\");\n      |                  ^\n  386 |           await expect\n  387 |             .soft(group(page))\n  388 |             .toContainText(\"Could not check revision history\");"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                        "column": 18,
+                        "line": 385
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).not.\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('group', { name: 'Source recovery', exact: true })\nExpected substring: not \u001b[32m\"predates recorded history\"\u001b[39m\nReceived string: \u001b[31m\"Recovery first preserves the bytes now on disk in a recovery backup and then commits a new revision; revision 1 stays in history. Sidecars keep their recorded content.Adopt external changes as a new revisionRevision 1 \u001b[7mpredates recorded history\u001b[27m, so it cannot be restored here. Adopting the external changes remains available.\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft not toContainText\" getByRole('group', { name: 'Source recovery', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('group', { name: 'Source recovery', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <div role=\"group\" class=\"recovery-panel\" aria-label=\"Source recovery\">\u2026</div>\u001b[22m\n\u001b[2m       - unexpected value \"Recovery first preserves the bytes now on disk in a recovery backup and then commits a new revision; revision 1 stays in history. Sidecars keep their recorded content.Adopt external changes as a new revisionRevision 1 predates recorded history, so it cannot be restored here. Adopting the external changes remains available.\"\u001b[22m\n\n\n  383 |           await expect\n  384 |             .soft(group(page))\n> 385 |             .not.toContainText(\"predates recorded history\");\n      |                  ^\n  386 |           await expect\n  387 |             .soft(group(page))\n  388 |             .toContainText(\"Could not check revision history\");\n    at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:385:18"
+                    },
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                        "column": 14,
+                        "line": 388
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('group', { name: 'Source recovery', exact: true })\nExpected substring: \u001b[32m\"Could not check revision history\"\u001b[39m\nReceived string:    \u001b[31m\"Recovery first preserves the bytes now on disk in a recovery backup and then commits a new revision; revision 1 stays in history. Sidecars keep their recorded content.Adopt external changes as a new revisionRevision 1 predates recorded history, so it cannot be restored here. Adopting the external changes remains available.\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toContainText\" getByRole('group', { name: 'Source recovery', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('group', { name: 'Source recovery', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <div role=\"group\" class=\"recovery-panel\" aria-label=\"Source recovery\">\u2026</div>\u001b[22m\n\u001b[2m       - unexpected value \"Recovery first preserves the bytes now on disk in a recovery backup and then commits a new revision; revision 1 stays in history. Sidecars keep their recorded content.Adopt external changes as a new revisionRevision 1 predates recorded history, so it cannot be restored here. Adopting the external changes remains available.\"\u001b[22m\n\n\n  386 |           await expect\n  387 |             .soft(group(page))\n> 388 |             .toContainText(\"Could not check revision history\");\n      |              ^\n  389 |           await expect(\n  390 |             recoverButton(page, project.revision, \"restore_revision\"),\n  391 |           ).toHaveCount(0);\n    at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:388:14"
+                    },
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                        "column": 24,
+                        "line": 9
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('group', { name: 'Source recovery', exact: true }).getByRole('button', { name: 'Retry revision history', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('group', { name: 'Source recovery', exact: true }).getByRole('button', { name: 'Retry revision history', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('group', { name: 'Source recovery', exact: true }).getByRole('button', { name: 'Retry revision history', exact: true })\u001b[22m\n\n\n   7 |\n   8 | async function tabTo(page: Page, target: Locator) {\n>  9 |   await expect(target).toBeVisible();\n     |                        ^\n  10 |   for (let i = 0; i < 220; i++) {\n  11 |     if (await target.evaluate((n) => document.activeElement === n)) return;\n  12 |     await page.keyboard.press(\"Tab\");\n    at tabTo (<repo>/tests/e2e/source-recovery-accessibility.spec.ts:9:24)\n    at activate (<repo>/tests/e2e/source-recovery-accessibility.spec.ts:17:9)\n    at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:392:17"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T20:09:49.319Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/source-recovery-accessibil-06c8e-y-failed-lookup-at-1024x768/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/source-recovery-accessibil-06c8e-y-failed-lookup-at-1024x768/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                    "column": 18,
+                    "line": 385
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "62943bf3acd23bb0ef02-3c00f78e58e11166039e",
+          "file": "source-recovery-accessibility.spec.ts",
+          "line": 336,
+          "column": 9
+        },
+        {
+          "title": "recovery accessibility: history absent response at 1024x768",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 11347,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('group', { name: 'Source recovery', exact: true })\nExpected substring: \u001b[32m\"\u001b[7mNo recorded copy i\u001b[27ms available\"\u001b[39m\nReceived string:    \u001b[31m\"\u001b[7mRecovery first preserves the bytes now on disk in a recovery backup and then commits a new revision; revision 1 stays in history. Sidecars keep their recorded content.Adopt external changes as a new revisionRevision 1 predates recorded history, so it cannot be restored here. Adopting the external changes remain\u001b[27ms available\u001b[7m.\u001b[27m\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" getByRole('group', { name: 'Source recovery', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('group', { name: 'Source recovery', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <div role=\"group\" class=\"recovery-panel\" aria-label=\"Source recovery\">\u2026</div>\u001b[22m\n\u001b[2m       - unexpected value \"Recovery first preserves the bytes now on disk in a recovery backup and then commits a new revision; revision 1 stays in history. Sidecars keep their recorded content.Adopt external changes as a new revisionRevision 1 predates recorded history, so it cannot be restored here. Adopting the external changes remains available.\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('group', { name: 'Source recovery', exact: true })\nExpected substring: \u001b[32m\"\u001b[7mNo recorded copy i\u001b[27ms available\"\u001b[39m\nReceived string:    \u001b[31m\"\u001b[7mRecovery first preserves the bytes now on disk in a recovery backup and then commits a new revision; revision 1 stays in history. Sidecars keep their recorded content.Adopt external changes as a new revisionRevision 1 predates recorded history, so it cannot be restored here. Adopting the external changes remain\u001b[27ms available\u001b[7m.\u001b[27m\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" getByRole('group', { name: 'Source recovery', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('group', { name: 'Source recovery', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <div role=\"group\" class=\"recovery-panel\" aria-label=\"Source recovery\">\u2026</div>\u001b[22m\n\u001b[2m       - unexpected value \"Recovery first preserves the bytes now on disk in a recovery backup and then commits a new revision; revision 1 stays in history. Sidecars keep their recorded content.Adopt external changes as a new revisionRevision 1 predates recorded history, so it cannot be restored here. Adopting the external changes remains available.\"\u001b[22m\n\n    at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:404:37",
+                    "location": {
+                      "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                      "column": 37,
+                      "line": 404
+                    },
+                    "snippet": "  402 |           expect(requests).toBe(2);\n  403 |         } else {\n> 404 |           await expect(group(page)).toContainText(\n      |                                     ^\n  405 |             \"No recorded copy is available\",\n  406 |           );\n  407 |           await expect("
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                        "column": 37,
+                        "line": 404
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('group', { name: 'Source recovery', exact: true })\nExpected substring: \u001b[32m\"\u001b[7mNo recorded copy i\u001b[27ms available\"\u001b[39m\nReceived string:    \u001b[31m\"\u001b[7mRecovery first preserves the bytes now on disk in a recovery backup and then commits a new revision; revision 1 stays in history. Sidecars keep their recorded content.Adopt external changes as a new revisionRevision 1 predates recorded history, so it cannot be restored here. Adopting the external changes remain\u001b[27ms available\u001b[7m.\u001b[27m\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" getByRole('group', { name: 'Source recovery', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('group', { name: 'Source recovery', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <div role=\"group\" class=\"recovery-panel\" aria-label=\"Source recovery\">\u2026</div>\u001b[22m\n\u001b[2m       - unexpected value \"Recovery first preserves the bytes now on disk in a recovery backup and then commits a new revision; revision 1 stays in history. Sidecars keep their recorded content.Adopt external changes as a new revisionRevision 1 predates recorded history, so it cannot be restored here. Adopting the external changes remains available.\"\u001b[22m\n\n\n  402 |           expect(requests).toBe(2);\n  403 |         } else {\n> 404 |           await expect(group(page)).toContainText(\n      |                                     ^\n  405 |             \"No recorded copy is available\",\n  406 |           );\n  407 |           await expect(\n    at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:404:37"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T20:10:21.196Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/source-recovery-accessibil-ea660-absent-response-at-1024x768/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/source-recovery-accessibil-ea660-absent-response-at-1024x768/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                    "column": 37,
+                    "line": 404
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "62943bf3acd23bb0ef02-c90a858123aebf1c5a59",
+          "file": "source-recovery-accessibility.spec.ts",
+          "line": 336,
+          "column": 9
+        },
+        {
+          "title": "recovery accessibility: late modified recovery preserves Home at 1024x768",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 13018,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Recent projects', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toBeVisible\" getByRole('heading', { name: 'Recent projects', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Recent projects', exact: true })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Recent projects', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toBeVisible\" getByRole('heading', { name: 'Recent projects', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Recent projects', exact: true })\u001b[22m\n\n    at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:546:16",
+                    "location": {
+                      "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                      "column": 16,
+                      "line": 546
+                    },
+                    "snippet": "  544 |                 }),\n  545 |               )\n> 546 |               .toBeVisible();\n      |                ^\n  547 |           if (mode === \"newer head\") {\n  548 |             await expect(page.locator(\".workspace-context\")).toContainText(\n  549 |               `Draft revision ${project.revision + 2}`,"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                        "column": 16,
+                        "line": 546
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Recent projects', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toBeVisible\" getByRole('heading', { name: 'Recent projects', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Recent projects', exact: true })\u001b[22m\n\n\n  544 |                 }),\n  545 |               )\n> 546 |               .toBeVisible();\n      |                ^\n  547 |           if (mode === \"newer head\") {\n  548 |             await expect(page.locator(\".workspace-context\")).toContainText(\n  549 |               `Draft revision ${project.revision + 2}`,\n    at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:546:16"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T20:10:32.942Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "recovery-completion.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJicm9rZW4iOmZhbHNlLCJtb2RlIjoiSG9tZSIsIndyaXRlcyI6W3siYm9keSI6eyJleHBlY3RlZFJldmlzaW9uIjoxLCJhY3Rpb24iOiJyZXN0b3JlX3JldmlzaW9uIiwicmV2aXNpb24iOjF9LCJpZk1hdGNoIjoiXCIxXCIifV0sImNvbW1pdHRlZFJldmlzaW9uIjoyLCJsYXRlc3RSZXZpc2lvbiI6MiwibmV3ZXJIaXN0b3J5IjpudWxsLCJyZWFkeUlkIjpudWxsLCJvd25Qcm9qZWN0UnVuU2V0VW5jaGFuZ2VkIjp0cnVlLCJzY29wZSI6IkhlbGQgYWN0dWFsIGNvbW1pdHRlZCByZWNvdmVyeSByZXNwb25zZTsgcHJlc2VydmUgY3VycmVudCBjb250ZXh0OyBubyBTdGFydCJ9"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/source-recovery-accessibil-0fdb6--preserves-Home-at-1024x768/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/source-recovery-accessibil-0fdb6--preserves-Home-at-1024x768/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                    "column": 16,
+                    "line": 546
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "62943bf3acd23bb0ef02-d81fda28de05322c8be1",
+          "file": "source-recovery-accessibility.spec.ts",
+          "line": 443,
+          "column": 11
+        },
+        {
+          "title": "recovery accessibility: late modified recovery preserves newer head at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 6,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3806,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T20:10:46.349Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "recovery-completion.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJicm9rZW4iOmZhbHNlLCJtb2RlIjoibmV3ZXIgaGVhZCIsIndyaXRlcyI6W3siYm9keSI6eyJleHBlY3RlZFJldmlzaW9uIjoxLCJhY3Rpb24iOiJyZXN0b3JlX3JldmlzaW9uIiwicmV2aXNpb24iOjF9LCJpZk1hdGNoIjoiXCIxXCIifV0sImNvbW1pdHRlZFJldmlzaW9uIjoyLCJsYXRlc3RSZXZpc2lvbiI6MywibmV3ZXJIaXN0b3J5Ijoie1widW5kb1wiOlt7XCJ0YXJnZXRcIjoyLFwiYXRcIjozLFwibGFiZWxcIjpcInNldCBwYXJhbWV0ZXJcIn1dLFwicmVkb1wiOltdfSIsInJlYWR5SWQiOm51bGwsIm93blByb2plY3RSdW5TZXRVbmNoYW5nZWQiOnRydWUsInNjb3BlIjoiSGVsZCBhY3R1YWwgY29tbWl0dGVkIHJlY292ZXJ5IHJlc3BvbnNlOyBwcmVzZXJ2ZSBjdXJyZW50IGNvbnRleHQ7IG5vIFN0YXJ0In0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "62943bf3acd23bb0ef02-c5b9fc314032900fca60",
+          "file": "source-recovery-accessibility.spec.ts",
+          "line": 443,
+          "column": 11
+        },
+        {
+          "title": "recovery accessibility: late modified recovery preserves newer readiness at 1024x768",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 6,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 13140,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('dialog').getByText('pf-7f7e43af-e49a-4fb5-9e5a-b9f07be336f0', { exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toBeVisible\" getByRole('dialog').getByText('pf-7f7e43af-e49a-4fb5-9e5a-b9f07be336f0', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog').getByText('pf-7f7e43af-e49a-4fb5-9e5a-b9f07be336f0', { exact: true })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('dialog').getByText('pf-7f7e43af-e49a-4fb5-9e5a-b9f07be336f0', { exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toBeVisible\" getByRole('dialog').getByText('pf-7f7e43af-e49a-4fb5-9e5a-b9f07be336f0', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog').getByText('pf-7f7e43af-e49a-4fb5-9e5a-b9f07be336f0', { exact: true })\u001b[22m\n\n    at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:563:16",
+                    "location": {
+                      "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                      "column": 16,
+                      "line": 563
+                    },
+                    "snippet": "  561 |                 page.getByRole(\"dialog\").getByText(readyId!, { exact: true }),\n  562 |               )\n> 563 |               .toBeVisible();\n      |                ^\n  564 |           if (mode === \"deliberate focus\")\n  565 |             await expect(home(page)).toBeFocused();\n  566 |           if (mode === \"repeat submit\") {"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                        "column": 16,
+                        "line": 563
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('dialog').getByText('pf-7f7e43af-e49a-4fb5-9e5a-b9f07be336f0', { exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toBeVisible\" getByRole('dialog').getByText('pf-7f7e43af-e49a-4fb5-9e5a-b9f07be336f0', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog').getByText('pf-7f7e43af-e49a-4fb5-9e5a-b9f07be336f0', { exact: true })\u001b[22m\n\n\n  561 |                 page.getByRole(\"dialog\").getByText(readyId!, { exact: true }),\n  562 |               )\n> 563 |               .toBeVisible();\n      |                ^\n  564 |           if (mode === \"deliberate focus\")\n  565 |             await expect(home(page)).toBeFocused();\n  566 |           if (mode === \"repeat submit\") {\n    at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:563:16"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T20:10:50.215Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "recovery-completion.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJicm9rZW4iOmZhbHNlLCJtb2RlIjoibmV3ZXIgcmVhZGluZXNzIiwid3JpdGVzIjpbeyJib2R5Ijp7ImV4cGVjdGVkUmV2aXNpb24iOjEsImFjdGlvbiI6InJlc3RvcmVfcmV2aXNpb24iLCJyZXZpc2lvbiI6MX0sImlmTWF0Y2giOiJcIjFcIiJ9XSwiY29tbWl0dGVkUmV2aXNpb24iOjIsImxhdGVzdFJldmlzaW9uIjoyLCJuZXdlckhpc3RvcnkiOm51bGwsInJlYWR5SWQiOiJwZi03ZjdlNDNhZi1lNDlhLTRmYjUtOWU1YS1iOWYwN2JlMzM2ZjAiLCJvd25Qcm9qZWN0UnVuU2V0VW5jaGFuZ2VkIjp0cnVlLCJzY29wZSI6IkhlbGQgYWN0dWFsIGNvbW1pdHRlZCByZWNvdmVyeSByZXNwb25zZTsgcHJlc2VydmUgY3VycmVudCBjb250ZXh0OyBubyBTdGFydCJ9"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/source-recovery-accessibil-b010a-newer-readiness-at-1024x768/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/source-recovery-accessibil-b010a-newer-readiness-at-1024x768/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                    "column": 16,
+                    "line": 563
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "62943bf3acd23bb0ef02-86b7aafeab74a940cf99",
+          "file": "source-recovery-accessibility.spec.ts",
+          "line": 443,
+          "column": 11
+        },
+        {
+          "title": "recovery accessibility: late modified recovery preserves deliberate focus at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 7,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3007,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T20:11:03.669Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "recovery-completion.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJicm9rZW4iOmZhbHNlLCJtb2RlIjoiZGVsaWJlcmF0ZSBmb2N1cyIsIndyaXRlcyI6W3siYm9keSI6eyJleHBlY3RlZFJldmlzaW9uIjoxLCJhY3Rpb24iOiJyZXN0b3JlX3JldmlzaW9uIiwicmV2aXNpb24iOjF9LCJpZk1hdGNoIjoiXCIxXCIifV0sImNvbW1pdHRlZFJldmlzaW9uIjoyLCJsYXRlc3RSZXZpc2lvbiI6MiwibmV3ZXJIaXN0b3J5IjpudWxsLCJyZWFkeUlkIjpudWxsLCJvd25Qcm9qZWN0UnVuU2V0VW5jaGFuZ2VkIjp0cnVlLCJzY29wZSI6IkhlbGQgYWN0dWFsIGNvbW1pdHRlZCByZWNvdmVyeSByZXNwb25zZTsgcHJlc2VydmUgY3VycmVudCBjb250ZXh0OyBubyBTdGFydCJ9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "62943bf3acd23bb0ef02-597a1ab8c3fe4d7c2d20",
+          "file": "source-recovery-accessibility.spec.ts",
+          "line": 443,
+          "column": 11
+        },
+        {
+          "title": "recovery accessibility: late modified recovery preserves repeat submit at 1024x768",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 7,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 11993,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeDisabled\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('group', { name: 'Source recovery', exact: true }).getByRole('button', { name: 'Restore committed revision 1', exact: true })\nExpected: disabled\nReceived: enabled\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toBeDisabled\" getByRole('group', { name: 'Source recovery', exact: true }).getByRole('button', { name: 'Restore committed revision 1', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('group', { name: 'Source recovery', exact: true }).getByRole('button', { name: 'Restore committed revision 1', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <button class=\"button\">Restore committed revision 1</button>\u001b[22m\n\u001b[2m       - unexpected value \"enabled\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeDisabled\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('group', { name: 'Source recovery', exact: true }).getByRole('button', { name: 'Restore committed revision 1', exact: true })\nExpected: disabled\nReceived: enabled\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toBeDisabled\" getByRole('group', { name: 'Source recovery', exact: true }).getByRole('button', { name: 'Restore committed revision 1', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('group', { name: 'Source recovery', exact: true }).getByRole('button', { name: 'Restore committed revision 1', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <button class=\"button\">Restore committed revision 1</button>\u001b[22m\n\u001b[2m       - unexpected value \"enabled\"\u001b[22m\n\n    at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:533:39",
+                    "location": {
+                      "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                      "column": 39,
+                      "line": 533
+                    },
+                    "snippet": "  531 |           if (mode === \"deliberate focus\") await tabTo(page, home(page));\n  532 |           if (mode === \"repeat submit\") {\n> 533 |             await expect.soft(button).toBeDisabled();\n      |                                       ^\n  534 |             if (await button.isEnabled()) await page.keyboard.press(\"Enter\");\n  535 |           }\n  536 |           await pending.release();"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                        "column": 39,
+                        "line": 533
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeDisabled\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('group', { name: 'Source recovery', exact: true }).getByRole('button', { name: 'Restore committed revision 1', exact: true })\nExpected: disabled\nReceived: enabled\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toBeDisabled\" getByRole('group', { name: 'Source recovery', exact: true }).getByRole('button', { name: 'Restore committed revision 1', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('group', { name: 'Source recovery', exact: true }).getByRole('button', { name: 'Restore committed revision 1', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <button class=\"button\">Restore committed revision 1</button>\u001b[22m\n\u001b[2m       - unexpected value \"enabled\"\u001b[22m\n\n\n  531 |           if (mode === \"deliberate focus\") await tabTo(page, home(page));\n  532 |           if (mode === \"repeat submit\") {\n> 533 |             await expect.soft(button).toBeDisabled();\n      |                                       ^\n  534 |             if (await button.isEnabled()) await page.keyboard.press(\"Enter\");\n  535 |           }\n  536 |           await pending.release();\n    at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:533:39"
+                    },
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                        "column": 36,
+                        "line": 567
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoHaveLength\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected length: \u001b[32m1\u001b[39m\nReceived length: \u001b[31m2\u001b[39m\nReceived array:  \u001b[31m[{\"body\": {\"action\": \"restore_revision\", \"expectedRevision\": 1, \"revision\": 1}, \"ifMatch\": \"\\\"1\\\"\"}, {\"body\": {\"action\": \"restore_revision\", \"expectedRevision\": 1, \"revision\": 1}, \"ifMatch\": \"\\\"1\\\"\"}]\u001b[39m\n\n  565 |             await expect(home(page)).toBeFocused();\n  566 |           if (mode === \"repeat submit\") {\n> 567 |             expect(pending.writes).toHaveLength(1);\n      |                                    ^\n  568 |             await expect(page.locator(\".alerts\")).not.toContainText(\n  569 |               \"REVISION_CONFLICT\",\n  570 |             );\n    at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:567:36"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T20:11:06.733Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/source-recovery-accessibil-89aaa-s-repeat-submit-at-1024x768/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/source-recovery-accessibil-89aaa-s-repeat-submit-at-1024x768/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                    "column": 39,
+                    "line": 533
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "62943bf3acd23bb0ef02-430fc42707ed08e4f62c",
+          "file": "source-recovery-accessibility.spec.ts",
+          "line": 443,
+          "column": 11
+        },
+        {
+          "title": "recovery accessibility: late unreadable recovery preserves Home at 1024x768",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 8,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 12706,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Recent projects', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toBeVisible\" getByRole('heading', { name: 'Recent projects', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Recent projects', exact: true })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Recent projects', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toBeVisible\" getByRole('heading', { name: 'Recent projects', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Recent projects', exact: true })\u001b[22m\n\n    at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:546:16",
+                    "location": {
+                      "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                      "column": 16,
+                      "line": 546
+                    },
+                    "snippet": "  544 |                 }),\n  545 |               )\n> 546 |               .toBeVisible();\n      |                ^\n  547 |           if (mode === \"newer head\") {\n  548 |             await expect(page.locator(\".workspace-context\")).toContainText(\n  549 |               `Draft revision ${project.revision + 2}`,"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                        "column": 16,
+                        "line": 546
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Recent projects', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toBeVisible\" getByRole('heading', { name: 'Recent projects', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Recent projects', exact: true })\u001b[22m\n\n\n  544 |                 }),\n  545 |               )\n> 546 |               .toBeVisible();\n      |                ^\n  547 |           if (mode === \"newer head\") {\n  548 |             await expect(page.locator(\".workspace-context\")).toContainText(\n  549 |               `Draft revision ${project.revision + 2}`,\n    at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:546:16"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T20:11:19.078Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "recovery-completion.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJicm9rZW4iOnRydWUsIm1vZGUiOiJIb21lIiwid3JpdGVzIjpbeyJib2R5Ijp7ImV4cGVjdGVkUmV2aXNpb24iOjEsImFjdGlvbiI6InJlc3RvcmVfcmV2aXNpb24iLCJyZXZpc2lvbiI6MX0sImlmTWF0Y2giOiJcIjFcIiJ9XSwiY29tbWl0dGVkUmV2aXNpb24iOjIsImxhdGVzdFJldmlzaW9uIjoyLCJuZXdlckhpc3RvcnkiOm51bGwsInJlYWR5SWQiOm51bGwsIm93blByb2plY3RSdW5TZXRVbmNoYW5nZWQiOnRydWUsInNjb3BlIjoiSGVsZCBhY3R1YWwgY29tbWl0dGVkIHJlY292ZXJ5IHJlc3BvbnNlOyBwcmVzZXJ2ZSBjdXJyZW50IGNvbnRleHQ7IG5vIFN0YXJ0In0="
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/source-recovery-accessibil-ce33a--preserves-Home-at-1024x768/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/source-recovery-accessibil-ce33a--preserves-Home-at-1024x768/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                    "column": 16,
+                    "line": 546
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "62943bf3acd23bb0ef02-c027342bf5ecd752ef53",
+          "file": "source-recovery-accessibility.spec.ts",
+          "line": 443,
+          "column": 11
+        },
+        {
+          "title": "recovery accessibility: late unreadable recovery preserves newer head at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 9,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3443,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T20:11:32.183Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "recovery-completion.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJicm9rZW4iOnRydWUsIm1vZGUiOiJuZXdlciBoZWFkIiwid3JpdGVzIjpbeyJib2R5Ijp7ImV4cGVjdGVkUmV2aXNpb24iOjEsImFjdGlvbiI6InJlc3RvcmVfcmV2aXNpb24iLCJyZXZpc2lvbiI6MX0sImlmTWF0Y2giOiJcIjFcIiJ9XSwiY29tbWl0dGVkUmV2aXNpb24iOjIsImxhdGVzdFJldmlzaW9uIjozLCJuZXdlckhpc3RvcnkiOiJ7XCJ1bmRvXCI6W3tcInRhcmdldFwiOjIsXCJhdFwiOjMsXCJsYWJlbFwiOlwic2V0IHBhcmFtZXRlclwifV0sXCJyZWRvXCI6W119IiwicmVhZHlJZCI6bnVsbCwib3duUHJvamVjdFJ1blNldFVuY2hhbmdlZCI6dHJ1ZSwic2NvcGUiOiJIZWxkIGFjdHVhbCBjb21taXR0ZWQgcmVjb3ZlcnkgcmVzcG9uc2U7IHByZXNlcnZlIGN1cnJlbnQgY29udGV4dDsgbm8gU3RhcnQifQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "62943bf3acd23bb0ef02-d80ebcae0e93e48d814a",
+          "file": "source-recovery-accessibility.spec.ts",
+          "line": 443,
+          "column": 11
+        },
+        {
+          "title": "recovery accessibility: late unreadable recovery preserves newer readiness at 1024x768",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 9,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 13322,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('dialog').getByText('pf-0fce4926-d23f-4cbe-8d72-7b958110049f', { exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toBeVisible\" getByRole('dialog').getByText('pf-0fce4926-d23f-4cbe-8d72-7b958110049f', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog').getByText('pf-0fce4926-d23f-4cbe-8d72-7b958110049f', { exact: true })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('dialog').getByText('pf-0fce4926-d23f-4cbe-8d72-7b958110049f', { exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toBeVisible\" getByRole('dialog').getByText('pf-0fce4926-d23f-4cbe-8d72-7b958110049f', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog').getByText('pf-0fce4926-d23f-4cbe-8d72-7b958110049f', { exact: true })\u001b[22m\n\n    at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:563:16",
+                    "location": {
+                      "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                      "column": 16,
+                      "line": 563
+                    },
+                    "snippet": "  561 |                 page.getByRole(\"dialog\").getByText(readyId!, { exact: true }),\n  562 |               )\n> 563 |               .toBeVisible();\n      |                ^\n  564 |           if (mode === \"deliberate focus\")\n  565 |             await expect(home(page)).toBeFocused();\n  566 |           if (mode === \"repeat submit\") {"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                        "column": 16,
+                        "line": 563
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('dialog').getByText('pf-0fce4926-d23f-4cbe-8d72-7b958110049f', { exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toBeVisible\" getByRole('dialog').getByText('pf-0fce4926-d23f-4cbe-8d72-7b958110049f', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog').getByText('pf-0fce4926-d23f-4cbe-8d72-7b958110049f', { exact: true })\u001b[22m\n\n\n  561 |                 page.getByRole(\"dialog\").getByText(readyId!, { exact: true }),\n  562 |               )\n> 563 |               .toBeVisible();\n      |                ^\n  564 |           if (mode === \"deliberate focus\")\n  565 |             await expect(home(page)).toBeFocused();\n  566 |           if (mode === \"repeat submit\") {\n    at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:563:16"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T20:11:35.684Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "recovery-completion.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJicm9rZW4iOnRydWUsIm1vZGUiOiJuZXdlciByZWFkaW5lc3MiLCJ3cml0ZXMiOlt7ImJvZHkiOnsiZXhwZWN0ZWRSZXZpc2lvbiI6MSwiYWN0aW9uIjoicmVzdG9yZV9yZXZpc2lvbiIsInJldmlzaW9uIjoxfSwiaWZNYXRjaCI6IlwiMVwiIn1dLCJjb21taXR0ZWRSZXZpc2lvbiI6MiwibGF0ZXN0UmV2aXNpb24iOjIsIm5ld2VySGlzdG9yeSI6bnVsbCwicmVhZHlJZCI6InBmLTBmY2U0OTI2LWQyM2YtNGNiZS04ZDcyLTdiOTU4MTEwMDQ5ZiIsIm93blByb2plY3RSdW5TZXRVbmNoYW5nZWQiOnRydWUsInNjb3BlIjoiSGVsZCBhY3R1YWwgY29tbWl0dGVkIHJlY292ZXJ5IHJlc3BvbnNlOyBwcmVzZXJ2ZSBjdXJyZW50IGNvbnRleHQ7IG5vIFN0YXJ0In0="
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/source-recovery-accessibil-a72eb-newer-readiness-at-1024x768/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/source-recovery-accessibil-a72eb-newer-readiness-at-1024x768/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                    "column": 16,
+                    "line": 563
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "62943bf3acd23bb0ef02-2e34a1ac5adf1ea1ca8b",
+          "file": "source-recovery-accessibility.spec.ts",
+          "line": 443,
+          "column": 11
+        },
+        {
+          "title": "recovery accessibility: late unreadable recovery preserves deliberate focus at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 10,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2527,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T20:11:49.331Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "recovery-completion.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJicm9rZW4iOnRydWUsIm1vZGUiOiJkZWxpYmVyYXRlIGZvY3VzIiwid3JpdGVzIjpbeyJib2R5Ijp7ImV4cGVjdGVkUmV2aXNpb24iOjEsImFjdGlvbiI6InJlc3RvcmVfcmV2aXNpb24iLCJyZXZpc2lvbiI6MX0sImlmTWF0Y2giOiJcIjFcIiJ9XSwiY29tbWl0dGVkUmV2aXNpb24iOjIsImxhdGVzdFJldmlzaW9uIjoyLCJuZXdlckhpc3RvcnkiOm51bGwsInJlYWR5SWQiOm51bGwsIm93blByb2plY3RSdW5TZXRVbmNoYW5nZWQiOnRydWUsInNjb3BlIjoiSGVsZCBhY3R1YWwgY29tbWl0dGVkIHJlY292ZXJ5IHJlc3BvbnNlOyBwcmVzZXJ2ZSBjdXJyZW50IGNvbnRleHQ7IG5vIFN0YXJ0In0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "62943bf3acd23bb0ef02-885bad2e51adfbd83078",
+          "file": "source-recovery-accessibility.spec.ts",
+          "line": 443,
+          "column": 11
+        },
+        {
+          "title": "recovery accessibility: real stale refusal current at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 10,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2697,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T20:11:51.917Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "recovery-refusal.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJkZXBhcnRlZCI6ZmFsc2UsInN0YXR1cyI6NDEyLCJhZHZhbmNlZFJldmlzaW9uIjoyLCJyZWZ1c2VkUmVxdWVzdERpZE5vdE11dGF0ZSI6dHJ1ZSwic2NvcGUiOiJBY3R1YWwgc2Vjb25kLXNlc3Npb24gcmVjb3ZlcnkgZm9sbG93ZWQgYnkgc3RhbGUgVUkgcmVmdXNhbDsgbm8gU3RhcnQifQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "62943bf3acd23bb0ef02-4a2831d9c40de3cd543b",
+          "file": "source-recovery-accessibility.spec.ts",
+          "line": 601,
+          "column": 9
+        },
+        {
+          "title": "recovery accessibility: real stale refusal after departure at 1024x768",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 10,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 12456,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('.alerts').getByRole('alert')\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveCount\" locator('.alerts').getByRole('alert') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('.alerts').getByRole('alert')\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to 1 element\u001b[22m\n\u001b[2m       - unexpected value \"1\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('.alerts').getByRole('alert')\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveCount\" locator('.alerts').getByRole('alert') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('.alerts').getByRole('alert')\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to 1 element\u001b[22m\n\u001b[2m       - unexpected value \"1\"\u001b[22m\n\n    at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:656:14",
+                    "location": {
+                      "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                      "column": 14,
+                      "line": 656
+                    },
+                    "snippet": "  654 |           await expect\n  655 |             .soft(page.locator(\".alerts\").getByRole(\"alert\"))\n> 656 |             .toHaveCount(0);\n      |              ^\n  657 |         } else {\n  658 |           await expect(page.locator(\".alerts\")).toContainText(\n  659 |             \"REVISION_CONFLICT\","
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                        "column": 14,
+                        "line": 656
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('.alerts').getByRole('alert')\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveCount\" locator('.alerts').getByRole('alert') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('.alerts').getByRole('alert')\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to 1 element\u001b[22m\n\u001b[2m       - unexpected value \"1\"\u001b[22m\n\n\n  654 |           await expect\n  655 |             .soft(page.locator(\".alerts\").getByRole(\"alert\"))\n> 656 |             .toHaveCount(0);\n      |              ^\n  657 |         } else {\n  658 |           await expect(page.locator(\".alerts\")).toContainText(\n  659 |             \"REVISION_CONFLICT\",\n    at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:656:14"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T20:11:54.628Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "recovery-refusal.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJkZXBhcnRlZCI6dHJ1ZSwic3RhdHVzIjo0MTIsImFkdmFuY2VkUmV2aXNpb24iOjIsInJlZnVzZWRSZXF1ZXN0RGlkTm90TXV0YXRlIjp0cnVlLCJzY29wZSI6IkFjdHVhbCBzZWNvbmQtc2Vzc2lvbiByZWNvdmVyeSBmb2xsb3dlZCBieSBzdGFsZSBVSSByZWZ1c2FsOyBubyBTdGFydCJ9"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/source-recovery-accessibil-4d4a8-after-departure-at-1024x768/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/source-recovery-accessibil-4d4a8-after-departure-at-1024x768/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                    "column": 14,
+                    "line": 656
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "62943bf3acd23bb0ef02-b6d36d11e99ec71f5546",
+          "file": "source-recovery-accessibility.spec.ts",
+          "line": 601,
+          "column": 9
+        },
+        {
+          "title": "recovery accessibility: native adopt at 1440x900",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 11,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 21438,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAccessibleDescription\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('group', { name: 'Source recovery', exact: true })\nExpected pattern: \u001b[32m/Recovery first preserves/\u001b[39m\nReceived string:  \u001b[31m\"\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveAccessibleDescription\" getByRole('group', { name: 'Source recovery', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('group', { name: 'Source recovery', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <div role=\"group\" class=\"recovery-panel\" aria-label=\"Source recovery\">\u2026</div>\u001b[22m\n\u001b[2m       - unexpected value \"\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAccessibleDescription\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('group', { name: 'Source recovery', exact: true })\nExpected pattern: \u001b[32m/Recovery first preserves/\u001b[39m\nReceived string:  \u001b[31m\"\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveAccessibleDescription\" getByRole('group', { name: 'Source recovery', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('group', { name: 'Source recovery', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <div role=\"group\" class=\"recovery-panel\" aria-label=\"Source recovery\">\u2026</div>\u001b[22m\n\u001b[2m       - unexpected value \"\"\u001b[22m\n\n    at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:240:12",
+                    "location": {
+                      "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                      "column": 12,
+                      "line": 240
+                    },
+                    "snippet": "  238 |         await expect\n  239 |           .soft(group(page))\n> 240 |           .toHaveAccessibleDescription(/Recovery first preserves/);\n      |            ^\n  241 |         const contrast = await renderedContrast(\n  242 |           group(page).locator(\":scope > p\").first(),\n  243 |           \"Source recovery preservation guidance\","
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                        "column": 12,
+                        "line": 240
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAccessibleDescription\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('group', { name: 'Source recovery', exact: true })\nExpected pattern: \u001b[32m/Recovery first preserves/\u001b[39m\nReceived string:  \u001b[31m\"\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveAccessibleDescription\" getByRole('group', { name: 'Source recovery', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('group', { name: 'Source recovery', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <div role=\"group\" class=\"recovery-panel\" aria-label=\"Source recovery\">\u2026</div>\u001b[22m\n\u001b[2m       - unexpected value \"\"\u001b[22m\n\n\n  238 |         await expect\n  239 |           .soft(group(page))\n> 240 |           .toHaveAccessibleDescription(/Recovery first preserves/);\n      |            ^\n  241 |         const contrast = await renderedContrast(\n  242 |           group(page).locator(\":scope > p\").first(),\n  243 |           \"Source recovery preservation guidance\",\n    at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:240:12"
+                    },
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                        "column": 41,
+                        "line": 271
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('button', { name: 'XDL source', exact: true })\nExpected: focused\nReceived: inactive\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toBeFocused\" getByRole('button', { name: 'XDL source', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: 'XDL source', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <button class=\"source-toggle\">\u2026</button>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n\n\n  269 |         );\n  270 |         await expect(group(page)).toHaveCount(0);\n> 271 |         await expect.soft(source(page)).toBeFocused();\n      |                                         ^\n  272 |         const current = await read(page, pid);\n  273 |         expect(current.revision).toBe(project.revision + 1);\n  274 |         expect(current.sourceIntegrity).toBe(\"intact\");\n    at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:271:41"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T20:12:07.405Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "recovery-keyboard.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJtb2RlIjoiYWRvcHQiLCJhY3Rpb24iOiJhZG9wdF9leHRlcm5hbCIsInJldmlzaW9uQmVmb3JlIjoxLCJyZXZpc2lvbkFmdGVyIjoyLCJ3cml0ZXMiOlt7ImJvZHkiOnsiZXhwZWN0ZWRSZXZpc2lvbiI6MSwiYWN0aW9uIjoiYWRvcHRfZXh0ZXJuYWwifSwiaWZNYXRjaCI6IlwiMVwiIn1dLCJwcmVzZXJ2ZWQiOnsicmVjb3ZlcnlJZCI6InJlYy01NjBmM2ZjYi1jNmNiLTRkMTAtOGIzMi1lOTY5Mjk1ZDAyYWUiLCJjb21taXR0ZWREaWdlc3QiOiJzaGEyNTY6MzlhZTE0M2NkN2Q4NTFiZDZkNGYxOGY3YTcwYjBlMGM0ZDJlYmIzN2RkODZmOWFhOGMxN2Y2ZDg2M2Y0ODk3OSIsIm9ic2VydmVkRGlnZXN0Ijoic2hhMjU2OjhiNjRjOWYwZWFmNzc4NWNlNjg3OGE0Zjk5OWVjNjlmZGQ4NWM3M2UyZTk2OTA0OGI0YzVmMzQ1YTFkNTVlMGIiLCJwcmVzZXJ2ZWRFbmNvZGluZyI6InV0Zi04IiwiZXhhY3RCYWNrdXBCeXRlcyI6dHJ1ZSwib2xkUmV2aXNpb25EaXJlY3RvcnlVbmNoYW5nZWQiOnRydWV9LCJjYW5vbmljYWxCeXRlc0FuZE90aGVySWRlbnRpdGllcyI6dHJ1ZSwiYXV0aG9yaXRhdGl2ZVZhbGlkYXRpb24iOnRydWUsIm93blByb2plY3RSdW5TZXRVbmNoYW5nZWQiOnRydWUsIm1lYXN1cmVtZW50cyI6W3sibGFiZWwiOiJTb3VyY2UgcmVjb3ZlcnkgcHJlc2VydmF0aW9uIGd1aWRhbmNlIiwidGV4dCI6IlJlY292ZXJ5IGZpcnN0IHByZXNlcnZlcyB0aGUgYnl0ZXMgbm93IG9uIGRpc2sgaW4gYSByZWNvdmVyeSBiYWNrdXAgYW5kIHRoZW4gY29tbWl0cyBhIG5ldyByZXZpc2lvbjsgcmV2aXNpb24gMSBzdGF5cyBpbiBoaXN0b3J5LiBTaWRlY2FycyBrZWVwIHRoZWlyIHJlY29yZGVkIGNvbnRlbnQuIiwiY29sb3IiOiJyZ2IoMTYxLCA4OSwgODEpIiwiZm9udFNpemUiOiIxMnB4IiwiZm9udFdlaWdodCI6IjQwMCIsInRocmVzaG9sZCI6NC41LCJzY29wZSI6IlNlbGVjdGVkIG5vcm1hbC1zaXplIHJlbmRlcmVkIHRleHQ7IG5vIG92ZXJhbGwgYWNjZXNzaWJpbGl0eSBjZXJ0aWZpY2F0aW9uIiwic3VwcG9ydGVkIjp0cnVlLCJsYXllcnMiOlsicmdiYSgwLCAwLCAwLCAwKSIsInJnYmEoMCwgMCwgMCwgMCkiLCJyZ2JhKDAsIDAsIDAsIDApIiwicmdiKDI1NSwgMjQzLCAyNDIpIl0sImJhY2tncm91bmQiOlsxLDAuOTUyOTQxMTc2NDcwNTg4MiwwLjk0OTAxOTYwNzg0MzEzNzIsMV0sImNvbXBvc2l0ZWRGb3JlZ3JvdW5kIjpbMC42MzEzNzI1NDkwMTk2MDc4LDAuMzQ5MDE5NjA3ODQzMTM3MjQsMC4zMTc2NDcwNTg4MjM1Mjk0LDFdLCJyYXRpbyI6NC43NjMzNjA5MTYxNTU3NzIsInBhc3NlZCI6dHJ1ZSwiYXNzdW1wdGlvbnMiOiJDU1Mgc1JHQiBjb2xvcnM7IGFscGhhIGNvbXBvc2l0ZWQgdGhyb3VnaCBleHBsaWNpdCBiYWNrZ3JvdW5kczsgbm8gYW50aS1hbGlhc2luZyBhcHByb3hpbWF0aW9uIn1dLCJzY29wZSI6IkFjdHVhbCBvd25lZCBmaWxlIG1vZGlmaWNhdGlvbiBhbmQgZXhwbGljaXQgcmVjb3Zlcnk7IG5hdGl2ZSBrZXlzOyBubyBTdGFydCBvciBkZXZpY2UgYWNjZXNzIn0="
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/source-recovery-accessibil-5d7a1-ty-native-adopt-at-1440x900/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/source-recovery-accessibil-5d7a1-ty-native-adopt-at-1440x900/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                    "column": 12,
+                    "line": 240
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "62943bf3acd23bb0ef02-a3ce4a1bdf45b03f7115",
+          "file": "source-recovery-accessibility.spec.ts",
+          "line": 223,
+          "column": 9
+        },
+        {
+          "title": "recovery accessibility: native restore at 1440x900",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 12,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 21543,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAccessibleDescription\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('group', { name: 'Source recovery', exact: true })\nExpected pattern: \u001b[32m/Recovery first preserves/\u001b[39m\nReceived string:  \u001b[31m\"\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveAccessibleDescription\" getByRole('group', { name: 'Source recovery', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('group', { name: 'Source recovery', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <div role=\"group\" class=\"recovery-panel\" aria-label=\"Source recovery\">\u2026</div>\u001b[22m\n\u001b[2m       - unexpected value \"\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAccessibleDescription\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('group', { name: 'Source recovery', exact: true })\nExpected pattern: \u001b[32m/Recovery first preserves/\u001b[39m\nReceived string:  \u001b[31m\"\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveAccessibleDescription\" getByRole('group', { name: 'Source recovery', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('group', { name: 'Source recovery', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <div role=\"group\" class=\"recovery-panel\" aria-label=\"Source recovery\">\u2026</div>\u001b[22m\n\u001b[2m       - unexpected value \"\"\u001b[22m\n\n    at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:240:12",
+                    "location": {
+                      "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                      "column": 12,
+                      "line": 240
+                    },
+                    "snippet": "  238 |         await expect\n  239 |           .soft(group(page))\n> 240 |           .toHaveAccessibleDescription(/Recovery first preserves/);\n      |            ^\n  241 |         const contrast = await renderedContrast(\n  242 |           group(page).locator(\":scope > p\").first(),\n  243 |           \"Source recovery preservation guidance\","
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                        "column": 12,
+                        "line": 240
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAccessibleDescription\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('group', { name: 'Source recovery', exact: true })\nExpected pattern: \u001b[32m/Recovery first preserves/\u001b[39m\nReceived string:  \u001b[31m\"\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveAccessibleDescription\" getByRole('group', { name: 'Source recovery', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('group', { name: 'Source recovery', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <div role=\"group\" class=\"recovery-panel\" aria-label=\"Source recovery\">\u2026</div>\u001b[22m\n\u001b[2m       - unexpected value \"\"\u001b[22m\n\n\n  238 |         await expect\n  239 |           .soft(group(page))\n> 240 |           .toHaveAccessibleDescription(/Recovery first preserves/);\n      |            ^\n  241 |         const contrast = await renderedContrast(\n  242 |           group(page).locator(\":scope > p\").first(),\n  243 |           \"Source recovery preservation guidance\",\n    at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:240:12"
+                    },
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                        "column": 41,
+                        "line": 271
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('button', { name: 'XDL source', exact: true })\nExpected: focused\nReceived: inactive\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toBeFocused\" getByRole('button', { name: 'XDL source', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: 'XDL source', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <button class=\"source-toggle\">\u2026</button>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n\n\n  269 |         );\n  270 |         await expect(group(page)).toHaveCount(0);\n> 271 |         await expect.soft(source(page)).toBeFocused();\n      |                                         ^\n  272 |         const current = await read(page, pid);\n  273 |         expect(current.revision).toBe(project.revision + 1);\n  274 |         expect(current.sourceIntegrity).toBe(\"intact\");\n    at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:271:41"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T20:12:29.253Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "recovery-keyboard.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJtb2RlIjoicmVzdG9yZSIsImFjdGlvbiI6InJlc3RvcmVfcmV2aXNpb24iLCJyZXZpc2lvbkJlZm9yZSI6MSwicmV2aXNpb25BZnRlciI6Miwid3JpdGVzIjpbeyJib2R5Ijp7ImV4cGVjdGVkUmV2aXNpb24iOjEsImFjdGlvbiI6InJlc3RvcmVfcmV2aXNpb24iLCJyZXZpc2lvbiI6MX0sImlmTWF0Y2giOiJcIjFcIiJ9XSwicHJlc2VydmVkIjp7InJlY292ZXJ5SWQiOiJyZWMtNjdlZjFhMGQtZjNhYS00NGM4LWFiZjQtMThhYzc0NjBhNzg5IiwiY29tbWl0dGVkRGlnZXN0Ijoic2hhMjU2OjM5YWUxNDNjZDdkODUxYmQ2ZDRmMThmN2E3MGIwZTBjNGQyZWJiMzdkZDg2ZjlhYThjMTdmNmQ4NjNmNDg5NzkiLCJvYnNlcnZlZERpZ2VzdCI6InNoYTI1Njo4YjY0YzlmMGVhZjc3ODVjZTY4NzhhNGY5OTllYzY5ZmRkODVjNzNlMmU5NjkwNDhiNGM1ZjM0NWExZDU1ZTBiIiwicHJlc2VydmVkRW5jb2RpbmciOiJ1dGYtOCIsImV4YWN0QmFja3VwQnl0ZXMiOnRydWUsIm9sZFJldmlzaW9uRGlyZWN0b3J5VW5jaGFuZ2VkIjp0cnVlfSwiY2Fub25pY2FsQnl0ZXNBbmRPdGhlcklkZW50aXRpZXMiOnRydWUsImF1dGhvcml0YXRpdmVWYWxpZGF0aW9uIjp0cnVlLCJvd25Qcm9qZWN0UnVuU2V0VW5jaGFuZ2VkIjp0cnVlLCJtZWFzdXJlbWVudHMiOlt7ImxhYmVsIjoiU291cmNlIHJlY292ZXJ5IHByZXNlcnZhdGlvbiBndWlkYW5jZSIsInRleHQiOiJSZWNvdmVyeSBmaXJzdCBwcmVzZXJ2ZXMgdGhlIGJ5dGVzIG5vdyBvbiBkaXNrIGluIGEgcmVjb3ZlcnkgYmFja3VwIGFuZCB0aGVuIGNvbW1pdHMgYSBuZXcgcmV2aXNpb247IHJldmlzaW9uIDEgc3RheXMgaW4gaGlzdG9yeS4gU2lkZWNhcnMga2VlcCB0aGVpciByZWNvcmRlZCBjb250ZW50LiIsImNvbG9yIjoicmdiKDE2MSwgODksIDgxKSIsImZvbnRTaXplIjoiMTJweCIsImZvbnRXZWlnaHQiOiI0MDAiLCJ0aHJlc2hvbGQiOjQuNSwic2NvcGUiOiJTZWxlY3RlZCBub3JtYWwtc2l6ZSByZW5kZXJlZCB0ZXh0OyBubyBvdmVyYWxsIGFjY2Vzc2liaWxpdHkgY2VydGlmaWNhdGlvbiIsInN1cHBvcnRlZCI6dHJ1ZSwibGF5ZXJzIjpbInJnYmEoMCwgMCwgMCwgMCkiLCJyZ2JhKDAsIDAsIDAsIDApIiwicmdiYSgwLCAwLCAwLCAwKSIsInJnYigyNTUsIDI0MywgMjQyKSJdLCJiYWNrZ3JvdW5kIjpbMSwwLjk1Mjk0MTE3NjQ3MDU4ODIsMC45NDkwMTk2MDc4NDMxMzcyLDFdLCJjb21wb3NpdGVkRm9yZWdyb3VuZCI6WzAuNjMxMzcyNTQ5MDE5NjA3OCwwLjM0OTAxOTYwNzg0MzEzNzI0LDAuMzE3NjQ3MDU4ODIzNTI5NCwxXSwicmF0aW8iOjQuNzYzMzYwOTE2MTU1NzcyLCJwYXNzZWQiOnRydWUsImFzc3VtcHRpb25zIjoiQ1NTIHNSR0IgY29sb3JzOyBhbHBoYSBjb21wb3NpdGVkIHRocm91Z2ggZXhwbGljaXQgYmFja2dyb3VuZHM7IG5vIGFudGktYWxpYXNpbmcgYXBwcm94aW1hdGlvbiJ9XSwic2NvcGUiOiJBY3R1YWwgb3duZWQgZmlsZSBtb2RpZmljYXRpb24gYW5kIGV4cGxpY2l0IHJlY292ZXJ5OyBuYXRpdmUga2V5czsgbm8gU3RhcnQgb3IgZGV2aWNlIGFjY2VzcyJ9"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/source-recovery-accessibil-b8ce1--native-restore-at-1440x900/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/source-recovery-accessibil-b8ce1--native-restore-at-1440x900/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                    "column": 12,
+                    "line": 240
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "62943bf3acd23bb0ef02-c3a7fd30e76b90c29368",
+          "file": "source-recovery-accessibility.spec.ts",
+          "line": 223,
+          "column": 9
+        },
+        {
+          "title": "recovery accessibility: native unreadable restore at 1440x900",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 13,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 21400,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAccessibleDescription\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('group', { name: 'Source recovery', exact: true })\nExpected pattern: \u001b[32m/Recovery first preserves/\u001b[39m\nReceived string:  \u001b[31m\"\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveAccessibleDescription\" getByRole('group', { name: 'Source recovery', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('group', { name: 'Source recovery', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <div role=\"group\" class=\"recovery-panel\" aria-label=\"Source recovery\">\u2026</div>\u001b[22m\n\u001b[2m       - unexpected value \"\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAccessibleDescription\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('group', { name: 'Source recovery', exact: true })\nExpected pattern: \u001b[32m/Recovery first preserves/\u001b[39m\nReceived string:  \u001b[31m\"\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveAccessibleDescription\" getByRole('group', { name: 'Source recovery', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('group', { name: 'Source recovery', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <div role=\"group\" class=\"recovery-panel\" aria-label=\"Source recovery\">\u2026</div>\u001b[22m\n\u001b[2m       - unexpected value \"\"\u001b[22m\n\n    at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:240:12",
+                    "location": {
+                      "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                      "column": 12,
+                      "line": 240
+                    },
+                    "snippet": "  238 |         await expect\n  239 |           .soft(group(page))\n> 240 |           .toHaveAccessibleDescription(/Recovery first preserves/);\n      |            ^\n  241 |         const contrast = await renderedContrast(\n  242 |           group(page).locator(\":scope > p\").first(),\n  243 |           \"Source recovery preservation guidance\","
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                        "column": 12,
+                        "line": 240
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAccessibleDescription\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('group', { name: 'Source recovery', exact: true })\nExpected pattern: \u001b[32m/Recovery first preserves/\u001b[39m\nReceived string:  \u001b[31m\"\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveAccessibleDescription\" getByRole('group', { name: 'Source recovery', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('group', { name: 'Source recovery', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <div role=\"group\" class=\"recovery-panel\" aria-label=\"Source recovery\">\u2026</div>\u001b[22m\n\u001b[2m       - unexpected value \"\"\u001b[22m\n\n\n  238 |         await expect\n  239 |           .soft(group(page))\n> 240 |           .toHaveAccessibleDescription(/Recovery first preserves/);\n      |            ^\n  241 |         const contrast = await renderedContrast(\n  242 |           group(page).locator(\":scope > p\").first(),\n  243 |           \"Source recovery preservation guidance\",\n    at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:240:12"
+                    },
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                        "column": 41,
+                        "line": 271
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('button', { name: 'XDL source', exact: true })\nExpected: focused\nReceived: inactive\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toBeFocused\" getByRole('button', { name: 'XDL source', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: 'XDL source', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <button class=\"source-toggle\">\u2026</button>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n\n\n  269 |         );\n  270 |         await expect(group(page)).toHaveCount(0);\n> 271 |         await expect.soft(source(page)).toBeFocused();\n      |                                         ^\n  272 |         const current = await read(page, pid);\n  273 |         expect(current.revision).toBe(project.revision + 1);\n  274 |         expect(current.sourceIntegrity).toBe(\"intact\");\n    at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:271:41"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T20:12:51.153Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "recovery-keyboard.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJtb2RlIjoidW5yZWFkYWJsZSByZXN0b3JlIiwiYWN0aW9uIjoicmVzdG9yZV9yZXZpc2lvbiIsInJldmlzaW9uQmVmb3JlIjoxLCJyZXZpc2lvbkFmdGVyIjoyLCJ3cml0ZXMiOlt7ImJvZHkiOnsiZXhwZWN0ZWRSZXZpc2lvbiI6MSwiYWN0aW9uIjoicmVzdG9yZV9yZXZpc2lvbiIsInJldmlzaW9uIjoxfSwiaWZNYXRjaCI6IlwiMVwiIn1dLCJwcmVzZXJ2ZWQiOnsicmVjb3ZlcnlJZCI6InJlYy0wYTY1ZWZhMi02NDQ0LTQyMGUtYTRjMC04ZTc0NTk4OTNlZTUiLCJjb21taXR0ZWREaWdlc3QiOiJzaGEyNTY6MzlhZTE0M2NkN2Q4NTFiZDZkNGYxOGY3YTcwYjBlMGM0ZDJlYmIzN2RkODZmOWFhOGMxN2Y2ZDg2M2Y0ODk3OSIsIm9ic2VydmVkRGlnZXN0Ijoic2hhMjU2OjVmMjEwZDVlNDU0NzM5OWM1OTRhNGExZmNhNzdiYTM1OGZiOTA1N2FiNmI0ZjQyMWJmNTI5Mjk0ZGM3ZDk1YzYiLCJwcmVzZXJ2ZWRFbmNvZGluZyI6ImJpbmFyeSIsImV4YWN0QmFja3VwQnl0ZXMiOnRydWUsIm9sZFJldmlzaW9uRGlyZWN0b3J5VW5jaGFuZ2VkIjp0cnVlfSwiY2Fub25pY2FsQnl0ZXNBbmRPdGhlcklkZW50aXRpZXMiOnRydWUsImF1dGhvcml0YXRpdmVWYWxpZGF0aW9uIjp0cnVlLCJvd25Qcm9qZWN0UnVuU2V0VW5jaGFuZ2VkIjp0cnVlLCJtZWFzdXJlbWVudHMiOlt7ImxhYmVsIjoiU291cmNlIHJlY292ZXJ5IHByZXNlcnZhdGlvbiBndWlkYW5jZSIsInRleHQiOiJSZWNvdmVyeSBmaXJzdCBwcmVzZXJ2ZXMgdGhlIGJ5dGVzIG5vdyBvbiBkaXNrIGluIGEgcmVjb3ZlcnkgYmFja3VwIGFuZCB0aGVuIGNvbW1pdHMgYSBuZXcgcmV2aXNpb247IHJldmlzaW9uIDEgc3RheXMgaW4gaGlzdG9yeS4gU2lkZWNhcnMga2VlcCB0aGVpciByZWNvcmRlZCBjb250ZW50LiIsImNvbG9yIjoicmdiKDE2MSwgODksIDgxKSIsImZvbnRTaXplIjoiMTJweCIsImZvbnRXZWlnaHQiOiI0MDAiLCJ0aHJlc2hvbGQiOjQuNSwic2NvcGUiOiJTZWxlY3RlZCBub3JtYWwtc2l6ZSByZW5kZXJlZCB0ZXh0OyBubyBvdmVyYWxsIGFjY2Vzc2liaWxpdHkgY2VydGlmaWNhdGlvbiIsInN1cHBvcnRlZCI6dHJ1ZSwibGF5ZXJzIjpbInJnYmEoMCwgMCwgMCwgMCkiLCJyZ2JhKDAsIDAsIDAsIDApIiwicmdiYSgwLCAwLCAwLCAwKSIsInJnYigyNTUsIDI0MywgMjQyKSJdLCJiYWNrZ3JvdW5kIjpbMSwwLjk1Mjk0MTE3NjQ3MDU4ODIsMC45NDkwMTk2MDc4NDMxMzcyLDFdLCJjb21wb3NpdGVkRm9yZWdyb3VuZCI6WzAuNjMxMzcyNTQ5MDE5NjA3OCwwLjM0OTAxOTYwNzg0MzEzNzI0LDAuMzE3NjQ3MDU4ODIzNTI5NCwxXSwicmF0aW8iOjQuNzYzMzYwOTE2MTU1NzcyLCJwYXNzZWQiOnRydWUsImFzc3VtcHRpb25zIjoiQ1NTIHNSR0IgY29sb3JzOyBhbHBoYSBjb21wb3NpdGVkIHRocm91Z2ggZXhwbGljaXQgYmFja2dyb3VuZHM7IG5vIGFudGktYWxpYXNpbmcgYXBwcm94aW1hdGlvbiJ9XSwic2NvcGUiOiJBY3R1YWwgb3duZWQgZmlsZSBtb2RpZmljYXRpb24gYW5kIGV4cGxpY2l0IHJlY292ZXJ5OyBuYXRpdmUga2V5czsgbm8gU3RhcnQgb3IgZGV2aWNlIGFjY2VzcyJ9"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/source-recovery-accessibil-5bd7b-eadable-restore-at-1440x900/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/source-recovery-accessibil-5bd7b-eadable-restore-at-1440x900/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                    "column": 12,
+                    "line": 240
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "62943bf3acd23bb0ef02-eb6fab9a33bf707584bb",
+          "file": "source-recovery-accessibility.spec.ts",
+          "line": 223,
+          "column": 9
+        },
+        {
+          "title": "recovery accessibility: history failed lookup at 1440x900",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 14,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 31472,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).not.\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('group', { name: 'Source recovery', exact: true })\nExpected substring: not \u001b[32m\"predates recorded history\"\u001b[39m\nReceived string: \u001b[31m\"Recovery first preserves the bytes now on disk in a recovery backup and then commits a new revision; revision 1 stays in history. Sidecars keep their recorded content.Adopt external changes as a new revisionRevision 1 \u001b[7mpredates recorded history\u001b[27m, so it cannot be restored here. Adopting the external changes remains available.\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft not toContainText\" getByRole('group', { name: 'Source recovery', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('group', { name: 'Source recovery', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <div role=\"group\" class=\"recovery-panel\" aria-label=\"Source recovery\">\u2026</div>\u001b[22m\n\u001b[2m       - unexpected value \"Recovery first preserves the bytes now on disk in a recovery backup and then commits a new revision; revision 1 stays in history. Sidecars keep their recorded content.Adopt external changes as a new revisionRevision 1 predates recorded history, so it cannot be restored here. Adopting the external changes remains available.\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).not.\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('group', { name: 'Source recovery', exact: true })\nExpected substring: not \u001b[32m\"predates recorded history\"\u001b[39m\nReceived string: \u001b[31m\"Recovery first preserves the bytes now on disk in a recovery backup and then commits a new revision; revision 1 stays in history. Sidecars keep their recorded content.Adopt external changes as a new revisionRevision 1 \u001b[7mpredates recorded history\u001b[27m, so it cannot be restored here. Adopting the external changes remains available.\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft not toContainText\" getByRole('group', { name: 'Source recovery', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('group', { name: 'Source recovery', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <div role=\"group\" class=\"recovery-panel\" aria-label=\"Source recovery\">\u2026</div>\u001b[22m\n\u001b[2m       - unexpected value \"Recovery first preserves the bytes now on disk in a recovery backup and then commits a new revision; revision 1 stays in history. Sidecars keep their recorded content.Adopt external changes as a new revisionRevision 1 predates recorded history, so it cannot be restored here. Adopting the external changes remains available.\"\u001b[22m\n\n    at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:385:18",
+                    "location": {
+                      "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                      "column": 18,
+                      "line": 385
+                    },
+                    "snippet": "  383 |           await expect\n  384 |             .soft(group(page))\n> 385 |             .not.toContainText(\"predates recorded history\");\n      |                  ^\n  386 |           await expect\n  387 |             .soft(group(page))\n  388 |             .toContainText(\"Could not check revision history\");"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                        "column": 18,
+                        "line": 385
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).not.\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('group', { name: 'Source recovery', exact: true })\nExpected substring: not \u001b[32m\"predates recorded history\"\u001b[39m\nReceived string: \u001b[31m\"Recovery first preserves the bytes now on disk in a recovery backup and then commits a new revision; revision 1 stays in history. Sidecars keep their recorded content.Adopt external changes as a new revisionRevision 1 \u001b[7mpredates recorded history\u001b[27m, so it cannot be restored here. Adopting the external changes remains available.\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft not toContainText\" getByRole('group', { name: 'Source recovery', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('group', { name: 'Source recovery', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <div role=\"group\" class=\"recovery-panel\" aria-label=\"Source recovery\">\u2026</div>\u001b[22m\n\u001b[2m       - unexpected value \"Recovery first preserves the bytes now on disk in a recovery backup and then commits a new revision; revision 1 stays in history. Sidecars keep their recorded content.Adopt external changes as a new revisionRevision 1 predates recorded history, so it cannot be restored here. Adopting the external changes remains available.\"\u001b[22m\n\n\n  383 |           await expect\n  384 |             .soft(group(page))\n> 385 |             .not.toContainText(\"predates recorded history\");\n      |                  ^\n  386 |           await expect\n  387 |             .soft(group(page))\n  388 |             .toContainText(\"Could not check revision history\");\n    at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:385:18"
+                    },
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                        "column": 14,
+                        "line": 388
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('group', { name: 'Source recovery', exact: true })\nExpected substring: \u001b[32m\"Could not check revision history\"\u001b[39m\nReceived string:    \u001b[31m\"Recovery first preserves the bytes now on disk in a recovery backup and then commits a new revision; revision 1 stays in history. Sidecars keep their recorded content.Adopt external changes as a new revisionRevision 1 predates recorded history, so it cannot be restored here. Adopting the external changes remains available.\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toContainText\" getByRole('group', { name: 'Source recovery', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('group', { name: 'Source recovery', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <div role=\"group\" class=\"recovery-panel\" aria-label=\"Source recovery\">\u2026</div>\u001b[22m\n\u001b[2m       - unexpected value \"Recovery first preserves the bytes now on disk in a recovery backup and then commits a new revision; revision 1 stays in history. Sidecars keep their recorded content.Adopt external changes as a new revisionRevision 1 predates recorded history, so it cannot be restored here. Adopting the external changes remains available.\"\u001b[22m\n\n\n  386 |           await expect\n  387 |             .soft(group(page))\n> 388 |             .toContainText(\"Could not check revision history\");\n      |              ^\n  389 |           await expect(\n  390 |             recoverButton(page, project.revision, \"restore_revision\"),\n  391 |           ).toHaveCount(0);\n    at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:388:14"
+                    },
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                        "column": 24,
+                        "line": 9
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('group', { name: 'Source recovery', exact: true }).getByRole('button', { name: 'Retry revision history', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('group', { name: 'Source recovery', exact: true }).getByRole('button', { name: 'Retry revision history', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('group', { name: 'Source recovery', exact: true }).getByRole('button', { name: 'Retry revision history', exact: true })\u001b[22m\n\n\n   7 |\n   8 | async function tabTo(page: Page, target: Locator) {\n>  9 |   await expect(target).toBeVisible();\n     |                        ^\n  10 |   for (let i = 0; i < 220; i++) {\n  11 |     if (await target.evaluate((n) => document.activeElement === n)) return;\n  12 |     await page.keyboard.press(\"Tab\");\n    at tabTo (<repo>/tests/e2e/source-recovery-accessibility.spec.ts:9:24)\n    at activate (<repo>/tests/e2e/source-recovery-accessibility.spec.ts:17:9)\n    at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:392:17"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T20:13:12.951Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/source-recovery-accessibil-4b438-y-failed-lookup-at-1440x900/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/source-recovery-accessibil-4b438-y-failed-lookup-at-1440x900/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                    "column": 18,
+                    "line": 385
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "62943bf3acd23bb0ef02-e32727d4bcb9ab80da84",
+          "file": "source-recovery-accessibility.spec.ts",
+          "line": 336,
+          "column": 9
+        },
+        {
+          "title": "recovery accessibility: history absent response at 1440x900",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 15,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 11410,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('group', { name: 'Source recovery', exact: true })\nExpected substring: \u001b[32m\"\u001b[7mNo recorded copy i\u001b[27ms available\"\u001b[39m\nReceived string:    \u001b[31m\"\u001b[7mRecovery first preserves the bytes now on disk in a recovery backup and then commits a new revision; revision 1 stays in history. Sidecars keep their recorded content.Adopt external changes as a new revisionRevision 1 predates recorded history, so it cannot be restored here. Adopting the external changes remain\u001b[27ms available\u001b[7m.\u001b[27m\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" getByRole('group', { name: 'Source recovery', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('group', { name: 'Source recovery', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <div role=\"group\" class=\"recovery-panel\" aria-label=\"Source recovery\">\u2026</div>\u001b[22m\n\u001b[2m       - unexpected value \"Recovery first preserves the bytes now on disk in a recovery backup and then commits a new revision; revision 1 stays in history. Sidecars keep their recorded content.Adopt external changes as a new revisionRevision 1 predates recorded history, so it cannot be restored here. Adopting the external changes remains available.\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('group', { name: 'Source recovery', exact: true })\nExpected substring: \u001b[32m\"\u001b[7mNo recorded copy i\u001b[27ms available\"\u001b[39m\nReceived string:    \u001b[31m\"\u001b[7mRecovery first preserves the bytes now on disk in a recovery backup and then commits a new revision; revision 1 stays in history. Sidecars keep their recorded content.Adopt external changes as a new revisionRevision 1 predates recorded history, so it cannot be restored here. Adopting the external changes remain\u001b[27ms available\u001b[7m.\u001b[27m\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" getByRole('group', { name: 'Source recovery', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('group', { name: 'Source recovery', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <div role=\"group\" class=\"recovery-panel\" aria-label=\"Source recovery\">\u2026</div>\u001b[22m\n\u001b[2m       - unexpected value \"Recovery first preserves the bytes now on disk in a recovery backup and then commits a new revision; revision 1 stays in history. Sidecars keep their recorded content.Adopt external changes as a new revisionRevision 1 predates recorded history, so it cannot be restored here. Adopting the external changes remains available.\"\u001b[22m\n\n    at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:404:37",
+                    "location": {
+                      "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                      "column": 37,
+                      "line": 404
+                    },
+                    "snippet": "  402 |           expect(requests).toBe(2);\n  403 |         } else {\n> 404 |           await expect(group(page)).toContainText(\n      |                                     ^\n  405 |             \"No recorded copy is available\",\n  406 |           );\n  407 |           await expect("
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                        "column": 37,
+                        "line": 404
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('group', { name: 'Source recovery', exact: true })\nExpected substring: \u001b[32m\"\u001b[7mNo recorded copy i\u001b[27ms available\"\u001b[39m\nReceived string:    \u001b[31m\"\u001b[7mRecovery first preserves the bytes now on disk in a recovery backup and then commits a new revision; revision 1 stays in history. Sidecars keep their recorded content.Adopt external changes as a new revisionRevision 1 predates recorded history, so it cannot be restored here. Adopting the external changes remain\u001b[27ms available\u001b[7m.\u001b[27m\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" getByRole('group', { name: 'Source recovery', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('group', { name: 'Source recovery', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <div role=\"group\" class=\"recovery-panel\" aria-label=\"Source recovery\">\u2026</div>\u001b[22m\n\u001b[2m       - unexpected value \"Recovery first preserves the bytes now on disk in a recovery backup and then commits a new revision; revision 1 stays in history. Sidecars keep their recorded content.Adopt external changes as a new revisionRevision 1 predates recorded history, so it cannot be restored here. Adopting the external changes remains available.\"\u001b[22m\n\n\n  402 |           expect(requests).toBe(2);\n  403 |         } else {\n> 404 |           await expect(group(page)).toContainText(\n      |                                     ^\n  405 |             \"No recorded copy is available\",\n  406 |           );\n  407 |           await expect(\n    at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:404:37"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T20:13:44.817Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/source-recovery-accessibil-49c99-absent-response-at-1440x900/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/source-recovery-accessibil-49c99-absent-response-at-1440x900/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                    "column": 37,
+                    "line": 404
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "62943bf3acd23bb0ef02-c3f3dd4aa01bd6a83549",
+          "file": "source-recovery-accessibility.spec.ts",
+          "line": 336,
+          "column": 9
+        },
+        {
+          "title": "recovery accessibility: late modified recovery preserves Home at 1440x900",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 16,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 13103,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Recent projects', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toBeVisible\" getByRole('heading', { name: 'Recent projects', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Recent projects', exact: true })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Recent projects', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toBeVisible\" getByRole('heading', { name: 'Recent projects', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Recent projects', exact: true })\u001b[22m\n\n    at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:546:16",
+                    "location": {
+                      "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                      "column": 16,
+                      "line": 546
+                    },
+                    "snippet": "  544 |                 }),\n  545 |               )\n> 546 |               .toBeVisible();\n      |                ^\n  547 |           if (mode === \"newer head\") {\n  548 |             await expect(page.locator(\".workspace-context\")).toContainText(\n  549 |               `Draft revision ${project.revision + 2}`,"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                        "column": 16,
+                        "line": 546
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Recent projects', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toBeVisible\" getByRole('heading', { name: 'Recent projects', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Recent projects', exact: true })\u001b[22m\n\n\n  544 |                 }),\n  545 |               )\n> 546 |               .toBeVisible();\n      |                ^\n  547 |           if (mode === \"newer head\") {\n  548 |             await expect(page.locator(\".workspace-context\")).toContainText(\n  549 |               `Draft revision ${project.revision + 2}`,\n    at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:546:16"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T20:13:56.617Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "recovery-completion.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJicm9rZW4iOmZhbHNlLCJtb2RlIjoiSG9tZSIsIndyaXRlcyI6W3siYm9keSI6eyJleHBlY3RlZFJldmlzaW9uIjoxLCJhY3Rpb24iOiJyZXN0b3JlX3JldmlzaW9uIiwicmV2aXNpb24iOjF9LCJpZk1hdGNoIjoiXCIxXCIifV0sImNvbW1pdHRlZFJldmlzaW9uIjoyLCJsYXRlc3RSZXZpc2lvbiI6MiwibmV3ZXJIaXN0b3J5IjpudWxsLCJyZWFkeUlkIjpudWxsLCJvd25Qcm9qZWN0UnVuU2V0VW5jaGFuZ2VkIjp0cnVlLCJzY29wZSI6IkhlbGQgYWN0dWFsIGNvbW1pdHRlZCByZWNvdmVyeSByZXNwb25zZTsgcHJlc2VydmUgY3VycmVudCBjb250ZXh0OyBubyBTdGFydCJ9"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/source-recovery-accessibil-e18c9--preserves-Home-at-1440x900/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/source-recovery-accessibil-e18c9--preserves-Home-at-1440x900/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                    "column": 16,
+                    "line": 546
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "62943bf3acd23bb0ef02-30268977762d334f901a",
+          "file": "source-recovery-accessibility.spec.ts",
+          "line": 443,
+          "column": 11
+        },
+        {
+          "title": "recovery accessibility: late modified recovery preserves newer head at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 17,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4072,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T20:14:10.104Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "recovery-completion.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJicm9rZW4iOmZhbHNlLCJtb2RlIjoibmV3ZXIgaGVhZCIsIndyaXRlcyI6W3siYm9keSI6eyJleHBlY3RlZFJldmlzaW9uIjoxLCJhY3Rpb24iOiJyZXN0b3JlX3JldmlzaW9uIiwicmV2aXNpb24iOjF9LCJpZk1hdGNoIjoiXCIxXCIifV0sImNvbW1pdHRlZFJldmlzaW9uIjoyLCJsYXRlc3RSZXZpc2lvbiI6MywibmV3ZXJIaXN0b3J5Ijoie1widW5kb1wiOlt7XCJ0YXJnZXRcIjoyLFwiYXRcIjozLFwibGFiZWxcIjpcInNldCBwYXJhbWV0ZXJcIn1dLFwicmVkb1wiOltdfSIsInJlYWR5SWQiOm51bGwsIm93blByb2plY3RSdW5TZXRVbmNoYW5nZWQiOnRydWUsInNjb3BlIjoiSGVsZCBhY3R1YWwgY29tbWl0dGVkIHJlY292ZXJ5IHJlc3BvbnNlOyBwcmVzZXJ2ZSBjdXJyZW50IGNvbnRleHQ7IG5vIFN0YXJ0In0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "62943bf3acd23bb0ef02-ad490c8169216f5a1dd5",
+          "file": "source-recovery-accessibility.spec.ts",
+          "line": 443,
+          "column": 11
+        },
+        {
+          "title": "recovery accessibility: late modified recovery preserves newer readiness at 1440x900",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 17,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 13012,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('dialog').getByText('pf-42d833e2-f413-454d-8193-d385de9a90b5', { exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toBeVisible\" getByRole('dialog').getByText('pf-42d833e2-f413-454d-8193-d385de9a90b5', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog').getByText('pf-42d833e2-f413-454d-8193-d385de9a90b5', { exact: true })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('dialog').getByText('pf-42d833e2-f413-454d-8193-d385de9a90b5', { exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toBeVisible\" getByRole('dialog').getByText('pf-42d833e2-f413-454d-8193-d385de9a90b5', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog').getByText('pf-42d833e2-f413-454d-8193-d385de9a90b5', { exact: true })\u001b[22m\n\n    at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:563:16",
+                    "location": {
+                      "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                      "column": 16,
+                      "line": 563
+                    },
+                    "snippet": "  561 |                 page.getByRole(\"dialog\").getByText(readyId!, { exact: true }),\n  562 |               )\n> 563 |               .toBeVisible();\n      |                ^\n  564 |           if (mode === \"deliberate focus\")\n  565 |             await expect(home(page)).toBeFocused();\n  566 |           if (mode === \"repeat submit\") {"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                        "column": 16,
+                        "line": 563
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('dialog').getByText('pf-42d833e2-f413-454d-8193-d385de9a90b5', { exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toBeVisible\" getByRole('dialog').getByText('pf-42d833e2-f413-454d-8193-d385de9a90b5', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog').getByText('pf-42d833e2-f413-454d-8193-d385de9a90b5', { exact: true })\u001b[22m\n\n\n  561 |                 page.getByRole(\"dialog\").getByText(readyId!, { exact: true }),\n  562 |               )\n> 563 |               .toBeVisible();\n      |                ^\n  564 |           if (mode === \"deliberate focus\")\n  565 |             await expect(home(page)).toBeFocused();\n  566 |           if (mode === \"repeat submit\") {\n    at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:563:16"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T20:14:14.248Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "recovery-completion.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJicm9rZW4iOmZhbHNlLCJtb2RlIjoibmV3ZXIgcmVhZGluZXNzIiwid3JpdGVzIjpbeyJib2R5Ijp7ImV4cGVjdGVkUmV2aXNpb24iOjEsImFjdGlvbiI6InJlc3RvcmVfcmV2aXNpb24iLCJyZXZpc2lvbiI6MX0sImlmTWF0Y2giOiJcIjFcIiJ9XSwiY29tbWl0dGVkUmV2aXNpb24iOjIsImxhdGVzdFJldmlzaW9uIjoyLCJuZXdlckhpc3RvcnkiOm51bGwsInJlYWR5SWQiOiJwZi00MmQ4MzNlMi1mNDEzLTQ1NGQtODE5My1kMzg1ZGU5YTkwYjUiLCJvd25Qcm9qZWN0UnVuU2V0VW5jaGFuZ2VkIjp0cnVlLCJzY29wZSI6IkhlbGQgYWN0dWFsIGNvbW1pdHRlZCByZWNvdmVyeSByZXNwb25zZTsgcHJlc2VydmUgY3VycmVudCBjb250ZXh0OyBubyBTdGFydCJ9"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/source-recovery-accessibil-5206c-newer-readiness-at-1440x900/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/source-recovery-accessibil-5206c-newer-readiness-at-1440x900/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                    "column": 16,
+                    "line": 563
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "62943bf3acd23bb0ef02-1204b8b5bf46482871c0",
+          "file": "source-recovery-accessibility.spec.ts",
+          "line": 443,
+          "column": 11
+        },
+        {
+          "title": "recovery accessibility: late modified recovery preserves deliberate focus at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 18,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2919,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T20:14:27.599Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "recovery-completion.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJicm9rZW4iOmZhbHNlLCJtb2RlIjoiZGVsaWJlcmF0ZSBmb2N1cyIsIndyaXRlcyI6W3siYm9keSI6eyJleHBlY3RlZFJldmlzaW9uIjoxLCJhY3Rpb24iOiJyZXN0b3JlX3JldmlzaW9uIiwicmV2aXNpb24iOjF9LCJpZk1hdGNoIjoiXCIxXCIifV0sImNvbW1pdHRlZFJldmlzaW9uIjoyLCJsYXRlc3RSZXZpc2lvbiI6MiwibmV3ZXJIaXN0b3J5IjpudWxsLCJyZWFkeUlkIjpudWxsLCJvd25Qcm9qZWN0UnVuU2V0VW5jaGFuZ2VkIjp0cnVlLCJzY29wZSI6IkhlbGQgYWN0dWFsIGNvbW1pdHRlZCByZWNvdmVyeSByZXNwb25zZTsgcHJlc2VydmUgY3VycmVudCBjb250ZXh0OyBubyBTdGFydCJ9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "62943bf3acd23bb0ef02-41b516d4e4b07d13f9f3",
+          "file": "source-recovery-accessibility.spec.ts",
+          "line": 443,
+          "column": 11
+        },
+        {
+          "title": "recovery accessibility: late modified recovery preserves repeat submit at 1440x900",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 18,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 12315,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeDisabled\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('group', { name: 'Source recovery', exact: true }).getByRole('button', { name: 'Restore committed revision 1', exact: true })\nExpected: disabled\nReceived: enabled\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toBeDisabled\" getByRole('group', { name: 'Source recovery', exact: true }).getByRole('button', { name: 'Restore committed revision 1', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('group', { name: 'Source recovery', exact: true }).getByRole('button', { name: 'Restore committed revision 1', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <button class=\"button\">Restore committed revision 1</button>\u001b[22m\n\u001b[2m       - unexpected value \"enabled\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeDisabled\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('group', { name: 'Source recovery', exact: true }).getByRole('button', { name: 'Restore committed revision 1', exact: true })\nExpected: disabled\nReceived: enabled\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toBeDisabled\" getByRole('group', { name: 'Source recovery', exact: true }).getByRole('button', { name: 'Restore committed revision 1', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('group', { name: 'Source recovery', exact: true }).getByRole('button', { name: 'Restore committed revision 1', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <button class=\"button\">Restore committed revision 1</button>\u001b[22m\n\u001b[2m       - unexpected value \"enabled\"\u001b[22m\n\n    at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:533:39",
+                    "location": {
+                      "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                      "column": 39,
+                      "line": 533
+                    },
+                    "snippet": "  531 |           if (mode === \"deliberate focus\") await tabTo(page, home(page));\n  532 |           if (mode === \"repeat submit\") {\n> 533 |             await expect.soft(button).toBeDisabled();\n      |                                       ^\n  534 |             if (await button.isEnabled()) await page.keyboard.press(\"Enter\");\n  535 |           }\n  536 |           await pending.release();"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                        "column": 39,
+                        "line": 533
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeDisabled\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('group', { name: 'Source recovery', exact: true }).getByRole('button', { name: 'Restore committed revision 1', exact: true })\nExpected: disabled\nReceived: enabled\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toBeDisabled\" getByRole('group', { name: 'Source recovery', exact: true }).getByRole('button', { name: 'Restore committed revision 1', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('group', { name: 'Source recovery', exact: true }).getByRole('button', { name: 'Restore committed revision 1', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <button class=\"button\">Restore committed revision 1</button>\u001b[22m\n\u001b[2m       - unexpected value \"enabled\"\u001b[22m\n\n\n  531 |           if (mode === \"deliberate focus\") await tabTo(page, home(page));\n  532 |           if (mode === \"repeat submit\") {\n> 533 |             await expect.soft(button).toBeDisabled();\n      |                                       ^\n  534 |             if (await button.isEnabled()) await page.keyboard.press(\"Enter\");\n  535 |           }\n  536 |           await pending.release();\n    at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:533:39"
+                    },
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                        "column": 36,
+                        "line": 567
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoHaveLength\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected length: \u001b[32m1\u001b[39m\nReceived length: \u001b[31m2\u001b[39m\nReceived array:  \u001b[31m[{\"body\": {\"action\": \"restore_revision\", \"expectedRevision\": 1, \"revision\": 1}, \"ifMatch\": \"\\\"1\\\"\"}, {\"body\": {\"action\": \"restore_revision\", \"expectedRevision\": 1, \"revision\": 1}, \"ifMatch\": \"\\\"1\\\"\"}]\u001b[39m\n\n  565 |             await expect(home(page)).toBeFocused();\n  566 |           if (mode === \"repeat submit\") {\n> 567 |             expect(pending.writes).toHaveLength(1);\n      |                                    ^\n  568 |             await expect(page.locator(\".alerts\")).not.toContainText(\n  569 |               \"REVISION_CONFLICT\",\n  570 |             );\n    at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:567:36"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T20:14:30.579Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/source-recovery-accessibil-049a9-s-repeat-submit-at-1440x900/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/source-recovery-accessibil-049a9-s-repeat-submit-at-1440x900/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                    "column": 39,
+                    "line": 533
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "62943bf3acd23bb0ef02-1a2fb92ea2c5dca54ff6",
+          "file": "source-recovery-accessibility.spec.ts",
+          "line": 443,
+          "column": 11
+        },
+        {
+          "title": "recovery accessibility: late unreadable recovery preserves Home at 1440x900",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 19,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 13037,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Recent projects', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toBeVisible\" getByRole('heading', { name: 'Recent projects', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Recent projects', exact: true })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Recent projects', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toBeVisible\" getByRole('heading', { name: 'Recent projects', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Recent projects', exact: true })\u001b[22m\n\n    at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:546:16",
+                    "location": {
+                      "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                      "column": 16,
+                      "line": 546
+                    },
+                    "snippet": "  544 |                 }),\n  545 |               )\n> 546 |               .toBeVisible();\n      |                ^\n  547 |           if (mode === \"newer head\") {\n  548 |             await expect(page.locator(\".workspace-context\")).toContainText(\n  549 |               `Draft revision ${project.revision + 2}`,"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                        "column": 16,
+                        "line": 546
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Recent projects', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toBeVisible\" getByRole('heading', { name: 'Recent projects', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Recent projects', exact: true })\u001b[22m\n\n\n  544 |                 }),\n  545 |               )\n> 546 |               .toBeVisible();\n      |                ^\n  547 |           if (mode === \"newer head\") {\n  548 |             await expect(page.locator(\".workspace-context\")).toContainText(\n  549 |               `Draft revision ${project.revision + 2}`,\n    at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:546:16"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T20:14:43.243Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "recovery-completion.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJicm9rZW4iOnRydWUsIm1vZGUiOiJIb21lIiwid3JpdGVzIjpbeyJib2R5Ijp7ImV4cGVjdGVkUmV2aXNpb24iOjEsImFjdGlvbiI6InJlc3RvcmVfcmV2aXNpb24iLCJyZXZpc2lvbiI6MX0sImlmTWF0Y2giOiJcIjFcIiJ9XSwiY29tbWl0dGVkUmV2aXNpb24iOjIsImxhdGVzdFJldmlzaW9uIjoyLCJuZXdlckhpc3RvcnkiOm51bGwsInJlYWR5SWQiOm51bGwsIm93blByb2plY3RSdW5TZXRVbmNoYW5nZWQiOnRydWUsInNjb3BlIjoiSGVsZCBhY3R1YWwgY29tbWl0dGVkIHJlY292ZXJ5IHJlc3BvbnNlOyBwcmVzZXJ2ZSBjdXJyZW50IGNvbnRleHQ7IG5vIFN0YXJ0In0="
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/source-recovery-accessibil-f36cf--preserves-Home-at-1440x900/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/source-recovery-accessibil-f36cf--preserves-Home-at-1440x900/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                    "column": 16,
+                    "line": 546
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "62943bf3acd23bb0ef02-8070e88dc7756a960f11",
+          "file": "source-recovery-accessibility.spec.ts",
+          "line": 443,
+          "column": 11
+        },
+        {
+          "title": "recovery accessibility: late unreadable recovery preserves newer head at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 20,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4146,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T20:14:56.677Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "recovery-completion.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJicm9rZW4iOnRydWUsIm1vZGUiOiJuZXdlciBoZWFkIiwid3JpdGVzIjpbeyJib2R5Ijp7ImV4cGVjdGVkUmV2aXNpb24iOjEsImFjdGlvbiI6InJlc3RvcmVfcmV2aXNpb24iLCJyZXZpc2lvbiI6MX0sImlmTWF0Y2giOiJcIjFcIiJ9XSwiY29tbWl0dGVkUmV2aXNpb24iOjIsImxhdGVzdFJldmlzaW9uIjozLCJuZXdlckhpc3RvcnkiOiJ7XCJ1bmRvXCI6W3tcInRhcmdldFwiOjIsXCJhdFwiOjMsXCJsYWJlbFwiOlwic2V0IHBhcmFtZXRlclwifV0sXCJyZWRvXCI6W119IiwicmVhZHlJZCI6bnVsbCwib3duUHJvamVjdFJ1blNldFVuY2hhbmdlZCI6dHJ1ZSwic2NvcGUiOiJIZWxkIGFjdHVhbCBjb21taXR0ZWQgcmVjb3ZlcnkgcmVzcG9uc2U7IHByZXNlcnZlIGN1cnJlbnQgY29udGV4dDsgbm8gU3RhcnQifQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "62943bf3acd23bb0ef02-102e9f99874d5b64b74b",
+          "file": "source-recovery-accessibility.spec.ts",
+          "line": 443,
+          "column": 11
+        },
+        {
+          "title": "recovery accessibility: late unreadable recovery preserves newer readiness at 1440x900",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 20,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 13714,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('dialog').getByText('pf-5ec8d28e-3011-4152-9ad5-f1ce136ac67a', { exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toBeVisible\" getByRole('dialog').getByText('pf-5ec8d28e-3011-4152-9ad5-f1ce136ac67a', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog').getByText('pf-5ec8d28e-3011-4152-9ad5-f1ce136ac67a', { exact: true })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('dialog').getByText('pf-5ec8d28e-3011-4152-9ad5-f1ce136ac67a', { exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toBeVisible\" getByRole('dialog').getByText('pf-5ec8d28e-3011-4152-9ad5-f1ce136ac67a', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog').getByText('pf-5ec8d28e-3011-4152-9ad5-f1ce136ac67a', { exact: true })\u001b[22m\n\n    at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:563:16",
+                    "location": {
+                      "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                      "column": 16,
+                      "line": 563
+                    },
+                    "snippet": "  561 |                 page.getByRole(\"dialog\").getByText(readyId!, { exact: true }),\n  562 |               )\n> 563 |               .toBeVisible();\n      |                ^\n  564 |           if (mode === \"deliberate focus\")\n  565 |             await expect(home(page)).toBeFocused();\n  566 |           if (mode === \"repeat submit\") {"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                        "column": 16,
+                        "line": 563
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('dialog').getByText('pf-5ec8d28e-3011-4152-9ad5-f1ce136ac67a', { exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toBeVisible\" getByRole('dialog').getByText('pf-5ec8d28e-3011-4152-9ad5-f1ce136ac67a', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog').getByText('pf-5ec8d28e-3011-4152-9ad5-f1ce136ac67a', { exact: true })\u001b[22m\n\n\n  561 |                 page.getByRole(\"dialog\").getByText(readyId!, { exact: true }),\n  562 |               )\n> 563 |               .toBeVisible();\n      |                ^\n  564 |           if (mode === \"deliberate focus\")\n  565 |             await expect(home(page)).toBeFocused();\n  566 |           if (mode === \"repeat submit\") {\n    at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:563:16"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T20:15:00.881Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "recovery-completion.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJicm9rZW4iOnRydWUsIm1vZGUiOiJuZXdlciByZWFkaW5lc3MiLCJ3cml0ZXMiOlt7ImJvZHkiOnsiZXhwZWN0ZWRSZXZpc2lvbiI6MSwiYWN0aW9uIjoicmVzdG9yZV9yZXZpc2lvbiIsInJldmlzaW9uIjoxfSwiaWZNYXRjaCI6IlwiMVwiIn1dLCJjb21taXR0ZWRSZXZpc2lvbiI6MiwibGF0ZXN0UmV2aXNpb24iOjIsIm5ld2VySGlzdG9yeSI6bnVsbCwicmVhZHlJZCI6InBmLTVlYzhkMjhlLTMwMTEtNDE1Mi05YWQ1LWYxY2UxMzZhYzY3YSIsIm93blByb2plY3RSdW5TZXRVbmNoYW5nZWQiOnRydWUsInNjb3BlIjoiSGVsZCBhY3R1YWwgY29tbWl0dGVkIHJlY292ZXJ5IHJlc3BvbnNlOyBwcmVzZXJ2ZSBjdXJyZW50IGNvbnRleHQ7IG5vIFN0YXJ0In0="
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/source-recovery-accessibil-3c32a-newer-readiness-at-1440x900/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/source-recovery-accessibil-3c32a-newer-readiness-at-1440x900/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                    "column": 16,
+                    "line": 563
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "62943bf3acd23bb0ef02-77171a4487a054ff4211",
+          "file": "source-recovery-accessibility.spec.ts",
+          "line": 443,
+          "column": 11
+        },
+        {
+          "title": "recovery accessibility: late unreadable recovery preserves deliberate focus at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 21,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2998,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T20:15:14.943Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "recovery-completion.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJicm9rZW4iOnRydWUsIm1vZGUiOiJkZWxpYmVyYXRlIGZvY3VzIiwid3JpdGVzIjpbeyJib2R5Ijp7ImV4cGVjdGVkUmV2aXNpb24iOjEsImFjdGlvbiI6InJlc3RvcmVfcmV2aXNpb24iLCJyZXZpc2lvbiI6MX0sImlmTWF0Y2giOiJcIjFcIiJ9XSwiY29tbWl0dGVkUmV2aXNpb24iOjIsImxhdGVzdFJldmlzaW9uIjoyLCJuZXdlckhpc3RvcnkiOm51bGwsInJlYWR5SWQiOm51bGwsIm93blByb2plY3RSdW5TZXRVbmNoYW5nZWQiOnRydWUsInNjb3BlIjoiSGVsZCBhY3R1YWwgY29tbWl0dGVkIHJlY292ZXJ5IHJlc3BvbnNlOyBwcmVzZXJ2ZSBjdXJyZW50IGNvbnRleHQ7IG5vIFN0YXJ0In0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "62943bf3acd23bb0ef02-39ec6636e05da596c6d6",
+          "file": "source-recovery-accessibility.spec.ts",
+          "line": 443,
+          "column": 11
+        },
+        {
+          "title": "recovery accessibility: real stale refusal current at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 21,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2148,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T20:15:17.997Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "recovery-refusal.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJkZXBhcnRlZCI6ZmFsc2UsInN0YXR1cyI6NDEyLCJhZHZhbmNlZFJldmlzaW9uIjoyLCJyZWZ1c2VkUmVxdWVzdERpZE5vdE11dGF0ZSI6dHJ1ZSwic2NvcGUiOiJBY3R1YWwgc2Vjb25kLXNlc3Npb24gcmVjb3ZlcnkgZm9sbG93ZWQgYnkgc3RhbGUgVUkgcmVmdXNhbDsgbm8gU3RhcnQifQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "62943bf3acd23bb0ef02-e123705451315e3434d9",
+          "file": "source-recovery-accessibility.spec.ts",
+          "line": 601,
+          "column": 9
+        },
+        {
+          "title": "recovery accessibility: real stale refusal after departure at 1440x900",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 21,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 12526,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('.alerts').getByRole('alert')\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveCount\" locator('.alerts').getByRole('alert') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('.alerts').getByRole('alert')\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to 1 element\u001b[22m\n\u001b[2m       - unexpected value \"1\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('.alerts').getByRole('alert')\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveCount\" locator('.alerts').getByRole('alert') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('.alerts').getByRole('alert')\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to 1 element\u001b[22m\n\u001b[2m       - unexpected value \"1\"\u001b[22m\n\n    at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:656:14",
+                    "location": {
+                      "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                      "column": 14,
+                      "line": 656
+                    },
+                    "snippet": "  654 |           await expect\n  655 |             .soft(page.locator(\".alerts\").getByRole(\"alert\"))\n> 656 |             .toHaveCount(0);\n      |              ^\n  657 |         } else {\n  658 |           await expect(page.locator(\".alerts\")).toContainText(\n  659 |             \"REVISION_CONFLICT\","
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                        "column": 14,
+                        "line": 656
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('.alerts').getByRole('alert')\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveCount\" locator('.alerts').getByRole('alert') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('.alerts').getByRole('alert')\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to 1 element\u001b[22m\n\u001b[2m       - unexpected value \"1\"\u001b[22m\n\n\n  654 |           await expect\n  655 |             .soft(page.locator(\".alerts\").getByRole(\"alert\"))\n> 656 |             .toHaveCount(0);\n      |              ^\n  657 |         } else {\n  658 |           await expect(page.locator(\".alerts\")).toContainText(\n  659 |             \"REVISION_CONFLICT\",\n    at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:656:14"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T20:15:20.152Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "recovery-refusal.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJkZXBhcnRlZCI6dHJ1ZSwic3RhdHVzIjo0MTIsImFkdmFuY2VkUmV2aXNpb24iOjIsInJlZnVzZWRSZXF1ZXN0RGlkTm90TXV0YXRlIjp0cnVlLCJzY29wZSI6IkFjdHVhbCBzZWNvbmQtc2Vzc2lvbiByZWNvdmVyeSBmb2xsb3dlZCBieSBzdGFsZSBVSSByZWZ1c2FsOyBubyBTdGFydCJ9"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/source-recovery-accessibil-a0674-after-departure-at-1440x900/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/source-recovery-accessibil-a0674-after-departure-at-1440x900/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                    "column": 14,
+                    "line": 656
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "62943bf3acd23bb0ef02-bf596f29bfba9d1d73dc",
+          "file": "source-recovery-accessibility.spec.ts",
+          "line": 601,
+          "column": 9
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-26T20:08:42.734Z",
+    "duration": 409994.304,
+    "expected": 10,
+    "skipped": 0,
+    "unexpected": 22,
+    "flaky": 0
+  }
+}

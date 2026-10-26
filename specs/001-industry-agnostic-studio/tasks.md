@@ -421,3 +421,7 @@ Evidence: `evidence/studio/M2-keyboard-source/`; count 47/100, no milestone acce
 T017/T042/T045/T046 traces retain the source amendment with completed component statuses unchanged.
 Clean 7ec222b package smoke passes; clean 100-file manifest, archive/file hashes and tested UI
 bytes are verified under `M2-keyboard-source/package/`. Native Windows remains held.
+
+Linux source-recovery successor (2026-10-26): T038/T067 remain unchecked. Native source-recovery successor: 38 native keyboard cases at both viewports verify real adopt/restore/unreadable recovery, exact requests/canonical and preserved backup bytes/digests, focus and project identity initialization, held completion preserving navigation/newer history/readiness/deliberate focus, repeated pending Enter and actual current/departed stale refusals. History HTTP/shape/window/absence fixtures distinguish unknown from observed absence and retry the actual history endpoint. Full 209 browser and separate performance pass frozen source/compiled/fixed inputs; backend 851 inherited by exact unchanged 164-input proof for the UI candidate. ADR-0013 records recovery completion. No Start/live/physical action; Windows/actual AT/milestone gates remain open.
+Evidence: `evidence/studio/M2-keyboard-source-recovery/`;47/100, no milestone accepted.
+T016/T045/T046 component traces amended without changing completed statuses.

@@ -1,0 +1,286 @@
+{
+  "config": {
+    "argv": [
+      "<loop-cache>/node-v24.22.1-linux-x64/bin/node",
+      "<repo>/node_modules/.bin/playwright",
+      "test",
+      "-c",
+      "tests/e2e/playwright.config.ts",
+      "--grep",
+      "recovery accessibility: unreadable target"
+    ],
+    "configFile": "<repo>/tests/e2e/playwright.config.ts",
+    "rootDir": "<repo>/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "<repo>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "<repo>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "*.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "<repo>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "<repo>/tests/e2e",
+        "snapshotDir": "<repo>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": "*.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "baseURL": "http://127.0.0.1:34187",
+          "browserName": "chromium",
+          "actionTimeout": 15000,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "trace": "off",
+          "screenshot": "only-on-failure",
+          "video": "off"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "<repo>/test-results/browser-report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "source-recovery-accessibility.spec.ts",
+      "file": "source-recovery-accessibility.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "recovery accessibility: unreadable target replaces previous project context at 1024x768",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 23266,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('tab', { name: 'Model', exact: true })\nExpected: \u001b[32m\"\u001b[7mtru\u001b[27me\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mfals\u001b[27me\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveAttribute\" getByRole('tab', { name: 'Model', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('tab', { name: 'Model', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <button class=\"\" role=\"tab\" aria-selected=\"false\">\u2026</button>\u001b[22m\n\u001b[2m       - unexpected value \"false\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('tab', { name: 'Model', exact: true })\nExpected: \u001b[32m\"\u001b[7mtru\u001b[27me\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mfals\u001b[27me\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveAttribute\" getByRole('tab', { name: 'Model', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('tab', { name: 'Model', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <button class=\"\" role=\"tab\" aria-selected=\"false\">\u2026</button>\u001b[22m\n\u001b[2m       - unexpected value \"false\"\u001b[22m\n\n    at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:721:165",
+                    "location": {
+                      "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                      "column": 165,
+                      "line": 721
+                    },
+                    "snippet": "  719 |       await activate(page,page.getByRole(\"button\",{name:\"Back to workspace\",exact:true}));await expect(page.getByRole(\"heading\",{name:previous.name,exact:true})).toBeVisible();await expect(page.getByRole(\"tab\",{name:\"Deployment\",exact:true})).toHaveAttribute(\"aria-selected\",\"true\");\n  720 |       const reply=page.waitForResponse(r=>new URL(r.url()).pathname===`/api/v1/projects/${owned.pid}/recoveries`&&r.request().method()===\"POST\");await activate(page,recoverButton(page,owned.project.revision,\"restore_revision\"));const result=await (await reply).json();await page.waitForLoadState(\"networkidle\");\n> 721 |       await expect(page.getByRole(\"heading\",{name:owned.project.name,exact:true})).toBeVisible();await expect.soft(page.getByRole(\"tab\",{name:\"Model\",exact:true})).toHaveAttribute(\"aria-selected\",\"true\");await expect.soft(source(page)).toBeFocused();\n      |                                                                                                                                                                     ^\n  722 |       const current=await read(page,owned.pid);expect(current.revision).toBe(owned.project.revision+1);for(const id of Object.keys(owned.project.documents))expect(current.documents[id].content).toBe(owned.project.documents[id].content);\n  723 |       expect((await read(page,previous.projectId)).documents).toEqual(previous.documents);expect(await runs(page,previous.projectId)).toEqual(previousRuns);expect(await runs(page,owned.pid)).toEqual([]);await backup(page,owned,result);\n  724 |       await info.attach(\"recovery-previous-project.json\",{body:JSON.stringify({viewport,previousProjectId:previous.projectId,recoveredProjectId:owned.pid,distinctIdentities:previous.projectId!==owned.pid,previousCanonicalDocumentsUnchanged:true,recoveredInitialView:\"Model\",actualCreationThenUnreadableLoad:true,scope:\"Owned fixture breaks only the newly created project's source before its first UI read; previous workspace remains rendered; no Start\"}),contentType:\"application/json\"});"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                        "column": 165,
+                        "line": 721
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('tab', { name: 'Model', exact: true })\nExpected: \u001b[32m\"\u001b[7mtru\u001b[27me\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mfals\u001b[27me\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveAttribute\" getByRole('tab', { name: 'Model', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('tab', { name: 'Model', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <button class=\"\" role=\"tab\" aria-selected=\"false\">\u2026</button>\u001b[22m\n\u001b[2m       - unexpected value \"false\"\u001b[22m\n\n\n  719 |       await activate(page,page.getByRole(\"button\",{name:\"Back to workspace\",exact:true}));await expect(page.getByRole(\"heading\",{name:previous.name,exact:true})).toBeVisible();await expect(page.getByRole(\"tab\",{name:\"Deployment\",exact:true})).toHaveAttribute(\"aria-selected\",\"true\");\n  720 |       const reply=page.waitForResponse(r=>new URL(r.url()).pathname===`/api/v1/projects/${owned.pid}/recoveries`&&r.request().method()===\"POST\");await activate(page,recoverButton(page,owned.project.revision,\"restore_revision\"));const result=await (await reply).json();await page.waitForLoadState(\"networkidle\");\n> 721 |       await expect(page.getByRole(\"heading\",{name:owned.project.name,exact:true})).toBeVisible();await expect.soft(page.getByRole(\"tab\",{name:\"Model\",exact:true})).toHaveAttribute(\"aria-selected\",\"true\");await expect.soft(source(page)).toBeFocused();\n      |                                                                                                                                                                     ^\n  722 |       const current=await read(page,owned.pid);expect(current.revision).toBe(owned.project.revision+1);for(const id of Object.keys(owned.project.documents))expect(current.documents[id].content).toBe(owned.project.documents[id].content);\n  723 |       expect((await read(page,previous.projectId)).documents).toEqual(previous.documents);expect(await runs(page,previous.projectId)).toEqual(previousRuns);expect(await runs(page,owned.pid)).toEqual([]);await backup(page,owned,result);\n  724 |       await info.attach(\"recovery-previous-project.json\",{body:JSON.stringify({viewport,previousProjectId:previous.projectId,recoveredProjectId:owned.pid,distinctIdentities:previous.projectId!==owned.pid,previousCanonicalDocumentsUnchanged:true,recoveredInitialView:\"Model\",actualCreationThenUnreadableLoad:true,scope:\"Owned fixture breaks only the newly created project's source before its first UI read; previous workspace remains rendered; no Start\"}),contentType:\"application/json\"});\n    at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:721:165"
+                    },
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                        "column": 237,
+                        "line": 721
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('button', { name: 'XDL source', exact: true })\nExpected: focused\nReceived: inactive\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toBeFocused\" getByRole('button', { name: 'XDL source', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: 'XDL source', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <button class=\"source-toggle\">\u2026</button>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n\n\n  719 |       await activate(page,page.getByRole(\"button\",{name:\"Back to workspace\",exact:true}));await expect(page.getByRole(\"heading\",{name:previous.name,exact:true})).toBeVisible();await expect(page.getByRole(\"tab\",{name:\"Deployment\",exact:true})).toHaveAttribute(\"aria-selected\",\"true\");\n  720 |       const reply=page.waitForResponse(r=>new URL(r.url()).pathname===`/api/v1/projects/${owned.pid}/recoveries`&&r.request().method()===\"POST\");await activate(page,recoverButton(page,owned.project.revision,\"restore_revision\"));const result=await (await reply).json();await page.waitForLoadState(\"networkidle\");\n> 721 |       await expect(page.getByRole(\"heading\",{name:owned.project.name,exact:true})).toBeVisible();await expect.soft(page.getByRole(\"tab\",{name:\"Model\",exact:true})).toHaveAttribute(\"aria-selected\",\"true\");await expect.soft(source(page)).toBeFocused();\n      |                                                                                                                                                                                                                                             ^\n  722 |       const current=await read(page,owned.pid);expect(current.revision).toBe(owned.project.revision+1);for(const id of Object.keys(owned.project.documents))expect(current.documents[id].content).toBe(owned.project.documents[id].content);\n  723 |       expect((await read(page,previous.projectId)).documents).toEqual(previous.documents);expect(await runs(page,previous.projectId)).toEqual(previousRuns);expect(await runs(page,owned.pid)).toEqual([]);await backup(page,owned,result);\n  724 |       await info.attach(\"recovery-previous-project.json\",{body:JSON.stringify({viewport,previousProjectId:previous.projectId,recoveredProjectId:owned.pid,distinctIdentities:previous.projectId!==owned.pid,previousCanonicalDocumentsUnchanged:true,recoveredInitialView:\"Model\",actualCreationThenUnreadableLoad:true,scope:\"Owned fixture breaks only the newly created project's source before its first UI read; previous workspace remains rendered; no Start\"}),contentType:\"application/json\"});\n    at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:721:237"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T20:15:48.731Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "recovery-previous-project.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJwcmV2aW91c1Byb2plY3RJZCI6InByai01ZDBhNTg2Zi01YmM5LTQ3ZDYtYjM2ZS05ZWEzZjRhMDUzODIiLCJyZWNvdmVyZWRQcm9qZWN0SWQiOiJwcmotNGE3Mjc1ODktMTc1YS00YTMwLWJiNGItMTAxYzIyY2ZhY2IzIiwiZGlzdGluY3RJZGVudGl0aWVzIjp0cnVlLCJwcmV2aW91c0Nhbm9uaWNhbERvY3VtZW50c1VuY2hhbmdlZCI6dHJ1ZSwicmVjb3ZlcmVkSW5pdGlhbFZpZXciOiJNb2RlbCIsImFjdHVhbENyZWF0aW9uVGhlblVucmVhZGFibGVMb2FkIjp0cnVlLCJzY29wZSI6Ik93bmVkIGZpeHR1cmUgYnJlYWtzIG9ubHkgdGhlIG5ld2x5IGNyZWF0ZWQgcHJvamVjdCdzIHNvdXJjZSBiZWZvcmUgaXRzIGZpcnN0IFVJIHJlYWQ7IHByZXZpb3VzIHdvcmtzcGFjZSByZW1haW5zIHJlbmRlcmVkOyBubyBTdGFydCJ9"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/source-recovery-accessibil-e66d2-project-context-at-1024x768/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/source-recovery-accessibil-e66d2-project-context-at-1024x768/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                    "column": 165,
+                    "line": 721
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "62943bf3acd23bb0ef02-6af0bfd130534b334522",
+          "file": "source-recovery-accessibility.spec.ts",
+          "line": 700,
+          "column": 7
+        },
+        {
+          "title": "recovery accessibility: unreadable target replaces previous project context at 1440x900",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 23041,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('tab', { name: 'Model', exact: true })\nExpected: \u001b[32m\"\u001b[7mtru\u001b[27me\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mfals\u001b[27me\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveAttribute\" getByRole('tab', { name: 'Model', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('tab', { name: 'Model', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <button class=\"\" role=\"tab\" aria-selected=\"false\">\u2026</button>\u001b[22m\n\u001b[2m       - unexpected value \"false\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('tab', { name: 'Model', exact: true })\nExpected: \u001b[32m\"\u001b[7mtru\u001b[27me\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mfals\u001b[27me\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveAttribute\" getByRole('tab', { name: 'Model', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('tab', { name: 'Model', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <button class=\"\" role=\"tab\" aria-selected=\"false\">\u2026</button>\u001b[22m\n\u001b[2m       - unexpected value \"false\"\u001b[22m\n\n    at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:721:165",
+                    "location": {
+                      "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                      "column": 165,
+                      "line": 721
+                    },
+                    "snippet": "  719 |       await activate(page,page.getByRole(\"button\",{name:\"Back to workspace\",exact:true}));await expect(page.getByRole(\"heading\",{name:previous.name,exact:true})).toBeVisible();await expect(page.getByRole(\"tab\",{name:\"Deployment\",exact:true})).toHaveAttribute(\"aria-selected\",\"true\");\n  720 |       const reply=page.waitForResponse(r=>new URL(r.url()).pathname===`/api/v1/projects/${owned.pid}/recoveries`&&r.request().method()===\"POST\");await activate(page,recoverButton(page,owned.project.revision,\"restore_revision\"));const result=await (await reply).json();await page.waitForLoadState(\"networkidle\");\n> 721 |       await expect(page.getByRole(\"heading\",{name:owned.project.name,exact:true})).toBeVisible();await expect.soft(page.getByRole(\"tab\",{name:\"Model\",exact:true})).toHaveAttribute(\"aria-selected\",\"true\");await expect.soft(source(page)).toBeFocused();\n      |                                                                                                                                                                     ^\n  722 |       const current=await read(page,owned.pid);expect(current.revision).toBe(owned.project.revision+1);for(const id of Object.keys(owned.project.documents))expect(current.documents[id].content).toBe(owned.project.documents[id].content);\n  723 |       expect((await read(page,previous.projectId)).documents).toEqual(previous.documents);expect(await runs(page,previous.projectId)).toEqual(previousRuns);expect(await runs(page,owned.pid)).toEqual([]);await backup(page,owned,result);\n  724 |       await info.attach(\"recovery-previous-project.json\",{body:JSON.stringify({viewport,previousProjectId:previous.projectId,recoveredProjectId:owned.pid,distinctIdentities:previous.projectId!==owned.pid,previousCanonicalDocumentsUnchanged:true,recoveredInitialView:\"Model\",actualCreationThenUnreadableLoad:true,scope:\"Owned fixture breaks only the newly created project's source before its first UI read; previous workspace remains rendered; no Start\"}),contentType:\"application/json\"});"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                        "column": 165,
+                        "line": 721
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAttribute\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('tab', { name: 'Model', exact: true })\nExpected: \u001b[32m\"\u001b[7mtru\u001b[27me\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mfals\u001b[27me\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveAttribute\" getByRole('tab', { name: 'Model', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('tab', { name: 'Model', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <button class=\"\" role=\"tab\" aria-selected=\"false\">\u2026</button>\u001b[22m\n\u001b[2m       - unexpected value \"false\"\u001b[22m\n\n\n  719 |       await activate(page,page.getByRole(\"button\",{name:\"Back to workspace\",exact:true}));await expect(page.getByRole(\"heading\",{name:previous.name,exact:true})).toBeVisible();await expect(page.getByRole(\"tab\",{name:\"Deployment\",exact:true})).toHaveAttribute(\"aria-selected\",\"true\");\n  720 |       const reply=page.waitForResponse(r=>new URL(r.url()).pathname===`/api/v1/projects/${owned.pid}/recoveries`&&r.request().method()===\"POST\");await activate(page,recoverButton(page,owned.project.revision,\"restore_revision\"));const result=await (await reply).json();await page.waitForLoadState(\"networkidle\");\n> 721 |       await expect(page.getByRole(\"heading\",{name:owned.project.name,exact:true})).toBeVisible();await expect.soft(page.getByRole(\"tab\",{name:\"Model\",exact:true})).toHaveAttribute(\"aria-selected\",\"true\");await expect.soft(source(page)).toBeFocused();\n      |                                                                                                                                                                     ^\n  722 |       const current=await read(page,owned.pid);expect(current.revision).toBe(owned.project.revision+1);for(const id of Object.keys(owned.project.documents))expect(current.documents[id].content).toBe(owned.project.documents[id].content);\n  723 |       expect((await read(page,previous.projectId)).documents).toEqual(previous.documents);expect(await runs(page,previous.projectId)).toEqual(previousRuns);expect(await runs(page,owned.pid)).toEqual([]);await backup(page,owned,result);\n  724 |       await info.attach(\"recovery-previous-project.json\",{body:JSON.stringify({viewport,previousProjectId:previous.projectId,recoveredProjectId:owned.pid,distinctIdentities:previous.projectId!==owned.pid,previousCanonicalDocumentsUnchanged:true,recoveredInitialView:\"Model\",actualCreationThenUnreadableLoad:true,scope:\"Owned fixture breaks only the newly created project's source before its first UI read; previous workspace remains rendered; no Start\"}),contentType:\"application/json\"});\n    at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:721:165"
+                    },
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                        "column": 237,
+                        "line": 721
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('button', { name: 'XDL source', exact: true })\nExpected: focused\nReceived: inactive\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toBeFocused\" getByRole('button', { name: 'XDL source', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: 'XDL source', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <button class=\"source-toggle\">\u2026</button>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n\n\n  719 |       await activate(page,page.getByRole(\"button\",{name:\"Back to workspace\",exact:true}));await expect(page.getByRole(\"heading\",{name:previous.name,exact:true})).toBeVisible();await expect(page.getByRole(\"tab\",{name:\"Deployment\",exact:true})).toHaveAttribute(\"aria-selected\",\"true\");\n  720 |       const reply=page.waitForResponse(r=>new URL(r.url()).pathname===`/api/v1/projects/${owned.pid}/recoveries`&&r.request().method()===\"POST\");await activate(page,recoverButton(page,owned.project.revision,\"restore_revision\"));const result=await (await reply).json();await page.waitForLoadState(\"networkidle\");\n> 721 |       await expect(page.getByRole(\"heading\",{name:owned.project.name,exact:true})).toBeVisible();await expect.soft(page.getByRole(\"tab\",{name:\"Model\",exact:true})).toHaveAttribute(\"aria-selected\",\"true\");await expect.soft(source(page)).toBeFocused();\n      |                                                                                                                                                                                                                                             ^\n  722 |       const current=await read(page,owned.pid);expect(current.revision).toBe(owned.project.revision+1);for(const id of Object.keys(owned.project.documents))expect(current.documents[id].content).toBe(owned.project.documents[id].content);\n  723 |       expect((await read(page,previous.projectId)).documents).toEqual(previous.documents);expect(await runs(page,previous.projectId)).toEqual(previousRuns);expect(await runs(page,owned.pid)).toEqual([]);await backup(page,owned,result);\n  724 |       await info.attach(\"recovery-previous-project.json\",{body:JSON.stringify({viewport,previousProjectId:previous.projectId,recoveredProjectId:owned.pid,distinctIdentities:previous.projectId!==owned.pid,previousCanonicalDocumentsUnchanged:true,recoveredInitialView:\"Model\",actualCreationThenUnreadableLoad:true,scope:\"Owned fixture breaks only the newly created project's source before its first UI read; previous workspace remains rendered; no Start\"}),contentType:\"application/json\"});\n    at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:721:237"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T20:16:12.357Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "recovery-previous-project.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJwcmV2aW91c1Byb2plY3RJZCI6InByai04NDQ2NTU5OS0wNzYxLTQ1NjItYTM1OC1mODk3ZDFjZDQ1YmMiLCJyZWNvdmVyZWRQcm9qZWN0SWQiOiJwcmotOGIwNGVmOTUtZmYyMC00ZWI5LWEyMzctYmMwM2U3ZWI2OWM3IiwiZGlzdGluY3RJZGVudGl0aWVzIjp0cnVlLCJwcmV2aW91c0Nhbm9uaWNhbERvY3VtZW50c1VuY2hhbmdlZCI6dHJ1ZSwicmVjb3ZlcmVkSW5pdGlhbFZpZXciOiJNb2RlbCIsImFjdHVhbENyZWF0aW9uVGhlblVucmVhZGFibGVMb2FkIjp0cnVlLCJzY29wZSI6Ik93bmVkIGZpeHR1cmUgYnJlYWtzIG9ubHkgdGhlIG5ld2x5IGNyZWF0ZWQgcHJvamVjdCdzIHNvdXJjZSBiZWZvcmUgaXRzIGZpcnN0IFVJIHJlYWQ7IHByZXZpb3VzIHdvcmtzcGFjZSByZW1haW5zIHJlbmRlcmVkOyBubyBTdGFydCJ9"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/source-recovery-accessibil-ab1cf-project-context-at-1440x900/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/source-recovery-accessibil-ab1cf-project-context-at-1440x900/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/source-recovery-accessibility.spec.ts",
+                    "column": 165,
+                    "line": 721
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "62943bf3acd23bb0ef02-fe5bd1e6d86130f46690",
+          "file": "source-recovery-accessibility.spec.ts",
+          "line": 700,
+          "column": 7
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-26T20:15:48.207Z",
+    "duration": 47302.627,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  }
+}
