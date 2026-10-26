@@ -235,3 +235,134 @@ test("connections: relations are shown by kind with their own meaning and action
       .filter({ hasText: "outside any feedback cycle" }),
   ).toBeVisible();
 });
+
+test("connections: declared, resolved and observed communication are separate perspectives", async ({
+  page,
+}, testInfo) => {
+  test.setTimeout(60000);
+  await connectStudio(page, testInfo);
+  const projectId = await page.evaluate(async () => {
+    const { csrfToken } = await fetch("/api/v1/session").then((r) => r.json());
+    const headers = {
+      "Content-Type": "application/json",
+      "X-CSRF-Token": csrfToken,
+    };
+    let project = await fetch("/api/v1/projects", {
+      method: "POST",
+      headers,
+      body: JSON.stringify({
+        name: "Communication perspectives",
+        blueprintRef: "reference-feedback",
+      }),
+    }).then((r) => r.json());
+    project = await fetch(`/api/v1/projects/${project.projectId}/edits`, {
+      method: "POST",
+      headers: { ...headers, "If-Match": String(project.revision) },
+      body: JSON.stringify({
+        baseRevision: project.revision,
+        edits: [{ kind: "set_parameter", parameterId: "duration", value: 0.5 }],
+      }),
+    }).then((r) => r.json());
+    localStorage.setItem("studio.projectId", project.projectId);
+    return project.projectId as string;
+  });
+  await page.reload();
+  await page.getByRole("tab", { name: /Connections/ }).click();
+  const projections = page.getByRole("region", {
+    name: "Communication projections",
+  });
+  await expect(projections.getByRole("status")).toContainText("Draft only");
+  await projections.getByRole("radio", { name: "Resolved" }).check();
+  await expect(
+    projections.getByRole("row", { name: /state-flow/ }),
+  ).toContainText("resolved at run start");
+  // Run the owned feedback blueprint, then inspect the run's projections.
+  await page
+    .getByRole("button", { name: "Preflight & run", exact: true })
+    .click();
+  await page
+    .getByRole("button", { name: "Start frozen snapshot", exact: true })
+    .click();
+  await expect(
+    page.getByRole("heading", { name: /Run results/ }),
+  ).toContainText("stopped", {
+    timeout: 20000,
+  });
+  await page.getByRole("tab", { name: /Connections/ }).click();
+  await expect(projections.getByRole("status")).toContainText(
+    "transport: in-process (owned reference worker)",
+  );
+  await projections.getByRole("radio", { name: "Observed" }).check();
+  const state = projections.getByRole("row", { name: /state-flow/ });
+  await expect(state).toContainText("5 sample(s)");
+  await expect(state).toContainText("final");
+  await expect(state).toContainText(
+    "no network transport, packet capture or native X-COM traffic",
+  );
+  await expect(
+    projections.getByRole("row", { name: /command-flow/ }),
+  ).toContainText("not collected");
+  await projections.getByRole("radio", { name: "Declared" }).check();
+  await expect(
+    projections.getByRole("row", { name: /command-flow/ }),
+  ).toContainText("unit delay");
+  expect(projectId).toBeTruthy();
+});
+
+test("connections: an open observed perspective follows a running run to its final state", async ({
+  page,
+}, testInfo) => {
+  test.setTimeout(60000);
+  await connectStudio(page, testInfo);
+  await page.evaluate(async () => {
+    const { csrfToken } = await fetch("/api/v1/session").then((r) => r.json());
+    const headers = {
+      "Content-Type": "application/json",
+      "X-CSRF-Token": csrfToken,
+    };
+    let project = await fetch("/api/v1/projects", {
+      method: "POST",
+      headers,
+      body: JSON.stringify({
+        name: "Live communication",
+        blueprintRef: "reference-feedback",
+      }),
+    }).then((r) => r.json());
+    project = await fetch(`/api/v1/projects/${project.projectId}/edits`, {
+      method: "POST",
+      headers: { ...headers, "If-Match": String(project.revision) },
+      body: JSON.stringify({
+        baseRevision: project.revision,
+        edits: [{ kind: "set_parameter", parameterId: "duration", value: 4 }],
+      }),
+    }).then((r) => r.json());
+    localStorage.setItem("studio.projectId", project.projectId);
+  });
+  await page.reload();
+  await page
+    .getByRole("button", { name: "Preflight & run", exact: true })
+    .click();
+  await page
+    .getByRole("button", { name: "Start frozen snapshot", exact: true })
+    .click();
+  await page.getByRole("tab", { name: /Connections/ }).click();
+  const projections = page.getByRole("region", {
+    name: "Communication projections",
+  });
+  await expect(projections.getByRole("status")).toContainText("(running)", {
+    timeout: 10000,
+  });
+  await projections.getByRole("radio", { name: "Observed" }).check();
+  // Without leaving the view, the projection follows the run's state change to its final evidence.
+  await expect(projections.getByRole("status")).toContainText("(stopped)", {
+    timeout: 20000,
+  });
+  await expect(
+    projections.getByRole("row", { name: /state-flow/ }),
+  ).toContainText("final", {
+    timeout: 10000,
+  });
+  await expect(
+    projections.getByRole("row", { name: /state-flow/ }),
+  ).toContainText("40 sample(s)");
+});

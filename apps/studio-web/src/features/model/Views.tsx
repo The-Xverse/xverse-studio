@@ -28,6 +28,7 @@ import {
   useConnectionAdmission,
 } from "../connections/ConnectionAdmission";
 import { FlowContractForm, RelationKinds } from "../connections/Relations";
+import { CommunicationProjections } from "../connections/projections";
 import {
   DefinitionInspector,
   ModelBreadcrumb,
@@ -929,12 +930,16 @@ export function ConnectionsView({
   projectId,
   revision,
   onOpenView,
+  runId,
+  runState,
 }: {
   projection: Projection;
   edit: (edits: Data[]) => Promise<unknown>;
   projectId: string;
   revision: number;
   onOpenView?: (view: string) => void;
+  runId?: string;
+  runState?: string;
 }) {
   const [source, setSource] = useState(""),
     [target, setTarget] = useState(""),
@@ -968,7 +973,6 @@ export function ConnectionsView({
                   <th>Interface</th>
                   <th>Clock</th>
                   <th>Admission</th>
-                  <th>Observed</th>
                 </tr>
               </thead>
               <tbody>
@@ -1005,15 +1009,18 @@ export function ConnectionsView({
                         )}
                       />
                     </td>
-                    <td>
-                      <Badge>Not observed</Badge>
-                    </td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
           <AdmissionSummary report={report} failure={failure} />
+          <CommunicationProjections
+            projectId={projectId}
+            revision={revision}
+            runId={runId}
+            runState={runState}
+          />
           <div className="scope-note">
             <Icon name="info" />
             <span>

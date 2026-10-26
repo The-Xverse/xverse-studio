@@ -84,7 +84,7 @@ After M0 owned contracts pass, guided operation (T015–T033), visual authoring 
 - [x] T053 [P] [US7] Add compatible/mismatched port, explicit converter, multiplicity, timing/QoS, physical-coupling and valid/invalid feedback fixtures with declared expected semantics. Paths: `tests/contract/test_connections.py`, `tests/fixtures/connections/`. Depends on: T014. (FR-034; FR-035; FR-037; FR-038; AC-016; AC-017)
 - [x] T054 [US7] Implement connection admission using platform/profile/provider contracts; require explicit conversions and validate supported feedback causality without a universal acyclic-graph rule. Paths: `services/studio-api/src/xverse_studio/connections/`. Depends on: T053, T042, T050. (FR-034; FR-035; FR-038; AC-016)
 - [x] T055 [US7] Implement compatible-target guidance, inspectable mapping forms and distinct relation styles/actions for communication, model coupling, deployment and traceability. Paths: `apps/studio-web/src/features/connections/`. Depends on: T054, T043. (FR-034; FR-035; FR-037; FR-038; AC-016; AC-017)
-- [ ] T056 [US7] Implement declared/resolved/observed communication projections with provider scope, freshness and limitation labels; preserve Lite/native X-COM distinction. Paths: `services/studio-api/src/xverse_studio/connections/projections.py`, `apps/studio-web/src/features/connections/projections.tsx`. Depends on: T055, T030. (FR-036; FR-037; AC-017)
+- [x] T056 [US7] Implement declared/resolved/observed communication projections with provider scope, freshness and limitation labels; preserve Lite/native X-COM distinction. Paths: `services/studio-api/src/xverse_studio/connections/projections.py`, `apps/studio-web/src/features/connections/projections.tsx`. Depends on: T055, T030. (FR-036; FR-037; AC-017)
 - [x] T057 [P] [US8] Add compatible/incompatible rebinding, logical identity preservation, resource/time/network constraints, effective-value precedence and portable/private binding tests. Paths: `tests/integration/test_deployment_variants.py`. Depends on: T014. (FR-039; FR-040; FR-041; FR-042; AC-018)
 - [x] T058 [US8] Implement named deployment variants and authoritative compatibility/effective-value resolution; reject undefined override precedence and keep environment addresses/secret handles separate. Resolve host-specific paths/resources against the selected provider OS contract while keeping portable deployment intent and secret references separate. Paths: `services/studio-api/src/xverse_studio/deployments/`. Depends on: T057, T042, T054. (FR-039; FR-040; FR-041; FR-042; AC-018)
 - [x] T059 [US8] Build realization/placement comparison, binding and resource/time forms with visible provenance/fidelity limits and provider-supported controls. Paths: `apps/studio-web/src/features/deployments/`. Depends on: T058, T051. (FR-039; FR-040; FR-041; FR-042; FR-016; AC-018)
@@ -277,6 +277,8 @@ Later completions (2026-10-26):
 - **T058, T059:** closed after T054 (`evidence/studio/M2-deployments/`,
   `evidence/studio/M2-deployment-forms/`).
 - **T055:** flow-contract form and relations by kind (`evidence/studio/M2-relations/`).
+- **T056:** declared, resolved and observed communication projections
+  (`evidence/studio/M2-communication/`).
 
 The current count is in `traceability.json`.
 

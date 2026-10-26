@@ -395,9 +395,12 @@ def reference_configuration(documents: dict[str, str], compiled: dict | None = N
                   observerRef="state-observer", clockDomain="simulation-time", planDigest=actual_compile["planDigest"],
                   semanticDigest=actual_compile["semanticDigest"])
     config["elementRefs"] = [system_ref + "#controller", system_ref + "#plant", system_ref + "#state-flow"]
+    # Flows the owned worker executes; projections resolve these routes (evidence refs stay as above).
+    config["resolvedFlows"] = [system_ref + "#command-flow", system_ref + "#state-flow"]
     if feedback:
         config["elementRefs"] += [system_ref + "#sensor-device", system_ref + "#state-sensor", system_ref + "#measurement-flow",
                                   system_ref + "#feedback-flow"]
+        config["resolvedFlows"] += [system_ref + "#measurement-flow", system_ref + "#feedback-flow"]
         config["causality"] = {"flowRef": system_ref + "#command-flow", "kind": "unit-delay"}
         config["converter"] = {"flowRef": system_ref + "#state-flow", **{k: converter[k] for k in ("kind", "fromUnit", "toUnit")},
                                "scale": float(converter["scale"]), "offset": float(converter["offset"])}

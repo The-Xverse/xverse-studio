@@ -1216,6 +1216,12 @@ export default function App() {
                   projectId={project.projectId}
                   revision={project.revision}
                   onOpenView={(next) => setView(next as typeof view)}
+                  runId={
+                    run?.projectId === project.projectId ? run.runId : undefined
+                  }
+                  runState={
+                    run?.projectId === project.projectId ? run.state : undefined
+                  }
                   edit={(edits) =>
                     doAction("Validating connection", () => edit(edits))
                   }

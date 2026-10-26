@@ -418,6 +418,38 @@ def create_app(
             "revision": p["revision"],
         }
 
+    @app.get("/api/v1/projects/{projectId}/communication")
+    def communication(
+        projectId: str, runId: str | None = Query(None, max_length=128)
+    ):
+        # Declared / resolved / observed projections; a run supplies its frozen inputs and evidence.
+        from xverse_studio.connections.projections import project_communication
+
+        p = projects.read(projectId)
+        if runId is None:
+            return {
+                **project_communication(projects.sources(p)),
+                "revision": p["revision"],
+            }
+        r = runs.read(runId)
+        if r.get("projectId") != projectId:
+            raise Problem("NOT_FOUND", "Run not found for this project.", 404)
+        from xverse_studio.connections.projections import ProjectionUnavailable
+
+        records, integrity = read_journal(runs.directory(runId), r)
+        snapshot = store.get("snapshot", r["snapshotId"]) or {}
+        try:
+            report = project_communication(
+                projects.sources(p),
+                run=r,
+                snapshot=snapshot,
+                records=records,
+                integrity=integrity,
+            )
+        except ProjectionUnavailable as error:
+            raise Problem("SNAPSHOT_UNAVAILABLE", str(error), 409) from None
+        return {**report, "revision": p["revision"]}
+
     @app.post("/api/v1/projects/{projectId}/validations")
     def validate(projectId: str, body: Selection):
         p = projects.read(projectId)

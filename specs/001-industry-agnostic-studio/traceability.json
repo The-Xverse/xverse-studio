@@ -3713,8 +3713,15 @@
       "acceptance_ids": [
         "AC-017"
       ],
-      "status": "in_progress",
-      "implementation_note": "Owned graph/source/catalog/profile/variant work implemented and tested; independent composition repair verification and final UI successor are being retained. External two-industry/live and cross-OS gates remain open."
+      "status": "completed",
+      "implementation_note": "Owned component complete: declared/resolved/observed communication projections (connections/projections.py, GET /projects/{id}/communication, Connections perspective switch) with provider transport/scope/limitations, observer-attributed samples by full flow reference, integrity-gated observation, live/stale/final/partial/unknown freshness, not-collected vs not-yet vs not-observed states, and Lite/owned evidence never labelled native X-COM. Audit and re-audit repairs all tested; 701 backend / 74 browser checks pass on an unchanged candidate.",
+      "implementation_evidence": [
+        "services/studio-api/src/xverse_studio/connections/projections.py",
+        "apps/studio-web/src/features/connections/projections.tsx",
+        "tests/integration/test_communication_projections.py",
+        "evidence/studio/M2-communication/README.md",
+        "evidence/studio/M2-communication/verification.json"
+      ]
     },
     {
       "id": "T057",
@@ -6214,15 +6221,15 @@
     "status_document": "../../docs/implementation/STATUS.md",
     "native_windows": "BLOCKED at user request. Initial native Server 2022 install failed on upstream Git filenames; application/browser NOT_RUN.",
     "m5": "deferred",
-    "code_candidate": "working-tree product sha256 recorded in evidence/studio/M2-relations/verification.json on bba8c86",
-    "component_completed": 41,
+    "code_candidate": "working-tree product sha256 recorded in evidence/studio/M2-communication/verification.json on e176297",
+    "component_completed": 42,
     "verification": {
-      "backend_tests_passed": 690,
-      "playwright_checks_passed": 72,
+      "backend_tests_passed": 701,
+      "playwright_checks_passed": 74,
       "playwright_checks_failed": 0,
       "playwright_scope": "full Linux browser suite with performance measurements on an unchanged candidate",
       "milestones_accepted": 0,
-      "evidence": "evidence/studio/M2-relations/"
+      "evidence": "evidence/studio/M2-communication/"
     }
   }
 }
