@@ -16,7 +16,7 @@ def test_admitted_profile_lock_materializes_exact_local_schema_and_preserves_exe
     before = adapter.compile(projects.sources(project))
     updated = registry.bind(projects, project["projectId"], 1, locks)
     assert updated["revision"] == 2
-    assert len(updated["manifest"]["profiles"]) == 2
+    assert len(updated["manifest"]["profiles"]) == len(registry.list()["items"]) == 3
     for lock in updated["manifest"]["profiles"]:
         assert lock["schemaPath"] in updated["supportingFiles"]
         assert lock["presentationPath"] in updated["supportingFiles"]
@@ -275,6 +275,7 @@ def test_api_profile_discovery_is_exact_and_independent_of_providers_and_bluepri
     sources = {
         "io.xverse.experiment": files("xverse_xdl").joinpath("profiles", "experiment-lite-v0.1.schema.json").read_bytes(),
         "io.xverse.studio.experiments": (Path(assertions.__file__).parent / "evaluation-v1.schema.json").read_bytes(),
+        "io.xverse.studio.connections": (Path(assertions.__file__).parent.parent / "connections" / "connections-v1.schema.json").read_bytes(),
     }
     declared = {ref["namespace"]: ref["version"] for example in examples() for ref in example["profileRefs"]}
     listing = client.get("/api/v1/profiles").json()["items"]

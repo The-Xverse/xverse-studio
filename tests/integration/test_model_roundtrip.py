@@ -8,7 +8,6 @@ import subprocess
 import sys
 import tempfile
 import zipfile
-from importlib.resources import files
 from pathlib import Path
 
 import pytest
@@ -23,10 +22,8 @@ _cases = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(_cases)
 CASES, baseline = _cases.CASES, _cases.baseline
 
-PROFILE_SCHEMAS = [
-    str(files("xverse_xdl").joinpath("profiles", "experiment-lite-v0.1.schema.json")),
-    str(Path(__file__).resolve().parents[2] / "services/studio-api/src/xverse_studio/assertions/evaluation-v1.schema.json"),
-]
+# Exactly the explicit profile schemas Studio's adapter passes to the platform.
+PROFILE_SCHEMAS = list(XDLAdapter().profile_schema_paths)
 
 
 def cli(documents, tmp_path, command):

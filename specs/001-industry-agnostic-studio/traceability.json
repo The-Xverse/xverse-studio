@@ -3647,12 +3647,14 @@
       "acceptance_ids": [
         "AC-016"
       ],
-      "status": "in_progress",
-      "implementation_note": "In progress: connection admission 1.0 (ADR-0014) checks declared semantics and blocks explicit converters, backward version compatibility, declared quality, uninterpretable multiplicity, model couplings and feedback cycles because no provider/profile admits the needed contracts; preflight receives blocking diagnostics. Open: admission driven by actual provider/profile contracts and a supported causality path, which cannot be exercised until such a contract is admitted.",
+      "status": "completed",
+      "implementation_note": "Owned component complete (ADR-0016, owner decision 2026-10-26): connection admission driven by the selected provider's declared contracts and the owned io.xverse.studio.connections profile; explicit linear converters with bounded coefficients and unit-delay feedback causality (every loop delayed, one provider-supported clock) are admitted only where the owned reference provider executes them; the feedback blueprint runs the declared loop and converter end to end. Other converters, causality kinds, algebraic loops and couplings stay unsupported. 687 backend / 70 browser checks pass on an unchanged candidate.",
       "implementation_evidence": [
-        "docs/architecture/ADR-0014-connection-admission.md",
-        "evidence/studio/M2-connections/verification.json",
-        "evidence/studio/M2-connections/independent-review.md"
+        "services/studio-api/src/xverse_studio/connections/__init__.py",
+        "docs/architecture/ADR-0016-owned-connection-contracts.md",
+        "tests/integration/test_connection_contracts.py",
+        "evidence/studio/M2-connection-contracts/README.md",
+        "evidence/studio/M2-connection-contracts/verification.json"
       ]
     },
     {
@@ -6208,15 +6210,15 @@
     "status_document": "../../docs/implementation/STATUS.md",
     "native_windows": "BLOCKED at user request. Initial native Server 2022 install failed on upstream Git filenames; application/browser NOT_RUN.",
     "m5": "deferred",
-    "code_candidate": "working-tree product sha256 recorded in evidence/studio/M2-deployment-forms/verification.json on 1ff8ce9",
-    "component_completed": 37,
+    "code_candidate": "working-tree product sha256 recorded in evidence/studio/M2-connection-contracts/verification.json on e6a5160",
+    "component_completed": 38,
     "verification": {
-      "backend_tests_passed": 672,
-      "playwright_checks_passed": 69,
+      "backend_tests_passed": 687,
+      "playwright_checks_passed": 70,
       "playwright_checks_failed": 0,
       "playwright_scope": "full Linux browser suite with performance measurements on an unchanged candidate",
       "milestones_accepted": 0,
-      "evidence": "evidence/studio/M2-roundtrip/"
+      "evidence": "evidence/studio/M2-connection-contracts/"
     }
   }
 }

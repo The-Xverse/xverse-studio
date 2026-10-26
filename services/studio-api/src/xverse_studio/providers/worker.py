@@ -148,6 +148,7 @@ def main():
         initial = value
         target = float(config["target"])
         gain = float(config["gain"])
+        converter = config.get("converter")
         start = time.monotonic()
         stopped = False
         fault_emitted = False
@@ -181,28 +182,38 @@ def main():
                 )
                 fault_emitted = True
             measured = initial if fault else value
+            # Unit-delay loop: the plant applies this step's command only at the next step
+            # (state[n+1] = state[n] + command[n]·step); sensing and control are within the step.
             control = gain * (target - measured)
-            emit(
-                "observation.available",
-                {
-                    "observerRef": config.get("observerRef", "reference-observer"),
-                    "values": {
-                        "value": value,
-                        "measured": measured,
-                        "target": target,
-                        "control": control,
-                    },
-                    "units": {
-                        "value": "1",
-                        "measured": "1",
-                        "target": "1",
-                        "control": "1",
-                    },
-                    "coverage": "sample",
-                    "evidenceScope": "owned_reference",
+            observation = {
+                "observerRef": config.get("observerRef", "reference-observer"),
+                "values": {
+                    "value": value,
+                    "measured": measured,
+                    "target": target,
+                    "control": control,
                 },
-                tick,
-            )
+                "units": {
+                    "value": "1",
+                    "measured": "1",
+                    "target": "1",
+                    "control": "1",
+                },
+                "coverage": "sample",
+                "evidenceScope": "owned_reference",
+            }
+            if converter:
+                # The declared linear converter maps exactly the plant state its flow carries.
+                observation["values"]["observed"] = (
+                    converter["scale"] * value + converter["offset"]
+                )
+                observation["units"]["observed"] = converter["toUnit"]
+                observation["conversion"] = {
+                    "field": "observed",
+                    "source": "value",
+                    **converter,
+                }
+            emit("observation.available", observation, tick)
             value += control * step
             delay = start + (i + 1) * step - time.monotonic()
             if delay > 0:

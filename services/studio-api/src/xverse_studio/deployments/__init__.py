@@ -128,6 +128,8 @@ class Deployments:
         from xverse_studio.providers.registry import descriptors
 
         provider = next((value for value in descriptors() if value["providerId"] == provider_id), None)
+        if provider is None:
+            raise Problem("PROVIDER_UNAVAILABLE", "No provider descriptor has this identity.", 404)
         report = resolve_deployment(documents, deployment_ref, host_os=platform.system(), provider=provider)
         return {**report, "sourceValid": True, "diagnostics": resolution_diagnostics(report)}
 

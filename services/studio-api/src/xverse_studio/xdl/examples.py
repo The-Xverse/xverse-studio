@@ -12,6 +12,8 @@ API_VERSION = "xverse.io/xdl/v1alpha1"
 PROFILE_NAMESPACE = "io.xverse.experiment"
 EVALUATION_NAMESPACE = "io.xverse.studio.experiments"
 EVALUATION_SCHEMA_ID = "https://schemas.xverse.io/studio/experiments/1.0/evaluation.schema.json"
+CONNECTIONS_NAMESPACE = "io.xverse.studio.connections"
+CONNECTIONS_SCHEMA_ID = "https://schemas.xverse.io/studio/connections/1.0/connection-contracts.schema.json"
 MODEL_CONTRACT = (
     "xverse.studio.reference.first-order.v1\n"
     "state[0]=initial; measured[n]=initial if stuck-sensor active else state[n];\n"
@@ -61,8 +63,18 @@ def _interface(identifier: str, direction: str = "bidirectional") -> dict:
             "unitSemantics": "1", "compatibility": "exact"}
 
 
-def reference_resources(namespace: str = "org.xverse.studio.reference") -> dict[str, dict]:
-    """Return a fresh valid XDL set for the admitted finite reference-model contract."""
+# The owned converter template (ADR-0016): scale/offset are run inputs; units and kind are fixed.
+CONVERTER_TEMPLATE = {"kind": "linear", "fromUnit": "1", "toUnit": "%", "scale": 100.0, "offset": 0.0}
+# Admitted converter coefficients are bounded so every converted sample stays finite.
+CONVERTER_BOUND = 1e6
+
+
+def reference_resources(namespace: str = "org.xverse.studio.reference", feedback: bool = False) -> dict[str, dict]:
+    """Return a fresh valid XDL set for the admitted finite reference-model contract.
+
+    With `feedback`, the System declares the model's existing unit-delay loop as an explicit
+    plant-to-controller flow and observes the state through the owned linear converter.
+    """
     controller = _resource("Component", "reference-controller", namespace, {
         "capabilities": ["reference-control"], "interfaces": [_interface("command")],
         "endpoints": [{"id": "command-out", "ownerId": "reference-controller", "interfaceId": "command", "direction": "output"}],
@@ -97,6 +109,35 @@ def reference_resources(namespace: str = "org.xverse.studio.reference") -> dict[
         "timeDomains": [{"id": "simulation-time", "clockClass": "simulation", "epoch": "0", "rate": "1", "monotonic": True}],
         "defaultTimeDomainId": "simulation-time",
     })
+    if feedback:
+        # The model's measurement is a sensor reading of the plant state (the stuck-sensor fault freezes
+        # it). Declaring that sensing device makes the loop explicit: controller -> plant -> sensor-device
+        # -> controller. The model's delay is the plant's integration: state[n+1] uses command[n], so the
+        # unit delay is declared on the controller-to-plant command flow. Start order stays controller, plant.
+        controller["spec"]["interfaces"].append(_interface("state"))
+        controller["spec"]["endpoints"].append({"id": "state-in", "ownerId": "reference-controller", "interfaceId": "state", "direction": "input"})
+        spec = system["spec"]
+        spec["devices"] = [{"id": "sensor-device", "capabilities": ["state-measurement"], "supportedRealizationClasses": ["simulated"],
+                            "nodeId": "plant-node"}]
+        spec["sensors"] = [{"id": "state-sensor", "deviceId": "sensor-device", "observedQuantity": "normalized plant state",
+                            "outputEndpointId": "sensor-out", "unitSemantics": "1", "samplingIntent": "every fixed model step",
+                            "maturity": "prototype"}]
+        spec["interfaces"].append({**_interface("observed-state"), "compatibility": "explicit-converter"})
+        spec["endpoints"] = [e for e in spec["endpoints"] if e["id"] != "observer-in"] + [
+            {"id": "sensor-in", "ownerId": "sensor-device", "interfaceId": "state", "direction": "input"},
+            {"id": "sensor-out", "ownerId": "sensor-device", "interfaceId": "state", "direction": "output"},
+            {"id": "controller-in", "ownerId": "controller", "interfaceId": "state", "direction": "input"},
+            {"id": "plant-observed", "ownerId": "plant", "interfaceId": "observed-state", "direction": "output"},
+            {"id": "observer-in", "ownerId": "observer-node", "interfaceId": "observed-state", "direction": "input"}]
+        spec["flows"][0]["extensions"] = {CONNECTIONS_NAMESPACE: {"causality": {"kind": "unit-delay"}}}
+        spec["flows"] = [spec["flows"][0],
+            {"id": "state-flow", "sourceEndpointId": "plant-observed", "destinationEndpointIds": ["observer-in"],
+             "interfaceId": "observed-state", "deliveryIntent": "ordered", "timeDomainId": "simulation-time",
+             "extensions": {CONNECTIONS_NAMESPACE: {"converter": deepcopy(CONVERTER_TEMPLATE)}}},
+            {"id": "measurement-flow", "sourceEndpointId": "plant-out", "destinationEndpointIds": ["sensor-in"],
+             "interfaceId": "state", "deliveryIntent": "ordered", "timeDomainId": "simulation-time"},
+            {"id": "feedback-flow", "sourceEndpointId": "sensor-out", "destinationEndpointIds": ["controller-in"],
+             "interfaceId": "state", "deliveryIntent": "ordered", "timeDomainId": "simulation-time"}]
     lifecycle = {"prepare": "verify-owned-reference", "ready": "reference-ready", "start": "start-reference", "stop": "stop-reference", "failure": "record-reference-failure"}
     deployment = _resource("Deployment", "local-reference", namespace, {
         "systemRef": _ref("System", "reference-loop", namespace),
@@ -150,7 +191,15 @@ def reference_resources(namespace: str = "org.xverse.studio.reference") -> dict[
         "schemaRef": EVALUATION_SCHEMA_ID, "documentationRef": "urn:xverse:studio:experiments:1.0", "conflictPolicy": "reject",
     })
     evaluation_profile["metadata"]["version"] = "1.0.0"
-    return {"controller.xdl.yaml": controller, "plant.xdl.yaml": plant, "system.xdl.yaml": system,
+    extra = {}
+    if feedback:
+        connections_profile = _resource("Profile", "studio-connections", namespace, {
+            "extensionNamespace": CONNECTIONS_NAMESPACE, "compatibleApiVersions": [API_VERSION],
+            "schemaRef": CONNECTIONS_SCHEMA_ID, "documentationRef": "urn:xverse:studio:connections:1.0", "conflictPolicy": "reject",
+        })
+        connections_profile["metadata"]["version"] = "1.0.0"
+        extra["connections-profile.xdl.yaml"] = connections_profile
+    return {**extra, "controller.xdl.yaml": controller, "plant.xdl.yaml": plant, "system.xdl.yaml": system,
             "deployment.xdl.yaml": deployment, "scenario.xdl.yaml": scenario, "profile.xdl.yaml": profile,
             "evaluation-profile.xdl.yaml": evaluation_profile}
 
@@ -166,18 +215,22 @@ def dump_yaml(value: dict) -> str:
 def examples() -> list[dict]:
     """Discover data bundles; selecting one never installs or invokes provider code."""
     result = []
-    for identifier, title, namespace, description in (
+    for identifier, title, namespace, description, feedback in (
         ("reference-process-control", "Process control reference", "org.xverse.studio.process-control",
-         "Explore a normalized process response, tune the setpoint and compare measured reference observations."),
+         "Explore a normalized process response, tune the setpoint and compare measured reference observations.", False),
         ("reference-automotive", "Automotive reference", "org.xverse.studio.automotive",
-         "Explore a normalized controller and plant response using the same reference model; no vehicle dynamics claim."),
+         "Explore a normalized controller and plant response using the same reference model; no vehicle dynamics claim.", False),
+        ("reference-feedback", "Process control feedback reference", "org.xverse.studio.feedback",
+         "Declare the reference loop's unit-delay feedback explicitly and observe the state through an explicit linear converter to percent.", True),
     ):
-        resources = reference_resources(namespace)
+        resources = reference_resources(namespace, feedback)
         resources["system.xdl.yaml"]["metadata"]["description"] = description
         result.append({"id": identifier, "entryId": identifier, "name": title, "description": description,
                        "version": "1.0.0", "scope": "owned_reference", "maturity": "fixture", "providerId": "studio.reference",
                        "documents": {k: dump_yaml(v) for k, v in resources.items()}, "parameters": deepcopy(PARAMETERS),
                        "limitations": ["Owned executable reference only; external CARLA, native X-COM, process equipment and physical devices are not integrated."],
-                       "expectedObservations": ["Normalized state, target, simulation time and reference fault markers."],
-                       "profileRefs": [{"namespace": PROFILE_NAMESPACE, "version": "0.1.0"}, {"namespace": EVALUATION_NAMESPACE, "version": "1.0.0"}]})
+                       "expectedObservations": ["Normalized state, target, simulation time and reference fault markers."]
+                       + (["The same state converted by the declared linear converter (scale·x + offset) in percent."] if feedback else []),
+                       "profileRefs": [{"namespace": PROFILE_NAMESPACE, "version": "0.1.0"}, {"namespace": EVALUATION_NAMESPACE, "version": "1.0.0"}]
+                       + ([{"namespace": CONNECTIONS_NAMESPACE, "version": "1.0.0"}] if feedback else [])})
     return result

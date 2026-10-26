@@ -62,6 +62,15 @@ export function AdmissionCell({ connection }: { connection?: Data }) {
             <li key={index}>
               <Badge tone={tone(check.status)}>{check.status}</Badge>{" "}
               <strong>{check.check}</strong> {check.message}
+              {check.mapping && (
+                <span className="converter-mapping">
+                  {" "}
+                  <code>
+                    y = {check.mapping.scale}·x + {check.mapping.offset}
+                  </code>{" "}
+                  ({check.mapping.fromUnit} → {check.mapping.toUnit})
+                </span>
+              )}
               {check.code && (
                 <>
                   {" "}
@@ -95,6 +104,10 @@ export function AdmissionSummary({
       ["rejected", "unsupported"].includes(c.admission),
     ).length,
     unknownFlows = flows.filter((c) => c.admission === "unknown").length,
+    blockedCycles = report.cycles.filter(
+      (cycle: Data) => cycle.status !== "admitted",
+    ),
+    admittedCycles = report.cycles.length - blockedCycles.length,
     endpointViolations = report.endpoints.filter((e: Data) =>
       ["fail", "unsupported"].includes(e.status),
     );
@@ -102,8 +115,8 @@ export function AdmissionSummary({
     blockedFlows &&
       `${blockedFlows} of ${flows.length} flows cannot execute as declared`,
     unknownFlows && `${unknownFlows} flows are not established`,
-    report.cycles.length &&
-      `${report.cycles.length} feedback cycle(s) unsupported`,
+    blockedCycles.length &&
+      `${blockedCycles.length} feedback cycle(s) not admitted`,
     report.couplings.length &&
       `${report.couplings.length} model coupling(s) unsupported`,
     endpointViolations.length &&
@@ -118,6 +131,8 @@ export function AdmissionSummary({
         {parts.length
           ? `${parts.join("; ")}.`
           : `All ${flows.length} declared flows are admitted for their declared semantics.`}{" "}
+        {admittedCycles > 0 &&
+          `${admittedCycles} feedback cycle(s) admitted under a declared unit-delay contract. `}
         Admission evaluates declarations only; it does not prove routing,
         traffic or executable correctness.
       </p>
@@ -127,7 +142,7 @@ export function AdmissionSummary({
           <ul>
             {report.cycles.map((cycle: Data, index: number) => (
               <li key={index}>
-                <Badge tone="warning">{cycle.status}</Badge> members{" "}
+                <Badge tone={tone(cycle.status)}>{cycle.status}</Badge> members{" "}
                 {cycle.members.map((m: string) => m.split("#")[1]).join(", ")}{" "}
                 <small>{cycle.message}</small>
               </li>
@@ -209,9 +224,11 @@ export function targetGuidance(
             ? `Interface ${e.interfaceId} differs from ${source.interfaceId}; no converter is admitted.`
             : "";
       const note =
-        !blocked && iface?.compatibility && iface.compatibility !== "exact"
-          ? `Interface declares ${iface.compatibility}; this connection will not be admitted for execution.`
-          : "";
+        !blocked && iface?.compatibility === "explicit-converter"
+          ? "Interface requires an explicit converter; declare a converter mapping the selected provider admits, or this connection is rejected."
+          : !blocked && iface?.compatibility && iface.compatibility !== "exact"
+            ? `Interface declares ${iface.compatibility}; this connection will not be admitted for execution.`
+            : "";
       return { endpoint: e, compatible: !blocked, reason: blocked || note };
     })
     .sort((a, b) => Number(b.compatible) - Number(a.compatible));

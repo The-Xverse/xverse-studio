@@ -93,7 +93,9 @@ class Runs:
             diagnostics.extend(
                 blocking(
                     admit_connections(
-                        documents, {"diagnostics": compiled.get("diagnostics", [])}
+                        documents,
+                        {"diagnostics": compiled.get("diagnostics", [])},
+                        provider,
                     )
                 )
             )

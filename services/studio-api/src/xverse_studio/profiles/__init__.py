@@ -10,7 +10,8 @@ from ruamel.yaml import YAML
 
 from xverse_studio.storage.core import Problem, canonical, digest, uid
 from xverse_studio.security.files import safe_name
-from xverse_studio.xdl.examples import API_VERSION, EVALUATION_NAMESPACE, EVALUATION_SCHEMA_ID, PROFILE_NAMESPACE, dump_yaml
+from xverse_studio.xdl.examples import (API_VERSION, CONNECTIONS_NAMESPACE, CONNECTIONS_SCHEMA_ID, EVALUATION_NAMESPACE,
+                                        EVALUATION_SCHEMA_ID, PROFILE_NAMESPACE, dump_yaml)
 
 
 class ProfileRegistry:
@@ -24,6 +25,8 @@ class ProfileRegistry:
              "https://xverse.io/profiles/experiment-lite/v0.1/schema.json", "https://xverse.io/profiles/experiment-lite/v0.1/README.md"),
             (EVALUATION_NAMESPACE, "1.0.0", "Bounded experiment assessment", str(Path(__file__).parent.parent / "assertions" / "evaluation-v1.schema.json"),
              EVALUATION_SCHEMA_ID, "urn:xverse:studio:experiments:1.0"),
+            (CONNECTIONS_NAMESPACE, "1.0.0", "Owned connection contracts", str(Path(__file__).parent.parent / "connections" / "connections-v1.schema.json"),
+             CONNECTIONS_SCHEMA_ID, "urn:xverse:studio:connections:1.0"),
         ]
         for namespace, version, title, path, schema_ref, documentation in sources:
             raw = Path(path).read_bytes()

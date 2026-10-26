@@ -2,6 +2,9 @@
 
 Status: implemented owned components under verification; no M2 acceptance claim.
 
+Amended by ADR-0016: a provider that declares the owned connection contracts admits a declared linear
+converter and a unit-delay feedback cycle; without such a provider both stay unsupported as below.
+
 FR-034, FR-035 and FR-038 require connections to be checked against direction, interface, units,
 multiplicity, timing and feedback semantics, conversions to be explicit, and feedback cycles to be
 judged by declared causality contracts rather than a universal acyclicity rule. The pinned XDL validator

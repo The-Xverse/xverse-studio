@@ -397,13 +397,24 @@ def create_app(
         return result
 
     @app.get("/api/v1/projects/{projectId}/connections")
-    def connections(projectId: str):
+    def connections(
+        projectId: str,
+        providerId: str = Query("studio.reference", max_length=128),
+    ):
         from xverse_studio.connections import admit_connections
 
         p = projects.read(projectId)
         documents = projects.sources(p)
+        # Converters and causality are admitted only under the selected provider's contracts.
+        provider = next(
+            (d for d in descriptors() if d["providerId"] == providerId), None
+        )
+        if provider is None:
+            raise Problem(
+                "PROVIDER_UNAVAILABLE", "No provider descriptor has this identity.", 404
+            )
         return {
-            **admit_connections(documents, adapter.validate(documents)),
+            **admit_connections(documents, adapter.validate(documents), provider),
             "revision": p["revision"],
         }
 

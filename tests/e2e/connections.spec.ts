@@ -70,7 +70,7 @@ test("connections: admission is shown per flow and the connect form guides compa
     "not prove routing, traffic or executable correctness",
   );
   await expect(summary).toContainText(
-    "converter no, versionCompatibility no, quality no, causality no, modelCoupling no",
+    "converter yes, versionCompatibility no, quality no, causality yes, modelCoupling no",
   );
   await expect(summary).toContainText(
     "Communication flows are never presented as physical couplings.",
@@ -105,7 +105,7 @@ test("connections: admission is shown per flow and the connect form guides compa
   );
 });
 
-test("connections: a feedback cycle and an explicit converter are reported as unsupported, never converted", async ({
+test("connections: an undelayed feedback cycle and an undeclared converter are never admitted or converted", async ({
   page,
 }, testInfo) => {
   test.setTimeout(60000);
@@ -115,22 +115,70 @@ test("connections: a feedback cycle and an explicit converter are reported as un
   await expect(summary).toContainText(
     "2 of 3 flows cannot execute as declared",
   );
-  await expect(summary).toContainText("1 feedback cycle(s) unsupported");
+  await expect(summary).toContainText("1 feedback cycle(s) not admitted");
   await expect(summary.getByRole("listitem").first()).toContainText(
     "members controller, plant",
   );
   await expect(summary).toContainText(
-    "needs an admitted timing/causality contract",
+    "No flow in this feedback cycle declares a unit delay, so the loop is algebraic",
   );
   await projectWithSystem(page, "Explicit converter", "explicit-converter");
   await expect(
     page.getByRole("button", {
-      name: /^Admission unsupported; show checks for .*#command-flow$/,
+      name: /^Admission rejected; show checks for .*#command-flow$/,
     }),
   ).toBeVisible();
   await page.getByLabel("Source endpoint").selectOption("controller-out");
   await page.getByLabel("Destination endpoint").selectOption("plant-in");
   await expect(page.locator("#target-guidance")).toContainText(
-    "Interface declares explicit-converter; this connection will not be admitted for execution.",
+    "Interface requires an explicit converter; declare a converter mapping the selected provider admits, or this connection is rejected.",
   );
+});
+
+test("connections: the owned feedback blueprint shows its admitted unit-delay loop and linear converter", async ({
+  page,
+}, testInfo) => {
+  test.setTimeout(60000);
+  await connectStudio(page, testInfo);
+  await page.evaluate(async () => {
+    const { csrfToken } = await fetch("/api/v1/session").then((r) => r.json());
+    const project = await fetch("/api/v1/projects", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRF-Token": csrfToken,
+      },
+      body: JSON.stringify({
+        name: "Feedback contracts",
+        blueprintRef: "reference-feedback",
+      }),
+    }).then((r) => r.json());
+    localStorage.setItem("studio.projectId", project.projectId);
+  });
+  await page.reload();
+  await page.getByRole("tab", { name: /Connections/ }).click();
+  const summary = page.getByRole("region", { name: "Connection admission" });
+  await expect(summary).toContainText(
+    "All 4 declared flows are admitted for their declared semantics.",
+  );
+  await expect(summary).toContainText(
+    "1 feedback cycle(s) admitted under a declared unit-delay contract.",
+  );
+  await expect(
+    summary.locator("li").filter({ hasText: "members" }),
+  ).toContainText("admitted");
+  const stateFlow = page.getByRole("button", {
+    name: /^Admission admitted; show checks for .*#state-flow$/,
+  });
+  await stateFlow.click();
+  await expect(page.locator(".converter-mapping")).toHaveText(
+    " y = 100·x + 0 (1 → %)",
+  );
+  const command = page.getByRole("button", {
+    name: /^Admission admitted; show checks for .*#command-flow$/,
+  });
+  await command.click();
+  await expect(
+    page.locator(".admission-checks").filter({ hasText: "causality" }).last(),
+  ).toContainText("Admitted under unit-delay causality on command-flow");
 });

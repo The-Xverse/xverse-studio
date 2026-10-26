@@ -19,7 +19,8 @@ from xverse_xdl import (
     compile_experiment_sources, plan_matches_digest, validate_sources,
 )
 
-from .examples import API_VERSION, EVALUATION_NAMESPACE, EVALUATION_SCHEMA_ID, PARAMETERS, PROFILE_NAMESPACE, examples, reference_resources
+from .examples import (API_VERSION, CONNECTIONS_NAMESPACE, CONVERTER_BOUND, CONVERTER_TEMPLATE, EVALUATION_NAMESPACE, EVALUATION_SCHEMA_ID, PARAMETERS,
+                       PROFILE_NAMESPACE, examples, reference_resources)
 
 PLATFORM_REVISION = "7fab6a290c3731533c2b88517158055c768b9d4e"
 MAX_DOCUMENTS = 128
@@ -54,7 +55,8 @@ class XDLAdapter:
     def __init__(self, profile_schema_paths: tuple = ()) -> None:
         packaged = files("xverse_xdl").joinpath("profiles", "experiment-lite-v0.1.schema.json")
         evaluation = Path(__file__).parent.parent / "assertions" / "evaluation-v1.schema.json"
-        self.profile_schema_paths = (str(packaged), str(evaluation), *tuple(str(p) for p in profile_schema_paths))
+        connections = Path(__file__).parent.parent / "connections" / "connections-v1.schema.json"
+        self.profile_schema_paths = (str(packaged), str(evaluation), str(connections), *tuple(str(p) for p in profile_schema_paths))
         self._validation_cache = OrderedDict()
         self._validation_cache_lock = threading.RLock()
         self._cache_result_bytes = self._cache_source_bytes = 0
@@ -270,7 +272,26 @@ def reference_configuration(documents: dict[str, str], compiled: dict | None = N
     if len(systems) != 1:
         raise XDLRejected("The reference provider needs exactly one System.")
     namespace = systems[0]["metadata"]["namespace"]
-    expected = reference_resources(namespace)
+    # The feedback template (ADR-0016) is admitted only as a whole: its declared loop and converter
+    # are what the worker executes.
+    feedback = any(isinstance(f, dict) and f.get("id") == "feedback-flow" for f in systems[0].get("spec", {}).get("flows", []) or [])
+    expected = reference_resources(namespace, feedback)
+    converter = None
+    if feedback:
+        flows = {f.get("id"): f for f in systems[0]["spec"].get("flows", []) if isinstance(f, dict)}
+        converter = deepcopy(((flows.get("state-flow") or {}).get("extensions") or {}).get(CONNECTIONS_NAMESPACE, {}).get("converter"))
+        if not isinstance(converter, dict):
+            raise XDLRejected("The feedback reference observes its state only through its declared linear converter.", "CONVERSION_INVALID")
+        for field in ("scale", "offset"):
+            value = converter.get(field)
+            if isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value) or (field == "scale" and value == 0):
+                raise XDLRejected("The linear converter needs a finite non-zero scale and a finite offset.", "CONVERSION_INVALID")
+            if abs(value) > CONVERTER_BOUND:
+                raise XDLRejected(f"Converter coefficients are bounded by ±{CONVERTER_BOUND:g} so converted samples stay finite.", "LIMIT_EXCEEDED")
+        for resource in authored:
+            if resource.get("kind") == "Profile" and resource.get("spec", {}).get("extensionNamespace") == CONNECTIONS_NAMESPACE \
+                    and resource.get("metadata", {}).get("version") != "1.0.0":
+                raise XDLRejected("The connections profile identity is incompatible.", "PROFILE_UNRESOLVED")
     system_ref = f"xdl://{namespace}/system/reference-loop"
     deployments = [r for r in authored if r.get("kind") == "Deployment"]
     scenarios = [r for r in authored if r.get("kind") == "Scenario"]
@@ -328,6 +349,12 @@ def reference_configuration(documents: dict[str, str], compiled: dict | None = N
     def body(resource: dict) -> dict:
         resource = deepcopy(resource)
         resource.pop("metadata", None)
+        if resource.get("kind") == "System" and feedback:
+            # Converter scale/offset are run inputs; every other part of the template must match.
+            for flow in resource.get("spec", {}).get("flows", []) or []:
+                payload = (flow.get("extensions") or {}).get(CONNECTIONS_NAMESPACE, {}) if isinstance(flow, dict) else {}
+                if isinstance(payload.get("converter"), dict):
+                    payload["converter"].update(scale=CONVERTER_TEMPLATE["scale"], offset=CONVERTER_TEMPLATE["offset"])
         if resource.get("kind") == "Scenario":
             # Assessment definitions are admitted inert consumers, preserved in full platform identities.
             resource.get("extensions", {}).pop(EVALUATION_NAMESPACE, None)
@@ -368,6 +395,12 @@ def reference_configuration(documents: dict[str, str], compiled: dict | None = N
                   observerRef="state-observer", clockDomain="simulation-time", planDigest=actual_compile["planDigest"],
                   semanticDigest=actual_compile["semanticDigest"])
     config["elementRefs"] = [system_ref + "#controller", system_ref + "#plant", system_ref + "#state-flow"]
+    if feedback:
+        config["elementRefs"] += [system_ref + "#sensor-device", system_ref + "#state-sensor", system_ref + "#measurement-flow",
+                                  system_ref + "#feedback-flow"]
+        config["causality"] = {"flowRef": system_ref + "#command-flow", "kind": "unit-delay"}
+        config["converter"] = {"flowRef": system_ref + "#state-flow", **{k: converter[k] for k in ("kind", "fromUnit", "toUnit")},
+                               "scale": float(converter["scale"]), "offset": float(converter["offset"])}
     return config
 
 

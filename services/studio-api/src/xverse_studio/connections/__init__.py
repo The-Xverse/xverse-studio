@@ -10,11 +10,14 @@ over what the declarations state, and never reports an unevaluated declaration a
 * ``unsupported``: declared semantics need a contract no provider/profile admits; blocking;
 * ``fail``: the declaration is violated; blocking.
 
-Explicit converters, backward version compatibility, declared quality, uninterpretable
-multiplicity, model couplings and feedback cycles all need contracts that are not admitted
-for the owned reference provider, so they block execution instead of being ignored.
+Backward version compatibility, declared quality, uninterpretable multiplicity and model
+couplings need contracts no provider admits, so they block execution instead of being ignored.
+Explicit converters and feedback cycles are admitted only under the owned connection contracts
+(ADR-0016) that the selected provider declares it executes: a linear converter and unit-delay
+causality. Without such a provider they stay unsupported.
 """
 
+import math
 import re
 
 from ruamel.yaml import YAML
@@ -32,6 +35,24 @@ ADMITTED_CONTRACTS = {
     "modelCoupling": False,
 }
 BLOCKING = ("fail", "unsupported")
+CONNECTIONS_NAMESPACE = "io.xverse.studio.connections"
+# Admitted linear converter coefficients are bounded so every converted sample stays finite.
+CONVERTER_BOUND = 1e6
+
+
+def _contracts(provider):
+    declared = (provider or {}).get("connectionContracts") or {}
+    return {"converters": set(declared.get("converters") or []), "causality": set(declared.get("causality") or [])}
+
+
+def _flow_contract(flow):
+    payload = (flow.get("extensions") or {}).get(CONNECTIONS_NAMESPACE) if isinstance(flow.get("extensions"), dict) else None
+    return payload if isinstance(payload, dict) else {}
+
+
+def _finite(value, nonzero=False):
+    return (isinstance(value, (int, float)) and not isinstance(value, bool) and math.isfinite(value)
+            and abs(value) <= CONVERTER_BOUND and (not nonzero or value != 0))
 
 
 def _bounds(text):
@@ -117,8 +138,13 @@ def _admission(checks):
     )
 
 
-def admit_connections(documents, validation):
-    """Return the connection admission report for a complete source set."""
+def admit_connections(documents, validation, provider=None):
+    """Return the connection admission report for a complete source set.
+
+    `provider` is the selected provider descriptor; only its declared `connectionContracts`
+    can admit a converter or a feedback cycle.
+    """
+    contracts = _contracts(provider)
     yaml = YAML(typ="safe")
     resources = []
     for name, source in documents.items():
@@ -252,13 +278,63 @@ def admit_connections(documents, validation):
                 )
             interface = interfaces.get(flow.get("interfaceId")) or {}
             compatibility = interface.get("compatibility")
+            converter = _flow_contract(flow).get("converter")
             if compatibility == "explicit-converter":
+                if "linear" not in contracts["converters"]:
+                    checks.append(
+                        _check(
+                            "conversion",
+                            "unsupported",
+                            "The interface requires an explicit converter; the selected provider admits no converter contract, so nothing is converted.",
+                            "CONVERSION_UNSUPPORTED",
+                            pointer,
+                        )
+                    )
+                elif not isinstance(converter, dict):
+                    checks.append(
+                        _check(
+                            "conversion",
+                            "fail",
+                            "The interface requires an explicit converter, but this flow declares none; nothing is converted implicitly.",
+                            "CONVERSION_INVALID",
+                            pointer,
+                        )
+                    )
+                elif (
+                    converter.get("kind") != "linear"
+                    or converter.get("fromUnit") != interface.get("unitSemantics")
+                    or converter.get("toUnit") == converter.get("fromUnit")
+                    or not _finite(converter.get("scale"), nonzero=True)
+                    or not _finite(converter.get("offset"))
+                ):
+                    checks.append(
+                        _check(
+                            "conversion",
+                            "fail",
+                            f"The declared converter must be linear from the interface unit {interface.get('unitSemantics')!r} to a different unit, with a non-zero scale and an offset bounded by ±{CONVERTER_BOUND:g}.",
+                            "CONVERSION_INVALID",
+                            pointer,
+                        )
+                    )
+                else:
+                    checks.append(
+                        {
+                            **_check(
+                                "conversion",
+                                "pass",
+                                f"Explicit linear mapping y = {converter['scale']}·x + {converter['offset']} from {converter['fromUnit']!r} to {converter['toUnit']!r}; provider {provider.get('providerId')} declares linear converters. Preflight still checks that the provider executes this topology.",
+                                pointer=pointer,
+                            ),
+                            "mapping": {k: converter[k] for k in ("kind", "fromUnit", "toUnit", "scale", "offset")},
+                        }
+                    )
+            elif isinstance(converter, dict):
                 checks.append(
                     _check(
                         "conversion",
-                        "unsupported",
-                        "The interface requires an explicit converter; no converter contract is admitted, so nothing is converted.",
-                        "CONVERSION_UNSUPPORTED",
+                        "fail",
+                        "A converter is declared on an interface that does not require one; nothing is converted implicitly.",
+                        "CONVERSION_INVALID",
                         pointer,
                     )
                 )
@@ -361,7 +437,7 @@ def admit_connections(documents, validation):
                 if source_owner and owner:
                     edges.append((source_owner, owner))
                     owners.append((source_owner, owner))
-            flow_owners[len(connections)] = owners
+            flow_owners[len(connections)] = (owners, flow)
             connections.append(
                 {
                     "ref": f"{system_ref}#{flow.get('id')}",
@@ -378,29 +454,96 @@ def admit_connections(documents, validation):
             )
         system_cycles = _cycles(edges)
         for members in system_cycles:
+            inside = [
+                (position, flow)
+                for position, (owners, flow) in flow_owners.items()
+                if any(a in members and b in members for a, b in owners)
+            ]
+            is_delayed = lambda flow: (_flow_contract(flow).get("causality") or {}).get("kind") == "unit-delay"
+            delayed = [flow.get("id") for _, flow in inside if is_delayed(flow)]
+            # A flow without its own time domain uses the System default.
+            clocks = {flow.get("timeDomainId") or default_domain for _, flow in inside}
+            # Every directed loop must pass through a delayed flow; an undelayed sub-loop is algebraic.
+            undelayed = [
+                edge
+                for position, flow in inside
+                if not is_delayed(flow)
+                for edge in flow_owners[position][0]
+                if edge[0] in members and edge[1] in members
+            ]
+            provider_clocks = set((provider or {}).get("clockDomains") or [])
+            if "unit-delay" not in contracts["causality"]:
+                status, code, message = (
+                    "unsupported",
+                    "CAUSALITY_CONTRACT_UNSUPPORTED",
+                    "This feedback cycle needs an admitted timing/causality contract; the selected provider admits none, so it cannot execute. A drawn edge or an acyclic graph is not proof of executable correctness.",
+                )
+            elif not delayed:
+                status, code, message = (
+                    "unsupported",
+                    "CAUSALITY_CONTRACT_UNSUPPORTED",
+                    "No flow in this feedback cycle declares a unit delay, so the loop is algebraic; no algebraic-loop solver is admitted.",
+                )
+            elif _cycles(undelayed):
+                status, code, message = (
+                    "unsupported",
+                    "CAUSALITY_CONTRACT_UNSUPPORTED",
+                    "Part of this feedback cycle closes without any delayed flow, so that loop is algebraic; no algebraic-loop solver is admitted.",
+                )
+            elif len(clocks) != 1 or None in clocks:
+                status, code, message = (
+                    "fail",
+                    "CAUSALITY_CLOCK_MISMATCH",
+                    "A unit delay is defined over one time domain; this cycle's flows declare different or missing time domains.",
+                )
+            elif provider_clocks and not clocks <= provider_clocks:
+                status, code, message = (
+                    "unsupported",
+                    "CAUSALITY_CONTRACT_UNSUPPORTED",
+                    f"Provider {provider.get('providerId')} declares unit-delay causality only in {', '.join(sorted(provider_clocks))}.",
+                )
+            else:
+                status, code, message = (
+                    "admitted",
+                    None,
+                    f"Admitted under unit-delay causality on {', '.join(delayed)} in {next(iter(clocks))}; provider {provider.get('providerId')} declares this contract. The declared delay, not the drawing, makes the loop executable; preflight still checks that the provider executes this topology.",
+                )
             cycles.append(
                 {
                     "systemRef": system_ref,
                     "members": [f"{system_ref}#{m}" for m in members],
-                    "status": "unsupported",
-                    "code": "CAUSALITY_CONTRACT_UNSUPPORTED",
-                    "message": "This feedback cycle needs an admitted timing/causality contract; none is admitted, so it cannot execute. A drawn edge or an acyclic graph is not proof of executable correctness.",
+                    "status": status,
+                    "code": code,
+                    "message": message,
+                    "delayedFlows": delayed,
                 }
             )
-        # Flows inside an unsupported cycle are themselves not admitted.
-        for position, owners in flow_owners.items():
-            if any(
-                a in members and b in members
-                for a, b in owners
-                for members in system_cycles
-            ):
+            # Flows inside a cycle share its causality verdict.
+            for position, _ in inside:
                 connections[position]["checks"].append(
                     _check(
                         "causality",
-                        "unsupported",
-                        "This flow is part of a feedback cycle without an admitted causality contract.",
-                        "CAUSALITY_CONTRACT_UNSUPPORTED",
+                        "pass" if status == "admitted" else status,
+                        message if status == "admitted" else f"This flow is part of a feedback cycle that is not admitted: {message}",
+                        code,
                         connections[position]["checks"][0]["pointer"],
+                    )
+                )
+        # A declared delay outside any feedback cycle has no admission effect; say so rather than ignore it.
+        in_cycle = {
+            position
+            for members in system_cycles
+            for position, (owners, _) in flow_owners.items()
+            if any(a in members and b in members for a, b in owners)
+        }
+        for position, (_, flow) in flow_owners.items():
+            if position not in in_cycle and (_flow_contract(flow).get("causality") or {}).get("kind") == "unit-delay":
+                connections[position]["checks"].append(
+                    _check(
+                        "causality",
+                        "declared",
+                        "A unit delay is declared on a flow outside any feedback cycle; it is recorded and has no admission effect.",
+                        pointer=connections[position]["checks"][0]["pointer"],
                     )
                 )
         for link in spec.get("links", []) or []:
@@ -442,7 +585,7 @@ def admit_connections(documents, validation):
     }
     blocking = (
         sum(c["admission"] in ("rejected", "unsupported") for c in connections)
-        + len(cycles)
+        + sum(cycle["status"] != "admitted" for cycle in cycles)
         + len(couplings)
         + len(limits)
         # Endpoint violations without any evaluated flow (e.g. a lower bound with no flows).
@@ -454,7 +597,8 @@ def admit_connections(documents, validation):
     return {
         "admissionVersion": ADMISSION_VERSION,
         "sourceValid": valid,
-        "admittedContracts": dict(ADMITTED_CONTRACTS),
+        "admittedContracts": {**ADMITTED_CONTRACTS, "converter": bool(contracts["converters"]), "causality": bool(contracts["causality"])},
+        "providerId": (provider or {}).get("providerId"),
         "connections": connections,
         "endpoints": endpoint_checks,
         "cycles": cycles,
@@ -506,6 +650,8 @@ def admission_diagnostics(report):
                 "Correct the endpoint multiplicity or its attached flows.",
             )
     for cycle in report["cycles"]:
+        if cycle["status"] == "admitted":
+            continue
         add(
             cycle["code"],
             cycle["message"],

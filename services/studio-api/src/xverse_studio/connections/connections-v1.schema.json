@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.xverse.io/studio/connections/1.0/connection-contracts.schema.json",
+  "title": "Studio owned connection contracts v1",
+  "description": "Declared flow causality and explicit linear conversion; admitted only where the selected provider declares and executes them.",
+  "type": "object",
+  "additionalProperties": false,
+  "minProperties": 1,
+  "properties": {
+    "causality": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "unit-delay"
+        }
+      },
+      "required": [
+        "kind"
+      ]
+    },
+    "converter": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "const": "linear"
+        },
+        "fromUnit": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64
+        },
+        "toUnit": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64
+        },
+        "scale": {
+          "type": "number"
+        },
+        "offset": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "kind",
+        "fromUnit",
+        "toUnit",
+        "scale",
+        "offset"
+      ]
+    }
+  }
+}

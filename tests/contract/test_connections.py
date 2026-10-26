@@ -105,7 +105,11 @@ def test_api_reports_connections_and_preflight_blocks_unsupported_semantics(clie
         json={"revision": project["revision"]},
     ).json()
     assert preflight["status"] == "blocked"
-    assert "CONVERSION_UNSUPPORTED" in {d["code"] for d in preflight["diagnostics"]}
+    # The reference provider admits a linear converter, but this flow declares none (ADR-0016).
+    assert "CONVERSION_INVALID" in {d["code"] for d in preflight["diagnostics"]}
+    # A provider without converter contracts leaves the same declaration unsupported.
+    lite = client.get(f"/api/v1/projects/{project['projectId']}/connections?providerId=xverse.lite").json()
+    assert {c["code"] for c in lite["connections"][0]["checks"] if c["check"] == "conversion"} == {"CONVERSION_UNSUPPORTED"}
     # Source bytes are preserved exactly; admission never rewrites them.
     current = client.get(f"/api/v1/projects/{project['projectId']}").json()
     system = next(d for d in current["documents"].values() if d["path"].endswith("/system.xdl.yaml"))

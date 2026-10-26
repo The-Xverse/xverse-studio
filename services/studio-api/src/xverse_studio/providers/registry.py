@@ -16,6 +16,8 @@ REFERENCE = {
     "hostExecutionClass": "native-process",
     "operations": ["start", "stop", "cancel"],
     "clockDomains": ["simulation-time"],
+    # Contracts this provider actually executes (ADR-0016); nothing else is admitted.
+    "connectionContracts": {"causality": ["unit-delay"], "converters": ["linear"]},
     "limits": {
         "maxDurationSeconds": 30,
         "maxSamples": 3000,
