@@ -47,7 +47,9 @@ diagnostic results overlap this successor. Native Windows, actual assistive-tech
 accessibility acceptance remain open.
 Both 13ff409 product and 807b5bb metadata CI jobs passed, predating the new history repair. Their
 clean package smoke and verified 100-file manifest remain in `M0-compatibility-manifest/package/`;
-latest-candidate package/CI outcomes are recorded separately.
+Clean 70a13a1 also passed offline Linux package extraction/startup/UI, Unicode persistence and public
+compilation; its clean 100-file manifest and tested UI bytes are verified in `M2-keyboard-instance/package/`.
+Latest-candidate CI outcomes are recorded separately.
 Both viewport performance workloads and duplicate-name project retention passed in the b2cf71a full
 cohort. A clean b2cf71a package extraction also passed offline native Linux provisioning,
 startup/UI serving, Unicode persistence and authoritative compilation (`M3-assets/package/`);

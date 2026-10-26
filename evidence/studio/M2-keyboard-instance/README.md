@@ -81,3 +81,10 @@ Backend/services/Python tests/contributor/compatibility inputs are byte-identica
 `backend-source-equivalence.json`. Actual native Windows, assistive-technology assessment and wider
 accessibility/failure acceptance remain open. Component completion stays 47/100; no milestone is
 accepted. This evidence never substitutes for live provider or physical-device acceptance.
+
+Clean product `70a13a1a7dd8b4a0f32e1fb0864fcdd8946786a4` passed a fresh offline native Linux package
+extraction with prepared dependencies, startup/UI HTTP 200, Unicode persistence, authoritative
+compilation and owned shutdown. `package/` retains the receipt and clean 100-file manifest. All
+archive/file hashes and the exact tested frontend bytes were verified. Browser interaction remains
+the separate 97-check scope; native Windows was not run. Fresh-host CI is a separate per-commit
+outcome, never inferred from older green jobs.

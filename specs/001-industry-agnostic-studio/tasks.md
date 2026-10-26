@@ -370,3 +370,6 @@ completion amendment. All 97 full browser checks and the separate final-source p
 pass unchanged source; 851 backend tests are inherited through exact unchanged-source comparison,
 not rerun here. Raw results/reviews/failures are in `evidence/studio/M2-keyboard-instance/`. Native
 Windows and complete accessibility/assistive-technology acceptance remain open; count stays 47/100.
+Clean 70a13a1 passed the fresh offline native Linux package smoke: startup/UI, Unicode persistence,
+public compilation and owned shutdown. All archive/file hashes, clean 100-file manifest and tested
+frontend bytes are verified under `M2-keyboard-instance/package/`. Fresh-host CI remains separate.
