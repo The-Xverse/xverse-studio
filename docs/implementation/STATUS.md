@@ -50,6 +50,17 @@ browser checks, with 161–170 logged passes and no logged assertion failures be
 cohorts and package stages did not complete. Retained native-CI receipts preserve those outcomes;
 a job-budget amendment is separate from the local browser result.
 
+Clean 21460a3 passed offline native Linux package extraction/provisioning, startup/UI, Unicode
+persistence, public compilation and owned shutdown. Its clean 100-file manifest, archive/file
+hashes and tested UI bytes are verified under `M2-keyboard-source-recovery/package/`.
+The candidate-binding record also matches the exact frozen source/compiled input set.
+
+After the frozen recovery checks, the CI job budget was amended 25→45 minutes. Parsed YAML
+comparison proves all other workflow semantics identical; source/compiled/test inputs and 100
+packaged files are unchanged. The single declared fixed-input difference is CI scheduling.
+Backend 851 inheritance now has 163 byte-identical inputs plus the unchanged-command CI control;
+the original 164-input proof remains exact for the frozen UI candidate. See `evidence/studio/native-ci/ci-budget-amendment/`. New candidate CI remains a separate outcome. T002 stays in_progress; Windows held.
+
 The preceding source-editor successor passed 26 native keyboard checks and the complete 171-check
 browser suite with unchanged application/test inputs. Source saves use authoritative returned
 Projects with project/load/intent/head guards, preserve newer navigation/history/drafts/readiness

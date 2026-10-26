@@ -425,3 +425,9 @@ bytes are verified under `M2-keyboard-source/package/`. Native Windows remains h
 Linux source-recovery successor (2026-10-26): T038/T067 remain unchecked. Native source-recovery successor: 38 native keyboard cases at both viewports verify real adopt/restore/unreadable recovery, exact requests/canonical and preserved backup bytes/digests, focus and project identity initialization, held completion preserving navigation/newer history/readiness/deliberate focus, repeated pending Enter and actual current/departed stale refusals. History HTTP/shape/window/absence fixtures distinguish unknown from observed absence and retry the actual history endpoint. Full 209 browser and separate performance pass frozen source/compiled/fixed inputs; backend 851 inherited by exact unchanged 164-input proof for the UI candidate. ADR-0013 records recovery completion. No Start/live/physical action; Windows/actual AT/milestone gates remain open.
 Evidence: `evidence/studio/M2-keyboard-source-recovery/`;47/100, no milestone accepted.
 T016/T045/T046 component traces amended without changing completed statuses.
+Clean 21460a3 package smoke passes, with clean 100-file hash/manifest, archive and tested UI-byte
+proof under `M2-keyboard-source-recovery/package/`; native Windows remains held.
+
+T002 CI scheduling amendment: actual 25-minute cancellations motivate 45-minute native Ubuntu24 job budget.
+All other parsed workflow semantics and 100 packaged files are identical; no per-test limit changes.
+Evidence: `evidence/studio/native-ci/ci-budget-amendment/`. T002 stays in_progress; Windows held.

@@ -111,3 +111,15 @@ The preceding 7ec222b/a950572 push/PR CI jobs were cancelled at their 25-minute 
 during browser checks; none completed its fresh-host browser/package lane. Those cancelled
 receipts and actual progress/annotations are retained separately. Local success never rewrites
 their outcome.
+
+Clean `21460a3` package extraction passes native Linux offline provisioning with the prepared
+dependency cache, startup/UI, Unicode persistence, public compilation and owned shutdown.
+All 100 clean manifest/file/archive hashes and tested UI bytes are verified in `package/`.
+`candidate-binding.json` matches all 259 tracked source/fixed inputs to that commit and
+all six compiled assets to the tested/packaged bytes. Candidate CI is a separate result.
+
+The subsequent CI-only amendment raises the job budget 25→45 minutes. It preserves all
+264 other frozen inputs, all 100 packaged payload files, and all workflow commands/pins/env/
+matrix/per-test limits. The 163 unchanged backend inputs plus the unchanged-command YAML
+control qualify backend 851 inheritance for that amendment; the original 164-input proof
+remains exact for UI 21460a3. See `../native-ci/ci-budget-amendment/`. New CI is pending.
