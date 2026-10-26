@@ -91,3 +91,8 @@ simulator or physical-device capacity.
 | --- | --- | --- | --- |
 | 1024x768 | 25.1 ms | 1651.2 ms | 446.6 ms |
 | 1440x900 | 29.1 ms | 1709.2 ms | 445.2 ms |
+
+Clean `7ec222b` package extraction also passes native Linux offline provisioning with the
+prepared dependency cache, startup/UI, Unicode persistence, public compilation and owned
+shutdown. Its clean 100-file manifest, archive/file hashes and tested UI bytes are verified
+in `package/`. This is a prepared-cache installation lane; candidate CI is recorded separately.

@@ -47,6 +47,11 @@ review and measurements are retained in `evidence/studio/M2-keyboard-source/`. W
 live integration and complete milestone gates remain open; count 47/100. Both f04f6cd and 11ffb49
 push/PR Ubuntu24 CI passed before this source-editor repair.
 
+Clean 7ec222b passed offline native Linux package extraction/provisioning, startup/UI,
+Unicode persistence, authoritative compilation and owned shutdown. Its clean 100-file manifest,
+archive/file hashes and tested UI bytes are retained under `M2-keyboard-source/package/`.
+Fresh-host CI remains a separate per-candidate outcome.
+
 The preceding parameter successor passed 28 native keyboard checks and the full 145-check browser
 suite with application/test inputs unchanged. Generic saves use authoritative returned Projects
 with project/load/intent and compare-before-write history guards. Field generations preserve newer
