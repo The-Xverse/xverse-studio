@@ -584,3 +584,18 @@ def test_time_mapping_edit_adds_replaces_and_removes_through_the_validator(clien
     assert removed.status_code == 200, removed.text
     deployment = next(d for d in removed.json()["documents"].values() if d["path"] == "xdl/deployment.xdl.yaml")
     assert "timeMappings" not in YAML(typ="safe").load(deployment["content"])["spec"]
+
+
+def test_resolution_reports_connection_compatibility_for_the_selected_provider(client):
+    project = client.post("/api/v1/projects", json={"name": "Provider connections", "blueprintRef": "reference-feedback"}).json()
+    pid = project["projectId"]
+    variant = client.get(f"/api/v1/projects/{pid}/deployment-variants").json()["items"][0]
+    url = f"/api/v1/projects/{pid}/deployment-variants/{variant['documentId']}/resolution"
+    reference = client.get(url).json()["connections"]
+    assert reference["blocking"] == 0 and reference["notAdmitted"] == []
+    assert [c["status"] for c in reference["cycles"]] == ["admitted"]
+    # The same logical System under a provider without connection contracts cannot keep its loop or converter.
+    lite = client.get(url + "?providerId=xverse.lite").json()["connections"]
+    assert lite["blocking"] > 0 and [c["status"] for c in lite["cycles"]] == ["unsupported"]
+    assert any(ref.endswith("#state-flow") for ref in lite["notAdmitted"])
+    assert client.get(url + "?providerId=unknown").status_code == 404

@@ -42,3 +42,11 @@ realization/target classes and fidelity limits are listed.
 
 T059 stays open because it depends on T058, which waits on T054. Native Windows is blocked at user
 request.
+
+## Closure (after T058)
+
+The closure audit found every T059 clause met and flagged one control. The binding form offered
+"Software" and "Emulated", which are not XDL realization classes, so the validator always refused
+them. It now offers the four XDL classes and marks those the selected provider does not declare as
+"not executable by" that provider (browser-tested). The resolution panel shows the provider's
+connection verdict. T059 is complete; the current run is recorded in `closure-verification.json`.

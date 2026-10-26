@@ -3769,11 +3769,12 @@
       "acceptance_ids": [
         "AC-018"
       ],
-      "status": "in_progress",
-      "implementation_note": "Deployment resolution 1.0 implemented (deployments/resolution.py, ADR-0015): named variants, authoritative compatibility/effective-value resolution rejecting undefined precedence, environment/secret separation and host-path resolution against the provider OS contract, exposed through the resolution route, rebinding and preflight. Remains open: declared dependency T054 (admitted converter/causality contracts) and native Windows.",
+      "status": "completed",
+      "implementation_note": "Owned component complete: deployment resolution 1.0 (ADR-0015) with named variants, provider-declared compatibility, undefined-precedence rejection, environment/secret separation with credential redaction, host-path resolution against the provider OS contract, and (after T054) the selected provider's connection-contract verdicts in rebinding. Closure audit found every clause met; 688 backend / 71 browser checks pass on an unchanged candidate.",
       "implementation_evidence": [
         "services/studio-api/src/xverse_studio/deployments/resolution.py",
-        "evidence/studio/M2-deployments/verification.json"
+        "evidence/studio/M2-deployments/verification.json",
+        "evidence/studio/M2-deployments/closure-verification.json"
       ]
     },
     {
@@ -3800,14 +3801,15 @@
       "acceptance_ids": [
         "AC-018"
       ],
-      "status": "in_progress",
-      "implementation_note": "Component implemented: resolution panel (binding checks, constraints, effective-value source chains, portable intent vs environment, provider maturity/classes/fidelity limits), realization/placement variant comparison, bound-resource and time-mapping forms (set_time_mapping amendment) and provider-declared realization/target classes. 661 backend / 69 browser checks pass. Remains open: depends on T058, which waits on T054.",
+      "status": "completed",
+      "implementation_note": "Owned component complete: resolution panel with provider fidelity limits and connection verdicts, realization/placement variant comparison, binding form offering the XDL realization classes with provider support marked, bound-resource and time-mapping forms. Closure audit found every clause met; 688 backend / 71 browser checks pass.",
       "implementation_evidence": [
         "apps/studio-web/src/features/deployments/ResolutionPanel.tsx",
         "apps/studio-web/src/features/deployments/DeploymentComposer.tsx",
         "tests/e2e/deployment-resolution.spec.ts",
         "evidence/studio/M2-deployment-forms/README.md",
-        "evidence/studio/M2-deployment-forms/verification.json"
+        "evidence/studio/M2-deployment-forms/verification.json",
+        "evidence/studio/M2-deployment-forms/closure-verification.json"
       ]
     },
     {
@@ -6210,15 +6212,15 @@
     "status_document": "../../docs/implementation/STATUS.md",
     "native_windows": "BLOCKED at user request. Initial native Server 2022 install failed on upstream Git filenames; application/browser NOT_RUN.",
     "m5": "deferred",
-    "code_candidate": "working-tree product sha256 recorded in evidence/studio/M2-connection-contracts/verification.json on e6a5160",
-    "component_completed": 38,
+    "code_candidate": "working-tree product sha256 recorded in evidence/studio/M2-deployments/closure-verification.json on 6d59159",
+    "component_completed": 40,
     "verification": {
-      "backend_tests_passed": 687,
-      "playwright_checks_passed": 70,
+      "backend_tests_passed": 688,
+      "playwright_checks_passed": 71,
       "playwright_checks_failed": 0,
       "playwright_scope": "full Linux browser suite with performance measurements on an unchanged candidate",
       "milestones_accepted": 0,
-      "evidence": "evidence/studio/M2-connection-contracts/"
+      "evidence": "evidence/studio/M2-deployments/"
     }
   }
 }

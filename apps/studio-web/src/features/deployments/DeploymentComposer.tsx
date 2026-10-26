@@ -589,6 +589,7 @@ export function DeploymentComposer({
           header={false}
           projection={{ ...projection, deployments: [document] }}
           providers={providers}
+          providerId={providerId}
           edit={async (edits) =>
             doAction("Saving selected deployment binding", async () => {
               const { kind, documentId, ...change } = edits[0];

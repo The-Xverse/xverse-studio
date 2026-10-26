@@ -123,15 +123,22 @@ class Deployments:
         return {**self._resolve(documents, resource_ref(resource), provider_id), "documentId": document_id,
                 "revision": project["revision"]}
 
-    @staticmethod
-    def _resolve(documents, deployment_ref, provider_id="studio.reference"):
+    def _resolve(self, documents, deployment_ref, provider_id="studio.reference"):
+        from xverse_studio.connections import admit_connections
         from xverse_studio.providers.registry import descriptors
 
         provider = next((value for value in descriptors() if value["providerId"] == provider_id), None)
         if provider is None:
             raise Problem("PROVIDER_UNAVAILABLE", "No provider descriptor has this identity.", 404)
         report = resolve_deployment(documents, deployment_ref, host_os=platform.system(), provider=provider)
-        return {**report, "sourceValid": True, "diagnostics": resolution_diagnostics(report)}
+        # Connection compatibility also depends on the provider's declared contracts (ADR-0016).
+        # Summarized here for rebinding; preflight reports its blocking diagnostics itself.
+        admission = admit_connections(documents, self.adapter.validate(documents), provider)
+        connections = {"providerId": provider_id, "blocking": admission["blocking"],
+                       "admittedContracts": admission["admittedContracts"],
+                       "notAdmitted": sorted(c["ref"] for c in admission["connections"] if c["admission"] != "admitted"),
+                       "cycles": [{"members": c["members"], "status": c["status"]} for c in admission["cycles"]]}
+        return {**report, "sourceValid": True, "diagnostics": resolution_diagnostics(report), "connections": connections}
 
     def create(self, project_id, revision, value):
         if not isinstance(value, dict) or set(value) - {"name", "sourceDeploymentId", "sourceScenarioId"}:

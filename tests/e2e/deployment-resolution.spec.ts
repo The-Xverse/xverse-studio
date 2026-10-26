@@ -124,6 +124,9 @@ test("deployment resolution: effective values, bound resources and variant compa
   await expect(resolution).toContainText(
     "Fidelity limit: Scalar first-order reference model only",
   );
+  await expect(resolution.getByRole("note")).toContainText(
+    "Under provider studio.reference: every declared flow is admitted for its declared semantics.",
+  );
   const rate = resolution.getByRole("row", { name: /plant\.rate/ });
   await expect(rate).toContainText("ambiguous");
   await expect(rate).toContainText("PRECEDENCE_UNDEFINED");
@@ -199,4 +202,34 @@ test("deployment resolution: effective values, bound resources and variant compa
   expect(await sourceOf("/deployment-bench-variant.xdl.yaml")).toContain(
     "- bench-cpu",
   );
+});
+
+test("deployment binding form offers XDL realization classes and marks those the provider cannot execute", async ({
+  page,
+}, testInfo) => {
+  await connectStudio(page, testInfo);
+  await page.evaluate(async () => {
+    const { csrfToken } = await fetch("/api/v1/session").then((r) => r.json());
+    const project = await fetch("/api/v1/projects", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRF-Token": csrfToken,
+      },
+      body: JSON.stringify({ name: "Realization classes" }),
+    }).then((r) => r.json());
+    localStorage.setItem("studio.projectId", project.projectId);
+  });
+  await page.reload();
+  await page.getByRole("tab", { name: "Deployment", exact: true }).click();
+  const realization = page
+    .locator("label", { hasText: "Realization" })
+    .locator("select")
+    .last();
+  await expect(realization.locator("option")).toHaveText([
+    "Simulated",
+    "Virtual (not executable by studio.reference)",
+    "Physical (not executable by studio.reference)",
+    "Hybrid (not executable by studio.reference)",
+  ]);
 });

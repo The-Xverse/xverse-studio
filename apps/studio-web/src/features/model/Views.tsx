@@ -1138,11 +1138,13 @@ export function DeploymentView({
   providers,
   edit,
   header = true,
+  providerId = "studio.reference",
 }: {
   header?: boolean;
   projection: Projection;
   providers: Data[];
   edit: (edits: Data[]) => Promise<unknown>;
+  providerId?: string;
 }) {
   const [chosen, setChosen] = useState(0);
   const d = projection.deployments[chosen];
@@ -1265,7 +1267,11 @@ export function DeploymentView({
               </section>
             ))}
           </div>
-          <BindingForm deployment={d} onSave={edit} />
+          <BindingForm
+            deployment={d}
+            onSave={edit}
+            provider={providers.find((p) => p.providerId === providerId)}
+          />
           <section className="panel">
             <h3>Effective configuration provenance</h3>
             <p>
@@ -1668,13 +1674,19 @@ export function SourceEditor({
   }
 }
 
+// The XDL realization classes; the selected provider may execute only some of them.
+const REALIZATION_CLASSES = ["simulated", "virtual", "physical", "hybrid"];
+
 function BindingForm({
   deployment,
   onSave,
+  provider,
 }: {
   deployment: Data;
   onSave: (edits: Data[]) => Promise<unknown>;
+  provider?: Data;
 }) {
+  const supported: string[] | undefined = provider?.realizationClasses;
   const bindings: Data[] = deployment.spec?.bindings || [],
     targets: Data[] = deployment.spec?.targets || [];
   const [id, setId] = useState(bindings[0]?.id || ""),
@@ -1727,10 +1739,14 @@ function BindingForm({
               value={realization}
               onChange={(e) => setRealization(e.target.value)}
             >
-              <option value="simulated">Simulated</option>
-              <option value="software">Software</option>
-              <option value="emulated">Emulated</option>
-              <option value="physical">Physical</option>
+              {REALIZATION_CLASSES.map((value) => (
+                <option key={value} value={value}>
+                  {value[0].toUpperCase() + value.slice(1)}
+                  {supported && !supported.includes(value)
+                    ? ` (not executable by ${provider?.providerId})`
+                    : ""}
+                </option>
+              ))}
             </select>
           </label>
           <label>

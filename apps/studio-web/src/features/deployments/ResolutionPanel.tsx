@@ -138,6 +138,23 @@ export function ResolutionPanel({
           </ul>
         </div>
       )}
+      {report.connections && (
+        <p className="resolution-connections" role="note">
+          <Badge tone={report.connections.blocking ? "danger" : "success"}>
+            {report.connections.blocking
+              ? `${report.connections.blocking} connection finding(s)`
+              : "connections admitted"}
+          </Badge>{" "}
+          Under provider <code>{report.connections.providerId}</code>:{" "}
+          {report.connections.cycles.length
+            ? `${report.connections.cycles.filter((c: Data) => c.status === "admitted").length} of ${report.connections.cycles.length} feedback cycle(s) admitted; `
+            : ""}
+          {report.connections.notAdmitted.length
+            ? `not admitted: ${report.connections.notAdmitted.map((ref: string) => ref.split("#")[1]).join(", ")}.`
+            : "every declared flow is admitted for its declared semantics."}{" "}
+          See Connections for the checks.
+        </p>
+      )}
       <section aria-labelledby="resolution-bindings">
         <h4 id="resolution-bindings">Bindings</h4>
         <table className="data-table resolution-table">

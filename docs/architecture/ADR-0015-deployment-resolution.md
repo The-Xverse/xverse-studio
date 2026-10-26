@@ -43,7 +43,17 @@ lacks:
 - A hard limit is not compared with capacity.
 
 The route and the rebinding `PATCH` take `providerId`, defaulting to `studio.reference`; preflight
-uses the selected provider.
+uses the selected provider. An unknown `providerId` returns `404 PROVIDER_UNAVAILABLE`.
+
+Connection compatibility also depends on the provider's declared connection contracts (ADR-0016). The
+report therefore carries a `connections` summary for the selected provider:
+
+- the blocking count;
+- the admitted contracts;
+- the flows that are not admitted;
+- the verdict on each cycle.
+
+Rebinding shows those consequences without double-counting preflight's own connection diagnostics.
 
 ### Bindings
 

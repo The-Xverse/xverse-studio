@@ -42,3 +42,12 @@ tests.
 
 T058 remains open. Its declared dependency T054 (admitted converter/causality contracts) is still in
 progress, and variant comparison and forms belong to T059. Native Windows is blocked at user request.
+
+## Closure (after T054)
+
+T054 closed with the owned connection contracts (ADR-0016). The resolution report now carries the
+selected provider's connection verdicts: blocking count, admitted contracts, flows that are not
+admitted, and cycle verdicts. Rebinding therefore shows what a provider change does to the loop and
+the converter; `test_resolution_reports_connection_compatibility_for_the_selected_provider` checks it
+under both the reference and Lite providers. An unknown provider returns 404. A closure audit found
+every T058 clause met. T058 is complete; the current run is recorded in `closure-verification.json`.
