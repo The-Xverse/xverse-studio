@@ -1,0 +1,76 @@
+
+> xverse-studio-workspace@0.1.0 test:e2e
+> playwright test -c tests/e2e/playwright.config.ts --grep wizard accessibility:
+
+
+Running 2 tests using 1 worker
+
+(node:4027679) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 tests/e2e/wizard-accessibility.spec.ts:83:7 › wizard accessibility: native keyboard instance, placement and binding at 1024x768 (11.0s)
+(node:4028954) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 tests/e2e/wizard-accessibility.spec.ts:83:7 › wizard accessibility: native keyboard instance, placement and binding at 1440x900 (11.0s)
+
+
+  1) tests/e2e/wizard-accessibility.spec.ts:83:7 › wizard accessibility: native keyboard instance, placement and binding at 1024x768
+
+    Error: expect(locator).toHaveValue(expected) failed
+
+    Locator: getByRole('dialog', { name: 'Add element', exact: true }).getByLabel('Element family')
+    Expected: "component"
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toHaveValue" getByRole('dialog', { name: 'Add element', exact: true }).getByLabel('Element family') with timeout 10000ms
+      - waiting for getByRole('dialog', { name: 'Add element', exact: true }).getByLabel('Element family')
+
+
+      105 |     try {
+      106 |       await activate(page, add);
+    > 107 |       await expect(dialog.getByLabel("Element family")).toHaveValue("component");
+          |                                                         ^
+      108 |       const definitions = dialog.getByRole("radiogroup", { name: "Definitions" });
+      109 |       const plant = definitions.getByRole("radio", { name: /reference-plant org\.xverse\.studio\.process-control/ });
+      110 |       await radio(page, definitions, plant);
+        at <repo>/tests/e2e/wizard-accessibility.spec.ts:107:57
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/wizard-accessibility-wizar-dadc5-ent-and-binding-at-1024x768/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/wizard-accessibility-wizar-dadc5-ent-and-binding-at-1024x768/error-context.md
+
+  2) tests/e2e/wizard-accessibility.spec.ts:83:7 › wizard accessibility: native keyboard instance, placement and binding at 1440x900
+
+    Error: expect(locator).toHaveValue(expected) failed
+
+    Locator: getByRole('dialog', { name: 'Add element', exact: true }).getByLabel('Element family')
+    Expected: "component"
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toHaveValue" getByRole('dialog', { name: 'Add element', exact: true }).getByLabel('Element family') with timeout 10000ms
+      - waiting for getByRole('dialog', { name: 'Add element', exact: true }).getByLabel('Element family')
+
+
+      105 |     try {
+      106 |       await activate(page, add);
+    > 107 |       await expect(dialog.getByLabel("Element family")).toHaveValue("component");
+          |                                                         ^
+      108 |       const definitions = dialog.getByRole("radiogroup", { name: "Definitions" });
+      109 |       const plant = definitions.getByRole("radio", { name: /reference-plant org\.xverse\.studio\.process-control/ });
+      110 |       await radio(page, definitions, plant);
+        at <repo>/tests/e2e/wizard-accessibility.spec.ts:107:57
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/wizard-accessibility-wizar-c7363-ent-and-binding-at-1440x900/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/wizard-accessibility-wizar-c7363-ent-and-binding-at-1440x900/error-context.md
+
+  2 failed
+    tests/e2e/wizard-accessibility.spec.ts:83:7 › wizard accessibility: native keyboard instance, placement and binding at 1024x768
+    tests/e2e/wizard-accessibility.spec.ts:83:7 › wizard accessibility: native keyboard instance, placement and binding at 1440x900

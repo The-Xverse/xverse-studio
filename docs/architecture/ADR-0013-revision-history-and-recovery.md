@@ -52,3 +52,24 @@ and redo with exact bytes and validation, stale restore, concurrent saves, tampe
 external write preservation and both recovery actions, interrupted staging, leftover staged revision,
 active-run snapshot isolation) and `tests/e2e/draft-run-isolation.spec.ts`. Native Windows file-locking
 and case-collision behavior remain T048 obligations.
+
+Client completion amendment (2026-10-26): a completed restore persists its per-project tab history
+only while that head still equals the one read at initiation. It never merges over a newer head.
+Visible project/history state, notices and errors apply only to the initiating project and load
+generation. The full Project returned by restore is already `projects.read` at commit; the browser
+uses that authoritative result directly instead of starting a new load that could recapture obsolete
+navigation intent. Other actors can still advance a later revision; normal revision conflicts and
+explicit reload remain authoritative. No endpoint, stored format, restoration authority or immutable
+revision changes.
+
+After a toolbar-origin Undo/Redo completes, focus returns to the enabled originating history control
+or its enabled opposite. Enter and graph shortcuts share this path for toolbar origins; other shortcut
+origins keep their existing behavior. Restoration waits for busy state to clear and requires matching
+project/load/intent/section/modal context, with focus still on the origin or BODY. It never overrides
+deliberately moved focus or navigation. This is client completion handling, not a new runtime control.
+
+Verification: `tests/e2e/wizard-accessibility.spec.ts` exercises native instance creation/binding,
+exact-byte Undo/Redo through Enter and shortcuts, departure, deliberately moved focus and a newer
+same-project edit/history head at both required viewports. Original failures, independent review and
+the successor are retained in `evidence/studio/M2-keyboard-instance/`. These are Linux partial results;
+native Windows and complete accessibility acceptance remain open.

@@ -359,3 +359,14 @@ exact unchanged-source comparison; no browser rerun is claimed for this descript
 Clean 13ff409 passed fresh offline native Linux package extraction, startup/UI, Unicode persistence,
 authoritative compilation and owned shutdown. Its clean 100-file manifest includes the descriptive
 baseline and checker; archive hashes and tested UI bytes were verified. See the dossier's package/.
+
+Linux wizard/history successor (2026-10-26): T038/T067 stay unchecked. Eight native keyboard
+journeys at both viewports verify definition/identity/placement/realization choices, one atomic
+instance+binding transaction, unchanged reusable definition bytes, exact source Undo/Redo through
+Enter and toolbar shortcuts, and authoritative validation without a run. Repaired focus loss and
+late history completion reopening a departed project or replacing a newer tab head; counterchecks
+retain deliberately moved focus and a newer same-project edit. ADR-0013 documents the client
+completion amendment. All 97 full browser checks and the separate final-source performance refresh
+pass unchanged source; 851 backend tests are inherited through exact unchanged-source comparison,
+not rerun here. Raw results/reviews/failures are in `evidence/studio/M2-keyboard-instance/`. Native
+Windows and complete accessibility/assistive-technology acceptance remain open; count stays 47/100.

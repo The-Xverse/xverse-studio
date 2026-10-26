@@ -162,6 +162,30 @@ export default function App() {
     selectedProjectRef = useRef(""),
     projectLoadSequence = useRef(0),
     streamIdentity = useRef("");
+  const undoControl = useRef<HTMLButtonElement | null>(null),
+    redoControl = useRef<HTMLButtonElement | null>(null);
+  const [historyFocus, setHistoryFocus] = useState<{
+    projectId: string;
+    loadSequence: number;
+    intentSequence: number;
+    direction: "undo" | "redo";
+    origin: HTMLButtonElement;
+  } | null>(null);
+  useEffect(() => {
+    if (busy || !historyFocus) return;
+    setHistoryFocus(null);
+    if (
+      project?.projectId !== historyFocus.projectId ||
+      selectedProjectRef.current !== historyFocus.projectId ||
+      projectLoadSequence.current !== historyFocus.loadSequence ||
+      preflightRequestSequence.current !== historyFocus.intentSequence ||
+      section !== "workspace" || modal ||
+      (document.activeElement !== document.body && document.activeElement !== historyFocus.origin)
+    ) return;
+    const same = historyFocus.direction === "undo" ? undoControl.current : redoControl.current,
+      opposite = historyFocus.direction === "undo" ? redoControl.current : undoControl.current;
+    (same && !same.disabled ? same : opposite && !opposite.disabled ? opposite : null)?.focus();
+  }, [busy, historyFocus, project?.projectId, section, modal]);
   function setModal(value: string) {
     preflightRequestSequence.current++;
     storeModal(value);
@@ -303,6 +327,11 @@ export default function App() {
       !editHistory[direction].length
     )
       return;
+    const active = document.activeElement;
+    if (active === undoControl.current || active === redoControl.current) {
+      historyFromControl(direction, active as HTMLButtonElement);
+      return;
+    }
     void doAction(
       direction === "undo" ? "Undoing graph edit" : "Redoing graph edit",
       () => stepHistory(direction),
@@ -667,23 +696,49 @@ export default function App() {
   }
   async function stepHistory(direction: "undo" | "redo") {
     if (!project) return;
-    const history = readHistory(project.projectId);
+    const projectId = project.projectId,
+      sequence = projectLoadSequence.current,
+      history = readHistory(projectId),
+      current = () => selectedProjectRef.current === projectId && projectLoadSequence.current === sequence,
+      persist = (next: EditHistory) => {
+        // A newer load/edit may already have reconciled this tab's head.
+        if (JSON.stringify(readHistory(projectId)) !== JSON.stringify(history)) return false;
+        writeHistory(projectId, next);
+        return true;
+      };
     try {
       const result = await applyStep(project, history, direction);
       if (!result) return;
-      writeHistory(project.projectId, result.history);
-      setEditHistory(result.history);
-      await refreshProject();
+      const persisted = persist(result.history);
+      if (!current()) return;
+      // Restore already returns the full committed Project. Starting another load here
+      // would recapture an obsolete navigation intent after the user had left.
+      setProject(result.project);
+      setEditHistory(persisted ? result.history : reconcileHistory(readHistory(projectId), result.project.revision));
+      setPreflight(null);
       setNotice(
         `${direction === "undo" ? "Undid" : "Redid"} a graph edit as new revision ${result.project.revision}. Earlier revisions and run snapshots are unchanged.`,
       );
     } catch (error) {
       if (error instanceof HistoryStale) {
-        writeHistory(project.projectId, { undo: [], redo: [] });
-        setEditHistory({ undo: [], redo: [] });
+        persist({ undo: [], redo: [] });
+        if (current()) setEditHistory({ undo: [], redo: [] });
       }
+      if (!current()) return;
       throw error;
     }
+  }
+  function historyFromControl(direction: "undo" | "redo", origin: HTMLButtonElement) {
+    const request = project && document.activeElement === origin ? {
+      projectId: project.projectId,
+      loadSequence: projectLoadSequence.current,
+      intentSequence: preflightRequestSequence.current,
+      direction: origin === undoControl.current ? "undo" as const : "redo" as const, origin,
+    } : null;
+    void doAction(direction === "undo" ? "Undoing graph edit" : "Redoing graph edit", async () => {
+      try { await stepHistory(direction); }
+      finally { if (request) setHistoryFocus(request); }
+    });
   }
   async function validate() {
     if (!project) return;
@@ -1108,6 +1163,7 @@ export default function App() {
                       onOpen={() => setModal("inspection")}
                     />
                     <button
+                      ref={undoControl}
                       className="button"
                       disabled={!!busy || !editHistory.undo.length}
                       aria-keyshortcuts="Control+Z"
@@ -1116,15 +1172,12 @@ export default function App() {
                           ? `Undo ${editHistory.undo[editHistory.undo.length - 1].label}`
                           : "No graph edit to undo in this tab"
                       }
-                      onClick={() =>
-                        void doAction("Undoing graph edit", () =>
-                          stepHistory("undo"),
-                        )
-                      }
+                      onClick={(event) => historyFromControl("undo", event.currentTarget)}
                     >
                       Undo
                     </button>
                     <button
+                      ref={redoControl}
                       className="button"
                       disabled={!!busy || !editHistory.redo.length}
                       aria-keyshortcuts="Control+Shift+Z"
@@ -1133,11 +1186,7 @@ export default function App() {
                           ? `Redo ${editHistory.redo[editHistory.redo.length - 1].label}`
                           : "No graph edit to redo in this tab"
                       }
-                      onClick={() =>
-                        void doAction("Redoing graph edit", () =>
-                          stepHistory("redo"),
-                        )
-                      }
+                      onClick={(event) => historyFromControl("redo", event.currentTarget)}
                     >
                       Redo
                     </button>

@@ -34,23 +34,20 @@ with its manifest/checker included, clean 100-file hash proof and unchanged test
 grants no runtime authority and does not close T001. Both 944a875 product and d421c23 package-metadata CI runs passed;
 those outcomes predate this descriptive artifact.
 
-The latest frontend successor passed typecheck/build, architecture and the full **89-check native
-Linux Chromium browser suite**, unchanged source (`evidence/studio/M1-shell-operability/`). Four new
-shell journeys cover actual login HTTP 401/error recovery, navigation state/focus, project-form operation
-and held real busy responses at both required viewports. Repaired 18/24 selected contrast failures,
-missing programmatic navigation/login associations and Settings moving below the viewport after
-tall Environment content rendered. All 24 final selected shell text pairs pass the scoped check.
-The preceding diagnostic source passed 85 checks (`M1-accessible-diagnostics/`); these counts overlap.
-Backend/services/scripts/Python tests and dependency locks are byte-identical to b2cf71a's **851-test**
-cohort (`M3-assets/`); backend tests were not rerun for this frontend-only slice. Separate final-source
-performance refresh passed at both viewports: selection p95 27.9/27.1 ms, open-validation
-1679.4/1780.1 ms and history 446.6/447.1 ms; commands/raw samples are retained separately. Native Windows, actual
-assistive-technology and complete accessibility acceptance remain open.
-Clean shell product 944a875 also passed the offline Linux package smoke with its tested UI, Unicode
-persistence, public compilation and clean 98-file manifest (`M1-shell-operability/package/`).
-Its new fresh-host CI is recorded separately. Earlier diagnostic product e6c9de0 passed fresh offline Linux package provisioning, native startup/UI,
-Unicode persistence and authoritative compilation (`M1-accessible-diagnostics/package/`). It predates
-the shell repair; clean package and fresh-host CI outcomes are recorded separately per candidate.
+The latest frontend successor passed typecheck/build, architecture, compatibility consistency and
+the full **97-check native Linux Chromium suite**, unchanged source (`M2-keyboard-instance/`). Eight
+native wizard/history journeys at both viewports verify atomic instance/binding authoring, exact
+source restoration and focus/context preservation. Repaired toolbar/shortcut focus loss and late
+history responses reopening departed projects or replacing newer heads. ADR-0013 records the client
+completion amendment. The backend/Python tests/contributor/compatibility inputs are byte-identical
+to the passing **851-test** 13ff409 cohort; backend tests were not rerun for this frontend-only slice.
+Final-source performance passed: selection p95 24.1/25.2 ms, open-validation 1648.1/1708.3 ms and
+history 446.5/447.3 ms, with raw distributions retained separately. The prior 89-check shell and 85-check
+diagnostic results overlap this successor. Native Windows, actual assistive-technology and complete
+accessibility acceptance remain open.
+Both 13ff409 product and 807b5bb metadata CI jobs passed, predating the new history repair. Their
+clean package smoke and verified 100-file manifest remain in `M0-compatibility-manifest/package/`;
+latest-candidate package/CI outcomes are recorded separately.
 Both viewport performance workloads and duplicate-name project retention passed in the b2cf71a full
 cohort. A clean b2cf71a package extraction also passed offline native Linux provisioning,
 startup/UI serving, Unicode persistence and authoritative compilation (`M3-assets/package/`);
