@@ -1,0 +1,80 @@
+{
+  "viewport": {
+    "width": 1024,
+    "height": 768
+  },
+  "trigger": "shortcut",
+  "shortcutRedoWorked": true,
+  "focus": {
+    "focused": true,
+    "activeTag": "TEXTAREA",
+    "box": {
+      "x": 51,
+      "y": 241.5,
+      "width": 922,
+      "height": 380,
+      "top": 241.5,
+      "right": 973,
+      "bottom": 621.5,
+      "left": 51
+    },
+    "viewport": {
+      "width": 1024,
+      "height": 768
+    },
+    "outline": "solid",
+    "outlineWidth": 3
+  },
+  "revisions": [
+    1,
+    2
+  ],
+  "exactSubmittedSource": true,
+  "savedSourceDigest": "sha256:8c6e7bd454b1e6c6a60c3e984234d0ecf1f67af0ded707869c3570c35f4b295a",
+  "documentIdentitiesAndOtherBytesPreserved": true,
+  "recoveryCacheCleared": true,
+  "authoritativeValidation": true,
+  "ownProjectRunSetUnchanged": true,
+  "measurements": [
+    {
+      "label": "Source authoring guidance",
+      "text": "Exact authored content is retained. Unknown extensions stay intact; platform validation decides whether the revision is executable. Saving changes only the draft.",
+      "color": "rgb(101, 117, 141)",
+      "fontSize": "10px",
+      "fontWeight": "400",
+      "threshold": 4.5,
+      "scope": "Selected normal-size rendered text; no overall accessibility certification",
+      "supported": true,
+      "layers": [
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(255, 255, 255)"
+      ],
+      "background": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "compositedForeground": [
+        0.396078431372549,
+        0.4588235294117647,
+        0.5529411764705883,
+        1
+      ],
+      "ratio": 4.6849131598896205,
+      "passed": true,
+      "assumptions": "CSS sRGB colors; alpha composited through explicit backgrounds; no anti-aliasing approximation"
+    }
+  ],
+  "writes": [
+    {
+      "path": "/api/v1/projects/prj-190b3663-48b2-41e6-b2c5-e43764426c47/documents/doc-2",
+      "body": {
+        "content": "apiVersion: xverse.io/xdl/v1alpha1\nkind: System\nmetadata:\n  namespace: org.xverse.studio.process-control\n  name: reference-loop\n  version: 1.0.0\n  description: Explore a normalized process response, tune the setpoint and \n    compare measured reference observations.\n  provenance:\n    source: urn:xverse:studio:reference\n    revision: 1.0.0\n    maturity: prototype\n    limitations:\n    - Owned executable reference only; no external simulator, device or \n      scientific fidelity claim.\nspec:\n  nodes:\n  - id: controller-node\n    roles:\n    - controller\n  - id: plant-node\n    roles:\n    - plant\n  - id: observer-node\n    roles:\n    - observer\n  componentInstances:\n  - id: controller\n    componentRef:\n      apiVersion: xverse.io/xdl/v1alpha1\n      kind: Component\n      namespace: org.xverse.studio.process-control\n      name: reference-controller\n    nodeId: controller-node\n  - id: plant\n    componentRef:\n      apiVersion: xverse.io/xdl/v1alpha1\n      kind: Component\n      namespace: org.xverse.studio.process-control\n      name: reference-plant\n    nodeId: plant-node\n  interfaces:\n  - id: command\n    direction: bidirectional\n    payloadSchema: urn:xverse:studio:normalized-scalar:v1\n    unitSemantics: '1'\n    compatibility: exact\n  - id: state\n    direction: bidirectional\n    payloadSchema: urn:xverse:studio:normalized-scalar:v1\n    unitSemantics: '1'\n    compatibility: exact\n  endpoints:\n  - id: controller-out\n    ownerId: controller\n    interfaceId: command\n    direction: output\n  - id: plant-in\n    ownerId: plant\n    interfaceId: command\n    direction: input\n  - id: plant-out\n    ownerId: plant\n    interfaceId: state\n    direction: output\n  - id: observer-in\n    ownerId: observer-node\n    interfaceId: state\n    direction: input\n  flows:\n  - id: command-flow\n    sourceEndpointId: controller-out\n    destinationEndpointIds:\n    - plant-in\n    interfaceId: command\n    deliveryIntent: ordered\n    timeDomainId: simulation-time\n  - id: state-flow\n    sourceEndpointId: plant-out\n    destinationEndpointIds:\n    - observer-in\n    interfaceId: state\n    deliveryIntent: ordered\n    timeDomainId: simulation-time\n  timeDomains:\n  - id: simulation-time\n    clockClass: simulation\n    epoch: '0'\n    rate: '1'\n    monotonic: true\n  defaultTimeDomainId: simulation-time\n\n# source-shortcut-1024\n",
+        "format": "yaml"
+      }
+    }
+  ],
+  "scope": "Native source text edit and save only; no Start/live mutation"
+}

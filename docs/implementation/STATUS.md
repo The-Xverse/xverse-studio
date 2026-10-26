@@ -34,7 +34,20 @@ with its manifest/checker included, clean 100-file hash proof and unchanged test
 grants no runtime authority and does not close T001. Both 944a875 product and d421c23 package-metadata CI runs passed;
 those outcomes predate this descriptive artifact.
 
-The latest parameter successor passed 28 native keyboard checks and the full 145-check browser
+The latest source-editor successor passed 26 native keyboard checks and the complete 171-check
+browser suite with unchanged application/test inputs. Source saves use authoritative returned
+Projects with project/load/intent/head guards, preserve newer navigation/history/drafts/readiness
+and restore focus conditionally. Real 412 conflict comparison/retry and real 413 size refusal retain
+authored text without false acknowledgement. UTF-8 recovery bounds preserve the last bounded cache;
+controlled read failures keep canonical text editable and preserve unread cached drafts. Associated
+guidance and selected comparison contrast are verified. ADR-0013 and affected component traces are
+amended; T038/T067 remain partial. Type/build/architecture/compatibility/spec checks pass. Separate
+performance uses the same input map; backend 851 is inherited by exact unchanged-input proof. Original failures,
+review and measurements are retained in `evidence/studio/M2-keyboard-source/`. Windows, actual AT,
+live integration and complete milestone gates remain open; count 47/100. Both f04f6cd and 11ffb49
+push/PR Ubuntu24 CI passed before this source-editor repair.
+
+The preceding parameter successor passed 28 native keyboard checks and the full 145-check browser
 suite with application/test inputs unchanged. Generic saves use authoritative returned Projects
 with project/load/intent and compare-before-write history guards. Field generations preserve newer
 and reverted inputs, other fields, another project and exact newer readiness. Explicit success

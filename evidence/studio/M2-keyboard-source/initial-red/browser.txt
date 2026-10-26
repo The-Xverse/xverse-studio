@@ -1,0 +1,1091 @@
+
+> xverse-studio-workspace@0.1.0 test:e2e
+> playwright test -c tests/e2e/playwright.config.ts --grep source accessibility:
+
+
+Running 20 tests using 1 worker
+
+(node:1900406) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   1 tests/e2e/source-accessibility.spec.ts:60:9 › source accessibility: native undo redo and shortcut save at 1024x768 (32.3s)
+(node:1900753) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   2 tests/e2e/source-accessibility.spec.ts:60:9 › source accessibility: native undo redo and button save at 1024x768 (32.1s)
+(node:1901148) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   3 tests/e2e/source-accessibility.spec.ts:92:9 › source accessibility: late save preserves Home at 1024x768 (12.1s)
+(node:1901361) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   4 tests/e2e/source-accessibility.spec.ts:92:9 › source accessibility: late save preserves newer revision at 1024x768 (3.7s)
+  ✓   5 tests/e2e/source-accessibility.spec.ts:92:9 › source accessibility: late save preserves same document draft at 1024x768 (1.9s)
+  ✓   6 tests/e2e/source-accessibility.spec.ts:92:9 › source accessibility: late save preserves other document at 1024x768 (1.9s)
+  ✓   7 tests/e2e/source-accessibility.spec.ts:92:9 › source accessibility: late save preserves deliberate focus at 1024x768 (1.9s)
+  ✘   8 tests/e2e/source-accessibility.spec.ts:92:9 › source accessibility: late save preserves newer readiness at 1024x768 (13.2s)
+(node:1901716) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   9 tests/e2e/source-accessibility.spec.ts:144:9 › source accessibility: real conflict and explicit recovery at 1024x768 (13.4s)
+(node:1901978) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  10 tests/e2e/source-accessibility.spec.ts:144:9 › source accessibility: real conflict after departure at 1024x768 (12.1s)
+(node:1902160) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  11 tests/e2e/source-accessibility.spec.ts:60:9 › source accessibility: native undo redo and shortcut save at 1440x900 (32.3s)
+(node:1902515) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  12 tests/e2e/source-accessibility.spec.ts:60:9 › source accessibility: native undo redo and button save at 1440x900 (32.1s)
+(node:1902882) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  13 tests/e2e/source-accessibility.spec.ts:92:9 › source accessibility: late save preserves Home at 1440x900 (12.3s)
+(node:1903104) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  14 tests/e2e/source-accessibility.spec.ts:92:9 › source accessibility: late save preserves newer revision at 1440x900 (3.9s)
+  ✓  15 tests/e2e/source-accessibility.spec.ts:92:9 › source accessibility: late save preserves same document draft at 1440x900 (1.9s)
+  ✓  16 tests/e2e/source-accessibility.spec.ts:92:9 › source accessibility: late save preserves other document at 1440x900 (2.0s)
+  ✓  17 tests/e2e/source-accessibility.spec.ts:92:9 › source accessibility: late save preserves deliberate focus at 1440x900 (1.9s)
+  ✘  18 tests/e2e/source-accessibility.spec.ts:92:9 › source accessibility: late save preserves newer readiness at 1440x900 (13.2s)
+(node:1903448) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  19 tests/e2e/source-accessibility.spec.ts:144:9 › source accessibility: real conflict and explicit recovery at 1440x900 (13.4s)
+(node:1903672) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  20 tests/e2e/source-accessibility.spec.ts:144:9 › source accessibility: real conflict after departure at 1440x900 (12.1s)
+
+
+  1) tests/e2e/source-accessibility.spec.ts:60:9 › source accessibility: native undo redo and shortcut save at 1024x768
+
+    Error: expect(locator).toHaveValue(expected) failed
+
+    Locator: getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('textbox', { name: /^(XDL source|Edited draft)$/ })
+    Timeout: 10000ms
+    - Expected  - 2
+    + Received  + 0
+
+    @@ -88,7 +88,5 @@
+          epoch: '0'
+          rate: '1'
+          monotonic: true
+        defaultTimeDomainId: simulation-time
+
+    - # source-shortcut-1024
+    -
+
+    Call log:
+      - Expect "soft toHaveValue" getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('textbox', { name: /^(XDL source|Edited draft)$/ }) with timeout 10000ms
+      - waiting for getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('textbox', { name: /^(XDL source|Edited draft)$/ })
+        24 × locator resolved to <textarea id="xdl-source" spellcheck="false" class="source-textarea">apiVersion: xverse.io/xdl/v1alpha1↵kind: System↵m…</textarea>
+           - unexpected value "apiVersion: xverse.io/xdl/v1alpha1
+    kind: System
+    metadata:
+      namespace: org.xverse.studio.process-control
+      name: reference-loop
+      version: 1.0.0
+      description: Explore a normalized process response, tune the setpoint and
+        compare measured reference observations.
+      provenance:
+        source: urn:xverse:studio:reference
+        revision: 1.0.0
+        maturity: prototype
+        limitations:
+        - Owned executable reference only; no external simulator, device or
+          scientific fidelity claim.
+    spec:
+      nodes:
+      - id: controller-node
+        roles:
+        - controller
+      - id: plant-node
+        roles:
+        - plant
+      - id: observer-node
+        roles:
+        - observer
+      componentInstances:
+      - id: controller
+        componentRef:
+          apiVersion: xverse.io/xdl/v1alpha1
+          kind: Component
+          namespace: org.xverse.studio.process-control
+          name: reference-controller
+        nodeId: controller-node
+      - id: plant
+        componentRef:
+          apiVersion: xverse.io/xdl/v1alpha1
+          kind: Component
+          namespace: org.xverse.studio.process-control
+          name: reference-plant
+        nodeId: plant-node
+      interfaces:
+      - id: command
+        direction: bidirectional
+        payloadSchema: urn:xverse:studio:normalized-scalar:v1
+        unitSemantics: '1'
+        compatibility: exact
+      - id: state
+        direction: bidirectional
+        payloadSchema: urn:xverse:studio:normalized-scalar:v1
+        unitSemantics: '1'
+        compatibility: exact
+      endpoints:
+      - id: controller-out
+        ownerId: controller
+        interfaceId: command
+        direction: output
+      - id: plant-in
+        ownerId: plant
+        interfaceId: command
+        direction: input
+      - id: plant-out
+        ownerId: plant
+        interfaceId: state
+        direction: output
+      - id: observer-in
+        ownerId: observer-node
+        interfaceId: state
+        direction: input
+      flows:
+      - id: command-flow
+        sourceEndpointId: controller-out
+        destinationEndpointIds:
+        - plant-in
+        interfaceId: command
+        deliveryIntent: ordered
+        timeDomainId: simulation-time
+      - id: state-flow
+        sourceEndpointId: plant-out
+        destinationEndpointIds:
+        - observer-in
+        interfaceId: state
+        deliveryIntent: ordered
+        timeDomainId: simulation-time
+      timeDomains:
+      - id: simulation-time
+        clockClass: simulation
+        epoch: '0'
+        rate: '1'
+        monotonic: true
+      defaultTimeDomainId: simulation-time
+    "
+
+
+      64 |       const edited = await append(page, `source-${trigger}-${viewport.width}`); expect(edited).toBe(original + `\n# source-${trigger}-${viewport.width}\n`);
+      65 |       await page.keyboard.press("ControlOrMeta+z"); await expect(text(page)).toHaveValue(original);
+    > 66 |       await page.keyboard.press("ControlOrMeta+Shift+Z"); await expect.soft(text(page)).toHaveValue(edited);
+         |                                                                                         ^
+      67 |       const shortcutRedoWorked = (await text(page).inputValue()) === edited;
+      68 |       if (!shortcutRedoWorked) { await activate(page, dialog(page).getByRole("button", { name: "Redo", exact: true })); await expect(text(page)).toHaveValue(edited); }
+      69 |       await expect.soft(text(page)).toHaveAccessibleDescription(/Exact authored content is retained/);
+        at <repo>/tests/e2e/source-accessibility.spec.ts:66:89
+
+    Error: expect(locator).toHaveAccessibleDescription(expected) failed
+
+    Locator: getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('textbox', { name: /^(XDL source|Edited draft)$/ })
+    Expected pattern: /Exact authored content is retained/
+    Received string:  ""
+    Timeout: 10000ms
+
+    Call log:
+      - Expect "soft toHaveAccessibleDescription" getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('textbox', { name: /^(XDL source|Edited draft)$/ }) with timeout 10000ms
+      - waiting for getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('textbox', { name: /^(XDL source|Edited draft)$/ })
+        24 × locator resolved to <textarea id="xdl-source" spellcheck="false" class="source-textarea">apiVersion: xverse.io/xdl/v1alpha1↵kind: System↵m…</textarea>
+           - unexpected value ""
+
+
+      67 |       const shortcutRedoWorked = (await text(page).inputValue()) === edited;
+      68 |       if (!shortcutRedoWorked) { await activate(page, dialog(page).getByRole("button", { name: "Redo", exact: true })); await expect(text(page)).toHaveValue(edited); }
+    > 69 |       await expect.soft(text(page)).toHaveAccessibleDescription(/Exact authored content is retained/);
+         |                                     ^
+      70 |       const writes: { path: string; body: any }[] = [];
+      71 |       page.on("request", (r) => { if (r.method() === "PUT") writes.push({ path: new URL(r.url()).pathname, body: r.postDataJSON() }); });
+      72 |       const response = page.waitForResponse((r) => new URL(r.url()).pathname === `/api/v1/projects/${pid}/documents/${id}` && r.request().method() === "PUT");
+        at <repo>/tests/e2e/source-accessibility.spec.ts:69:37
+
+    Error: expect(locator).toBeFocused() failed
+
+    Locator:  getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('textbox', { name: /^(XDL source|Edited draft)$/ })
+    Expected: focused
+    Received: inactive
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "soft toBeFocused" getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('textbox', { name: /^(XDL source|Edited draft)$/ }) with timeout 10000ms
+      - waiting for getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('textbox', { name: /^(XDL source|Edited draft)$/ })
+        24 × locator resolved to <textarea id="xdl-source" spellcheck="false" class="source-textarea">apiVersion: xverse.io/xdl/v1alpha1↵kind: System↵m…</textarea>
+           - unexpected value "inactive"
+
+
+      73 |       if (trigger === "shortcut") { await tabTo(page, text(page)); await page.keyboard.press("ControlOrMeta+s"); } else await activate(page, save(page));
+      74 |       expect((await response).status()).toBe(200); await page.waitForLoadState("networkidle");
+    > 75 |       await expect(text(page)).toBeEnabled(); await expect(save(page)).toBeDisabled(); await expect.soft(text(page)).toBeFocused();
+         |                                                                                                                      ^
+      76 |       const focus = await geometry(text(page)); expect.soft(focus.outline).not.toBe("none"); expect.soft(focus.outlineWidth).toBeGreaterThan(0);
+      77 |       expect.soft(focus.box.top).toBeGreaterThanOrEqual(0); expect.soft(focus.box.bottom).toBeLessThanOrEqual(viewport.height);
+      78 |       await expect.poll(() => cache(page, pid, id)).toBe(null);
+        at <repo>/tests/e2e/source-accessibility.spec.ts:75:118
+
+    Error: expect(received).not.toBe(expected) // Object.is equality
+
+    Expected: not "none"
+
+      74 |       expect((await response).status()).toBe(200); await page.waitForLoadState("networkidle");
+      75 |       await expect(text(page)).toBeEnabled(); await expect(save(page)).toBeDisabled(); await expect.soft(text(page)).toBeFocused();
+    > 76 |       const focus = await geometry(text(page)); expect.soft(focus.outline).not.toBe("none"); expect.soft(focus.outlineWidth).toBeGreaterThan(0);
+         |                                                                                ^
+      77 |       expect.soft(focus.box.top).toBeGreaterThanOrEqual(0); expect.soft(focus.box.bottom).toBeLessThanOrEqual(viewport.height);
+      78 |       await expect.poll(() => cache(page, pid, id)).toBe(null);
+      79 |       const saved = await read(page, pid); expect(saved.revision).toBe(project.revision + 1); expect(saved.documents[id].content).toBe(edited);
+        at <repo>/tests/e2e/source-accessibility.spec.ts:76:80
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/source-accessibility-sourc-3efb5-d-shortcut-save-at-1024x768/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/source-accessibility-sourc-3efb5-d-shortcut-save-at-1024x768/error-context.md
+
+  2) tests/e2e/source-accessibility.spec.ts:60:9 › source accessibility: native undo redo and button save at 1024x768
+
+    Error: expect(locator).toHaveValue(expected) failed
+
+    Locator: getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('textbox', { name: /^(XDL source|Edited draft)$/ })
+    Timeout: 10000ms
+    - Expected  - 2
+    + Received  + 0
+
+    @@ -88,7 +88,5 @@
+          epoch: '0'
+          rate: '1'
+          monotonic: true
+        defaultTimeDomainId: simulation-time
+
+    - # source-button-1024
+    -
+
+    Call log:
+      - Expect "soft toHaveValue" getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('textbox', { name: /^(XDL source|Edited draft)$/ }) with timeout 10000ms
+      - waiting for getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('textbox', { name: /^(XDL source|Edited draft)$/ })
+        24 × locator resolved to <textarea id="xdl-source" spellcheck="false" class="source-textarea">apiVersion: xverse.io/xdl/v1alpha1↵kind: System↵m…</textarea>
+           - unexpected value "apiVersion: xverse.io/xdl/v1alpha1
+    kind: System
+    metadata:
+      namespace: org.xverse.studio.process-control
+      name: reference-loop
+      version: 1.0.0
+      description: Explore a normalized process response, tune the setpoint and
+        compare measured reference observations.
+      provenance:
+        source: urn:xverse:studio:reference
+        revision: 1.0.0
+        maturity: prototype
+        limitations:
+        - Owned executable reference only; no external simulator, device or
+          scientific fidelity claim.
+    spec:
+      nodes:
+      - id: controller-node
+        roles:
+        - controller
+      - id: plant-node
+        roles:
+        - plant
+      - id: observer-node
+        roles:
+        - observer
+      componentInstances:
+      - id: controller
+        componentRef:
+          apiVersion: xverse.io/xdl/v1alpha1
+          kind: Component
+          namespace: org.xverse.studio.process-control
+          name: reference-controller
+        nodeId: controller-node
+      - id: plant
+        componentRef:
+          apiVersion: xverse.io/xdl/v1alpha1
+          kind: Component
+          namespace: org.xverse.studio.process-control
+          name: reference-plant
+        nodeId: plant-node
+      interfaces:
+      - id: command
+        direction: bidirectional
+        payloadSchema: urn:xverse:studio:normalized-scalar:v1
+        unitSemantics: '1'
+        compatibility: exact
+      - id: state
+        direction: bidirectional
+        payloadSchema: urn:xverse:studio:normalized-scalar:v1
+        unitSemantics: '1'
+        compatibility: exact
+      endpoints:
+      - id: controller-out
+        ownerId: controller
+        interfaceId: command
+        direction: output
+      - id: plant-in
+        ownerId: plant
+        interfaceId: command
+        direction: input
+      - id: plant-out
+        ownerId: plant
+        interfaceId: state
+        direction: output
+      - id: observer-in
+        ownerId: observer-node
+        interfaceId: state
+        direction: input
+      flows:
+      - id: command-flow
+        sourceEndpointId: controller-out
+        destinationEndpointIds:
+        - plant-in
+        interfaceId: command
+        deliveryIntent: ordered
+        timeDomainId: simulation-time
+      - id: state-flow
+        sourceEndpointId: plant-out
+        destinationEndpointIds:
+        - observer-in
+        interfaceId: state
+        deliveryIntent: ordered
+        timeDomainId: simulation-time
+      timeDomains:
+      - id: simulation-time
+        clockClass: simulation
+        epoch: '0'
+        rate: '1'
+        monotonic: true
+      defaultTimeDomainId: simulation-time
+    "
+
+
+      64 |       const edited = await append(page, `source-${trigger}-${viewport.width}`); expect(edited).toBe(original + `\n# source-${trigger}-${viewport.width}\n`);
+      65 |       await page.keyboard.press("ControlOrMeta+z"); await expect(text(page)).toHaveValue(original);
+    > 66 |       await page.keyboard.press("ControlOrMeta+Shift+Z"); await expect.soft(text(page)).toHaveValue(edited);
+         |                                                                                         ^
+      67 |       const shortcutRedoWorked = (await text(page).inputValue()) === edited;
+      68 |       if (!shortcutRedoWorked) { await activate(page, dialog(page).getByRole("button", { name: "Redo", exact: true })); await expect(text(page)).toHaveValue(edited); }
+      69 |       await expect.soft(text(page)).toHaveAccessibleDescription(/Exact authored content is retained/);
+        at <repo>/tests/e2e/source-accessibility.spec.ts:66:89
+
+    Error: expect(locator).toHaveAccessibleDescription(expected) failed
+
+    Locator: getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('textbox', { name: /^(XDL source|Edited draft)$/ })
+    Expected pattern: /Exact authored content is retained/
+    Received string:  ""
+    Timeout: 10000ms
+
+    Call log:
+      - Expect "soft toHaveAccessibleDescription" getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('textbox', { name: /^(XDL source|Edited draft)$/ }) with timeout 10000ms
+      - waiting for getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('textbox', { name: /^(XDL source|Edited draft)$/ })
+        24 × locator resolved to <textarea id="xdl-source" spellcheck="false" class="source-textarea">apiVersion: xverse.io/xdl/v1alpha1↵kind: System↵m…</textarea>
+           - unexpected value ""
+
+
+      67 |       const shortcutRedoWorked = (await text(page).inputValue()) === edited;
+      68 |       if (!shortcutRedoWorked) { await activate(page, dialog(page).getByRole("button", { name: "Redo", exact: true })); await expect(text(page)).toHaveValue(edited); }
+    > 69 |       await expect.soft(text(page)).toHaveAccessibleDescription(/Exact authored content is retained/);
+         |                                     ^
+      70 |       const writes: { path: string; body: any }[] = [];
+      71 |       page.on("request", (r) => { if (r.method() === "PUT") writes.push({ path: new URL(r.url()).pathname, body: r.postDataJSON() }); });
+      72 |       const response = page.waitForResponse((r) => new URL(r.url()).pathname === `/api/v1/projects/${pid}/documents/${id}` && r.request().method() === "PUT");
+        at <repo>/tests/e2e/source-accessibility.spec.ts:69:37
+
+    Error: expect(locator).toBeFocused() failed
+
+    Locator:  getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('textbox', { name: /^(XDL source|Edited draft)$/ })
+    Expected: focused
+    Received: inactive
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "soft toBeFocused" getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('textbox', { name: /^(XDL source|Edited draft)$/ }) with timeout 10000ms
+      - waiting for getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('textbox', { name: /^(XDL source|Edited draft)$/ })
+        24 × locator resolved to <textarea id="xdl-source" spellcheck="false" class="source-textarea">apiVersion: xverse.io/xdl/v1alpha1↵kind: System↵m…</textarea>
+           - unexpected value "inactive"
+
+
+      73 |       if (trigger === "shortcut") { await tabTo(page, text(page)); await page.keyboard.press("ControlOrMeta+s"); } else await activate(page, save(page));
+      74 |       expect((await response).status()).toBe(200); await page.waitForLoadState("networkidle");
+    > 75 |       await expect(text(page)).toBeEnabled(); await expect(save(page)).toBeDisabled(); await expect.soft(text(page)).toBeFocused();
+         |                                                                                                                      ^
+      76 |       const focus = await geometry(text(page)); expect.soft(focus.outline).not.toBe("none"); expect.soft(focus.outlineWidth).toBeGreaterThan(0);
+      77 |       expect.soft(focus.box.top).toBeGreaterThanOrEqual(0); expect.soft(focus.box.bottom).toBeLessThanOrEqual(viewport.height);
+      78 |       await expect.poll(() => cache(page, pid, id)).toBe(null);
+        at <repo>/tests/e2e/source-accessibility.spec.ts:75:118
+
+    Error: expect(received).not.toBe(expected) // Object.is equality
+
+    Expected: not "none"
+
+      74 |       expect((await response).status()).toBe(200); await page.waitForLoadState("networkidle");
+      75 |       await expect(text(page)).toBeEnabled(); await expect(save(page)).toBeDisabled(); await expect.soft(text(page)).toBeFocused();
+    > 76 |       const focus = await geometry(text(page)); expect.soft(focus.outline).not.toBe("none"); expect.soft(focus.outlineWidth).toBeGreaterThan(0);
+         |                                                                                ^
+      77 |       expect.soft(focus.box.top).toBeGreaterThanOrEqual(0); expect.soft(focus.box.bottom).toBeLessThanOrEqual(viewport.height);
+      78 |       await expect.poll(() => cache(page, pid, id)).toBe(null);
+      79 |       const saved = await read(page, pid); expect(saved.revision).toBe(project.revision + 1); expect(saved.documents[id].content).toBe(edited);
+        at <repo>/tests/e2e/source-accessibility.spec.ts:76:80
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/source-accessibility-sourc-17752-and-button-save-at-1024x768/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/source-accessibility-sourc-17752-and-button-save-at-1024x768/error-context.md
+
+  3) tests/e2e/source-accessibility.spec.ts:92:9 › source accessibility: late save preserves Home at 1024x768
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('heading', { name: 'Recent projects', exact: true })
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "soft toBeVisible" getByRole('heading', { name: 'Recent projects', exact: true }) with timeout 10000ms
+      - waiting for getByRole('heading', { name: 'Recent projects', exact: true })
+
+
+      124 |         }
+      125 |         await pending.release(); await page.waitForLoadState("networkidle");
+    > 126 |         if (mode === "Home") await expect.soft(page.getByRole("heading", { name: "Recent projects", exact: true })).toBeVisible();
+          |                                                                                                                     ^
+      127 |         if (newerText !== null) {
+      128 |           await expect(text(page)).toHaveValue(newerText); await expect(text(page)).toBeFocused();
+      129 |           await expect.poll(() => cache(page, pid, mode === "other document" ? otherId : id)).toBe(newerText);
+        at <repo>/tests/e2e/source-accessibility.spec.ts:126:117
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/source-accessibility-sourc-84e7c--preserves-Home-at-1024x768/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/source-accessibility-sourc-84e7c--preserves-Home-at-1024x768/error-context.md
+
+  4) tests/e2e/source-accessibility.spec.ts:92:9 › source accessibility: late save preserves newer readiness at 1024x768
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('dialog').getByText('pf-a5c2800d-aec6-4f2d-95b5-4ca0529f143f', { exact: true })
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "soft toBeVisible" getByRole('dialog').getByText('pf-a5c2800d-aec6-4f2d-95b5-4ca0529f143f', { exact: true }) with timeout 10000ms
+      - waiting for getByRole('dialog').getByText('pf-a5c2800d-aec6-4f2d-95b5-4ca0529f143f', { exact: true })
+
+
+      134 |         }
+      135 |         if (mode === "deliberate focus") await expect(dialog(page).getByRole("button", { name: "Compare changes", exact: true })).toBeFocused();
+    > 136 |         if (mode === "newer readiness") await expect.soft(page.getByRole("dialog").getByText(readyId!, { exact: true })).toBeVisible();
+          |                                                                                                                          ^
+      137 |         const saved = await read(page, pid); expect(saved.revision).toBe(project.revision + (mode === "newer revision" ? 2 : 1)); expect(saved.documents[id].content).toBe(submitted);
+      138 |         expect(saved.documents[otherId].content).toBe(project.documents[otherId].content); expect(await runIds(page, pid)).toEqual(runs);
+      139 |         await testInfo.attach("source-completion.json", { body: JSON.stringify({ mode, viewport, committedRevision: actual.body.revision, savedRevision: saved.revision, newerDraftPreserved: newerText !== null, newerHistory: history, readyId, activeTag: await page.evaluate(() => document.activeElement?.tagName), ownProjectRunSetUnchanged: true, scope: "Held real PUT response; preserve navigation/drafts/newer history/readiness and deliberate focus" }), contentType: "application/json" });
+        at <repo>/tests/e2e/source-accessibility.spec.ts:136:122
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/source-accessibility-sourc-bb5f1-newer-readiness-at-1024x768/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/source-accessibility-sourc-bb5f1-newer-readiness-at-1024x768/error-context.md
+
+  5) tests/e2e/source-accessibility.spec.ts:144:9 › source accessibility: real conflict and explicit recovery at 1024x768
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('alert')
+    Expected substring: "REVISION_CONFLICT"
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "soft toContainText" getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('alert') with timeout 10000ms
+      - waiting for getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('alert')
+
+
+      161 |         } else {
+      162 |           await expect(text(page)).toHaveValue(local); await expect(save(page)).toBeEnabled();
+    > 163 |           await expect.soft(dialog(page).getByRole("alert")).toContainText("REVISION_CONFLICT");
+          |                                                              ^
+      164 |           await page.keyboard.press("Escape"); await activate(page, page.getByRole("button", { name: "Load current revision", exact: true }));
+      165 |           await expect(page.locator(".alerts")).toContainText("Current revision loaded"); await open(page, id); await expect(text(page)).toHaveValue(local);
+      166 |           await activate(page, dialog(page).getByRole("button", { name: "Compare changes", exact: true })); await expect(dialog(page).locator(".source-baseline")).toHaveText(external);
+        at <repo>/tests/e2e/source-accessibility.spec.ts:163:62
+
+    Error: expect(received).toBeGreaterThanOrEqual(expected)
+
+    Expected: >= 4.5
+    Received:    2.978722824351402
+
+      174 |         expect(await runIds(page, pid)).toEqual(runs);
+      175 |         await testInfo.attach("source-conflict.json", { body: JSON.stringify({ viewport, departed, refusedStatus: 412, localDraftPreserved: true, beforeRevision: project.revision, advancedRevision: advanced.revision, finalRevision: (await read(page, pid)).revision, explicitRecovery: !departed, ownProjectRunSetUnchanged: true, measurements: contrast ? [contrast] : [], scope: "Actual stale source refusal; explicit current-revision comparison/retry; historical digest retained; no external-file adoption or Start" }), contentType: "application/json" });
+    > 176 |         if (contrast) { expect(contrast.supported).toBe(true); if (contrast.supported) expect(contrast.ratio).toBeGreaterThanOrEqual(4.5); }
+          |                                                                                                               ^
+      177 |       } finally { await pending.close(); }
+      178 |     });
+      179 |   }
+        at <repo>/tests/e2e/source-accessibility.spec.ts:176:111
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/source-accessibility-sourc-837dc-plicit-recovery-at-1024x768/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/source-accessibility-sourc-837dc-plicit-recovery-at-1024x768/error-context.md
+
+  6) tests/e2e/source-accessibility.spec.ts:144:9 › source accessibility: real conflict after departure at 1024x768
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('.alerts').getByRole('alert')
+    Expected: 0
+    Received: 1
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "soft toHaveCount" locator('.alerts').getByRole('alert') with timeout 10000ms
+      - waiting for locator('.alerts').getByRole('alert')
+        24 × locator resolved to 1 element
+           - unexpected value "1"
+
+
+      158 |         expect((await read(page, pid)).documents).toEqual(advanced.documents); await expect.poll(() => cache(page, pid, id)).toBe(local);
+      159 |         if (departed) {
+    > 160 |           await expect(page.getByRole("heading", { name: "Recent projects", exact: true })).toBeVisible(); await expect.soft(page.locator(".alerts").getByRole("alert")).toHaveCount(0);
+          |                                                                                                                                                                          ^
+      161 |         } else {
+      162 |           await expect(text(page)).toHaveValue(local); await expect(save(page)).toBeEnabled();
+      163 |           await expect.soft(dialog(page).getByRole("alert")).toContainText("REVISION_CONFLICT");
+        at <repo>/tests/e2e/source-accessibility.spec.ts:160:170
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/source-accessibility-sourc-cf5e3-after-departure-at-1024x768/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/source-accessibility-sourc-cf5e3-after-departure-at-1024x768/error-context.md
+
+  7) tests/e2e/source-accessibility.spec.ts:60:9 › source accessibility: native undo redo and shortcut save at 1440x900
+
+    Error: expect(locator).toHaveValue(expected) failed
+
+    Locator: getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('textbox', { name: /^(XDL source|Edited draft)$/ })
+    Timeout: 10000ms
+    - Expected  - 2
+    + Received  + 0
+
+    @@ -88,7 +88,5 @@
+          epoch: '0'
+          rate: '1'
+          monotonic: true
+        defaultTimeDomainId: simulation-time
+
+    - # source-shortcut-1440
+    -
+
+    Call log:
+      - Expect "soft toHaveValue" getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('textbox', { name: /^(XDL source|Edited draft)$/ }) with timeout 10000ms
+      - waiting for getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('textbox', { name: /^(XDL source|Edited draft)$/ })
+        24 × locator resolved to <textarea id="xdl-source" spellcheck="false" class="source-textarea">apiVersion: xverse.io/xdl/v1alpha1↵kind: System↵m…</textarea>
+           - unexpected value "apiVersion: xverse.io/xdl/v1alpha1
+    kind: System
+    metadata:
+      namespace: org.xverse.studio.process-control
+      name: reference-loop
+      version: 1.0.0
+      description: Explore a normalized process response, tune the setpoint and
+        compare measured reference observations.
+      provenance:
+        source: urn:xverse:studio:reference
+        revision: 1.0.0
+        maturity: prototype
+        limitations:
+        - Owned executable reference only; no external simulator, device or
+          scientific fidelity claim.
+    spec:
+      nodes:
+      - id: controller-node
+        roles:
+        - controller
+      - id: plant-node
+        roles:
+        - plant
+      - id: observer-node
+        roles:
+        - observer
+      componentInstances:
+      - id: controller
+        componentRef:
+          apiVersion: xverse.io/xdl/v1alpha1
+          kind: Component
+          namespace: org.xverse.studio.process-control
+          name: reference-controller
+        nodeId: controller-node
+      - id: plant
+        componentRef:
+          apiVersion: xverse.io/xdl/v1alpha1
+          kind: Component
+          namespace: org.xverse.studio.process-control
+          name: reference-plant
+        nodeId: plant-node
+      interfaces:
+      - id: command
+        direction: bidirectional
+        payloadSchema: urn:xverse:studio:normalized-scalar:v1
+        unitSemantics: '1'
+        compatibility: exact
+      - id: state
+        direction: bidirectional
+        payloadSchema: urn:xverse:studio:normalized-scalar:v1
+        unitSemantics: '1'
+        compatibility: exact
+      endpoints:
+      - id: controller-out
+        ownerId: controller
+        interfaceId: command
+        direction: output
+      - id: plant-in
+        ownerId: plant
+        interfaceId: command
+        direction: input
+      - id: plant-out
+        ownerId: plant
+        interfaceId: state
+        direction: output
+      - id: observer-in
+        ownerId: observer-node
+        interfaceId: state
+        direction: input
+      flows:
+      - id: command-flow
+        sourceEndpointId: controller-out
+        destinationEndpointIds:
+        - plant-in
+        interfaceId: command
+        deliveryIntent: ordered
+        timeDomainId: simulation-time
+      - id: state-flow
+        sourceEndpointId: plant-out
+        destinationEndpointIds:
+        - observer-in
+        interfaceId: state
+        deliveryIntent: ordered
+        timeDomainId: simulation-time
+      timeDomains:
+      - id: simulation-time
+        clockClass: simulation
+        epoch: '0'
+        rate: '1'
+        monotonic: true
+      defaultTimeDomainId: simulation-time
+    "
+
+
+      64 |       const edited = await append(page, `source-${trigger}-${viewport.width}`); expect(edited).toBe(original + `\n# source-${trigger}-${viewport.width}\n`);
+      65 |       await page.keyboard.press("ControlOrMeta+z"); await expect(text(page)).toHaveValue(original);
+    > 66 |       await page.keyboard.press("ControlOrMeta+Shift+Z"); await expect.soft(text(page)).toHaveValue(edited);
+         |                                                                                         ^
+      67 |       const shortcutRedoWorked = (await text(page).inputValue()) === edited;
+      68 |       if (!shortcutRedoWorked) { await activate(page, dialog(page).getByRole("button", { name: "Redo", exact: true })); await expect(text(page)).toHaveValue(edited); }
+      69 |       await expect.soft(text(page)).toHaveAccessibleDescription(/Exact authored content is retained/);
+        at <repo>/tests/e2e/source-accessibility.spec.ts:66:89
+
+    Error: expect(locator).toHaveAccessibleDescription(expected) failed
+
+    Locator: getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('textbox', { name: /^(XDL source|Edited draft)$/ })
+    Expected pattern: /Exact authored content is retained/
+    Received string:  ""
+    Timeout: 10000ms
+
+    Call log:
+      - Expect "soft toHaveAccessibleDescription" getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('textbox', { name: /^(XDL source|Edited draft)$/ }) with timeout 10000ms
+      - waiting for getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('textbox', { name: /^(XDL source|Edited draft)$/ })
+        24 × locator resolved to <textarea id="xdl-source" spellcheck="false" class="source-textarea">apiVersion: xverse.io/xdl/v1alpha1↵kind: System↵m…</textarea>
+           - unexpected value ""
+
+
+      67 |       const shortcutRedoWorked = (await text(page).inputValue()) === edited;
+      68 |       if (!shortcutRedoWorked) { await activate(page, dialog(page).getByRole("button", { name: "Redo", exact: true })); await expect(text(page)).toHaveValue(edited); }
+    > 69 |       await expect.soft(text(page)).toHaveAccessibleDescription(/Exact authored content is retained/);
+         |                                     ^
+      70 |       const writes: { path: string; body: any }[] = [];
+      71 |       page.on("request", (r) => { if (r.method() === "PUT") writes.push({ path: new URL(r.url()).pathname, body: r.postDataJSON() }); });
+      72 |       const response = page.waitForResponse((r) => new URL(r.url()).pathname === `/api/v1/projects/${pid}/documents/${id}` && r.request().method() === "PUT");
+        at <repo>/tests/e2e/source-accessibility.spec.ts:69:37
+
+    Error: expect(locator).toBeFocused() failed
+
+    Locator:  getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('textbox', { name: /^(XDL source|Edited draft)$/ })
+    Expected: focused
+    Received: inactive
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "soft toBeFocused" getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('textbox', { name: /^(XDL source|Edited draft)$/ }) with timeout 10000ms
+      - waiting for getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('textbox', { name: /^(XDL source|Edited draft)$/ })
+        24 × locator resolved to <textarea id="xdl-source" spellcheck="false" class="source-textarea">apiVersion: xverse.io/xdl/v1alpha1↵kind: System↵m…</textarea>
+           - unexpected value "inactive"
+
+
+      73 |       if (trigger === "shortcut") { await tabTo(page, text(page)); await page.keyboard.press("ControlOrMeta+s"); } else await activate(page, save(page));
+      74 |       expect((await response).status()).toBe(200); await page.waitForLoadState("networkidle");
+    > 75 |       await expect(text(page)).toBeEnabled(); await expect(save(page)).toBeDisabled(); await expect.soft(text(page)).toBeFocused();
+         |                                                                                                                      ^
+      76 |       const focus = await geometry(text(page)); expect.soft(focus.outline).not.toBe("none"); expect.soft(focus.outlineWidth).toBeGreaterThan(0);
+      77 |       expect.soft(focus.box.top).toBeGreaterThanOrEqual(0); expect.soft(focus.box.bottom).toBeLessThanOrEqual(viewport.height);
+      78 |       await expect.poll(() => cache(page, pid, id)).toBe(null);
+        at <repo>/tests/e2e/source-accessibility.spec.ts:75:118
+
+    Error: expect(received).not.toBe(expected) // Object.is equality
+
+    Expected: not "none"
+
+      74 |       expect((await response).status()).toBe(200); await page.waitForLoadState("networkidle");
+      75 |       await expect(text(page)).toBeEnabled(); await expect(save(page)).toBeDisabled(); await expect.soft(text(page)).toBeFocused();
+    > 76 |       const focus = await geometry(text(page)); expect.soft(focus.outline).not.toBe("none"); expect.soft(focus.outlineWidth).toBeGreaterThan(0);
+         |                                                                                ^
+      77 |       expect.soft(focus.box.top).toBeGreaterThanOrEqual(0); expect.soft(focus.box.bottom).toBeLessThanOrEqual(viewport.height);
+      78 |       await expect.poll(() => cache(page, pid, id)).toBe(null);
+      79 |       const saved = await read(page, pid); expect(saved.revision).toBe(project.revision + 1); expect(saved.documents[id].content).toBe(edited);
+        at <repo>/tests/e2e/source-accessibility.spec.ts:76:80
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/source-accessibility-sourc-fa394-d-shortcut-save-at-1440x900/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/source-accessibility-sourc-fa394-d-shortcut-save-at-1440x900/error-context.md
+
+  8) tests/e2e/source-accessibility.spec.ts:60:9 › source accessibility: native undo redo and button save at 1440x900
+
+    Error: expect(locator).toHaveValue(expected) failed
+
+    Locator: getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('textbox', { name: /^(XDL source|Edited draft)$/ })
+    Timeout: 10000ms
+    - Expected  - 2
+    + Received  + 0
+
+    @@ -88,7 +88,5 @@
+          epoch: '0'
+          rate: '1'
+          monotonic: true
+        defaultTimeDomainId: simulation-time
+
+    - # source-button-1440
+    -
+
+    Call log:
+      - Expect "soft toHaveValue" getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('textbox', { name: /^(XDL source|Edited draft)$/ }) with timeout 10000ms
+      - waiting for getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('textbox', { name: /^(XDL source|Edited draft)$/ })
+        24 × locator resolved to <textarea id="xdl-source" spellcheck="false" class="source-textarea">apiVersion: xverse.io/xdl/v1alpha1↵kind: System↵m…</textarea>
+           - unexpected value "apiVersion: xverse.io/xdl/v1alpha1
+    kind: System
+    metadata:
+      namespace: org.xverse.studio.process-control
+      name: reference-loop
+      version: 1.0.0
+      description: Explore a normalized process response, tune the setpoint and
+        compare measured reference observations.
+      provenance:
+        source: urn:xverse:studio:reference
+        revision: 1.0.0
+        maturity: prototype
+        limitations:
+        - Owned executable reference only; no external simulator, device or
+          scientific fidelity claim.
+    spec:
+      nodes:
+      - id: controller-node
+        roles:
+        - controller
+      - id: plant-node
+        roles:
+        - plant
+      - id: observer-node
+        roles:
+        - observer
+      componentInstances:
+      - id: controller
+        componentRef:
+          apiVersion: xverse.io/xdl/v1alpha1
+          kind: Component
+          namespace: org.xverse.studio.process-control
+          name: reference-controller
+        nodeId: controller-node
+      - id: plant
+        componentRef:
+          apiVersion: xverse.io/xdl/v1alpha1
+          kind: Component
+          namespace: org.xverse.studio.process-control
+          name: reference-plant
+        nodeId: plant-node
+      interfaces:
+      - id: command
+        direction: bidirectional
+        payloadSchema: urn:xverse:studio:normalized-scalar:v1
+        unitSemantics: '1'
+        compatibility: exact
+      - id: state
+        direction: bidirectional
+        payloadSchema: urn:xverse:studio:normalized-scalar:v1
+        unitSemantics: '1'
+        compatibility: exact
+      endpoints:
+      - id: controller-out
+        ownerId: controller
+        interfaceId: command
+        direction: output
+      - id: plant-in
+        ownerId: plant
+        interfaceId: command
+        direction: input
+      - id: plant-out
+        ownerId: plant
+        interfaceId: state
+        direction: output
+      - id: observer-in
+        ownerId: observer-node
+        interfaceId: state
+        direction: input
+      flows:
+      - id: command-flow
+        sourceEndpointId: controller-out
+        destinationEndpointIds:
+        - plant-in
+        interfaceId: command
+        deliveryIntent: ordered
+        timeDomainId: simulation-time
+      - id: state-flow
+        sourceEndpointId: plant-out
+        destinationEndpointIds:
+        - observer-in
+        interfaceId: state
+        deliveryIntent: ordered
+        timeDomainId: simulation-time
+      timeDomains:
+      - id: simulation-time
+        clockClass: simulation
+        epoch: '0'
+        rate: '1'
+        monotonic: true
+      defaultTimeDomainId: simulation-time
+    "
+
+
+      64 |       const edited = await append(page, `source-${trigger}-${viewport.width}`); expect(edited).toBe(original + `\n# source-${trigger}-${viewport.width}\n`);
+      65 |       await page.keyboard.press("ControlOrMeta+z"); await expect(text(page)).toHaveValue(original);
+    > 66 |       await page.keyboard.press("ControlOrMeta+Shift+Z"); await expect.soft(text(page)).toHaveValue(edited);
+         |                                                                                         ^
+      67 |       const shortcutRedoWorked = (await text(page).inputValue()) === edited;
+      68 |       if (!shortcutRedoWorked) { await activate(page, dialog(page).getByRole("button", { name: "Redo", exact: true })); await expect(text(page)).toHaveValue(edited); }
+      69 |       await expect.soft(text(page)).toHaveAccessibleDescription(/Exact authored content is retained/);
+        at <repo>/tests/e2e/source-accessibility.spec.ts:66:89
+
+    Error: expect(locator).toHaveAccessibleDescription(expected) failed
+
+    Locator: getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('textbox', { name: /^(XDL source|Edited draft)$/ })
+    Expected pattern: /Exact authored content is retained/
+    Received string:  ""
+    Timeout: 10000ms
+
+    Call log:
+      - Expect "soft toHaveAccessibleDescription" getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('textbox', { name: /^(XDL source|Edited draft)$/ }) with timeout 10000ms
+      - waiting for getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('textbox', { name: /^(XDL source|Edited draft)$/ })
+        24 × locator resolved to <textarea id="xdl-source" spellcheck="false" class="source-textarea">apiVersion: xverse.io/xdl/v1alpha1↵kind: System↵m…</textarea>
+           - unexpected value ""
+
+
+      67 |       const shortcutRedoWorked = (await text(page).inputValue()) === edited;
+      68 |       if (!shortcutRedoWorked) { await activate(page, dialog(page).getByRole("button", { name: "Redo", exact: true })); await expect(text(page)).toHaveValue(edited); }
+    > 69 |       await expect.soft(text(page)).toHaveAccessibleDescription(/Exact authored content is retained/);
+         |                                     ^
+      70 |       const writes: { path: string; body: any }[] = [];
+      71 |       page.on("request", (r) => { if (r.method() === "PUT") writes.push({ path: new URL(r.url()).pathname, body: r.postDataJSON() }); });
+      72 |       const response = page.waitForResponse((r) => new URL(r.url()).pathname === `/api/v1/projects/${pid}/documents/${id}` && r.request().method() === "PUT");
+        at <repo>/tests/e2e/source-accessibility.spec.ts:69:37
+
+    Error: expect(locator).toBeFocused() failed
+
+    Locator:  getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('textbox', { name: /^(XDL source|Edited draft)$/ })
+    Expected: focused
+    Received: inactive
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "soft toBeFocused" getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('textbox', { name: /^(XDL source|Edited draft)$/ }) with timeout 10000ms
+      - waiting for getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('textbox', { name: /^(XDL source|Edited draft)$/ })
+        24 × locator resolved to <textarea id="xdl-source" spellcheck="false" class="source-textarea">apiVersion: xverse.io/xdl/v1alpha1↵kind: System↵m…</textarea>
+           - unexpected value "inactive"
+
+
+      73 |       if (trigger === "shortcut") { await tabTo(page, text(page)); await page.keyboard.press("ControlOrMeta+s"); } else await activate(page, save(page));
+      74 |       expect((await response).status()).toBe(200); await page.waitForLoadState("networkidle");
+    > 75 |       await expect(text(page)).toBeEnabled(); await expect(save(page)).toBeDisabled(); await expect.soft(text(page)).toBeFocused();
+         |                                                                                                                      ^
+      76 |       const focus = await geometry(text(page)); expect.soft(focus.outline).not.toBe("none"); expect.soft(focus.outlineWidth).toBeGreaterThan(0);
+      77 |       expect.soft(focus.box.top).toBeGreaterThanOrEqual(0); expect.soft(focus.box.bottom).toBeLessThanOrEqual(viewport.height);
+      78 |       await expect.poll(() => cache(page, pid, id)).toBe(null);
+        at <repo>/tests/e2e/source-accessibility.spec.ts:75:118
+
+    Error: expect(received).not.toBe(expected) // Object.is equality
+
+    Expected: not "none"
+
+      74 |       expect((await response).status()).toBe(200); await page.waitForLoadState("networkidle");
+      75 |       await expect(text(page)).toBeEnabled(); await expect(save(page)).toBeDisabled(); await expect.soft(text(page)).toBeFocused();
+    > 76 |       const focus = await geometry(text(page)); expect.soft(focus.outline).not.toBe("none"); expect.soft(focus.outlineWidth).toBeGreaterThan(0);
+         |                                                                                ^
+      77 |       expect.soft(focus.box.top).toBeGreaterThanOrEqual(0); expect.soft(focus.box.bottom).toBeLessThanOrEqual(viewport.height);
+      78 |       await expect.poll(() => cache(page, pid, id)).toBe(null);
+      79 |       const saved = await read(page, pid); expect(saved.revision).toBe(project.revision + 1); expect(saved.documents[id].content).toBe(edited);
+        at <repo>/tests/e2e/source-accessibility.spec.ts:76:80
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/source-accessibility-sourc-69f29-and-button-save-at-1440x900/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/source-accessibility-sourc-69f29-and-button-save-at-1440x900/error-context.md
+
+  9) tests/e2e/source-accessibility.spec.ts:92:9 › source accessibility: late save preserves Home at 1440x900
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('heading', { name: 'Recent projects', exact: true })
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "soft toBeVisible" getByRole('heading', { name: 'Recent projects', exact: true }) with timeout 10000ms
+      - waiting for getByRole('heading', { name: 'Recent projects', exact: true })
+
+
+      124 |         }
+      125 |         await pending.release(); await page.waitForLoadState("networkidle");
+    > 126 |         if (mode === "Home") await expect.soft(page.getByRole("heading", { name: "Recent projects", exact: true })).toBeVisible();
+          |                                                                                                                     ^
+      127 |         if (newerText !== null) {
+      128 |           await expect(text(page)).toHaveValue(newerText); await expect(text(page)).toBeFocused();
+      129 |           await expect.poll(() => cache(page, pid, mode === "other document" ? otherId : id)).toBe(newerText);
+        at <repo>/tests/e2e/source-accessibility.spec.ts:126:117
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/source-accessibility-sourc-06a31--preserves-Home-at-1440x900/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/source-accessibility-sourc-06a31--preserves-Home-at-1440x900/error-context.md
+
+  10) tests/e2e/source-accessibility.spec.ts:92:9 › source accessibility: late save preserves newer readiness at 1440x900
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('dialog').getByText('pf-985d363a-504e-4f9b-a908-d20e50756f56', { exact: true })
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "soft toBeVisible" getByRole('dialog').getByText('pf-985d363a-504e-4f9b-a908-d20e50756f56', { exact: true }) with timeout 10000ms
+      - waiting for getByRole('dialog').getByText('pf-985d363a-504e-4f9b-a908-d20e50756f56', { exact: true })
+
+
+      134 |         }
+      135 |         if (mode === "deliberate focus") await expect(dialog(page).getByRole("button", { name: "Compare changes", exact: true })).toBeFocused();
+    > 136 |         if (mode === "newer readiness") await expect.soft(page.getByRole("dialog").getByText(readyId!, { exact: true })).toBeVisible();
+          |                                                                                                                          ^
+      137 |         const saved = await read(page, pid); expect(saved.revision).toBe(project.revision + (mode === "newer revision" ? 2 : 1)); expect(saved.documents[id].content).toBe(submitted);
+      138 |         expect(saved.documents[otherId].content).toBe(project.documents[otherId].content); expect(await runIds(page, pid)).toEqual(runs);
+      139 |         await testInfo.attach("source-completion.json", { body: JSON.stringify({ mode, viewport, committedRevision: actual.body.revision, savedRevision: saved.revision, newerDraftPreserved: newerText !== null, newerHistory: history, readyId, activeTag: await page.evaluate(() => document.activeElement?.tagName), ownProjectRunSetUnchanged: true, scope: "Held real PUT response; preserve navigation/drafts/newer history/readiness and deliberate focus" }), contentType: "application/json" });
+        at <repo>/tests/e2e/source-accessibility.spec.ts:136:122
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/source-accessibility-sourc-d4ce4-newer-readiness-at-1440x900/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/source-accessibility-sourc-d4ce4-newer-readiness-at-1440x900/error-context.md
+
+  11) tests/e2e/source-accessibility.spec.ts:144:9 › source accessibility: real conflict and explicit recovery at 1440x900
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('alert')
+    Expected substring: "REVISION_CONFLICT"
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "soft toContainText" getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('alert') with timeout 10000ms
+      - waiting for getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('alert')
+
+
+      161 |         } else {
+      162 |           await expect(text(page)).toHaveValue(local); await expect(save(page)).toBeEnabled();
+    > 163 |           await expect.soft(dialog(page).getByRole("alert")).toContainText("REVISION_CONFLICT");
+          |                                                              ^
+      164 |           await page.keyboard.press("Escape"); await activate(page, page.getByRole("button", { name: "Load current revision", exact: true }));
+      165 |           await expect(page.locator(".alerts")).toContainText("Current revision loaded"); await open(page, id); await expect(text(page)).toHaveValue(local);
+      166 |           await activate(page, dialog(page).getByRole("button", { name: "Compare changes", exact: true })); await expect(dialog(page).locator(".source-baseline")).toHaveText(external);
+        at <repo>/tests/e2e/source-accessibility.spec.ts:163:62
+
+    Error: expect(received).toBeGreaterThanOrEqual(expected)
+
+    Expected: >= 4.5
+    Received:    2.978722824351402
+
+      174 |         expect(await runIds(page, pid)).toEqual(runs);
+      175 |         await testInfo.attach("source-conflict.json", { body: JSON.stringify({ viewport, departed, refusedStatus: 412, localDraftPreserved: true, beforeRevision: project.revision, advancedRevision: advanced.revision, finalRevision: (await read(page, pid)).revision, explicitRecovery: !departed, ownProjectRunSetUnchanged: true, measurements: contrast ? [contrast] : [], scope: "Actual stale source refusal; explicit current-revision comparison/retry; historical digest retained; no external-file adoption or Start" }), contentType: "application/json" });
+    > 176 |         if (contrast) { expect(contrast.supported).toBe(true); if (contrast.supported) expect(contrast.ratio).toBeGreaterThanOrEqual(4.5); }
+          |                                                                                                               ^
+      177 |       } finally { await pending.close(); }
+      178 |     });
+      179 |   }
+        at <repo>/tests/e2e/source-accessibility.spec.ts:176:111
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/source-accessibility-sourc-919a1-plicit-recovery-at-1440x900/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/source-accessibility-sourc-919a1-plicit-recovery-at-1440x900/error-context.md
+
+  12) tests/e2e/source-accessibility.spec.ts:144:9 › source accessibility: real conflict after departure at 1440x900
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('.alerts').getByRole('alert')
+    Expected: 0
+    Received: 1
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "soft toHaveCount" locator('.alerts').getByRole('alert') with timeout 10000ms
+      - waiting for locator('.alerts').getByRole('alert')
+        24 × locator resolved to 1 element
+           - unexpected value "1"
+
+
+      158 |         expect((await read(page, pid)).documents).toEqual(advanced.documents); await expect.poll(() => cache(page, pid, id)).toBe(local);
+      159 |         if (departed) {
+    > 160 |           await expect(page.getByRole("heading", { name: "Recent projects", exact: true })).toBeVisible(); await expect.soft(page.locator(".alerts").getByRole("alert")).toHaveCount(0);
+          |                                                                                                                                                                          ^
+      161 |         } else {
+      162 |           await expect(text(page)).toHaveValue(local); await expect(save(page)).toBeEnabled();
+      163 |           await expect.soft(dialog(page).getByRole("alert")).toContainText("REVISION_CONFLICT");
+        at <repo>/tests/e2e/source-accessibility.spec.ts:160:170
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/source-accessibility-sourc-2f04b-after-departure-at-1440x900/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/source-accessibility-sourc-2f04b-after-departure-at-1440x900/error-context.md
+
+  12 failed
+    tests/e2e/source-accessibility.spec.ts:60:9 › source accessibility: native undo redo and shortcut save at 1024x768
+    tests/e2e/source-accessibility.spec.ts:60:9 › source accessibility: native undo redo and button save at 1024x768
+    tests/e2e/source-accessibility.spec.ts:92:9 › source accessibility: late save preserves Home at 1024x768
+    tests/e2e/source-accessibility.spec.ts:92:9 › source accessibility: late save preserves newer readiness at 1024x768
+    tests/e2e/source-accessibility.spec.ts:144:9 › source accessibility: real conflict and explicit recovery at 1024x768
+    tests/e2e/source-accessibility.spec.ts:144:9 › source accessibility: real conflict after departure at 1024x768
+    tests/e2e/source-accessibility.spec.ts:60:9 › source accessibility: native undo redo and shortcut save at 1440x900
+    tests/e2e/source-accessibility.spec.ts:60:9 › source accessibility: native undo redo and button save at 1440x900
+    tests/e2e/source-accessibility.spec.ts:92:9 › source accessibility: late save preserves Home at 1440x900
+    tests/e2e/source-accessibility.spec.ts:92:9 › source accessibility: late save preserves newer readiness at 1440x900
+    tests/e2e/source-accessibility.spec.ts:144:9 › source accessibility: real conflict and explicit recovery at 1440x900
+    tests/e2e/source-accessibility.spec.ts:144:9 › source accessibility: real conflict after departure at 1440x900
+  8 passed (4.2m)

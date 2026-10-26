@@ -415,3 +415,7 @@ T015/T017/T042/T045/T062 component traces retain the ADR-0013 amendment without 
 completed statuses.
 Clean f04f6cd package smoke passes; clean 100-file manifest, archive/file hashes and tested UI
 bytes are verified under `M1-keyboard-parameters/package/`. Native Windows remains held.
+
+Linux source completion successor (2026-10-26): T038/T067 stay unchecked. Native source successor: 26 keyboard checks at both viewports verify exact authored PUT/Undo/Redo, associated guidance and focus, held real completion preserving navigation/newer history/drafts/readiness, current/departed actual 412 conflicts with explicit comparison/retry, UTF-8 recovery bound and actual 413 refusal, and scoped browser-storage read failures preserving unread cache. Full 171 browser and separate performance pass unchanged application/test inputs; backend 851 inherited by exact unchanged-input proof. ADR-0013 records source completion/recovery. No Start/external-file adoption/live mutation in the focused slice; Windows/actual AT/full acceptance remain open.
+Evidence: `evidence/studio/M2-keyboard-source/`; count 47/100, no milestone accepted.
+T017/T042/T045/T046 traces retain the source amendment with completed component statuses unchanged.

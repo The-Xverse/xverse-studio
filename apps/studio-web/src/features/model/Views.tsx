@@ -23,7 +23,7 @@ import {
 } from "@xyflow/react";
 import type { NodeProps, Node } from "@xyflow/react";
 import type { Data, Project, Parameter } from "../../api/types";
-import { api } from "../../api/client";
+import { api, ApiError } from "../../api/client";
 import type { DoAction } from "../../app/App";
 import { Icon, Badge, Empty, Json, KeyValues } from "../../app/ui";
 import type { Projection, ElementProjection } from "./projection";
@@ -1577,7 +1577,7 @@ export function SourceEditor({
   target?: SourceTarget;
   project: Project;
   doAction: DoAction;
-  onSaved: () => Promise<void>;
+  onSaved: (saved: Project) => boolean;
 }) {
   type Draft = {
     projectId: string;
@@ -1586,11 +1586,18 @@ export function SourceEditor({
     history: string[];
     future: string[];
     recovered: boolean;
+    recoveryUnavailable: boolean;
   };
   const ids = Object.keys(project.documents);
   function loadDraft(id: string): Draft {
-    const original = documentContent(project.documents[id] ?? ""),
+    const original = documentContent(project.documents[id] ?? "");
+    let saved: string | null = null,
+      recoveryUnavailable = false;
+    try {
       saved = sessionStorage.getItem(`studio.draft.${project.projectId}.${id}`);
+    } catch {
+      recoveryUnavailable = true;
+    }
     return {
       projectId: project.projectId,
       id,
@@ -1598,6 +1605,7 @@ export function SourceEditor({
       history: [],
       future: [],
       recovered: saved !== null && saved !== original,
+      recoveryUnavailable,
     };
   }
   const [draft, setDraft] = useState<Draft>(() =>
@@ -1607,25 +1615,49 @@ export function SourceEditor({
         : ids[0] || "",
     ),
   );
-  const activeDraft = useRef(draft);
+  const activeDraft = useRef(draft),
+    latestSourceProject = useRef(project),
+    mounted = useRef(true),
+    sending = useRef(false),
+    guidanceId = useId();
+  latestSourceProject.current = project;
+  useEffect(() => {
+    mounted.current = true;
+    return () => {
+      mounted.current = false;
+    };
+  }, []);
   const { id, content, history, future, recovered } = draft;
+  const contentBytes = useMemo(
+    () => new TextEncoder().encode(content).byteLength,
+    [content],
+  );
   const [compare, setCompare] = useState(false),
     [saving, setSaving] = useState(false),
-    [recoveryError, setRecoveryError] = useState("");
+    [recoveryError, setRecoveryError] = useState(""),
+    [saveError, setSaveError] = useState<Error | null>(null),
+    [saveFocus, setSaveFocus] = useState<{
+      id: string;
+      content: string;
+      origin: Element | null;
+    } | null>(null);
   function replaceDraft(next: Draft) {
     activeDraft.current = next;
     setDraft(next);
   }
   function persistDraft(value: Draft) {
-    const original = documentContent(project.documents[value.id] ?? ""),
+    // Do not replace an unread cached draft with the canonical fallback or new text.
+    if (value.recoveryUnavailable) return;
+    const currentProject = latestSourceProject.current,
+      original = documentContent(currentProject.documents[value.id] ?? ""),
       key = `studio.draft.${value.projectId}.${value.id}`;
     if (
-      value.projectId !== project.projectId ||
-      !Object.hasOwn(project.documents, value.id)
+      value.projectId !== currentProject.projectId ||
+      !Object.hasOwn(currentProject.documents, value.id)
     )
       return;
     if (value.content === original) sessionStorage.removeItem(key);
-    else if (value.content.length <= 524288)
+    else if (new TextEncoder().encode(value.content).byteLength <= 524288)
       sessionStorage.setItem(key, value.content);
   }
   function switchDocument(nextId: string) {
@@ -1638,6 +1670,7 @@ export function SourceEditor({
       );
     }
     replaceDraft(loadDraft(nextId));
+    setSaveError(null);
     anchored.current = false;
     setAnchorNotice("");
   }
@@ -1699,15 +1732,31 @@ export function SourceEditor({
     Object.hasOwn(project.documents, id);
   const baseline = documentContent(project.documents[id] ?? "");
   const dirty = identityMatches && content !== baseline;
+  const recoveryMessage =
+    contentBytes > 524288 && dirty
+      ? "This draft exceeds the 512 KiB browser recovery limit. Keep a local copy before closing."
+      : recoveryError;
+  useEffect(() => {
+    if (saving || !saveFocus) return;
+    setSaveFocus(null);
+    if (
+      saveFocus.id === id &&
+      saveFocus.content === content &&
+      identityMatches &&
+      textarea.current &&
+      !textarea.current.disabled &&
+      document.querySelector('[role="dialog"]') ===
+        textarea.current.closest('[role="dialog"]') &&
+      (document.activeElement === document.body ||
+        document.activeElement === saveFocus.origin)
+    )
+      textarea.current.focus();
+  }, [saving, saveFocus, id, content, identityMatches]);
   useEffect(() => {
     const timer = setTimeout(() => {
       try {
         persistDraft(draft);
-        setRecoveryError(
-          content.length > 524288 && dirty
-            ? "This draft exceeds the 512 KiB browser recovery limit. Keep a local copy before closing."
-            : "",
-        );
+        setRecoveryError("");
       } catch {
         setRecoveryError(
           "Browser draft recovery is unavailable. Keep a local copy before closing this editor.",
@@ -1722,7 +1771,7 @@ export function SourceEditor({
         /* Storage quota cannot make source text executable or target another document. */
       }
     };
-  }, [draft, baseline]);
+  }, [draft, baseline, contentBytes]);
   useEffect(() => {
     const handle = (e: BeforeUnloadEvent) => {
       if (dirty) {
@@ -1735,6 +1784,7 @@ export function SourceEditor({
   }, [dirty]);
   function change(value: string) {
     const current = activeDraft.current;
+    setSaveError(null);
     replaceDraft({
       ...current,
       history: [...current.history.slice(-49), current.content],
@@ -1836,9 +1886,21 @@ export function SourceEditor({
           <Json value={project.sourceDiagnostics || []} />
         </div>
       )}
-      {recoveryError && (
+      {(recoveryMessage || draft.recoveryUnavailable) && (
         <p role="alert" className="notice">
-          {recoveryError}
+          {draft.recoveryUnavailable &&
+            "Browser draft recovery could not be read. The unread cache is preserved. Keep a local copy before closing this editor. "}
+          {recoveryMessage}
+        </p>
+      )}
+      {saveError && (
+        <p role="alert" className="error-banner">
+          {saveError instanceof ApiError ? `${saveError.code}: ` : ""}
+          {saveError.message}{" "}
+          {saveError instanceof ApiError &&
+          saveError.code === "REVISION_CONFLICT"
+            ? "Your draft is retained. Close this editor to load the current revision, then compare it before saving again."
+            : "Your draft remains in this editor. Review the error and keep a local copy. Correct the source or retry when the service is available."}
         </p>
       )}
       {!identityMatches && (
@@ -1849,11 +1911,14 @@ export function SourceEditor({
       )}
       {recovered && (
         <p className="notice">
-          Recovered an uncommitted draft from this browser tab. Review it before
-          saving.
+          <span>
+            Recovered an uncommitted draft from this browser tab. Review it
+            before saving.
+          </span>{" "}
+          This is the last cached text; newer uncached edits may be missing.
         </p>
       )}
-      <p className="field-hint">
+      <p className="field-hint" id={guidanceId}>
         Exact authored content is retained. Unknown extensions stay intact;
         platform validation decides whether the revision is executable. Saving
         changes only the draft.
@@ -1875,16 +1940,19 @@ export function SourceEditor({
             ref={textarea}
             id="xdl-source"
             className="source-textarea"
+            aria-describedby={guidanceId}
             disabled={saving || !identityMatches}
             spellCheck={false}
             value={content}
             onChange={(e) => change(e.target.value)}
             onKeyDown={(e) => {
-              if ((e.ctrlKey || e.metaKey) && e.key === "s") {
+              if (e.altKey || e.nativeEvent.isComposing) return;
+              const key = e.key.toLowerCase();
+              if ((e.ctrlKey || e.metaKey) && key === "s") {
                 e.preventDefault();
                 void save();
               }
-              if ((e.ctrlKey || e.metaKey) && e.key === "z") {
+              if ((e.ctrlKey || e.metaKey) && key === "z") {
                 e.preventDefault();
                 e.shiftKey ? redo() : undo();
               }
@@ -1898,7 +1966,7 @@ export function SourceEditor({
             ? "Recorded revision (externally modified source)"
             : "Draft revision"}{" "}
           <code>{String(project.revision).slice(0, 12)}</code> · UTF-8 ·{" "}
-          {content.length.toLocaleString()} characters
+          {contentBytes.toLocaleString()} bytes
         </span>
         <button
           className="button primary"
@@ -1915,39 +1983,68 @@ export function SourceEditor({
     const submitted = activeDraft.current,
       document = project.documents[submitted.id];
     if (
-      saving ||
+      sending.current ||
       externalSource ||
       submitted.projectId !== project.projectId ||
       !Object.hasOwn(project.documents, submitted.id) ||
       submitted.content === documentContent(document)
     )
       return;
+    sending.current = true;
     setSaving(true);
+    setSaveError(null);
+    const origin = window.document.activeElement;
     try {
       await doAction("Saving source revision", async () => {
-        await api(
-          `/projects/${submitted.projectId}/documents/${encodeURIComponent(submitted.id)}`,
-          {
-            method: "PUT",
-            revision: project.revision,
-            body: {
-              content: submitted.content,
-              format: typeof document === "string" ? "yaml" : document.format,
+        let saved: Project;
+        try {
+          saved = await api<Project>(
+            `/projects/${submitted.projectId}/documents/${encodeURIComponent(submitted.id)}`,
+            {
+              method: "PUT",
+              revision: project.revision,
+              body: {
+                content: submitted.content,
+                format: typeof document === "string" ? "yaml" : document.format,
+              },
             },
-          },
-        );
+          );
+        } catch (error) {
+          if (
+            mounted.current &&
+            activeDraft.current.id === submitted.id &&
+            activeDraft.current.content === submitted.content
+          )
+            setSaveError(
+              error instanceof Error ? error : new Error("Source save failed."),
+            );
+          throw error;
+        }
+        const current = onSaved(saved);
+        if (!mounted.current || !current) return;
+        if (saved.revision > latestSourceProject.current.revision)
+          latestSourceProject.current = saved;
         const key = `studio.draft.${submitted.projectId}.${submitted.id}`;
-        if (sessionStorage.getItem(key) === submitted.content)
-          sessionStorage.removeItem(key);
+        try {
+          if (sessionStorage.getItem(key) === submitted.content)
+            sessionStorage.removeItem(key);
+        } catch {
+          setRecoveryError(
+            "The revision was saved, but browser draft recovery is unavailable. Keep a local copy before closing this editor.",
+          );
+        }
         if (
           activeDraft.current.id === submitted.id &&
           activeDraft.current.content === submitted.content
         )
           replaceDraft({ ...activeDraft.current, recovered: false });
-        await onSaved();
       });
     } finally {
-      setSaving(false);
+      sending.current = false;
+      if (mounted.current) {
+        setSaving(false);
+        setSaveFocus({ id: submitted.id, content: submitted.content, origin });
+      }
     }
   }
 }

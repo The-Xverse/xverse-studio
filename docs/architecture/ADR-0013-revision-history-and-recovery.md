@@ -104,3 +104,38 @@ phase only if the old node is disconnected, its replacement still exists, focus 
 modal is active. A deliberate blur clears the witness. Metadata continues to apply; it is not frozen
 to avoid focus transitions. The native presentation countercheck asserts the returned group legend
 as well as preserved input/focus and unchanged canonical documents.
+
+Source completion and recovery amendment (2026-10-26): source PUT already returns the
+authoritative committed Project. Source saves now share the revision-commit guard with deployment
+authoring instead of starting a captured project refresh. A reply applies only to the selected
+project/load generation and cannot replace a known equal or newer head. Current feedback also
+requires the initiating intent; obsolete failures cannot appear in a departed workspace. A current
+revision conflict remains visible inside the source modal and through the existing explicit
+Load current revision action after closing it. Other failures retain the in-editor text and show
+error-specific guidance rather than recommending a reload for every refusal. An actual size refusal
+does not acknowledge a save or advance the canonical revision.
+
+Source shortcut keys are case-normalized, including Ctrl/Meta+Shift+Z, and ignore Alt and IME
+composition. A synchronous send guard prevents overlapping submissions from one editor. After a
+current request finishes and disabled controls re-enable, focus may return to the same document/text
+only when it remains in the active source dialog and focus is still on its initiating control or
+BODY. Deliberately moved focus, another document/editor and a different modal take precedence.
+The guidance is associated with the textarea; comparison text has scoped rendered-contrast evidence.
+
+Recovery keeps the 500 ms debounce and 50-step text history. Its 512 KiB document bound is measured
+in UTF-8 bytes; oversized text is immediately reported and leaves the last bounded cache intact.
+Recovered text is explicitly the last cached version and may omit newer uncached edits. Cache reads
+that fail fall back to editable canonical source with a persistent keep-copy warning. That fallback
+and any new edits cannot overwrite or remove the unread cache. Restoring read access and reopening
+or switching permits explicit recovery of that text. Persistence cleanup reads the latest known
+Project, so an old effect cannot recreate a just-saved draft against an obsolete baseline. A current
+acknowledgement removes only cache text equal to its submission; departed/newer editors retain their
+own recovery state. Storage failure after a commit is a recovery warning, not a failed server save.
+
+Verification: `tests/e2e/source-accessibility.spec.ts` covers native source Undo/Redo and shortcut/
+button save, exact source and other-document preservation, actual stale refusal and explicit compare/
+retry, held real responses with newer navigation/history/drafts/readiness/focus, the exact UTF-8
+cache boundary and real backend size refusal. Scoped browser-storage read-failure fixtures verify
+canonical fallback and unread-cache preservation; they do not establish platform-filesystem failure
+handling. Native Linux evidence belongs in `evidence/studio/M2-keyboard-source/`; Windows, actual
+assistive technology, external-file adoption and complete milestone acceptance remain separate.

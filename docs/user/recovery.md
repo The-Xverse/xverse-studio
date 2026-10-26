@@ -73,6 +73,24 @@ save cannot activate a partial multi-file revision. External modifications are p
 creating a replacement revision. Abandoned staged revisions are retained for inspection rather than
 automatically deleted. Invalid source drafts cannot enter executable readiness.
 
+The XDL source editor keeps uncommitted text in this browser tab after a 500 ms debounce, up to
+512 KiB of UTF-8 text per document. This cache is separate from saved revisions and private full-root
+backups. A larger draft remains editable but cannot replace the last bounded cache; keep a local copy
+before closing. Recovered text is the last cached version and can omit newer uncached edits. Review
+it before saving. Closing the tab can remove its session cache.
+
+If browser recovery storage cannot be read, Studio shows editable saved source and a keep-copy
+warning. It preserves the unread cache instead of replacing it with that fallback or your new edits.
+Keep those edits separately, restore browser storage access, then reopen the editor or switch
+documents to read the cached draft again. A storage warning does not mean a server save failed.
+
+Use Ctrl/Meta+Z and Ctrl/Meta+Shift+Z for source Undo/Redo, and Ctrl/Meta+S or **Save source revision**
+to commit exact authored text. A revision conflict retains your local draft: close the editor, choose
+**Load current revision**, reopen the document and use **Compare changes** before explicitly saving
+again. A size refusal requires correcting the source; reloading cannot raise the document limit.
+Saving changes the project's draft revision and never changes an active run's frozen inputs. These
+browser recovery journeys have native Linux evidence; Windows verification remains held.
+
 Campaign recovery reconciles existing child identities before scheduling pending work. An uncertain
 start is never replayed. Interrupted evaluation/retention operations report uncertainty or error rather
 than synthesizing success. Historical canonical journal bytes are read-only; annotations and derived

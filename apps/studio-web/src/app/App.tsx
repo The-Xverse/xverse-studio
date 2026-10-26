@@ -169,7 +169,7 @@ export default function App() {
   }
   const renderedLoadSequence = projectLoadSequence.current,
     renderedIntentSequence = preflightRequestSequence.current;
-  function commitDeploymentProject(saved: Project) {
+  function commitProjectRevision(saved: Project) {
     const current = latestProject.current;
     if (
       !project ||
@@ -1415,7 +1415,7 @@ export default function App() {
                     providerId={executionProvider}
                     selection={executionSelection}
                     onSelection={chooseExecution}
-                    onCommitted={commitDeploymentProject}
+                    onCommitted={commitProjectRevision}
                     doAction={doAction}
                   />
                 ) : view === "Experiments" ? (
@@ -1596,10 +1596,28 @@ export default function App() {
               key={project.projectId}
               project={project}
               target={sourceContext}
-              doAction={doAction}
-              onSaved={async () => {
-                await refreshProject();
-                setNotice("Source revision saved. Validate it before running.");
+              doAction={(label, action) =>
+                doAction(label, async () => {
+                  try {
+                    return await action();
+                  } catch (error) {
+                    if (
+                      selectedProjectRef.current === project.projectId &&
+                      projectLoadSequence.current === renderedLoadSequence &&
+                      preflightRequestSequence.current ===
+                        renderedIntentSequence
+                    )
+                      throw error;
+                  }
+                })
+              }
+              onSaved={(saved) => {
+                const current = commitProjectRevision(saved);
+                if (current)
+                  setNotice(
+                    "Source revision saved. Validate it before running.",
+                  );
+                return current;
               }}
             />
           </Modal>

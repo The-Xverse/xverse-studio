@@ -1,0 +1,312 @@
+
+> xverse-studio-workspace@0.1.0 test:e2e
+> playwright test -c tests/e2e/playwright.config.ts --grep source accessibility: (UTF-8|recovery read)
+
+
+Running 6 tests using 1 worker
+
+(node:1909473) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 tests/e2e/source-accessibility.spec.ts:641:7 › source accessibility: UTF-8 recovery bound and real size refusal at 1024x768 (31.1s)
+(node:1909847) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 tests/e2e/source-accessibility.spec.ts:671:9 › source accessibility: recovery read failure on open at 1024x768 (1.1s)
+(node:1909957) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  3 tests/e2e/source-accessibility.spec.ts:671:9 › source accessibility: recovery read failure on switch at 1024x768 (11.2s)
+(node:1910125) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  4 tests/e2e/source-accessibility.spec.ts:641:7 › source accessibility: UTF-8 recovery bound and real size refusal at 1440x900 (30.8s)
+(node:1910467) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  5 tests/e2e/source-accessibility.spec.ts:671:9 › source accessibility: recovery read failure on open at 1440x900 (1.1s)
+(node:1910598) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  6 tests/e2e/source-accessibility.spec.ts:671:9 › source accessibility: recovery read failure on switch at 1440x900 (11.2s)
+
+
+  1) tests/e2e/source-accessibility.spec.ts:641:7 › source accessibility: UTF-8 recovery bound and real size refusal at 1024x768
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('alert')
+    Expected substring: "512 KiB"
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "soft toContainText" getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('alert') with timeout 10000ms
+      - waiting for getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('alert')
+
+
+      650 |     await expect.poll(async () => digest(await cache(page, pid, id))).toBe(boundedDigest);
+      651 |     await page.keyboard.press("ControlOrMeta+End"); await page.keyboard.insertText("🔧");
+    > 652 |     await expect.soft(dialog(page).getByRole("alert")).toContainText("512 KiB");
+          |                                                        ^
+      653 |     await expect.soft.poll(async () => digest(await cache(page, pid, id))).toBe(boundedDigest);
+      654 |     const refused = bounded + "\n# " + "界".repeat(175000) + "\n";
+      655 |     expect(new TextEncoder().encode(refused).length).toBeGreaterThan(1048576);
+        at <repo>/tests/e2e/source-accessibility.spec.ts:652:56
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: "9b978070a9c822fdd4ee4fbdece016d43d1bc89c3fd29ed89d6c111ec1494bc0"
+    Received: "b8c0d8f674b0053956aa501c84f5afc36f2b9ed49b2fa5639c1d119e16b29715"
+
+    Call Log:
+    - Timeout 10000ms exceeded while waiting on the predicate
+
+      651 |     await page.keyboard.press("ControlOrMeta+End"); await page.keyboard.insertText("🔧");
+      652 |     await expect.soft(dialog(page).getByRole("alert")).toContainText("512 KiB");
+    > 653 |     await expect.soft.poll(async () => digest(await cache(page, pid, id))).toBe(boundedDigest);
+          |                                                                            ^
+      654 |     const refused = bounded + "\n# " + "界".repeat(175000) + "\n";
+      655 |     expect(new TextEncoder().encode(refused).length).toBeGreaterThan(1048576);
+      656 |     expect(refused.length).toBeLessThan(524288);
+        at <repo>/tests/e2e/source-accessibility.spec.ts:653:76
+
+    Error: expect(locator).not.toContainText(expected) failed
+
+    Locator: getByRole('dialog', { name: 'Authored XDL source', exact: true }).locator('.error-banner[role="alert"]').filter({ hasText: 'LIMIT_EXCEEDED' })
+    Expected substring: not "load the current revision"
+    Received string: "LIMIT_EXCEEDED: A document is limited to 1 MiB. Your draft is retained. Close this editor to load the current revision, then compare it before saving again."
+    Timeout: 10000ms
+
+    Call log:
+      - Expect "soft not toContainText" getByRole('dialog', { name: 'Authored XDL source', exact: true }).locator('.error-banner[role="alert"]').filter({ hasText: 'LIMIT_EXCEEDED' }) with timeout 10000ms
+      - waiting for getByRole('dialog', { name: 'Authored XDL source', exact: true }).locator('.error-banner[role="alert"]').filter({ hasText: 'LIMIT_EXCEEDED' })
+        24 × locator resolved to <p role="alert" class="error-banner">LIMIT_EXCEEDED: A document is limited to 1 MiB. Y…</p>
+           - unexpected value "LIMIT_EXCEEDED: A document is limited to 1 MiB. Your draft is retained. Close this editor to load the current revision, then compare it before saving again."
+
+
+      659 |     await page.keyboard.press("ControlOrMeta+s"); expect((await response).status()).toBe(413); await page.waitForLoadState("networkidle");
+      660 |     const failure = dialog(page).locator('.error-banner[role="alert"]').filter({ hasText: "LIMIT_EXCEEDED" });
+    > 661 |     await expect(failure).toContainText("1 MiB"); await expect.soft(failure).not.toContainText("load the current revision");
+          |                                                                                  ^
+      662 |     expect(digest(await text(page).inputValue())).toBe(digest(refused)); await expect(save(page)).toBeEnabled();
+      663 |     expect((await read(page, pid)).documents).toEqual(project.documents); expect((await read(page, pid)).revision).toBe(project.revision);
+      664 |     await page.keyboard.press("Escape"); await open(page, id);
+        at <repo>/tests/e2e/source-accessibility.spec.ts:661:82
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: "9b978070a9c822fdd4ee4fbdece016d43d1bc89c3fd29ed89d6c111ec1494bc0"
+    Received: "89293ba3e8824e5542aea00f025bdd700fa44e53f63db0638ebc8e933e036ae6"
+
+      663 |     expect((await read(page, pid)).documents).toEqual(project.documents); expect((await read(page, pid)).revision).toBe(project.revision);
+      664 |     await page.keyboard.press("Escape"); await open(page, id);
+    > 665 |     expect(digest(await text(page).inputValue())).toBe(boundedDigest);
+          |                                                   ^
+      666 |     await expect.soft(dialog(page)).toContainText("last cached text");
+      667 |     expect(await runIds(page, pid)).toEqual(runs);
+      668 |     await testInfo.attach("source-recovery-bound.json", { body: JSON.stringify({ viewport, cachedBytes: 524288, overBoundaryBytes: 524292, retainedCacheDigest: "sha256:" + boundedDigest, refusalBytes: new TextEncoder().encode(refused).length, actualRefusedStatus: 413, unchangedCanonicalRevision: project.revision, canonicalDocumentsUnchanged: true, ownProjectRunSetUnchanged: true, scope: "Native Unicode source edit; exact UTF-8 browser recovery boundary and actual backend size refusal; no Start" }), contentType: "application/json" });
+        at <repo>/tests/e2e/source-accessibility.spec.ts:665:51
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/source-accessibility-sourc-5bbff-al-size-refusal-at-1024x768/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/source-accessibility-sourc-5bbff-al-size-refusal-at-1024x768/error-context.md
+
+  2) tests/e2e/source-accessibility.spec.ts:671:9 › source accessibility: recovery read failure on open at 1024x768
+
+    Error: expect(received).toBeGreaterThanOrEqual(expected)
+
+    Expected: >= 0
+    Received:    -1
+
+      25 |     );
+      26 |   const index = enabled.indexOf(value);
+    > 27 |   expect(index).toBeGreaterThanOrEqual(0);
+         |                 ^
+      28 |   await tabTo(page, target);
+      29 |   await page.keyboard.press("Home");
+      30 |   for (let i = 0; i < index; i++) await page.keyboard.press("ArrowDown");
+        at choose (<repo>/tests/e2e/source-accessibility.spec.ts:27:17)
+        at open (<repo>/tests/e2e/source-accessibility.spec.ts:86:3)
+        at <repo>/tests/e2e/source-accessibility.spec.ts:681:32
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/source-accessibility-sourc-e5f87-failure-on-open-at-1024x768/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/source-accessibility-sourc-e5f87-failure-on-open-at-1024x768/error-context.md
+
+  3) tests/e2e/source-accessibility.spec.ts:671:9 › source accessibility: recovery read failure on switch at 1024x768
+
+    Error: expect(locator).toHaveValue(expected) failed
+
+    Locator:  getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByLabel('Resource', { exact: true })
+    Expected: "doc-0"
+    Received: "doc-2"
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toHaveValue" getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByLabel('Resource', { exact: true }) with timeout 10000ms
+      - waiting for getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByLabel('Resource', { exact: true })
+        24 × locator resolved to <select aria-label="Resource">…</select>
+           - unexpected value "doc-2"
+
+
+      29 |   await page.keyboard.press("Home");
+      30 |   for (let i = 0; i < index; i++) await page.keyboard.press("ArrowDown");
+    > 31 |   await expect(target).toHaveValue(value);
+         |                        ^
+      32 | }
+      33 | const dialog = (page: Page) =>
+      34 |   page.getByRole("dialog", { name: "Authored XDL source", exact: true });
+        at choose (<repo>/tests/e2e/source-accessibility.spec.ts:31:24)
+        at <repo>/tests/e2e/source-accessibility.spec.ts:681:59
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/source-accessibility-sourc-cab3f-ilure-on-switch-at-1024x768/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/source-accessibility-sourc-cab3f-ilure-on-switch-at-1024x768/error-context.md
+
+  4) tests/e2e/source-accessibility.spec.ts:641:7 › source accessibility: UTF-8 recovery bound and real size refusal at 1440x900
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('alert')
+    Expected substring: "512 KiB"
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "soft toContainText" getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('alert') with timeout 10000ms
+      - waiting for getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('alert')
+
+
+      650 |     await expect.poll(async () => digest(await cache(page, pid, id))).toBe(boundedDigest);
+      651 |     await page.keyboard.press("ControlOrMeta+End"); await page.keyboard.insertText("🔧");
+    > 652 |     await expect.soft(dialog(page).getByRole("alert")).toContainText("512 KiB");
+          |                                                        ^
+      653 |     await expect.soft.poll(async () => digest(await cache(page, pid, id))).toBe(boundedDigest);
+      654 |     const refused = bounded + "\n# " + "界".repeat(175000) + "\n";
+      655 |     expect(new TextEncoder().encode(refused).length).toBeGreaterThan(1048576);
+        at <repo>/tests/e2e/source-accessibility.spec.ts:652:56
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: "9b978070a9c822fdd4ee4fbdece016d43d1bc89c3fd29ed89d6c111ec1494bc0"
+    Received: "b8c0d8f674b0053956aa501c84f5afc36f2b9ed49b2fa5639c1d119e16b29715"
+
+    Call Log:
+    - Timeout 10000ms exceeded while waiting on the predicate
+
+      651 |     await page.keyboard.press("ControlOrMeta+End"); await page.keyboard.insertText("🔧");
+      652 |     await expect.soft(dialog(page).getByRole("alert")).toContainText("512 KiB");
+    > 653 |     await expect.soft.poll(async () => digest(await cache(page, pid, id))).toBe(boundedDigest);
+          |                                                                            ^
+      654 |     const refused = bounded + "\n# " + "界".repeat(175000) + "\n";
+      655 |     expect(new TextEncoder().encode(refused).length).toBeGreaterThan(1048576);
+      656 |     expect(refused.length).toBeLessThan(524288);
+        at <repo>/tests/e2e/source-accessibility.spec.ts:653:76
+
+    Error: expect(locator).not.toContainText(expected) failed
+
+    Locator: getByRole('dialog', { name: 'Authored XDL source', exact: true }).locator('.error-banner[role="alert"]').filter({ hasText: 'LIMIT_EXCEEDED' })
+    Expected substring: not "load the current revision"
+    Received string: "LIMIT_EXCEEDED: A document is limited to 1 MiB. Your draft is retained. Close this editor to load the current revision, then compare it before saving again."
+    Timeout: 10000ms
+
+    Call log:
+      - Expect "soft not toContainText" getByRole('dialog', { name: 'Authored XDL source', exact: true }).locator('.error-banner[role="alert"]').filter({ hasText: 'LIMIT_EXCEEDED' }) with timeout 10000ms
+      - waiting for getByRole('dialog', { name: 'Authored XDL source', exact: true }).locator('.error-banner[role="alert"]').filter({ hasText: 'LIMIT_EXCEEDED' })
+        24 × locator resolved to <p role="alert" class="error-banner">LIMIT_EXCEEDED: A document is limited to 1 MiB. Y…</p>
+           - unexpected value "LIMIT_EXCEEDED: A document is limited to 1 MiB. Your draft is retained. Close this editor to load the current revision, then compare it before saving again."
+
+
+      659 |     await page.keyboard.press("ControlOrMeta+s"); expect((await response).status()).toBe(413); await page.waitForLoadState("networkidle");
+      660 |     const failure = dialog(page).locator('.error-banner[role="alert"]').filter({ hasText: "LIMIT_EXCEEDED" });
+    > 661 |     await expect(failure).toContainText("1 MiB"); await expect.soft(failure).not.toContainText("load the current revision");
+          |                                                                                  ^
+      662 |     expect(digest(await text(page).inputValue())).toBe(digest(refused)); await expect(save(page)).toBeEnabled();
+      663 |     expect((await read(page, pid)).documents).toEqual(project.documents); expect((await read(page, pid)).revision).toBe(project.revision);
+      664 |     await page.keyboard.press("Escape"); await open(page, id);
+        at <repo>/tests/e2e/source-accessibility.spec.ts:661:82
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: "9b978070a9c822fdd4ee4fbdece016d43d1bc89c3fd29ed89d6c111ec1494bc0"
+    Received: "89293ba3e8824e5542aea00f025bdd700fa44e53f63db0638ebc8e933e036ae6"
+
+      663 |     expect((await read(page, pid)).documents).toEqual(project.documents); expect((await read(page, pid)).revision).toBe(project.revision);
+      664 |     await page.keyboard.press("Escape"); await open(page, id);
+    > 665 |     expect(digest(await text(page).inputValue())).toBe(boundedDigest);
+          |                                                   ^
+      666 |     await expect.soft(dialog(page)).toContainText("last cached text");
+      667 |     expect(await runIds(page, pid)).toEqual(runs);
+      668 |     await testInfo.attach("source-recovery-bound.json", { body: JSON.stringify({ viewport, cachedBytes: 524288, overBoundaryBytes: 524292, retainedCacheDigest: "sha256:" + boundedDigest, refusalBytes: new TextEncoder().encode(refused).length, actualRefusedStatus: 413, unchangedCanonicalRevision: project.revision, canonicalDocumentsUnchanged: true, ownProjectRunSetUnchanged: true, scope: "Native Unicode source edit; exact UTF-8 browser recovery boundary and actual backend size refusal; no Start" }), contentType: "application/json" });
+        at <repo>/tests/e2e/source-accessibility.spec.ts:665:51
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/source-accessibility-sourc-aa913-al-size-refusal-at-1440x900/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/source-accessibility-sourc-aa913-al-size-refusal-at-1440x900/error-context.md
+
+  5) tests/e2e/source-accessibility.spec.ts:671:9 › source accessibility: recovery read failure on open at 1440x900
+
+    Error: expect(received).toBeGreaterThanOrEqual(expected)
+
+    Expected: >= 0
+    Received:    -1
+
+      25 |     );
+      26 |   const index = enabled.indexOf(value);
+    > 27 |   expect(index).toBeGreaterThanOrEqual(0);
+         |                 ^
+      28 |   await tabTo(page, target);
+      29 |   await page.keyboard.press("Home");
+      30 |   for (let i = 0; i < index; i++) await page.keyboard.press("ArrowDown");
+        at choose (<repo>/tests/e2e/source-accessibility.spec.ts:27:17)
+        at open (<repo>/tests/e2e/source-accessibility.spec.ts:86:3)
+        at <repo>/tests/e2e/source-accessibility.spec.ts:681:32
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/source-accessibility-sourc-d2503-failure-on-open-at-1440x900/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/source-accessibility-sourc-d2503-failure-on-open-at-1440x900/error-context.md
+
+  6) tests/e2e/source-accessibility.spec.ts:671:9 › source accessibility: recovery read failure on switch at 1440x900
+
+    Error: expect(locator).toHaveValue(expected) failed
+
+    Locator:  getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByLabel('Resource', { exact: true })
+    Expected: "doc-0"
+    Received: "doc-2"
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toHaveValue" getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByLabel('Resource', { exact: true }) with timeout 10000ms
+      - waiting for getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByLabel('Resource', { exact: true })
+        24 × locator resolved to <select aria-label="Resource">…</select>
+           - unexpected value "doc-2"
+
+
+      29 |   await page.keyboard.press("Home");
+      30 |   for (let i = 0; i < index; i++) await page.keyboard.press("ArrowDown");
+    > 31 |   await expect(target).toHaveValue(value);
+         |                        ^
+      32 | }
+      33 | const dialog = (page: Page) =>
+      34 |   page.getByRole("dialog", { name: "Authored XDL source", exact: true });
+        at choose (<repo>/tests/e2e/source-accessibility.spec.ts:31:24)
+        at <repo>/tests/e2e/source-accessibility.spec.ts:681:59
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/source-accessibility-sourc-b6a77-ilure-on-switch-at-1440x900/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/source-accessibility-sourc-b6a77-ilure-on-switch-at-1440x900/error-context.md
+
+  6 failed
+    tests/e2e/source-accessibility.spec.ts:641:7 › source accessibility: UTF-8 recovery bound and real size refusal at 1024x768
+    tests/e2e/source-accessibility.spec.ts:671:9 › source accessibility: recovery read failure on open at 1024x768
+    tests/e2e/source-accessibility.spec.ts:671:9 › source accessibility: recovery read failure on switch at 1024x768
+    tests/e2e/source-accessibility.spec.ts:641:7 › source accessibility: UTF-8 recovery bound and real size refusal at 1440x900
+    tests/e2e/source-accessibility.spec.ts:671:9 › source accessibility: recovery read failure on open at 1440x900
+    tests/e2e/source-accessibility.spec.ts:671:9 › source accessibility: recovery read failure on switch at 1440x900

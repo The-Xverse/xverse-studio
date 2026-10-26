@@ -1,0 +1,584 @@
+{
+  "config": {
+    "argv": [
+      "<loop-cache>/node-v24.22.1-linux-x64/bin/node",
+      "<repo>/node_modules/.bin/playwright",
+      "test",
+      "-c",
+      "tests/e2e/playwright.config.ts",
+      "--grep",
+      "source accessibility: (UTF-8|recovery read)"
+    ],
+    "configFile": "<repo>/tests/e2e/playwright.config.ts",
+    "rootDir": "<repo>/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "<repo>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "<repo>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "*.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "<repo>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "<repo>/tests/e2e",
+        "snapshotDir": "<repo>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": "*.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "baseURL": "http://127.0.0.1:47193",
+          "browserName": "chromium",
+          "actionTimeout": 15000,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "trace": "off",
+          "screenshot": "only-on-failure",
+          "video": "off"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "<repo>/test-results/browser-report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "source-accessibility.spec.ts",
+      "file": "source-accessibility.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "source accessibility: UTF-8 recovery bound and real size refusal at 1024x768",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 31093,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('alert')\nExpected substring: \u001b[32m\"512 KiB\"\u001b[39m\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toContainText\" getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('alert') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('alert')\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('alert')\nExpected substring: \u001b[32m\"512 KiB\"\u001b[39m\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toContainText\" getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('alert') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('alert')\u001b[22m\n\n    at <repo>/tests/e2e/source-accessibility.spec.ts:652:56",
+                    "location": {
+                      "file": "<repo>/tests/e2e/source-accessibility.spec.ts",
+                      "column": 56,
+                      "line": 652
+                    },
+                    "snippet": "  650 |     await expect.poll(async () => digest(await cache(page, pid, id))).toBe(boundedDigest);\n  651 |     await page.keyboard.press(\"ControlOrMeta+End\"); await page.keyboard.insertText(\"\ud83d\udd27\");\n> 652 |     await expect.soft(dialog(page).getByRole(\"alert\")).toContainText(\"512 KiB\");\n      |                                                        ^\n  653 |     await expect.soft.poll(async () => digest(await cache(page, pid, id))).toBe(boundedDigest);\n  654 |     const refused = bounded + \"\\n# \" + \"\u754c\".repeat(175000) + \"\\n\";\n  655 |     expect(new TextEncoder().encode(refused).length).toBeGreaterThan(1048576);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/source-accessibility.spec.ts",
+                        "column": 56,
+                        "line": 652
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('alert')\nExpected substring: \u001b[32m\"512 KiB\"\u001b[39m\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toContainText\" getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('alert') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('alert')\u001b[22m\n\n\n  650 |     await expect.poll(async () => digest(await cache(page, pid, id))).toBe(boundedDigest);\n  651 |     await page.keyboard.press(\"ControlOrMeta+End\"); await page.keyboard.insertText(\"\ud83d\udd27\");\n> 652 |     await expect.soft(dialog(page).getByRole(\"alert\")).toContainText(\"512 KiB\");\n      |                                                        ^\n  653 |     await expect.soft.poll(async () => digest(await cache(page, pid, id))).toBe(boundedDigest);\n  654 |     const refused = bounded + \"\\n# \" + \"\u754c\".repeat(175000) + \"\\n\";\n  655 |     expect(new TextEncoder().encode(refused).length).toBeGreaterThan(1048576);\n    at <repo>/tests/e2e/source-accessibility.spec.ts:652:56"
+                    },
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/source-accessibility.spec.ts",
+                        "column": 76,
+                        "line": 653
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"\u001b[7m9b978070a9c822fdd4ee4fbdece016d43d1bc89c3fd29ed89d6\u001b[27mc111\u001b[7mec1494bc0\u001b[27m\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mb8c0d8f674b0053956aa501c84f5afc36f2b9ed49b2fa5639\u001b[27mc1\u001b[7md\u001b[27m11\u001b[7m9e16b29715\u001b[27m\"\u001b[39m\n\nCall Log:\n- Timeout 10000ms exceeded while waiting on the predicate\n\n  651 |     await page.keyboard.press(\"ControlOrMeta+End\"); await page.keyboard.insertText(\"\ud83d\udd27\");\n  652 |     await expect.soft(dialog(page).getByRole(\"alert\")).toContainText(\"512 KiB\");\n> 653 |     await expect.soft.poll(async () => digest(await cache(page, pid, id))).toBe(boundedDigest);\n      |                                                                            ^\n  654 |     const refused = bounded + \"\\n# \" + \"\u754c\".repeat(175000) + \"\\n\";\n  655 |     expect(new TextEncoder().encode(refused).length).toBeGreaterThan(1048576);\n  656 |     expect(refused.length).toBeLessThan(524288);\n    at <repo>/tests/e2e/source-accessibility.spec.ts:653:76"
+                    },
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/source-accessibility.spec.ts",
+                        "column": 82,
+                        "line": 661
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).not.\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('dialog', { name: 'Authored XDL source', exact: true }).locator('.error-banner[role=\"alert\"]').filter({ hasText: 'LIMIT_EXCEEDED' })\nExpected substring: not \u001b[32m\"load the current revision\"\u001b[39m\nReceived string: \u001b[31m\"LIMIT_EXCEEDED: A document is limited to 1 MiB. Your draft is retained. Close this editor to \u001b[7mload the current revision\u001b[27m, then compare it before saving again.\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft not toContainText\" getByRole('dialog', { name: 'Authored XDL source', exact: true }).locator('.error-banner[role=\"alert\"]').filter({ hasText: 'LIMIT_EXCEEDED' }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: 'Authored XDL source', exact: true }).locator('.error-banner[role=\"alert\"]').filter({ hasText: 'LIMIT_EXCEEDED' })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <p role=\"alert\" class=\"error-banner\">LIMIT_EXCEEDED: A document is limited to 1 MiB. Y\u2026</p>\u001b[22m\n\u001b[2m       - unexpected value \"LIMIT_EXCEEDED: A document is limited to 1 MiB. Your draft is retained. Close this editor to load the current revision, then compare it before saving again.\"\u001b[22m\n\n\n  659 |     await page.keyboard.press(\"ControlOrMeta+s\"); expect((await response).status()).toBe(413); await page.waitForLoadState(\"networkidle\");\n  660 |     const failure = dialog(page).locator('.error-banner[role=\"alert\"]').filter({ hasText: \"LIMIT_EXCEEDED\" });\n> 661 |     await expect(failure).toContainText(\"1 MiB\"); await expect.soft(failure).not.toContainText(\"load the current revision\");\n      |                                                                                  ^\n  662 |     expect(digest(await text(page).inputValue())).toBe(digest(refused)); await expect(save(page)).toBeEnabled();\n  663 |     expect((await read(page, pid)).documents).toEqual(project.documents); expect((await read(page, pid)).revision).toBe(project.revision);\n  664 |     await page.keyboard.press(\"Escape\"); await open(page, id);\n    at <repo>/tests/e2e/source-accessibility.spec.ts:661:82"
+                    },
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/source-accessibility.spec.ts",
+                        "column": 51,
+                        "line": 665
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"9b978070a9c822fdd4ee4fbdece016d43d1bc89c3fd29ed89d6c111ec1494bc0\"\u001b[39m\nReceived: \u001b[31m\"89293ba3e8824e5542aea00f025bdd700fa44e53f63db0638ebc8e933e036ae6\"\u001b[39m\n\n  663 |     expect((await read(page, pid)).documents).toEqual(project.documents); expect((await read(page, pid)).revision).toBe(project.revision);\n  664 |     await page.keyboard.press(\"Escape\"); await open(page, id);\n> 665 |     expect(digest(await text(page).inputValue())).toBe(boundedDigest);\n      |                                                   ^\n  666 |     await expect.soft(dialog(page)).toContainText(\"last cached text\");\n  667 |     expect(await runIds(page, pid)).toEqual(runs);\n  668 |     await testInfo.attach(\"source-recovery-bound.json\", { body: JSON.stringify({ viewport, cachedBytes: 524288, overBoundaryBytes: 524292, retainedCacheDigest: \"sha256:\" + boundedDigest, refusalBytes: new TextEncoder().encode(refused).length, actualRefusedStatus: 413, unchangedCanonicalRevision: project.revision, canonicalDocumentsUnchanged: true, ownProjectRunSetUnchanged: true, scope: \"Native Unicode source edit; exact UTF-8 browser recovery boundary and actual backend size refusal; no Start\" }), contentType: \"application/json\" });\n    at <repo>/tests/e2e/source-accessibility.spec.ts:665:51"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T19:40:22.132Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/source-accessibility-sourc-5bbff-al-size-refusal-at-1024x768/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/source-accessibility-sourc-5bbff-al-size-refusal-at-1024x768/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/source-accessibility.spec.ts",
+                    "column": 56,
+                    "line": 652
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "932b59c179a2624f741d-b8f1043104e763bb4842",
+          "file": "source-accessibility.spec.ts",
+          "line": 641,
+          "column": 7
+        },
+        {
+          "title": "source accessibility: recovery read failure on open at 1024x768",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 1111,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: >= \u001b[32m0\u001b[39m\nReceived:    \u001b[31m-1\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: >= \u001b[32m0\u001b[39m\nReceived:    \u001b[31m-1\u001b[39m\n    at choose (<repo>/tests/e2e/source-accessibility.spec.ts:27:17)\n    at open (<repo>/tests/e2e/source-accessibility.spec.ts:86:3)\n    at <repo>/tests/e2e/source-accessibility.spec.ts:681:32",
+                    "location": {
+                      "file": "<repo>/tests/e2e/source-accessibility.spec.ts",
+                      "column": 17,
+                      "line": 27
+                    },
+                    "snippet": "  25 |     );\n  26 |   const index = enabled.indexOf(value);\n> 27 |   expect(index).toBeGreaterThanOrEqual(0);\n     |                 ^\n  28 |   await tabTo(page, target);\n  29 |   await page.keyboard.press(\"Home\");\n  30 |   for (let i = 0; i < index; i++) await page.keyboard.press(\"ArrowDown\");"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/source-accessibility.spec.ts",
+                        "column": 17,
+                        "line": 27
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: >= \u001b[32m0\u001b[39m\nReceived:    \u001b[31m-1\u001b[39m\n\n  25 |     );\n  26 |   const index = enabled.indexOf(value);\n> 27 |   expect(index).toBeGreaterThanOrEqual(0);\n     |                 ^\n  28 |   await tabTo(page, target);\n  29 |   await page.keyboard.press(\"Home\");\n  30 |   for (let i = 0; i < index; i++) await page.keyboard.press(\"ArrowDown\");\n    at choose (<repo>/tests/e2e/source-accessibility.spec.ts:27:17)\n    at open (<repo>/tests/e2e/source-accessibility.spec.ts:86:3)\n    at <repo>/tests/e2e/source-accessibility.spec.ts:681:32"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T19:40:53.620Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/source-accessibility-sourc-e5f87-failure-on-open-at-1024x768/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/source-accessibility-sourc-e5f87-failure-on-open-at-1024x768/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/source-accessibility.spec.ts",
+                    "column": 17,
+                    "line": 27
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "932b59c179a2624f741d-79ea295cb843e76a7be9",
+          "file": "source-accessibility.spec.ts",
+          "line": 671,
+          "column": 9
+        },
+        {
+          "title": "source accessibility: recovery read failure on switch at 1024x768",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 11248,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByLabel('Resource', { exact: true })\nExpected: \u001b[32m\"doc-\u001b[7m0\u001b[27m\"\u001b[39m\nReceived: \u001b[31m\"doc-\u001b[7m2\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByLabel('Resource', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByLabel('Resource', { exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <select aria-label=\"Resource\">\u2026</select>\u001b[22m\n\u001b[2m       - unexpected value \"doc-2\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByLabel('Resource', { exact: true })\nExpected: \u001b[32m\"doc-\u001b[7m0\u001b[27m\"\u001b[39m\nReceived: \u001b[31m\"doc-\u001b[7m2\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByLabel('Resource', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByLabel('Resource', { exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <select aria-label=\"Resource\">\u2026</select>\u001b[22m\n\u001b[2m       - unexpected value \"doc-2\"\u001b[22m\n\n    at choose (<repo>/tests/e2e/source-accessibility.spec.ts:31:24)\n    at <repo>/tests/e2e/source-accessibility.spec.ts:681:59",
+                    "location": {
+                      "file": "<repo>/tests/e2e/source-accessibility.spec.ts",
+                      "column": 24,
+                      "line": 31
+                    },
+                    "snippet": "  29 |   await page.keyboard.press(\"Home\");\n  30 |   for (let i = 0; i < index; i++) await page.keyboard.press(\"ArrowDown\");\n> 31 |   await expect(target).toHaveValue(value);\n     |                        ^\n  32 | }\n  33 | const dialog = (page: Page) =>\n  34 |   page.getByRole(\"dialog\", { name: \"Authored XDL source\", exact: true });"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/source-accessibility.spec.ts",
+                        "column": 24,
+                        "line": 31
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByLabel('Resource', { exact: true })\nExpected: \u001b[32m\"doc-\u001b[7m0\u001b[27m\"\u001b[39m\nReceived: \u001b[31m\"doc-\u001b[7m2\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByLabel('Resource', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByLabel('Resource', { exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <select aria-label=\"Resource\">\u2026</select>\u001b[22m\n\u001b[2m       - unexpected value \"doc-2\"\u001b[22m\n\n\n  29 |   await page.keyboard.press(\"Home\");\n  30 |   for (let i = 0; i < index; i++) await page.keyboard.press(\"ArrowDown\");\n> 31 |   await expect(target).toHaveValue(value);\n     |                        ^\n  32 | }\n  33 | const dialog = (page: Page) =>\n  34 |   page.getByRole(\"dialog\", { name: \"Authored XDL source\", exact: true });\n    at choose (<repo>/tests/e2e/source-accessibility.spec.ts:31:24)\n    at <repo>/tests/e2e/source-accessibility.spec.ts:681:59"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T19:40:55.124Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/source-accessibility-sourc-cab3f-ilure-on-switch-at-1024x768/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/source-accessibility-sourc-cab3f-ilure-on-switch-at-1024x768/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/source-accessibility.spec.ts",
+                    "column": 24,
+                    "line": 31
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "932b59c179a2624f741d-492c8c7f9724f5184c56",
+          "file": "source-accessibility.spec.ts",
+          "line": 671,
+          "column": 9
+        },
+        {
+          "title": "source accessibility: UTF-8 recovery bound and real size refusal at 1440x900",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 30849,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('alert')\nExpected substring: \u001b[32m\"512 KiB\"\u001b[39m\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toContainText\" getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('alert') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('alert')\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('alert')\nExpected substring: \u001b[32m\"512 KiB\"\u001b[39m\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toContainText\" getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('alert') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('alert')\u001b[22m\n\n    at <repo>/tests/e2e/source-accessibility.spec.ts:652:56",
+                    "location": {
+                      "file": "<repo>/tests/e2e/source-accessibility.spec.ts",
+                      "column": 56,
+                      "line": 652
+                    },
+                    "snippet": "  650 |     await expect.poll(async () => digest(await cache(page, pid, id))).toBe(boundedDigest);\n  651 |     await page.keyboard.press(\"ControlOrMeta+End\"); await page.keyboard.insertText(\"\ud83d\udd27\");\n> 652 |     await expect.soft(dialog(page).getByRole(\"alert\")).toContainText(\"512 KiB\");\n      |                                                        ^\n  653 |     await expect.soft.poll(async () => digest(await cache(page, pid, id))).toBe(boundedDigest);\n  654 |     const refused = bounded + \"\\n# \" + \"\u754c\".repeat(175000) + \"\\n\";\n  655 |     expect(new TextEncoder().encode(refused).length).toBeGreaterThan(1048576);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/source-accessibility.spec.ts",
+                        "column": 56,
+                        "line": 652
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('alert')\nExpected substring: \u001b[32m\"512 KiB\"\u001b[39m\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toContainText\" getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('alert') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('alert')\u001b[22m\n\n\n  650 |     await expect.poll(async () => digest(await cache(page, pid, id))).toBe(boundedDigest);\n  651 |     await page.keyboard.press(\"ControlOrMeta+End\"); await page.keyboard.insertText(\"\ud83d\udd27\");\n> 652 |     await expect.soft(dialog(page).getByRole(\"alert\")).toContainText(\"512 KiB\");\n      |                                                        ^\n  653 |     await expect.soft.poll(async () => digest(await cache(page, pid, id))).toBe(boundedDigest);\n  654 |     const refused = bounded + \"\\n# \" + \"\u754c\".repeat(175000) + \"\\n\";\n  655 |     expect(new TextEncoder().encode(refused).length).toBeGreaterThan(1048576);\n    at <repo>/tests/e2e/source-accessibility.spec.ts:652:56"
+                    },
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/source-accessibility.spec.ts",
+                        "column": 76,
+                        "line": 653
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"\u001b[7m9b978070a9c822fdd4ee4fbdece016d43d1bc89c3fd29ed89d6\u001b[27mc111\u001b[7mec1494bc0\u001b[27m\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mb8c0d8f674b0053956aa501c84f5afc36f2b9ed49b2fa5639\u001b[27mc1\u001b[7md\u001b[27m11\u001b[7m9e16b29715\u001b[27m\"\u001b[39m\n\nCall Log:\n- Timeout 10000ms exceeded while waiting on the predicate\n\n  651 |     await page.keyboard.press(\"ControlOrMeta+End\"); await page.keyboard.insertText(\"\ud83d\udd27\");\n  652 |     await expect.soft(dialog(page).getByRole(\"alert\")).toContainText(\"512 KiB\");\n> 653 |     await expect.soft.poll(async () => digest(await cache(page, pid, id))).toBe(boundedDigest);\n      |                                                                            ^\n  654 |     const refused = bounded + \"\\n# \" + \"\u754c\".repeat(175000) + \"\\n\";\n  655 |     expect(new TextEncoder().encode(refused).length).toBeGreaterThan(1048576);\n  656 |     expect(refused.length).toBeLessThan(524288);\n    at <repo>/tests/e2e/source-accessibility.spec.ts:653:76"
+                    },
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/source-accessibility.spec.ts",
+                        "column": 82,
+                        "line": 661
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).not.\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('dialog', { name: 'Authored XDL source', exact: true }).locator('.error-banner[role=\"alert\"]').filter({ hasText: 'LIMIT_EXCEEDED' })\nExpected substring: not \u001b[32m\"load the current revision\"\u001b[39m\nReceived string: \u001b[31m\"LIMIT_EXCEEDED: A document is limited to 1 MiB. Your draft is retained. Close this editor to \u001b[7mload the current revision\u001b[27m, then compare it before saving again.\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft not toContainText\" getByRole('dialog', { name: 'Authored XDL source', exact: true }).locator('.error-banner[role=\"alert\"]').filter({ hasText: 'LIMIT_EXCEEDED' }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: 'Authored XDL source', exact: true }).locator('.error-banner[role=\"alert\"]').filter({ hasText: 'LIMIT_EXCEEDED' })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <p role=\"alert\" class=\"error-banner\">LIMIT_EXCEEDED: A document is limited to 1 MiB. Y\u2026</p>\u001b[22m\n\u001b[2m       - unexpected value \"LIMIT_EXCEEDED: A document is limited to 1 MiB. Your draft is retained. Close this editor to load the current revision, then compare it before saving again.\"\u001b[22m\n\n\n  659 |     await page.keyboard.press(\"ControlOrMeta+s\"); expect((await response).status()).toBe(413); await page.waitForLoadState(\"networkidle\");\n  660 |     const failure = dialog(page).locator('.error-banner[role=\"alert\"]').filter({ hasText: \"LIMIT_EXCEEDED\" });\n> 661 |     await expect(failure).toContainText(\"1 MiB\"); await expect.soft(failure).not.toContainText(\"load the current revision\");\n      |                                                                                  ^\n  662 |     expect(digest(await text(page).inputValue())).toBe(digest(refused)); await expect(save(page)).toBeEnabled();\n  663 |     expect((await read(page, pid)).documents).toEqual(project.documents); expect((await read(page, pid)).revision).toBe(project.revision);\n  664 |     await page.keyboard.press(\"Escape\"); await open(page, id);\n    at <repo>/tests/e2e/source-accessibility.spec.ts:661:82"
+                    },
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/source-accessibility.spec.ts",
+                        "column": 51,
+                        "line": 665
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"9b978070a9c822fdd4ee4fbdece016d43d1bc89c3fd29ed89d6c111ec1494bc0\"\u001b[39m\nReceived: \u001b[31m\"89293ba3e8824e5542aea00f025bdd700fa44e53f63db0638ebc8e933e036ae6\"\u001b[39m\n\n  663 |     expect((await read(page, pid)).documents).toEqual(project.documents); expect((await read(page, pid)).revision).toBe(project.revision);\n  664 |     await page.keyboard.press(\"Escape\"); await open(page, id);\n> 665 |     expect(digest(await text(page).inputValue())).toBe(boundedDigest);\n      |                                                   ^\n  666 |     await expect.soft(dialog(page)).toContainText(\"last cached text\");\n  667 |     expect(await runIds(page, pid)).toEqual(runs);\n  668 |     await testInfo.attach(\"source-recovery-bound.json\", { body: JSON.stringify({ viewport, cachedBytes: 524288, overBoundaryBytes: 524292, retainedCacheDigest: \"sha256:\" + boundedDigest, refusalBytes: new TextEncoder().encode(refused).length, actualRefusedStatus: 413, unchangedCanonicalRevision: project.revision, canonicalDocumentsUnchanged: true, ownProjectRunSetUnchanged: true, scope: \"Native Unicode source edit; exact UTF-8 browser recovery boundary and actual backend size refusal; no Start\" }), contentType: \"application/json\" });\n    at <repo>/tests/e2e/source-accessibility.spec.ts:665:51"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T19:41:06.741Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/source-accessibility-sourc-aa913-al-size-refusal-at-1440x900/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/source-accessibility-sourc-aa913-al-size-refusal-at-1440x900/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/source-accessibility.spec.ts",
+                    "column": 56,
+                    "line": 652
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "932b59c179a2624f741d-f752f9f524e3d4cddeda",
+          "file": "source-accessibility.spec.ts",
+          "line": 641,
+          "column": 7
+        },
+        {
+          "title": "source accessibility: recovery read failure on open at 1440x900",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 1144,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: >= \u001b[32m0\u001b[39m\nReceived:    \u001b[31m-1\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: >= \u001b[32m0\u001b[39m\nReceived:    \u001b[31m-1\u001b[39m\n    at choose (<repo>/tests/e2e/source-accessibility.spec.ts:27:17)\n    at open (<repo>/tests/e2e/source-accessibility.spec.ts:86:3)\n    at <repo>/tests/e2e/source-accessibility.spec.ts:681:32",
+                    "location": {
+                      "file": "<repo>/tests/e2e/source-accessibility.spec.ts",
+                      "column": 17,
+                      "line": 27
+                    },
+                    "snippet": "  25 |     );\n  26 |   const index = enabled.indexOf(value);\n> 27 |   expect(index).toBeGreaterThanOrEqual(0);\n     |                 ^\n  28 |   await tabTo(page, target);\n  29 |   await page.keyboard.press(\"Home\");\n  30 |   for (let i = 0; i < index; i++) await page.keyboard.press(\"ArrowDown\");"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/source-accessibility.spec.ts",
+                        "column": 17,
+                        "line": 27
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: >= \u001b[32m0\u001b[39m\nReceived:    \u001b[31m-1\u001b[39m\n\n  25 |     );\n  26 |   const index = enabled.indexOf(value);\n> 27 |   expect(index).toBeGreaterThanOrEqual(0);\n     |                 ^\n  28 |   await tabTo(page, target);\n  29 |   await page.keyboard.press(\"Home\");\n  30 |   for (let i = 0; i < index; i++) await page.keyboard.press(\"ArrowDown\");\n    at choose (<repo>/tests/e2e/source-accessibility.spec.ts:27:17)\n    at open (<repo>/tests/e2e/source-accessibility.spec.ts:86:3)\n    at <repo>/tests/e2e/source-accessibility.spec.ts:681:32"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T19:41:37.992Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/source-accessibility-sourc-d2503-failure-on-open-at-1440x900/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/source-accessibility-sourc-d2503-failure-on-open-at-1440x900/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/source-accessibility.spec.ts",
+                    "column": 17,
+                    "line": 27
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "932b59c179a2624f741d-88e8d80741fdc0397c1a",
+          "file": "source-accessibility.spec.ts",
+          "line": 671,
+          "column": 9
+        },
+        {
+          "title": "source accessibility: recovery read failure on switch at 1440x900",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 11218,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByLabel('Resource', { exact: true })\nExpected: \u001b[32m\"doc-\u001b[7m0\u001b[27m\"\u001b[39m\nReceived: \u001b[31m\"doc-\u001b[7m2\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByLabel('Resource', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByLabel('Resource', { exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <select aria-label=\"Resource\">\u2026</select>\u001b[22m\n\u001b[2m       - unexpected value \"doc-2\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByLabel('Resource', { exact: true })\nExpected: \u001b[32m\"doc-\u001b[7m0\u001b[27m\"\u001b[39m\nReceived: \u001b[31m\"doc-\u001b[7m2\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByLabel('Resource', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByLabel('Resource', { exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <select aria-label=\"Resource\">\u2026</select>\u001b[22m\n\u001b[2m       - unexpected value \"doc-2\"\u001b[22m\n\n    at choose (<repo>/tests/e2e/source-accessibility.spec.ts:31:24)\n    at <repo>/tests/e2e/source-accessibility.spec.ts:681:59",
+                    "location": {
+                      "file": "<repo>/tests/e2e/source-accessibility.spec.ts",
+                      "column": 24,
+                      "line": 31
+                    },
+                    "snippet": "  29 |   await page.keyboard.press(\"Home\");\n  30 |   for (let i = 0; i < index; i++) await page.keyboard.press(\"ArrowDown\");\n> 31 |   await expect(target).toHaveValue(value);\n     |                        ^\n  32 | }\n  33 | const dialog = (page: Page) =>\n  34 |   page.getByRole(\"dialog\", { name: \"Authored XDL source\", exact: true });"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/source-accessibility.spec.ts",
+                        "column": 24,
+                        "line": 31
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByLabel('Resource', { exact: true })\nExpected: \u001b[32m\"doc-\u001b[7m0\u001b[27m\"\u001b[39m\nReceived: \u001b[31m\"doc-\u001b[7m2\u001b[27m\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByLabel('Resource', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByLabel('Resource', { exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <select aria-label=\"Resource\">\u2026</select>\u001b[22m\n\u001b[2m       - unexpected value \"doc-2\"\u001b[22m\n\n\n  29 |   await page.keyboard.press(\"Home\");\n  30 |   for (let i = 0; i < index; i++) await page.keyboard.press(\"ArrowDown\");\n> 31 |   await expect(target).toHaveValue(value);\n     |                        ^\n  32 | }\n  33 | const dialog = (page: Page) =>\n  34 |   page.getByRole(\"dialog\", { name: \"Authored XDL source\", exact: true });\n    at choose (<repo>/tests/e2e/source-accessibility.spec.ts:31:24)\n    at <repo>/tests/e2e/source-accessibility.spec.ts:681:59"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T19:41:39.516Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/source-accessibility-sourc-b6a77-ilure-on-switch-at-1440x900/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/source-accessibility-sourc-b6a77-ilure-on-switch-at-1440x900/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/source-accessibility.spec.ts",
+                    "column": 24,
+                    "line": 31
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "932b59c179a2624f741d-5446f1056479e5e06b8b",
+          "file": "source-accessibility.spec.ts",
+          "line": 671,
+          "column": 9
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-26T19:40:21.606Z",
+    "duration": 89234.17700000001,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 6,
+    "flaky": 0
+  }
+}
