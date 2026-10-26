@@ -46,6 +46,10 @@ records original failures, review, outcomes and raw measurements. T038/T067 rema
 0/5 milestones are unchanged. Both 70a13a1 product and ed88eb5 metadata push/PR CI passed before this
 connection repair.
 
+Clean e76b969 also passed offline native Linux package extraction/startup/UI, Unicode persistence,
+authoritative compilation and owned shutdown. Its clean 100-file manifest, archive/file hashes and
+exact tested UI bytes are verified under `M2-keyboard-connections/package/`. Fresh-host CI remains separate.
+
 The preceding frontend successor passed typecheck/build, architecture, compatibility consistency and
 the full **97-check native Linux Chromium suite**, unchanged source (`M2-keyboard-instance/`). Eight
 native wizard/history journeys at both viewports verify atomic instance/binding authoring, exact

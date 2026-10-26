@@ -383,3 +383,5 @@ review-added complete-flow assertion passes both final focused checks, with exac
 equivalence proof. Final-source two-viewport performance refresh passes. Windows, actual
 assistive-technology assessment and full acceptance stay open.
 Evidence: `evidence/studio/M2-keyboard-connections/`; component count 47/100, no milestone accepted.
+Clean e76b969 package smoke also passes; clean 100-file manifest, archive/file hashes and tested UI
+bytes are verified under `M2-keyboard-connections/package/`. Native Windows remains held.

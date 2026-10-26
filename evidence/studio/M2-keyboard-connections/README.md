@@ -63,3 +63,9 @@ includes the new test. Typecheck/build, architecture, compatibility consistency 
 spec structure passed. Exact unchanged backend/Python/contributor/compatibility
 inputs inherit the passing 851-test 13ff409 cohort; backend tests were not rerun for
 this frontend-only change. Scope remains 47/100 components, no milestone accepted.
+
+Clean product `e76b969db258f86178377bb263268dc7c290c826` passed fresh offline native Linux package extraction with
+prepared dependencies, startup/UI HTTP 200, Unicode persistence, authoritative public
+compilation and owned shutdown. `package/` retains its clean 100-file manifest, receipt
+and verification of all archive/file hashes and the exact tested UI bytes. Browser
+interaction remains the separate scope above; native Windows was not run.
