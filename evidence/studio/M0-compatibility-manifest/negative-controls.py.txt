@@ -1,0 +1,99 @@
+from pathlib import Path
+import copy
+import hashlib
+import importlib.util
+import json
+import os
+import subprocess
+import sys
+
+root = Path.cwd()
+out = root / '.studio-local/compatibility-manifest'
+target = root / 'config/platform-compatibility.json'
+original = target.read_bytes()
+base = json.loads(original)
+env = dict(os.environ, PYTEST_DISABLE_PLUGIN_AUTOLOAD='1')
+command = [sys.executable, '-I', '-B', 'scripts/check_platform_compatibility.py']
+def run():
+    r = subprocess.run(command, env=env, capture_output=True, text=True)
+    return r.returncode, json.loads(r.stdout)
+def assign(value, path, item):
+    for key in path[:-1]: value = value[key]
+    value[path[-1]] = item
+cases = [
+    ('source revision', ['sourceRevisions','xverse-platform','revision'], '0'*40, 'sourceRevisions:'),
+    ('lock digest', ['dependencies','lockFiles','uv.lock'], 'sha256:'+'0'*64, 'dependencies:'),
+    ('unsupported API', ['xdl','identity','apiVersions'], ['unsupported'], 'xdl:'),
+    ('schema digest', ['xdl','profiles',0,'sha256'], 'sha256:'+'0'*64, 'xdl:'),
+    ('provider limit', ['providerDescriptorSnapshots',0,'limits','maxDurationSeconds'], 31, 'providerDescriptorSnapshots:'),
+    ('unadmitted Lite available', ['providerDescriptorSnapshots',1,'available'], True, 'providerDescriptorSnapshots:'),
+    ('Windows claimed passed', ['nativeHosts','Windows','currentStatus'], 'passed', 'nativeHosts:'),
+    ('SADS satisfaction invented', ['sads','satisfaction'], 'implemented', 'sads:'),
+    ('numeric false alias', ['runtimeAdmissionAuthority'], 0, 'runtimeAdmissionAuthority:'),
+    ('invented live set', ['admittedLiveCompatibilitySet'], {'status':'admitted'}, 'admittedLiveCompatibilitySet:'),
+]
+results = []
+try:
+    assert run()[0] == 0
+    for label, path, item, expected in cases:
+        value = copy.deepcopy(base); assign(value, path, item)
+        target.write_text(json.dumps(value, indent=2)+'\n')
+        code, report = run()
+        assert code == 1 and not report['valid'] and any(expected in e for e in report['errors']), (label, report)
+        target.write_bytes(original)
+        control, _ = run(); assert control == 0
+        results.append({'case':label,'rejected':True,'controlPassed':True,'errors':report['errors']})
+    for label, raw, expected in [
+        ('duplicate key', original.rstrip()[:-1]+b',"runtimeAdmissionAuthority": true}', 'DUPLICATE_MANIFEST_KEY'),
+        ('oversized manifest', b' '*(256*1024+1), 'MANIFEST_SIZE_EXCEEDED'),
+        ('non-object manifest', b'[]', 'MANIFEST_OBJECT_REQUIRED'),
+        ('unknown executable-looking metadata', json.dumps({**base, 'untrustedHook': {'command':'inert fixture text'}}).encode(), 'Manifest sections'),
+    ]:
+        target.write_bytes(raw); code, report = run()
+        assert code == 1 and not report['valid'] and any(expected in e for e in report['errors']), (label, report)
+        target.write_bytes(original); assert run()[0] == 0
+        results.append({'case':label,'rejected':True,'controlPassed':True,'errors':report['errors']})
+finally:
+    target.write_bytes(original)
+
+# Inject controlled read results into the real observer; immutable retained receipts stay untouched.
+spec = importlib.util.spec_from_file_location('baseline_check_controls', root/'scripts/check_platform_compatibility.py')
+module = importlib.util.module_from_spec(spec); spec.loader.exec_module(module)
+real_read = module.read_json
+receipt = root/'evidence/studio/M1-shell-operability/verification.json'
+environment = root/'evidence/studio/M3-physical-contracts/environment.json'
+for label, path, mutate, expected in [
+    ('failed Linux receipt', receipt, lambda v: v['browser'].update(unexpected=1), 'LINUX_WORKFLOW_EVIDENCE_NOT_PASSING'),
+    ('changed-source Linux receipt', receipt, lambda v: v.update(sourceUnchanged=False), 'LINUX_WORKFLOW_EVIDENCE_NOT_PASSING'),
+    ('wrong native evidence lane', environment, lambda v: v.update(os='Windows'), 'RECORDED_NATIVE_LANE_MISMATCH'),
+]:
+    def read_fixture(p):
+        value = real_read(p)
+        if p == path: mutate(value)
+        return value
+    module.read_json = read_fixture
+    try:
+        module.observed_baseline(); raise AssertionError(label+' was accepted')
+    except module.BaselineDrift as e:
+        assert str(e) == expected
+    finally: module.read_json = real_read
+    module.observed_baseline()
+    results.append({'case':label,'method':'controlled read fixture; retained file unchanged','rejected':True,'controlPassed':True,'diagnostic':expected})
+
+# Simulate a missing fixed evidence reference without moving or rewriting retained evidence.
+real_is_file = Path.is_file
+reference = root/'docs/implementation/sads-dispositions.md'
+def file_fixture(p): return False if p == reference else real_is_file(p)
+Path.is_file = file_fixture
+try:
+    module.observed_baseline(); raise AssertionError('missing reference accepted')
+except module.BaselineDrift as e: assert str(e) == 'RECORDED_EVIDENCE_MISSING'
+finally: Path.is_file = real_is_file
+module.observed_baseline()
+results.append({'case':'missing fixed evidence reference','method':'controlled stat fixture; retained file unchanged','rejected':True,'controlPassed':True,'diagnostic':'RECORDED_EVIDENCE_MISSING'})
+assert target.read_bytes() == original
+result={'command':['.venv/bin/python','-I','-B','scripts/check_platform_compatibility.py'],
+    'scope':'Controlled descriptive-claim drift rejection; no provider operation or native Windows test',
+    'manifestRestoredByteForByte':True,'manifestSha256':hashlib.sha256(original).hexdigest(),'cases':results}
+(out/'negative-controls.json').write_text(json.dumps(result,indent=2)+'\n')
+print(json.dumps({'rejected':len(results),'passingControls':len(results),'manifestRestored':True}))

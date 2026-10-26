@@ -41,3 +41,8 @@ Native Windows dependency installation was attempted on Server 2022 and failed b
 pinned Git tree contains nonportable filenames. Windows installation/testing are now BLOCKED at
 user request; backend/browser checks remain NOT_RUN. A portable wheel preparation is held locally
 and is not integrated or a passing native result.
+
+`config/platform-compatibility.json` snapshots the selected lock digests and backend distribution
+versions alongside source and evidence scope. `scripts/check_platform_compatibility.py` rejects drift
+against the provisioned checkout; it is a contributor consistency check, not application startup or
+runtime admission. The locks still own the complete transitive resolution.

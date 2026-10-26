@@ -23,6 +23,15 @@ not an estimate of remaining effort. T026 transport implementation is substantia
 remains open pending a complete current native/browser successor. Windows installation/testing
 remains blocked at user request, and native Windows secure I/O remains unimplemented/unavailable.
 
+T001's planned machine-readable baseline is now present in `config/platform-compatibility.json`,
+with a read-only contributor consistency check. It separates selected offline XDL/package/profile
+identities and limits from source-only compat/blueprint pins, descriptor declarations, exact recorded
+Linux evidence, held Windows and unavailable live integrations. The admitted live set is null;
+normative SADS satisfaction is unclaimed. Original failures/review repairs and 18 consistency controls
+are retained under `evidence/studio/M0-compatibility-manifest/`. The fresh contributor gate passed 851 backend tests plus baseline/architecture/spec checks,
+with source and fixed inputs unchanged. The artifact grants no runtime authority and does not close T001. Both 944a875 product and d421c23 package-metadata CI runs passed;
+those outcomes predate this descriptive artifact.
+
 The latest frontend successor passed typecheck/build, architecture and the full **89-check native
 Linux Chromium browser suite**, unchanged source (`evidence/studio/M1-shell-operability/`). Four new
 shell journeys cover actual login HTTP 401/error recovery, navigation state/focus, project-form operation

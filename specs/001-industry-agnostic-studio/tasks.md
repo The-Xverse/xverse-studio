@@ -344,3 +344,15 @@ CI jobs and c4e31f6 metadata CI jobs passed; they predate this shell source.
 Clean shell product 944a875 passed fresh offline native Linux package extraction, startup/UI, Unicode
 persistence, authoritative compilation and owned shutdown; receipt/clean 98-file manifest and tested
 frontend byte comparison are in `M1-shell-operability/package/`. Fresh-host CI is recorded separately.
+
+T001 descriptive baseline successor (2026-10-26): added the plan-required
+`config/platform-compatibility.json`, with selected immutable source/package/schema/lock identities,
+actual limits and separate descriptor/native-host evidence. The live compatibility set stays null;
+Windows is held, its owned I/O gap is source-inspected, and SADS allocation claims no satisfaction.
+The contributor gate now checks recorded facts against fixed installed/source/evidence inputs without
+provider operations or runtime authority. Independent review's missing/failed-receipt guard was repaired;
+18 controlled rejections and 18 restored controls pass. Evidence: `M0-compatibility-manifest/`. T001
+remains unchecked and component completion remains 47/100, with no milestone accepted.
+The fresh unchanged-source contributor gate passed 851 backend tests plus baseline consistency,
+architecture and spec structure. Prior 89 browser checks and compiled UI bytes remain applicable by
+exact unchanged-source comparison; no browser rerun is claimed for this descriptive artifact.

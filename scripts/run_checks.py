@@ -18,6 +18,7 @@ env = dict(
 )
 commands = [
     [sys.executable, str(root / "scripts/validate_spec_package.py")],
+    [sys.executable, "-I", str(root / "scripts/check_platform_compatibility.py")],
     [sys.executable, str(root / "scripts/check_architecture.py")],
     [
         sys.executable,

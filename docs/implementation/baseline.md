@@ -63,3 +63,17 @@ Current live limitations are concrete:
 The executable `studio.reference` provider is Studio-owned and has its own finite model contract.
 Its evidence scope is `owned_reference` and maturity is `fixture`. It proves owned application
 behaviour only; it does not establish compatibility, vehicle dynamics, industrial fidelity or hardware.
+
+The selected facts are also recorded in [the machine-readable baseline](../../config/platform-compatibility.json).
+It includes selected source/package/schema identities and limits, declared provider snapshots, the
+exact recorded Linux evidence candidate, held Windows status and unavailable integrations. Its
+`admittedLiveCompatibilitySet` is null. It is descriptive metadata; application admission uses the
+existing backend contracts and never reads this file to grant authority.
+
+`uv run python -I scripts/check_platform_compatibility.py` checks it in a fully provisioned contributor
+checkout. The contributor gate runs the same check before the backend suite. It compares installed
+XDL Git provenance and selected file hashes, lock/package versions, schema bytes, descriptors,
+toolchain declarations and fixed evidence receipts. It does not start/probe a provider or repeat the
+historical browser measurements. Intentional baseline changes need reviewed manifest/evidence
+updates; the checker does not rewrite the manifest. Repository evidence links require the checkout,
+and wheel-only provenance needs its own admission update. T001 remains open for its recorded gates.

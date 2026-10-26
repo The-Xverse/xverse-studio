@@ -1952,10 +1952,16 @@
         "AC-001"
       ],
       "status": "in_progress",
-      "implementation_note": "Linux-only partial baseline verification records Ubuntu/tool identities and confirms installed xverse-xdl 0.4.0 matches all five selected-baseline file hashes plus the unchanged lockfile. Native Windows, admitted live runtime compatibility and normative SADS source gaps remain open.",
+      "implementation_note": "Linux-only partial baseline verification records Ubuntu/tool identities and confirms installed xverse-xdl 0.4.0 matches all five selected-baseline file hashes plus the unchanged lockfile. Native Windows, admitted live runtime compatibility and normative SADS source gaps remain open. The planned config/platform-compatibility.json now consolidates selected source/installed-package/schema/lock identities, adapter versus platform limits, descriptor declarations, exact scoped Linux evidence and held Windows/source-inspected I/O gaps. Live compatibility set stays null; SADS satisfaction stays unclaimed. A read-only contributor drift check compares fixed trusted sources and successful evidence, with 18 rejected consistency controls and 18 restored passes; runtime admission remains unchanged. T001 remains open. Fresh unchanged-source contributor gate passes 851 backend tests plus the compatibility check, architecture and spec structure. Prior 89 browser checks and built UI remain applicable through exact unchanged source/byte comparisons; no browser rerun for metadata.",
       "implementation_evidence": [
         "evidence/studio/M0-linux-baseline/README.md",
-        "evidence/studio/M0-linux-baseline/verification.json"
+        "evidence/studio/M0-linux-baseline/verification.json",
+        "config/platform-compatibility.json",
+        "scripts/check_platform_compatibility.py",
+        "evidence/studio/M0-compatibility-manifest/README.md",
+        "evidence/studio/M0-compatibility-manifest/verification.json",
+        "evidence/studio/M0-compatibility-manifest/negative-controls.json",
+        "evidence/studio/M0-compatibility-manifest/independent-review.md"
       ]
     },
     {
@@ -6315,18 +6321,17 @@
     "status_document": "../../docs/implementation/STATUS.md",
     "native_windows": "BLOCKED at user request. Initial native Server 2022 install failed on upstream Git filenames; application/browser NOT_RUN.",
     "m5": "deferred",
-    "code_candidate": "944a87502f1f986a3f2b5d72dd868aecabeaf167; application/test source digest in evidence/studio/M1-shell-operability/verification.json",
+    "code_candidate": "descriptive baseline source/input digest in evidence/studio/M0-compatibility-manifest/verification.json on d421c23",
     "component_completed": 47,
     "verification": {
       "backend_tests_passed": 851,
       "playwright_checks_passed": 89,
       "playwright_checks_failed": 0,
-      "playwright_scope": "Full native Linux Chromium successor, unchanged source; four shell keyboard/contrast/semantics checks added to prior 85. Separate overlapping two-viewport performance refresh passed. Backend 851 inherited unchanged, not rerun.",
+      "playwright_scope": "Inherited 89-check Linux Chromium gate; all application/runtime/browser-harness sources and built UI bytes unchanged from 944a875. No browser rerun for descriptive metadata. Fresh contributor gate: 851 backend tests plus baseline/architecture/spec checks pass.",
       "milestones_accepted": 0,
-      "evidence": "evidence/studio/M1-shell-operability/",
-      "backend_evidence": "evidence/studio/M3-assets/verification.json and M1-shell-operability/backend-source-equivalence.json",
-      "prior_package_evidence": "evidence/studio/M1-accessible-diagnostics/package/receipt.json (clean e6c9de0 product source, native Linux)",
-      "package_evidence": "evidence/studio/M1-shell-operability/package/receipt.json (clean 944a875 Linux source)"
+      "evidence": "evidence/studio/M0-compatibility-manifest/",
+      "backend_evidence": "evidence/studio/M0-compatibility-manifest/verification.json",
+      "prior_package_evidence": "evidence/studio/M1-shell-operability/package/receipt.json (clean 944a875 Linux source)"
     }
   }
 }

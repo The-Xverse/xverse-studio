@@ -1,0 +1,327 @@
+{
+  "formatVersion": "1.0",
+  "scope": "descriptive_selected_baseline; not runtime authority",
+  "runtimeAdmissionAuthority": false,
+  "admittedLiveCompatibilitySet": null,
+  "sourceRevisions": {
+    "xverse-platform": {
+      "repository": "https://github.com/The-Xverse/xverse-platform",
+      "revision": "7fab6a290c3731533c2b88517158055c768b9d4e",
+      "status": "offline_xdl_verified_on_recorded_linux"
+    },
+    "xverse-compat": {
+      "repository": "https://github.com/The-Xverse/xverse-compat",
+      "revision": "f5b3957ca84cccfd98cddd9eb3ab95b0a4643eed",
+      "status": "source_inspection_only"
+    },
+    "xverse-blueprints": {
+      "repository": "https://github.com/The-Xverse/xverse-blueprints",
+      "revision": "0741e01b9e86b9bb9360e2feb220807b36bcbdc4",
+      "status": "source_inspection_only"
+    }
+  },
+  "xdl": {
+    "identity": {
+      "package": "xverse-xdl",
+      "version": "0.4.0",
+      "revision": "7fab6a290c3731533c2b88517158055c768b9d4e",
+      "apiVersions": [
+        "xverse.io/xdl/v1alpha1"
+      ],
+      "compilerPlanVersion": "1",
+      "scope": "offline_validation_and_declared_intent_compilation"
+    },
+    "publicExportsUsed": [
+      "validate_sources",
+      "canonical_json",
+      "compile_experiment_sources",
+      "plan_matches_digest",
+      "LoadLimits",
+      "ExperimentLimits",
+      "SUPPORTED_API_VERSIONS",
+      "__version__"
+    ],
+    "selectedFilesSha256": {
+      "xverse_xdl/__init__.py": "sha256:0e0ca25bf3afab9276a4a18900ed2fc3d82e4c3bf23854c4c9c69b3791cec8ce",
+      "xverse_xdl/experiment_plan.py": "sha256:4e4affa52fe77cea4f37598cd6bce2309a0a767a7e878372ecee0a5599603393",
+      "xverse_xdl/validate.py": "sha256:a2f57ead55dc805bdc37a3a79d91bbfa04e92ed7902636b4c3d6d978ce578fa2",
+      "xverse_xdl/normalize.py": "sha256:d7c933d90d6901fc693f35d575260c73e370ab012604a260d8885f7ffa6dd5f7",
+      "xverse_xdl/profiles/experiment-lite-v0.1.schema.json": "sha256:a2123b3349ab016fda829d57084d9142565bf76fdafd474fe19fe222562dfc30"
+    },
+    "profiles": [
+      {
+        "schemaId": "https://xverse.io/profiles/experiment-lite/v0.1/schema.json",
+        "sha256": "sha256:a2123b3349ab016fda829d57084d9142565bf76fdafd474fe19fe222562dfc30",
+        "profiles": [
+          {
+            "namespace": "io.xverse.experiment",
+            "version": "0.1.0"
+          }
+        ],
+        "artifact": "xverse_xdl/profiles/experiment-lite-v0.1.schema.json",
+        "origin": "installed_platform_distribution",
+        "scope": "offline_schema_admission; execution requires separate provider admission"
+      },
+      {
+        "schemaId": "https://schemas.xverse.io/studio/experiments/1.0/evaluation.schema.json",
+        "sha256": "sha256:2f24e20f9c926aaa755728a01342b1ebb1cb114438dd4262901afd6a446874cd",
+        "profiles": [
+          {
+            "namespace": "io.xverse.studio.experiments",
+            "version": "1.0.0"
+          }
+        ],
+        "artifact": "services/studio-api/src/xverse_studio/assertions/evaluation-v1.schema.json",
+        "origin": "studio_owned",
+        "scope": "offline_schema_admission; execution requires separate provider admission"
+      },
+      {
+        "schemaId": "https://schemas.xverse.io/studio/connections/1.0/connection-contracts.schema.json",
+        "sha256": "sha256:40a89b71efae28e8fa4b80372842988d12b588bf7c95f3de05695ea33462bbbe",
+        "profiles": [
+          {
+            "namespace": "io.xverse.studio.connections",
+            "version": "1.0.0"
+          }
+        ],
+        "artifact": "services/studio-api/src/xverse_studio/connections/connections-v1.schema.json",
+        "origin": "studio_owned",
+        "scope": "offline_schema_admission; execution requires separate provider admission"
+      },
+      {
+        "schemaId": "https://schemas.xverse.io/studio/domain/1.0/presentation-only.schema.json",
+        "sha256": "sha256:43d97f8dcadfa1246450121be31fc8c333f617301d29cf9cee100d8a8365bb6b",
+        "profiles": [
+          {
+            "namespace": "io.xverse.studio.domain.process-control",
+            "version": "1.0.0"
+          },
+          {
+            "namespace": "io.xverse.studio.domain.automotive",
+            "version": "1.0.0"
+          }
+        ],
+        "artifact": "services/studio-api/src/xverse_studio/profiles/domain-presentation-v1.schema.json",
+        "origin": "studio_owned",
+        "scope": "presentation_only"
+      }
+    ],
+    "studioAdapterLimits": {
+      "maxDocuments": 128,
+      "maxDocumentBytes": 1048576
+    },
+    "platformLoadDefaults": {
+      "max_bytes_per_file": 5242880,
+      "max_depth": 100,
+      "max_nodes": 100000,
+      "max_resources": 1000
+    },
+    "platformExperimentDefaults": {
+      "max_resources": 1000,
+      "max_bytes_per_file": 5242880,
+      "max_parameters": 256,
+      "max_steps": 256,
+      "max_faults": 256,
+      "max_observers": 256,
+      "max_metrics": 256,
+      "max_dependencies_per_step": 64,
+      "max_flows": 1024,
+      "max_bindings": 512,
+      "max_ticks": 9007199254740991,
+      "max_seed": 9007199254740991,
+      "max_number_magnitude": 1000000000000000.0,
+      "max_text_length": 200,
+      "max_limitations": 64,
+      "max_diagnostics": 256
+    },
+    "executionBoundary": "Public offline validation/declared-intent compilation; no runtime launch"
+  },
+  "dependencies": {
+    "lockFiles": {
+      "uv.lock": "sha256:62167ec13733f2518814e8c7c29bd20f99c90420981ecccff92991010447dd5f",
+      "package-lock.json": "sha256:b2735b63b7c1c06a26cf3c98d38ad6e8188f40a177c2d63a02f35563a2d2e23c"
+    },
+    "backendPackages": {
+      "fastapi": "0.135.1",
+      "uvicorn": "0.41.0",
+      "pydantic": "2.12.5",
+      "psutil": "7.2.2",
+      "xverse-xdl": "0.4.0",
+      "jsonschema": "4.26.0",
+      "referencing": "0.37.0",
+      "ruamel.yaml": "0.19.1"
+    },
+    "pythonRequirement": ">=3.13,<3.14",
+    "nodeRequirement": ">=24.22.1 <25",
+    "toolchainPins": {
+      "python": "3.13.13",
+      "node": "24.22.1",
+      "uv": "0.12.17",
+      "playwright": "1.64.1"
+    }
+  },
+  "providerDescriptorSnapshots": [
+    {
+      "providerId": "studio.reference",
+      "providerVersion": "1.0.0",
+      "contractVersion": "1.0",
+      "implementationDigest": "sha256:d544ae4d0fe1609fc5482d91334b211f96e75165e7bbaf5c62c72b7b2690631a",
+      "maturity": "fixture",
+      "evidenceScope": "owned_reference",
+      "supportedHostOS": [
+        "Linux",
+        "Windows"
+      ],
+      "architectures": [
+        "x86_64",
+        "AMD64"
+      ],
+      "operations": [
+        "start",
+        "stop",
+        "cancel"
+      ],
+      "connectionContracts": {
+        "causality": [
+          "unit-delay"
+        ],
+        "converters": [
+          "linear"
+        ]
+      },
+      "limits": {
+        "maxDurationSeconds": 30,
+        "maxSamples": 3000,
+        "maxConcurrentRuns": 4,
+        "maxElements": 200,
+        "maxConnections": 400
+      },
+      "available": true,
+      "limitations": [
+        "Scalar first-order reference model only; no external simulator, physical device, native X-COM, or industrial fidelity claim.",
+        "Pause, rewind, step, live mutation and physical coupling are unsupported."
+      ]
+    },
+    {
+      "providerId": "xverse.lite",
+      "providerVersion": "unavailable",
+      "contractVersion": "1.0",
+      "implementationDigest": null,
+      "maturity": "unavailable",
+      "evidenceScope": "unavailable",
+      "supportedHostOS": [
+        "Linux"
+      ],
+      "architectures": [
+        "x86_64"
+      ],
+      "operations": [],
+      "available": false,
+      "blockedReasons": [
+        {
+          "code": "DEP-RUN-CONFIG",
+          "message": "The inspected Bash harness uses a private trusted-host path and generates its own XDL. An admitted public effective-input/plan contract and permitted live environment are required."
+        }
+      ]
+    }
+  ],
+  "nativeHosts": {
+    "Linux": {
+      "distribution": {
+        "PRETTY_NAME": "Ubuntu 22.04.5 LTS",
+        "VERSION_ID": "22.04",
+        "ID": "ubuntu"
+      },
+      "architecture": "x86_64",
+      "python": "3.13.13",
+      "node": "v24.22.1",
+      "browserVersion": "156.0.8078.4",
+      "verification": "scoped owned/offline workflows; no live-provider compatibility claim",
+      "evidenceCandidate": "944a87502f1f986a3f2b5d72dd868aecabeaf167",
+      "evidenceSourceDigest": "sha256:0c4fdf2ebd8488cc6338396dffd6aa516918c514f976a5fb86591c4aefdc0c63",
+      "repositoryEvidence": [
+        "evidence/studio/M3-physical-contracts/environment.json",
+        "evidence/studio/M1-shell-operability/verification.json",
+        "evidence/studio/M1-shell-operability/journeys/1024x768/login/native-browser-environment.json"
+      ]
+    },
+    "Windows": {
+      "lastAttempt": "Windows Server 2022 Datacenter 10.0.20348 x64",
+      "installation": "FAIL",
+      "applicationAndBrowser": "NOT_RUN",
+      "currentStatus": "BLOCKED_USER_REQUEST",
+      "installationDiagnostic": "UPSTREAM_NONPORTABLE_FILENAMES",
+      "knownOwnedGap": {
+        "diagnostic": "PLATFORM_IO_UNAVAILABLE",
+        "basis": "source inspection; native Windows execution NOT_RUN"
+      },
+      "repositoryEvidence": [
+        "evidence/studio/native-ci/windows-initial-install-failure.json",
+        "docs/implementation/platform-support.md"
+      ]
+    }
+  },
+  "unavailableIntegrations": [
+    {
+      "integration": "Lite_runtime_and_CARLA",
+      "status": "unavailable",
+      "diagnostics": [
+        "DEP-RUN",
+        "DEP-RUN-CONFIG"
+      ],
+      "prerequisite": "Admitted public effective-input/plan contract and permitted per-OS live environment"
+    },
+    {
+      "integration": "native_XCOM",
+      "status": "unavailable",
+      "prerequisite": "Separate admitted native adapter; Lite flow evidence is not native-core activation"
+    },
+    {
+      "integration": "physical_assets",
+      "status": "unavailable",
+      "scope": "Live device/provider admission; read-only inventory contracts exist",
+      "prerequisite": "Nominated provider/device, permitted operations and per-host driver/ownership/clock/stop evidence"
+    }
+  ],
+  "sads": {
+    "allocatedSourceIds": [
+      "XVE-SYS-0159",
+      "XVE-SYS-0160",
+      "XVE-SYS-0161",
+      "XVE-SYS-0162",
+      "XVE-SYS-0163",
+      "XVE-SYS-0164",
+      "XVE-SYS-0165",
+      "XVE-SYS-0166",
+      "XVE-SYS-0167",
+      "XVE-SYS-0168",
+      "XVE-SYS-0169",
+      "XVE-SYS-0170",
+      "XVE-SYS-0171",
+      "XVE-SYS-0172",
+      "XVE-SYS-0173",
+      "XVE-SYS-0174",
+      "XVE-SYS-0175",
+      "XVE-SYS-0176",
+      "XVE-SYS-0177",
+      "XVE-SYS-0178"
+    ],
+    "normativeText": "unavailable",
+    "satisfaction": "not_claimed",
+    "repositoryEvidence": [
+      "docs/implementation/sads-dispositions.md"
+    ]
+  },
+  "repositoryEvidence": [
+    "docs/implementation/baseline.md",
+    "docs/implementation/dependencies.md",
+    "docs/implementation/platform-support.md",
+    "evidence/studio/M0-linux-baseline/verification.json"
+  ],
+  "limitations": [
+    "Source pins do not establish a coherent admitted live execution set.",
+    "Provider supportedHostOS/available fields are descriptor declarations; native host evidence qualifies verification independently.",
+    "Repository evidence references require the source checkout; they are not promises that evidence is embedded in the application bundle.",
+    "Native Windows is held; normative SADS and live runtime/provider gates remain open. T001 remains in progress."
+  ]
+}
