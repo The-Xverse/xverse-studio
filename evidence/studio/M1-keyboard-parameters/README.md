@@ -105,3 +105,9 @@ presentation, not provider, simulator or device capacity.
 | --- | --- | --- | --- |
 | 1024x768 | 28.5 ms | 1655.7 ms | 446.6 ms |
 | 1440x900 | 28.6 ms | 1663.3 ms | 446.9 ms |
+
+Clean product `f04f6cdc5ec44ecfe4574bbd0a519fab765fd951` passed fresh offline native Linux package extraction with
+prepared dependencies, startup/UI HTTP 200, Unicode persistence, authoritative public
+compilation and owned shutdown. `package/` retains its clean 100-file manifest, receipt
+and verification of all archive/file hashes and exact tested UI bytes. Browser scope
+remains the separate checks above; native Windows was not run.

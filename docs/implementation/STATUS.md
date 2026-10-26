@@ -47,6 +47,11 @@ the earlier 140/141 result remains failed. `evidence/studio/M1-keyboard-paramete
 review and raw measurements. Windows/actual AT and milestone gates remain open; count 47/100.
 Both 1c8e937 and 25ad840 push/PR CI passed before this generic save repair.
 
+Clean f04f6cd also passed offline native Linux package extraction/provisioning, startup/UI,
+Unicode persistence, authoritative compilation and owned shutdown. Its clean 100-file manifest,
+archive/file hashes and exact tested UI bytes are retained under `M1-keyboard-parameters/package/`.
+Fresh-host CI remains a separate per-candidate outcome.
+
 The preceding deployment successor passed 18 native keyboard journeys at both required viewports and
 the full 117-check browser suite with source/fixed inputs unchanged. It verifies variant cloning,
 resource binding, time-mapping authoring/removal, exact revisions/requests, original document bytes

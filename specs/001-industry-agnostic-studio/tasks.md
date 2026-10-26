@@ -413,3 +413,5 @@ No live mutation/Start; Windows, actual assistive-technology and full acceptance
 Evidence: `evidence/studio/M1-keyboard-parameters/`; count 47/100, no milestone accepted.
 T015/T017/T042/T045/T062 component traces retain the ADR-0013 amendment without changing their
 completed statuses.
+Clean f04f6cd package smoke passes; clean 100-file manifest, archive/file hashes and tested UI
+bytes are verified under `M1-keyboard-parameters/package/`. Native Windows remains held.
