@@ -292,3 +292,10 @@ several first-draft tests passing for unrelated reasons; they were rewritten, an
 reports unadmitted (`PROFILE_UNRESOLVED`) and redefined (`PROFILE_CONFLICT`) authored profiles.
 618 backend tests and 66 browser/performance checks pass. Component completion is 33/100. See
 `evidence/studio/M2-profiles-catalog/`.
+
+Linux-only partial checkpoint (2026-10-26): T038/T067 now retain separate 1024×768 and 1440×900
+keyboard/focus/status journeys and passing 30-repetition canvas/history distributions
+(`evidence/studio/M1-operability/`, `M2-operability/`). T023's executed Linux recovery cases and
+remaining direct regression gaps are mapped in `M1-linux-reconciliation/`; T001's installed XDL
+checksums match the selected baseline (`M0-linux-baseline/`). All four tasks stay unchecked; native
+Windows remains held and no acceptance gate is inferred from these partial results.

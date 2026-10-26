@@ -1,0 +1,88 @@
+import { test, expect, type Locator, type Page } from "@playwright/test";
+import { connectStudio } from "./connect-studio";
+import { measureModel } from "../performance/browser-model";
+import { measureHistory } from "../performance/browser-history";
+
+async function focusByTab(page: Page, target: Locator) {
+  await expect(target).toBeVisible();
+  for (let step = 0; step < 160; step++) {
+    if (await target.evaluate((element) => document.activeElement === element)) {
+      return;
+    }
+    await page.keyboard.press("Tab");
+  }
+  throw new Error("Essential operation is unreachable through native Tab order.");
+}
+
+async function activateByTab(page: Page, target: Locator) {
+  await focusByTab(page, target);
+  await page.keyboard.press("Enter");
+}
+
+async function expectNoPageOverflow(page: Page) {
+  expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1)).toBe(false);
+}
+
+for (const viewport of [
+  { width: 1024, height: 768 },
+  { width: 1440, height: 900 },
+]) {
+  test(`operability: keyboard, focus, textual status and reference workloads at ${viewport.width}x${viewport.height}`, async ({ page }, testInfo) => {
+    test.setTimeout(240000);
+    await page.setViewportSize(viewport);
+    await connectStudio(page, testInfo);
+    await activateByTab(page, page.getByRole("button", { name: "X-Verse Studio home", exact: true }));
+    await activateByTab(page, page.locator(".example-grid").getByRole("button", { name: /Process control reference/ }));
+    const projectId = await page.evaluate(() => localStorage.getItem("studio.projectId"));
+    await activateByTab(page, page.getByRole("button", { name: "Table view", exact: true }));
+    await activateByTab(page, page.getByRole("button", { name: "plant", exact: true }));
+    await expect(page.getByRole("heading", { name: "Element inspector", exact: true })).toBeVisible();
+    await activateByTab(page, page.getByRole("button", { name: "Parameters", exact: true }));
+    const duration = page.getByLabel("Duration");
+    await focusByTab(page, duration);
+    await page.keyboard.press("ControlOrMeta+A");
+    await page.keyboard.insertText("30");
+    await activateByTab(page, duration.locator("xpath=ancestor::form").getByRole("button", { name: "Apply", exact: true }));
+    await expect(page.locator(".alerts[aria-live=polite]")).toContainText("Draft saved.");
+    await activateByTab(page, page.getByRole("button", { name: "Validate", exact: true }));
+    await expect(page.locator(".alerts[aria-live=polite]")).toContainText("Authoritative platform validation passed.");
+    const preflight = page.getByRole("button", { name: "Preflight & run", exact: true });
+    await activateByTab(page, preflight);
+    await expect(page.getByRole("heading", { name: "Execution preflight", exact: true })).toBeVisible();
+    const dialog = page.getByRole("dialog", { name: "Execution preflight", exact: true });
+    for (const key of ["Tab", "Tab", "Shift+Tab", "Shift+Tab"]) {
+      await page.keyboard.press(key);
+      expect(await dialog.evaluate((element) => element.contains(document.activeElement))).toBe(true);
+    }
+    await page.keyboard.press("Escape");
+    await expect(preflight).toBeFocused();
+    const focusOutline = await preflight.evaluate((element) => {
+      const style = getComputedStyle(element);
+      return style.outlineStyle !== "none" && parseFloat(style.outlineWidth) >= 2;
+    });
+    expect(focusOutline).toBe(true);
+    await page.keyboard.press("Enter");
+    await activateByTab(page, page.getByRole("button", { name: "Start frozen snapshot", exact: true }));
+    const runHeading = page.locator(".results-view").getByRole("heading", { name: /^Run results/ });
+    await expect(runHeading).toHaveText("Run results running", { timeout: 15000 });
+    const runId = await page.evaluate((id) => localStorage.getItem("studio.lastRun." + id), projectId);
+    await expect(page.locator(".results-view .run-identity code").first()).toHaveText(runId!);
+    await activateByTab(page, page.getByRole("button", { name: "Stop", exact: true }));
+    await expect(runHeading).toHaveText("Run results stopped", { timeout: 15000 });
+    await expectNoPageOverflow(page);
+    await testInfo.attach("keyboard-operability.json", {
+      body: JSON.stringify({ scope: "owned reference; native Linux evidence only when run on Linux", platform: process.platform, browser: await page.context().browser()?.version(), viewport, nativeTabActivation: true, modalEscapeRestoresFocus: true, visibleFocusOutline: focusOutline, politeTextValidationStatus: true, textualRunningAndStoppedStates: true, horizontalPageOverflow: false, limitations: ["No screen-reader certification or other browser-engine claim.", "Native Windows held at user request."] }),
+      contentType: "application/json",
+    });
+    if (process.env.STUDIO_PERFORMANCE === "1") {
+      await measureModel(page, testInfo);
+      await expectNoPageOverflow(page);
+      await testInfo.attach("model-validation-outcome.json", {
+        body: JSON.stringify({ scope: "Open and authoritative validation-result presentation; diagnostic outcomes are retained", viewport, message: await page.locator(".alerts").innerText() }),
+        contentType: "application/json",
+      });
+      await measureHistory(page, testInfo, projectId || undefined);
+      await expectNoPageOverflow(page);
+    }
+  });
+}

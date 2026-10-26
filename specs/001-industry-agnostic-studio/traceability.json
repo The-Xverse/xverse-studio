@@ -1931,7 +1931,7 @@
       "story": "SETUP",
       "kind": "design",
       "parallel": false,
-      "description": "Inspect and pin the actual platform/compat/blueprints revisions, API/profile surface, dependency identities, runtime limits and execution boundary; record missing supported-wrapper work without importing private classes. Record applicability and source dispositions for public SADS allocations XVE-SYS-0159\u20130178; absent normative text is an evidence gap, not permission to invent detailed matches or a blocker to user-derived requirements. Establish the native platform-support matrix: exact supported Linux distribution/release and Windows edition/release, architecture, browser and Python/Node versions. Separate Studio backend support from each provider/driver/runtime OS capability.",
+      "description": "Inspect and pin the actual platform/compat/blueprints revisions, API/profile surface, dependency identities, runtime limits and execution boundary; record missing supported-wrapper work without importing private classes. Record applicability and source dispositions for public SADS allocations XVE-SYS-0159–0178; absent normative text is an evidence gap, not permission to invent detailed matches or a blocker to user-derived requirements. Establish the native platform-support matrix: exact supported Linux distribution/release and Windows edition/release, architecture, browser and Python/Node versions. Separate Studio backend support from each provider/driver/runtime OS capability.",
       "paths": [
         "docs/implementation/baseline.md",
         "docs/implementation/dependencies.md",
@@ -1952,7 +1952,11 @@
         "AC-001"
       ],
       "status": "in_progress",
-      "implementation_note": "Owned Linux foundation implemented and exercised; native Windows and selected external runtime admission remain open. See evidence/studio/M0-review and docs/implementation/platform-support.md."
+      "implementation_note": "Linux-only partial baseline verification records Ubuntu/tool identities and confirms installed xverse-xdl 0.4.0 matches all five selected-baseline file hashes plus the unchanged lockfile. Native Windows, admitted live runtime compatibility and normative SADS source gaps remain open.",
+      "implementation_evidence": [
+        "evidence/studio/M0-linux-baseline/README.md",
+        "evidence/studio/M0-linux-baseline/verification.json"
+      ]
     },
     {
       "id": "T002",
@@ -2611,7 +2615,12 @@
         "AC-009"
       ],
       "status": "in_progress",
-      "implementation_note": "Owned native reference/browser workflows exercised, with exact input identity and failure regressions. Actual Lite, five-person usability and full native Windows gates remain open."
+      "implementation_note": "Linux-only partial: the unchanged full 776-test cohort includes real backend crash/restart with worker continuity, one Start receipt, ownership-verified cancellation/cleanup, lost launch acknowledgement, wrong-argv rejection and unknown outcomes. A separate audit maps those tests and records remaining direct PID-reuse, later missing/inaccessible identity and shutdown-with-unknown regressions. Native Windows remains held; task stays open.",
+      "implementation_evidence": [
+        "evidence/studio/M1-linux-reconciliation/README.md",
+        "evidence/studio/M1-linux-reconciliation/independent-review.md",
+        "evidence/studio/M3-physical-contracts/verification.json"
+      ]
     },
     {
       "id": "T024",
@@ -3096,7 +3105,7 @@
       "story": "SETUP",
       "kind": "verification",
       "parallel": true,
-      "description": "Verify keyboard/focus/status alternatives at 1024\u00d7768 and 1440\u00d7900 and measure the 50,000-event/200-row workload over the specified repetitions. Execute the supported browser/accessibility and event-query matrix on both native Linux and Windows, retaining each platform's results independently.",
+      "description": "Verify keyboard/focus/status alternatives at 1024×768 and 1440×900 and measure the 50,000-event/200-row workload over the specified repetitions. Execute the supported browser/accessibility and event-query matrix on both native Linux and Windows, retaining each platform's results independently.",
       "paths": [
         "tests/e2e/accessibility.spec.ts",
         "tests/performance/evidence-query.spec.ts",
@@ -3118,7 +3127,13 @@
         "AC-031"
       ],
       "status": "in_progress",
-      "implementation_note": "Owned native reference/browser workflows exercised, with exact input identity and failure regressions. Actual Lite, five-person usability and full native Windows gates remain open."
+      "implementation_note": "Linux-only partial: two real native Chromium journeys pass at 1024x768 and 1440x900 with Tab/Enter form/table/run controls, textual status, modal containment/Escape/visible-focus restoration, selected Start identity and overflow checks. 50,000-event/200-row history workloads retain one warm-up plus 30 samples per viewport and pass p95. Native Windows held; full accessibility/diagnostic acceptance remains open.",
+      "implementation_evidence": [
+        "tests/e2e/accessibility.spec.ts",
+        "evidence/studio/M1-operability/README.md",
+        "evidence/studio/M1-operability/verification.json",
+        "evidence/studio/M1-operability/independent-review.md"
+      ]
     },
     {
       "id": "T039",
@@ -3291,7 +3306,7 @@
         "AC-031"
       ],
       "status": "completed",
-      "implementation_note": "Owned component complete after independent review (eight findings repaired; two recorded browser regressions repaired) and an unchanged-candidate 547 backend / 54 browser-performance run at both viewports: node-placement grouping (nodeId and memberIds) as a keyboard WAI-ARIA tree, presentation-only node frames and node-aware auto layout, named ports on canvas elements, System \u203a node \u203a element \u203a Component-definition drill-down, search and zoom. Edges stay element-level; regrouping needs a source edit; XDL v1alpha1 has no nested Systems. AC-013 live/cross-OS and AC-031 Windows remain open.",
+      "implementation_note": "Owned component complete after independent review (eight findings repaired; two recorded browser regressions repaired) and an unchanged-candidate 547 backend / 54 browser-performance run at both viewports: node-placement grouping (nodeId and memberIds) as a keyboard WAI-ARIA tree, presentation-only node frames and node-aware auto layout, named ports on canvas elements, System › node › element › Component-definition drill-down, search and zoom. Edges stay element-level; regrouping needs a source edit; XDL v1alpha1 has no nested Systems. AC-013 live/cross-OS and AC-031 Windows remain open.",
       "implementation_evidence": [
         "evidence/studio/M2-structure/verification.json",
         "evidence/studio/M2-structure/independent-review.md"
@@ -4072,7 +4087,14 @@
         "AC-031"
       ],
       "status": "in_progress",
-      "implementation_note": "Owned graph/source/catalog/profile/variant work implemented and tested; independent composition repair verification and final UI successor are being retained. External two-industry/live and cross-OS gates remain open."
+      "implementation_note": "Linux-only partial: both 1024x768 and 1440x900 journeys pass keyboard/focus/status checks and one-warm-up/30-repetition measurements of 200 elements/400 connections plus 50,000 retained events. Both model fixtures pass authoritative validation. Selection p95 29.3/28.6 ms, open-validation 1652.7/1660.2 ms, history 446.3/446.2 ms. Native Windows held and broader accessibility/diagnostic acceptance open; task stays in progress.",
+      "implementation_evidence": [
+        "tests/e2e/accessibility.spec.ts",
+        "tests/performance/browser-model.ts",
+        "tests/performance/browser-history.ts",
+        "evidence/studio/M2-operability/README.md",
+        "evidence/studio/M1-operability/verification.json"
+      ]
     },
     {
       "id": "T068",
@@ -5084,7 +5106,7 @@
       "story": "SETUP",
       "kind": "verification",
       "parallel": false,
-      "description": "Assemble the exact-candidate M0\u2013M4 acceptance dossier with all measured success criteria, tasks/evidence traceability and remaining dependencies; report truthful completion and release scope for review. Require both native-platform core smoke/packaging results and explicit per-OS provider availability in the release dossier; browser-only Windows access or WSL execution cannot satisfy native Windows backend support.",
+      "description": "Assemble the exact-candidate M0–M4 acceptance dossier with all measured success criteria, tasks/evidence traceability and remaining dependencies; report truthful completion and release scope for review. Require both native-platform core smoke/packaging results and explicit per-OS provider availability in the release dossier; browser-only Windows access or WSL execution cannot satisfy native Windows backend support.",
       "paths": [
         "evidence/studio/release/",
         "docs/releases/studio-1.0.md"
@@ -5139,7 +5161,7 @@
       ],
       "status": "blocked",
       "implementation_note": "Owned bounded evaluator/metric/campaign/comparison/exchange/annotation/retention slices exercised. Release completeness, broader provider scenarios, shared-artifact retention and native Windows gates remain open.",
-      "blocker": "Retained M0\u2013M4 acceptance gates, native Windows verification, live runtime, hardware and human usability are incomplete."
+      "blocker": "Retained M0–M4 acceptance gates, native Windows verification, live runtime, hardware and human usability are incomplete."
     }
   ],
   "acceptance_cases": [
@@ -6241,20 +6263,22 @@
     }
   ],
   "implementation_record": {
-    "scope": "Owned reference implementation; no accepted M0\u2013M4 milestone claimed.",
+    "scope": "Owned reference implementation; no accepted M0–M4 milestone claimed.",
     "branch": "implement/studio-m0-m4",
     "status_document": "../../docs/implementation/STATUS.md",
     "native_windows": "BLOCKED at user request. Initial native Server 2022 install failed on upstream Git filenames; application/browser NOT_RUN.",
     "m5": "deferred",
-    "code_candidate": "application/test source digest recorded in evidence/studio/M3-physical-contracts/verification.json on 99d1aee",
+    "code_candidate": "unchanged T070 source plus two-viewport browser test; exact successor digest in evidence/studio/M1-operability/verification.json on 04293b8",
     "component_completed": 45,
     "verification": {
       "backend_tests_passed": 776,
       "playwright_checks_passed": 75,
       "playwright_checks_failed": 0,
-      "playwright_scope": "full Linux browser suite with performance measurements on an unchanged candidate",
+      "playwright_scope": "full Linux 75-check T070 cohort; successor two-viewport tests verified separately with all prior application/test source unchanged",
       "milestones_accepted": 0,
-      "evidence": "evidence/studio/M3-physical-contracts/"
+      "evidence": "evidence/studio/M3-physical-contracts/",
+      "playwright_successor_checks_passed": 2,
+      "successor_evidence": "evidence/studio/M1-operability/"
     }
   }
 }

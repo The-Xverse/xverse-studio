@@ -23,6 +23,12 @@ remains blocked at user request, and native Windows secure I/O remains unimpleme
 
 The latest full Linux backend run passed **776 tests**; typecheck/build and the full **75-check
 browser/performance gate passed** with unchanged source (`evidence/studio/M3-physical-contracts/`).
+A successor added only the two-viewport browser test and passed both focused keyboard/performance
+journeys with prior application/test source unchanged (`evidence/studio/M1-operability/`,
+`M2-operability/`). This is separate from the full 75-check cohort. T038/T067 stay open for native
+Windows and broader accessibility/diagnostic gates. T023's Linux audit identifies direct PID-reuse,
+later process-identity failure and unknown-shutdown regression gaps (`M1-linux-reconciliation/`);
+T001's five installed XDL file hashes match the selected baseline (`M0-linux-baseline/`).
 Fresh-host CI passed (push and PR) for every commit since b61c7ec, through 99d1aee.
 That includes the 30-second native expiry case with actual HTTP 410 and running verified-prefix
 recovery. Fresh-host push CI for checkpoint fb8ddb6 had failed that case (a history read racing a
