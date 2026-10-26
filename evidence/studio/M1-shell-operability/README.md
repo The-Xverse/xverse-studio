@@ -23,6 +23,13 @@ Workloads retain 200 elements/400 connections and 50,000 recorded events. Histor
 418.5/1930.2 ms and are excluded from the declared warmed distributions; cold provisioning/journal
 verification is also excluded. These measure Studio/browser fixtures, not simulator/device capacity.
 
+Clean product commit `944a87502f1f986a3f2b5d72dd868aecabeaf167` passed a fresh offline Linux package
+extraction with the prepared dependency cache, native startup/UI HTTP 200, Unicode persistence,
+authoritative compilation and owned shutdown. `package/` retains its receipt and clean 98-file
+manifest. All archive/file hashes and the exact tested frontend bytes were verified. Physical
+source/cache/tool/temp paths were resolved; native Windows was not run. Fresh-host CI remains a
+separate per-commit outcome, never inferred from the earlier e6c9de0/c4e31f6 passing runs.
+
 | Journey | Observed behavior |
 | --- | --- |
 | Login instructions/error recovery | Native keyboard entry of a synthetic invalid token, real HTTP 401, password cleared, associated error/invalid state; editing clears stale feedback while retaining the instructions/help association |

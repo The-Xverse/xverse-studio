@@ -341,3 +341,6 @@ Final shell-source performance refresh passed: 30 repetitions after one warm-up 
 selection p95 27.9/27.1 ms, open-validation 1679.4/1780.1 ms and history 446.6/447.1 ms. Raw distributions
 and authoritative model validation outcomes are retained separately. Both earlier e6c9de0 product
 CI jobs and c4e31f6 metadata CI jobs passed; they predate this shell source.
+Clean shell product 944a875 passed fresh offline native Linux package extraction, startup/UI, Unicode
+persistence, authoritative compilation and owned shutdown; receipt/clean 98-file manifest and tested
+frontend byte comparison are in `M1-shell-operability/package/`. Fresh-host CI is recorded separately.

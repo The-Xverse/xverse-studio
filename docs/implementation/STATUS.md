@@ -35,7 +35,9 @@ cohort (`M3-assets/`); backend tests were not rerun for this frontend-only slice
 performance refresh passed at both viewports: selection p95 27.9/27.1 ms, open-validation
 1679.4/1780.1 ms and history 446.6/447.1 ms; commands/raw samples are retained separately. Native Windows, actual
 assistive-technology and complete accessibility acceptance remain open.
-Earlier diagnostic product e6c9de0 passed fresh offline Linux package provisioning, native startup/UI,
+Clean shell product 944a875 also passed the offline Linux package smoke with its tested UI, Unicode
+persistence, public compilation and clean 98-file manifest (`M1-shell-operability/package/`).
+Its new fresh-host CI is recorded separately. Earlier diagnostic product e6c9de0 passed fresh offline Linux package provisioning, native startup/UI,
 Unicode persistence and authoritative compilation (`M1-accessible-diagnostics/package/`). It predates
 the shell repair; clean package and fresh-host CI outcomes are recorded separately per candidate.
 Both viewport performance workloads and duplicate-name project retention passed in the b2cf71a full
