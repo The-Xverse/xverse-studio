@@ -2380,8 +2380,16 @@
         "AC-003",
         "AC-004"
       ],
-      "status": "in_progress",
-      "implementation_note": "Owned native reference/browser workflows exercised, with exact input identity and failure regressions. Actual Lite, five-person usability and full native Windows gates remain open."
+      "status": "completed",
+      "implementation_note": "Owned component complete: create/open/recent/example journeys (with T015 scenarios), explicit dependency import verified per lock (registry identity, sidecar digests, duplicates), and read-only unresolved-content inspection (GET /projects/{id}/inspection, header Dependencies dialog with parsed payloads linking to exact sources) with clearly scoped example claims. 659 backend / 68 browser checks pass. Live Lite, the five-person study and native Windows remain open under their own gates.",
+      "implementation_evidence": [
+        "services/studio-api/src/xverse_studio/projects/inspection.py",
+        "apps/studio-web/src/features/projects/ProjectInspection.tsx",
+        "tests/integration/test_project_inspection.py",
+        "tests/e2e/project-journeys.spec.ts",
+        "evidence/studio/M1-projects/README.md",
+        "evidence/studio/M1-projects/verification.json"
+      ]
     },
     {
       "id": "T017",
@@ -3717,8 +3725,14 @@
       "acceptance_ids": [
         "AC-018"
       ],
-      "status": "in_progress",
-      "implementation_note": "Owned graph/source/catalog/profile/variant work implemented and tested; independent composition repair verification and final UI successor are being retained. External two-industry/live and cross-OS gates remain open."
+      "status": "completed",
+      "implementation_note": "Owned component complete: compatible/incompatible rebinding through update_binding/PATCH with logical identity preserved (System bytes, element and connection refs), declared artifact/resource requirement pass/fail/unknown, placement, exclusive-resource, clock-mapping-path and network-binding constraints, effective-value chains with undefined precedence rejected, and portable intent separated from unresolved asset/secret references with credential redaction and host/provider OS path resolution. 659 backend / 68 browser checks pass on an unchanged candidate.",
+      "implementation_evidence": [
+        "tests/integration/test_deployment_variants.py",
+        "docs/architecture/ADR-0015-deployment-resolution.md",
+        "evidence/studio/M2-deployments/README.md",
+        "evidence/studio/M2-deployments/verification.json"
+      ]
     },
     {
       "id": "T058",
@@ -3745,7 +3759,11 @@
         "AC-018"
       ],
       "status": "in_progress",
-      "implementation_note": "Owned graph/source/catalog/profile/variant work implemented and tested; independent composition repair verification and final UI successor are being retained. External two-industry/live and cross-OS gates remain open."
+      "implementation_note": "Deployment resolution 1.0 implemented (deployments/resolution.py, ADR-0015): named variants, authoritative compatibility/effective-value resolution rejecting undefined precedence, environment/secret separation and host-path resolution against the provider OS contract, exposed through the resolution route, rebinding and preflight. Remains open: declared dependency T054 (admitted converter/causality contracts) and native Windows.",
+      "implementation_evidence": [
+        "services/studio-api/src/xverse_studio/deployments/resolution.py",
+        "evidence/studio/M2-deployments/verification.json"
+      ]
     },
     {
       "id": "T059",
@@ -6174,15 +6192,15 @@
     "status_document": "../../docs/implementation/STATUS.md",
     "native_windows": "BLOCKED at user request. Initial native Server 2022 install failed on upstream Git filenames; application/browser NOT_RUN.",
     "m5": "deferred",
-    "code_candidate": "working-tree product sha256 recorded in evidence/studio/M1-onboarding/verification.json on 90c11c4",
-    "component_completed": 35,
+    "code_candidate": "working-tree product sha256 recorded in evidence/studio/M2-deployments/verification.json on f7db660",
+    "component_completed": 37,
     "verification": {
-      "backend_tests_passed": 635,
-      "playwright_checks_passed": 67,
+      "backend_tests_passed": 659,
+      "playwright_checks_passed": 68,
       "playwright_checks_failed": 0,
       "playwright_scope": "full Linux browser suite with performance measurements on an unchanged candidate",
       "milestones_accepted": 0,
-      "evidence": "evidence/studio/M1-onboarding/"
+      "evidence": "evidence/studio/M2-deployments/"
     }
   }
 }

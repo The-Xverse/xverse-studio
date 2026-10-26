@@ -83,8 +83,12 @@ class ProfileRegistry:
                 continue
             if not isinstance(resource, dict) or resource.get("kind") != "Profile":
                 continue
-            spec, meta = resource.get("spec") or {}, resource.get("metadata") or {}
+            # Malformed shapes are the validator's to report; never fail while reporting them.
+            spec = resource.get("spec") if isinstance(resource.get("spec"), dict) else {}
+            meta = resource.get("metadata") if isinstance(resource.get("metadata"), dict) else {}
             namespace = spec.get("extensionNamespace")
+            if not isinstance(namespace, str):
+                continue
             ref = f"xdl://{meta.get('namespace')}/profile/{meta.get('name')}"
             entry = admitted.get(namespace)
             if entry is None:
@@ -116,23 +120,47 @@ class ProfileRegistry:
             raise Problem("PROFILE_CONFLICT", "The authored envelope exceeds the admitted profile-lock bound.")
         seen = set()
         for lock in locks:
-            entry = self._verified_lock(lock)
-            if lock["namespace"] in seen:
-                raise Problem("PROFILE_CONFLICT", "A namespace has more than one declared profile lock.")
-            seen.add(lock["namespace"])
-            for path_field, digest_field in (("schemaPath", "schemaDigest"), ("presentationPath", "presentationDigest")):
-                if not lock.get(path_field):
-                    continue
-                content = project.get("supportingFiles", {}).get(lock[path_field])
-                if not isinstance(content, str) or digest(content.encode()) != lock[digest_field]:
-                    raise Problem("PROFILE_CONFLICT", "A declared profile sidecar is absent or disagrees with its immutable digest.")
-                if path_field == "presentationPath":
-                    try:
-                        if json.loads(content) != entry["presentation"]:
-                            raise ValueError()
-                    except (ValueError, TypeError, RecursionError):
-                        raise Problem("PROFILE_CONFLICT", "Profile presentation must match the admitted inert metadata.") from None
+            self._verified_project_lock(project, lock, seen)
         return deepcopy(locks)
+
+    def lock_statuses(self, project):
+        """Per-lock verdicts with the same checks as `validate_project`, for read-only inspection."""
+        locks = project.get("manifest", {}).get("profiles", [])
+        if not isinstance(locks, list):
+            return [{"namespace": None, "version": None, "status": "conflict", "reason": "The profile-lock list is malformed."}]
+        seen, result = set(), []
+        for index, lock in enumerate(locks):
+            text = lambda key: lock.get(key) if isinstance(lock, dict) and isinstance(lock.get(key), str) else None
+            try:
+                if index >= 16:
+                    raise Problem("PROFILE_CONFLICT", "The authored envelope exceeds the admitted profile-lock bound.")
+                self._verified_project_lock(project, lock, seen)
+                status, reason = "admitted", "Matches the admitted registry identity and its declared sidecar bytes."
+            except Problem as problem:
+                status, reason = ("unresolved" if problem.code == "PROFILE_UNRESOLVED" else "conflict"), str(problem)
+            result.append({"index": index, "namespace": text("namespace"), "version": text("version"),
+                           "schemaPath": text("schemaPath"), "presentationPath": text("presentationPath"),
+                           "status": status, "reason": reason})
+        return result
+
+    def _verified_project_lock(self, project, lock, seen):
+        entry = self._verified_lock(lock)
+        if lock["namespace"] in seen:
+            raise Problem("PROFILE_CONFLICT", "A namespace has more than one declared profile lock.")
+        seen.add(lock["namespace"])
+        for path_field, digest_field in (("schemaPath", "schemaDigest"), ("presentationPath", "presentationDigest")):
+            if not lock.get(path_field):
+                continue
+            content = project.get("supportingFiles", {}).get(lock[path_field])
+            if not isinstance(content, str) or digest(content.encode()) != lock[digest_field]:
+                raise Problem("PROFILE_CONFLICT", "A declared profile sidecar is absent or disagrees with its immutable digest.")
+            if path_field == "presentationPath":
+                try:
+                    if json.loads(content) != entry["presentation"]:
+                        raise ValueError()
+                except (ValueError, TypeError, RecursionError):
+                    raise Problem("PROFILE_CONFLICT", "Profile presentation must match the admitted inert metadata.") from None
+        return entry
 
     def validate_snapshot(self, snapshot):
         locks = snapshot.get("profileLocks", [])

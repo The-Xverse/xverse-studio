@@ -3,6 +3,7 @@ import hashlib
 import hmac
 import json
 import os
+import platform
 import secrets
 import subprocess
 import sys
@@ -93,6 +94,23 @@ class Runs:
                 blocking(
                     admit_connections(
                         documents, {"diagnostics": compiled.get("diagnostics", [])}
+                    )
+                )
+            )
+            # Undecidable compatibility, undefined precedence and unresolved environment
+            # bindings of the selected Deployment block execution (ADR-0015).
+            from xverse_studio.deployments.resolution import (
+                resolution_diagnostics,
+                resolve_deployment,
+            )
+
+            diagnostics.extend(
+                resolution_diagnostics(
+                    resolve_deployment(
+                        documents,
+                        refs["deploymentRef"],
+                        host_os=platform.system(),
+                        provider=provider,
                     )
                 )
             )

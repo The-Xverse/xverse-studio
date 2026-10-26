@@ -1,5 +1,5 @@
 """Versioned inert catalog/profile admission and authored deployment composition."""
-from fastapi import Request, Response
+from fastapi import Query, Request, Response
 from pydantic import Field
 
 from xverse_studio.api.models import Body
@@ -88,6 +88,10 @@ def install_composition(app, store, projects, runs, adapter):
     @app.get("/api/v1/projects/{projectId}/deployment-variants")
     def list_variants(projectId: str):
         return deployments.list(projectId)
+
+    @app.get("/api/v1/projects/{projectId}/deployment-variants/{documentId}/resolution")
+    def variant_resolution(projectId: str, documentId: str, providerId: str = Query("studio.reference", max_length=128)):
+        return deployments.resolution(projectId, documentId, providerId)
 
     @app.post("/api/v1/projects/{projectId}/deployment-variants", status_code=201)
     def create_variant(projectId: str, body: VariantCreate, request: Request, response: Response):

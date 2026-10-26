@@ -380,6 +380,14 @@ def create_app(
     def imports(body: Import):
         return projects.import_archive(body.archiveBase64)
 
+    @app.get("/api/v1/projects/{projectId}/inspection")
+    def inspection(projectId: str):
+        # Declared dependencies, example scope and unresolved content; read-only, never executes.
+        from xverse_studio.profiles import ProfileRegistry
+        from xverse_studio.projects.inspection import inspect_project
+
+        return inspect_project(projects.read(projectId), ProfileRegistry(adapter))
+
     @app.get("/api/v1/projects/{projectId}/graph")
     def graph(projectId: str):
         p = projects.read(projectId)

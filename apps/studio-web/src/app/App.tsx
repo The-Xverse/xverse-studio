@@ -54,6 +54,11 @@ import {
 } from "../features/model/run-overlay";
 import { InstanceWizard } from "../features/elements/InstanceWizard";
 import {
+  InspectionButton,
+  ProjectInspection,
+  useProjectInspection,
+} from "../features/projects/ProjectInspection";
+import {
   applyStep,
   HistoryStale,
   readHistory,
@@ -706,7 +711,7 @@ export default function App() {
     await refreshProjects();
     if (result.projectId) await loadProject(result.projectId);
     setNotice(
-      "Archive imported without executing referenced code. Validate and review dependencies before running.",
+      "Archive imported without executing referenced code. Review Dependencies for unresolved content, then validate before running.",
     );
   }
   async function importEvidence(file: File) {
@@ -1029,6 +1034,11 @@ export default function App() {
                   </div>
                 </div>
                 <div className="header-actions">
+                  <InspectionButton
+                    projectId={project.projectId}
+                    revision={project.revision}
+                    onOpen={() => setModal("inspection")}
+                  />
                   <button
                     className="button"
                     disabled={!!busy || !editHistory.undo.length}
@@ -1372,6 +1382,23 @@ export default function App() {
           }}
         />
       )}
+      {modal === "inspection" && project && (
+        <Modal
+          title="Dependencies and unresolved content"
+          wide
+          onClose={() => setModal("")}
+        >
+          <InspectionDialogBody
+            projectId={project.projectId}
+            revision={project.revision}
+            onOpenSource={(documentId) => {
+              // Close first so focus returns to the header before the source dialog takes it.
+              setModal("");
+              window.setTimeout(() => openSource({ documentId }), 0);
+            }}
+          />
+        </Modal>
+      )}
       {modal === "source" && project && (
         <Modal title="Authored XDL source" wide onClose={() => setModal("")}>
           <SourceEditor
@@ -1462,6 +1489,25 @@ export default function App() {
     </div>
   );
 }
+function InspectionDialogBody({
+  projectId,
+  revision,
+  onOpenSource,
+}: {
+  projectId: string;
+  revision: number;
+  onOpenSource: (documentId: string) => void;
+}) {
+  const { report, failure } = useProjectInspection(projectId, revision);
+  return (
+    <ProjectInspection
+      report={report}
+      failure={failure}
+      onOpenSource={onOpenSource}
+    />
+  );
+}
+
 function Login({ onLogin }: { onLogin: (token: string) => Promise<void> }) {
   const [token, setToken] = useState(""),
     [error, setError] = useState(""),
@@ -1663,6 +1709,11 @@ function Home({
                     <span>Guided example</span>
                     <span>{entry.scope || "Owned reference"}</span>
                   </div>
+                  {!!entry.limitations?.length && (
+                    <p className="card-limit">
+                      Scope limit: {entry.limitations[0]}
+                    </p>
+                  )}
                 </div>
               </button>
             ))}

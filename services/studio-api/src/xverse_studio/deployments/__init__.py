@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from copy import deepcopy
+import platform
 import re
 
 from ruamel.yaml import YAML
@@ -10,6 +11,8 @@ from xverse_studio.storage.core import Problem, digest, uid
 from xverse_studio.xdl import XDLAdapter, reference_configuration, XDLRejected
 from xverse_studio.xdl.edits import semantic_edits
 from xverse_studio.xdl.examples import EVALUATION_NAMESPACE, PROFILE_NAMESPACE, dump_yaml
+
+from .resolution import RESOLUTION_VERSION, resolution_diagnostics, resolve_deployment
 
 
 def resource_ref(resource):
@@ -98,6 +101,32 @@ class Deployments:
                            "readiness": "preflight_required", "limitations": ["Static XDL compatibility does not establish artifact availability, provider support or behavioural equivalence."]})
         return {"items": result, "revision": project["revision"], "diagnostics": [], "nextCursor": None}
 
+    def resolution(self, project_id, document_id, provider_id="studio.reference"):
+        """Deployment resolution 1.0 (ADR-0015) for one authored Deployment document; read-only."""
+        project = self.projects.read(project_id)
+        document = project["documents"].get(document_id)
+        if document is None:
+            raise Problem("NOT_FOUND", "Deployment document not found.", 404)
+        documents = self.projects.sources(project)
+        validation = self.adapter.validate(documents)
+        if not validation["valid"]:
+            return {"resolutionVersion": RESOLUTION_VERSION, "documentId": document_id, "revision": project["revision"],
+                    "sourceValid": False, "diagnostics": validation["diagnostics"], "bindings": [], "constraints": [],
+                    "parameters": [], "environment": [], "portability": [], "portableIntent": None}
+        resource = YAML(typ="safe").load(document["content"])
+        if not isinstance(resource, dict) or resource.get("kind") != "Deployment":
+            raise Problem("NOT_FOUND", "Deployment document not found.", 404)
+        return {**self._resolve(documents, resource_ref(resource), provider_id), "documentId": document_id,
+                "revision": project["revision"]}
+
+    @staticmethod
+    def _resolve(documents, deployment_ref, provider_id="studio.reference"):
+        from xverse_studio.providers.registry import descriptors
+
+        provider = next((value for value in descriptors() if value["providerId"] == provider_id), None)
+        report = resolve_deployment(documents, deployment_ref, host_os=platform.system(), provider=provider)
+        return {**report, "sourceValid": True, "diagnostics": resolution_diagnostics(report)}
+
     def create(self, project_id, revision, value):
         if not isinstance(value, dict) or set(value) - {"name", "sourceDeploymentId", "sourceScenarioId"}:
             raise Problem("VARIANT_INVALID", "Unsupported deployment-variant fields.")
@@ -181,7 +210,7 @@ class Deployments:
     def update_binding(self, project_id, revision, document_id, value):
         if not isinstance(value, dict) or set(value) - {"bindingId", "targetId", "realizationClass", "artifactIds", "resourceIds", "scenarioRef"}:
             raise Problem("BINDING_INVALID", "Unsupported binding fields.")
-        readiness = {}
+        readiness, resolution = {}, {}
         def change(project):
             if document_id not in project["documents"]:
                 raise Problem("NOT_FOUND", "Deployment document not found.", 404)
@@ -199,12 +228,16 @@ class Deployments:
             compiled = compile_selection(updated, selection, self.adapter)
             readiness.update(status="blocked", diagnostics=compiled["diagnostics"])
             if compiled["valid"]:
+                resolution.update(self._resolve(updated, selection["deploymentRef"]))
+            if compiled["valid"]:
                 try:
                     reference_configuration(compiled["contributingDocuments"], compiled)
                     readiness.update(status="preflight_required", diagnostics=[])
                 except XDLRejected as error:
                     readiness["diagnostics"] = [{"code": error.code, "severity": "error", "message": str(error)}]
+                if resolution["diagnostics"]:
+                    readiness.update(status="blocked", diagnostics=[*readiness["diagnostics"], *resolution["diagnostics"]])
             return {identifier: {**document, "content": updated[document["path"]]} for identifier, document in project["documents"].items()}
         project = self.projects.mutate(project_id, revision, change)
         variant = next(item for item in self.list(project_id)["items"] if item["documentId"] == document_id)
-        return {"project": project, "variant": variant, "compatibility": readiness}
+        return {"project": project, "variant": variant, "compatibility": readiness, "resolution": resolution or None}
