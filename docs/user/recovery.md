@@ -97,6 +97,11 @@ pass the backend's integrity checks; unavailable or corrupt copies produce an er
 revision. Recovery preserves the observed external bytes in the named backup before committing.
 The original revision stays in history, and existing run snapshots remain unchanged.
 
+Check the project name and ID in the recovery guidance. If opening another project fails, your
+previous workspace remains active and editable; the recovery controls apply to the named failed
+target. Resuming edits in the active workspace while that recovery is pending keeps your workspace
+in place. The other project's recovery can still commit; open it explicitly when you are ready.
+
 If Studio cannot check revision history, restoration availability is **unknown**. Use **Retry revision
 history**; a failed lookup does not mean the project has no history. A successful lookup with no
 recorded copy reports that absence separately. Keep a copy of your data before choosing adoption or

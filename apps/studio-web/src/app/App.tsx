@@ -111,6 +111,13 @@ export type DoAction = (
   label: string,
   action: () => Promise<unknown>,
 ) => Promise<any>;
+type ProjectIntent = {
+  projectId: string;
+  loadSequence: number;
+  intentSequence: number;
+  workspaceSequence: number;
+};
+type ProjectRequestError = Error & { requestedProjectId?: string };
 export default function App() {
   const [authenticated, setAuthenticated] = useState<boolean | null>(null),
     [csrf, setCsrf] = useState("");
@@ -161,6 +168,7 @@ export default function App() {
     lastRun = useRef(localStorage.getItem("studio.lastRun") || ""),
     selectedProjectRef = useRef(""),
     projectLoadSequence = useRef(0),
+    workspaceInteractionSequence = useRef(0),
     streamIdentity = useRef("");
   const latestProject = useRef(project);
   function setProject(value: Project | null) {
@@ -169,6 +177,43 @@ export default function App() {
   }
   const renderedLoadSequence = projectLoadSequence.current,
     renderedIntentSequence = preflightRequestSequence.current;
+  function projectIntent(): ProjectIntent {
+    return {
+      projectId: selectedProjectRef.current,
+      loadSequence: projectLoadSequence.current,
+      intentSequence: preflightRequestSequence.current,
+      workspaceSequence: workspaceInteractionSequence.current,
+    };
+  }
+  function sameProjectIntent(
+    context: ProjectIntent,
+    includeInteraction = true,
+  ) {
+    return (
+      selectedProjectRef.current === context.projectId &&
+      projectLoadSequence.current === context.loadSequence &&
+      (!includeInteraction ||
+        (preflightRequestSequence.current === context.intentSequence &&
+          workspaceInteractionSequence.current === context.workspaceSequence))
+    );
+  }
+  function projectRequestError(error: unknown, projectId: string) {
+    return Object.assign(
+      error instanceof Error ? error : new Error("The project request failed."),
+      { requestedProjectId: projectId },
+    );
+  }
+  function workspaceInteraction(event: { target: EventTarget | null }) {
+    // Authoring can resume without a modal or a committed edit, for example by
+    // typing a parameter. Keep that intent separate from revision acknowledgements.
+    if (
+      project &&
+      section === "workspace" &&
+      event.target instanceof Element &&
+      !event.target.closest(".alerts")
+    )
+      workspaceInteractionSequence.current++;
+  }
   function commitProjectRevision(saved: Project) {
     const current = latestProject.current;
     if (
@@ -219,50 +264,50 @@ export default function App() {
     )
       sourceControl.current?.focus();
   }, [busy, recoveryFocus, project?.projectId, section, modal]);
-  function recoveryAction(
-    projectId: string,
-    label: string,
-    action: () => Promise<unknown>,
-  ) {
-    const origin = document.activeElement;
-    return doAction(label, async () => {
-      try {
-        return await action();
-      } catch (error) {
-        if (
-          selectedProjectRef.current === projectId &&
-          projectLoadSequence.current === renderedLoadSequence &&
-          preflightRequestSequence.current === renderedIntentSequence
-        ) {
-          setRecoveryFocus({
-            projectId,
-            loadSequence: renderedLoadSequence,
-            intentSequence: renderedIntentSequence,
-            origin,
-            target: "error",
-          });
-          throw error;
-        }
-      }
-    });
+  function recoveryHandlers(projectId: string) {
+    let context: ProjectIntent | undefined;
+    return {
+      doAction: (label: string, action: () => Promise<unknown>) => {
+        projectLoadSequence.current++;
+        preflightRequestSequence.current++;
+        const initiating = projectIntent(),
+          origin = document.activeElement;
+        context = initiating;
+        return doAction(label, async () => {
+          try {
+            return await action();
+          } catch (error) {
+            if (sameProjectIntent(initiating)) {
+              setRecoveryFocus({ ...initiating, origin, target: "error" });
+              throw projectRequestError(error, projectId);
+            }
+          }
+        });
+      },
+      onRecovered: (result: RecoveryResult, origin: HTMLButtonElement) => {
+        if (context) completeRecovery(projectId, result, origin, context);
+      },
+    };
   }
   function completeRecovery(
     projectId: string,
     result: RecoveryResult,
     origin: HTMLButtonElement,
+    context: ProjectIntent,
   ) {
     const saved = result.project,
       known = latestProject.current;
     if (
       saved.projectId !== projectId ||
-      selectedProjectRef.current !== projectId ||
-      projectLoadSequence.current !== renderedLoadSequence ||
+      !sameProjectIntent(context, false) ||
       (known?.projectId === projectId && saved.revision <= known.revision)
     )
       return;
-    const visible = preflightRequestSequence.current === renderedIntentSequence,
+    const visible = sameProjectIntent(context),
       changed = known?.projectId !== projectId;
+    if (changed && !visible) return;
     preflightRequestSequence.current++;
+    selectedProjectRef.current = projectId;
     setProject(saved);
     const history = reconcileHistory(readHistory(projectId), saved.revision);
     writeHistory(projectId, history);
@@ -298,15 +343,14 @@ export default function App() {
       setPendingStart(readPendingStart(projectId));
       setRun(null);
       localStorage.removeItem("studio.lastRun");
-      const storedRun = localStorage.getItem("studio.lastRun." + projectId),
-        intent = preflightRequestSequence.current;
+      const storedRun = localStorage.getItem("studio.lastRun." + projectId);
       if (storedRun)
         void api<Run>(`/runs/${storedRun}`)
           .then((value) => {
             if (
               selectedProjectRef.current !== projectId ||
-              projectLoadSequence.current !== renderedLoadSequence ||
-              preflightRequestSequence.current !== intent
+              projectLoadSequence.current !== context.loadSequence ||
+              localStorage.getItem("studio.lastRun." + projectId) !== storedRun
             )
               return;
             setRun(value.projectId === projectId ? value : null);
@@ -324,7 +368,7 @@ export default function App() {
       );
       setRecoveryFocus({
         projectId,
-        loadSequence: renderedLoadSequence,
+        loadSequence: context.loadSequence,
         intentSequence: preflightRequestSequence.current,
         origin,
         target: "source",
@@ -397,13 +441,24 @@ export default function App() {
     setProjects(items<Project>(await api("/projects")));
   }
   async function loadProject(projectId: string) {
-    const sequence = ++projectLoadSequence.current,
-      changed = selectedProjectRef.current !== projectId;
+    projectLoadSequence.current++;
+    const context = projectIntent();
+    let value: Project;
+    try {
+      value = await api<Project>(`/projects/${encodeURIComponent(projectId)}`);
+    } catch (error) {
+      if (sameProjectIntent(context))
+        throw projectRequestError(error, projectId);
+      return;
+    }
+    const known = latestProject.current;
+    if (
+      !sameProjectIntent(context) ||
+      (known?.projectId === projectId && known.revision > value.revision)
+    )
+      return;
+    const changed = selectedProjectRef.current !== projectId;
     selectedProjectRef.current = projectId;
-    const value = await api<Project>(
-      `/projects/${encodeURIComponent(projectId)}`,
-    );
-    if (sequence !== projectLoadSequence.current) return value;
     setProject(value);
     {
       const history = reconcileHistory(readHistory(projectId), value.revision);
@@ -434,33 +489,54 @@ export default function App() {
       }
     }
     setPendingStart(readPendingStart(projectId));
+    const accepted = projectIntent();
     const storedRun = localStorage.getItem("studio.lastRun." + projectId);
+    const retainedRunCurrent = () =>
+      sameProjectIntent(accepted, false) &&
+      localStorage.getItem("studio.lastRun." + projectId) === storedRun;
     if (storedRun) {
+      if (changed) {
+        setRun(null);
+        localStorage.removeItem("studio.lastRun");
+      }
       try {
         const selectedRun = await api<Run>(`/runs/${storedRun}`);
-        if (sequence !== projectLoadSequence.current) return value;
+        if (!retainedRunCurrent()) return;
         setRun(selectedRun.projectId === projectId ? selectedRun : null);
-        localStorage.setItem("studio.lastRun", storedRun);
+        if (selectedRun.projectId === projectId)
+          localStorage.setItem("studio.lastRun", storedRun);
+        else localStorage.removeItem("studio.lastRun");
       } catch {
+        if (!retainedRunCurrent()) return;
         setRun(null);
+        localStorage.removeItem("studio.lastRun");
       }
     } else {
       setRun(null);
       localStorage.removeItem("studio.lastRun");
     }
-    return value;
+    // Hydrating the same project's run is still useful after opening Results or
+    // Source. Navigation continuations must not close a newer modal or recapture it.
+    return sameProjectIntent(accepted) ? value : undefined;
   }
   async function loadBoot() {
-    const [p, c, d, cap] = await Promise.all([
+    const context = projectIntent();
+    const metadata = await Promise.all([
       api("/projects"),
       api("/catalog"),
       api("/providers"),
       api("/capabilities"),
-    ]);
+    ]).catch((error) => {
+      if (sameProjectIntent(context)) throw error;
+      return undefined;
+    });
+    if (!metadata) return;
+    const [p, c, d, cap] = metadata;
     setProjects(items<Project>(p));
     setCatalog(items<CatalogEntry>(c));
     setProviders(items<Data>(d));
     setCapabilities(cap);
+    if (!sameProjectIntent(context)) return;
     const saved = localStorage.getItem("studio.projectId");
     if (saved && items<Project>(p).some((p) => p.projectId === saved))
       await loadProject(saved);
@@ -483,7 +559,12 @@ export default function App() {
     };
   }, []);
   const refreshProject = async () =>
-    project ? loadProject(project.projectId) : null;
+    project &&
+    selectedProjectRef.current === project.projectId &&
+    projectLoadSequence.current === renderedLoadSequence &&
+    preflightRequestSequence.current === renderedIntentSequence
+      ? loadProject(project.projectId)
+      : undefined;
   const historyShortcut = useRef<(direction: "undo" | "redo") => void>(
     () => undefined,
   );
@@ -706,20 +787,29 @@ export default function App() {
     };
   }, [run?.runId, run?.snapshotId, terminalStream]);
   async function createProject(blueprintRef?: string) {
-    const value = await api<Project>("/projects", {
-      method: "POST",
-      body: {
-        name:
-          name.trim() ||
-          (blueprintRef
-            ? catalog.find((c) => (c.id || c.entryId) === blueprintRef)?.name
-            : "Untitled System") ||
-          "New System",
-        ...(blueprintRef ? { blueprintRef } : {}),
-      } satisfies NewProject,
+    projectLoadSequence.current++;
+    const context = projectIntent();
+    const value = await (async () => {
+      const created = await api<Project>("/projects", {
+        method: "POST",
+        body: {
+          name:
+            name.trim() ||
+            (blueprintRef
+              ? catalog.find((c) => (c.id || c.entryId) === blueprintRef)?.name
+              : "Untitled System") ||
+            "New System",
+          ...(blueprintRef ? { blueprintRef } : {}),
+        } satisfies NewProject,
+      });
+      await refreshProjects();
+      return created;
+    })().catch((error) => {
+      if (sameProjectIntent(context)) throw error;
+      return undefined;
     });
-    await refreshProjects();
-    await loadProject(value.projectId);
+    if (!value || !sameProjectIntent(context)) return;
+    if (!(await loadProject(value.projectId))) return;
     setModal("");
     setName("");
     setNotice(
@@ -991,6 +1081,8 @@ export default function App() {
     }
   }
   async function importFile(file: File) {
+    projectLoadSequence.current++;
+    const context = projectIntent();
     const uploadLimit =
       Math.floor(
         (capabilities.limits?.requestBytes || 8 * 1024 * 1024) * 0.75,
@@ -999,17 +1091,24 @@ export default function App() {
       throw new Error(
         `Select an archive smaller than ${(uploadLimit / 1024 / 1024).toFixed(1)} MiB for the advertised request limit.`,
       );
-    const bytes = new Uint8Array(await file.arrayBuffer());
-    let binary = "";
-    for (let i = 0; i < bytes.length; i += 8192)
-      binary += String.fromCharCode(...bytes.subarray(i, i + 8192));
-    const result = await api<Project>("/projects/imports", {
-      method: "POST",
-      body: { archiveBase64: btoa(binary) },
-      key: mutationKey(),
+    const result = await (async () => {
+      const bytes = new Uint8Array(await file.arrayBuffer());
+      let binary = "";
+      for (let i = 0; i < bytes.length; i += 8192)
+        binary += String.fromCharCode(...bytes.subarray(i, i + 8192));
+      const imported = await api<Project>("/projects/imports", {
+        method: "POST",
+        body: { archiveBase64: btoa(binary) },
+        key: mutationKey(),
+      });
+      await refreshProjects();
+      return imported;
+    })().catch((error) => {
+      if (sameProjectIntent(context)) throw error;
+      return undefined;
     });
-    await refreshProjects();
-    if (result.projectId) await loadProject(result.projectId);
+    if (!result?.projectId || !sameProjectIntent(context)) return;
+    if (!(await loadProject(result.projectId))) return;
     setNotice(
       "Archive imported without executing referenced code. Review Dependencies for unresolved content, then validate before running.",
     );
@@ -1061,7 +1160,14 @@ export default function App() {
   return (
     <PresentationContext.Provider value={presentation}>
       <div className="application">
-        <a className="skip-link" href="#main-content">
+        <a
+          className="skip-link"
+          href="#main-content"
+          onClick={() => {
+            if (project && section === "workspace")
+              workspaceInteractionSequence.current++;
+          }}
+        >
           Skip to workspace
         </a>
         <header className="topbar">
@@ -1134,7 +1240,13 @@ export default function App() {
             </button>
             <span className="rail-version">v0.1</span>
           </nav>
-          <main id="main-content" className="main-content">
+          <main
+            id="main-content"
+            className="main-content"
+            onPointerDownCapture={workspaceInteraction}
+            onKeyDownCapture={workspaceInteraction}
+            onInputCapture={workspaceInteraction}
+          >
             <div className="alerts" aria-live="polite">
               {busy && (
                 <div className="notice busy">
@@ -1186,12 +1298,7 @@ export default function App() {
                     <RecoveryPanel
                       key={`${project.projectId}:${project.revision}`}
                       project={project}
-                      doAction={(label, action) =>
-                        recoveryAction(project.projectId, label, action)
-                      }
-                      onRecovered={(recovery, origin) => {
-                        completeRecovery(project.projectId, recovery, origin);
-                      }}
+                      {...recoveryHandlers(project.projectId)}
                     />
                   </div>
                 </div>
@@ -1217,23 +1324,17 @@ export default function App() {
                       (() => {
                         // Unreadable committed sources can still be restored from history.
                         const listed = projects.find(
-                          (p) => p.projectId === selectedProjectRef.current,
+                          (p) => p.projectId === (
+                            (error as ProjectRequestError).requestedProjectId ||
+                            selectedProjectRef.current
+                          ),
                         );
                         return listed ? (
                           <RecoveryPanel
                             key={`${listed.projectId}:${listed.revision}`}
                             project={listed}
                             adoptable={false}
-                            doAction={(label, action) =>
-                              recoveryAction(listed.projectId, label, action)
-                            }
-                            onRecovered={(recovery, origin) => {
-                              completeRecovery(
-                                listed.projectId,
-                                recovery,
-                                origin,
-                              );
-                            }}
+                            {...recoveryHandlers(listed.projectId)}
                           />
                         ) : null;
                       })()}
@@ -1243,7 +1344,11 @@ export default function App() {
                           void doAction(
                             "Loading current revision",
                             async () => {
-                              await refreshProject();
+                              const target = (error as ProjectRequestError).requestedProjectId,
+                                accepted = target
+                                  ? await loadProject(target)
+                                  : await refreshProject();
+                              if (!accepted) return;
                               setNotice(
                                 "Current revision loaded. Compare it with your draft before saving again.",
                               );
@@ -1285,7 +1390,7 @@ export default function App() {
                 onCreate={(id) =>
                   void doAction("Creating project", () => createProject(id))
                 }
-                onClose={() => setSection("workspace")}
+                onClose={() => changeSection("workspace")}
                 onRegister={() => setModal("artifact")}
                 onTemplate={(template) => {
                   setAddTemplate(template);

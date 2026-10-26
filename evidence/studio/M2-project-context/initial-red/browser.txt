@@ -1,0 +1,514 @@
+
+> xverse-studio-workspace@0.1.0 test:e2e
+> playwright test -c tests/e2e/playwright.config.ts --grep project context:
+
+
+Running 10 tests using 1 worker
+
+(node:1983060) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   1 tests/e2e/project-context.spec.ts:429:9 › project context: foreign recovery preserves newer source draft at 1024x768 (23.2s)
+(node:1983329) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   2 tests/e2e/project-context.spec.ts:429:9 › project context: foreign recovery preserves newer source save at 1024x768 (33.0s)
+(node:1983702) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   3 tests/e2e/project-context.spec.ts:429:9 › project context: foreign recovery preserves newer parameter draft at 1024x768 (13.3s)
+(node:1983912) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   4 tests/e2e/project-context.spec.ts:563:9 › project context: obsolete successful load preserves newer source save at 1024x768 (22.2s)
+(node:1984190) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   5 tests/e2e/project-context.spec.ts:563:9 › project context: obsolete failed load preserves newer source save at 1024x768 (2.6s)
+(node:1984315) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   6 tests/e2e/project-context.spec.ts:429:9 › project context: foreign recovery preserves newer source draft at 1440x900 (4.3s)
+  ✘   7 tests/e2e/project-context.spec.ts:429:9 › project context: foreign recovery preserves newer source save at 1440x900 (32.8s)
+(node:1984691) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   8 tests/e2e/project-context.spec.ts:429:9 › project context: foreign recovery preserves newer parameter draft at 1440x900 (13.3s)
+(node:1984906) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   9 tests/e2e/project-context.spec.ts:563:9 › project context: obsolete successful load preserves newer source save at 1440x900 (22.9s)
+(node:1985173) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  10 tests/e2e/project-context.spec.ts:563:9 › project context: obsolete failed load preserves newer source save at 1440x900 (2.5s)
+
+
+  1) tests/e2e/project-context.spec.ts:429:9 › project context: foreign recovery preserves newer source draft at 1024x768
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 4
+    + Received  + 4
+
+      Object {
+    -   "documentId": "doc-2",
+    +   "documentId": "doc-0",
+        "draftDigest": "sha256:2c716828ce72a375fed47c9c57827816c1a35fa9edceda2ce9e0d85e5995a79d",
+        "operationErrors": 0,
+    -   "projectName": "Active context source draft 1024",
+    -   "sourceDigest": "sha256:2c716828ce72a375fed47c9c57827816c1a35fa9edceda2ce9e0d85e5995a79d",
+    +   "projectName": "Process control reference",
+    +   "sourceDigest": "sha256:24431c6056ead9808ce4f0f1293224fccedeea35955060d716b55e0721630bf5",
+        "sourceModal": 1,
+    -   "storedProject": "prj-c96237e7-36f2-4b1a-b1fd-61f3e4669f45",
+    +   "storedProject": "prj-4b62c63a-7003-4165-a3b4-8f14ea4c976b",
+      }
+
+    Call Log:
+    - Timeout 10000ms exceeded while waiting on the predicate
+
+      500 |           await expect.soft
+      501 |             .poll(() => renderedContext(page, current.projectId, authored!.id))
+    > 502 |             .toEqual({
+          |              ^
+      503 |               projectName: current.name,
+      504 |               storedProject: current.projectId,
+      505 |               sourceModal: 1,
+        at <repo>/tests/e2e/project-context.spec.ts:502:14
+
+    Error: expect(locator).toBeFocused() failed
+
+    Locator:  getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('textbox', { name: 'XDL source', exact: true })
+    Expected: focused
+    Received: inactive
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "soft toBeFocused" getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('textbox', { name: 'XDL source', exact: true }) with timeout 10000ms
+      - waiting for getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('textbox', { name: 'XDL source', exact: true })
+        24 × locator resolved to <textarea id="xdl-source" spellcheck="false" class="source-textarea" aria-describedby="_r_4_">apiVersion: xverse.io/xdl/v1alpha1↵kind: Componen…</textarea>
+           - unexpected value "inactive"
+
+
+      510 |               operationErrors: 0,
+      511 |             });
+    > 512 |           await expect.soft(authored.editor).toBeFocused();
+          |                                              ^
+      513 |         } else {
+      514 |           await expect
+      515 |             .soft(page.locator(".project-header h1"))
+        at <repo>/tests/e2e/project-context.spec.ts:512:46
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/project-context-project-co-d1a17-er-source-draft-at-1024x768/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/project-context-project-co-d1a17-er-source-draft-at-1024x768/error-context.md
+
+  2) tests/e2e/project-context.spec.ts:429:9 › project context: foreign recovery preserves newer source save at 1024x768
+
+    Error: expect(locator).toBeDisabled() failed
+
+    Locator:  getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('button', { name: 'Save source revision', exact: true })
+    Expected: disabled
+    Received: enabled
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "soft toBeDisabled" getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('button', { name: 'Save source revision', exact: true }) with timeout 10000ms
+      - waiting for getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('button', { name: 'Save source revision', exact: true })
+        24 × locator resolved to <button class="button primary">…</button>
+           - unexpected value "enabled"
+
+
+      492 |             await page.keyboard.press("ControlOrMeta+s");
+      493 |             expect((await reply).status()).toBe(200);
+    > 494 |             await expect.soft(authored.save).toBeDisabled();
+          |                                              ^
+      495 |           }
+      496 |         }
+      497 |         await pending.release();
+        at <repo>/tests/e2e/project-context.spec.ts:494:46
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 5
+    + Received  + 5
+
+      Object {
+    -   "documentId": "doc-2",
+    -   "draftDigest": null,
+    +   "documentId": "doc-0",
+    +   "draftDigest": "sha256:f3d094387b8bd9bdcb52888f174eaae900382d76d04e752bbad89f2c3422b6fb",
+        "operationErrors": 0,
+    -   "projectName": "Active context source save 1024",
+    -   "sourceDigest": "sha256:f3d094387b8bd9bdcb52888f174eaae900382d76d04e752bbad89f2c3422b6fb",
+    +   "projectName": "Process control reference",
+    +   "sourceDigest": "sha256:24431c6056ead9808ce4f0f1293224fccedeea35955060d716b55e0721630bf5",
+        "sourceModal": 1,
+    -   "storedProject": "prj-6eec416a-bdc1-440f-90b5-58dce5472100",
+    +   "storedProject": "prj-05f0ffb3-b95e-4beb-9d5c-1e083b7318e0",
+      }
+
+    Call Log:
+    - Timeout 10000ms exceeded while waiting on the predicate
+
+      500 |           await expect.soft
+      501 |             .poll(() => renderedContext(page, current.projectId, authored!.id))
+    > 502 |             .toEqual({
+          |              ^
+      503 |               projectName: current.name,
+      504 |               storedProject: current.projectId,
+      505 |               sourceModal: 1,
+        at <repo>/tests/e2e/project-context.spec.ts:502:14
+
+    Error: expect(locator).toBeFocused() failed
+
+    Locator:  getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('textbox', { name: 'XDL source', exact: true })
+    Expected: focused
+    Received: inactive
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "soft toBeFocused" getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('textbox', { name: 'XDL source', exact: true }) with timeout 10000ms
+      - waiting for getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('textbox', { name: 'XDL source', exact: true })
+        24 × locator resolved to <textarea id="xdl-source" spellcheck="false" class="source-textarea" aria-describedby="_r_4_">apiVersion: xverse.io/xdl/v1alpha1↵kind: Componen…</textarea>
+           - unexpected value "inactive"
+
+
+      510 |               operationErrors: 0,
+      511 |             });
+    > 512 |           await expect.soft(authored.editor).toBeFocused();
+          |                                              ^
+      513 |         } else {
+      514 |           await expect
+      515 |             .soft(page.locator(".project-header h1"))
+        at <repo>/tests/e2e/project-context.spec.ts:512:46
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/project-context-project-co-734aa-wer-source-save-at-1024x768/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/project-context-project-co-734aa-wer-source-save-at-1024x768/error-context.md
+
+  3) tests/e2e/project-context.spec.ts:429:9 › project context: foreign recovery preserves newer parameter draft at 1024x768
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByLabel('Duration', { exact: true })
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByLabel('Duration', { exact: true }) with timeout 10000ms
+      - waiting for getByLabel('Duration', { exact: true })
+
+
+       7 |
+       8 | async function tabTo(page: Page, target: Locator) {
+    >  9 |   await expect(target).toBeVisible();
+         |                        ^
+      10 |   // A removed error control can leave traversal after the persistent header.
+      11 |   // Native reverse traversal reaches it without walking every recent-project row.
+      12 |   for (const [key, limit] of [
+        at tabTo (<repo>/tests/e2e/project-context.spec.ts:9:24)
+        at <repo>/tests/e2e/project-context.spec.ts:466:17
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/project-context-project-co-55e54-parameter-draft-at-1024x768/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/project-context-project-co-55e54-parameter-draft-at-1024x768/error-context.md
+
+  4) tests/e2e/project-context.spec.ts:563:9 › project context: obsolete successful load preserves newer source save at 1024x768
+
+    Error: expect(locator).toBeDisabled() failed
+
+    Locator:  getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('button', { name: 'Save source revision', exact: true })
+    Expected: disabled
+    Received: enabled
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "soft toBeDisabled" getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('button', { name: 'Save source revision', exact: true }) with timeout 10000ms
+      - waiting for getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('button', { name: 'Save source revision', exact: true })
+        24 × locator resolved to <button class="button primary">…</button>
+           - unexpected value "enabled"
+
+
+      596 |         await page.keyboard.press("ControlOrMeta+s");
+      597 |         expect((await reply).status()).toBe(200);
+    > 598 |         await expect.soft(authored.save).toBeDisabled();
+          |                                          ^
+      599 |         await target.release();
+      600 |         await page.waitForLoadState("networkidle");
+      601 |         await expect.soft
+        at <repo>/tests/e2e/project-context.spec.ts:598:42
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 6
+    + Received  + 6
+
+      Object {
+    -   "documentId": "doc-2",
+    -   "draftDigest": null,
+    +   "documentId": null,
+    +   "draftDigest": "sha256:918fe99ad9357d8cdcc4e6df2152805a4accd69baf8a3f08a5a3897c60ae0bbe",
+        "operationErrors": 0,
+    -   "projectName": "Current load context false 1024",
+    -   "sourceDigest": "sha256:918fe99ad9357d8cdcc4e6df2152805a4accd69baf8a3f08a5a3897c60ae0bbe",
+    -   "sourceModal": 1,
+    -   "storedProject": "prj-51c91183-636a-4609-904b-b65c85568795",
+    +   "projectName": "Process control reference",
+    +   "sourceDigest": null,
+    +   "sourceModal": 0,
+    +   "storedProject": "prj-39947437-6a45-4624-b9de-90ae835e9dfa",
+      }
+
+    Call Log:
+    - Timeout 10000ms exceeded while waiting on the predicate
+
+      601 |         await expect.soft
+      602 |           .poll(() => renderedContext(page, current.projectId, authored.id))
+    > 603 |           .toEqual({
+          |            ^
+      604 |             projectName: current.name,
+      605 |             storedProject: current.projectId,
+      606 |             sourceModal: 1,
+        at <repo>/tests/e2e/project-context.spec.ts:603:12
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/project-context-project-co-4743f-wer-source-save-at-1024x768/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/project-context-project-co-4743f-wer-source-save-at-1024x768/error-context.md
+
+  5) tests/e2e/project-context.spec.ts:563:9 › project context: obsolete failed load preserves newer source save at 1024x768
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 400
+    Received: 409
+
+      575 |       try {
+      576 |         const other = await target.fixture();
+    > 577 |         expect(await target.ready()).toBe(broken ? 400 : 200);
+          |                                      ^
+      578 |         await activate(
+      579 |           page,
+      580 |           page.getByRole("button", { name: "Back to workspace", exact: true }),
+        at <repo>/tests/e2e/project-context.spec.ts:577:38
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/project-context-project-co-1f38e-wer-source-save-at-1024x768/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/project-context-project-co-1f38e-wer-source-save-at-1024x768/error-context.md
+
+  6) tests/e2e/project-context.spec.ts:429:9 › project context: foreign recovery preserves newer source save at 1440x900
+
+    Error: expect(locator).toBeDisabled() failed
+
+    Locator:  getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('button', { name: 'Save source revision', exact: true })
+    Expected: disabled
+    Received: enabled
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "soft toBeDisabled" getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('button', { name: 'Save source revision', exact: true }) with timeout 10000ms
+      - waiting for getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('button', { name: 'Save source revision', exact: true })
+        24 × locator resolved to <button class="button primary">…</button>
+           - unexpected value "enabled"
+
+
+      492 |             await page.keyboard.press("ControlOrMeta+s");
+      493 |             expect((await reply).status()).toBe(200);
+    > 494 |             await expect.soft(authored.save).toBeDisabled();
+          |                                              ^
+      495 |           }
+      496 |         }
+      497 |         await pending.release();
+        at <repo>/tests/e2e/project-context.spec.ts:494:46
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 5
+    + Received  + 5
+
+      Object {
+    -   "documentId": "doc-2",
+    -   "draftDigest": null,
+    +   "documentId": "doc-0",
+    +   "draftDigest": "sha256:8d793a14cd5d556478f5000e5f8440e5d296830d517411f623a07074926a1363",
+        "operationErrors": 0,
+    -   "projectName": "Active context source save 1440",
+    -   "sourceDigest": "sha256:8d793a14cd5d556478f5000e5f8440e5d296830d517411f623a07074926a1363",
+    +   "projectName": "Process control reference",
+    +   "sourceDigest": "sha256:24431c6056ead9808ce4f0f1293224fccedeea35955060d716b55e0721630bf5",
+        "sourceModal": 1,
+    -   "storedProject": "prj-ca04136d-9386-4810-8e98-31b81881025b",
+    +   "storedProject": "prj-c9768719-a975-4184-b510-4eee77c28fa0",
+      }
+
+    Call Log:
+    - Timeout 10000ms exceeded while waiting on the predicate
+
+      500 |           await expect.soft
+      501 |             .poll(() => renderedContext(page, current.projectId, authored!.id))
+    > 502 |             .toEqual({
+          |              ^
+      503 |               projectName: current.name,
+      504 |               storedProject: current.projectId,
+      505 |               sourceModal: 1,
+        at <repo>/tests/e2e/project-context.spec.ts:502:14
+
+    Error: expect(locator).toBeFocused() failed
+
+    Locator:  getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('textbox', { name: 'XDL source', exact: true })
+    Expected: focused
+    Received: inactive
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "soft toBeFocused" getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('textbox', { name: 'XDL source', exact: true }) with timeout 10000ms
+      - waiting for getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('textbox', { name: 'XDL source', exact: true })
+        24 × locator resolved to <textarea id="xdl-source" spellcheck="false" class="source-textarea" aria-describedby="_r_4_">apiVersion: xverse.io/xdl/v1alpha1↵kind: Componen…</textarea>
+           - unexpected value "inactive"
+
+
+      510 |               operationErrors: 0,
+      511 |             });
+    > 512 |           await expect.soft(authored.editor).toBeFocused();
+          |                                              ^
+      513 |         } else {
+      514 |           await expect
+      515 |             .soft(page.locator(".project-header h1"))
+        at <repo>/tests/e2e/project-context.spec.ts:512:46
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/project-context-project-co-06e66-wer-source-save-at-1440x900/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/project-context-project-co-06e66-wer-source-save-at-1440x900/error-context.md
+
+  7) tests/e2e/project-context.spec.ts:429:9 › project context: foreign recovery preserves newer parameter draft at 1440x900
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByLabel('Duration', { exact: true })
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByLabel('Duration', { exact: true }) with timeout 10000ms
+      - waiting for getByLabel('Duration', { exact: true })
+
+
+       7 |
+       8 | async function tabTo(page: Page, target: Locator) {
+    >  9 |   await expect(target).toBeVisible();
+         |                        ^
+      10 |   // A removed error control can leave traversal after the persistent header.
+      11 |   // Native reverse traversal reaches it without walking every recent-project row.
+      12 |   for (const [key, limit] of [
+        at tabTo (<repo>/tests/e2e/project-context.spec.ts:9:24)
+        at <repo>/tests/e2e/project-context.spec.ts:466:17
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/project-context-project-co-093f1-parameter-draft-at-1440x900/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/project-context-project-co-093f1-parameter-draft-at-1440x900/error-context.md
+
+  8) tests/e2e/project-context.spec.ts:563:9 › project context: obsolete successful load preserves newer source save at 1440x900
+
+    Error: expect(locator).toBeDisabled() failed
+
+    Locator:  getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('button', { name: 'Save source revision', exact: true })
+    Expected: disabled
+    Received: enabled
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "soft toBeDisabled" getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('button', { name: 'Save source revision', exact: true }) with timeout 10000ms
+      - waiting for getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('button', { name: 'Save source revision', exact: true })
+        24 × locator resolved to <button class="button primary">…</button>
+           - unexpected value "enabled"
+
+
+      596 |         await page.keyboard.press("ControlOrMeta+s");
+      597 |         expect((await reply).status()).toBe(200);
+    > 598 |         await expect.soft(authored.save).toBeDisabled();
+          |                                          ^
+      599 |         await target.release();
+      600 |         await page.waitForLoadState("networkidle");
+      601 |         await expect.soft
+        at <repo>/tests/e2e/project-context.spec.ts:598:42
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 6
+    + Received  + 6
+
+      Object {
+    -   "documentId": "doc-2",
+    -   "draftDigest": null,
+    +   "documentId": null,
+    +   "draftDigest": "sha256:1d1ac1e4161a0c7265e957751b4ca0d702e10af61bec9bbadf3a667178b67457",
+        "operationErrors": 0,
+    -   "projectName": "Current load context false 1440",
+    -   "sourceDigest": "sha256:1d1ac1e4161a0c7265e957751b4ca0d702e10af61bec9bbadf3a667178b67457",
+    -   "sourceModal": 1,
+    -   "storedProject": "prj-123adbe2-67cc-45b2-bdf8-ca606e79fb5d",
+    +   "projectName": "Process control reference",
+    +   "sourceDigest": null,
+    +   "sourceModal": 0,
+    +   "storedProject": "prj-58062257-c860-4b2f-a899-697e8893dee0",
+      }
+
+    Call Log:
+    - Timeout 10000ms exceeded while waiting on the predicate
+
+      601 |         await expect.soft
+      602 |           .poll(() => renderedContext(page, current.projectId, authored.id))
+    > 603 |           .toEqual({
+          |            ^
+      604 |             projectName: current.name,
+      605 |             storedProject: current.projectId,
+      606 |             sourceModal: 1,
+        at <repo>/tests/e2e/project-context.spec.ts:603:12
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/project-context-project-co-a2175-wer-source-save-at-1440x900/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/project-context-project-co-a2175-wer-source-save-at-1440x900/error-context.md
+
+  9) tests/e2e/project-context.spec.ts:563:9 › project context: obsolete failed load preserves newer source save at 1440x900
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 400
+    Received: 409
+
+      575 |       try {
+      576 |         const other = await target.fixture();
+    > 577 |         expect(await target.ready()).toBe(broken ? 400 : 200);
+          |                                      ^
+      578 |         await activate(
+      579 |           page,
+      580 |           page.getByRole("button", { name: "Back to workspace", exact: true }),
+        at <repo>/tests/e2e/project-context.spec.ts:577:38
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/project-context-project-co-3d3e6-wer-source-save-at-1440x900/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/project-context-project-co-3d3e6-wer-source-save-at-1440x900/error-context.md
+
+  9 failed
+    tests/e2e/project-context.spec.ts:429:9 › project context: foreign recovery preserves newer source draft at 1024x768
+    tests/e2e/project-context.spec.ts:429:9 › project context: foreign recovery preserves newer source save at 1024x768
+    tests/e2e/project-context.spec.ts:429:9 › project context: foreign recovery preserves newer parameter draft at 1024x768
+    tests/e2e/project-context.spec.ts:563:9 › project context: obsolete successful load preserves newer source save at 1024x768
+    tests/e2e/project-context.spec.ts:563:9 › project context: obsolete failed load preserves newer source save at 1024x768
+    tests/e2e/project-context.spec.ts:429:9 › project context: foreign recovery preserves newer source save at 1440x900
+    tests/e2e/project-context.spec.ts:429:9 › project context: foreign recovery preserves newer parameter draft at 1440x900
+    tests/e2e/project-context.spec.ts:563:9 › project context: obsolete successful load preserves newer source save at 1440x900
+    tests/e2e/project-context.spec.ts:563:9 › project context: obsolete failed load preserves newer source save at 1440x900
+  1 passed (2.9m)

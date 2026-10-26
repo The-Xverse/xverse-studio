@@ -1,0 +1,189 @@
+from pathlib import Path
+from collections import Counter
+import json
+
+root = Path.cwd()
+out = root/'evidence/studio/M2-project-context'
+v = json.loads((out/'verification.json').read_text())
+assert v['targeted']['expected'] == 62 and v['full']['expected'] == 233
+rows = []
+for viewport in ['1024x768', '1440x900']:
+    model = json.loads((out/f'performance/{viewport}/model-performance.json').read_text())
+    history = json.loads((out/f'performance/{viewport}/history-performance.json').read_text())
+    rows.append((viewport, model['selectionAndInspector']['p95'], model['openAndValidationPresentation']['p95'], history['p95']))
+table = '\n'.join(f'| {vp} | {selection:.1f} ms | {opening:.1f} ms | {history:.1f} ms |' for vp,selection,opening,history in rows)
+contrast = json.loads((out/'contrast-summary.json').read_text())
+(out/'README.md').write_text(f'''# Active project and requested-operation context — Linux partial evidence
+
+This repairs project-context handling under FR-002/FR-023/FR-026 and NFR-006,
+with partial T038/T067 evidence at 1024×768 and 1440×900. All 24 new context
+cases plus 38 existing recovery cases pass; the full 233-browser successor and
+separate two-case performance run also pass. Application, compiled UI, runtime and
+performance inputs match across these runs; every input stayed unchanged within
+each run. One unrelated display-test setup changed before the final full run and
+has an explicit input-difference control and affected retest. Type/build,
+architecture, compatibility and spec checks pass. No milestone is accepted and
+the component count remains 47/100. Windows remains held at user request.
+
+The active Project remains the rendered workspace until a current successful
+load is accepted. Failed requests carry a separate target ID; recovery guidance
+names that project explicitly. A recovery commits independently on the backend,
+but cannot replace another workspace after the operator resumes authoring there.
+Workspace interaction has its own sequence so unsaved parameter input counts as
+intent without invalidating legitimate revision acknowledgements. Recovery context
+is captured at submission, including when its error panel immediately unmounts.
+Creation/import requests advance navigation generation at initiation, and their
+continuations require an accepted load. Startup metadata cannot reopen a remembered
+project after newer navigation. No backend contract or execution authority changes.
+
+## Direct transaction evidence
+
+The native Tab/Enter journeys use the real isolated Linux backend and public API.
+Authentication and fixture preparation are separate helpers. Controlled unreadable
+files are confined to the owned browser-test data root, with path, real path and
+original bytes checked before modification and restoration in finally. No arbitrary
+host root, provider or device is accessed. These focused cases never Start a run.
+
+Actual B recovery replies are held after commit while the still-visible A workspace
+receives a newer source draft, source save or parameter draft. Releasing B preserves
+A's exact source/cache/context/focus or parameter value. Actual A PUTs advance once
+and are acknowledged before releasing B; other A documents remain exact. B advances
+once independently and its real recovery backup preserves the observed bytes.
+Both projects' run sets remain unchanged.
+
+Actual successful and failed HTTP 409 B reads are held while the operator returns to A
+and saves source. Late replies and the creation continuation preserve the new modal,
+acknowledgement and active identity without leaking an obsolete error. A held HTTP 201
+creation reply has the same counter; its backend-created project stays retained.
+Two actual creation POST replies are held, then the older is released while the
+newer is pending; the latest creation intent wins, and both projects stay intact.
+Actual HTTP 200 startup discovery and a labelled controlled HTTP 503 metadata failure cannot
+reopen a project or display a late error after explicit Home. The HTTP 503 is a transport
+fixture, not evidence of a live provider failure. Delayed-import completion is
+source-reviewed without a dedicated held-import journey.
+Post-hydration create/import modal continuation, retained-pointer supersession and
+newer state of the same run also lack dedicated hydration journeys. The Source
+counter covers reload hydration and modal preservation directly.
+
+The existing 38 recovery cases retain positive foreign recovery with no intervening
+authoring, boot recovery, current refusal/focus, actual stale HTTP 412, equal/newer head
+and exact history/readiness, Home, deliberately moved focus, pending submissions,
+history failure/shape/window/absence and actual preserved backup bytes. These
+counterchecks ensure the new guards do not disable legitimate recovery.
+
+## Retained failures and review
+
+initial-red/ records the first 10-case run: nine failures and one pass. Four failures
+were fixture errors (the accessible Duration name includes its unit; unreadable
+project reads return HTTP 409). That run is not counted as ten product failures. After
+those corrections and an explicit response/client settlement barrier, context-red/
+records ten actual failures on unchanged 077d581. ten-successor/ records their first
+repair passing before the extra creation/startup counters were added.
+
+The first expanded 56-case cohort overlapped an asynchronous build. Its actual result
+was 55 pass/one failure, but compiled assets were not frozen or included in its older
+map. overlapping-build/ retains that failed run and its classification as invalid
+candidate verification. It is never relabelled a pass. The final build completed
+before the successor target began; all six compiled assets are in its before/after
+map; the later unrelated setup-input difference is declared separately.
+
+The first frozen successor passed 56 focused and 227 full browser checks, then both
+performance journeys failed before retained-history measurement: Results navigation
+superseded the overly broad cached-run context guard. Those outcomes and their
+source/compiled maps remain under before-run-context/. A dedicated actual retained-run
+counter reproduced missing metadata at both viewports while Home departures passed
+(cached-run-red/: two failures/two passes). Run hydration now requires current
+project/load, the same stored pointer and matching returned ownership, independently
+of the stricter navigation-continuation acceptance. New Results, Source-modal and
+Home cases use real held metadata from the inert registered journal fixture; no run
+is started. Relevant metadata can restore after Results/Source interaction while
+Home remains departed. Replacement target/full/performance results apply to the
+repaired candidate; the earlier performance failure is never relabelled a pass.
+The older local wrapper recorded the failed child status but returned zero itself;
+the retainer still refused the failed gate and no task update ran. Replacement
+wrappers propagate the child exit status before downstream retention/documentation.
+
+The first 62-case replacement was interrupted for a known test selector error:
+12 passed, two Source cases failed, one was interrupted and 47 did not run. The
+modal-preservation assertion passed and hydration added a count to the Results tab's
+accessible name; the subsequent exact-name selector was wrong. Its raw result remains
+under source-selector-interrupted/. The corrected selector includes the count. These
+metadata cases now use the existing small inert registered-reader fixture rather than
+the 50,000-record workload, with public hash-integrity/count checks. The separate
+performance workload still uses 50,000 records; no performance threshold was reduced.
+
+The next full 233 run ended 232 passed/one failure before the incompatible-time/unit
+display assertions: its actual 0.2-second reference fixture was still observed as
+running when the default 10-second poll expired. The retained worker journal shows
+normal duration completion, cleanup complete and evidence complete. Individual old
+HTTP poll timings were not recorded, so no host-load cause is asserted. The original
+232/1 remains failed under reference-stop-timeout/.
+
+Independent review supported a bounded 30-second prerequisite-observation wait for
+this display test, retaining the real runtime and all display assertions. It now
+records at most 64 timestamped HTTP/state/version observations and explicitly fails
+failed/unknown/HTTP-error outcomes. The affected case passed with real preparation
+then stopped/version 2 observations (affected-setup-successor/). All bytes outside
+this one setup block are identical. test-input-control.json and test-setup-change.diff
+retain both file hashes and the exact change; final full 233 uses the corrected test.
+The earlier 62/performance 2 maps retain their original test hash; all 265 other inputs
+match the final full map. No application/performance workload or threshold changed,
+and the measured performance was not rerun for different numbers.
+
+Independent read-only review found the missing create/import initiation generation.
+It was repaired and the overlapping creation counter was added. Final source review
+passed with the delayed-import limitation above; it did not run tests or establish
+native Windows, assistive-technology or broader acceptance. See independent-review.md.
+
+## Measurements and candidate identity
+
+One documented warm-up and 30 repetitions per viewport; retained raw distributions:
+
+| Viewport | Selection/inspector p95 | Open/validation p95 | History p95 |
+|---|---:|---:|---:|
+{table}
+
+All {contrast['selectedPairs']} selected guidance/history/foreign-target text and
+paint pairs pass 4.5:1, minimum {contrast['minimumRatio']:.4f}:1. This is not a global
+accessibility claim. No CSS change was required.
+
+Final full-run input digest: `{v['applicationAndInputDigest']}` ({v['frozenInputs']} source/compiled/fixed
+inputs). The environment recorder's tracked-source subset is supplemental; the
+authoritative map also includes the new test and compiled UI. Its Git identity names
+the base commit, while this input digest and the later candidate binding identify
+the tested successor. Backend 851 results are inherited through 163 exact unchanged inputs plus the
+reviewed unchanged-command CI scheduling control; they were not rerun locally for
+this frontend-only repair. See backend-input-inheritance.json. Both previous 077d581
+Ubuntu24 CI runs passed backend, browser and clean package stages; their retained
+receipt is separate from this successor's local verification. Current-candidate CI
+and clean package evidence require their own exact identities.
+''')
+note = ' Linux project-context successor: 24 new native keyboard cases plus 38 recovery counters and full 233 browser checks pass; separate performance/type/build/architecture/compat/spec pass. Application/compiled/runtime/performance inputs match, all inputs stayed frozen within each run, and one unrelated display-test setup difference has exact file/diff control plus affected retest. The prior full 232/1 remains failed. Active rendered identity stays distinct from requested load/recovery target; newer source/parameter drafts and actual save acknowledgements survive foreign recovery and late reads, creation and startup. Latest creation intent wins; actual backups/documents/run sets preserved. Delayed import is source-reviewed only. Backend 851 inherited via 163 exact unchanged inputs plus unchanged-command CI scheduling control; no local backend rerun. Evidence evidence/studio/M2-project-context/. T038/T067 stay partial; Windows/actual AT/milestone gates remain open.'
+p = root/'specs/001-industry-agnostic-studio/traceability.json'
+trace = json.loads(p.read_text())
+for task in trace['tasks']:
+    if task['id'] in ['T016','T038','T045','T046','T067']:
+        if note.strip() not in task['implementation_note']:
+            task['implementation_note'] += note
+        evidence = task.setdefault('implementation_evidence', [])
+        for item in ['evidence/studio/M2-project-context/', 'tests/e2e/project-context.spec.ts']:
+            if item not in evidence: evidence.append(item)
+assert Counter(t['status'] for t in trace['tasks']) == {'completed':47, 'in_progress':43, 'blocked':10}
+record = trace['implementation_record']
+record['code_candidate'] = f"Base 077d581 plus project-context source/input digest {v['applicationAndInputDigest']}; clean committed candidate binding pending package verification"
+record['verification'].update(playwright_checks_passed=233, playwright_checks_failed=0,
+    playwright_scope='Full native Linux Chromium 233 plus earlier 62 focused (24 new + 38 recovery) and two-viewport performance. Application/compiled/runtime/performance inputs match; one unrelated display-test setup changed with exact input control/affected retest; each run frozen. Backend 851 inherited through 163 exact unchanged inputs plus CI scheduling control; not rerun locally.',
+    evidence='evidence/studio/M2-project-context/', backend_evidence='evidence/studio/M2-project-context/backend-input-inheritance.json',
+    prior_package_evidence='evidence/studio/M2-keyboard-source-recovery/package/receipt.json (clean 21460a3 native Linux source)',
+    package_evidence='Pending exact-candidate clean package for project-context successor')
+p.write_text(json.dumps(trace,ensure_ascii=False,indent=2)+'\n')
+p = root/'specs/001-industry-agnostic-studio/tasks.md'
+text = p.read_text()
+if note.strip() not in text: p.write_text(text+'\n'+note.strip()+'\n')
+p = root/'docs/implementation/STATUS.md'; text = p.read_text()
+marker = 'The latest source-recovery successor passed38'
+paragraph = 'The latest project-context successor passed 24 new keyboard cases plus 38 existing recovery cases and the full 233-browser suite. Application/compiled/runtime/performance inputs match; one unrelated display-test setup difference has exact file/diff control and affected retest, with all inputs frozen within each run. The prior full 232/1 remains failed. Active workspace identity stays separate from failed/pending load and recovery targets. Actual foreign recovery commits independently while newer drafts/save acknowledgements remain in their active workspace; late reads, creation and startup respect newer intent, and overlapping creations select the latest request. Separate performance/type/build/architecture/compatibility/spec pass; backend 851 is inherited with 163 exact unchanged inputs plus the CI scheduling control. The earlier mixed-build 55/1 cohort remains failed and invalid as candidate verification. See `evidence/studio/M2-project-context/`. Delayed import is source-reviewed only. Count 47/100; no milestone accepted; Windows/actual AT remain open.\n\nBoth 077d581 Ubuntu24 push/PR CI runs completed successfully, including backend/browser/package stages. Their receipt is `evidence/studio/native-ci/ubuntu-24.04-077d581-runs.json`; this is separate from current successor verification.\n\n'
+if paragraph not in text:
+    anchor = 'The latest source-recovery successor'
+    p.write_text(text.replace(anchor, paragraph+anchor, 1))
+print('Documented verified partial scope; tasks and traceability updated together')

@@ -34,6 +34,10 @@ with its manifest/checker included, clean 100-file hash proof and unchanged test
 grants no runtime authority and does not close T001. Both 944a875 product and d421c23 package-metadata CI runs passed;
 those outcomes predate this descriptive artifact.
 
+The latest project-context successor passed 24 new keyboard cases plus 38 existing recovery cases and the full 233-browser suite. Application/compiled/runtime/performance inputs match; one unrelated display-test setup difference has exact file/diff control and affected retest, with all inputs frozen within each run. The prior full 232/1 remains failed. Active workspace identity stays separate from failed/pending load and recovery targets. Actual foreign recovery commits independently while newer drafts/save acknowledgements remain in their active workspace; late reads, creation and startup respect newer intent, and overlapping creations select the latest request. Separate performance/type/build/architecture/compatibility/spec pass; backend 851 is inherited with 163 exact unchanged inputs plus the CI scheduling control. The earlier mixed-build 55/1 cohort remains failed and invalid as candidate verification. See `evidence/studio/M2-project-context/`. Delayed import is source-reviewed only. Count 47/100; no milestone accepted; Windows/actual AT remain open.
+
+Both 077d581 Ubuntu24 push/PR CI runs completed successfully, including backend/browser/package stages. Their receipt is `evidence/studio/native-ci/ubuntu-24.04-077d581-runs.json`; this is separate from current successor verification.
+
 The latest source-recovery successor passed 38 native keyboard cases and full 209 browser checks
 with frozen source/compiled UI/fixed inputs. History lookup distinguishes unavailable observations
 from absence, supports retry and rejects malformed/out-of-window replies. Real recovery preserves

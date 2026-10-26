@@ -21,7 +21,7 @@ export function RecoveryPanel({
   onRecovered,
   adoptable = true,
 }: {
-  project: { projectId: string; revision: number };
+  project: { projectId: string; revision: number; name?: string };
   doAction: DoAction;
   onRecovered: (
     result: RecoveryResult,
@@ -152,7 +152,8 @@ export function RecoveryPanel({
       <p id={descriptionId}>
         Recovery first preserves the bytes now on disk in a recovery backup and
         then commits a new revision; revision {project.revision} stays in
-        history. Sidecars keep their recorded content.
+        history. Sidecars keep their recorded content. Recovery applies to{" "}
+        {project.name || project.projectId} ({project.projectId}).
       </p>
       <div className="button-row">
         {adoptable && (

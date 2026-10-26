@@ -1,0 +1,964 @@
+{
+  "config": {
+    "argv": [
+      "<loop-cache>/node-v24.22.1-linux-x64/bin/node",
+      "<repo>/node_modules/.bin/playwright",
+      "test",
+      "-c",
+      "tests/e2e/playwright.config.ts",
+      "--grep",
+      "project context:"
+    ],
+    "configFile": "<repo>/tests/e2e/playwright.config.ts",
+    "rootDir": "<repo>/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "<repo>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "<repo>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "*.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "<repo>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "<repo>/tests/e2e",
+        "snapshotDir": "<repo>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": "*.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "baseURL": "http://127.0.0.1:39147",
+          "browserName": "chromium",
+          "actionTimeout": 15000,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "trace": "off",
+          "screenshot": "only-on-failure",
+          "video": "off"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "<repo>/test-results/browser-report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "project-context.spec.ts",
+      "file": "project-context.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "project context: foreign recovery preserves newer source draft at 1024x768",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 23641,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  - 4\u001b[39m\n\u001b[31m+ Received  + 4\u001b[39m\n\n\u001b[2m  Object {\u001b[22m\n\u001b[32m-   \"documentId\": \"doc-2\",\u001b[39m\n\u001b[31m+   \"documentId\": \"doc-0\",\u001b[39m\n\u001b[2m    \"draftDigest\": \"sha256:2c716828ce72a375fed47c9c57827816c1a35fa9edceda2ce9e0d85e5995a79d\",\u001b[22m\n\u001b[2m    \"operationErrors\": 0,\u001b[22m\n\u001b[32m-   \"projectName\": \"Active context source draft 1024\",\u001b[39m\n\u001b[32m-   \"sourceDigest\": \"sha256:2c716828ce72a375fed47c9c57827816c1a35fa9edceda2ce9e0d85e5995a79d\",\u001b[39m\n\u001b[31m+   \"projectName\": \"Process control reference\",\u001b[39m\n\u001b[31m+   \"sourceDigest\": \"sha256:24431c6056ead9808ce4f0f1293224fccedeea35955060d716b55e0721630bf5\",\u001b[39m\n\u001b[2m    \"sourceModal\": 1,\u001b[22m\n\u001b[32m-   \"storedProject\": \"prj-c49b07b0-728f-4f43-960b-fe3f614b9d29\",\u001b[39m\n\u001b[31m+   \"storedProject\": \"prj-707982a1-2fa8-4fe6-b0ff-1bc53f2c8a01\",\u001b[39m\n\u001b[2m  }\u001b[22m\n\nCall Log:\n- Timeout 10000ms exceeded while waiting on the predicate",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  - 4\u001b[39m\n\u001b[31m+ Received  + 4\u001b[39m\n\n\u001b[2m  Object {\u001b[22m\n\u001b[32m-   \"documentId\": \"doc-2\",\u001b[39m\n\u001b[31m+   \"documentId\": \"doc-0\",\u001b[39m\n\u001b[2m    \"draftDigest\": \"sha256:2c716828ce72a375fed47c9c57827816c1a35fa9edceda2ce9e0d85e5995a79d\",\u001b[22m\n\u001b[2m    \"operationErrors\": 0,\u001b[22m\n\u001b[32m-   \"projectName\": \"Active context source draft 1024\",\u001b[39m\n\u001b[32m-   \"sourceDigest\": \"sha256:2c716828ce72a375fed47c9c57827816c1a35fa9edceda2ce9e0d85e5995a79d\",\u001b[39m\n\u001b[31m+   \"projectName\": \"Process control reference\",\u001b[39m\n\u001b[31m+   \"sourceDigest\": \"sha256:24431c6056ead9808ce4f0f1293224fccedeea35955060d716b55e0721630bf5\",\u001b[39m\n\u001b[2m    \"sourceModal\": 1,\u001b[22m\n\u001b[32m-   \"storedProject\": \"prj-c49b07b0-728f-4f43-960b-fe3f614b9d29\",\u001b[39m\n\u001b[31m+   \"storedProject\": \"prj-707982a1-2fa8-4fe6-b0ff-1bc53f2c8a01\",\u001b[39m\n\u001b[2m  }\u001b[22m\n\nCall Log:\n- Timeout 10000ms exceeded while waiting on the predicate\n    at <repo>/tests/e2e/project-context.spec.ts:507:14",
+                    "location": {
+                      "file": "<repo>/tests/e2e/project-context.spec.ts",
+                      "column": 14,
+                      "line": 507
+                    },
+                    "snippet": "  505 |           await expect.soft\n  506 |             .poll(() => renderedContext(page, current.projectId, authored!.id))\n> 507 |             .toEqual({\n      |              ^\n  508 |               projectName: current.name,\n  509 |               storedProject: current.projectId,\n  510 |               sourceModal: 1,"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/project-context.spec.ts",
+                        "column": 14,
+                        "line": 507
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  - 4\u001b[39m\n\u001b[31m+ Received  + 4\u001b[39m\n\n\u001b[2m  Object {\u001b[22m\n\u001b[32m-   \"documentId\": \"doc-2\",\u001b[39m\n\u001b[31m+   \"documentId\": \"doc-0\",\u001b[39m\n\u001b[2m    \"draftDigest\": \"sha256:2c716828ce72a375fed47c9c57827816c1a35fa9edceda2ce9e0d85e5995a79d\",\u001b[22m\n\u001b[2m    \"operationErrors\": 0,\u001b[22m\n\u001b[32m-   \"projectName\": \"Active context source draft 1024\",\u001b[39m\n\u001b[32m-   \"sourceDigest\": \"sha256:2c716828ce72a375fed47c9c57827816c1a35fa9edceda2ce9e0d85e5995a79d\",\u001b[39m\n\u001b[31m+   \"projectName\": \"Process control reference\",\u001b[39m\n\u001b[31m+   \"sourceDigest\": \"sha256:24431c6056ead9808ce4f0f1293224fccedeea35955060d716b55e0721630bf5\",\u001b[39m\n\u001b[2m    \"sourceModal\": 1,\u001b[22m\n\u001b[32m-   \"storedProject\": \"prj-c49b07b0-728f-4f43-960b-fe3f614b9d29\",\u001b[39m\n\u001b[31m+   \"storedProject\": \"prj-707982a1-2fa8-4fe6-b0ff-1bc53f2c8a01\",\u001b[39m\n\u001b[2m  }\u001b[22m\n\nCall Log:\n- Timeout 10000ms exceeded while waiting on the predicate\n\n  505 |           await expect.soft\n  506 |             .poll(() => renderedContext(page, current.projectId, authored!.id))\n> 507 |             .toEqual({\n      |              ^\n  508 |               projectName: current.name,\n  509 |               storedProject: current.projectId,\n  510 |               sourceModal: 1,\n    at <repo>/tests/e2e/project-context.spec.ts:507:14"
+                    },
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/project-context.spec.ts",
+                        "column": 46,
+                        "line": 517
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('textbox', { name: 'XDL source', exact: true })\nExpected: focused\nReceived: inactive\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toBeFocused\" getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('textbox', { name: 'XDL source', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('textbox', { name: 'XDL source', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <textarea id=\"xdl-source\" spellcheck=\"false\" class=\"source-textarea\" aria-describedby=\"_r_4_\">apiVersion: xverse.io/xdl/v1alpha1\u21b5kind: Componen\u2026</textarea>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n\n\n  515 |               operationErrors: 0,\n  516 |             });\n> 517 |           await expect.soft(authored.editor).toBeFocused();\n      |                                              ^\n  518 |         } else {\n  519 |           await expect\n  520 |             .soft(page.locator(\".project-header h1\"))\n    at <repo>/tests/e2e/project-context.spec.ts:517:46"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T21:44:55.837Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "project-context-recovery.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJtb2RlIjoic291cmNlIGRyYWZ0IiwiYWN0aXZlUHJvamVjdElkIjoicHJqLWM0OWIwN2IwLTcyOGYtNGY0My05NjBiLWZlM2Y2MTRiOWQyOSIsInJlY292ZXJlZFByb2plY3RJZCI6InByai03MDc5ODJhMS0yZmE4LTRmZTYtYjBmZi0xYmM1M2YyYzhhMDEiLCJkaXN0aW5jdFByb2plY3RzIjp0cnVlLCJhY3RpdmVSZXZpc2lvbiI6MSwiaW5kZXBlbmRlbnRSZWNvdmVyeUNvbW1pdHRlZCI6dHJ1ZSwicHJlc2VydmVkIjp7InJlY292ZXJ5SWQiOiJyZWMtMDg1ODI4ZDUtNTI5NS00ZjM4LWI0ODctN2E2YzJjMGI0MjJmIiwiY29tbWl0dGVkRGlnZXN0Ijoic2hhMjU2OjM5YWUxNDNjZDdkODUxYmQ2ZDRmMThmN2E3MGIwZTBjNGQyZWJiMzdkZDg2ZjlhYThjMTdmNmQ4NjNmNDg5NzkiLCJvYnNlcnZlZERpZ2VzdCI6InNoYTI1Njo0OTVlZDU1MThjNTBiZGU0OTUyMjJlYmQ2MThhNjMzZTcxMmZkNDczM2M4NWY4MjA1NTY3Nzk0YTViNjI0OWZmIiwicHJlc2VydmVkRW5jb2RpbmciOiJiaW5hcnkiLCJleGFjdEJhY2t1cEJ5dGVzIjp0cnVlLCJvbGRSZXZpc2lvbkRpcmVjdG9yeVVuY2hhbmdlZCI6dHJ1ZX0sIm93blByb2plY3RSdW5TZXRzVW5jaGFuZ2VkIjp0cnVlLCJzY29wZSI6IlJlYWwgZm9yZWlnbiBvd25lZCByZWNvdmVyeSBoZWxkIGFmdGVyIGNvbW1pdDsgcHJlc2VydmUgbmV3ZXIgYXV0aG9yaW5nIGludGVudCBpbiBzdGlsbC1yZW5kZXJlZCBhY3RpdmUgcHJvamVjdDsgbm8gU3RhcnQifQ=="
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/project-context-project-co-d1a17-er-source-draft-at-1024x768/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/project-context-project-co-d1a17-er-source-draft-at-1024x768/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/project-context.spec.ts",
+                    "column": 14,
+                    "line": 507
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "520c74da435c110dc8a0-aafdb5b8158685e4b098",
+          "file": "project-context.spec.ts",
+          "line": 434,
+          "column": 9
+        },
+        {
+          "title": "project context: foreign recovery preserves newer source save at 1024x768",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 32877,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeDisabled\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('button', { name: 'Save source revision', exact: true })\nExpected: disabled\nReceived: enabled\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toBeDisabled\" getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('button', { name: 'Save source revision', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('button', { name: 'Save source revision', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <button class=\"button primary\">\u2026</button>\u001b[22m\n\u001b[2m       - unexpected value \"enabled\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeDisabled\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('button', { name: 'Save source revision', exact: true })\nExpected: disabled\nReceived: enabled\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toBeDisabled\" getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('button', { name: 'Save source revision', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('button', { name: 'Save source revision', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <button class=\"button primary\">\u2026</button>\u001b[22m\n\u001b[2m       - unexpected value \"enabled\"\u001b[22m\n\n    at <repo>/tests/e2e/project-context.spec.ts:499:46",
+                    "location": {
+                      "file": "<repo>/tests/e2e/project-context.spec.ts",
+                      "column": 46,
+                      "line": 499
+                    },
+                    "snippet": "  497 |             await page.keyboard.press(\"ControlOrMeta+s\");\n  498 |             expect((await reply).status()).toBe(200);\n> 499 |             await expect.soft(authored.save).toBeDisabled();\n      |                                              ^\n  500 |           }\n  501 |         }\n  502 |         await pending.release();"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/project-context.spec.ts",
+                        "column": 46,
+                        "line": 499
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeDisabled\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('button', { name: 'Save source revision', exact: true })\nExpected: disabled\nReceived: enabled\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toBeDisabled\" getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('button', { name: 'Save source revision', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('button', { name: 'Save source revision', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <button class=\"button primary\">\u2026</button>\u001b[22m\n\u001b[2m       - unexpected value \"enabled\"\u001b[22m\n\n\n  497 |             await page.keyboard.press(\"ControlOrMeta+s\");\n  498 |             expect((await reply).status()).toBe(200);\n> 499 |             await expect.soft(authored.save).toBeDisabled();\n      |                                              ^\n  500 |           }\n  501 |         }\n  502 |         await pending.release();\n    at <repo>/tests/e2e/project-context.spec.ts:499:46"
+                    },
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/project-context.spec.ts",
+                        "column": 14,
+                        "line": 507
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  - 5\u001b[39m\n\u001b[31m+ Received  + 5\u001b[39m\n\n\u001b[2m  Object {\u001b[22m\n\u001b[32m-   \"documentId\": \"doc-2\",\u001b[39m\n\u001b[32m-   \"draftDigest\": null,\u001b[39m\n\u001b[31m+   \"documentId\": \"doc-0\",\u001b[39m\n\u001b[31m+   \"draftDigest\": \"sha256:f3d094387b8bd9bdcb52888f174eaae900382d76d04e752bbad89f2c3422b6fb\",\u001b[39m\n\u001b[2m    \"operationErrors\": 0,\u001b[22m\n\u001b[32m-   \"projectName\": \"Active context source save 1024\",\u001b[39m\n\u001b[32m-   \"sourceDigest\": \"sha256:f3d094387b8bd9bdcb52888f174eaae900382d76d04e752bbad89f2c3422b6fb\",\u001b[39m\n\u001b[31m+   \"projectName\": \"Process control reference\",\u001b[39m\n\u001b[31m+   \"sourceDigest\": \"sha256:24431c6056ead9808ce4f0f1293224fccedeea35955060d716b55e0721630bf5\",\u001b[39m\n\u001b[2m    \"sourceModal\": 1,\u001b[22m\n\u001b[32m-   \"storedProject\": \"prj-6ec73411-8f35-4393-892d-2d39afaac030\",\u001b[39m\n\u001b[31m+   \"storedProject\": \"prj-f349036c-0164-45f9-8f48-f8e3eef77c4e\",\u001b[39m\n\u001b[2m  }\u001b[22m\n\nCall Log:\n- Timeout 10000ms exceeded while waiting on the predicate\n\n  505 |           await expect.soft\n  506 |             .poll(() => renderedContext(page, current.projectId, authored!.id))\n> 507 |             .toEqual({\n      |              ^\n  508 |               projectName: current.name,\n  509 |               storedProject: current.projectId,\n  510 |               sourceModal: 1,\n    at <repo>/tests/e2e/project-context.spec.ts:507:14"
+                    },
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/project-context.spec.ts",
+                        "column": 46,
+                        "line": 517
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('textbox', { name: 'XDL source', exact: true })\nExpected: focused\nReceived: inactive\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toBeFocused\" getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('textbox', { name: 'XDL source', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('textbox', { name: 'XDL source', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <textarea id=\"xdl-source\" spellcheck=\"false\" class=\"source-textarea\" aria-describedby=\"_r_4_\">apiVersion: xverse.io/xdl/v1alpha1\u21b5kind: Componen\u2026</textarea>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n\n\n  515 |               operationErrors: 0,\n  516 |             });\n> 517 |           await expect.soft(authored.editor).toBeFocused();\n      |                                              ^\n  518 |         } else {\n  519 |           await expect\n  520 |             .soft(page.locator(\".project-header h1\"))\n    at <repo>/tests/e2e/project-context.spec.ts:517:46"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T21:45:19.866Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "project-context-recovery.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJtb2RlIjoic291cmNlIHNhdmUiLCJhY3RpdmVQcm9qZWN0SWQiOiJwcmotNmVjNzM0MTEtOGYzNS00MzkzLTg5MmQtMmQzOWFmYWFjMDMwIiwicmVjb3ZlcmVkUHJvamVjdElkIjoicHJqLWYzNDkwMzZjLTAxNjQtNDVmOS04ZjQ4LWY4ZTNlZWY3N2M0ZSIsImRpc3RpbmN0UHJvamVjdHMiOnRydWUsImFjdGl2ZVJldmlzaW9uIjoyLCJpbmRlcGVuZGVudFJlY292ZXJ5Q29tbWl0dGVkIjp0cnVlLCJwcmVzZXJ2ZWQiOnsicmVjb3ZlcnlJZCI6InJlYy1mYmI1Njg5NC05ZTQ2LTRkYjYtOGJjOS00MWE1MGNlN2UxZDAiLCJjb21taXR0ZWREaWdlc3QiOiJzaGEyNTY6MzlhZTE0M2NkN2Q4NTFiZDZkNGYxOGY3YTcwYjBlMGM0ZDJlYmIzN2RkODZmOWFhOGMxN2Y2ZDg2M2Y0ODk3OSIsIm9ic2VydmVkRGlnZXN0Ijoic2hhMjU2OjQ5NWVkNTUxOGM1MGJkZTQ5NTIyMmViZDYxOGE2MzNlNzEyZmQ0NzMzYzg1ZjgyMDU1Njc3OTRhNWI2MjQ5ZmYiLCJwcmVzZXJ2ZWRFbmNvZGluZyI6ImJpbmFyeSIsImV4YWN0QmFja3VwQnl0ZXMiOnRydWUsIm9sZFJldmlzaW9uRGlyZWN0b3J5VW5jaGFuZ2VkIjp0cnVlfSwib3duUHJvamVjdFJ1blNldHNVbmNoYW5nZWQiOnRydWUsInNjb3BlIjoiUmVhbCBmb3JlaWduIG93bmVkIHJlY292ZXJ5IGhlbGQgYWZ0ZXIgY29tbWl0OyBwcmVzZXJ2ZSBuZXdlciBhdXRob3JpbmcgaW50ZW50IGluIHN0aWxsLXJlbmRlcmVkIGFjdGl2ZSBwcm9qZWN0OyBubyBTdGFydCJ9"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/project-context-project-co-734aa-wer-source-save-at-1024x768/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/project-context-project-co-734aa-wer-source-save-at-1024x768/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/project-context.spec.ts",
+                    "column": 46,
+                    "line": 499
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "520c74da435c110dc8a0-202cd6560500bfd69a92",
+          "file": "project-context.spec.ts",
+          "line": 434,
+          "column": 9
+        },
+        {
+          "title": "project context: foreign recovery preserves newer parameter draft at 1024x768",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 23794,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('.project-header h1')\nExpected: \u001b[32m\"Active context parameter draft 1024\"\u001b[39m\nReceived: \u001b[31m\"Process control reference\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveText\" locator('.project-header h1') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('.project-header h1')\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <h1>Process control reference</h1>\u001b[22m\n\u001b[2m       - unexpected value \"Process control reference\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('.project-header h1')\nExpected: \u001b[32m\"Active context parameter draft 1024\"\u001b[39m\nReceived: \u001b[31m\"Process control reference\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveText\" locator('.project-header h1') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('.project-header h1')\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <h1>Process control reference</h1>\u001b[22m\n\u001b[2m       - unexpected value \"Process control reference\"\u001b[22m\n\n    at <repo>/tests/e2e/project-context.spec.ts:521:14",
+                    "location": {
+                      "file": "<repo>/tests/e2e/project-context.spec.ts",
+                      "column": 14,
+                      "line": 521
+                    },
+                    "snippet": "  519 |           await expect\n  520 |             .soft(page.locator(\".project-header h1\"))\n> 521 |             .toHaveText(current.name);\n      |              ^\n  522 |           await expect\n  523 |             .soft(page.getByRole(\"spinbutton\", { name: \"Duration s\", exact: true }))\n  524 |             .toHaveValue(\"7\");"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/project-context.spec.ts",
+                        "column": 14,
+                        "line": 521
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('.project-header h1')\nExpected: \u001b[32m\"Active context parameter draft 1024\"\u001b[39m\nReceived: \u001b[31m\"Process control reference\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveText\" locator('.project-header h1') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('.project-header h1')\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <h1>Process control reference</h1>\u001b[22m\n\u001b[2m       - unexpected value \"Process control reference\"\u001b[22m\n\n\n  519 |           await expect\n  520 |             .soft(page.locator(\".project-header h1\"))\n> 521 |             .toHaveText(current.name);\n      |              ^\n  522 |           await expect\n  523 |             .soft(page.getByRole(\"spinbutton\", { name: \"Duration s\", exact: true }))\n  524 |             .toHaveValue(\"7\");\n    at <repo>/tests/e2e/project-context.spec.ts:521:14"
+                    },
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/project-context.spec.ts",
+                        "column": 14,
+                        "line": 524
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('spinbutton', { name: 'Duration s', exact: true })\nExpected: \u001b[32m\"7\"\u001b[39m\nReceived: \u001b[31m\"5\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveValue\" getByRole('spinbutton', { name: 'Duration s', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('spinbutton', { name: 'Duration s', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <input max=\"30\" min=\"0.1\" value=\"5\" step=\"any\" required=\"\" type=\"number\" aria-describedby=\"_r_3_-duration\"/>\u001b[22m\n\u001b[2m       - unexpected value \"5\"\u001b[22m\n\n\n  522 |           await expect\n  523 |             .soft(page.getByRole(\"spinbutton\", { name: \"Duration s\", exact: true }))\n> 524 |             .toHaveValue(\"7\");\n      |              ^\n  525 |           expect(\n  526 |             await page.evaluate(() => localStorage.getItem(\"studio.projectId\")),\n  527 |           ).toBe(current.projectId);\n    at <repo>/tests/e2e/project-context.spec.ts:524:14"
+                    },
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/project-context.spec.ts",
+                        "column": 13,
+                        "line": 527
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"prj-\u001b[7mc6f4efcd-aac7-4203-90dd-63b4d3ea3136\u001b[27m\"\u001b[39m\nReceived: \u001b[31m\"prj-\u001b[7m23e08088-8688-4822-99b4-898344cb3cd8\u001b[27m\"\u001b[39m\n\n  525 |           expect(\n  526 |             await page.evaluate(() => localStorage.getItem(\"studio.projectId\")),\n> 527 |           ).toBe(current.projectId);\n      |             ^\n  528 |         }\n  529 |         const saved = await read(page, current.projectId);\n  530 |         expect(saved.revision).toBe(\n    at <repo>/tests/e2e/project-context.spec.ts:527:13"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T21:45:53.103Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/project-context-project-co-55e54-parameter-draft-at-1024x768/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/project-context-project-co-55e54-parameter-draft-at-1024x768/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/project-context.spec.ts",
+                    "column": 14,
+                    "line": 521
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "520c74da435c110dc8a0-ac2a84281cc7c7c26bec",
+          "file": "project-context.spec.ts",
+          "line": 434,
+          "column": 9
+        },
+        {
+          "title": "project context: obsolete successful load preserves newer source save at 1024x768",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 22389,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeDisabled\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('button', { name: 'Save source revision', exact: true })\nExpected: disabled\nReceived: enabled\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toBeDisabled\" getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('button', { name: 'Save source revision', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('button', { name: 'Save source revision', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <button class=\"button primary\">\u2026</button>\u001b[22m\n\u001b[2m       - unexpected value \"enabled\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeDisabled\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('button', { name: 'Save source revision', exact: true })\nExpected: disabled\nReceived: enabled\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toBeDisabled\" getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('button', { name: 'Save source revision', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('button', { name: 'Save source revision', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <button class=\"button primary\">\u2026</button>\u001b[22m\n\u001b[2m       - unexpected value \"enabled\"\u001b[22m\n\n    at <repo>/tests/e2e/project-context.spec.ts:603:42",
+                    "location": {
+                      "file": "<repo>/tests/e2e/project-context.spec.ts",
+                      "column": 42,
+                      "line": 603
+                    },
+                    "snippet": "  601 |         await page.keyboard.press(\"ControlOrMeta+s\");\n  602 |         expect((await reply).status()).toBe(200);\n> 603 |         await expect.soft(authored.save).toBeDisabled();\n      |                                          ^\n  604 |         await target.release();\n  605 |         await settle(page);\n  606 |         await expect.soft"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/project-context.spec.ts",
+                        "column": 42,
+                        "line": 603
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeDisabled\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('button', { name: 'Save source revision', exact: true })\nExpected: disabled\nReceived: enabled\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toBeDisabled\" getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('button', { name: 'Save source revision', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('button', { name: 'Save source revision', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <button class=\"button primary\">\u2026</button>\u001b[22m\n\u001b[2m       - unexpected value \"enabled\"\u001b[22m\n\n\n  601 |         await page.keyboard.press(\"ControlOrMeta+s\");\n  602 |         expect((await reply).status()).toBe(200);\n> 603 |         await expect.soft(authored.save).toBeDisabled();\n      |                                          ^\n  604 |         await target.release();\n  605 |         await settle(page);\n  606 |         await expect.soft\n    at <repo>/tests/e2e/project-context.spec.ts:603:42"
+                    },
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/project-context.spec.ts",
+                        "column": 12,
+                        "line": 608
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  - 6\u001b[39m\n\u001b[31m+ Received  + 6\u001b[39m\n\n\u001b[2m  Object {\u001b[22m\n\u001b[32m-   \"documentId\": \"doc-2\",\u001b[39m\n\u001b[32m-   \"draftDigest\": null,\u001b[39m\n\u001b[31m+   \"documentId\": null,\u001b[39m\n\u001b[31m+   \"draftDigest\": \"sha256:918fe99ad9357d8cdcc4e6df2152805a4accd69baf8a3f08a5a3897c60ae0bbe\",\u001b[39m\n\u001b[2m    \"operationErrors\": 0,\u001b[22m\n\u001b[32m-   \"projectName\": \"Current load context false 1024\",\u001b[39m\n\u001b[32m-   \"sourceDigest\": \"sha256:918fe99ad9357d8cdcc4e6df2152805a4accd69baf8a3f08a5a3897c60ae0bbe\",\u001b[39m\n\u001b[32m-   \"sourceModal\": 1,\u001b[39m\n\u001b[32m-   \"storedProject\": \"prj-07c12b0f-4fe1-4222-ba04-6dacf69fd6e4\",\u001b[39m\n\u001b[31m+   \"projectName\": \"Process control reference\",\u001b[39m\n\u001b[31m+   \"sourceDigest\": null,\u001b[39m\n\u001b[31m+   \"sourceModal\": 0,\u001b[39m\n\u001b[31m+   \"storedProject\": \"prj-96f91aec-33fe-464d-873d-9c35c2769cbd\",\u001b[39m\n\u001b[2m  }\u001b[22m\n\nCall Log:\n- Timeout 10000ms exceeded while waiting on the predicate\n\n  606 |         await expect.soft\n  607 |           .poll(() => renderedContext(page, current.projectId, authored.id))\n> 608 |           .toEqual({\n      |            ^\n  609 |             projectName: current.name,\n  610 |             storedProject: current.projectId,\n  611 |             sourceModal: 1,\n    at <repo>/tests/e2e/project-context.spec.ts:608:12"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T21:46:17.298Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "project-context-load.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJicm9rZW4iOmZhbHNlLCJsb2FkU3RhdHVzIjoyMDAsImFjdGl2ZVByb2plY3RJZCI6InByai0wN2MxMmIwZi00ZmUxLTQyMjItYmEwNC02ZGFjZjY5ZmQ2ZTQiLCJsb2FkVGFyZ2V0SWQiOiJwcmotOTZmOTFhZWMtMzNmZS00NjRkLTg3M2QtOWMzNWMyNzY5Y2JkIiwic291cmNlQ29tbWl0QWNrbm93bGVkZ2VkIjp0cnVlLCJuZXdlck1vZGFsUHJlc2VydmVkIjp0cnVlLCJvd25Qcm9qZWN0UnVuU2V0c1VuY2hhbmdlZCI6dHJ1ZSwic2NvcGUiOiJIZWxkIGFjdHVhbCBsb2FkIHJlc3BvbnNlIGFuZCBhY3R1YWwgc291cmNlIFBVVDsgb2Jzb2xldGUgY3JlYXRpb24gY29udGludWF0aW9uL2Vycm9yIG11c3Qgbm90IGNoYW5nZSBuZXdlciBhdXRob3JpbmcgY29udGV4dDsgbm8gU3RhcnQifQ=="
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/project-context-project-co-4743f-wer-source-save-at-1024x768/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/project-context-project-co-4743f-wer-source-save-at-1024x768/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/project-context.spec.ts",
+                    "column": 42,
+                    "line": 603
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "520c74da435c110dc8a0-aa3de00f61fdf11f7d19",
+          "file": "project-context.spec.ts",
+          "line": 568,
+          "column": 9
+        },
+        {
+          "title": "project context: obsolete failed load preserves newer source save at 1024x768",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 22910,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeDisabled\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('button', { name: 'Save source revision', exact: true })\nExpected: disabled\nReceived: enabled\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toBeDisabled\" getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('button', { name: 'Save source revision', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('button', { name: 'Save source revision', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <button class=\"button primary\">\u2026</button>\u001b[22m\n\u001b[2m       - unexpected value \"enabled\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeDisabled\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('button', { name: 'Save source revision', exact: true })\nExpected: disabled\nReceived: enabled\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toBeDisabled\" getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('button', { name: 'Save source revision', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('button', { name: 'Save source revision', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <button class=\"button primary\">\u2026</button>\u001b[22m\n\u001b[2m       - unexpected value \"enabled\"\u001b[22m\n\n    at <repo>/tests/e2e/project-context.spec.ts:603:42",
+                    "location": {
+                      "file": "<repo>/tests/e2e/project-context.spec.ts",
+                      "column": 42,
+                      "line": 603
+                    },
+                    "snippet": "  601 |         await page.keyboard.press(\"ControlOrMeta+s\");\n  602 |         expect((await reply).status()).toBe(200);\n> 603 |         await expect.soft(authored.save).toBeDisabled();\n      |                                          ^\n  604 |         await target.release();\n  605 |         await settle(page);\n  606 |         await expect.soft"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/project-context.spec.ts",
+                        "column": 42,
+                        "line": 603
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeDisabled\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('button', { name: 'Save source revision', exact: true })\nExpected: disabled\nReceived: enabled\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toBeDisabled\" getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('button', { name: 'Save source revision', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('button', { name: 'Save source revision', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <button class=\"button primary\">\u2026</button>\u001b[22m\n\u001b[2m       - unexpected value \"enabled\"\u001b[22m\n\n\n  601 |         await page.keyboard.press(\"ControlOrMeta+s\");\n  602 |         expect((await reply).status()).toBe(200);\n> 603 |         await expect.soft(authored.save).toBeDisabled();\n      |                                          ^\n  604 |         await target.release();\n  605 |         await settle(page);\n  606 |         await expect.soft\n    at <repo>/tests/e2e/project-context.spec.ts:603:42"
+                    },
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/project-context.spec.ts",
+                        "column": 12,
+                        "line": 608
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  - 2\u001b[39m\n\u001b[31m+ Received  + 2\u001b[39m\n\n\u001b[2m  Object {\u001b[22m\n\u001b[2m    \"documentId\": \"doc-2\",\u001b[22m\n\u001b[32m-   \"draftDigest\": null,\u001b[39m\n\u001b[32m-   \"operationErrors\": 0,\u001b[39m\n\u001b[31m+   \"draftDigest\": \"sha256:10c91330ab82a0c2bd02328f23b9147e43ad6e792b8cc02b2168be0d00626e07\",\u001b[39m\n\u001b[31m+   \"operationErrors\": 1,\u001b[39m\n\u001b[2m    \"projectName\": \"Current load context true 1024\",\u001b[22m\n\u001b[2m    \"sourceDigest\": \"sha256:10c91330ab82a0c2bd02328f23b9147e43ad6e792b8cc02b2168be0d00626e07\",\u001b[22m\n\u001b[2m    \"sourceModal\": 1,\u001b[22m\n\u001b[2m    \"storedProject\": \"prj-40c6fa8c-059c-42e8-9ef1-5f1ff0415f8f\",\u001b[22m\n\u001b[2m  }\u001b[22m\n\nCall Log:\n- Timeout 10000ms exceeded while waiting on the predicate\n\n  606 |         await expect.soft\n  607 |           .poll(() => renderedContext(page, current.projectId, authored.id))\n> 608 |           .toEqual({\n      |            ^\n  609 |             projectName: current.name,\n  610 |             storedProject: current.projectId,\n  611 |             sourceModal: 1,\n    at <repo>/tests/e2e/project-context.spec.ts:608:12"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T21:46:40.071Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "project-context-load.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJicm9rZW4iOnRydWUsImxvYWRTdGF0dXMiOjQwOSwiYWN0aXZlUHJvamVjdElkIjoicHJqLTQwYzZmYThjLTA1OWMtNDJlOC05ZWYxLTVmMWZmMDQxNWY4ZiIsImxvYWRUYXJnZXRJZCI6InByai0zNmIyMzc2Mi1kMWEyLTQ2NWEtOGFkMS0yMTg4NmU5MmZmN2MiLCJzb3VyY2VDb21taXRBY2tub3dsZWRnZWQiOnRydWUsIm5ld2VyTW9kYWxQcmVzZXJ2ZWQiOnRydWUsIm93blByb2plY3RSdW5TZXRzVW5jaGFuZ2VkIjp0cnVlLCJzY29wZSI6IkhlbGQgYWN0dWFsIGxvYWQgcmVzcG9uc2UgYW5kIGFjdHVhbCBzb3VyY2UgUFVUOyBvYnNvbGV0ZSBjcmVhdGlvbiBjb250aW51YXRpb24vZXJyb3IgbXVzdCBub3QgY2hhbmdlIG5ld2VyIGF1dGhvcmluZyBjb250ZXh0OyBubyBTdGFydCJ9"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/project-context-project-co-1f38e-wer-source-save-at-1024x768/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/project-context-project-co-1f38e-wer-source-save-at-1024x768/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/project-context.spec.ts",
+                    "column": 42,
+                    "line": 603
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "520c74da435c110dc8a0-2f38a9c898eebfab8b25",
+          "file": "project-context.spec.ts",
+          "line": 568,
+          "column": 9
+        },
+        {
+          "title": "project context: foreign recovery preserves newer source draft at 1440x900",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 23052,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  - 4\u001b[39m\n\u001b[31m+ Received  + 4\u001b[39m\n\n\u001b[2m  Object {\u001b[22m\n\u001b[32m-   \"documentId\": \"doc-2\",\u001b[39m\n\u001b[31m+   \"documentId\": \"doc-0\",\u001b[39m\n\u001b[2m    \"draftDigest\": \"sha256:5938bc7fcee97e1a695157f8cd411fb155fc8c3195cb7c4ad1dc8792f04f06ed\",\u001b[22m\n\u001b[2m    \"operationErrors\": 0,\u001b[22m\n\u001b[32m-   \"projectName\": \"Active context source draft 1440\",\u001b[39m\n\u001b[32m-   \"sourceDigest\": \"sha256:5938bc7fcee97e1a695157f8cd411fb155fc8c3195cb7c4ad1dc8792f04f06ed\",\u001b[39m\n\u001b[31m+   \"projectName\": \"Process control reference\",\u001b[39m\n\u001b[31m+   \"sourceDigest\": \"sha256:24431c6056ead9808ce4f0f1293224fccedeea35955060d716b55e0721630bf5\",\u001b[39m\n\u001b[2m    \"sourceModal\": 1,\u001b[22m\n\u001b[32m-   \"storedProject\": \"prj-2c02f143-2fa0-4ab0-9d69-41c23066dad1\",\u001b[39m\n\u001b[31m+   \"storedProject\": \"prj-1f9e95a6-b447-49f0-b88b-b9adb454a1a7\",\u001b[39m\n\u001b[2m  }\u001b[22m\n\nCall Log:\n- Timeout 10000ms exceeded while waiting on the predicate",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  - 4\u001b[39m\n\u001b[31m+ Received  + 4\u001b[39m\n\n\u001b[2m  Object {\u001b[22m\n\u001b[32m-   \"documentId\": \"doc-2\",\u001b[39m\n\u001b[31m+   \"documentId\": \"doc-0\",\u001b[39m\n\u001b[2m    \"draftDigest\": \"sha256:5938bc7fcee97e1a695157f8cd411fb155fc8c3195cb7c4ad1dc8792f04f06ed\",\u001b[22m\n\u001b[2m    \"operationErrors\": 0,\u001b[22m\n\u001b[32m-   \"projectName\": \"Active context source draft 1440\",\u001b[39m\n\u001b[32m-   \"sourceDigest\": \"sha256:5938bc7fcee97e1a695157f8cd411fb155fc8c3195cb7c4ad1dc8792f04f06ed\",\u001b[39m\n\u001b[31m+   \"projectName\": \"Process control reference\",\u001b[39m\n\u001b[31m+   \"sourceDigest\": \"sha256:24431c6056ead9808ce4f0f1293224fccedeea35955060d716b55e0721630bf5\",\u001b[39m\n\u001b[2m    \"sourceModal\": 1,\u001b[22m\n\u001b[32m-   \"storedProject\": \"prj-2c02f143-2fa0-4ab0-9d69-41c23066dad1\",\u001b[39m\n\u001b[31m+   \"storedProject\": \"prj-1f9e95a6-b447-49f0-b88b-b9adb454a1a7\",\u001b[39m\n\u001b[2m  }\u001b[22m\n\nCall Log:\n- Timeout 10000ms exceeded while waiting on the predicate\n    at <repo>/tests/e2e/project-context.spec.ts:507:14",
+                    "location": {
+                      "file": "<repo>/tests/e2e/project-context.spec.ts",
+                      "column": 14,
+                      "line": 507
+                    },
+                    "snippet": "  505 |           await expect.soft\n  506 |             .poll(() => renderedContext(page, current.projectId, authored!.id))\n> 507 |             .toEqual({\n      |              ^\n  508 |               projectName: current.name,\n  509 |               storedProject: current.projectId,\n  510 |               sourceModal: 1,"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/project-context.spec.ts",
+                        "column": 14,
+                        "line": 507
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  - 4\u001b[39m\n\u001b[31m+ Received  + 4\u001b[39m\n\n\u001b[2m  Object {\u001b[22m\n\u001b[32m-   \"documentId\": \"doc-2\",\u001b[39m\n\u001b[31m+   \"documentId\": \"doc-0\",\u001b[39m\n\u001b[2m    \"draftDigest\": \"sha256:5938bc7fcee97e1a695157f8cd411fb155fc8c3195cb7c4ad1dc8792f04f06ed\",\u001b[22m\n\u001b[2m    \"operationErrors\": 0,\u001b[22m\n\u001b[32m-   \"projectName\": \"Active context source draft 1440\",\u001b[39m\n\u001b[32m-   \"sourceDigest\": \"sha256:5938bc7fcee97e1a695157f8cd411fb155fc8c3195cb7c4ad1dc8792f04f06ed\",\u001b[39m\n\u001b[31m+   \"projectName\": \"Process control reference\",\u001b[39m\n\u001b[31m+   \"sourceDigest\": \"sha256:24431c6056ead9808ce4f0f1293224fccedeea35955060d716b55e0721630bf5\",\u001b[39m\n\u001b[2m    \"sourceModal\": 1,\u001b[22m\n\u001b[32m-   \"storedProject\": \"prj-2c02f143-2fa0-4ab0-9d69-41c23066dad1\",\u001b[39m\n\u001b[31m+   \"storedProject\": \"prj-1f9e95a6-b447-49f0-b88b-b9adb454a1a7\",\u001b[39m\n\u001b[2m  }\u001b[22m\n\nCall Log:\n- Timeout 10000ms exceeded while waiting on the predicate\n\n  505 |           await expect.soft\n  506 |             .poll(() => renderedContext(page, current.projectId, authored!.id))\n> 507 |             .toEqual({\n      |              ^\n  508 |               projectName: current.name,\n  509 |               storedProject: current.projectId,\n  510 |               sourceModal: 1,\n    at <repo>/tests/e2e/project-context.spec.ts:507:14"
+                    },
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/project-context.spec.ts",
+                        "column": 46,
+                        "line": 517
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('textbox', { name: 'XDL source', exact: true })\nExpected: focused\nReceived: inactive\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toBeFocused\" getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('textbox', { name: 'XDL source', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('textbox', { name: 'XDL source', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <textarea id=\"xdl-source\" spellcheck=\"false\" class=\"source-textarea\" aria-describedby=\"_r_4_\">apiVersion: xverse.io/xdl/v1alpha1\u21b5kind: Componen\u2026</textarea>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n\n\n  515 |               operationErrors: 0,\n  516 |             });\n> 517 |           await expect.soft(authored.editor).toBeFocused();\n      |                                              ^\n  518 |         } else {\n  519 |           await expect\n  520 |             .soft(page.locator(\".project-header h1\"))\n    at <repo>/tests/e2e/project-context.spec.ts:517:46"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T21:47:03.374Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "project-context-recovery.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJtb2RlIjoic291cmNlIGRyYWZ0IiwiYWN0aXZlUHJvamVjdElkIjoicHJqLTJjMDJmMTQzLTJmYTAtNGFiMC05ZDY5LTQxYzIzMDY2ZGFkMSIsInJlY292ZXJlZFByb2plY3RJZCI6InByai0xZjllOTVhNi1iNDQ3LTQ5ZjAtYjg4Yi1iOWFkYjQ1NGExYTciLCJkaXN0aW5jdFByb2plY3RzIjp0cnVlLCJhY3RpdmVSZXZpc2lvbiI6MSwiaW5kZXBlbmRlbnRSZWNvdmVyeUNvbW1pdHRlZCI6dHJ1ZSwicHJlc2VydmVkIjp7InJlY292ZXJ5SWQiOiJyZWMtNjE0NzAxNGEtYjk5Ni00MDVkLThhNWMtZmU5YmJiMzM0M2EyIiwiY29tbWl0dGVkRGlnZXN0Ijoic2hhMjU2OjM5YWUxNDNjZDdkODUxYmQ2ZDRmMThmN2E3MGIwZTBjNGQyZWJiMzdkZDg2ZjlhYThjMTdmNmQ4NjNmNDg5NzkiLCJvYnNlcnZlZERpZ2VzdCI6InNoYTI1Njo0OTVlZDU1MThjNTBiZGU0OTUyMjJlYmQ2MThhNjMzZTcxMmZkNDczM2M4NWY4MjA1NTY3Nzk0YTViNjI0OWZmIiwicHJlc2VydmVkRW5jb2RpbmciOiJiaW5hcnkiLCJleGFjdEJhY2t1cEJ5dGVzIjp0cnVlLCJvbGRSZXZpc2lvbkRpcmVjdG9yeVVuY2hhbmdlZCI6dHJ1ZX0sIm93blByb2plY3RSdW5TZXRzVW5jaGFuZ2VkIjp0cnVlLCJzY29wZSI6IlJlYWwgZm9yZWlnbiBvd25lZCByZWNvdmVyeSBoZWxkIGFmdGVyIGNvbW1pdDsgcHJlc2VydmUgbmV3ZXIgYXV0aG9yaW5nIGludGVudCBpbiBzdGlsbC1yZW5kZXJlZCBhY3RpdmUgcHJvamVjdDsgbm8gU3RhcnQifQ=="
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/project-context-project-co-a2e99-er-source-draft-at-1440x900/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/project-context-project-co-a2e99-er-source-draft-at-1440x900/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/project-context.spec.ts",
+                    "column": 14,
+                    "line": 507
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "520c74da435c110dc8a0-2a438333b792123e3146",
+          "file": "project-context.spec.ts",
+          "line": 434,
+          "column": 9
+        },
+        {
+          "title": "project context: foreign recovery preserves newer source save at 1440x900",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 6,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 33103,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeDisabled\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('button', { name: 'Save source revision', exact: true })\nExpected: disabled\nReceived: enabled\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toBeDisabled\" getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('button', { name: 'Save source revision', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('button', { name: 'Save source revision', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <button class=\"button primary\">\u2026</button>\u001b[22m\n\u001b[2m       - unexpected value \"enabled\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeDisabled\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('button', { name: 'Save source revision', exact: true })\nExpected: disabled\nReceived: enabled\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toBeDisabled\" getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('button', { name: 'Save source revision', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('button', { name: 'Save source revision', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <button class=\"button primary\">\u2026</button>\u001b[22m\n\u001b[2m       - unexpected value \"enabled\"\u001b[22m\n\n    at <repo>/tests/e2e/project-context.spec.ts:499:46",
+                    "location": {
+                      "file": "<repo>/tests/e2e/project-context.spec.ts",
+                      "column": 46,
+                      "line": 499
+                    },
+                    "snippet": "  497 |             await page.keyboard.press(\"ControlOrMeta+s\");\n  498 |             expect((await reply).status()).toBe(200);\n> 499 |             await expect.soft(authored.save).toBeDisabled();\n      |                                              ^\n  500 |           }\n  501 |         }\n  502 |         await pending.release();"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/project-context.spec.ts",
+                        "column": 46,
+                        "line": 499
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeDisabled\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('button', { name: 'Save source revision', exact: true })\nExpected: disabled\nReceived: enabled\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toBeDisabled\" getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('button', { name: 'Save source revision', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('button', { name: 'Save source revision', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <button class=\"button primary\">\u2026</button>\u001b[22m\n\u001b[2m       - unexpected value \"enabled\"\u001b[22m\n\n\n  497 |             await page.keyboard.press(\"ControlOrMeta+s\");\n  498 |             expect((await reply).status()).toBe(200);\n> 499 |             await expect.soft(authored.save).toBeDisabled();\n      |                                              ^\n  500 |           }\n  501 |         }\n  502 |         await pending.release();\n    at <repo>/tests/e2e/project-context.spec.ts:499:46"
+                    },
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/project-context.spec.ts",
+                        "column": 14,
+                        "line": 507
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  - 5\u001b[39m\n\u001b[31m+ Received  + 5\u001b[39m\n\n\u001b[2m  Object {\u001b[22m\n\u001b[32m-   \"documentId\": \"doc-2\",\u001b[39m\n\u001b[32m-   \"draftDigest\": null,\u001b[39m\n\u001b[31m+   \"documentId\": \"doc-0\",\u001b[39m\n\u001b[31m+   \"draftDigest\": \"sha256:8d793a14cd5d556478f5000e5f8440e5d296830d517411f623a07074926a1363\",\u001b[39m\n\u001b[2m    \"operationErrors\": 0,\u001b[22m\n\u001b[32m-   \"projectName\": \"Active context source save 1440\",\u001b[39m\n\u001b[32m-   \"sourceDigest\": \"sha256:8d793a14cd5d556478f5000e5f8440e5d296830d517411f623a07074926a1363\",\u001b[39m\n\u001b[31m+   \"projectName\": \"Process control reference\",\u001b[39m\n\u001b[31m+   \"sourceDigest\": \"sha256:24431c6056ead9808ce4f0f1293224fccedeea35955060d716b55e0721630bf5\",\u001b[39m\n\u001b[2m    \"sourceModal\": 1,\u001b[22m\n\u001b[32m-   \"storedProject\": \"prj-59323ad3-6de2-4c3d-85f5-54f168cef1cb\",\u001b[39m\n\u001b[31m+   \"storedProject\": \"prj-f12b4a7b-c407-4439-8e67-76de11cd93cb\",\u001b[39m\n\u001b[2m  }\u001b[22m\n\nCall Log:\n- Timeout 10000ms exceeded while waiting on the predicate\n\n  505 |           await expect.soft\n  506 |             .poll(() => renderedContext(page, current.projectId, authored!.id))\n> 507 |             .toEqual({\n      |              ^\n  508 |               projectName: current.name,\n  509 |               storedProject: current.projectId,\n  510 |               sourceModal: 1,\n    at <repo>/tests/e2e/project-context.spec.ts:507:14"
+                    },
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/project-context.spec.ts",
+                        "column": 46,
+                        "line": 517
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('textbox', { name: 'XDL source', exact: true })\nExpected: focused\nReceived: inactive\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toBeFocused\" getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('textbox', { name: 'XDL source', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('textbox', { name: 'XDL source', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <textarea id=\"xdl-source\" spellcheck=\"false\" class=\"source-textarea\" aria-describedby=\"_r_4_\">apiVersion: xverse.io/xdl/v1alpha1\u21b5kind: Componen\u2026</textarea>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n\n\n  515 |               operationErrors: 0,\n  516 |             });\n> 517 |           await expect.soft(authored.editor).toBeFocused();\n      |                                              ^\n  518 |         } else {\n  519 |           await expect\n  520 |             .soft(page.locator(\".project-header h1\"))\n    at <repo>/tests/e2e/project-context.spec.ts:517:46"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T21:47:26.807Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "project-context-recovery.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJtb2RlIjoic291cmNlIHNhdmUiLCJhY3RpdmVQcm9qZWN0SWQiOiJwcmotNTkzMjNhZDMtNmRlMi00YzNkLTg1ZjUtNTRmMTY4Y2VmMWNiIiwicmVjb3ZlcmVkUHJvamVjdElkIjoicHJqLWYxMmI0YTdiLWM0MDctNDQzOS04ZTY3LTc2ZGUxMWNkOTNjYiIsImRpc3RpbmN0UHJvamVjdHMiOnRydWUsImFjdGl2ZVJldmlzaW9uIjoyLCJpbmRlcGVuZGVudFJlY292ZXJ5Q29tbWl0dGVkIjp0cnVlLCJwcmVzZXJ2ZWQiOnsicmVjb3ZlcnlJZCI6InJlYy0yODg5ZDdlNi04MmE1LTRkZGEtYTRjYi0yZTE1OWNmYjkzMTQiLCJjb21taXR0ZWREaWdlc3QiOiJzaGEyNTY6MzlhZTE0M2NkN2Q4NTFiZDZkNGYxOGY3YTcwYjBlMGM0ZDJlYmIzN2RkODZmOWFhOGMxN2Y2ZDg2M2Y0ODk3OSIsIm9ic2VydmVkRGlnZXN0Ijoic2hhMjU2OjQ5NWVkNTUxOGM1MGJkZTQ5NTIyMmViZDYxOGE2MzNlNzEyZmQ0NzMzYzg1ZjgyMDU1Njc3OTRhNWI2MjQ5ZmYiLCJwcmVzZXJ2ZWRFbmNvZGluZyI6ImJpbmFyeSIsImV4YWN0QmFja3VwQnl0ZXMiOnRydWUsIm9sZFJldmlzaW9uRGlyZWN0b3J5VW5jaGFuZ2VkIjp0cnVlfSwib3duUHJvamVjdFJ1blNldHNVbmNoYW5nZWQiOnRydWUsInNjb3BlIjoiUmVhbCBmb3JlaWduIG93bmVkIHJlY292ZXJ5IGhlbGQgYWZ0ZXIgY29tbWl0OyBwcmVzZXJ2ZSBuZXdlciBhdXRob3JpbmcgaW50ZW50IGluIHN0aWxsLXJlbmRlcmVkIGFjdGl2ZSBwcm9qZWN0OyBubyBTdGFydCJ9"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/project-context-project-co-06e66-wer-source-save-at-1440x900/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/project-context-project-co-06e66-wer-source-save-at-1440x900/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/project-context.spec.ts",
+                    "column": 46,
+                    "line": 499
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "520c74da435c110dc8a0-86902159905a4ff14e24",
+          "file": "project-context.spec.ts",
+          "line": 434,
+          "column": 9
+        },
+        {
+          "title": "project context: foreign recovery preserves newer parameter draft at 1440x900",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 7,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 23514,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('.project-header h1')\nExpected: \u001b[32m\"Active context parameter draft 1440\"\u001b[39m\nReceived: \u001b[31m\"Process control reference\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveText\" locator('.project-header h1') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('.project-header h1')\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <h1>Process control reference</h1>\u001b[22m\n\u001b[2m       - unexpected value \"Process control reference\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('.project-header h1')\nExpected: \u001b[32m\"Active context parameter draft 1440\"\u001b[39m\nReceived: \u001b[31m\"Process control reference\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveText\" locator('.project-header h1') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('.project-header h1')\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <h1>Process control reference</h1>\u001b[22m\n\u001b[2m       - unexpected value \"Process control reference\"\u001b[22m\n\n    at <repo>/tests/e2e/project-context.spec.ts:521:14",
+                    "location": {
+                      "file": "<repo>/tests/e2e/project-context.spec.ts",
+                      "column": 14,
+                      "line": 521
+                    },
+                    "snippet": "  519 |           await expect\n  520 |             .soft(page.locator(\".project-header h1\"))\n> 521 |             .toHaveText(current.name);\n      |              ^\n  522 |           await expect\n  523 |             .soft(page.getByRole(\"spinbutton\", { name: \"Duration s\", exact: true }))\n  524 |             .toHaveValue(\"7\");"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/project-context.spec.ts",
+                        "column": 14,
+                        "line": 521
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('.project-header h1')\nExpected: \u001b[32m\"Active context parameter draft 1440\"\u001b[39m\nReceived: \u001b[31m\"Process control reference\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveText\" locator('.project-header h1') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('.project-header h1')\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <h1>Process control reference</h1>\u001b[22m\n\u001b[2m       - unexpected value \"Process control reference\"\u001b[22m\n\n\n  519 |           await expect\n  520 |             .soft(page.locator(\".project-header h1\"))\n> 521 |             .toHaveText(current.name);\n      |              ^\n  522 |           await expect\n  523 |             .soft(page.getByRole(\"spinbutton\", { name: \"Duration s\", exact: true }))\n  524 |             .toHaveValue(\"7\");\n    at <repo>/tests/e2e/project-context.spec.ts:521:14"
+                    },
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/project-context.spec.ts",
+                        "column": 14,
+                        "line": 524
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('spinbutton', { name: 'Duration s', exact: true })\nExpected: \u001b[32m\"7\"\u001b[39m\nReceived: \u001b[31m\"5\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveValue\" getByRole('spinbutton', { name: 'Duration s', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('spinbutton', { name: 'Duration s', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <input max=\"30\" min=\"0.1\" value=\"5\" step=\"any\" required=\"\" type=\"number\" aria-describedby=\"_r_3_-duration\"/>\u001b[22m\n\u001b[2m       - unexpected value \"5\"\u001b[22m\n\n\n  522 |           await expect\n  523 |             .soft(page.getByRole(\"spinbutton\", { name: \"Duration s\", exact: true }))\n> 524 |             .toHaveValue(\"7\");\n      |              ^\n  525 |           expect(\n  526 |             await page.evaluate(() => localStorage.getItem(\"studio.projectId\")),\n  527 |           ).toBe(current.projectId);\n    at <repo>/tests/e2e/project-context.spec.ts:524:14"
+                    },
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/project-context.spec.ts",
+                        "column": 13,
+                        "line": 527
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"prj-\u001b[7m133d0c9d-1028-4589-a00d-8012559a2d22\u001b[27m\"\u001b[39m\nReceived: \u001b[31m\"prj-\u001b[7m6b2cc542-906c-4209-aa91-4b791734f964\u001b[27m\"\u001b[39m\n\n  525 |           expect(\n  526 |             await page.evaluate(() => localStorage.getItem(\"studio.projectId\")),\n> 527 |           ).toBe(current.projectId);\n      |             ^\n  528 |         }\n  529 |         const saved = await read(page, current.projectId);\n  530 |         expect(saved.revision).toBe(\n    at <repo>/tests/e2e/project-context.spec.ts:527:13"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T21:48:00.303Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/project-context-project-co-093f1-parameter-draft-at-1440x900/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/project-context-project-co-093f1-parameter-draft-at-1440x900/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/project-context.spec.ts",
+                    "column": 14,
+                    "line": 521
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "520c74da435c110dc8a0-c902043bbe1a07715561",
+          "file": "project-context.spec.ts",
+          "line": 434,
+          "column": 9
+        },
+        {
+          "title": "project context: obsolete successful load preserves newer source save at 1440x900",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 8,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 23105,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeDisabled\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('button', { name: 'Save source revision', exact: true })\nExpected: disabled\nReceived: enabled\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toBeDisabled\" getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('button', { name: 'Save source revision', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('button', { name: 'Save source revision', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <button class=\"button primary\">\u2026</button>\u001b[22m\n\u001b[2m       - unexpected value \"enabled\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeDisabled\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('button', { name: 'Save source revision', exact: true })\nExpected: disabled\nReceived: enabled\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toBeDisabled\" getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('button', { name: 'Save source revision', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('button', { name: 'Save source revision', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <button class=\"button primary\">\u2026</button>\u001b[22m\n\u001b[2m       - unexpected value \"enabled\"\u001b[22m\n\n    at <repo>/tests/e2e/project-context.spec.ts:603:42",
+                    "location": {
+                      "file": "<repo>/tests/e2e/project-context.spec.ts",
+                      "column": 42,
+                      "line": 603
+                    },
+                    "snippet": "  601 |         await page.keyboard.press(\"ControlOrMeta+s\");\n  602 |         expect((await reply).status()).toBe(200);\n> 603 |         await expect.soft(authored.save).toBeDisabled();\n      |                                          ^\n  604 |         await target.release();\n  605 |         await settle(page);\n  606 |         await expect.soft"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/project-context.spec.ts",
+                        "column": 42,
+                        "line": 603
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeDisabled\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('button', { name: 'Save source revision', exact: true })\nExpected: disabled\nReceived: enabled\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toBeDisabled\" getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('button', { name: 'Save source revision', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('button', { name: 'Save source revision', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <button class=\"button primary\">\u2026</button>\u001b[22m\n\u001b[2m       - unexpected value \"enabled\"\u001b[22m\n\n\n  601 |         await page.keyboard.press(\"ControlOrMeta+s\");\n  602 |         expect((await reply).status()).toBe(200);\n> 603 |         await expect.soft(authored.save).toBeDisabled();\n      |                                          ^\n  604 |         await target.release();\n  605 |         await settle(page);\n  606 |         await expect.soft\n    at <repo>/tests/e2e/project-context.spec.ts:603:42"
+                    },
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/project-context.spec.ts",
+                        "column": 12,
+                        "line": 608
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  - 6\u001b[39m\n\u001b[31m+ Received  + 6\u001b[39m\n\n\u001b[2m  Object {\u001b[22m\n\u001b[32m-   \"documentId\": \"doc-2\",\u001b[39m\n\u001b[32m-   \"draftDigest\": null,\u001b[39m\n\u001b[31m+   \"documentId\": null,\u001b[39m\n\u001b[31m+   \"draftDigest\": \"sha256:1d1ac1e4161a0c7265e957751b4ca0d702e10af61bec9bbadf3a667178b67457\",\u001b[39m\n\u001b[2m    \"operationErrors\": 0,\u001b[22m\n\u001b[32m-   \"projectName\": \"Current load context false 1440\",\u001b[39m\n\u001b[32m-   \"sourceDigest\": \"sha256:1d1ac1e4161a0c7265e957751b4ca0d702e10af61bec9bbadf3a667178b67457\",\u001b[39m\n\u001b[32m-   \"sourceModal\": 1,\u001b[39m\n\u001b[32m-   \"storedProject\": \"prj-467c1291-2dbb-4aac-a900-7b5baf8f138c\",\u001b[39m\n\u001b[31m+   \"projectName\": \"Process control reference\",\u001b[39m\n\u001b[31m+   \"sourceDigest\": null,\u001b[39m\n\u001b[31m+   \"sourceModal\": 0,\u001b[39m\n\u001b[31m+   \"storedProject\": \"prj-d618bdba-6d9b-4470-8d50-af0c4ff4378c\",\u001b[39m\n\u001b[2m  }\u001b[22m\n\nCall Log:\n- Timeout 10000ms exceeded while waiting on the predicate\n\n  606 |         await expect.soft\n  607 |           .poll(() => renderedContext(page, current.projectId, authored.id))\n> 608 |           .toEqual({\n      |            ^\n  609 |             projectName: current.name,\n  610 |             storedProject: current.projectId,\n  611 |             sourceModal: 1,\n    at <repo>/tests/e2e/project-context.spec.ts:608:12"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T21:48:24.209Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "project-context-load.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJicm9rZW4iOmZhbHNlLCJsb2FkU3RhdHVzIjoyMDAsImFjdGl2ZVByb2plY3RJZCI6InByai00NjdjMTI5MS0yZGJiLTRhYWMtYTkwMC03YjViYWY4ZjEzOGMiLCJsb2FkVGFyZ2V0SWQiOiJwcmotZDYxOGJkYmEtNmQ5Yi00NDcwLThkNTAtYWYwYzRmZjQzNzhjIiwic291cmNlQ29tbWl0QWNrbm93bGVkZ2VkIjp0cnVlLCJuZXdlck1vZGFsUHJlc2VydmVkIjp0cnVlLCJvd25Qcm9qZWN0UnVuU2V0c1VuY2hhbmdlZCI6dHJ1ZSwic2NvcGUiOiJIZWxkIGFjdHVhbCBsb2FkIHJlc3BvbnNlIGFuZCBhY3R1YWwgc291cmNlIFBVVDsgb2Jzb2xldGUgY3JlYXRpb24gY29udGludWF0aW9uL2Vycm9yIG11c3Qgbm90IGNoYW5nZSBuZXdlciBhdXRob3JpbmcgY29udGV4dDsgbm8gU3RhcnQifQ=="
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/project-context-project-co-a2175-wer-source-save-at-1440x900/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/project-context-project-co-a2175-wer-source-save-at-1440x900/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/project-context.spec.ts",
+                    "column": 42,
+                    "line": 603
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "520c74da435c110dc8a0-43d1169b28235d588558",
+          "file": "project-context.spec.ts",
+          "line": 568,
+          "column": 9
+        },
+        {
+          "title": "project context: obsolete failed load preserves newer source save at 1440x900",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 9,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 23057,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeDisabled\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('button', { name: 'Save source revision', exact: true })\nExpected: disabled\nReceived: enabled\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toBeDisabled\" getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('button', { name: 'Save source revision', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('button', { name: 'Save source revision', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <button class=\"button primary\">\u2026</button>\u001b[22m\n\u001b[2m       - unexpected value \"enabled\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeDisabled\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('button', { name: 'Save source revision', exact: true })\nExpected: disabled\nReceived: enabled\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toBeDisabled\" getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('button', { name: 'Save source revision', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('button', { name: 'Save source revision', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <button class=\"button primary\">\u2026</button>\u001b[22m\n\u001b[2m       - unexpected value \"enabled\"\u001b[22m\n\n    at <repo>/tests/e2e/project-context.spec.ts:603:42",
+                    "location": {
+                      "file": "<repo>/tests/e2e/project-context.spec.ts",
+                      "column": 42,
+                      "line": 603
+                    },
+                    "snippet": "  601 |         await page.keyboard.press(\"ControlOrMeta+s\");\n  602 |         expect((await reply).status()).toBe(200);\n> 603 |         await expect.soft(authored.save).toBeDisabled();\n      |                                          ^\n  604 |         await target.release();\n  605 |         await settle(page);\n  606 |         await expect.soft"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/project-context.spec.ts",
+                        "column": 42,
+                        "line": 603
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeDisabled\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('button', { name: 'Save source revision', exact: true })\nExpected: disabled\nReceived: enabled\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toBeDisabled\" getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('button', { name: 'Save source revision', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('button', { name: 'Save source revision', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <button class=\"button primary\">\u2026</button>\u001b[22m\n\u001b[2m       - unexpected value \"enabled\"\u001b[22m\n\n\n  601 |         await page.keyboard.press(\"ControlOrMeta+s\");\n  602 |         expect((await reply).status()).toBe(200);\n> 603 |         await expect.soft(authored.save).toBeDisabled();\n      |                                          ^\n  604 |         await target.release();\n  605 |         await settle(page);\n  606 |         await expect.soft\n    at <repo>/tests/e2e/project-context.spec.ts:603:42"
+                    },
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/project-context.spec.ts",
+                        "column": 12,
+                        "line": 608
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  - 2\u001b[39m\n\u001b[31m+ Received  + 2\u001b[39m\n\n\u001b[2m  Object {\u001b[22m\n\u001b[2m    \"documentId\": \"doc-2\",\u001b[22m\n\u001b[32m-   \"draftDigest\": null,\u001b[39m\n\u001b[32m-   \"operationErrors\": 0,\u001b[39m\n\u001b[31m+   \"draftDigest\": \"sha256:ef7b835db678741b98bf985cb6e9031cdcd2b1a1a9047028b44ae3a99d304379\",\u001b[39m\n\u001b[31m+   \"operationErrors\": 1,\u001b[39m\n\u001b[2m    \"projectName\": \"Current load context true 1440\",\u001b[22m\n\u001b[2m    \"sourceDigest\": \"sha256:ef7b835db678741b98bf985cb6e9031cdcd2b1a1a9047028b44ae3a99d304379\",\u001b[22m\n\u001b[2m    \"sourceModal\": 1,\u001b[22m\n\u001b[2m    \"storedProject\": \"prj-629ceafc-64af-4025-9fa5-3295ecf20275\",\u001b[22m\n\u001b[2m  }\u001b[22m\n\nCall Log:\n- Timeout 10000ms exceeded while waiting on the predicate\n\n  606 |         await expect.soft\n  607 |           .poll(() => renderedContext(page, current.projectId, authored.id))\n> 608 |           .toEqual({\n      |            ^\n  609 |             projectName: current.name,\n  610 |             storedProject: current.projectId,\n  611 |             sourceModal: 1,\n    at <repo>/tests/e2e/project-context.spec.ts:608:12"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T21:48:47.710Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "project-context-load.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJicm9rZW4iOnRydWUsImxvYWRTdGF0dXMiOjQwOSwiYWN0aXZlUHJvamVjdElkIjoicHJqLTYyOWNlYWZjLTY0YWYtNDAyNS05ZmE1LTMyOTVlY2YyMDI3NSIsImxvYWRUYXJnZXRJZCI6InByai05N2FiOTc0OC0xYjBjLTQzYWUtOTMxMC05OTdkMjVmY2NjNzMiLCJzb3VyY2VDb21taXRBY2tub3dsZWRnZWQiOnRydWUsIm5ld2VyTW9kYWxQcmVzZXJ2ZWQiOnRydWUsIm93blByb2plY3RSdW5TZXRzVW5jaGFuZ2VkIjp0cnVlLCJzY29wZSI6IkhlbGQgYWN0dWFsIGxvYWQgcmVzcG9uc2UgYW5kIGFjdHVhbCBzb3VyY2UgUFVUOyBvYnNvbGV0ZSBjcmVhdGlvbiBjb250aW51YXRpb24vZXJyb3IgbXVzdCBub3QgY2hhbmdlIG5ld2VyIGF1dGhvcmluZyBjb250ZXh0OyBubyBTdGFydCJ9"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/project-context-project-co-3d3e6-wer-source-save-at-1440x900/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/project-context-project-co-3d3e6-wer-source-save-at-1440x900/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/project-context.spec.ts",
+                    "column": 42,
+                    "line": 603
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "520c74da435c110dc8a0-d2d4a2d5c3fba1fa6b3a",
+          "file": "project-context.spec.ts",
+          "line": 568,
+          "column": 9
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-26T21:44:55.310Z",
+    "duration": 255558.888,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 10,
+    "flaky": 0
+  }
+}

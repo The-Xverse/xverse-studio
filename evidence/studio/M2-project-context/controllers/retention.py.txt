@@ -1,0 +1,167 @@
+from pathlib import Path
+import base64
+import hashlib
+import json
+import re
+import sys
+
+root = Path.cwd()
+local = root / '.studio-local/project-context'
+out = root / 'evidence/studio/M2-project-context'
+out.mkdir(exist_ok=True)
+
+def clean_text(value):
+    for original, replacement in [(str(root.parent/'.xverse-studio-cache'), '<loop-cache>'), (str(root), '<repo>'), ('<repo>', '<repo>'), (sys.base_prefix, '<python-install>')]:
+        value = value.replace(original, replacement)
+    return value
+
+def clean(value):
+    if isinstance(value, str): return clean_text(value)
+    if isinstance(value, list): return [clean(v) for v in value]
+    if isinstance(value, dict):
+        result = {k: clean(v) for k, v in value.items()}
+        if value.get('contentType', '').startswith(('application/json', 'text/')) and 'body' in value:
+            try: result['body'] = base64.b64encode(clean_text(base64.b64decode(value['body']).decode()).encode()).decode()
+            except (ValueError, UnicodeError): pass
+        return result
+    return value
+
+def save(name, value):
+    p = out / name
+    p.parent.mkdir(parents=True, exist_ok=True)
+    p.write_text(json.dumps(clean(value), indent=2)+'\n')
+
+def copy_text(name, path):
+    p = out / name
+    p.parent.mkdir(parents=True, exist_ok=True)
+    p.write_text('\n'.join(v.rstrip() for v in clean_text(path.read_text()).splitlines()).rstrip()+'\n')
+
+def read(path): return json.loads(path.read_text())
+
+def results(report):
+    for suite in report.get('suites', []): yield from results(suite)
+    for spec in report.get('specs', []):
+        for test in spec['tests']:
+            for result in test['results']: yield spec['title'], result
+
+for stage in ['initial-red', 'context-red', 'ten-successor', 'overlapping-build']:
+    path = local / stage
+    for name in ['summary.json', 'source-before.json', 'source-after.json', 'browser-report.json']:
+        save(f'{stage}/{name}', read(path/name))
+    copy_text(f'{stage}/browser.txt', path/'successor.log')
+    copy_text(f'{stage}/test.ts.txt', path/'context-test.ts.txt')
+    if (path/'classification.json').exists(): save(f'{stage}/classification.json', read(path/'classification.json'))
+    for p in (path/'failure-context').glob('*.md'): copy_text(f'{stage}/failure-context/{p.name}', p)
+
+assert read(local/'context-red/browser-report.json')['stats']['unexpected'] == 10
+for label, path in [
+    ('before-run-context/targeted', root/'.studio-local/project-context-target/before-run-context'),
+    ('before-run-context/full', root/'.studio-local/project-context-full/before-run-context'),
+    ('before-run-context/performance-failure', root/'.studio-local/project-context-performance/run-context-red'),
+    ('cached-run-red', root/'.studio-local/project-context-run-red'),
+    ('source-selector-interrupted', root/'.studio-local/project-context-target/source-selector-interrupted'),
+    ('reference-stop-timeout', root/'.studio-local/project-context-full/reference-stop-timeout'),
+]:
+    for name in ['summary.json', 'source-before.json', 'source-after.json', 'browser-report.json']:
+        save(f'{label}/{name}', read(path/name))
+    copy_text(f'{label}/browser.txt', path/'browser.log')
+    copy_text(f'{label}/controller.py.txt', path/'verify.py')
+    if (path/'classification.json').exists(): save(f'{label}/classification.json', read(path/'classification.json'))
+    if (path/'context-test.ts.txt').exists(): copy_text(f'{label}/test.ts.txt', path/'context-test.ts.txt')
+    if (path/'evidence-filters-test.ts.txt').exists(): copy_text(f'{label}/test.ts.txt', path/'evidence-filters-test.ts.txt')
+    for name in ['run-observed.json', 'worker-lifecycle.json']:
+        if (path/name).exists(): save(f'{label}/{name}', read(path/name))
+    for p in (path/'failure-context').glob('*.md'):
+        copy_text(f'{label}/failure-context/{p.name}', p)
+    for p in (path/'browser-output').glob('**/error-context.md'):
+        copy_text(f'{label}/contexts/{p.parent.name}/error-context.md', p)
+    for p in (path/'browser-output').glob('**/*performance.json'):
+        save(f'{label}/measurements/{p.parent.name}/{p.name}', read(p))
+target = root/'.studio-local/project-context-target'
+full = root/'.studio-local/project-context-full'
+perf = root/'.studio-local/project-context-performance'
+maps = read(full/'source-before.json')
+assert maps == read(full/'source-after.json')
+assert all(hashlib.sha256((root/n).read_bytes()).hexdigest() == h for n,h in maps.items())
+setup = root/'.studio-local/project-context-stop-retest'
+control = read(setup/'test-input-control.json')
+changed = control['changedFile']
+assert changed == 'tests/e2e/evidence-filters.spec.ts'
+assert maps[changed] == control['afterSha256']
+earlier = dict(maps, **{changed: control['beforeSha256']})
+assert earlier == read(full/'reference-stop-timeout/source-before.json') == read(full/'reference-stop-timeout/source-after.json')
+assert control['allOtherTestBytesUnchanged'] and control['runtimeAndPerformanceThresholdsUnchanged']
+save('test-input-control.json', {**control, 'identicalOtherInputs': len(maps)-1, 'scope': 'Earlier62 targeted and two performance checks retain their original map; one unrelated display-test setup changed before the affected retest and final full233. Application, compiled UI, runtime, performance workloads and thresholds are byte-identical.'})
+copy_text('test-setup-change.diff', setup/'test-change.diff')
+affected = read(setup/'browser-report.json')
+assert affected['stats']['expected'] == 1 and not any(affected['stats'][k] for k in ['unexpected','skipped','flaky'])
+assert maps == read(setup/'source-before.json') == read(setup/'source-after.json')
+assert read(setup/'summary.json')['exitCode'] == 0
+for name in ['summary.json','browser-report.json','source-before.json','source-after.json','owned-reference-settlement.json']:
+    save('affected-setup-successor/'+name, read(setup/name))
+copy_text('affected-setup-successor/browser.txt', setup/'browser.log')
+reports = {}
+for label, path, expected in [('targeted', target, 62), ('full', full, 233), ('performance', perf, 2)]:
+    summary = read(path/'summary.json')
+    assert summary['exitCode'] == 0 and summary['sourceUnchanged']
+    expected_map = maps if label == 'full' else earlier
+    assert expected_map == read(path/'source-before.json') == read(path/'source-after.json')
+    report = read(path/'browser-report.json')
+    assert report['stats']['expected'] == expected
+    assert not any(report['stats'][k] for k in ['unexpected', 'skipped', 'flaky'])
+    reports[label] = report
+    save(f'{label}/verification.json', summary)
+    save(f'{label}/browser-report.json', report)
+    copy_text(f'{label}/browser.txt', path/'browser.log')
+    copy_text(f'controllers/{label}.py.txt', path/'verify.py')
+    save(f'{label}/application-and-input-hashes.json', expected_map)
+save('application-and-input-hashes.json', maps)
+ui = read(local/'built-ui-observed.json')
+assert all(maps[n] == h for n,h in (ui['files'] | ui['sourceInputs']).items())
+save('built-ui-observation.json', ui)
+copy_text('build-and-checks.txt', local/'build.log')
+save('environment.json', read(local/'environment.json'))
+copy_text('controllers/retention.py.txt', local/'retain.py')
+copy_text('controllers/documentation.py.txt', local/'document.py')
+copy_text('independent-review.md', local/'review.md')
+
+proof = read(root/'evidence/studio/M2-keyboard-source-recovery/backend-source-equivalence.json')
+checked = {n:h for n,h in proof['checkedFiles'].items() if n != '.github/workflows/ci.yml'}
+assert len(checked) == 163 and all(maps[n] == h for n,h in checked.items())
+control = read(root/'evidence/studio/native-ci/ci-budget-amendment/verification.json')
+assert maps['.github/workflows/ci.yml'] == control['afterSha256']
+assert control['commandsStepsEnvironmentActionPinsMatrixIdentical']
+save('backend-input-inheritance.json', {
+    'baseline': proof['baseline'], 'backendPassed': 851, 'checkedFiles': checked,
+    'allCheckedFilesUnchanged': True, 'ciSchedulingControl': 'evidence/studio/native-ci/ci-budget-amendment/verification.json',
+    'workflowSha256': maps['.github/workflows/ci.yml'],
+    'scope': '163 exact unchanged backend/Python/contributor/compatibility inputs plus previously reviewed CI-only job budget change with identical commands; no new backend rerun for frontend-only repair',
+})
+pairs = []
+for label in ['targeted', 'performance']:
+    for title,result in results(reports[label]):
+        viewport = re.search(r'(\d+x\d+)', title).group(1)
+        mode = title.split(': ',1)[-1].rsplit(' at ',1)[0].replace(' ', '-')
+        for a in result.get('attachments', []):
+            if a.get('contentType') == 'application/json' and 'body' in a:
+                value = json.loads(base64.b64decode(a['body']))
+                save(f'{label}/journeys/{viewport}/{mode}/{a["name"]}', value)
+                if isinstance(value, dict):
+                    pairs.extend(value.get('measurements', []))
+                    if 'contrast' in value: pairs.append(value['contrast'])
+for p in (perf/'browser-output').glob('**/*performance.json'):
+    value = read(p); vp = value['viewport']
+    save(f'performance/{vp["width"]}x{vp["height"]}/{p.name}', value)
+assert len(pairs) == 20 and all(p.get('supported') and p.get('passed') for p in pairs)
+save('contrast-summary.json', {'selectedPairs': len(pairs), 'minimumRatio': min(p['ratio'] for p in pairs), 'threshold': 4.5, 'measurements': pairs, 'scope': 'Selected recovery guidance/history and named foreign-target paint pairs; no global conformance claim'})
+save('verification.json', {
+    'baseCandidate': read(full/'summary.json')['baseCandidate'],
+    'applicationAndInputDigest': 'sha256:'+hashlib.sha256(json.dumps(maps,sort_keys=True,separators=(',',':')).encode()).hexdigest(),
+    'frozenInputs': len(maps), 'compiledAssets': len(ui['files']), 'allInputsUnchangedWithinEachRun': True,
+    'applicationCompiledRuntimeAndPerformanceInputsIdentical': True, 'oneTestSetupInputControl': 'test-input-control.json',
+    'targeted': reports['targeted']['stats'], 'full': reports['full']['stats'], 'performance': reports['performance']['stats'],
+    'backend': 'backend-input-inheritance.json', 'checks': 'build-and-checks.txt',
+    'completedTasks': 47, 'milestonesAccepted': [], 'windows': 'BLOCKED_USER_REQUEST',
+    'limitations': ['Native Linux Chromium only', 'No actual assistive-technology assessment', 'Delayed import completion and post-hydration create/import modal continuation are source-reviewed without dedicated journeys', 'Retained-run pointer supersession and newer state of the same run lack dedicated hydration journeys', 'Startup HTTP503 is a controlled metadata failure, not a live provider failure', 'No Start/live provider/device action; owned reference projects and files only'],
+})
+print(json.dumps({'targeted':62,'full':233,'performance':2,'inputs':len(maps),'contrastPairs':len(pairs)}))

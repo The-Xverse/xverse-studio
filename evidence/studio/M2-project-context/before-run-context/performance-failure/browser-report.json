@@ -1,0 +1,280 @@
+{
+  "config": {
+    "argv": [
+      "<loop-cache>/node-v24.22.1-linux-x64/bin/node",
+      "<repo>/node_modules/.bin/playwright",
+      "test",
+      "-c",
+      "tests/e2e/playwright.config.ts",
+      "--grep",
+      "operability:"
+    ],
+    "configFile": "<repo>/tests/e2e/playwright.config.ts",
+    "rootDir": "<repo>/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "<repo>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "<repo>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "*.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "<repo>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "<repo>/tests/e2e",
+        "snapshotDir": "<repo>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": "*.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "baseURL": "http://127.0.0.1:53219",
+          "browserName": "chromium",
+          "actionTimeout": 15000,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "trace": "off",
+          "screenshot": "only-on-failure",
+          "video": "off"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "<repo>/test-results/browser-report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "accessibility.spec.ts",
+      "file": "accessibility.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "operability: keyboard, focus, textual status and reference workloads at 1024x768",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 78752,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText('Recorded fixture scope', { exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByText('Recorded fixture scope', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByText('Recorded fixture scope', { exact: true })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText('Recorded fixture scope', { exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByText('Recorded fixture scope', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByText('Recorded fixture scope', { exact: true })\u001b[22m\n\n    at measureHistory (<repo>/tests/performance/browser-history.ts:59:5)\n    at <repo>/tests/e2e/accessibility.spec.ts:90:7",
+                    "location": {
+                      "file": "<repo>/tests/performance/browser-history.ts",
+                      "column": 5,
+                      "line": 59
+                    },
+                    "snippet": "\u001b[90m   at \u001b[39m../performance/browser-history.ts:59\n\n  57 |   await expect(\n  58 |     page.getByText(\"Recorded fixture scope\", { exact: true }),\n> 59 |   ).toBeVisible();\n     |     ^\n  60 |   await expect(\n  61 |     page.getByRole(\"button\", { name: \"Stop\", exact: true }),\n  62 |   ).toHaveCount(0);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/performance/browser-history.ts",
+                        "column": 5,
+                        "line": 59
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText('Recorded fixture scope', { exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByText('Recorded fixture scope', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByText('Recorded fixture scope', { exact: true })\u001b[22m\n\n\n   at ../performance/browser-history.ts:59\n\n  57 |   await expect(\n  58 |     page.getByText(\"Recorded fixture scope\", { exact: true }),\n> 59 |   ).toBeVisible();\n     |     ^\n  60 |   await expect(\n  61 |     page.getByRole(\"button\", { name: \"Stop\", exact: true }),\n  62 |   ).toHaveCount(0);\n    at measureHistory (<repo>/tests/performance/browser-history.ts:59:5)\n    at <repo>/tests/e2e/accessibility.spec.ts:90:7"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T22:22:58.873Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "keyboard-operability.json",
+                      "contentType": "application/json",
+                      "body": "eyJzY29wZSI6Im93bmVkIHJlZmVyZW5jZTsgbmF0aXZlIExpbnV4IGV2aWRlbmNlIG9ubHkgd2hlbiBydW4gb24gTGludXgiLCJwbGF0Zm9ybSI6ImxpbnV4IiwiYnJvd3NlciI6IjE1Ni4wLjgwNzguNCIsInZpZXdwb3J0Ijp7IndpZHRoIjoxMDI0LCJoZWlnaHQiOjc2OH0sIm5hdGl2ZVRhYkFjdGl2YXRpb24iOnRydWUsIm1vZGFsRXNjYXBlUmVzdG9yZXNGb2N1cyI6dHJ1ZSwidmlzaWJsZUZvY3VzT3V0bGluZSI6dHJ1ZSwicG9saXRlVGV4dFZhbGlkYXRpb25TdGF0dXMiOnRydWUsInRleHR1YWxSdW5uaW5nQW5kU3RvcHBlZFN0YXRlcyI6dHJ1ZSwiaG9yaXpvbnRhbFBhZ2VPdmVyZmxvdyI6ZmFsc2UsImxpbWl0YXRpb25zIjpbIk5vIHNjcmVlbi1yZWFkZXIgY2VydGlmaWNhdGlvbiBvciBvdGhlciBicm93c2VyLWVuZ2luZSBjbGFpbS4iLCJOYXRpdmUgV2luZG93cyBoZWxkIGF0IHVzZXIgcmVxdWVzdC4iXX0="
+                    },
+                    {
+                      "name": "model-validation-outcome.json",
+                      "contentType": "application/json",
+                      "body": "eyJzY29wZSI6Ik9wZW4gYW5kIGF1dGhvcml0YXRpdmUgdmFsaWRhdGlvbi1yZXN1bHQgcHJlc2VudGF0aW9uOyBkaWFnbm9zdGljIG91dGNvbWVzIGFyZSByZXRhaW5lZCIsInZpZXdwb3J0Ijp7IndpZHRoIjoxMDI0LCJoZWlnaHQiOjc2OH0sIm1lc3NhZ2UiOiJBdXRob3JpdGF0aXZlIHBsYXRmb3JtIHZhbGlkYXRpb24gcGFzc2VkLiBFeGVjdXRpb24gcmVhZGluZXNzIGlzIGNoZWNrZWQgc2VwYXJhdGVseS4ifQ=="
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/accessibility-operability--474d1-rence-workloads-at-1024x768/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/accessibility-operability--474d1-rence-workloads-at-1024x768/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/performance/browser-history.ts",
+                    "column": 5,
+                    "line": 59
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "ddd864604af8a6a0198f-67f749698296891e3045",
+          "file": "accessibility.spec.ts",
+          "line": 30,
+          "column": 7
+        },
+        {
+          "title": "operability: keyboard, focus, textual status and reference workloads at 1440x900",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 76098,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText('Recorded fixture scope', { exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByText('Recorded fixture scope', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByText('Recorded fixture scope', { exact: true })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText('Recorded fixture scope', { exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByText('Recorded fixture scope', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByText('Recorded fixture scope', { exact: true })\u001b[22m\n\n    at measureHistory (<repo>/tests/performance/browser-history.ts:59:5)\n    at <repo>/tests/e2e/accessibility.spec.ts:90:7",
+                    "location": {
+                      "file": "<repo>/tests/performance/browser-history.ts",
+                      "column": 5,
+                      "line": 59
+                    },
+                    "snippet": "\u001b[90m   at \u001b[39m../performance/browser-history.ts:59\n\n  57 |   await expect(\n  58 |     page.getByText(\"Recorded fixture scope\", { exact: true }),\n> 59 |   ).toBeVisible();\n     |     ^\n  60 |   await expect(\n  61 |     page.getByRole(\"button\", { name: \"Stop\", exact: true }),\n  62 |   ).toHaveCount(0);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/performance/browser-history.ts",
+                        "column": 5,
+                        "line": 59
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText('Recorded fixture scope', { exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByText('Recorded fixture scope', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByText('Recorded fixture scope', { exact: true })\u001b[22m\n\n\n   at ../performance/browser-history.ts:59\n\n  57 |   await expect(\n  58 |     page.getByText(\"Recorded fixture scope\", { exact: true }),\n> 59 |   ).toBeVisible();\n     |     ^\n  60 |   await expect(\n  61 |     page.getByRole(\"button\", { name: \"Stop\", exact: true }),\n  62 |   ).toHaveCount(0);\n    at measureHistory (<repo>/tests/performance/browser-history.ts:59:5)\n    at <repo>/tests/e2e/accessibility.spec.ts:90:7"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T22:24:18.028Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "keyboard-operability.json",
+                      "contentType": "application/json",
+                      "body": "eyJzY29wZSI6Im93bmVkIHJlZmVyZW5jZTsgbmF0aXZlIExpbnV4IGV2aWRlbmNlIG9ubHkgd2hlbiBydW4gb24gTGludXgiLCJwbGF0Zm9ybSI6ImxpbnV4IiwiYnJvd3NlciI6IjE1Ni4wLjgwNzguNCIsInZpZXdwb3J0Ijp7IndpZHRoIjoxNDQwLCJoZWlnaHQiOjkwMH0sIm5hdGl2ZVRhYkFjdGl2YXRpb24iOnRydWUsIm1vZGFsRXNjYXBlUmVzdG9yZXNGb2N1cyI6dHJ1ZSwidmlzaWJsZUZvY3VzT3V0bGluZSI6dHJ1ZSwicG9saXRlVGV4dFZhbGlkYXRpb25TdGF0dXMiOnRydWUsInRleHR1YWxSdW5uaW5nQW5kU3RvcHBlZFN0YXRlcyI6dHJ1ZSwiaG9yaXpvbnRhbFBhZ2VPdmVyZmxvdyI6ZmFsc2UsImxpbWl0YXRpb25zIjpbIk5vIHNjcmVlbi1yZWFkZXIgY2VydGlmaWNhdGlvbiBvciBvdGhlciBicm93c2VyLWVuZ2luZSBjbGFpbS4iLCJOYXRpdmUgV2luZG93cyBoZWxkIGF0IHVzZXIgcmVxdWVzdC4iXX0="
+                    },
+                    {
+                      "name": "model-validation-outcome.json",
+                      "contentType": "application/json",
+                      "body": "eyJzY29wZSI6Ik9wZW4gYW5kIGF1dGhvcml0YXRpdmUgdmFsaWRhdGlvbi1yZXN1bHQgcHJlc2VudGF0aW9uOyBkaWFnbm9zdGljIG91dGNvbWVzIGFyZSByZXRhaW5lZCIsInZpZXdwb3J0Ijp7IndpZHRoIjoxNDQwLCJoZWlnaHQiOjkwMH0sIm1lc3NhZ2UiOiJBdXRob3JpdGF0aXZlIHBsYXRmb3JtIHZhbGlkYXRpb24gcGFzc2VkLiBFeGVjdXRpb24gcmVhZGluZXNzIGlzIGNoZWNrZWQgc2VwYXJhdGVseS4ifQ=="
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/accessibility-operability--5e28b-rence-workloads-at-1440x900/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/accessibility-operability--5e28b-rence-workloads-at-1440x900/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/performance/browser-history.ts",
+                    "column": 5,
+                    "line": 59
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "ddd864604af8a6a0198f-f4e09b85ed1942eb957a",
+          "file": "accessibility.spec.ts",
+          "line": 30,
+          "column": 7
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-26T22:22:58.426Z",
+    "duration": 155822.03699999998,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  }
+}

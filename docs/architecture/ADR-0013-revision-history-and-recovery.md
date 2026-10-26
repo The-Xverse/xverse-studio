@@ -151,9 +151,9 @@ revision when the user submits the recovery transaction.
 
 Recovery submits once per pending panel context, with a synchronous guard and disabled controls.
 The App owns completion context because an unreadable project's error panel can unmount as soon as
-the action clears its old error. A valid response can initialize that selected project's context
+the action clears its old error. A valid response can initialize the requested project's context
 even when no Project is rendered or the previous project is still visible. The authoritative
-returned Project applies only to the initiating selected project/load generation and cannot replace
+returned Project applies only to the initiating active project/load generation and cannot replace
 a known equal or newer head. This preserves newer readiness and history. Feedback and focus also
 require the initiating intent. Completion starts no captured project refresh or new project load.
 
@@ -170,6 +170,29 @@ or BODY. History retry similarly restores its relevant enabled control or absenc
 overriding deliberately moved focus. Group guidance is associated with the controls' source-recovery
 group. Native pending-Enter cases establish disabled controls and one actual request; the same-tick
 synchronous guard is separately source-reviewed.
+
+Project-context amendment (2026-10-26): a requested load is separate from the active rendered
+Project. The active identity changes only when a current successful read is accepted. A failed
+read carries its requested project ID into the error and recovery controls, whose guidance names
+that target explicitly. The previous workspace remains authorable, and its revision acknowledgements
+continue to belong to that workspace. A recovery captures its active context when submitted, rather
+than when its panel rendered. It can commit the requested project's recovery independently, but
+switches the visible project only while that request's navigation and authoring intent remain current.
+Opening another modal or resuming keyboard, pointer or input interaction in the workspace supersedes
+that switch. Interaction tracking is separate from revision acknowledgement generations so typing
+does not invalidate an otherwise current save.
+
+Successful and failed late project reads are discarded after newer navigation or authoring intent;
+creation/import continuations require an explicitly accepted load before closing a modal or reporting
+the new workspace. Their earlier API phase also respects the initiating context. Startup metadata
+may populate global discovery, but cannot reopen the remembered project after newer navigation.
+Retained-run metadata requires current project/load identity, an unchanged per-project retained-run
+pointer and matching returned ownership. Results navigation or opening Source does not cancel that
+observation; it does supersede a navigation continuation that might close the newer modal. Success
+and failure clearing share the narrow run relevance guard, while the load's return acceptance keeps
+the full initiating intent guard. A captured refresh cannot recapture a departed project. These changes affect browser
+completion only; backend transactions, concurrency checks, recovery backups and run authority are
+unchanged. Verification adds `tests/e2e/project-context.spec.ts` alongside the existing recovery cases.
 
 Verification: `tests/e2e/source-recovery-accessibility.spec.ts` uses only isolated owned files under
 the declared browser-test data root. Actual adopt/restore transactions check exact requests,
