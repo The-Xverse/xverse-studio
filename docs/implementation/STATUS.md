@@ -3,7 +3,8 @@
 Scope: runnable development reference implementation on `implement/studio-m0-m4`. No M0–M4 milestone
 or Studio 1.0 release is accepted. The supplied requirements/task IDs and acceptance targets remain.
 
-Latest recorded task completion: **40/100 components**, most recently T058/T059's deployment resolution
+Latest recorded task completion: **41/100 components**, most recently T055's flow-contract form and
+relations by kind (`evidence/studio/M2-relations/`), T058/T059's deployment resolution
 and forms (closed after T054), T054's owned connection
 contracts with real execution (ADR-0016; `evidence/studio/M2-connection-contracts/`), and before it T057's deployment-variant
 cases over deployment resolution 1.0 (ADR-0015; `evidence/studio/M2-deployments/`) and T016's
@@ -16,9 +17,9 @@ not an estimate of remaining effort. T026 transport implementation is substantia
 remains open pending a complete current native/browser successor. Windows installation/testing
 remains blocked at user request, and native Windows secure I/O remains unimplemented/unavailable.
 
-The latest full Linux backend run passed **688 tests**; typecheck/build and the full **71-check
-browser/performance gate passed** on the current candidate (`evidence/studio/M2-deployments/closure-verification.json`).
-Fresh-host CI passed (push and PR) for every commit since b61c7ec, through 6d59159.
+The latest full Linux backend run passed **690 tests**; typecheck/build and the full **72-check
+browser/performance gate passed** on the current candidate (`evidence/studio/M2-relations/`).
+Fresh-host CI passed (push and PR) for every commit since b61c7ec, through bba8c86.
 That includes the 30-second native expiry case with actual HTTP 410 and running verified-prefix
 recovery. Fresh-host push CI for checkpoint fb8ddb6 had failed that case (a history read racing a
 journal append); the PR run passed. Both outcomes are retained in `evidence/studio/native-ci/`.
@@ -41,7 +42,7 @@ private Linux backup/restore uses anchored acquisition and preserves immutable e
 Physical-provider inventory is empty.
 
 Component-complete task IDs, with the exact component scope/evidence in traceability.json:
-T003, T006, T013, T015, T016, T017, T018, T019, T020, T022, T024, T028, T029, T030, T031, T032, T036, T041, T042, T043, T044, T045, T046, T047, T049, T050, T051, T052, T053, T054, T057, T058, T059, T060, T061, T085, T086, T087, T092, T094.
+T003, T006, T013, T015, T016, T017, T018, T019, T020, T022, T024, T028, T029, T030, T031, T032, T036, T041, T042, T043, T044, T045, T046, T047, T049, T050, T051, T052, T053, T054, T055, T057, T058, T059, T060, T061, T085, T086, T087, T092, T094.
 T044 was reopened after review, then repaired and reverified for selected-source navigation, empty
 draft retention, atomic document switching and external-source inspection.
 Other tasks remain unchecked; implemented subparts are recorded as in progress instead of implying

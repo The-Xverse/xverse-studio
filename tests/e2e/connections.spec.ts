@@ -3,8 +3,13 @@ import { execFileSync } from "node:child_process";
 import path from "node:path";
 import { connectStudio } from "./connect-studio";
 
-async function projectWithSystem(page: Page, name: string, variant?: string) {
-  const content = variant
+async function projectWithSystem(
+  page: Page,
+  name: string,
+  variant?: string,
+  transform: (content: string) => string = (content) => content,
+) {
+  const generated = variant
     ? execFileSync(
         path.resolve(".venv/bin/python"),
         [
@@ -16,6 +21,7 @@ async function projectWithSystem(page: Page, name: string, variant?: string) {
         { encoding: "utf8" },
       )
     : null;
+  const content = generated === null ? null : transform(generated);
   const project = await page.evaluate(
     async ({ name, content }) => {
       const { csrfToken } = await fetch("/api/v1/session").then((r) =>
@@ -181,4 +187,51 @@ test("connections: the owned feedback blueprint shows its admitted unit-delay lo
   await expect(
     page.locator(".admission-checks").filter({ hasText: "causality" }).last(),
   ).toContainText("Admitted under unit-delay causality on command-flow");
+});
+
+test("connections: relations are shown by kind with their own meaning and actions, and contracts are declared per flow", async ({
+  page,
+}, testInfo) => {
+  test.setTimeout(60000);
+  await connectStudio(page, testInfo);
+  await projectWithSystem(page, "Relation kinds", "model-coupling", (content) =>
+    content.replace(
+      "  provenance:\n",
+      "  traceability:\n  - relation: satisfies\n    ref: urn:example:requirement:loop-1\n    revision: '3'\n    maturity: prototype\n    elementId: controller\n  provenance:\n",
+    ),
+  );
+  const kinds = page.getByRole("region", { name: "Relations by kind" });
+  await expect(kinds.locator(".relation-coupling")).toContainText(
+    "no model-coupling provider or solver is admitted",
+  );
+  await expect(kinds.locator(".relation-deployment")).toContainText(
+    "controller → reference-target (simulated) in local-reference",
+  );
+  await expect(kinds.locator(".relation-traceability")).toContainText(
+    "satisfies urn:example:requirement:loop-1 (3)",
+  );
+  await expect(kinds.locator(".relation-traceability")).toContainText(
+    "never fetched and never proves a result",
+  );
+  await kinds
+    .getByRole("button", { name: "Edit placement in Deployment" })
+    .click();
+  await expect(
+    page.getByRole("tab", { name: "Deployment", exact: true }),
+  ).toHaveAttribute("aria-selected", "true");
+  // A unit delay declared on a flow outside any cycle is recorded without admission effect.
+  await page.getByRole("tab", { name: /Connections/ }).click();
+  const form = page.getByRole("form", { name: "Flow contract" });
+  await form.locator("select").first().selectOption("command-flow");
+  await form.getByLabel(/Unit delay/).check();
+  await form.getByRole("button", { name: "Save flow contract" }).click();
+  const command = page.getByRole("button", {
+    name: /show checks for .*#command-flow$/,
+  });
+  await command.click();
+  await expect(
+    page
+      .locator(".admission-checks")
+      .filter({ hasText: "outside any feedback cycle" }),
+  ).toBeVisible();
 });

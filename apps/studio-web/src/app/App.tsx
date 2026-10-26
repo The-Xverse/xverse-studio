@@ -1215,6 +1215,7 @@ export default function App() {
                   projection={projection}
                   projectId={project.projectId}
                   revision={project.revision}
+                  onOpenView={(next) => setView(next as typeof view)}
                   edit={(edits) =>
                     doAction("Validating connection", () => edit(edits))
                   }

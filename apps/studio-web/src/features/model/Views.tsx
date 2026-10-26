@@ -27,6 +27,7 @@ import {
   targetGuidance,
   useConnectionAdmission,
 } from "../connections/ConnectionAdmission";
+import { FlowContractForm, RelationKinds } from "../connections/Relations";
 import {
   DefinitionInspector,
   ModelBreadcrumb,
@@ -927,11 +928,13 @@ export function ConnectionsView({
   edit,
   projectId,
   revision,
+  onOpenView,
 }: {
   projection: Projection;
   edit: (edits: Data[]) => Promise<unknown>;
   projectId: string;
   revision: number;
+  onOpenView?: (view: string) => void;
 }) {
   const [source, setSource] = useState(""),
     [target, setTarget] = useState(""),
@@ -1036,8 +1039,8 @@ export function ConnectionsView({
           <p className="field-hint">
             The authoritative validator checks direction and interface identity;
             admission then reports multiplicity, clock, compatibility and
-            feedback. Studio never converts: a conversion requires an admitted
-            converter contract, and none is admitted.
+            feedback. Studio never converts: a conversion needs an explicit
+            converter declaration that the selected provider admits.
           </p>
           <form
             onSubmit={(e) => {
@@ -1121,13 +1124,18 @@ export function ConnectionsView({
             </button>
           </form>
           <hr />
-          <h4>Relationship kinds</h4>
-          <ul className="limits-list">
-            <li>Communication transfers declared data.</li>
-            <li>Physical coupling needs a dedicated solver contract.</li>
-            <li>Deployment binds a logical element to a realization.</li>
-            <li>Trace links record references without proving a result.</li>
-          </ul>
+          <FlowContractForm
+            flows={projection.connections}
+            interfaces={interfaces}
+            report={report}
+            edit={edit}
+          />
+          <hr />
+          <RelationKinds
+            projection={projection}
+            report={report}
+            onOpenView={onOpenView}
+          />
         </aside>
       </div>
     </div>

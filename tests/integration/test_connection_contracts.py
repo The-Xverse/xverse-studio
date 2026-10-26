@@ -187,3 +187,51 @@ def test_existing_examples_carry_no_connection_contract_configuration():
         documents = {"xdl/" + name: content for name, content in entry["documents"].items()}
         config = reference_configuration(documents, XDLAdapter().compile(documents))
         assert "converter" not in config and "causality" not in config
+
+
+def _edit(client, project, *edits):
+    response = client.post(f"/api/v1/projects/{project['projectId']}/edits", headers={"If-Match": str(project["revision"])},
+                           json={"baseRevision": project["revision"], "edits": list(edits)})
+    return response
+
+
+def _admission(client, project):
+    return client.get(f"/api/v1/projects/{project['projectId']}/connections").json()
+
+
+def test_flow_contract_edit_declares_and_removes_contracts_that_admission_then_judges(client):
+    project = _feedback_project(client)
+    removed = _edit(client, project, {"kind": "set_flow_contract", "flowId": "command-flow"})
+    assert removed.status_code == 200, removed.text
+    assert [c["status"] for c in _admission(client, removed.json())["cycles"]] == ["unsupported"]
+    restored = _edit(client, removed.json(), {"kind": "set_flow_contract", "flowId": "command-flow", "causality": "unit-delay"})
+    assert [c["status"] for c in _admission(client, restored.json())["cycles"]] == ["admitted"]
+    mapped = _edit(client, restored.json(), {"kind": "set_flow_contract", "flowId": "state-flow",
+                                              "converter": {"fromUnit": "1", "toUnit": "%", "scale": 25, "offset": 5}})
+    assert mapped.status_code == 200, mapped.text
+    state = next(c for c in _admission(client, mapped.json())["connections"] if c["ref"].endswith("#state-flow"))
+    assert next(k for k in state["checks"] if k["check"] == "conversion")["mapping"]["scale"] == 25
+    # The edited template still executes: scale and offset are run inputs.
+    preflight = client.post(f"/api/v1/projects/{project['projectId']}/preflights", json={"revision": mapped.json()["revision"]}).json()
+    assert preflight["status"] == "ready", preflight["diagnostics"]
+
+
+def test_flow_contract_edit_adds_the_profile_once_and_never_converts_implicitly(client):
+    project = client.post("/api/v1/projects", json={"name": "Contracts on a plain system"}).json()
+    paths = {d["path"] for d in project["documents"].values()}
+    assert "xdl/connections-profile.xdl.yaml" not in paths
+    declared = _edit(client, project, {"kind": "set_flow_contract", "flowId": "state-flow",
+                                        "converter": {"fromUnit": "1", "toUnit": "%", "scale": 100, "offset": 0}})
+    assert declared.status_code == 200, declared.text
+    paths = [d["path"] for d in declared.json()["documents"].values()]
+    assert paths.count("xdl/connections-profile.xdl.yaml") == 1
+    # A converter on an exact interface is rejected at admission, never applied.
+    state = next(c for c in _admission(client, declared.json())["connections"] if c["ref"].endswith("#state-flow"))
+    assert ("conversion", "fail", "CONVERSION_INVALID") in {(k["check"], k["status"], k["code"]) for k in state["checks"]}
+    again = _edit(client, declared.json(), {"kind": "set_flow_contract", "flowId": "command-flow", "causality": "unit-delay"})
+    assert [d["path"] for d in again.json()["documents"].values()].count("xdl/connections-profile.xdl.yaml") == 1
+    for bad in ({"flowId": "missing", "causality": "unit-delay"}, {"flowId": "state-flow", "causality": "zero-delay"},
+                {"flowId": "state-flow", "converter": {"fromUnit": "1", "toUnit": "%", "scale": "x", "offset": 0}}):
+        refused = _edit(client, again.json(), {"kind": "set_flow_contract", **bad})
+        assert refused.status_code == 422, refused.text
+        assert client.get(f"/api/v1/projects/{project['projectId']}").json()["revision"] == again.json()["revision"]

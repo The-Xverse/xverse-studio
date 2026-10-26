@@ -8,7 +8,7 @@ import re
 from ruamel.yaml import YAML
 
 from . import XDLAdapter, XDLRejected
-from .examples import PROFILE_NAMESPACE
+from .examples import API_VERSION, CONNECTIONS_NAMESPACE, CONNECTIONS_SCHEMA_ID, PROFILE_NAMESPACE
 from .edit_limits import check_edit_payload
 
 REGISTRY = {
@@ -28,6 +28,7 @@ REGISTRY = {
     "add_binding": {"documentId", "bindingId", "elementId", "targetId", "realizationClass", "artifactIds"},
     "rename_display_label": {"documentId", "label", "name", "elementRef"},
     "set_time_mapping": {"documentId", "mappingId", "sourceTimeDomainId", "targetTimeDomainId", "mapping", "tolerance", "remove"},
+    "set_flow_contract": {"documentId", "flowId", "causality", "converter"},
 }
 IDENTIFIER = re.compile(r"^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$")
 ASSET_COLLECTIONS = {"device": "devices", "sensor": "sensors", "actuator": "actuators", "model": "models"}
@@ -370,6 +371,53 @@ def semantic_edits(documents: dict[str, str], edits: list[dict]) -> dict[str, st
                     mappings[existing[0]] = value
                 else:
                     spec.setdefault("timeMappings", []).append(value)
+            touched.add(name)
+        elif kind == "set_flow_contract":
+            # Declares (or removes) a flow's owned connection contract (ADR-0016). Admission and the
+            # provider decide whether it is admitted; nothing is converted or delayed by this edit.
+            name, system = select("System", explicit)
+            flows = [f for f in system["spec"].get("flows", []) if isinstance(f, dict) and f.get("id") == edit.get("flowId")]
+            if len(flows) != 1:
+                raise XDLRejected("Select one existing flow.", "SELECTION_UNRESOLVED")
+            payload = {}
+            causality, converter = edit.get("causality"), edit.get("converter")
+            if causality is not None:
+                if causality != "unit-delay":
+                    raise XDLRejected("The only declarable causality is unit-delay.", "INVALID_EDIT")
+                payload["causality"] = {"kind": "unit-delay"}
+            if converter is not None:
+                if (not isinstance(converter, dict) or set(converter) != {"fromUnit", "toUnit", "scale", "offset"}
+                        or not all(isinstance(converter[k], str) and 1 <= len(converter[k]) <= 64 for k in ("fromUnit", "toUnit"))
+                        or not all(not isinstance(converter[k], bool) and isinstance(converter[k], (int, float)) and math.isfinite(converter[k])
+                                   for k in ("scale", "offset"))):
+                    raise XDLRejected("A linear converter needs fromUnit, toUnit, and finite scale and offset.", "INVALID_EDIT")
+                payload["converter"] = {"kind": "linear", **{k: converter[k] for k in ("fromUnit", "toUnit", "scale", "offset")}}
+            extensions = flows[0].get("extensions") or {}
+            if payload:
+                extensions[CONNECTIONS_NAMESPACE] = payload
+                flows[0]["extensions"] = extensions
+                if not any(value.get("kind") == "Profile" and (value.get("spec") or {}).get("extensionNamespace") == CONNECTIONS_NAMESPACE
+                           for value in parsed.values()):
+                    namespace = system["metadata"]["namespace"]
+                    path = "xdl/connections-profile.xdl.yaml"
+                    if path in parsed:
+                        raise XDLRejected("A document already uses the connections profile path.", "IDENTITY_CONFLICT")
+                    parsed[path] = {"apiVersion": API_VERSION, "kind": "Profile",
+                                    "metadata": {"namespace": namespace, "name": "studio-connections", "version": "1.0.0",
+                                                 "description": "Owned connection contracts (ADR-0016).",
+                                                 "provenance": {"source": "urn:xverse:studio:connections", "revision": "1.0.0",
+                                                                "maturity": "prototype",
+                                                                "limitations": ["Admitted only where the selected provider declares and executes the contract."]}},
+                                    "spec": {"extensionNamespace": CONNECTIONS_NAMESPACE, "compatibleApiVersions": [API_VERSION],
+                                             "schemaRef": CONNECTIONS_SCHEMA_ID, "documentationRef": "urn:xverse:studio:connections:1.0",
+                                             "conflictPolicy": "reject"}}
+                    touched.add(path)
+            else:
+                extensions.pop(CONNECTIONS_NAMESPACE, None)
+                if extensions:
+                    flows[0]["extensions"] = extensions
+                else:
+                    flows[0].pop("extensions", None)
             touched.add(name)
         elif kind == "rename_display_label":
             # XDL metadata.description is a display label; logical metadata.name is never renamed implicitly.

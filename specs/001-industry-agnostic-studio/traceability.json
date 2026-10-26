@@ -3681,12 +3681,14 @@
         "AC-016",
         "AC-017"
       ],
-      "status": "in_progress",
-      "implementation_note": "In progress: Connections view shows per-flow admission with checks, cycles, model couplings, endpoint issues, network links as communication-only, admitted-contract status, and compatible-target guidance with reasons. Open: inspectable converter mapping forms (need an admitted converter contract) and distinct actions for coupling, deployment and traceability relations.",
+      "status": "completed",
+      "implementation_note": "Owned component complete: compatible-target guidance, inspectable flow-contract form (unit delay and linear converter via the set_flow_contract amendment, with provider contracts and current admission shown) and relations by kind (communication, model coupling, deployment, traceability) with distinct styles, meanings and actions. Review/closure audit found all clauses met; 690 backend / 72 browser checks pass on an unchanged candidate.",
       "implementation_evidence": [
-        "docs/architecture/ADR-0014-connection-admission.md",
-        "evidence/studio/M2-connections/verification.json",
-        "evidence/studio/M2-connections/independent-review.md"
+        "apps/studio-web/src/features/connections/Relations.tsx",
+        "apps/studio-web/src/features/connections/ConnectionAdmission.tsx",
+        "tests/e2e/connections.spec.ts",
+        "evidence/studio/M2-relations/README.md",
+        "evidence/studio/M2-relations/verification.json"
       ]
     },
     {
@@ -6212,15 +6214,15 @@
     "status_document": "../../docs/implementation/STATUS.md",
     "native_windows": "BLOCKED at user request. Initial native Server 2022 install failed on upstream Git filenames; application/browser NOT_RUN.",
     "m5": "deferred",
-    "code_candidate": "working-tree product sha256 recorded in evidence/studio/M2-deployments/closure-verification.json on 6d59159",
-    "component_completed": 40,
+    "code_candidate": "working-tree product sha256 recorded in evidence/studio/M2-relations/verification.json on bba8c86",
+    "component_completed": 41,
     "verification": {
-      "backend_tests_passed": 688,
-      "playwright_checks_passed": 71,
+      "backend_tests_passed": 690,
+      "playwright_checks_passed": 72,
       "playwright_checks_failed": 0,
       "playwright_scope": "full Linux browser suite with performance measurements on an unchanged candidate",
       "milestones_accepted": 0,
-      "evidence": "evidence/studio/M2-deployments/"
+      "evidence": "evidence/studio/M2-relations/"
     }
   }
 }
