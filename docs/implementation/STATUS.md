@@ -23,8 +23,16 @@ not an estimate of remaining effort. T026 transport implementation is substantia
 remains open pending a complete current native/browser successor. Windows installation/testing
 remains blocked at user request, and native Windows secure I/O remains unimplemented/unavailable.
 
-The latest full Linux backend run passed **851 tests**; typecheck/build and the full **77-check
-browser/performance gate passed** with unchanged source (`evidence/studio/M3-assets/`).
+The latest full Linux backend run passed **851 tests** (`evidence/studio/M3-assets/`). The frontend
+successor passed typecheck/build, architecture and the full **85-check browser suite**, with source
+unchanged (`evidence/studio/M1-accessible-diagnostics/`). Its backend/services/scripts/Python tests
+are byte-identical to the 851-test cohort; they were not rerun for this frontend-only slice. Eight new
+keyboard diagnostic journeys cover real source/stale-input recovery, retained evidence, labeled
+transport fixtures and late readiness responses at both required viewports. Twenty-six selected
+rendered text pairs pass the scoped contrast check; focus, stale Start/Recheck and navigation race
+defects are repaired. Separate viewport performance measurements are retained in the successor dossier.
+Native Windows, assistive-technology and complete accessibility acceptance remain open. The earlier
+full 77-check browser/performance gate passed with unchanged source (`M3-assets/`).
 Both viewport performance workloads and duplicate-name project retention now pass in the same full
 cohort. A clean b2cf71a package extraction also passed offline native Linux provisioning,
 startup/UI serving, Unicode persistence and authoritative compilation (`M3-assets/package/`);
@@ -32,7 +40,8 @@ failed symlink-relative-path attempts and successful physical-path controls are 
 T073 has 30 passing registry cases and five detected mutations; positive HTTP authority awaits T074,
 whose T023 dependency remains open. T038/T067 retain their native Windows and broader accessibility
 gates. T001's five installed XDL file hashes match the selected baseline.
-Both fresh-host CI runs for b2cf71a passed, following the earlier 04293b8 passes. Both abd5acc jobs failed a name-only retention-test
+Both fresh-host CI runs for b2cf71a and the metadata/package checkpoint 78d504b passed, following
+the earlier 04293b8 passes. Those runs predate the diagnostic frontend successor. Both abd5acc jobs failed a name-only retention-test
 selector after the new viewport tests created valid duplicate names; the resulting artifact failure
 was a cascade. Original logs are retained under `M1-operability/ci-regression/`. The successor uses
 exact project IDs and passes both the full local cohort and fresh-host CI; receipts are retained

@@ -1,0 +1,80 @@
+
+> xverse-studio-workspace@0.1.0 test:e2e
+> playwright test -c tests/e2e/playwright.config.ts --grep real stale plan
+
+
+Running 2 tests using 1 worker
+
+(node:3199813) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 tests/e2e/diagnostic-accessibility.spec.ts:165:7 › diagnostic accessibility: real stale plan and labeled artifact recovery at 1024x768 (12.7s)
+(node:3200398) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 tests/e2e/diagnostic-accessibility.spec.ts:165:7 › diagnostic accessibility: real stale plan and labeled artifact recovery at 1440x900 (12.1s)
+
+
+  1) tests/e2e/diagnostic-accessibility.spec.ts:165:7 › diagnostic accessibility: real stale plan and labeled artifact recovery at 1024x768
+
+    Error: expect(locator).toBeDisabled() failed
+
+    Locator:  getByRole('button', { name: 'Start frozen snapshot', exact: true })
+    Expected: disabled
+    Received: enabled
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toBeDisabled" getByRole('button', { name: 'Start frozen snapshot', exact: true }) with timeout 10000ms
+      - waiting for getByRole('button', { name: 'Start frozen snapshot', exact: true })
+        24 × locator resolved to <button class="button primary">Start frozen snapshot</button>
+           - unexpected value "enabled"
+
+
+      213 |       await expect(stale.getByRole("button", { name: "Recheck readiness to freeze a fresh plan.", exact: true })).toBeVisible();
+      214 |       measurements.push(await renderedContrast(stale.locator("h4"), "Stale-plan error finding"));
+    > 215 |       await expect(page.getByRole("button", { name: "Start frozen snapshot", exact: true })).toBeDisabled();
+          |                                                                                              ^
+      216 |       const stalePreflightId = frozen.preflightId;
+      217 |       await activate(page, stale.getByRole("button", { name: "Recheck readiness to freeze a fresh plan.", exact: true }));
+      218 |       await expect(page.getByRole("button", { name: "Start frozen snapshot", exact: true })).toBeEnabled();
+        at <repo>/tests/e2e/diagnostic-accessibility.spec.ts:215:94
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/diagnostic-accessibility-d-60682-tifact-recovery-at-1024x768/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/diagnostic-accessibility-d-60682-tifact-recovery-at-1024x768/error-context.md
+
+  2) tests/e2e/diagnostic-accessibility.spec.ts:165:7 › diagnostic accessibility: real stale plan and labeled artifact recovery at 1440x900
+
+    Error: expect(locator).toBeDisabled() failed
+
+    Locator:  getByRole('button', { name: 'Start frozen snapshot', exact: true })
+    Expected: disabled
+    Received: enabled
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toBeDisabled" getByRole('button', { name: 'Start frozen snapshot', exact: true }) with timeout 10000ms
+      - waiting for getByRole('button', { name: 'Start frozen snapshot', exact: true })
+        24 × locator resolved to <button class="button primary">Start frozen snapshot</button>
+           - unexpected value "enabled"
+
+
+      213 |       await expect(stale.getByRole("button", { name: "Recheck readiness to freeze a fresh plan.", exact: true })).toBeVisible();
+      214 |       measurements.push(await renderedContrast(stale.locator("h4"), "Stale-plan error finding"));
+    > 215 |       await expect(page.getByRole("button", { name: "Start frozen snapshot", exact: true })).toBeDisabled();
+          |                                                                                              ^
+      216 |       const stalePreflightId = frozen.preflightId;
+      217 |       await activate(page, stale.getByRole("button", { name: "Recheck readiness to freeze a fresh plan.", exact: true }));
+      218 |       await expect(page.getByRole("button", { name: "Start frozen snapshot", exact: true })).toBeEnabled();
+        at <repo>/tests/e2e/diagnostic-accessibility.spec.ts:215:94
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/diagnostic-accessibility-d-2f61a-tifact-recovery-at-1440x900/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/diagnostic-accessibility-d-2f61a-tifact-recovery-at-1440x900/error-context.md
+
+  2 failed
+    tests/e2e/diagnostic-accessibility.spec.ts:165:7 › diagnostic accessibility: real stale plan and labeled artifact recovery at 1024x768
+    tests/e2e/diagnostic-accessibility.spec.ts:165:7 › diagnostic accessibility: real stale plan and labeled artifact recovery at 1440x900

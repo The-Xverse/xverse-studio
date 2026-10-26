@@ -313,3 +313,14 @@ Component completion is 47/100; no milestone is accepted.
 Committed b2cf71a passed both native Ubuntu 24.04 CI jobs and a clean local package extraction smoke.
 The latter uses resolved physical cache/tool/temp paths; failed logical-symlink-path attempts and
 successful controls with both Python interpreter choices are retained in `M3-assets/package/`.
+
+Linux diagnostic operability successor (2026-10-26): T038/T067 remain unchecked. Eight native
+Tab/Enter journeys at both required viewports now verify real source-error recovery, recorded
+clock/gap/partial-evidence diagnostics, actual stale-plan Recheck and held-response navigation;
+artifact/lost-ownership/failed-cleanup transport fixtures are explicitly labeled. Repaired contrast,
+lost diagnostic focus, stale Start/Recheck and obsolete readiness response handling. All 26 selected
+text pairs pass the scoped 4.5:1 check (minimum 4.5919), and the final full 85-check browser successor
+passes with unchanged source. Backend/services/scripts/Python tests are byte-identical to the passing
+851-test b2cf71a cohort, not rerun here. Separate final-source viewport performance refresh and
+independent review are retained in `evidence/studio/M1-accessible-diagnostics/`. Native Windows,
+assistive-technology and complete accessibility acceptance remain open; component count stays 47/100.

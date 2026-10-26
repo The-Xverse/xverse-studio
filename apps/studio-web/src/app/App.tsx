@@ -141,7 +141,7 @@ export default function App() {
   const [error, setError] = useState<ApiError | Error | null>(null),
     [notice, setNotice] = useState(""),
     [busy, setBusy] = useState(""),
-    [modal, setModal] = useState(""),
+    [modal, storeModal] = useState(""),
     [name, setName] = useState(""),
     [selected, setSelected] = useState(""),
     [preflight, setPreflight] = useState<Preflight | null>(null);
@@ -162,6 +162,26 @@ export default function App() {
     selectedProjectRef = useRef(""),
     projectLoadSequence = useRef(0),
     streamIdentity = useRef("");
+  function setModal(value: string) {
+    preflightRequestSequence.current++;
+    storeModal(value);
+  }
+  function showHome(removeLastProject = false) {
+    projectLoadSequence.current++;
+    selectedProjectRef.current = "";
+    setPreflight(null);
+    setModal("");
+    setProject(null);
+    setSection("workspace");
+    if (removeLastProject) localStorage.removeItem("studio.projectId");
+  }
+  function changeSection(value: typeof section) {
+    projectLoadSequence.current++;
+    selectedProjectRef.current = project?.projectId || "";
+    setPreflight(null);
+    setModal("");
+    setSection(value);
+  }
   const doAction: DoAction = useCallback(async (label, action) => {
     setBusy(label);
     setError(null);
@@ -331,6 +351,7 @@ export default function App() {
         (c.id || c.entryId) === project?.manifest?.provenance?.blueprintRef,
     ) || catalog.find((c) => project?.name?.includes(c.name));
   function chooseExecution(selection: ExecutionSelection) {
+    preflightRequestSequence.current++;
     setExecutionSelection(selection);
     setPreflight(null);
     if (project)
@@ -509,13 +530,23 @@ export default function App() {
   }
   async function checkPreflight(providerId = executionProvider) {
     if (!project) return;
-    const sequence = ++preflightRequestSequence.current;
+    const sequence = ++preflightRequestSequence.current,
+      loadSequence = projectLoadSequence.current;
+    const current = await api<Project>(
+      `/projects/${encodeURIComponent(project.projectId)}`,
+    );
+    if (
+      sequence !== preflightRequestSequence.current ||
+      loadSequence !== projectLoadSequence.current ||
+      selectedProjectRef.current !== project.projectId
+    )
+      return;
     const value = await api<Preflight>(
       `/projects/${project.projectId}/preflights`,
       {
         method: "POST",
         body: {
-          revision: project.revision,
+          revision: current.revision,
           providerId,
           ...executionSelection,
         } satisfies Selection,
@@ -524,9 +555,19 @@ export default function App() {
     );
     if (
       sequence !== preflightRequestSequence.current ||
+      loadSequence !== projectLoadSequence.current ||
       selectedProjectRef.current !== project.projectId
     )
       return;
+    if (current.revision !== project.revision) {
+      setProject(current);
+      const history = reconcileHistory(
+        readHistory(current.projectId),
+        current.revision,
+      );
+      writeHistory(current.projectId, history);
+      setEditHistory(history);
+    }
     setExecutionProvider(providerId);
     setPreflight(value);
     startKey.current = mutationKey();
@@ -780,10 +821,7 @@ export default function App() {
         <header className="topbar">
           <button
             className="brand"
-            onClick={() => {
-              setProject(null);
-              setSection("workspace");
-            }}
+            onClick={() => showHome()}
             aria-label="X-Verse Studio home"
           >
             <span className="brand-mark">X</span>
@@ -798,7 +836,7 @@ export default function App() {
           </span>
           <span className="top-spacer" />
           <Badge>REFERENCE PREVIEW</Badge>
-          <button className="top-button" onClick={() => setSection("settings")}>
+          <button className="top-button" onClick={() => changeSection("settings")}>
             <Icon name="settings" />
             <span>Environment</span>
           </button>
@@ -812,7 +850,7 @@ export default function App() {
               className={section === "workspace" ? "active" : ""}
               title="Workspace"
               aria-label="Workspace"
-              onClick={() => setSection("workspace")}
+              onClick={() => changeSection("workspace")}
             >
               <Icon name="model" size={22} />
               <span>Workspace</span>
@@ -821,7 +859,7 @@ export default function App() {
               className={section === "catalog" ? "active" : ""}
               title="Catalog"
               aria-label="Catalog"
-              onClick={() => setSection("catalog")}
+              onClick={() => changeSection("catalog")}
             >
               <Icon name="catalog" size={22} />
               <span>Catalog</span>
@@ -830,7 +868,7 @@ export default function App() {
               className={section === "lab" ? "active" : ""}
               title="Laboratory"
               aria-label="Laboratory"
-              onClick={() => setSection("lab")}
+              onClick={() => changeSection("lab")}
             >
               <Icon name="lab" size={22} />
               <span>Lab</span>
@@ -839,7 +877,7 @@ export default function App() {
             <button
               className={section === "settings" ? "active" : ""}
               aria-label="Compatibility and environment"
-              onClick={() => setSection("settings")}
+              onClick={() => changeSection("settings")}
             >
               <Icon name="settings" size={22} />
               <span>Settings</span>
@@ -1037,10 +1075,7 @@ export default function App() {
                   <div>
                     <div className="breadcrumb">
                       <button
-                        onClick={() => {
-                          setProject(null);
-                          localStorage.removeItem("studio.projectId");
-                        }}
+                        onClick={() => showHome(true)}
                       >
                         Workspace
                       </button>

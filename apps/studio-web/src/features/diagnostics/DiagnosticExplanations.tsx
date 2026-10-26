@@ -53,19 +53,23 @@ export function DiagnosticExplanations({
   title,
   actions = {},
   emptyText,
+  onLoaded,
 }: {
   url: string;
   refreshKey: string;
   title: string;
   actions?: Record<string, () => unknown>;
   emptyText: string;
+  onLoaded?: (value: Data, subjectUrl: string) => void;
 }) {
   const [loaded, setLoaded] = useState<{ url: string; value: Data } | null>(
       null,
     ),
     [failure, setFailure] = useState(""),
     [nonce, setNonce] = useState(0),
-    shownUrl = useRef("");
+    shownUrl = useRef(""),
+    loadedCallback = useRef(onLoaded);
+  loadedCallback.current = onLoaded;
   // Never show another subject's explanation while this one loads.
   const explanation = loaded?.url === url ? loaded.value : null;
   useEffect(() => {
@@ -81,6 +85,7 @@ export function DiagnosticExplanations({
             if (controller.signal.aborted) return;
             setLoaded({ url, value });
             setFailure("");
+            loadedCallback.current?.(value, url);
           })
           .catch((error) => {
             if (!controller.signal.aborted)

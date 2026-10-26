@@ -86,7 +86,8 @@ export function ResultsView({
     observationRequest = useRef<AbortController | null>(null),
     observationGeneration = useRef(0),
     readContext = useRef(""),
-    historyContext = useRef("");
+    historyContext = useRef(""),
+    eventsTab = useRef<HTMLButtonElement | null>(null);
   const queryIdentity = JSON.stringify([
     run?.runId,
     run?.snapshotId,
@@ -556,6 +557,7 @@ export function ResultsView({
         ].map((t) => (
           <button
             role="tab"
+            ref={t === "Events & logs" ? eventsTab : undefined}
             aria-selected={tab === t}
             key={t}
             className={tab === t ? "active" : ""}
@@ -1024,7 +1026,10 @@ export function ResultsView({
           refreshKey={`${run.stateVersion}:${run.state}:${run.evidence}:${run.cleanup}:${events[events.length - 1]?.sequence ?? ""}`}
           emptyText="No findings for the evaluated classes. Completion and liveness are not evidence of functional health."
           actions={{
-            inspect_events: () => setTab("Events & logs"),
+            inspect_events: () => {
+              setTab("Events & logs");
+              eventsTab.current?.focus();
+            },
             reconcile_ownership: async () =>
               onRunUpdated(
                 await api<Run>(`/runs/${encodeURIComponent(run.runId)}`),

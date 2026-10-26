@@ -1,5 +1,5 @@
 import "./preflight.css";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { Data, Preflight } from "../../api/types";
 import { ApiError } from "../../api/client";
 import { Badge, Json, KeyValues, Modal, statusTone } from "../../app/ui";
@@ -47,7 +47,19 @@ export function PreflightReview({
     [pending, setPending] = useState(false),
     [error, setError] = useState<Data | null>(null),
     [inspectPlan, setInspectPlan] = useState(false),
-    [now, setNow] = useState(Date.now());
+    [now, setNow] = useState(Date.now()),
+    [staleReport, setStaleReport] = useState<{
+      preflightId: string;
+      stale: boolean;
+    } | null>(null);
+  const recheckButton = useRef<HTMLButtonElement | null>(null),
+    restoreRecheckFocus = useRef(false);
+  useEffect(() => {
+    if (!pending && restoreRecheckFocus.current) {
+      restoreRecheckFocus.current = false;
+      recheckButton.current?.focus();
+    }
+  }, [pending, preflight.preflightId]);
   useEffect(() => {
     const timer = setInterval(() => setNow(Date.now()), 1000);
     return () => clearInterval(timer);
@@ -67,8 +79,12 @@ export function PreflightReview({
     expired = !Number.isFinite(expires) || now >= expires,
     providerChanged = selectedProvider !== preflight.providerId;
   const draftChanged = preflight.revision !== currentRevision;
+  const diagnosticUrl = `/projects/${encodeURIComponent(projectId)}/preflights/${encodeURIComponent(preflight.preflightId)}/diagnostics`;
+  const serverPlanStale =
+    staleReport?.preflightId === preflight.preflightId && staleReport.stale;
   const canStart =
     !draftChanged &&
+    !serverPlanStale &&
     preflight.status === "ready" &&
     !expired &&
     !providerChanged &&
@@ -136,7 +152,8 @@ export function PreflightReview({
           <div>
             <span className="eyebrow">FROZEN EXECUTION REQUEST</span>
             <h3>
-              Admission decision: <span>{text(preflight.status)}</span>
+              Admission decision:{" "}
+              <span>{serverPlanStale ? "stale" : text(preflight.status)}</span>
             </h3>
           </div>
           <p>
@@ -166,6 +183,7 @@ export function PreflightReview({
             </select>
           </label>
           <button
+            ref={recheckButton}
             className="button"
             disabled={pending}
             onClick={() => void perform(() => onRecheck(selectedProvider))}
@@ -232,6 +250,13 @@ export function PreflightReview({
           <p className="notice" role="status">
             The current draft revision differs from this frozen request. Recheck
             readiness before Start.
+          </p>
+        )}
+        {serverPlanStale && (
+          <p className="notice" role="status">
+            The backend reports that this frozen plan no longer matches current
+            inputs. Recheck readiness to load the current saved project and
+            freeze a new plan.
           </p>
         )}
         {expired && (
@@ -399,11 +424,25 @@ export function PreflightReview({
         <DiagnosticExplanations
           title="Readiness explanation"
           emptyText="No blocking findings were recorded for this frozen preflight. Readiness is not runtime health."
-          url={`/projects/${encodeURIComponent(projectId)}/preflights/${encodeURIComponent(preflight.preflightId)}/diagnostics`}
+          url={diagnosticUrl}
           refreshKey={`${preflight.preflightId}:${expired}:${currentRevision}`}
+          onLoaded={(value, subjectUrl) => {
+            if (subjectUrl !== diagnosticUrl) return;
+            const reported =
+              Array.isArray(value.findings) &&
+              value.findings.some((finding: Data) => finding.code === "PLAN_STALE");
+            setStaleReport((previous) => ({
+              preflightId: preflight.preflightId,
+              stale:
+                reported ||
+                (previous?.preflightId === preflight.preflightId && previous.stale),
+            }));
+          }}
           actions={{
-            recheck_preflight: () =>
-              void perform(() => onRecheck(selectedProvider)),
+            recheck_preflight: () => {
+              restoreRecheckFocus.current = true;
+              void perform(() => onRecheck(selectedProvider));
+            },
           }}
         />
         <section className="frozen-plan-preview">

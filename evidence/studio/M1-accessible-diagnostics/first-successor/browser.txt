@@ -1,0 +1,115 @@
+
+> xverse-studio-workspace@0.1.0 test:e2e
+> playwright test -c tests/e2e/playwright.config.ts --grep diagnostic accessibility:
+
+
+Running 6 tests using 1 worker
+
+(node:3154149) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/e2e/diagnostic-accessibility.spec.ts:44:7 › diagnostic accessibility: real invalid-source keyboard recovery at 1024x768 (2.7s)
+  ✘  2 tests/e2e/diagnostic-accessibility.spec.ts:99:7 › diagnostic accessibility: recorded and labeled transport outcomes at 1024x768 (2.8s)
+(node:3154595) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  3 tests/e2e/diagnostic-accessibility.spec.ts:165:7 › diagnostic accessibility: real stale plan and labeled artifact recovery at 1024x768 (17.2s)
+(node:3155640) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  4 tests/e2e/diagnostic-accessibility.spec.ts:44:7 › diagnostic accessibility: real invalid-source keyboard recovery at 1440x900 (2.5s)
+  ✘  5 tests/e2e/diagnostic-accessibility.spec.ts:99:7 › diagnostic accessibility: recorded and labeled transport outcomes at 1440x900 (3.0s)
+(node:3156092) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  6 tests/e2e/diagnostic-accessibility.spec.ts:165:7 › diagnostic accessibility: real stale plan and labeled artifact recovery at 1440x900 (17.1s)
+
+
+  1) tests/e2e/diagnostic-accessibility.spec.ts:99:7 › diagnostic accessibility: recorded and labeled transport outcomes at 1024x768
+
+    Error: Required diagnostic action is unreachable through native Tab order
+
+      11 |     await page.keyboard.press(reverse ? "Shift+Tab" : "Tab");
+      12 |   }
+    > 13 |   throw Error("Required diagnostic action is unreachable through native Tab order");
+         |         ^
+      14 | }
+      15 | async function activate(page: Page, target: Locator, reverse = false) {
+      16 |   await focusByTab(page, target, reverse);
+        at focusByTab (<repo>/tests/e2e/diagnostic-accessibility.spec.ts:13:9)
+        at activate (<repo>/tests/e2e/diagnostic-accessibility.spec.ts:16:3)
+        at <repo>/tests/e2e/diagnostic-accessibility.spec.ts:144:7
+
+    attachment #3: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/diagnostic-accessibility-d-2cd96-nsport-outcomes-at-1024x768/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/diagnostic-accessibility-d-2cd96-nsport-outcomes-at-1024x768/error-context.md
+
+  2) tests/e2e/diagnostic-accessibility.spec.ts:165:7 › diagnostic accessibility: real stale plan and labeled artifact recovery at 1024x768
+
+    TimeoutError: page.waitForEvent: Timeout 15000ms exceeded while waiting for event "load"
+    =========================== logs ===========================
+    waiting for event "load"
+    ============================================================
+
+      215 |       await page.keyboard.press("Escape");
+      216 |       // Native browser refresh retrieves the edited revision before a new preflight.
+    > 217 |       await Promise.all([page.waitForEvent("load"), page.keyboard.press("ControlOrMeta+R")]);
+          |                               ^
+      218 |       await expect(page.locator(".project-header h1")).toHaveText(project.name);
+      219 |       await activate(page, page.getByRole("button", { name: "Preflight & run", exact: true }));
+      220 |       await expect(page.getByRole("button", { name: "Start frozen snapshot", exact: true })).toBeEnabled();
+        at <repo>/tests/e2e/diagnostic-accessibility.spec.ts:217:31
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/diagnostic-accessibility-d-60682-tifact-recovery-at-1024x768/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/diagnostic-accessibility-d-60682-tifact-recovery-at-1024x768/error-context.md
+
+  3) tests/e2e/diagnostic-accessibility.spec.ts:99:7 › diagnostic accessibility: recorded and labeled transport outcomes at 1440x900
+
+    Error: Required diagnostic action is unreachable through native Tab order
+
+      11 |     await page.keyboard.press(reverse ? "Shift+Tab" : "Tab");
+      12 |   }
+    > 13 |   throw Error("Required diagnostic action is unreachable through native Tab order");
+         |         ^
+      14 | }
+      15 | async function activate(page: Page, target: Locator, reverse = false) {
+      16 |   await focusByTab(page, target, reverse);
+        at focusByTab (<repo>/tests/e2e/diagnostic-accessibility.spec.ts:13:9)
+        at activate (<repo>/tests/e2e/diagnostic-accessibility.spec.ts:16:3)
+        at <repo>/tests/e2e/diagnostic-accessibility.spec.ts:144:7
+
+    attachment #3: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/diagnostic-accessibility-d-6193f-nsport-outcomes-at-1440x900/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/diagnostic-accessibility-d-6193f-nsport-outcomes-at-1440x900/error-context.md
+
+  4) tests/e2e/diagnostic-accessibility.spec.ts:165:7 › diagnostic accessibility: real stale plan and labeled artifact recovery at 1440x900
+
+    TimeoutError: page.waitForEvent: Timeout 15000ms exceeded while waiting for event "load"
+    =========================== logs ===========================
+    waiting for event "load"
+    ============================================================
+
+      215 |       await page.keyboard.press("Escape");
+      216 |       // Native browser refresh retrieves the edited revision before a new preflight.
+    > 217 |       await Promise.all([page.waitForEvent("load"), page.keyboard.press("ControlOrMeta+R")]);
+          |                               ^
+      218 |       await expect(page.locator(".project-header h1")).toHaveText(project.name);
+      219 |       await activate(page, page.getByRole("button", { name: "Preflight & run", exact: true }));
+      220 |       await expect(page.getByRole("button", { name: "Start frozen snapshot", exact: true })).toBeEnabled();
+        at <repo>/tests/e2e/diagnostic-accessibility.spec.ts:217:31
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/diagnostic-accessibility-d-2f61a-tifact-recovery-at-1440x900/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/diagnostic-accessibility-d-2f61a-tifact-recovery-at-1440x900/error-context.md
+
+  4 failed
+    tests/e2e/diagnostic-accessibility.spec.ts:99:7 › diagnostic accessibility: recorded and labeled transport outcomes at 1024x768
+    tests/e2e/diagnostic-accessibility.spec.ts:165:7 › diagnostic accessibility: real stale plan and labeled artifact recovery at 1024x768
+    tests/e2e/diagnostic-accessibility.spec.ts:99:7 › diagnostic accessibility: recorded and labeled transport outcomes at 1440x900
+    tests/e2e/diagnostic-accessibility.spec.ts:165:7 › diagnostic accessibility: real stale plan and labeled artifact recovery at 1440x900
+  2 passed (47.0s)

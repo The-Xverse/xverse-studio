@@ -1,0 +1,113 @@
+
+> xverse-studio-workspace@0.1.0 test:e2e
+> playwright test -c tests/e2e/playwright.config.ts --grep diagnostic accessibility:
+
+
+Running 8 tests using 1 worker
+
+(node:3256660) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/e2e/diagnostic-accessibility.spec.ts:44:7 › diagnostic accessibility: real invalid-source keyboard recovery at 1024x768 (2.9s)
+  ✓  2 tests/e2e/diagnostic-accessibility.spec.ts:99:7 › diagnostic accessibility: recorded and labeled transport outcomes at 1024x768 (2.7s)
+  ✘  3 tests/e2e/diagnostic-accessibility.spec.ts:165:7 › diagnostic accessibility: late preflight cannot reopen a departed workspace at 1024x768 (5.8s)
+(node:3257460) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  4 tests/e2e/diagnostic-accessibility.spec.ts:202:7 › diagnostic accessibility: real stale plan and labeled artifact recovery at 1024x768 (5.5s)
+  ✓  5 tests/e2e/diagnostic-accessibility.spec.ts:44:7 › diagnostic accessibility: real invalid-source keyboard recovery at 1440x900 (2.0s)
+  ✓  6 tests/e2e/diagnostic-accessibility.spec.ts:99:7 › diagnostic accessibility: recorded and labeled transport outcomes at 1440x900 (2.6s)
+  ✘  7 tests/e2e/diagnostic-accessibility.spec.ts:165:7 › diagnostic accessibility: late preflight cannot reopen a departed workspace at 1440x900 (4.6s)
+(node:3258460) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  8 tests/e2e/diagnostic-accessibility.spec.ts:202:7 › diagnostic accessibility: real stale plan and labeled artifact recovery at 1440x900 (5.1s)
+
+
+  1) tests/e2e/diagnostic-accessibility.spec.ts:165:7 › diagnostic accessibility: late preflight cannot reopen a departed workspace at 1024x768
+
+    Error: route.fulfill: Route is already handled!
+
+      182 |         prepared = true;
+      183 |         await held;
+    > 184 |         await route.fulfill({ response });
+          |                     ^
+      185 |       });
+      186 |       try {
+      187 |         await activate(page, page.getByRole("button", { name: "Preflight & run", exact: true }));
+        at <repo>/tests/e2e/diagnostic-accessibility.spec.ts:184:21
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('button', { name: 'Workspace', exact: true })
+    Expected: visible
+    Error: strict mode violation: getByRole('button', { name: 'Workspace', exact: true }) resolved to 2 elements:
+        1) <button class="active" title="Workspace" aria-label="Workspace">…</button> aka getByRole('button', { name: 'Workspace', description: 'Workspace' })
+        2) <button>Workspace</button> aka locator('#main-content').getByRole('button', { name: 'Workspace' })
+
+    Call log:
+      - Expect "toBeVisible" getByRole('button', { name: 'Workspace', exact: true }) with timeout 10000ms
+      - waiting for getByRole('button', { name: 'Workspace', exact: true })
+
+
+       6 |
+       7 | async function focusByTab(page: Page, target: Locator, reverse = false) {
+    >  8 |   await expect(target).toBeVisible();
+         |                        ^
+       9 |   for (let i = 0; i < (reverse ? 32 : 200); i++) {
+      10 |     if (await target.evaluate((node) => node === document.activeElement)) return;
+      11 |     await page.keyboard.press(reverse ? "Shift+Tab" : "Tab");
+        at focusByTab (<repo>/tests/e2e/diagnostic-accessibility.spec.ts:8:24)
+        at activate (<repo>/tests/e2e/diagnostic-accessibility.spec.ts:16:9)
+        at <repo>/tests/e2e/diagnostic-accessibility.spec.ts:189:15
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/diagnostic-accessibility-d-a8c5d-arted-workspace-at-1024x768/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/diagnostic-accessibility-d-a8c5d-arted-workspace-at-1024x768/error-context.md
+
+  2) tests/e2e/diagnostic-accessibility.spec.ts:165:7 › diagnostic accessibility: late preflight cannot reopen a departed workspace at 1440x900
+
+    Error: route.fulfill: Route is already handled!
+
+      182 |         prepared = true;
+      183 |         await held;
+    > 184 |         await route.fulfill({ response });
+          |                     ^
+      185 |       });
+      186 |       try {
+      187 |         await activate(page, page.getByRole("button", { name: "Preflight & run", exact: true }));
+        at <repo>/tests/e2e/diagnostic-accessibility.spec.ts:184:21
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('button', { name: 'Workspace', exact: true })
+    Expected: visible
+    Error: strict mode violation: getByRole('button', { name: 'Workspace', exact: true }) resolved to 2 elements:
+        1) <button class="active" title="Workspace" aria-label="Workspace">…</button> aka getByRole('button', { name: 'Workspace', description: 'Workspace' })
+        2) <button>Workspace</button> aka locator('#main-content').getByRole('button', { name: 'Workspace' })
+
+    Call log:
+      - Expect "toBeVisible" getByRole('button', { name: 'Workspace', exact: true }) with timeout 10000ms
+      - waiting for getByRole('button', { name: 'Workspace', exact: true })
+
+
+       6 |
+       7 | async function focusByTab(page: Page, target: Locator, reverse = false) {
+    >  8 |   await expect(target).toBeVisible();
+         |                        ^
+       9 |   for (let i = 0; i < (reverse ? 32 : 200); i++) {
+      10 |     if (await target.evaluate((node) => node === document.activeElement)) return;
+      11 |     await page.keyboard.press(reverse ? "Shift+Tab" : "Tab");
+        at focusByTab (<repo>/tests/e2e/diagnostic-accessibility.spec.ts:8:24)
+        at activate (<repo>/tests/e2e/diagnostic-accessibility.spec.ts:16:9)
+        at <repo>/tests/e2e/diagnostic-accessibility.spec.ts:189:15
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/diagnostic-accessibility-d-8df2a-arted-workspace-at-1440x900/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/diagnostic-accessibility-d-8df2a-arted-workspace-at-1440x900/error-context.md
+
+  2 failed
+    tests/e2e/diagnostic-accessibility.spec.ts:165:7 › diagnostic accessibility: late preflight cannot reopen a departed workspace at 1024x768
+    tests/e2e/diagnostic-accessibility.spec.ts:165:7 › diagnostic accessibility: late preflight cannot reopen a departed workspace at 1440x900
+  6 passed (32.4s)
