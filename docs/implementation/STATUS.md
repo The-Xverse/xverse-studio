@@ -34,7 +34,19 @@ with its manifest/checker included, clean 100-file hash proof and unchanged test
 grants no runtime authority and does not close T001. Both 944a875 product and d421c23 package-metadata CI runs passed;
 those outcomes predate this descriptive artifact.
 
-The latest frontend successor passed typecheck/build, architecture, compatibility consistency and
+The latest connection-authoring successor passed both required native Linux keyboard viewports,
+reproducing and repairing browser/backend flow-ID grammar drift with associated guidance and native
+constraint focus. Independent backend rejection preserves exact documents/revision; one successful
+edit restores canonical topology without changing definitions or creating a run. The full 99-check
+browser suite passed unchanged source. A review-added complete-flow assertion then passed both
+affected journeys; runtime/harness bytes are identical, with test-source equivalence retained.
+Final-source performance, typecheck/build, architecture, compatibility and spec checks pass. The
+851-test backend result is inherited by exact unchanged-source proof. `evidence/studio/M2-keyboard-connections/`
+records original failures, review, outcomes and raw measurements. T038/T067 remain open; 47/100 and
+0/5 milestones are unchanged. Both 70a13a1 product and ed88eb5 metadata push/PR CI passed before this
+connection repair.
+
+The preceding frontend successor passed typecheck/build, architecture, compatibility consistency and
 the full **97-check native Linux Chromium suite**, unchanged source (`M2-keyboard-instance/`). Eight
 native wizard/history journeys at both viewports verify atomic instance/binding authoring, exact
 source restoration and focus/context preservation. Repaired toolbar/shortcut focus loss and late

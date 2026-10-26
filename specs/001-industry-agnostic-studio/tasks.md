@@ -373,3 +373,13 @@ Windows and complete accessibility/assistive-technology acceptance remain open; 
 Clean 70a13a1 passed the fresh offline native Linux package smoke: startup/UI, Unicode persistence,
 public compilation and owned shutdown. All archive/file hashes, clean 100-file manifest and tested
 frontend bytes are verified under `M2-keyboard-instance/package/`. Fresh-host CI remains separate.
+
+Linux keyboard connection successor (2026-10-26): T038/T067 stay unchecked. Two keyboard journeys
+at both required viewports reproduce and repair browser/backend flow-ID grammar drift, with
+associated instructions/native constraint focus, independent backend HTTP 422 rejection, exact
+successful edit/revision, complete topology and other-document preservation, authoritative
+validation and unchanged project run set. Full 99 browser checks pass unchanged runtime; the
+review-added complete-flow assertion passes both final focused checks, with exact test-only
+equivalence proof. Final-source two-viewport performance refresh passes. Windows, actual
+assistive-technology assessment and full acceptance stay open.
+Evidence: `evidence/studio/M2-keyboard-connections/`; component count 47/100, no milestone accepted.

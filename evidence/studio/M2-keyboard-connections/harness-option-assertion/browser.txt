@@ -1,0 +1,80 @@
+
+> xverse-studio-workspace@0.1.0 test:e2e
+> playwright test -c tests/e2e/playwright.config.ts --grep connection accessibility:
+
+
+Running 2 tests using 1 worker
+
+(node:1628563) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 tests/e2e/connection-accessibility.spec.ts:33:7 › connection accessibility: native typed flow and rejected identifier recovery at 1024x768 (11.8s)
+(node:1628873) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 tests/e2e/connection-accessibility.spec.ts:33:7 › connection accessibility: native typed flow and rejected identifier recovery at 1440x900 (11.5s)
+
+
+  1) tests/e2e/connection-accessibility.spec.ts:33:7 › connection accessibility: native typed flow and rejected identifier recovery at 1024x768
+
+    Error: expect(locator).toBeDisabled() failed
+
+    Locator:  getByLabel('Destination endpoint').locator('option[value="observer-in"]')
+    Expected: disabled
+    Received: enabled
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toBeDisabled" getByLabel('Destination endpoint').locator('option[value="observer-in"]') with timeout 10000ms
+      - waiting for getByLabel('Destination endpoint').locator('option[value="observer-in"]')
+        24 × locator resolved to <option disabled value="observer-in">observer-in · state — Interface state differs fro…</option>
+           - unexpected value "enabled"
+
+
+      56 |     await type(page, identifier, "Bad_ID"); await choose(page, from, "controller-out");
+      57 |     await expect(to).toHaveAccessibleDescription(/compatible destination/);
+    > 58 |     await expect(to.locator('option[value="observer-in"]')).toBeDisabled();
+         |                                                             ^
+      59 |     await expect(to.locator('option[value="observer-in"]')).toContainText("Interface state differs from command");
+      60 |     await choose(page, to, "plant-in");
+      61 |     const nativeValidBefore = await identifier.evaluate((n) => (n as HTMLInputElement).validity.valid);
+        at <repo>/tests/e2e/connection-accessibility.spec.ts:58:61
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/connection-accessibility-c-de262-tifier-recovery-at-1024x768/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/connection-accessibility-c-de262-tifier-recovery-at-1024x768/error-context.md
+
+  2) tests/e2e/connection-accessibility.spec.ts:33:7 › connection accessibility: native typed flow and rejected identifier recovery at 1440x900
+
+    Error: expect(locator).toBeDisabled() failed
+
+    Locator:  getByLabel('Destination endpoint').locator('option[value="observer-in"]')
+    Expected: disabled
+    Received: enabled
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toBeDisabled" getByLabel('Destination endpoint').locator('option[value="observer-in"]') with timeout 10000ms
+      - waiting for getByLabel('Destination endpoint').locator('option[value="observer-in"]')
+        23 × locator resolved to <option disabled value="observer-in">observer-in · state — Interface state differs fro…</option>
+           - unexpected value "enabled"
+
+
+      56 |     await type(page, identifier, "Bad_ID"); await choose(page, from, "controller-out");
+      57 |     await expect(to).toHaveAccessibleDescription(/compatible destination/);
+    > 58 |     await expect(to.locator('option[value="observer-in"]')).toBeDisabled();
+         |                                                             ^
+      59 |     await expect(to.locator('option[value="observer-in"]')).toContainText("Interface state differs from command");
+      60 |     await choose(page, to, "plant-in");
+      61 |     const nativeValidBefore = await identifier.evaluate((n) => (n as HTMLInputElement).validity.valid);
+        at <repo>/tests/e2e/connection-accessibility.spec.ts:58:61
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/connection-accessibility-c-f8888-tifier-recovery-at-1440x900/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/connection-accessibility-c-f8888-tifier-recovery-at-1440x900/error-context.md
+
+  2 failed
+    tests/e2e/connection-accessibility.spec.ts:33:7 › connection accessibility: native typed flow and rejected identifier recovery at 1024x768
+    tests/e2e/connection-accessibility.spec.ts:33:7 › connection accessibility: native typed flow and rejected identifier recovery at 1440x900

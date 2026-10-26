@@ -1,0 +1,260 @@
+{
+  "config": {
+    "argv": [
+      "<loop-cache>/node-v24.22.1-linux-x64/bin/node",
+      "<repo>/node_modules/.bin/playwright",
+      "test",
+      "-c",
+      "tests/e2e/playwright.config.ts",
+      "--grep",
+      "connection accessibility:"
+    ],
+    "configFile": "<repo>/tests/e2e/playwright.config.ts",
+    "rootDir": "<repo>/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "<repo>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "<repo>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "*.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "<repo>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "<repo>/tests/e2e",
+        "snapshotDir": "<repo>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": "*.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "baseURL": "http://127.0.0.1:42713",
+          "browserName": "chromium",
+          "actionTimeout": 15000,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "trace": "off",
+          "screenshot": "only-on-failure",
+          "video": "off"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "<repo>/test-results/browser-report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "connection-accessibility.spec.ts",
+      "file": "connection-accessibility.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "connection accessibility: native typed flow and rejected identifier recovery at 1024x768",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 11755,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeDisabled\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByLabel('Destination endpoint').locator('option[value=\"observer-in\"]')\nExpected: disabled\nReceived: enabled\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeDisabled\" getByLabel('Destination endpoint').locator('option[value=\"observer-in\"]') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Destination endpoint').locator('option[value=\"observer-in\"]')\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <option disabled value=\"observer-in\">observer-in \u00b7 state \u2014 Interface state differs fro\u2026</option>\u001b[22m\n\u001b[2m       - unexpected value \"enabled\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeDisabled\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByLabel('Destination endpoint').locator('option[value=\"observer-in\"]')\nExpected: disabled\nReceived: enabled\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeDisabled\" getByLabel('Destination endpoint').locator('option[value=\"observer-in\"]') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Destination endpoint').locator('option[value=\"observer-in\"]')\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <option disabled value=\"observer-in\">observer-in \u00b7 state \u2014 Interface state differs fro\u2026</option>\u001b[22m\n\u001b[2m       - unexpected value \"enabled\"\u001b[22m\n\n    at <repo>/tests/e2e/connection-accessibility.spec.ts:58:61",
+                    "location": {
+                      "file": "<repo>/tests/e2e/connection-accessibility.spec.ts",
+                      "column": 61,
+                      "line": 58
+                    },
+                    "snippet": "  56 |     await type(page, identifier, \"Bad_ID\"); await choose(page, from, \"controller-out\");\n  57 |     await expect(to).toHaveAccessibleDescription(/compatible destination/);\n> 58 |     await expect(to.locator('option[value=\"observer-in\"]')).toBeDisabled();\n     |                                                             ^\n  59 |     await expect(to.locator('option[value=\"observer-in\"]')).toContainText(\"Interface state differs from command\");\n  60 |     await choose(page, to, \"plant-in\");\n  61 |     const nativeValidBefore = await identifier.evaluate((n) => (n as HTMLInputElement).validity.valid);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/connection-accessibility.spec.ts",
+                        "column": 61,
+                        "line": 58
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeDisabled\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByLabel('Destination endpoint').locator('option[value=\"observer-in\"]')\nExpected: disabled\nReceived: enabled\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeDisabled\" getByLabel('Destination endpoint').locator('option[value=\"observer-in\"]') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Destination endpoint').locator('option[value=\"observer-in\"]')\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <option disabled value=\"observer-in\">observer-in \u00b7 state \u2014 Interface state differs fro\u2026</option>\u001b[22m\n\u001b[2m       - unexpected value \"enabled\"\u001b[22m\n\n\n  56 |     await type(page, identifier, \"Bad_ID\"); await choose(page, from, \"controller-out\");\n  57 |     await expect(to).toHaveAccessibleDescription(/compatible destination/);\n> 58 |     await expect(to.locator('option[value=\"observer-in\"]')).toBeDisabled();\n     |                                                             ^\n  59 |     await expect(to.locator('option[value=\"observer-in\"]')).toContainText(\"Interface state differs from command\");\n  60 |     await choose(page, to, \"plant-in\");\n  61 |     const nativeValidBefore = await identifier.evaluate((n) => (n as HTMLInputElement).validity.valid);\n    at <repo>/tests/e2e/connection-accessibility.spec.ts:58:61"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T17:14:12.538Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/connection-accessibility-c-de262-tifier-recovery-at-1024x768/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/connection-accessibility-c-de262-tifier-recovery-at-1024x768/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/connection-accessibility.spec.ts",
+                    "column": 61,
+                    "line": 58
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "5e60a09bed9141bc10a4-a21b1ed9cb97954a95e2",
+          "file": "connection-accessibility.spec.ts",
+          "line": 33,
+          "column": 7
+        },
+        {
+          "title": "connection accessibility: native typed flow and rejected identifier recovery at 1440x900",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 11545,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeDisabled\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByLabel('Destination endpoint').locator('option[value=\"observer-in\"]')\nExpected: disabled\nReceived: enabled\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeDisabled\" getByLabel('Destination endpoint').locator('option[value=\"observer-in\"]') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Destination endpoint').locator('option[value=\"observer-in\"]')\u001b[22m\n\u001b[2m    23 \u00d7 locator resolved to <option disabled value=\"observer-in\">observer-in \u00b7 state \u2014 Interface state differs fro\u2026</option>\u001b[22m\n\u001b[2m       - unexpected value \"enabled\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeDisabled\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByLabel('Destination endpoint').locator('option[value=\"observer-in\"]')\nExpected: disabled\nReceived: enabled\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeDisabled\" getByLabel('Destination endpoint').locator('option[value=\"observer-in\"]') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Destination endpoint').locator('option[value=\"observer-in\"]')\u001b[22m\n\u001b[2m    23 \u00d7 locator resolved to <option disabled value=\"observer-in\">observer-in \u00b7 state \u2014 Interface state differs fro\u2026</option>\u001b[22m\n\u001b[2m       - unexpected value \"enabled\"\u001b[22m\n\n    at <repo>/tests/e2e/connection-accessibility.spec.ts:58:61",
+                    "location": {
+                      "file": "<repo>/tests/e2e/connection-accessibility.spec.ts",
+                      "column": 61,
+                      "line": 58
+                    },
+                    "snippet": "  56 |     await type(page, identifier, \"Bad_ID\"); await choose(page, from, \"controller-out\");\n  57 |     await expect(to).toHaveAccessibleDescription(/compatible destination/);\n> 58 |     await expect(to.locator('option[value=\"observer-in\"]')).toBeDisabled();\n     |                                                             ^\n  59 |     await expect(to.locator('option[value=\"observer-in\"]')).toContainText(\"Interface state differs from command\");\n  60 |     await choose(page, to, \"plant-in\");\n  61 |     const nativeValidBefore = await identifier.evaluate((n) => (n as HTMLInputElement).validity.valid);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/connection-accessibility.spec.ts",
+                        "column": 61,
+                        "line": 58
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeDisabled\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByLabel('Destination endpoint').locator('option[value=\"observer-in\"]')\nExpected: disabled\nReceived: enabled\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeDisabled\" getByLabel('Destination endpoint').locator('option[value=\"observer-in\"]') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Destination endpoint').locator('option[value=\"observer-in\"]')\u001b[22m\n\u001b[2m    23 \u00d7 locator resolved to <option disabled value=\"observer-in\">observer-in \u00b7 state \u2014 Interface state differs fro\u2026</option>\u001b[22m\n\u001b[2m       - unexpected value \"enabled\"\u001b[22m\n\n\n  56 |     await type(page, identifier, \"Bad_ID\"); await choose(page, from, \"controller-out\");\n  57 |     await expect(to).toHaveAccessibleDescription(/compatible destination/);\n> 58 |     await expect(to.locator('option[value=\"observer-in\"]')).toBeDisabled();\n     |                                                             ^\n  59 |     await expect(to.locator('option[value=\"observer-in\"]')).toContainText(\"Interface state differs from command\");\n  60 |     await choose(page, to, \"plant-in\");\n  61 |     const nativeValidBefore = await identifier.evaluate((n) => (n as HTMLInputElement).validity.valid);\n    at <repo>/tests/e2e/connection-accessibility.spec.ts:58:61"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T17:14:24.701Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/connection-accessibility-c-f8888-tifier-recovery-at-1440x900/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/connection-accessibility-c-f8888-tifier-recovery-at-1440x900/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/connection-accessibility.spec.ts",
+                    "column": 61,
+                    "line": 58
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "5e60a09bed9141bc10a4-7080b7d470dca716e452",
+          "file": "connection-accessibility.spec.ts",
+          "line": 33,
+          "column": 7
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-26T17:14:12.042Z",
+    "duration": 24309.350000000002,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  }
+}

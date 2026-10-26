@@ -1106,9 +1106,17 @@ export function ConnectionsView({
                 value={id}
                 onChange={(e) => setId(e.target.value)}
                 required
-                pattern="[a-zA-Z0-9_\-]+"
+                pattern="[a-z][a-z0-9]*(-[a-z0-9]+)*"
+                aria-describedby="flow-id-guidance"
+                aria-invalid={
+                  id.length > 0 && !/^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/.test(id)
+                }
               />
             </label>
+            <p className="field-hint" id="flow-id-guidance">
+              Start with a lowercase letter; use lowercase letters and digits
+              separated by single hyphens.
+            </p>
             <label>
               Source endpoint
               <select
