@@ -1,9 +1,7 @@
 from typing import Any, Literal
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import Field
 
-
-class Body(BaseModel):
-    model_config = ConfigDict(extra="forbid", strict=True, allow_inf_nan=False)
+from xverse_studio.security.models import Body  # The strict base lives below the API layer.
 
 
 class Login(Body):

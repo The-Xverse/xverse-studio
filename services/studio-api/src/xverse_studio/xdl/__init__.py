@@ -326,7 +326,7 @@ def reference_configuration(documents: dict[str, str], compiled: dict | None = N
 
     def presentation_profile(resource: dict) -> bool:
         # Owned presentation-only domain profiles (T062) are inert terminology, pinned to their identity.
-        from xverse_studio.profiles.presentation import DOMAIN_PROFILES, DOMAIN_SCHEMA_ID
+        from .examples import DOMAIN_PROFILES, DOMAIN_SCHEMA_ID
 
         domains = {item["namespace"]: item for item in DOMAIN_PROFILES}
         namespace = resource.get("spec", {}).get("extensionNamespace") if resource.get("kind") == "Profile" else None

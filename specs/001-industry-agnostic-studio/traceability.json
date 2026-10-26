@@ -3945,8 +3945,15 @@
       "acceptance_ids": [
         "AC-019"
       ],
-      "status": "in_progress",
-      "implementation_note": "Owned graph/source/catalog/profile/variant work implemented and tested; independent composition repair verification and final UI successor are being retained. External two-industry/live and cross-OS gates remain open."
+      "status": "completed",
+      "implementation_note": "Owned component complete: profile conflict/security contract cases and a strengthened architecture check (domain dispatch in comparisons, conditional expressions, loops, comprehensions, match cases and keyed lookups; foundational-to-feature dependency direction with relative/dynamic imports resolved; API-layer imports; browser executable HTML/code hooks) run in every check; three violations found in the T062 candidate were repaired. Audit hardening tested; 747 backend / 75 browser checks pass on an unchanged candidate.",
+      "implementation_evidence": [
+        "scripts/check_architecture.py",
+        "tests/contract/test_architecture_boundaries.py",
+        "evidence/studio/M2-profiles/README.md",
+        "evidence/studio/M2-profiles/dependency-graph.json",
+        "evidence/studio/M2-profiles/verification.json"
+      ]
     },
     {
       "id": "T064",
@@ -6229,15 +6236,15 @@
     "status_document": "../../docs/implementation/STATUS.md",
     "native_windows": "BLOCKED at user request. Initial native Server 2022 install failed on upstream Git filenames; application/browser NOT_RUN.",
     "m5": "deferred",
-    "code_candidate": "working-tree product sha256 recorded in evidence/studio/M2-profile-presentation/verification.json on c753dfe",
-    "component_completed": 43,
+    "code_candidate": "working-tree product sha256 recorded in evidence/studio/M2-profiles/verification.json on a1f9139",
+    "component_completed": 44,
     "verification": {
-      "backend_tests_passed": 716,
+      "backend_tests_passed": 747,
       "playwright_checks_passed": 75,
       "playwright_checks_failed": 0,
       "playwright_scope": "full Linux browser suite with performance measurements on an unchanged candidate",
       "milestones_accepted": 0,
-      "evidence": "evidence/studio/M2-profile-presentation/"
+      "evidence": "evidence/studio/M2-profiles/"
     }
   }
 }

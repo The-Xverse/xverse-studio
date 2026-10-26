@@ -10,8 +10,8 @@ from __future__ import annotations
 import re
 
 from xverse_studio.storage.core import Problem
+from xverse_studio.xdl.examples import DOMAIN_PROFILES, DOMAIN_SCHEMA_ID  # noqa: F401  (re-exported)
 
-DOMAIN_SCHEMA_ID = "https://schemas.xverse.io/studio/domain/1.0/presentation-only.schema.json"
 CORE_LABELS = {"System": "System", "Element": "Element", "Flow": "Flow", "Deployment": "Deployment", "Scenario": "Scenario"}
 ICONS = {"home", "model", "connection", "deployment", "experiment", "results", "catalog", "lab", "code", "search",
          "download", "upload", "refresh", "info", "settings"}
@@ -21,34 +21,6 @@ _TEXT = re.compile(rf"^[^{_UNSAFE}]{{1,60}}$")
 _LONG_TEXT = re.compile(rf"^[^{_UNSAFE}]{{1,240}}$")
 _IDENTIFIER = re.compile(r"^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$")
 _REFERENCE = re.compile(r"^(?:https://[A-Za-z0-9.-]+(?:/[A-Za-z0-9._~/-]*)?|urn:[a-z0-9][a-z0-9-]{0,31}:[A-Za-z0-9._:~-]{1,160})$")
-
-# Studio-owned, presentation-only domain profiles for the owned blueprints (owner decision 2026-10-26).
-DOMAIN_PROFILES = [
-    {"namespace": "io.xverse.studio.domain.process-control", "version": "1.0.0", "resourceName": "domain-process-control",
-     "presentation": {
-         "name": "Process-control terminology", "domain": "Process control",
-         "description": "Owned presentation for the process-control reference blueprints; no plant, equipment or fidelity claim.",
-         "labels": {"System": "Process", "Element": "Unit", "Flow": "Signal", "Deployment": "Plant deployment",
-                    "Scenario": "Operating scenario"},
-         "icons": {"System": "settings", "Element": "lab", "Flow": "connection", "Scenario": "experiment"},
-         "formGroups": [{"id": "setpoint", "label": "Setpoint and response", "parameters": ["target", "gain", "initial"]},
-                        {"id": "horizon", "label": "Run horizon", "parameters": ["duration", "timestep"]},
-                        {"id": "instrument-faults", "label": "Instrument faults", "parameters": ["fault"]}],
-         "namespaces": ["org.xverse.studio.process-control", "org.xverse.studio.feedback"],
-         "documentation": "urn:xverse:studio:domain:process-control:1.0"}},
-    {"namespace": "io.xverse.studio.domain.automotive", "version": "1.0.0", "resourceName": "domain-automotive",
-     "presentation": {
-         "name": "Automotive terminology", "domain": "Automotive",
-         "description": "Owned presentation for the automotive reference blueprint; no vehicle dynamics or ECU fidelity claim.",
-         "labels": {"System": "Vehicle function", "Element": "ECU", "Flow": "Bus signal", "Deployment": "Vehicle deployment",
-                    "Scenario": "Drive scenario"},
-         "icons": {"System": "model", "Element": "settings", "Flow": "connection"},
-         "formGroups": [{"id": "setpoint", "label": "Reference and response", "parameters": ["target", "gain", "initial"]},
-                        {"id": "horizon", "label": "Drive horizon", "parameters": ["duration", "timestep"]},
-                        {"id": "sensor-faults", "label": "Sensor faults", "parameters": ["fault"]}],
-         "namespaces": ["org.xverse.studio.automotive"],
-         "documentation": "urn:xverse:studio:domain:automotive:1.0"}},
-]
 
 
 def sanitize_presentation(value):

@@ -63,6 +63,36 @@ def _interface(identifier: str, direction: str = "bidirectional") -> dict:
             "unitSemantics": "1", "compatibility": "exact"}
 
 
+DOMAIN_SCHEMA_ID = "https://schemas.xverse.io/studio/domain/1.0/presentation-only.schema.json"
+# Studio-owned, presentation-only domain profiles for the owned blueprints (owner decision 2026-10-26).
+DOMAIN_PROFILES = [
+    {"namespace": "io.xverse.studio.domain.process-control", "version": "1.0.0", "resourceName": "domain-process-control",
+     "presentation": {
+         "name": "Process-control terminology", "domain": "Process control",
+         "description": "Owned presentation for the process-control reference blueprints; no plant, equipment or fidelity claim.",
+         "labels": {"System": "Process", "Element": "Unit", "Flow": "Signal", "Deployment": "Plant deployment",
+                    "Scenario": "Operating scenario"},
+         "icons": {"System": "settings", "Element": "lab", "Flow": "connection", "Scenario": "experiment"},
+         "formGroups": [{"id": "setpoint", "label": "Setpoint and response", "parameters": ["target", "gain", "initial"]},
+                        {"id": "horizon", "label": "Run horizon", "parameters": ["duration", "timestep"]},
+                        {"id": "instrument-faults", "label": "Instrument faults", "parameters": ["fault"]}],
+         "namespaces": ["org.xverse.studio.process-control", "org.xverse.studio.feedback"],
+         "documentation": "urn:xverse:studio:domain:process-control:1.0"}},
+    {"namespace": "io.xverse.studio.domain.automotive", "version": "1.0.0", "resourceName": "domain-automotive",
+     "presentation": {
+         "name": "Automotive terminology", "domain": "Automotive",
+         "description": "Owned presentation for the automotive reference blueprint; no vehicle dynamics or ECU fidelity claim.",
+         "labels": {"System": "Vehicle function", "Element": "ECU", "Flow": "Bus signal", "Deployment": "Vehicle deployment",
+                    "Scenario": "Drive scenario"},
+         "icons": {"System": "model", "Element": "settings", "Flow": "connection"},
+         "formGroups": [{"id": "setpoint", "label": "Reference and response", "parameters": ["target", "gain", "initial"]},
+                        {"id": "horizon", "label": "Drive horizon", "parameters": ["duration", "timestep"]},
+                        {"id": "sensor-faults", "label": "Sensor faults", "parameters": ["fault"]}],
+         "namespaces": ["org.xverse.studio.automotive"],
+         "documentation": "urn:xverse:studio:domain:automotive:1.0"}},
+]
+
+
 # The owned converter template (ADR-0016): scale/offset are run inputs; units and kind are fixed.
 CONVERTER_TEMPLATE = {"kind": "linear", "fromUnit": "1", "toUnit": "%", "scale": 100.0, "offset": 0.0}
 # Admitted converter coefficients are bounded so every converted sample stays finite.
@@ -215,13 +245,16 @@ def dump_yaml(value: dict) -> str:
 def examples() -> list[dict]:
     """Discover data bundles; selecting one never installs or invokes provider code."""
     result = []
-    for identifier, title, namespace, description, feedback in (
+    for identifier, title, namespace, description, feedback, domain_profile in (
         ("reference-process-control", "Process control reference", "org.xverse.studio.process-control",
-         "Explore a normalized process response, tune the setpoint and compare measured reference observations.", False),
+         "Explore a normalized process response, tune the setpoint and compare measured reference observations.", False,
+         "io.xverse.studio.domain.process-control"),
         ("reference-automotive", "Automotive reference", "org.xverse.studio.automotive",
-         "Explore a normalized controller and plant response using the same reference model; no vehicle dynamics claim.", False),
+         "Explore a normalized controller and plant response using the same reference model; no vehicle dynamics claim.", False,
+         "io.xverse.studio.domain.automotive"),
         ("reference-feedback", "Process control feedback reference", "org.xverse.studio.feedback",
-         "Declare the reference loop's unit-delay feedback explicitly and observe the state through an explicit linear converter to percent.", True),
+         "Declare the reference loop's unit-delay feedback explicitly and observe the state through an explicit linear converter to percent.", True,
+         "io.xverse.studio.domain.process-control"),
     ):
         resources = reference_resources(namespace, feedback)
         resources["system.xdl.yaml"]["metadata"]["description"] = description
@@ -234,6 +267,5 @@ def examples() -> list[dict]:
                        "profileRefs": [{"namespace": PROFILE_NAMESPACE, "version": "0.1.0"}, {"namespace": EVALUATION_NAMESPACE, "version": "1.0.0"}]
                        + ([{"namespace": CONNECTIONS_NAMESPACE, "version": "1.0.0"}] if feedback else [])
                        # Owned presentation-only domain terminology (T062); it never changes semantics.
-                       + [{"namespace": "io.xverse.studio.domain.automotive" if identifier == "reference-automotive"
-                           else "io.xverse.studio.domain.process-control", "version": "1.0.0"}]})
+                       + [{"namespace": domain_profile, "version": "1.0.0"}]})
     return result

@@ -8,7 +8,7 @@ from urllib.parse import urlsplit
 
 from pydantic import Field
 
-from xverse_studio.api.models import Body
+from xverse_studio.security.models import Body
 from xverse_studio.providers.registry import descriptors
 from xverse_studio.security.files import check_text
 from xverse_studio.storage.core import Problem, canonical, digest
