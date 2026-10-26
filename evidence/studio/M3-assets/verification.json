@@ -1,0 +1,107 @@
+{
+  "candidateBase": "abd5acc7a7603f79df39cba0f0dfa5d6250634c7",
+  "platform": "Linux-6.8.0-138-generic-x86_64-with-glibc2.35",
+  "python": "3.13.13 (main, May 29 2026, 21:59:41) [GCC 11.4.0]",
+  "startedAt": "2026-10-26T09:14:58Z",
+  "checks": [
+    {
+      "name": "spec",
+      "command": [
+        "<repo>/.venv/bin/python",
+        "-I",
+        "scripts/validate_spec_package.py"
+      ],
+      "exitCode": 0,
+      "seconds": 0.043
+    },
+    {
+      "name": "ruff",
+      "command": [
+        ".venv/bin/ruff",
+        "check",
+        "--select",
+        "F821",
+        "services/studio-api/src",
+        "scripts",
+        "tests"
+      ],
+      "exitCode": 0,
+      "seconds": 0.016
+    },
+    {
+      "name": "backend",
+      "command": [
+        "<repo>/.venv/bin/python",
+        "-I",
+        "scripts/run_checks.py"
+      ],
+      "exitCode": 0,
+      "seconds": 549.604
+    },
+    {
+      "name": "typecheck",
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "exitCode": 0,
+      "seconds": 2.812
+    },
+    {
+      "name": "build",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "exitCode": 0,
+      "seconds": 4.442
+    },
+    {
+      "name": "browser",
+      "command": [
+        "<repo>/.venv/bin/python",
+        "-I",
+        "scripts/test_browser.py",
+        "--performance"
+      ],
+      "exitCode": 0,
+      "seconds": 677.468
+    }
+  ],
+  "sourceUnchanged": true,
+  "finishedAt": "2026-10-26T09:35:32Z",
+  "applicationAndTestSourceDigest": "sha256:f5df37cac4b0751f68acab20888ba183cb8d3528a0209d931de5abf5c82c42a1",
+  "backend": {
+    "passed": 851,
+    "failed": 0
+  },
+  "browser": {
+    "startTime": "2026-10-26T09:24:16.132Z",
+    "duration": 673263.108,
+    "expected": 77,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "tasksCompleted": [
+    "T072",
+    "T076"
+  ],
+  "tasksPartial": [
+    "T023",
+    "T073"
+  ],
+  "componentCompleted": 47,
+  "milestonesAccepted": [],
+  "windows": "BLOCKED_USER_REQUEST",
+  "performanceEvidence": [
+    "performance/operability-1024x768/history-performance.json",
+    "performance/operability-1024x768/model-performance.json",
+    "performance/reference-workflow-1440x900/history-performance.json",
+    "performance/reference-workflow-1440x900/model-performance.json",
+    "performance/operability-1440x900/history-performance.json",
+    "performance/operability-1440x900/model-performance.json"
+  ]
+}

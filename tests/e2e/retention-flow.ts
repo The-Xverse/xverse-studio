@@ -10,6 +10,7 @@ export async function exerciseRetention(
     .getByRole("button", { name: "X-Verse Studio home", exact: true })
     .click();
   await page
+    .locator(`.project-list-row[data-project-id="${protectedProject.projectId}"]`)
     .getByRole("button", {
       name: `Review retention for project ${protectedProject.name}`,
       exact: true,
@@ -46,6 +47,7 @@ export async function exerciseRetention(
     page.getByRole("heading", { name: "Recent projects", exact: true }),
   ).toBeFocused();
   await page
+    .locator(`.project-list-row[data-project-id="${candidateId}"]`)
     .getByRole("button", {
       name: `Review retention for project ${candidateName}`,
       exact: true,
@@ -84,10 +86,7 @@ export async function exerciseRetention(
     .getByRole("button", { name: "Close retention review", exact: true })
     .click();
   await expect(
-    page.getByRole("button", {
-      name: `Review retention for project ${candidateName}`,
-      exact: true,
-    }),
+    page.locator(`.project-list-row[data-project-id="${candidateId}"]`),
   ).toHaveCount(0);
   await expect(
     page.getByRole("heading", { name: "Recent projects", exact: true }),

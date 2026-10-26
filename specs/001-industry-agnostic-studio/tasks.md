@@ -103,11 +103,11 @@ After M0 owned contracts pass, guided operation (T015–T033), visual authoring 
 
 - [x] T070 [P] [US10] Add physical-provider fixtures for identity/metadata, unresolved assets, exclusivity, leases, observe-only access, denied stimulation, disconnect and unknown cleanup. Paths: `tests/contract/test_physical_provider.py`, `tests/fixtures/providers/physical/`. Depends on: T063. (FR-048; FR-049; FR-050; FR-051; AC-021; AC-022; AC-023)
 - [ ] T071 [US10] Nominate one actual device/provider, exact identities, permitted nonhazardous test actions, reservation/clock/stop contract and required external capability work; record unavailable inputs as blockers. Record the provider's supported native OS/architecture and driver requirements; a provider verified only on Linux remains explicitly unavailable on Windows. Paths: `docs/implementation/physical-provider-admission.md`. Depends on: T001, T070. (FR-048; FR-050; FR-052; AC-021; AC-024)
-- [ ] T072 [US10] Implement lab inventory and logical-device-to-asset binding with explicit identity, metadata availability and active-operation readiness checks. Paths: `services/studio-api/src/xverse_studio/lab/assets.py`, `services/studio-api/src/xverse_studio/lab/bindings.py`. Depends on: T070, T058, T061. (FR-048; AC-021)
+- [x] T072 [US10] Implement lab inventory and logical-device-to-asset binding with explicit identity, metadata availability and active-operation readiness checks. Paths: `services/studio-api/src/xverse_studio/lab/assets.py`, `services/studio-api/src/xverse_studio/lab/bindings.py`. Depends on: T070, T058, T061. (FR-048; AC-021)
 - [ ] T073 [P] [US10] Exercise concurrent claims, lease renewal/expiry, stale handles, interruption and repeated release; verify API-level observe/stimulate/destructive-action distinctions. Paths: `tests/integration/test_lab_reservations.py`. Depends on: T070. (FR-049; FR-050; NFR-005; AC-022; AC-023)
 - [ ] T074 [US10] Implement provider-backed reservations/reconciliation and action authority checks; expired or uncertain ownership cannot enable active commands. Paths: `services/studio-api/src/xverse_studio/lab/reservations.py`, `services/studio-api/src/xverse_studio/lab/authority.py`. Depends on: T073, T072, T023. (FR-049; FR-050; AC-022; AC-023)
 - [ ] T075 [US10] Build inventory, binding, reservation and connection-test views with simulation/hardware indication, observe-only default and explicit unsupported-operation explanations. Paths: `apps/studio-web/src/features/lab/`. Depends on: T072, T074, T059. (FR-048; FR-049; FR-050; AC-021; AC-022)
-- [ ] T076 [P] [US10] Specify virtual/physical substitution, mismatched interfaces, missing clock evidence, unplug, refused stop and failed restore outcomes without assuming physical pause or rewind. Paths: `tests/integration/test_hybrid_time_and_loss.py`. Depends on: T070. (FR-051; FR-052; FR-040; AC-023; AC-024)
+- [x] T076 [P] [US10] Specify virtual/physical substitution, mismatched interfaces, missing clock evidence, unplug, refused stop and failed restore outcomes without assuming physical pause or rewind. Paths: `tests/integration/test_hybrid_time_and_loss.py`. Depends on: T070. (FR-051; FR-052; FR-040; AC-023; AC-024)
 - [ ] T077 [US10] Implement provider-declared disconnect/recovery/stop integration and expose physical-state uncertainty and original timestamp/synchronization evidence. Paths: `services/studio-api/src/xverse_studio/lab/recovery.py`, `services/studio-api/src/xverse_studio/lab/time_quality.py`. Depends on: T076, T029, T074. (FR-051; AC-023; AC-024)
 - [ ] T078 [US10] Show compatible substitution, unchanged logical topology, changed time/control/fidelity capabilities and uncertain physical/cleanup outcomes. Paths: `apps/studio-web/src/features/lab/hybrid-inspector.tsx`, `apps/studio-web/src/features/results/`. Depends on: T075, T077, T030. (FR-051; FR-052; FR-040; AC-023; AC-024)
 - [ ] T079 [US10] Run physical contract and failure-path fixtures, label results as fixtures and confirm that absent device access cannot pass the actual hardware case. Paths: `evidence/studio/M3-fixture/`. Depends on: T075, T077, T078. (FR-048; FR-049; FR-050; FR-051; NFR-005; AC-021; AC-022; AC-023; AC-024)
@@ -299,3 +299,13 @@ keyboard/focus/status journeys and passing 30-repetition canvas/history distribu
 remaining direct regression gaps are mapped in `M1-linux-reconciliation/`; T001's installed XDL
 checksums match the selected baseline (`M0-linux-baseline/`). All four tasks stay unchecked; native
 Windows remains held and no acceptance gate is inferred from these partial results.
+
+M3 owned successor (2026-10-26): T072's read-only canonical inventory/binding observations
+(ADR-0018) and T076's hybrid substitution/loss fixtures are complete. Independent reviews,
+mutation controls and the unchanged 851-backend / 77-browser-performance cohort are retained in
+`evidence/studio/M3-assets/`, `M3-hybrid-contracts/`. T073 has stronger registry failure/restart
+fixtures but stays open for positive HTTP authority; T074 is behind Windows-held T023. T023's
+three direct identity/shutdown fixture gaps are repaired, with native Windows still open.
+Both CI failures on abd5acc are retained: duplicate project names exposed a retention-test selector
+assumption; the successor scopes actions by exact project ID and passes the full regression.
+Component completion is 47/100; no milestone is accepted.

@@ -31,3 +31,17 @@ Remaining direct Linux test gaps identified by the audit:
 
 The implementation guards these branches, but inspection alone is not execution evidence. Native
 Windows installation/testing remains held at user request and cannot be inferred from Linux.
+
+## Successor direct regressions
+
+The primary agent added `tests/platform/test_reconciliation_identity.py` for all three identified
+branches: persisted run/state agree while current birth differs, later NoSuchProcess/AccessDenied,
+and unknown ownership blocks shutdown delegation and respawn. Three focused cases passed. A
+separate read-only agent audited the tests (two calls, no edits or suites) and returned PASS:
+`contacts == [12345]` proves the current-process branch is reached; process inspection is replaced
+before reconciliation, and command delegation/respawn are intercepted. No real PID is contacted or
+signalled. Three source mutations were detected with passing controls. Final successor cohort and
+hashes are retained separately.
+
+This repairs the direct fixture-test gaps listed above. It remains controlled failure injection,
+not actual operating-system PID reuse, Windows evidence or task closure while Windows is held.

@@ -3,7 +3,9 @@
 Scope: runnable development reference implementation on `implement/studio-m0-m4`. No M0–M4 milestone
 or Studio 1.0 release is accepted. The supplied requirements/task IDs and acceptance targets remain.
 
-Latest recorded task completion: **45/100 components**, most recently T070's physical-provider contract fixtures
+Latest recorded task completion: **47/100 components**, most recently T072's read-only inventory/binding observations
+(ADR-0018) and T076's hybrid substitution/loss fixtures (`evidence/studio/M3-assets/`,
+`M3-hybrid-contracts/`), after T070's physical-provider contract fixtures
 (`evidence/studio/M3-physical-contracts/`), after T063's profile and architecture
 checks with enforced dependency direction (`evidence/studio/M2-profiles/`), T062's owned inert domain
 presentation (ADR-0017; `evidence/studio/M2-profile-presentation/`), T056's declared/resolved/observed
@@ -21,15 +23,17 @@ not an estimate of remaining effort. T026 transport implementation is substantia
 remains open pending a complete current native/browser successor. Windows installation/testing
 remains blocked at user request, and native Windows secure I/O remains unimplemented/unavailable.
 
-The latest full Linux backend run passed **776 tests**; typecheck/build and the full **75-check
-browser/performance gate passed** with unchanged source (`evidence/studio/M3-physical-contracts/`).
-A successor added only the two-viewport browser test and passed both focused keyboard/performance
-journeys with prior application/test source unchanged (`evidence/studio/M1-operability/`,
-`M2-operability/`). This is separate from the full 75-check cohort. T038/T067 stay open for native
-Windows and broader accessibility/diagnostic gates. T023's Linux audit identifies direct PID-reuse,
-later process-identity failure and unknown-shutdown regression gaps (`M1-linux-reconciliation/`);
-T001's five installed XDL file hashes match the selected baseline (`M0-linux-baseline/`).
-Fresh-host CI passed (push and PR) for every commit since b61c7ec, through 99d1aee.
+The latest full Linux backend run passed **851 tests**; typecheck/build and the full **77-check
+browser/performance gate passed** with unchanged source (`evidence/studio/M3-assets/`).
+Both viewport performance workloads and duplicate-name project retention now pass in the same full
+cohort. T023's direct identity/shutdown failure fixtures are repaired, but native Windows stays held.
+T073 has 30 passing registry cases and five detected mutations; positive HTTP authority awaits T074,
+whose T023 dependency remains open. T038/T067 retain their native Windows and broader accessibility
+gates. T001's five installed XDL file hashes match the selected baseline.
+Fresh-host CI passed (push and PR) through 04293b8. Both abd5acc jobs failed a name-only retention-test
+selector after the new viewport tests created valid duplicate names; the resulting artifact failure
+was a cascade. Original logs are retained under `M1-operability/ci-regression/`. The successor uses
+exact project IDs and passes the full local cohort; fresh-host successor CI is recorded separately.
 That includes the 30-second native expiry case with actual HTTP 410 and running verified-prefix
 recovery. Fresh-host push CI for checkpoint fb8ddb6 had failed that case (a history read racing a
 journal append); the PR run passed. Both outcomes are retained in `evidence/studio/native-ci/`.
@@ -52,7 +56,7 @@ private Linux backup/restore uses anchored acquisition and preserves immutable e
 Physical-provider inventory is empty.
 
 Component-complete task IDs, with the exact component scope/evidence in traceability.json:
-T003, T006, T013, T015, T016, T017, T018, T019, T020, T022, T024, T028, T029, T030, T031, T032, T036, T041, T042, T043, T044, T045, T046, T047, T049, T050, T051, T052, T053, T054, T055, T056, T057, T058, T059, T060, T061, T062, T063, T070, T085, T086, T087, T092, T094.
+T003, T006, T013, T015, T016, T017, T018, T019, T020, T022, T024, T028, T029, T030, T031, T032, T036, T041, T042, T043, T044, T045, T046, T047, T049, T050, T051, T052, T053, T054, T055, T056, T057, T058, T059, T060, T061, T062, T063, T070, T072, T076, T085, T086, T087, T092, T094.
 T044 was reopened after review, then repaired and reverified for selected-source navigation, empty
 draft retention, atomic document switching and external-source inspection.
 Other tasks remain unchecked; implemented subparts are recorded as in progress instead of implying

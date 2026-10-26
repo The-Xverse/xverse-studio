@@ -36,6 +36,7 @@
 | `GET /projects/{projectId}/connections` | Read-only connection admission 1.0: per-flow checks, feedback cycles, network links, coupling status and admitted contracts; see ADR-0014 | M2 |
 | `GET/POST /projects/{projectId}/deployment-variants`, `PATCH .../deployment-variants/{documentId}` | Named authored Deployment/Scenario variants (amendment): list, clone with expected revision, and rebind (target, realization, artifacts, resources) returning recomputed compatibility and resolution without committing an ambiguous selection | M2 |
 | `GET /projects/{projectId}/deployment-variants/{documentId}/resolution` | Read-only deployment resolution 1.0 (amendment): binding compatibility, resource/time/network constraints, effective-value chains with undefined precedence rejected, and portable intent separate from unresolved environment/secret references; see ADR-0015 | M2 |
+| `GET /projects/{projectId}/deployment-variants/{documentId}/physical-bindings` | Read-only physical-binding observations (amendment; ADR-0018): authoritative selected source and current revision, logical references joined to server inventory, identity/interface/metadata/readiness facts, unresolved and provider-failure diagnostics; no reservation, probe, secret resolution or execution authority | M3 |
 | `POST /projects/{projectId}/compilations` | `revision`, deployment/scenario refs; returns plan reference/digest or diagnostics | M0 |
 | `GET /catalog` | Cursor-paged admitted templates/components/models/blueprints; filters by kind, role, profile, interface and provider availability | M2 |
 | `GET /catalog/{entryId}` | Immutable entry identity/version/digest, XDL resource/template refs, parameter schema, provenance, maturity and dependencies | M2 |
@@ -159,3 +160,32 @@ Kinds are a closed registry: `stop` and `cancel`; conditionally `pause`, `resume
 | `LIMIT_EXCEEDED` / 413 or 422 | Bounded resource limit exceeded |
 
 API contract tests must cover concurrency, origin checks, unknown fields, path/ID confusion, duplicate operations, capability rejection and stale preflight. Client-side disabling is usability only; the backend is the enforcement boundary.
+
+## Read-only physical observations 1.0 (ADR-0018)
+
+`GET /assets` returns an allowlisted inventory observation with bounded paging, `complete`,
+`truncated`, `activeReady: false`, unavailable physical-provider admission and safe diagnostics.
+The facade observes at most 32 explicitly registered providers and 1,000 inventory entries, retaining
+at most 100 inventory diagnostics (`/assets` also includes its one fixed unavailable-admission
+diagnostic). Per asset it exposes at most 64 interface declarations, examines at most
+64 capabilities and 16 host-OS entries, and bounds public metadata strings to 256 characters.
+Invalid, ambiguous, failed or truncated observations make completeness false. Private provider data,
+endpoints and credential-bearing fields are not a public inventory representation. Provider inventory
+methods must honor their trusted bounded-call contract; this facade does not install providers or
+supply a new timeout/admission framework.
+
+`GET /projects/{projectId}/deployment-variants/{documentId}/physical-bindings` optionally takes the
+expected `revision`; a stale revision rejects with 412. It asserts project integrity and uses the
+pinned authoritative validator before parsing or observing inventory. Its report names the current
+source revision, selected document, System and Deployment, preserves each canonical logical reference,
+and joins physical/hybrid placements through the target's opaque `externalAssetRef`. Interface
+requirements derive from the selected System's declared endpoints/interfaces; browser-supplied
+requirements or inventory labels cannot override them. Unsupported endpoint references stay unresolved
+and are never contacted or echoed.
+
+The report keeps `bindingObservationVersion: "1.0"`, `sourceValid`, `inventoryComplete`, per-binding
+identity/interfaces/metadata/availability/admission/permission facts and diagnostics. Missing evidence
+remains unknown. `activeReady` is false and `runtimeAdmission` unavailable; neither a matching asset
+nor an `admitted_integration` string in its observation confers active authority. The report changes
+no XDL, project revision, deployment admission, run snapshot or portable export, and performs no
+reservation, command, probe or secret resolution. Physical reservation/control APIs remain unadmitted.

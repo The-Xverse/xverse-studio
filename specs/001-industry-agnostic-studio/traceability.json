@@ -2615,11 +2615,14 @@
         "AC-009"
       ],
       "status": "in_progress",
-      "implementation_note": "Linux-only partial: the unchanged full 776-test cohort includes real backend crash/restart with worker continuity, one Start receipt, ownership-verified cancellation/cleanup, lost launch acknowledgement, wrong-argv rejection and unknown outcomes. A separate audit maps those tests and records remaining direct PID-reuse, later missing/inaccessible identity and shutdown-with-unknown regressions. Native Windows remains held; task stays open.",
+      "implementation_note": "Linux-only partial: full native crash/restart/worker continuity and command recovery regressions pass. Three new controlled identity cases cover matching persisted state with different current birth, later NoSuchProcess/AccessDenied, and unknown ownership preventing shutdown command delegation/respawn. Independent review passed and three source mutations detected; all are in the unchanged 851-test successor. This is fault injection, not actual OS PID reuse; native Windows stays held and task remains open.",
       "implementation_evidence": [
         "evidence/studio/M1-linux-reconciliation/README.md",
         "evidence/studio/M1-linux-reconciliation/independent-review.md",
-        "evidence/studio/M3-physical-contracts/verification.json"
+        "evidence/studio/M3-physical-contracts/verification.json",
+        "tests/platform/test_reconciliation_identity.py",
+        "evidence/studio/M1-linux-reconciliation/verification.json",
+        "evidence/studio/M1-linux-reconciliation/red-checks.json"
       ]
     },
     {
@@ -4260,8 +4263,17 @@
       "acceptance_ids": [
         "AC-021"
       ],
-      "status": "in_progress",
-      "implementation_note": "Physical contract fixtures and empty production inventory are explicit. No actual device/provider/permission has been admitted; hardware acceptance is blocked."
+      "status": "completed",
+      "implementation_note": "Owned backend component complete: bounded safe inventory, explicit completeness/provider failures/unknown metadata, and read-only selected canonical XDL logicalRef-target-externalAssetRef resolution using authoritative endpoint contracts. Separate identity/interface/metadata/availability/admission/permission facts; source/revision checks precede inventory. Fixture labels cannot grant authority; physical controls/reservations remain unavailable. Independent audit repairs and five detected source mutations verified; 851 backend and 77 full browser/performance checks pass on unchanged source. Live AC-021 and Windows remain blocked.",
+      "implementation_evidence": [
+        "services/studio-api/src/xverse_studio/lab/assets.py",
+        "services/studio-api/src/xverse_studio/lab/bindings.py",
+        "tests/integration/test_lab_assets.py",
+        "docs/architecture/ADR-0018-physical-binding-observations.md",
+        "evidence/studio/M3-assets/README.md",
+        "evidence/studio/M3-assets/independent-review.md",
+        "evidence/studio/M3-assets/verification.json"
+      ]
     },
     {
       "id": "T073",
@@ -4286,7 +4298,13 @@
         "AC-023"
       ],
       "status": "in_progress",
-      "implementation_note": "Physical contract fixtures and empty production inventory are explicit. No actual device/provider/permission has been admitted; hardware acceptance is blocked."
+      "implementation_note": "Registry-only partial: 30 cases include real serialized fixture restart, persistence failure before delegation, lost reserve/renew/release acknowledgements, malformed owner/scope/fence/deadline responses, revoked grants and repeated uncertain release. Five controlled mutations detected with passing controls; included in passing 851-test successor. Positive HTTP observe/stimulate/destructive authority remains open for T074, whose T023 dependency is Windows-held. No rejection-only authorization success or physical integration claim.",
+      "implementation_evidence": [
+        "tests/integration/test_lab_reservations.py",
+        "evidence/studio/M3-reservations/README.md",
+        "evidence/studio/M3-reservations/verification.json",
+        "evidence/studio/M3-reservations/red-checks.json"
+      ]
     },
     {
       "id": "T074",
@@ -4364,8 +4382,15 @@
         "AC-023",
         "AC-024"
       ],
-      "status": "in_progress",
-      "implementation_note": "Physical contract fixtures and empty production inventory are explicit. No actual device/provider/permission has been admitted; hardware acceptance is blocked."
+      "status": "completed",
+      "implementation_note": "Fixture test task complete: actual authored physical rebinding preserves System bytes and graph references while the pinned compiler retains XDL1-PLAN-REALIZATION-UNSUPPORTED; compatible/incompatible fixture substitution, source/mapping uncertainty, unplug, refused stop, failed restore cleanup and unsupported physical recovery policies verified. Thirty focused cases, three detected mutations with passing controls and independent clause audit; successor full 851-backend/77-browser cohort passes. No physical admission, live stop/restore, clock measurement or Windows claim.",
+      "implementation_evidence": [
+        "tests/integration/test_hybrid_time_and_loss.py",
+        "evidence/studio/M3-hybrid-contracts/README.md",
+        "evidence/studio/M3-hybrid-contracts/independent-review.md",
+        "evidence/studio/M3-hybrid-contracts/verification.json",
+        "evidence/studio/M3-hybrid-contracts/red-checks.json"
+      ]
     },
     {
       "id": "T077",
@@ -6268,17 +6293,15 @@
     "status_document": "../../docs/implementation/STATUS.md",
     "native_windows": "BLOCKED at user request. Initial native Server 2022 install failed on upstream Git filenames; application/browser NOT_RUN.",
     "m5": "deferred",
-    "code_candidate": "unchanged T070 source plus two-viewport browser test; exact successor digest in evidence/studio/M1-operability/verification.json on 04293b8",
-    "component_completed": 45,
+    "code_candidate": "application/test source digest recorded in evidence/studio/M3-assets/verification.json on abd5acc",
+    "component_completed": 47,
     "verification": {
-      "backend_tests_passed": 776,
-      "playwright_checks_passed": 75,
+      "backend_tests_passed": 851,
+      "playwright_checks_passed": 77,
       "playwright_checks_failed": 0,
-      "playwright_scope": "full Linux 75-check T070 cohort; successor two-viewport tests verified separately with all prior application/test source unchanged",
+      "playwright_scope": "full Linux browser suite including both viewport performance workloads and duplicate-name retention regression; unchanged source",
       "milestones_accepted": 0,
-      "evidence": "evidence/studio/M3-physical-contracts/",
-      "playwright_successor_checks_passed": 2,
-      "successor_evidence": "evidence/studio/M1-operability/"
+      "evidence": "evidence/studio/M3-assets/"
     }
   }
 }

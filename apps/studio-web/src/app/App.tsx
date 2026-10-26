@@ -1805,7 +1805,11 @@ function Home({
         {projects.length ? (
           <div className="project-list">
             {projects.map((p) => (
-              <div className="project-list-row" key={p.projectId}>
+              <div
+                className="project-list-row"
+                key={p.projectId}
+                data-project-id={p.projectId}
+              >
                 <button
                   className="project-open"
                   onClick={() => onOpen(p.projectId)}

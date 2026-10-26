@@ -18,6 +18,8 @@ from xverse_studio.assertions.evaluator import evaluator_identity
 from xverse_studio.comparison import compare_runs
 from xverse_studio.evidence.reader import read_journal
 from xverse_studio.lab import LabError, LabRegistry
+from xverse_studio.lab.assets import inventory_observation
+from xverse_studio.lab.bindings import resolve_physical_bindings
 from xverse_studio.storage.core import Problem, atomic, canonical, digest, uid
 from xverse_studio.xdl import XDLRejected, reference_configuration
 from xverse_studio.xdl.edits import semantic_edits
@@ -183,7 +185,17 @@ def install_advanced(app, store, projects, runs, adapter):
 
     @app.get("/api/v1/assets")
     def assets(cursor: str | None = None, limit: int = 100):
-        return {**_page(lab.inventory(), cursor, limit), "scope": "explicitly_admitted_providers", "physicalProviderStatus": "unavailable", "diagnostics": [{"code": "PHYSICAL_PROVIDER_NOT_ADMITTED", "message": "No physical device/provider and approved test environment have been admitted on this host."}]}
+        # Reject invalid paging before contacting even explicitly registered inventory.
+        _page([], cursor, limit)
+        observed = inventory_observation(lab)
+        return {**_page(observed["items"], cursor, limit), "scope": "explicitly_registered_inventory_observations",
+                "physicalProviderStatus": "unavailable", "activeReady": False, "truncated": observed["truncated"],
+                "complete": observed["complete"],
+                "diagnostics": [{"code": "PHYSICAL_PROVIDER_NOT_ADMITTED"}, *observed["diagnostics"]]}
+
+    @app.get("/api/v1/projects/{projectId}/deployment-variants/{documentId}/physical-bindings")
+    def physical_bindings(projectId: str, documentId: str, revision: int | None = None):
+        return resolve_physical_bindings(projects, adapter, lab, projectId, documentId, revision)
 
     @app.post("/api/v1/assets/{assetId}/reservations", status_code=202)
     def reserve(assetId: str, body: Reservation, request: Request):
