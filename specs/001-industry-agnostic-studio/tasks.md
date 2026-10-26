@@ -101,7 +101,7 @@ After M0 owned contracts pass, guided operation (T015–T033), visual authoring 
 
 ## M3 — Hybrid laboratory / Studio 0.3
 
-- [ ] T070 [P] [US10] Add physical-provider fixtures for identity/metadata, unresolved assets, exclusivity, leases, observe-only access, denied stimulation, disconnect and unknown cleanup. Paths: `tests/contract/test_physical_provider.py`, `tests/fixtures/providers/physical/`. Depends on: T063. (FR-048; FR-049; FR-050; FR-051; AC-021; AC-022; AC-023)
+- [x] T070 [P] [US10] Add physical-provider fixtures for identity/metadata, unresolved assets, exclusivity, leases, observe-only access, denied stimulation, disconnect and unknown cleanup. Paths: `tests/contract/test_physical_provider.py`, `tests/fixtures/providers/physical/`. Depends on: T063. (FR-048; FR-049; FR-050; FR-051; AC-021; AC-022; AC-023)
 - [ ] T071 [US10] Nominate one actual device/provider, exact identities, permitted nonhazardous test actions, reservation/clock/stop contract and required external capability work; record unavailable inputs as blockers. Record the provider's supported native OS/architecture and driver requirements; a provider verified only on Linux remains explicitly unavailable on Windows. Paths: `docs/implementation/physical-provider-admission.md`. Depends on: T001, T070. (FR-048; FR-050; FR-052; AC-021; AC-024)
 - [ ] T072 [US10] Implement lab inventory and logical-device-to-asset binding with explicit identity, metadata availability and active-operation readiness checks. Paths: `services/studio-api/src/xverse_studio/lab/assets.py`, `services/studio-api/src/xverse_studio/lab/bindings.py`. Depends on: T070, T058, T061. (FR-048; AC-021)
 - [ ] T073 [P] [US10] Exercise concurrent claims, lease renewal/expiry, stale handles, interruption and repeated release; verify API-level observe/stimulate/destructive-action distinctions. Paths: `tests/integration/test_lab_reservations.py`. Depends on: T070. (FR-049; FR-050; NFR-005; AC-022; AC-023)
@@ -281,6 +281,9 @@ Later completions (2026-10-26):
   (`evidence/studio/M2-communication/`).
 - **T062:** owned inert domain presentation (ADR-0017; `evidence/studio/M2-profile-presentation/`).
 - **T063:** profile and architecture checks with dependency direction (`evidence/studio/M2-profiles/`).
+- **T070:** physical-provider contract fixtures, independently audited with six detected mutations
+  and passing controls (`evidence/studio/M3-physical-contracts/`); 776 backend and 75 browser/performance
+  checks pass. Fixture task complete; live physical acceptance remains blocked.
 
 The current count is in `traceability.json`.
 
