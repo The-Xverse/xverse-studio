@@ -7,14 +7,16 @@ Latest recorded task completion: **37/100 components**, most recently T057's dep
 cases over deployment resolution 1.0 (ADR-0015; `evidence/studio/M2-deployments/`) and T016's
 project journeys with dependency and unresolved-content inspection (`evidence/studio/M1-projects/`).
 T058's resolution and T059's resolution panel, variant comparison and resource/time forms
-(`evidence/studio/M2-deployment-forms/`) are implemented but stay open on the declared T054 dependency. This is an audited task count,
+(`evidence/studio/M2-deployment-forms/`) are implemented but stay open on the declared T054 dependency. T048's Linux round-trip execution
+against the pinned CLI is recorded in `evidence/studio/M2-roundtrip/`; its Windows exchange clause
+remains blocked. This is an audited task count,
 not an estimate of remaining effort. T026 transport implementation is substantially repaired but
 remains open pending a complete current native/browser successor. Windows installation/testing
 remains blocked at user request, and native Windows secure I/O remains unimplemented/unavailable.
 
-The latest full Linux backend run passed **661 tests**; typecheck/build and the full **69-check
-browser/performance gate passed** on the current candidate (`evidence/studio/M2-deployment-forms/`).
-Fresh-host CI passed (push and PR) for every commit since b61c7ec, through 1ff8ce9.
+The latest full Linux backend run passed **672 tests**; typecheck/build and the full **69-check
+browser/performance gate passed** on the current candidate (`evidence/studio/M2-roundtrip/`).
+Fresh-host CI passed (push and PR) for every commit since b61c7ec, through 4b1d928.
 That includes the 30-second native expiry case with actual HTTP 410 and running verified-prefix
 recovery. Fresh-host push CI for checkpoint fb8ddb6 had failed that case (a history read racing a
 journal append); the PR run passed. Both outcomes are retained in `evidence/studio/native-ci/`.

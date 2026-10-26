@@ -3228,6 +3228,8 @@
       "implementation_note": "Owned graph/source/catalog/profile/variant work implemented and tested; independent composition repair verification and final UI successor are being retained. External two-industry/live and cross-OS gates remain open.",
       "implementation_evidence": [
         "tests/contract/test_semantic_edits.py",
+        "tests/fixtures/xdl/roundtrip/cases.py",
+        "tests/integration/test_model_roundtrip.py",
         "tests/integration/test_project_store.py"
       ],
       "completion_scope": "Task component implemented and verified by the cited owned/Linux evidence; this does not close retained milestone or external/native acceptance gates."
@@ -3449,7 +3451,14 @@
         "AC-014"
       ],
       "status": "in_progress",
-      "implementation_note": "Owned graph/source/catalog/profile/variant work implemented and tested; independent composition repair verification and final UI successor are being retained. External two-industry/live and cross-OS gates remain open."
+      "implementation_note": "Linux execution recorded: Studio library adapter and pinned xdl CLI agree on validity, diagnostics, semantic and plan digests for both admitted examples and a round-trip corpus (comments, key order, CRLF, YAML-to-JSON, non-ASCII label and path keep identity; parameter change alters it; unresolved extension rejected by both); HTTP layout-only, semantic edit, stale-writer conflict (CLI identity unchanged), refused edit, invalid draft (identical diagnostics) and restore recovery with export/import byte preservation. Remains open: bidirectional native Windows exchange (blocked at user request).",
+      "implementation_evidence": [
+        "tests/integration/test_model_roundtrip.py",
+        "tests/fixtures/xdl/roundtrip/cases.py",
+        "evidence/studio/M2-roundtrip/README.md",
+        "evidence/studio/M2-roundtrip/linux-identities.json",
+        "evidence/studio/M2-roundtrip/verification.json"
+      ]
     },
     {
       "id": "T049",
@@ -6202,12 +6211,12 @@
     "code_candidate": "working-tree product sha256 recorded in evidence/studio/M2-deployment-forms/verification.json on 1ff8ce9",
     "component_completed": 37,
     "verification": {
-      "backend_tests_passed": 661,
+      "backend_tests_passed": 672,
       "playwright_checks_passed": 69,
       "playwright_checks_failed": 0,
       "playwright_scope": "full Linux browser suite with performance measurements on an unchanged candidate",
       "milestones_accepted": 0,
-      "evidence": "evidence/studio/M2-deployment-forms/"
+      "evidence": "evidence/studio/M2-roundtrip/"
     }
   }
 }
