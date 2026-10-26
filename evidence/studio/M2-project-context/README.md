@@ -143,3 +143,5 @@ this frontend-only repair. See backend-input-inheritance.json. Both previous 077
 Ubuntu24 CI runs passed backend, browser and clean package stages; their retained
 receipt is separate from this successor's local verification. Current-candidate CI
 and clean package evidence require their own exact identities.
+
+Clean candidate `e82b511b7ab6265dfe0f14cd46efb356f57d4a7c` passed offline native Linux package provisioning from the prepared cache, startup/UI, Unicode persistence, public compilation and owned shutdown. All 100 manifest/archive/file hashes and six tested UI assets are verified; candidate-binding.json checks 260 committed source/fixed inputs plus six compiled assets. Native Windows remains held.
