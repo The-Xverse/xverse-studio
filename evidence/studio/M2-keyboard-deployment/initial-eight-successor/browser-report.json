@@ -1,0 +1,442 @@
+{
+  "config": {
+    "argv": [
+      "<loop-cache>/node-v24.22.1-linux-x64/bin/node",
+      "<repo>/node_modules/.bin/playwright",
+      "test",
+      "-c",
+      "tests/e2e/playwright.config.ts",
+      "--grep",
+      "deployment accessibility:"
+    ],
+    "configFile": "<repo>/tests/e2e/playwright.config.ts",
+    "rootDir": "<repo>/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "<repo>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "<repo>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "*.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "<repo>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "<repo>/tests/e2e",
+        "snapshotDir": "<repo>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": "*.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "baseURL": "http://127.0.0.1:55667",
+          "browserName": "chromium",
+          "actionTimeout": 15000,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "trace": "off",
+          "screenshot": "only-on-failure",
+          "video": "off"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "<repo>/test-results/browser-report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "deployment-accessibility.spec.ts",
+      "file": "deployment-accessibility.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "deployment accessibility: native variant resource and mapping authoring at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 9835,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T17:43:44.426Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "deployment-keyboard.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJwbGF0Zm9ybSI6ImxpbnV4IiwiYnJvd3NlciI6IjE1Ni4wLjgwNzguNCIsImZvY3VzIjp7ImZvY3VzZWQiOnRydWUsImFjdGl2ZVRhZyI6IklOUFVUIiwicmVjdCI6eyJ4IjoxMTcsInkiOjM2NC43MDMxMjUsIndpZHRoIjoyMDgsImhlaWdodCI6MzgsInRvcCI6MzY0LjcwMzEyNSwicmlnaHQiOjMyNSwiYm90dG9tIjo0MDIuNzAzMTI1LCJsZWZ0IjoxMTd9LCJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJvdXRsaW5lIjoic29saWQiLCJvdXRsaW5lV2lkdGgiOjN9LCJyZXZpc2lvbnMiOlszLDQsNSw2LDddLCJtYXBwaW5nIjp7ImlkIjoid2FsbC10by1zaW0iLCJzb3VyY2VUaW1lRG9tYWluUmVmIjp7ImFwaVZlcnNpb24iOiJ4dmVyc2UuaW8veGRsL3YxYWxwaGExIiwia2luZCI6IlN5c3RlbSIsIm5hbWVzcGFjZSI6Im9yZy54dmVyc2Uuc3R1ZGlvLnByb2Nlc3MtY29udHJvbCIsIm5hbWUiOiJyZWZlcmVuY2UtbG9vcCIsImVsZW1lbnQiOiJ3YWxsLXRpbWUifSwidGFyZ2V0VGltZURvbWFpblJlZiI6eyJhcGlWZXJzaW9uIjoieHZlcnNlLmlvL3hkbC92MWFscGhhMSIsImtpbmQiOiJTeXN0ZW0iLCJuYW1lc3BhY2UiOiJvcmcueHZlcnNlLnN0dWRpby5wcm9jZXNzLWNvbnRyb2wiLCJuYW1lIjoicmVmZXJlbmNlLWxvb3AiLCJlbGVtZW50Ijoic2ltdWxhdGlvbi10aW1lIn0sIm1hcHBpbmciOiJvZmZzZXQtYXQtc3RhcnQiLCJ0b2xlcmFuY2UiOnsidmFsdWUiOjAuMDEsInVuaXQiOiJzIn19LCJzZWxlY3RlZCI6eyJkZXBsb3ltZW50UmVmIjoieGRsOi8vb3JnLnh2ZXJzZS5zdHVkaW8ucHJvY2Vzcy1jb250cm9sL2RlcGxveW1lbnQva2V5Ym9hcmQtYmVuY2gtMTAyNCIsInNjZW5hcmlvUmVmIjoieGRsOi8vb3JnLnh2ZXJzZS5zdHVkaW8ucHJvY2Vzcy1jb250cm9sL3NjZW5hcmlvL2tleWJvYXJkLWJlbmNoLTEwMjQtc2NlbmFyaW8ifSwid3JpdGVzIjpbeyJwYXRoIjoiL2FwaS92MS9wcm9qZWN0cy9wcmotYzRjYTU2YjItMjI2OC00Y2FlLTliYTYtOWQ3MGM3NWI0YWI4L2RlcGxveW1lbnQtdmFyaWFudHMiLCJtZXRob2QiOiJQT1NUIiwiYm9keSI6eyJiYXNlUmV2aXNpb24iOjMsIm5hbWUiOiJLZXlib2FyZCBiZW5jaCAxMDI0Iiwic291cmNlRGVwbG95bWVudElkIjoiZG9jLTMiLCJzb3VyY2VTY2VuYXJpb0lkIjoiZG9jLTQifX0seyJwYXRoIjoiL2FwaS92MS9wcm9qZWN0cy9wcmotYzRjYTU2YjItMjI2OC00Y2FlLTliYTYtOWQ3MGM3NWI0YWI4L2RlcGxveW1lbnQtdmFyaWFudHMvZG9jLWNiYmUxMmEwLTNjNDEtNDgwMi1iMDg5LWJkMDIyMTAzYTA4ZiIsIm1ldGhvZCI6IlBBVENIIiwiYm9keSI6eyJiYXNlUmV2aXNpb24iOjQsImJpbmRpbmdJZCI6InBsYW50LWJpbmRpbmciLCJyZXNvdXJjZUlkcyI6WyJiZW5jaC1jcHUiXX19LHsicGF0aCI6Ii9hcGkvdjEvcHJvamVjdHMvcHJqLWM0Y2E1NmIyLTIyNjgtNGNhZS05YmE2LTlkNzBjNzViNGFiOC9lZGl0cyIsIm1ldGhvZCI6IlBPU1QiLCJib2R5Ijp7ImJhc2VSZXZpc2lvbiI6NSwiZWRpdHMiOlt7ImtpbmQiOiJzZXRfdGltZV9tYXBwaW5nIiwiZG9jdW1lbnRJZCI6InhkbC9kZXBsb3ltZW50LWtleWJvYXJkLWJlbmNoLTEwMjQueGRsLnlhbWwiLCJtYXBwaW5nSWQiOiJ3YWxsLXRvLXNpbSIsInNvdXJjZVRpbWVEb21haW5JZCI6IndhbGwtdGltZSIsInRhcmdldFRpbWVEb21haW5JZCI6InNpbXVsYXRpb24tdGltZSIsIm1hcHBpbmciOiJvZmZzZXQtYXQtc3RhcnQiLCJ0b2xlcmFuY2UiOnsidmFsdWUiOjAuMDEsInVuaXQiOiJzIn19XX19LHsicGF0aCI6Ii9hcGkvdjEvcHJvamVjdHMvcHJqLWM0Y2E1NmIyLTIyNjgtNGNhZS05YmE2LTlkNzBjNzViNGFiOC9lZGl0cyIsIm1ldGhvZCI6IlBPU1QiLCJib2R5Ijp7ImJhc2VSZXZpc2lvbiI6NiwiZWRpdHMiOlt7ImtpbmQiOiJzZXRfdGltZV9tYXBwaW5nIiwiZG9jdW1lbnRJZCI6InhkbC9kZXBsb3ltZW50LWtleWJvYXJkLWJlbmNoLTEwMjQueGRsLnlhbWwiLCJtYXBwaW5nSWQiOiJ3YWxsLXRvLXNpbSIsInJlbW92ZSI6dHJ1ZX1dfX0seyJwYXRoIjoiL2FwaS92MS9wcm9qZWN0cy9wcmotYzRjYTU2YjItMjI2OC00Y2FlLTliYTYtOWQ3MGM3NWI0YWI4L3ZhbGlkYXRpb25zIiwibWV0aG9kIjoiUE9TVCIsImJvZHkiOnsicmV2aXNpb24iOjd9fV0sIm1lYXN1cmVtZW50cyI6W3sibGFiZWwiOiJUaW1lIG1hcHBpbmcgZGVjbGFyYXRpb24gc2NvcGUiLCJ0ZXh0IjoiQSBtYXBwaW5nIHdpdGggYW4gZXhpc3RpbmcgaWRlbnRpZmllciByZXBsYWNlcyBpdC4gU3R1ZGlvIHJlY29yZHMgdGhlIGRlY2xhcmVkIHJlbGF0aW9uOyBpdHMgYWNjdXJhY3kgaXMgbmV2ZXIgZXZhbHVhdGVkLiIsImNvbG9yIjoicmdiKDEwMSwgMTE3LCAxNDEpIiwiZm9udFNpemUiOiIxMHB4IiwiZm9udFdlaWdodCI6IjQwMCIsInRocmVzaG9sZCI6NC41LCJzY29wZSI6IlNlbGVjdGVkIG5vcm1hbC1zaXplIHJlbmRlcmVkIHRleHQ7IG5vIG92ZXJhbGwgYWNjZXNzaWJpbGl0eSBjZXJ0aWZpY2F0aW9uIiwic3VwcG9ydGVkIjp0cnVlLCJsYXllcnMiOlsicmdiYSgwLCAwLCAwLCAwKSIsInJnYmEoMCwgMCwgMCwgMCkiLCJyZ2IoMjU1LCAyNTUsIDI1NSkiXSwiYmFja2dyb3VuZCI6WzEsMSwxLDFdLCJjb21wb3NpdGVkRm9yZWdyb3VuZCI6WzAuMzk2MDc4NDMxMzcyNTQ5LDAuNDU4ODIzNTI5NDExNzY0NywwLjU1Mjk0MTE3NjQ3MDU4ODMsMV0sInJhdGlvIjo0LjY4NDkxMzE1OTg4OTYyMDUsInBhc3NlZCI6dHJ1ZSwiYXNzdW1wdGlvbnMiOiJDU1Mgc1JHQiBjb2xvcnM7IGFscGhhIGNvbXBvc2l0ZWQgdGhyb3VnaCBleHBsaWNpdCBiYWNrZ3JvdW5kczsgbm8gYW50aS1hbGlhc2luZyBhcHByb3hpbWF0aW9uIn1dLCJvcmlnaW5hbHNBbmRTeXN0ZW1CeXRlc1VuY2hhbmdlZCI6dHJ1ZSwiY2xvbmVkUmVzb3VyY2VCaW5kaW5nIjpbImJlbmNoLWNwdSJdLCJmaW5hbE1hcHBpbmdBYnNlbnQiOnRydWUsImF1dGhvcml0YXRpdmVWYWxpZGF0aW9uIjp0cnVlLCJvd25Qcm9qZWN0UnVuU2V0VW5jaGFuZ2VkIjp0cnVlLCJzY29wZSI6Ik5hdGl2ZSBrZXlib2FyZCBkZWNsYXJhdGlvbnMgb25seTsgbm8gY2xvY2sgYWNjdXJhY3kgb3IgYWN0dWFsIHJlc291cmNlIHJlc2VydmF0aW9uL2V4ZWN1dGlvbiBlc3RhYmxpc2hlZCJ9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "677a7f32e59440006319-74e31c6e6a37445cfa72",
+          "file": "deployment-accessibility.spec.ts",
+          "line": 90,
+          "column": 7
+        },
+        {
+          "title": "deployment accessibility: late clone preserves Home at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1992,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T17:43:54.338Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "late-deployment.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJhY3Rpb24iOiJjbG9uZSIsImFjdHVhbFN0YXR1cyI6MjAxLCJiZWZvcmVSZXZpc2lvbiI6Mywic2F2ZWRSZXZpc2lvbiI6NCwic2VsZWN0aW9uQmVmb3JlIjoie1wiZGVwbG95bWVudFJlZlwiOlwieGRsOi8vb3JnLnh2ZXJzZS5zdHVkaW8ucHJvY2Vzcy1jb250cm9sL2RlcGxveW1lbnQvbG9jYWwtcmVmZXJlbmNlXCIsXCJzY2VuYXJpb1JlZlwiOlwieGRsOi8vb3JnLnh2ZXJzZS5zdHVkaW8ucHJvY2Vzcy1jb250cm9sL3NjZW5hcmlvL3JlZmVyZW5jZS1yZXNwb25zZVwifSIsInNlbGVjdGlvbkFmdGVyIjoie1wiZGVwbG95bWVudFJlZlwiOlwieGRsOi8vb3JnLnh2ZXJzZS5zdHVkaW8ucHJvY2Vzcy1jb250cm9sL2RlcGxveW1lbnQvbG9jYWwtcmVmZXJlbmNlXCIsXCJzY2VuYXJpb1JlZlwiOlwieGRsOi8vb3JnLnh2ZXJzZS5zdHVkaW8ucHJvY2Vzcy1jb250cm9sL3NjZW5hcmlvL3JlZmVyZW5jZS1yZXNwb25zZVwifSIsImFjdGl2ZVRhZyI6IkJVVFRPTiIsIm93blByb2plY3RSdW5TZXRVbmNoYW5nZWQiOnRydWUsInNjb3BlIjoiUmVhbCBzZXJ2ZXIgY29tbWl0IGhlbGQgYXQgYnJvd3NlciByZXNwb25zZTsgZGVsaWJlcmF0ZSBuYXRpdmUgSG9tZSBkZXBhcnR1cmUgcmVtYWlucyBhdXRob3JpdGF0aXZlIn0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "677a7f32e59440006319-1bed17174b882463e1ba",
+          "file": "deployment-accessibility.spec.ts",
+          "line": 157,
+          "column": 9
+        },
+        {
+          "title": "deployment accessibility: late resource preserves Home at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3025,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T17:43:56.337Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "late-deployment.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJhY3Rpb24iOiJyZXNvdXJjZSIsImFjdHVhbFN0YXR1cyI6MjAwLCJiZWZvcmVSZXZpc2lvbiI6Mywic2F2ZWRSZXZpc2lvbiI6NCwic2VsZWN0aW9uQmVmb3JlIjoie1wiZGVwbG95bWVudFJlZlwiOlwieGRsOi8vb3JnLnh2ZXJzZS5zdHVkaW8ucHJvY2Vzcy1jb250cm9sL2RlcGxveW1lbnQvbG9jYWwtcmVmZXJlbmNlXCIsXCJzY2VuYXJpb1JlZlwiOlwieGRsOi8vb3JnLnh2ZXJzZS5zdHVkaW8ucHJvY2Vzcy1jb250cm9sL3NjZW5hcmlvL3JlZmVyZW5jZS1yZXNwb25zZVwifSIsInNlbGVjdGlvbkFmdGVyIjoie1wiZGVwbG95bWVudFJlZlwiOlwieGRsOi8vb3JnLnh2ZXJzZS5zdHVkaW8ucHJvY2Vzcy1jb250cm9sL2RlcGxveW1lbnQvbG9jYWwtcmVmZXJlbmNlXCIsXCJzY2VuYXJpb1JlZlwiOlwieGRsOi8vb3JnLnh2ZXJzZS5zdHVkaW8ucHJvY2Vzcy1jb250cm9sL3NjZW5hcmlvL3JlZmVyZW5jZS1yZXNwb25zZVwifSIsImFjdGl2ZVRhZyI6IkJVVFRPTiIsIm93blByb2plY3RSdW5TZXRVbmNoYW5nZWQiOnRydWUsInNjb3BlIjoiUmVhbCBzZXJ2ZXIgY29tbWl0IGhlbGQgYXQgYnJvd3NlciByZXNwb25zZTsgZGVsaWJlcmF0ZSBuYXRpdmUgSG9tZSBkZXBhcnR1cmUgcmVtYWlucyBhdXRob3JpdGF0aXZlIn0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "677a7f32e59440006319-dd1d4e48726fb4c01b9a",
+          "file": "deployment-accessibility.spec.ts",
+          "line": 157,
+          "column": 9
+        },
+        {
+          "title": "deployment accessibility: late mapping preserves Home at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2062,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T17:43:59.368Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "late-deployment.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJhY3Rpb24iOiJtYXBwaW5nIiwiYWN0dWFsU3RhdHVzIjoyMDAsImJlZm9yZVJldmlzaW9uIjozLCJzYXZlZFJldmlzaW9uIjo0LCJzZWxlY3Rpb25CZWZvcmUiOiJ7XCJkZXBsb3ltZW50UmVmXCI6XCJ4ZGw6Ly9vcmcueHZlcnNlLnN0dWRpby5wcm9jZXNzLWNvbnRyb2wvZGVwbG95bWVudC9sb2NhbC1yZWZlcmVuY2VcIixcInNjZW5hcmlvUmVmXCI6XCJ4ZGw6Ly9vcmcueHZlcnNlLnN0dWRpby5wcm9jZXNzLWNvbnRyb2wvc2NlbmFyaW8vcmVmZXJlbmNlLXJlc3BvbnNlXCJ9Iiwic2VsZWN0aW9uQWZ0ZXIiOiJ7XCJkZXBsb3ltZW50UmVmXCI6XCJ4ZGw6Ly9vcmcueHZlcnNlLnN0dWRpby5wcm9jZXNzLWNvbnRyb2wvZGVwbG95bWVudC9sb2NhbC1yZWZlcmVuY2VcIixcInNjZW5hcmlvUmVmXCI6XCJ4ZGw6Ly9vcmcueHZlcnNlLnN0dWRpby5wcm9jZXNzLWNvbnRyb2wvc2NlbmFyaW8vcmVmZXJlbmNlLXJlc3BvbnNlXCJ9IiwiYWN0aXZlVGFnIjoiQlVUVE9OIiwib3duUHJvamVjdFJ1blNldFVuY2hhbmdlZCI6dHJ1ZSwic2NvcGUiOiJSZWFsIHNlcnZlciBjb21taXQgaGVsZCBhdCBicm93c2VyIHJlc3BvbnNlOyBkZWxpYmVyYXRlIG5hdGl2ZSBIb21lIGRlcGFydHVyZSByZW1haW5zIGF1dGhvcml0YXRpdmUifQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "677a7f32e59440006319-47bd16fa9a3aa0b768db",
+          "file": "deployment-accessibility.spec.ts",
+          "line": 157,
+          "column": 9
+        },
+        {
+          "title": "deployment accessibility: native variant resource and mapping authoring at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 9131,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T17:44:01.437Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "deployment-keyboard.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJwbGF0Zm9ybSI6ImxpbnV4IiwiYnJvd3NlciI6IjE1Ni4wLjgwNzguNCIsImZvY3VzIjp7ImZvY3VzZWQiOnRydWUsImFjdGl2ZVRhZyI6IklOUFVUIiwicmVjdCI6eyJ4IjoxMjksInkiOjQzMS4yNSwid2lkdGgiOjIwMCwiaGVpZ2h0IjozOCwidG9wIjo0MzEuMjUsInJpZ2h0IjozMjksImJvdHRvbSI6NDY5LjI1LCJsZWZ0IjoxMjl9LCJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJvdXRsaW5lIjoic29saWQiLCJvdXRsaW5lV2lkdGgiOjN9LCJyZXZpc2lvbnMiOlszLDQsNSw2LDddLCJtYXBwaW5nIjp7ImlkIjoid2FsbC10by1zaW0iLCJzb3VyY2VUaW1lRG9tYWluUmVmIjp7ImFwaVZlcnNpb24iOiJ4dmVyc2UuaW8veGRsL3YxYWxwaGExIiwia2luZCI6IlN5c3RlbSIsIm5hbWVzcGFjZSI6Im9yZy54dmVyc2Uuc3R1ZGlvLnByb2Nlc3MtY29udHJvbCIsIm5hbWUiOiJyZWZlcmVuY2UtbG9vcCIsImVsZW1lbnQiOiJ3YWxsLXRpbWUifSwidGFyZ2V0VGltZURvbWFpblJlZiI6eyJhcGlWZXJzaW9uIjoieHZlcnNlLmlvL3hkbC92MWFscGhhMSIsImtpbmQiOiJTeXN0ZW0iLCJuYW1lc3BhY2UiOiJvcmcueHZlcnNlLnN0dWRpby5wcm9jZXNzLWNvbnRyb2wiLCJuYW1lIjoicmVmZXJlbmNlLWxvb3AiLCJlbGVtZW50Ijoic2ltdWxhdGlvbi10aW1lIn0sIm1hcHBpbmciOiJvZmZzZXQtYXQtc3RhcnQiLCJ0b2xlcmFuY2UiOnsidmFsdWUiOjAuMDEsInVuaXQiOiJzIn19LCJzZWxlY3RlZCI6eyJkZXBsb3ltZW50UmVmIjoieGRsOi8vb3JnLnh2ZXJzZS5zdHVkaW8ucHJvY2Vzcy1jb250cm9sL2RlcGxveW1lbnQva2V5Ym9hcmQtYmVuY2gtMTQ0MCIsInNjZW5hcmlvUmVmIjoieGRsOi8vb3JnLnh2ZXJzZS5zdHVkaW8ucHJvY2Vzcy1jb250cm9sL3NjZW5hcmlvL2tleWJvYXJkLWJlbmNoLTE0NDAtc2NlbmFyaW8ifSwid3JpdGVzIjpbeyJwYXRoIjoiL2FwaS92MS9wcm9qZWN0cy9wcmotNjE0NDA1OTktYzUyMS00YzY1LWI0NWEtNjRjNDc3Y2E1OGRiL2RlcGxveW1lbnQtdmFyaWFudHMiLCJtZXRob2QiOiJQT1NUIiwiYm9keSI6eyJiYXNlUmV2aXNpb24iOjMsIm5hbWUiOiJLZXlib2FyZCBiZW5jaCAxNDQwIiwic291cmNlRGVwbG95bWVudElkIjoiZG9jLTMiLCJzb3VyY2VTY2VuYXJpb0lkIjoiZG9jLTQifX0seyJwYXRoIjoiL2FwaS92MS9wcm9qZWN0cy9wcmotNjE0NDA1OTktYzUyMS00YzY1LWI0NWEtNjRjNDc3Y2E1OGRiL2RlcGxveW1lbnQtdmFyaWFudHMvZG9jLThiMWMwOGJhLTkyYjQtNDYyMi1hNWRlLTQxMTQ3NGVmYWY5NSIsIm1ldGhvZCI6IlBBVENIIiwiYm9keSI6eyJiYXNlUmV2aXNpb24iOjQsImJpbmRpbmdJZCI6InBsYW50LWJpbmRpbmciLCJyZXNvdXJjZUlkcyI6WyJiZW5jaC1jcHUiXX19LHsicGF0aCI6Ii9hcGkvdjEvcHJvamVjdHMvcHJqLTYxNDQwNTk5LWM1MjEtNGM2NS1iNDVhLTY0YzQ3N2NhNThkYi9lZGl0cyIsIm1ldGhvZCI6IlBPU1QiLCJib2R5Ijp7ImJhc2VSZXZpc2lvbiI6NSwiZWRpdHMiOlt7ImtpbmQiOiJzZXRfdGltZV9tYXBwaW5nIiwiZG9jdW1lbnRJZCI6InhkbC9kZXBsb3ltZW50LWtleWJvYXJkLWJlbmNoLTE0NDAueGRsLnlhbWwiLCJtYXBwaW5nSWQiOiJ3YWxsLXRvLXNpbSIsInNvdXJjZVRpbWVEb21haW5JZCI6IndhbGwtdGltZSIsInRhcmdldFRpbWVEb21haW5JZCI6InNpbXVsYXRpb24tdGltZSIsIm1hcHBpbmciOiJvZmZzZXQtYXQtc3RhcnQiLCJ0b2xlcmFuY2UiOnsidmFsdWUiOjAuMDEsInVuaXQiOiJzIn19XX19LHsicGF0aCI6Ii9hcGkvdjEvcHJvamVjdHMvcHJqLTYxNDQwNTk5LWM1MjEtNGM2NS1iNDVhLTY0YzQ3N2NhNThkYi9lZGl0cyIsIm1ldGhvZCI6IlBPU1QiLCJib2R5Ijp7ImJhc2VSZXZpc2lvbiI6NiwiZWRpdHMiOlt7ImtpbmQiOiJzZXRfdGltZV9tYXBwaW5nIiwiZG9jdW1lbnRJZCI6InhkbC9kZXBsb3ltZW50LWtleWJvYXJkLWJlbmNoLTE0NDAueGRsLnlhbWwiLCJtYXBwaW5nSWQiOiJ3YWxsLXRvLXNpbSIsInJlbW92ZSI6dHJ1ZX1dfX0seyJwYXRoIjoiL2FwaS92MS9wcm9qZWN0cy9wcmotNjE0NDA1OTktYzUyMS00YzY1LWI0NWEtNjRjNDc3Y2E1OGRiL3ZhbGlkYXRpb25zIiwibWV0aG9kIjoiUE9TVCIsImJvZHkiOnsicmV2aXNpb24iOjd9fV0sIm1lYXN1cmVtZW50cyI6W3sibGFiZWwiOiJUaW1lIG1hcHBpbmcgZGVjbGFyYXRpb24gc2NvcGUiLCJ0ZXh0IjoiQSBtYXBwaW5nIHdpdGggYW4gZXhpc3RpbmcgaWRlbnRpZmllciByZXBsYWNlcyBpdC4gU3R1ZGlvIHJlY29yZHMgdGhlIGRlY2xhcmVkIHJlbGF0aW9uOyBpdHMgYWNjdXJhY3kgaXMgbmV2ZXIgZXZhbHVhdGVkLiIsImNvbG9yIjoicmdiKDEwMSwgMTE3LCAxNDEpIiwiZm9udFNpemUiOiIxMHB4IiwiZm9udFdlaWdodCI6IjQwMCIsInRocmVzaG9sZCI6NC41LCJzY29wZSI6IlNlbGVjdGVkIG5vcm1hbC1zaXplIHJlbmRlcmVkIHRleHQ7IG5vIG92ZXJhbGwgYWNjZXNzaWJpbGl0eSBjZXJ0aWZpY2F0aW9uIiwic3VwcG9ydGVkIjp0cnVlLCJsYXllcnMiOlsicmdiYSgwLCAwLCAwLCAwKSIsInJnYmEoMCwgMCwgMCwgMCkiLCJyZ2IoMjU1LCAyNTUsIDI1NSkiXSwiYmFja2dyb3VuZCI6WzEsMSwxLDFdLCJjb21wb3NpdGVkRm9yZWdyb3VuZCI6WzAuMzk2MDc4NDMxMzcyNTQ5LDAuNDU4ODIzNTI5NDExNzY0NywwLjU1Mjk0MTE3NjQ3MDU4ODMsMV0sInJhdGlvIjo0LjY4NDkxMzE1OTg4OTYyMDUsInBhc3NlZCI6dHJ1ZSwiYXNzdW1wdGlvbnMiOiJDU1Mgc1JHQiBjb2xvcnM7IGFscGhhIGNvbXBvc2l0ZWQgdGhyb3VnaCBleHBsaWNpdCBiYWNrZ3JvdW5kczsgbm8gYW50aS1hbGlhc2luZyBhcHByb3hpbWF0aW9uIn1dLCJvcmlnaW5hbHNBbmRTeXN0ZW1CeXRlc1VuY2hhbmdlZCI6dHJ1ZSwiY2xvbmVkUmVzb3VyY2VCaW5kaW5nIjpbImJlbmNoLWNwdSJdLCJmaW5hbE1hcHBpbmdBYnNlbnQiOnRydWUsImF1dGhvcml0YXRpdmVWYWxpZGF0aW9uIjp0cnVlLCJvd25Qcm9qZWN0UnVuU2V0VW5jaGFuZ2VkIjp0cnVlLCJzY29wZSI6Ik5hdGl2ZSBrZXlib2FyZCBkZWNsYXJhdGlvbnMgb25seTsgbm8gY2xvY2sgYWNjdXJhY3kgb3IgYWN0dWFsIHJlc291cmNlIHJlc2VydmF0aW9uL2V4ZWN1dGlvbiBlc3RhYmxpc2hlZCJ9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "677a7f32e59440006319-a9c395de63578b933ebf",
+          "file": "deployment-accessibility.spec.ts",
+          "line": 90,
+          "column": 7
+        },
+        {
+          "title": "deployment accessibility: late clone preserves Home at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1974,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T17:44:10.577Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "late-deployment.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJhY3Rpb24iOiJjbG9uZSIsImFjdHVhbFN0YXR1cyI6MjAxLCJiZWZvcmVSZXZpc2lvbiI6Mywic2F2ZWRSZXZpc2lvbiI6NCwic2VsZWN0aW9uQmVmb3JlIjoie1wiZGVwbG95bWVudFJlZlwiOlwieGRsOi8vb3JnLnh2ZXJzZS5zdHVkaW8ucHJvY2Vzcy1jb250cm9sL2RlcGxveW1lbnQvbG9jYWwtcmVmZXJlbmNlXCIsXCJzY2VuYXJpb1JlZlwiOlwieGRsOi8vb3JnLnh2ZXJzZS5zdHVkaW8ucHJvY2Vzcy1jb250cm9sL3NjZW5hcmlvL3JlZmVyZW5jZS1yZXNwb25zZVwifSIsInNlbGVjdGlvbkFmdGVyIjoie1wiZGVwbG95bWVudFJlZlwiOlwieGRsOi8vb3JnLnh2ZXJzZS5zdHVkaW8ucHJvY2Vzcy1jb250cm9sL2RlcGxveW1lbnQvbG9jYWwtcmVmZXJlbmNlXCIsXCJzY2VuYXJpb1JlZlwiOlwieGRsOi8vb3JnLnh2ZXJzZS5zdHVkaW8ucHJvY2Vzcy1jb250cm9sL3NjZW5hcmlvL3JlZmVyZW5jZS1yZXNwb25zZVwifSIsImFjdGl2ZVRhZyI6IkJVVFRPTiIsIm93blByb2plY3RSdW5TZXRVbmNoYW5nZWQiOnRydWUsInNjb3BlIjoiUmVhbCBzZXJ2ZXIgY29tbWl0IGhlbGQgYXQgYnJvd3NlciByZXNwb25zZTsgZGVsaWJlcmF0ZSBuYXRpdmUgSG9tZSBkZXBhcnR1cmUgcmVtYWlucyBhdXRob3JpdGF0aXZlIn0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "677a7f32e59440006319-8cd261dc33f9e5f8cb4c",
+          "file": "deployment-accessibility.spec.ts",
+          "line": 157,
+          "column": 9
+        },
+        {
+          "title": "deployment accessibility: late resource preserves Home at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3176,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T17:44:12.559Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "late-deployment.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJhY3Rpb24iOiJyZXNvdXJjZSIsImFjdHVhbFN0YXR1cyI6MjAwLCJiZWZvcmVSZXZpc2lvbiI6Mywic2F2ZWRSZXZpc2lvbiI6NCwic2VsZWN0aW9uQmVmb3JlIjoie1wiZGVwbG95bWVudFJlZlwiOlwieGRsOi8vb3JnLnh2ZXJzZS5zdHVkaW8ucHJvY2Vzcy1jb250cm9sL2RlcGxveW1lbnQvbG9jYWwtcmVmZXJlbmNlXCIsXCJzY2VuYXJpb1JlZlwiOlwieGRsOi8vb3JnLnh2ZXJzZS5zdHVkaW8ucHJvY2Vzcy1jb250cm9sL3NjZW5hcmlvL3JlZmVyZW5jZS1yZXNwb25zZVwifSIsInNlbGVjdGlvbkFmdGVyIjoie1wiZGVwbG95bWVudFJlZlwiOlwieGRsOi8vb3JnLnh2ZXJzZS5zdHVkaW8ucHJvY2Vzcy1jb250cm9sL2RlcGxveW1lbnQvbG9jYWwtcmVmZXJlbmNlXCIsXCJzY2VuYXJpb1JlZlwiOlwieGRsOi8vb3JnLnh2ZXJzZS5zdHVkaW8ucHJvY2Vzcy1jb250cm9sL3NjZW5hcmlvL3JlZmVyZW5jZS1yZXNwb25zZVwifSIsImFjdGl2ZVRhZyI6IkJVVFRPTiIsIm93blByb2plY3RSdW5TZXRVbmNoYW5nZWQiOnRydWUsInNjb3BlIjoiUmVhbCBzZXJ2ZXIgY29tbWl0IGhlbGQgYXQgYnJvd3NlciByZXNwb25zZTsgZGVsaWJlcmF0ZSBuYXRpdmUgSG9tZSBkZXBhcnR1cmUgcmVtYWlucyBhdXRob3JpdGF0aXZlIn0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "677a7f32e59440006319-1e3ed88a218425ba36e0",
+          "file": "deployment-accessibility.spec.ts",
+          "line": 157,
+          "column": 9
+        },
+        {
+          "title": "deployment accessibility: late mapping preserves Home at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2143,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T17:44:15.744Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "late-deployment.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJhY3Rpb24iOiJtYXBwaW5nIiwiYWN0dWFsU3RhdHVzIjoyMDAsImJlZm9yZVJldmlzaW9uIjozLCJzYXZlZFJldmlzaW9uIjo0LCJzZWxlY3Rpb25CZWZvcmUiOiJ7XCJkZXBsb3ltZW50UmVmXCI6XCJ4ZGw6Ly9vcmcueHZlcnNlLnN0dWRpby5wcm9jZXNzLWNvbnRyb2wvZGVwbG95bWVudC9sb2NhbC1yZWZlcmVuY2VcIixcInNjZW5hcmlvUmVmXCI6XCJ4ZGw6Ly9vcmcueHZlcnNlLnN0dWRpby5wcm9jZXNzLWNvbnRyb2wvc2NlbmFyaW8vcmVmZXJlbmNlLXJlc3BvbnNlXCJ9Iiwic2VsZWN0aW9uQWZ0ZXIiOiJ7XCJkZXBsb3ltZW50UmVmXCI6XCJ4ZGw6Ly9vcmcueHZlcnNlLnN0dWRpby5wcm9jZXNzLWNvbnRyb2wvZGVwbG95bWVudC9sb2NhbC1yZWZlcmVuY2VcIixcInNjZW5hcmlvUmVmXCI6XCJ4ZGw6Ly9vcmcueHZlcnNlLnN0dWRpby5wcm9jZXNzLWNvbnRyb2wvc2NlbmFyaW8vcmVmZXJlbmNlLXJlc3BvbnNlXCJ9IiwiYWN0aXZlVGFnIjoiQlVUVE9OIiwib3duUHJvamVjdFJ1blNldFVuY2hhbmdlZCI6dHJ1ZSwic2NvcGUiOiJSZWFsIHNlcnZlciBjb21taXQgaGVsZCBhdCBicm93c2VyIHJlc3BvbnNlOyBkZWxpYmVyYXRlIG5hdGl2ZSBIb21lIGRlcGFydHVyZSByZW1haW5zIGF1dGhvcml0YXRpdmUifQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "677a7f32e59440006319-85f0c5ff95dd3347211f",
+          "file": "deployment-accessibility.spec.ts",
+          "line": 157,
+          "column": 9
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-26T17:43:44.021Z",
+    "duration": 33986.779,
+    "expected": 8,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

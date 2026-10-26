@@ -1,0 +1,450 @@
+{
+  "config": {
+    "argv": [
+      "<loop-cache>/node-v24.22.1-linux-x64/bin/node",
+      "<repo>/node_modules/.bin/playwright",
+      "test",
+      "-c",
+      "tests/e2e/playwright.config.ts",
+      "--grep",
+      "deployment accessibility: (explicit clone loading|newer readiness)"
+    ],
+    "configFile": "<repo>/tests/e2e/playwright.config.ts",
+    "rootDir": "<repo>/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "<repo>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "<repo>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "*.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "<repo>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "<repo>/tests/e2e",
+        "snapshotDir": "<repo>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": "*.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "baseURL": "http://127.0.0.1:54159",
+          "browserName": "chromium",
+          "actionTimeout": 15000,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "trace": "off",
+          "screenshot": "only-on-failure",
+          "video": "off"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "<repo>/test-results/browser-report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "deployment-accessibility.spec.ts",
+      "file": "deployment-accessibility.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "deployment accessibility: explicit clone loading at 1024x768",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 22907,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: not \u001b[32m\"xdl://org.xverse.studio.process-control/deployment/local-reference\"\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: not \u001b[32m\"xdl://org.xverse.studio.process-control/deployment/local-reference\"\u001b[39m\n    at <repo>/tests/e2e/deployment-accessibility.spec.ts:858:38",
+                    "location": {
+                      "file": "<repo>/tests/e2e/deployment-accessibility.spec.ts",
+                      "column": 38,
+                      "line": 858
+                    },
+                    "snippet": "  856 |           expect(stored.deploymentRef).toBe(clone.variant.ref);\n  857 |           const presented = await page.getByLabel(\"Deployment variant\", { exact: true }).inputValue();\n> 858 |           expect.soft(presented).not.toBe(oldRef);\n      |                                      ^\n  859 |           await expect.soft(page.getByRole(\"region\", { name: \"Bound resources\", exact: true })).toHaveCount(0);\n  860 |           await expect.soft(page.getByRole(\"region\", { name: \"Time mappings\", exact: true })).toHaveCount(0);\n  861 |           await pending.release();"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/deployment-accessibility.spec.ts",
+                        "column": 38,
+                        "line": 858
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: not \u001b[32m\"xdl://org.xverse.studio.process-control/deployment/local-reference\"\u001b[39m\n\n  856 |           expect(stored.deploymentRef).toBe(clone.variant.ref);\n  857 |           const presented = await page.getByLabel(\"Deployment variant\", { exact: true }).inputValue();\n> 858 |           expect.soft(presented).not.toBe(oldRef);\n      |                                      ^\n  859 |           await expect.soft(page.getByRole(\"region\", { name: \"Bound resources\", exact: true })).toHaveCount(0);\n  860 |           await expect.soft(page.getByRole(\"region\", { name: \"Time mappings\", exact: true })).toHaveCount(0);\n  861 |           await pending.release();\n    at <repo>/tests/e2e/deployment-accessibility.spec.ts:858:38"
+                    },
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/deployment-accessibility.spec.ts",
+                        "column": 97,
+                        "line": 859
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('region', { name: 'Bound resources', exact: true })\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveCount\" getByRole('region', { name: 'Bound resources', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('region', { name: 'Bound resources', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to 1 element\u001b[22m\n\u001b[2m       - unexpected value \"1\"\u001b[22m\n\n\n  857 |           const presented = await page.getByLabel(\"Deployment variant\", { exact: true }).inputValue();\n  858 |           expect.soft(presented).not.toBe(oldRef);\n> 859 |           await expect.soft(page.getByRole(\"region\", { name: \"Bound resources\", exact: true })).toHaveCount(0);\n      |                                                                                                 ^\n  860 |           await expect.soft(page.getByRole(\"region\", { name: \"Time mappings\", exact: true })).toHaveCount(0);\n  861 |           await pending.release();\n  862 |           await expect(page.getByLabel(\"Deployment variant\", { exact: true })).toHaveValue(clone.variant.ref);\n    at <repo>/tests/e2e/deployment-accessibility.spec.ts:859:97"
+                    },
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/deployment-accessibility.spec.ts",
+                        "column": 95,
+                        "line": 860
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('region', { name: 'Time mappings', exact: true })\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveCount\" getByRole('region', { name: 'Time mappings', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('region', { name: 'Time mappings', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to 1 element\u001b[22m\n\u001b[2m       - unexpected value \"1\"\u001b[22m\n\n\n  858 |           expect.soft(presented).not.toBe(oldRef);\n  859 |           await expect.soft(page.getByRole(\"region\", { name: \"Bound resources\", exact: true })).toHaveCount(0);\n> 860 |           await expect.soft(page.getByRole(\"region\", { name: \"Time mappings\", exact: true })).toHaveCount(0);\n      |                                                                                               ^\n  861 |           await pending.release();\n  862 |           await expect(page.getByLabel(\"Deployment variant\", { exact: true })).toHaveValue(clone.variant.ref);\n  863 |           await testInfo.attach(\"deployment-review-countercheck.json\", { body: JSON.stringify({ mode, viewport, stored, presentedWhileLoading: presented, original: oldRef, expected: clone.variant.ref, scope: \"Held real variant-list GET; explicit selection must not expose the previous variant's authoring forms\" }), contentType: \"application/json\" });\n    at <repo>/tests/e2e/deployment-accessibility.spec.ts:860:95"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T17:53:01.901Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "deployment-review-countercheck.json",
+                      "contentType": "application/json",
+                      "body": "eyJtb2RlIjoiZXhwbGljaXQgY2xvbmUgbG9hZGluZyIsInZpZXdwb3J0Ijp7IndpZHRoIjoxMDI0LCJoZWlnaHQiOjc2OH0sInN0b3JlZCI6eyJkZXBsb3ltZW50UmVmIjoieGRsOi8vb3JnLnh2ZXJzZS5zdHVkaW8ucHJvY2Vzcy1jb250cm9sL2RlcGxveW1lbnQvbG9hZGluZy1iZW5jaC0xMDI0Iiwic2NlbmFyaW9SZWYiOiJ4ZGw6Ly9vcmcueHZlcnNlLnN0dWRpby5wcm9jZXNzLWNvbnRyb2wvc2NlbmFyaW8vbG9hZGluZy1iZW5jaC0xMDI0LXNjZW5hcmlvIn0sInByZXNlbnRlZFdoaWxlTG9hZGluZyI6InhkbDovL29yZy54dmVyc2Uuc3R1ZGlvLnByb2Nlc3MtY29udHJvbC9kZXBsb3ltZW50L2xvY2FsLXJlZmVyZW5jZSIsIm9yaWdpbmFsIjoieGRsOi8vb3JnLnh2ZXJzZS5zdHVkaW8ucHJvY2Vzcy1jb250cm9sL2RlcGxveW1lbnQvbG9jYWwtcmVmZXJlbmNlIiwiZXhwZWN0ZWQiOiJ4ZGw6Ly9vcmcueHZlcnNlLnN0dWRpby5wcm9jZXNzLWNvbnRyb2wvZGVwbG95bWVudC9sb2FkaW5nLWJlbmNoLTEwMjQiLCJzY29wZSI6IkhlbGQgcmVhbCB2YXJpYW50LWxpc3QgR0VUOyBleHBsaWNpdCBzZWxlY3Rpb24gbXVzdCBub3QgZXhwb3NlIHRoZSBwcmV2aW91cyB2YXJpYW50J3MgYXV0aG9yaW5nIGZvcm1zIn0="
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/deployment-accessibility-d-910c5-t-clone-loading-at-1024x768/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/deployment-accessibility-d-910c5-t-clone-loading-at-1024x768/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/deployment-accessibility.spec.ts",
+                    "column": 38,
+                    "line": 858
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "677a7f32e59440006319-e13bc387a8e7413693e5",
+          "file": "deployment-accessibility.spec.ts",
+          "line": 842,
+          "column": 9
+        },
+        {
+          "title": "deployment accessibility: newer readiness at 1024x768",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 14307,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('dialog')\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toBeVisible\" getByRole('dialog') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog')\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('dialog')\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toBeVisible\" getByRole('dialog') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog')\u001b[22m\n\n    at <repo>/tests/e2e/deployment-accessibility.spec.ts:881:37",
+                    "location": {
+                      "file": "<repo>/tests/e2e/deployment-accessibility.spec.ts",
+                      "column": 37,
+                      "line": 881
+                    },
+                    "snippet": "  879 |           const dialog = page.getByRole(\"dialog\"); await expect(dialog).toBeVisible();\n  880 |           await pending.release(); await expect(page.locator(\".notice.busy\")).toHaveCount(0);\n> 881 |           await expect.soft(dialog).toBeVisible();\n      |                                     ^\n  882 |           await expect.soft(page.locator(\".workspace-context\")).toContainText(`Draft revision ${saved.body.project.revision}`);\n  883 |           await testInfo.attach(\"deployment-review-countercheck.json\", { body: JSON.stringify({ mode, viewport, committedRevision: saved.body.project.revision, preflightId: report.preflightId, snapshotId: report.snapshotId, status: report.status, dialogRetained: await dialog.count(), scope: \"Newer actual ready preflight at the same committed revision remains current after an older save acknowledgement; no Start\" }), contentType: \"application/json\" });\n  884 |           if (await dialog.count()) await page.keyboard.press(\"Escape\");"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/deployment-accessibility.spec.ts",
+                        "column": 37,
+                        "line": 881
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('dialog')\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toBeVisible\" getByRole('dialog') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog')\u001b[22m\n\n\n  879 |           const dialog = page.getByRole(\"dialog\"); await expect(dialog).toBeVisible();\n  880 |           await pending.release(); await expect(page.locator(\".notice.busy\")).toHaveCount(0);\n> 881 |           await expect.soft(dialog).toBeVisible();\n      |                                     ^\n  882 |           await expect.soft(page.locator(\".workspace-context\")).toContainText(`Draft revision ${saved.body.project.revision}`);\n  883 |           await testInfo.attach(\"deployment-review-countercheck.json\", { body: JSON.stringify({ mode, viewport, committedRevision: saved.body.project.revision, preflightId: report.preflightId, snapshotId: report.snapshotId, status: report.status, dialogRetained: await dialog.count(), scope: \"Newer actual ready preflight at the same committed revision remains current after an older save acknowledgement; no Start\" }), contentType: \"application/json\" });\n  884 |           if (await dialog.count()) await page.keyboard.press(\"Escape\");\n    at <repo>/tests/e2e/deployment-accessibility.spec.ts:881:37"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T17:53:25.215Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "deployment-review-countercheck.json",
+                      "contentType": "application/json",
+                      "body": "eyJtb2RlIjoibmV3ZXIgcmVhZGluZXNzIiwidmlld3BvcnQiOnsid2lkdGgiOjEwMjQsImhlaWdodCI6NzY4fSwiY29tbWl0dGVkUmV2aXNpb24iOjIsInByZWZsaWdodElkIjoicGYtNzk2OTA5ZGUtNGEwMC00YzY1LTg3YjctOTVjNzE1OTJjMTE2Iiwic25hcHNob3RJZCI6InNuYXAtZjRiMDM0YWUtYjIwMS00NGE1LTlhNjQtNWVhZGMxZjQ4MWFmIiwic3RhdHVzIjoicmVhZHkiLCJkaWFsb2dSZXRhaW5lZCI6MCwic2NvcGUiOiJOZXdlciBhY3R1YWwgcmVhZHkgcHJlZmxpZ2h0IGF0IHRoZSBzYW1lIGNvbW1pdHRlZCByZXZpc2lvbiByZW1haW5zIGN1cnJlbnQgYWZ0ZXIgYW4gb2xkZXIgc2F2ZSBhY2tub3dsZWRnZW1lbnQ7IG5vIFN0YXJ0In0="
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/deployment-accessibility-d-9d91d-newer-readiness-at-1024x768/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/deployment-accessibility-d-9d91d-newer-readiness-at-1024x768/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/deployment-accessibility.spec.ts",
+                    "column": 37,
+                    "line": 881
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "677a7f32e59440006319-5b05f0bb77bf32f55d6f",
+          "file": "deployment-accessibility.spec.ts",
+          "line": 842,
+          "column": 9
+        },
+        {
+          "title": "deployment accessibility: explicit clone loading at 1440x900",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 22628,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: not \u001b[32m\"xdl://org.xverse.studio.process-control/deployment/local-reference\"\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: not \u001b[32m\"xdl://org.xverse.studio.process-control/deployment/local-reference\"\u001b[39m\n    at <repo>/tests/e2e/deployment-accessibility.spec.ts:858:38",
+                    "location": {
+                      "file": "<repo>/tests/e2e/deployment-accessibility.spec.ts",
+                      "column": 38,
+                      "line": 858
+                    },
+                    "snippet": "  856 |           expect(stored.deploymentRef).toBe(clone.variant.ref);\n  857 |           const presented = await page.getByLabel(\"Deployment variant\", { exact: true }).inputValue();\n> 858 |           expect.soft(presented).not.toBe(oldRef);\n      |                                      ^\n  859 |           await expect.soft(page.getByRole(\"region\", { name: \"Bound resources\", exact: true })).toHaveCount(0);\n  860 |           await expect.soft(page.getByRole(\"region\", { name: \"Time mappings\", exact: true })).toHaveCount(0);\n  861 |           await pending.release();"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/deployment-accessibility.spec.ts",
+                        "column": 38,
+                        "line": 858
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: not \u001b[32m\"xdl://org.xverse.studio.process-control/deployment/local-reference\"\u001b[39m\n\n  856 |           expect(stored.deploymentRef).toBe(clone.variant.ref);\n  857 |           const presented = await page.getByLabel(\"Deployment variant\", { exact: true }).inputValue();\n> 858 |           expect.soft(presented).not.toBe(oldRef);\n      |                                      ^\n  859 |           await expect.soft(page.getByRole(\"region\", { name: \"Bound resources\", exact: true })).toHaveCount(0);\n  860 |           await expect.soft(page.getByRole(\"region\", { name: \"Time mappings\", exact: true })).toHaveCount(0);\n  861 |           await pending.release();\n    at <repo>/tests/e2e/deployment-accessibility.spec.ts:858:38"
+                    },
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/deployment-accessibility.spec.ts",
+                        "column": 97,
+                        "line": 859
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('region', { name: 'Bound resources', exact: true })\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveCount\" getByRole('region', { name: 'Bound resources', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('region', { name: 'Bound resources', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to 1 element\u001b[22m\n\u001b[2m       - unexpected value \"1\"\u001b[22m\n\n\n  857 |           const presented = await page.getByLabel(\"Deployment variant\", { exact: true }).inputValue();\n  858 |           expect.soft(presented).not.toBe(oldRef);\n> 859 |           await expect.soft(page.getByRole(\"region\", { name: \"Bound resources\", exact: true })).toHaveCount(0);\n      |                                                                                                 ^\n  860 |           await expect.soft(page.getByRole(\"region\", { name: \"Time mappings\", exact: true })).toHaveCount(0);\n  861 |           await pending.release();\n  862 |           await expect(page.getByLabel(\"Deployment variant\", { exact: true })).toHaveValue(clone.variant.ref);\n    at <repo>/tests/e2e/deployment-accessibility.spec.ts:859:97"
+                    },
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/deployment-accessibility.spec.ts",
+                        "column": 95,
+                        "line": 860
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('region', { name: 'Time mappings', exact: true })\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveCount\" getByRole('region', { name: 'Time mappings', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('region', { name: 'Time mappings', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to 1 element\u001b[22m\n\u001b[2m       - unexpected value \"1\"\u001b[22m\n\n\n  858 |           expect.soft(presented).not.toBe(oldRef);\n  859 |           await expect.soft(page.getByRole(\"region\", { name: \"Bound resources\", exact: true })).toHaveCount(0);\n> 860 |           await expect.soft(page.getByRole(\"region\", { name: \"Time mappings\", exact: true })).toHaveCount(0);\n      |                                                                                               ^\n  861 |           await pending.release();\n  862 |           await expect(page.getByLabel(\"Deployment variant\", { exact: true })).toHaveValue(clone.variant.ref);\n  863 |           await testInfo.attach(\"deployment-review-countercheck.json\", { body: JSON.stringify({ mode, viewport, stored, presentedWhileLoading: presented, original: oldRef, expected: clone.variant.ref, scope: \"Held real variant-list GET; explicit selection must not expose the previous variant's authoring forms\" }), contentType: \"application/json\" });\n    at <repo>/tests/e2e/deployment-accessibility.spec.ts:860:95"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T17:53:39.930Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "deployment-review-countercheck.json",
+                      "contentType": "application/json",
+                      "body": "eyJtb2RlIjoiZXhwbGljaXQgY2xvbmUgbG9hZGluZyIsInZpZXdwb3J0Ijp7IndpZHRoIjoxNDQwLCJoZWlnaHQiOjkwMH0sInN0b3JlZCI6eyJkZXBsb3ltZW50UmVmIjoieGRsOi8vb3JnLnh2ZXJzZS5zdHVkaW8ucHJvY2Vzcy1jb250cm9sL2RlcGxveW1lbnQvbG9hZGluZy1iZW5jaC0xNDQwIiwic2NlbmFyaW9SZWYiOiJ4ZGw6Ly9vcmcueHZlcnNlLnN0dWRpby5wcm9jZXNzLWNvbnRyb2wvc2NlbmFyaW8vbG9hZGluZy1iZW5jaC0xNDQwLXNjZW5hcmlvIn0sInByZXNlbnRlZFdoaWxlTG9hZGluZyI6InhkbDovL29yZy54dmVyc2Uuc3R1ZGlvLnByb2Nlc3MtY29udHJvbC9kZXBsb3ltZW50L2xvY2FsLXJlZmVyZW5jZSIsIm9yaWdpbmFsIjoieGRsOi8vb3JnLnh2ZXJzZS5zdHVkaW8ucHJvY2Vzcy1jb250cm9sL2RlcGxveW1lbnQvbG9jYWwtcmVmZXJlbmNlIiwiZXhwZWN0ZWQiOiJ4ZGw6Ly9vcmcueHZlcnNlLnN0dWRpby5wcm9jZXNzLWNvbnRyb2wvZGVwbG95bWVudC9sb2FkaW5nLWJlbmNoLTE0NDAiLCJzY29wZSI6IkhlbGQgcmVhbCB2YXJpYW50LWxpc3QgR0VUOyBleHBsaWNpdCBzZWxlY3Rpb24gbXVzdCBub3QgZXhwb3NlIHRoZSBwcmV2aW91cyB2YXJpYW50J3MgYXV0aG9yaW5nIGZvcm1zIn0="
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/deployment-accessibility-d-05636-t-clone-loading-at-1440x900/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/deployment-accessibility-d-05636-t-clone-loading-at-1440x900/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/deployment-accessibility.spec.ts",
+                    "column": 38,
+                    "line": 858
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "677a7f32e59440006319-6ae938b209eb905ecfcd",
+          "file": "deployment-accessibility.spec.ts",
+          "line": 842,
+          "column": 9
+        },
+        {
+          "title": "deployment accessibility: newer readiness at 1440x900",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 14143,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('dialog')\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toBeVisible\" getByRole('dialog') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog')\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('dialog')\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toBeVisible\" getByRole('dialog') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog')\u001b[22m\n\n    at <repo>/tests/e2e/deployment-accessibility.spec.ts:881:37",
+                    "location": {
+                      "file": "<repo>/tests/e2e/deployment-accessibility.spec.ts",
+                      "column": 37,
+                      "line": 881
+                    },
+                    "snippet": "  879 |           const dialog = page.getByRole(\"dialog\"); await expect(dialog).toBeVisible();\n  880 |           await pending.release(); await expect(page.locator(\".notice.busy\")).toHaveCount(0);\n> 881 |           await expect.soft(dialog).toBeVisible();\n      |                                     ^\n  882 |           await expect.soft(page.locator(\".workspace-context\")).toContainText(`Draft revision ${saved.body.project.revision}`);\n  883 |           await testInfo.attach(\"deployment-review-countercheck.json\", { body: JSON.stringify({ mode, viewport, committedRevision: saved.body.project.revision, preflightId: report.preflightId, snapshotId: report.snapshotId, status: report.status, dialogRetained: await dialog.count(), scope: \"Newer actual ready preflight at the same committed revision remains current after an older save acknowledgement; no Start\" }), contentType: \"application/json\" });\n  884 |           if (await dialog.count()) await page.keyboard.press(\"Escape\");"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/deployment-accessibility.spec.ts",
+                        "column": 37,
+                        "line": 881
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('dialog')\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toBeVisible\" getByRole('dialog') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog')\u001b[22m\n\n\n  879 |           const dialog = page.getByRole(\"dialog\"); await expect(dialog).toBeVisible();\n  880 |           await pending.release(); await expect(page.locator(\".notice.busy\")).toHaveCount(0);\n> 881 |           await expect.soft(dialog).toBeVisible();\n      |                                     ^\n  882 |           await expect.soft(page.locator(\".workspace-context\")).toContainText(`Draft revision ${saved.body.project.revision}`);\n  883 |           await testInfo.attach(\"deployment-review-countercheck.json\", { body: JSON.stringify({ mode, viewport, committedRevision: saved.body.project.revision, preflightId: report.preflightId, snapshotId: report.snapshotId, status: report.status, dialogRetained: await dialog.count(), scope: \"Newer actual ready preflight at the same committed revision remains current after an older save acknowledgement; no Start\" }), contentType: \"application/json\" });\n  884 |           if (await dialog.count()) await page.keyboard.press(\"Escape\");\n    at <repo>/tests/e2e/deployment-accessibility.spec.ts:881:37"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T17:54:02.941Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "deployment-review-countercheck.json",
+                      "contentType": "application/json",
+                      "body": "eyJtb2RlIjoibmV3ZXIgcmVhZGluZXNzIiwidmlld3BvcnQiOnsid2lkdGgiOjE0NDAsImhlaWdodCI6OTAwfSwiY29tbWl0dGVkUmV2aXNpb24iOjIsInByZWZsaWdodElkIjoicGYtN2IxMGMxMjYtNGQxNS00MDVmLTk3NTAtMzhjYTY4OGM3YjBlIiwic25hcHNob3RJZCI6InNuYXAtNjZhOGViNjgtNzJjNC00Y2NjLTgyNTgtZGYyMzc2MjczODFmIiwic3RhdHVzIjoicmVhZHkiLCJkaWFsb2dSZXRhaW5lZCI6MCwic2NvcGUiOiJOZXdlciBhY3R1YWwgcmVhZHkgcHJlZmxpZ2h0IGF0IHRoZSBzYW1lIGNvbW1pdHRlZCByZXZpc2lvbiByZW1haW5zIGN1cnJlbnQgYWZ0ZXIgYW4gb2xkZXIgc2F2ZSBhY2tub3dsZWRnZW1lbnQ7IG5vIFN0YXJ0In0="
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/deployment-accessibility-d-d5004-newer-readiness-at-1440x900/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/deployment-accessibility-d-d5004-newer-readiness-at-1440x900/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/deployment-accessibility.spec.ts",
+                    "column": 37,
+                    "line": 881
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "677a7f32e59440006319-23b0854c7ef4ab499497",
+          "file": "deployment-accessibility.spec.ts",
+          "line": 842,
+          "column": 9
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-26T17:53:01.375Z",
+    "duration": 75819.263,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 4,
+    "flaky": 0
+  }
+}

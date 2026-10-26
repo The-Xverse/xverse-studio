@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type {
   BindingUpdate,
   VariantCreate,
@@ -26,7 +26,7 @@ export function DeploymentComposer({
   providerId,
   selection,
   onSelection,
-  refresh,
+  onCommitted,
   doAction,
 }: {
   project: Project;
@@ -35,11 +35,12 @@ export function DeploymentComposer({
   providerId: string;
   selection: ExecutionSelection;
   onSelection: (selection: ExecutionSelection) => void;
-  refresh: () => Promise<unknown>;
+  onCommitted: (project: Project) => boolean;
   doAction: DoAction;
 }) {
   const term = useTerm();
   const [variants, setVariants] = useState<Data[]>([]),
+    [variantsLoading, setVariantsLoading] = useState(true),
     [name, setName] = useState(""),
     [diagnostics, setDiagnostics] = useState<Data[]>([]),
     [compatibility, setCompatibility] = useState<Data | null>(null),
@@ -57,13 +58,28 @@ export function DeploymentComposer({
       key: string;
       ids: string[];
     } | null>(null);
+  const mounted = useRef(false),
+    mappingIdentifier = useRef<HTMLInputElement | null>(null);
+  const [mappingFocus, setMappingFocus] = useState<{
+    context: string;
+    mappingId: string;
+    origin: HTMLButtonElement;
+  } | null>(null);
+  useEffect(() => {
+    mounted.current = true;
+    return () => {
+      mounted.current = false;
+    };
+  }, []);
   useEffect(() => {
     let active = true;
+    setVariantsLoading(true);
     void api(`/projects/${project.projectId}/deployment-variants`)
       .then((response) => {
         if (!active) return;
         const values = items<Data>(response);
         setVariants(values);
+        setVariantsLoading(false);
         setDiagnostics(response.diagnostics || []);
         if (!selection.deploymentRef && values.length === 1)
           onSelection({
@@ -75,13 +91,15 @@ export function DeploymentComposer({
           });
       })
       .catch((error) => {
-        if (active)
+        if (active) {
+          setVariantsLoading(false);
           setDiagnostics([
             {
               code: error.code || "VARIANT_UNAVAILABLE",
               message: error.message,
             },
           ]);
+        }
       });
     return () => {
       active = false;
@@ -89,7 +107,9 @@ export function DeploymentComposer({
   }, [project.projectId, project.revision]);
   const chosen =
     variants.find((variant) => variant.ref === selection.deploymentRef) ||
-    (variants.length === 1 ? variants[0] : undefined);
+    (!selection.deploymentRef && variants.length === 1
+      ? variants[0]
+      : undefined);
   const document = projection.deployments.find(
     (resource) => resource.documentId === chosen?.documentId,
   );
@@ -124,37 +144,97 @@ export function DeploymentComposer({
       resourceDraft?.key === draftKey
         ? resourceDraft.ids
         : binding?.resourceIds || [];
-  async function timeMappingEdit(edit: Data) {
-    const result = await api(`/projects/${project.projectId}/edits`, {
-      method: "POST",
-      revision: project.revision,
-      body: {
-        baseRevision: project.revision,
-        edits: [
-          {
-            kind: "set_time_mapping",
-            documentId: (
-              project.documents[chosen!.documentId] as { path: string }
-            ).path,
-            ...edit,
+  const context = JSON.stringify([
+    project.projectId,
+    chosen?.documentId,
+    providerId,
+    selection.scenarioRef,
+  ]);
+  const latestContext = useRef(context);
+  latestContext.current = context;
+  const isCurrent = (expected: string) =>
+    mounted.current && latestContext.current === expected;
+  useEffect(() => {
+    if (!mappingFocus) return;
+    if (!isCurrent(mappingFocus.context)) {
+      setMappingFocus(null);
+      return;
+    }
+    if (
+      (chosen?.timeMappings || []).some(
+        (value: Data) => value.id === mappingFocus.mappingId,
+      )
+    )
+      return;
+    setMappingFocus(null);
+    if (
+      !window.document.querySelector('[role="dialog"][aria-modal="true"]') &&
+      (window.document.activeElement === window.document.body ||
+        window.document.activeElement === mappingFocus.origin)
+    )
+      mappingIdentifier.current?.focus();
+  }, [mappingFocus, chosen]);
+  // Authoritative mutations already return the full committed Project. Never start
+  // a new project load using a request's obsolete navigation/selection closure.
+  async function author(
+    action: () => Promise<Data>,
+    complete?: (result: Data) => void,
+  ) {
+    const expected = context;
+    try {
+      const result = await action();
+      if (
+        onCommitted((result.project || result) as Project) &&
+        isCurrent(expected)
+      )
+        complete?.(result);
+      return result;
+    } catch (error) {
+      if (isCurrent(expected)) throw error;
+      return undefined;
+    }
+  }
+  async function timeMappingEdit(
+    edit: Data,
+    complete?: (result: Data) => void,
+  ) {
+    return author(
+      () =>
+        api(`/projects/${project.projectId}/edits`, {
+          method: "POST",
+          revision: project.revision,
+          body: {
+            baseRevision: project.revision,
+            edits: [
+              {
+                kind: "set_time_mapping",
+                documentId: (
+                  project.documents[chosen!.documentId] as { path: string }
+                ).path,
+                ...edit,
+              },
+            ],
           },
-        ],
-      },
-    });
-    await refresh();
-    return result;
+        }),
+      complete,
+    );
   }
   async function patchBinding(change: Partial<BindingUpdate>) {
-    const result = await api(
-      `/projects/${project.projectId}/deployment-variants/${chosen!.documentId}?providerId=${encodeURIComponent(providerId)}`,
-      {
-        method: "PATCH",
-        revision: project.revision,
-        body: { baseRevision: project.revision, ...change } as BindingUpdate,
-      },
+    return author(
+      () =>
+        api(
+          `/projects/${project.projectId}/deployment-variants/${chosen!.documentId}?providerId=${encodeURIComponent(providerId)}`,
+          {
+            method: "PATCH",
+            revision: project.revision,
+            body: {
+              baseRevision: project.revision,
+              ...change,
+            } as BindingUpdate,
+          },
+        ),
+      (result) => setCompatibility(result.compatibility),
     );
-    setCompatibility(result.compatibility);
-    await refresh();
   }
   return (
     <div className="view-page deployment-composer">
@@ -169,6 +249,12 @@ export function DeploymentComposer({
         <Badge>Explicit compiler selection</Badge>
       </div>
       <Diagnostics diagnostics={diagnostics as any} />
+      {variantsLoading && !chosen && (
+        <p className="muted" role="status">
+          Loading deployment variants. The selected variant's authoring forms
+          will be available when it is ready.
+        </p>
+      )}
       <section className="panel">
         <div className="variant-selection">
           <label>
@@ -264,27 +350,31 @@ export function DeploymentComposer({
                     `xdl://${resource.metadata.namespace}/scenario/${resource.metadata.name}` ===
                     selection.scenarioRef,
                 );
-                const result = await api(
-                  `/projects/${project.projectId}/deployment-variants`,
-                  {
-                    method: "POST",
-                    revision: project.revision,
-                    body: {
-                      baseRevision: project.revision,
-                      name,
-                      sourceDeploymentId: chosen.documentId,
-                      ...(scenario
-                        ? { sourceScenarioId: scenario.documentId }
-                        : {}),
-                    } satisfies VariantCreate,
+                const submittedName = name;
+                await author(
+                  () =>
+                    api(`/projects/${project.projectId}/deployment-variants`, {
+                      method: "POST",
+                      revision: project.revision,
+                      body: {
+                        baseRevision: project.revision,
+                        name,
+                        sourceDeploymentId: chosen.documentId,
+                        ...(scenario
+                          ? { sourceScenarioId: scenario.documentId }
+                          : {}),
+                      } satisfies VariantCreate,
+                    }),
+                  (result) => {
+                    onSelection({
+                      deploymentRef: result.variant.ref,
+                      scenarioRef: result.variant.scenarioRefs[0],
+                    });
+                    setName((current) =>
+                      current === submittedName ? "" : current,
+                    );
                   },
                 );
-                onSelection({
-                  deploymentRef: result.variant.ref,
-                  scenarioRef: result.variant.scenarioRefs[0],
-                });
-                setName("");
-                await refresh();
               },
             );
           }}
@@ -389,8 +479,8 @@ export function DeploymentComposer({
             </fieldset>
             <p className="field-hint">
               Studio records the binding exactly; placement and requirement
-              checks are shown in the resolution above. Time mappings are edited
-              in XDL source.
+              checks are shown in the resolution above. Edit declared clock
+              relations in Time mappings below.
             </p>
             <button className="button" disabled={!binding}>
               Save bound resources
@@ -412,11 +502,21 @@ export function DeploymentComposer({
                     type="button"
                     className="small-button"
                     aria-label={`Remove time mapping ${value.id}`}
-                    onClick={() =>
+                    onClick={(event) => {
+                      const origin = event.currentTarget,
+                        request =
+                          window.document.activeElement === origin
+                            ? { context, mappingId: value.id, origin }
+                            : null;
                       void doAction("Removing time mapping", () =>
-                        timeMappingEdit({ mappingId: value.id, remove: true }),
-                      )
-                    }
+                        timeMappingEdit(
+                          { mappingId: value.id, remove: true },
+                          () => {
+                            if (request) setMappingFocus(request);
+                          },
+                        ),
+                      );
+                    }}
                   >
                     Remove
                   </button>
@@ -433,23 +533,32 @@ export function DeploymentComposer({
             onSubmit={(event) => {
               event.preventDefault();
               void doAction("Saving time mapping", async () => {
-                await timeMappingEdit({
-                  mappingId: mappingForm.mappingId,
-                  sourceTimeDomainId: mappingForm.sourceTimeDomainId,
-                  targetTimeDomainId: mappingForm.targetTimeDomainId,
-                  mapping: mappingForm.mapping,
-                  tolerance: {
-                    value: Number(mappingForm.toleranceValue),
-                    unit: mappingForm.toleranceUnit,
+                const submitted = mappingForm;
+                await timeMappingEdit(
+                  {
+                    mappingId: mappingForm.mappingId,
+                    sourceTimeDomainId: mappingForm.sourceTimeDomainId,
+                    targetTimeDomainId: mappingForm.targetTimeDomainId,
+                    mapping: mappingForm.mapping,
+                    tolerance: {
+                      value: Number(mappingForm.toleranceValue),
+                      unit: mappingForm.toleranceUnit,
+                    },
                   },
-                });
-                setMappingForm({ ...mappingForm, mappingId: "", mapping: "" });
+                  () =>
+                    setMappingForm((current) =>
+                      current === submitted
+                        ? { ...current, mappingId: "", mapping: "" }
+                        : current,
+                    ),
+                );
               });
             }}
           >
             <label>
               Mapping identifier
               <input
+                ref={mappingIdentifier}
                 required
                 pattern="[a-z][a-z0-9]*(-[a-z0-9]+)*"
                 maxLength={63}
@@ -600,9 +709,17 @@ export function DeploymentComposer({
           }
         />
       ) : (
-        <Empty title="Choose an authored deployment" icon="deployment">
-          Unsupported or invalid resources remain available in XDL source with
-          authoritative diagnostics.
+        <Empty
+          title={
+            variantsLoading
+              ? "Loading selected deployment"
+              : "Choose an authored deployment"
+          }
+          icon="deployment"
+        >
+          {variantsLoading
+            ? "Waiting for the selected variant before showing its authoring forms."
+            : "Unsupported or invalid resources remain available in XDL source with authoritative diagnostics."}
         </Empty>
       )}
     </div>

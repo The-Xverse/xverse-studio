@@ -133,7 +133,7 @@ export default function App() {
   };
   const [retentionTarget, setRetentionTarget] =
     useState<RetentionTarget | null>(null);
-  const [project, setProject] = useState<Project | null>(null),
+  const [project, storeProject] = useState<Project | null>(null),
     [view, setView] = useState<View>("Model"),
     [section, setSection] = useState<
       "workspace" | "catalog" | "lab" | "settings"
@@ -162,6 +162,34 @@ export default function App() {
     selectedProjectRef = useRef(""),
     projectLoadSequence = useRef(0),
     streamIdentity = useRef("");
+  const latestProject = useRef(project);
+  function setProject(value: Project | null) {
+    latestProject.current = value;
+    storeProject(value);
+  }
+  const renderedLoadSequence = projectLoadSequence.current,
+    renderedIntentSequence = preflightRequestSequence.current;
+  function commitDeploymentProject(saved: Project) {
+    const current = latestProject.current;
+    if (
+      !project ||
+      !current ||
+      selectedProjectRef.current !== project.projectId ||
+      projectLoadSequence.current !== renderedLoadSequence ||
+      current.projectId !== saved.projectId ||
+      project.projectId !== saved.projectId ||
+      saved.revision <= current.revision
+    )
+      return false;
+    const visible = renderedIntentSequence === preflightRequestSequence.current;
+    preflightRequestSequence.current++;
+    setProject(saved);
+    const history = reconcileHistory(readHistory(saved.projectId), saved.revision);
+    writeHistory(saved.projectId, history);
+    setEditHistory(history);
+    setPreflight(null);
+    return visible;
+  }
   const undoControl = useRef<HTMLButtonElement | null>(null),
     redoControl = useRef<HTMLButtonElement | null>(null);
   const [historyFocus, setHistoryFocus] = useState<{
@@ -1365,7 +1393,7 @@ export default function App() {
                     providerId={executionProvider}
                     selection={executionSelection}
                     onSelection={chooseExecution}
-                    refresh={refreshProject}
+                    onCommitted={commitDeploymentProject}
                     doAction={doAction}
                   />
                 ) : view === "Experiments" ? (

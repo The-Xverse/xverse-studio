@@ -78,6 +78,30 @@ Deployment time mappings are authored with the `set_time_mapping` semantic edit 
 amendment). It adds a mapping, replaces one by its id, or removes one. The authoritative validator
 checks the referenced domains.
 
+### Client completion and selection amendment (2026-10-26)
+
+Variant cloning and binding updates already return the full committed Project alongside their
+reports; time-mapping edits return that Project directly. The browser applies this authoritative
+result without starting another project load from a request's captured navigation closure. It checks
+the initiating project/load generation and requires a strictly newer revision than the latest
+accepted Project. All Project state assignments update that known head synchronously, including
+loads, history and readiness refreshes. An acknowledgement for an already-current revision does not
+clear a newer preflight or overwrite its selection. A fresh accepted revision reconciles the tab's
+graph history and invalidates earlier readiness; it does not change existing run snapshots.
+
+Completion may update variant selection or local feedback only while the originating mounted
+project/variant/provider/Scenario context and selection intent remain current. Late errors from a
+departed context are suppressed. Conditional form clearing preserves text entered while a save was
+pending. An explicit Deployment selection never falls back to a different sole cached variant while
+its metadata is loading; the loading state is announced and its authoring forms wait for the matching
+variant. No executable resource identity is inferred from the old selection.
+
+Removing a mapping restores focus to Mapping identifier after the item disappears, provided the
+authoring context is unchanged, no modal is active, and focus remains on the initiating button or
+BODY. Deliberately moved focus is preserved. This is client completion handling: the mutation,
+optimistic-concurrency, validation, resolution and provider-admission contracts above are unchanged.
+Authoring a resource binding or clock relation establishes neither reservation nor clock accuracy.
+
 ### Deployment constraints
 
 - **Exclusive resources.** An exclusive resource bound by more than one binding fails

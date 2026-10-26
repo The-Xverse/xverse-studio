@@ -34,7 +34,21 @@ with its manifest/checker included, clean 100-file hash proof and unchanged test
 grants no runtime authority and does not close T001. Both 944a875 product and d421c23 package-metadata CI runs passed;
 those outcomes predate this descriptive artifact.
 
-The latest connection-authoring successor passed both required native Linux keyboard viewports,
+The latest deployment successor passed 18 native keyboard journeys at both required viewports and
+the full 117-check browser suite with source/fixed inputs unchanged. It verifies variant cloning,
+resource binding, time-mapping authoring/removal, exact revisions/requests, original document bytes
+and no new run. Repaired late completion reopening Home/changing selection, removal focus loss,
+explicit-selection fallback during loading and equal-revision acknowledgements dismissing newer
+readiness. Counterchecks preserve newer heads, moved focus and different variant selection.
+ADR-0015 records the client amendment. Build/typecheck, architecture, compatibility and spec checks
+pass; backend 851 is inherited by unchanged-source proof. Final-source performance passes separately.
+`evidence/studio/M2-keyboard-deployment/` retains reds, the separate blocked readiness-fixture
+correction, independent review and exact source identities. Declaration fixtures do not establish
+runtime, reservation or clock accuracy; the ready lane uses the exact admitted reference. Tasks
+remain partial; count 47/100, no milestone accepted. Both e76b969 and 2e27c3f push/PR CI passed before
+this deployment repair.
+
+The preceding connection-authoring successor passed both required native Linux keyboard viewports,
 reproducing and repairing browser/backend flow-ID grammar drift with associated guidance and native
 constraint focus. Independent backend rejection preserves exact documents/revision; one successful
 edit restores canonical topology without changing definitions or creating a run. The full 99-check

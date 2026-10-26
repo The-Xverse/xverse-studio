@@ -385,3 +385,17 @@ assistive-technology assessment and full acceptance stay open.
 Evidence: `evidence/studio/M2-keyboard-connections/`; component count 47/100, no milestone accepted.
 Clean e76b969 package smoke also passes; clean 100-file manifest, archive/file hashes and tested UI
 bytes are verified under `M2-keyboard-connections/package/`. Native Windows remains held.
+
+Linux keyboard deployment successor (2026-10-26): T038/T067 stay unchecked. Eighteen keyboard
+journeys at both viewports verify clone/resource/time-mapping authoring and removal, exact four
+successful revisions/requests, complete intended clone spec and unchanged original document
+bytes, authoritative validation and no new run. Repairs stop late Home reopening/selection
+replacement, restore removal focus and preserve newer heads, moved focus and changed variants.
+Review-reproduced explicit-selection fallback and same-revision readiness dismissal are repaired.
+Final 117 browser checks and separate performance refresh pass unchanged source; backend 851 is
+inherited by exact unchanged-input proof. Extra declaration fixtures establish no runtime,
+reservation or clock-accuracy support; the ready lane uses the exact admitted reference. Windows,
+actual assistive-technology assessment and full acceptance remain open.
+Evidence: `evidence/studio/M2-keyboard-deployment/`; count 47/100, no milestone accepted.
+T057/T058/T059 component traces also retain the ADR-0015 client-completion amendment and final
+regression; their completed component status is unchanged.
