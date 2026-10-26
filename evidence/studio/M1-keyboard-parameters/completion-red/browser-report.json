@@ -1,0 +1,1170 @@
+{
+  "config": {
+    "argv": [
+      "<loop-cache>/node-v24.22.1-linux-x64/bin/node",
+      "<repo>/node_modules/.bin/playwright",
+      "test",
+      "-c",
+      "tests/e2e/playwright.config.ts",
+      "--grep",
+      "parameter accessibility:"
+    ],
+    "configFile": "<repo>/tests/e2e/playwright.config.ts",
+    "rootDir": "<repo>/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "<repo>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "<repo>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "*.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "<repo>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "<repo>/tests/e2e",
+        "snapshotDir": "<repo>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": "*.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "baseURL": "http://127.0.0.1:46659",
+          "browserName": "chromium",
+          "actionTimeout": 15000,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "trace": "off",
+          "screenshot": "only-on-failure",
+          "video": "off"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "<repo>/test-results/browser-report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "parameter-accessibility.spec.ts",
+      "file": "parameter-accessibility.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "parameter accessibility: native range recovery and save at 1024x768",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 22692,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAccessibleDescription\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('Duration')\nExpected pattern: \u001b[32m/Requested simulation horizon/\u001b[39m\nReceived string:  \u001b[31m\"\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveAccessibleDescription\" getByLabel('Duration') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Duration')\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <input max=\"30\" min=\"0.1\" step=\"any\" value=\"31\" required=\"\" type=\"number\"/>\u001b[22m\n\u001b[2m       - unexpected value \"\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAccessibleDescription\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('Duration')\nExpected pattern: \u001b[32m/Requested simulation horizon/\u001b[39m\nReceived string:  \u001b[31m\"\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveAccessibleDescription\" getByLabel('Duration') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Duration')\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <input max=\"30\" min=\"0.1\" step=\"any\" value=\"31\" required=\"\" type=\"number\"/>\u001b[22m\n\u001b[2m       - unexpected value \"\"\u001b[22m\n\n    at <repo>/tests/e2e/parameter-accessibility.spec.ts:71:30",
+                    "location": {
+                      "file": "<repo>/tests/e2e/parameter-accessibility.spec.ts",
+                      "column": 30,
+                      "line": 71
+                    },
+                    "snippet": "  69 |     expect(await input.evaluate((n) => (n as HTMLInputElement).validity.rangeOverflow)).toBe(true);\n  70 |     expect(writes).toEqual([]); expect((await read(page, id)).documents).toEqual(project.documents);\n> 71 |     await expect.soft(input).toHaveAccessibleDescription(/Requested simulation horizon/);\n     |                              ^\n  72 |     await type(page, input, \"6\");\n  73 |     const savedResponse = page.waitForResponse((r) => new URL(r.url()).pathname === `/api/v1/projects/${id}/edits` && r.request().method() === \"POST\");\n  74 |     await activate(page, apply(input)); const response = await savedResponse; expect(response.status()).toBe(200); const saved = await response.json();"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/parameter-accessibility.spec.ts",
+                        "column": 30,
+                        "line": 71
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAccessibleDescription\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('Duration')\nExpected pattern: \u001b[32m/Requested simulation horizon/\u001b[39m\nReceived string:  \u001b[31m\"\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveAccessibleDescription\" getByLabel('Duration') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Duration')\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <input max=\"30\" min=\"0.1\" step=\"any\" value=\"31\" required=\"\" type=\"number\"/>\u001b[22m\n\u001b[2m       - unexpected value \"\"\u001b[22m\n\n\n  69 |     expect(await input.evaluate((n) => (n as HTMLInputElement).validity.rangeOverflow)).toBe(true);\n  70 |     expect(writes).toEqual([]); expect((await read(page, id)).documents).toEqual(project.documents);\n> 71 |     await expect.soft(input).toHaveAccessibleDescription(/Requested simulation horizon/);\n     |                              ^\n  72 |     await type(page, input, \"6\");\n  73 |     const savedResponse = page.waitForResponse((r) => new URL(r.url()).pathname === `/api/v1/projects/${id}/edits` && r.request().method() === \"POST\");\n  74 |     await activate(page, apply(input)); const response = await savedResponse; expect(response.status()).toBe(200); const saved = await response.json();\n    at <repo>/tests/e2e/parameter-accessibility.spec.ts:71:30"
+                    },
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/parameter-accessibility.spec.ts",
+                        "column": 67,
+                        "line": 76
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByLabel('Duration')\nExpected: focused\nReceived: inactive\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toBeFocused\" getByLabel('Duration') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Duration')\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <input max=\"30\" min=\"0.1\" value=\"6\" step=\"any\" required=\"\" type=\"number\"/>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n\n\n  74 |     await activate(page, apply(input)); const response = await savedResponse; expect(response.status()).toBe(200); const saved = await response.json();\n  75 |     await expect(page.locator(\".alerts\")).toContainText(\"Draft saved\"); await expect(apply(input)).toBeDisabled();\n> 76 |     const focus = await geometry(input); await expect.soft(input).toBeFocused();\n     |                                                                   ^\n  77 |     expect.soft(focus.outline).not.toBe(\"none\"); expect.soft(focus.outlineWidth).toBeGreaterThan(0);\n  78 |     expect.soft(focus.box.top).toBeGreaterThanOrEqual(0); expect.soft(focus.box.bottom).toBeLessThanOrEqual(viewport.height);\n  79 |     expect(saved.revision).toBe(project.revision + 1); expect(value(saved, \"duration\")).toBe(6);\n    at <repo>/tests/e2e/parameter-accessibility.spec.ts:76:67"
+                    },
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/parameter-accessibility.spec.ts",
+                        "column": 36,
+                        "line": 77
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: not \u001b[32m\"none\"\u001b[39m\n\n  75 |     await expect(page.locator(\".alerts\")).toContainText(\"Draft saved\"); await expect(apply(input)).toBeDisabled();\n  76 |     const focus = await geometry(input); await expect.soft(input).toBeFocused();\n> 77 |     expect.soft(focus.outline).not.toBe(\"none\"); expect.soft(focus.outlineWidth).toBeGreaterThan(0);\n     |                                    ^\n  78 |     expect.soft(focus.box.top).toBeGreaterThanOrEqual(0); expect.soft(focus.box.bottom).toBeLessThanOrEqual(viewport.height);\n  79 |     expect(saved.revision).toBe(project.revision + 1); expect(value(saved, \"duration\")).toBe(6);\n  80 |     expect(writes).toEqual([{ path: `/api/v1/projects/${id}/edits`, body: { baseRevision: project.revision, edits: [{ kind: \"set_parameter\", parameterId: \"duration\", value: 6 }] } }]);\n    at <repo>/tests/e2e/parameter-accessibility.spec.ts:77:36"
+                    },
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/parameter-accessibility.spec.ts",
+                        "column": 89,
+                        "line": 78
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: <= \u001b[32m768\u001b[39m\nReceived:    \u001b[31m1108.71875\u001b[39m\n\n  76 |     const focus = await geometry(input); await expect.soft(input).toBeFocused();\n  77 |     expect.soft(focus.outline).not.toBe(\"none\"); expect.soft(focus.outlineWidth).toBeGreaterThan(0);\n> 78 |     expect.soft(focus.box.top).toBeGreaterThanOrEqual(0); expect.soft(focus.box.bottom).toBeLessThanOrEqual(viewport.height);\n     |                                                                                         ^\n  79 |     expect(saved.revision).toBe(project.revision + 1); expect(value(saved, \"duration\")).toBe(6);\n  80 |     expect(writes).toEqual([{ path: `/api/v1/projects/${id}/edits`, body: { baseRevision: project.revision, edits: [{ kind: \"set_parameter\", parameterId: \"duration\", value: 6 }] } }]);\n  81 |     for (const [key, document] of Object.entries(project.documents) as [string, any][]) if (!document.path.endsWith(\"/scenario.xdl.yaml\")) expect(saved.documents[key].content).toBe(document.content);\n    at <repo>/tests/e2e/parameter-accessibility.spec.ts:78:89"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T18:22:41.667Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "parameter-keyboard.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJwbGF0Zm9ybSI6ImxpbnV4IiwiYnJvd3NlciI6IjE1Ni4wLjgwNzguNCIsImZvY3VzIjp7ImZvY3VzZWQiOmZhbHNlLCJhY3RpdmVUYWciOiJCT0RZIiwiYm94Ijp7IngiOjc5MSwieSI6MTA3Ni4yMTg3NSwid2lkdGgiOjIxNywiaGVpZ2h0IjozMi41LCJ0b3AiOjEwNzYuMjE4NzUsInJpZ2h0IjoxMDA4LCJib3R0b20iOjExMDguNzE4NzUsImxlZnQiOjc5MX0sInZpZXdwb3J0Ijp7IndpZHRoIjoxMDI0LCJoZWlnaHQiOjc2OH0sIm91dGxpbmUiOiJub25lIiwib3V0bGluZVdpZHRoIjozfSwicmV2aXNpb25zIjpbMSwyXSwibmF0aXZlUmFuZ2VSZWplY3RlZCI6dHJ1ZSwiY2Fub25pY2FsRHVyYXRpb24iOjYsIm90aGVyRG9jdW1lbnRzQnl0ZUlkZW50aWNhbCI6dHJ1ZSwib3RoZXJTY2VuYXJpb0NvbnRlbnRQcmVzZXJ2ZWQiOnRydWUsImF1dGhvcml0YXRpdmVWYWxpZGF0aW9uIjp0cnVlLCJvd25Qcm9qZWN0UnVuU2V0VW5jaGFuZ2VkIjp0cnVlLCJtZWFzdXJlbWVudHMiOlt7ImxhYmVsIjoiRHVyYXRpb24gcHVycG9zZSBhbmQgY29uc3RyYWludCBndWlkYW5jZSIsInRleHQiOiJSZXF1ZXN0ZWQgc2ltdWxhdGlvbiBob3Jpem9uLCBpbiBzZWNvbmRzOyBhdCBtb3N0IDMsMDAwIHNhbXBsZXMuIiwiY29sb3IiOiJyZ2IoMTAxLCAxMTcsIDE0MSkiLCJmb250U2l6ZSI6IjlweCIsImZvbnRXZWlnaHQiOiI0MDAiLCJ0aHJlc2hvbGQiOjQuNSwic2NvcGUiOiJTZWxlY3RlZCBub3JtYWwtc2l6ZSByZW5kZXJlZCB0ZXh0OyBubyBvdmVyYWxsIGFjY2Vzc2liaWxpdHkgY2VydGlmaWNhdGlvbiIsInN1cHBvcnRlZCI6dHJ1ZSwibGF5ZXJzIjpbInJnYmEoMCwgMCwgMCwgMCkiLCJyZ2JhKDAsIDAsIDAsIDApIiwicmdiYSgwLCAwLCAwLCAwKSIsInJnYmEoMCwgMCwgMCwgMCkiLCJyZ2JhKDAsIDAsIDAsIDApIiwicmdiYSgwLCAwLCAwLCAwKSIsInJnYigyNTUsIDI1NSwgMjU1KSJdLCJiYWNrZ3JvdW5kIjpbMSwxLDEsMV0sImNvbXBvc2l0ZWRGb3JlZ3JvdW5kIjpbMC4zOTYwNzg0MzEzNzI1NDksMC40NTg4MjM1Mjk0MTE3NjQ3LDAuNTUyOTQxMTc2NDcwNTg4MywxXSwicmF0aW8iOjQuNjg0OTEzMTU5ODg5NjIwNSwicGFzc2VkIjp0cnVlLCJhc3N1bXB0aW9ucyI6IkNTUyBzUkdCIGNvbG9yczsgYWxwaGEgY29tcG9zaXRlZCB0aHJvdWdoIGV4cGxpY2l0IGJhY2tncm91bmRzOyBubyBhbnRpLWFsaWFzaW5nIGFwcHJveGltYXRpb24ifV0sIndyaXRlcyI6W3sicGF0aCI6Ii9hcGkvdjEvcHJvamVjdHMvcHJqLTQyOGVhZjY3LWE5ODItNDA4Yi1iMTk2LTliODFhMGJhYjIyNS9lZGl0cyIsImJvZHkiOnsiYmFzZVJldmlzaW9uIjoxLCJlZGl0cyI6W3sia2luZCI6InNldF9wYXJhbWV0ZXIiLCJwYXJhbWV0ZXJJZCI6ImR1cmF0aW9uIiwidmFsdWUiOjZ9XX19LHsicGF0aCI6Ii9hcGkvdjEvcHJvamVjdHMvcHJqLTQyOGVhZjY3LWE5ODItNDA4Yi1iMTk2LTliODFhMGJhYjIyNS92YWxpZGF0aW9ucyIsImJvZHkiOnsicmV2aXNpb24iOjJ9fV0sInNjb3BlIjoiTmF0aXZlIGF1dGhvcmVkIHBhcmFtZXRlciBlZGl0IG9ubHk7IG5vIGxpdmUgbXV0YXRpb24gb3IgU3RhcnQifQ=="
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/parameter-accessibility-pa-dd6e7-covery-and-save-at-1024x768/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/parameter-accessibility-pa-dd6e7-covery-and-save-at-1024x768/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/parameter-accessibility.spec.ts",
+                    "column": 30,
+                    "line": 71
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "936e073082c9cef45be7-5ee7055fbcdce179469f",
+          "file": "parameter-accessibility.spec.ts",
+          "line": 62,
+          "column": 7
+        },
+        {
+          "title": "parameter accessibility: late save preserves Home at 1024x768",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 13038,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Recent projects', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toBeVisible\" getByRole('heading', { name: 'Recent projects', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Recent projects', exact: true })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Recent projects', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toBeVisible\" getByRole('heading', { name: 'Recent projects', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Recent projects', exact: true })\u001b[22m\n\n    at <repo>/tests/e2e/parameter-accessibility.spec.ts:129:117",
+                    "location": {
+                      "file": "<repo>/tests/e2e/parameter-accessibility.spec.ts",
+                      "column": 117,
+                      "line": 129
+                    },
+                    "snippet": "  127 |         await page.waitForLoadState(\"networkidle\");\n  128 |         await expect(page.locator(\".notice.busy\")).toHaveCount(0);\n> 129 |         if (mode === \"Home\") await expect.soft(page.getByRole(\"heading\", { name: \"Recent projects\", exact: true })).toBeVisible();\n      |                                                                                                                     ^\n  130 |         if (mode === \"Home\" || mode === \"deliberate focus\") await expect.soft(home).toBeFocused();\n  131 |         if (mode === \"newer head\") {\n  132 |           await expect.soft(duration(page)).toHaveValue(\"7\"); await expect.soft(page.locator(\".workspace-context\")).toContainText(`Draft revision ${project.revision + 2}`);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/parameter-accessibility.spec.ts",
+                        "column": 117,
+                        "line": 129
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Recent projects', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toBeVisible\" getByRole('heading', { name: 'Recent projects', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Recent projects', exact: true })\u001b[22m\n\n\n  127 |         await page.waitForLoadState(\"networkidle\");\n  128 |         await expect(page.locator(\".notice.busy\")).toHaveCount(0);\n> 129 |         if (mode === \"Home\") await expect.soft(page.getByRole(\"heading\", { name: \"Recent projects\", exact: true })).toBeVisible();\n      |                                                                                                                     ^\n  130 |         if (mode === \"Home\" || mode === \"deliberate focus\") await expect.soft(home).toBeFocused();\n  131 |         if (mode === \"newer head\") {\n  132 |           await expect.soft(duration(page)).toHaveValue(\"7\"); await expect.soft(page.locator(\".workspace-context\")).toContainText(`Draft revision ${project.revision + 2}`);\n    at <repo>/tests/e2e/parameter-accessibility.spec.ts:129:117"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T18:23:04.779Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "late-parameter.json",
+                      "contentType": "application/json",
+                      "body": "eyJtb2RlIjoiSG9tZSIsInZpZXdwb3J0Ijp7IndpZHRoIjoxMDI0LCJoZWlnaHQiOjc2OH0sImFjdHVhbFN0YXR1cyI6MjAwLCJiZWZvcmVSZXZpc2lvbiI6MSwic2F2ZWRSZXZpc2lvbiI6MiwiY2Fub25pY2FsRHVyYXRpb24iOjYsIm5ld2VySGlzdG9yeSI6bnVsbCwiaGlzdG9yeUFmdGVyIjoie1widW5kb1wiOlt7XCJ0YXJnZXRcIjoxLFwiYXRcIjoyLFwibGFiZWxcIjpcInNldCBwYXJhbWV0ZXJcIn1dLFwicmVkb1wiOltdfSIsInJlYWR5SWQiOm51bGwsImFjdGl2ZVRhZyI6IkJVVFRPTiIsIm93blByb2plY3RSdW5TZXRVbmNoYW5nZWQiOnRydWUsInNjb3BlIjoiSGVsZCByZWFsIGNvbW1pdHRlZCBlZGl0IHJlc3BvbnNlOyBwcmVzZXJ2ZWQgbmF2aWdhdGlvbiwgaGlzdG9yeSwgbmV3ZXIgZHJhZnRzL3JlYWRpbmVzcy9mb2N1czsgbm8gU3RhcnQifQ=="
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/parameter-accessibility-pa-e3d92--preserves-Home-at-1024x768/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/parameter-accessibility-pa-e3d92--preserves-Home-at-1024x768/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/parameter-accessibility.spec.ts",
+                    "column": 117,
+                    "line": 129
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "936e073082c9cef45be7-bd15b8a48b1c49fb1266",
+          "file": "parameter-accessibility.spec.ts",
+          "line": 92,
+          "column": 9
+        },
+        {
+          "title": "parameter accessibility: late save preserves newer head at 1024x768",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 4367,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"{\\\"undo\\\":[\u001b[7m{\\\"target\\\":2,\\\"at\\\":3,\\\"label\\\":\\\"set parameter\\\"}\u001b[27m],\\\"redo\\\":[]}\"\u001b[39m\nReceived: \u001b[31m\"{\\\"undo\\\":[],\\\"redo\\\":[]}\"\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"{\\\"undo\\\":[\u001b[7m{\\\"target\\\":2,\\\"at\\\":3,\\\"label\\\":\\\"set parameter\\\"}\u001b[27m],\\\"redo\\\":[]}\"\u001b[39m\nReceived: \u001b[31m\"{\\\"undo\\\":[],\\\"redo\\\":[]}\"\u001b[39m\n    at <repo>/tests/e2e/parameter-accessibility.spec.ts:133:109",
+                    "location": {
+                      "file": "<repo>/tests/e2e/parameter-accessibility.spec.ts",
+                      "column": 109,
+                      "line": 133
+                    },
+                    "snippet": "  131 |         if (mode === \"newer head\") {\n  132 |           await expect.soft(duration(page)).toHaveValue(\"7\"); await expect.soft(page.locator(\".workspace-context\")).toContainText(`Draft revision ${project.revision + 2}`);\n> 133 |           expect.soft(await page.evaluate((id) => sessionStorage.getItem(\"studio.graphHistory.\" + id), id)).toBe(newerHistory);\n      |                                                                                                             ^\n  134 |         }\n  135 |         if (mode === \"newer same-field draft\") { await expect.soft(duration(page)).toHaveValue(\"7\"); await expect.soft(apply(duration(page))).toBeEnabled(); }\n  136 |         if (mode === \"other field draft\") { await expect.soft(page.getByLabel(\"Target\", { exact: false })).toHaveValue(\"2.5\"); await expect.soft(apply(page.getByLabel(\"Target\", { exact: false }))).toBeEnabled(); }"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/parameter-accessibility.spec.ts",
+                        "column": 109,
+                        "line": 133
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"{\\\"undo\\\":[\u001b[7m{\\\"target\\\":2,\\\"at\\\":3,\\\"label\\\":\\\"set parameter\\\"}\u001b[27m],\\\"redo\\\":[]}\"\u001b[39m\nReceived: \u001b[31m\"{\\\"undo\\\":[],\\\"redo\\\":[]}\"\u001b[39m\n\n  131 |         if (mode === \"newer head\") {\n  132 |           await expect.soft(duration(page)).toHaveValue(\"7\"); await expect.soft(page.locator(\".workspace-context\")).toContainText(`Draft revision ${project.revision + 2}`);\n> 133 |           expect.soft(await page.evaluate((id) => sessionStorage.getItem(\"studio.graphHistory.\" + id), id)).toBe(newerHistory);\n      |                                                                                                             ^\n  134 |         }\n  135 |         if (mode === \"newer same-field draft\") { await expect.soft(duration(page)).toHaveValue(\"7\"); await expect.soft(apply(duration(page))).toBeEnabled(); }\n  136 |         if (mode === \"other field draft\") { await expect.soft(page.getByLabel(\"Target\", { exact: false })).toHaveValue(\"2.5\"); await expect.soft(apply(page.getByLabel(\"Target\", { exact: false }))).toBeEnabled(); }\n    at <repo>/tests/e2e/parameter-accessibility.spec.ts:133:109"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T18:23:18.225Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "late-parameter.json",
+                      "contentType": "application/json",
+                      "body": "eyJtb2RlIjoibmV3ZXIgaGVhZCIsInZpZXdwb3J0Ijp7IndpZHRoIjoxMDI0LCJoZWlnaHQiOjc2OH0sImFjdHVhbFN0YXR1cyI6MjAwLCJiZWZvcmVSZXZpc2lvbiI6MSwic2F2ZWRSZXZpc2lvbiI6MywiY2Fub25pY2FsRHVyYXRpb24iOjcsIm5ld2VySGlzdG9yeSI6IntcInVuZG9cIjpbe1widGFyZ2V0XCI6MixcImF0XCI6MyxcImxhYmVsXCI6XCJzZXQgcGFyYW1ldGVyXCJ9XSxcInJlZG9cIjpbXX0iLCJoaXN0b3J5QWZ0ZXIiOiJ7XCJ1bmRvXCI6W10sXCJyZWRvXCI6W119IiwicmVhZHlJZCI6bnVsbCwiYWN0aXZlVGFnIjoiQk9EWSIsIm93blByb2plY3RSdW5TZXRVbmNoYW5nZWQiOnRydWUsInNjb3BlIjoiSGVsZCByZWFsIGNvbW1pdHRlZCBlZGl0IHJlc3BvbnNlOyBwcmVzZXJ2ZWQgbmF2aWdhdGlvbiwgaGlzdG9yeSwgbmV3ZXIgZHJhZnRzL3JlYWRpbmVzcy9mb2N1czsgbm8gU3RhcnQifQ=="
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/parameter-accessibility-pa-62491-rves-newer-head-at-1024x768/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/parameter-accessibility-pa-62491-rves-newer-head-at-1024x768/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/parameter-accessibility.spec.ts",
+                    "column": 109,
+                    "line": 133
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "936e073082c9cef45be7-409f7fc33475135cd81b",
+          "file": "parameter-accessibility.spec.ts",
+          "line": 92,
+          "column": 9
+        },
+        {
+          "title": "parameter accessibility: late save preserves newer same-field draft at 1024x768",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 23411,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByLabel('Duration')\nExpected: \u001b[32m\"7\"\u001b[39m\nReceived: \u001b[31m\"6\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveValue\" getByLabel('Duration') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Duration')\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <input max=\"30\" min=\"0.1\" value=\"6\" step=\"any\" required=\"\" type=\"number\"/>\u001b[22m\n\u001b[2m       - unexpected value \"6\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByLabel('Duration')\nExpected: \u001b[32m\"7\"\u001b[39m\nReceived: \u001b[31m\"6\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveValue\" getByLabel('Duration') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Duration')\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <input max=\"30\" min=\"0.1\" value=\"6\" step=\"any\" required=\"\" type=\"number\"/>\u001b[22m\n\u001b[2m       - unexpected value \"6\"\u001b[22m\n\n    at <repo>/tests/e2e/parameter-accessibility.spec.ts:135:84",
+                    "location": {
+                      "file": "<repo>/tests/e2e/parameter-accessibility.spec.ts",
+                      "column": 84,
+                      "line": 135
+                    },
+                    "snippet": "  133 |           expect.soft(await page.evaluate((id) => sessionStorage.getItem(\"studio.graphHistory.\" + id), id)).toBe(newerHistory);\n  134 |         }\n> 135 |         if (mode === \"newer same-field draft\") { await expect.soft(duration(page)).toHaveValue(\"7\"); await expect.soft(apply(duration(page))).toBeEnabled(); }\n      |                                                                                    ^\n  136 |         if (mode === \"other field draft\") { await expect.soft(page.getByLabel(\"Target\", { exact: false })).toHaveValue(\"2.5\"); await expect.soft(apply(page.getByLabel(\"Target\", { exact: false }))).toBeEnabled(); }\n  137 |         if (mode === \"newer readiness\") await expect.soft(page.getByRole(\"dialog\", { name: \"Execution preflight\", exact: true })).toBeVisible();\n  138 |         const saved = await read(page, id); expect(saved.revision).toBe(project.revision + (mode === \"newer head\" ? 2 : 1)); expect(value(saved, \"duration\")).toBe(mode === \"newer head\" ? 7 : 6);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/parameter-accessibility.spec.ts",
+                        "column": 84,
+                        "line": 135
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByLabel('Duration')\nExpected: \u001b[32m\"7\"\u001b[39m\nReceived: \u001b[31m\"6\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveValue\" getByLabel('Duration') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Duration')\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <input max=\"30\" min=\"0.1\" value=\"6\" step=\"any\" required=\"\" type=\"number\"/>\u001b[22m\n\u001b[2m       - unexpected value \"6\"\u001b[22m\n\n\n  133 |           expect.soft(await page.evaluate((id) => sessionStorage.getItem(\"studio.graphHistory.\" + id), id)).toBe(newerHistory);\n  134 |         }\n> 135 |         if (mode === \"newer same-field draft\") { await expect.soft(duration(page)).toHaveValue(\"7\"); await expect.soft(apply(duration(page))).toBeEnabled(); }\n      |                                                                                    ^\n  136 |         if (mode === \"other field draft\") { await expect.soft(page.getByLabel(\"Target\", { exact: false })).toHaveValue(\"2.5\"); await expect.soft(apply(page.getByLabel(\"Target\", { exact: false }))).toBeEnabled(); }\n  137 |         if (mode === \"newer readiness\") await expect.soft(page.getByRole(\"dialog\", { name: \"Execution preflight\", exact: true })).toBeVisible();\n  138 |         const saved = await read(page, id); expect(saved.revision).toBe(project.revision + (mode === \"newer head\" ? 2 : 1)); expect(value(saved, \"duration\")).toBe(mode === \"newer head\" ? 7 : 6);\n    at <repo>/tests/e2e/parameter-accessibility.spec.ts:135:84"
+                    },
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/parameter-accessibility.spec.ts",
+                        "column": 143,
+                        "line": 135
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeEnabled\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByLabel('Duration').locator('xpath=ancestor::form').getByRole('button', { name: 'Apply', exact: true })\nExpected: enabled\nReceived: disabled\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toBeEnabled\" getByLabel('Duration').locator('xpath=ancestor::form').getByRole('button', { name: 'Apply', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Duration').locator('xpath=ancestor::form').getByRole('button', { name: 'Apply', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <button disabled class=\"small-button\">Apply</button>\u001b[22m\n\u001b[2m       - unexpected value \"disabled\"\u001b[22m\n\n\n  133 |           expect.soft(await page.evaluate((id) => sessionStorage.getItem(\"studio.graphHistory.\" + id), id)).toBe(newerHistory);\n  134 |         }\n> 135 |         if (mode === \"newer same-field draft\") { await expect.soft(duration(page)).toHaveValue(\"7\"); await expect.soft(apply(duration(page))).toBeEnabled(); }\n      |                                                                                                                                               ^\n  136 |         if (mode === \"other field draft\") { await expect.soft(page.getByLabel(\"Target\", { exact: false })).toHaveValue(\"2.5\"); await expect.soft(apply(page.getByLabel(\"Target\", { exact: false }))).toBeEnabled(); }\n  137 |         if (mode === \"newer readiness\") await expect.soft(page.getByRole(\"dialog\", { name: \"Execution preflight\", exact: true })).toBeVisible();\n  138 |         const saved = await read(page, id); expect(saved.revision).toBe(project.revision + (mode === \"newer head\" ? 2 : 1)); expect(value(saved, \"duration\")).toBe(mode === \"newer head\" ? 7 : 6);\n    at <repo>/tests/e2e/parameter-accessibility.spec.ts:135:143"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T18:23:22.963Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "late-parameter.json",
+                      "contentType": "application/json",
+                      "body": "eyJtb2RlIjoibmV3ZXIgc2FtZS1maWVsZCBkcmFmdCIsInZpZXdwb3J0Ijp7IndpZHRoIjoxMDI0LCJoZWlnaHQiOjc2OH0sImFjdHVhbFN0YXR1cyI6MjAwLCJiZWZvcmVSZXZpc2lvbiI6MSwic2F2ZWRSZXZpc2lvbiI6MiwiY2Fub25pY2FsRHVyYXRpb24iOjYsIm5ld2VySGlzdG9yeSI6bnVsbCwiaGlzdG9yeUFmdGVyIjoie1widW5kb1wiOlt7XCJ0YXJnZXRcIjoxLFwiYXRcIjoyLFwibGFiZWxcIjpcInNldCBwYXJhbWV0ZXJcIn1dLFwicmVkb1wiOltdfSIsInJlYWR5SWQiOm51bGwsImFjdGl2ZVRhZyI6IkJPRFkiLCJvd25Qcm9qZWN0UnVuU2V0VW5jaGFuZ2VkIjp0cnVlLCJzY29wZSI6IkhlbGQgcmVhbCBjb21taXR0ZWQgZWRpdCByZXNwb25zZTsgcHJlc2VydmVkIG5hdmlnYXRpb24sIGhpc3RvcnksIG5ld2VyIGRyYWZ0cy9yZWFkaW5lc3MvZm9jdXM7IG5vIFN0YXJ0In0="
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/parameter-accessibility-pa-23b5a-ame-field-draft-at-1024x768/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/parameter-accessibility-pa-23b5a-ame-field-draft-at-1024x768/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/parameter-accessibility.spec.ts",
+                    "column": 84,
+                    "line": 135
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "936e073082c9cef45be7-c20b3387941c2fb91b53",
+          "file": "parameter-accessibility.spec.ts",
+          "line": 92,
+          "column": 9
+        },
+        {
+          "title": "parameter accessibility: late save preserves other field draft at 1024x768",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 22920,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByLabel('Target')\nExpected: \u001b[32m\"2.5\"\u001b[39m\nReceived: \u001b[31m\"1\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveValue\" getByLabel('Target') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Target')\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <input max=\"100\" value=\"1\" step=\"any\" min=\"-100\" required=\"\" type=\"number\"/>\u001b[22m\n\u001b[2m       - unexpected value \"1\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByLabel('Target')\nExpected: \u001b[32m\"2.5\"\u001b[39m\nReceived: \u001b[31m\"1\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveValue\" getByLabel('Target') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Target')\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <input max=\"100\" value=\"1\" step=\"any\" min=\"-100\" required=\"\" type=\"number\"/>\u001b[22m\n\u001b[2m       - unexpected value \"1\"\u001b[22m\n\n    at <repo>/tests/e2e/parameter-accessibility.spec.ts:136:108",
+                    "location": {
+                      "file": "<repo>/tests/e2e/parameter-accessibility.spec.ts",
+                      "column": 108,
+                      "line": 136
+                    },
+                    "snippet": "  134 |         }\n  135 |         if (mode === \"newer same-field draft\") { await expect.soft(duration(page)).toHaveValue(\"7\"); await expect.soft(apply(duration(page))).toBeEnabled(); }\n> 136 |         if (mode === \"other field draft\") { await expect.soft(page.getByLabel(\"Target\", { exact: false })).toHaveValue(\"2.5\"); await expect.soft(apply(page.getByLabel(\"Target\", { exact: false }))).toBeEnabled(); }\n      |                                                                                                            ^\n  137 |         if (mode === \"newer readiness\") await expect.soft(page.getByRole(\"dialog\", { name: \"Execution preflight\", exact: true })).toBeVisible();\n  138 |         const saved = await read(page, id); expect(saved.revision).toBe(project.revision + (mode === \"newer head\" ? 2 : 1)); expect(value(saved, \"duration\")).toBe(mode === \"newer head\" ? 7 : 6);\n  139 |         expect(await runIds(page, id)).toEqual(runs);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/parameter-accessibility.spec.ts",
+                        "column": 108,
+                        "line": 136
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByLabel('Target')\nExpected: \u001b[32m\"2.5\"\u001b[39m\nReceived: \u001b[31m\"1\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveValue\" getByLabel('Target') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Target')\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <input max=\"100\" value=\"1\" step=\"any\" min=\"-100\" required=\"\" type=\"number\"/>\u001b[22m\n\u001b[2m       - unexpected value \"1\"\u001b[22m\n\n\n  134 |         }\n  135 |         if (mode === \"newer same-field draft\") { await expect.soft(duration(page)).toHaveValue(\"7\"); await expect.soft(apply(duration(page))).toBeEnabled(); }\n> 136 |         if (mode === \"other field draft\") { await expect.soft(page.getByLabel(\"Target\", { exact: false })).toHaveValue(\"2.5\"); await expect.soft(apply(page.getByLabel(\"Target\", { exact: false }))).toBeEnabled(); }\n      |                                                                                                            ^\n  137 |         if (mode === \"newer readiness\") await expect.soft(page.getByRole(\"dialog\", { name: \"Execution preflight\", exact: true })).toBeVisible();\n  138 |         const saved = await read(page, id); expect(saved.revision).toBe(project.revision + (mode === \"newer head\" ? 2 : 1)); expect(value(saved, \"duration\")).toBe(mode === \"newer head\" ? 7 : 6);\n  139 |         expect(await runIds(page, id)).toEqual(runs);\n    at <repo>/tests/e2e/parameter-accessibility.spec.ts:136:108"
+                    },
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/parameter-accessibility.spec.ts",
+                        "column": 198,
+                        "line": 136
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeEnabled\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByLabel('Target').locator('xpath=ancestor::form').getByRole('button', { name: 'Apply', exact: true })\nExpected: enabled\nReceived: disabled\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toBeEnabled\" getByLabel('Target').locator('xpath=ancestor::form').getByRole('button', { name: 'Apply', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Target').locator('xpath=ancestor::form').getByRole('button', { name: 'Apply', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <button disabled class=\"small-button\">Apply</button>\u001b[22m\n\u001b[2m       - unexpected value \"disabled\"\u001b[22m\n\n\n  134 |         }\n  135 |         if (mode === \"newer same-field draft\") { await expect.soft(duration(page)).toHaveValue(\"7\"); await expect.soft(apply(duration(page))).toBeEnabled(); }\n> 136 |         if (mode === \"other field draft\") { await expect.soft(page.getByLabel(\"Target\", { exact: false })).toHaveValue(\"2.5\"); await expect.soft(apply(page.getByLabel(\"Target\", { exact: false }))).toBeEnabled(); }\n      |                                                                                                                                                                                                      ^\n  137 |         if (mode === \"newer readiness\") await expect.soft(page.getByRole(\"dialog\", { name: \"Execution preflight\", exact: true })).toBeVisible();\n  138 |         const saved = await read(page, id); expect(saved.revision).toBe(project.revision + (mode === \"newer head\" ? 2 : 1)); expect(value(saved, \"duration\")).toBe(mode === \"newer head\" ? 7 : 6);\n  139 |         expect(await runIds(page, id)).toEqual(runs);\n    at <repo>/tests/e2e/parameter-accessibility.spec.ts:136:198"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T18:23:46.779Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "late-parameter.json",
+                      "contentType": "application/json",
+                      "body": "eyJtb2RlIjoib3RoZXIgZmllbGQgZHJhZnQiLCJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJhY3R1YWxTdGF0dXMiOjIwMCwiYmVmb3JlUmV2aXNpb24iOjEsInNhdmVkUmV2aXNpb24iOjIsImNhbm9uaWNhbER1cmF0aW9uIjo2LCJuZXdlckhpc3RvcnkiOm51bGwsImhpc3RvcnlBZnRlciI6IntcInVuZG9cIjpbe1widGFyZ2V0XCI6MSxcImF0XCI6MixcImxhYmVsXCI6XCJzZXQgcGFyYW1ldGVyXCJ9XSxcInJlZG9cIjpbXX0iLCJyZWFkeUlkIjpudWxsLCJhY3RpdmVUYWciOiJCT0RZIiwib3duUHJvamVjdFJ1blNldFVuY2hhbmdlZCI6dHJ1ZSwic2NvcGUiOiJIZWxkIHJlYWwgY29tbWl0dGVkIGVkaXQgcmVzcG9uc2U7IHByZXNlcnZlZCBuYXZpZ2F0aW9uLCBoaXN0b3J5LCBuZXdlciBkcmFmdHMvcmVhZGluZXNzL2ZvY3VzOyBubyBTdGFydCJ9"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/parameter-accessibility-pa-4bb7a-her-field-draft-at-1024x768/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/parameter-accessibility-pa-4bb7a-her-field-draft-at-1024x768/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/parameter-accessibility.spec.ts",
+                    "column": 108,
+                    "line": 136
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "936e073082c9cef45be7-1a541c670edafcab093e",
+          "file": "parameter-accessibility.spec.ts",
+          "line": 92,
+          "column": 9
+        },
+        {
+          "title": "parameter accessibility: late save preserves deliberate focus at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3025,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T18:24:10.095Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "late-parameter.json",
+                      "contentType": "application/json",
+                      "body": "eyJtb2RlIjoiZGVsaWJlcmF0ZSBmb2N1cyIsInZpZXdwb3J0Ijp7IndpZHRoIjoxMDI0LCJoZWlnaHQiOjc2OH0sImFjdHVhbFN0YXR1cyI6MjAwLCJiZWZvcmVSZXZpc2lvbiI6MSwic2F2ZWRSZXZpc2lvbiI6MiwiY2Fub25pY2FsRHVyYXRpb24iOjYsIm5ld2VySGlzdG9yeSI6bnVsbCwiaGlzdG9yeUFmdGVyIjoie1widW5kb1wiOlt7XCJ0YXJnZXRcIjoxLFwiYXRcIjoyLFwibGFiZWxcIjpcInNldCBwYXJhbWV0ZXJcIn1dLFwicmVkb1wiOltdfSIsInJlYWR5SWQiOm51bGwsImFjdGl2ZVRhZyI6IkJVVFRPTiIsIm93blByb2plY3RSdW5TZXRVbmNoYW5nZWQiOnRydWUsInNjb3BlIjoiSGVsZCByZWFsIGNvbW1pdHRlZCBlZGl0IHJlc3BvbnNlOyBwcmVzZXJ2ZWQgbmF2aWdhdGlvbiwgaGlzdG9yeSwgbmV3ZXIgZHJhZnRzL3JlYWRpbmVzcy9mb2N1czsgbm8gU3RhcnQifQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "936e073082c9cef45be7-637f2141362a01c4de32",
+          "file": "parameter-accessibility.spec.ts",
+          "line": 92,
+          "column": 9
+        },
+        {
+          "title": "parameter accessibility: late save preserves newer readiness at 1024x768",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 13951,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('dialog', { name: 'Execution preflight', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toBeVisible\" getByRole('dialog', { name: 'Execution preflight', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: 'Execution preflight', exact: true })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('dialog', { name: 'Execution preflight', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toBeVisible\" getByRole('dialog', { name: 'Execution preflight', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: 'Execution preflight', exact: true })\u001b[22m\n\n    at <repo>/tests/e2e/parameter-accessibility.spec.ts:137:131",
+                    "location": {
+                      "file": "<repo>/tests/e2e/parameter-accessibility.spec.ts",
+                      "column": 131,
+                      "line": 137
+                    },
+                    "snippet": "  135 |         if (mode === \"newer same-field draft\") { await expect.soft(duration(page)).toHaveValue(\"7\"); await expect.soft(apply(duration(page))).toBeEnabled(); }\n  136 |         if (mode === \"other field draft\") { await expect.soft(page.getByLabel(\"Target\", { exact: false })).toHaveValue(\"2.5\"); await expect.soft(apply(page.getByLabel(\"Target\", { exact: false }))).toBeEnabled(); }\n> 137 |         if (mode === \"newer readiness\") await expect.soft(page.getByRole(\"dialog\", { name: \"Execution preflight\", exact: true })).toBeVisible();\n      |                                                                                                                                   ^\n  138 |         const saved = await read(page, id); expect(saved.revision).toBe(project.revision + (mode === \"newer head\" ? 2 : 1)); expect(value(saved, \"duration\")).toBe(mode === \"newer head\" ? 7 : 6);\n  139 |         expect(await runIds(page, id)).toEqual(runs);\n  140 |         await testInfo.attach(\"late-parameter.json\", { body: JSON.stringify({ mode, viewport, actualStatus: actual.status, beforeRevision: project.revision, savedRevision: saved.revision, canonicalDuration: value(saved, \"duration\"), newerHistory, historyAfter: await page.evaluate((id) => sessionStorage.getItem(\"studio.graphHistory.\" + id), id), readyId, activeTag: await page.evaluate(() => document.activeElement?.tagName), ownProjectRunSetUnchanged: true, scope: \"Held real committed edit response; preserved navigation, history, newer drafts/readiness/focus; no Start\" }), contentType: \"application/json\" });"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/parameter-accessibility.spec.ts",
+                        "column": 131,
+                        "line": 137
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('dialog', { name: 'Execution preflight', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toBeVisible\" getByRole('dialog', { name: 'Execution preflight', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: 'Execution preflight', exact: true })\u001b[22m\n\n\n  135 |         if (mode === \"newer same-field draft\") { await expect.soft(duration(page)).toHaveValue(\"7\"); await expect.soft(apply(duration(page))).toBeEnabled(); }\n  136 |         if (mode === \"other field draft\") { await expect.soft(page.getByLabel(\"Target\", { exact: false })).toHaveValue(\"2.5\"); await expect.soft(apply(page.getByLabel(\"Target\", { exact: false }))).toBeEnabled(); }\n> 137 |         if (mode === \"newer readiness\") await expect.soft(page.getByRole(\"dialog\", { name: \"Execution preflight\", exact: true })).toBeVisible();\n      |                                                                                                                                   ^\n  138 |         const saved = await read(page, id); expect(saved.revision).toBe(project.revision + (mode === \"newer head\" ? 2 : 1)); expect(value(saved, \"duration\")).toBe(mode === \"newer head\" ? 7 : 6);\n  139 |         expect(await runIds(page, id)).toEqual(runs);\n  140 |         await testInfo.attach(\"late-parameter.json\", { body: JSON.stringify({ mode, viewport, actualStatus: actual.status, beforeRevision: project.revision, savedRevision: saved.revision, canonicalDuration: value(saved, \"duration\"), newerHistory, historyAfter: await page.evaluate((id) => sessionStorage.getItem(\"studio.graphHistory.\" + id), id), readyId, activeTag: await page.evaluate(() => document.activeElement?.tagName), ownProjectRunSetUnchanged: true, scope: \"Held real committed edit response; preserved navigation, history, newer drafts/readiness/focus; no Start\" }), contentType: \"application/json\" });\n    at <repo>/tests/e2e/parameter-accessibility.spec.ts:137:131"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T18:24:13.181Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "late-parameter.json",
+                      "contentType": "application/json",
+                      "body": "eyJtb2RlIjoibmV3ZXIgcmVhZGluZXNzIiwidmlld3BvcnQiOnsid2lkdGgiOjEwMjQsImhlaWdodCI6NzY4fSwiYWN0dWFsU3RhdHVzIjoyMDAsImJlZm9yZVJldmlzaW9uIjoxLCJzYXZlZFJldmlzaW9uIjoyLCJjYW5vbmljYWxEdXJhdGlvbiI6NiwibmV3ZXJIaXN0b3J5IjpudWxsLCJoaXN0b3J5QWZ0ZXIiOiJ7XCJ1bmRvXCI6W3tcInRhcmdldFwiOjEsXCJhdFwiOjIsXCJsYWJlbFwiOlwic2V0IHBhcmFtZXRlclwifV0sXCJyZWRvXCI6W119IiwicmVhZHlJZCI6InBmLTM5MTMzNmQ2LTU2ZjAtNGQ5Yy04M2RlLTllMWYwMjA3Nzk1NSIsImFjdGl2ZVRhZyI6IkJVVFRPTiIsIm93blByb2plY3RSdW5TZXRVbmNoYW5nZWQiOnRydWUsInNjb3BlIjoiSGVsZCByZWFsIGNvbW1pdHRlZCBlZGl0IHJlc3BvbnNlOyBwcmVzZXJ2ZWQgbmF2aWdhdGlvbiwgaGlzdG9yeSwgbmV3ZXIgZHJhZnRzL3JlYWRpbmVzcy9mb2N1czsgbm8gU3RhcnQifQ=="
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/parameter-accessibility-pa-a36ef-newer-readiness-at-1024x768/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/parameter-accessibility-pa-a36ef-newer-readiness-at-1024x768/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/parameter-accessibility.spec.ts",
+                    "column": 131,
+                    "line": 137
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "936e073082c9cef45be7-1f21c1af7cd0cb8dc3a7",
+          "file": "parameter-accessibility.spec.ts",
+          "line": 92,
+          "column": 9
+        },
+        {
+          "title": "parameter accessibility: native range recovery and save at 1440x900",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 6,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 22413,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAccessibleDescription\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('Duration')\nExpected pattern: \u001b[32m/Requested simulation horizon/\u001b[39m\nReceived string:  \u001b[31m\"\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveAccessibleDescription\" getByLabel('Duration') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Duration')\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <input max=\"30\" min=\"0.1\" step=\"any\" value=\"31\" required=\"\" type=\"number\"/>\u001b[22m\n\u001b[2m       - unexpected value \"\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAccessibleDescription\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('Duration')\nExpected pattern: \u001b[32m/Requested simulation horizon/\u001b[39m\nReceived string:  \u001b[31m\"\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveAccessibleDescription\" getByLabel('Duration') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Duration')\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <input max=\"30\" min=\"0.1\" step=\"any\" value=\"31\" required=\"\" type=\"number\"/>\u001b[22m\n\u001b[2m       - unexpected value \"\"\u001b[22m\n\n    at <repo>/tests/e2e/parameter-accessibility.spec.ts:71:30",
+                    "location": {
+                      "file": "<repo>/tests/e2e/parameter-accessibility.spec.ts",
+                      "column": 30,
+                      "line": 71
+                    },
+                    "snippet": "  69 |     expect(await input.evaluate((n) => (n as HTMLInputElement).validity.rangeOverflow)).toBe(true);\n  70 |     expect(writes).toEqual([]); expect((await read(page, id)).documents).toEqual(project.documents);\n> 71 |     await expect.soft(input).toHaveAccessibleDescription(/Requested simulation horizon/);\n     |                              ^\n  72 |     await type(page, input, \"6\");\n  73 |     const savedResponse = page.waitForResponse((r) => new URL(r.url()).pathname === `/api/v1/projects/${id}/edits` && r.request().method() === \"POST\");\n  74 |     await activate(page, apply(input)); const response = await savedResponse; expect(response.status()).toBe(200); const saved = await response.json();"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/parameter-accessibility.spec.ts",
+                        "column": 30,
+                        "line": 71
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveAccessibleDescription\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('Duration')\nExpected pattern: \u001b[32m/Requested simulation horizon/\u001b[39m\nReceived string:  \u001b[31m\"\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveAccessibleDescription\" getByLabel('Duration') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Duration')\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <input max=\"30\" min=\"0.1\" step=\"any\" value=\"31\" required=\"\" type=\"number\"/>\u001b[22m\n\u001b[2m       - unexpected value \"\"\u001b[22m\n\n\n  69 |     expect(await input.evaluate((n) => (n as HTMLInputElement).validity.rangeOverflow)).toBe(true);\n  70 |     expect(writes).toEqual([]); expect((await read(page, id)).documents).toEqual(project.documents);\n> 71 |     await expect.soft(input).toHaveAccessibleDescription(/Requested simulation horizon/);\n     |                              ^\n  72 |     await type(page, input, \"6\");\n  73 |     const savedResponse = page.waitForResponse((r) => new URL(r.url()).pathname === `/api/v1/projects/${id}/edits` && r.request().method() === \"POST\");\n  74 |     await activate(page, apply(input)); const response = await savedResponse; expect(response.status()).toBe(200); const saved = await response.json();\n    at <repo>/tests/e2e/parameter-accessibility.spec.ts:71:30"
+                    },
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/parameter-accessibility.spec.ts",
+                        "column": 67,
+                        "line": 76
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByLabel('Duration')\nExpected: focused\nReceived: inactive\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toBeFocused\" getByLabel('Duration') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Duration')\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <input max=\"30\" min=\"0.1\" value=\"6\" step=\"any\" required=\"\" type=\"number\"/>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n\n\n  74 |     await activate(page, apply(input)); const response = await savedResponse; expect(response.status()).toBe(200); const saved = await response.json();\n  75 |     await expect(page.locator(\".alerts\")).toContainText(\"Draft saved\"); await expect(apply(input)).toBeDisabled();\n> 76 |     const focus = await geometry(input); await expect.soft(input).toBeFocused();\n     |                                                                   ^\n  77 |     expect.soft(focus.outline).not.toBe(\"none\"); expect.soft(focus.outlineWidth).toBeGreaterThan(0);\n  78 |     expect.soft(focus.box.top).toBeGreaterThanOrEqual(0); expect.soft(focus.box.bottom).toBeLessThanOrEqual(viewport.height);\n  79 |     expect(saved.revision).toBe(project.revision + 1); expect(value(saved, \"duration\")).toBe(6);\n    at <repo>/tests/e2e/parameter-accessibility.spec.ts:76:67"
+                    },
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/parameter-accessibility.spec.ts",
+                        "column": 36,
+                        "line": 77
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: not \u001b[32m\"none\"\u001b[39m\n\n  75 |     await expect(page.locator(\".alerts\")).toContainText(\"Draft saved\"); await expect(apply(input)).toBeDisabled();\n  76 |     const focus = await geometry(input); await expect.soft(input).toBeFocused();\n> 77 |     expect.soft(focus.outline).not.toBe(\"none\"); expect.soft(focus.outlineWidth).toBeGreaterThan(0);\n     |                                    ^\n  78 |     expect.soft(focus.box.top).toBeGreaterThanOrEqual(0); expect.soft(focus.box.bottom).toBeLessThanOrEqual(viewport.height);\n  79 |     expect(saved.revision).toBe(project.revision + 1); expect(value(saved, \"duration\")).toBe(6);\n  80 |     expect(writes).toEqual([{ path: `/api/v1/projects/${id}/edits`, body: { baseRevision: project.revision, edits: [{ kind: \"set_parameter\", parameterId: \"duration\", value: 6 }] } }]);\n    at <repo>/tests/e2e/parameter-accessibility.spec.ts:77:36"
+                    },
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/parameter-accessibility.spec.ts",
+                        "column": 89,
+                        "line": 78
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: <= \u001b[32m900\u001b[39m\nReceived:    \u001b[31m1114.71875\u001b[39m\n\n  76 |     const focus = await geometry(input); await expect.soft(input).toBeFocused();\n  77 |     expect.soft(focus.outline).not.toBe(\"none\"); expect.soft(focus.outlineWidth).toBeGreaterThan(0);\n> 78 |     expect.soft(focus.box.top).toBeGreaterThanOrEqual(0); expect.soft(focus.box.bottom).toBeLessThanOrEqual(viewport.height);\n     |                                                                                         ^\n  79 |     expect(saved.revision).toBe(project.revision + 1); expect(value(saved, \"duration\")).toBe(6);\n  80 |     expect(writes).toEqual([{ path: `/api/v1/projects/${id}/edits`, body: { baseRevision: project.revision, edits: [{ kind: \"set_parameter\", parameterId: \"duration\", value: 6 }] } }]);\n  81 |     for (const [key, document] of Object.entries(project.documents) as [string, any][]) if (!document.path.endsWith(\"/scenario.xdl.yaml\")) expect(saved.documents[key].content).toBe(document.content);\n    at <repo>/tests/e2e/parameter-accessibility.spec.ts:78:89"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T18:24:27.474Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "parameter-keyboard.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJwbGF0Zm9ybSI6ImxpbnV4IiwiYnJvd3NlciI6IjE1Ni4wLjgwNzguNCIsImZvY3VzIjp7ImZvY3VzZWQiOmZhbHNlLCJhY3RpdmVUYWciOiJCT0RZIiwiYm94Ijp7IngiOjExOTEsInkiOjEwODIuMjE4NzUsIndpZHRoIjoyMjksImhlaWdodCI6MzIuNSwidG9wIjoxMDgyLjIxODc1LCJyaWdodCI6MTQyMCwiYm90dG9tIjoxMTE0LjcxODc1LCJsZWZ0IjoxMTkxfSwidmlld3BvcnQiOnsid2lkdGgiOjE0NDAsImhlaWdodCI6OTAwfSwib3V0bGluZSI6Im5vbmUiLCJvdXRsaW5lV2lkdGgiOjN9LCJyZXZpc2lvbnMiOlsxLDJdLCJuYXRpdmVSYW5nZVJlamVjdGVkIjp0cnVlLCJjYW5vbmljYWxEdXJhdGlvbiI6Niwib3RoZXJEb2N1bWVudHNCeXRlSWRlbnRpY2FsIjp0cnVlLCJvdGhlclNjZW5hcmlvQ29udGVudFByZXNlcnZlZCI6dHJ1ZSwiYXV0aG9yaXRhdGl2ZVZhbGlkYXRpb24iOnRydWUsIm93blByb2plY3RSdW5TZXRVbmNoYW5nZWQiOnRydWUsIm1lYXN1cmVtZW50cyI6W3sibGFiZWwiOiJEdXJhdGlvbiBwdXJwb3NlIGFuZCBjb25zdHJhaW50IGd1aWRhbmNlIiwidGV4dCI6IlJlcXVlc3RlZCBzaW11bGF0aW9uIGhvcml6b24sIGluIHNlY29uZHM7IGF0IG1vc3QgMywwMDAgc2FtcGxlcy4iLCJjb2xvciI6InJnYigxMDEsIDExNywgMTQxKSIsImZvbnRTaXplIjoiOXB4IiwiZm9udFdlaWdodCI6IjQwMCIsInRocmVzaG9sZCI6NC41LCJzY29wZSI6IlNlbGVjdGVkIG5vcm1hbC1zaXplIHJlbmRlcmVkIHRleHQ7IG5vIG92ZXJhbGwgYWNjZXNzaWJpbGl0eSBjZXJ0aWZpY2F0aW9uIiwic3VwcG9ydGVkIjp0cnVlLCJsYXllcnMiOlsicmdiYSgwLCAwLCAwLCAwKSIsInJnYmEoMCwgMCwgMCwgMCkiLCJyZ2JhKDAsIDAsIDAsIDApIiwicmdiYSgwLCAwLCAwLCAwKSIsInJnYmEoMCwgMCwgMCwgMCkiLCJyZ2JhKDAsIDAsIDAsIDApIiwicmdiKDI1NSwgMjU1LCAyNTUpIl0sImJhY2tncm91bmQiOlsxLDEsMSwxXSwiY29tcG9zaXRlZEZvcmVncm91bmQiOlswLjM5NjA3ODQzMTM3MjU0OSwwLjQ1ODgyMzUyOTQxMTc2NDcsMC41NTI5NDExNzY0NzA1ODgzLDFdLCJyYXRpbyI6NC42ODQ5MTMxNTk4ODk2MjA1LCJwYXNzZWQiOnRydWUsImFzc3VtcHRpb25zIjoiQ1NTIHNSR0IgY29sb3JzOyBhbHBoYSBjb21wb3NpdGVkIHRocm91Z2ggZXhwbGljaXQgYmFja2dyb3VuZHM7IG5vIGFudGktYWxpYXNpbmcgYXBwcm94aW1hdGlvbiJ9XSwid3JpdGVzIjpbeyJwYXRoIjoiL2FwaS92MS9wcm9qZWN0cy9wcmotMmUyZmM0OGEtNmVlMS00NWExLThiYzUtYzZjZGE5ZGRjYmQ1L2VkaXRzIiwiYm9keSI6eyJiYXNlUmV2aXNpb24iOjEsImVkaXRzIjpbeyJraW5kIjoic2V0X3BhcmFtZXRlciIsInBhcmFtZXRlcklkIjoiZHVyYXRpb24iLCJ2YWx1ZSI6Nn1dfX0seyJwYXRoIjoiL2FwaS92MS9wcm9qZWN0cy9wcmotMmUyZmM0OGEtNmVlMS00NWExLThiYzUtYzZjZGE5ZGRjYmQ1L3ZhbGlkYXRpb25zIiwiYm9keSI6eyJyZXZpc2lvbiI6Mn19XSwic2NvcGUiOiJOYXRpdmUgYXV0aG9yZWQgcGFyYW1ldGVyIGVkaXQgb25seTsgbm8gbGl2ZSBtdXRhdGlvbiBvciBTdGFydCJ9"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/parameter-accessibility-pa-7e0b2-covery-and-save-at-1440x900/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/parameter-accessibility-pa-7e0b2-covery-and-save-at-1440x900/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/parameter-accessibility.spec.ts",
+                    "column": 30,
+                    "line": 71
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "936e073082c9cef45be7-06b77173eb92c43992b1",
+          "file": "parameter-accessibility.spec.ts",
+          "line": 62,
+          "column": 7
+        },
+        {
+          "title": "parameter accessibility: late save preserves Home at 1440x900",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 7,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 12370,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Recent projects', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toBeVisible\" getByRole('heading', { name: 'Recent projects', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Recent projects', exact: true })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Recent projects', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toBeVisible\" getByRole('heading', { name: 'Recent projects', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Recent projects', exact: true })\u001b[22m\n\n    at <repo>/tests/e2e/parameter-accessibility.spec.ts:129:117",
+                    "location": {
+                      "file": "<repo>/tests/e2e/parameter-accessibility.spec.ts",
+                      "column": 117,
+                      "line": 129
+                    },
+                    "snippet": "  127 |         await page.waitForLoadState(\"networkidle\");\n  128 |         await expect(page.locator(\".notice.busy\")).toHaveCount(0);\n> 129 |         if (mode === \"Home\") await expect.soft(page.getByRole(\"heading\", { name: \"Recent projects\", exact: true })).toBeVisible();\n      |                                                                                                                     ^\n  130 |         if (mode === \"Home\" || mode === \"deliberate focus\") await expect.soft(home).toBeFocused();\n  131 |         if (mode === \"newer head\") {\n  132 |           await expect.soft(duration(page)).toHaveValue(\"7\"); await expect.soft(page.locator(\".workspace-context\")).toContainText(`Draft revision ${project.revision + 2}`);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/parameter-accessibility.spec.ts",
+                        "column": 117,
+                        "line": 129
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Recent projects', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toBeVisible\" getByRole('heading', { name: 'Recent projects', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Recent projects', exact: true })\u001b[22m\n\n\n  127 |         await page.waitForLoadState(\"networkidle\");\n  128 |         await expect(page.locator(\".notice.busy\")).toHaveCount(0);\n> 129 |         if (mode === \"Home\") await expect.soft(page.getByRole(\"heading\", { name: \"Recent projects\", exact: true })).toBeVisible();\n      |                                                                                                                     ^\n  130 |         if (mode === \"Home\" || mode === \"deliberate focus\") await expect.soft(home).toBeFocused();\n  131 |         if (mode === \"newer head\") {\n  132 |           await expect.soft(duration(page)).toHaveValue(\"7\"); await expect.soft(page.locator(\".workspace-context\")).toContainText(`Draft revision ${project.revision + 2}`);\n    at <repo>/tests/e2e/parameter-accessibility.spec.ts:129:117"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T18:24:50.286Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "late-parameter.json",
+                      "contentType": "application/json",
+                      "body": "eyJtb2RlIjoiSG9tZSIsInZpZXdwb3J0Ijp7IndpZHRoIjoxNDQwLCJoZWlnaHQiOjkwMH0sImFjdHVhbFN0YXR1cyI6MjAwLCJiZWZvcmVSZXZpc2lvbiI6MSwic2F2ZWRSZXZpc2lvbiI6MiwiY2Fub25pY2FsRHVyYXRpb24iOjYsIm5ld2VySGlzdG9yeSI6bnVsbCwiaGlzdG9yeUFmdGVyIjoie1widW5kb1wiOlt7XCJ0YXJnZXRcIjoxLFwiYXRcIjoyLFwibGFiZWxcIjpcInNldCBwYXJhbWV0ZXJcIn1dLFwicmVkb1wiOltdfSIsInJlYWR5SWQiOm51bGwsImFjdGl2ZVRhZyI6IkJVVFRPTiIsIm93blByb2plY3RSdW5TZXRVbmNoYW5nZWQiOnRydWUsInNjb3BlIjoiSGVsZCByZWFsIGNvbW1pdHRlZCBlZGl0IHJlc3BvbnNlOyBwcmVzZXJ2ZWQgbmF2aWdhdGlvbiwgaGlzdG9yeSwgbmV3ZXIgZHJhZnRzL3JlYWRpbmVzcy9mb2N1czsgbm8gU3RhcnQifQ=="
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/parameter-accessibility-pa-3dc2c--preserves-Home-at-1440x900/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/parameter-accessibility-pa-3dc2c--preserves-Home-at-1440x900/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/parameter-accessibility.spec.ts",
+                    "column": 117,
+                    "line": 129
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "936e073082c9cef45be7-bb0f6f54bd68a0ec2f1e",
+          "file": "parameter-accessibility.spec.ts",
+          "line": 92,
+          "column": 9
+        },
+        {
+          "title": "parameter accessibility: late save preserves newer head at 1440x900",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 8,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 4263,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"{\\\"undo\\\":[\u001b[7m{\\\"target\\\":2,\\\"at\\\":3,\\\"label\\\":\\\"set parameter\\\"}\u001b[27m],\\\"redo\\\":[]}\"\u001b[39m\nReceived: \u001b[31m\"{\\\"undo\\\":[],\\\"redo\\\":[]}\"\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"{\\\"undo\\\":[\u001b[7m{\\\"target\\\":2,\\\"at\\\":3,\\\"label\\\":\\\"set parameter\\\"}\u001b[27m],\\\"redo\\\":[]}\"\u001b[39m\nReceived: \u001b[31m\"{\\\"undo\\\":[],\\\"redo\\\":[]}\"\u001b[39m\n    at <repo>/tests/e2e/parameter-accessibility.spec.ts:133:109",
+                    "location": {
+                      "file": "<repo>/tests/e2e/parameter-accessibility.spec.ts",
+                      "column": 109,
+                      "line": 133
+                    },
+                    "snippet": "  131 |         if (mode === \"newer head\") {\n  132 |           await expect.soft(duration(page)).toHaveValue(\"7\"); await expect.soft(page.locator(\".workspace-context\")).toContainText(`Draft revision ${project.revision + 2}`);\n> 133 |           expect.soft(await page.evaluate((id) => sessionStorage.getItem(\"studio.graphHistory.\" + id), id)).toBe(newerHistory);\n      |                                                                                                             ^\n  134 |         }\n  135 |         if (mode === \"newer same-field draft\") { await expect.soft(duration(page)).toHaveValue(\"7\"); await expect.soft(apply(duration(page))).toBeEnabled(); }\n  136 |         if (mode === \"other field draft\") { await expect.soft(page.getByLabel(\"Target\", { exact: false })).toHaveValue(\"2.5\"); await expect.soft(apply(page.getByLabel(\"Target\", { exact: false }))).toBeEnabled(); }"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/parameter-accessibility.spec.ts",
+                        "column": 109,
+                        "line": 133
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"{\\\"undo\\\":[\u001b[7m{\\\"target\\\":2,\\\"at\\\":3,\\\"label\\\":\\\"set parameter\\\"}\u001b[27m],\\\"redo\\\":[]}\"\u001b[39m\nReceived: \u001b[31m\"{\\\"undo\\\":[],\\\"redo\\\":[]}\"\u001b[39m\n\n  131 |         if (mode === \"newer head\") {\n  132 |           await expect.soft(duration(page)).toHaveValue(\"7\"); await expect.soft(page.locator(\".workspace-context\")).toContainText(`Draft revision ${project.revision + 2}`);\n> 133 |           expect.soft(await page.evaluate((id) => sessionStorage.getItem(\"studio.graphHistory.\" + id), id)).toBe(newerHistory);\n      |                                                                                                             ^\n  134 |         }\n  135 |         if (mode === \"newer same-field draft\") { await expect.soft(duration(page)).toHaveValue(\"7\"); await expect.soft(apply(duration(page))).toBeEnabled(); }\n  136 |         if (mode === \"other field draft\") { await expect.soft(page.getByLabel(\"Target\", { exact: false })).toHaveValue(\"2.5\"); await expect.soft(apply(page.getByLabel(\"Target\", { exact: false }))).toBeEnabled(); }\n    at <repo>/tests/e2e/parameter-accessibility.spec.ts:133:109"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T18:25:03.028Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "late-parameter.json",
+                      "contentType": "application/json",
+                      "body": "eyJtb2RlIjoibmV3ZXIgaGVhZCIsInZpZXdwb3J0Ijp7IndpZHRoIjoxNDQwLCJoZWlnaHQiOjkwMH0sImFjdHVhbFN0YXR1cyI6MjAwLCJiZWZvcmVSZXZpc2lvbiI6MSwic2F2ZWRSZXZpc2lvbiI6MywiY2Fub25pY2FsRHVyYXRpb24iOjcsIm5ld2VySGlzdG9yeSI6IntcInVuZG9cIjpbe1widGFyZ2V0XCI6MixcImF0XCI6MyxcImxhYmVsXCI6XCJzZXQgcGFyYW1ldGVyXCJ9XSxcInJlZG9cIjpbXX0iLCJoaXN0b3J5QWZ0ZXIiOiJ7XCJ1bmRvXCI6W10sXCJyZWRvXCI6W119IiwicmVhZHlJZCI6bnVsbCwiYWN0aXZlVGFnIjoiQk9EWSIsIm93blByb2plY3RSdW5TZXRVbmNoYW5nZWQiOnRydWUsInNjb3BlIjoiSGVsZCByZWFsIGNvbW1pdHRlZCBlZGl0IHJlc3BvbnNlOyBwcmVzZXJ2ZWQgbmF2aWdhdGlvbiwgaGlzdG9yeSwgbmV3ZXIgZHJhZnRzL3JlYWRpbmVzcy9mb2N1czsgbm8gU3RhcnQifQ=="
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/parameter-accessibility-pa-6d282-rves-newer-head-at-1440x900/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/parameter-accessibility-pa-6d282-rves-newer-head-at-1440x900/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/parameter-accessibility.spec.ts",
+                    "column": 109,
+                    "line": 133
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "936e073082c9cef45be7-617a503bdcc3cadef105",
+          "file": "parameter-accessibility.spec.ts",
+          "line": 92,
+          "column": 9
+        },
+        {
+          "title": "parameter accessibility: late save preserves newer same-field draft at 1440x900",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 9,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 23333,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByLabel('Duration')\nExpected: \u001b[32m\"7\"\u001b[39m\nReceived: \u001b[31m\"6\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveValue\" getByLabel('Duration') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Duration')\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <input max=\"30\" min=\"0.1\" value=\"6\" step=\"any\" required=\"\" type=\"number\"/>\u001b[22m\n\u001b[2m       - unexpected value \"6\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByLabel('Duration')\nExpected: \u001b[32m\"7\"\u001b[39m\nReceived: \u001b[31m\"6\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveValue\" getByLabel('Duration') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Duration')\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <input max=\"30\" min=\"0.1\" value=\"6\" step=\"any\" required=\"\" type=\"number\"/>\u001b[22m\n\u001b[2m       - unexpected value \"6\"\u001b[22m\n\n    at <repo>/tests/e2e/parameter-accessibility.spec.ts:135:84",
+                    "location": {
+                      "file": "<repo>/tests/e2e/parameter-accessibility.spec.ts",
+                      "column": 84,
+                      "line": 135
+                    },
+                    "snippet": "  133 |           expect.soft(await page.evaluate((id) => sessionStorage.getItem(\"studio.graphHistory.\" + id), id)).toBe(newerHistory);\n  134 |         }\n> 135 |         if (mode === \"newer same-field draft\") { await expect.soft(duration(page)).toHaveValue(\"7\"); await expect.soft(apply(duration(page))).toBeEnabled(); }\n      |                                                                                    ^\n  136 |         if (mode === \"other field draft\") { await expect.soft(page.getByLabel(\"Target\", { exact: false })).toHaveValue(\"2.5\"); await expect.soft(apply(page.getByLabel(\"Target\", { exact: false }))).toBeEnabled(); }\n  137 |         if (mode === \"newer readiness\") await expect.soft(page.getByRole(\"dialog\", { name: \"Execution preflight\", exact: true })).toBeVisible();\n  138 |         const saved = await read(page, id); expect(saved.revision).toBe(project.revision + (mode === \"newer head\" ? 2 : 1)); expect(value(saved, \"duration\")).toBe(mode === \"newer head\" ? 7 : 6);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/parameter-accessibility.spec.ts",
+                        "column": 84,
+                        "line": 135
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByLabel('Duration')\nExpected: \u001b[32m\"7\"\u001b[39m\nReceived: \u001b[31m\"6\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveValue\" getByLabel('Duration') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Duration')\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <input max=\"30\" min=\"0.1\" value=\"6\" step=\"any\" required=\"\" type=\"number\"/>\u001b[22m\n\u001b[2m       - unexpected value \"6\"\u001b[22m\n\n\n  133 |           expect.soft(await page.evaluate((id) => sessionStorage.getItem(\"studio.graphHistory.\" + id), id)).toBe(newerHistory);\n  134 |         }\n> 135 |         if (mode === \"newer same-field draft\") { await expect.soft(duration(page)).toHaveValue(\"7\"); await expect.soft(apply(duration(page))).toBeEnabled(); }\n      |                                                                                    ^\n  136 |         if (mode === \"other field draft\") { await expect.soft(page.getByLabel(\"Target\", { exact: false })).toHaveValue(\"2.5\"); await expect.soft(apply(page.getByLabel(\"Target\", { exact: false }))).toBeEnabled(); }\n  137 |         if (mode === \"newer readiness\") await expect.soft(page.getByRole(\"dialog\", { name: \"Execution preflight\", exact: true })).toBeVisible();\n  138 |         const saved = await read(page, id); expect(saved.revision).toBe(project.revision + (mode === \"newer head\" ? 2 : 1)); expect(value(saved, \"duration\")).toBe(mode === \"newer head\" ? 7 : 6);\n    at <repo>/tests/e2e/parameter-accessibility.spec.ts:135:84"
+                    },
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/parameter-accessibility.spec.ts",
+                        "column": 143,
+                        "line": 135
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeEnabled\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByLabel('Duration').locator('xpath=ancestor::form').getByRole('button', { name: 'Apply', exact: true })\nExpected: enabled\nReceived: disabled\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toBeEnabled\" getByLabel('Duration').locator('xpath=ancestor::form').getByRole('button', { name: 'Apply', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Duration').locator('xpath=ancestor::form').getByRole('button', { name: 'Apply', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <button disabled class=\"small-button\">Apply</button>\u001b[22m\n\u001b[2m       - unexpected value \"disabled\"\u001b[22m\n\n\n  133 |           expect.soft(await page.evaluate((id) => sessionStorage.getItem(\"studio.graphHistory.\" + id), id)).toBe(newerHistory);\n  134 |         }\n> 135 |         if (mode === \"newer same-field draft\") { await expect.soft(duration(page)).toHaveValue(\"7\"); await expect.soft(apply(duration(page))).toBeEnabled(); }\n      |                                                                                                                                               ^\n  136 |         if (mode === \"other field draft\") { await expect.soft(page.getByLabel(\"Target\", { exact: false })).toHaveValue(\"2.5\"); await expect.soft(apply(page.getByLabel(\"Target\", { exact: false }))).toBeEnabled(); }\n  137 |         if (mode === \"newer readiness\") await expect.soft(page.getByRole(\"dialog\", { name: \"Execution preflight\", exact: true })).toBeVisible();\n  138 |         const saved = await read(page, id); expect(saved.revision).toBe(project.revision + (mode === \"newer head\" ? 2 : 1)); expect(value(saved, \"duration\")).toBe(mode === \"newer head\" ? 7 : 6);\n    at <repo>/tests/e2e/parameter-accessibility.spec.ts:135:143"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T18:25:07.710Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "late-parameter.json",
+                      "contentType": "application/json",
+                      "body": "eyJtb2RlIjoibmV3ZXIgc2FtZS1maWVsZCBkcmFmdCIsInZpZXdwb3J0Ijp7IndpZHRoIjoxNDQwLCJoZWlnaHQiOjkwMH0sImFjdHVhbFN0YXR1cyI6MjAwLCJiZWZvcmVSZXZpc2lvbiI6MSwic2F2ZWRSZXZpc2lvbiI6MiwiY2Fub25pY2FsRHVyYXRpb24iOjYsIm5ld2VySGlzdG9yeSI6bnVsbCwiaGlzdG9yeUFmdGVyIjoie1widW5kb1wiOlt7XCJ0YXJnZXRcIjoxLFwiYXRcIjoyLFwibGFiZWxcIjpcInNldCBwYXJhbWV0ZXJcIn1dLFwicmVkb1wiOltdfSIsInJlYWR5SWQiOm51bGwsImFjdGl2ZVRhZyI6IkJPRFkiLCJvd25Qcm9qZWN0UnVuU2V0VW5jaGFuZ2VkIjp0cnVlLCJzY29wZSI6IkhlbGQgcmVhbCBjb21taXR0ZWQgZWRpdCByZXNwb25zZTsgcHJlc2VydmVkIG5hdmlnYXRpb24sIGhpc3RvcnksIG5ld2VyIGRyYWZ0cy9yZWFkaW5lc3MvZm9jdXM7IG5vIFN0YXJ0In0="
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/parameter-accessibility-pa-1eccc-ame-field-draft-at-1440x900/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/parameter-accessibility-pa-1eccc-ame-field-draft-at-1440x900/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/parameter-accessibility.spec.ts",
+                    "column": 84,
+                    "line": 135
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "936e073082c9cef45be7-936c0eb32378cca3b094",
+          "file": "parameter-accessibility.spec.ts",
+          "line": 92,
+          "column": 9
+        },
+        {
+          "title": "parameter accessibility: late save preserves other field draft at 1440x900",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 10,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 23241,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByLabel('Target')\nExpected: \u001b[32m\"2.5\"\u001b[39m\nReceived: \u001b[31m\"1\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveValue\" getByLabel('Target') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Target')\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <input max=\"100\" value=\"1\" step=\"any\" min=\"-100\" required=\"\" type=\"number\"/>\u001b[22m\n\u001b[2m       - unexpected value \"1\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByLabel('Target')\nExpected: \u001b[32m\"2.5\"\u001b[39m\nReceived: \u001b[31m\"1\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveValue\" getByLabel('Target') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Target')\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <input max=\"100\" value=\"1\" step=\"any\" min=\"-100\" required=\"\" type=\"number\"/>\u001b[22m\n\u001b[2m       - unexpected value \"1\"\u001b[22m\n\n    at <repo>/tests/e2e/parameter-accessibility.spec.ts:136:108",
+                    "location": {
+                      "file": "<repo>/tests/e2e/parameter-accessibility.spec.ts",
+                      "column": 108,
+                      "line": 136
+                    },
+                    "snippet": "  134 |         }\n  135 |         if (mode === \"newer same-field draft\") { await expect.soft(duration(page)).toHaveValue(\"7\"); await expect.soft(apply(duration(page))).toBeEnabled(); }\n> 136 |         if (mode === \"other field draft\") { await expect.soft(page.getByLabel(\"Target\", { exact: false })).toHaveValue(\"2.5\"); await expect.soft(apply(page.getByLabel(\"Target\", { exact: false }))).toBeEnabled(); }\n      |                                                                                                            ^\n  137 |         if (mode === \"newer readiness\") await expect.soft(page.getByRole(\"dialog\", { name: \"Execution preflight\", exact: true })).toBeVisible();\n  138 |         const saved = await read(page, id); expect(saved.revision).toBe(project.revision + (mode === \"newer head\" ? 2 : 1)); expect(value(saved, \"duration\")).toBe(mode === \"newer head\" ? 7 : 6);\n  139 |         expect(await runIds(page, id)).toEqual(runs);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/parameter-accessibility.spec.ts",
+                        "column": 108,
+                        "line": 136
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByLabel('Target')\nExpected: \u001b[32m\"2.5\"\u001b[39m\nReceived: \u001b[31m\"1\"\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveValue\" getByLabel('Target') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Target')\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <input max=\"100\" value=\"1\" step=\"any\" min=\"-100\" required=\"\" type=\"number\"/>\u001b[22m\n\u001b[2m       - unexpected value \"1\"\u001b[22m\n\n\n  134 |         }\n  135 |         if (mode === \"newer same-field draft\") { await expect.soft(duration(page)).toHaveValue(\"7\"); await expect.soft(apply(duration(page))).toBeEnabled(); }\n> 136 |         if (mode === \"other field draft\") { await expect.soft(page.getByLabel(\"Target\", { exact: false })).toHaveValue(\"2.5\"); await expect.soft(apply(page.getByLabel(\"Target\", { exact: false }))).toBeEnabled(); }\n      |                                                                                                            ^\n  137 |         if (mode === \"newer readiness\") await expect.soft(page.getByRole(\"dialog\", { name: \"Execution preflight\", exact: true })).toBeVisible();\n  138 |         const saved = await read(page, id); expect(saved.revision).toBe(project.revision + (mode === \"newer head\" ? 2 : 1)); expect(value(saved, \"duration\")).toBe(mode === \"newer head\" ? 7 : 6);\n  139 |         expect(await runIds(page, id)).toEqual(runs);\n    at <repo>/tests/e2e/parameter-accessibility.spec.ts:136:108"
+                    },
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/parameter-accessibility.spec.ts",
+                        "column": 198,
+                        "line": 136
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeEnabled\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByLabel('Target').locator('xpath=ancestor::form').getByRole('button', { name: 'Apply', exact: true })\nExpected: enabled\nReceived: disabled\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toBeEnabled\" getByLabel('Target').locator('xpath=ancestor::form').getByRole('button', { name: 'Apply', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Target').locator('xpath=ancestor::form').getByRole('button', { name: 'Apply', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <button disabled class=\"small-button\">Apply</button>\u001b[22m\n\u001b[2m       - unexpected value \"disabled\"\u001b[22m\n\n\n  134 |         }\n  135 |         if (mode === \"newer same-field draft\") { await expect.soft(duration(page)).toHaveValue(\"7\"); await expect.soft(apply(duration(page))).toBeEnabled(); }\n> 136 |         if (mode === \"other field draft\") { await expect.soft(page.getByLabel(\"Target\", { exact: false })).toHaveValue(\"2.5\"); await expect.soft(apply(page.getByLabel(\"Target\", { exact: false }))).toBeEnabled(); }\n      |                                                                                                                                                                                                      ^\n  137 |         if (mode === \"newer readiness\") await expect.soft(page.getByRole(\"dialog\", { name: \"Execution preflight\", exact: true })).toBeVisible();\n  138 |         const saved = await read(page, id); expect(saved.revision).toBe(project.revision + (mode === \"newer head\" ? 2 : 1)); expect(value(saved, \"duration\")).toBe(mode === \"newer head\" ? 7 : 6);\n  139 |         expect(await runIds(page, id)).toEqual(runs);\n    at <repo>/tests/e2e/parameter-accessibility.spec.ts:136:198"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T18:25:31.442Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "late-parameter.json",
+                      "contentType": "application/json",
+                      "body": "eyJtb2RlIjoib3RoZXIgZmllbGQgZHJhZnQiLCJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJhY3R1YWxTdGF0dXMiOjIwMCwiYmVmb3JlUmV2aXNpb24iOjEsInNhdmVkUmV2aXNpb24iOjIsImNhbm9uaWNhbER1cmF0aW9uIjo2LCJuZXdlckhpc3RvcnkiOm51bGwsImhpc3RvcnlBZnRlciI6IntcInVuZG9cIjpbe1widGFyZ2V0XCI6MSxcImF0XCI6MixcImxhYmVsXCI6XCJzZXQgcGFyYW1ldGVyXCJ9XSxcInJlZG9cIjpbXX0iLCJyZWFkeUlkIjpudWxsLCJhY3RpdmVUYWciOiJCT0RZIiwib3duUHJvamVjdFJ1blNldFVuY2hhbmdlZCI6dHJ1ZSwic2NvcGUiOiJIZWxkIHJlYWwgY29tbWl0dGVkIGVkaXQgcmVzcG9uc2U7IHByZXNlcnZlZCBuYXZpZ2F0aW9uLCBoaXN0b3J5LCBuZXdlciBkcmFmdHMvcmVhZGluZXNzL2ZvY3VzOyBubyBTdGFydCJ9"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/parameter-accessibility-pa-09438-her-field-draft-at-1440x900/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/parameter-accessibility-pa-09438-her-field-draft-at-1440x900/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/parameter-accessibility.spec.ts",
+                    "column": 108,
+                    "line": 136
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "936e073082c9cef45be7-01f2c6007dda85c51fef",
+          "file": "parameter-accessibility.spec.ts",
+          "line": 92,
+          "column": 9
+        },
+        {
+          "title": "parameter accessibility: late save preserves deliberate focus at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 11,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3090,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T18:25:55.075Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "late-parameter.json",
+                      "contentType": "application/json",
+                      "body": "eyJtb2RlIjoiZGVsaWJlcmF0ZSBmb2N1cyIsInZpZXdwb3J0Ijp7IndpZHRoIjoxNDQwLCJoZWlnaHQiOjkwMH0sImFjdHVhbFN0YXR1cyI6MjAwLCJiZWZvcmVSZXZpc2lvbiI6MSwic2F2ZWRSZXZpc2lvbiI6MiwiY2Fub25pY2FsRHVyYXRpb24iOjYsIm5ld2VySGlzdG9yeSI6bnVsbCwiaGlzdG9yeUFmdGVyIjoie1widW5kb1wiOlt7XCJ0YXJnZXRcIjoxLFwiYXRcIjoyLFwibGFiZWxcIjpcInNldCBwYXJhbWV0ZXJcIn1dLFwicmVkb1wiOltdfSIsInJlYWR5SWQiOm51bGwsImFjdGl2ZVRhZyI6IkJVVFRPTiIsIm93blByb2plY3RSdW5TZXRVbmNoYW5nZWQiOnRydWUsInNjb3BlIjoiSGVsZCByZWFsIGNvbW1pdHRlZCBlZGl0IHJlc3BvbnNlOyBwcmVzZXJ2ZWQgbmF2aWdhdGlvbiwgaGlzdG9yeSwgbmV3ZXIgZHJhZnRzL3JlYWRpbmVzcy9mb2N1czsgbm8gU3RhcnQifQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "936e073082c9cef45be7-14d362ac965a849d9d79",
+          "file": "parameter-accessibility.spec.ts",
+          "line": 92,
+          "column": 9
+        },
+        {
+          "title": "parameter accessibility: late save preserves newer readiness at 1440x900",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 11,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 13801,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('dialog', { name: 'Execution preflight', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toBeVisible\" getByRole('dialog', { name: 'Execution preflight', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: 'Execution preflight', exact: true })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('dialog', { name: 'Execution preflight', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toBeVisible\" getByRole('dialog', { name: 'Execution preflight', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: 'Execution preflight', exact: true })\u001b[22m\n\n    at <repo>/tests/e2e/parameter-accessibility.spec.ts:137:131",
+                    "location": {
+                      "file": "<repo>/tests/e2e/parameter-accessibility.spec.ts",
+                      "column": 131,
+                      "line": 137
+                    },
+                    "snippet": "  135 |         if (mode === \"newer same-field draft\") { await expect.soft(duration(page)).toHaveValue(\"7\"); await expect.soft(apply(duration(page))).toBeEnabled(); }\n  136 |         if (mode === \"other field draft\") { await expect.soft(page.getByLabel(\"Target\", { exact: false })).toHaveValue(\"2.5\"); await expect.soft(apply(page.getByLabel(\"Target\", { exact: false }))).toBeEnabled(); }\n> 137 |         if (mode === \"newer readiness\") await expect.soft(page.getByRole(\"dialog\", { name: \"Execution preflight\", exact: true })).toBeVisible();\n      |                                                                                                                                   ^\n  138 |         const saved = await read(page, id); expect(saved.revision).toBe(project.revision + (mode === \"newer head\" ? 2 : 1)); expect(value(saved, \"duration\")).toBe(mode === \"newer head\" ? 7 : 6);\n  139 |         expect(await runIds(page, id)).toEqual(runs);\n  140 |         await testInfo.attach(\"late-parameter.json\", { body: JSON.stringify({ mode, viewport, actualStatus: actual.status, beforeRevision: project.revision, savedRevision: saved.revision, canonicalDuration: value(saved, \"duration\"), newerHistory, historyAfter: await page.evaluate((id) => sessionStorage.getItem(\"studio.graphHistory.\" + id), id), readyId, activeTag: await page.evaluate(() => document.activeElement?.tagName), ownProjectRunSetUnchanged: true, scope: \"Held real committed edit response; preserved navigation, history, newer drafts/readiness/focus; no Start\" }), contentType: \"application/json\" });"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/parameter-accessibility.spec.ts",
+                        "column": 131,
+                        "line": 137
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('dialog', { name: 'Execution preflight', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toBeVisible\" getByRole('dialog', { name: 'Execution preflight', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: 'Execution preflight', exact: true })\u001b[22m\n\n\n  135 |         if (mode === \"newer same-field draft\") { await expect.soft(duration(page)).toHaveValue(\"7\"); await expect.soft(apply(duration(page))).toBeEnabled(); }\n  136 |         if (mode === \"other field draft\") { await expect.soft(page.getByLabel(\"Target\", { exact: false })).toHaveValue(\"2.5\"); await expect.soft(apply(page.getByLabel(\"Target\", { exact: false }))).toBeEnabled(); }\n> 137 |         if (mode === \"newer readiness\") await expect.soft(page.getByRole(\"dialog\", { name: \"Execution preflight\", exact: true })).toBeVisible();\n      |                                                                                                                                   ^\n  138 |         const saved = await read(page, id); expect(saved.revision).toBe(project.revision + (mode === \"newer head\" ? 2 : 1)); expect(value(saved, \"duration\")).toBe(mode === \"newer head\" ? 7 : 6);\n  139 |         expect(await runIds(page, id)).toEqual(runs);\n  140 |         await testInfo.attach(\"late-parameter.json\", { body: JSON.stringify({ mode, viewport, actualStatus: actual.status, beforeRevision: project.revision, savedRevision: saved.revision, canonicalDuration: value(saved, \"duration\"), newerHistory, historyAfter: await page.evaluate((id) => sessionStorage.getItem(\"studio.graphHistory.\" + id), id), readyId, activeTag: await page.evaluate(() => document.activeElement?.tagName), ownProjectRunSetUnchanged: true, scope: \"Held real committed edit response; preserved navigation, history, newer drafts/readiness/focus; no Start\" }), contentType: \"application/json\" });\n    at <repo>/tests/e2e/parameter-accessibility.spec.ts:137:131"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T18:25:58.228Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "late-parameter.json",
+                      "contentType": "application/json",
+                      "body": "eyJtb2RlIjoibmV3ZXIgcmVhZGluZXNzIiwidmlld3BvcnQiOnsid2lkdGgiOjE0NDAsImhlaWdodCI6OTAwfSwiYWN0dWFsU3RhdHVzIjoyMDAsImJlZm9yZVJldmlzaW9uIjoxLCJzYXZlZFJldmlzaW9uIjoyLCJjYW5vbmljYWxEdXJhdGlvbiI6NiwibmV3ZXJIaXN0b3J5IjpudWxsLCJoaXN0b3J5QWZ0ZXIiOiJ7XCJ1bmRvXCI6W3tcInRhcmdldFwiOjEsXCJhdFwiOjIsXCJsYWJlbFwiOlwic2V0IHBhcmFtZXRlclwifV0sXCJyZWRvXCI6W119IiwicmVhZHlJZCI6InBmLTgwZGVhOWY4LTkxNzUtNGQzOS1iMGViLWFkODM2Y2JiNGRiMyIsImFjdGl2ZVRhZyI6IkJVVFRPTiIsIm93blByb2plY3RSdW5TZXRVbmNoYW5nZWQiOnRydWUsInNjb3BlIjoiSGVsZCByZWFsIGNvbW1pdHRlZCBlZGl0IHJlc3BvbnNlOyBwcmVzZXJ2ZWQgbmF2aWdhdGlvbiwgaGlzdG9yeSwgbmV3ZXIgZHJhZnRzL3JlYWRpbmVzcy9mb2N1czsgbm8gU3RhcnQifQ=="
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/parameter-accessibility-pa-45922-newer-readiness-at-1440x900/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/parameter-accessibility-pa-45922-newer-readiness-at-1440x900/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/parameter-accessibility.spec.ts",
+                    "column": 131,
+                    "line": 137
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "936e073082c9cef45be7-cfa7fc25cf246f92b301",
+          "file": "parameter-accessibility.spec.ts",
+          "line": 92,
+          "column": 9
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-26T18:22:41.156Z",
+    "duration": 210930.38199999998,
+    "expected": 2,
+    "skipped": 0,
+    "unexpected": 12,
+    "flaky": 0
+  }
+}

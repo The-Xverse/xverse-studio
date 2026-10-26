@@ -1,7 +1,15 @@
 import { parseDocument, isMap, isSeq } from "yaml";
 import { LogicalAssetForm } from "./LogicalAssetForm";
 import { Modal } from "../../app/ui";
-import { useContext, useState, useEffect, useMemo, useRef } from "react";
+import {
+  useContext,
+  useState,
+  useEffect,
+  useMemo,
+  useRef,
+  useId,
+  useLayoutEffect,
+} from "react";
 import {
   ReactFlow,
   Background,
@@ -172,7 +180,7 @@ export function ModelView({
   parameters: Parameter[];
   selected: string;
   setSelected: (id: string) => void;
-  edit: (edits: Data[]) => Promise<unknown>;
+  edit: (edits: Data[]) => Promise<Project | undefined>;
   saveLayout: (layout: Data) => Promise<unknown>;
   onSource: (target?: SourceTarget) => void;
   onCatalog: () => void;
@@ -695,9 +703,12 @@ export function ModelView({
         <div className="inspector-body">
           {inspectorTab === "Parameters" ? (
             <ParameterForm
+              projectId={project.projectId}
               parameters={parameters}
               onSave={async (parameterId, value) => {
-                await edit([{ kind: "set_parameter", parameterId, value }]);
+                return Boolean(
+                  await edit([{ kind: "set_parameter", parameterId, value }]),
+                );
               }}
             />
           ) : definitionElement?.definition ? (
@@ -809,9 +820,12 @@ export function ModelView({
               />
               <h4>Reference parameters</h4>
               <ParameterForm
+                projectId={project.projectId}
                 parameters={parameters}
                 onSave={async (parameterId, value) => {
-                  await edit([{ kind: "set_parameter", parameterId, value }]);
+                  return Boolean(
+                    await edit([{ kind: "set_parameter", parameterId, value }]),
+                  );
                 }}
               />
             </>
@@ -844,23 +858,143 @@ export function ModelView({
   );
 }
 function ParameterForm({
+  projectId,
   parameters,
   onSave,
 }: {
+  projectId: string;
   parameters: Parameter[];
-  onSave: (id: string, value: unknown) => Promise<void>;
+  onSave: (id: string, value: unknown) => Promise<boolean>;
 }) {
-  const [draft, setDraft] = useState<Record<string, string>>({});
+  type FieldDraft = {
+    text: string;
+    authored: string;
+    version: number;
+    edited: boolean;
+    submitted?: { version: number; value: unknown };
+  };
+  const keyOf = (p: Parameter) =>
+    JSON.stringify([projectId, p.documentId, p.scenarioRef, p.id]);
+  const authoredValue = (p: Parameter) => p.value ?? p.default ?? "";
+  const [draft, setDraft] = useState<Record<string, FieldDraft>>({});
+  const guidancePrefix = useId(),
+    controls = useRef<Record<string, HTMLInputElement | HTMLSelectElement>>({}),
+    mounted = useRef(false),
+    currentKeys = useRef(new Set<string>());
+  const focusedControl = useRef<{
+    key: string;
+    node: HTMLInputElement | HTMLSelectElement;
+  } | null>(null);
+  currentKeys.current = new Set(parameters.map(keyOf));
+  const [focusRequest, setFocusRequest] = useState<{
+    key: string;
+    version: number;
+    origin: Element;
+  } | null>(null);
   const presentation = useContext(PresentationContext);
-  useEffect(
-    () =>
-      setDraft(
-        Object.fromEntries(
-          parameters.map((p) => [p.id, String(p.value ?? p.default ?? "")]),
-        ),
+  useLayoutEffect(() => {
+    const previous = focusedControl.current;
+    if (!previous || previous.node.isConnected) return;
+    focusedControl.current = null;
+    const replacement = controls.current[previous.key];
+    if (
+      replacement &&
+      currentKeys.current.has(previous.key) &&
+      document.activeElement === document.body &&
+      !document.querySelector('[role="dialog"][aria-modal="true"]')
+    )
+      replacement.focus();
+  });
+  useEffect(() => {
+    mounted.current = true;
+    return () => {
+      mounted.current = false;
+    };
+  }, []);
+  useEffect(() => {
+    setDraft((previous) =>
+      Object.fromEntries(
+        parameters.map((p) => {
+          const key = keyOf(p),
+            authored = String(authoredValue(p)),
+            old = previous[key];
+          if (!old)
+            return [
+              key,
+              { text: authored, authored, version: 0, edited: false },
+            ];
+          if (old.authored === authored) return [key, old];
+          const acknowledged =
+            old.submitted && Object.is(old.submitted.value, authoredValue(p));
+          const newerInput =
+            old.submitted && old.version !== old.submitted.version;
+          // An edit generation is intent, including retyping the old authored value.
+          // Only the exact submitted generation may be normalized by its acknowledgement.
+          if (!old.edited || (acknowledged && !newerInput))
+            return [
+              key,
+              {
+                ...old,
+                text: authored,
+                authored,
+                edited: false,
+                submitted: undefined,
+              },
+            ];
+          return [
+            key,
+            {
+              ...old,
+              authored,
+              submitted: acknowledged ? undefined : old.submitted,
+            },
+          ];
+        }),
       ),
-    [parameters],
-  );
+    );
+  }, [parameters, projectId]);
+  useEffect(() => {
+    if (!focusRequest) return;
+    const field = draft[focusRequest.key],
+      control = controls.current[focusRequest.key],
+      parameter = parameters.find((p) => keyOf(p) === focusRequest.key);
+    // Wait for the field merge when props and the completion arrive together.
+    if (
+      parameter &&
+      field &&
+      field.authored !== String(authoredValue(parameter))
+    )
+      return;
+    setFocusRequest(null);
+    if (
+      !mounted.current ||
+      !currentKeys.current.has(focusRequest.key) ||
+      !field ||
+      !control ||
+      field.version !== focusRequest.version ||
+      field.text !== field.authored ||
+      document.querySelector('[role="dialog"][aria-modal="true"]') ||
+      (document.activeElement !== document.body &&
+        document.activeElement !== focusRequest.origin)
+    )
+      return;
+    control.focus();
+  }, [focusRequest, draft, parameters]);
+  function change(p: Parameter, text: string) {
+    const key = keyOf(p);
+    setDraft((previous) => {
+      const old = previous[key] || {
+        text: String(authoredValue(p)),
+        authored: String(authoredValue(p)),
+        version: 0,
+        edited: false,
+      };
+      return {
+        ...previous,
+        [key]: { ...old, text, version: old.version + 1, edited: true },
+      };
+    });
+  }
   if (!parameters.length)
     return (
       <p className="field-hint">
@@ -890,68 +1024,154 @@ function ParameterForm({
       {groups.map((group) => (
         <fieldset className="parameter-group" key={group.id}>
           {group.label && <legend>{group.label}</legend>}
-          {group.items.map((p) => (
-            <form
-              key={p.id}
-              onSubmit={async (e) => {
-                e.preventDefault();
-                await onSave(
-                  p.id,
-                  (p.valueType || p.type) === "number"
-                    ? Number(draft[p.id])
-                    : draft[p.id],
-                );
-              }}
-            >
-              <label>
-                {p.label || p.id}
-                <span className="unit-label">
-                  {p.unit || "unit not declared"}
-                </span>
-                {p.enum ? (
-                  <select
-                    value={draft[p.id] || ""}
-                    onChange={(e) =>
-                      setDraft({ ...draft, [p.id]: e.target.value })
-                    }
+          {group.items.map((p) => {
+            const key = keyOf(p),
+              field = draft[key],
+              text = field?.text ?? String(authoredValue(p)),
+              guidanceId = `${guidancePrefix}-${encodeURIComponent(p.id)}`,
+              dirty = text !== String(authoredValue(p)),
+              describedBy = `${guidanceId}${dirty ? ` ${guidanceId}-draft` : ""}`;
+            return (
+              <form
+                key={key}
+                onSubmit={async (e) => {
+                  e.preventDefault();
+                  const version = field?.version ?? 0,
+                    value =
+                      (p.valueType || p.type) === "number"
+                        ? Number(text)
+                        : text,
+                    origin = document.activeElement;
+                  setDraft((previous) => ({
+                    ...previous,
+                    [key]: {
+                      ...(previous[key] || {
+                        text,
+                        authored: String(authoredValue(p)),
+                        version,
+                        edited: true,
+                      }),
+                      submitted: { version, value },
+                    },
+                  }));
+                  const acknowledged = await onSave(p.id, value);
+                  if (
+                    acknowledged &&
+                    mounted.current &&
+                    currentKeys.current.has(key) &&
+                    origin
+                  ) {
+                    // A successful same-value numeric edit need not change props
+                    // (for example 5.0 -> typed 5). Normalize only its own generation.
+                    setDraft((previous) => {
+                      const old = previous[key];
+                      if (
+                        !old ||
+                        old.version !== version ||
+                        old.authored !== String(value)
+                      )
+                        return previous;
+                      return {
+                        ...previous,
+                        [key]: {
+                          ...old,
+                          text: old.authored,
+                          edited: false,
+                          submitted: undefined,
+                        },
+                      };
+                    });
+                    setFocusRequest({ key, version, origin });
+                  }
+                }}
+              >
+                <label>
+                  {p.label || p.id}
+                  <span className="unit-label">
+                    {p.unit || "unit not declared"}
+                  </span>
+                  {p.enum ? (
+                    <select
+                      ref={(node) => {
+                        if (node) controls.current[key] = node;
+                        else delete controls.current[key];
+                      }}
+                      value={text}
+                      onChange={(e) => change(p, e.target.value)}
+                      onFocus={(e) => {
+                        focusedControl.current = { key, node: e.currentTarget };
+                      }}
+                      onBlur={(e) => {
+                        if (
+                          focusedControl.current?.node === e.currentTarget &&
+                          e.currentTarget.isConnected
+                        )
+                          focusedControl.current = null;
+                      }}
+                      aria-describedby={describedBy}
+                    >
+                      {p.enum.map((value) => (
+                        <option key={value}>{value}</option>
+                      ))}
+                    </select>
+                  ) : (
+                    <input
+                      ref={(node) => {
+                        if (node) controls.current[key] = node;
+                        else delete controls.current[key];
+                      }}
+                      type={
+                        (p.valueType || p.type) === "number" ? "number" : "text"
+                      }
+                      step="any"
+                      min={p.minimum}
+                      max={p.maximum}
+                      value={text}
+                      onChange={(e) => change(p, e.target.value)}
+                      onFocus={(e) => {
+                        focusedControl.current = { key, node: e.currentTarget };
+                      }}
+                      onBlur={(e) => {
+                        if (
+                          focusedControl.current?.node === e.currentTarget &&
+                          e.currentTarget.isConnected
+                        )
+                          focusedControl.current = null;
+                      }}
+                      aria-describedby={describedBy}
+                      required
+                    />
+                  )}
+                </label>
+                <p className="field-hint" id={guidanceId}>
+                  {p.description ||
+                    "Value from authored Scenario configuration."}
+                </p>
+                {dirty && (
+                  <p
+                    className="field-hint"
+                    id={`${guidanceId}-draft`}
+                    role="status"
                   >
-                    {p.enum.map((value) => (
-                      <option key={value}>{value}</option>
-                    ))}
-                  </select>
-                ) : (
-                  <input
-                    type={
-                      (p.valueType || p.type) === "number" ? "number" : "text"
-                    }
-                    step="any"
-                    min={p.minimum}
-                    max={p.maximum}
-                    value={draft[p.id] ?? ""}
-                    onChange={(e) =>
-                      setDraft({ ...draft, [p.id]: e.target.value })
-                    }
-                    required
-                  />
+                    Unsaved value. Current saved value:{" "}
+                    {String(authoredValue(p))}.
+                  </p>
                 )}
-              </label>
-              <p className="field-hint">
-                {p.description || "Value from authored Scenario configuration."}
-              </p>
-              <div className="parameter-source">
-                <span>
-                  {p.source || "Scenario XDL"}
-                  {p.default !== undefined ? ` · default ${p.default}` : ""}
-                </span>
-                <button
-                  className="small-button"
-                  disabled={draft[p.id] === String(p.value ?? p.default ?? "")}
-                >
-                  Apply
-                </button>
-              </div>
-            </form>
-          ))}
+                <div className="parameter-source">
+                  <span>
+                    {p.source || "Scenario XDL"}
+                    {p.default !== undefined ? ` · default ${p.default}` : ""}
+                  </span>
+                  <button
+                    className="small-button"
+                    disabled={text === String(authoredValue(p))}
+                  >
+                    Apply
+                  </button>
+                </div>
+              </form>
+            );
+          })}
         </fieldset>
       ))}
     </div>

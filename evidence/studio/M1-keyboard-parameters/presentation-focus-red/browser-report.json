@@ -1,0 +1,350 @@
+{
+  "config": {
+    "argv": [
+      "<loop-cache>/node-v24.22.1-linux-x64/bin/node",
+      "<repo>/node_modules/.bin/playwright",
+      "test",
+      "-c",
+      "tests/e2e/playwright.config.ts",
+      "--grep",
+      "parameter accessibility: delayed presentation"
+    ],
+    "configFile": "<repo>/tests/e2e/playwright.config.ts",
+    "rootDir": "<repo>/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "<repo>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "<repo>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "*.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "<repo>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "<repo>/tests/e2e",
+        "snapshotDir": "<repo>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": "*.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "baseURL": "http://127.0.0.1:51521",
+          "browserName": "chromium",
+          "actionTimeout": 15000,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "trace": "off",
+          "screenshot": "only-on-failure",
+          "video": "off"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "<repo>/test-results/browser-report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "parameter-accessibility.spec.ts",
+      "file": "parameter-accessibility.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "parameter accessibility: delayed presentation preserves field focus at 1024x768",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 11922,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByLabel('Duration')\nExpected: focused\nReceived: inactive\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeFocused\" getByLabel('Duration') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Duration')\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <input max=\"30\" min=\"0.1\" value=\"8\" step=\"any\" required=\"\" type=\"number\" aria-describedby=\"_r_1_-duration _r_1_-duration-draft\"/>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByLabel('Duration')\nExpected: focused\nReceived: inactive\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeFocused\" getByLabel('Duration') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Duration')\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <input max=\"30\" min=\"0.1\" value=\"8\" step=\"any\" required=\"\" type=\"number\" aria-describedby=\"_r_1_-duration _r_1_-duration-draft\"/>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n\n    at <repo>/tests/e2e/parameter-accessibility.spec.ts:671:43",
+                    "location": {
+                      "file": "<repo>/tests/e2e/parameter-accessibility.spec.ts",
+                      "column": 43,
+                      "line": 671
+                    },
+                    "snippet": "  669 |         await expect(apply(duration(page))).toBeEnabled();\n  670 |         if (moved) await expect(home).toBeFocused();\n> 671 |         else await expect(duration(page)).toBeFocused();\n      |                                           ^\n  672 |         expect((await read(page, project.projectId)).documents).toEqual(\n  673 |           project.documents,\n  674 |         );"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/parameter-accessibility.spec.ts",
+                        "column": 43,
+                        "line": 671
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByLabel('Duration')\nExpected: focused\nReceived: inactive\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeFocused\" getByLabel('Duration') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Duration')\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <input max=\"30\" min=\"0.1\" value=\"8\" step=\"any\" required=\"\" type=\"number\" aria-describedby=\"_r_1_-duration _r_1_-duration-draft\"/>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n\n\n  669 |         await expect(apply(duration(page))).toBeEnabled();\n  670 |         if (moved) await expect(home).toBeFocused();\n> 671 |         else await expect(duration(page)).toBeFocused();\n      |                                           ^\n  672 |         expect((await read(page, project.projectId)).documents).toEqual(\n  673 |           project.documents,\n  674 |         );\n    at <repo>/tests/e2e/parameter-accessibility.spec.ts:671:43"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T18:55:40.745Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "parameter-presentation.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJtb3ZlZCI6ZmFsc2UsImZvcm1Hcm91cHMiOlt7ImlkIjoic2V0cG9pbnQiLCJsYWJlbCI6IlNldHBvaW50IGFuZCByZXNwb25zZSIsInBhcmFtZXRlcnMiOlsidGFyZ2V0IiwiZ2FpbiIsImluaXRpYWwiXX0seyJpZCI6Imhvcml6b24iLCJsYWJlbCI6IlJ1biBob3Jpem9uIiwicGFyYW1ldGVycyI6WyJkdXJhdGlvbiIsInRpbWVzdGVwIl19LHsiaWQiOiJpbnN0cnVtZW50LWZhdWx0cyIsImxhYmVsIjoiSW5zdHJ1bWVudCBmYXVsdHMiLCJwYXJhbWV0ZXJzIjpbImZhdWx0Il19XSwib3JpZ2luYWxDb250cm9sU3RpbGxDb25uZWN0ZWQiOmZhbHNlLCJtZWFzdXJlZCI6eyJmb2N1c2VkIjpmYWxzZSwiYWN0aXZlVGFnIjoiQk9EWSIsImJveCI6eyJ4Ijo3OTEsInkiOjY3Ni43MTg3NSwid2lkdGgiOjIxNywiaGVpZ2h0IjozMi41LCJ0b3AiOjY3Ni43MTg3NSwicmlnaHQiOjEwMDgsImJvdHRvbSI6NzA5LjIxODc1LCJsZWZ0Ijo3OTF9LCJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJvdXRsaW5lIjoibm9uZSIsIm91dGxpbmVXaWR0aCI6M30sImNhbm9uaWNhbER1cmF0aW9uIjo1LCJzY29wZSI6IkhlbGQgcmVhbCBpbmVydCBwcmVzZW50YXRpb24gbWV0YWRhdGE7IHJlZ3JvdXBpbmcgbXVzdCBwcmVzZXJ2ZSBpbnB1dCBhbmQgY3VycmVudCBmb2N1cyBpbnRlbnQifQ=="
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/parameter-accessibility-pa-d7c4b-ves-field-focus-at-1024x768/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/parameter-accessibility-pa-d7c4b-ves-field-focus-at-1024x768/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/parameter-accessibility.spec.ts",
+                    "column": 43,
+                    "line": 671
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "936e073082c9cef45be7-511da366a75568c72f52",
+          "file": "parameter-accessibility.spec.ts",
+          "line": 620,
+          "column": 9
+        },
+        {
+          "title": "parameter accessibility: delayed presentation preserves moved focus at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1925,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T18:55:53.084Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "parameter-presentation.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJtb3ZlZCI6dHJ1ZSwiZm9ybUdyb3VwcyI6W3siaWQiOiJzZXRwb2ludCIsImxhYmVsIjoiU2V0cG9pbnQgYW5kIHJlc3BvbnNlIiwicGFyYW1ldGVycyI6WyJ0YXJnZXQiLCJnYWluIiwiaW5pdGlhbCJdfSx7ImlkIjoiaG9yaXpvbiIsImxhYmVsIjoiUnVuIGhvcml6b24iLCJwYXJhbWV0ZXJzIjpbImR1cmF0aW9uIiwidGltZXN0ZXAiXX0seyJpZCI6Imluc3RydW1lbnQtZmF1bHRzIiwibGFiZWwiOiJJbnN0cnVtZW50IGZhdWx0cyIsInBhcmFtZXRlcnMiOlsiZmF1bHQiXX1dLCJvcmlnaW5hbENvbnRyb2xTdGlsbENvbm5lY3RlZCI6ZmFsc2UsIm1lYXN1cmVkIjp7ImZvY3VzZWQiOmZhbHNlLCJhY3RpdmVUYWciOiJCVVRUT04iLCJib3giOnsieCI6NzkxLCJ5IjozMTYuNzE4NzUsIndpZHRoIjoyMTcsImhlaWdodCI6MzIuNSwidG9wIjozMTYuNzE4NzUsInJpZ2h0IjoxMDA4LCJib3R0b20iOjM0OS4yMTg3NSwibGVmdCI6NzkxfSwidmlld3BvcnQiOnsid2lkdGgiOjEwMjQsImhlaWdodCI6NzY4fSwib3V0bGluZSI6Im5vbmUiLCJvdXRsaW5lV2lkdGgiOjN9LCJjYW5vbmljYWxEdXJhdGlvbiI6NSwic2NvcGUiOiJIZWxkIHJlYWwgaW5lcnQgcHJlc2VudGF0aW9uIG1ldGFkYXRhOyByZWdyb3VwaW5nIG11c3QgcHJlc2VydmUgaW5wdXQgYW5kIGN1cnJlbnQgZm9jdXMgaW50ZW50In0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "936e073082c9cef45be7-eb0ab3b3f8ee45078d72",
+          "file": "parameter-accessibility.spec.ts",
+          "line": 620,
+          "column": 9
+        },
+        {
+          "title": "parameter accessibility: delayed presentation preserves field focus at 1440x900",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 11621,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByLabel('Duration')\nExpected: focused\nReceived: inactive\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeFocused\" getByLabel('Duration') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Duration')\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <input max=\"30\" min=\"0.1\" value=\"8\" step=\"any\" required=\"\" type=\"number\" aria-describedby=\"_r_1_-duration _r_1_-duration-draft\"/>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByLabel('Duration')\nExpected: focused\nReceived: inactive\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeFocused\" getByLabel('Duration') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Duration')\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <input max=\"30\" min=\"0.1\" value=\"8\" step=\"any\" required=\"\" type=\"number\" aria-describedby=\"_r_1_-duration _r_1_-duration-draft\"/>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n\n    at <repo>/tests/e2e/parameter-accessibility.spec.ts:671:43",
+                    "location": {
+                      "file": "<repo>/tests/e2e/parameter-accessibility.spec.ts",
+                      "column": 43,
+                      "line": 671
+                    },
+                    "snippet": "  669 |         await expect(apply(duration(page))).toBeEnabled();\n  670 |         if (moved) await expect(home).toBeFocused();\n> 671 |         else await expect(duration(page)).toBeFocused();\n      |                                           ^\n  672 |         expect((await read(page, project.projectId)).documents).toEqual(\n  673 |           project.documents,\n  674 |         );"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/parameter-accessibility.spec.ts",
+                        "column": 43,
+                        "line": 671
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByLabel('Duration')\nExpected: focused\nReceived: inactive\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeFocused\" getByLabel('Duration') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Duration')\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <input max=\"30\" min=\"0.1\" value=\"8\" step=\"any\" required=\"\" type=\"number\" aria-describedby=\"_r_1_-duration _r_1_-duration-draft\"/>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n\n\n  669 |         await expect(apply(duration(page))).toBeEnabled();\n  670 |         if (moved) await expect(home).toBeFocused();\n> 671 |         else await expect(duration(page)).toBeFocused();\n      |                                           ^\n  672 |         expect((await read(page, project.projectId)).documents).toEqual(\n  673 |           project.documents,\n  674 |         );\n    at <repo>/tests/e2e/parameter-accessibility.spec.ts:671:43"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T18:55:55.079Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "parameter-presentation.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJtb3ZlZCI6ZmFsc2UsImZvcm1Hcm91cHMiOlt7ImlkIjoic2V0cG9pbnQiLCJsYWJlbCI6IlNldHBvaW50IGFuZCByZXNwb25zZSIsInBhcmFtZXRlcnMiOlsidGFyZ2V0IiwiZ2FpbiIsImluaXRpYWwiXX0seyJpZCI6Imhvcml6b24iLCJsYWJlbCI6IlJ1biBob3Jpem9uIiwicGFyYW1ldGVycyI6WyJkdXJhdGlvbiIsInRpbWVzdGVwIl19LHsiaWQiOiJpbnN0cnVtZW50LWZhdWx0cyIsImxhYmVsIjoiSW5zdHJ1bWVudCBmYXVsdHMiLCJwYXJhbWV0ZXJzIjpbImZhdWx0Il19XSwib3JpZ2luYWxDb250cm9sU3RpbGxDb25uZWN0ZWQiOmZhbHNlLCJtZWFzdXJlZCI6eyJmb2N1c2VkIjpmYWxzZSwiYWN0aXZlVGFnIjoiQk9EWSIsImJveCI6eyJ4IjoxMTkxLCJ5Ijo4MzYuMjE4NzUsIndpZHRoIjoyMjksImhlaWdodCI6MzIuNSwidG9wIjo4MzYuMjE4NzUsInJpZ2h0IjoxNDIwLCJib3R0b20iOjg2OC43MTg3NSwibGVmdCI6MTE5MX0sInZpZXdwb3J0Ijp7IndpZHRoIjoxNDQwLCJoZWlnaHQiOjkwMH0sIm91dGxpbmUiOiJub25lIiwib3V0bGluZVdpZHRoIjozfSwiY2Fub25pY2FsRHVyYXRpb24iOjUsInNjb3BlIjoiSGVsZCByZWFsIGluZXJ0IHByZXNlbnRhdGlvbiBtZXRhZGF0YTsgcmVncm91cGluZyBtdXN0IHByZXNlcnZlIGlucHV0IGFuZCBjdXJyZW50IGZvY3VzIGludGVudCJ9"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/parameter-accessibility-pa-e797b-ves-field-focus-at-1440x900/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/parameter-accessibility-pa-e797b-ves-field-focus-at-1440x900/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/parameter-accessibility.spec.ts",
+                    "column": 43,
+                    "line": 671
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "936e073082c9cef45be7-1da5699479c88542e5ec",
+          "file": "parameter-accessibility.spec.ts",
+          "line": 620,
+          "column": 9
+        },
+        {
+          "title": "parameter accessibility: delayed presentation preserves moved focus at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1983,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T18:56:07.056Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "parameter-presentation.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJtb3ZlZCI6dHJ1ZSwiZm9ybUdyb3VwcyI6W3siaWQiOiJzZXRwb2ludCIsImxhYmVsIjoiU2V0cG9pbnQgYW5kIHJlc3BvbnNlIiwicGFyYW1ldGVycyI6WyJ0YXJnZXQiLCJnYWluIiwiaW5pdGlhbCJdfSx7ImlkIjoiaG9yaXpvbiIsImxhYmVsIjoiUnVuIGhvcml6b24iLCJwYXJhbWV0ZXJzIjpbImR1cmF0aW9uIiwidGltZXN0ZXAiXX0seyJpZCI6Imluc3RydW1lbnQtZmF1bHRzIiwibGFiZWwiOiJJbnN0cnVtZW50IGZhdWx0cyIsInBhcmFtZXRlcnMiOlsiZmF1bHQiXX1dLCJvcmlnaW5hbENvbnRyb2xTdGlsbENvbm5lY3RlZCI6ZmFsc2UsIm1lYXN1cmVkIjp7ImZvY3VzZWQiOmZhbHNlLCJhY3RpdmVUYWciOiJCVVRUT04iLCJib3giOnsieCI6MTE5MSwieSI6MzU2LjIxODc1LCJ3aWR0aCI6MjI5LCJoZWlnaHQiOjMyLjUsInRvcCI6MzU2LjIxODc1LCJyaWdodCI6MTQyMCwiYm90dG9tIjozODguNzE4NzUsImxlZnQiOjExOTF9LCJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJvdXRsaW5lIjoibm9uZSIsIm91dGxpbmVXaWR0aCI6M30sImNhbm9uaWNhbER1cmF0aW9uIjo1LCJzY29wZSI6IkhlbGQgcmVhbCBpbmVydCBwcmVzZW50YXRpb24gbWV0YWRhdGE7IHJlZ3JvdXBpbmcgbXVzdCBwcmVzZXJ2ZSBpbnB1dCBhbmQgY3VycmVudCBmb2N1cyBpbnRlbnQifQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "936e073082c9cef45be7-f9fca0fc11799bf950b1",
+          "file": "parameter-accessibility.spec.ts",
+          "line": 620,
+          "column": 9
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-26T18:55:40.218Z",
+    "duration": 28933.489,
+    "expected": 2,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  }
+}

@@ -1,0 +1,1140 @@
+{
+  "config": {
+    "argv": [
+      "<loop-cache>/node-v24.22.1-linux-x64/bin/node",
+      "<repo>/node_modules/.bin/playwright",
+      "test",
+      "-c",
+      "tests/e2e/playwright.config.ts",
+      "--grep",
+      "parameter accessibility:"
+    ],
+    "configFile": "<repo>/tests/e2e/playwright.config.ts",
+    "rootDir": "<repo>/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "<repo>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "<repo>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "*.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "<repo>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "<repo>/tests/e2e",
+        "snapshotDir": "<repo>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": "*.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "baseURL": "http://127.0.0.1:39257",
+          "browserName": "chromium",
+          "actionTimeout": 15000,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "trace": "off",
+          "screenshot": "only-on-failure",
+          "video": "off"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "<repo>/test-results/browser-report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "parameter-accessibility.spec.ts",
+      "file": "parameter-accessibility.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "parameter accessibility: native range recovery and save at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2553,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T18:39:30.068Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "parameter-keyboard.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJwbGF0Zm9ybSI6ImxpbnV4IiwiYnJvd3NlciI6IjE1Ni4wLjgwNzguNCIsImZvY3VzIjp7ImZvY3VzZWQiOnRydWUsImFjdGl2ZVRhZyI6IklOUFVUIiwiYm94Ijp7IngiOjc5MSwieSI6NjQ3LjIxODc1LCJ3aWR0aCI6MjE3LCJoZWlnaHQiOjMyLjUsInRvcCI6NjQ3LjIxODc1LCJyaWdodCI6MTAwOCwiYm90dG9tIjo2NzkuNzE4NzUsImxlZnQiOjc5MX0sInZpZXdwb3J0Ijp7IndpZHRoIjoxMDI0LCJoZWlnaHQiOjc2OH0sIm91dGxpbmUiOiJzb2xpZCIsIm91dGxpbmVXaWR0aCI6M30sInJldmlzaW9ucyI6WzEsMl0sIm5hdGl2ZVJhbmdlUmVqZWN0ZWQiOnRydWUsImNhbm9uaWNhbER1cmF0aW9uIjo2LCJvdGhlckRvY3VtZW50c0J5dGVJZGVudGljYWwiOnRydWUsIm90aGVyU2NlbmFyaW9Db250ZW50UHJlc2VydmVkIjp0cnVlLCJhdXRob3JpdGF0aXZlVmFsaWRhdGlvbiI6dHJ1ZSwib3duUHJvamVjdFJ1blNldFVuY2hhbmdlZCI6dHJ1ZSwibWVhc3VyZW1lbnRzIjpbeyJsYWJlbCI6IkR1cmF0aW9uIHB1cnBvc2UgYW5kIGNvbnN0cmFpbnQgZ3VpZGFuY2UiLCJ0ZXh0IjoiUmVxdWVzdGVkIHNpbXVsYXRpb24gaG9yaXpvbiwgaW4gc2Vjb25kczsgYXQgbW9zdCAzLDAwMCBzYW1wbGVzLiIsImNvbG9yIjoicmdiKDEwMSwgMTE3LCAxNDEpIiwiZm9udFNpemUiOiI5cHgiLCJmb250V2VpZ2h0IjoiNDAwIiwidGhyZXNob2xkIjo0LjUsInNjb3BlIjoiU2VsZWN0ZWQgbm9ybWFsLXNpemUgcmVuZGVyZWQgdGV4dDsgbm8gb3ZlcmFsbCBhY2Nlc3NpYmlsaXR5IGNlcnRpZmljYXRpb24iLCJzdXBwb3J0ZWQiOnRydWUsImxheWVycyI6WyJyZ2JhKDAsIDAsIDAsIDApIiwicmdiYSgwLCAwLCAwLCAwKSIsInJnYmEoMCwgMCwgMCwgMCkiLCJyZ2JhKDAsIDAsIDAsIDApIiwicmdiYSgwLCAwLCAwLCAwKSIsInJnYmEoMCwgMCwgMCwgMCkiLCJyZ2IoMjU1LCAyNTUsIDI1NSkiXSwiYmFja2dyb3VuZCI6WzEsMSwxLDFdLCJjb21wb3NpdGVkRm9yZWdyb3VuZCI6WzAuMzk2MDc4NDMxMzcyNTQ5LDAuNDU4ODIzNTI5NDExNzY0NywwLjU1Mjk0MTE3NjQ3MDU4ODMsMV0sInJhdGlvIjo0LjY4NDkxMzE1OTg4OTYyMDUsInBhc3NlZCI6dHJ1ZSwiYXNzdW1wdGlvbnMiOiJDU1Mgc1JHQiBjb2xvcnM7IGFscGhhIGNvbXBvc2l0ZWQgdGhyb3VnaCBleHBsaWNpdCBiYWNrZ3JvdW5kczsgbm8gYW50aS1hbGlhc2luZyBhcHByb3hpbWF0aW9uIn1dLCJ3cml0ZXMiOlt7InBhdGgiOiIvYXBpL3YxL3Byb2plY3RzL3Byai0xZmU4ZGU3MS01NTMwLTRmMzYtYmM1MC00MzM2NGFjOTUzZWYvZWRpdHMiLCJib2R5Ijp7ImJhc2VSZXZpc2lvbiI6MSwiZWRpdHMiOlt7ImtpbmQiOiJzZXRfcGFyYW1ldGVyIiwicGFyYW1ldGVySWQiOiJkdXJhdGlvbiIsInZhbHVlIjo2fV19fSx7InBhdGgiOiIvYXBpL3YxL3Byb2plY3RzL3Byai0xZmU4ZGU3MS01NTMwLTRmMzYtYmM1MC00MzM2NGFjOTUzZWYvdmFsaWRhdGlvbnMiLCJib2R5Ijp7InJldmlzaW9uIjoyfX1dLCJzY29wZSI6Ik5hdGl2ZSBhdXRob3JlZCBwYXJhbWV0ZXIgZWRpdCBvbmx5OyBubyBsaXZlIG11dGF0aW9uIG9yIFN0YXJ0In0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "936e073082c9cef45be7-5ee7055fbcdce179469f",
+          "file": "parameter-accessibility.spec.ts",
+          "line": 137,
+          "column": 7
+        },
+        {
+          "title": "parameter accessibility: late save preserves Home at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2470,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T18:39:32.688Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "late-parameter.json",
+                      "contentType": "application/json",
+                      "body": "eyJtb2RlIjoiSG9tZSIsInZpZXdwb3J0Ijp7IndpZHRoIjoxMDI0LCJoZWlnaHQiOjc2OH0sImFjdHVhbFN0YXR1cyI6MjAwLCJiZWZvcmVSZXZpc2lvbiI6MSwic2F2ZWRSZXZpc2lvbiI6MiwiY2Fub25pY2FsRHVyYXRpb24iOjYsIm5ld2VySGlzdG9yeSI6bnVsbCwiaGlzdG9yeUFmdGVyIjoie1widW5kb1wiOlt7XCJ0YXJnZXRcIjoxLFwiYXRcIjoyLFwibGFiZWxcIjpcInNldCBwYXJhbWV0ZXJcIn1dLFwicmVkb1wiOltdfSIsInJlYWR5SWQiOm51bGwsImFjdGl2ZVRhZyI6IkJVVFRPTiIsIm93blByb2plY3RSdW5TZXRVbmNoYW5nZWQiOnRydWUsInNjb3BlIjoiSGVsZCByZWFsIGNvbW1pdHRlZCBlZGl0IHJlc3BvbnNlOyBwcmVzZXJ2ZWQgbmF2aWdhdGlvbiwgaGlzdG9yeSwgbmV3ZXIgZHJhZnRzL3JlYWRpbmVzcy9mb2N1czsgbm8gU3RhcnQifQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "936e073082c9cef45be7-bd15b8a48b1c49fb1266",
+          "file": "parameter-accessibility.spec.ts",
+          "line": 258,
+          "column": 9
+        },
+        {
+          "title": "parameter accessibility: late save preserves other project at 1024x768",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 12212,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('.project-list-row[data-project-id=\"prj-e1ad5dd5-78bc-4d91-ba0d-d9e7836fcb4f\"] .project-open')\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" locator('.project-list-row[data-project-id=\"prj-e1ad5dd5-78bc-4d91-ba0d-d9e7836fcb4f\"] .project-open') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('.project-list-row[data-project-id=\"prj-e1ad5dd5-78bc-4d91-ba0d-d9e7836fcb4f\"] .project-open')\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('.project-list-row[data-project-id=\"prj-e1ad5dd5-78bc-4d91-ba0d-d9e7836fcb4f\"] .project-open')\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" locator('.project-list-row[data-project-id=\"prj-e1ad5dd5-78bc-4d91-ba0d-d9e7836fcb4f\"] .project-open') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('.project-list-row[data-project-id=\"prj-e1ad5dd5-78bc-4d91-ba0d-d9e7836fcb4f\"] .project-open')\u001b[22m\n\n    at tabTo (<repo>/tests/e2e/parameter-accessibility.spec.ts:7:24)\n    at activate (<repo>/tests/e2e/parameter-accessibility.spec.ts:16:9)\n    at <repo>/tests/e2e/parameter-accessibility.spec.ts:312:17",
+                    "location": {
+                      "file": "<repo>/tests/e2e/parameter-accessibility.spec.ts",
+                      "column": 24,
+                      "line": 7
+                    },
+                    "snippet": "   5 |\n   6 | async function tabTo(page: Page, target: Locator) {\n>  7 |   await expect(target).toBeVisible();\n     |                        ^\n   8 |   for (let i = 0; i < 180; i++) {\n   9 |     if (await target.evaluate((node) => document.activeElement === node))\n  10 |       return;"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/parameter-accessibility.spec.ts",
+                        "column": 24,
+                        "line": 7
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('.project-list-row[data-project-id=\"prj-e1ad5dd5-78bc-4d91-ba0d-d9e7836fcb4f\"] .project-open')\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" locator('.project-list-row[data-project-id=\"prj-e1ad5dd5-78bc-4d91-ba0d-d9e7836fcb4f\"] .project-open') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('.project-list-row[data-project-id=\"prj-e1ad5dd5-78bc-4d91-ba0d-d9e7836fcb4f\"] .project-open')\u001b[22m\n\n\n   5 |\n   6 | async function tabTo(page: Page, target: Locator) {\n>  7 |   await expect(target).toBeVisible();\n     |                        ^\n   8 |   for (let i = 0; i < 180; i++) {\n   9 |     if (await target.evaluate((node) => document.activeElement === node))\n  10 |       return;\n    at tabTo (<repo>/tests/e2e/parameter-accessibility.spec.ts:7:24)\n    at activate (<repo>/tests/e2e/parameter-accessibility.spec.ts:16:9)\n    at <repo>/tests/e2e/parameter-accessibility.spec.ts:312:17"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T18:39:35.172Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/parameter-accessibility-pa-fbe2d-s-other-project-at-1024x768/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/parameter-accessibility-pa-fbe2d-s-other-project-at-1024x768/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/parameter-accessibility.spec.ts",
+                    "column": 24,
+                    "line": 7
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "936e073082c9cef45be7-13ef92b2c922812d9f6f",
+          "file": "parameter-accessibility.spec.ts",
+          "line": 258,
+          "column": 9
+        },
+        {
+          "title": "parameter accessibility: late save preserves newer head at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4036,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T18:39:47.758Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "late-parameter.json",
+                      "contentType": "application/json",
+                      "body": "eyJtb2RlIjoibmV3ZXIgaGVhZCIsInZpZXdwb3J0Ijp7IndpZHRoIjoxMDI0LCJoZWlnaHQiOjc2OH0sImFjdHVhbFN0YXR1cyI6MjAwLCJiZWZvcmVSZXZpc2lvbiI6MSwic2F2ZWRSZXZpc2lvbiI6MywiY2Fub25pY2FsRHVyYXRpb24iOjcsIm5ld2VySGlzdG9yeSI6IntcInVuZG9cIjpbe1widGFyZ2V0XCI6MixcImF0XCI6MyxcImxhYmVsXCI6XCJzZXQgcGFyYW1ldGVyXCJ9XSxcInJlZG9cIjpbXX0iLCJoaXN0b3J5QWZ0ZXIiOiJ7XCJ1bmRvXCI6W3tcInRhcmdldFwiOjIsXCJhdFwiOjMsXCJsYWJlbFwiOlwic2V0IHBhcmFtZXRlclwifV0sXCJyZWRvXCI6W119IiwicmVhZHlJZCI6bnVsbCwiYWN0aXZlVGFnIjoiQk9EWSIsIm93blByb2plY3RSdW5TZXRVbmNoYW5nZWQiOnRydWUsInNjb3BlIjoiSGVsZCByZWFsIGNvbW1pdHRlZCBlZGl0IHJlc3BvbnNlOyBwcmVzZXJ2ZWQgbmF2aWdhdGlvbiwgaGlzdG9yeSwgbmV3ZXIgZHJhZnRzL3JlYWRpbmVzcy9mb2N1czsgbm8gU3RhcnQifQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "936e073082c9cef45be7-409f7fc33475135cd81b",
+          "file": "parameter-accessibility.spec.ts",
+          "line": 258,
+          "column": 9
+        },
+        {
+          "title": "parameter accessibility: late save preserves newer same-field draft at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3078,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T18:39:51.851Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "late-parameter.json",
+                      "contentType": "application/json",
+                      "body": "eyJtb2RlIjoibmV3ZXIgc2FtZS1maWVsZCBkcmFmdCIsInZpZXdwb3J0Ijp7IndpZHRoIjoxMDI0LCJoZWlnaHQiOjc2OH0sImFjdHVhbFN0YXR1cyI6MjAwLCJiZWZvcmVSZXZpc2lvbiI6MSwic2F2ZWRSZXZpc2lvbiI6MiwiY2Fub25pY2FsRHVyYXRpb24iOjYsIm5ld2VySGlzdG9yeSI6bnVsbCwiaGlzdG9yeUFmdGVyIjoie1widW5kb1wiOlt7XCJ0YXJnZXRcIjoxLFwiYXRcIjoyLFwibGFiZWxcIjpcInNldCBwYXJhbWV0ZXJcIn1dLFwicmVkb1wiOltdfSIsInJlYWR5SWQiOm51bGwsImFjdGl2ZVRhZyI6IkJPRFkiLCJvd25Qcm9qZWN0UnVuU2V0VW5jaGFuZ2VkIjp0cnVlLCJzY29wZSI6IkhlbGQgcmVhbCBjb21taXR0ZWQgZWRpdCByZXNwb25zZTsgcHJlc2VydmVkIG5hdmlnYXRpb24sIGhpc3RvcnksIG5ld2VyIGRyYWZ0cy9yZWFkaW5lc3MvZm9jdXM7IG5vIFN0YXJ0In0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "936e073082c9cef45be7-c20b3387941c2fb91b53",
+          "file": "parameter-accessibility.spec.ts",
+          "line": 258,
+          "column": 9
+        },
+        {
+          "title": "parameter accessibility: late save preserves reverted same-field draft at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3009,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T18:39:54.936Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "late-parameter.json",
+                      "contentType": "application/json",
+                      "body": "eyJtb2RlIjoicmV2ZXJ0ZWQgc2FtZS1maWVsZCBkcmFmdCIsInZpZXdwb3J0Ijp7IndpZHRoIjoxMDI0LCJoZWlnaHQiOjc2OH0sImFjdHVhbFN0YXR1cyI6MjAwLCJiZWZvcmVSZXZpc2lvbiI6MSwic2F2ZWRSZXZpc2lvbiI6MiwiY2Fub25pY2FsRHVyYXRpb24iOjYsIm5ld2VySGlzdG9yeSI6bnVsbCwiaGlzdG9yeUFmdGVyIjoie1widW5kb1wiOlt7XCJ0YXJnZXRcIjoxLFwiYXRcIjoyLFwibGFiZWxcIjpcInNldCBwYXJhbWV0ZXJcIn1dLFwicmVkb1wiOltdfSIsInJlYWR5SWQiOm51bGwsImFjdGl2ZVRhZyI6IkJPRFkiLCJvd25Qcm9qZWN0UnVuU2V0VW5jaGFuZ2VkIjp0cnVlLCJzY29wZSI6IkhlbGQgcmVhbCBjb21taXR0ZWQgZWRpdCByZXNwb25zZTsgcHJlc2VydmVkIG5hdmlnYXRpb24sIGhpc3RvcnksIG5ld2VyIGRyYWZ0cy9yZWFkaW5lc3MvZm9jdXM7IG5vIFN0YXJ0In0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "936e073082c9cef45be7-3f713131c8278092d5a3",
+          "file": "parameter-accessibility.spec.ts",
+          "line": 258,
+          "column": 9
+        },
+        {
+          "title": "parameter accessibility: late save preserves other field draft at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3025,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T18:39:57.951Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "late-parameter.json",
+                      "contentType": "application/json",
+                      "body": "eyJtb2RlIjoib3RoZXIgZmllbGQgZHJhZnQiLCJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJhY3R1YWxTdGF0dXMiOjIwMCwiYmVmb3JlUmV2aXNpb24iOjEsInNhdmVkUmV2aXNpb24iOjIsImNhbm9uaWNhbER1cmF0aW9uIjo2LCJuZXdlckhpc3RvcnkiOm51bGwsImhpc3RvcnlBZnRlciI6IntcInVuZG9cIjpbe1widGFyZ2V0XCI6MSxcImF0XCI6MixcImxhYmVsXCI6XCJzZXQgcGFyYW1ldGVyXCJ9XSxcInJlZG9cIjpbXX0iLCJyZWFkeUlkIjpudWxsLCJhY3RpdmVUYWciOiJCT0RZIiwib3duUHJvamVjdFJ1blNldFVuY2hhbmdlZCI6dHJ1ZSwic2NvcGUiOiJIZWxkIHJlYWwgY29tbWl0dGVkIGVkaXQgcmVzcG9uc2U7IHByZXNlcnZlZCBuYXZpZ2F0aW9uLCBoaXN0b3J5LCBuZXdlciBkcmFmdHMvcmVhZGluZXNzL2ZvY3VzOyBubyBTdGFydCJ9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "936e073082c9cef45be7-1a541c670edafcab093e",
+          "file": "parameter-accessibility.spec.ts",
+          "line": 258,
+          "column": 9
+        },
+        {
+          "title": "parameter accessibility: late save preserves deliberate focus at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2672,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T18:40:00.984Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "late-parameter.json",
+                      "contentType": "application/json",
+                      "body": "eyJtb2RlIjoiZGVsaWJlcmF0ZSBmb2N1cyIsInZpZXdwb3J0Ijp7IndpZHRoIjoxMDI0LCJoZWlnaHQiOjc2OH0sImFjdHVhbFN0YXR1cyI6MjAwLCJiZWZvcmVSZXZpc2lvbiI6MSwic2F2ZWRSZXZpc2lvbiI6MiwiY2Fub25pY2FsRHVyYXRpb24iOjYsIm5ld2VySGlzdG9yeSI6bnVsbCwiaGlzdG9yeUFmdGVyIjoie1widW5kb1wiOlt7XCJ0YXJnZXRcIjoxLFwiYXRcIjoyLFwibGFiZWxcIjpcInNldCBwYXJhbWV0ZXJcIn1dLFwicmVkb1wiOltdfSIsInJlYWR5SWQiOm51bGwsImFjdGl2ZVRhZyI6IkJVVFRPTiIsIm93blByb2plY3RSdW5TZXRVbmNoYW5nZWQiOnRydWUsInNjb3BlIjoiSGVsZCByZWFsIGNvbW1pdHRlZCBlZGl0IHJlc3BvbnNlOyBwcmVzZXJ2ZWQgbmF2aWdhdGlvbiwgaGlzdG9yeSwgbmV3ZXIgZHJhZnRzL3JlYWRpbmVzcy9mb2N1czsgbm8gU3RhcnQifQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "936e073082c9cef45be7-637f2141362a01c4de32",
+          "file": "parameter-accessibility.spec.ts",
+          "line": 258,
+          "column": 9
+        },
+        {
+          "title": "parameter accessibility: late save preserves newer readiness at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3615,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T18:40:03.666Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "late-parameter.json",
+                      "contentType": "application/json",
+                      "body": "eyJtb2RlIjoibmV3ZXIgcmVhZGluZXNzIiwidmlld3BvcnQiOnsid2lkdGgiOjEwMjQsImhlaWdodCI6NzY4fSwiYWN0dWFsU3RhdHVzIjoyMDAsImJlZm9yZVJldmlzaW9uIjoxLCJzYXZlZFJldmlzaW9uIjoyLCJjYW5vbmljYWxEdXJhdGlvbiI6NiwibmV3ZXJIaXN0b3J5IjpudWxsLCJoaXN0b3J5QWZ0ZXIiOiJ7XCJ1bmRvXCI6W3tcInRhcmdldFwiOjEsXCJhdFwiOjIsXCJsYWJlbFwiOlwic2V0IHBhcmFtZXRlclwifV0sXCJyZWRvXCI6W119IiwicmVhZHlJZCI6InBmLTdlYjY0YzgyLTA3MDQtNDdhNC1iMTU0LWJjYzMzYmZmMzIyYyIsImFjdGl2ZVRhZyI6IlNVTU1BUlkiLCJvd25Qcm9qZWN0UnVuU2V0VW5jaGFuZ2VkIjp0cnVlLCJzY29wZSI6IkhlbGQgcmVhbCBjb21taXR0ZWQgZWRpdCByZXNwb25zZTsgcHJlc2VydmVkIG5hdmlnYXRpb24sIGhpc3RvcnksIG5ld2VyIGRyYWZ0cy9yZWFkaW5lc3MvZm9jdXM7IG5vIFN0YXJ0In0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "936e073082c9cef45be7-1f21c1af7cd0cb8dc3a7",
+          "file": "parameter-accessibility.spec.ts",
+          "line": 258,
+          "column": 9
+        },
+        {
+          "title": "parameter accessibility: real stale failure in current form at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2301,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T18:40:07.287Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "parameter-failure.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJkZXBhcnRlZCI6ZmFsc2UsInN0YXR1cyI6NDEyLCJjb2RlIjoiUkVWSVNJT05fQ09ORkxJQ1QiLCJwcm9qZWN0UmV2aXNpb25VbmNoYW5nZWRBZnRlclJlZnVzYWwiOnRydWUsImNhbm9uaWNhbER1cmF0aW9uIjo1LCJvd25Qcm9qZWN0UnVuU2V0VW5jaGFuZ2VkIjp0cnVlLCJzY29wZSI6IlJlYWwgc3RhbGUgcmV2aXNpb24gcmVmdXNhbDsgZmFpbHVyZSBpcyBub3QgYSBzYXZlIGFja25vd2xlZGdlbWVudCBhbmQgY2Fubm90IHBvbGx1dGUgYSBkZXBhcnRlZCBjb250ZXh0In0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "936e073082c9cef45be7-c004d0362af096fb5b94",
+          "file": "parameter-accessibility.spec.ts",
+          "line": 505,
+          "column": 9
+        },
+        {
+          "title": "parameter accessibility: real stale failure after departure at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2431,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T18:40:09.599Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "parameter-failure.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJkZXBhcnRlZCI6dHJ1ZSwic3RhdHVzIjo0MTIsImNvZGUiOiJSRVZJU0lPTl9DT05GTElDVCIsInByb2plY3RSZXZpc2lvblVuY2hhbmdlZEFmdGVyUmVmdXNhbCI6dHJ1ZSwiY2Fub25pY2FsRHVyYXRpb24iOjUsIm93blByb2plY3RSdW5TZXRVbmNoYW5nZWQiOnRydWUsInNjb3BlIjoiUmVhbCBzdGFsZSByZXZpc2lvbiByZWZ1c2FsOyBmYWlsdXJlIGlzIG5vdCBhIHNhdmUgYWNrbm93bGVkZ2VtZW50IGFuZCBjYW5ub3QgcG9sbHV0ZSBhIGRlcGFydGVkIGNvbnRleHQifQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "936e073082c9cef45be7-0bc7f18c0a7264dfcc4a",
+          "file": "parameter-accessibility.spec.ts",
+          "line": 505,
+          "column": 9
+        },
+        {
+          "title": "parameter accessibility: numeric normalization at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1882,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T18:40:12.038Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "parameter-normalization.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJzdWJtaXR0ZWRUZXh0IjoiNS4wIiwiYXV0aG9yZWRWYWx1ZSI6NSwiZGlzcGxheWVkVGV4dCI6IjUiLCJzYXZlZFJldmlzaW9uIjoyLCJvd25Qcm9qZWN0UnVuU2V0VW5jaGFuZ2VkIjp0cnVlLCJzY29wZSI6IkFjdHVhbCB0eXBlZC12YWx1ZSBhY2tub3dsZWRnZW1lbnQgbWF5IG5vcm1hbGl6ZSBpdHMgb3duIGdlbmVyYXRpb247IGZhaWxlZCBzYXZlcyBjYW5ub3QifQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "936e073082c9cef45be7-852fcc20669833b17697",
+          "file": "parameter-accessibility.spec.ts",
+          "line": 597,
+          "column": 7
+        },
+        {
+          "title": "parameter accessibility: native range recovery and save at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1866,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T18:40:13.927Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "parameter-keyboard.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJwbGF0Zm9ybSI6ImxpbnV4IiwiYnJvd3NlciI6IjE1Ni4wLjgwNzguNCIsImZvY3VzIjp7ImZvY3VzZWQiOnRydWUsImFjdGl2ZVRhZyI6IklOUFVUIiwiYm94Ijp7IngiOjExOTEsInkiOjcxNi4yMTg3NSwid2lkdGgiOjIyOSwiaGVpZ2h0IjozMi41LCJ0b3AiOjcxNi4yMTg3NSwicmlnaHQiOjE0MjAsImJvdHRvbSI6NzQ4LjcxODc1LCJsZWZ0IjoxMTkxfSwidmlld3BvcnQiOnsid2lkdGgiOjE0NDAsImhlaWdodCI6OTAwfSwib3V0bGluZSI6InNvbGlkIiwib3V0bGluZVdpZHRoIjozfSwicmV2aXNpb25zIjpbMSwyXSwibmF0aXZlUmFuZ2VSZWplY3RlZCI6dHJ1ZSwiY2Fub25pY2FsRHVyYXRpb24iOjYsIm90aGVyRG9jdW1lbnRzQnl0ZUlkZW50aWNhbCI6dHJ1ZSwib3RoZXJTY2VuYXJpb0NvbnRlbnRQcmVzZXJ2ZWQiOnRydWUsImF1dGhvcml0YXRpdmVWYWxpZGF0aW9uIjp0cnVlLCJvd25Qcm9qZWN0UnVuU2V0VW5jaGFuZ2VkIjp0cnVlLCJtZWFzdXJlbWVudHMiOlt7ImxhYmVsIjoiRHVyYXRpb24gcHVycG9zZSBhbmQgY29uc3RyYWludCBndWlkYW5jZSIsInRleHQiOiJSZXF1ZXN0ZWQgc2ltdWxhdGlvbiBob3Jpem9uLCBpbiBzZWNvbmRzOyBhdCBtb3N0IDMsMDAwIHNhbXBsZXMuIiwiY29sb3IiOiJyZ2IoMTAxLCAxMTcsIDE0MSkiLCJmb250U2l6ZSI6IjlweCIsImZvbnRXZWlnaHQiOiI0MDAiLCJ0aHJlc2hvbGQiOjQuNSwic2NvcGUiOiJTZWxlY3RlZCBub3JtYWwtc2l6ZSByZW5kZXJlZCB0ZXh0OyBubyBvdmVyYWxsIGFjY2Vzc2liaWxpdHkgY2VydGlmaWNhdGlvbiIsInN1cHBvcnRlZCI6dHJ1ZSwibGF5ZXJzIjpbInJnYmEoMCwgMCwgMCwgMCkiLCJyZ2JhKDAsIDAsIDAsIDApIiwicmdiYSgwLCAwLCAwLCAwKSIsInJnYmEoMCwgMCwgMCwgMCkiLCJyZ2JhKDAsIDAsIDAsIDApIiwicmdiYSgwLCAwLCAwLCAwKSIsInJnYigyNTUsIDI1NSwgMjU1KSJdLCJiYWNrZ3JvdW5kIjpbMSwxLDEsMV0sImNvbXBvc2l0ZWRGb3JlZ3JvdW5kIjpbMC4zOTYwNzg0MzEzNzI1NDksMC40NTg4MjM1Mjk0MTE3NjQ3LDAuNTUyOTQxMTc2NDcwNTg4MywxXSwicmF0aW8iOjQuNjg0OTEzMTU5ODg5NjIwNSwicGFzc2VkIjp0cnVlLCJhc3N1bXB0aW9ucyI6IkNTUyBzUkdCIGNvbG9yczsgYWxwaGEgY29tcG9zaXRlZCB0aHJvdWdoIGV4cGxpY2l0IGJhY2tncm91bmRzOyBubyBhbnRpLWFsaWFzaW5nIGFwcHJveGltYXRpb24ifV0sIndyaXRlcyI6W3sicGF0aCI6Ii9hcGkvdjEvcHJvamVjdHMvcHJqLTViNTA4N2RlLTYwMmYtNDI1Ni05ZTlkLWM4NWI4OWE3NTQyOS9lZGl0cyIsImJvZHkiOnsiYmFzZVJldmlzaW9uIjoxLCJlZGl0cyI6W3sia2luZCI6InNldF9wYXJhbWV0ZXIiLCJwYXJhbWV0ZXJJZCI6ImR1cmF0aW9uIiwidmFsdWUiOjZ9XX19LHsicGF0aCI6Ii9hcGkvdjEvcHJvamVjdHMvcHJqLTViNTA4N2RlLTYwMmYtNDI1Ni05ZTlkLWM4NWI4OWE3NTQyOS92YWxpZGF0aW9ucyIsImJvZHkiOnsicmV2aXNpb24iOjJ9fV0sInNjb3BlIjoiTmF0aXZlIGF1dGhvcmVkIHBhcmFtZXRlciBlZGl0IG9ubHk7IG5vIGxpdmUgbXV0YXRpb24gb3IgU3RhcnQifQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "936e073082c9cef45be7-06b77173eb92c43992b1",
+          "file": "parameter-accessibility.spec.ts",
+          "line": 137,
+          "column": 7
+        },
+        {
+          "title": "parameter accessibility: late save preserves Home at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2678,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T18:40:15.805Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "late-parameter.json",
+                      "contentType": "application/json",
+                      "body": "eyJtb2RlIjoiSG9tZSIsInZpZXdwb3J0Ijp7IndpZHRoIjoxNDQwLCJoZWlnaHQiOjkwMH0sImFjdHVhbFN0YXR1cyI6MjAwLCJiZWZvcmVSZXZpc2lvbiI6MSwic2F2ZWRSZXZpc2lvbiI6MiwiY2Fub25pY2FsRHVyYXRpb24iOjYsIm5ld2VySGlzdG9yeSI6bnVsbCwiaGlzdG9yeUFmdGVyIjoie1widW5kb1wiOlt7XCJ0YXJnZXRcIjoxLFwiYXRcIjoyLFwibGFiZWxcIjpcInNldCBwYXJhbWV0ZXJcIn1dLFwicmVkb1wiOltdfSIsInJlYWR5SWQiOm51bGwsImFjdGl2ZVRhZyI6IkJVVFRPTiIsIm93blByb2plY3RSdW5TZXRVbmNoYW5nZWQiOnRydWUsInNjb3BlIjoiSGVsZCByZWFsIGNvbW1pdHRlZCBlZGl0IHJlc3BvbnNlOyBwcmVzZXJ2ZWQgbmF2aWdhdGlvbiwgaGlzdG9yeSwgbmV3ZXIgZHJhZnRzL3JlYWRpbmVzcy9mb2N1czsgbm8gU3RhcnQifQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "936e073082c9cef45be7-bb0f6f54bd68a0ec2f1e",
+          "file": "parameter-accessibility.spec.ts",
+          "line": 258,
+          "column": 9
+        },
+        {
+          "title": "parameter accessibility: late save preserves other project at 1440x900",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 12076,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('.project-list-row[data-project-id=\"prj-750a7033-1530-41a8-b313-6c7cacb0e8e2\"] .project-open')\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" locator('.project-list-row[data-project-id=\"prj-750a7033-1530-41a8-b313-6c7cacb0e8e2\"] .project-open') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('.project-list-row[data-project-id=\"prj-750a7033-1530-41a8-b313-6c7cacb0e8e2\"] .project-open')\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('.project-list-row[data-project-id=\"prj-750a7033-1530-41a8-b313-6c7cacb0e8e2\"] .project-open')\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" locator('.project-list-row[data-project-id=\"prj-750a7033-1530-41a8-b313-6c7cacb0e8e2\"] .project-open') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('.project-list-row[data-project-id=\"prj-750a7033-1530-41a8-b313-6c7cacb0e8e2\"] .project-open')\u001b[22m\n\n    at tabTo (<repo>/tests/e2e/parameter-accessibility.spec.ts:7:24)\n    at activate (<repo>/tests/e2e/parameter-accessibility.spec.ts:16:9)\n    at <repo>/tests/e2e/parameter-accessibility.spec.ts:312:17",
+                    "location": {
+                      "file": "<repo>/tests/e2e/parameter-accessibility.spec.ts",
+                      "column": 24,
+                      "line": 7
+                    },
+                    "snippet": "   5 |\n   6 | async function tabTo(page: Page, target: Locator) {\n>  7 |   await expect(target).toBeVisible();\n     |                        ^\n   8 |   for (let i = 0; i < 180; i++) {\n   9 |     if (await target.evaluate((node) => document.activeElement === node))\n  10 |       return;"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/parameter-accessibility.spec.ts",
+                        "column": 24,
+                        "line": 7
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('.project-list-row[data-project-id=\"prj-750a7033-1530-41a8-b313-6c7cacb0e8e2\"] .project-open')\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" locator('.project-list-row[data-project-id=\"prj-750a7033-1530-41a8-b313-6c7cacb0e8e2\"] .project-open') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('.project-list-row[data-project-id=\"prj-750a7033-1530-41a8-b313-6c7cacb0e8e2\"] .project-open')\u001b[22m\n\n\n   5 |\n   6 | async function tabTo(page: Page, target: Locator) {\n>  7 |   await expect(target).toBeVisible();\n     |                        ^\n   8 |   for (let i = 0; i < 180; i++) {\n   9 |     if (await target.evaluate((node) => document.activeElement === node))\n  10 |       return;\n    at tabTo (<repo>/tests/e2e/parameter-accessibility.spec.ts:7:24)\n    at activate (<repo>/tests/e2e/parameter-accessibility.spec.ts:16:9)\n    at <repo>/tests/e2e/parameter-accessibility.spec.ts:312:17"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T18:40:18.497Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/parameter-accessibility-pa-38a0b-s-other-project-at-1440x900/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/parameter-accessibility-pa-38a0b-s-other-project-at-1440x900/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/parameter-accessibility.spec.ts",
+                    "column": 24,
+                    "line": 7
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "936e073082c9cef45be7-ed7af6f86f37fb40be41",
+          "file": "parameter-accessibility.spec.ts",
+          "line": 258,
+          "column": 9
+        },
+        {
+          "title": "parameter accessibility: late save preserves newer head at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4115,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T18:40:30.930Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "late-parameter.json",
+                      "contentType": "application/json",
+                      "body": "eyJtb2RlIjoibmV3ZXIgaGVhZCIsInZpZXdwb3J0Ijp7IndpZHRoIjoxNDQwLCJoZWlnaHQiOjkwMH0sImFjdHVhbFN0YXR1cyI6MjAwLCJiZWZvcmVSZXZpc2lvbiI6MSwic2F2ZWRSZXZpc2lvbiI6MywiY2Fub25pY2FsRHVyYXRpb24iOjcsIm5ld2VySGlzdG9yeSI6IntcInVuZG9cIjpbe1widGFyZ2V0XCI6MixcImF0XCI6MyxcImxhYmVsXCI6XCJzZXQgcGFyYW1ldGVyXCJ9XSxcInJlZG9cIjpbXX0iLCJoaXN0b3J5QWZ0ZXIiOiJ7XCJ1bmRvXCI6W3tcInRhcmdldFwiOjIsXCJhdFwiOjMsXCJsYWJlbFwiOlwic2V0IHBhcmFtZXRlclwifV0sXCJyZWRvXCI6W119IiwicmVhZHlJZCI6bnVsbCwiYWN0aXZlVGFnIjoiQk9EWSIsIm93blByb2plY3RSdW5TZXRVbmNoYW5nZWQiOnRydWUsInNjb3BlIjoiSGVsZCByZWFsIGNvbW1pdHRlZCBlZGl0IHJlc3BvbnNlOyBwcmVzZXJ2ZWQgbmF2aWdhdGlvbiwgaGlzdG9yeSwgbmV3ZXIgZHJhZnRzL3JlYWRpbmVzcy9mb2N1czsgbm8gU3RhcnQifQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "936e073082c9cef45be7-617a503bdcc3cadef105",
+          "file": "parameter-accessibility.spec.ts",
+          "line": 258,
+          "column": 9
+        },
+        {
+          "title": "parameter accessibility: late save preserves newer same-field draft at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3099,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T18:40:35.107Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "late-parameter.json",
+                      "contentType": "application/json",
+                      "body": "eyJtb2RlIjoibmV3ZXIgc2FtZS1maWVsZCBkcmFmdCIsInZpZXdwb3J0Ijp7IndpZHRoIjoxNDQwLCJoZWlnaHQiOjkwMH0sImFjdHVhbFN0YXR1cyI6MjAwLCJiZWZvcmVSZXZpc2lvbiI6MSwic2F2ZWRSZXZpc2lvbiI6MiwiY2Fub25pY2FsRHVyYXRpb24iOjYsIm5ld2VySGlzdG9yeSI6bnVsbCwiaGlzdG9yeUFmdGVyIjoie1widW5kb1wiOlt7XCJ0YXJnZXRcIjoxLFwiYXRcIjoyLFwibGFiZWxcIjpcInNldCBwYXJhbWV0ZXJcIn1dLFwicmVkb1wiOltdfSIsInJlYWR5SWQiOm51bGwsImFjdGl2ZVRhZyI6IkJPRFkiLCJvd25Qcm9qZWN0UnVuU2V0VW5jaGFuZ2VkIjp0cnVlLCJzY29wZSI6IkhlbGQgcmVhbCBjb21taXR0ZWQgZWRpdCByZXNwb25zZTsgcHJlc2VydmVkIG5hdmlnYXRpb24sIGhpc3RvcnksIG5ld2VyIGRyYWZ0cy9yZWFkaW5lc3MvZm9jdXM7IG5vIFN0YXJ0In0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "936e073082c9cef45be7-936c0eb32378cca3b094",
+          "file": "parameter-accessibility.spec.ts",
+          "line": 258,
+          "column": 9
+        },
+        {
+          "title": "parameter accessibility: late save preserves reverted same-field draft at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3201,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T18:40:38.213Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "late-parameter.json",
+                      "contentType": "application/json",
+                      "body": "eyJtb2RlIjoicmV2ZXJ0ZWQgc2FtZS1maWVsZCBkcmFmdCIsInZpZXdwb3J0Ijp7IndpZHRoIjoxNDQwLCJoZWlnaHQiOjkwMH0sImFjdHVhbFN0YXR1cyI6MjAwLCJiZWZvcmVSZXZpc2lvbiI6MSwic2F2ZWRSZXZpc2lvbiI6MiwiY2Fub25pY2FsRHVyYXRpb24iOjYsIm5ld2VySGlzdG9yeSI6bnVsbCwiaGlzdG9yeUFmdGVyIjoie1widW5kb1wiOlt7XCJ0YXJnZXRcIjoxLFwiYXRcIjoyLFwibGFiZWxcIjpcInNldCBwYXJhbWV0ZXJcIn1dLFwicmVkb1wiOltdfSIsInJlYWR5SWQiOm51bGwsImFjdGl2ZVRhZyI6IkJPRFkiLCJvd25Qcm9qZWN0UnVuU2V0VW5jaGFuZ2VkIjp0cnVlLCJzY29wZSI6IkhlbGQgcmVhbCBjb21taXR0ZWQgZWRpdCByZXNwb25zZTsgcHJlc2VydmVkIG5hdmlnYXRpb24sIGhpc3RvcnksIG5ld2VyIGRyYWZ0cy9yZWFkaW5lc3MvZm9jdXM7IG5vIFN0YXJ0In0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "936e073082c9cef45be7-e2c0f8a282b8f5a05c93",
+          "file": "parameter-accessibility.spec.ts",
+          "line": 258,
+          "column": 9
+        },
+        {
+          "title": "parameter accessibility: late save preserves other field draft at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3132,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T18:40:41.421Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "late-parameter.json",
+                      "contentType": "application/json",
+                      "body": "eyJtb2RlIjoib3RoZXIgZmllbGQgZHJhZnQiLCJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJhY3R1YWxTdGF0dXMiOjIwMCwiYmVmb3JlUmV2aXNpb24iOjEsInNhdmVkUmV2aXNpb24iOjIsImNhbm9uaWNhbER1cmF0aW9uIjo2LCJuZXdlckhpc3RvcnkiOm51bGwsImhpc3RvcnlBZnRlciI6IntcInVuZG9cIjpbe1widGFyZ2V0XCI6MSxcImF0XCI6MixcImxhYmVsXCI6XCJzZXQgcGFyYW1ldGVyXCJ9XSxcInJlZG9cIjpbXX0iLCJyZWFkeUlkIjpudWxsLCJhY3RpdmVUYWciOiJCT0RZIiwib3duUHJvamVjdFJ1blNldFVuY2hhbmdlZCI6dHJ1ZSwic2NvcGUiOiJIZWxkIHJlYWwgY29tbWl0dGVkIGVkaXQgcmVzcG9uc2U7IHByZXNlcnZlZCBuYXZpZ2F0aW9uLCBoaXN0b3J5LCBuZXdlciBkcmFmdHMvcmVhZGluZXNzL2ZvY3VzOyBubyBTdGFydCJ9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "936e073082c9cef45be7-01f2c6007dda85c51fef",
+          "file": "parameter-accessibility.spec.ts",
+          "line": 258,
+          "column": 9
+        },
+        {
+          "title": "parameter accessibility: late save preserves deliberate focus at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2784,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T18:40:44.562Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "late-parameter.json",
+                      "contentType": "application/json",
+                      "body": "eyJtb2RlIjoiZGVsaWJlcmF0ZSBmb2N1cyIsInZpZXdwb3J0Ijp7IndpZHRoIjoxNDQwLCJoZWlnaHQiOjkwMH0sImFjdHVhbFN0YXR1cyI6MjAwLCJiZWZvcmVSZXZpc2lvbiI6MSwic2F2ZWRSZXZpc2lvbiI6MiwiY2Fub25pY2FsRHVyYXRpb24iOjYsIm5ld2VySGlzdG9yeSI6bnVsbCwiaGlzdG9yeUFmdGVyIjoie1widW5kb1wiOlt7XCJ0YXJnZXRcIjoxLFwiYXRcIjoyLFwibGFiZWxcIjpcInNldCBwYXJhbWV0ZXJcIn1dLFwicmVkb1wiOltdfSIsInJlYWR5SWQiOm51bGwsImFjdGl2ZVRhZyI6IkJVVFRPTiIsIm93blByb2plY3RSdW5TZXRVbmNoYW5nZWQiOnRydWUsInNjb3BlIjoiSGVsZCByZWFsIGNvbW1pdHRlZCBlZGl0IHJlc3BvbnNlOyBwcmVzZXJ2ZWQgbmF2aWdhdGlvbiwgaGlzdG9yeSwgbmV3ZXIgZHJhZnRzL3JlYWRpbmVzcy9mb2N1czsgbm8gU3RhcnQifQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "936e073082c9cef45be7-14d362ac965a849d9d79",
+          "file": "parameter-accessibility.spec.ts",
+          "line": 258,
+          "column": 9
+        },
+        {
+          "title": "parameter accessibility: late save preserves newer readiness at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3761,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T18:40:47.355Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "late-parameter.json",
+                      "contentType": "application/json",
+                      "body": "eyJtb2RlIjoibmV3ZXIgcmVhZGluZXNzIiwidmlld3BvcnQiOnsid2lkdGgiOjE0NDAsImhlaWdodCI6OTAwfSwiYWN0dWFsU3RhdHVzIjoyMDAsImJlZm9yZVJldmlzaW9uIjoxLCJzYXZlZFJldmlzaW9uIjoyLCJjYW5vbmljYWxEdXJhdGlvbiI6NiwibmV3ZXJIaXN0b3J5IjpudWxsLCJoaXN0b3J5QWZ0ZXIiOiJ7XCJ1bmRvXCI6W3tcInRhcmdldFwiOjEsXCJhdFwiOjIsXCJsYWJlbFwiOlwic2V0IHBhcmFtZXRlclwifV0sXCJyZWRvXCI6W119IiwicmVhZHlJZCI6InBmLTYzYmVmOTE4LTQxNzgtNGI3Ny04MjIxLTM4NjZiNzZmZjc0ZCIsImFjdGl2ZVRhZyI6IlNVTU1BUlkiLCJvd25Qcm9qZWN0UnVuU2V0VW5jaGFuZ2VkIjp0cnVlLCJzY29wZSI6IkhlbGQgcmVhbCBjb21taXR0ZWQgZWRpdCByZXNwb25zZTsgcHJlc2VydmVkIG5hdmlnYXRpb24sIGhpc3RvcnksIG5ld2VyIGRyYWZ0cy9yZWFkaW5lc3MvZm9jdXM7IG5vIFN0YXJ0In0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "936e073082c9cef45be7-cfa7fc25cf246f92b301",
+          "file": "parameter-accessibility.spec.ts",
+          "line": 258,
+          "column": 9
+        },
+        {
+          "title": "parameter accessibility: real stale failure in current form at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2221,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T18:40:51.125Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "parameter-failure.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJkZXBhcnRlZCI6ZmFsc2UsInN0YXR1cyI6NDEyLCJjb2RlIjoiUkVWSVNJT05fQ09ORkxJQ1QiLCJwcm9qZWN0UmV2aXNpb25VbmNoYW5nZWRBZnRlclJlZnVzYWwiOnRydWUsImNhbm9uaWNhbER1cmF0aW9uIjo1LCJvd25Qcm9qZWN0UnVuU2V0VW5jaGFuZ2VkIjp0cnVlLCJzY29wZSI6IlJlYWwgc3RhbGUgcmV2aXNpb24gcmVmdXNhbDsgZmFpbHVyZSBpcyBub3QgYSBzYXZlIGFja25vd2xlZGdlbWVudCBhbmQgY2Fubm90IHBvbGx1dGUgYSBkZXBhcnRlZCBjb250ZXh0In0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "936e073082c9cef45be7-66ca140aad1529677d44",
+          "file": "parameter-accessibility.spec.ts",
+          "line": 505,
+          "column": 9
+        },
+        {
+          "title": "parameter accessibility: real stale failure after departure at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2240,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T18:40:53.355Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "parameter-failure.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJkZXBhcnRlZCI6dHJ1ZSwic3RhdHVzIjo0MTIsImNvZGUiOiJSRVZJU0lPTl9DT05GTElDVCIsInByb2plY3RSZXZpc2lvblVuY2hhbmdlZEFmdGVyUmVmdXNhbCI6dHJ1ZSwiY2Fub25pY2FsRHVyYXRpb24iOjUsIm93blByb2plY3RSdW5TZXRVbmNoYW5nZWQiOnRydWUsInNjb3BlIjoiUmVhbCBzdGFsZSByZXZpc2lvbiByZWZ1c2FsOyBmYWlsdXJlIGlzIG5vdCBhIHNhdmUgYWNrbm93bGVkZ2VtZW50IGFuZCBjYW5ub3QgcG9sbHV0ZSBhIGRlcGFydGVkIGNvbnRleHQifQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "936e073082c9cef45be7-63871ff89dc923f7bf2a",
+          "file": "parameter-accessibility.spec.ts",
+          "line": 505,
+          "column": 9
+        },
+        {
+          "title": "parameter accessibility: numeric normalization at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1643,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T18:40:55.601Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "parameter-normalization.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJzdWJtaXR0ZWRUZXh0IjoiNS4wIiwiYXV0aG9yZWRWYWx1ZSI6NSwiZGlzcGxheWVkVGV4dCI6IjUiLCJzYXZlZFJldmlzaW9uIjoyLCJvd25Qcm9qZWN0UnVuU2V0VW5jaGFuZ2VkIjp0cnVlLCJzY29wZSI6IkFjdHVhbCB0eXBlZC12YWx1ZSBhY2tub3dsZWRnZW1lbnQgbWF5IG5vcm1hbGl6ZSBpdHMgb3duIGdlbmVyYXRpb247IGZhaWxlZCBzYXZlcyBjYW5ub3QifQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "936e073082c9cef45be7-27c09a19dc2852728349",
+          "file": "parameter-accessibility.spec.ts",
+          "line": 597,
+          "column": 7
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-26T18:39:29.544Z",
+    "duration": 87759.655,
+    "expected": 22,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  }
+}

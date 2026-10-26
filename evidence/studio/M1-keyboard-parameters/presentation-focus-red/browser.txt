@@ -1,0 +1,85 @@
+
+> xverse-studio-workspace@0.1.0 test:e2e
+> playwright test -c tests/e2e/playwright.config.ts --grep parameter accessibility: delayed presentation
+
+
+Running 4 tests using 1 worker
+
+(node:1883934) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 tests/e2e/parameter-accessibility.spec.ts:620:9 › parameter accessibility: delayed presentation preserves field focus at 1024x768 (11.9s)
+(node:1884121) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  2 tests/e2e/parameter-accessibility.spec.ts:620:9 › parameter accessibility: delayed presentation preserves moved focus at 1024x768 (1.9s)
+  ✘  3 tests/e2e/parameter-accessibility.spec.ts:620:9 › parameter accessibility: delayed presentation preserves field focus at 1440x900 (11.6s)
+(node:1884322) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  4 tests/e2e/parameter-accessibility.spec.ts:620:9 › parameter accessibility: delayed presentation preserves moved focus at 1440x900 (2.0s)
+
+
+  1) tests/e2e/parameter-accessibility.spec.ts:620:9 › parameter accessibility: delayed presentation preserves field focus at 1024x768
+
+    Error: expect(locator).toBeFocused() failed
+
+    Locator:  getByLabel('Duration')
+    Expected: focused
+    Received: inactive
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toBeFocused" getByLabel('Duration') with timeout 10000ms
+      - waiting for getByLabel('Duration')
+        24 × locator resolved to <input max="30" min="0.1" value="8" step="any" required="" type="number" aria-describedby="_r_1_-duration _r_1_-duration-draft"/>
+           - unexpected value "inactive"
+
+
+      669 |         await expect(apply(duration(page))).toBeEnabled();
+      670 |         if (moved) await expect(home).toBeFocused();
+    > 671 |         else await expect(duration(page)).toBeFocused();
+          |                                           ^
+      672 |         expect((await read(page, project.projectId)).documents).toEqual(
+      673 |           project.documents,
+      674 |         );
+        at <repo>/tests/e2e/parameter-accessibility.spec.ts:671:43
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/parameter-accessibility-pa-d7c4b-ves-field-focus-at-1024x768/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/parameter-accessibility-pa-d7c4b-ves-field-focus-at-1024x768/error-context.md
+
+  2) tests/e2e/parameter-accessibility.spec.ts:620:9 › parameter accessibility: delayed presentation preserves field focus at 1440x900
+
+    Error: expect(locator).toBeFocused() failed
+
+    Locator:  getByLabel('Duration')
+    Expected: focused
+    Received: inactive
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toBeFocused" getByLabel('Duration') with timeout 10000ms
+      - waiting for getByLabel('Duration')
+        24 × locator resolved to <input max="30" min="0.1" value="8" step="any" required="" type="number" aria-describedby="_r_1_-duration _r_1_-duration-draft"/>
+           - unexpected value "inactive"
+
+
+      669 |         await expect(apply(duration(page))).toBeEnabled();
+      670 |         if (moved) await expect(home).toBeFocused();
+    > 671 |         else await expect(duration(page)).toBeFocused();
+          |                                           ^
+      672 |         expect((await read(page, project.projectId)).documents).toEqual(
+      673 |           project.documents,
+      674 |         );
+        at <repo>/tests/e2e/parameter-accessibility.spec.ts:671:43
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/parameter-accessibility-pa-e797b-ves-field-focus-at-1440x900/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/parameter-accessibility-pa-e797b-ves-field-focus-at-1440x900/error-context.md
+
+  2 failed
+    tests/e2e/parameter-accessibility.spec.ts:620:9 › parameter accessibility: delayed presentation preserves field focus at 1024x768
+    tests/e2e/parameter-accessibility.spec.ts:620:9 › parameter accessibility: delayed presentation preserves field focus at 1440x900
+  2 passed (28.9s)

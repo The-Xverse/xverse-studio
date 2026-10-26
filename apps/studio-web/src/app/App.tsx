@@ -694,7 +694,7 @@ export default function App() {
       "Run accepted by the backend. Browser disconnection will not duplicate or terminate it.",
     );
   }
-  async function edit(edits: Data[]) {
+  async function edit(edits: Data[]): Promise<Project | undefined> {
     const selectedScenario = projection.scenarios.find(
       (resource) =>
         `xdl://${resource.metadata.namespace}/scenario/${resource.metadata.name}` ===
@@ -706,21 +706,43 @@ export default function App() {
         : edit,
     );
     if (!project) return;
-    const saved = await api<Project>(`/projects/${project.projectId}/edits`, {
-      method: "POST",
-      revision: project.revision,
-      body: { baseRevision: project.revision, edits },
-    });
-    const history = recordEdit(
-      readHistory(project.projectId),
-      project.revision,
-      saved.revision,
-      edits.map((edit) => String(edit.kind).replace(/_/g, " ")).join(", "),
-    );
-    writeHistory(project.projectId, history);
-    setEditHistory(history);
-    await refreshProject();
-    setNotice("Draft saved. Existing run snapshots remain unchanged.");
+    const projectId = project.projectId,
+      sequence = projectLoadSequence.current,
+      intent = preflightRequestSequence.current,
+      initialHistory = readHistory(projectId),
+      current = () => selectedProjectRef.current === projectId && projectLoadSequence.current === sequence;
+    try {
+      const saved = await api<Project>(`/projects/${projectId}/edits`, {
+        method: "POST",
+        revision: project.revision,
+        body: { baseRevision: project.revision, edits },
+      });
+      const known = latestProject.current;
+      if (known?.projectId === projectId && known.revision > saved.revision) return undefined;
+      const history = recordEdit(initialHistory, project.revision, saved.revision,
+        edits.map((edit) => String(edit.kind).replace(/_/g, " ")).join(", ")),
+        persisted = JSON.stringify(readHistory(projectId)) === JSON.stringify(initialHistory);
+      // A completed edit belongs to its original tab head, even after departure.
+      // A newer load/edit must never have its history replaced by an older reply.
+      if (persisted) writeHistory(projectId, history);
+      if (!current()) return undefined;
+      const visible = intent === preflightRequestSequence.current;
+      if (persisted) setEditHistory(history);
+      if (!known || saved.revision > known.revision) {
+        // The response is already the full authoritative committed Project.
+        setProject(saved);
+        if (!persisted) setEditHistory(reconcileHistory(readHistory(projectId), saved.revision));
+        preflightRequestSequence.current++;
+        setPreflight(null);
+        if (visible)
+          setNotice("Draft saved. Existing run snapshots remain unchanged.");
+      }
+      // Callers may complete local form/focus work only for the current intent.
+      return visible ? saved : undefined;
+    } catch (error) {
+      if (current() && intent === preflightRequestSequence.current) throw error;
+      return undefined;
+    }
   }
   async function stepHistory(direction: "undo" | "redo") {
     if (!project) return;

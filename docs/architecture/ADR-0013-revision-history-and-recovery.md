@@ -73,3 +73,34 @@ exact-byte Undo/Redo through Enter and shortcuts, departure, deliberately moved 
 same-project edit/history head at both required viewports. Original failures, independent review and
 the successor are retained in `evidence/studio/M2-keyboard-instance/`. These are Linux partial results;
 native Windows and complete accessibility acceptance remain open.
+
+Generic edit completion amendment (2026-10-26): semantic edits capture their initiating
+project/load/selection intent and tab history before sending the expected-revision transaction.
+The returned full committed Project supplies the new visible head directly; no captured refresh
+starts another project load. A reply cannot replace a known newer head. The completed step persists
+only while the stored tab history still equals its initial value, including after departure; visible
+history and feedback remain scoped to the current context. An equal-head acknowledgement preserves
+newer readiness. Obsolete errors do not appear in a departed workspace. Local forms receive explicit
+success only for a current acknowledgement, independently of whether an older backend operation
+committed. Backend validation, revision promotion and immutable run snapshots are unchanged.
+
+Parameter drafts belong to project/document/Scenario/parameter identities. Field edit generations
+preserve newer text, including explicitly retyping the old authored value while a save is pending,
+and unrelated dirty fields survive a returned Project. Only a matching submitted generation may be
+normalized by its acknowledgement. Same-value numeric text (for example `5.0` submitted as typed
+`5`) requires explicit successful completion before normalization; a resolving failure wrapper is
+not success. Retained input is labelled unsaved alongside the current saved value and associated
+parameter guidance. Draft state and control references are bounded by the current parameter set.
+
+After a current successful Apply disables, focus can return to the corresponding enabled field.
+Restoration requires the same field identity and generation, a current authored value, no modal,
+and focus still on the origin or BODY. Newer edits, deliberately moved focus and another project's
+controls take precedence. These are scoped browser completion and input-recovery rules, not live
+parameter mutation or additional runtime admission.
+
+Inert presentation metadata may arrive after editing begins and regroup parameter forms. When that
+commit replaces the currently focused control, the same semantic field receives focus in the layout
+phase only if the old node is disconnected, its replacement still exists, focus is on BODY and no
+modal is active. A deliberate blur clears the witness. Metadata continues to apply; it is not frozen
+to avoid focus transitions. The native presentation countercheck asserts the returned group legend
+as well as preserved input/focus and unchanged canonical documents.

@@ -1,0 +1,105 @@
+
+> xverse-studio-workspace@0.1.0 test:e2e
+> playwright test -c tests/e2e/playwright.config.ts --grep parameter accessibility:
+
+
+Running 24 tests using 1 worker
+
+(node:1871137) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 tests/e2e/parameter-accessibility.spec.ts:137:7 › parameter accessibility: native range recovery and save at 1024x768 (2.6s)
+  ✓   2 tests/e2e/parameter-accessibility.spec.ts:258:9 › parameter accessibility: late save preserves Home at 1024x768 (2.5s)
+  ✘   3 tests/e2e/parameter-accessibility.spec.ts:258:9 › parameter accessibility: late save preserves other project at 1024x768 (12.2s)
+(node:1871391) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   4 tests/e2e/parameter-accessibility.spec.ts:258:9 › parameter accessibility: late save preserves newer head at 1024x768 (4.0s)
+  ✓   5 tests/e2e/parameter-accessibility.spec.ts:258:9 › parameter accessibility: late save preserves newer same-field draft at 1024x768 (3.1s)
+  ✓   6 tests/e2e/parameter-accessibility.spec.ts:258:9 › parameter accessibility: late save preserves reverted same-field draft at 1024x768 (3.0s)
+  ✓   7 tests/e2e/parameter-accessibility.spec.ts:258:9 › parameter accessibility: late save preserves other field draft at 1024x768 (3.0s)
+  ✓   8 tests/e2e/parameter-accessibility.spec.ts:258:9 › parameter accessibility: late save preserves deliberate focus at 1024x768 (2.7s)
+  ✓   9 tests/e2e/parameter-accessibility.spec.ts:258:9 › parameter accessibility: late save preserves newer readiness at 1024x768 (3.6s)
+  ✓  10 tests/e2e/parameter-accessibility.spec.ts:505:9 › parameter accessibility: real stale failure in current form at 1024x768 (2.3s)
+  ✓  11 tests/e2e/parameter-accessibility.spec.ts:505:9 › parameter accessibility: real stale failure after departure at 1024x768 (2.4s)
+  ✓  12 tests/e2e/parameter-accessibility.spec.ts:597:7 › parameter accessibility: numeric normalization at 1024x768 (1.9s)
+  ✓  13 tests/e2e/parameter-accessibility.spec.ts:137:7 › parameter accessibility: native range recovery and save at 1440x900 (1.9s)
+  ✓  14 tests/e2e/parameter-accessibility.spec.ts:258:9 › parameter accessibility: late save preserves Home at 1440x900 (2.7s)
+  ✘  15 tests/e2e/parameter-accessibility.spec.ts:258:9 › parameter accessibility: late save preserves other project at 1440x900 (12.1s)
+(node:1872017) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  16 tests/e2e/parameter-accessibility.spec.ts:258:9 › parameter accessibility: late save preserves newer head at 1440x900 (4.1s)
+  ✓  17 tests/e2e/parameter-accessibility.spec.ts:258:9 › parameter accessibility: late save preserves newer same-field draft at 1440x900 (3.1s)
+  ✓  18 tests/e2e/parameter-accessibility.spec.ts:258:9 › parameter accessibility: late save preserves reverted same-field draft at 1440x900 (3.2s)
+  ✓  19 tests/e2e/parameter-accessibility.spec.ts:258:9 › parameter accessibility: late save preserves other field draft at 1440x900 (3.1s)
+  ✓  20 tests/e2e/parameter-accessibility.spec.ts:258:9 › parameter accessibility: late save preserves deliberate focus at 1440x900 (2.8s)
+  ✓  21 tests/e2e/parameter-accessibility.spec.ts:258:9 › parameter accessibility: late save preserves newer readiness at 1440x900 (3.8s)
+  ✓  22 tests/e2e/parameter-accessibility.spec.ts:505:9 › parameter accessibility: real stale failure in current form at 1440x900 (2.2s)
+  ✓  23 tests/e2e/parameter-accessibility.spec.ts:505:9 › parameter accessibility: real stale failure after departure at 1440x900 (2.2s)
+  ✓  24 tests/e2e/parameter-accessibility.spec.ts:597:7 › parameter accessibility: numeric normalization at 1440x900 (1.6s)
+
+
+  1) tests/e2e/parameter-accessibility.spec.ts:258:9 › parameter accessibility: late save preserves other project at 1024x768
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('.project-list-row[data-project-id="prj-e1ad5dd5-78bc-4d91-ba0d-d9e7836fcb4f"] .project-open')
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" locator('.project-list-row[data-project-id="prj-e1ad5dd5-78bc-4d91-ba0d-d9e7836fcb4f"] .project-open') with timeout 10000ms
+      - waiting for locator('.project-list-row[data-project-id="prj-e1ad5dd5-78bc-4d91-ba0d-d9e7836fcb4f"] .project-open')
+
+
+       5 |
+       6 | async function tabTo(page: Page, target: Locator) {
+    >  7 |   await expect(target).toBeVisible();
+         |                        ^
+       8 |   for (let i = 0; i < 180; i++) {
+       9 |     if (await target.evaluate((node) => document.activeElement === node))
+      10 |       return;
+        at tabTo (<repo>/tests/e2e/parameter-accessibility.spec.ts:7:24)
+        at activate (<repo>/tests/e2e/parameter-accessibility.spec.ts:16:9)
+        at <repo>/tests/e2e/parameter-accessibility.spec.ts:312:17
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/parameter-accessibility-pa-fbe2d-s-other-project-at-1024x768/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/parameter-accessibility-pa-fbe2d-s-other-project-at-1024x768/error-context.md
+
+  2) tests/e2e/parameter-accessibility.spec.ts:258:9 › parameter accessibility: late save preserves other project at 1440x900
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('.project-list-row[data-project-id="prj-750a7033-1530-41a8-b313-6c7cacb0e8e2"] .project-open')
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" locator('.project-list-row[data-project-id="prj-750a7033-1530-41a8-b313-6c7cacb0e8e2"] .project-open') with timeout 10000ms
+      - waiting for locator('.project-list-row[data-project-id="prj-750a7033-1530-41a8-b313-6c7cacb0e8e2"] .project-open')
+
+
+       5 |
+       6 | async function tabTo(page: Page, target: Locator) {
+    >  7 |   await expect(target).toBeVisible();
+         |                        ^
+       8 |   for (let i = 0; i < 180; i++) {
+       9 |     if (await target.evaluate((node) => document.activeElement === node))
+      10 |       return;
+        at tabTo (<repo>/tests/e2e/parameter-accessibility.spec.ts:7:24)
+        at activate (<repo>/tests/e2e/parameter-accessibility.spec.ts:16:9)
+        at <repo>/tests/e2e/parameter-accessibility.spec.ts:312:17
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/parameter-accessibility-pa-38a0b-s-other-project-at-1440x900/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/parameter-accessibility-pa-38a0b-s-other-project-at-1440x900/error-context.md
+
+  2 failed
+    tests/e2e/parameter-accessibility.spec.ts:258:9 › parameter accessibility: late save preserves other project at 1024x768
+    tests/e2e/parameter-accessibility.spec.ts:258:9 › parameter accessibility: late save preserves other project at 1440x900
+  22 passed (1.5m)

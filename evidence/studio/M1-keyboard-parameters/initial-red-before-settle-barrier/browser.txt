@@ -1,0 +1,537 @@
+
+> xverse-studio-workspace@0.1.0 test:e2e
+> playwright test -c tests/e2e/playwright.config.ts --grep parameter accessibility:
+
+
+Running 14 tests using 1 worker
+
+(node:1847495) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   1 tests/e2e/parameter-accessibility.spec.ts:62:7 › parameter accessibility: native range recovery and save at 1024x768 (22.4s)
+(node:1847784) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   2 tests/e2e/parameter-accessibility.spec.ts:92:9 › parameter accessibility: late save preserves Home at 1024x768 (12.4s)
+(node:1847957) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   3 tests/e2e/parameter-accessibility.spec.ts:92:9 › parameter accessibility: late save preserves newer head at 1024x768 (3.7s)
+(node:1848110) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   4 tests/e2e/parameter-accessibility.spec.ts:92:9 › parameter accessibility: late save preserves newer same-field draft at 1024x768 (22.5s)
+(node:1848343) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   5 tests/e2e/parameter-accessibility.spec.ts:92:9 › parameter accessibility: late save preserves other field draft at 1024x768 (22.6s)
+(node:1848602) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   6 tests/e2e/parameter-accessibility.spec.ts:92:9 › parameter accessibility: late save preserves deliberate focus at 1024x768 (2.5s)
+  ✓   7 tests/e2e/parameter-accessibility.spec.ts:92:9 › parameter accessibility: late save preserves newer readiness at 1024x768 (3.3s)
+  ✘   8 tests/e2e/parameter-accessibility.spec.ts:62:7 › parameter accessibility: native range recovery and save at 1440x900 (22.0s)
+(node:1848902) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   9 tests/e2e/parameter-accessibility.spec.ts:92:9 › parameter accessibility: late save preserves Home at 1440x900 (12.4s)
+(node:1849068) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  10 tests/e2e/parameter-accessibility.spec.ts:92:9 › parameter accessibility: late save preserves newer head at 1440x900 (3.6s)
+(node:1849218) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  11 tests/e2e/parameter-accessibility.spec.ts:92:9 › parameter accessibility: late save preserves newer same-field draft at 1440x900 (22.9s)
+(node:1849460) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  12 tests/e2e/parameter-accessibility.spec.ts:92:9 › parameter accessibility: late save preserves other field draft at 1440x900 (22.7s)
+(node:1849714) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  13 tests/e2e/parameter-accessibility.spec.ts:92:9 › parameter accessibility: late save preserves deliberate focus at 1440x900 (2.6s)
+  ✓  14 tests/e2e/parameter-accessibility.spec.ts:92:9 › parameter accessibility: late save preserves newer readiness at 1440x900 (3.3s)
+
+
+  1) tests/e2e/parameter-accessibility.spec.ts:62:7 › parameter accessibility: native range recovery and save at 1024x768
+
+    Error: expect(locator).toHaveAccessibleDescription(expected) failed
+
+    Locator: getByLabel('Duration')
+    Expected pattern: /Requested simulation horizon/
+    Received string:  ""
+    Timeout: 10000ms
+
+    Call log:
+      - Expect "soft toHaveAccessibleDescription" getByLabel('Duration') with timeout 10000ms
+      - waiting for getByLabel('Duration')
+        24 × locator resolved to <input max="30" min="0.1" step="any" value="31" required="" type="number"/>
+           - unexpected value ""
+
+
+      69 |     expect(await input.evaluate((n) => (n as HTMLInputElement).validity.rangeOverflow)).toBe(true);
+      70 |     expect(writes).toEqual([]); expect((await read(page, id)).documents).toEqual(project.documents);
+    > 71 |     await expect.soft(input).toHaveAccessibleDescription(/Requested simulation horizon/);
+         |                              ^
+      72 |     await type(page, input, "6");
+      73 |     const savedResponse = page.waitForResponse((r) => new URL(r.url()).pathname === `/api/v1/projects/${id}/edits` && r.request().method() === "POST");
+      74 |     await activate(page, apply(input)); const response = await savedResponse; expect(response.status()).toBe(200); const saved = await response.json();
+        at <repo>/tests/e2e/parameter-accessibility.spec.ts:71:30
+
+    Error: expect(locator).toBeFocused() failed
+
+    Locator:  getByLabel('Duration')
+    Expected: focused
+    Received: inactive
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "soft toBeFocused" getByLabel('Duration') with timeout 10000ms
+      - waiting for getByLabel('Duration')
+        24 × locator resolved to <input max="30" min="0.1" value="6" step="any" required="" type="number"/>
+           - unexpected value "inactive"
+
+
+      74 |     await activate(page, apply(input)); const response = await savedResponse; expect(response.status()).toBe(200); const saved = await response.json();
+      75 |     await expect(page.locator(".alerts")).toContainText("Draft saved"); await expect(apply(input)).toBeDisabled();
+    > 76 |     const focus = await geometry(input); await expect.soft(input).toBeFocused();
+         |                                                                   ^
+      77 |     expect.soft(focus.outline).not.toBe("none"); expect.soft(focus.outlineWidth).toBeGreaterThan(0);
+      78 |     expect.soft(focus.box.top).toBeGreaterThanOrEqual(0); expect.soft(focus.box.bottom).toBeLessThanOrEqual(viewport.height);
+      79 |     expect(saved.revision).toBe(project.revision + 1); expect(value(saved, "duration")).toBe(6);
+        at <repo>/tests/e2e/parameter-accessibility.spec.ts:76:67
+
+    Error: expect(received).not.toBe(expected) // Object.is equality
+
+    Expected: not "none"
+
+      75 |     await expect(page.locator(".alerts")).toContainText("Draft saved"); await expect(apply(input)).toBeDisabled();
+      76 |     const focus = await geometry(input); await expect.soft(input).toBeFocused();
+    > 77 |     expect.soft(focus.outline).not.toBe("none"); expect.soft(focus.outlineWidth).toBeGreaterThan(0);
+         |                                    ^
+      78 |     expect.soft(focus.box.top).toBeGreaterThanOrEqual(0); expect.soft(focus.box.bottom).toBeLessThanOrEqual(viewport.height);
+      79 |     expect(saved.revision).toBe(project.revision + 1); expect(value(saved, "duration")).toBe(6);
+      80 |     expect(writes).toEqual([{ path: `/api/v1/projects/${id}/edits`, body: { baseRevision: project.revision, edits: [{ kind: "set_parameter", parameterId: "duration", value: 6 }] } }]);
+        at <repo>/tests/e2e/parameter-accessibility.spec.ts:77:36
+
+    Error: expect(received).toBeLessThanOrEqual(expected)
+
+    Expected: <= 768
+    Received:    1108.71875
+
+      76 |     const focus = await geometry(input); await expect.soft(input).toBeFocused();
+      77 |     expect.soft(focus.outline).not.toBe("none"); expect.soft(focus.outlineWidth).toBeGreaterThan(0);
+    > 78 |     expect.soft(focus.box.top).toBeGreaterThanOrEqual(0); expect.soft(focus.box.bottom).toBeLessThanOrEqual(viewport.height);
+         |                                                                                         ^
+      79 |     expect(saved.revision).toBe(project.revision + 1); expect(value(saved, "duration")).toBe(6);
+      80 |     expect(writes).toEqual([{ path: `/api/v1/projects/${id}/edits`, body: { baseRevision: project.revision, edits: [{ kind: "set_parameter", parameterId: "duration", value: 6 }] } }]);
+      81 |     for (const [key, document] of Object.entries(project.documents) as [string, any][]) if (!document.path.endsWith("/scenario.xdl.yaml")) expect(saved.documents[key].content).toBe(document.content);
+        at <repo>/tests/e2e/parameter-accessibility.spec.ts:78:89
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/parameter-accessibility-pa-dd6e7-covery-and-save-at-1024x768/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/parameter-accessibility-pa-dd6e7-covery-and-save-at-1024x768/error-context.md
+
+  2) tests/e2e/parameter-accessibility.spec.ts:92:9 › parameter accessibility: late save preserves Home at 1024x768
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('heading', { name: 'Recent projects', exact: true })
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "soft toBeVisible" getByRole('heading', { name: 'Recent projects', exact: true }) with timeout 10000ms
+      - waiting for getByRole('heading', { name: 'Recent projects', exact: true })
+
+
+      122 |         }
+      123 |         await pending.release(); await expect(page.locator(".notice.busy")).toHaveCount(0);
+    > 124 |         if (mode === "Home") await expect.soft(page.getByRole("heading", { name: "Recent projects", exact: true })).toBeVisible();
+          |                                                                                                                     ^
+      125 |         if (mode === "Home" || mode === "deliberate focus") await expect.soft(home).toBeFocused();
+      126 |         if (mode === "newer head") {
+      127 |           await expect.soft(duration(page)).toHaveValue("7"); await expect.soft(page.locator(".workspace-context")).toContainText(`Draft revision ${project.revision + 2}`);
+        at <repo>/tests/e2e/parameter-accessibility.spec.ts:124:117
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/parameter-accessibility-pa-e3d92--preserves-Home-at-1024x768/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/parameter-accessibility-pa-e3d92--preserves-Home-at-1024x768/error-context.md
+
+  3) tests/e2e/parameter-accessibility.spec.ts:92:9 › parameter accessibility: late save preserves newer head at 1024x768
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: "{\"undo\":[{\"target\":2,\"at\":3,\"label\":\"set parameter\"}],\"redo\":[]}"
+    Received: "{\"undo\":[{\"target\":1,\"at\":2,\"label\":\"set parameter\"}],\"redo\":[]}"
+
+      126 |         if (mode === "newer head") {
+      127 |           await expect.soft(duration(page)).toHaveValue("7"); await expect.soft(page.locator(".workspace-context")).toContainText(`Draft revision ${project.revision + 2}`);
+    > 128 |           expect.soft(await page.evaluate((id) => sessionStorage.getItem("studio.graphHistory." + id), id)).toBe(newerHistory);
+          |                                                                                                             ^
+      129 |         }
+      130 |         if (mode === "newer same-field draft") { await expect.soft(duration(page)).toHaveValue("7"); await expect.soft(apply(duration(page))).toBeEnabled(); }
+      131 |         if (mode === "other field draft") { await expect.soft(page.getByLabel("Target", { exact: false })).toHaveValue("2.5"); await expect.soft(apply(page.getByLabel("Target", { exact: false }))).toBeEnabled(); }
+        at <repo>/tests/e2e/parameter-accessibility.spec.ts:128:109
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/parameter-accessibility-pa-62491-rves-newer-head-at-1024x768/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/parameter-accessibility-pa-62491-rves-newer-head-at-1024x768/error-context.md
+
+  4) tests/e2e/parameter-accessibility.spec.ts:92:9 › parameter accessibility: late save preserves newer same-field draft at 1024x768
+
+    Error: expect(locator).toHaveValue(expected) failed
+
+    Locator:  getByLabel('Duration')
+    Expected: "7"
+    Received: "6"
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "soft toHaveValue" getByLabel('Duration') with timeout 10000ms
+      - waiting for getByLabel('Duration')
+        24 × locator resolved to <input max="30" min="0.1" value="6" step="any" required="" type="number"/>
+           - unexpected value "6"
+
+
+      128 |           expect.soft(await page.evaluate((id) => sessionStorage.getItem("studio.graphHistory." + id), id)).toBe(newerHistory);
+      129 |         }
+    > 130 |         if (mode === "newer same-field draft") { await expect.soft(duration(page)).toHaveValue("7"); await expect.soft(apply(duration(page))).toBeEnabled(); }
+          |                                                                                    ^
+      131 |         if (mode === "other field draft") { await expect.soft(page.getByLabel("Target", { exact: false })).toHaveValue("2.5"); await expect.soft(apply(page.getByLabel("Target", { exact: false }))).toBeEnabled(); }
+      132 |         if (mode === "newer readiness") await expect.soft(page.getByRole("dialog", { name: "Execution preflight", exact: true })).toBeVisible();
+      133 |         const saved = await read(page, id); expect(saved.revision).toBe(project.revision + (mode === "newer head" ? 2 : 1)); expect(value(saved, "duration")).toBe(mode === "newer head" ? 7 : 6);
+        at <repo>/tests/e2e/parameter-accessibility.spec.ts:130:84
+
+    Error: expect(locator).toBeEnabled() failed
+
+    Locator:  getByLabel('Duration').locator('xpath=ancestor::form').getByRole('button', { name: 'Apply', exact: true })
+    Expected: enabled
+    Received: disabled
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "soft toBeEnabled" getByLabel('Duration').locator('xpath=ancestor::form').getByRole('button', { name: 'Apply', exact: true }) with timeout 10000ms
+      - waiting for getByLabel('Duration').locator('xpath=ancestor::form').getByRole('button', { name: 'Apply', exact: true })
+        24 × locator resolved to <button disabled class="small-button">Apply</button>
+           - unexpected value "disabled"
+
+
+      128 |           expect.soft(await page.evaluate((id) => sessionStorage.getItem("studio.graphHistory." + id), id)).toBe(newerHistory);
+      129 |         }
+    > 130 |         if (mode === "newer same-field draft") { await expect.soft(duration(page)).toHaveValue("7"); await expect.soft(apply(duration(page))).toBeEnabled(); }
+          |                                                                                                                                               ^
+      131 |         if (mode === "other field draft") { await expect.soft(page.getByLabel("Target", { exact: false })).toHaveValue("2.5"); await expect.soft(apply(page.getByLabel("Target", { exact: false }))).toBeEnabled(); }
+      132 |         if (mode === "newer readiness") await expect.soft(page.getByRole("dialog", { name: "Execution preflight", exact: true })).toBeVisible();
+      133 |         const saved = await read(page, id); expect(saved.revision).toBe(project.revision + (mode === "newer head" ? 2 : 1)); expect(value(saved, "duration")).toBe(mode === "newer head" ? 7 : 6);
+        at <repo>/tests/e2e/parameter-accessibility.spec.ts:130:143
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/parameter-accessibility-pa-23b5a-ame-field-draft-at-1024x768/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/parameter-accessibility-pa-23b5a-ame-field-draft-at-1024x768/error-context.md
+
+  5) tests/e2e/parameter-accessibility.spec.ts:92:9 › parameter accessibility: late save preserves other field draft at 1024x768
+
+    Error: expect(locator).toHaveValue(expected) failed
+
+    Locator:  getByLabel('Target')
+    Expected: "2.5"
+    Received: "1"
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "soft toHaveValue" getByLabel('Target') with timeout 10000ms
+      - waiting for getByLabel('Target')
+        24 × locator resolved to <input max="100" value="1" step="any" min="-100" required="" type="number"/>
+           - unexpected value "1"
+
+
+      129 |         }
+      130 |         if (mode === "newer same-field draft") { await expect.soft(duration(page)).toHaveValue("7"); await expect.soft(apply(duration(page))).toBeEnabled(); }
+    > 131 |         if (mode === "other field draft") { await expect.soft(page.getByLabel("Target", { exact: false })).toHaveValue("2.5"); await expect.soft(apply(page.getByLabel("Target", { exact: false }))).toBeEnabled(); }
+          |                                                                                                            ^
+      132 |         if (mode === "newer readiness") await expect.soft(page.getByRole("dialog", { name: "Execution preflight", exact: true })).toBeVisible();
+      133 |         const saved = await read(page, id); expect(saved.revision).toBe(project.revision + (mode === "newer head" ? 2 : 1)); expect(value(saved, "duration")).toBe(mode === "newer head" ? 7 : 6);
+      134 |         expect(await runIds(page, id)).toEqual(runs);
+        at <repo>/tests/e2e/parameter-accessibility.spec.ts:131:108
+
+    Error: expect(locator).toBeEnabled() failed
+
+    Locator:  getByLabel('Target').locator('xpath=ancestor::form').getByRole('button', { name: 'Apply', exact: true })
+    Expected: enabled
+    Received: disabled
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "soft toBeEnabled" getByLabel('Target').locator('xpath=ancestor::form').getByRole('button', { name: 'Apply', exact: true }) with timeout 10000ms
+      - waiting for getByLabel('Target').locator('xpath=ancestor::form').getByRole('button', { name: 'Apply', exact: true })
+        24 × locator resolved to <button disabled class="small-button">Apply</button>
+           - unexpected value "disabled"
+
+
+      129 |         }
+      130 |         if (mode === "newer same-field draft") { await expect.soft(duration(page)).toHaveValue("7"); await expect.soft(apply(duration(page))).toBeEnabled(); }
+    > 131 |         if (mode === "other field draft") { await expect.soft(page.getByLabel("Target", { exact: false })).toHaveValue("2.5"); await expect.soft(apply(page.getByLabel("Target", { exact: false }))).toBeEnabled(); }
+          |                                                                                                                                                                                                      ^
+      132 |         if (mode === "newer readiness") await expect.soft(page.getByRole("dialog", { name: "Execution preflight", exact: true })).toBeVisible();
+      133 |         const saved = await read(page, id); expect(saved.revision).toBe(project.revision + (mode === "newer head" ? 2 : 1)); expect(value(saved, "duration")).toBe(mode === "newer head" ? 7 : 6);
+      134 |         expect(await runIds(page, id)).toEqual(runs);
+        at <repo>/tests/e2e/parameter-accessibility.spec.ts:131:198
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/parameter-accessibility-pa-4bb7a-her-field-draft-at-1024x768/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/parameter-accessibility-pa-4bb7a-her-field-draft-at-1024x768/error-context.md
+
+  6) tests/e2e/parameter-accessibility.spec.ts:62:7 › parameter accessibility: native range recovery and save at 1440x900
+
+    Error: expect(locator).toHaveAccessibleDescription(expected) failed
+
+    Locator: getByLabel('Duration')
+    Expected pattern: /Requested simulation horizon/
+    Received string:  ""
+    Timeout: 10000ms
+
+    Call log:
+      - Expect "soft toHaveAccessibleDescription" getByLabel('Duration') with timeout 10000ms
+      - waiting for getByLabel('Duration')
+        24 × locator resolved to <input max="30" min="0.1" step="any" value="31" required="" type="number"/>
+           - unexpected value ""
+
+
+      69 |     expect(await input.evaluate((n) => (n as HTMLInputElement).validity.rangeOverflow)).toBe(true);
+      70 |     expect(writes).toEqual([]); expect((await read(page, id)).documents).toEqual(project.documents);
+    > 71 |     await expect.soft(input).toHaveAccessibleDescription(/Requested simulation horizon/);
+         |                              ^
+      72 |     await type(page, input, "6");
+      73 |     const savedResponse = page.waitForResponse((r) => new URL(r.url()).pathname === `/api/v1/projects/${id}/edits` && r.request().method() === "POST");
+      74 |     await activate(page, apply(input)); const response = await savedResponse; expect(response.status()).toBe(200); const saved = await response.json();
+        at <repo>/tests/e2e/parameter-accessibility.spec.ts:71:30
+
+    Error: expect(locator).toBeFocused() failed
+
+    Locator:  getByLabel('Duration')
+    Expected: focused
+    Received: inactive
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "soft toBeFocused" getByLabel('Duration') with timeout 10000ms
+      - waiting for getByLabel('Duration')
+        24 × locator resolved to <input max="30" min="0.1" value="6" step="any" required="" type="number"/>
+           - unexpected value "inactive"
+
+
+      74 |     await activate(page, apply(input)); const response = await savedResponse; expect(response.status()).toBe(200); const saved = await response.json();
+      75 |     await expect(page.locator(".alerts")).toContainText("Draft saved"); await expect(apply(input)).toBeDisabled();
+    > 76 |     const focus = await geometry(input); await expect.soft(input).toBeFocused();
+         |                                                                   ^
+      77 |     expect.soft(focus.outline).not.toBe("none"); expect.soft(focus.outlineWidth).toBeGreaterThan(0);
+      78 |     expect.soft(focus.box.top).toBeGreaterThanOrEqual(0); expect.soft(focus.box.bottom).toBeLessThanOrEqual(viewport.height);
+      79 |     expect(saved.revision).toBe(project.revision + 1); expect(value(saved, "duration")).toBe(6);
+        at <repo>/tests/e2e/parameter-accessibility.spec.ts:76:67
+
+    Error: expect(received).not.toBe(expected) // Object.is equality
+
+    Expected: not "none"
+
+      75 |     await expect(page.locator(".alerts")).toContainText("Draft saved"); await expect(apply(input)).toBeDisabled();
+      76 |     const focus = await geometry(input); await expect.soft(input).toBeFocused();
+    > 77 |     expect.soft(focus.outline).not.toBe("none"); expect.soft(focus.outlineWidth).toBeGreaterThan(0);
+         |                                    ^
+      78 |     expect.soft(focus.box.top).toBeGreaterThanOrEqual(0); expect.soft(focus.box.bottom).toBeLessThanOrEqual(viewport.height);
+      79 |     expect(saved.revision).toBe(project.revision + 1); expect(value(saved, "duration")).toBe(6);
+      80 |     expect(writes).toEqual([{ path: `/api/v1/projects/${id}/edits`, body: { baseRevision: project.revision, edits: [{ kind: "set_parameter", parameterId: "duration", value: 6 }] } }]);
+        at <repo>/tests/e2e/parameter-accessibility.spec.ts:77:36
+
+    Error: expect(received).toBeLessThanOrEqual(expected)
+
+    Expected: <= 900
+    Received:    1114.71875
+
+      76 |     const focus = await geometry(input); await expect.soft(input).toBeFocused();
+      77 |     expect.soft(focus.outline).not.toBe("none"); expect.soft(focus.outlineWidth).toBeGreaterThan(0);
+    > 78 |     expect.soft(focus.box.top).toBeGreaterThanOrEqual(0); expect.soft(focus.box.bottom).toBeLessThanOrEqual(viewport.height);
+         |                                                                                         ^
+      79 |     expect(saved.revision).toBe(project.revision + 1); expect(value(saved, "duration")).toBe(6);
+      80 |     expect(writes).toEqual([{ path: `/api/v1/projects/${id}/edits`, body: { baseRevision: project.revision, edits: [{ kind: "set_parameter", parameterId: "duration", value: 6 }] } }]);
+      81 |     for (const [key, document] of Object.entries(project.documents) as [string, any][]) if (!document.path.endsWith("/scenario.xdl.yaml")) expect(saved.documents[key].content).toBe(document.content);
+        at <repo>/tests/e2e/parameter-accessibility.spec.ts:78:89
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/parameter-accessibility-pa-7e0b2-covery-and-save-at-1440x900/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/parameter-accessibility-pa-7e0b2-covery-and-save-at-1440x900/error-context.md
+
+  7) tests/e2e/parameter-accessibility.spec.ts:92:9 › parameter accessibility: late save preserves Home at 1440x900
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('heading', { name: 'Recent projects', exact: true })
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "soft toBeVisible" getByRole('heading', { name: 'Recent projects', exact: true }) with timeout 10000ms
+      - waiting for getByRole('heading', { name: 'Recent projects', exact: true })
+
+
+      122 |         }
+      123 |         await pending.release(); await expect(page.locator(".notice.busy")).toHaveCount(0);
+    > 124 |         if (mode === "Home") await expect.soft(page.getByRole("heading", { name: "Recent projects", exact: true })).toBeVisible();
+          |                                                                                                                     ^
+      125 |         if (mode === "Home" || mode === "deliberate focus") await expect.soft(home).toBeFocused();
+      126 |         if (mode === "newer head") {
+      127 |           await expect.soft(duration(page)).toHaveValue("7"); await expect.soft(page.locator(".workspace-context")).toContainText(`Draft revision ${project.revision + 2}`);
+        at <repo>/tests/e2e/parameter-accessibility.spec.ts:124:117
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/parameter-accessibility-pa-3dc2c--preserves-Home-at-1440x900/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/parameter-accessibility-pa-3dc2c--preserves-Home-at-1440x900/error-context.md
+
+  8) tests/e2e/parameter-accessibility.spec.ts:92:9 › parameter accessibility: late save preserves newer head at 1440x900
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: "{\"undo\":[{\"target\":2,\"at\":3,\"label\":\"set parameter\"}],\"redo\":[]}"
+    Received: "{\"undo\":[],\"redo\":[]}"
+
+      126 |         if (mode === "newer head") {
+      127 |           await expect.soft(duration(page)).toHaveValue("7"); await expect.soft(page.locator(".workspace-context")).toContainText(`Draft revision ${project.revision + 2}`);
+    > 128 |           expect.soft(await page.evaluate((id) => sessionStorage.getItem("studio.graphHistory." + id), id)).toBe(newerHistory);
+          |                                                                                                             ^
+      129 |         }
+      130 |         if (mode === "newer same-field draft") { await expect.soft(duration(page)).toHaveValue("7"); await expect.soft(apply(duration(page))).toBeEnabled(); }
+      131 |         if (mode === "other field draft") { await expect.soft(page.getByLabel("Target", { exact: false })).toHaveValue("2.5"); await expect.soft(apply(page.getByLabel("Target", { exact: false }))).toBeEnabled(); }
+        at <repo>/tests/e2e/parameter-accessibility.spec.ts:128:109
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/parameter-accessibility-pa-6d282-rves-newer-head-at-1440x900/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/parameter-accessibility-pa-6d282-rves-newer-head-at-1440x900/error-context.md
+
+  9) tests/e2e/parameter-accessibility.spec.ts:92:9 › parameter accessibility: late save preserves newer same-field draft at 1440x900
+
+    Error: expect(locator).toHaveValue(expected) failed
+
+    Locator:  getByLabel('Duration')
+    Expected: "7"
+    Received: "6"
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "soft toHaveValue" getByLabel('Duration') with timeout 10000ms
+      - waiting for getByLabel('Duration')
+        24 × locator resolved to <input max="30" min="0.1" value="6" step="any" required="" type="number"/>
+           - unexpected value "6"
+
+
+      128 |           expect.soft(await page.evaluate((id) => sessionStorage.getItem("studio.graphHistory." + id), id)).toBe(newerHistory);
+      129 |         }
+    > 130 |         if (mode === "newer same-field draft") { await expect.soft(duration(page)).toHaveValue("7"); await expect.soft(apply(duration(page))).toBeEnabled(); }
+          |                                                                                    ^
+      131 |         if (mode === "other field draft") { await expect.soft(page.getByLabel("Target", { exact: false })).toHaveValue("2.5"); await expect.soft(apply(page.getByLabel("Target", { exact: false }))).toBeEnabled(); }
+      132 |         if (mode === "newer readiness") await expect.soft(page.getByRole("dialog", { name: "Execution preflight", exact: true })).toBeVisible();
+      133 |         const saved = await read(page, id); expect(saved.revision).toBe(project.revision + (mode === "newer head" ? 2 : 1)); expect(value(saved, "duration")).toBe(mode === "newer head" ? 7 : 6);
+        at <repo>/tests/e2e/parameter-accessibility.spec.ts:130:84
+
+    Error: expect(locator).toBeEnabled() failed
+
+    Locator:  getByLabel('Duration').locator('xpath=ancestor::form').getByRole('button', { name: 'Apply', exact: true })
+    Expected: enabled
+    Received: disabled
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "soft toBeEnabled" getByLabel('Duration').locator('xpath=ancestor::form').getByRole('button', { name: 'Apply', exact: true }) with timeout 10000ms
+      - waiting for getByLabel('Duration').locator('xpath=ancestor::form').getByRole('button', { name: 'Apply', exact: true })
+        24 × locator resolved to <button disabled class="small-button">Apply</button>
+           - unexpected value "disabled"
+
+
+      128 |           expect.soft(await page.evaluate((id) => sessionStorage.getItem("studio.graphHistory." + id), id)).toBe(newerHistory);
+      129 |         }
+    > 130 |         if (mode === "newer same-field draft") { await expect.soft(duration(page)).toHaveValue("7"); await expect.soft(apply(duration(page))).toBeEnabled(); }
+          |                                                                                                                                               ^
+      131 |         if (mode === "other field draft") { await expect.soft(page.getByLabel("Target", { exact: false })).toHaveValue("2.5"); await expect.soft(apply(page.getByLabel("Target", { exact: false }))).toBeEnabled(); }
+      132 |         if (mode === "newer readiness") await expect.soft(page.getByRole("dialog", { name: "Execution preflight", exact: true })).toBeVisible();
+      133 |         const saved = await read(page, id); expect(saved.revision).toBe(project.revision + (mode === "newer head" ? 2 : 1)); expect(value(saved, "duration")).toBe(mode === "newer head" ? 7 : 6);
+        at <repo>/tests/e2e/parameter-accessibility.spec.ts:130:143
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/parameter-accessibility-pa-1eccc-ame-field-draft-at-1440x900/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/parameter-accessibility-pa-1eccc-ame-field-draft-at-1440x900/error-context.md
+
+  10) tests/e2e/parameter-accessibility.spec.ts:92:9 › parameter accessibility: late save preserves other field draft at 1440x900
+
+    Error: expect(locator).toHaveValue(expected) failed
+
+    Locator:  getByLabel('Target')
+    Expected: "2.5"
+    Received: "1"
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "soft toHaveValue" getByLabel('Target') with timeout 10000ms
+      - waiting for getByLabel('Target')
+        24 × locator resolved to <input max="100" value="1" step="any" min="-100" required="" type="number"/>
+           - unexpected value "1"
+
+
+      129 |         }
+      130 |         if (mode === "newer same-field draft") { await expect.soft(duration(page)).toHaveValue("7"); await expect.soft(apply(duration(page))).toBeEnabled(); }
+    > 131 |         if (mode === "other field draft") { await expect.soft(page.getByLabel("Target", { exact: false })).toHaveValue("2.5"); await expect.soft(apply(page.getByLabel("Target", { exact: false }))).toBeEnabled(); }
+          |                                                                                                            ^
+      132 |         if (mode === "newer readiness") await expect.soft(page.getByRole("dialog", { name: "Execution preflight", exact: true })).toBeVisible();
+      133 |         const saved = await read(page, id); expect(saved.revision).toBe(project.revision + (mode === "newer head" ? 2 : 1)); expect(value(saved, "duration")).toBe(mode === "newer head" ? 7 : 6);
+      134 |         expect(await runIds(page, id)).toEqual(runs);
+        at <repo>/tests/e2e/parameter-accessibility.spec.ts:131:108
+
+    Error: expect(locator).toBeEnabled() failed
+
+    Locator:  getByLabel('Target').locator('xpath=ancestor::form').getByRole('button', { name: 'Apply', exact: true })
+    Expected: enabled
+    Received: disabled
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "soft toBeEnabled" getByLabel('Target').locator('xpath=ancestor::form').getByRole('button', { name: 'Apply', exact: true }) with timeout 10000ms
+      - waiting for getByLabel('Target').locator('xpath=ancestor::form').getByRole('button', { name: 'Apply', exact: true })
+        24 × locator resolved to <button disabled class="small-button">Apply</button>
+           - unexpected value "disabled"
+
+
+      129 |         }
+      130 |         if (mode === "newer same-field draft") { await expect.soft(duration(page)).toHaveValue("7"); await expect.soft(apply(duration(page))).toBeEnabled(); }
+    > 131 |         if (mode === "other field draft") { await expect.soft(page.getByLabel("Target", { exact: false })).toHaveValue("2.5"); await expect.soft(apply(page.getByLabel("Target", { exact: false }))).toBeEnabled(); }
+          |                                                                                                                                                                                                      ^
+      132 |         if (mode === "newer readiness") await expect.soft(page.getByRole("dialog", { name: "Execution preflight", exact: true })).toBeVisible();
+      133 |         const saved = await read(page, id); expect(saved.revision).toBe(project.revision + (mode === "newer head" ? 2 : 1)); expect(value(saved, "duration")).toBe(mode === "newer head" ? 7 : 6);
+      134 |         expect(await runIds(page, id)).toEqual(runs);
+        at <repo>/tests/e2e/parameter-accessibility.spec.ts:131:198
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/parameter-accessibility-pa-09438-her-field-draft-at-1440x900/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/parameter-accessibility-pa-09438-her-field-draft-at-1440x900/error-context.md
+
+  10 failed
+    tests/e2e/parameter-accessibility.spec.ts:62:7 › parameter accessibility: native range recovery and save at 1024x768
+    tests/e2e/parameter-accessibility.spec.ts:92:9 › parameter accessibility: late save preserves Home at 1024x768
+    tests/e2e/parameter-accessibility.spec.ts:92:9 › parameter accessibility: late save preserves newer head at 1024x768
+    tests/e2e/parameter-accessibility.spec.ts:92:9 › parameter accessibility: late save preserves newer same-field draft at 1024x768
+    tests/e2e/parameter-accessibility.spec.ts:92:9 › parameter accessibility: late save preserves other field draft at 1024x768
+    tests/e2e/parameter-accessibility.spec.ts:62:7 › parameter accessibility: native range recovery and save at 1440x900
+    tests/e2e/parameter-accessibility.spec.ts:92:9 › parameter accessibility: late save preserves Home at 1440x900
+    tests/e2e/parameter-accessibility.spec.ts:92:9 › parameter accessibility: late save preserves newer head at 1440x900
+    tests/e2e/parameter-accessibility.spec.ts:92:9 › parameter accessibility: late save preserves newer same-field draft at 1440x900
+    tests/e2e/parameter-accessibility.spec.ts:92:9 › parameter accessibility: late save preserves other field draft at 1440x900
+  4 passed (3.1m)

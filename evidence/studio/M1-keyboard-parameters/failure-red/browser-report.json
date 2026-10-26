@@ -1,0 +1,350 @@
+{
+  "config": {
+    "argv": [
+      "<loop-cache>/node-v24.22.1-linux-x64/bin/node",
+      "<repo>/node_modules/.bin/playwright",
+      "test",
+      "-c",
+      "tests/e2e/playwright.config.ts",
+      "--grep",
+      "parameter accessibility: real stale failure"
+    ],
+    "configFile": "<repo>/tests/e2e/playwright.config.ts",
+    "rootDir": "<repo>/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "<repo>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "<repo>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "*.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "<repo>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "<repo>/tests/e2e",
+        "snapshotDir": "<repo>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": "*.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "baseURL": "http://127.0.0.1:44903",
+          "browserName": "chromium",
+          "actionTimeout": 15000,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "trace": "off",
+          "screenshot": "only-on-failure",
+          "video": "off"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "<repo>/test-results/browser-report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "parameter-accessibility.spec.ts",
+      "file": "parameter-accessibility.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "parameter accessibility: real stale failure in current form at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2805,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T18:28:50.234Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "parameter-failure.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJkZXBhcnRlZCI6ZmFsc2UsInN0YXR1cyI6NDEyLCJjb2RlIjoiUkVWSVNJT05fQ09ORkxJQ1QiLCJwcm9qZWN0UmV2aXNpb25VbmNoYW5nZWRBZnRlclJlZnVzYWwiOnRydWUsImNhbm9uaWNhbER1cmF0aW9uIjo1LCJvd25Qcm9qZWN0UnVuU2V0VW5jaGFuZ2VkIjp0cnVlLCJzY29wZSI6IlJlYWwgc3RhbGUgcmV2aXNpb24gcmVmdXNhbDsgZmFpbHVyZSBpcyBub3QgYSBzYXZlIGFja25vd2xlZGdlbWVudCBhbmQgY2Fubm90IHBvbGx1dGUgYSBkZXBhcnRlZCBjb250ZXh0In0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "936e073082c9cef45be7-c004d0362af096fb5b94",
+          "file": "parameter-accessibility.spec.ts",
+          "line": 147,
+          "column": 9
+        },
+        {
+          "title": "parameter accessibility: real stale failure after departure at 1024x768",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 12548,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('.alerts').getByRole('alert')\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveCount\" locator('.alerts').getByRole('alert') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('.alerts').getByRole('alert')\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to 1 element\u001b[22m\n\u001b[2m       - unexpected value \"1\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('.alerts').getByRole('alert')\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveCount\" locator('.alerts').getByRole('alert') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('.alerts').getByRole('alert')\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to 1 element\u001b[22m\n\u001b[2m       - unexpected value \"1\"\u001b[22m\n\n    at <repo>/tests/e2e/parameter-accessibility.spec.ts:163:73",
+                    "location": {
+                      "file": "<repo>/tests/e2e/parameter-accessibility.spec.ts",
+                      "column": 73,
+                      "line": 163
+                    },
+                    "snippet": "  161 |         if (departed) {\n  162 |           await expect(page.getByRole(\"heading\", { name: \"Recent projects\", exact: true })).toBeVisible();\n> 163 |           await expect.soft(page.locator(\".alerts\").getByRole(\"alert\")).toHaveCount(0);\n      |                                                                         ^\n  164 |         } else {\n  165 |           await expect(page.locator(\".alerts\").getByRole(\"alert\")).toContainText(\"REVISION_CONFLICT\");\n  166 |           await expect(duration(page)).toHaveValue(\"6\"); await expect(apply(duration(page))).toBeEnabled();"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/parameter-accessibility.spec.ts",
+                        "column": 73,
+                        "line": 163
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('.alerts').getByRole('alert')\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveCount\" locator('.alerts').getByRole('alert') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('.alerts').getByRole('alert')\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to 1 element\u001b[22m\n\u001b[2m       - unexpected value \"1\"\u001b[22m\n\n\n  161 |         if (departed) {\n  162 |           await expect(page.getByRole(\"heading\", { name: \"Recent projects\", exact: true })).toBeVisible();\n> 163 |           await expect.soft(page.locator(\".alerts\").getByRole(\"alert\")).toHaveCount(0);\n      |                                                                         ^\n  164 |         } else {\n  165 |           await expect(page.locator(\".alerts\").getByRole(\"alert\")).toContainText(\"REVISION_CONFLICT\");\n  166 |           await expect(duration(page)).toHaveValue(\"6\"); await expect(apply(duration(page))).toBeEnabled();\n    at <repo>/tests/e2e/parameter-accessibility.spec.ts:163:73"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T18:28:53.104Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "parameter-failure.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJkZXBhcnRlZCI6dHJ1ZSwic3RhdHVzIjo0MTIsImNvZGUiOiJSRVZJU0lPTl9DT05GTElDVCIsInByb2plY3RSZXZpc2lvblVuY2hhbmdlZEFmdGVyUmVmdXNhbCI6dHJ1ZSwiY2Fub25pY2FsRHVyYXRpb24iOjUsIm93blByb2plY3RSdW5TZXRVbmNoYW5nZWQiOnRydWUsInNjb3BlIjoiUmVhbCBzdGFsZSByZXZpc2lvbiByZWZ1c2FsOyBmYWlsdXJlIGlzIG5vdCBhIHNhdmUgYWNrbm93bGVkZ2VtZW50IGFuZCBjYW5ub3QgcG9sbHV0ZSBhIGRlcGFydGVkIGNvbnRleHQifQ=="
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/parameter-accessibility-pa-74444-after-departure-at-1024x768/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/parameter-accessibility-pa-74444-after-departure-at-1024x768/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/parameter-accessibility.spec.ts",
+                    "column": 73,
+                    "line": 163
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "936e073082c9cef45be7-0bc7f18c0a7264dfcc4a",
+          "file": "parameter-accessibility.spec.ts",
+          "line": 147,
+          "column": 9
+        },
+        {
+          "title": "parameter accessibility: real stale failure in current form at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2588,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T18:29:05.997Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "parameter-failure.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJkZXBhcnRlZCI6ZmFsc2UsInN0YXR1cyI6NDEyLCJjb2RlIjoiUkVWSVNJT05fQ09ORkxJQ1QiLCJwcm9qZWN0UmV2aXNpb25VbmNoYW5nZWRBZnRlclJlZnVzYWwiOnRydWUsImNhbm9uaWNhbER1cmF0aW9uIjo1LCJvd25Qcm9qZWN0UnVuU2V0VW5jaGFuZ2VkIjp0cnVlLCJzY29wZSI6IlJlYWwgc3RhbGUgcmV2aXNpb24gcmVmdXNhbDsgZmFpbHVyZSBpcyBub3QgYSBzYXZlIGFja25vd2xlZGdlbWVudCBhbmQgY2Fubm90IHBvbGx1dGUgYSBkZXBhcnRlZCBjb250ZXh0In0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "936e073082c9cef45be7-66ca140aad1529677d44",
+          "file": "parameter-accessibility.spec.ts",
+          "line": 147,
+          "column": 9
+        },
+        {
+          "title": "parameter accessibility: real stale failure after departure at 1440x900",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 12427,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('.alerts').getByRole('alert')\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveCount\" locator('.alerts').getByRole('alert') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('.alerts').getByRole('alert')\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to 1 element\u001b[22m\n\u001b[2m       - unexpected value \"1\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('.alerts').getByRole('alert')\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveCount\" locator('.alerts').getByRole('alert') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('.alerts').getByRole('alert')\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to 1 element\u001b[22m\n\u001b[2m       - unexpected value \"1\"\u001b[22m\n\n    at <repo>/tests/e2e/parameter-accessibility.spec.ts:163:73",
+                    "location": {
+                      "file": "<repo>/tests/e2e/parameter-accessibility.spec.ts",
+                      "column": 73,
+                      "line": 163
+                    },
+                    "snippet": "  161 |         if (departed) {\n  162 |           await expect(page.getByRole(\"heading\", { name: \"Recent projects\", exact: true })).toBeVisible();\n> 163 |           await expect.soft(page.locator(\".alerts\").getByRole(\"alert\")).toHaveCount(0);\n      |                                                                         ^\n  164 |         } else {\n  165 |           await expect(page.locator(\".alerts\").getByRole(\"alert\")).toContainText(\"REVISION_CONFLICT\");\n  166 |           await expect(duration(page)).toHaveValue(\"6\"); await expect(apply(duration(page))).toBeEnabled();"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/parameter-accessibility.spec.ts",
+                        "column": 73,
+                        "line": 163
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('.alerts').getByRole('alert')\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toHaveCount\" locator('.alerts').getByRole('alert') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('.alerts').getByRole('alert')\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to 1 element\u001b[22m\n\u001b[2m       - unexpected value \"1\"\u001b[22m\n\n\n  161 |         if (departed) {\n  162 |           await expect(page.getByRole(\"heading\", { name: \"Recent projects\", exact: true })).toBeVisible();\n> 163 |           await expect.soft(page.locator(\".alerts\").getByRole(\"alert\")).toHaveCount(0);\n      |                                                                         ^\n  164 |         } else {\n  165 |           await expect(page.locator(\".alerts\").getByRole(\"alert\")).toContainText(\"REVISION_CONFLICT\");\n  166 |           await expect(duration(page)).toHaveValue(\"6\"); await expect(apply(duration(page))).toBeEnabled();\n    at <repo>/tests/e2e/parameter-accessibility.spec.ts:163:73"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T18:29:08.639Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "parameter-failure.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJkZXBhcnRlZCI6dHJ1ZSwic3RhdHVzIjo0MTIsImNvZGUiOiJSRVZJU0lPTl9DT05GTElDVCIsInByb2plY3RSZXZpc2lvblVuY2hhbmdlZEFmdGVyUmVmdXNhbCI6dHJ1ZSwiY2Fub25pY2FsRHVyYXRpb24iOjUsIm93blByb2plY3RSdW5TZXRVbmNoYW5nZWQiOnRydWUsInNjb3BlIjoiUmVhbCBzdGFsZSByZXZpc2lvbiByZWZ1c2FsOyBmYWlsdXJlIGlzIG5vdCBhIHNhdmUgYWNrbm93bGVkZ2VtZW50IGFuZCBjYW5ub3QgcG9sbHV0ZSBhIGRlcGFydGVkIGNvbnRleHQifQ=="
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/parameter-accessibility-pa-9ba22-after-departure-at-1440x900/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/parameter-accessibility-pa-9ba22-after-departure-at-1440x900/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/parameter-accessibility.spec.ts",
+                    "column": 73,
+                    "line": 163
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "936e073082c9cef45be7-63871ff89dc923f7bf2a",
+          "file": "parameter-accessibility.spec.ts",
+          "line": 147,
+          "column": 9
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-26T18:28:49.726Z",
+    "duration": 31395.858,
+    "expected": 2,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  }
+}

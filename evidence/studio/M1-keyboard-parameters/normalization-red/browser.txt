@@ -1,0 +1,172 @@
+
+> xverse-studio-workspace@0.1.0 test:e2e
+> playwright test -c tests/e2e/playwright.config.ts --grep parameter accessibility: numeric normalization
+
+
+Running 2 tests using 1 worker
+
+(node:1860016) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 tests/e2e/parameter-accessibility.spec.ts:542:7 › parameter accessibility: numeric normalization at 1024x768 (31.9s)
+(node:1861085) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 tests/e2e/parameter-accessibility.spec.ts:542:7 › parameter accessibility: numeric normalization at 1440x900 (31.7s)
+
+
+  1) tests/e2e/parameter-accessibility.spec.ts:542:7 › parameter accessibility: numeric normalization at 1024x768
+
+    Error: expect(locator).toHaveValue(expected) failed
+
+    Locator:  getByLabel('Duration')
+    Expected: "5"
+    Received: "5.0"
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "soft toHaveValue" getByLabel('Duration') with timeout 10000ms
+      - waiting for getByLabel('Duration')
+        24 × locator resolved to <input max="30" min="0.1" step="any" required="" value="5.0" type="number" aria-describedby="_r_1_-duration"/>
+           - unexpected value "5.0"
+
+
+      562 |     expect((await response).status()).toBe(200);
+      563 |     await expect(page.locator(".alerts")).toContainText("Draft saved");
+    > 564 |     await expect.soft(duration(page)).toHaveValue("5");
+          |                                       ^
+      565 |     await expect.soft(apply(duration(page))).toBeDisabled();
+      566 |     await expect.soft(duration(page)).toBeFocused();
+      567 |     const saved = await read(page, id);
+        at <repo>/tests/e2e/parameter-accessibility.spec.ts:564:39
+
+    Error: expect(locator).toBeDisabled() failed
+
+    Locator:  getByLabel('Duration').locator('xpath=ancestor::form').getByRole('button', { name: 'Apply', exact: true })
+    Expected: disabled
+    Received: enabled
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "soft toBeDisabled" getByLabel('Duration').locator('xpath=ancestor::form').getByRole('button', { name: 'Apply', exact: true }) with timeout 10000ms
+      - waiting for getByLabel('Duration').locator('xpath=ancestor::form').getByRole('button', { name: 'Apply', exact: true })
+        24 × locator resolved to <button class="small-button">Apply</button>
+           - unexpected value "enabled"
+
+
+      563 |     await expect(page.locator(".alerts")).toContainText("Draft saved");
+      564 |     await expect.soft(duration(page)).toHaveValue("5");
+    > 565 |     await expect.soft(apply(duration(page))).toBeDisabled();
+          |                                              ^
+      566 |     await expect.soft(duration(page)).toBeFocused();
+      567 |     const saved = await read(page, id);
+      568 |     expect(saved.revision).toBe(project.revision + 1);
+        at <repo>/tests/e2e/parameter-accessibility.spec.ts:565:46
+
+    Error: expect(locator).toBeFocused() failed
+
+    Locator:  getByLabel('Duration')
+    Expected: focused
+    Received: inactive
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "soft toBeFocused" getByLabel('Duration') with timeout 10000ms
+      - waiting for getByLabel('Duration')
+        24 × locator resolved to <input max="30" min="0.1" step="any" required="" value="5.0" type="number" aria-describedby="_r_1_-duration"/>
+           - unexpected value "inactive"
+
+
+      564 |     await expect.soft(duration(page)).toHaveValue("5");
+      565 |     await expect.soft(apply(duration(page))).toBeDisabled();
+    > 566 |     await expect.soft(duration(page)).toBeFocused();
+          |                                       ^
+      567 |     const saved = await read(page, id);
+      568 |     expect(saved.revision).toBe(project.revision + 1);
+      569 |     expect(value(saved, "duration")).toBe(5);
+        at <repo>/tests/e2e/parameter-accessibility.spec.ts:566:39
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/parameter-accessibility-pa-c1f07-c-normalization-at-1024x768/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/parameter-accessibility-pa-c1f07-c-normalization-at-1024x768/error-context.md
+
+  2) tests/e2e/parameter-accessibility.spec.ts:542:7 › parameter accessibility: numeric normalization at 1440x900
+
+    Error: expect(locator).toHaveValue(expected) failed
+
+    Locator:  getByLabel('Duration')
+    Expected: "5"
+    Received: "5.0"
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "soft toHaveValue" getByLabel('Duration') with timeout 10000ms
+      - waiting for getByLabel('Duration')
+        24 × locator resolved to <input max="30" min="0.1" step="any" required="" value="5.0" type="number" aria-describedby="_r_1_-duration"/>
+           - unexpected value "5.0"
+
+
+      562 |     expect((await response).status()).toBe(200);
+      563 |     await expect(page.locator(".alerts")).toContainText("Draft saved");
+    > 564 |     await expect.soft(duration(page)).toHaveValue("5");
+          |                                       ^
+      565 |     await expect.soft(apply(duration(page))).toBeDisabled();
+      566 |     await expect.soft(duration(page)).toBeFocused();
+      567 |     const saved = await read(page, id);
+        at <repo>/tests/e2e/parameter-accessibility.spec.ts:564:39
+
+    Error: expect(locator).toBeDisabled() failed
+
+    Locator:  getByLabel('Duration').locator('xpath=ancestor::form').getByRole('button', { name: 'Apply', exact: true })
+    Expected: disabled
+    Received: enabled
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "soft toBeDisabled" getByLabel('Duration').locator('xpath=ancestor::form').getByRole('button', { name: 'Apply', exact: true }) with timeout 10000ms
+      - waiting for getByLabel('Duration').locator('xpath=ancestor::form').getByRole('button', { name: 'Apply', exact: true })
+        24 × locator resolved to <button class="small-button">Apply</button>
+           - unexpected value "enabled"
+
+
+      563 |     await expect(page.locator(".alerts")).toContainText("Draft saved");
+      564 |     await expect.soft(duration(page)).toHaveValue("5");
+    > 565 |     await expect.soft(apply(duration(page))).toBeDisabled();
+          |                                              ^
+      566 |     await expect.soft(duration(page)).toBeFocused();
+      567 |     const saved = await read(page, id);
+      568 |     expect(saved.revision).toBe(project.revision + 1);
+        at <repo>/tests/e2e/parameter-accessibility.spec.ts:565:46
+
+    Error: expect(locator).toBeFocused() failed
+
+    Locator:  getByLabel('Duration')
+    Expected: focused
+    Received: inactive
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "soft toBeFocused" getByLabel('Duration') with timeout 10000ms
+      - waiting for getByLabel('Duration')
+        24 × locator resolved to <input max="30" min="0.1" step="any" required="" value="5.0" type="number" aria-describedby="_r_1_-duration"/>
+           - unexpected value "inactive"
+
+
+      564 |     await expect.soft(duration(page)).toHaveValue("5");
+      565 |     await expect.soft(apply(duration(page))).toBeDisabled();
+    > 566 |     await expect.soft(duration(page)).toBeFocused();
+          |                                       ^
+      567 |     const saved = await read(page, id);
+      568 |     expect(saved.revision).toBe(project.revision + 1);
+      569 |     expect(value(saved, "duration")).toBe(5);
+        at <repo>/tests/e2e/parameter-accessibility.spec.ts:566:39
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/parameter-accessibility-pa-21b57-c-normalization-at-1440x900/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/parameter-accessibility-pa-21b57-c-normalization-at-1440x900/error-context.md
+
+  2 failed
+    tests/e2e/parameter-accessibility.spec.ts:542:7 › parameter accessibility: numeric normalization at 1024x768
+    tests/e2e/parameter-accessibility.spec.ts:542:7 › parameter accessibility: numeric normalization at 1440x900

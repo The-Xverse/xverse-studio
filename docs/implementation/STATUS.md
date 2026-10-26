@@ -34,7 +34,20 @@ with its manifest/checker included, clean 100-file hash proof and unchanged test
 grants no runtime authority and does not close T001. Both 944a875 product and d421c23 package-metadata CI runs passed;
 those outcomes predate this descriptive artifact.
 
-The latest deployment successor passed 18 native keyboard journeys at both required viewports and
+The latest parameter successor passed 28 native keyboard checks and the full 145-check browser
+suite with application/test inputs unchanged. Generic saves use authoritative returned Projects
+with project/load/intent and compare-before-write history guards. Field generations preserve newer
+and reverted inputs, other fields, another project and exact newer readiness. Explicit success
+normalizes same-value numeric text; real refusals retain input and do not leak departed errors.
+Associated guidance/unsaved status and guarded Apply focus are covered. ADR-0013 and affected
+component traces are amended. Full/performance use identical source/fixed inputs; type/build,
+architecture, compatibility and spec checks pass. Backend 851 is inherited by exact unchanged
+inputs. A full-suite failure from delayed presentation regrouping was reproduced and repaired;
+the earlier 140/141 result remains failed. `evidence/studio/M1-keyboard-parameters/` retains reds, explicit harness corrections,
+review and raw measurements. Windows/actual AT and milestone gates remain open; count 47/100.
+Both 1c8e937 and 25ad840 push/PR CI passed before this generic save repair.
+
+The preceding deployment successor passed 18 native keyboard journeys at both required viewports and
 the full 117-check browser suite with source/fixed inputs unchanged. It verifies variant cloning,
 resource binding, time-mapping authoring/removal, exact revisions/requests, original document bytes
 and no new run. Repaired late completion reopening Home/changing selection, removal focus loss,

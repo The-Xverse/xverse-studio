@@ -401,3 +401,15 @@ T057/T058/T059 component traces also retain the ADR-0015 client-completion amend
 regression; their completed component status is unchanged.
 Clean 1c8e937 package smoke passes; clean 100-file manifest, archive/file hashes and tested UI
 bytes are verified under `M2-keyboard-deployment/package/`. Native Windows remains held.
+
+Linux parameter completion successor (2026-10-26): T038/T067 stay unchecked. Twenty-eight keyboard
+checks at both required viewports verify native range recovery, typed authoritative save,
+current acknowledgement/focus, newer/reverted/other-field draft preservation, current/departed
+real stale failures, same-value numeric normalization, project isolation, delayed presentation
+regrouping/focus, exact newer readiness ID and unchanged newer history. Full 145-check browser
+and separate performance pass unchanged application/test source. ADR-0013 records generic
+completion and field generations. Backend 851 is inherited by exact unchanged-input proof.
+No live mutation/Start; Windows, actual assistive-technology and full acceptance remain open.
+Evidence: `evidence/studio/M1-keyboard-parameters/`; count 47/100, no milestone accepted.
+T015/T017/T042/T045/T062 component traces retain the ADR-0013 amendment without changing their
+completed statuses.
