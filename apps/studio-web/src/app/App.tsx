@@ -845,11 +845,12 @@ export default function App() {
           </span>
         </header>
         <div className="app-body">
-          <aside className="rail" aria-label="Main navigation">
+          <nav className="rail" aria-label="Main navigation">
             <button
               className={section === "workspace" ? "active" : ""}
               title="Workspace"
               aria-label="Workspace"
+              aria-current={section === "workspace" ? "page" : undefined}
               onClick={() => changeSection("workspace")}
             >
               <Icon name="model" size={22} />
@@ -859,6 +860,7 @@ export default function App() {
               className={section === "catalog" ? "active" : ""}
               title="Catalog"
               aria-label="Catalog"
+              aria-current={section === "catalog" ? "page" : undefined}
               onClick={() => changeSection("catalog")}
             >
               <Icon name="catalog" size={22} />
@@ -868,6 +870,7 @@ export default function App() {
               className={section === "lab" ? "active" : ""}
               title="Laboratory"
               aria-label="Laboratory"
+              aria-current={section === "lab" ? "page" : undefined}
               onClick={() => changeSection("lab")}
             >
               <Icon name="lab" size={22} />
@@ -877,13 +880,14 @@ export default function App() {
             <button
               className={section === "settings" ? "active" : ""}
               aria-label="Compatibility and environment"
+              aria-current={section === "settings" ? "page" : undefined}
               onClick={() => changeSection("settings")}
             >
               <Icon name="settings" size={22} />
               <span>Settings</span>
             </button>
             <span className="rail-version">v0.1</span>
-          </aside>
+          </nav>
           <main id="main-content" className="main-content">
             <div className="alerts" aria-live="polite">
               {busy && (
@@ -1635,7 +1639,7 @@ function Login({ onLogin }: { onLogin: (token: string) => Promise<void> }) {
       <main className="login-panel">
         <span className="eyebrow">LOCAL WORKSPACE</span>
         <h2>Connect to Studio</h2>
-        <p>
+        <p id="bootstrap-instructions">
           Enter the one-use bootstrap token from the local launcher’s session
           file. Your session stays on this backend.
         </p>
@@ -1659,7 +1663,12 @@ function Login({ onLogin }: { onLogin: (token: string) => Promise<void> }) {
             <input
               type="password"
               value={token}
-              onChange={(e) => setToken(e.target.value)}
+              onChange={(e) => {
+                setToken(e.target.value);
+                setError("");
+              }}
+              aria-describedby={`bootstrap-instructions bootstrap-help${error ? " bootstrap-error" : ""}`}
+              aria-invalid={!!error}
               autoComplete="off"
               autoFocus
               required
@@ -1667,7 +1676,7 @@ function Login({ onLogin }: { onLogin: (token: string) => Promise<void> }) {
             />
           </label>
           {error && (
-            <p className="field-error" role="alert">
+            <p id="bootstrap-error" className="field-error" role="alert">
               {error}
             </p>
           )}
@@ -1676,7 +1685,7 @@ function Login({ onLogin }: { onLogin: (token: string) => Promise<void> }) {
             <Icon name="arrow" />
           </button>
         </form>
-        <div className="login-help">
+        <div id="bootstrap-help" className="login-help">
           <Icon name="info" />
           <span>
             The launcher creates a short-lived token locally. It is never sent

@@ -3130,7 +3130,7 @@
         "AC-031"
       ],
       "status": "in_progress",
-      "implementation_note": "Linux-only partial: two real native Chromium journeys pass at 1024x768 and 1440x900 with Tab/Enter form/table/run controls, textual status, modal containment/Escape/visible-focus restoration, selected Start identity and overflow checks. 50,000-event/200-row history workloads retain one warm-up plus 30 samples per viewport and pass p95. Native Windows held; full accessibility/diagnostic acceptance remains open. Linux diagnostic successor: eight Tab/Enter journeys at both viewports cover real invalid-source recovery, retained clock/gap/partial-evidence explanations, real stale-plan Recheck, labeled synthetic transport/artifact outcomes and held-response Home/breadcrumb navigation. Repairs preserve focus, disable stale Start and guard obsolete readiness responses. All 26 selected rendered text pairs pass 4.5:1 (minimum 4.5919); complete 85-check browser successor passes. Full accessibility/assistive-technology and native Windows clauses remain open.",
+      "implementation_note": "Linux-only partial: two real native Chromium journeys pass at 1024x768 and 1440x900 with Tab/Enter form/table/run controls, textual status, modal containment/Escape/visible-focus restoration, selected Start identity and overflow checks. 50,000-event/200-row history workloads retain one warm-up plus 30 samples per viewport and pass p95. Native Windows held; full accessibility/diagnostic acceptance remains open. Linux diagnostic successor: eight Tab/Enter journeys at both viewports cover real invalid-source recovery, retained clock/gap/partial-evidence explanations, real stale-plan Recheck, labeled synthetic transport/artifact outcomes and held-response Home/breadcrumb navigation. Repairs preserve focus, disable stale Start and guard obsolete readiness responses. All 26 selected rendered text pairs pass 4.5:1 (minimum 4.5919); complete 85-check browser successor passes. Full accessibility/assistive-technology and native Windows clauses remain open. Linux shell successor: four real native keyboard journeys at both required viewports verify login 401/error association and editing recovery, all navigation destinations/current state, visible focused-control bounds after tall Environment content, labelled project form/Escape return and a held real project response with polite busy text. All 24 selected shell text pairs pass (minimum 4.5204); 89-check full browser successor passes unchanged source. Viewport-bounded sticky rail repairs Settings moving below the viewport. Actual assistive-technology/native Windows/full acceptance remain open. Final-source performance refresh passes one warm-up plus 30 measurements per viewport: selection 27.9/27.1 ms, open-validation 1679.4/1780.1 ms, history 446.6/447.1 ms; raw distributions retained separately.",
       "implementation_evidence": [
         "tests/e2e/accessibility.spec.ts",
         "evidence/studio/M1-operability/README.md",
@@ -3141,7 +3141,11 @@
         "evidence/studio/M1-accessible-diagnostics/README.md",
         "evidence/studio/M1-accessible-diagnostics/verification.json",
         "evidence/studio/M1-accessible-diagnostics/independent-review.md",
-        "evidence/studio/M1-accessible-diagnostics/package/verification.json"
+        "evidence/studio/M1-accessible-diagnostics/package/verification.json",
+        "tests/e2e/shell-accessibility.spec.ts",
+        "evidence/studio/M1-shell-operability/README.md",
+        "evidence/studio/M1-shell-operability/verification.json",
+        "evidence/studio/M1-shell-operability/independent-review.md"
       ]
     },
     {
@@ -4096,7 +4100,7 @@
         "AC-031"
       ],
       "status": "in_progress",
-      "implementation_note": "Linux-only partial: both 1024x768 and 1440x900 journeys pass keyboard/focus/status checks and one-warm-up/30-repetition measurements of 200 elements/400 connections plus 50,000 retained events. Both model fixtures pass authoritative validation. Selection p95 29.3/28.6 ms, open-validation 1652.7/1660.2 ms, history 446.3/446.2 ms. Native Windows held and broader accessibility/diagnostic acceptance open; task stays in progress. Linux diagnostic successor: eight Tab/Enter journeys at both viewports cover real invalid-source recovery, retained clock/gap/partial-evidence explanations, real stale-plan Recheck, labeled synthetic transport/artifact outcomes and held-response Home/breadcrumb navigation. Repairs preserve focus, disable stale Start and guard obsolete readiness responses. All 26 selected rendered text pairs pass 4.5:1 (minimum 4.5919); complete 85-check browser successor passes. Full accessibility/assistive-technology and native Windows clauses remain open.",
+      "implementation_note": "Linux-only partial: both 1024x768 and 1440x900 journeys pass keyboard/focus/status checks and one-warm-up/30-repetition measurements of 200 elements/400 connections plus 50,000 retained events. Both model fixtures pass authoritative validation. Selection p95 29.3/28.6 ms, open-validation 1652.7/1660.2 ms, history 446.3/446.2 ms. Native Windows held and broader accessibility/diagnostic acceptance open; task stays in progress. Linux diagnostic successor: eight Tab/Enter journeys at both viewports cover real invalid-source recovery, retained clock/gap/partial-evidence explanations, real stale-plan Recheck, labeled synthetic transport/artifact outcomes and held-response Home/breadcrumb navigation. Repairs preserve focus, disable stale Start and guard obsolete readiness responses. All 26 selected rendered text pairs pass 4.5:1 (minimum 4.5919); complete 85-check browser successor passes. Full accessibility/assistive-technology and native Windows clauses remain open. Linux shell successor: four real native keyboard journeys at both required viewports verify login 401/error association and editing recovery, all navigation destinations/current state, visible focused-control bounds after tall Environment content, labelled project form/Escape return and a held real project response with polite busy text. All 24 selected shell text pairs pass (minimum 4.5204); 89-check full browser successor passes unchanged source. Viewport-bounded sticky rail repairs Settings moving below the viewport. Actual assistive-technology/native Windows/full acceptance remain open. Final-source performance refresh passes one warm-up plus 30 measurements per viewport: selection 27.9/27.1 ms, open-validation 1679.4/1780.1 ms, history 446.6/447.1 ms; raw distributions retained separately.",
       "implementation_evidence": [
         "tests/e2e/accessibility.spec.ts",
         "tests/performance/browser-model.ts",
@@ -4108,7 +4112,11 @@
         "evidence/studio/M1-accessible-diagnostics/README.md",
         "evidence/studio/M1-accessible-diagnostics/verification.json",
         "evidence/studio/M1-accessible-diagnostics/independent-review.md",
-        "evidence/studio/M1-accessible-diagnostics/package/verification.json"
+        "evidence/studio/M1-accessible-diagnostics/package/verification.json",
+        "tests/e2e/shell-accessibility.spec.ts",
+        "evidence/studio/M1-shell-operability/README.md",
+        "evidence/studio/M1-shell-operability/verification.json",
+        "evidence/studio/M1-shell-operability/independent-review.md"
       ]
     },
     {
@@ -6305,17 +6313,17 @@
     "status_document": "../../docs/implementation/STATUS.md",
     "native_windows": "BLOCKED at user request. Initial native Server 2022 install failed on upstream Git filenames; application/browser NOT_RUN.",
     "m5": "deferred",
-    "code_candidate": "application/test source digest recorded in evidence/studio/M1-accessible-diagnostics/verification.json on 78d504b",
+    "code_candidate": "application/test source digest recorded in evidence/studio/M1-shell-operability/verification.json on c4e31f6",
     "component_completed": 47,
     "verification": {
       "backend_tests_passed": 851,
-      "playwright_checks_passed": 85,
+      "playwright_checks_passed": 89,
       "playwright_checks_failed": 0,
-      "playwright_scope": "Full native Linux Chromium frontend successor, unchanged source; performance refreshed separately in two overlapping viewport journeys; backend/services/scripts/Python tests exactly unchanged from the 851-test b2cf71a cohort (not rerun in this frontend-only slice)",
+      "playwright_scope": "Full native Linux Chromium successor, unchanged source; four shell keyboard/contrast/semantics checks added to prior 85. Separate overlapping two-viewport performance refresh passed. Backend 851 inherited unchanged, not rerun.",
       "milestones_accepted": 0,
-      "evidence": "evidence/studio/M1-accessible-diagnostics/",
-      "backend_evidence": "evidence/studio/M3-assets/verification.json and M1-accessible-diagnostics/backend-source-equivalence.json",
-      "package_evidence": "evidence/studio/M1-accessible-diagnostics/package/receipt.json (clean e6c9de0 product source, native Linux)"
+      "evidence": "evidence/studio/M1-shell-operability/",
+      "backend_evidence": "evidence/studio/M3-assets/verification.json and M1-shell-operability/backend-source-equivalence.json",
+      "prior_package_evidence": "evidence/studio/M1-accessible-diagnostics/package/receipt.json (clean e6c9de0 product source, native Linux)"
     }
   }
 }

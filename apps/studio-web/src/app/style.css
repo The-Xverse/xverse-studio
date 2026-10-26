@@ -425,6 +425,11 @@ hr {
 .rail {
   width: 78px;
   flex: 0 0 78px;
+  /* Tall views must not push the focused navigation controls below the viewport. */
+  position: sticky;
+  top: 0;
+  align-self: flex-start;
+  height: calc(100vh - 62px);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -435,7 +440,7 @@ hr {
 }
 .rail > button {
   background: none;
-  color: #8b99af;
+  color: var(--muted);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -457,7 +462,7 @@ hr {
 }
 .rail > button.active {
   background: #edf3ff;
-  color: #3870dc;
+  color: #2e62bc;
 }
 .rail-spacer {
   flex: 1;
@@ -528,7 +533,7 @@ hr {
 .notice.busy {
   background: #f2f5f9;
   border-color: #e1e7ef;
-  color: #687a96;
+  color: var(--muted);
 }
 .spinner {
   display: inline-block;
@@ -2244,14 +2249,14 @@ hr {
   font-size: 12px;
   margin-bottom: 29px;
   line-height: 1.9;
-  color: #8c9cb3;
+  color: var(--muted);
 }
 .login-panel .eyebrow {
   font-size: 8px;
 }
 .login-panel label {
   font-size: 11px;
-  color: #8193ad;
+  color: var(--muted);
 }
 .login-panel input {
   padding: 12px;
@@ -2268,7 +2273,7 @@ hr {
   display: flex;
   gap: 10px;
   font-size: 9px;
-  color: #9aaac0;
+  color: var(--muted);
   padding-top: 25px;
   margin-top: 25px;
   border-top: 1px solid #e7edf5;

@@ -1,0 +1,360 @@
+{
+  "config": {
+    "argv": [
+      "<loop-cache>/node-v24.22.1-linux-x64/bin/node",
+      "<repo>/node_modules/.bin/playwright",
+      "test",
+      "-c",
+      "tests/e2e/playwright.config.ts",
+      "--grep",
+      "shell accessibility:"
+    ],
+    "configFile": "<repo>/tests/e2e/playwright.config.ts",
+    "rootDir": "<repo>/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "<repo>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "<repo>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "*.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "<repo>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "<repo>/tests/e2e",
+        "snapshotDir": "<repo>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": "*.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "baseURL": "http://127.0.0.1:39645",
+          "browserName": "chromium",
+          "actionTimeout": 15000,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "trace": "off",
+          "screenshot": "only-on-failure",
+          "video": "off"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "<repo>/test-results/browser-report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "shell-accessibility.spec.ts",
+      "file": "shell-accessibility.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "shell accessibility: login instructions and real rejected-token recovery at 1024x768",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 15350,
+                  "error": {
+                    "message": "TimeoutError: locator.innerText: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.login-panel').getByRole('alert')\u001b[22m\n",
+                    "stack": "TimeoutError: locator.innerText: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.login-panel').getByRole('alert')\u001b[22m\n\n    at <repo>/tests/e2e/shell-accessibility.spec.ts:74:77",
+                    "location": {
+                      "file": "<repo>/tests/e2e/shell-accessibility.spec.ts",
+                      "column": 77,
+                      "line": 74
+                    },
+                    "snippet": "  72 |       rejectedHTTP: 401, submittedFixture: \"invalid synthetic token\", clearedPassword: true,\n  73 |       inputName: \"Bootstrap token\", description: await token.getAttribute(\"aria-describedby\"),\n> 74 |       invalid: await token.getAttribute(\"aria-invalid\"), error: await error.innerText(),\n     |                                                                             ^\n  75 |       keyboardRecovery: true, staleErrorClearedOnEditing: true, measurements: pairs }), contentType: \"application/json\" });\n  76 |     checkPairs(pairs);\n  77 |   });"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/shell-accessibility.spec.ts",
+                        "column": 77,
+                        "line": 74
+                      },
+                      "message": "TimeoutError: locator.innerText: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.login-panel').getByRole('alert')\u001b[22m\n\n\n  72 |       rejectedHTTP: 401, submittedFixture: \"invalid synthetic token\", clearedPassword: true,\n  73 |       inputName: \"Bootstrap token\", description: await token.getAttribute(\"aria-describedby\"),\n> 74 |       invalid: await token.getAttribute(\"aria-invalid\"), error: await error.innerText(),\n     |                                                                             ^\n  75 |       keyboardRecovery: true, staleErrorClearedOnEditing: true, measurements: pairs }), contentType: \"application/json\" });\n  76 |     checkPairs(pairs);\n  77 |   });\n    at <repo>/tests/e2e/shell-accessibility.spec.ts:74:77"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T10:51:22.159Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/shell-accessibility-shell--86c4f--token-recovery-at-1024x768/test-failed-1.png"
+                    },
+                    {
+                      "name": "native-browser-environment.json",
+                      "contentType": "application/json",
+                      "body": "eyJwbGF0Zm9ybSI6ImxpbnV4IiwiYXJjaGl0ZWN0dXJlIjoieDY0IiwiYnJvd3NlciI6IjE1Ni4wLjgwNzguNCIsInZpZXdwb3J0Ijp7IndpZHRoIjoxMDI0LCJoZWlnaHQiOjc2OH0sInNjb3BlIjoiU2VsZWN0ZWQgbmF0aXZlIGJyb3dzZXIgc2VtYW50aWNzOyBubyBzY3JlZW4tcmVhZGVyIG9yIFdpbmRvd3MgY2xhaW0ifQ=="
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/shell-accessibility-shell--86c4f--token-recovery-at-1024x768/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/shell-accessibility.spec.ts",
+                    "column": 77,
+                    "line": 74
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "31deb63443f844a36357-93822abf53ec91d0f42e",
+          "file": "shell-accessibility.spec.ts",
+          "line": 37,
+          "column": 7
+        },
+        {
+          "title": "shell accessibility: navigation state, form and real busy response at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1177,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T10:51:37.937Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "shell-semantics.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJuYXZpZ2F0aW9uTGFuZG1hcmsiOiJOQVYiLCJuYXZpZ2F0aW9uU25hcHNob3QiOiItIG5hdmlnYXRpb24gXCJNYWluIG5hdmlnYXRpb25cIjpcbiAgLSBidXR0b24gXCJXb3Jrc3BhY2VcIlxuICAtIGJ1dHRvbiBcIkNhdGFsb2dcIlxuICAtIGJ1dHRvbiBcIkxhYm9yYXRvcnlcIjogTGFiXG4gIC0gYnV0dG9uIFwiQ29tcGF0aWJpbGl0eSBhbmQgZW52aXJvbm1lbnRcIjogU2V0dGluZ3NcbiAgLSB0ZXh0OiB2MC4xIiwicmVhbFByb2plY3RDcmVhdGlvbiI6dHJ1ZSwiYnVzeVJlc3BvbnNlSGVsZEZvck9ic2VydmF0aW9uIjp0cnVlLCJsaXZlUmVnaW9uIjoicG9saXRlIiwia2V5Ym9hcmRNb2RhbFJldHVybiI6dHJ1ZSwibWVhc3VyZW1lbnRzIjpbeyJsYWJlbCI6Ik5hdmlnYXRpb24gV29ya3NwYWNlIiwidGV4dCI6IldvcmtzcGFjZSIsImNvbG9yIjoicmdiKDQ2LCA5OCwgMTg4KSIsImZvbnRTaXplIjoiOHB4IiwiZm9udFdlaWdodCI6IjU1MCIsInRocmVzaG9sZCI6NC41LCJzY29wZSI6IlNlbGVjdGVkIG5vcm1hbC1zaXplIHJlbmRlcmVkIHRleHQ7IG5vIG92ZXJhbGwgYWNjZXNzaWJpbGl0eSBjZXJ0aWZpY2F0aW9uIiwic3VwcG9ydGVkIjp0cnVlLCJsYXllcnMiOlsicmdiYSgwLCAwLCAwLCAwKSIsInJnYigyMzcsIDI0MywgMjU1KSJdLCJiYWNrZ3JvdW5kIjpbMC45Mjk0MTE3NjQ3MDU4ODI0LDAuOTUyOTQxMTc2NDcwNTg4MiwxLDFdLCJjb21wb3NpdGVkRm9yZWdyb3VuZCI6WzAuMTgwMzkyMTU2ODYyNzQ1MSwwLjM4NDMxMzcyNTQ5MDE5NjEsMC43MzcyNTQ5MDE5NjA3ODQ0LDFdLCJyYXRpbyI6NS4yNTU3Nzg2ODU3MjM2MzU1LCJwYXNzZWQiOnRydWUsImFzc3VtcHRpb25zIjoiQ1NTIHNSR0IgY29sb3JzOyBhbHBoYSBjb21wb3NpdGVkIHRocm91Z2ggZXhwbGljaXQgYmFja2dyb3VuZHM7IG5vIGFudGktYWxpYXNpbmcgYXBwcm94aW1hdGlvbiJ9LHsibGFiZWwiOiJOYXZpZ2F0aW9uIENhdGFsb2ciLCJ0ZXh0IjoiQ2F0YWxvZyIsImNvbG9yIjoicmdiKDk4LCAxMTMsIDEzOCkiLCJmb250U2l6ZSI6IjhweCIsImZvbnRXZWlnaHQiOiI1NTAiLCJ0aHJlc2hvbGQiOjQuNSwic2NvcGUiOiJTZWxlY3RlZCBub3JtYWwtc2l6ZSByZW5kZXJlZCB0ZXh0OyBubyBvdmVyYWxsIGFjY2Vzc2liaWxpdHkgY2VydGlmaWNhdGlvbiIsInN1cHBvcnRlZCI6dHJ1ZSwibGF5ZXJzIjpbInJnYmEoMCwgMCwgMCwgMCkiLCJyZ2JhKDAsIDAsIDAsIDApIiwicmdiKDI1NSwgMjU1LCAyNTUpIl0sImJhY2tncm91bmQiOlsxLDEsMSwxXSwiY29tcG9zaXRlZEZvcmVncm91bmQiOlswLjM4NDMxMzcyNTQ5MDE5NjEsMC40NDMxMzcyNTQ5MDE5NjA3NiwwLjU0MTE3NjQ3MDU4ODIzNTMsMV0sInJhdGlvIjo0Ljk0MzA1OTk1ODAwNDM5NiwicGFzc2VkIjp0cnVlLCJhc3N1bXB0aW9ucyI6IkNTUyBzUkdCIGNvbG9yczsgYWxwaGEgY29tcG9zaXRlZCB0aHJvdWdoIGV4cGxpY2l0IGJhY2tncm91bmRzOyBubyBhbnRpLWFsaWFzaW5nIGFwcHJveGltYXRpb24ifSx7ImxhYmVsIjoiTmF2aWdhdGlvbiBMYWJvcmF0b3J5IiwidGV4dCI6IkxhYiIsImNvbG9yIjoicmdiKDk4LCAxMTMsIDEzOCkiLCJmb250U2l6ZSI6IjhweCIsImZvbnRXZWlnaHQiOiI1NTAiLCJ0aHJlc2hvbGQiOjQuNSwic2NvcGUiOiJTZWxlY3RlZCBub3JtYWwtc2l6ZSByZW5kZXJlZCB0ZXh0OyBubyBvdmVyYWxsIGFjY2Vzc2liaWxpdHkgY2VydGlmaWNhdGlvbiIsInN1cHBvcnRlZCI6dHJ1ZSwibGF5ZXJzIjpbInJnYmEoMCwgMCwgMCwgMCkiLCJyZ2JhKDAsIDAsIDAsIDApIiwicmdiKDI1NSwgMjU1LCAyNTUpIl0sImJhY2tncm91bmQiOlsxLDEsMSwxXSwiY29tcG9zaXRlZEZvcmVncm91bmQiOlswLjM4NDMxMzcyNTQ5MDE5NjEsMC40NDMxMzcyNTQ5MDE5NjA3NiwwLjU0MTE3NjQ3MDU4ODIzNTMsMV0sInJhdGlvIjo0Ljk0MzA1OTk1ODAwNDM5NiwicGFzc2VkIjp0cnVlLCJhc3N1bXB0aW9ucyI6IkNTUyBzUkdCIGNvbG9yczsgYWxwaGEgY29tcG9zaXRlZCB0aHJvdWdoIGV4cGxpY2l0IGJhY2tncm91bmRzOyBubyBhbnRpLWFsaWFzaW5nIGFwcHJveGltYXRpb24ifSx7ImxhYmVsIjoiTmF2aWdhdGlvbiBDb21wYXRpYmlsaXR5IGFuZCBlbnZpcm9ubWVudCIsInRleHQiOiJTZXR0aW5ncyIsImNvbG9yIjoicmdiKDk4LCAxMTMsIDEzOCkiLCJmb250U2l6ZSI6IjhweCIsImZvbnRXZWlnaHQiOiI1NTAiLCJ0aHJlc2hvbGQiOjQuNSwic2NvcGUiOiJTZWxlY3RlZCBub3JtYWwtc2l6ZSByZW5kZXJlZCB0ZXh0OyBubyBvdmVyYWxsIGFjY2Vzc2liaWxpdHkgY2VydGlmaWNhdGlvbiIsInN1cHBvcnRlZCI6dHJ1ZSwibGF5ZXJzIjpbInJnYmEoMCwgMCwgMCwgMCkiLCJyZ2JhKDAsIDAsIDAsIDApIiwicmdiKDI1NSwgMjU1LCAyNTUpIl0sImJhY2tncm91bmQiOlsxLDEsMSwxXSwiY29tcG9zaXRlZEZvcmVncm91bmQiOlswLjM4NDMxMzcyNTQ5MDE5NjEsMC40NDMxMzcyNTQ5MDE5NjA3NiwwLjU0MTE3NjQ3MDU4ODIzNTMsMV0sInJhdGlvIjo0Ljk0MzA1OTk1ODAwNDM5NiwicGFzc2VkIjp0cnVlLCJhc3N1bXB0aW9ucyI6IkNTUyBzUkdCIGNvbG9yczsgYWxwaGEgY29tcG9zaXRlZCB0aHJvdWdoIGV4cGxpY2l0IGJhY2tncm91bmRzOyBubyBhbnRpLWFsaWFzaW5nIGFwcHJveGltYXRpb24ifSx7ImxhYmVsIjoiU2VsZWN0ZWQgQ2F0YWxvZyBuYXZpZ2F0aW9uIiwidGV4dCI6IkNhdGFsb2ciLCJjb2xvciI6InJnYig5OCwgMTEzLCAxMzgpIiwiZm9udFNpemUiOiI4cHgiLCJmb250V2VpZ2h0IjoiNTUwIiwidGhyZXNob2xkIjo0LjUsInNjb3BlIjoiU2VsZWN0ZWQgbm9ybWFsLXNpemUgcmVuZGVyZWQgdGV4dDsgbm8gb3ZlcmFsbCBhY2Nlc3NpYmlsaXR5IGNlcnRpZmljYXRpb24iLCJzdXBwb3J0ZWQiOnRydWUsImxheWVycyI6WyJyZ2JhKDAsIDAsIDAsIDApIiwicmdiYSgwLCAwLCAwLCAwKSIsInJnYigyNTUsIDI1NSwgMjU1KSJdLCJiYWNrZ3JvdW5kIjpbMSwxLDEsMV0sImNvbXBvc2l0ZWRGb3JlZ3JvdW5kIjpbMC4zODQzMTM3MjU0OTAxOTYxLDAuNDQzMTM3MjU0OTAxOTYwNzYsMC41NDExNzY0NzA1ODgyMzUzLDFdLCJyYXRpbyI6NC45NDMwNTk5NTgwMDQzOTYsInBhc3NlZCI6dHJ1ZSwiYXNzdW1wdGlvbnMiOiJDU1Mgc1JHQiBjb2xvcnM7IGFscGhhIGNvbXBvc2l0ZWQgdGhyb3VnaCBleHBsaWNpdCBiYWNrZ3JvdW5kczsgbm8gYW50aS1hbGlhc2luZyBhcHByb3hpbWF0aW9uIn0seyJsYWJlbCI6IlByb2plY3QgbmFtZSBsYWJlbCIsInRleHQiOiJQcm9qZWN0IG5hbWUiLCJjb2xvciI6InJnYig2MiwgNzYsIDk4KSIsImZvbnRTaXplIjoiMTJweCIsImZvbnRXZWlnaHQiOiI1NTAiLCJ0aHJlc2hvbGQiOjQuNSwic2NvcGUiOiJTZWxlY3RlZCBub3JtYWwtc2l6ZSByZW5kZXJlZCB0ZXh0OyBubyBvdmVyYWxsIGFjY2Vzc2liaWxpdHkgY2VydGlmaWNhdGlvbiIsInN1cHBvcnRlZCI6dHJ1ZSwibGF5ZXJzIjpbInJnYmEoMCwgMCwgMCwgMCkiLCJyZ2JhKDAsIDAsIDAsIDApIiwicmdiKDI1NSwgMjU1LCAyNTUpIl0sImJhY2tncm91bmQiOlsxLDEsMSwxXSwiY29tcG9zaXRlZEZvcmVncm91bmQiOlswLjI0MzEzNzI1NDkwMTk2MDc4LDAuMjk4MDM5MjE1Njg2Mjc0NSwwLjM4NDMxMzcyNTQ5MDE5NjEsMV0sInJhdGlvIjo4LjY5NTc1NDY2NTQ1NDQ4LCJwYXNzZWQiOnRydWUsImFzc3VtcHRpb25zIjoiQ1NTIHNSR0IgY29sb3JzOyBhbHBoYSBjb21wb3NpdGVkIHRocm91Z2ggZXhwbGljaXQgYmFja2dyb3VuZHM7IG5vIGFudGktYWxpYXNpbmcgYXBwcm94aW1hdGlvbiJ9LHsibGFiZWwiOiJDcmVhdGluZyBwcm9qZWN0IGJ1c3kgbm90aWNlIiwidGV4dCI6IkNyZWF0aW5nIHByb2plY3TigKYiLCJjb2xvciI6InJnYig5OCwgMTEzLCAxMzgpIiwiZm9udFNpemUiOiIxMnB4IiwiZm9udFdlaWdodCI6IjQwMCIsInRocmVzaG9sZCI6NC41LCJzY29wZSI6IlNlbGVjdGVkIG5vcm1hbC1zaXplIHJlbmRlcmVkIHRleHQ7IG5vIG92ZXJhbGwgYWNjZXNzaWJpbGl0eSBjZXJ0aWZpY2F0aW9uIiwic3VwcG9ydGVkIjp0cnVlLCJsYXllcnMiOlsicmdiKDI0MiwgMjQ1LCAyNDkpIl0sImJhY2tncm91bmQiOlswLjk0OTAxOTYwNzg0MzEzNzIsMC45NjA3ODQzMTM3MjU0OTAyLDAuOTc2NDcwNTg4MjM1Mjk0MSwxXSwiY29tcG9zaXRlZEZvcmVncm91bmQiOlswLjM4NDMxMzcyNTQ5MDE5NjEsMC40NDMxMzcyNTQ5MDE5NjA3NiwwLjU0MTE3NjQ3MDU4ODIzNTMsMV0sInJhdGlvIjo0LjUyMDM4NjYzMzcxMzYzNywicGFzc2VkIjp0cnVlLCJhc3N1bXB0aW9ucyI6IkNTUyBzUkdCIGNvbG9yczsgYWxwaGEgY29tcG9zaXRlZCB0aHJvdWdoIGV4cGxpY2l0IGJhY2tncm91bmRzOyBubyBhbnRpLWFsaWFzaW5nIGFwcHJveGltYXRpb24ifV0sImxpbWl0YXRpb25zIjpbIkJyb3dzZXIgYWNjZXNzaWJpbGl0eSBzZW1hbnRpY3MsIG5vdCBhY3R1YWwgYXNzaXN0aXZlLXRlY2hub2xvZ3kgZXhlY3V0aW9uIl19"
+                    },
+                    {
+                      "name": "native-browser-environment.json",
+                      "contentType": "application/json",
+                      "body": "eyJwbGF0Zm9ybSI6ImxpbnV4IiwiYXJjaGl0ZWN0dXJlIjoieDY0IiwiYnJvd3NlciI6IjE1Ni4wLjgwNzguNCIsInZpZXdwb3J0Ijp7IndpZHRoIjoxMDI0LCJoZWlnaHQiOjc2OH0sInNjb3BlIjoiU2VsZWN0ZWQgbmF0aXZlIGJyb3dzZXIgc2VtYW50aWNzOyBubyBzY3JlZW4tcmVhZGVyIG9yIFdpbmRvd3MgY2xhaW0ifQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "31deb63443f844a36357-f67ad259b0ba9e771431",
+          "file": "shell-accessibility.spec.ts",
+          "line": 79,
+          "column": 7
+        },
+        {
+          "title": "shell accessibility: login instructions and real rejected-token recovery at 1440x900",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 15366,
+                  "error": {
+                    "message": "TimeoutError: locator.innerText: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.login-panel').getByRole('alert')\u001b[22m\n",
+                    "stack": "TimeoutError: locator.innerText: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.login-panel').getByRole('alert')\u001b[22m\n\n    at <repo>/tests/e2e/shell-accessibility.spec.ts:74:77",
+                    "location": {
+                      "file": "<repo>/tests/e2e/shell-accessibility.spec.ts",
+                      "column": 77,
+                      "line": 74
+                    },
+                    "snippet": "  72 |       rejectedHTTP: 401, submittedFixture: \"invalid synthetic token\", clearedPassword: true,\n  73 |       inputName: \"Bootstrap token\", description: await token.getAttribute(\"aria-describedby\"),\n> 74 |       invalid: await token.getAttribute(\"aria-invalid\"), error: await error.innerText(),\n     |                                                                             ^\n  75 |       keyboardRecovery: true, staleErrorClearedOnEditing: true, measurements: pairs }), contentType: \"application/json\" });\n  76 |     checkPairs(pairs);\n  77 |   });"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/shell-accessibility.spec.ts",
+                        "column": 77,
+                        "line": 74
+                      },
+                      "message": "TimeoutError: locator.innerText: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.login-panel').getByRole('alert')\u001b[22m\n\n\n  72 |       rejectedHTTP: 401, submittedFixture: \"invalid synthetic token\", clearedPassword: true,\n  73 |       inputName: \"Bootstrap token\", description: await token.getAttribute(\"aria-describedby\"),\n> 74 |       invalid: await token.getAttribute(\"aria-invalid\"), error: await error.innerText(),\n     |                                                                             ^\n  75 |       keyboardRecovery: true, staleErrorClearedOnEditing: true, measurements: pairs }), contentType: \"application/json\" });\n  76 |     checkPairs(pairs);\n  77 |   });\n    at <repo>/tests/e2e/shell-accessibility.spec.ts:74:77"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T10:51:39.178Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/shell-accessibility-shell--10582--token-recovery-at-1440x900/test-failed-1.png"
+                    },
+                    {
+                      "name": "native-browser-environment.json",
+                      "contentType": "application/json",
+                      "body": "eyJwbGF0Zm9ybSI6ImxpbnV4IiwiYXJjaGl0ZWN0dXJlIjoieDY0IiwiYnJvd3NlciI6IjE1Ni4wLjgwNzguNCIsInZpZXdwb3J0Ijp7IndpZHRoIjoxNDQwLCJoZWlnaHQiOjkwMH0sInNjb3BlIjoiU2VsZWN0ZWQgbmF0aXZlIGJyb3dzZXIgc2VtYW50aWNzOyBubyBzY3JlZW4tcmVhZGVyIG9yIFdpbmRvd3MgY2xhaW0ifQ=="
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/shell-accessibility-shell--10582--token-recovery-at-1440x900/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/shell-accessibility.spec.ts",
+                    "column": 77,
+                    "line": 74
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "31deb63443f844a36357-265465a25acc7fd40a99",
+          "file": "shell-accessibility.spec.ts",
+          "line": 37,
+          "column": 7
+        },
+        {
+          "title": "shell accessibility: navigation state, form and real busy response at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1358,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T10:51:54.949Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "shell-semantics.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJuYXZpZ2F0aW9uTGFuZG1hcmsiOiJOQVYiLCJuYXZpZ2F0aW9uU25hcHNob3QiOiItIG5hdmlnYXRpb24gXCJNYWluIG5hdmlnYXRpb25cIjpcbiAgLSBidXR0b24gXCJXb3Jrc3BhY2VcIlxuICAtIGJ1dHRvbiBcIkNhdGFsb2dcIlxuICAtIGJ1dHRvbiBcIkxhYm9yYXRvcnlcIjogTGFiXG4gIC0gYnV0dG9uIFwiQ29tcGF0aWJpbGl0eSBhbmQgZW52aXJvbm1lbnRcIjogU2V0dGluZ3NcbiAgLSB0ZXh0OiB2MC4xIiwicmVhbFByb2plY3RDcmVhdGlvbiI6dHJ1ZSwiYnVzeVJlc3BvbnNlSGVsZEZvck9ic2VydmF0aW9uIjp0cnVlLCJsaXZlUmVnaW9uIjoicG9saXRlIiwia2V5Ym9hcmRNb2RhbFJldHVybiI6dHJ1ZSwibWVhc3VyZW1lbnRzIjpbeyJsYWJlbCI6Ik5hdmlnYXRpb24gV29ya3NwYWNlIiwidGV4dCI6IldvcmtzcGFjZSIsImNvbG9yIjoicmdiKDQ2LCA5OCwgMTg4KSIsImZvbnRTaXplIjoiOHB4IiwiZm9udFdlaWdodCI6IjU1MCIsInRocmVzaG9sZCI6NC41LCJzY29wZSI6IlNlbGVjdGVkIG5vcm1hbC1zaXplIHJlbmRlcmVkIHRleHQ7IG5vIG92ZXJhbGwgYWNjZXNzaWJpbGl0eSBjZXJ0aWZpY2F0aW9uIiwic3VwcG9ydGVkIjp0cnVlLCJsYXllcnMiOlsicmdiYSgwLCAwLCAwLCAwKSIsInJnYigyMzcsIDI0MywgMjU1KSJdLCJiYWNrZ3JvdW5kIjpbMC45Mjk0MTE3NjQ3MDU4ODI0LDAuOTUyOTQxMTc2NDcwNTg4MiwxLDFdLCJjb21wb3NpdGVkRm9yZWdyb3VuZCI6WzAuMTgwMzkyMTU2ODYyNzQ1MSwwLjM4NDMxMzcyNTQ5MDE5NjEsMC43MzcyNTQ5MDE5NjA3ODQ0LDFdLCJyYXRpbyI6NS4yNTU3Nzg2ODU3MjM2MzU1LCJwYXNzZWQiOnRydWUsImFzc3VtcHRpb25zIjoiQ1NTIHNSR0IgY29sb3JzOyBhbHBoYSBjb21wb3NpdGVkIHRocm91Z2ggZXhwbGljaXQgYmFja2dyb3VuZHM7IG5vIGFudGktYWxpYXNpbmcgYXBwcm94aW1hdGlvbiJ9LHsibGFiZWwiOiJOYXZpZ2F0aW9uIENhdGFsb2ciLCJ0ZXh0IjoiQ2F0YWxvZyIsImNvbG9yIjoicmdiKDk4LCAxMTMsIDEzOCkiLCJmb250U2l6ZSI6IjhweCIsImZvbnRXZWlnaHQiOiI1NTAiLCJ0aHJlc2hvbGQiOjQuNSwic2NvcGUiOiJTZWxlY3RlZCBub3JtYWwtc2l6ZSByZW5kZXJlZCB0ZXh0OyBubyBvdmVyYWxsIGFjY2Vzc2liaWxpdHkgY2VydGlmaWNhdGlvbiIsInN1cHBvcnRlZCI6dHJ1ZSwibGF5ZXJzIjpbInJnYmEoMCwgMCwgMCwgMCkiLCJyZ2JhKDAsIDAsIDAsIDApIiwicmdiKDI1NSwgMjU1LCAyNTUpIl0sImJhY2tncm91bmQiOlsxLDEsMSwxXSwiY29tcG9zaXRlZEZvcmVncm91bmQiOlswLjM4NDMxMzcyNTQ5MDE5NjEsMC40NDMxMzcyNTQ5MDE5NjA3NiwwLjU0MTE3NjQ3MDU4ODIzNTMsMV0sInJhdGlvIjo0Ljk0MzA1OTk1ODAwNDM5NiwicGFzc2VkIjp0cnVlLCJhc3N1bXB0aW9ucyI6IkNTUyBzUkdCIGNvbG9yczsgYWxwaGEgY29tcG9zaXRlZCB0aHJvdWdoIGV4cGxpY2l0IGJhY2tncm91bmRzOyBubyBhbnRpLWFsaWFzaW5nIGFwcHJveGltYXRpb24ifSx7ImxhYmVsIjoiTmF2aWdhdGlvbiBMYWJvcmF0b3J5IiwidGV4dCI6IkxhYiIsImNvbG9yIjoicmdiKDk4LCAxMTMsIDEzOCkiLCJmb250U2l6ZSI6IjhweCIsImZvbnRXZWlnaHQiOiI1NTAiLCJ0aHJlc2hvbGQiOjQuNSwic2NvcGUiOiJTZWxlY3RlZCBub3JtYWwtc2l6ZSByZW5kZXJlZCB0ZXh0OyBubyBvdmVyYWxsIGFjY2Vzc2liaWxpdHkgY2VydGlmaWNhdGlvbiIsInN1cHBvcnRlZCI6dHJ1ZSwibGF5ZXJzIjpbInJnYmEoMCwgMCwgMCwgMCkiLCJyZ2JhKDAsIDAsIDAsIDApIiwicmdiKDI1NSwgMjU1LCAyNTUpIl0sImJhY2tncm91bmQiOlsxLDEsMSwxXSwiY29tcG9zaXRlZEZvcmVncm91bmQiOlswLjM4NDMxMzcyNTQ5MDE5NjEsMC40NDMxMzcyNTQ5MDE5NjA3NiwwLjU0MTE3NjQ3MDU4ODIzNTMsMV0sInJhdGlvIjo0Ljk0MzA1OTk1ODAwNDM5NiwicGFzc2VkIjp0cnVlLCJhc3N1bXB0aW9ucyI6IkNTUyBzUkdCIGNvbG9yczsgYWxwaGEgY29tcG9zaXRlZCB0aHJvdWdoIGV4cGxpY2l0IGJhY2tncm91bmRzOyBubyBhbnRpLWFsaWFzaW5nIGFwcHJveGltYXRpb24ifSx7ImxhYmVsIjoiTmF2aWdhdGlvbiBDb21wYXRpYmlsaXR5IGFuZCBlbnZpcm9ubWVudCIsInRleHQiOiJTZXR0aW5ncyIsImNvbG9yIjoicmdiKDk4LCAxMTMsIDEzOCkiLCJmb250U2l6ZSI6IjhweCIsImZvbnRXZWlnaHQiOiI1NTAiLCJ0aHJlc2hvbGQiOjQuNSwic2NvcGUiOiJTZWxlY3RlZCBub3JtYWwtc2l6ZSByZW5kZXJlZCB0ZXh0OyBubyBvdmVyYWxsIGFjY2Vzc2liaWxpdHkgY2VydGlmaWNhdGlvbiIsInN1cHBvcnRlZCI6dHJ1ZSwibGF5ZXJzIjpbInJnYmEoMCwgMCwgMCwgMCkiLCJyZ2JhKDAsIDAsIDAsIDApIiwicmdiKDI1NSwgMjU1LCAyNTUpIl0sImJhY2tncm91bmQiOlsxLDEsMSwxXSwiY29tcG9zaXRlZEZvcmVncm91bmQiOlswLjM4NDMxMzcyNTQ5MDE5NjEsMC40NDMxMzcyNTQ5MDE5NjA3NiwwLjU0MTE3NjQ3MDU4ODIzNTMsMV0sInJhdGlvIjo0Ljk0MzA1OTk1ODAwNDM5NiwicGFzc2VkIjp0cnVlLCJhc3N1bXB0aW9ucyI6IkNTUyBzUkdCIGNvbG9yczsgYWxwaGEgY29tcG9zaXRlZCB0aHJvdWdoIGV4cGxpY2l0IGJhY2tncm91bmRzOyBubyBhbnRpLWFsaWFzaW5nIGFwcHJveGltYXRpb24ifSx7ImxhYmVsIjoiU2VsZWN0ZWQgQ2F0YWxvZyBuYXZpZ2F0aW9uIiwidGV4dCI6IkNhdGFsb2ciLCJjb2xvciI6InJnYig5MiwgMTExLCAxNDQpIiwiZm9udFNpemUiOiI4cHgiLCJmb250V2VpZ2h0IjoiNTUwIiwidGhyZXNob2xkIjo0LjUsInNjb3BlIjoiU2VsZWN0ZWQgbm9ybWFsLXNpemUgcmVuZGVyZWQgdGV4dDsgbm8gb3ZlcmFsbCBhY2Nlc3NpYmlsaXR5IGNlcnRpZmljYXRpb24iLCJzdXBwb3J0ZWQiOnRydWUsImxheWVycyI6WyJyZ2JhKDAsIDAsIDAsIDApIiwicmdiYSgyMzcsIDI0MywgMjU1LCAwLjExNCkiLCJyZ2IoMjU1LCAyNTUsIDI1NSkiXSwiYmFja2dyb3VuZCI6WzAuOTkxOTUyOTQxMTc2NDcwNiwwLjk5NDYzNTI5NDExNzY0NzEsMSwxXSwiY29tcG9zaXRlZEZvcmVncm91bmQiOlswLjM2MDc4NDMxMzcyNTQ5MDIsMC40MzUyOTQxMTc2NDcwNTg4MywwLjU2NDcwNTg4MjM1Mjk0MTIsMV0sInJhdGlvIjo1LjAyMTk4MzE4MzM5NzQ3NCwicGFzc2VkIjp0cnVlLCJhc3N1bXB0aW9ucyI6IkNTUyBzUkdCIGNvbG9yczsgYWxwaGEgY29tcG9zaXRlZCB0aHJvdWdoIGV4cGxpY2l0IGJhY2tncm91bmRzOyBubyBhbnRpLWFsaWFzaW5nIGFwcHJveGltYXRpb24ifSx7ImxhYmVsIjoiUHJvamVjdCBuYW1lIGxhYmVsIiwidGV4dCI6IlByb2plY3QgbmFtZSIsImNvbG9yIjoicmdiKDYyLCA3NiwgOTgpIiwiZm9udFNpemUiOiIxMnB4IiwiZm9udFdlaWdodCI6IjU1MCIsInRocmVzaG9sZCI6NC41LCJzY29wZSI6IlNlbGVjdGVkIG5vcm1hbC1zaXplIHJlbmRlcmVkIHRleHQ7IG5vIG92ZXJhbGwgYWNjZXNzaWJpbGl0eSBjZXJ0aWZpY2F0aW9uIiwic3VwcG9ydGVkIjp0cnVlLCJsYXllcnMiOlsicmdiYSgwLCAwLCAwLCAwKSIsInJnYmEoMCwgMCwgMCwgMCkiLCJyZ2IoMjU1LCAyNTUsIDI1NSkiXSwiYmFja2dyb3VuZCI6WzEsMSwxLDFdLCJjb21wb3NpdGVkRm9yZWdyb3VuZCI6WzAuMjQzMTM3MjU0OTAxOTYwNzgsMC4yOTgwMzkyMTU2ODYyNzQ1LDAuMzg0MzEzNzI1NDkwMTk2MSwxXSwicmF0aW8iOjguNjk1NzU0NjY1NDU0NDgsInBhc3NlZCI6dHJ1ZSwiYXNzdW1wdGlvbnMiOiJDU1Mgc1JHQiBjb2xvcnM7IGFscGhhIGNvbXBvc2l0ZWQgdGhyb3VnaCBleHBsaWNpdCBiYWNrZ3JvdW5kczsgbm8gYW50aS1hbGlhc2luZyBhcHByb3hpbWF0aW9uIn0seyJsYWJlbCI6IkNyZWF0aW5nIHByb2plY3QgYnVzeSBub3RpY2UiLCJ0ZXh0IjoiQ3JlYXRpbmcgcHJvamVjdOKApiIsImNvbG9yIjoicmdiKDk4LCAxMTMsIDEzOCkiLCJmb250U2l6ZSI6IjEycHgiLCJmb250V2VpZ2h0IjoiNDAwIiwidGhyZXNob2xkIjo0LjUsInNjb3BlIjoiU2VsZWN0ZWQgbm9ybWFsLXNpemUgcmVuZGVyZWQgdGV4dDsgbm8gb3ZlcmFsbCBhY2Nlc3NpYmlsaXR5IGNlcnRpZmljYXRpb24iLCJzdXBwb3J0ZWQiOnRydWUsImxheWVycyI6WyJyZ2IoMjQyLCAyNDUsIDI0OSkiXSwiYmFja2dyb3VuZCI6WzAuOTQ5MDE5NjA3ODQzMTM3MiwwLjk2MDc4NDMxMzcyNTQ5MDIsMC45NzY0NzA1ODgyMzUyOTQxLDFdLCJjb21wb3NpdGVkRm9yZWdyb3VuZCI6WzAuMzg0MzEzNzI1NDkwMTk2MSwwLjQ0MzEzNzI1NDkwMTk2MDc2LDAuNTQxMTc2NDcwNTg4MjM1MywxXSwicmF0aW8iOjQuNTIwMzg2NjMzNzEzNjM3LCJwYXNzZWQiOnRydWUsImFzc3VtcHRpb25zIjoiQ1NTIHNSR0IgY29sb3JzOyBhbHBoYSBjb21wb3NpdGVkIHRocm91Z2ggZXhwbGljaXQgYmFja2dyb3VuZHM7IG5vIGFudGktYWxpYXNpbmcgYXBwcm94aW1hdGlvbiJ9XSwibGltaXRhdGlvbnMiOlsiQnJvd3NlciBhY2Nlc3NpYmlsaXR5IHNlbWFudGljcywgbm90IGFjdHVhbCBhc3Npc3RpdmUtdGVjaG5vbG9neSBleGVjdXRpb24iXX0="
+                    },
+                    {
+                      "name": "native-browser-environment.json",
+                      "contentType": "application/json",
+                      "body": "eyJwbGF0Zm9ybSI6ImxpbnV4IiwiYXJjaGl0ZWN0dXJlIjoieDY0IiwiYnJvd3NlciI6IjE1Ni4wLjgwNzguNCIsInZpZXdwb3J0Ijp7IndpZHRoIjoxNDQwLCJoZWlnaHQiOjkwMH0sInNjb3BlIjoiU2VsZWN0ZWQgbmF0aXZlIGJyb3dzZXIgc2VtYW50aWNzOyBubyBzY3JlZW4tcmVhZGVyIG9yIFdpbmRvd3MgY2xhaW0ifQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "31deb63443f844a36357-5b5594b80503b38102d3",
+          "file": "shell-accessibility.spec.ts",
+          "line": 79,
+          "column": 7
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-26T10:51:21.671Z",
+    "duration": 34725.001,
+    "expected": 2,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  }
+}

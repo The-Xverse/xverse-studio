@@ -327,3 +327,17 @@ assistive-technology and complete accessibility acceptance remain open; componen
 Clean product commit e6c9de0 passed a fresh offline Linux package extraction with the tested frontend,
 native startup/UI, Unicode persistence and authoritative compilation; receipt and clean 98-file
 manifest are under `M1-accessible-diagnostics/package/`. Fresh-host CI remains a separate outcome.
+
+Linux shell operability successor (2026-10-26): T038/T067 stay unchecked. Four native keyboard
+journeys at both required viewports verify actual login HTTP 401 feedback/association and edit recovery,
+all navigation destinations/current state, labelled project creation/Escape focus return and real
+busy-response observation. Fixed 18/24 initial selected text contrast failures, navigation semantics,
+login descriptions/invalid state and a real layout defect that pushed focused Settings below the
+viewport on tall Environment content. All 24 selected shell text pairs pass (minimum 4.5204), and the
+full 89-check browser successor passes unchanged source. Independent review and original failures
+are retained in `evidence/studio/M1-shell-operability/`. Backend 851 is inherited byte-identically,
+not rerun here. Windows, actual assistive-technology and full accessibility acceptance remain open.
+Final shell-source performance refresh passed: 30 repetitions after one warm-up per viewport,
+selection p95 27.9/27.1 ms, open-validation 1679.4/1780.1 ms and history 446.6/447.1 ms. Raw distributions
+and authoritative model validation outcomes are retained separately. Both earlier e6c9de0 product
+CI jobs and c4e31f6 metadata CI jobs passed; they predate this shell source.
