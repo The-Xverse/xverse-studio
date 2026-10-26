@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { useDomainOf } from "../profiles/presentation";
 import type { CatalogEntry, Data } from "../../api/types";
 import type { DoAction } from "../../app/App";
 import { Badge } from "../../app/ui";
@@ -89,6 +90,8 @@ export function InstanceWizard({
   onSubmit: (edits: Data[]) => Promise<void>;
   doAction: DoAction;
 }) {
+  // Definitions from any industry may be selected when compatible; each keeps its own domain label.
+  const domainOf = useDomainOf();
   const definitions = useMemo<Definition[]>(() => {
     const result = new Map<string, Definition>();
     const entries = catalog.filter((entry) => entry.kind === "component");
@@ -305,6 +308,9 @@ export function InstanceWizard({
                 <strong>{d.name}</strong> <code>{d.namespace}</code>{" "}
                 {d.version && <code>{d.version}</code>}{" "}
                 {d.maturity && <Badge>{d.maturity}</Badge>}{" "}
+                {domainOf(d.namespace) && (
+                  <Badge tone="neutral">{domainOf(d.namespace)}</Badge>
+                )}{" "}
                 <Badge tone={d.source === "project" ? "info" : "warning"}>
                   {d.source === "project" ? "in project" : "catalog only"}
                 </Badge>{" "}

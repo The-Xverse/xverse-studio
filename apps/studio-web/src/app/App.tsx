@@ -36,6 +36,11 @@ import {
   type ExecutionSelection,
 } from "../features/deployments/DeploymentComposer";
 import { ProfileBindingsPanel } from "../features/profiles/ProfileBindingsPanel";
+import {
+  DomainBadge,
+  PresentationContext,
+  usePresentationData,
+} from "../features/profiles/presentation";
 import { ArtifactRegistrationForm } from "../features/catalog/ArtifactRegistrationForm";
 import { LogicalAssetForm } from "../features/model/LogicalAssetForm";
 import {
@@ -87,6 +92,14 @@ import {
   KeyValues,
 } from "./ui";
 type View = "Model" | "Connections" | "Deployment" | "Experiments" | "Results";
+// The core term whose domain icon, when a profile supplies one, marks each workflow tab.
+const viewTerms: Record<View, string> = {
+  Model: "System",
+  Connections: "Flow",
+  Deployment: "Deployment",
+  Experiments: "Scenario",
+  Results: "Results",
+};
 const viewIcons: Record<View, string> = {
   Model: "model",
   Connections: "connection",
@@ -730,6 +743,11 @@ export default function App() {
     );
     setModal("evidence-import");
   }
+  // Domain terms for the shared workflows; the core terms apply until they load.
+  const presentation = usePresentationData(
+    project?.projectId,
+    project?.revision,
+  );
   if (authenticated === null)
     return (
       <div className="startup">
@@ -754,747 +772,782 @@ export default function App() {
     );
   const runStatus = String(run?.status || run?.state || "No active run");
   return (
-    <div className="application">
-      <a className="skip-link" href="#main-content">
-        Skip to workspace
-      </a>
-      <header className="topbar">
-        <button
-          className="brand"
-          onClick={() => {
-            setProject(null);
-            setSection("workspace");
-          }}
-          aria-label="X-Verse Studio home"
-        >
-          <span className="brand-mark">X</span>
-          <span>
-            X-VERSE <b>STUDIO</b>
+    <PresentationContext.Provider value={presentation}>
+      <div className="application">
+        <a className="skip-link" href="#main-content">
+          Skip to workspace
+        </a>
+        <header className="topbar">
+          <button
+            className="brand"
+            onClick={() => {
+              setProject(null);
+              setSection("workspace");
+            }}
+            aria-label="X-Verse Studio home"
+          >
+            <span className="brand-mark">X</span>
+            <span>
+              X-VERSE <b>STUDIO</b>
+            </span>
+          </button>
+          <div className="top-divider" />
+          <span className="environment">
+            <span className="status-dot" />
+            Local workspace
           </span>
-        </button>
-        <div className="top-divider" />
-        <span className="environment">
-          <span className="status-dot" />
-          Local workspace
-        </span>
-        <span className="top-spacer" />
-        <Badge>REFERENCE PREVIEW</Badge>
-        <button className="top-button" onClick={() => setSection("settings")}>
-          <Icon name="settings" />
-          <span>Environment</span>
-        </button>
-        <span className="avatar" aria-label="Local operator">
-          LO
-        </span>
-      </header>
-      <div className="app-body">
-        <aside className="rail" aria-label="Main navigation">
-          <button
-            className={section === "workspace" ? "active" : ""}
-            title="Workspace"
-            aria-label="Workspace"
-            onClick={() => setSection("workspace")}
-          >
-            <Icon name="model" size={22} />
-            <span>Workspace</span>
+          <span className="top-spacer" />
+          <Badge>REFERENCE PREVIEW</Badge>
+          <button className="top-button" onClick={() => setSection("settings")}>
+            <Icon name="settings" />
+            <span>Environment</span>
           </button>
-          <button
-            className={section === "catalog" ? "active" : ""}
-            title="Catalog"
-            aria-label="Catalog"
-            onClick={() => setSection("catalog")}
-          >
-            <Icon name="catalog" size={22} />
-            <span>Catalog</span>
-          </button>
-          <button
-            className={section === "lab" ? "active" : ""}
-            title="Laboratory"
-            aria-label="Laboratory"
-            onClick={() => setSection("lab")}
-          >
-            <Icon name="lab" size={22} />
-            <span>Lab</span>
-          </button>
-          <div className="rail-spacer" />
-          <button
-            className={section === "settings" ? "active" : ""}
-            aria-label="Compatibility and environment"
-            onClick={() => setSection("settings")}
-          >
-            <Icon name="settings" size={22} />
-            <span>Settings</span>
-          </button>
-          <span className="rail-version">v0.1</span>
-        </aside>
-        <main id="main-content" className="main-content">
-          <div className="alerts" aria-live="polite">
-            {busy && (
-              <div className="notice busy">
-                <span className="spinner" />
-                {busy}…
-              </div>
-            )}
-            {notice && (
-              <div className="notice">
-                <Icon name="info" />
-                {notice}
-                <button
-                  aria-label="Dismiss notice"
-                  onClick={() => setNotice("")}
-                >
-                  <Icon name="close" size={14} />
-                </button>
-              </div>
-            )}
-            {pendingStart && pendingStart.projectId === project?.projectId && (
-              <PendingStartNotice
-                pending={pendingStart}
-                sending={startSending}
-                onRetry={() =>
-                  void doAction("Resolving the pending Start", () =>
-                    deliverStart(pendingStart),
-                  )
-                }
-                onDismiss={() => {
-                  clearPendingStart(pendingStart.projectId);
-                  setPendingStart(null);
-                }}
-              />
-            )}
-            {project?.sourceIntegrity === "modified" && (
-              <div className="notice error" role="alert">
-                <Icon name="info" />
-                <div>
-                  <strong>Source files changed outside Studio</strong>
-                  <p>
-                    Inspect and copy the source before recovery. The recorded
-                    revision has not admitted these bytes; saving, validation
-                    and execution are blocked.
-                  </p>
-                  <Diagnostics diagnostics={project.sourceDiagnostics || []} />
-                  <RecoveryPanel
-                    project={project}
-                    doAction={doAction}
-                    onRecovered={async (recovery) => {
-                      await refreshProject();
-                      setNotice(
-                        `Recovered as revision ${recovery.project.revision}. The observed external bytes are preserved in backup ${recovery.recovery.recoveryId}.`,
-                      );
+          <span className="avatar" aria-label="Local operator">
+            LO
+          </span>
+        </header>
+        <div className="app-body">
+          <aside className="rail" aria-label="Main navigation">
+            <button
+              className={section === "workspace" ? "active" : ""}
+              title="Workspace"
+              aria-label="Workspace"
+              onClick={() => setSection("workspace")}
+            >
+              <Icon name="model" size={22} />
+              <span>Workspace</span>
+            </button>
+            <button
+              className={section === "catalog" ? "active" : ""}
+              title="Catalog"
+              aria-label="Catalog"
+              onClick={() => setSection("catalog")}
+            >
+              <Icon name="catalog" size={22} />
+              <span>Catalog</span>
+            </button>
+            <button
+              className={section === "lab" ? "active" : ""}
+              title="Laboratory"
+              aria-label="Laboratory"
+              onClick={() => setSection("lab")}
+            >
+              <Icon name="lab" size={22} />
+              <span>Lab</span>
+            </button>
+            <div className="rail-spacer" />
+            <button
+              className={section === "settings" ? "active" : ""}
+              aria-label="Compatibility and environment"
+              onClick={() => setSection("settings")}
+            >
+              <Icon name="settings" size={22} />
+              <span>Settings</span>
+            </button>
+            <span className="rail-version">v0.1</span>
+          </aside>
+          <main id="main-content" className="main-content">
+            <div className="alerts" aria-live="polite">
+              {busy && (
+                <div className="notice busy">
+                  <span className="spinner" />
+                  {busy}…
+                </div>
+              )}
+              {notice && (
+                <div className="notice">
+                  <Icon name="info" />
+                  {notice}
+                  <button
+                    aria-label="Dismiss notice"
+                    onClick={() => setNotice("")}
+                  >
+                    <Icon name="close" size={14} />
+                  </button>
+                </div>
+              )}
+              {pendingStart &&
+                pendingStart.projectId === project?.projectId && (
+                  <PendingStartNotice
+                    pending={pendingStart}
+                    sending={startSending}
+                    onRetry={() =>
+                      void doAction("Resolving the pending Start", () =>
+                        deliverStart(pendingStart),
+                      )
+                    }
+                    onDismiss={() => {
+                      clearPendingStart(pendingStart.projectId);
+                      setPendingStart(null);
                     }}
                   />
+                )}
+              {project?.sourceIntegrity === "modified" && (
+                <div className="notice error" role="alert">
+                  <Icon name="info" />
+                  <div>
+                    <strong>Source files changed outside Studio</strong>
+                    <p>
+                      Inspect and copy the source before recovery. The recorded
+                      revision has not admitted these bytes; saving, validation
+                      and execution are blocked.
+                    </p>
+                    <Diagnostics
+                      diagnostics={project.sourceDiagnostics || []}
+                    />
+                    <RecoveryPanel
+                      project={project}
+                      doAction={doAction}
+                      onRecovered={async (recovery) => {
+                        await refreshProject();
+                        setNotice(
+                          `Recovered as revision ${recovery.project.revision}. The observed external bytes are preserved in backup ${recovery.recovery.recoveryId}.`,
+                        );
+                      }}
+                    />
+                  </div>
                 </div>
-              </div>
-            )}
-            {error && (
-              <div className="notice error" role="alert">
-                <Icon name="info" />
-                <div>
-                  <strong>
-                    {(error as ApiError).code || "Operation unavailable"}
-                  </strong>
-                  <p>{error.message}</p>
-                  <Diagnostics
-                    diagnostics={(error as ApiError).details?.diagnostics}
-                  />
-                  {(error as ApiError).code === "PROJECT_UNAVAILABLE" &&
-                    (() => {
-                      // Unreadable committed sources can still be restored from history.
-                      const listed = projects.find(
-                        (p) => p.projectId === selectedProjectRef.current,
-                      );
-                      return listed ? (
-                        <RecoveryPanel
-                          project={listed}
-                          adoptable={false}
-                          doAction={doAction}
-                          onRecovered={async (recovery) => {
-                            await loadProject(listed.projectId);
-                            await refreshProjects();
-                            setNotice(
-                              `Recovered as revision ${recovery.project.revision}. Observed bytes are preserved in backup ${recovery.recovery.recoveryId}.`,
-                            );
-                          }}
+              )}
+              {error && (
+                <div className="notice error" role="alert">
+                  <Icon name="info" />
+                  <div>
+                    <strong>
+                      {(error as ApiError).code || "Operation unavailable"}
+                    </strong>
+                    <p>{error.message}</p>
+                    <Diagnostics
+                      diagnostics={(error as ApiError).details?.diagnostics}
+                    />
+                    {(error as ApiError).code === "PROJECT_UNAVAILABLE" &&
+                      (() => {
+                        // Unreadable committed sources can still be restored from history.
+                        const listed = projects.find(
+                          (p) => p.projectId === selectedProjectRef.current,
+                        );
+                        return listed ? (
+                          <RecoveryPanel
+                            project={listed}
+                            adoptable={false}
+                            doAction={doAction}
+                            onRecovered={async (recovery) => {
+                              await loadProject(listed.projectId);
+                              await refreshProjects();
+                              setNotice(
+                                `Recovered as revision ${recovery.project.revision}. Observed bytes are preserved in backup ${recovery.recovery.recoveryId}.`,
+                              );
+                            }}
+                          />
+                        ) : null;
+                      })()}
+                    {(error as ApiError).status === 412 && (
+                      <button
+                        onClick={() =>
+                          void doAction(
+                            "Loading current revision",
+                            async () => {
+                              await refreshProject();
+                              setNotice(
+                                "Current revision loaded. Compare it with your draft before saving again.",
+                              );
+                            },
+                          )
+                        }
+                      >
+                        Load current revision
+                      </button>
+                    )}
+                  </div>
+                  <button
+                    aria-label="Dismiss error"
+                    onClick={() => setError(null)}
+                  >
+                    <Icon name="close" size={14} />
+                  </button>
+                </div>
+              )}
+            </div>
+            {section === "settings" ? (
+              <Environment
+                capabilities={capabilities}
+                providers={providers}
+                project={project}
+                refresh={async () => {
+                  await refreshProject();
+                  setNotice(
+                    "Profile locks saved with exact schema and presentation identities.",
+                  );
+                }}
+                doAction={doAction}
+              />
+            ) : section === "lab" ? (
+              <LabView providers={providers} doAction={doAction} />
+            ) : section === "catalog" ? (
+              <Catalog
+                entries={catalog}
+                onCreate={(id) =>
+                  void doAction("Creating project", () => createProject(id))
+                }
+                onClose={() => setSection("workspace")}
+                onRegister={() => setModal("artifact")}
+                onTemplate={(template) => {
+                  setAddTemplate(template);
+                  setAddKind("component");
+                  setModal("add");
+                }}
+                onRetention={(entry) =>
+                  setRetentionTarget({
+                    kind: "artifact",
+                    id: entry.entryId || entry.id || "",
+                    name: entry.name,
+                  })
+                }
+                hasProject={!!project}
+              />
+            ) : !project ? (
+              <Home
+                onRetention={(value) =>
+                  setRetentionTarget({
+                    kind: "project",
+                    id: value.projectId,
+                    name: value.name,
+                  })
+                }
+                projects={projects}
+                catalog={catalog}
+                onOpen={(id) =>
+                  void doAction("Opening project", () => loadProject(id))
+                }
+                onCreate={(id) =>
+                  void doAction("Creating project", () => createProject(id))
+                }
+                onNew={() => setModal("new")}
+                onImport={(file) =>
+                  void doAction("Inspecting archive", () => importFile(file))
+                }
+                onImportEvidence={(file) =>
+                  void doAction("Inspecting evidence without execution", () =>
+                    importEvidence(file),
+                  )
+                }
+              />
+            ) : (
+              <>
+                <div className="project-header">
+                  <div>
+                    <div className="breadcrumb">
+                      <button
+                        onClick={() => {
+                          setProject(null);
+                          localStorage.removeItem("studio.projectId");
+                        }}
+                      >
+                        Workspace
+                      </button>
+                      <Icon name="chevron" size={12} />
+                      <span>System</span>
+                    </div>
+                    <div className="title-row">
+                      <span className="system-icon">
+                        <Icon
+                          name={presentation.icons?.System || "model"}
+                          size={22}
                         />
-                      ) : null;
-                    })()}
-                  {(error as ApiError).status === 412 && (
+                      </span>
+                      <h1>{project.name}</h1>
+                      <Badge tone="info">Draft</Badge>
+                      <DomainBadge />
+                      <span className="revision">
+                        rev {String(project.revision).slice(0, 8)}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="header-actions">
+                    <InspectionButton
+                      projectId={project.projectId}
+                      revision={project.revision}
+                      onOpen={() => setModal("inspection")}
+                    />
                     <button
+                      className="button"
+                      disabled={!!busy || !editHistory.undo.length}
+                      aria-keyshortcuts="Control+Z"
+                      title={
+                        editHistory.undo.length
+                          ? `Undo ${editHistory.undo[editHistory.undo.length - 1].label}`
+                          : "No graph edit to undo in this tab"
+                      }
                       onClick={() =>
-                        void doAction("Loading current revision", async () => {
-                          await refreshProject();
-                          setNotice(
-                            "Current revision loaded. Compare it with your draft before saving again.",
-                          );
-                        })
+                        void doAction("Undoing graph edit", () =>
+                          stepHistory("undo"),
+                        )
                       }
                     >
-                      Load current revision
+                      Undo
                     </button>
-                  )}
-                </div>
-                <button
-                  aria-label="Dismiss error"
-                  onClick={() => setError(null)}
-                >
-                  <Icon name="close" size={14} />
-                </button>
-              </div>
-            )}
-          </div>
-          {section === "settings" ? (
-            <Environment
-              capabilities={capabilities}
-              providers={providers}
-              project={project}
-              refresh={async () => {
-                await refreshProject();
-                setNotice(
-                  "Profile locks saved with exact schema and presentation identities.",
-                );
-              }}
-              doAction={doAction}
-            />
-          ) : section === "lab" ? (
-            <LabView providers={providers} doAction={doAction} />
-          ) : section === "catalog" ? (
-            <Catalog
-              entries={catalog}
-              onCreate={(id) =>
-                void doAction("Creating project", () => createProject(id))
-              }
-              onClose={() => setSection("workspace")}
-              onRegister={() => setModal("artifact")}
-              onTemplate={(template) => {
-                setAddTemplate(template);
-                setAddKind("component");
-                setModal("add");
-              }}
-              onRetention={(entry) =>
-                setRetentionTarget({
-                  kind: "artifact",
-                  id: entry.entryId || entry.id || "",
-                  name: entry.name,
-                })
-              }
-              hasProject={!!project}
-            />
-          ) : !project ? (
-            <Home
-              onRetention={(value) =>
-                setRetentionTarget({
-                  kind: "project",
-                  id: value.projectId,
-                  name: value.name,
-                })
-              }
-              projects={projects}
-              catalog={catalog}
-              onOpen={(id) =>
-                void doAction("Opening project", () => loadProject(id))
-              }
-              onCreate={(id) =>
-                void doAction("Creating project", () => createProject(id))
-              }
-              onNew={() => setModal("new")}
-              onImport={(file) =>
-                void doAction("Inspecting archive", () => importFile(file))
-              }
-              onImportEvidence={(file) =>
-                void doAction("Inspecting evidence without execution", () =>
-                  importEvidence(file),
-                )
-              }
-            />
-          ) : (
-            <>
-              <div className="project-header">
-                <div>
-                  <div className="breadcrumb">
                     <button
-                      onClick={() => {
-                        setProject(null);
-                        localStorage.removeItem("studio.projectId");
-                      }}
+                      className="button"
+                      disabled={!!busy || !editHistory.redo.length}
+                      aria-keyshortcuts="Control+Shift+Z"
+                      title={
+                        editHistory.redo.length
+                          ? `Redo ${editHistory.redo[editHistory.redo.length - 1].label}`
+                          : "No graph edit to redo in this tab"
+                      }
+                      onClick={() =>
+                        void doAction("Redoing graph edit", () =>
+                          stepHistory("redo"),
+                        )
+                      }
                     >
-                      Workspace
+                      Redo
                     </button>
-                    <Icon name="chevron" size={12} />
-                    <span>System</span>
-                  </div>
-                  <div className="title-row">
-                    <span className="system-icon">
-                      <Icon name="model" size={22} />
-                    </span>
-                    <h1>{project.name}</h1>
-                    <Badge tone="info">Draft</Badge>
-                    <span className="revision">
-                      rev {String(project.revision).slice(0, 8)}
-                    </span>
+                    <button
+                      className="button"
+                      onClick={() =>
+                        void doAction("Exporting project", exportProject)
+                      }
+                    >
+                      <Icon name="download" />
+                      Export
+                    </button>
+                    <button
+                      className="button"
+                      onClick={() => void doAction("Validating XDL", validate)}
+                    >
+                      <Icon name="check" />
+                      Validate
+                    </button>
+                    <button
+                      className="button primary"
+                      data-preflight-trigger=""
+                      disabled={!!busy}
+                      onClick={() =>
+                        void doAction("Checking readiness", checkPreflight)
+                      }
+                    >
+                      <Icon name="play" />
+                      Preflight & run
+                    </button>
                   </div>
                 </div>
-                <div className="header-actions">
-                  <InspectionButton
+                <div
+                  className="view-tabs"
+                  role="tablist"
+                  aria-label="System workflows"
+                >
+                  {(Object.keys(viewIcons) as View[]).map((v) => (
+                    <button
+                      key={v}
+                      role="tab"
+                      aria-selected={view === v}
+                      className={view === v ? "active" : ""}
+                      onClick={() => setView(v)}
+                    >
+                      <Icon
+                        name={
+                          presentation.icons?.[viewTerms[v]] || viewIcons[v]
+                        }
+                        size={17}
+                      />
+                      {v}
+                      {v === "Results" && run && (
+                        <span className="tab-count">1</span>
+                      )}
+                    </button>
+                  ))}
+                  <span className="tab-fill" />
+                  <button
+                    className="source-toggle"
+                    onClick={() => openSource()}
+                  >
+                    <Icon name="code" size={17} />
+                    XDL source
+                  </button>
+                </div>
+                <div className="workspace-context">
+                  <span>
+                    <span className="tiny-dot" />
+                    Draft revision{" "}
+                    <code>{String(project.revision).slice(0, 8)}</code>
+                  </span>
+                  <span>
+                    {projection.elements.length} elements ·{" "}
+                    {projection.connections.length} connections
+                  </span>
+                  <span className="context-spacer" />
+                  <span>
+                    {run ? (
+                      <>
+                        Run snapshot <code>{run.snapshotId.slice(0, 12)}</code>{" "}
+                        <Badge tone={statusTone(runStatus)}>{runStatus}</Badge>{" "}
+                        <RunDivergenceBadge
+                          divergence={divergence}
+                          state={snapshotState}
+                          open={divergenceOpen}
+                          onToggle={() => setDivergenceOpen((open) => !open)}
+                          onRetry={retrySnapshot}
+                        />
+                      </>
+                    ) : (
+                      <>
+                        Execution scope <Badge>Owned reference</Badge>
+                      </>
+                    )}
+                  </span>
+                </div>
+                {divergenceOpen && divergence && (
+                  <RunDivergencePanel
+                    divergence={divergence}
+                    onSelectElement={(ref) => {
+                      setSelected(ref);
+                      setView("Model");
+                    }}
+                    onOpenDocument={(path) => {
+                      const documentId = Object.entries(project.documents).find(
+                        ([, d]: [string, any]) => d.path === path,
+                      )?.[0];
+                      if (documentId) openSource({ documentId });
+                    }}
+                    onFrozenInputs={() => setFrozenOpen(true)}
+                  />
+                )}
+                {frozenOpen && runSnapshot && (
+                  <FrozenInputs
+                    snapshot={runSnapshot}
+                    onClose={() => setFrozenOpen(false)}
+                  />
+                )}
+                {view === "Model" ? (
+                  <ModelView
+                    runChanges={divergence?.byElement}
+                    project={project}
+                    projection={projection}
+                    parameters={parameters}
+                    selected={selected}
+                    setSelected={setSelected}
+                    edit={(edits) =>
+                      doAction("Saving semantic edit", () => edit(edits))
+                    }
+                    saveLayout={(layout) =>
+                      doAction("Saving layout", async () => {
+                        await api(`/projects/${project.projectId}/layout`, {
+                          method: "PUT",
+                          revision:
+                            project.presentationRevision || project.revision,
+                          body: { positions: layout.positions },
+                        });
+                        await refreshProject();
+                        setNotice(
+                          "Layout saved separately from executable XDL.",
+                        );
+                      })
+                    }
+                    onSource={openSource}
+                    onCatalog={() => {
+                      setAddTemplate("");
+                      setModal("add");
+                    }}
+                  />
+                ) : view === "Connections" ? (
+                  <ConnectionsView
+                    projection={projection}
                     projectId={project.projectId}
                     revision={project.revision}
-                    onOpen={() => setModal("inspection")}
+                    onOpenView={(next) => setView(next as typeof view)}
+                    runId={
+                      run?.projectId === project.projectId
+                        ? run.runId
+                        : undefined
+                    }
+                    runState={
+                      run?.projectId === project.projectId
+                        ? run.state
+                        : undefined
+                    }
+                    edit={(edits) =>
+                      doAction("Validating connection", () => edit(edits))
+                    }
                   />
-                  <button
-                    className="button"
-                    disabled={!!busy || !editHistory.undo.length}
-                    aria-keyshortcuts="Control+Z"
-                    title={
-                      editHistory.undo.length
-                        ? `Undo ${editHistory.undo[editHistory.undo.length - 1].label}`
-                        : "No graph edit to undo in this tab"
+                ) : view === "Deployment" ? (
+                  <DeploymentComposer
+                    project={project}
+                    projection={projection}
+                    providers={providers}
+                    providerId={executionProvider}
+                    selection={executionSelection}
+                    onSelection={chooseExecution}
+                    refresh={refreshProject}
+                    doAction={doAction}
+                  />
+                ) : view === "Experiments" ? (
+                  <ExperimentsView
+                    project={project}
+                    projection={projection}
+                    selection={executionSelection}
+                    edit={edit}
+                    authoringLimits={
+                      capabilities.limits?.scenarioAuthoring || {}
                     }
-                    onClick={() =>
-                      void doAction("Undoing graph edit", () =>
-                        stepHistory("undo"),
-                      )
-                    }
-                  >
-                    Undo
-                  </button>
-                  <button
-                    className="button"
-                    disabled={!!busy || !editHistory.redo.length}
-                    aria-keyshortcuts="Control+Shift+Z"
-                    title={
-                      editHistory.redo.length
-                        ? `Redo ${editHistory.redo[editHistory.redo.length - 1].label}`
-                        : "No graph edit to redo in this tab"
-                    }
-                    onClick={() =>
-                      void doAction("Redoing graph edit", () =>
-                        stepHistory("redo"),
-                      )
-                    }
-                  >
-                    Redo
-                  </button>
-                  <button
-                    className="button"
-                    onClick={() =>
-                      void doAction("Exporting project", exportProject)
-                    }
-                  >
-                    <Icon name="download" />
-                    Export
-                  </button>
-                  <button
-                    className="button"
-                    onClick={() => void doAction("Validating XDL", validate)}
-                  >
-                    <Icon name="check" />
-                    Validate
-                  </button>
-                  <button
-                    className="button primary"
-                    data-preflight-trigger=""
-                    disabled={!!busy}
-                    onClick={() =>
-                      void doAction("Checking readiness", checkPreflight)
-                    }
-                  >
-                    <Icon name="play" />
-                    Preflight & run
-                  </button>
-                </div>
-              </div>
-              <div
-                className="view-tabs"
-                role="tablist"
-                aria-label="System workflows"
-              >
-                {(Object.keys(viewIcons) as View[]).map((v) => (
-                  <button
-                    key={v}
-                    role="tab"
-                    aria-selected={view === v}
-                    className={view === v ? "active" : ""}
-                    onClick={() => setView(v)}
-                  >
-                    <Icon name={viewIcons[v]} size={17} />
-                    {v}
-                    {v === "Results" && run && (
-                      <span className="tab-count">1</span>
+                    preflight={preflight}
+                    run={run}
+                    doAction={doAction}
+                    refresh={refreshProject}
+                    onSource={openSource}
+                  />
+                ) : (
+                  <ResultsView
+                    run={run}
+                    events={events}
+                    omitted={omitted}
+                    streamState={streamState}
+                    selected={selected}
+                    setSelected={(id) => {
+                      setSelected(id);
+                      setView("Model");
+                    }}
+                    doAction={doAction}
+                    onRunUpdated={runUpdated}
+                    onRun={checkPreflight}
+                    rerunEnabled={Boolean(
+                      capabilities.supportedOperations?.includes("rerun"),
                     )}
-                  </button>
-                ))}
-                <span className="tab-fill" />
-                <button className="source-toggle" onClick={() => openSource()}>
-                  <Icon name="code" size={17} />
-                  XDL source
-                </button>
-              </div>
-              <div className="workspace-context">
-                <span>
-                  <span className="tiny-dot" />
-                  Draft revision{" "}
-                  <code>{String(project.revision).slice(0, 8)}</code>
-                </span>
-                <span>
-                  {projection.elements.length} elements ·{" "}
-                  {projection.connections.length} connections
-                </span>
-                <span className="context-spacer" />
-                <span>
-                  {run ? (
-                    <>
-                      Run snapshot <code>{run.snapshotId.slice(0, 12)}</code>{" "}
-                      <Badge tone={statusTone(runStatus)}>{runStatus}</Badge>{" "}
-                      <RunDivergenceBadge
-                        divergence={divergence}
-                        state={snapshotState}
-                        open={divergenceOpen}
-                        onToggle={() => setDivergenceOpen((open) => !open)}
-                        onRetry={retrySnapshot}
-                      />
-                    </>
-                  ) : (
-                    <>
-                      Execution scope <Badge>Owned reference</Badge>
-                    </>
-                  )}
-                </span>
-              </div>
-              {divergenceOpen && divergence && (
-                <RunDivergencePanel
-                  divergence={divergence}
-                  onSelectElement={(ref) => {
-                    setSelected(ref);
-                    setView("Model");
-                  }}
-                  onOpenDocument={(path) => {
-                    const documentId = Object.entries(project.documents).find(
-                      ([, d]: [string, any]) => d.path === path,
-                    )?.[0];
-                    if (documentId) openSource({ documentId });
-                  }}
-                  onFrozenInputs={() => setFrozenOpen(true)}
-                />
-              )}
-              {frozenOpen && runSnapshot && (
-                <FrozenInputs
-                  snapshot={runSnapshot}
-                  onClose={() => setFrozenOpen(false)}
-                />
-              )}
-              {view === "Model" ? (
-                <ModelView
-                  runChanges={divergence?.byElement}
-                  project={project}
-                  projection={projection}
-                  parameters={parameters}
-                  selected={selected}
-                  setSelected={setSelected}
-                  edit={(edits) =>
-                    doAction("Saving semantic edit", () => edit(edits))
-                  }
-                  saveLayout={(layout) =>
-                    doAction("Saving layout", async () => {
-                      await api(`/projects/${project.projectId}/layout`, {
-                        method: "PUT",
-                        revision:
-                          project.presentationRevision || project.revision,
-                        body: { positions: layout.positions },
-                      });
-                      await refreshProject();
-                      setNotice("Layout saved separately from executable XDL.");
-                    })
-                  }
-                  onSource={openSource}
-                  onCatalog={() => {
-                    setAddTemplate("");
-                    setModal("add");
-                  }}
-                />
-              ) : view === "Connections" ? (
-                <ConnectionsView
-                  projection={projection}
-                  projectId={project.projectId}
-                  revision={project.revision}
-                  onOpenView={(next) => setView(next as typeof view)}
-                  runId={
-                    run?.projectId === project.projectId ? run.runId : undefined
-                  }
-                  runState={
-                    run?.projectId === project.projectId ? run.state : undefined
-                  }
-                  edit={(edits) =>
-                    doAction("Validating connection", () => edit(edits))
-                  }
-                />
-              ) : view === "Deployment" ? (
-                <DeploymentComposer
-                  project={project}
-                  projection={projection}
-                  providers={providers}
-                  providerId={executionProvider}
-                  selection={executionSelection}
-                  onSelection={chooseExecution}
-                  refresh={refreshProject}
-                  doAction={doAction}
-                />
-              ) : view === "Experiments" ? (
-                <ExperimentsView
-                  project={project}
-                  projection={projection}
-                  selection={executionSelection}
-                  edit={edit}
-                  authoringLimits={capabilities.limits?.scenarioAuthoring || {}}
-                  preflight={preflight}
-                  run={run}
-                  doAction={doAction}
-                  refresh={refreshProject}
-                  onSource={openSource}
-                />
-              ) : (
-                <ResultsView
-                  run={run}
-                  events={events}
-                  omitted={omitted}
-                  streamState={streamState}
-                  selected={selected}
-                  setSelected={(id) => {
-                    setSelected(id);
-                    setView("Model");
-                  }}
-                  doAction={doAction}
-                  onRunUpdated={runUpdated}
-                  onRun={checkPreflight}
-                  rerunEnabled={Boolean(
-                    capabilities.supportedOperations?.includes("rerun"),
-                  )}
-                  onSelectRun={(created) => {
-                    if (created.projectId)
-                      localStorage.setItem(
-                        "studio.lastRun." + created.projectId,
-                        created.runId,
-                      );
-                    if (created.projectId === selectedProjectRef.current) {
-                      setRun(created);
-                      lastRun.current = created.runId;
-                      localStorage.setItem("studio.lastRun", created.runId);
-                      setView("Results");
-                    }
-                  }}
-                />
-              )}
-              <footer className="workspace-footer">
-                <span>
-                  <Icon name="folder" size={13} />
-                  Local project ·{" "}
-                  {project.sourceIntegrity === "modified"
-                    ? "External source changes"
-                    : "Saved on backend"}
-                </span>
-                <span>Authoritative XDL · Layout stored separately</span>
-                <span>
-                  {
-                    providers.filter(
-                      (p) => p.available || p.availability === "available",
-                    ).length
-                  }{" "}
-                  provider(s) available
-                </span>
-              </footer>
-            </>
-          )}
-        </main>
-      </div>
-      {modal === "evidence-import" && evidenceImport && (
-        <Modal
-          title="Imported evidence inspection"
-          wide
-          onClose={() => setModal("")}
-        >
-          <p>
-            This is recorded evidence inspection. Import creates no run and
-            grants no execution authority.
-          </p>
-          <KeyValues
-            values={{
-              Bundle: evidenceImport.bundleId,
-              Integrity: evidenceImport.inspection?.integrity,
-              "Source run": evidenceImport.inspection?.sourceRunId,
-              "Source snapshot": evidenceImport.inspection?.sourceSnapshotId,
-              Availability: evidenceImport.inspection?.availability,
-              "Execution allowed": "No",
-            }}
-          />
-          <Json value={evidenceImport} expanded />
-        </Modal>
-      )}
-      {modal === "new" && (
-        <Modal title="Create a System workspace" onClose={() => setModal("")}>
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              void doAction("Creating project", () => createProject());
-            }}
+                    onSelectRun={(created) => {
+                      if (created.projectId)
+                        localStorage.setItem(
+                          "studio.lastRun." + created.projectId,
+                          created.runId,
+                        );
+                      if (created.projectId === selectedProjectRef.current) {
+                        setRun(created);
+                        lastRun.current = created.runId;
+                        localStorage.setItem("studio.lastRun", created.runId);
+                        setView("Results");
+                      }
+                    }}
+                  />
+                )}
+                <footer className="workspace-footer">
+                  <span>
+                    <Icon name="folder" size={13} />
+                    Local project ·{" "}
+                    {project.sourceIntegrity === "modified"
+                      ? "External source changes"
+                      : "Saved on backend"}
+                  </span>
+                  <span>Authoritative XDL · Layout stored separately</span>
+                  <span>
+                    {
+                      providers.filter(
+                        (p) => p.available || p.availability === "available",
+                      ).length
+                    }{" "}
+                    provider(s) available
+                  </span>
+                </footer>
+              </>
+            )}
+          </main>
+        </div>
+        {modal === "evidence-import" && evidenceImport && (
+          <Modal
+            title="Imported evidence inspection"
+            wide
+            onClose={() => setModal("")}
           >
             <p>
-              Begin with the owned reference blueprint. You can inspect and edit
-              its XDL before execution.
+              This is recorded evidence inspection. Import creates no run and
+              grants no execution authority.
             </p>
-            <label>
-              Project name
-              <input
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                maxLength={120}
-                placeholder="My System"
-              />
-            </label>
-            <div className="form-actions">
-              <button
-                type="button"
-                className="button"
-                onClick={() => setModal("")}
-              >
-                Cancel
-              </button>
-              <button className="button primary" disabled={!!busy}>
-                Create project
-              </button>
-            </div>
-          </form>
-        </Modal>
-      )}
-      {retentionTarget && (
-        <RetentionDialog
-          target={retentionTarget}
-          onClose={() => setRetentionTarget(null)}
-          restoreFocusSelector={
-            retentionTarget.kind === "project"
-              ? "#recent-projects-heading"
-              : "#catalog-heading"
-          }
-          onChanged={async (result) => {
-            const removed = result.outcomes?.some(
-              (row: Data) =>
-                row.projectId === project?.projectId &&
-                row.status === "removed",
-            );
-            if (removed) {
-              setProject(null);
-              setRun(null);
-              setPreflight(null);
-              selectedProjectRef.current = "";
-              localStorage.removeItem("studio.projectId");
-            }
-            await refreshProjects();
-            setCatalog(items<CatalogEntry>(await api("/catalog")));
-          }}
-        />
-      )}
-      {modal === "inspection" && project && (
-        <Modal
-          title="Dependencies and unresolved content"
-          wide
-          onClose={() => setModal("")}
-        >
-          <InspectionDialogBody
-            projectId={project.projectId}
-            revision={project.revision}
-            onOpenSource={(documentId) => {
-              // Close first so focus returns to the header before the source dialog takes it.
-              setModal("");
-              window.setTimeout(() => openSource({ documentId }), 0);
-            }}
-          />
-        </Modal>
-      )}
-      {modal === "source" && project && (
-        <Modal title="Authored XDL source" wide onClose={() => setModal("")}>
-          <SourceEditor
-            key={project.projectId}
-            project={project}
-            target={sourceContext}
-            doAction={doAction}
-            onSaved={async () => {
-              await refreshProject();
-              setNotice("Source revision saved. Validate it before running.");
-            }}
-          />
-        </Modal>
-      )}
-      {modal === "preflight" && preflight && project && (
-        <PreflightReview
-          preflight={preflight}
-          currentRevision={project.revision}
-          providers={providers}
-          onClose={() => {
-            preflightRequestSequence.current++;
-            setModal("");
-          }}
-          onStart={start}
-          projectId={project.projectId}
-          startBlockedReason={
-            startBlocked(project.projectId) ? unresolvedStartReason : undefined
-          }
-          onRecheck={checkPreflight}
-        />
-      )}
-      {modal === "artifact" && (
-        <Modal
-          title="Register an inert artifact reference"
-          onClose={() => setModal("")}
-        >
-          <ArtifactRegistrationForm
-            providers={providers}
-            doAction={doAction}
-            onSaved={async () => {
-              setCatalog(items<CatalogEntry>(await api("/catalog")));
-              setModal("");
-              setNotice(
-                "Artifact metadata registered. No artifact was downloaded or executed.",
-              );
-            }}
-          />
-        </Modal>
-      )}
-      {modal === "add" && (
-        <Modal title="Add an element" onClose={() => setModal("")}>
-          <label>
-            Element family
-            <select
-              aria-label="Element family"
-              value={addKind}
-              onChange={(e) => setAddKind(e.target.value)}
+            <KeyValues
+              values={{
+                Bundle: evidenceImport.bundleId,
+                Integrity: evidenceImport.inspection?.integrity,
+                "Source run": evidenceImport.inspection?.sourceRunId,
+                "Source snapshot": evidenceImport.inspection?.sourceSnapshotId,
+                Availability: evidenceImport.inspection?.availability,
+                "Execution allowed": "No",
+              }}
+            />
+            <Json value={evidenceImport} expanded />
+          </Modal>
+        )}
+        {modal === "new" && (
+          <Modal title="Create a System workspace" onClose={() => setModal("")}>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                void doAction("Creating project", () => createProject());
+              }}
             >
-              <option value="component">Reusable component instance</option>
-              <option value="logical">Device, Sensor, Actuator or Model</option>
-            </select>
-          </label>
-          {addKind === "logical" ? (
-            <LogicalAssetForm
-              projection={projection}
-              onSave={async (edits) => {
-                await edit(edits);
+              <p>
+                Begin with the owned reference blueprint. You can inspect and
+                edit its XDL before execution.
+              </p>
+              <label>
+                Project name
+                <input
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  maxLength={120}
+                  placeholder="My System"
+                />
+              </label>
+              <div className="form-actions">
+                <button
+                  type="button"
+                  className="button"
+                  onClick={() => setModal("")}
+                >
+                  Cancel
+                </button>
+                <button className="button primary" disabled={!!busy}>
+                  Create project
+                </button>
+              </div>
+            </form>
+          </Modal>
+        )}
+        {retentionTarget && (
+          <RetentionDialog
+            target={retentionTarget}
+            onClose={() => setRetentionTarget(null)}
+            restoreFocusSelector={
+              retentionTarget.kind === "project"
+                ? "#recent-projects-heading"
+                : "#catalog-heading"
+            }
+            onChanged={async (result) => {
+              const removed = result.outcomes?.some(
+                (row: Data) =>
+                  row.projectId === project?.projectId &&
+                  row.status === "removed",
+              );
+              if (removed) {
+                setProject(null);
+                setRun(null);
+                setPreflight(null);
+                selectedProjectRef.current = "";
+                localStorage.removeItem("studio.projectId");
+              }
+              await refreshProjects();
+              setCatalog(items<CatalogEntry>(await api("/catalog")));
+            }}
+          />
+        )}
+        {modal === "inspection" && project && (
+          <Modal
+            title="Dependencies and unresolved content"
+            wide
+            onClose={() => setModal("")}
+          >
+            <InspectionDialogBody
+              projectId={project.projectId}
+              revision={project.revision}
+              onOpenSource={(documentId) => {
+                // Close first so focus returns to the header before the source dialog takes it.
                 setModal("");
-                setView("Model");
+                window.setTimeout(() => openSource({ documentId }), 0);
               }}
             />
-          ) : (
-            <InstanceWizard
-              initialTemplate={addTemplate}
-              admittedApiVersions={capabilities.xdl?.apiVersions}
-              catalog={catalog}
-              projection={projection}
-              onSubmit={async (edits) => {
-                await edit(edits);
-                setModal("");
-                setView("Model");
-              }}
+          </Modal>
+        )}
+        {modal === "source" && project && (
+          <Modal title="Authored XDL source" wide onClose={() => setModal("")}>
+            <SourceEditor
+              key={project.projectId}
+              project={project}
+              target={sourceContext}
               doAction={doAction}
+              onSaved={async () => {
+                await refreshProject();
+                setNotice("Source revision saved. Validate it before running.");
+              }}
             />
-          )}
-        </Modal>
-      )}
-    </div>
+          </Modal>
+        )}
+        {modal === "preflight" && preflight && project && (
+          <PreflightReview
+            preflight={preflight}
+            currentRevision={project.revision}
+            providers={providers}
+            onClose={() => {
+              preflightRequestSequence.current++;
+              setModal("");
+            }}
+            onStart={start}
+            projectId={project.projectId}
+            startBlockedReason={
+              startBlocked(project.projectId)
+                ? unresolvedStartReason
+                : undefined
+            }
+            onRecheck={checkPreflight}
+          />
+        )}
+        {modal === "artifact" && (
+          <Modal
+            title="Register an inert artifact reference"
+            onClose={() => setModal("")}
+          >
+            <ArtifactRegistrationForm
+              providers={providers}
+              doAction={doAction}
+              onSaved={async () => {
+                setCatalog(items<CatalogEntry>(await api("/catalog")));
+                setModal("");
+                setNotice(
+                  "Artifact metadata registered. No artifact was downloaded or executed.",
+                );
+              }}
+            />
+          </Modal>
+        )}
+        {modal === "add" && (
+          <Modal
+            title={`Add ${presentation.labels?.Element || "element"}`}
+            onClose={() => setModal("")}
+          >
+            <label>
+              Element family
+              <select
+                aria-label="Element family"
+                value={addKind}
+                onChange={(e) => setAddKind(e.target.value)}
+              >
+                <option value="component">Reusable component instance</option>
+                <option value="logical">
+                  Device, Sensor, Actuator or Model
+                </option>
+              </select>
+            </label>
+            {addKind === "logical" ? (
+              <LogicalAssetForm
+                projection={projection}
+                onSave={async (edits) => {
+                  await edit(edits);
+                  setModal("");
+                  setView("Model");
+                }}
+              />
+            ) : (
+              <InstanceWizard
+                initialTemplate={addTemplate}
+                admittedApiVersions={capabilities.xdl?.apiVersions}
+                catalog={catalog}
+                projection={projection}
+                onSubmit={async (edits) => {
+                  await edit(edits);
+                  setModal("");
+                  setView("Model");
+                }}
+                doAction={doAction}
+              />
+            )}
+          </Modal>
+        )}
+      </div>
+    </PresentationContext.Provider>
   );
 }
 function InspectionDialogBody({

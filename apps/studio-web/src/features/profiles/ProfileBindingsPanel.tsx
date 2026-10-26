@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { PresentationPreview } from "./presentation";
 import type { ProfileBindings } from "../../../../../packages/contracts/api";
 import type { Data, Project } from "../../api/types";
 import { api, items } from "../../api/client";
@@ -76,6 +77,7 @@ export function ProfileBindingsPanel({
               </label>
               <Badge>{profile.maturity}</Badge>
               <p>{profile.presentation?.description}</p>
+              <PresentationPreview presentation={profile.presentation} />
               <KeyValues
                 values={{
                   Namespace: profile.namespace,

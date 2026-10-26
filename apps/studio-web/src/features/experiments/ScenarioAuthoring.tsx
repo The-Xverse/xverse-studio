@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTerm } from "../profiles/presentation";
 import type { Data } from "../../api/types";
 import type { Projection } from "../model/projection";
 import type { SourceTarget } from "../model/Views";
@@ -52,6 +53,7 @@ export function ScenarioAuthoring({
   edit: (edits: Data[]) => Promise<unknown>;
   onSource: (target?: SourceTarget) => void;
 }) {
+  const term = useTerm();
   const [selection, setSelection] = useState<{
       kind: ItemKind;
       item?: Data;
@@ -98,7 +100,7 @@ export function ScenarioAuthoring({
     >
       <div className="section-heading">
         <div>
-          <h3>Author scenario intent</h3>
+          <h3>Author {term("Scenario").toLowerCase()} intent</h3>
           <p>
             Edits create a validated draft revision. Existing run inputs stay
             frozen.

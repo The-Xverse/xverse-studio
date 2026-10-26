@@ -232,5 +232,8 @@ def examples() -> list[dict]:
                        "expectedObservations": ["Normalized state, target, simulation time and reference fault markers."]
                        + (["The same state converted by the declared linear converter (scale·x + offset) in percent."] if feedback else []),
                        "profileRefs": [{"namespace": PROFILE_NAMESPACE, "version": "0.1.0"}, {"namespace": EVALUATION_NAMESPACE, "version": "1.0.0"}]
-                       + ([{"namespace": CONNECTIONS_NAMESPACE, "version": "1.0.0"}] if feedback else [])})
+                       + ([{"namespace": CONNECTIONS_NAMESPACE, "version": "1.0.0"}] if feedback else [])
+                       # Owned presentation-only domain terminology (T062); it never changes semantics.
+                       + [{"namespace": "io.xverse.studio.domain.automotive" if identifier == "reference-automotive"
+                           else "io.xverse.studio.domain.process-control", "version": "1.0.0"}]})
     return result

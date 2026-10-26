@@ -1,7 +1,7 @@
 import { parseDocument, isMap, isSeq } from "yaml";
 import { LogicalAssetForm } from "./LogicalAssetForm";
 import { Modal } from "../../app/ui";
-import { useState, useEffect, useMemo, useRef } from "react";
+import { useContext, useState, useEffect, useMemo, useRef } from "react";
 import {
   ReactFlow,
   Background,
@@ -29,6 +29,7 @@ import {
 } from "../connections/ConnectionAdmission";
 import { FlowContractForm, RelationKinds } from "../connections/Relations";
 import { CommunicationProjections } from "../connections/projections";
+import { PresentationContext, useTerm } from "../profiles/presentation";
 import {
   DefinitionInspector,
   ModelBreadcrumb,
@@ -176,6 +177,7 @@ export function ModelView({
   onSource: (target?: SourceTarget) => void;
   onCatalog: () => void;
 }) {
+  const term = useTerm();
   const [search, setSearch] = useState(""),
     [structured, setStructured] = useState(false),
     [inspectorTab, setInspectorTab] = useState("Properties"),
@@ -376,7 +378,7 @@ export function ModelView({
     <div className="model-workspace">
       <aside className="model-tree" aria-label="Structured model navigation">
         <div className="pane-title">
-          <h2>System explorer</h2>
+          <h2>{term("System")} explorer</h2>
           <button
             className="icon-button"
             aria-label="View XDL source"
@@ -849,6 +851,7 @@ function ParameterForm({
   onSave: (id: string, value: unknown) => Promise<void>;
 }) {
   const [draft, setDraft] = useState<Record<string, string>>({});
+  const presentation = useContext(PresentationContext);
   useEffect(
     () =>
       setDraft(
@@ -865,61 +868,91 @@ function ParameterForm({
         source.
       </p>
     );
+  // Domain form groups only arrange the same parameters; ungrouped ones stay listed.
+  const groups: { id: string; label: string; items: Parameter[] }[] = [];
+  const placed = new Set<string>();
+  for (const group of presentation.formGroups || []) {
+    const items = parameters.filter(
+      (p) => group.parameters.includes(p.id) && !placed.has(p.id),
+    );
+    items.forEach((p) => placed.add(p.id));
+    if (items.length) groups.push({ id: group.id, label: group.label, items });
+  }
+  const rest = parameters.filter((p) => !placed.has(p.id));
+  if (rest.length)
+    groups.push({
+      id: "__ungrouped",
+      label: groups.length ? "Other parameters" : "",
+      items: rest,
+    });
   return (
     <div className="parameter-form">
-      {parameters.map((p) => (
-        <form
-          key={p.id}
-          onSubmit={async (e) => {
-            e.preventDefault();
-            await onSave(
-              p.id,
-              (p.valueType || p.type) === "number"
-                ? Number(draft[p.id])
-                : draft[p.id],
-            );
-          }}
-        >
-          <label>
-            {p.label || p.id}
-            <span className="unit-label">{p.unit || "unit not declared"}</span>
-            {p.enum ? (
-              <select
-                value={draft[p.id] || ""}
-                onChange={(e) => setDraft({ ...draft, [p.id]: e.target.value })}
-              >
-                {p.enum.map((value) => (
-                  <option key={value}>{value}</option>
-                ))}
-              </select>
-            ) : (
-              <input
-                type={(p.valueType || p.type) === "number" ? "number" : "text"}
-                step="any"
-                min={p.minimum}
-                max={p.maximum}
-                value={draft[p.id] ?? ""}
-                onChange={(e) => setDraft({ ...draft, [p.id]: e.target.value })}
-                required
-              />
-            )}
-          </label>
-          <p className="field-hint">
-            {p.description || "Value from authored Scenario configuration."}
-          </p>
-          <div className="parameter-source">
-            <span>
-              {p.source || "Scenario XDL"}
-              {p.default !== undefined ? ` · default ${p.default}` : ""}
-            </span>
-            <button
-              className="small-button"
-              disabled={draft[p.id] === String(p.value ?? p.default ?? "")}
+      {groups.map((group) => (
+        <fieldset className="parameter-group" key={group.id}>
+          {group.label && <legend>{group.label}</legend>}
+          {group.items.map((p) => (
+            <form
+              key={p.id}
+              onSubmit={async (e) => {
+                e.preventDefault();
+                await onSave(
+                  p.id,
+                  (p.valueType || p.type) === "number"
+                    ? Number(draft[p.id])
+                    : draft[p.id],
+                );
+              }}
             >
-              Apply
-            </button>
-          </div>
-        </form>
+              <label>
+                {p.label || p.id}
+                <span className="unit-label">
+                  {p.unit || "unit not declared"}
+                </span>
+                {p.enum ? (
+                  <select
+                    value={draft[p.id] || ""}
+                    onChange={(e) =>
+                      setDraft({ ...draft, [p.id]: e.target.value })
+                    }
+                  >
+                    {p.enum.map((value) => (
+                      <option key={value}>{value}</option>
+                    ))}
+                  </select>
+                ) : (
+                  <input
+                    type={
+                      (p.valueType || p.type) === "number" ? "number" : "text"
+                    }
+                    step="any"
+                    min={p.minimum}
+                    max={p.maximum}
+                    value={draft[p.id] ?? ""}
+                    onChange={(e) =>
+                      setDraft({ ...draft, [p.id]: e.target.value })
+                    }
+                    required
+                  />
+                )}
+              </label>
+              <p className="field-hint">
+                {p.description || "Value from authored Scenario configuration."}
+              </p>
+              <div className="parameter-source">
+                <span>
+                  {p.source || "Scenario XDL"}
+                  {p.default !== undefined ? ` · default ${p.default}` : ""}
+                </span>
+                <button
+                  className="small-button"
+                  disabled={draft[p.id] === String(p.value ?? p.default ?? "")}
+                >
+                  Apply
+                </button>
+              </div>
+            </form>
+          ))}
+        </fieldset>
       ))}
     </div>
   );
@@ -947,6 +980,7 @@ export function ConnectionsView({
   const system = projection.resources.find((r) => r.kind === "System"),
     endpoints: Data[] = system?.spec?.endpoints || [],
     interfaces: Data[] = system?.spec?.interfaces || [];
+  const term = useTerm();
   const { report, failure } = useConnectionAdmission(projectId, revision),
     guidance = targetGuidance(endpoints, interfaces, source),
     chosen = guidance.find((g) => g.endpoint.id === target);
@@ -956,7 +990,8 @@ export function ConnectionsView({
         <div>
           <h2>Connections</h2>
           <p>
-            Inspect declared data flows and their explicit endpoint contracts.
+            Inspect declared {term("Flow").toLowerCase()} flows and their
+            explicit endpoint contracts.
           </p>
         </div>
         <Badge>Communication projection</Badge>

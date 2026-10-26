@@ -10,6 +10,8 @@ from ruamel.yaml import YAML
 
 from xverse_studio.storage.core import Problem, canonical, digest, uid
 from xverse_studio.security.files import safe_name
+
+from .presentation import DOMAIN_PROFILES, DOMAIN_SCHEMA_ID, sanitize_presentation
 from xverse_studio.xdl.examples import (API_VERSION, CONNECTIONS_NAMESPACE, CONNECTIONS_SCHEMA_ID, EVALUATION_NAMESPACE,
                                         EVALUATION_SCHEMA_ID, PROFILE_NAMESPACE, dump_yaml)
 
@@ -28,16 +30,28 @@ class ProfileRegistry:
             (CONNECTIONS_NAMESPACE, "1.0.0", "Owned connection contracts", str(Path(__file__).parent.parent / "connections" / "connections-v1.schema.json"),
              CONNECTIONS_SCHEMA_ID, "urn:xverse:studio:connections:1.0"),
         ]
+        names = {PROFILE_NAMESPACE: "experiment-lite", EVALUATION_NAMESPACE: "studio-experiments", CONNECTIONS_NAMESPACE: "studio-connections"}
+        domain_schema = str(Path(__file__).parent / "domain-presentation-v1.schema.json")
+        domains = {item["namespace"]: item for item in DOMAIN_PROFILES}
+        sources += [(item["namespace"], item["version"], item["presentation"]["name"], domain_schema, DOMAIN_SCHEMA_ID,
+                     item["presentation"]["documentation"]) for item in DOMAIN_PROFILES]
         for namespace, version, title, path, schema_ref, documentation in sources:
             raw = Path(path).read_bytes()
-            presentation = {"name": title, "description": "Packaged declarative profile; provider execution is admitted independently.",
-                            "labels": {"System": "System", "Element": "Element"}, "formGroups": [], "documentation": documentation}
+            domain = domains.get(namespace)
+            presentation = (sanitize_presentation(domain["presentation"]) if domain else
+                            {"name": title, "description": "Packaged declarative profile; provider execution is admitted independently.",
+                             "labels": {"System": "System", "Element": "Element"}, "formGroups": [], "documentation": documentation})
             result.append({"profileId": namespace, "namespace": namespace, "version": version, "schemaRef": schema_ref,
+                           "resourceName": domain["resourceName"] if domain else names[namespace],
+                           **({"kind": "domain-presentation"} if domain else {}),
                            "schemaDigest": digest(raw), "presentationDigest": digest(canonical(presentation).encode()),
                            "presentation": presentation, "schema": json.loads(raw), "schemaText": raw.decode(),
                            "documentationRef": documentation, "compatibleApiVersions": [API_VERSION], "conflictPolicy": "reject",
-                           "maturity": "admitted_integration", "scope": "offline_schema_and_derived_assessment",
-                           "executionAllowed": False, "limitations": ["Profile selection cannot install a provider or grant simulator/device authority."]})
+                           "maturity": "fixture" if domain else "admitted_integration",
+                           "scope": "owned_presentation_only" if domain else "offline_schema_and_derived_assessment",
+                           "executionAllowed": False,
+                           "limitations": ["Profile selection cannot install a provider or grant simulator/device authority."]
+                           + (["Owned presentation only: terminology, icons and form groups for the owned reference blueprints; no domain fidelity."] if domain else [])})
         return result
 
     def list(self):
@@ -210,7 +224,7 @@ class ProfileRegistry:
                                 or current["spec"].get("conflictPolicy") != "reject" or API_VERSION not in (current["spec"].get("compatibleApiVersions") or [])):
                     raise Problem("PROFILE_CONFLICT", "The authored profile resource conflicts with the selected admitted semantics; source is preserved.")
                 if not current:
-                    name = "experiment-lite" if entry["namespace"] == PROFILE_NAMESPACE else "studio-experiments"
+                    name = entry["resourceName"]
                     resource = {"apiVersion": API_VERSION, "kind": "Profile", "metadata": {"namespace": "org.xverse.studio", "name": name, "version": entry["version"],
                                 "provenance": {"source": "urn:xverse:studio:profile-registry", "revision": entry["version"], "maturity": "prototype"}},
                                 "spec": {"extensionNamespace": entry["namespace"], "compatibleApiVersions": [API_VERSION], "schemaRef": entry["schemaRef"],

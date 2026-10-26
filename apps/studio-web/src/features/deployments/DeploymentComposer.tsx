@@ -9,6 +9,7 @@ import type { DoAction } from "../../app/App";
 import type { Projection } from "../model/projection";
 import { DeploymentView } from "../model/Views";
 import { Icon, Badge, Diagnostics, Empty, KeyValues } from "../../app/ui";
+import { useTerm } from "../profiles/presentation";
 import {
   ResolutionPanel,
   VariantComparison,
@@ -37,6 +38,7 @@ export function DeploymentComposer({
   refresh: () => Promise<unknown>;
   doAction: DoAction;
 }) {
+  const term = useTerm();
   const [variants, setVariants] = useState<Data[]>([]),
     [name, setName] = useState(""),
     [diagnostics, setDiagnostics] = useState<Data[]>([]),
@@ -158,7 +160,7 @@ export function DeploymentComposer({
     <div className="view-page deployment-composer">
       <div className="section-heading">
         <div>
-          <h2>Deployment variants</h2>
+          <h2>{term("Deployment")} variants</h2>
           <p>
             Select an authored Deployment and its associated Scenario. Logical
             System identities remain stable.

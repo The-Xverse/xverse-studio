@@ -418,6 +418,18 @@ def create_app(
             "revision": p["revision"],
         }
 
+    @app.get("/api/v1/projects/{projectId}/presentation")
+    def presentation(projectId: str):
+        # Inert, sanitized domain terminology for the shared workflows; never semantics.
+        from xverse_studio.profiles import ProfileRegistry
+        from xverse_studio.profiles.presentation import effective_presentation
+
+        p = projects.read(projectId)
+        return {
+            **effective_presentation(p, ProfileRegistry(adapter)),
+            "revision": p["revision"],
+        }
+
     @app.get("/api/v1/projects/{projectId}/communication")
     def communication(
         projectId: str, runId: str | None = Query(None, max_length=128)

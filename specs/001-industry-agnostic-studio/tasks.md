@@ -90,7 +90,7 @@ After M0 owned contracts pass, guided operation (T015–T033), visual authoring 
 - [x] T059 [US8] Build realization/placement comparison, binding and resource/time forms with visible provenance/fidelity limits and provider-supported controls. Paths: `apps/studio-web/src/features/deployments/`. Depends on: T058, T051. (FR-039; FR-040; FR-041; FR-042; FR-016; AC-018)
 - [x] T060 [P] [US9] Add compatible mixed-profile, namespace collision, core-semantic redefinition, malicious presentation and unsupported-version cases. Paths: `tests/contract/test_profiles.py`, `tests/fixtures/profiles/`. Depends on: T014. (FR-043; FR-044; FR-045; FR-047; NFR-001; NFR-009; AC-019)
 - [x] T061 [US9] Implement profile admission and composition independently from provider execution and blueprint composition; retain exact namespace/version/maturity/limitation metadata. Expose admitted profile discovery through the versioned API; OS compatibility comes from provider bindings rather than from the industry name. Paths: `services/studio-api/src/xverse_studio/profiles/`. Depends on: T060, T050. (FR-043; FR-044; FR-047; NFR-001; NFR-009; AC-019)
-- [ ] T062 [US9] Render sanitized profile-provided terminology/forms/icons/documentation through shared workflows and allow compatible cross-industry selections. Paths: `apps/studio-web/src/features/profiles/`. Depends on: T061, T051, T059. (FR-045; NFR-004; AC-019)
+- [x] T062 [US9] Render sanitized profile-provided terminology/forms/icons/documentation through shared workflows and allow compatible cross-industry selections. Paths: `apps/studio-web/src/features/profiles/`. Depends on: T061, T051, T059. (FR-045; NFR-004; AC-019)
 - [ ] T063 [US9] Run profile conflict/security/architecture checks and inspect dependency direction; reject domain conditionals or executable presentation hooks in core modules. Paths: `evidence/studio/M2-profiles/`. Depends on: T062, T013. (FR-043; FR-044; FR-045; FR-047; NFR-001; NFR-009; AC-019)
 - [ ] T064 [US9] Nominate exact automotive and independent process-control blueprint/provider artifacts; prepare a minimal reference process model and contract fixtures, and record any missing companion capability as external work before real admission. Paths: `docs/implementation/blueprint-admission.md`, `tests/fixtures/blueprints/process-control/`. Depends on: T001, T004, T061. (FR-046; FR-047; NFR-001; AC-020)
 - [ ] T065 [US9] Integrate the admitted example bundles and their declared observations/fidelity into the catalog; fixtures may demonstrate only their explicit scope and cannot masquerade as unavailable live providers. Paths: `tests/fixtures/blueprints/automotive/`, `tests/fixtures/blueprints/process-control/`, `apps/studio-web/src/features/projects/examples.ts`. Depends on: T064, T059, T062. (FR-046; FR-047; AC-020)
@@ -279,6 +279,7 @@ Later completions (2026-10-26):
 - **T055:** flow-contract form and relations by kind (`evidence/studio/M2-relations/`).
 - **T056:** declared, resolved and observed communication projections
   (`evidence/studio/M2-communication/`).
+- **T062:** owned inert domain presentation (ADR-0017; `evidence/studio/M2-profile-presentation/`).
 
 The current count is in `traceability.json`.
 

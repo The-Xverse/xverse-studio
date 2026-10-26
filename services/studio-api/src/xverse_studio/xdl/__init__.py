@@ -56,7 +56,8 @@ class XDLAdapter:
         packaged = files("xverse_xdl").joinpath("profiles", "experiment-lite-v0.1.schema.json")
         evaluation = Path(__file__).parent.parent / "assertions" / "evaluation-v1.schema.json"
         connections = Path(__file__).parent.parent / "connections" / "connections-v1.schema.json"
-        self.profile_schema_paths = (str(packaged), str(evaluation), str(connections), *tuple(str(p) for p in profile_schema_paths))
+        domain = Path(__file__).parent.parent / "profiles" / "domain-presentation-v1.schema.json"
+        self.profile_schema_paths = (str(packaged), str(evaluation), str(connections), str(domain), *tuple(str(p) for p in profile_schema_paths))
         self._validation_cache = OrderedDict()
         self._validation_cache_lock = threading.RLock()
         self._cache_result_bytes = self._cache_source_bytes = 0
@@ -323,6 +324,21 @@ def reference_configuration(documents: dict[str, str], compiled: dict | None = N
             raise XDLRejected("The assessment profile identity is incompatible.", "PROFILE_UNRESOLVED")
         return True
 
+    def presentation_profile(resource: dict) -> bool:
+        # Owned presentation-only domain profiles (T062) are inert terminology, pinned to their identity.
+        from xverse_studio.profiles.presentation import DOMAIN_PROFILES, DOMAIN_SCHEMA_ID
+
+        domains = {item["namespace"]: item for item in DOMAIN_PROFILES}
+        namespace = resource.get("spec", {}).get("extensionNamespace") if resource.get("kind") == "Profile" else None
+        if namespace not in domains:
+            return False
+        expected_spec = {"extensionNamespace": namespace, "compatibleApiVersions": [API_VERSION], "schemaRef": DOMAIN_SCHEMA_ID,
+                         "documentationRef": domains[namespace]["presentation"]["documentation"], "conflictPolicy": "reject"}
+        if resource.get("metadata", {}).get("version") != "1.0.0" or resource.get("spec") != expected_spec:
+            raise XDLRejected("The domain presentation profile identity is incompatible.", "PROFILE_UNRESOLVED")
+        return True
+
+    authored = [r for r in authored if not presentation_profile(r)]
     assessment_profiles = [r for r in authored if assessment_profile(r)]
     for resource in authored:
         payload = resource.get("extensions", {}).get(EVALUATION_NAMESPACE)
