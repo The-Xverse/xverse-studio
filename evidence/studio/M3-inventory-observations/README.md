@@ -116,3 +116,5 @@ Backend 851 results are inherited through 163 exact unchanged backend/Python/con
 compatibility inputs plus the reviewed unchanged-command CI scheduling control, not a
 new local backend run. Predecessor/current CI remain separate outcomes with their own
 actual receipts; no live or cross-platform acceptance follows from this dossier.
+
+Clean candidate `443b895018b23841f7d063b4a4b9def2596dffad` passed offline native Linux package provisioning from the prepared cache, startup/UI, Unicode persistence, public compilation and owned shutdown. All 100 manifest/archive/file hashes and six tested UI assets are verified; candidate-binding.json checks 266 committed source/fixed inputs plus six compiled assets. Native Windows remains held.
