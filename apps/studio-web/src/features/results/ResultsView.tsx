@@ -219,7 +219,33 @@ export function ResultsView({
             onSelectRun(created);
           return;
         }
-        if (["failed", "rejected", "unknown"].includes(operation.status))
+        if (operation.status === "rejected") {
+          if (
+            operation.evidenceScope !== "owned_reference" ||
+            operation.runId != null ||
+            operation.result != null ||
+            !id(operation.error?.code) ||
+            typeof operation.error?.message !== "string" ||
+            !operation.error.message.length ||
+            operation.error.retryable !== false
+          )
+            throw new Error(
+              "The rejected rerun receipt cannot confirm that no child was admitted. Retry retains the same request key.",
+            );
+          // A verified rejection settled this request before child admission.
+          // Only another explicit click can request fresh admission; uncertain
+          // outcomes still retain their original operation identity below.
+          const retainedKey = localStorage.getItem(keyName);
+          if (retainedKey === key) localStorage.removeItem(keyName);
+          throw new Error(
+            `${operation.error.code}: ${operation.error.message.slice(0, 1000)} This attempt was rejected. ${
+              retainedKey && retainedKey !== key
+                ? "A newer request is retained. Rerun frozen inputs will check that request."
+                : "Select Rerun frozen inputs for a new admission attempt."
+            }`,
+          );
+        }
+        if (["failed", "unknown"].includes(operation.status))
           throw new Error(
             `${operation.error?.code || "RERUN_NOT_ACKNOWLEDGED"}: ${operation.error?.message || "The new run could not be acknowledged."} Retrying retains the same operation identity.`,
           );

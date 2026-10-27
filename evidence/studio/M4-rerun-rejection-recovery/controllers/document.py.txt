@@ -1,0 +1,122 @@
+from pathlib import Path
+from collections import Counter
+import json
+root=Path.cwd().resolve();out=root/'evidence/studio/M4-rerun-rejection-recovery'
+v=json.loads((out/'verification.json').read_text());assert v['targeted']['expected']==69 and v['performance']['expected']==2 and v['allCurrentStageInputsIdentical'] and v['frozenInputs']==294
+(out/'README.md').write_text('''# Recover after a verified rerun rejection
+
+Two native browser cases filled the four-run owned-reference capacity, received
+RESOURCE_BUSY, stopped all four through accepted owned commands and explicitly
+requested another rerun. The browser kept returning the original rejected operation
+with the same key. It could not obtain fresh admission after capacity became free.
+Original protected snapshots and journals stayed intact. The original red remains
+retained; this was a recovery defect, not an admission or ownership failure.
+
+The browser now settles only a verified terminal rejection: the existing operation,
+source run, parent/new snapshot identities must match; scope must be owned-reference;
+there must be no child run/result; and the structured rejection error must declare
+the original operation non-retryable. Only that request's own stored key is cleared.
+A later explicit Rerun frozen inputs action can request fresh backend admission.
+Reading rejection never starts a workload or rewrites the rejected operation.
+
+A different stored key survives an older rejection, and the message explains that
+the next action checks the retained request. Failed, unknown, incomplete,
+contradictory or foreign-scope replies retain their key. Lost acknowledgements also
+keep their key. A valid retry identifies the existing child without duplication.
+The fifteen-second acknowledgement budget and backend authority remain unchanged.
+
+Fresh main verification passes 69 affected native browser checks and two separate
+performance checks. All 294 source/test/config/lock/ADR/guide/compiled inputs match
+within and across both stages. The 69 consist of 18 new rejection cases, 31 existing
+snapshot-inspection cases, 16 prior rerun cases and four annotation/evidence/shared
+Model-inspector/whole-Studio workflows. The previous 18 comparison cases belong to
+the earlier candidate; they are not claimed as freshly executed in this cohort.
+Typecheck/build, architecture, compatibility and structural spec checks pass.
+
+The 18 new cases also passed separately before promotion. Six use actual native
+capacity refusal/release, normal/reopened views and real requests from a second
+browser tab at both required widths. A settled old receipt preserves the second
+tab's newer key; inspecting its refusal settles that request before fresh admission.
+Fresh admission requires another explicit click and yields exactly one child with
+the original 0.2-second inputs despite a newer 30-second draft. Canonical original
+bytes stay unchanged. The separate first two-case successor also remains retained.
+
+Twelve labelled transport cases follow one actual owned child and substitute
+failed/unknown or rejected receipts with a child, absent error, retryable flag or
+foreign scope. Repeated requests retain the same key and exactly one child. Removing
+the fixture lets a valid retry select that existing child. These fixtures neither
+rewrite protected files nor establish actual provider failures or physical admission.
+
+Backend/runtime/Python-test sources are unchanged. The local 932 backend result is
+inherited through 217 unchanged of 218 selected inputs and an ADR-only amendment.
+The completed 7dd8 Ubuntu24 push/PR jobs also passed 932 backend tests, full 413 browser
+checks and package smoke. Current full 462 is collected, NOT_RUN locally. This 69
+is not a full 462 pass. The previous b38/4c inspection successor's 69 had a different
+explicitly retained cohort, plus separate performance and clean package evidence.
+
+This implementation-agent review is not independent milestone acceptance. Native
+Windows remains held; actual AT/human/novice work, external/physical providers,
+normative SADS and complete task dependencies retain their gates. Counts remain
+47 completed, 43 in progress and 10 blocked; no milestone is accepted.
+Clean committed successor package verification is pending.
+
+Performance retains the existing 200-element/400-flow and 50,000-record workloads,
+one warm-up and 30 repetitions; this does not establish live campaign scalability.
+
+| Viewport | Selection p95 | Open/validation p95 | History p95 |
+| --- | --- | --- | --- |
+''')
+p=out/'README.md';text=p.read_text()
+for size in ['1024x768','1440x900']:
+ m=json.loads((out/f'performance/{size}/model-performance.json').read_text());h=json.loads((out/f'performance/{size}/history-performance.json').read_text())
+ text+=f'| {size} | {m["selectionAndInspector"]["p95"]:.1f} ms | {m["openAndValidationPresentation"]["p95"]:.1f} ms | {h["p95"]:.1f} ms |\n'
+p.write_text(text+'\nSelected candidate digest: `'+v['applicationAndInputDigest']+'`. Environment sourceDigest is tracked-only before commit; the 294-input map includes new files and compiled assets.\n')
+(out/'implementation-review.md').write_text('''# Root implementation review
+
+This is the implementation agent's review, not independent milestone acceptance.
+The complete M0–M4 plan, IDs and authority boundaries remain. Current 69/performance2
+receipts and 294 input maps bind this successor. Prior full413/932 CI is historical;
+current462 collection is not execution. The preceding69 has a different recorded cohort.
+
+Only the rejected-operation branch in ResultsView changes runtime behavior. The
+backend's existing terminal rejection remains immutable. Current Reruns.dispatch
+first checks the durable child mapping after a Problem; an acknowledged child
+settles completed, otherwise its definitive admission refusal settles rejected.
+The UI consumes that existing response contract and does not authorize execution.
+
+Known context/scope, no child/result and a structured non-retryable error are
+required before releasing only the matching stored key. A separate explicit click
+is necessary for fresh admission. A newer tab's key and uncertain outcomes survive.
+No automatic retry/Start, new HTTP field, provider operation, XDL semantics or
+deadline increase is introduced. The existing completed-child validation remains.
+
+The original native red and exact sources precede the separate2/18 successors and
+main promotion. Native capacity/reopen/two-tab cases demonstrate real admission
+refusal and owned Stop, retained newer request identity, exactly one fresh child
+and unchanged original bytes. Labelled transport cases verify conservative handling
+of failed/unknown/contradictory/incomplete/foreign replies after a real child, then
+same-key/no-duplicate acknowledgement. Existing lost-ack/navigation/annotation/
+snapshot/shared-inspector/whole-workflow cases pass unchanged assertions.
+
+Native Windows, actual AT/human, broader provider failure/recovery and full task/
+milestone gates remain open. The model/evidence benchmarks retain their existing
+scope and thresholds. No full task, milestone or release acceptance is claimed.
+''')
+note=(' Rejected rerun recovery successor: actual owned capacity rejection previously trapped later requests on the same terminal operation after capacity release. Verified context/scope/no-child/non-retryable rejection now settles only its own stored key; a later explicit click requests fresh admission. Newer-tab keys and failed/unknown/malformed/contradictory receipts retain their identity. Fresh 69 affected browser checks and performance2 pass with 294 identical inputs:18 new rejection,31 inspection,16 prior rerun and4 shared workflows. Backend932 is inherited via217 unchanged inputs plus ADR-only amendment; prior7dd8 full413 CI is historical and current462 is collected NOT_RUN locally. Original red and separate2/18 successors retained at evidence/studio/M4-rerun-rejection-recovery/. T091/Windows/AT/human/provider/full milestone gates remain open; counts47/43/10 unchanged.')
+p=root/'specs/001-industry-agnostic-studio/traceability.json';trace=json.loads(p.read_text());counts=Counter(t['status'] for t in trace['tasks']);assert counts=={'completed':47,'in_progress':43,'blocked':10}
+for t in trace['tasks']:
+ if t['id'] in ['T038','T067','T091','T095','T096','T097','T098']:
+  assert t['status']=='in_progress';t['implementation_note']+=note
+  for n in ['evidence/studio/M4-rerun-rejection-recovery/verification.json','evidence/studio/M4-rerun-rejection-recovery/implementation-review.md','docs/architecture/ADR-0021-recorded-comparison.md']:
+   if n not in t.setdefault('implementation_evidence',[]):t['implementation_evidence'].append(n)
+record=trace['implementation_record'];record['code_candidate']='Uncommitted terminal-rejection recovery successor; exact294-input map in evidence/studio/M4-rerun-rejection-recovery/application-and-input-hashes.json; clean committed package binding pending'
+record['verification'].update({'playwright_checks_passed':413,'playwright_checks_failed':0,
+ 'playwright_scope':'Prior7dd8 Ubuntu24 push/PR CI passed full413/932/package smoke. Current terminal-rejection successor69 affected and performance2 fresh on294 identical inputs; current462 is collected NOT_RUN locally. This69 has18 rejection+31 inspection+16 prior rerun+4 shared cases. Prior comparison18 is historical. Backend/Python unchanged with217-input plus ADR inheritance.',
+ 'evidence':'evidence/studio/M4-rerun-rejection-recovery/','backend_evidence':'evidence/studio/native-ci/ubuntu-24.04-7dd8e0b-runs.json',
+ 'prior_package_evidence':'evidence/studio/M4-frozen-input-inspection/package/receipt.json (cleanb38a5a6 historical source)',
+ 'backend_inheritance':'evidence/studio/M4-rerun-rejection-recovery/backend-inheritance.json','affected_playwright_checks_passed':69,
+ 'current_full_playwright_collection':462,'current_full_playwright_execution':'NOT_RUN'})
+p.write_text(json.dumps(trace,ensure_ascii=False,indent=2)+'\n')
+p=root/'specs/001-industry-agnostic-studio/tasks.md';p.write_text(p.read_text()+'\n'+note.strip()+'\n')
+p=root/'docs/implementation/STATUS.md';text=p.read_text();marker='Frozen-input inspection successor:';assert marker in text;p.write_text(text.replace(marker,note.strip()+'\n\n'+marker,1))
+print(json.dumps({'counts':dict(counts),'acceptedMilestones':0,'tasksAndTraceUpdatedTogether':True}))

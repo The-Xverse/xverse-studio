@@ -1,0 +1,62 @@
+
+Running 2 tests using 1 worker
+
+(node:672526) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 .studio-local/rejected-rerun-context/probe.spec.ts:8:37 › rejected rerun: actual capacity release permits explicit new admission at 1024 (13.3s)
+(node:674463) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 .studio-local/rejected-rerun-context/probe.spec.ts:8:37 › rejected rerun: actual capacity release permits explicit new admission at 1440 (11.0s)
+
+
+  1) .studio-local/rejected-rerun-context/probe.spec.ts:8:37 › rejected rerun: actual capacity release permits explicit new admission at 1024
+
+    Error: Explicit rerun after verified rejection and real capacity release should receive fresh admission.
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "completed"
+    Received: "rejected"
+
+      39 |   await info.attach('native-rejected-rerun-recovery',{contentType:'application/json',body:JSON.stringify({scope:'Five actual owned runs; four reach running and are stopped through owned commands. No transport injection or canonical mutation.',width,original,originalSnapshotId:originalRun.snapshotId,busyRunIds:busy,first,second,attempts,canonicalOriginalBytesUnchanged:unchanged})});
+      40 |   expect(unchanged).toBe(true);
+    > 41 |   expect(second.status,'Explicit rerun after verified rejection and real capacity release should receive fresh admission.').toBe('completed');
+         |                                                                                                                             ^
+      42 |   expect(second.operationId).not.toBe(first.operationId);expect(attempts[1].key).not.toBe(attempts[0].key);
+      43 |   expect(second.result.runId).not.toBe(original);
+      44 |   await expect.poll(async()=>(await traceApi(page,'/runs/'+second.result.runId)).body.state,{timeout:20000}).toBe('stopped');
+        at <repo>/.studio-local/rejected-rerun-context/probe.spec.ts:41:125
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    .studio-local/rejected-rerun-context/native-red/browser-output/probe-rejected-rerun-actua-d40f4-licit-new-admission-at-1024/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: .studio-local/rejected-rerun-context/native-red/browser-output/probe-rejected-rerun-actua-d40f4-licit-new-admission-at-1024/error-context.md
+
+  2) .studio-local/rejected-rerun-context/probe.spec.ts:8:37 › rejected rerun: actual capacity release permits explicit new admission at 1440
+
+    Error: Explicit rerun after verified rejection and real capacity release should receive fresh admission.
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "completed"
+    Received: "rejected"
+
+      39 |   await info.attach('native-rejected-rerun-recovery',{contentType:'application/json',body:JSON.stringify({scope:'Five actual owned runs; four reach running and are stopped through owned commands. No transport injection or canonical mutation.',width,original,originalSnapshotId:originalRun.snapshotId,busyRunIds:busy,first,second,attempts,canonicalOriginalBytesUnchanged:unchanged})});
+      40 |   expect(unchanged).toBe(true);
+    > 41 |   expect(second.status,'Explicit rerun after verified rejection and real capacity release should receive fresh admission.').toBe('completed');
+         |                                                                                                                             ^
+      42 |   expect(second.operationId).not.toBe(first.operationId);expect(attempts[1].key).not.toBe(attempts[0].key);
+      43 |   expect(second.result.runId).not.toBe(original);
+      44 |   await expect.poll(async()=>(await traceApi(page,'/runs/'+second.result.runId)).body.state,{timeout:20000}).toBe('stopped');
+        at <repo>/.studio-local/rejected-rerun-context/probe.spec.ts:41:125
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    .studio-local/rejected-rerun-context/native-red/browser-output/probe-rejected-rerun-actua-aa5ba-licit-new-admission-at-1440/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: .studio-local/rejected-rerun-context/native-red/browser-output/probe-rejected-rerun-actua-aa5ba-licit-new-admission-at-1440/error-context.md
+
+  2 failed
+    .studio-local/rejected-rerun-context/probe.spec.ts:8:37 › rejected rerun: actual capacity release permits explicit new admission at 1024
+    .studio-local/rejected-rerun-context/probe.spec.ts:8:37 › rejected rerun: actual capacity release permits explicit new admission at 1440

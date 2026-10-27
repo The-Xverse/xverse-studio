@@ -123,3 +123,27 @@ and wait for recorded-history options before keyboard selection in the harness.
 The original red, TypeScript inference error and harness precondition/teardown
 failures stay retained as failures. No backend API, execution authority, XDL,
 provider admission or milestone acceptance changes.
+
+
+Terminal rerun rejection amendment: two native desktop cases filled the four-run
+owned-reference capacity, received RESOURCE_BUSY, stopped all four through owned
+commands and explicitly requested a rerun again. The browser reused the terminal
+rejected operation forever. Protected source snapshots and journals stayed intact.
+A rejected operation remains an immutable refusal; it cannot be retried into success.
+
+After matching the existing rerun operation/source/parent/new-snapshot identity,
+accept rejection as settled only with owned-reference scope, no child run/result,
+and a structured non-retryable rejection error. Release only that request's own
+stored key. A later explicit Rerun frozen inputs action can request fresh backend
+admission with a new key; settling rejection never starts a workload automatically.
+If another tab has stored a newer request, keep it and explain that the next action
+checks that request. No current backend operation or immutable receipt is rewritten.
+
+Failed, unknown, incomplete, contradictory or foreign-scope replies retain the
+original request key, as do lost/uncertain acknowledgements. A subsequent valid
+acknowledgement identifies the existing child without creating a duplicate. The
+current fifteen-second acknowledgement budget and all backend authority/admission
+remain unchanged; no new HTTP fields, provider API or XDL semantics are introduced.
+Verify real capacity release, reopening and two-tab requests at both widths, plus
+labelled receipt faults after an actual owned child and existing lost-ack/context
+regressions. Retain the original red and separate passing native successors.

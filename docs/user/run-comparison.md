@@ -51,3 +51,14 @@ Changing the selected run, view or results tab dismisses the earlier inspection.
 A delayed read preserves newer focus and dialogs. After a failed or timed-out
 read, select **Frozen inputs** again to retry. Inspection starts no workload and
 does not modify the original snapshot or recorded evidence.
+
+
+A verified **rejected** rerun settles that attempt. Correct its readiness issue,
+then select **Rerun frozen inputs** again to request a new admission check. This
+explicit action uses a new request key and can create a new run and snapshot.
+No workload starts merely because a rejection was read.
+
+An uncertain, failed or unconfirmed operation keeps its original key. Retrying
+checks that operation and cannot silently request another Start. If another tab
+has a newer retained request, the message explains that it will be checked first.
+A valid completed acknowledgement opens its existing child without duplication.
