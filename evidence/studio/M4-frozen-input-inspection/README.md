@@ -53,7 +53,7 @@ The implementation agent's review is not independent milestone acceptance.
 Native Windows remains held; actual assistive technology/human/novice work,
 external/physical providers and complete task dependencies retain their gates.
 Counts remain47 completed/43 in progress/10 blocked; no milestone is accepted.
-Clean committed successor package verification is pending.
+Clean committed successor package verification is retained below.
 
 Performance retains the existing200-element/400-flow and50000-record workloads,
 one warm-up and30 repetitions; this is not live provider/campaign scalability.
@@ -64,3 +64,5 @@ one warm-up and30 repetitions; this is not live provider/campaign scalability.
 | 1440x900 | 30.8 ms | 1661.3 ms | 447.0 ms |
 
 Selected candidate digest: `sha256:78bee002bdbded5bf0466df5b3ec94f86a2908f2c8c33e8003c66cee266b9404`. Environment sourceDigest is tracked-only before commit; the292-input map includes new files and compiled assets.
+
+Clean candidate `b38a5a6614ccb552097f900395ebc6cec08bab24` passed offline native Linux package provisioning from the prepared cache, startup/UI, Unicode persistence, public compilation and owned shutdown. All 104 manifest/archive/file hashes and six tested UI assets are verified; candidate-binding.json checks 286 committed source/fixed inputs plus six compiled assets. Native Windows remains held.
