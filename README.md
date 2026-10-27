@@ -21,7 +21,7 @@ uv run xverse-studio --data-dir .studio-local/data --port 8876
 
 Open http://127.0.0.1:8876 and enter the one-use token from `.studio-local/data/bootstrap.json`.
 See [native setup and the guided example](docs/user/getting-started.md),
-[finite campaigns](docs/user/campaigns.md), [recovery/update procedures](docs/user/recovery.md),
+[finite campaigns](docs/user/campaigns.md), [recorded comparison](docs/user/run-comparison.md), [recovery/update procedures](docs/user/recovery.md),
 and [provider limits](docs/providers/README.md).
 Run `uv run python scripts/run_checks.py` for backend checks and
 `uv run python scripts/test_browser.py` after provisioning Playwright Chromium for real browser checks.

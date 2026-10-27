@@ -4,11 +4,13 @@ from xverse_studio.comparison import compare_runs
 
 
 def run():
-    return {"runId": "r", "snapshot": {"snapshotId": "s", "semanticDigest": "model", "planDigest": "plan", "parameters": {"gain": 1}, "providerIdentity": {"id": "owned"}, "clockDomainRef": "sim"}, "evidence": {"integrity": "valid", "status": "complete"}, "observations": [{"field": "state", "unit": "1", "quantity": "dimensionless", "unitDefinitionDigest": "one", "clockDomainRef": "sim", "coverage": {"complete": True, "gaps": []}}]}
+    # The original healthy-control assertions now carry explicit provenance/window facts.
+    from test_comparison_report import fixture_run
+    return fixture_run()
 
 
 def test_configuration_differences_precede_interpretation():
-    left, right = run(), run(); right["runId"] = "other"; right["snapshot"]["parameters"]["gain"] = 2
+    left, right = run(), run(); right["runId"] = "other"; right["snapshot"]["configuration"]["gain"] = 2
     out = compare_runs(left, right)
     assert out["differences"][0]["field"] == "parameters"
     assert out["compatible"] is True

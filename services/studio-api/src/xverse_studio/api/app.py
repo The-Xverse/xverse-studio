@@ -593,23 +593,14 @@ def create_app(
     def list_runs(
         projectId: str | None = None, cursor: str | None = None, limit: int = 200
     ):
-        items = [
-            runs.read(r["runId"])
-            for r in store.all("run")
-            if not projectId or r["projectId"] == projectId
-        ]
-        return page(
-            [
-                {
-                    k: v
-                    for k, v in r.items()
-                    if k not in ("pid", "createTime", "ownerDigest")
-                }
-                for r in items
-            ],
-            cursor,
-            limit,
-        )
+        page([], cursor, limit)  # Refuse invalid paging before reconciliation.
+        records = store.find("run", "projectId", projectId) if projectId else store.all("run")
+        selected = page(records, cursor, limit)
+        return {**selected, "items": [
+            {k: v for k, v in runs.read(row["runId"]).items()
+             if k not in ("pid", "createTime", "ownerDigest")}
+            for row in selected["items"]
+        ]}
 
     @app.get("/api/v1/runs/{runId}")
     def run(runId: str):

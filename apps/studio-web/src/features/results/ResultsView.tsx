@@ -3,6 +3,7 @@ import { api, items, mutationKey } from "../../api/client";
 import type { Data, Run, RunEvent } from "../../api/types";
 import type { DoAction } from "../../app/App";
 import { Icon, Badge, Empty, Json, KeyValues, statusTone } from "../../app/ui";
+import { ComparisonWorkspace } from "../comparison/ComparisonWorkspace";
 import { EvidenceFilterControls } from "./EvidenceFilterControls";
 import {
   emptyFilters,
@@ -51,8 +52,6 @@ export function ResultsView({
     [history, setHistory] = useState<Run[]>([]),
     [annotations, setAnnotations] = useState<Data[]>([]),
     [annotation, setAnnotation] = useState(""),
-    [baseline, setBaseline] = useState(""),
-    [comparison, setComparison] = useState<Data | null>(null),
     [replay, setReplay] = useState(false),
     [showTable, setShowTable] = useState(false),
     [cursor, setCursor] = useState(0),
@@ -87,7 +86,8 @@ export function ResultsView({
     observationGeneration = useRef(0),
     readContext = useRef(""),
     historyContext = useRef(""),
-    eventsTab = useRef<HTMLButtonElement | null>(null);
+    eventsTab = useRef<HTMLButtonElement | null>(null),
+    observationsTab = useRef<HTMLButtonElement | null>(null);
   const queryIdentity = JSON.stringify([
     run?.runId,
     run?.snapshotId,
@@ -349,6 +349,10 @@ export function ResultsView({
     return Array.isArray(source) ? source : [];
   }, [observations]);
   useEffect(() => {
+    setReplay(false);
+    setCursor(0);
+  }, [run?.runId, run?.snapshotId]);
+  useEffect(() => {
     if (!replay || !samples.length) return;
     setCursor(0);
     const timer = setInterval(
@@ -557,11 +561,20 @@ export function ResultsView({
         ].map((t) => (
           <button
             role="tab"
-            ref={t === "Events & logs" ? eventsTab : undefined}
+            ref={
+              t === "Events & logs"
+                ? eventsTab
+                : t === "Observations"
+                  ? observationsTab
+                  : undefined
+            }
             aria-selected={tab === t}
             key={t}
             className={tab === t ? "active" : ""}
-            onClick={() => setTab(t)}
+            onClick={() => {
+              if (t !== "Observations") setReplay(false);
+              setTab(t);
+            }}
           >
             {t}
             {t === "Events & logs" && (
@@ -1073,68 +1086,16 @@ export function ResultsView({
           <RetentionPanel run={run} doAction={doAction} />
         </section>
       ) : tab === "Compare" ? (
-        <div className="connection-layout">
-          <section className="panel">
-            <h3>Baseline comparison</h3>
-            <p>
-              Check model, deployment, parameters, capabilities, units, and
-              clocks before interpreting differences.
-            </p>
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                void doAction("Comparing runs", async () =>
-                  setComparison(
-                    await api("/comparisons", {
-                      method: "POST",
-                      body: { leftRunId: baseline, rightRunId: run.runId },
-                    }),
-                  ),
-                );
-              }}
-            >
-              <label>
-                Baseline run
-                <select
-                  required
-                  value={baseline}
-                  onChange={(e) => setBaseline(e.target.value)}
-                >
-                  <option value="">Select a recorded run</option>
-                  {history
-                    .filter((r) => r.runId !== run.runId)
-                    .map((r) => (
-                      <option key={r.runId} value={r.runId}>
-                        {r.runId.slice(0, 16)} · {r.status || r.state}
-                      </option>
-                    ))}
-                </select>
-              </label>
-              <button className="button primary" disabled={!baseline}>
-                Inspect compatibility
-              </button>
-            </form>
-            {comparison && <Json value={comparison} expanded />}
-          </section>
-          <aside className="panel">
-            <h3>Replay and rerun</h3>
-            <p>
-              Replay re-presents recorded observations. It does not execute the
-              model or establish determinism.
-            </p>
-            <p>
-              A rerun creates a new identity after fresh preflight of the
-              current draft.
-            </p>
-            <button
-              className="button"
-              onClick={() => void doAction("Checking new-run readiness", onRun)}
-            >
-              <Icon name="play" />
-              Preflight a new run
-            </button>
-          </aside>
-        </div>
+        <ComparisonWorkspace
+          key={`${run.runId}:${run.snapshotId}`}
+          run={run}
+          onPlayback={() => {
+            setReplay(false);
+            setTab("Observations");
+            observationsTab.current?.focus();
+          }}
+          onPreflight={() => doAction("Checking new-run readiness", onRun)}
+        />
       ) : (
         <div className="connection-layout">
           <section className="panel">

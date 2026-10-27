@@ -1,0 +1,254 @@
+{
+  "config": {
+    "argv": [
+      "<loop-cache>/node-v24.22.1-linux-x64/bin/node",
+      "<repo>/node_modules/@playwright/test/cli.js",
+      "test",
+      "-c",
+      "<repo>/.studio-local/frozen-rerun-review/playwright.config.ts"
+    ],
+    "configFile": "<repo>/.studio-local/frozen-rerun-review/playwright.config.ts",
+    "rootDir": "<repo>/.studio-local/frozen-rerun-review",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "<repo>/.studio-local/frozen-rerun-review/isolated-first-successor/browser-output",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "<repo>/.studio-local/frozen-rerun-review",
+        "testIgnore": [],
+        "testMatch": [
+          "probe.spec.ts"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "<repo>/.studio-local/frozen-rerun-review/isolated-first-successor/browser-output",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "<repo>/.studio-local/frozen-rerun-review",
+        "snapshotDir": "<repo>/.studio-local/frozen-rerun-review",
+        "testIgnore": [],
+        "testMatch": "probe.spec.ts",
+        "timeout": 60000,
+        "use": {
+          "baseURL": "http://127.0.0.1:60751",
+          "browserName": "chromium",
+          "actionTimeout": 15000,
+          "screenshot": "only-on-failure",
+          "trace": "off",
+          "video": "off"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "<repo>/.studio-local/frozen-rerun-review/isolated-first-successor/browser-report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "probe.spec.ts",
+      "file": "probe.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "actual rerun acknowledgement preserves a newer Model view at 1024",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 10122,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Connect to Studio', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('heading', { name: 'Connect to Studio', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Connect to Studio', exact: true })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Connect to Studio', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('heading', { name: 'Connect to Studio', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Connect to Studio', exact: true })\u001b[22m\n\n    at connectStudio (<repo>/tests/e2e/connect-studio.ts:17:7)\n    at <repo>/.studio-local/frozen-rerun-review/probe.spec.ts:8:5",
+                    "location": {
+                      "file": "<repo>/tests/e2e/connect-studio.ts",
+                      "column": 7,
+                      "line": 17
+                    },
+                    "snippet": "\u001b[90m   at \u001b[39m../../tests/e2e/connect-studio.ts:17\n\n  15 |     await expect(\n  16 |       page.getByRole(\"heading\", { name: \"Connect to Studio\", exact: true }),\n> 17 |     ).toBeVisible();\n     |       ^\n  18 |     await page.screenshot({\n  19 |       path: testInfo.outputPath(\"login.png\"),\n  20 |       fullPage: true,"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/connect-studio.ts",
+                        "column": 7,
+                        "line": 17
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Connect to Studio', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('heading', { name: 'Connect to Studio', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Connect to Studio', exact: true })\u001b[22m\n\n\n   at ../../tests/e2e/connect-studio.ts:17\n\n  15 |     await expect(\n  16 |       page.getByRole(\"heading\", { name: \"Connect to Studio\", exact: true }),\n> 17 |     ).toBeVisible();\n     |       ^\n  18 |     await page.screenshot({\n  19 |       path: testInfo.outputPath(\"login.png\"),\n  20 |       fullPage: true,\n    at connectStudio (<repo>/tests/e2e/connect-studio.ts:17:7)\n    at <repo>/.studio-local/frozen-rerun-review/probe.spec.ts:8:5"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T11:10:16.391Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/.studio-local/frozen-rerun-review/isolated-first-successor/browser-output/probe-actual-rerun-acknowl-045f7--a-newer-Model-view-at-1024/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/.studio-local/frozen-rerun-review/isolated-first-successor/browser-output/probe-actual-rerun-acknowl-045f7--a-newer-Model-view-at-1024/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/connect-studio.ts",
+                    "column": 7,
+                    "line": 17
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "9223f0ac28d4fb57516f-cdf205662fe4b2e19d83",
+          "file": "probe.spec.ts",
+          "line": 6,
+          "column": 7
+        },
+        {
+          "title": "actual rerun acknowledgement preserves a newer Model view at 1440",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 10096,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Connect to Studio', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('heading', { name: 'Connect to Studio', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Connect to Studio', exact: true })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Connect to Studio', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('heading', { name: 'Connect to Studio', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Connect to Studio', exact: true })\u001b[22m\n\n    at connectStudio (<repo>/tests/e2e/connect-studio.ts:17:7)\n    at <repo>/.studio-local/frozen-rerun-review/probe.spec.ts:8:5",
+                    "location": {
+                      "file": "<repo>/tests/e2e/connect-studio.ts",
+                      "column": 7,
+                      "line": 17
+                    },
+                    "snippet": "\u001b[90m   at \u001b[39m../../tests/e2e/connect-studio.ts:17\n\n  15 |     await expect(\n  16 |       page.getByRole(\"heading\", { name: \"Connect to Studio\", exact: true }),\n> 17 |     ).toBeVisible();\n     |       ^\n  18 |     await page.screenshot({\n  19 |       path: testInfo.outputPath(\"login.png\"),\n  20 |       fullPage: true,"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/connect-studio.ts",
+                        "column": 7,
+                        "line": 17
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Connect to Studio', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('heading', { name: 'Connect to Studio', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Connect to Studio', exact: true })\u001b[22m\n\n\n   at ../../tests/e2e/connect-studio.ts:17\n\n  15 |     await expect(\n  16 |       page.getByRole(\"heading\", { name: \"Connect to Studio\", exact: true }),\n> 17 |     ).toBeVisible();\n     |       ^\n  18 |     await page.screenshot({\n  19 |       path: testInfo.outputPath(\"login.png\"),\n  20 |       fullPage: true,\n    at connectStudio (<repo>/tests/e2e/connect-studio.ts:17:7)\n    at <repo>/.studio-local/frozen-rerun-review/probe.spec.ts:8:5"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T11:10:27.551Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/.studio-local/frozen-rerun-review/isolated-first-successor/browser-output/probe-actual-rerun-acknowl-67c4c--a-newer-Model-view-at-1440/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/.studio-local/frozen-rerun-review/isolated-first-successor/browser-output/probe-actual-rerun-acknowl-67c4c--a-newer-Model-view-at-1440/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/connect-studio.ts",
+                    "column": 7,
+                    "line": 17
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "9223f0ac28d4fb57516f-35678b0f2338f3c9c5af",
+          "file": "probe.spec.ts",
+          "line": 6,
+          "column": 7
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-27T11:10:16.046Z",
+    "duration": 21722.889,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  }
+}

@@ -476,6 +476,9 @@ class Runs:
                 **kwargs,
             )
             self.children[rid] = process
+            # Preparation can take longer than the worker's observation window.
+            # Start the existing budget only once the native launch is acknowledged.
+            run["launchStartedAt"] = time.time()
         except OSError:
             run.update(
                 state="failed",
@@ -498,6 +501,26 @@ class Runs:
             op["status"] = "unknown"
             self.store.put("operation", op["operationId"], op)
         self.store.put("run", rid, run)
+
+    @staticmethod
+    def _terminal_after_exit(statepath, run):
+        """Reacquire once after exit, using only an already recorded owner identity."""
+        if (
+            run.get("pid") is None
+            or run.get("createTime") is None
+            or not run.get("ownerDigest")
+        ):
+            return None
+        observed = json.loads(statepath.read_text())
+        if (
+            isinstance(observed, dict)
+            and observed.get("state") in ("stopped", "failed")
+            and observed.get("ownerDigest") == run.get("ownerDigest")
+            and observed.get("pid") == run["pid"]
+            and observed.get("createTime") == run["createTime"]
+        ):
+            return observed
+        return None
 
     def read(self, rid):
         with self.store.lock:
@@ -542,13 +565,19 @@ class Runs:
                     ) != observed.get("createTime"):
                         observed = None
                 if observed and observed["state"] not in ("stopped", "failed"):
-                    process = psutil.Process(observed["pid"])
-                    if (
-                        abs(process.create_time() - observed["createTime"]) > 0.001
-                        or not process.is_running()
-                        or process.status() == psutil.STATUS_ZOMBIE
-                    ):
-                        observed = None
+                    try:
+                        process = psutil.Process(observed["pid"])
+                        if abs(process.create_time() - observed["createTime"]) > 0.001:
+                            observed = None
+                        elif (
+                            not process.is_running()
+                            or process.status() == psutil.STATUS_ZOMBIE
+                        ):
+                            observed = self._terminal_after_exit(statepath, run)
+                    except psutil.NoSuchProcess:
+                        # A running file read may precede the worker's final atomic
+                        # replacement and exit. This grants no process control.
+                        observed = self._terminal_after_exit(statepath, run)
             except (OSError, ValueError, psutil.Error):
                 observed = None
             if observed:
@@ -587,7 +616,7 @@ class Runs:
             elif run["state"] in ACTIVE:
                 if (
                     run.get("state") == "preparing"
-                    and time.time() - run["createdAt"] < 5
+                    and time.time() - run.get("launchStartedAt", run["createdAt"]) < 5
                 ):
                     return run
                 run.update(

@@ -1,0 +1,41 @@
+{
+  "observedAt": "2026-10-27T11:07:28.708586+00:00",
+  "stats": {
+    "startTime": "2026-10-27T11:04:21.159Z",
+    "duration": 39670.079000000005,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  },
+  "scope": "Two actual owned native reruns; only delivery of their real HTTP202 acknowledgements was delayed. Correctly awaited admitted child completion before deliberate Model navigation.",
+  "finding": "Late completion selected its child and switched Model back to Results at both widths. Product regression reproduced, not a provider or lifecycle failure.",
+  "facts": [
+    {
+      "test": "actual rerun acknowledgement preserves a newer Model view at 1024",
+      "facts": {
+        "scope": "Actual native owned rerun; only its real HTTP202 delivery was held. No provider or evidence fixture substituted.",
+        "originalRunId": "run-1d25f0db-ad06-4178-9946-4a5f73737b01",
+        "childRunId": "run-36eaa10d-5f7b-4f43-9353-9bf406a1a41d",
+        "operationId": "op-b540b6f0-2a15-4cea-bcf2-c5dd148f1024",
+        "intendedView": "Model",
+        "currentView": "false",
+        "currentRunId": "run-36eaa10d-5f7b-4f43-9353-9bf406a1a41d"
+      }
+    },
+    {
+      "test": "actual rerun acknowledgement preserves a newer Model view at 1440",
+      "facts": {
+        "scope": "Actual native owned rerun; only its real HTTP202 delivery was held. No provider or evidence fixture substituted.",
+        "originalRunId": "run-06932906-6347-4b52-9396-b05f02361bf2",
+        "childRunId": "run-19e020d6-6a0e-4227-b130-e2e27d9a95ce",
+        "operationId": "op-bc6c03ba-618b-4abe-a94a-eca800337a9c",
+        "intendedView": "Model",
+        "currentView": "false",
+        "currentRunId": "run-19e020d6-6a0e-4227-b130-e2e27d9a95ce"
+      }
+    }
+  ],
+  "mainCandidateEdited": false,
+  "currentComparisonAcceptance": "Current recorded-comparison component remains partial; full T091 and M0-M4 acceptance are not claimed."
+}

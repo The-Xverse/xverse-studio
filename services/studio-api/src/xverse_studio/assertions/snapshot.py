@@ -17,6 +17,12 @@ def definition_digest(definition):
     return "sha256:" + hashlib.sha256(json.dumps(definition, sort_keys=True, separators=(",", ":"), ensure_ascii=False, allow_nan=False).encode()).hexdigest()
 
 
+def definition_schema_digest():
+    """Identity of the installed admitted definition schema, not project metadata."""
+    schema_path = files("xverse_studio.assertions").joinpath("evaluation-v1.schema.json")
+    return "sha256:" + hashlib.sha256(schema_path.read_bytes()).hexdigest()
+
+
 def snapshot_definitions(snapshot: dict, adapter) -> list[dict]:
     """The adapter must be the server's admitted pinned validator, not user data."""
     expected_digest = snapshot.get("snapshotDigest")
@@ -43,8 +49,7 @@ def source_definitions(documents, adapter) -> list[dict]:
     profile = profiles[0]
     if profile.get("metadata", {}).get("version") != "1.0.0" or profile["spec"].get("schemaRef") != SCHEMA_ID:
         raise EvaluationError("PROFILE_NOT_ADMITTED")
-    schema_path = files("xverse_studio.assertions").joinpath("evaluation-v1.schema.json")
-    profile_digest = "sha256:" + hashlib.sha256(schema_path.read_bytes()).hexdigest()
+    profile_digest = definition_schema_digest()
     result = []
     seen = set()
     for scenario in scenarios:

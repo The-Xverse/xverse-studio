@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="2" time="12.583" timestamp="2026-10-27T10:22:11.973488+00:00" hostname="master"><testcase classname="tests.integration.test_run_history_projection" name="test_run_history_only_reconciles_requested_page_without_dropping_assessment" time="6.744"><failure message="AssertionError: Off-page runs must not be reconciled before pagination.&#10;assert ['run-f52e2bb...738c37b6e1f6'] == ['run-f52e2bb...893e56b11180']&#10;  &#10;  Left contains one more item: 'run-2819dd75-0d6e-4c87-b663-738c37b6e1f6'&#10;  Use -v to get more diff">tests/integration/test_run_history_projection.py:30: in test_run_history_only_reconciles_requested_page_without_dropping_assessment
+    assert calls == [right], 'Off-page runs must not be reconciled before pagination.'
+E   AssertionError: Off-page runs must not be reconciled before pagination.
+E   assert ['run-f52e2bb...738c37b6e1f6'] == ['run-f52e2bb...893e56b11180']
+E
+E     Left contains one more item: 'run-2819dd75-0d6e-4c87-b663-738c37b6e1f6'
+E     Use -v to get more diff</failure></testcase><testcase classname="tests.integration.test_run_history_projection" name="test_same_frozen_documents_share_admission_but_never_another_runs_verdict" time="5.757"><failure message="AssertionError: Identical immutable definition inputs must not be re-admitted for each snapshot UUID.&#10;assert 2 == 1&#10; +  where 2 = len(['snap-69eda056-57e4-4b48-9392-74b30eedae87', 'snap-96772e00-6149-458a-a6b8-446d36ad8a99'])">tests/integration/test_run_history_projection.py:59: in test_same_frozen_documents_share_admission_but_never_another_runs_verdict
+    assert len(admissions) == 1, 'Identical immutable definition inputs must not be re-admitted for each snapshot UUID.'
+E   AssertionError: Identical immutable definition inputs must not be re-admitted for each snapshot UUID.
+E   assert 2 == 1
+E    +  where 2 = len(['snap-69eda056-57e4-4b48-9392-74b30eedae87', 'snap-96772e00-6149-458a-a6b8-446d36ad8a99'])</failure></testcase></testsuite></testsuites>

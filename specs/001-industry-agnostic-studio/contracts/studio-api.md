@@ -267,3 +267,23 @@ discovery cannot claim completeness after a processing cap. Each page contains a
 most 200 rows, with exact integer tick ordering. An opaque continuation cursor binds
 run/snapshot, clock, actual journal and evaluation input identities and interpretation.
 Changed context returns `TIMELINE_CURSOR_STALE` and requires refresh from page one.
+
+
+Recorded comparison amendment (ADR-0021): both comparison routes return
+`comparisonVersion: "1.0"`, frozen `left`/`right` run/snapshot/project identities,
+12 named `configuration` rows with `same|different|unavailable` and explicit side
+availability, and at most 32 recorded `fields`. Original mode, compatibility,
+differences/diagnostics and `rerunRequiresFreshAdmission` remain. Configuration is
+read from verified protected snapshots, including full frozen provider identity,
+compiled artifacts/profile/resource identities, capabilities, compiler and clocks;
+no current-draft/provider fallback or invented clock applies. Missing provenance,
+invalid/incomplete evidence, incompatible quantities/clocks, uncertain alignment,
+gaps or missing/unequal exact original windows block like-for-like pairing. Source
+ticks remain signed decimal strings. Each side retains its own recorded numeric
+summary and quality; no interpolation or synthetic assertion verdict is produced.
+Input values are bounded to 64 KiB, depth 20, 8,192 nodes and 2,048 entries per container;
+excessive metadata is unavailable without changing protected inputs. Original gap counts
+are retained. Recorded observer identity/unit semantics/clock must agree with the frozen
+compiled declaration. Source reader limits remain unchanged.
+`COMPARISON_LIMIT` is a typed 422 refusal. Inspection and recorded playback create
+no workload; fresh execution retains backend admission and a new identity.

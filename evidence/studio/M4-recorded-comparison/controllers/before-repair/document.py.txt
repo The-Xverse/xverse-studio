@@ -1,0 +1,172 @@
+"""Document only terminal current-candidate comparison proof; preserve task scope."""
+from collections import Counter
+from pathlib import Path
+import json
+root=Path.cwd();out=root/'evidence/studio/M4-recorded-comparison'
+v=json.loads((out/'verification.json').read_text())
+assert v['backendTestsPassed']==916 and v['targeted']['expected']==19 and v['full']['expected']==397 and v['performance']['expected']==2
+assert v['frozenSelectedInputs']==283 and v['allFinalBrowserStageInputsIdentical']
+p=root/'specs/001-industry-agnostic-studio/traceability.json';trace=json.loads(p.read_text());counts=Counter({'completed':47,'in_progress':43,'blocked':10})
+assert Counter(t['status'] for t in trace['tasks'])==counts
+ids=['T038','T067','T091','T095','T096','T097','T098']
+assert {t['id'] for t in trace['tasks'] if t['id'] in ids}==set(ids)
+assert all(t['status']=='in_progress' for t in trace['tasks'] if t['id'] in ids)
+measurements=[]
+for viewport in ['1024x768','1440x900']:
+ m=json.loads((out/f'performance/{viewport}/model-performance.json').read_text());h=json.loads((out/f'performance/{viewport}/history-performance.json').read_text())
+ measurements.append(f'| {viewport} | {m["selectionAndInspector"]["p95"]:.1f} ms | {m["openAndValidationPresentation"]["p95"]:.1f} ms | {h["p95"]:.1f} ms |')
+(out/'README.md').write_text('''# Recorded comparison — owned native Linux component
+
+The Compare feature now presents frozen run/snapshot/project identities,12 named
+configuration dimensions and each side's original recorded field summaries.
+Model/deployment/parameter/artifact/profile/provider/capability/clock/compiler facts
+come from verified protected snapshots, not the current draft or a current provider
+registration. Missing facts are unavailable even when absent on both sides.
+
+Fresh full backend 916, focused native browser 19, full browser 397 and separate
+performance 2 pass. Browser cohorts have zero skips, flakes or unexpected failures.
+All 283 selected source/test/build/lock/config/ADR and six compiled UI inputs match
+across/within final browser stages. The 215 backend inputs also match before/after
+its fresh full run and current candidate. This is component progress, not complete
+T091, M0–M4 milestone, native Windows or live-provider acceptance.
+
+## Provenance and recorded data
+
+Both existing comparison routes retain their requests and original mode/compatibility/
+differences/diagnostics fields and add comparisonVersion1.0 with explicit frozen
+configuration availability and left/right summaries. Actual HTTP OpenAPI equals the
+checked-in generated contract without regeneration. Managed snapshot verification
+remains mandatory before reading historical comparison metadata.
+
+Recorded observer ID, unit semantics and clock must resolve the frozen compiled
+observer declaration. Evidence integrity, effective inputs, lifecycle/cleanup and
+functional verdict remain separate. Canonical reader bounds remain authoritative.
+At most32 fields are summarized; each metadata value has64KiB/depth20/8192-node/
+2048-entry bounds. Unsupported metadata remains unavailable without rewriting inputs.
+
+Known complete gap-free windows, original source clock definitions/quantities/unit
+identities, resolution and uncertainty govern like-for-like pairing. Signed source
+ticks remain exact decimal strings, including large integers. No interpolation,
+cross-clock mapping, arithmetic delta, atomic live capture, new evaluation or synthetic
+verdict is produced. Each side's numeric range/last value/count and original sample/
+coverage ticks remain independently inspectable when the overall pair is blocked.
+Original gap event counts are retained. The selected registry admits dimensionless
+unit 1; these checks do not add another unit family, provider or physical authority.
+
+The dedicated browser feature reads20-record workspace pages, validates report version
+and submitted left/right run/snapshot/project identities, bounds response depth and
+serializes each read channel with30-second deadlines/abort/mount/selection/focus guards.
+A new baseline clears the old report. Inspection/read-only playback creates no run.
+Current-draft preflight and admitted frozen-input rerun remain separate explicit paths;
+new-draft Start still needs separate acceptance and a new identity.
+
+## Meaningful verification and scoped fixtures
+
+Eighteen new browser journeys at 1024x768 and 1440x900 include three actual native
+reference runs per setup. They show frozen identities/parameter differences, equal
+complete windows and blocked unequal windows, preserved authored Projects, playback
+with zero workload requests, fresh current-draft preflight and no automatic Start.
+Held actual HTTP200 replies preserve newer baseline/Home/deliberate focus. Malformed
+identity/version/deep metadata/contradictory summary fixtures fail safely and actual
+retry succeeds.21-row/empty/HTTP503 history cases are labelled transport fixtures
+derived from a real run; they are not21 executed runs. The final19 includes the whole
+existing owned reference workflow, including the existing fresh frozen-input rerun.
+
+Backend cases include actual native equal/unequal windows, unchanged protected
+snapshot/journal bytes, independent lifecycle/cleanup and numeric summaries, and an
+actual running3-second run whose partial evidence is not upgraded to complete.
+Post-reader unit/clock/gap/missing-coverage injections follow real healthy two-run
+controls and leave canonical files unchanged. They prove API handoff/source-quality
+validation; they are not live provider admission, canonical tampering or real source
+gaps. Generic quantity/clock negatives also have explicit labelled record fixtures.
+
+## Original failures and review repairs
+
+The initial report cohort had19 failures/2 passes before implementation. The first
+browser baseline stopped at an exact Results-name fixture that omitted its existing
+count; it did not inspect comparison. The corrected baseline reached Compare but
+failed at the old implicit Baseline label before requesting a report. Its stable
+explicit accessible name is now present; neither failure is relabelled as playback
+or report execution. The first TypeScript check caught a structural identity-pair
+mismatch; explicit ID fields repair it. Its component was witnessed after failure
+before repair, without a claimed pre-run map.
+
+An initial21-case API successor passed, then55 focused cases passed. A further two
+fixture regressions caught bool/numeric equality coercion and excessive metadata
+depth. Strict JSON type identity and aligned bounded display guards repair both.
+The later58-case cohort and initial two browser journeys passed; the expanded18
+browser cohort passed before final observer/gap repairs and precise ADR wording.
+Final-input-amendment.json preserves those differences and compiled asset changes.
+
+The first compiled-observer probe used unsupported unit s; it was already blocked
+for unavailable quantity and did not reproduce a positive compatibility claim. Its
+corrected admitted-unit/undeclared-observer case did reproduce compatibletrue. The
+compiled declaration now blocks that claim;64 focused cases pass the successor.
+Another fixture caught four gap events reported as one issue; actual gap counts are
+now preserved. The original failed reports, exact available sources/maps, corrected
+fixtures and successors remain retained. No failure is rewritten as a passing gate. Both prior82c7f86 GitHub jobs were cancelled
+at the45-minute total job budget during browser checks; their package stages did not run.
+The CI scheduling budget is now75minutes. Parsed workflow comparison proves all other
+semantics identical and all283 selected plus215 backend inputs unchanged; the affected
+compatibility checker passes. This changes no product deadline, assertion or performance
+threshold. New candidate CI remains a separate pending outcome.
+
+The implementation agent's root review is not independent milestone review. The
+captured1024 comparison screenshot was visually inspected without observed horizontal
+clipping in that case; screenshots do not establish AT or human usability. Deadlines
+are source-reviewed, not timed native acceptance cases. No companion repository,
+cloud publication/deployment, arbitrary device access or stimulation is performed.
+
+## Measurements and remaining scope
+
+The separate existing performance fixture uses200 elements/400 flows and50000 retained
+history records, one warm-up and30 repetitions. It does not establish live comparison
+or campaign scalability. Full task dependencies, native Windows, external/physical
+providers, actual AT/human and complete milestone acceptance retain their own gates.
+Counts remain47completed/43in_progress/10blocked and zero accepted milestones.
+
+| Linux viewport | Selection p95 | Open/validation p95 | History p95 |
+| --- | --- | --- | --- |
+'''+ '\n'.join(measurements)+f'''
+
+Selected candidate digest: `{v['applicationAndInputDigest']}`. Development-worktree
+receipts name the predecessor HEAD; the later clean committed source/package binding
+identifies exact tested bytes. Environment helper sourceDigest is tracked-only before
+commit and excludes untracked new files/dist; application-and-input-hashes.json is the
+full selected map. Clean committed comparison package verification is pending here.
+''')
+note=(' Linux recorded comparison component: fresh 916 backend,19 focused native browser, full397 and separate performance 2 pass with283 identical selected source/test/build/lock/config/ADR and compiled UI inputs. '
+ 'Frozen model/deployment/parameter/artifact/profile/provider/capability/clock/compiler facts and original numeric results remain separate from lifecycle/cleanup/verdict, current drafts and unavailable facts. '
+ 'Compiled observer identity, canonical integrity, quantity/clock/uncertainty/resolution, original gap counts and exact signed complete windows gate pairing. '
+ 'Actual equal/unequal/running reference cases and native keyboard report/playback/preflight boundaries are distinct from labelled post-reader/transport fixtures. '
+ 'Late real reads preserve newer baseline/Home/focus. Evidence: evidence/studio/M4-recorded-comparison/. '
+ 'Complete task dependencies, native Windows, live provider, actual AT/human and full M0–M4 acceptance remain open; counts47/43/10 and zero accepted milestones unchanged.')
+for t in trace['tasks']:
+ if t['id'] in ids:
+  t['implementation_note']=t.get('implementation_note','')+note
+  evidence=t.setdefault('implementation_evidence',[])
+  for item in ['evidence/studio/M4-recorded-comparison/verification.json','evidence/studio/M4-recorded-comparison/implementation-review.md','docs/architecture/ADR-0021-recorded-comparison.md']:
+   if item not in evidence:evidence.append(item)
+record=trace['implementation_record'];record['code_candidate']='Tested uncommitted comparison inputs '+v['applicationAndInputDigest']+'; clean package binding pending in evidence/studio/M4-recorded-comparison/'
+record['verification'].update(backend_tests_passed=916,playwright_checks_passed=397,playwright_checks_failed=0,
+ playwright_scope='Full native Linux Chromium397, focused19 and separate performance 2, all283 selected inputs identical across/within final browser stages; fresh 916 backend with215 unchanged inputs.',
+ milestones_accepted=0,evidence='evidence/studio/M4-recorded-comparison/',backend_evidence='evidence/studio/M4-recorded-comparison/backend/verification.json',
+ prior_package_evidence='evidence/studio/M4-campaign-workflow/package/receipt.json (clean86d6647 historical native Linux source)',package_evidence='PENDING clean committed recorded-comparison package')
+assert Counter(t['status'] for t in trace['tasks'])==counts
+ci_note=(' CI job scheduling budget amended45→75minutes after both82c7f86 jobs were cancelled at their45-minute limit during browser checks; package stages did not run. Parsed workflow proof preserves all other semantics and283 source/compiled plus215 backend inputs; the affected compatibility checker passes. New candidate CI remains pending. Evidence: evidence/studio/M4-recorded-comparison/ci-budget-amendment/control.json.')
+for t in trace['tasks']:
+ if t['id']=='T002':
+  assert t['status']=='in_progress'
+  t['implementation_note']=t.get('implementation_note','')+ci_note
+  t.setdefault('implementation_evidence',[]).append('evidence/studio/M4-recorded-comparison/ci-budget-amendment/control.json')
+p.write_text(json.dumps(trace,ensure_ascii=False,indent=2)+'\n')
+p=root/'specs/001-industry-agnostic-studio/tasks.md';p.write_text(p.read_text()+'\n'+note.strip()+'\n\n'+ci_note.strip()+'\n')
+p=root/'docs/implementation/STATUS.md';s=p.read_text();marker='The latest finite campaign component';assert marker in s
+paragraph=('The latest recorded comparison component passes fresh 916 backend,19 focused native browser, full397 and separate performance 2 with283 identical selected source/test/build/lock/config/ADR and compiled inputs. '
+ 'Frozen configuration identities, recorded numeric summaries and explicit compatibility blockers preserve unavailable facts, quantity/clock/coverage/uncertainty/gap distinctions and exact signed ticks. '
+ 'Actual native equal/unequal/running reference cases and keyboard report/playback/preflight boundaries remain separate from labelled post-reader/transport fixtures. '
+ 'Late real replies preserve newer baseline/Home/focus. All failures, source amendments and review remain in `evidence/studio/M4-recorded-comparison/`. '
+ 'T091 and wider verification/release scope remain partial;47/100 completed and no accepted milestones. Windows/live-provider/actual AT/human gates remain open. '
+ 'Clean committed package verification for this comparison component is pending; previous campaign package receipts are historical.\n\n')
+p.write_text(s.replace(marker,paragraph+marker,1))
+print('Recorded terminal916/19/397/2 component evidence; tasks+trace together, states47/43/10 unchanged.')

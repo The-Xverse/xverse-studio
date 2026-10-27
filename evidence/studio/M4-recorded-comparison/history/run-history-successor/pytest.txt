@@ -1,0 +1,29 @@
+.F.....................F..........................................       [100%]
+=================================== FAILURES ===================================
+__ test_same_frozen_documents_share_admission_but_never_another_runs_verdict ___
+tests/integration/test_run_history_projection.py:53: in test_same_frozen_documents_share_admission_but_never_another_runs_verdict
+    project, left, right = two_runs(client)
+                           ^^^^^^^^^^^^^^^^
+tests/integration/test_run_history_projection.py:14: in two_runs
+    assert wait_run(client, right)['state'] == 'stopped'
+E   AssertionError: assert 'unknown' == 'stopped'
+E
+E     - stopped
+E     + unknown
+_ test_public_report_uses_frozen_provider_artifacts_clocks_and_real_summaries __
+tests/integration/test_comparison_report.py:128: in test_public_report_uses_frozen_provider_artifacts_clocks_and_real_summaries
+    assert wait_run(client, rid)['state'] == 'stopped'
+E   AssertionError: assert 'unknown' == 'stopped'
+E
+E     - stopped
+E     + unknown
+=============================== warnings summary ===============================
+.venv/lib/python3.13/site-packages/fastapi/testclient.py:1
+  <repo>/.venv/lib/python3.13/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/integration/test_run_history_projection.py::test_same_frozen_documents_share_admission_but_never_another_runs_verdict
+FAILED tests/integration/test_comparison_report.py::test_public_report_uses_frozen_provider_artifacts_clocks_and_real_summaries
+2 failed, 64 passed, 1 warning in 132.44s (0:02:12)

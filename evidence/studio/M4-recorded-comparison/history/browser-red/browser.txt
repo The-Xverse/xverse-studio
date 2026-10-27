@@ -1,0 +1,64 @@
+
+> xverse-studio-workspace@0.1.0 test:e2e
+> playwright test -c tests/e2e/playwright.config.ts --grep recorded comparison:
+
+
+Running 2 tests using 1 worker
+
+(node:3363083) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 tests/e2e/recorded-comparison.spec.ts:43:7 › recorded comparison: immutable provenance, unequal windows and playback admission at 1024 (27.6s)
+(node:3365822) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 tests/e2e/recorded-comparison.spec.ts:43:7 › recorded comparison: immutable provenance, unequal windows and playback admission at 1440 (26.8s)
+
+
+  1) tests/e2e/recorded-comparison.spec.ts:43:7 › recorded comparison: immutable provenance, unequal windows and playback admission at 1024
+
+    TimeoutError: locator.click: Timeout 15000ms exceeded.
+    Call log:
+      - waiting for getByRole('tab', { name: 'Results', exact: true })
+
+
+      34 |   }, { project, run: runs[1] });
+      35 |   await page.reload();
+    > 36 |   await page.getByRole('tab', { name: 'Results', exact: true }).click();
+         |                                                                 ^
+      37 |   await expect(page.getByLabel('Recorded run', { exact: true })).toHaveValue(runs[1].runId);
+      38 |   await page.getByRole('tab', { name: 'Compare', exact: true }).click();
+      39 |   return { project, runs };
+        at setup (<repo>/tests/e2e/recorded-comparison.spec.ts:36:65)
+        at <repo>/tests/e2e/recorded-comparison.spec.ts:46:31
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/recorded-comparison-record-10ff9--playback-admission-at-1024/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/recorded-comparison-record-10ff9--playback-admission-at-1024/error-context.md
+
+  2) tests/e2e/recorded-comparison.spec.ts:43:7 › recorded comparison: immutable provenance, unequal windows and playback admission at 1440
+
+    TimeoutError: locator.click: Timeout 15000ms exceeded.
+    Call log:
+      - waiting for getByRole('tab', { name: 'Results', exact: true })
+
+
+      34 |   }, { project, run: runs[1] });
+      35 |   await page.reload();
+    > 36 |   await page.getByRole('tab', { name: 'Results', exact: true }).click();
+         |                                                                 ^
+      37 |   await expect(page.getByLabel('Recorded run', { exact: true })).toHaveValue(runs[1].runId);
+      38 |   await page.getByRole('tab', { name: 'Compare', exact: true }).click();
+      39 |   return { project, runs };
+        at setup (<repo>/tests/e2e/recorded-comparison.spec.ts:36:65)
+        at <repo>/tests/e2e/recorded-comparison.spec.ts:46:31
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/recorded-comparison-record-6f94d--playback-admission-at-1440/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/recorded-comparison-record-6f94d--playback-admission-at-1440/error-context.md
+
+  2 failed
+    tests/e2e/recorded-comparison.spec.ts:43:7 › recorded comparison: immutable provenance, unequal windows and playback admission at 1024
+    tests/e2e/recorded-comparison.spec.ts:43:7 › recorded comparison: immutable provenance, unequal windows and playback admission at 1440

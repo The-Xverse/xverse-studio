@@ -15,7 +15,8 @@ from xverse_studio.assertions import EvaluationError, UNIT_DEFINITIONS, aggregat
 from xverse_studio.campaigns import CampaignError, CampaignPlanner, CampaignState
 from xverse_studio.assertions.dependencies import definition_order, metric_references
 from xverse_studio.assertions.evaluator import evaluator_identity
-from xverse_studio.comparison import compare_runs
+from xverse_studio.assertions.snapshot import definition_schema_digest
+from xverse_studio.comparison import ComparisonError, compare_runs, recorded_input
 from xverse_studio.evidence.reader import read_journal
 from xverse_studio.lab import LabError, LabRegistry
 from xverse_studio.lab.assets import inventory_observation
@@ -118,19 +119,24 @@ def install_advanced(app, store, projects, runs, adapter):
         if snapshot_digest != digest({k: v for k, v in snapshot.items() if k != "snapshotDigest"}):
             return {"evaluation": "error", "verdict": "indeterminate", "evaluationSummary": {"diagnostics": ["SNAPSHOT_INTEGRITY_INVALID"], "definitions": []}}
         try:
+            # Admission depends on exact frozen documents and the pinned validation
+            # context, not a new snapshot UUID/time. Verify the whole snapshot above
+            # before a cache hit; per-run evaluation records are never shared.
+            admission_key = digest({"documents": snapshot.get("documents"), "compiler": adapter.identity,
+                                    "evaluator": evaluator_identity(), "schemaDigest": definition_schema_digest()})
             with definition_cache_lock:
-                if snapshot_digest not in definition_cache:
-                    definition_cache[snapshot_digest] = snapshot_definitions(snapshot, adapter)
+                if admission_key not in definition_cache:
+                    definition_cache[admission_key] = snapshot_definitions(snapshot, adapter)
                     if len(definition_cache) > 64:
                         definition_cache.popitem(last=False)
-                definition_cache.move_to_end(snapshot_digest)
-                admitted = definition_cache[snapshot_digest]
+                definition_cache.move_to_end(admission_key)
+                admitted = definition_cache[admission_key]
         except EvaluationError as exc:
             return {"evaluation": "unavailable", "verdict": None, "evaluationSummary": {"diagnostics": [exc.code], "definitions": []}}
         required = [d for d in admitted if d["definition"]["kind"] == "assertion"]
         known = {d["definitionRef"]: d for d in admitted}
         latest = {}
-        for row in store.all("evaluation"):
+        for row in store.find("evaluation", "runId", run.get("runId")):
             definition_ref = row.get("definitionRef")
             entry = known.get(definition_ref)
             if row.get("runId") != run.get("runId") or row.get("snapshotId") != snapshot["snapshotId"] or entry is None or row.get("definitionDigest") != entry["definitionDigest"]:
@@ -482,16 +488,21 @@ def install_advanced(app, store, projects, runs, adapter):
         snapshot = store.get("snapshot", run["snapshotId"])
         runs.verify_snapshot(snapshot)
         records, integrity = read_journal(runs.directory(run_id), run)
-        projected = _journal_projection(run, snapshot, records, integrity)
-        return {"runId": run_id, "snapshot": {**snapshot, "parameters": snapshot.get("configuration"), "providerIdentity": {"providerId": run.get("providerId")}, "clockDomainRef": "simulation-time"}, "evidence": {"integrity": integrity, "status": run["evidence"]}, "observations": [{"observerRef": p["observerRef"], "field": p["field"], "unit": p["schema"]["unit"], "quantity": p["schema"]["quantity"], "unitDefinitionDigest": p["schema"]["unitDefinitionDigest"], "clockDomainRef": p["clockDomainRef"], "coverage": p["coverage"]} for p in projected]}
+        return recorded_input(run, snapshot, records, integrity, snapshot_integrity="valid")
+
+    def recorded_comparison(left, right):
+        try:
+            return compare_runs(comparable(left), comparable(right))
+        except ComparisonError as exc:
+            _failure(exc)
 
     @app.post("/api/v1/comparisons")
     def comparison(body: Compare):
-        return compare_runs(comparable(body.leftRunId), comparable(body.rightRunId))
+        return recorded_comparison(body.leftRunId, body.rightRunId)
 
     @app.get("/api/v1/runs/{runId}/comparison")
     def run_comparison(runId: str, baselineRunId: str):
-        return compare_runs(comparable(baselineRunId), comparable(runId))
+        return recorded_comparison(baselineRunId, runId)
 
     @app.get("/api/v1/runs/{runId}/annotations")
     def annotations(runId: str, cursor: str | None = None, limit: int = 100):
