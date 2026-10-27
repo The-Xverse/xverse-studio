@@ -1,0 +1,26 @@
+{
+  "scope": "Fixture-only review of initial isolated proposal; existing evaluator accepts signed canonical ticks. This is a proposed-repair regression, not a main defect.",
+  "initialProposalHash": "e54f07c8695f87b5e41ec7a0dbaa163817e86721c0944a3df34ae258cf10f719",
+  "finding": "The initial proposal rejects equal valid negative source windows; source epochs must not be assumed nonnegative.",
+  "initialResult": {
+    "leftRunId": "negative-fixture",
+    "rightRunId": "negative-fixture",
+    "mode": "recorded_observation_comparison",
+    "rerunRequiresFreshAdmission": true,
+    "differences": [],
+    "compatible": false,
+    "diagnostics": [
+      "OBSERVATION_WINDOW_UNAVAILABLE"
+    ],
+    "fields": [
+      {
+        "observerRef": "signed-clock-observer",
+        "field": "state",
+        "compatible": false,
+        "reasons": [
+          "OBSERVATION_WINDOW_UNAVAILABLE"
+        ]
+      }
+    ]
+  }
+}

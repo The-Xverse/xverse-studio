@@ -170,6 +170,15 @@ test("owned reference browser workflow: author, preflight, execute, reconnect, i
   await page.getByLabel("Parameter matrix (JSON)").fill('{"gain":[0.5,0.8]}');
   await page.getByLabel("Maximum runs", { exact: true }).fill("2");
   await page
+    .getByRole("button", { name: "Preview campaign", exact: true })
+    .click();
+  await expect(
+    page.getByRole("heading", {
+      name: "Authoritative campaign preview",
+      exact: true,
+    }),
+  ).toBeVisible();
+  await page
     .getByRole("button", { name: "Create campaign", exact: true })
     .click();
   await expect(
@@ -235,6 +244,19 @@ test("owned reference browser workflow: author, preflight, execute, reconnect, i
   await expect(
     page.getByRole("heading", { name: "Automotive reference", exact: true }),
   ).toBeVisible();
+  // Keep the worker active for the native Tab traversal; prove actual Stop execution below.
+  await page.getByRole("button", { name: "Parameters", exact: true }).click();
+  await page.getByLabel("Duration").fill("30");
+  await page
+    .getByLabel("Duration")
+    .locator("xpath=ancestor::form")
+    .getByRole("button", { name: "Apply", exact: true })
+    .click();
+  await expect(
+    page.getByText("Draft saved. Existing run snapshots remain unchanged.", {
+      exact: true,
+    }),
+  ).toBeVisible();
   await keyboardActivate(
     page.getByRole("button", { name: "Validate", exact: true }),
   );
@@ -263,13 +285,91 @@ test("owned reference browser workflow: author, preflight, execute, reconnect, i
   await expect(page.getByText("running", { exact: true }).first()).toBeVisible({
     timeout: 10000,
   });
-  await keyboardActivate(
-    page.getByRole("button", { name: "Stop", exact: true }),
+  const activeRunId = await page.evaluate(() =>
+    localStorage.getItem("studio.lastRun"),
   );
-  await expect(page.getByText("stopped", { exact: true }).first()).toBeVisible({
-    timeout: 15000,
+  expect(activeRunId).toBeTruthy();
+  const frozen = await page.evaluate(async (id) => {
+    const response = await fetch(`/api/v1/runs/${id}/snapshot`);
+    if (!response.ok)
+      throw new Error("Owned keyboard snapshot could not be read.");
+    return response.json();
+  }, activeRunId);
+  expect(frozen.snapshot.configuration.duration).toBe(30);
+  const stopTiming: any[] = [];
+  const recordStop = (value: any) => {
+    if (stopTiming.length < 64)
+      stopTiming.push({ at: performance.now(), ...value });
+  };
+  page.on("request", (request) => {
+    if (
+      request.method() === "POST" &&
+      new URL(request.url()).pathname === `/api/v1/runs/${activeRunId}/commands`
+    ) {
+      const body = request.postDataJSON();
+      recordStop({
+        event: "command-request",
+        kind: body.kind,
+        expectedStateVersion: body.expectedStateVersion,
+      });
+    }
   });
-  await expect(page.getByRole("alert")).toHaveCount(0);
+  const acknowledgement = page.waitForResponse(
+    (response) =>
+      response.request().method() === "POST" &&
+      new URL(response.url()).pathname ===
+        `/api/v1/runs/${activeRunId}/commands`,
+    { timeout: 15000 },
+  );
+  // Observe a rejected wait without creating an unhandled rejection if an earlier assertion fails.
+  void acknowledgement.catch(() => {});
+  try {
+    recordStop({ event: "keyboard-stop-begin", configuredDuration: 30 });
+    await keyboardActivate(
+      page.getByRole("button", { name: "Stop", exact: true }),
+    );
+    await expect(
+      page.getByText("stopped", { exact: true }).first(),
+    ).toBeVisible({
+      timeout: 15000,
+    });
+    const stopResponse = await acknowledgement;
+    const stopReceipt = await stopResponse.json();
+    recordStop({
+      event: "command-response",
+      status: stopResponse.status(),
+      code: stopReceipt.code,
+      operationId: stopReceipt.operationId,
+    });
+    expect(stopResponse.status()).toBe(202);
+    expect(stopReceipt.operationId).toBeTruthy();
+    await expect
+      .poll(
+        async () =>
+          page.evaluate(async (id) => {
+            const response = await fetch(`/api/v1/operations/${id}`);
+            if (!response.ok)
+              throw new Error("Owned Stop operation could not be read.");
+            const operation = await response.json();
+            return { kind: operation.kind, status: operation.status };
+          }, stopReceipt.operationId),
+        { timeout: 15000 },
+      )
+      .toEqual({ kind: "stop", status: "completed" });
+    await expect(page.getByRole("alert")).toHaveCount(0);
+    recordStop({ event: "stop-observed-completed" });
+  } finally {
+    await testInfo.attach("native-keyboard-stop-timing", {
+      contentType: "application/json",
+      body: JSON.stringify({
+        scope:
+          "Actual keyboard Stop against an admitted30-second owned run; no timeout/performance threshold change",
+        runId: activeRunId,
+        snapshotId: frozen.snapshot.snapshotId,
+        events: stopTiming,
+      }),
+    });
+  }
   expect(errors).toEqual([]);
   if (
     process.env.STUDIO_MEASURE_PERFORMANCE === "1" ||

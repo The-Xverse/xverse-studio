@@ -56,7 +56,7 @@ checks before claiming Windows support. WSL or a browser pointed at Linux cannot
    assertion is indeterminate or fails; run termination does not automatically pass an assertion.
 6. Inspect the authoritative XDL source. Compare changes before saving. Layout is a separate sidecar,
    and moving graph elements does not modify the executable plan. Invalid drafts remain inspectable.
-7. Use Results definitions/evaluations, annotations and finite campaigns only within advertised limits.
+7. Use Results definitions/evaluations, annotations and [finite campaigns](campaigns.md) only within advertised limits.
    Compare exact input/configuration differences before interpreting observation differences.
    See [external references](evidence-and-references.md) for separate reported claims and revision history.
    Use [Results filters](results-filters.md) to select sources, exact time windows and recorded evidence.

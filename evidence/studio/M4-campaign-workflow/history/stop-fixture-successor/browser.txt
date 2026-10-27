@@ -1,0 +1,36 @@
+
+> xverse-studio-workspace@0.1.0 test:e2e
+> playwright test -c tests/e2e/playwright.config.ts --grep owned reference browser workflow:
+
+
+Running 1 test using 1 worker
+
+(node:3094562) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 tests/e2e/studio.spec.ts:7:5 › owned reference browser workflow: author, preflight, execute, reconnect, inspect and annotate (47.6s)
+
+
+  1) tests/e2e/studio.spec.ts:7:5 › owned reference browser workflow: author, preflight, execute, reconnect, inspect and annotate
+
+    TimeoutError: locator.fill: Timeout 15000ms exceeded.
+    Call log:
+      - waiting for getByLabel('Duration', { exact: true })
+
+
+      247 |   // Keep the worker active for the native Tab traversal; prove actual Stop execution below.
+      248 |   await page.getByRole("button", { name: "Parameters", exact: true }).click();
+    > 249 |   await page.getByLabel("Duration", { exact: true }).fill("30");
+          |                                                      ^
+      250 |   await page
+      251 |     .getByLabel("Duration", { exact: true })
+      252 |     .locator("xpath=ancestor::form")
+        at <repo>/tests/e2e/studio.spec.ts:249:54
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/studio-owned-reference-bro-8fed0-onnect-inspect-and-annotate/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/studio-owned-reference-bro-8fed0-onnect-inspect-and-annotate/error-context.md
+
+  1 failed
+    tests/e2e/studio.spec.ts:7:5 › owned reference browser workflow: author, preflight, execute, reconnect, inspect and annotate

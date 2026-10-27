@@ -1,8 +1,9 @@
+import { CampaignWorkspace } from "../features/campaigns/CampaignWorkspace";
 import { ScenarioAuthoring } from "../features/experiments/ScenarioAuthoring";
 import { ScenarioTimeline } from "../features/experiments/ScenarioTimeline";
 import type { SourceTarget } from "../features/model/Views";
-import { useEffect, useState, useRef } from "react";
-import type { Campaign, Evaluation } from "../../../../packages/contracts/api";
+import { useEffect, useState } from "react";
+import type { Evaluation } from "../../../../packages/contracts/api";
 import { api, items, mutationKey } from "../api/client";
 import type { Project, Data, Run, Preflight } from "../api/types";
 import type { Projection } from "../features/model/projection";
@@ -29,6 +30,8 @@ export function ExperimentsView({
   edit,
   authoringLimits,
   onAuthoringIntent,
+  campaignLimits,
+  campaignEnabled,
 }: {
   project: Project;
   projection: Projection;
@@ -41,19 +44,13 @@ export function ExperimentsView({
   edit: (edits: Data[]) => Promise<unknown>;
   authoringLimits: Data;
   onAuthoringIntent: () => void;
+  campaignLimits: Data;
+  campaignEnabled: boolean;
 }) {
   const [tab, setTab] = useState("Scenario"),
-    [matrix, setMatrix] = useState('{"gain": [0.5, 0.8, 1.2]}'),
-    [concurrency, setConcurrency] = useState(1),
-    [budget, setBudget] = useState(8),
-    [campaign, setCampaign] = useState<Data | null>(null),
     [evaluations, setEvaluations] = useState<Data[]>([]),
     [definition, setDefinition] = useState(""),
     [definitions, setDefinitions] = useState<Data[]>([]);
-  const campaignKey = useRef(mutationKey());
-  useEffect(() => {
-    campaignKey.current = mutationKey();
-  }, [matrix, budget, concurrency]);
   const scenario = selection.scenarioRef
       ? projection.scenarios.find(
           (resource) =>
@@ -74,33 +71,6 @@ export function ExperimentsView({
         .catch(() => {});
     }
   }, [run?.runId]);
-  useEffect(() => {
-    if (
-      !campaign ||
-      !["running", "pending", "cancelling"].includes(campaign.status)
-    )
-      return;
-    const timer = setInterval(
-      () =>
-        void api(`/campaigns/${campaign.campaignId}`)
-          .then(setCampaign)
-          .catch(() => {}),
-      2000,
-    );
-    return () => clearInterval(timer);
-  }, [campaign?.campaignId, campaign?.status]);
-  let cardinality: number | null = null;
-  try {
-    const values = Object.values(JSON.parse(matrix));
-    cardinality = values.length
-      ? values.reduce<number>(
-          (n, v) => n * (Array.isArray(v) ? v.length : 0),
-          1,
-        )
-      : 0;
-  } catch {
-    /* Server returns authoritative schema diagnostics. */
-  }
   return (
     <div className="view-page">
       <div className="section-heading">
@@ -364,155 +334,13 @@ export function ExperimentsView({
           </aside>
         </div>
       ) : (
-        <div className="connection-layout">
-          <section className="panel">
-            <h3>Bounded parameter campaign</h3>
-            <p>
-              Each child receives its own immutable snapshot. Concurrency and
-              resource budgets are rechecked by the backend.
-            </p>
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                void doAction("Creating campaign", async () => {
-                  if (!preflight || preflight.status !== "ready")
-                    throw new Error(
-                      "Run a ready preflight from the current draft before scheduling a campaign.",
-                    );
-                  const result = await api("/campaigns", {
-                    method: "POST",
-                    key: campaignKey.current,
-                    body: {
-                      snapshotId: preflight.snapshotId,
-                      matrix: JSON.parse(matrix),
-                      budget: { maxRuns: budget, maxTotalSeconds: budget * 30 },
-                      concurrency,
-                      stopPolicy: "continue",
-                    } satisfies Campaign,
-                  });
-                  setCampaign(await api(`/campaigns/${result.campaignId}`));
-                });
-              }}
-            >
-              <label>
-                Parameter matrix (JSON)
-                <textarea
-                  rows={5}
-                  spellCheck={false}
-                  value={matrix}
-                  onChange={(e) => setMatrix(e.target.value)}
-                />
-              </label>
-              <div className="two-fields">
-                <label>
-                  Maximum runs
-                  <input
-                    type="number"
-                    min={1}
-                    max={32}
-                    value={budget}
-                    onChange={(e) => setBudget(Number(e.target.value))}
-                  />
-                </label>
-                <label>
-                  Concurrency
-                  <input
-                    type="number"
-                    min={1}
-                    max={1}
-                    value={concurrency}
-                    onChange={(e) => setConcurrency(Number(e.target.value))}
-                  />
-                </label>
-              </div>
-              <div className="campaign-preview">
-                <Icon name="catalog" />
-                <span>
-                  <strong>{cardinality ?? "Invalid JSON"}</strong> child runs in
-                  this matrix
-                </span>
-                <Badge
-                  tone={
-                    cardinality !== null && cardinality <= budget
-                      ? "info"
-                      : "danger"
-                  }
-                >
-                  Budget {budget}
-                </Badge>
-              </div>
-              <button
-                className="button primary"
-                disabled={
-                  cardinality === null ||
-                  cardinality < 1 ||
-                  cardinality > budget
-                }
-              >
-                Create campaign
-              </button>
-            </form>
-          </section>
-          <section className="panel">
-            <h3>Campaign history</h3>
-            {campaign ? (
-              <>
-                <div className="section-heading">
-                  <code>{campaign.campaignId}</code>
-                  <Badge tone={statusTone(campaign.status)}>
-                    {campaign.status}
-                  </Badge>
-                </div>
-                <table>
-                  <thead>
-                    <tr>
-                      <th>Child</th>
-                      <th>Parameters</th>
-                      <th>Status</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {(campaign.children || []).map((c: Data) => (
-                      <tr key={c.childKey || c.index}>
-                        <td>{c.index + 1}</td>
-                        <td>
-                          <code>{JSON.stringify(c.parameters)}</code>
-                        </td>
-                        <td>
-                          <Badge tone={statusTone(c.state)}>{c.state}</Badge>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-                <button
-                  className="button"
-                  disabled={["complete", "cancelled"].includes(campaign.status)}
-                  onClick={() =>
-                    void doAction("Cancelling campaign", async () => {
-                      await api(`/campaigns/${campaign.campaignId}/cancel`, {
-                        method: "POST",
-                        body: {},
-                        key: mutationKey(),
-                      });
-                      setCampaign(
-                        await api(`/campaigns/${campaign.campaignId}`),
-                      );
-                    })
-                  }
-                >
-                  Stop scheduling
-                </button>
-                <Json value={campaign} />
-              </>
-            ) : (
-              <Empty title="No campaign selected" icon="catalog">
-                Preview a finite matrix, create the campaign, and inspect each
-                child independently.
-              </Empty>
-            )}
-          </section>
-        </div>
+        <CampaignWorkspace
+          key={project.projectId}
+          project={project}
+          preflight={preflight}
+          limits={campaignLimits}
+          enabled={campaignEnabled}
+        />
       )}
     </div>
   );

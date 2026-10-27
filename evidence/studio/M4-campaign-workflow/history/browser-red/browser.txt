@@ -1,0 +1,76 @@
+
+> xverse-studio-workspace@0.1.0 test:e2e
+> playwright test -c tests/e2e/playwright.config.ts --grep campaign workflow:
+
+
+Running 2 tests using 1 worker
+
+(node:2613869) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 tests/e2e/campaign-workflow.spec.ts:36:7 › campaign workflow: retained native children reopen without scheduling at 1024 (21.9s)
+(node:2614603) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 tests/e2e/campaign-workflow.spec.ts:36:7 › campaign workflow: retained native children reopen without scheduling at 1440 (18.7s)
+
+
+  1) tests/e2e/campaign-workflow.spec.ts:36:7 › campaign workflow: retained native children reopen without scheduling at 1024
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('button', { name: 'Refresh campaign history', exact: true })
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('button', { name: 'Refresh campaign history', exact: true }) with timeout 10000ms
+      - waiting for getByRole('button', { name: 'Refresh campaign history', exact: true })
+
+
+      45 |     page.on("request", r => { if (!["GET", "HEAD", "OPTIONS"].includes(r.method())) writes.push(r.method() + " " + new URL(r.url()).pathname); });
+      46 |     const refresh = page.getByRole("button", { name: "Refresh campaign history", exact: true });
+    > 47 |     await expect(refresh).toBeVisible();
+         |                           ^
+      48 |     await refresh.focus(); await page.keyboard.press("Enter");
+      49 |     const open = page.getByRole("button", { name: `Inspect campaign ${made.campaignId}`, exact: true });
+      50 |     await expect(open).toBeVisible();
+        at <repo>/tests/e2e/campaign-workflow.spec.ts:47:27
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/campaign-workflow-campaign-630e7--without-scheduling-at-1024/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/campaign-workflow-campaign-630e7--without-scheduling-at-1024/error-context.md
+
+  2) tests/e2e/campaign-workflow.spec.ts:36:7 › campaign workflow: retained native children reopen without scheduling at 1440
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('button', { name: 'Refresh campaign history', exact: true })
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('button', { name: 'Refresh campaign history', exact: true }) with timeout 10000ms
+      - waiting for getByRole('button', { name: 'Refresh campaign history', exact: true })
+
+
+      45 |     page.on("request", r => { if (!["GET", "HEAD", "OPTIONS"].includes(r.method())) writes.push(r.method() + " " + new URL(r.url()).pathname); });
+      46 |     const refresh = page.getByRole("button", { name: "Refresh campaign history", exact: true });
+    > 47 |     await expect(refresh).toBeVisible();
+         |                           ^
+      48 |     await refresh.focus(); await page.keyboard.press("Enter");
+      49 |     const open = page.getByRole("button", { name: `Inspect campaign ${made.campaignId}`, exact: true });
+      50 |     await expect(open).toBeVisible();
+        at <repo>/tests/e2e/campaign-workflow.spec.ts:47:27
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/campaign-workflow-campaign-350ec--without-scheduling-at-1440/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/campaign-workflow-campaign-350ec--without-scheduling-at-1440/error-context.md
+
+  2 failed
+    tests/e2e/campaign-workflow.spec.ts:36:7 › campaign workflow: retained native children reopen without scheduling at 1024
+    tests/e2e/campaign-workflow.spec.ts:36:7 › campaign workflow: retained native children reopen without scheduling at 1440

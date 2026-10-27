@@ -1,0 +1,8 @@
+{
+  "scope": "Evidence finalization only; no product/runtime/test-input change.",
+  "firstAttempt": "Redirected scanner stdout into the scanned dossier before the scanner enumerated JSON files.",
+  "outcome": "failed",
+  "observedError": "json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)",
+  "cause": "The newly created output file was still empty and was included in its own scan.",
+  "repair": "Remove only the verified empty owned artifact; capture output outside the dossier, parse and retain it after successful scanner completion. Original successful scan remains authoritative for its earlier388-file set."
+}

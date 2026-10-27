@@ -1,0 +1,60 @@
+"""Independent owned API probe; SQLite fault injection is not a live provider claim."""
+from copy import deepcopy
+from io import StringIO
+import json
+from pathlib import Path
+import time
+
+from fastapi.testclient import TestClient
+from ruamel.yaml import YAML
+from xverse_studio.api.app import create_app
+
+
+def test_recorded_comparison_never_claims_compatibility_for_unverified_snapshot(tmp_path):
+    app=create_app(tmp_path,allowed_hosts=['testserver'],bootstrap_token='owned-comparison-probe')
+    with TestClient(app,base_url='http://testserver') as client:
+        client.headers['Origin']='http://testserver'
+        auth=client.post('/api/v1/session',json={'bootstrapToken':'owned-comparison-probe'})
+        assert auth.status_code==200
+        client.headers['X-CSRF-Token']=auth.json()['csrfToken']
+        project=client.post('/api/v1/projects',json={'name':'Owned comparison identity probe','blueprintRef':'reference-process-control'}).json()
+        doc_id,doc=next((k,v) for k,v in project['documents'].items() if 'scenario' in v['path'])
+        yaml=YAML();source=yaml.load(doc['content'])
+        next(p for p in source['extensions']['io.xverse.experiment']['parameters'] if p['id']=='duration')['value']=.2
+        stream=StringIO();yaml.dump(source,stream)
+        saved=client.put(f"/api/v1/projects/{project['projectId']}/documents/{doc_id}",headers={'If-Match':str(project['revision'])},json={'content':stream.getvalue(),'format':'yaml'})
+        assert saved.status_code==200,saved.text
+        project=saved.json();runs=[]
+        for index in range(2):
+            pf=client.post(f"/api/v1/projects/{project['projectId']}/preflights",json={'revision':project['revision']})
+            assert pf.status_code==200 and pf.json()['status']=='ready',pf.text
+            created=client.post('/api/v1/runs',headers={'Idempotency-Key':'owned-comparison-'+str(index)},json={'snapshotId':pf.json()['snapshotId'],'preflightId':pf.json()['preflightId']})
+            assert created.status_code==202,created.text
+            rid=created.json()['runId'];deadline=time.monotonic()+20
+            while time.monotonic()<deadline:
+                run=client.get('/api/v1/runs/'+rid).json()
+                if run['state'] in {'stopped','failed','unknown'}:break
+                time.sleep(.1)
+            assert run['state']=='stopped',run
+            runs.append(run)
+        payload={'leftRunId':runs[0]['runId'],'rightRunId':runs[1]['runId']}
+        before=client.post('/api/v1/comparisons',json=payload)
+        assert before.status_code==200 and before.json()['compatible'] is True,before.text
+        store=app.state.studio.store
+        original=store.get('snapshot',runs[0]['snapshotId'])
+        corrupted=deepcopy(original)
+        corrupted['artifactIdentities']=[{'artifactId':'owned-tampered-claim','digest':'sha256:'+'0'*64}]
+        store.put('snapshot',original['snapshotId'],corrupted)
+        try:
+            inspected=client.post('/api/v1/comparisons',json=payload)
+            projection=inspected.json()
+            Path('.studio-local/comparison-next/actual-public-projection.json').write_text(json.dumps({
+                'scope':'Two real owned reference runs; left stored snapshot body is deliberately changed without updating its digest or managed immutable file. Canonical journals and files are not modified.',
+                'leftRunId':runs[0]['runId'],'rightRunId':runs[1]['runId'],
+                'distinctSnapshots':runs[0]['snapshotId']!=runs[1]['snapshotId'],
+                'before':before.json(),'afterStatus':inspected.status_code,'after':projection,
+                'managedSnapshotBytesUnchanged':(store.root/'snapshots'/original['snapshotId']/'snapshot.json').read_text().strip()==json.dumps(original,sort_keys=True,separators=(',',':'),ensure_ascii=False),
+            },indent=2)+'\n')
+            assert inspected.status_code>=400 or projection.get('compatible') is not True, 'An unverified frozen snapshot must not produce a positive recorded-comparison compatibility claim.'
+        finally:
+            store.put('snapshot',original['snapshotId'],original)

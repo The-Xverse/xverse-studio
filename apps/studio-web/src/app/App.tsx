@@ -54,7 +54,10 @@ import {
 import { PreflightReview } from "../features/preflight/PreflightReview";
 import { ResultsView } from "../features/results/ResultsView";
 import { PendingStartNotice } from "../features/runs/PendingStartNotice";
-import { RecoveryPanel, type RecoveryResult } from "../features/model/RecoveryPanel";
+import {
+  RecoveryPanel,
+  type RecoveryResult,
+} from "../features/model/RecoveryPanel";
 import { FrozenInputs } from "../features/results/FrozenInputs";
 import {
   RunDivergenceBadge,
@@ -233,7 +236,10 @@ export default function App() {
     const visible = renderedIntentSequence === preflightRequestSequence.current;
     preflightRequestSequence.current++;
     setProject(saved);
-    const history = reconcileHistory(readHistory(saved.projectId), saved.revision);
+    const history = reconcileHistory(
+      readHistory(saved.projectId),
+      saved.revision,
+    );
     writeHistory(saved.projectId, history);
     setEditHistory(history);
     setPreflight(null);
@@ -396,12 +402,26 @@ export default function App() {
       selectedProjectRef.current !== historyFocus.projectId ||
       projectLoadSequence.current !== historyFocus.loadSequence ||
       preflightRequestSequence.current !== historyFocus.intentSequence ||
-      section !== "workspace" || modal ||
-      (document.activeElement !== document.body && document.activeElement !== historyFocus.origin)
-    ) return;
-    const same = historyFocus.direction === "undo" ? undoControl.current : redoControl.current,
-      opposite = historyFocus.direction === "undo" ? redoControl.current : undoControl.current;
-    (same && !same.disabled ? same : opposite && !opposite.disabled ? opposite : null)?.focus();
+      section !== "workspace" ||
+      modal ||
+      (document.activeElement !== document.body &&
+        document.activeElement !== historyFocus.origin)
+    )
+      return;
+    const same =
+        historyFocus.direction === "undo"
+          ? undoControl.current
+          : redoControl.current,
+      opposite =
+        historyFocus.direction === "undo"
+          ? redoControl.current
+          : undoControl.current;
+    (same && !same.disabled
+      ? same
+      : opposite && !opposite.disabled
+        ? opposite
+        : null
+    )?.focus();
   }, [busy, historyFocus, project?.projectId, section, modal]);
   function setModal(value: string) {
     preflightRequestSequence.current++;
@@ -945,7 +965,9 @@ export default function App() {
       sequence = projectLoadSequence.current,
       intent = preflightRequestSequence.current,
       initialHistory = readHistory(projectId),
-      current = () => selectedProjectRef.current === projectId && projectLoadSequence.current === sequence;
+      current = () =>
+        selectedProjectRef.current === projectId &&
+        projectLoadSequence.current === sequence;
     try {
       const saved = await api<Project>(`/projects/${projectId}/edits`, {
         method: "POST",
@@ -953,10 +975,17 @@ export default function App() {
         body: { baseRevision: project.revision, edits },
       });
       const known = latestProject.current;
-      if (known?.projectId === projectId && known.revision > saved.revision) return undefined;
-      const history = recordEdit(initialHistory, project.revision, saved.revision,
-        edits.map((edit) => String(edit.kind).replace(/_/g, " ")).join(", ")),
-        persisted = JSON.stringify(readHistory(projectId)) === JSON.stringify(initialHistory);
+      if (known?.projectId === projectId && known.revision > saved.revision)
+        return undefined;
+      const history = recordEdit(
+          initialHistory,
+          project.revision,
+          saved.revision,
+          edits.map((edit) => String(edit.kind).replace(/_/g, " ")).join(", "),
+        ),
+        persisted =
+          JSON.stringify(readHistory(projectId)) ===
+          JSON.stringify(initialHistory);
       // A completed edit belongs to its original tab head, even after departure.
       // A newer load/edit must never have its history replaced by an older reply.
       if (persisted) writeHistory(projectId, history);
@@ -966,7 +995,10 @@ export default function App() {
       if (!known || saved.revision > known.revision) {
         // The response is already the full authoritative committed Project.
         setProject(saved);
-        if (!persisted) setEditHistory(reconcileHistory(readHistory(projectId), saved.revision));
+        if (!persisted)
+          setEditHistory(
+            reconcileHistory(readHistory(projectId), saved.revision),
+          );
         preflightRequestSequence.current++;
         setPreflight(null);
         if (visible)
@@ -984,10 +1016,13 @@ export default function App() {
     const projectId = project.projectId,
       sequence = projectLoadSequence.current,
       history = readHistory(projectId),
-      current = () => selectedProjectRef.current === projectId && projectLoadSequence.current === sequence,
+      current = () =>
+        selectedProjectRef.current === projectId &&
+        projectLoadSequence.current === sequence,
       persist = (next: EditHistory) => {
         // A newer load/edit may already have reconciled this tab's head.
-        if (JSON.stringify(readHistory(projectId)) !== JSON.stringify(history)) return false;
+        if (JSON.stringify(readHistory(projectId)) !== JSON.stringify(history))
+          return false;
         writeHistory(projectId, next);
         return true;
       };
@@ -999,7 +1034,11 @@ export default function App() {
       // Restore already returns the full committed Project. Starting another load here
       // would recapture an obsolete navigation intent after the user had left.
       setProject(result.project);
-      setEditHistory(persisted ? result.history : reconcileHistory(readHistory(projectId), result.project.revision));
+      setEditHistory(
+        persisted
+          ? result.history
+          : reconcileHistory(readHistory(projectId), result.project.revision),
+      );
       setPreflight(null);
       setNotice(
         `${direction === "undo" ? "Undid" : "Redid"} a graph edit as new revision ${result.project.revision}. Earlier revisions and run snapshots are unchanged.`,
@@ -1013,17 +1052,33 @@ export default function App() {
       throw error;
     }
   }
-  function historyFromControl(direction: "undo" | "redo", origin: HTMLButtonElement) {
-    const request = project && document.activeElement === origin ? {
-      projectId: project.projectId,
-      loadSequence: projectLoadSequence.current,
-      intentSequence: preflightRequestSequence.current,
-      direction: origin === undoControl.current ? "undo" as const : "redo" as const, origin,
-    } : null;
-    void doAction(direction === "undo" ? "Undoing graph edit" : "Redoing graph edit", async () => {
-      try { await stepHistory(direction); }
-      finally { if (request) setHistoryFocus(request); }
-    });
+  function historyFromControl(
+    direction: "undo" | "redo",
+    origin: HTMLButtonElement,
+  ) {
+    const request =
+      project && document.activeElement === origin
+        ? {
+            projectId: project.projectId,
+            loadSequence: projectLoadSequence.current,
+            intentSequence: preflightRequestSequence.current,
+            direction:
+              origin === undoControl.current
+                ? ("undo" as const)
+                : ("redo" as const),
+            origin,
+          }
+        : null;
+    void doAction(
+      direction === "undo" ? "Undoing graph edit" : "Redoing graph edit",
+      async () => {
+        try {
+          await stepHistory(direction);
+        } finally {
+          if (request) setHistoryFocus(request);
+        }
+      },
+    );
   }
   async function validate() {
     if (!project) return;
@@ -1192,7 +1247,10 @@ export default function App() {
           </span>
           <span className="top-spacer" />
           <Badge>REFERENCE PREVIEW</Badge>
-          <button className="top-button" onClick={() => changeSection("settings")}>
+          <button
+            className="top-button"
+            onClick={() => changeSection("settings")}
+          >
             <Icon name="settings" />
             <span>Environment</span>
           </button>
@@ -1328,10 +1386,11 @@ export default function App() {
                       (() => {
                         // Unreadable committed sources can still be restored from history.
                         const listed = projects.find(
-                          (p) => p.projectId === (
-                            (error as ProjectRequestError).requestedProjectId ||
-                            selectedProjectRef.current
-                          ),
+                          (p) =>
+                            p.projectId ===
+                            ((error as ProjectRequestError)
+                              .requestedProjectId ||
+                              selectedProjectRef.current),
                         );
                         return listed ? (
                           <RecoveryPanel
@@ -1348,7 +1407,8 @@ export default function App() {
                           void doAction(
                             "Loading current revision",
                             async () => {
-                              const target = (error as ProjectRequestError).requestedProjectId,
+                              const target = (error as ProjectRequestError)
+                                  .requestedProjectId,
                                 accepted = target
                                   ? await loadProject(target)
                                   : await refreshProject();
@@ -1379,7 +1439,10 @@ export default function App() {
                 providers={providers}
                 project={project}
                 onIntent={() => {
-                  if (project && selectedProjectRef.current === project.projectId)
+                  if (
+                    project &&
+                    selectedProjectRef.current === project.projectId
+                  )
                     workspaceInteractionSequence.current++;
                 }}
                 onCommitted={(saved, navigate, origin) => {
@@ -1474,11 +1537,7 @@ export default function App() {
                 <div className="project-header">
                   <div>
                     <div className="breadcrumb">
-                      <button
-                        onClick={() => showHome(true)}
-                      >
-                        Workspace
-                      </button>
+                      <button onClick={() => showHome(true)}>Workspace</button>
                       <Icon name="chevron" size={12} />
                       <span>System</span>
                     </div>
@@ -1513,7 +1572,9 @@ export default function App() {
                           ? `Undo ${editHistory.undo[editHistory.undo.length - 1].label}`
                           : "No graph edit to undo in this tab"
                       }
-                      onClick={(event) => historyFromControl("undo", event.currentTarget)}
+                      onClick={(event) =>
+                        historyFromControl("undo", event.currentTarget)
+                      }
                     >
                       Undo
                     </button>
@@ -1527,7 +1588,9 @@ export default function App() {
                           ? `Redo ${editHistory.redo[editHistory.redo.length - 1].label}`
                           : "No graph edit to redo in this tab"
                       }
-                      onClick={(event) => historyFromControl("redo", event.currentTarget)}
+                      onClick={(event) =>
+                        historyFromControl("redo", event.currentTarget)
+                      }
                     >
                       Redo
                     </button>
@@ -1725,6 +1788,10 @@ export default function App() {
                     authoringLimits={
                       capabilities.limits?.scenarioAuthoring || {}
                     }
+                    campaignLimits={capabilities.limits || {}}
+                    campaignEnabled={Boolean(
+                      capabilities.supportedOperations?.includes("campaign"),
+                    )}
                     preflight={preflight}
                     run={run}
                     doAction={doAction}

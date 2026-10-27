@@ -401,10 +401,25 @@ def install_advanced(app, store, projects, runs, adapter):
         campaign_state(row).recover()
     app.state.studio.campaign_tick = campaign_tick
 
+    def campaign_public(row):
+        """Inert presentation provenance; never advances or repairs a campaign."""
+        base = row.get("baseSnapshot")
+        try:
+            if (not isinstance(base, dict) or base.get("snapshotId") != row["baseSnapshotId"]
+                    or digest(base) != row["baseSnapshotDigest"]):
+                raise Problem("SNAPSHOT_INTEGRITY", "The campaign base cannot be verified.")
+            runs.verify_snapshot(base)
+            provenance = {"status": "verified", **{key: base[key] for key in
+                ["snapshotId", "snapshotDigest", "projectId", "revision", "selection", "providerId"]}}
+        except (Problem, KeyError, TypeError):
+            provenance = {"status": "unavailable", "reason": "SNAPSHOT_INTEGRITY"}
+        return {**{k: v for k, v in row.items() if k not in {"baseSnapshot", "principal"}},
+                "campaignVersion": "1.0", "baseInput": provenance}
+
     @app.post("/api/v1/campaigns/preview")
     def preview_campaign(body: Campaign):
         preview = campaign_preview(body)
-        return {k: v for k, v in preview.items() if k != "baseSnapshot"}
+        return campaign_public(preview)
 
     @app.post("/api/v1/campaigns", status_code=202)
     def new_campaign(body: Campaign, request: Request):
@@ -423,12 +438,13 @@ def install_advanced(app, store, projects, runs, adapter):
 
     @app.get("/api/v1/campaigns")
     def campaigns(cursor: str | None = None, limit: int = 100):
-        return _page([{k: v for k, v in r.items() if k not in {"baseSnapshot", "principal"}} for r in store.all("campaign")], cursor, limit)
+        page = _page(store.all("campaign"), cursor, limit)
+        return {**page, "items": [campaign_public(row) for row in page["items"]]}
 
     @app.get("/api/v1/campaigns/{campaignId}")
     def campaign(campaignId: str):
         row = store.get("campaign", campaignId)
-        return {k: v for k, v in row.items() if k not in {"baseSnapshot", "principal"}}
+        return campaign_public(row)
 
     @app.post("/api/v1/campaigns/{campaignId}/cancel", status_code=202)
     def cancel_campaign(campaignId: str, body: Empty, request: Request):
@@ -464,6 +480,7 @@ def install_advanced(app, store, projects, runs, adapter):
     def comparable(run_id):
         run = runs.read(run_id)
         snapshot = store.get("snapshot", run["snapshotId"])
+        runs.verify_snapshot(snapshot)
         records, integrity = read_journal(runs.directory(run_id), run)
         projected = _journal_projection(run, snapshot, records, integrity)
         return {"runId": run_id, "snapshot": {**snapshot, "parameters": snapshot.get("configuration"), "providerIdentity": {"providerId": run.get("providerId")}, "clockDomainRef": "simulation-time"}, "evidence": {"integrity": integrity, "status": run["evidence"]}, "observations": [{"observerRef": p["observerRef"], "field": p["field"], "unit": p["schema"]["unit"], "quantity": p["schema"]["quantity"], "unitDefinitionDigest": p["schema"]["unitDefinitionDigest"], "clockDomainRef": p["clockDomainRef"], "coverage": p["coverage"]} for p in projected]}

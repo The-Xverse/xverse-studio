@@ -1,0 +1,385 @@
+import { test, expect } from "@playwright/test";
+import { connectStudio } from "./connect-studio";
+import { measureModel } from "../performance/browser-model";
+import { measureHistory } from "../performance/browser-history";
+import { exerciseComposition } from "./composition-flow";
+import { exerciseFrozenRerun } from "./frozen-rerun-flow";
+test("owned reference browser workflow: author, preflight, execute, reconnect, inspect and annotate", async ({
+  page,
+}, testInfo) => {
+  test.setTimeout(240000);
+  const errors: string[] = [];
+  page.on("pageerror", (e) => errors.push(e.message));
+  await connectStudio(page, testInfo);
+  await page.screenshot({
+    path: testInfo.outputPath("home.png"),
+    fullPage: true,
+  });
+  await page
+    .locator(".example-grid")
+    .getByRole("button", { name: /Process control reference/ })
+    .click();
+  await expect(
+    page.getByRole("heading", {
+      name: "Process control reference",
+      exact: true,
+    }),
+  ).toBeVisible();
+  await expect(page.getByRole("button", { name: "plant plant" })).toBeVisible();
+  await page.getByRole("button", { name: "plant plant" }).click();
+  await expect(page.locator(".inspector .key-values")).toContainText(
+    "reference-response",
+  );
+  await expect(
+    page.getByRole("heading", { name: "Element inspector" }),
+  ).toBeVisible();
+  await page.getByRole("button", { name: "Parameters", exact: true }).click();
+  await page.getByLabel("Duration").fill("1");
+  await page
+    .getByLabel("Duration")
+    .locator("xpath=ancestor::form")
+    .getByRole("button", { name: "Apply", exact: true })
+    .click();
+  await expect(
+    page.getByText("Draft saved. Existing run snapshots remain unchanged."),
+  ).toBeVisible();
+  await page.getByRole("button", { name: "Validate", exact: true }).click();
+  await expect(
+    page.getByText("Authoritative platform validation passed.", {
+      exact: false,
+    }),
+  ).toBeVisible();
+  await page.screenshot({
+    path: testInfo.outputPath("model.png"),
+    fullPage: true,
+  });
+  await page.getByRole("button", { name: "Table view", exact: true }).click();
+  await expect(
+    page.getByRole("table").getByRole("button", { name: "plant", exact: true }),
+  ).toBeVisible();
+  await page.getByRole("button", { name: "Graph view", exact: true }).click();
+  await page.getByRole("tab", { name: "Connections", exact: true }).click();
+  await expect(
+    page.getByRole("heading", { name: "Endpoint contracts" }),
+  ).toBeVisible();
+  await page.getByRole("tab", { name: "Deployment", exact: true }).click();
+  await expect(
+    page.getByRole("heading", { name: "Inspect and update a binding" }),
+  ).toBeVisible();
+  await page.getByRole("tab", { name: "Experiments", exact: true }).click();
+  await expect(
+    page.getByRole("heading", { name: "Scheduled actions" }),
+  ).toBeVisible();
+  await page.getByRole("button", { name: "XDL source", exact: true }).click();
+  await page
+    .getByRole("combobox", { name: "Resource", exact: true })
+    .selectOption({ index: 0 });
+  const before = await page
+    .getByLabel("XDL source", { exact: true })
+    .inputValue();
+  await page
+    .getByLabel("XDL source", { exact: true })
+    .fill(before + "\n# Browser round-trip verification\n");
+  await page
+    .getByRole("button", { name: "Compare changes", exact: true })
+    .click();
+  await expect(page.getByText("Edited draft", { exact: true })).toBeVisible();
+  await page
+    .getByRole("button", { name: "Save source revision", exact: true })
+    .click();
+  await expect(page.getByText("Saved revision", { exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "Close dialog", exact: true }).click();
+  await page
+    .getByRole("button", { name: "Preflight & run", exact: true })
+    .click();
+  await expect(
+    page.getByRole("heading", { name: "Execution preflight" }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: "Start frozen snapshot", exact: true }),
+  ).toBeEnabled();
+  await page
+    .getByRole("button", { name: "Start frozen snapshot", exact: true })
+    .click();
+  await expect(
+    page.getByRole("heading", { name: /Run results/ }),
+  ).toBeVisible();
+  await expect(page.getByText("stopped", { exact: true }).first()).toBeVisible({
+    timeout: 20000,
+  });
+  const runIds = await page.evaluate(() =>
+    localStorage.getItem("studio.lastRun"),
+  );
+  expect(runIds).toBeTruthy();
+  await page.reload();
+  await expect(
+    page.getByRole("heading", {
+      name: "Process control reference",
+      exact: true,
+    }),
+  ).toBeVisible();
+  await page.getByRole("tab", { name: "Results", exact: false }).click();
+  await expect(page.getByText(runIds!, { exact: true }).first()).toBeVisible();
+  await page.getByRole("button", { name: "Refresh", exact: true }).click();
+  await expect(
+    page.getByRole("img", { name: /Recorded observation chart/ }),
+  ).toBeVisible();
+  await page.screenshot({
+    path: testInfo.outputPath("results.png"),
+    fullPage: true,
+  });
+  await page.getByRole("tab", { name: "Events & logs", exact: false }).click();
+  await expect(
+    page.getByRole("heading", { name: "Events and permitted logs" }),
+  ).toBeVisible();
+  await page.getByRole("tab", { name: "Annotations", exact: true }).click();
+  await page
+    .getByLabel("Comment", { exact: true })
+    .fill("Browser verification note; separate from immutable evidence.");
+  await page
+    .getByRole("button", { name: "Save separate annotation", exact: true })
+    .click();
+  await expect(
+    page.getByText(
+      "Browser verification note; separate from immutable evidence.",
+      { exact: true },
+    ),
+  ).toBeVisible();
+  await page.getByRole("tab", { name: "Experiments", exact: true }).click();
+  await page.getByRole("tab", { name: "Assertions", exact: true }).click();
+  await expect(
+    page.getByLabel("Snapshot definition reference").locator("option"),
+  ).toHaveCount(2);
+  await page
+    .getByLabel("Snapshot definition reference")
+    .selectOption({ index: 1 });
+  await page
+    .getByRole("button", { name: "Evaluate assertion", exact: true })
+    .click();
+  await expect(page.getByText("indeterminate", { exact: true })).toBeVisible();
+  await page
+    .getByRole("button", { name: "Preflight & run", exact: true })
+    .click();
+  await expect(
+    page.getByRole("button", { name: "Start frozen snapshot", exact: true }),
+  ).toBeEnabled();
+  await page
+    .getByRole("button", { name: "Back to draft", exact: true })
+    .click();
+  await page.getByRole("tab", { name: "Campaigns", exact: true }).click();
+  await page.getByLabel("Parameter matrix (JSON)").fill('{"gain":[0.5,0.8]}');
+  await page.getByLabel("Maximum runs", { exact: true }).fill("2");
+  await page
+    .getByRole("button", { name: "Preview campaign", exact: true })
+    .click();
+  await expect(
+    page.getByRole("heading", {
+      name: "Authoritative campaign preview",
+      exact: true,
+    }),
+  ).toBeVisible();
+  await page
+    .getByRole("button", { name: "Create campaign", exact: true })
+    .click();
+  await expect(
+    page.locator(".section-heading").getByText("complete", { exact: true }),
+  ).toBeVisible({ timeout: 30000 });
+  await page.screenshot({
+    path: testInfo.outputPath("campaign.png"),
+    fullPage: true,
+  });
+  await exerciseComposition(page, testInfo);
+  await exerciseFrozenRerun(page, testInfo);
+  for (const viewport of [
+    { width: 1024, height: 768 },
+    { width: 1440, height: 900 },
+  ]) {
+    await page.setViewportSize(viewport);
+    await page.getByRole("tab", { name: "Model", exact: true }).click();
+    const horizontalOverflow = await page.evaluate(
+      () => document.documentElement.scrollWidth > window.innerWidth + 1,
+    );
+    expect(horizontalOverflow).toBe(false);
+    await page.getByRole("button", { name: "Table view", exact: true }).focus();
+    await page.keyboard.press("Enter");
+    await expect(
+      page.getByRole("button", { name: "plant", exact: true }),
+    ).toBeVisible();
+    await page.getByRole("button", { name: "Graph view", exact: true }).click();
+    await page.screenshot({
+      path: testInfo.outputPath(`workspace-${viewport.width}.png`),
+      fullPage: true,
+    });
+  }
+  await page.getByRole("button", { name: "Laboratory", exact: true }).click();
+  await expect(
+    page.getByRole("heading", { name: "No physical provider admitted" }),
+  ).toBeVisible();
+  expect(errors).toEqual([]);
+  const keyboardActivate = async (
+    target: ReturnType<typeof page.getByRole>,
+  ) => {
+    await expect(target).toBeVisible();
+    for (let step = 0; step < 130; step++) {
+      if (
+        await target.evaluate((element) => document.activeElement === element)
+      ) {
+        await page.keyboard.press("Enter");
+        return;
+      }
+      await page.keyboard.press("Tab");
+    }
+    throw new Error(
+      "Keyboard target is not reachable through native Tab order.",
+    );
+  };
+  await keyboardActivate(
+    page.getByRole("button", { name: "X-Verse Studio home", exact: true }),
+  );
+  await keyboardActivate(
+    page
+      .locator(".example-grid")
+      .getByRole("button", { name: /Automotive reference/ }),
+  );
+  await expect(
+    page.getByRole("heading", { name: "Automotive reference", exact: true }),
+  ).toBeVisible();
+  // Keep the worker active for the native Tab traversal; prove actual Stop execution below.
+  await page.getByRole("button", { name: "Parameters", exact: true }).click();
+  await page.getByLabel("Duration", { exact: true }).fill("30");
+  await page
+    .getByLabel("Duration", { exact: true })
+    .locator("xpath=ancestor::form")
+    .getByRole("button", { name: "Apply", exact: true })
+    .click();
+  await expect(
+    page.getByText("Draft saved. Existing run snapshots remain unchanged.", {
+      exact: true,
+    }),
+  ).toBeVisible();
+  await keyboardActivate(
+    page.getByRole("button", { name: "Validate", exact: true }),
+  );
+  await expect(
+    page.getByText("Authoritative platform validation passed.", {
+      exact: false,
+    }),
+  ).toBeVisible();
+  await keyboardActivate(
+    page.getByRole("button", { name: "Preflight & run", exact: true }),
+  );
+  await expect(
+    page.getByRole("heading", { name: "Execution preflight" }),
+  ).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(
+    page.getByRole("button", { name: "Preflight & run", exact: true }),
+  ).toBeFocused();
+  await page.keyboard.press("Enter");
+  await keyboardActivate(
+    page.getByRole("button", { name: "Start frozen snapshot", exact: true }),
+  );
+  await expect(
+    page.getByRole("heading", { name: /Run results/ }),
+  ).toBeVisible();
+  await expect(page.getByText("running", { exact: true }).first()).toBeVisible({
+    timeout: 10000,
+  });
+  const activeRunId = await page.evaluate(() =>
+    localStorage.getItem("studio.lastRun"),
+  );
+  expect(activeRunId).toBeTruthy();
+  const frozen = await page.evaluate(async (id) => {
+    const response = await fetch(`/api/v1/runs/${id}/snapshot`);
+    if (!response.ok)
+      throw new Error("Owned keyboard snapshot could not be read.");
+    return response.json();
+  }, activeRunId);
+  expect(frozen.snapshot.configuration.duration).toBe(30);
+  const stopTiming: any[] = [];
+  const recordStop = (value: any) => {
+    if (stopTiming.length < 64)
+      stopTiming.push({ at: performance.now(), ...value });
+  };
+  page.on("request", (request) => {
+    if (
+      request.method() === "POST" &&
+      new URL(request.url()).pathname === `/api/v1/runs/${activeRunId}/commands`
+    ) {
+      const body = request.postDataJSON();
+      recordStop({
+        event: "command-request",
+        kind: body.kind,
+        expectedStateVersion: body.expectedStateVersion,
+      });
+    }
+  });
+  const acknowledgement = page.waitForResponse(
+    (response) =>
+      response.request().method() === "POST" &&
+      new URL(response.url()).pathname ===
+        `/api/v1/runs/${activeRunId}/commands`,
+    { timeout: 15000 },
+  );
+  // Observe a rejected wait without creating an unhandled rejection if an earlier assertion fails.
+  void acknowledgement.catch(() => {});
+  try {
+    recordStop({ event: "keyboard-stop-begin", configuredDuration: 30 });
+    await keyboardActivate(
+      page.getByRole("button", { name: "Stop", exact: true }),
+    );
+    await expect(
+      page.getByText("stopped", { exact: true }).first(),
+    ).toBeVisible({
+      timeout: 15000,
+    });
+    const stopResponse = await acknowledgement;
+    const stopReceipt = await stopResponse.json();
+    recordStop({
+      event: "command-response",
+      status: stopResponse.status(),
+      code: stopReceipt.code,
+      operationId: stopReceipt.operationId,
+    });
+    expect(stopResponse.status()).toBe(202);
+    expect(stopReceipt.operationId).toBeTruthy();
+    await expect
+      .poll(
+        async () =>
+          page.evaluate(async (id) => {
+            const response = await fetch(`/api/v1/operations/${id}`);
+            if (!response.ok)
+              throw new Error("Owned Stop operation could not be read.");
+            const operation = await response.json();
+            return { kind: operation.kind, status: operation.status };
+          }, stopReceipt.operationId),
+        { timeout: 15000 },
+      )
+      .toEqual({ kind: "stop", status: "completed" });
+    await expect(page.getByRole("alert")).toHaveCount(0);
+    recordStop({ event: "stop-observed-completed" });
+  } finally {
+    await testInfo.attach("native-keyboard-stop-timing", {
+      contentType: "application/json",
+      body: JSON.stringify({
+        scope:
+          "Actual keyboard Stop against an admitted30-second owned run; no timeout/performance threshold change",
+        runId: activeRunId,
+        snapshotId: frozen.snapshot.snapshotId,
+        events: stopTiming,
+      }),
+    });
+  }
+  expect(errors).toEqual([]);
+  if (
+    process.env.STUDIO_MEASURE_PERFORMANCE === "1" ||
+    process.env.STUDIO_PERFORMANCE === "1"
+  ) {
+    const referenceProjectId = await page.evaluate(() =>
+      localStorage.getItem("studio.projectId"),
+    );
+    await measureModel(page, testInfo);
+    await measureHistory(page, testInfo, referenceProjectId || undefined);
+  }
+  expect(errors).toEqual([]);
+});

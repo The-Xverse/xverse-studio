@@ -69,6 +69,8 @@
 | `POST /reservations/{reservationId}/renewals` | Expected fencing identity and requested deadline; same-scope extension only; backend performs ongoing active-run renewal | M3 |
 | `DELETE /reservations/{reservationId}` | Release owned reservation; returns operation; cannot release another owner's token | M3 |
 | `POST /campaigns` | Frozen base snapshot, bounded parameter matrix, concurrency/stop policy | M4 |
+| `POST /campaigns/preview` | Side-effect-free authoritative bounded expansion; no campaign/child allocation | M4 |
+| `GET /campaigns` | Cursor-paged workspace campaign history with frozen input provenance | M4 |
 | `GET /campaigns/{campaignId}` | Child run identities and aggregate status, never synthetic run verdicts | M4 |
 | `POST /campaigns/{campaignId}/cancel` | Stop scheduling children; separately request permitted cancellation of active children | M4 |
 | `POST /retention/plans` | Explicit project/run/artifact IDs and retention rule; returns a read-only dependency-aware deletion plan and state fingerprint | M4 |
@@ -142,6 +144,19 @@ saved operation or payload conflict before new mutable admission is evaluated.
 The selected adapter must also prove that its effective generated XDL/plan matches the requested snapshot before admission, and record effective identities after execution. The inspected Lite harness generates its own documents; if it cannot accept a requested edit, reject it rather than run a fixed preset under the edited snapshot's identity. See DEP-RUN-CONFIG in the plan and the provider contract.
 
 ## Commands and failures
+
+Campaign presentation amendment (ADR-0020): preview/list/detail add
+`campaignVersion: "1.0"` and `baseInput`. Verified `baseInput` identifies the frozen
+`snapshotId`, `snapshotDigest`, `projectId`, `revision`, `selection` and `providerId`.
+It requires the campaign's base identity digest and managed canonical snapshot bytes
+to agree. Otherwise it is `{status: "unavailable", reason: "SNAPSHOT_INTEGRITY"}`;
+child states remain readable and no current draft supplies a fallback. Existing
+`baseSnapshotDigest` identifies the complete planner base object, including its own
+snapshot digest; it is distinct from `baseInput.snapshotDigest`. Stored records are
+unchanged. List pagination precedes verification. Preview creates no campaign or
+child. Cancellation returns separate active cancellation outcomes and never attests
+terminal cleanup or assertion success. Backend scheduling/recovery remains independent
+of browser polling. HTTP/XDL/profile/evaluator versions are unchanged.
 
 Kinds are a closed registry: `stop` and `cancel`; conditionally `pause`, `resume`, `step`, `reset`, `set_parameter`, and `activate_fault`/`recover_fault`. Capability discovery declares exact scope and parameter schemas. Provider authorization and state are checked again even if the frontend previously enabled a button.
 

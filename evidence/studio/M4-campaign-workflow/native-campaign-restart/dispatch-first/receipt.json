@@ -1,0 +1,199 @@
+{
+  "scope": "Actual native Linux owned reference campaign; actual backend crash after durable dispatch claim and before a durable Start acknowledgement. No hardware/seed/external provider claim.",
+  "startedAtUtc": "2026-10-27T08:18:29.352960+00:00",
+  "events": [
+    {
+      "kind": "durable-dispatching-claim-observed",
+      "elapsed": 2.4554489419970196
+    },
+    {
+      "kind": "owned-backend-crashed-without-start-receipt-or-run",
+      "elapsed": 2.459123194013955
+    },
+    {
+      "kind": "unknown-persists-pending-held-and-no-start-replayed",
+      "elapsed": 4.764435685996432
+    }
+  ],
+  "campaignId": "campaign-3759d5f8-2c3c-4e53-b5c0-dfb2551ec547",
+  "projectId": "prj-80264198-804e-440c-95cd-24d66159f78b",
+  "baseSnapshotId": "snap-8234a945-dd12-4bb9-a537-7733a4f8c53b",
+  "before": {
+    "baseSnapshotDigest": "sha256:e4090e457194d7396f1fe7188ad13e5f942493dde9d614b8e0fc45c2e84bd181",
+    "baseSnapshotId": "snap-8234a945-dd12-4bb9-a537-7733a4f8c53b",
+    "budget": {
+      "maxRuns": 2,
+      "maxTotalSeconds": 20
+    },
+    "campaignId": "campaign-3759d5f8-2c3c-4e53-b5c0-dfb2551ec547",
+    "cancelRequested": false,
+    "cardinality": 2,
+    "children": [
+      {
+        "childKey": "sha256:2855d5fbb377a9c4ca8c75fdcd77c239dd86fe3cf7e50c4a06f4bb6e1f92b41e",
+        "index": 0,
+        "operationKey": "campaign-3759d5f8-2c3c-4e53-b5c0-dfb2551ec547:sha256:2855d5fbb377a9c4ca8c75fdcd77c239dd86fe3cf7e50c4a06f4bb6e1f92b41e",
+        "parameters": {
+          "gain": 0.5
+        },
+        "runId": null,
+        "state": "dispatching"
+      },
+      {
+        "childKey": "sha256:c84c4e49032740be329a418d85b77186274e89dc25da390805268f4339f30350",
+        "index": 1,
+        "parameters": {
+          "gain": 0.8
+        },
+        "runId": null,
+        "state": "pending"
+      }
+    ],
+    "concurrency": 1,
+    "createdAt": 1793089111.401057,
+    "estimatedTotalSeconds": 20.0,
+    "matrix": {
+      "gain": [
+        0.5,
+        0.8
+      ]
+    },
+    "operationId": "op-3c1ce8f3-8358-44ee-9a14-b5f9dc7e94ae",
+    "revision": 2,
+    "status": "running",
+    "stopPolicy": "continue",
+    "campaignVersion": "1.0",
+    "baseInput": {
+      "status": "verified",
+      "snapshotId": "snap-8234a945-dd12-4bb9-a537-7733a4f8c53b",
+      "snapshotDigest": "sha256:cd6de3735e64d839bceaa679423b32cae23b855de79c5f2465343e4550a24666",
+      "projectId": "prj-80264198-804e-440c-95cd-24d66159f78b",
+      "revision": 2,
+      "selection": {
+        "deploymentRef": "xdl://org.xverse.studio.process-control/deployment/local-reference",
+        "scenarioRef": "xdl://org.xverse.studio.process-control/scenario/reference-response",
+        "systemRef": "xdl://org.xverse.studio.process-control/system/reference-loop"
+      },
+      "providerId": "studio.reference"
+    }
+  },
+  "backendBefore": {
+    "pid": 3212060,
+    "birth": 1793089108.89
+  },
+  "durableStartAcknowledgementPresent": false,
+  "allocatedRunIdsAtCrash": [],
+  "outcome": "passed",
+  "afterRestart": {
+    "baseSnapshotDigest": "sha256:e4090e457194d7396f1fe7188ad13e5f942493dde9d614b8e0fc45c2e84bd181",
+    "baseSnapshotId": "snap-8234a945-dd12-4bb9-a537-7733a4f8c53b",
+    "budget": {
+      "maxRuns": 2,
+      "maxTotalSeconds": 20
+    },
+    "campaignId": "campaign-3759d5f8-2c3c-4e53-b5c0-dfb2551ec547",
+    "cancelRequested": false,
+    "cardinality": 2,
+    "children": [
+      {
+        "childKey": "sha256:2855d5fbb377a9c4ca8c75fdcd77c239dd86fe3cf7e50c4a06f4bb6e1f92b41e",
+        "index": 0,
+        "operationKey": "campaign-3759d5f8-2c3c-4e53-b5c0-dfb2551ec547:sha256:2855d5fbb377a9c4ca8c75fdcd77c239dd86fe3cf7e50c4a06f4bb6e1f92b41e",
+        "parameters": {
+          "gain": 0.5
+        },
+        "reason": "RECONCILIATION_REQUIRED",
+        "runId": null,
+        "state": "unknown"
+      },
+      {
+        "childKey": "sha256:c84c4e49032740be329a418d85b77186274e89dc25da390805268f4339f30350",
+        "index": 1,
+        "parameters": {
+          "gain": 0.8
+        },
+        "runId": null,
+        "state": "pending"
+      }
+    ],
+    "concurrency": 1,
+    "createdAt": 1793089111.401057,
+    "estimatedTotalSeconds": 20.0,
+    "matrix": {
+      "gain": [
+        0.5,
+        0.8
+      ]
+    },
+    "operationId": "op-3c1ce8f3-8358-44ee-9a14-b5f9dc7e94ae",
+    "revision": 3,
+    "status": "running",
+    "stopPolicy": "continue",
+    "campaignVersion": "1.0",
+    "baseInput": {
+      "status": "verified",
+      "snapshotId": "snap-8234a945-dd12-4bb9-a537-7733a4f8c53b",
+      "snapshotDigest": "sha256:cd6de3735e64d839bceaa679423b32cae23b855de79c5f2465343e4550a24666",
+      "projectId": "prj-80264198-804e-440c-95cd-24d66159f78b",
+      "revision": 2,
+      "selection": {
+        "deploymentRef": "xdl://org.xverse.studio.process-control/deployment/local-reference",
+        "scenarioRef": "xdl://org.xverse.studio.process-control/scenario/reference-response",
+        "systemRef": "xdl://org.xverse.studio.process-control/system/reference-loop"
+      },
+      "providerId": "studio.reference"
+    }
+  },
+  "operation": {
+    "operationId": "op-3c1ce8f3-8358-44ee-9a14-b5f9dc7e94ae",
+    "status": "unknown",
+    "code": "CHILD_OWNERSHIP_UNKNOWN"
+  },
+  "backendAfter": {
+    "pid": 3212165,
+    "birth": 1793089111.4
+  },
+  "noDuplicateRuns": true,
+  "noUncertainReplay": true,
+  "pendingSchedulingHeld": true,
+  "observations": [
+    {
+      "elapsed": 2.9480599310190883,
+      "childStates": [
+        "unknown",
+        "pending"
+      ],
+      "runCount": 0
+    },
+    {
+      "elapsed": 3.5540837930166163,
+      "childStates": [
+        "unknown",
+        "pending"
+      ],
+      "runCount": 0
+    },
+    {
+      "elapsed": 4.160197759018047,
+      "childStates": [
+        "unknown",
+        "pending"
+      ],
+      "runCount": 0
+    }
+  ],
+  "canonicalProjectUnchanged": true,
+  "scopeLimit": "Actual observed dispatch-claim/no-Start-receipt window; not a crash after delegation, a failed worker, hardware or Windows acceptance.",
+  "seconds": 4.946,
+  "mainFrozenInputsUnchanged": true,
+  "command": [
+    "<repo>/.venv/bin/python",
+    "-I",
+    "-m",
+    "xverse_studio.host.launcher",
+    "--data-dir",
+    "<owned-private-root>",
+    "--port",
+    "<allocated-loopback-port>"
+  ]
+}

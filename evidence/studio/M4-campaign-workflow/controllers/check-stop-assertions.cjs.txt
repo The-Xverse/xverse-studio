@@ -1,0 +1,31 @@
+const fs = require('node:fs');
+const crypto = require('node:crypto');
+const ts = require('typescript');
+const beforePath = '.studio-local/campaign-workflow/before-stop-fixture/tests/e2e/studio.spec.ts';
+const afterPath = 'tests/e2e/studio.spec.ts';
+const printer = ts.createPrinter({ removeComments: true });
+function assertions(path) {
+  const source = ts.createSourceFile(path, fs.readFileSync(path, 'utf8'), ts.ScriptTarget.Latest, true, ts.ScriptKind.TS);
+  const values = [];
+  function root(node) {
+    while (ts.isCallExpression(node) || ts.isPropertyAccessExpression(node) || ts.isElementAccessExpression(node)) node = node.expression;
+    return ts.isIdentifier(node) ? node.text : '';
+  }
+  function walk(node) {
+    if (ts.isCallExpression(node) && root(node) === 'expect') values.push(printer.printNode(ts.EmitHint.Unspecified, node, source));
+    ts.forEachChild(node, walk);
+  }
+  walk(source);
+  return values;
+}
+const before = assertions(beforePath), after = assertions(afterPath);
+const counts = new Map(); for (const value of after) counts.set(value, (counts.get(value) || 0) + 1);
+const missing = []; for (const value of before) { if (!counts.get(value)) missing.push(value); else counts.set(value, counts.get(value) - 1); }
+if (missing.length) throw new Error('Original assertion expressions changed: ' + JSON.stringify(missing));
+const hash = p => crypto.createHash('sha256').update(fs.readFileSync(p)).digest('hex');
+fs.writeFileSync('.studio-local/campaign-workflow/full-stop-investigation/assertion-preservation.json', JSON.stringify({
+  parser: `TypeScript ${ts.version}`, scope: 'All original expect call-chain expressions, including their counts, remain unchanged; additional receipt/duration assertions are added.',
+  beforeSha256: hash(beforePath), afterSha256: hash(afterPath), beforeExpressions: before.length, afterExpressions: after.length,
+  allOriginalAssertionExpressionsUnchanged: true, missing,
+}, null, 2) + '\n');
+console.log(JSON.stringify({ before: before.length, after: after.length, allOriginalAssertionExpressionsUnchanged: true }));
