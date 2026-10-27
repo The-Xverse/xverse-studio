@@ -1,0 +1,99 @@
+[
+  {
+    "name": "format",
+    "command": [
+      "<repo>/.venv/bin/ruff",
+      "format",
+      "--check",
+      "tests/platform/test_campaign_delegation_recovery.py"
+    ],
+    "exitCode": 0,
+    "seconds": 0.028,
+    "selectedInputs": 299,
+    "sourceUnchanged": true
+  },
+  {
+    "name": "ruff",
+    "command": [
+      "<repo>/.venv/bin/ruff",
+      "check",
+      "--select",
+      "F821",
+      "services/studio-api/src",
+      "scripts",
+      "tests"
+    ],
+    "exitCode": 0,
+    "seconds": 0.029,
+    "selectedInputs": 299,
+    "sourceUnchanged": true
+  },
+  {
+    "name": "spec",
+    "command": [
+      "<repo>/.venv/bin/python",
+      "-I",
+      "scripts/validate_spec_package.py"
+    ],
+    "exitCode": 0,
+    "seconds": 0.044,
+    "selectedInputs": 299,
+    "sourceUnchanged": true
+  },
+  {
+    "name": "architecture",
+    "command": [
+      "<repo>/.venv/bin/python",
+      "-I",
+      "scripts/check_architecture.py"
+    ],
+    "exitCode": 0,
+    "seconds": 0.677,
+    "selectedInputs": 299,
+    "sourceUnchanged": true
+  },
+  {
+    "name": "compatibility",
+    "command": [
+      "<repo>/.venv/bin/python",
+      "-I",
+      "scripts/check_platform_compatibility.py"
+    ],
+    "exitCode": 0,
+    "seconds": 0.184,
+    "selectedInputs": 299,
+    "sourceUnchanged": true
+  },
+  {
+    "name": "environment",
+    "command": [
+      "<repo>/.venv/bin/python",
+      "-I",
+      "scripts/record_environment.py",
+      "--output",
+      "<repo>/.studio-local/campaign-delegation-main/final-identity/environment.json"
+    ],
+    "exitCode": 0,
+    "seconds": 0.097,
+    "selectedInputs": 299,
+    "sourceUnchanged": true
+  },
+  {
+    "name": "pytest",
+    "command": [
+      "<repo>/.venv/bin/python",
+      "-I",
+      "-m",
+      "pytest",
+      "tests/platform/test_campaign_delegation_recovery.py",
+      "-q",
+      "--tb=short",
+      "--basetemp=<repo>/.studio-local/campaign-delegation-main/owned-final-test-data-2d7ab7fc28334370a0f77b24b36c4690",
+      "--junitxml=<repo>/.studio-local/campaign-delegation-main/final-identity/junit.xml"
+    ],
+    "exitCode": 0,
+    "seconds": 55.601,
+    "selectedInputs": 299,
+    "sourceUnchanged": true
+  }
+]

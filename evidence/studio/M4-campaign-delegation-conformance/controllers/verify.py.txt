@@ -1,0 +1,37 @@
+"""Freeze the promoted native regression and execute the complete backend successor."""
+from pathlib import Path
+import hashlib,json,os,re,subprocess,sys,time,uuid
+
+root=Path.cwd().resolve();base=root/'.studio-local/campaign-delegation-main';out=base/'verified-backend';out.mkdir(exist_ok=False)
+cache=root.parent/'.xverse-studio-cache';env=dict(os.environ,SPECIFY_FEATURE_DIRECTORY='specs/001-industry-agnostic-studio',PYTEST_DISABLE_PLUGIN_AUTOLOAD='1',PATH=str(cache/'node-v24.22.1-linux-x64/bin')+os.pathsep+os.environ['PATH'],TMPDIR=str(cache/'tmp'),TEMP=str(cache/'tmp'),TMP=str(cache/'tmp'))
+fixed=['pyproject.toml','uv.lock','package.json','package-lock.json','docs/user/run-comparison.md','docs/user/campaigns.md','docs/architecture/ADR-0013-revision-history-and-recovery.md','docs/architecture/ADR-0019-scenario-evidence-timeline.md','docs/architecture/ADR-0020-campaign-workflow.md','docs/architecture/ADR-0021-recorded-comparison.md','docs/architecture/ADR-0022-owned-worker-state-handoff.md']
+def inputs():
+    paths=subprocess.check_output(['git','ls-files','--cached','--others','--exclude-standard'],text=True).splitlines()
+    paths += [str(p.relative_to(root)) for p in (root/'apps/studio-web/dist').rglob('*') if p.is_file()]
+    return {name:hashlib.sha256((root/name).read_bytes()).hexdigest() for name in sorted(set(paths)) if (root/name).is_file() and (name.startswith(('apps/','services/','scripts/','tests/','packages/','config/')) or name in fixed)}
+def save(path,value):path.write_text(json.dumps(value,indent=2)+'\n')
+frozen=inputs();assert len(frozen)==299,len(frozen);save(out/'source-before.json',frozen)
+previous=json.loads((root/'evidence/studio/M1-parameter-presentation-focus/application-and-input-hashes.json').read_text())
+changed={name:{'previous':h,'current':frozen.get(name)} for name,h in previous.items() if frozen.get(name)!=h}
+assert set(changed)=={'docs/architecture/ADR-0020-campaign-workflow.md'},changed
+added=sorted(set(frozen)-set(previous));assert added==['tests/platform/test_campaign_delegation_recovery.py'],added
+save(out/'browser-inheritance.json',{'scope':'Prior fresh main48/full474/performance2 and clean104-file package belong to product5736276 plus equivalent metadata b2897ee. All application/backend/browser-test/compiled inputs are unchanged. Only the non-executable campaign ADR differs among the prior298 inputs, and the added native regression is backend-test-only. No fresh browser/performance execution is claimed.','priorProductCandidate':'573627647ad3fc853caf18f7fc6e6c412fe3fa18','priorMetadataCandidate':'b2897ee2c71ead56de1d97f6ff9bb68b52bc1238','priorEvidence':'evidence/studio/M1-parameter-presentation-focus/verification.json','byteIdenticalPreviousInputs':len(previous)-len(changed),'documentChanges':changed,'additionalInputs':added})
+records=[]
+def run(name,command):
+    start=time.monotonic()
+    with (out/(name+'.log')).open('w') as log:result=subprocess.run(command,cwd=root,env=env,stdout=log,stderr=subprocess.STDOUT)
+    after=inputs();assert after==frozen
+    row={'name':name,'command':command,'exitCode':result.returncode,'seconds':round(time.monotonic()-start,3),'selectedInputs':299,'sourceUnchanged':after==frozen};records.append(row);save(out/'verification.json',records);print(json.dumps(row),flush=True)
+    if result.returncode:raise SystemExit(result.returncode)
+    return (out/(name+'.log')).read_text()
+try:
+    for name,command in [('spec',[sys.executable,'-I','scripts/validate_spec_package.py']),('architecture',[sys.executable,'-I','scripts/check_architecture.py']),('compatibility',[sys.executable,'-I','scripts/check_platform_compatibility.py']),('ruff',[str(root/'.venv/bin/ruff'),'check','--select','F821','services/studio-api/src','scripts','tests']),('environment',[sys.executable,'-I','scripts/record_environment.py','--output',str(out/'environment.json')])]:run(name,command)
+    text=run('collection',[sys.executable,'-I','-m','pytest','--collect-only','-q']);match=re.search(r'(\d+) tests collected',text);assert match and int(match[1])==938
+    data=base/('owned-full-test-data-'+uuid.uuid4().hex)
+    run('pytest',[sys.executable,'-I','-m','pytest','tests','-q','--tb=short','--basetemp='+str(data),'--junitxml='+str(out/'junit.xml')])
+    facts=[json.loads(path.read_text()) for path in data.rglob('receipt.json') if path.parent.name=='observations'];assert len(facts)==4
+    assert all(v['outcome']=='passed' and v['noDuplicateRuns'] and v['canonicalProjectUnchanged'] and v['activeSnapshotUnchanged'] for v in facts)
+    save(out/'native-recovery-observations.json',facts)
+    print('Fresh938 backend and static gates passed',flush=True)
+finally:
+    save(out/'source-after.json',inputs());assert inputs()==frozen

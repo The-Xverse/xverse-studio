@@ -61,3 +61,27 @@ journal writes, external/physical providers or native Windows. The Linux fault
 fixture requires its observed kernel sleep point; unavailable observations cannot
 be substituted with a fake worker. Windows remains a separate held lane. No product
 API, provider operation, OS requirement or execution authority is added.
+
+Native delegation-recovery conformance amendment (2026-10-27):
+`tests/platform/test_campaign_delegation_recovery.py` embeds a bounded test-only
+backend pause after real Start returns and before campaign acknowledgement. The
+claim is durably dispatching without its run ID while the existing Start receipt
+and actual unchanged reference worker are verified. This is explicit initial-backend
+instrumentation, not a product hook or an uninstrumented timing observation.
+
+The test kills only its owned backend after process-birth validation; the successor
+uses the ordinary native launcher. Four Linux cases cover an original worker still
+running, already normally complete, and failed after an owner/PID/birth/argv and
+kernel-sleep-verified SIGINT under continue and stop_on_failure. Recovery must retain
+the original child/run/worker identities, schedule only pending work, preserve the
+canonical base/child snapshots and Project, and deduplicate repeated same-key retries.
+The failed worker's own unknown cleanup, partial prefix-verified evidence and null
+verdict remain distinct from campaign coordination. Its journal sequence/digest chain
+and immutable terminal bytes are checked independently. No stored record, worker
+code, argv, owner file or canonical journal is rewritten to force the fault.
+
+These cases make the retained supplemental probes repeatable in the backend suite.
+The tested prototype passed four cases; main-candidate verification is a separate
+required result. Initial-backend pause and Linux-only kernel/process scope remain
+explicit. Arbitrary interruption points, mid-journal writes, native Windows, live
+external/physical providers and full task/milestone acceptance remain separate gates.
