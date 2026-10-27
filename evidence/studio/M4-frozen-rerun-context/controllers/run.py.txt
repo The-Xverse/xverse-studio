@@ -1,0 +1,39 @@
+"""Freeze the promoted UI successor; retain affected verification without claiming a full413 pass."""
+from pathlib import Path
+import hashlib,json,os,shutil,subprocess,sys,time
+
+root=Path.cwd();base=root/'.studio-local/frozen-rerun-workflow';cache=root.parent/'.xverse-studio-cache'
+env=dict(os.environ,PATH=str(cache/'node-v24.22.1-linux-x64/bin')+os.pathsep+os.environ['PATH'],
+         PLAYWRIGHT_BROWSERS_PATH=str(cache/'playwright'),TMPDIR=str(cache/'tmp'),TEMP=str(cache/'tmp'),TMP=str(cache/'tmp'),PYTEST_DISABLE_PLUGIN_AUTOLOAD='1')
+def inputs():
+    paths=subprocess.check_output(['git','ls-files','--cached','--others','--exclude-standard'],text=True).splitlines()
+    paths += [str(p.relative_to(root)) for p in (root/'apps/studio-web/dist').rglob('*') if p.is_file()]
+    return {n:hashlib.sha256((root/n).read_bytes()).hexdigest() for n in sorted(set(paths)) if (root/n).is_file() and
+            (n.startswith(('apps/','services/','scripts/','tests/','packages/','config/')) or n in
+             ['pyproject.toml','uv.lock','package.json','package-lock.json','docs/user/run-comparison.md',
+              'docs/architecture/ADR-0019-scenario-evidence-timeline.md','docs/architecture/ADR-0020-campaign-workflow.md',
+              'docs/architecture/ADR-0021-recorded-comparison.md','docs/architecture/ADR-0022-owned-worker-state-handoff.md'])}
+frozen=inputs();(base/'frozen-inputs.json').write_text(json.dumps(frozen,indent=2)+'\n')
+old=json.loads((root/'evidence/studio/M4-recorded-comparison/backend/source-before.json').read_text())
+changed={n:{'previous':h,'current':frozen.get(n)} for n,h in old.items() if frozen.get(n)!=h}
+assert set(changed)=={'docs/architecture/ADR-0021-recorded-comparison.md'}
+(base/'backend-inheritance.json').write_text(json.dumps({'scope':'Original932 backend pass is inherited through unchanged backend/runtime/Python-test inputs. Only the non-executable ADR0021 changed among its218 selected inputs; two new Playwright cases files and the guide do not enter pytest. No fresh full backend or413-browser pass is claimed.',
+    'priorCandidate':'9a0f189d3c7c87b2d945dc8ffbf57ae575cc9a91','priorEvidence':'evidence/studio/M4-recorded-comparison/backend/verification.json',
+    'unchangedPreviousInputs':len(old)-len(changed),'documentChanges':changed},indent=2)+'\n')
+pattern='frozen rerun context:|owned rerun acknowledgement:|recorded comparison:|comparison completion:|comparison response guards:|comparison history:|owned reference browser workflow:|annotation run context:|evidence filters: late original-run'
+for name,args,count in [('targeted',['--grep',pattern],37),('performance',['--performance','--grep','operability:'],2)]:
+    print('START '+name,flush=True);out=base/name;out.mkdir(exist_ok=False)
+    before=inputs();assert before==frozen;(out/'source-before.json').write_text(json.dumps(before,indent=2)+'\n')
+    command=[sys.executable,'-I','scripts/test_browser.py',*args];start=time.monotonic()
+    with (out/'browser.log').open('w') as log:r=subprocess.run(command,cwd=root,env=env,stdout=log,stderr=subprocess.STDOUT)
+    after=inputs();(out/'source-after.json').write_text(json.dumps(after,indent=2)+'\n')
+    shutil.copyfile(root/'test-results/browser-report.json',out/'browser-report.json');shutil.copytree(root/'test-results/browser',out/'browser-output')
+    summary={'command':command,'exitCode':r.returncode,'seconds':round(time.monotonic()-start,3),'sourceUnchanged':before==after,
+             'inputs':len(before),'baseCandidate':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
+             'scope':'Main UI successor affected verification; full413 browser remains independently unverified.'}
+    (out/'summary.json').write_text(json.dumps(summary,indent=2)+'\n');print(json.dumps(summary),flush=True)
+    if r.returncode:raise SystemExit(r.returncode)
+    assert before==after==frozen
+    report=json.loads((out/'browser-report.json').read_text());assert report['stats']['expected']==count and not any(report['stats'][k] for k in ['skipped','flaky','unexpected'])
+    print('PASS '+name+': '+str(count),flush=True)
+print('Main rerun affected/performance verification passed',flush=True)

@@ -32,3 +32,11 @@ Start requires separate acceptance. **Rerun frozen inputs** instead requests fre
 backend admission for the historical inputs and creates a new run/snapshot identity.
 Neither path guarantees reproducibility or admits an unsupported provider or physical
 operation. Native Windows and live-provider support require their own evidence.
+
+A rerun can continue on the backend after you leave Results. Its acknowledgement
+preserves a newer view, selected run, annotation draft or deliberate focus. Return
+to Results and use **Recorded run** to inspect the retained child independently.
+If acknowledgement is uncertain, repeating **Rerun frozen inputs** retries the same
+stored request key. A read timeout does not cancel the experiment or request a
+second Start. An incompatible operation or child reply stays unconfirmed until a
+matching response can be read.

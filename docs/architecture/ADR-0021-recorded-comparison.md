@@ -73,3 +73,27 @@ admission for identical documents under different snapshot UUIDs; successors mus
 also preserve independent evaluation results, changed-input admission and invalid
 snapshot refusal. A report limits sentence now explicitly retains each read's own
 integrity verdict rather than implying that verification always succeeds.
+
+Follow-on rerun acknowledgement amendment: an actual owned rerun completed while
+its real HTTP acceptance response was deliberately held. Releasing that response
+after the user selected Model caused the browser to select the child and return
+to Results at both desktop widths. This is separate from recorded comparison and
+does not invalidate the original immutable run or create another workload.
+
+Bind rerun presentation to the mounted Results instance, source run/snapshot and
+selected result tab. A completed request may select its verified child only while
+that context and the initiating focus remain current and no newer dialog is open.
+Settling an old receipt must not remove another tab's newer stored request key.
+Guard repeated submissions synchronously. Apply the existing fifteen-second
+acknowledgement budget to the initial HTTP request, operation reads and child read;
+an aborted read does not cancel backend execution. Uncertain acknowledgement keeps
+the same idempotency key for explicit retry and never authorizes another Start.
+
+Before selecting a child, check the accepted operation ID, rerun kind, source run,
+parent/new snapshot, child/start-operation IDs, project and owned-reference scope.
+Malformed or mismatched replies remain unconfirmed. This consumes existing v1
+response fields; no backend API, ownership, provider or XDL semantics change.
+Verify normal rerun, newer views/annotations/focus/run selection, labelled response
+identity faults and actual lost acknowledgements with same-key/no-duplicate retry.
+Retain the original red and separate isolated proposal before main verification;
+native Windows, broader provider admission and complete T091 acceptance remain open.

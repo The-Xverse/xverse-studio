@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo, useRef } from "react";
+import { useEffect, useState, useMemo, useRef, useLayoutEffect } from "react";
 import { api, items, mutationKey } from "../../api/client";
 import type { Data, Run, RunEvent } from "../../api/types";
 import type { DoAction } from "../../app/App";
@@ -125,26 +125,105 @@ export function ResultsView({
       );
     setFrozenInputs(response.snapshot);
   }
+  // The backend owns execution; this component may select an acknowledged child
+  // only while the original run/tab and the user's focus intent are still current.
+  const rerunMounted = useRef(false),
+    rerunPending = useRef(false),
+    rerunSignature = JSON.stringify([run?.runId, run?.snapshotId, tab]),
+    rerunContext = useRef({ signature: rerunSignature });
+  if (rerunContext.current.signature !== rerunSignature)
+    rerunContext.current = { signature: rerunSignature };
+  useLayoutEffect(() => {
+    rerunMounted.current = true;
+    return () => {
+      rerunMounted.current = false;
+    };
+  }, []);
   async function rerunFrozenInputs() {
-    if (!run || !rerunEnabled) return;
-    const keyName = "studio.pendingRerun." + run.runId;
-    const key = localStorage.getItem(keyName) || mutationKey();
-    localStorage.setItem(keyName, key);
+    if (!run || !rerunEnabled || rerunPending.current) return;
+    rerunPending.current = true;
+    const submitted = rerunContext.current,
+      origin = document.activeElement,
+      current = () =>
+        rerunMounted.current && rerunContext.current === submitted,
+      keyName = "studio.pendingRerun." + run.runId,
+      abort = new AbortController(),
+      deadline = performance.now() + 15000,
+      timer = setTimeout(() => abort.abort(), 15000);
+    const id = (value: unknown): value is string =>
+      typeof value === "string" && value.length > 0 && value.length <= 128;
     setRerunBusy(true);
     try {
+      const key = localStorage.getItem(keyName) || mutationKey();
+      localStorage.setItem(keyName, key);
       const accepted = await api(`/runs/${run.runId}/reruns`, {
         method: "POST",
         body: {},
         key,
+        signal: abort.signal,
       });
-      const deadline = performance.now() + 15000;
+      if (!id(accepted.operationId))
+        throw new Error(
+          "The rerun acknowledgement cannot be identified. Retry retains the same request key.",
+        );
       while (performance.now() < deadline) {
-        const operation = await api(`/operations/${accepted.operationId}`);
-        setRerunOperation(operation);
-        if (operation.status === "completed" && operation.result?.runId) {
-          const created = await api<Run>(`/runs/${operation.result.runId}`);
-          onSelectRun(created);
-          localStorage.removeItem(keyName);
+        const operation: Data = await api(`/operations/${accepted.operationId}`, {
+          signal: abort.signal,
+        });
+        if (
+          operation.operationId !== accepted.operationId ||
+          operation.kind !== "rerun" ||
+          operation.sourceRunId !== run.runId ||
+          operation.parentSnapshotId !== run.snapshotId ||
+          !id(operation.snapshotId) ||
+          operation.snapshotId === run.snapshotId ||
+          ![
+            "accepted",
+            "delegated",
+            "completed",
+            "failed",
+            "rejected",
+            "unknown",
+          ].includes(operation.status)
+        )
+          throw new Error(
+            "The rerun operation does not match its original run and snapshot. Retry retains the same request key.",
+          );
+        if (current()) setRerunOperation(operation);
+        if (operation.status === "completed") {
+          if (
+            !id(operation.result?.runId) ||
+            operation.result.runId === run.runId ||
+            operation.runId !== operation.result.runId ||
+            !id(operation.result.startOperationId)
+          )
+            throw new Error(
+              "The rerun's new child identity cannot be verified. Retry retains the same request key.",
+            );
+          const created = await api<Run>(`/runs/${operation.result.runId}`, {
+            signal: abort.signal,
+          });
+          if (
+            created.runId !== operation.result.runId ||
+            created.snapshotId !== operation.snapshotId ||
+            created.projectId !== run.projectId ||
+            created.operationId !== operation.result.startOperationId ||
+            created.providerId !== "studio.reference" ||
+            created.evidenceScope !== "owned_reference"
+          )
+            throw new Error(
+              "The acknowledged child does not match this rerun. Retry retains the same request key.",
+            );
+          // Settling this receipt never forgets another tab's newer submission.
+          if (localStorage.getItem(keyName) === key)
+            localStorage.removeItem(keyName);
+          if (
+            current() &&
+            !document.querySelector('[role="dialog"]') &&
+            (document.activeElement === origin ||
+              document.activeElement === document.body)
+          )
+            onSelectRun(created);
           return;
         }
         if (["failed", "rejected", "unknown"].includes(operation.status))
@@ -156,8 +235,18 @@ export function ResultsView({
       throw new Error(
         "Rerun acknowledgment is still pending. Retrying uses the same operation key; no second start is requested.",
       );
+    } catch (error) {
+      if (current()) {
+        if (abort.signal.aborted)
+          throw new Error(
+            "Rerun acknowledgment is still pending. Retrying uses the same operation key; no second start is requested.",
+          );
+        throw error;
+      }
     } finally {
-      setRerunBusy(false);
+      clearTimeout(timer);
+      rerunPending.current = false;
+      if (rerunMounted.current) setRerunBusy(false);
     }
   }
   async function loadHistory(after = "") {
