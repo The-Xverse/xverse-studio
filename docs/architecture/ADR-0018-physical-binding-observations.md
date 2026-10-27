@@ -90,3 +90,46 @@ the real backend projection. Controlled HTTP/shape/page fixtures establish UI be
 not live hardware. Focused checks perform no mutation, reservation, probe, Start or
 device operation; real inventory/project/run lists remain unchanged. Native Windows,
 actual assistive technology and milestone acceptance require separate evidence.
+
+## Physical-placement presentation amendment — 2026-10-27
+
+The independent read-only part of T075 adds explicit physical-placement inspection
+to the Deployment workflow. Each GET pins the committed project revision and selected
+document. The backend report remains authoritative for source validity, logical and
+asset identities, interface requirements, metadata and separate readiness dimensions.
+The client validates the version and exact project/document/revision/System/Deployment
+context, retains public fields only and never performs an inventory join or grants
+authority. Root diagnostics preserve both provider codes and the platform validator's
+hyphenated XDL codes. A successful invalid-source report is distinct from an empty
+valid placement report and from unavailable observations.
+
+An invalid source set empties the validated variant list. Inspection alone can retain
+the matching authored Deployment from the display projection, or its sole unambiguous
+Deployment when no selection exists, to request the backend's invalid-source report.
+This display identity is never supplied to authoring, resolution or execution controls.
+Ambiguous or absent authored selection keeps inspection unavailable. A failed GET
+does not acknowledge, reload or amend canonical state; a stale revision requires an
+explicit reopen. Required interfaces, safe asset identities, provider/OS declarations,
+firmware, evidence scope, availability, permission and blocked activation remain
+separate. Unsupported/private payload fields are not copied into raw inspection.
+
+One captured report contains at most 1,000 bindings, displayed in local pages of 50.
+These pages belong to that single revision-bound response; they do not make new
+inventory observations. Truncation and incomplete inventory remain visible. Requests
+have a 30-second abortable deadline and synchronous pending protection. Context changes
+abort old reads and hide prior reports immediately. Completion cannot republish a
+report or error after project, variant, revision or Home changes, or take focus from
+a newer dialog or deliberately focused control. An explicit current completion moves
+focus to its heading or failure only while its original focus intent remains current.
+
+The narrow resolution-table wrapping rule removes inherited nowrap headers that
+otherwise overflow the adjacent Deployment workflow at the required 1024-pixel view.
+It preserves full text and table semantics. The placement panel does not clip or
+shorten long public observations to satisfy the viewport.
+
+Verification uses actual owned source declarations, empty inventory, validation
+failure, stale revision and unreadable UTF-8 refusals, plus explicitly labelled
+transport fixtures for metadata matches, malformed contexts/authority and maximum
+reports. These are browser/contract observations, not physical-provider admission.
+T074 reservations, connection tests, actual devices, native Windows, assistive
+technology and full milestone acceptance retain their separate gates.

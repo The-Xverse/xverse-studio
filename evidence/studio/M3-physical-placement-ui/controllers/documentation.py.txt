@@ -1,0 +1,196 @@
+from pathlib import Path
+from collections import Counter
+import json
+
+root = Path.cwd()
+out = root / 'evidence/studio/M3-physical-placement-ui'
+v = json.loads((out / 'verification.json').read_text())
+assert v['targeted']['expected'] == 118 and v['full']['expected'] == 339
+assert v['performance']['expected'] == 2 and v['allFinalStageInputsIdentical']
+rows = []
+for viewport in ['1024x768', '1440x900']:
+    model = json.loads((out / f'performance/{viewport}/model-performance.json').read_text())
+    history = json.loads((out / f'performance/{viewport}/history-performance.json').read_text())
+    rows.append((viewport, model['selectionAndInspector']['p95'], model['openAndValidationPresentation']['p95'], history['p95']))
+table = '\n'.join(f'| {vp} | {selection:.1f} ms | {opening:.1f} ms | {history:.1f} ms |' for vp, selection, opening, history in rows)
+contrast = json.loads((out / 'contrast-summary.json').read_text())
+(out / 'README.md').write_text(f'''# Physical-placement inspection — partial native Linux evidence
+
+The independent read-only portion of T075 now presents T072's authoritative placement
+observations in the Deployment workflow. Final 118 targeted browser journeys cover
+46 new placement cases, 36 inventory, 20 deployment and 16 source regressions. The
+full 339-browser suite and separate two-viewport performance checks pass. All
+{v['frozenInputs']} source/compiled/fixed inputs are identical across and within these
+final stages, including six compiled UI assets. Type/build/architecture/compatibility
+checks pass. The backend and admission contracts are unchanged.
+
+T075 remains in progress. T074's durable provider reservation integration, connection
+tests and actual device admission remain unavailable. AC-021–024 remain blocked,
+Windows is held at the user's request and actual assistive-technology acceptance is
+open. The component count stays 47/100; no milestone is accepted.
+
+## Behavior and boundaries
+
+Inspect physical placements makes an explicit GET for the selected authored Deployment
+and committed revision. The report adapter checks version, exact project/document/revision
+and selected System/Deployment context. The backend owns source validation, inventory
+resolution and interface requirements; the browser performs no asset join. It retains
+only bounded public fields. Identity, required interfaces, observed firmware, metadata,
+provider OS declarations, evidence scope, availability, permission and blocked activation
+are separate. Neither a matched asset nor an admission-looking label grants authority.
+
+Invalid source reports are distinct from valid reports containing no physical/hybrid
+bindings and from unavailable observations. Hyphenated authoritative XDL diagnostics
+are preserved. When validation empties the variant list, inspection alone can use a
+unique matching authored display identity. Duplicate or absent identities keep it
+unavailable; this fallback is never supplied to execution or authoring controls.
+
+One response contains at most 1,000 bindings, displayed in local pages of 50. Each
+row remains accessible without another inventory read. Inventory/interface truncation,
+provider diagnostics and unknown facts remain visible. The 30-second abort deadline
+is source reviewed, not directly timed in these browser witnesses. Canonical state
+is never committed or reloaded to acknowledge a GET. Stale revision refusal requires
+explicit reopen. Context/generation/abort guards suppress obsolete reports and errors;
+native pending resubmission creates one read, and deliberate focus/newer dialogs survive.
+
+The adjacent resolution table now wraps its inherited nowrap headers. A diagnostic
+cohort proved that the long Value sources heading caused whole-page overflow at 1024
+pixels. The scoped rule preserves full text and table semantics. Long public Unicode
+metadata and expanded raw inspection remain observable without horizontal page overflow.
+
+## Verification scope and retained failures
+
+Actual public source save and read APIs establish physical declarations, empty binding
+sets, invalid source, stale 412 and explicit reopen recovery. A strict realpath-checked
+file in the newly owned browser root is temporarily made non-UTF-8 for actual 409
+refusal and restored in finally. Held actual reports exercise Home, new project,
+changed variant, newer committed revision, source dialog and deliberate focus. Full
+canonical Project objects, supporting files, revisions and run sets are preserved.
+The newer-revision case performs one expected UI source save before monitoring the
+late read; other inspection phases perform no mutative requests. No Start, device
+operation, provider registration, reservation, connection or stimulation occurs.
+
+Positive matched metadata, malformed contexts/authority and maximum reports are
+explicitly labelled transport fixtures. They do not establish actual hardware,
+device firmware, provider OS support or physical execution. The existing public
+inventory fixture is read by e2e tests only; no backend/runtime input changed.
+
+Historical cohorts are retained with exact maps/reports/logs/tests and classifications:
+
+- initial-red: two missing-control failures on the unchanged committed UI.
+- first-successor: 38 passed, including all inventory regressions.
+- invalid-source-red: two failures from disabled inspection after source invalidity.
+- invalid-source-successor: two passed/two failed, reproducing client rejection of
+  the actual XDL-PARSE-YAML diagnostic. The real validator result is retained.
+- expanded-first: 37 passed/one 1024 overflow failure.
+- overflow-diagnostic: one passed/one failed on unchanged product; measured width
+  1382 and resolution-table right edge 1381.875 at the 1024 viewport.
+- expanded-successor: 98 passed/two failed from a fixture assumption that document
+  IDs were globally unique. Both projects use doc-3. The corrected successor verifies
+  the destination GET/report projectId and its project-local document identity.
+- before-source-setup-targeted: 102 passed on the unchanged product. The first full
+  339 then ended 338 passed/one failed before its deliberate-focus assertions:
+  holdPut.ready expired at its default 10-second setup observation wait. Performance
+  did not run. The owned source save completed as revision 2; the original request
+  timings were not collected, and the host-load cause is unproven.
+
+The replacement source helper bounds both actual PUT transport and setup observation
+at 30 seconds, records at most 64 timing events and still requires the real response
+before the unchanged focus/source assertions. No application deadline or performance
+threshold changed. source-setup-input-control.json proves all bytes outside that
+one helper unchanged, and the exact diff and original source snapshot are retained.
+All 275 other source/compiled/fixed inputs match the failed full and earlier 102 cohort;
+final 118/full 339/performance 2 share all 276 inputs. The final target expands to
+include all 16 affected source journeys. This does not relabel the earlier failure
+passed or assert that the original focus countercheck ran.
+
+No failed cohort is relabelled passed. The duplicate authored identity refusal was a
+source-review finding with a new successor witness, not a prior reproduced red.
+The root implementation review is not independent review or milestone acceptance.
+
+## Measurements and identity
+
+One warm-up plus 30 repetitions retains the declared 200-element/400-flow workload
+and evidence history with 50,000 records and at most 200 displayed rows.
+
+| Native Linux viewport | Selection p95 | Open/validation p95 | History p95 |
+| --- | --- | --- | --- |
+{table}
+
+Selected rendered text checks cover {contrast['selectedPairs']} paint pairs with a
+minimum ratio of {contrast['minimumRatio']:.5f}:1 against a 4.5:1 threshold. Focus,
+control bounds and descriptions have native browser witnesses at both viewports.
+This is scoped Chromium evidence, not overall accessibility or assistive-technology
+certification. The environment includes an actual owned live browser executable,
+version and SHA256 observation without private arguments or authentication state.
+
+Final input digest: `{v['applicationAndInputDigest']}`. The recorded Git identity is
+the predecessor; a later clean candidate/package binding establishes exact committed
+identity. Backend 851 results are inherited through 163 exact unchanged backend/Python/
+contributor/compatibility inputs and unchanged-command CI scheduling control, not a
+new local backend run. Both predecessor 24c55d5 CI runs succeeded with their own
+terminal receipt; those outcomes cover that predecessor and successor CI is separate.
+''')
+
+note = (' Linux physical-placement successor: partial T075 adds revision/Deployment-scoped authoritative read-only inspection. '
+    'Final 118 targeted journeys (46 placement, 36 inventory, 20 deployment and 16 source), full 339 browser and separate performance 2 pass all 276 identical frozen source/compiled/fixed inputs. '
+    'Actual invalid/empty/unreadable/stale source observations, explicit reopen, obsolete project/variant/revision/Home replies, pending repeats and focus/dialog guards are verified. '
+    'Labelled matched Unicode metadata, malformed contexts/authority and 1000-binding/50-row pages cannot grant admission. '
+    'Invalid-source inspection uses only a unique authored display identity; execution/authoring remain on validated variants. '
+    'Scoped resolution-table wrapping repairs reproduced 1024 overflow. Canonical Projects/run sets remain unchanged during inspection; one newer-revision case performs its expected source save before monitoring the late GET. '
+    'All failures, the project-local document-ID fixture correction and first-full 338/1 source-setup timeout are retained at evidence/studio/M3-physical-placement-ui/. The bounded real-PUT observation helper keeps every focus/source assertion unchanged; no application or performance threshold changed. '
+    'Backend 851 inherited via 163 exact unchanged inputs plus CI control; no local backend rerun. T075 remains partial, 47 completed, no milestones accepted; Windows/AT/physical/reservation gates remain open.')
+p = root / 'specs/001-industry-agnostic-studio/traceability.json'
+trace = json.loads(p.read_text())
+for task in trace['tasks']:
+    if task['id'] in ['T038', 'T059', 'T067', 'T072', 'T075', 'T097']:
+        if note.strip() not in task['implementation_note']:
+            task['implementation_note'] += note
+        for item in ['evidence/studio/M3-physical-placement-ui/', 'tests/e2e/physical-placements-accessibility.spec.ts',
+                     'docs/architecture/ADR-0018-physical-binding-observations.md']:
+            if item not in task.setdefault('implementation_evidence', []):
+                task['implementation_evidence'].append(item)
+assert Counter(t['status'] for t in trace['tasks']) == {'completed':47,'in_progress':43,'blocked':10}
+record = trace['implementation_record']
+record['code_candidate'] = f"Base 24c55d5 plus physical-placement input digest {v['applicationAndInputDigest']}; exact clean package candidate binding pending"
+record['verification'].update(playwright_checks_passed=339, playwright_checks_failed=0,
+    playwright_scope='Full native Linux Chromium 339, targeted 118 and separate two-viewport performance; all 276 inputs identical across and within final stages. Backend 851 inherited through 163 unchanged inputs plus CI scheduling control, not rerun locally.',
+    evidence='evidence/studio/M3-physical-placement-ui/', backend_evidence='evidence/studio/M3-physical-placement-ui/backend-input-inheritance.json',
+    prior_package_evidence='evidence/studio/M3-inventory-observations/package/receipt.json (clean 443b895 native Linux source)',
+    package_evidence='Pending exact-candidate clean physical-placement package')
+p.write_text(json.dumps(trace,ensure_ascii=False,indent=2)+'\n')
+p = root / 'specs/001-industry-agnostic-studio/tasks.md'
+if note.strip() not in p.read_text():
+    p.write_text(p.read_text()+'\n'+note.strip()+'\n')
+p = root / 'docs/implementation/STATUS.md'
+paragraph = ('The latest physical-placement successor passes 118 targeted journeys (46 new placement, 36 inventory, 20 deployment and 16 source), full 339 browser and separate two-viewport performance with all 276 final inputs identical. '
+    'Read-only selected Deployment/revision inspection preserves authoritative identities, diagnostics and separate readiness dimensions. Actual invalid/empty/unreadable/stale source observations, explicit reopen and context/focus guards are verified. '
+    'Labelled metadata/authority/maximum-report fixtures establish no provider admission. Inspection alone retains unique authored display selection when source validation empties the variant list. '
+    'A scoped resolution-table wrapping rule repairs reproduced 1024 overflow. All failures, the project-local document-ID fixture correction and first-full 338/1 setup timeout are retained; the bounded source-PUT setup helper preserves all focus/source assertions and application/performance thresholds. '
+    'See `evidence/studio/M3-physical-placement-ui/`; backend 851 inherited via 163 unchanged inputs plus CI scheduling control. '
+    'T075 remains partial, 47/100 completed, no milestones accepted; Windows/AT/reservation/physical gates remain open.\n\n'
+    'Both 24c55d5 Ubuntu24 push/PR CI runs completed successfully, including backend/browser/package stages. Receipt: `evidence/studio/native-ci/ubuntu-24.04-24c55d5-runs.json`. These outcomes are separate from this new successor.\n\n')
+if paragraph not in p.read_text():
+    p.write_text(p.read_text().replace('The latest read-only inventory successor',paragraph+'The latest read-only inventory successor',1))
+p = root / 'docs/user/hybrid-lab.md'
+addition = '''
+Open Laboratory to inspect public inventory observations, metadata, diagnostics and
+their completeness. Availability, permission and readiness are separate facts. A
+failed or incomplete observation cannot establish that a device is absent.
+
+In a project's Deployment view, choose an authored Deployment and activate **Inspect
+physical placements**. The report describes physical/hybrid declarations at the
+committed revision, their logical references, required interfaces and observed public
+asset metadata. Invalid source is reported separately from an empty binding set.
+Ambiguous authored identity cannot select a document for inspection. After a stale
+revision refusal, reopen the project and inspect again. Report pages show 50 bindings
+at a time from the same captured response; inventory changes require a new inspection.
+
+Inspection does not reserve an asset, contact an endpoint or grant execution permission.
+Fixture scope, declared provider OS support and observed metadata do not establish
+live hardware support. Canonical source and active runs remain unchanged by inspection.
+'''
+if addition.strip() not in p.read_text():
+    p.write_text(p.read_text()+addition)
+(out / 'controllers/documentation.py.txt').write_text(Path(__file__).read_text())
+print('Documented actual final placement verification; tasks/traces retain 47/100 and no milestone acceptance.')

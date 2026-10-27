@@ -1,0 +1,340 @@
+{
+  "config": {
+    "argv": [
+      "<loop-cache>/node-v24.22.1-linux-x64/bin/node",
+      "<repo>/node_modules/.bin/playwright",
+      "test",
+      "-c",
+      "tests/e2e/playwright.config.ts",
+      "--grep",
+      "physical placements:"
+    ],
+    "configFile": "<repo>/tests/e2e/playwright.config.ts",
+    "rootDir": "<repo>/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "<repo>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "<repo>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "*.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "<repo>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "<repo>/tests/e2e",
+        "snapshotDir": "<repo>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": "*.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "baseURL": "http://127.0.0.1:41389",
+          "browserName": "chromium",
+          "actionTimeout": 15000,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "trace": "off",
+          "screenshot": "only-on-failure",
+          "video": "off"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "<repo>/test-results/browser-report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "physical-placements-accessibility.spec.ts",
+      "file": "physical-placements-accessibility.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "physical placements: actual invalid source is not an empty observation at 1024x768",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 13267,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('region', { name: 'Physical placement observation', exact: true }).getByRole('alert')\nExpected substring: \u001b[32m\"source set is invalid\"\u001b[39m\nReceived string:    \u001b[31m\"Physical placement availability is unknown. The public diagnostics are incomplete or malformed. Inspect again to retry.\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" getByRole('region', { name: 'Physical placement observation', exact: true }).getByRole('alert') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('region', { name: 'Physical placement observation', exact: true }).getByRole('alert')\u001b[22m\n\u001b[2m    23 \u00d7 locator resolved to <p role=\"alert\" tabindex=\"-1\" class=\"notice error\">Physical placement availability is unknown. The p\u2026</p>\u001b[22m\n\u001b[2m       - unexpected value \"Physical placement availability is unknown. The public diagnostics are incomplete or malformed. Inspect again to retry.\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('region', { name: 'Physical placement observation', exact: true }).getByRole('alert')\nExpected substring: \u001b[32m\"source set is invalid\"\u001b[39m\nReceived string:    \u001b[31m\"Physical placement availability is unknown. The public diagnostics are incomplete or malformed. Inspect again to retry.\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" getByRole('region', { name: 'Physical placement observation', exact: true }).getByRole('alert') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('region', { name: 'Physical placement observation', exact: true }).getByRole('alert')\u001b[22m\n\u001b[2m    23 \u00d7 locator resolved to <p role=\"alert\" tabindex=\"-1\" class=\"notice error\">Physical placement availability is unknown. The p\u2026</p>\u001b[22m\n\u001b[2m       - unexpected value \"Physical placement availability is unknown. The public diagnostics are incomplete or malformed. Inspect again to retry.\"\u001b[22m\n\n    at <repo>/tests/e2e/physical-placements-accessibility.spec.ts:204:50",
+                    "location": {
+                      "file": "<repo>/tests/e2e/physical-placements-accessibility.spec.ts",
+                      "column": 50,
+                      "line": 204
+                    },
+                    "snippet": "  202 |     await expect(inspect(page)).toBeEnabled();\n  203 |     await activate(page, inspect(page));\n> 204 |     await expect(panel(page).getByRole(\"alert\")).toContainText(\"source set is invalid\");\n      |                                                  ^\n  205 |     await expect(panel(page).getByRole(\"alert\")).toBeFocused();\n  206 |     await expect(panel(page).getByText(/No physical or hybrid bindings/)).toHaveCount(0);\n  207 |     await finish({actualInvalidResolverReport:report});"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/physical-placements-accessibility.spec.ts",
+                        "column": 50,
+                        "line": 204
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('region', { name: 'Physical placement observation', exact: true }).getByRole('alert')\nExpected substring: \u001b[32m\"source set is invalid\"\u001b[39m\nReceived string:    \u001b[31m\"Physical placement availability is unknown. The public diagnostics are incomplete or malformed. Inspect again to retry.\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" getByRole('region', { name: 'Physical placement observation', exact: true }).getByRole('alert') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('region', { name: 'Physical placement observation', exact: true }).getByRole('alert')\u001b[22m\n\u001b[2m    23 \u00d7 locator resolved to <p role=\"alert\" tabindex=\"-1\" class=\"notice error\">Physical placement availability is unknown. The p\u2026</p>\u001b[22m\n\u001b[2m       - unexpected value \"Physical placement availability is unknown. The public diagnostics are incomplete or malformed. Inspect again to retry.\"\u001b[22m\n\n\n  202 |     await expect(inspect(page)).toBeEnabled();\n  203 |     await activate(page, inspect(page));\n> 204 |     await expect(panel(page).getByRole(\"alert\")).toContainText(\"source set is invalid\");\n      |                                                  ^\n  205 |     await expect(panel(page).getByRole(\"alert\")).toBeFocused();\n  206 |     await expect(panel(page).getByText(/No physical or hybrid bindings/)).toHaveCount(0);\n  207 |     await finish({actualInvalidResolverReport:report});\n    at <repo>/tests/e2e/physical-placements-accessibility.spec.ts:204:50"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T02:38:33.984Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/physical-placements-access-1bd3e-pty-observation-at-1024x768/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/physical-placements-access-1bd3e-pty-observation-at-1024x768/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/physical-placements-accessibility.spec.ts",
+                    "column": 50,
+                    "line": 204
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "a94800dbbc8a48884adb-8fd804d380b3accdbce5",
+          "file": "physical-placements-accessibility.spec.ts",
+          "line": 189,
+          "column": 7
+        },
+        {
+          "title": "physical placements: actual unresolved authored binding is read-only at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2159,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T02:38:47.650Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "physical-placement-observation.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJwcm9qZWN0SWQiOiJwcmotYTdmNWRmNGUtMGRkYy00YTUxLWJhODEtM2U5MjUwMGQyYjk1IiwiZG9jdW1lbnRJZCI6ImRvYy0zIiwicmV2aXNpb24iOjIsImFjdHVhbFJlc29sdmVyUmVwb3J0Ijp7ImJpbmRpbmdPYnNlcnZhdGlvblZlcnNpb24iOiIxLjAiLCJwcm9qZWN0SWQiOiJwcmotYTdmNWRmNGUtMGRkYy00YTUxLWJhODEtM2U5MjUwMGQyYjk1IiwiZG9jdW1lbnRJZCI6ImRvYy0zIiwicmV2aXNpb24iOjIsInNvdXJjZVZhbGlkIjp0cnVlLCJzY29wZSI6InJlYWRfb25seV9wbGFjZW1lbnRfb2JzZXJ2YXRpb24iLCJhY3RpdmVSZWFkeSI6ZmFsc2UsInJ1bnRpbWVBZG1pc3Npb24iOiJ1bmF2YWlsYWJsZSIsImJpbmRpbmdzIjpbeyJiaW5kaW5nSWQiOiJwbGFudC1iaW5kaW5nIiwibG9naWNhbFJlZiI6InhkbDovL29yZy54dmVyc2Uuc3R1ZGlvLnByb2Nlc3MtY29udHJvbC9zeXN0ZW0vcmVmZXJlbmNlLWxvb3AjcGxhbnQiLCJ0YXJnZXRJZCI6InJlZmVyZW5jZS10YXJnZXQiLCJyZWFsaXphdGlvbkNsYXNzIjoicGh5c2ljYWwiLCJhc3NldElkIjoidXJuOmZpeHR1cmU6dW5yZXNvbHZlZC1iZW5jaCIsImFzc2V0IjpudWxsLCJyZXF1aXJlZEludGVyZmFjZXMiOnsiY29tbWFuZCI6eyJpZCI6ImNvbW1hbmQiLCJkaXJlY3Rpb24iOiJiaWRpcmVjdGlvbmFsIiwicGF5bG9hZFNjaGVtYSI6InVybjp4dmVyc2U6c3R1ZGlvOm5vcm1hbGl6ZWQtc2NhbGFyOnYxIiwidW5pdFNlbWFudGljcyI6IjEiLCJjb21wYXRpYmlsaXR5IjoiZXhhY3QifSwic3RhdGUiOnsiaWQiOiJzdGF0ZSIsImRpcmVjdGlvbiI6ImJpZGlyZWN0aW9uYWwiLCJwYXlsb2FkU2NoZW1hIjoidXJuOnh2ZXJzZTpzdHVkaW86bm9ybWFsaXplZC1zY2FsYXI6djEiLCJ1bml0U2VtYW50aWNzIjoiMSIsImNvbXBhdGliaWxpdHkiOiJleGFjdCJ9fSwicmVxdWlyZWRJbnRlcmZhY2VzVHJ1bmNhdGVkIjpmYWxzZSwiZXZpZGVuY2VTY29wZSI6InVua25vd24iLCJyZWFkeSI6ZmFsc2UsImFjdGl2ZVJlYWR5IjpmYWxzZSwiZGlhZ25vc3RpY3MiOlsiUEhZU0lDQUxfUFJPVklERVJfTk9UX0FETUlUVEVEIiwiQVNTRVRfVU5BVkFJTEFCTEUiXSwicmVhZGluZXNzIjp7ImlkZW50aXR5IjoidW5rbm93biIsImludGVyZmFjZXMiOiJ1bmtub3duIiwiYXZhaWxhYmlsaXR5IjoidW5rbm93biIsIm1ldGFkYXRhIjoidW5rbm93biIsInByb3ZpZGVyQWRtaXNzaW9uIjoidW5hdmFpbGFibGUiLCJwZXJtaXNzaW9uIjoidW5rbm93biIsImFjdGl2ZU9wZXJhdGlvbiI6ImJsb2NrZWQifX1dLCJkaWFnbm9zdGljcyI6W10sImxpbWl0YXRpb25zIjpbIkRvZXMgbm90IGNoYW5nZSBkZXBsb3ltZW50IHJlc29sdXRpb24gb3IgcnVudGltZSBhZG1pc3Npb24uIiwiUGh5c2ljYWwgY29udHJvbHMgYW5kIHJlc2VydmF0aW9ucyByZW1haW4gdW5hZG1pdHRlZC4iXSwic3lzdGVtUmVmIjoieGRsOi8vb3JnLnh2ZXJzZS5zdHVkaW8ucHJvY2Vzcy1jb250cm9sL3N5c3RlbS9yZWZlcmVuY2UtbG9vcCIsImRlcGxveW1lbnRSZWYiOiJ4ZGw6Ly9vcmcueHZlcnNlLnN0dWRpby5wcm9jZXNzLWNvbnRyb2wvZGVwbG95bWVudC9sb2NhbC1yZWZlcmVuY2UiLCJpbnZlbnRvcnlUcnVuY2F0ZWQiOmZhbHNlLCJpbnZlbnRvcnlDb21wbGV0ZSI6dHJ1ZX0sImFjdHVhbENhbm9uaWNhbFVuY2hhbmdlZCI6dHJ1ZSwibXV0YXRpdmVSZXF1ZXN0c0FmdGVyU2V0dXAiOjAsIm9ic2VydmVkVUlSZWFkcyI6WyI/cmV2aXNpb249MiJdLCJzY29wZSI6IkFjdHVhbCBwdWJsaWMgc291cmNlIGRlY2xhcmF0aW9uIGFuZCBhdXRob3JpdGF0aXZlIHJlYWQtb25seSByZXNvbHZlciB3aXRoIGVtcHR5L3VuYWRtaXR0ZWQgaW52ZW50b3J5OyBubyBmaXh0dXJlIHByb3ZpZGVyIGluc3RhbGxlZCwgZGV2aWNlIG9wZXJhdGlvbiwgcmVzZXJ2YXRpb24gb3IgU3RhcnQifQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a94800dbbc8a48884adb-3aad4c2db67492bf3746",
+          "file": "physical-placements-accessibility.spec.ts",
+          "line": 210,
+          "column": 7
+        },
+        {
+          "title": "physical placements: actual invalid source is not an empty observation at 1440x900",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 13149,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('region', { name: 'Physical placement observation', exact: true }).getByRole('alert')\nExpected substring: \u001b[32m\"source set is invalid\"\u001b[39m\nReceived string:    \u001b[31m\"Physical placement availability is unknown. The public diagnostics are incomplete or malformed. Inspect again to retry.\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" getByRole('region', { name: 'Physical placement observation', exact: true }).getByRole('alert') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('region', { name: 'Physical placement observation', exact: true }).getByRole('alert')\u001b[22m\n\u001b[2m    23 \u00d7 locator resolved to <p role=\"alert\" tabindex=\"-1\" class=\"notice error\">Physical placement availability is unknown. The p\u2026</p>\u001b[22m\n\u001b[2m       - unexpected value \"Physical placement availability is unknown. The public diagnostics are incomplete or malformed. Inspect again to retry.\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('region', { name: 'Physical placement observation', exact: true }).getByRole('alert')\nExpected substring: \u001b[32m\"source set is invalid\"\u001b[39m\nReceived string:    \u001b[31m\"Physical placement availability is unknown. The public diagnostics are incomplete or malformed. Inspect again to retry.\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" getByRole('region', { name: 'Physical placement observation', exact: true }).getByRole('alert') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('region', { name: 'Physical placement observation', exact: true }).getByRole('alert')\u001b[22m\n\u001b[2m    23 \u00d7 locator resolved to <p role=\"alert\" tabindex=\"-1\" class=\"notice error\">Physical placement availability is unknown. The p\u2026</p>\u001b[22m\n\u001b[2m       - unexpected value \"Physical placement availability is unknown. The public diagnostics are incomplete or malformed. Inspect again to retry.\"\u001b[22m\n\n    at <repo>/tests/e2e/physical-placements-accessibility.spec.ts:204:50",
+                    "location": {
+                      "file": "<repo>/tests/e2e/physical-placements-accessibility.spec.ts",
+                      "column": 50,
+                      "line": 204
+                    },
+                    "snippet": "  202 |     await expect(inspect(page)).toBeEnabled();\n  203 |     await activate(page, inspect(page));\n> 204 |     await expect(panel(page).getByRole(\"alert\")).toContainText(\"source set is invalid\");\n      |                                                  ^\n  205 |     await expect(panel(page).getByRole(\"alert\")).toBeFocused();\n  206 |     await expect(panel(page).getByText(/No physical or hybrid bindings/)).toHaveCount(0);\n  207 |     await finish({actualInvalidResolverReport:report});"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/physical-placements-accessibility.spec.ts",
+                        "column": 50,
+                        "line": 204
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('region', { name: 'Physical placement observation', exact: true }).getByRole('alert')\nExpected substring: \u001b[32m\"source set is invalid\"\u001b[39m\nReceived string:    \u001b[31m\"Physical placement availability is unknown. The public diagnostics are incomplete or malformed. Inspect again to retry.\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" getByRole('region', { name: 'Physical placement observation', exact: true }).getByRole('alert') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('region', { name: 'Physical placement observation', exact: true }).getByRole('alert')\u001b[22m\n\u001b[2m    23 \u00d7 locator resolved to <p role=\"alert\" tabindex=\"-1\" class=\"notice error\">Physical placement availability is unknown. The p\u2026</p>\u001b[22m\n\u001b[2m       - unexpected value \"Physical placement availability is unknown. The public diagnostics are incomplete or malformed. Inspect again to retry.\"\u001b[22m\n\n\n  202 |     await expect(inspect(page)).toBeEnabled();\n  203 |     await activate(page, inspect(page));\n> 204 |     await expect(panel(page).getByRole(\"alert\")).toContainText(\"source set is invalid\");\n      |                                                  ^\n  205 |     await expect(panel(page).getByRole(\"alert\")).toBeFocused();\n  206 |     await expect(panel(page).getByText(/No physical or hybrid bindings/)).toHaveCount(0);\n  207 |     await finish({actualInvalidResolverReport:report});\n    at <repo>/tests/e2e/physical-placements-accessibility.spec.ts:204:50"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T02:38:49.872Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/physical-placements-access-62d42-pty-observation-at-1440x900/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/physical-placements-access-62d42-pty-observation-at-1440x900/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/physical-placements-accessibility.spec.ts",
+                    "column": 50,
+                    "line": 204
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "a94800dbbc8a48884adb-709123f3f2bb13e82c18",
+          "file": "physical-placements-accessibility.spec.ts",
+          "line": 189,
+          "column": 7
+        },
+        {
+          "title": "physical placements: actual unresolved authored binding is read-only at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2419,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T02:39:03.379Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "physical-placement-observation.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJwcm9qZWN0SWQiOiJwcmotOGIzZjBjOTYtODc3MC00MGMxLWIyYmYtMWNkN2M4OWY4MmNjIiwiZG9jdW1lbnRJZCI6ImRvYy0zIiwicmV2aXNpb24iOjIsImFjdHVhbFJlc29sdmVyUmVwb3J0Ijp7ImJpbmRpbmdPYnNlcnZhdGlvblZlcnNpb24iOiIxLjAiLCJwcm9qZWN0SWQiOiJwcmotOGIzZjBjOTYtODc3MC00MGMxLWIyYmYtMWNkN2M4OWY4MmNjIiwiZG9jdW1lbnRJZCI6ImRvYy0zIiwicmV2aXNpb24iOjIsInNvdXJjZVZhbGlkIjp0cnVlLCJzY29wZSI6InJlYWRfb25seV9wbGFjZW1lbnRfb2JzZXJ2YXRpb24iLCJhY3RpdmVSZWFkeSI6ZmFsc2UsInJ1bnRpbWVBZG1pc3Npb24iOiJ1bmF2YWlsYWJsZSIsImJpbmRpbmdzIjpbeyJiaW5kaW5nSWQiOiJwbGFudC1iaW5kaW5nIiwibG9naWNhbFJlZiI6InhkbDovL29yZy54dmVyc2Uuc3R1ZGlvLnByb2Nlc3MtY29udHJvbC9zeXN0ZW0vcmVmZXJlbmNlLWxvb3AjcGxhbnQiLCJ0YXJnZXRJZCI6InJlZmVyZW5jZS10YXJnZXQiLCJyZWFsaXphdGlvbkNsYXNzIjoicGh5c2ljYWwiLCJhc3NldElkIjoidXJuOmZpeHR1cmU6dW5yZXNvbHZlZC1iZW5jaCIsImFzc2V0IjpudWxsLCJyZXF1aXJlZEludGVyZmFjZXMiOnsiY29tbWFuZCI6eyJpZCI6ImNvbW1hbmQiLCJkaXJlY3Rpb24iOiJiaWRpcmVjdGlvbmFsIiwicGF5bG9hZFNjaGVtYSI6InVybjp4dmVyc2U6c3R1ZGlvOm5vcm1hbGl6ZWQtc2NhbGFyOnYxIiwidW5pdFNlbWFudGljcyI6IjEiLCJjb21wYXRpYmlsaXR5IjoiZXhhY3QifSwic3RhdGUiOnsiaWQiOiJzdGF0ZSIsImRpcmVjdGlvbiI6ImJpZGlyZWN0aW9uYWwiLCJwYXlsb2FkU2NoZW1hIjoidXJuOnh2ZXJzZTpzdHVkaW86bm9ybWFsaXplZC1zY2FsYXI6djEiLCJ1bml0U2VtYW50aWNzIjoiMSIsImNvbXBhdGliaWxpdHkiOiJleGFjdCJ9fSwicmVxdWlyZWRJbnRlcmZhY2VzVHJ1bmNhdGVkIjpmYWxzZSwiZXZpZGVuY2VTY29wZSI6InVua25vd24iLCJyZWFkeSI6ZmFsc2UsImFjdGl2ZVJlYWR5IjpmYWxzZSwiZGlhZ25vc3RpY3MiOlsiUEhZU0lDQUxfUFJPVklERVJfTk9UX0FETUlUVEVEIiwiQVNTRVRfVU5BVkFJTEFCTEUiXSwicmVhZGluZXNzIjp7ImlkZW50aXR5IjoidW5rbm93biIsImludGVyZmFjZXMiOiJ1bmtub3duIiwiYXZhaWxhYmlsaXR5IjoidW5rbm93biIsIm1ldGFkYXRhIjoidW5rbm93biIsInByb3ZpZGVyQWRtaXNzaW9uIjoidW5hdmFpbGFibGUiLCJwZXJtaXNzaW9uIjoidW5rbm93biIsImFjdGl2ZU9wZXJhdGlvbiI6ImJsb2NrZWQifX1dLCJkaWFnbm9zdGljcyI6W10sImxpbWl0YXRpb25zIjpbIkRvZXMgbm90IGNoYW5nZSBkZXBsb3ltZW50IHJlc29sdXRpb24gb3IgcnVudGltZSBhZG1pc3Npb24uIiwiUGh5c2ljYWwgY29udHJvbHMgYW5kIHJlc2VydmF0aW9ucyByZW1haW4gdW5hZG1pdHRlZC4iXSwic3lzdGVtUmVmIjoieGRsOi8vb3JnLnh2ZXJzZS5zdHVkaW8ucHJvY2Vzcy1jb250cm9sL3N5c3RlbS9yZWZlcmVuY2UtbG9vcCIsImRlcGxveW1lbnRSZWYiOiJ4ZGw6Ly9vcmcueHZlcnNlLnN0dWRpby5wcm9jZXNzLWNvbnRyb2wvZGVwbG95bWVudC9sb2NhbC1yZWZlcmVuY2UiLCJpbnZlbnRvcnlUcnVuY2F0ZWQiOmZhbHNlLCJpbnZlbnRvcnlDb21wbGV0ZSI6dHJ1ZX0sImFjdHVhbENhbm9uaWNhbFVuY2hhbmdlZCI6dHJ1ZSwibXV0YXRpdmVSZXF1ZXN0c0FmdGVyU2V0dXAiOjAsIm9ic2VydmVkVUlSZWFkcyI6WyI/cmV2aXNpb249MiJdLCJzY29wZSI6IkFjdHVhbCBwdWJsaWMgc291cmNlIGRlY2xhcmF0aW9uIGFuZCBhdXRob3JpdGF0aXZlIHJlYWQtb25seSByZXNvbHZlciB3aXRoIGVtcHR5L3VuYWRtaXR0ZWQgaW52ZW50b3J5OyBubyBmaXh0dXJlIHByb3ZpZGVyIGluc3RhbGxlZCwgZGV2aWNlIG9wZXJhdGlvbiwgcmVzZXJ2YXRpb24gb3IgU3RhcnQifQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a94800dbbc8a48884adb-d56ff0a8e1c454467cf1",
+          "file": "physical-placements-accessibility.spec.ts",
+          "line": 210,
+          "column": 7
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-27T02:38:33.441Z",
+    "duration": 32466.432999999997,
+    "expected": 2,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  }
+}

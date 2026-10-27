@@ -1,0 +1,270 @@
+{
+  "config": {
+    "argv": [
+      "<loop-cache>/node-v24.22.1-linux-x64/bin/node",
+      "<repo>/node_modules/.bin/playwright",
+      "test",
+      "-c",
+      "tests/e2e/playwright.config.ts",
+      "--grep",
+      "physical placements:"
+    ],
+    "configFile": "<repo>/tests/e2e/playwright.config.ts",
+    "rootDir": "<repo>/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "<repo>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "<repo>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "*.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "<repo>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "<repo>/tests/e2e",
+        "snapshotDir": "<repo>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": "*.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "baseURL": "http://127.0.0.1:48221",
+          "browserName": "chromium",
+          "actionTimeout": 15000,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "trace": "off",
+          "screenshot": "only-on-failure",
+          "video": "off"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "<repo>/test-results/browser-report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "physical-placements-accessibility.spec.ts",
+      "file": "physical-placements-accessibility.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "physical placements: actual unresolved authored binding is read-only at 1024x768",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 12195,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('button', { name: 'Inspect physical placements', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toBeVisible\" getByRole('button', { name: 'Inspect physical placements', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: 'Inspect physical placements', exact: true })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('button', { name: 'Inspect physical placements', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toBeVisible\" getByRole('button', { name: 'Inspect physical placements', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: 'Inspect physical placements', exact: true })\u001b[22m\n\n    at <repo>/tests/e2e/physical-placements-accessibility.spec.ts:150:32",
+                    "location": {
+                      "file": "<repo>/tests/e2e/physical-placements-accessibility.spec.ts",
+                      "column": 32,
+                      "line": 150
+                    },
+                    "snippet": "  148 |       exact: true,\n  149 |     });\n> 150 |     await expect.soft(inspect).toBeVisible();\n      |                                ^\n  151 |     if (await inspect.count()) {\n  152 |       await activate(page, inspect);\n  153 |       const panel = page.getByRole(\"region\", {"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/physical-placements-accessibility.spec.ts",
+                        "column": 32,
+                        "line": 150
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('button', { name: 'Inspect physical placements', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toBeVisible\" getByRole('button', { name: 'Inspect physical placements', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: 'Inspect physical placements', exact: true })\u001b[22m\n\n\n  148 |       exact: true,\n  149 |     });\n> 150 |     await expect.soft(inspect).toBeVisible();\n      |                                ^\n  151 |     if (await inspect.count()) {\n  152 |       await activate(page, inspect);\n  153 |       const panel = page.getByRole(\"region\", {\n    at <repo>/tests/e2e/physical-placements-accessibility.spec.ts:150:32"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T02:14:14.161Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "physical-placement-observation.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJwcm9qZWN0SWQiOiJwcmotOTUzOTdlN2ItYjA3NC00NGViLWFjODAtZDRmYmQ0MDFkZWZkIiwiZG9jdW1lbnRJZCI6ImRvYy0zIiwicmV2aXNpb24iOjIsImFjdHVhbFJlc29sdmVyUmVwb3J0Ijp7ImJpbmRpbmdPYnNlcnZhdGlvblZlcnNpb24iOiIxLjAiLCJwcm9qZWN0SWQiOiJwcmotOTUzOTdlN2ItYjA3NC00NGViLWFjODAtZDRmYmQ0MDFkZWZkIiwiZG9jdW1lbnRJZCI6ImRvYy0zIiwicmV2aXNpb24iOjIsInNvdXJjZVZhbGlkIjp0cnVlLCJzY29wZSI6InJlYWRfb25seV9wbGFjZW1lbnRfb2JzZXJ2YXRpb24iLCJhY3RpdmVSZWFkeSI6ZmFsc2UsInJ1bnRpbWVBZG1pc3Npb24iOiJ1bmF2YWlsYWJsZSIsImJpbmRpbmdzIjpbeyJiaW5kaW5nSWQiOiJwbGFudC1iaW5kaW5nIiwibG9naWNhbFJlZiI6InhkbDovL29yZy54dmVyc2Uuc3R1ZGlvLnByb2Nlc3MtY29udHJvbC9zeXN0ZW0vcmVmZXJlbmNlLWxvb3AjcGxhbnQiLCJ0YXJnZXRJZCI6InJlZmVyZW5jZS10YXJnZXQiLCJyZWFsaXphdGlvbkNsYXNzIjoicGh5c2ljYWwiLCJhc3NldElkIjoidXJuOmZpeHR1cmU6dW5yZXNvbHZlZC1iZW5jaCIsImFzc2V0IjpudWxsLCJyZXF1aXJlZEludGVyZmFjZXMiOnsiY29tbWFuZCI6eyJpZCI6ImNvbW1hbmQiLCJkaXJlY3Rpb24iOiJiaWRpcmVjdGlvbmFsIiwicGF5bG9hZFNjaGVtYSI6InVybjp4dmVyc2U6c3R1ZGlvOm5vcm1hbGl6ZWQtc2NhbGFyOnYxIiwidW5pdFNlbWFudGljcyI6IjEiLCJjb21wYXRpYmlsaXR5IjoiZXhhY3QifSwic3RhdGUiOnsiaWQiOiJzdGF0ZSIsImRpcmVjdGlvbiI6ImJpZGlyZWN0aW9uYWwiLCJwYXlsb2FkU2NoZW1hIjoidXJuOnh2ZXJzZTpzdHVkaW86bm9ybWFsaXplZC1zY2FsYXI6djEiLCJ1bml0U2VtYW50aWNzIjoiMSIsImNvbXBhdGliaWxpdHkiOiJleGFjdCJ9fSwicmVxdWlyZWRJbnRlcmZhY2VzVHJ1bmNhdGVkIjpmYWxzZSwiZXZpZGVuY2VTY29wZSI6InVua25vd24iLCJyZWFkeSI6ZmFsc2UsImFjdGl2ZVJlYWR5IjpmYWxzZSwiZGlhZ25vc3RpY3MiOlsiUEhZU0lDQUxfUFJPVklERVJfTk9UX0FETUlUVEVEIiwiQVNTRVRfVU5BVkFJTEFCTEUiXSwicmVhZGluZXNzIjp7ImlkZW50aXR5IjoidW5rbm93biIsImludGVyZmFjZXMiOiJ1bmtub3duIiwiYXZhaWxhYmlsaXR5IjoidW5rbm93biIsIm1ldGFkYXRhIjoidW5rbm93biIsInByb3ZpZGVyQWRtaXNzaW9uIjoidW5hdmFpbGFibGUiLCJwZXJtaXNzaW9uIjoidW5rbm93biIsImFjdGl2ZU9wZXJhdGlvbiI6ImJsb2NrZWQifX1dLCJkaWFnbm9zdGljcyI6W10sImxpbWl0YXRpb25zIjpbIkRvZXMgbm90IGNoYW5nZSBkZXBsb3ltZW50IHJlc29sdXRpb24gb3IgcnVudGltZSBhZG1pc3Npb24uIiwiUGh5c2ljYWwgY29udHJvbHMgYW5kIHJlc2VydmF0aW9ucyByZW1haW4gdW5hZG1pdHRlZC4iXSwic3lzdGVtUmVmIjoieGRsOi8vb3JnLnh2ZXJzZS5zdHVkaW8ucHJvY2Vzcy1jb250cm9sL3N5c3RlbS9yZWZlcmVuY2UtbG9vcCIsImRlcGxveW1lbnRSZWYiOiJ4ZGw6Ly9vcmcueHZlcnNlLnN0dWRpby5wcm9jZXNzLWNvbnRyb2wvZGVwbG95bWVudC9sb2NhbC1yZWZlcmVuY2UiLCJpbnZlbnRvcnlUcnVuY2F0ZWQiOmZhbHNlLCJpbnZlbnRvcnlDb21wbGV0ZSI6dHJ1ZX0sImFjdHVhbENhbm9uaWNhbFVuY2hhbmdlZCI6dHJ1ZSwibXV0YXRpdmVSZXF1ZXN0c0FmdGVyU2V0dXAiOjAsIm9ic2VydmVkVUlSZWFkcyI6W10sInNjb3BlIjoiQWN0dWFsIHB1YmxpYyBzb3VyY2UgZGVjbGFyYXRpb24gYW5kIGF1dGhvcml0YXRpdmUgcmVhZC1vbmx5IHJlc29sdmVyIHdpdGggZW1wdHkvdW5hZG1pdHRlZCBpbnZlbnRvcnk7IG5vIGZpeHR1cmUgcHJvdmlkZXIgaW5zdGFsbGVkLCBkZXZpY2Ugb3BlcmF0aW9uLCByZXNlcnZhdGlvbiBvciBTdGFydCJ9"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/physical-placements-access-40a28-ng-is-read-only-at-1024x768/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/physical-placements-access-40a28-ng-is-read-only-at-1024x768/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/physical-placements-accessibility.spec.ts",
+                    "column": 32,
+                    "line": 150
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "a94800dbbc8a48884adb-3aad4c2db67492bf3746",
+          "file": "physical-placements-accessibility.spec.ts",
+          "line": 129,
+          "column": 7
+        },
+        {
+          "title": "physical placements: actual unresolved authored binding is read-only at 1440x900",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 11856,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('button', { name: 'Inspect physical placements', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toBeVisible\" getByRole('button', { name: 'Inspect physical placements', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: 'Inspect physical placements', exact: true })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('button', { name: 'Inspect physical placements', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toBeVisible\" getByRole('button', { name: 'Inspect physical placements', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: 'Inspect physical placements', exact: true })\u001b[22m\n\n    at <repo>/tests/e2e/physical-placements-accessibility.spec.ts:150:32",
+                    "location": {
+                      "file": "<repo>/tests/e2e/physical-placements-accessibility.spec.ts",
+                      "column": 32,
+                      "line": 150
+                    },
+                    "snippet": "  148 |       exact: true,\n  149 |     });\n> 150 |     await expect.soft(inspect).toBeVisible();\n      |                                ^\n  151 |     if (await inspect.count()) {\n  152 |       await activate(page, inspect);\n  153 |       const panel = page.getByRole(\"region\", {"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/physical-placements-accessibility.spec.ts",
+                        "column": 32,
+                        "line": 150
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('button', { name: 'Inspect physical placements', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toBeVisible\" getByRole('button', { name: 'Inspect physical placements', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: 'Inspect physical placements', exact: true })\u001b[22m\n\n\n  148 |       exact: true,\n  149 |     });\n> 150 |     await expect.soft(inspect).toBeVisible();\n      |                                ^\n  151 |     if (await inspect.count()) {\n  152 |       await activate(page, inspect);\n  153 |       const panel = page.getByRole(\"region\", {\n    at <repo>/tests/e2e/physical-placements-accessibility.spec.ts:150:32"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T02:14:26.744Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "physical-placement-observation.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJwcm9qZWN0SWQiOiJwcmotNjVjMjJlNjUtYzU2ZC00NTE1LTk4MTYtMTdiY2I4OGNjZjQ3IiwiZG9jdW1lbnRJZCI6ImRvYy0zIiwicmV2aXNpb24iOjIsImFjdHVhbFJlc29sdmVyUmVwb3J0Ijp7ImJpbmRpbmdPYnNlcnZhdGlvblZlcnNpb24iOiIxLjAiLCJwcm9qZWN0SWQiOiJwcmotNjVjMjJlNjUtYzU2ZC00NTE1LTk4MTYtMTdiY2I4OGNjZjQ3IiwiZG9jdW1lbnRJZCI6ImRvYy0zIiwicmV2aXNpb24iOjIsInNvdXJjZVZhbGlkIjp0cnVlLCJzY29wZSI6InJlYWRfb25seV9wbGFjZW1lbnRfb2JzZXJ2YXRpb24iLCJhY3RpdmVSZWFkeSI6ZmFsc2UsInJ1bnRpbWVBZG1pc3Npb24iOiJ1bmF2YWlsYWJsZSIsImJpbmRpbmdzIjpbeyJiaW5kaW5nSWQiOiJwbGFudC1iaW5kaW5nIiwibG9naWNhbFJlZiI6InhkbDovL29yZy54dmVyc2Uuc3R1ZGlvLnByb2Nlc3MtY29udHJvbC9zeXN0ZW0vcmVmZXJlbmNlLWxvb3AjcGxhbnQiLCJ0YXJnZXRJZCI6InJlZmVyZW5jZS10YXJnZXQiLCJyZWFsaXphdGlvbkNsYXNzIjoicGh5c2ljYWwiLCJhc3NldElkIjoidXJuOmZpeHR1cmU6dW5yZXNvbHZlZC1iZW5jaCIsImFzc2V0IjpudWxsLCJyZXF1aXJlZEludGVyZmFjZXMiOnsiY29tbWFuZCI6eyJpZCI6ImNvbW1hbmQiLCJkaXJlY3Rpb24iOiJiaWRpcmVjdGlvbmFsIiwicGF5bG9hZFNjaGVtYSI6InVybjp4dmVyc2U6c3R1ZGlvOm5vcm1hbGl6ZWQtc2NhbGFyOnYxIiwidW5pdFNlbWFudGljcyI6IjEiLCJjb21wYXRpYmlsaXR5IjoiZXhhY3QifSwic3RhdGUiOnsiaWQiOiJzdGF0ZSIsImRpcmVjdGlvbiI6ImJpZGlyZWN0aW9uYWwiLCJwYXlsb2FkU2NoZW1hIjoidXJuOnh2ZXJzZTpzdHVkaW86bm9ybWFsaXplZC1zY2FsYXI6djEiLCJ1bml0U2VtYW50aWNzIjoiMSIsImNvbXBhdGliaWxpdHkiOiJleGFjdCJ9fSwicmVxdWlyZWRJbnRlcmZhY2VzVHJ1bmNhdGVkIjpmYWxzZSwiZXZpZGVuY2VTY29wZSI6InVua25vd24iLCJyZWFkeSI6ZmFsc2UsImFjdGl2ZVJlYWR5IjpmYWxzZSwiZGlhZ25vc3RpY3MiOlsiUEhZU0lDQUxfUFJPVklERVJfTk9UX0FETUlUVEVEIiwiQVNTRVRfVU5BVkFJTEFCTEUiXSwicmVhZGluZXNzIjp7ImlkZW50aXR5IjoidW5rbm93biIsImludGVyZmFjZXMiOiJ1bmtub3duIiwiYXZhaWxhYmlsaXR5IjoidW5rbm93biIsIm1ldGFkYXRhIjoidW5rbm93biIsInByb3ZpZGVyQWRtaXNzaW9uIjoidW5hdmFpbGFibGUiLCJwZXJtaXNzaW9uIjoidW5rbm93biIsImFjdGl2ZU9wZXJhdGlvbiI6ImJsb2NrZWQifX1dLCJkaWFnbm9zdGljcyI6W10sImxpbWl0YXRpb25zIjpbIkRvZXMgbm90IGNoYW5nZSBkZXBsb3ltZW50IHJlc29sdXRpb24gb3IgcnVudGltZSBhZG1pc3Npb24uIiwiUGh5c2ljYWwgY29udHJvbHMgYW5kIHJlc2VydmF0aW9ucyByZW1haW4gdW5hZG1pdHRlZC4iXSwic3lzdGVtUmVmIjoieGRsOi8vb3JnLnh2ZXJzZS5zdHVkaW8ucHJvY2Vzcy1jb250cm9sL3N5c3RlbS9yZWZlcmVuY2UtbG9vcCIsImRlcGxveW1lbnRSZWYiOiJ4ZGw6Ly9vcmcueHZlcnNlLnN0dWRpby5wcm9jZXNzLWNvbnRyb2wvZGVwbG95bWVudC9sb2NhbC1yZWZlcmVuY2UiLCJpbnZlbnRvcnlUcnVuY2F0ZWQiOmZhbHNlLCJpbnZlbnRvcnlDb21wbGV0ZSI6dHJ1ZX0sImFjdHVhbENhbm9uaWNhbFVuY2hhbmdlZCI6dHJ1ZSwibXV0YXRpdmVSZXF1ZXN0c0FmdGVyU2V0dXAiOjAsIm9ic2VydmVkVUlSZWFkcyI6W10sInNjb3BlIjoiQWN0dWFsIHB1YmxpYyBzb3VyY2UgZGVjbGFyYXRpb24gYW5kIGF1dGhvcml0YXRpdmUgcmVhZC1vbmx5IHJlc29sdmVyIHdpdGggZW1wdHkvdW5hZG1pdHRlZCBpbnZlbnRvcnk7IG5vIGZpeHR1cmUgcHJvdmlkZXIgaW5zdGFsbGVkLCBkZXZpY2Ugb3BlcmF0aW9uLCByZXNlcnZhdGlvbiBvciBTdGFydCJ9"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/physical-placements-access-2a938-ng-is-read-only-at-1440x900/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/physical-placements-access-2a938-ng-is-read-only-at-1440x900/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/physical-placements-accessibility.spec.ts",
+                    "column": 32,
+                    "line": 150
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "a94800dbbc8a48884adb-d56ff0a8e1c454467cf1",
+          "file": "physical-placements-accessibility.spec.ts",
+          "line": 129,
+          "column": 7
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-27T02:14:13.633Z",
+    "duration": 25074.746,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  }
+}

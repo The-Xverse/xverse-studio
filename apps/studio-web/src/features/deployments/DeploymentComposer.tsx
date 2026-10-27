@@ -10,6 +10,7 @@ import type { Projection } from "../model/projection";
 import { DeploymentView } from "../model/Views";
 import { Icon, Badge, Diagnostics, Empty, KeyValues } from "../../app/ui";
 import { useTerm } from "../profiles/presentation";
+import { PhysicalPlacementsPanel } from "../lab/PhysicalPlacementsPanel";
 import {
   ResolutionPanel,
   VariantComparison,
@@ -113,6 +114,24 @@ export function DeploymentComposer({
   const document = projection.deployments.find(
     (resource) => resource.documentId === chosen?.documentId,
   );
+  // The validated variant list can be empty when any source is invalid. A
+  // display-only authored identity still permits the backend's invalid-source
+  // observation; it never supplies a variant to authoring or execution controls.
+  const placementCandidates = selection.deploymentRef
+    ? projection.deployments.filter(
+        (resource) =>
+          `xdl://${resource.metadata.namespace}/deployment/${resource.metadata.name}` ===
+          selection.deploymentRef,
+      )
+    : projection.deployments;
+  const placementDocument =
+    document ||
+    (placementCandidates.length === 1 ? placementCandidates[0] : undefined);
+  const placementRef =
+    chosen?.ref ||
+    (placementDocument
+      ? `xdl://${placementDocument.metadata.namespace}/deployment/${placementDocument.metadata.name}`
+      : undefined);
   const resolved = useResolution(
       project.projectId,
       project.revision,
@@ -401,6 +420,19 @@ export function DeploymentComposer({
           </div>
         </form>
       </section>
+      <PhysicalPlacementsPanel
+        projectId={project.projectId}
+        revision={project.revision}
+        documentId={placementDocument?.documentId || chosen?.documentId}
+        deploymentRef={placementRef}
+        systemRef={
+          typeof placementDocument?.spec?.systemRef?.namespace === "string" &&
+          typeof placementDocument?.spec?.systemRef?.name === "string"
+            ? `xdl://${placementDocument.spec.systemRef.namespace}/system/${placementDocument.spec.systemRef.name}`
+            : undefined
+        }
+        loading={variantsLoading}
+      />
       {chosen && (
         <section className="panel" aria-labelledby="resolution-heading">
           <h3 id="resolution-heading">

@@ -94,10 +94,21 @@ async function append(page: Page, comment: string) {
 }
 async function holdPut(page: Page, projectId: string, id: string) {
   const pattern = `**/api/v1/projects/${projectId}/documents/${id}`;
+  const started = performance.now(),
+    observations: Record<string, unknown>[] = [];
+  const observe = (stage: string, details: Record<string, unknown> = {}) => {
+    if (observations.length < 64)
+      observations.push({
+        stage,
+        elapsedMs: Math.round(performance.now() - started),
+        ...details,
+      });
+  };
   let release!: () => void,
     ready = false,
     seen = false,
     actual: any = null,
+    requestError: unknown = null,
     finished: Promise<void> | undefined;
   const held = new Promise<void>((resolve) => {
     release = resolve;
@@ -108,23 +119,53 @@ async function holdPut(page: Page, projectId: string, id: string) {
       return;
     }
     seen = true;
+    observe("request", { method: route.request().method(), documentId: id });
     let finish!: () => void;
     finished = new Promise<void>((resolve) => {
       finish = resolve;
     });
     try {
-      const response = await route.fetch();
+      const response = await route.fetch({ timeout: 30000 });
       actual = { status: response.status(), body: await response.json() };
       ready = true;
+      observe("authoritative response", {
+        status: actual.status,
+        revision: actual.body.revision,
+        code: actual.body.code,
+      });
       await held;
       await route.fulfill({ response });
+      observe("released");
+    } catch (error) {
+      requestError = new Error(
+        "The owned source PUT did not return a usable response within its configured transport bounds.",
+      );
+      observe("request failed", {
+        errorType: error instanceof Error ? error.name : "unknown",
+      });
+      throw requestError;
     } finally {
       finish();
     }
   });
   return {
     async ready() {
-      await expect.poll(() => ready).toBe(true);
+      // This is setup for the focus countercheck, not a source-save performance target.
+      await expect
+        .poll(
+          () => {
+            observe("waiting", { requestSeen: seen, responseReady: ready });
+            return ready || requestError !== null;
+          },
+          {
+            timeout: 30000,
+            intervals: [100, 250, 500, 1000],
+            message:
+              "Owned source PUT must return before the focus-preservation countercheck",
+          },
+        )
+        .toBe(true);
+      if (requestError) throw requestError;
       return actual;
     },
     async release() {
@@ -133,11 +174,28 @@ async function holdPut(page: Page, projectId: string, id: string) {
     },
     async close() {
       release();
-      await finished;
-      await page.unroute(pattern);
+      try {
+        await finished;
+      } finally {
+        await page.unroute(pattern);
+        await test.info().attach("held-source-request-observation.json", {
+          body: JSON.stringify({
+            projectId,
+            documentId: id,
+            requestSeen: seen,
+            responseReady: ready,
+            status: actual?.status,
+            observations,
+            scope:
+              "Bounded real source PUT setup timings, with unchanged source/focus assertions; no authentication headers or private state",
+          }),
+          contentType: "application/json",
+        });
+      }
     },
   };
 }
+
 async function geometry(target: Locator) {
   return target.evaluate((n) => {
     const box = n.getBoundingClientRect(),
