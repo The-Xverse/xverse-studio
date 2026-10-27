@@ -53,6 +53,8 @@ AT/human or native Windows. Unavailable kernel observations cannot be replaced w
 a fake worker. The full task dependencies and M0–M4 gates remain open. Counts remain
 47 completed, 43 in progress and 10 blocked; zero milestones accepted.
 
-Clean committed successor package verification is pending.
+Clean committed successor package verification is retained below.
 
 Selected input digest: `sha256:7af91967440555426a65692d5a02234f72b5ce9c60acfa6a7eb7e73d98b9a1bb`. The environment helper records tracked files before commit; the296-input map also binds the new test, guides and six compiled assets.
+
+Clean candidate `b355c4cdb5e1621566db0239bf0083bc1c8b526a` passed offline native Linux package provisioning from the prepared cache, startup/UI, Unicode persistence, public compilation and owned shutdown. All 104 manifest/archive/file hashes and six tested UI assets are verified; candidate-binding.json checks 290 committed source/fixed inputs plus six compiled assets. Native Windows remains held.
