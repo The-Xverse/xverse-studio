@@ -72,4 +72,8 @@ milestone acceptance remain unfinished or blocked. Root implementation review ca
 close them. Task states remain47 complete/43 in progress/10 blocked, zero milestones
 accepted, M0–M4 active and M5 deferred.
 
-Clean committed successor package verification is pending.
+Clean committed successor package verification is retained below.
+
+Clean candidate `e441980568d23d6f035586de9a9ceba79292555b` passed offline native Linux package provisioning from the prepared cache, startup/UI, Unicode persistence, public compilation and owned shutdown. All 110 manifest/archive/file hashes and six tested UI assets are verified; candidate-binding.json checks 310 committed source/fixed inputs plus six compiled assets. Native Windows remains held.
+
+Prior f985eb3 CI is mixed: PR passed944 backend/full474 browser/package104; push passed944 backend but full browser failed472/2 in parameter-presentation response reads and its package was NOT_RUN. Exact outcomes are retained in evidence/studio/native-ci/ubuntu-24.04-f985eb3-mixed-runs.json. The disposed-response handler lifetime is under investigation; these prior results do not verify the new configured reservation API.
