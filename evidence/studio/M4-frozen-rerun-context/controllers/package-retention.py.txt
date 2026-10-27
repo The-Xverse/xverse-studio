@@ -8,7 +8,7 @@ root = Path.cwd(); out = root/'evidence/studio/M4-frozen-rerun-context'; raw = r
 candidate = subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()
 def clean(value):
     if isinstance(value,str):
-        for original,replacement in [(str(root.parent/'.xverse-studio-cache'),'<loop-cache>'),(str(root),'<repo>'),('/home/jefferson/xverse-studio','<repo>'),(sys.base_prefix,'<python-install>')]:value=value.replace(original,replacement)
+        for original,replacement in [(str(root.parent/'.xverse-studio-cache'),'<loop-cache>'),(str(root),'<repo>'),('<repo>','<repo>'),(sys.base_prefix,'<python-install>')]:value=value.replace(original,replacement)
         return value
     if isinstance(value,list):return [clean(v) for v in value]
     if isinstance(value,dict):return {k:clean(v) for k,v in value.items()}
