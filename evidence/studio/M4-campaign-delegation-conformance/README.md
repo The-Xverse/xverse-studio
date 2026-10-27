@@ -51,4 +51,6 @@ physical providers, actual AT/human measurements or complete campaign acceptance
 The full M0–M4 objective remains; M5 is deferred. Task states remain47 complete/43 in
 progress/10 blocked with zero accepted milestones.
 
-Clean committed successor package verification is pending.
+Clean committed successor package verification is retained below.
+
+Clean candidate `be4d7e12d7554a39718f666d03036b972c3070fc` passed offline native Linux package provisioning from the prepared cache, startup/UI, Unicode persistence, public compilation and owned shutdown. All 104 manifest/archive/file hashes and six tested UI assets are verified; candidate-binding.json checks 293 committed source/fixed inputs plus six compiled assets. Native Windows remains held.
