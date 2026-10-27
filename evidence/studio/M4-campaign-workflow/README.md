@@ -150,3 +150,5 @@ Windows remains held; actual AT/human, external/physical/seed-provider and compl
 M0–M4 acceptance gates remain open. Root review is not independent milestone review.
 No companion repository, device registration/reservation, flashing/stimulation or
 cloud publication/deployment is performed.
+
+Clean candidate `86d664716b2467be2ee712b2edaf49b043d81409` passed offline native Linux package provisioning from the prepared cache, startup/UI, Unicode persistence, public compilation and owned shutdown. All 102 manifest/archive/file hashes and six tested UI assets are verified; candidate-binding.json checks 270 committed source/fixed inputs plus six compiled assets. Native Windows remains held.
