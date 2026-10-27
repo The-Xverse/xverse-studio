@@ -96,3 +96,5 @@ binding identify this tested successor. Both predecessor 9ab5883 Ubuntu24 push/P
 CI runs passed, including backend/browser/package stages; their actual receipt is
 `../native-ci/ubuntu-24.04-9ab5883-runs.json`. New-candidate CI and clean package
 verification require their own identities and are separate outcomes.
+
+Clean candidate `2ea4ec58939653c81288e1ed98ba63cffd4aa648` passed offline native Linux package provisioning from the prepared cache, startup/UI, Unicode persistence, public compilation and owned shutdown. All 100 manifest/archive/file hashes and six tested UI assets are verified; candidate-binding.json checks 262 committed source/fixed inputs plus six compiled assets. Native Windows remains held.
