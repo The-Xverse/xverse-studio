@@ -178,6 +178,6 @@ for (const mode of ["apply", "field", "enum", "elsewhere", "dialog", "depart"])
         ).toEqual([]);
       } finally {
         release();
-        await page.unroute(pattern);
+        await page.unrouteAll({ behavior: "wait" });
       }
     });

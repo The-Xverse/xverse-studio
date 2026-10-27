@@ -1,0 +1,111 @@
+"""Retain actual response-disposal counterexample and unchanged application checks."""
+from pathlib import Path
+import base64
+import hashlib
+import json
+import re
+import sys
+
+root = Path.cwd().resolve()
+base = Path(__file__).resolve().parent
+out = root / 'evidence/studio/M1-presentation-route-lifetime'
+read = lambda path: json.loads(path.read_text())
+
+def clean_text(value):
+    for original, replacement in [(str(root.parent / '.xverse-studio-cache'), '<loop-cache>'),
+        (str(root), '<repo>'), (str(Path.home() / 'xverse-studio'), '<repo>'),
+        (sys.base_prefix, '<python-install>'), (str(Path.home()), '<user-home>'),
+        (str(root.parent), '<workspace-volume>')]:
+        value = value.replace(original, replacement)
+    value = re.sub(r'(?i)(\bstudio_session=)[A-Za-z0-9_-]{16,}', r'\1<redacted>', value)
+    value = re.sub(r'''(?i)(x-csrf-token["']?\s*[:=]\s*["']?)[A-Za-z0-9._-]{16,}''', r'\1<redacted>', value)
+    return re.sub(r'(?i)(bearer\s+)[A-Za-z0-9._-]{16,}', r'\1<redacted>', value)
+
+def clean(value):
+    if isinstance(value, str):
+        return clean_text(value)
+    if isinstance(value, list):
+        return [clean(v) for v in value]
+    if isinstance(value, dict):
+        result = {key: '<redacted>' if key.lower() in {'studio_session', 'csrftoken', 'x-csrf-token',
+            'bootstraptoken', 'x-studio-bootstrap', 'sessiontoken', 'ownerkey', 'authorization', 'cookie', 'set-cookie'} else clean(v) for key, v in value.items()}
+        if value.get('contentType', '').startswith(('text/', 'application/json')) and 'body' in value:
+            try:
+                result['body'] = base64.b64encode(clean_text(base64.b64decode(value['body']).decode()).encode()).decode()
+            except (ValueError, UnicodeError):
+                pass
+        return result
+    return value
+
+def save(name, value):
+    path = out / name
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(clean(value), indent=2) + '\n')
+
+def copy(name, source):
+    if source.suffix == '.json':
+        return save(name, read(source))
+    path = out / name
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text('\n'.join(line.rstrip() for line in clean_text(source.read_text()).splitlines()).rstrip() + '\n')
+
+old, wait, main = (read(base / name / 'receipt.json') if name != 'main' else read(base / name / 'verification.json') for name in ['old', 'wait', 'main'])
+assert old['exitCode'] == 1 and old['stats']['unexpected'] == 2 and old['stats']['expected'] == 0
+assert 'Response has been disposed' in (base / 'old/browser-report.json').read_text()
+assert wait['exitCode'] == 0 and wait['stats']['expected'] == 2
+assert main['exitCode'] == 0 and main['stats']['expected'] == 48
+assert all(not receipt['stats'][key] for receipt in [wait, main] for key in ['unexpected', 'skipped', 'flaky'])
+frozen = read(base / 'main/source-before.json')
+assert frozen == read(base / 'main/source-after.json') and len(frozen) == 316
+for name, value in frozen.items():
+    assert hashlib.sha256((root / name).read_bytes()).hexdigest() == value, name
+previous = read(root / 'evidence/studio/M3-reservation-api/application-and-input-hashes.json')
+assert {name for name in frozen if frozen[name] != previous[name]} == {'tests/e2e/parameter-presentation-focus.spec.ts'}
+for phase in ['old', 'wait']:
+    assert read(base / phase / 'source-before.json') == read(base / phase / 'source-after.json') == previous
+manifest = read(root / 'evidence/studio/M3-reservation-api/package/package-manifest.json')
+assert len(manifest['files']) == 110
+for name, value in manifest['files'].items():
+    assert 'sha256:' + hashlib.sha256((root / name).read_bytes()).hexdigest() == value
+old_source = (base / 'old/probe.spec.ts.txt').read_text()
+wait_source = (base / 'wait/probe.spec.ts.txt').read_text()
+assert wait_source.replace('await page.unrouteAll({ behavior: "wait" });', 'await page.unroute(pattern);') == old_source
+original = (base / 'original.spec.ts.txt').read_text()
+current = (root / 'tests/e2e/parameter-presentation-focus.spec.ts').read_text()
+assert current.replace('await page.unrouteAll({ behavior: "wait" });', 'await page.unroute(pattern);') == original
+out.mkdir(exist_ok=False)
+save('application-and-input-hashes.json', frozen)
+for phase in ['old', 'wait', 'main']:
+    for source in (base / phase).iterdir():
+        if source.is_file():
+            copy(phase + '/' + source.name.replace('.log', '.txt'), source)
+    artifacts = [{'path': str(path.relative_to(base / phase)), 'sha256': hashlib.sha256(path.read_bytes()).hexdigest()} for path in sorted((base / phase / 'browser-output').rglob('*')) if path.is_file()]
+    save(phase + '/omitted-artifacts.json', {'scope': 'Only actual structured report/log/source controls retained; screenshots/raw output remain private and do not supply absent live acceptance.', 'artifacts': artifacts})
+for name in ['original.spec.ts.txt', 'old-cleanup-probe.spec.ts.txt', 'wait-cleanup-probe.spec.ts.txt',
+             'probe-control.json', 'wait-amendment.json', 'main-cleanup-amendment.json']:
+    copy('controls/' + name, base / name)
+for name in ['prepare-probe.py', 'run-probe.py', 'verify-main.py', 'retain.py', 'document.py', 'privacy-check.py']:
+    copy('controllers/' + name + '.txt', base / name)
+save('framework-api-observation.json', {'playwrightCoreVersion': read(base / 'main/versions.json')['playwright'],
+    'lockSha256': hashlib.sha256((root / 'package-lock.json').read_bytes()).hexdigest(),
+    'typesSha256': hashlib.sha256((root / 'node_modules/playwright-core/types/types.d.ts').read_bytes()).hexdigest(),
+    'implementationSha256': hashlib.sha256((root / 'node_modules/playwright-core/lib/coreBundle.js').read_bytes()).hexdigest(),
+    'primarySources': ['node_modules/playwright-core/types/types.d.ts:5299', 'node_modules/playwright-core/lib/coreBundle.js:61669', 'node_modules/playwright-core/lib/coreBundle.js:64055'],
+    'observation': 'Installed types prescribe wait for active handler completion. The implementation drains active invocation promises for wait; only ignoreErrors sets its exception-suppression flag. Main finally uses wait, and all original assertions/status checks/thresholds remain.'})
+save('verification.json', {'scope': 'Test callback lifetime repair; application/compiled/runtime bytes unchanged. No physical/provider/product focus behavior is implemented by this fixture-only change.',
+    'controlledOldNativeCasesFailed': 2, 'controlledWaitNativeCasesPassed': 2, 'freshMainBrowserPassed': 48,
+    'browserUnexpected': 0, 'browserSkipped': 0, 'browserFlaky': 0,
+    'mainAssertionsAndThresholdsPreserved': True, 'responseDTOUnmodified': True,
+    'all315OtherInputsUnchanged': True, 'all110ProductPayloadsUnchanged': True,
+    'newBackendExecution': False, 'inheritedBackendPassed': 1055,
+    'priorDefaultBrowserPassed': 83, 'priorPerformancePassed': 2,
+    'priorPackageCandidate': manifest['candidate'], 'priorEvidence': '../M3-reservation-api/',
+    'priorCI': '../native-ci/ubuntu-24.04-f985eb3-mixed-runs.json',
+    'originalCICallbackTimingCaptured': False, 'currentFull474BrowserExecuted': False,
+    'completedTasks': 47, 'inProgressTasks': 43, 'blockedTasks': 10, 'acceptedMilestones': [],
+    'limitations': ['The controlled probe gates real later response bodies until finally, delays100ms and closes its owned context. It reproduces the reported disposed-body boundary, not an exact captured CI event timeline.',
+        'Probe2 failures/2 passes are separate controlled cases, not additional permanent main tests or full-suite success.',
+        'Fresh48 tests preserve native focus/document/no-run assertions. No new full474, backend, performance or package run is claimed; all other315 inputs/Python/tests and all110 packaged payloads match the verified API candidate.',
+        'Previous f985 PR passed944/full474/package104; push failed472/2 after944 and did not package. Those failures remain failures.',
+        'Native Windows, actual AT/human/SADS/provider/hardware/physical-command and complete M0–M4 milestone acceptance remain unfinished or blocked. Root review is not independent milestone acceptance.']})
+print(json.dumps({'oldNativeFailures': 2, 'waitNativePasses': 2, 'freshMainBrowserPasses': 48, 'productPayloadsUnchanged': 110, 'exactCITimingClaimed': False}))

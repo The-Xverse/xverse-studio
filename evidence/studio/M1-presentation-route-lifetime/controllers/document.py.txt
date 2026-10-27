@@ -1,0 +1,103 @@
+from collections import Counter
+from pathlib import Path
+import json
+import subprocess
+
+root = Path.cwd().resolve()
+out = root / 'evidence/studio/M1-presentation-route-lifetime'
+v = json.loads((out / 'verification.json').read_text())
+assert v['controlledOldNativeCasesFailed'] == 2 and v['controlledWaitNativeCasesPassed'] == 2 and v['freshMainBrowserPassed'] == 48
+note = ('Presentation response-lifetime fixture repair: old f985 push CI failed two disposed response body reads (472 passed), while its PR passed474; both had944 backend and push did not package. A controlled owned native HTTP200 probe gates later actual bodies through finally and reproduces both disposal failures after the unchanged application assertions. Changing only cleanup to unrouteAll with behavior wait makes both controlled cases pass; the main test changes the same single line and fresh48 parameter/wizard browser checks pass with no skip/unexpected/flaky. All original focus/document/no-run assertions, status checks and thresholds remain byte-identical. No ignoreErrors or blanket catch is added. All other315 selected inputs and110 API product payloads match the verified e441 runtime; backend1055/previous default83/performance2/package110 are inherited through that exact unchanged executable evidence. Exact original CI callback timing was not captured; no current full474 is claimed. Evidence: evidence/studio/M1-presentation-route-lifetime/. Counts47/43/10 and zero accepted milestones unchanged; Windows/AT/human/provider/hardware/full gates remain open.')
+(out / 'README.md').write_text('''# Presentation response-handler lifetime
+
+Prior f985 push CI passed 944 backend tests but failed two intercepted presentation
+body reads: Apply at 1024 and enum at 1440, with `Response has been disposed` at
+`response.text()`. Its full browser result is 472 passed/2 failed and packaging was
+not run. The same head's PR job passed 944/full 474/package 104. The exact mixed
+receipt and raw-log hashes remain in the native-ci evidence; failed outcomes are
+not replaced by later passes.
+
+The test intercepts every presentation read, including reads caused by saving.
+It released its initial reply and removed route registration at the end, but
+`page.unroute(pattern)` does not drain already running callbacks. The pinned
+Playwright 1.64.1 types and implementation distinguish waiting for callbacks from
+silently ignoring their errors. The main cleanup now awaits
+`page.unrouteAll({ behavior: "wait" })` after releasing the initial reply.
+No handler/status/body assertion or timeout is weakened, and no error-suppression
+mode is used. The inverse single-line replacement reproduces the original file
+byte-for-byte, preserving all focus, canonical edit/history and no-run checks.
+
+A separate owned native probe copies those original assertions and unmodified
+actual HTTP 200 bodies. It holds later fetched body reads until finally, delays
+100 ms, then closes its owned context and observes for 250 ms. Both original
+cleanup cases reproduce disposed body errors after the application assertions.
+Changing only that cleanup to wait makes both cases pass with the same gates,
+delays, bodies and context-close boundary. Both full reports, source controls and
+commands remain. This is a controlled reproduction of the reported boundary;
+the exact original CI callback/context timeline was not captured.
+
+The temporary probe is removed only after an exact-byte ownership check; neither
+it nor its artificial context-close/delay code enters the main test. Fresh 48
+parameter presentation, parameter accessibility and wizard journeys pass with zero
+skips, unexpected or flaky outcomes. All other 315 selected inputs, every Python
+and backend-test input, all runtime/browser performance inputs and all 110 customer
+payloads match the verified API candidate. Backend 1055, default browser 83,
+performance 2 and the clean native Linux package retain their separately qualified
+M3-reservation-api evidence, including its generated-contract amendment. This test
+change adds no application, metadata DTO, lock/dependency or canonical-document
+behavior. No new full 474/backend/performance/package run is claimed here.
+
+Structured actual reports/logs, exact hashes, tool versions and source controls are
+retained after path/credential sanitization. Screenshots, authentication roots and
+raw CI logs stay private; they do not satisfy missing live cases. Root review is by
+the implementation agent, not independent milestone acceptance. Native Windows,
+actual AT/human/SADS, physical providers/hardware/commands and wider M0–M4 gates
+remain unfinished or blocked. Task states stay 47 complete/43 in progress/10 blocked,
+zero accepted milestones, M5 deferred.
+''')
+(out / 'implementation-review.md').write_text('''# Root review
+
+The prior failed CI reports body disposal and context cleanup, not a failed focus
+assertion. Source review found removal of registration without handler completion.
+A real native gated-body/context-close countercheck reproduces both errors; waiting
+for active callbacks removes them. The pinned framework implementation reserves
+exception suppression for ignoreErrors, which is not used. The final source differs
+by one cleanup call only, with an exact inverse-byte control. Actual HTTP bodies,
+focus/edit/history/no-run assertions and every threshold remain unchanged.
+
+Fresh affected 48 pass after the controlled old2 failures/wait2 successes. All other
+315 selected inputs and all 110 packaged payloads match e441 API evidence. The exact
+original CI timing remains unobserved, and new full474/Windows/AT/human/provider or
+milestone acceptance is not inferred. The original CI failures remain retained.
+''')
+path = root / 'specs/001-industry-agnostic-studio/traceability.json'
+trace = json.loads(path.read_text())
+prior = json.loads(subprocess.check_output(['git', 'show', 'HEAD:specs/001-industry-agnostic-studio/traceability.json']))
+assert Counter(task['status'] for task in trace['tasks']) == {'completed': 47, 'in_progress': 43, 'blocked': 10}
+for task in trace['tasks']:
+    if task['id'] in ['T038', 'T097', 'T098']:
+        assert task['status'] == 'in_progress'
+        task['implementation_note'] += ' ' + note
+        for name in ['evidence/studio/M1-presentation-route-lifetime/verification.json', 'evidence/studio/M1-presentation-route-lifetime/implementation-review.md']:
+            if name not in task.setdefault('implementation_evidence', []):
+                task['implementation_evidence'].append(name)
+record = trace['implementation_record']
+record['code_candidate'] = 'Runtime/package e441980568d23d6f035586de9a9ceba79292555b plus test-only callback drain; exact316 input map in evidence/studio/M1-presentation-route-lifetime/application-and-input-hashes.json; all110 customer payloads unchanged'
+record['verification'].update({'playwright_checks_passed': 48, 'playwright_checks_failed': 0,
+    'affected_playwright_checks_passed': 48,
+    'playwright_scope': 'Fresh48 actual parameter/wizard journeys after test-only callback drain. Controlled native old2fail/wait2pass separate. Prior API83/performance2 inherited through exact unchanged runtime/compiled inputs; no new full474 execution.',
+    'evidence': 'evidence/studio/M1-presentation-route-lifetime/',
+    'current_full_playwright_execution': 'NOT_RUN_FOR_CALLBACK_DRAIN',
+    'browser_inheritance': 'All other315 selected inputs and110 customer payloads unchanged from verified e441 API source; backend1055/default83/performance2/package110 retained with their original generated-contract qualification.'})
+for before, after in zip(prior['tasks'], trace['tasks']):
+    assert {k: value for k, value in before.items() if k not in ('implementation_note', 'implementation_evidence')} == {k: value for k, value in after.items() if k not in ('implementation_note', 'implementation_evidence')}
+assert trace['milestones'] == prior['milestones']
+path.write_text(json.dumps(trace, ensure_ascii=False, indent=2) + '\n')
+path = root / 'specs/001-industry-agnostic-studio/tasks.md'
+path.write_text(path.read_text() + '\n' + note + '\n')
+path = root / 'docs/implementation/STATUS.md'
+text = path.read_text()
+marker = 'Prior f985eb3 CI is mixed:'
+assert marker in text
+path.write_text(text.replace(marker, note + '\n\n' + marker, 1))
+print('Recorded native response-lifetime repair; all task definitions/states and milestone states unchanged.')
