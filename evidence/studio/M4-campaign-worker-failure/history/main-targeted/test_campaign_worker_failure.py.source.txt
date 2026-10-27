@@ -1,0 +1,282 @@
+"""Linux-only native worker fault lane, separate from Windows/provider admission.
+
+The authenticated in-process HTTP service starts its unmodified native worker.
+Only its exact PID/birth/argv/owner-verified child receives SIGINT, at an observed
+sleep point after a real sample. No worker arguments or canonical files are changed.
+"""
+
+import hashlib
+import json
+import os
+from pathlib import Path
+import signal
+import sys
+import time
+
+import psutil
+import pytest
+
+from xverse_studio.storage.core import canonical, digest
+
+
+def response(result, status=200):
+    assert result.status_code == status, (result.status_code, result.text[:1000])
+    return result.json()
+
+
+def wait_for(read, ready, timeout=20):
+    deadline = time.monotonic() + timeout
+    while time.monotonic() < deadline:
+        value = read()
+        if ready(value):
+            return value
+        time.sleep(0.05)
+    raise AssertionError(("Owned native fault precondition/outcome timed out", value))
+
+
+def file_sha(path):
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def interrupt_owned_sleeping_worker(runs, store, run_id):
+    child = runs.children[run_id]
+    directory = runs.directory(run_id)
+    state_path = directory / "state.json"
+    initial = json.loads(state_path.read_text())
+    channel_path = Path("/proc") / str(child.pid) / "wchan"
+
+    def phase():
+        elapsed = time.time() - initial["startedAt"]
+        return {
+            "channel": channel_path.read_text().strip(),
+            "phase": elapsed % 1.0,
+            "elapsed": elapsed,
+        }
+
+    # This declared fixture uses one-second steps and a five-second horizon.
+    # Observe its real sleep, rather than interrupting an evidence append.
+    observed = wait_for(
+        phase,
+        lambda p: (
+            p["channel"] == "hrtimer_nanosleep"
+            and 0.15 <= p["phase"] <= 0.65
+            and p["elapsed"] < 4.5
+        ),
+        timeout=4,
+    )
+    with store.lock:
+        known = store.get("run", run_id)
+        worker = psutil.Process(child.pid)
+        state = json.loads(state_path.read_text())
+        expected = [
+            sys.executable,
+            "-I",
+            "-m",
+            "xverse_studio.providers.worker",
+            str(directory),
+        ]
+        assert child.pid != os.getpid()
+        assert child.poll() is None and worker.is_running()
+        assert worker.status() != psutil.STATUS_ZOMBIE
+        assert known["providerId"] == "studio.reference"
+        assert known["evidenceScope"] == "owned_reference"
+        assert known["pid"] == child.pid
+        assert abs(worker.create_time() - known["createTime"]) <= 0.001
+        assert worker.cmdline() == expected
+        assert digest(expected) == known["launchArgvDigest"]
+        identity_matches = (
+            state["pid"] == child.pid
+            and state["createTime"] == known["createTime"]
+            and state["ownerDigest"] == known["ownerDigest"]
+            and digest((directory / "owner.key").read_bytes()) == known["ownerDigest"]
+        )
+        assert identity_matches, "Persisted owner mismatch; refusing fault delivery."
+        assert state["state"] == "running"
+        elapsed = time.time() - state["startedAt"]
+        assert 0 <= elapsed < 4.5 and 0.15 <= elapsed % 1.0 <= 0.7
+        assert channel_path.read_text().strip() == "hrtimer_nanosleep"
+        action = {
+            "kind": "SIGINT",
+            "pid": child.pid,
+            "createTime": known["createTime"],
+            "unmodifiedWorkerArgvVerified": True,
+            "persistedOwnerVerified": True,
+            "afterActualSample": True,
+            "sleepWaitChannel": observed["channel"],
+            "sleepPhaseSeconds": round(observed["phase"], 3),
+        }
+        # psutil also checks the captured process identity before signalling.
+        # This is one owned PID, never a process group or an arbitrary host PID.
+        worker.send_signal(signal.SIGINT)
+    return child, action
+
+
+@pytest.mark.skipif(
+    sys.platform != "linux",
+    reason="Linux SIGINT/sleep fault lane; provides no native Windows result.",
+)
+@pytest.mark.parametrize(
+    "policy, expected_states",
+    [
+        ("stop_on_failure", ["failed", "cancelled"]),
+        ("continue", ["failed", "stopped"]),
+    ],
+)
+def test_native_worker_failure_preserves_policy_evidence_and_retry_identity(
+    client, tmp_path, policy, expected_states
+):
+    project = response(
+        client.post(
+            "/api/v1/projects", json={"name": "Owned worker failure " + policy}
+        ),
+        201,
+    )
+    project = response(
+        client.post(
+            f"/api/v1/projects/{project['projectId']}/edits",
+            headers={"If-Match": str(project["revision"])},
+            json={
+                "baseRevision": project["revision"],
+                "edits": [
+                    {"kind": "set_parameter", "parameterId": "timestep", "value": 1.0}
+                ],
+            },
+        )
+    )
+    pf = response(
+        client.post(
+            f"/api/v1/projects/{project['projectId']}/preflights",
+            json={"revision": project["revision"]},
+        )
+    )
+    assert pf["status"] == "ready"
+    body = {
+        "snapshotId": pf["snapshotId"],
+        "matrix": {"gain": [0.4, 0.8]},
+        "budget": {"maxRuns": 2, "maxTotalSeconds": 10},
+        "concurrency": 1,
+        "stopPolicy": policy,
+    }
+    key = "owned-native-worker-fault-" + policy
+    accepted = response(
+        client.post("/api/v1/campaigns", headers={"Idempotency-Key": key}, json=body),
+        202,
+    )
+    campaign_id = accepted["campaignId"]
+    campaign = wait_for(
+        lambda: response(client.get("/api/v1/campaigns/" + campaign_id)),
+        lambda c: bool(c["children"][0].get("runId")),
+    )
+    run_id = campaign["children"][0]["runId"]
+    runs, store = client.app.state.studio.runs, client.app.state.studio.store
+    live = wait_for(
+        lambda: response(client.get("/api/v1/runs/" + run_id)),
+        lambda r: r["state"] == "running",
+    )
+    wait_for(
+        lambda: response(client.get(f"/api/v1/runs/{run_id}/observations")),
+        lambda r: bool(r.get("items")),
+    )
+    journal = runs.directory(run_id) / "evidence.jsonl"
+    prefix = journal.read_bytes()
+    protected = {
+        str(Path("snapshots") / sid / "snapshot.json"): file_sha(
+            tmp_path / "snapshots" / sid / "snapshot.json"
+        )
+        for sid in [pf["snapshotId"], live["snapshotId"]]
+    }
+    child, action = interrupt_owned_sleeping_worker(runs, store, run_id)
+    failed = wait_for(
+        lambda: response(client.get("/api/v1/runs/" + run_id)),
+        lambda r: r["state"] in {"failed", "stopped", "unknown"},
+    )
+    assert failed["state"] == "failed" and failed["reason"] == "REFERENCE_WORKER_ERROR"
+    assert failed["cleanup"] == "unknown" and failed["evidence"] == "partial"
+    assert failed["verdict"] is None
+    assert child.wait(timeout=10) == 1
+    partial = response(client.get(f"/api/v1/runs/{run_id}/observations"))
+    assert partial["integrity"] == "verified_prefix" and partial["items"]
+    assert journal.read_bytes().startswith(prefix)
+    snapshot = response(client.get(f"/api/v1/runs/{run_id}/snapshot"))
+    assert snapshot["integrity"] == "valid" and snapshot["readOnly"]
+    assert snapshot["snapshot"]["configuration"]["gain"] == 0.4
+
+    events, previous = [], "0" * 64
+    for index, line in enumerate(journal.read_bytes().splitlines(), 1):
+        event = json.loads(line)
+        assert event["runId"] == run_id and event["snapshotId"] == live["snapshotId"]
+        assert event["sequence"] == str(index) and event["previousDigest"] == previous
+        unsigned = {k: v for k, v in event.items() if k != "digest"}
+        assert (
+            hashlib.sha256(canonical(unsigned).encode()).hexdigest() == event["digest"]
+        )
+        previous = event["digest"]
+        events.append(event)
+    assert any(
+        e["type"] == "log.appended" and e["payload"].get("severity") == "error"
+        for e in events
+    )
+    terminal_digest = file_sha(journal)
+    finished = wait_for(
+        lambda: response(client.get("/api/v1/campaigns/" + campaign_id)),
+        lambda c: c["status"] == "complete",
+    )
+    operation = wait_for(
+        lambda: response(client.get("/api/v1/operations/" + accepted["operationId"])),
+        lambda o: o["status"] == "completed",
+    )
+    assert [c["state"] for c in finished["children"]] == expected_states
+    assert operation["result"]["childStates"] == expected_states
+    listed = response(client.get("/api/v1/runs?projectId=" + project["projectId"]))[
+        "items"
+    ]
+    assert len(listed) == (1 if policy == "stop_on_failure" else 2)
+    if policy == "stop_on_failure":
+        assert finished["children"][1]["runId"] is None
+    else:
+        second = next(r for r in listed if r["runId"] != run_id)
+        assert second["state"] == "stopped" and second["cleanup"] == "complete"
+        assert second["evidence"] == "complete"
+        second_snapshot = response(
+            client.get(f"/api/v1/runs/{second['runId']}/snapshot")
+        )
+        assert second_snapshot["snapshot"]["configuration"]["gain"] == 0.8
+        assert second_snapshot["snapshot"]["parentSnapshotId"] == pf["snapshotId"]
+    for name, expected in protected.items():
+        assert file_sha(tmp_path / name) == expected
+    for _ in range(3):
+        response(client.get("/api/v1/campaigns/" + campaign_id))
+    retry = response(
+        client.post("/api/v1/campaigns", headers={"Idempotency-Key": key}, json=body),
+        202,
+    )
+    assert retry["campaignId"] == campaign_id
+    assert file_sha(journal) == terminal_digest
+    assert len(
+        response(client.get("/api/v1/runs?projectId=" + project["projectId"]))["items"]
+    ) == len(listed)
+    # Named, credential-free observation only; the containing private data root
+    # must never be copied wholesale into committed evidence.
+    observation = {
+        "scope": "Linux-only controlled SIGINT in the unmodified owned worker after an actual sample; in-process authenticated HTTP backend, not launcher/restart/Windows/physical admission.",
+        "policy": policy,
+        "campaignId": campaign_id,
+        "firstRunId": run_id,
+        "action": action,
+        "workerReturnCode": child.returncode,
+        "childStates": expected_states,
+        "operationStatus": operation["status"],
+        "firstLifecycle": failed["state"],
+        "firstCleanup": failed["cleanup"],
+        "firstEvidence": failed["evidence"],
+        "firstVerdict": failed["verdict"],
+        "readerIntegrity": partial["integrity"],
+        "canonicalSnapshotsUnchanged": True,
+        "terminalJournalUnchanged": True,
+        "sameKeyRetryNoDuplicate": True,
+        "runIds": [r["runId"] for r in listed],
+        "verifiedJournalEvents": len(events),
+    }
+    (tmp_path / "native-fault-observation.json").write_text(
+        json.dumps(observation, indent=2) + "\n"
+    )

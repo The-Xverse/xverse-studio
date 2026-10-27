@@ -39,3 +39,25 @@ allocation, budget refusals, immutable children, retained reopen, cancellation,
 failure policy, idempotent retries and late acknowledgements. Label transport/failure
 fixtures. Native Windows, actual assistive technology and full AC-028 remain separate
 gates. Keep task IDs and full M0–M4 acceptance scope intact.
+
+Native worker-failure verification amendment: the unmodified owned worker now has
+a Linux-only controlled failure regression. After an actual sample, the test checks
+the exact Popen child, PID/birth, launch-argument digest and persisted owner, observes
+its declared sleep point, and delivers SIGINT to that single owned PID. It never
+changes worker arguments, provider descriptors, protected snapshots or journal bytes.
+The worker records its own failed/partial/unknown-cleanup outcome and exits with 1.
+Its journal remains an append-only verified prefix, not sealed complete evidence.
+
+With stop_on_failure the pending child is cancelled without a Start. With continue
+the next child receives current admission and executes normally. Campaign-operation
+completion reports coordination completion; it does not replace failed child state,
+unknown cleanup, partial evidence or an unevaluated assertion verdict. Same-key
+creation retry and repeated inspection cannot allocate another child or rewrite
+the failed worker's terminal journal. Base and child snapshot identities stay intact.
+
+The tests use an authenticated in-process HTTP service and actual native workers.
+They do not verify native launcher restart, arbitrary failure points, interrupted
+journal writes, external/physical providers or native Windows. The Linux fault
+fixture requires its observed kernel sleep point; unavailable observations cannot
+be substituted with a fake worker. Windows remains a separate held lane. No product
+API, provider operation, OS requirement or execution authority is added.

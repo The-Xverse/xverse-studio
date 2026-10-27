@@ -1,0 +1,13 @@
+"""Remove native hostnames from the two allowlisted passing JUnit exports."""
+from pathlib import Path
+import hashlib,json,re,xml.etree.ElementTree as ET
+root=Path.cwd().resolve();out=root/'evidence/studio/M4-campaign-worker-failure';records=[]
+for name in ['backend/junit.xml','history/main-targeted/junit.xml']:
+ p=out/name;before=p.read_text();old=ET.fromstring(before);expected=sum('hostname' in e.attrib for e in old.iter())
+ after,count=re.subn(r'hostname="[^"]*"','hostname="native-host"',before);assert count==expected==1
+ new=ET.fromstring(after)
+ assert [(e.tag,{k:v for k,v in e.attrib.items() if k!='hostname'},e.text,e.tail) for e in old.iter()]==[(e.tag,{k:v for k,v in e.attrib.items() if k!='hostname'},e.text,e.tail) for e in new.iter()]
+ p.write_text(after);records.append({'file':name,'beforeSha256':hashlib.sha256(before.encode()).hexdigest(),'afterSha256':hashlib.sha256(after.encode()).hexdigest(),'hostnameAttributesRedacted':count,'allTestcaseResultsAndOtherFieldsUnchanged':True})
+(out/'xml-sanitization.json').write_text(json.dumps({'scope':'Post-retention privacy repair before staging/publication; raw originals remain private. Test results/source inputs are unchanged.','records':records},indent=2)+'\n')
+(out/'controllers/xml-sanitization.py.txt').write_text(Path(__file__).read_text())
+print(json.dumps({'passingJUnitRecordsSanitized':len(records),'allTestcaseResultsUnchanged':True}))

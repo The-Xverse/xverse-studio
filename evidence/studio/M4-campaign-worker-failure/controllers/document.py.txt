@@ -1,0 +1,102 @@
+from pathlib import Path
+from collections import Counter
+import json
+root=Path.cwd().resolve();out=root/'evidence/studio/M4-campaign-worker-failure';v=json.loads((out/'verification.json').read_text());assert v['backendTestsPassed']==934 and v['allCurrentBackendInputsUnchanged'] and v['frozenInputs']==296
+(out/'README.md').write_text('''# Native owned worker failure and campaign policy
+
+The new two-case regression starts the unmodified native reference worker through
+the authenticated in-process HTTP service. After a real sample, it verifies the
+exact owned Popen child, PID/birth, argument digest and persisted owner, observes a
+declared Linux kernel sleep point, and delivers SIGINT to that one PID. Worker
+code, launch arguments, provider descriptors and canonical files are unchanged.
+The signal is a bounded owned host-fault fixture, not a product command or physical
+stimulation. Native Windows is a separate held lane.
+
+Both policies produce a real first-child failure and worker exit code 1. The worker
+records partial evidence and unknown cleanup; the reader verifies its journal prefix
+without claiming a complete seal. The test independently checks sequence/digest
+links, the actual error event, prefix preservation and immutable terminal bytes.
+The functional assertion verdict remains unevaluated. Completed campaign coordination
+does not replace those failed/unknown/partial facts.
+
+With stop_on_failure, the pending child is cancelled without a run allocation.
+With continue, the next separately admitted child executes to stopped with complete
+cleanup/evidence. Protected base/child snapshots preserve their identities and matrix
+values. Repeated reads and a same-key creation retry allocate no duplicate child and
+do not rewrite the failed worker's journal.
+
+Fresh final verification passes all 934 backend tests with zero failures/errors/skips,
+including both native cases; all 296 selected source/test/lock/config/ADR/guide/compiled
+inputs stay unchanged. Spec, architecture, compatibility and F821 checks pass. The
+existing Starlette/httpx deprecation warning remains recorded; dependencies are unchanged.
+The earlier two-case main pass and two private native trials are historical controls.
+Before the final full run, the main fixture explicitly declared its already selected
+five-second horizon and base gain; assertion ASTs stayed identical.
+
+Application/backend/browser-test/compiled bytes match the previous rerun-recovery
+candidate. Among its 294 selected inputs, 293 are identical and only the non-executable
+campaign ADR changed. Additions are the backend-only test and campaign guide. Prior
+69 affected browser/performance2 evidence is inherited by that exact comparison;
+no new browser/performance run is claimed for this candidate. Full462 remains NOT_RUN
+locally. Previous69 contains18 rejection+31 inspection+16 prior rerun+4 shared workflows.
+
+The earlier4c PR CI passed932/full444/package smoke, while its push CI passed932 then
+443 browser checks and failed the wizard's newer-head1024 Draft-saved assertion;
+push package stages were skipped. Both outcomes remain in the native-ci receipt.
+The CI snapshot retains revision3 and an unsaved7, but lacks original event timing.
+A separate controlled real-presentation read reproduces loss of Apply focus to BODY
+at both widths while preserving unsaved7. An isolated same-repository Views proposal
+passes2/10/12 controls and the original six history cases repeated twice, but is NOT applied to this native backend candidate. Matching the
+mechanism does not prove the exact original CI timing. All separate red/proposal
+source witnesses remain in follow-on-presentation/. This is not full GUI acceptance.
+
+This root review is by the implementation agent, not independent milestone acceptance.
+The lane does not verify arbitrary interruption points, interrupted journal writes,
+native launcher restart, crash-after-delegation, external/physical providers, actual
+AT/human or native Windows. Unavailable kernel observations cannot be replaced with
+a fake worker. The full task dependencies and M0–M4 gates remain open. Counts remain
+47 completed, 43 in progress and 10 blocked; zero milestones accepted.
+
+Clean committed successor package verification is pending.
+''')
+(out/'implementation-review.md').write_text('''# Root implementation review
+
+The complete M0–M4 plan and IDs remain. This is the implementation agent's review,
+not independent milestone acceptance. Fresh934 and all296 unchanged input hashes
+are authoritative for this native-test successor. Prior69/performance2 is explicitly
+inherited through293 unchanged inputs plus a non-executable ADR change; the new test
+and guide do not change runtime/browser code. Full462 is not a local execution.
+
+Fault delivery checks the actual owned Popen handle, PID/birth, exact unmodified argv,
+persisted owner and observed sleep point. No process group, arbitrary PID, new launcher
+hook, descriptor override, provider operation or canonical mutation is used. The
+worker's own exception path writes failure/partial/unknown-cleanup facts and exits1.
+The caller retains failed state, prefix verification, unknown cleanup and null verdict.
+The second policy outcome and same-key/no-duplicate retry follow the actual scheduler.
+
+The fixture uses only native Linux and its observed kernel sleep point. It cannot
+verify Windows, every crash point or interrupted evidence writes. The full campaign
+delegation/recovery and provider/permission matrix retains its recorded open scope.
+The kernel observation is a fixture prerequisite, not an application OS requirement.
+
+The known wizard CI failure is retained, not waived by the successful PR lane. The
+matching focus-loss red and isolated UI proposal remain separate and unapplied to
+this backend candidate. No full GUI, task, milestone or release acceptance is claimed.
+''')
+note=(' Native campaign worker-failure successor: fresh934 backend tests pass with296 unchanged inputs, including two actual Linux worker failures at an owner/PID/birth/argv-verified kernel sleep point. stop_on_failure cancels the pending child; continue admits and executes the next child. Worker exit1, failed lifecycle, unknown cleanup, partial prefix-verified evidence and null verdict remain distinct. Canonical snapshots/journal and same-key retry identities are preserved. Application/UI code is unchanged; prior69/performance2 is inherited via293 unchanged inputs plus ADR-only change, with a backend test and guide added. Known4c CI push443/1 wizard failure, matching focus red and isolated proposal remain separate; no fullGUI/nativeWindows/launcher-restart/delegation/physical/milestone acceptance. Evidence: evidence/studio/M4-campaign-worker-failure/. Counts47/43/10 unchanged.')
+p=root/'specs/001-industry-agnostic-studio/traceability.json';trace=json.loads(p.read_text());counts=Counter(t['status'] for t in trace['tasks']);assert counts=={'completed':47,'in_progress':43,'blocked':10}
+for t in trace['tasks']:
+ if t['id'] in ['T011','T021','T023','T089','T090','T095','T098']:
+  assert t['status']=='in_progress';t['implementation_note']+=note
+  for n in ['evidence/studio/M4-campaign-worker-failure/verification.json','evidence/studio/M4-campaign-worker-failure/implementation-review.md','docs/architecture/ADR-0020-campaign-workflow.md','evidence/studio/native-ci/ubuntu-24.04-4c37433-runs.json']:
+   if n not in t.setdefault('implementation_evidence',[]):t['implementation_evidence'].append(n)
+record=trace['implementation_record'];record['code_candidate']='Uncommitted native worker-failure regression;296-input binding in evidence/studio/M4-campaign-worker-failure/application-and-input-hashes.json; clean package binding pending'
+record['verification'].update({'backend_tests_passed':934,'backend_evidence':'evidence/studio/M4-campaign-worker-failure/backend/verification.json','evidence':'evidence/studio/M4-campaign-worker-failure/',
+ 'playwright_scope':'Prior39d8d46 UI69/performance2 inherited through293 unchanged inputs plus non-executable ADR20 amendment; a backend-only test and campaign guide are added. Earlier4c PR full444 passed, push443/1 failed wizard newer-head. A controlled focus red and isolated proposal are retained separately, unapplied to this native candidate. No currentfull462 or fresh GUI/performance execution claim.',
+ 'browser_inheritance':'evidence/studio/M4-campaign-worker-failure/browser-inheritance.json','backend_inheritance':'Not inherited: fresh934 full backend run.',
+ 'prior_package_evidence':'evidence/studio/M4-rerun-rejection-recovery/package/receipt.json (clean3d99287 historical source)',
+ 'current_full_playwright_collection':462,'current_full_playwright_execution':'NOT_RUN'})
+p.write_text(json.dumps(trace,ensure_ascii=False,indent=2)+'\n')
+p=root/'specs/001-industry-agnostic-studio/tasks.md';p.write_text(p.read_text()+'\n'+note.strip()+'\n')
+p=root/'docs/implementation/STATUS.md';s=p.read_text();marker='Rejected rerun recovery successor:';assert marker in s;p.write_text(s.replace(marker,note.strip()+'\n\n'+marker,1))
+print(json.dumps({'counts':dict(counts),'tasksAndTraceUpdatedTogether':True,'acceptedMilestones':0}))

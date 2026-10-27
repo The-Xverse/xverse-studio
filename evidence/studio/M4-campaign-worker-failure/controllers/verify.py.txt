@@ -1,0 +1,40 @@
+"""Freeze the backend-test successor and inherit unchanged UI/runtime evidence."""
+from pathlib import Path
+import ast, hashlib, json, os, re, shutil, subprocess, sys, time, uuid
+root=Path.cwd().resolve();base=root/'.studio-local/campaign-worker-failure';out=base/'verified-backend';out.mkdir(exist_ok=False)
+cache=root.parent/'.xverse-studio-cache'
+env=dict(os.environ,PATH=str(cache/'node-v24.22.1-linux-x64/bin')+os.pathsep+os.environ['PATH'],PYTEST_DISABLE_PLUGIN_AUTOLOAD='1',TMPDIR=str(cache/'tmp'),TEMP=str(cache/'tmp'),TMP=str(cache/'tmp'),SPECIFY_FEATURE_DIRECTORY='specs/001-industry-agnostic-studio')
+def save(p,v):p.write_text(json.dumps(v,indent=2)+'\n')
+def inputs():
+ paths=subprocess.check_output(['git','ls-files','--cached','--others','--exclude-standard'],text=True).splitlines()
+ paths += [str(p.relative_to(root)) for p in (root/'apps/studio-web/dist').rglob('*') if p.is_file()]
+ selected=['pyproject.toml','uv.lock','package.json','package-lock.json','docs/user/run-comparison.md','docs/user/campaigns.md',
+ 'docs/architecture/ADR-0019-scenario-evidence-timeline.md','docs/architecture/ADR-0020-campaign-workflow.md','docs/architecture/ADR-0021-recorded-comparison.md','docs/architecture/ADR-0022-owned-worker-state-handoff.md']
+ return {n:hashlib.sha256((root/n).read_bytes()).hexdigest() for n in sorted(set(paths)) if (root/n).is_file() and (n.startswith(('apps/','services/','scripts/','tests/','packages/','config/')) or n in selected)}
+frozen=inputs();save(out/'source-before.json',frozen);assert len(frozen)==296
+previous=json.loads((root/'evidence/studio/M4-rerun-rejection-recovery/application-and-input-hashes.json').read_text())
+changed={n:{'previous':h,'current':frozen.get(n)} for n,h in previous.items() if frozen.get(n)!=h};assert set(changed)=={'docs/architecture/ADR-0020-campaign-workflow.md'}
+added=sorted(set(frozen)-set(previous));assert added==['docs/user/campaigns.md','tests/integration/test_campaign_worker_failure.py']
+save(out/'browser-inheritance.json',{'scope':'Prior69 affected browser/performance2 and clean104-file package belong to product3d99287 plus equivalent metadata39d8d46. All application/backend/browser-test/compiled inputs remain identical; sole prior294 difference is non-executable ADR20. Two additions are one backend-only regression file and the campaign guide. No fresh browser/performance execution is claimed.',
+ 'priorProductCandidate':'3d99287b75dfe12d50e89d4d3e09e585e349ecac','priorEvidence':'evidence/studio/M4-rerun-rejection-recovery/verification.json','byteIdenticalPreviousInputs':len(previous)-len(changed),'documentChanges':changed,'additionalInputs':added})
+before=(base/'main-targeted/test_campaign_worker_failure.py.source.txt').read_text();current=(root/'tests/integration/test_campaign_worker_failure.py').read_text()
+assert [ast.dump(n) for n in ast.walk(ast.parse(before)) if isinstance(n,ast.Assert)]==[ast.dump(n) for n in ast.walk(ast.parse(current)) if isinstance(n,ast.Assert)]
+save(out/'setup-amendment.json',{'scope':'After the first main2 pass, the fixture explicitly declares its already selected5-second horizon and0.8 base gain alongside1-second steps. All assertion ASTs are preserved. Fresh full934 will execute this final source; prior2 is a separate historical setup.', 'allAssertionsPreserved':True,'previousSha256':hashlib.sha256(before.encode()).hexdigest(),'currentSha256':hashlib.sha256(current.encode()).hexdigest()})
+records=[]
+def run(name,cmd):
+ start=time.monotonic()
+ with (out/(name+'.log')).open('w') as log:r=subprocess.run(cmd,cwd=root,env=env,stdout=log,stderr=subprocess.STDOUT)
+ after=inputs();assert frozen==after
+ value={'name':name,'command':cmd,'exitCode':r.returncode,'seconds':round(time.monotonic()-start,3),'selectedInputs':len(frozen),'sourceUnchanged':frozen==after};records.append(value);save(out/'verification.json',records);print(json.dumps(value),flush=True)
+ if r.returncode:raise SystemExit(r.returncode)
+ return (out/(name+'.log')).read_text()
+try:
+ for name,cmd in [('spec',[sys.executable,'-I','scripts/validate_spec_package.py']),('architecture',[sys.executable,'-I','scripts/check_architecture.py']),('compatibility',[sys.executable,'-I','scripts/check_platform_compatibility.py']),('ruff',[str(root/'.venv/bin/ruff'),'check','--select','F821','services/studio-api/src','scripts','tests']),('environment',[sys.executable,'-I','scripts/record_environment.py','--output',str(out/'environment.json')])]:run(name,cmd)
+ text=run('collection',[sys.executable,'-I','-m','pytest','--collect-only','-q']);m=re.search(r'(\d+) tests collected',text);assert m and int(m[1])==934
+ data=base/('owned-full-test-data-'+uuid.uuid4().hex)
+ command=[sys.executable,'-I','-m','pytest','tests','-q','--tb=short','--basetemp='+str(data),'--junitxml='+str(out/'junit.xml')]
+ run('pytest',command)
+ observations=[json.loads(p.read_text()) for p in data.rglob('native-fault-observation.json')];assert len(observations)==2;save(out/'native-observations.json',observations)
+ print('Fresh934 backend and static gates passed',flush=True)
+finally:
+ save(out/'source-after.json',inputs());assert frozen==inputs()

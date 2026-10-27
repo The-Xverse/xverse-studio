@@ -35,3 +35,12 @@ While this form is mounted, retrying the unchanged request uses the original key
 After reopening, inspect retained history rather than assuming that a lost response
 means nothing was created. Linux owned-reference evidence does not admit external,
 physical or native Windows provider execution.
+
+**Stop on failure** cancels children that have not started after a child fails or
+is rejected. **Continue** considers the remaining children under current admission
+checks. Neither policy turns a failed run into a successful result.
+
+A **complete** campaign means coordination has ended. Read each child's execution,
+cleanup, evidence and assertion status separately in Results. A failed worker can
+leave unknown cleanup and partial, prefix-verified evidence; those observations
+remain distinct from a complete journal or a passing assertion.

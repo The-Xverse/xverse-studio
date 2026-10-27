@@ -1,0 +1,88 @@
+"""Retain successful current gates and all historical failed/precondition cohorts."""
+from pathlib import Path
+import base64, hashlib, json, re, sys
+root=Path.cwd().resolve(); local=root/'.studio-local/campaign-worker-failure'
+history=root/'.studio-local/campaign-worker-failure'; out=root/'evidence/studio/M4-campaign-worker-failure'
+def read(p):return json.loads(p.read_text())
+def clean_text(value):
+ for original,replacement in [(str(root.parent/'.xverse-studio-cache'),'<loop-cache>'),(str(root),'<repo>'),(str(Path.home()/'xverse-studio'),'<repo>'),(sys.base_prefix,'<python-install>'),(str(Path.home()),'<user-home>'),(str(root.parent),'<workspace-volume>')]:value=value.replace(original,replacement)
+ value=re.sub(r'(?i)(\bstudio_session=)[A-Za-z0-9_-]{16,}',r'\1<redacted>',value)
+ value=re.sub(r'''(?i)(x-csrf-token["']?\s*[:=]\s*["']?)[A-Za-z0-9._-]{16,}''',r'\1<redacted>',value)
+ value=re.sub(r'(?i)(bearer\s+)[A-Za-z0-9._-]{16,}',r'\1<redacted>',value)
+ ci_prefix='/'.join(['','home','runner','work',''])
+ value=re.sub(re.escape(ci_prefix)+r'''[^\s:)'"]+''','<ci-workspace>',value)
+ return value
+def clean(value):
+ if isinstance(value,str):return clean_text(value)
+ if isinstance(value,list):return [clean(v) for v in value]
+ if isinstance(value,dict):
+  result={k:('<redacted>' if k.lower() in {'studio_session','csrftoken','x-csrf-token','bootstraptoken','x-studio-bootstrap','sessiontoken','ownerkey','authorization','cookie','set-cookie'} else clean(v)) for k,v in value.items()}
+  if value.get('contentType','').startswith(('text/','application/json')) and 'body' in value:
+   try:result['body']=base64.b64encode(clean_text(base64.b64decode(value['body']).decode()).encode()).decode()
+   except (ValueError,UnicodeError):pass
+  return result
+ return value
+def save(name,value):
+ p=out/name;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(clean(value),indent=2)+'\n')
+def copy(name,source):
+ p=out/name;p.parent.mkdir(parents=True,exist_ok=True)
+ if source.suffix=='.png':p.write_bytes(source.read_bytes())
+ elif source.suffix=='.json':save(name,read(source))
+ else:p.write_text('\n'.join(line.rstrip() for line in clean_text(source.read_text()).splitlines()).rstrip()+'\n')
+def results(report):
+ for suite in report.get('suites',[]):yield from results(suite)
+ for spec in report.get('specs',[]):
+  for test in spec['tests']:
+   for result in test['results']:yield spec['title'],result
+import xml.etree.ElementTree as ET
+backend=local/'verified-backend';frozen=read(backend/'source-before.json');assert len(frozen)==296 and frozen==read(backend/'source-after.json')
+for n,h in frozen.items():assert hashlib.sha256((root/n).read_bytes()).hexdigest()==h,n
+commands=read(backend/'verification.json');assert all(r['exitCode']==0 and r['sourceUnchanged'] and r['selectedInputs']==296 for r in commands)
+assert commands[-1]['name']=='pytest'
+suites=ET.parse(backend/'junit.xml').getroot().findall('testsuite');counts={k:sum(int(s.get(k,0)) for s in suites) for k in ['tests','failures','errors','skipped']};assert counts=={'tests':934,'failures':0,'errors':0,'skipped':0},counts
+observations=read(backend/'native-observations.json');assert {v['policy'] for v in observations}=={'continue','stop_on_failure'}
+assert all(v['workerReturnCode']==1 and v['readerIntegrity']=='verified_prefix' and v['canonicalSnapshotsUnchanged'] and v['terminalJournalUnchanged'] and v['sameKeyRetryNoDuplicate'] for v in observations)
+inherit=read(backend/'browser-inheritance.json');assert inherit['byteIdenticalPreviousInputs']==293 and set(inherit['documentChanges'])=={'docs/architecture/ADR-0020-campaign-workflow.md'}
+out.mkdir(exist_ok=False)
+save('application-and-input-hashes.json',frozen);save('environment.json',read(backend/'environment.json'));save('browser-inheritance.json',inherit);save('native-observations.json',observations)
+for p in backend.iterdir():
+ if p.is_file():copy('backend/'+p.name.replace('.log','.txt'),p)
+for name in ['native-initial','native-sleep-successor','main-targeted']:
+ d=local/name;assert read(d/'summary.json')['exitCode']==0
+ for p in d.iterdir():
+  if p.is_file() and p.suffix in {'.json','.txt','.log','.xml'}:copy('history/'+name+'/'+p.name.replace('.log','.txt'),p)
+for n in ['probe.py','verify.py','retain.py','document.py','privacy-check.py']:copy('controllers/'+n+'.txt',local/n)
+# Preserve the separate, still-unapplied UI investigation. No raw auth roots or
+# raw CI logs/archive are traversed; only named terminal artifacts are retained.
+for label,d in [('native-red',root/'.studio-local/parameter-presentation-focus/native-red'),('isolated-build',root/'.studio-local/parameter-presentation-focus/isolated-build'),('isolated-first-successor',root/'.studio-local/parameter-presentation-focus/isolated-first-successor'),('isolated-expanded-successor',root/'.studio-local/parameter-presentation-focus/isolated-expanded-successor')]:
+ assert d.is_dir()
+ for p in d.rglob('*'):
+  if p.is_file() and p.suffix in {'.json','.txt','.log','.md','.png'}:copy('follow-on-presentation/'+label+'/'+str(p.relative_to(d)).replace('.log','.txt'),p)
+for name in ['source-control.json','source-amendment.json']:save('follow-on-presentation/'+name,read(root/'.studio-local/parameter-presentation-proposal'/name))
+for label,d in [('isolated-enum-successor',root/'.studio-local/parameter-presentation-focus/isolated-enum-successor'),('isolated-original-history',root/'.studio-local/wizard-ci-review/isolated-original-history')]:
+ assert read(d/'summary.json')['exitCode']==0
+ for p in d.rglob('*'):
+  if p.is_file() and p.suffix in {'.json','.txt','.log','.md','.png'}:copy('follow-on-presentation/'+label+'/'+str(p.relative_to(d)).replace('.log','.txt'),p)
+ci=local/'terminal-ci';copy('follow-on-presentation/ci-before/error-context.md',ci/'wizard-failure-private/error-context.md');copy('follow-on-presentation/ci-before/test-failed-1.png',ci/'wizard-failure-private/test-failed-1.png')
+report=read(ci/'selected-private-artifact/test-results/browser-report.json')
+failed=[]
+def failed_specs(value):
+ for suite in value.get('suites',[]):yield from failed_specs(suite)
+ for spec in value.get('specs',[]):
+  if any(t.get('status')=='unexpected' for t in spec.get('tests',[])):yield spec
+failed=list(failed_specs(report));assert len(failed)==1
+save('follow-on-presentation/ci-before/browser-failure.json',{'stats':report['stats'],'failedSpecs':failed,'rawArchiveIndex':read(ci/'selected-artifact-index.json')['archiveSha256']})
+ci_environment=read(ci/'selected-private-artifact/evidence/studio/native-ci/environment.json');names=['apps/studio-web/src/features/model/Views.tsx','apps/studio-web/src/features/profiles/presentation.tsx','apps/studio-web/src/app/App.tsx','tests/e2e/wizard-accessibility.spec.ts']
+matches={n:ci_environment['sourceFiles'][n]==hashlib.sha256((root/n).read_bytes()).hexdigest() for n in names};assert all(matches.values())
+save('follow-on-presentation/ci-before/source-control.json',{'scope':'Failed4c CI recorded source hashes match all four main files relevant to the controlled focus-loss mechanism. Original CI event timing remains unproven. The isolated Views proposal differs and is not applied here.','recordedCIHashes':{n:ci_environment['sourceFiles'][n] for n in names},'allRelevantMainFilesMatch':matches})
+save('verification.json',{'baseCandidate':read(backend/'environment.json')['gitCandidate'],'scope':'Linux-only actual owned native worker failure and campaign policy; authenticated in-process HTTP backend, no launcher/restart/Windows/physical admission claim.',
+ 'backend':counts,'backendTestsPassed':934,'frozenInputs':296,'compiledAssets':6,'allCurrentBackendInputsUnchanged':True,
+ 'browserChecksInherited':69,'performanceChecksInherited':2,'browserInheritance':'browser-inheritance.json','currentFull462':'NOT_RUN_LOCALLY',
+ 'knownCI':'../native-ci/ubuntu-24.04-4c37433-runs.json','followOnFocusProposal':'Unapplied to this candidate. Actual2 red and isolated2/10/12 plus original12 pass; original CI timing unproven. See follow-on-presentation/.',
+ 'applicationAndInputDigest':'sha256:'+hashlib.sha256(json.dumps(frozen,sort_keys=True,separators=(',',':')).encode()).hexdigest(),
+ 'completedTasks':47,'acceptedMilestones':[],
+ 'limitations':['Controlled SIGINT at a verified Linux kernel sleep point after a real sample; other interruption points and unavailable kernel observations are not substituted with fake data.',
+ 'No worker argv/provider/owner/canonical-evidence alteration. Reads and same-key retry retain immutable failed evidence and child identities.',
+ 'Native Windows remains held; external/physical providers, native backend crash-after-delegation, actual AT/human and full task/milestone gates remain open.',
+ 'Fresh934 backend is separate from inherited prior69/performance2. Known presentation-focus defect is retained with an isolated proposal; no full GUI acceptance is claimed.']})
+print(json.dumps({'dossier':str(out.relative_to(root)),'backend':counts,'inputs':296,'browser':'inherited69/performance2','knownFocusDefect':'separate isolated proposal, not applied'}))
