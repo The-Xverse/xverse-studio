@@ -109,3 +109,5 @@ partial under their complete task/dependency scope. The audited count stays 47/1
 all five milestone gates remain open. Root implementation review is not independent
 review. No companion repository, deployment, device registration, reservation, flashing
 or physical stimulation changes are authorized or performed by this checkpoint.
+
+Clean candidate `08022a4084afab98e6f5890562b665885b53374e` passed offline native Linux package provisioning from the prepared cache, startup/UI, Unicode persistence, public compilation and owned shutdown. All 101 manifest/archive/file hashes and six tested UI assets are verified; candidate-binding.json checks 264 committed source/fixed inputs plus six compiled assets. Native Windows remains held.

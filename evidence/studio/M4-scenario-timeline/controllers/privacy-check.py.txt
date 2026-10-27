@@ -26,14 +26,18 @@ def check(value, name):
                 pass
 
 files = list(out.rglob('*'))
+text_count = image_count = 0
 for p in files:
     if p.is_file():
         if p.suffix == '.png':
+            image_count += 1
             continue
+        text_count += 1
         content = p.read_text()
         check(content, str(p.relative_to(root)))
         if p.suffix == '.json':
             check(json.loads(content), str(p.relative_to(root)))
 assert not problems, problems
-print(json.dumps({'dossierFilesChecked': sum(p.is_file() for p in files), 'machinePathsOrCredentialShapedLiterals': problems,
-    'scope': 'Supplemental literal scan plus allowlisted artifact retention; not a universal secret detector'}))
+print(json.dumps({'dossierFilesEnumerated': sum(p.is_file() for p in files), 'textFilesChecked': text_count,
+    'pngImagesExcludedFromTextScan': image_count, 'machinePathsOrCredentialShapedLiterals': problems,
+    'scope': 'Supplemental literal text and decoded text/JSON attachment scan plus allowlisted artifact retention; not a universal secret detector or image scan'}))
