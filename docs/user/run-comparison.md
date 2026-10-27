@@ -40,3 +40,14 @@ If acknowledgement is uncertain, repeating **Rerun frozen inputs** retries the s
 stored request key. A read timeout does not cancel the experiment or request a
 second Start. An incompatible operation or child reply stays unconfirmed until a
 matching response can be read.
+
+
+Use **Frozen inputs** to inspect the selected recorded run's verified sources and
+run/project/snapshot identities. **Compiled contributing inputs** and **Complete
+authored revision** are distinct input sets. If the complete revision was not
+recorded, its option is unavailable. Sources are read-only.
+
+Changing the selected run, view or results tab dismisses the earlier inspection.
+A delayed read preserves newer focus and dialogs. After a failed or timed-out
+read, select **Frozen inputs** again to retry. Inspection starts no workload and
+does not modify the original snapshot or recorded evidence.

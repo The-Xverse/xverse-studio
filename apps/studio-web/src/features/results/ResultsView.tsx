@@ -14,7 +14,7 @@ import {
 } from "./evidenceFilters";
 import { ObservationPlot, ObservationTable } from "./ObservationDisplay";
 import { RetentionDialog } from "../retention/RetentionDialog";
-import { FrozenInputs } from "./FrozenInputs";
+import { FrozenInputsControl } from "./FrozenInputsControl";
 import { RunControls } from "../runs/RunControls";
 import { DiagnosticExplanations } from "../diagnostics/DiagnosticExplanations";
 import { projectDisplay } from "../model/projection";
@@ -75,7 +75,6 @@ export function ResultsView({
     [observationError, setObservationError] = useState(""),
     [observationNext, setObservationNext] = useState<string | null>(null),
     [observationTrail, setObservationTrail] = useState<string[]>([""]),
-    [frozenInputs, setFrozenInputs] = useState<Data | null>(null),
     [rerunBusy, setRerunBusy] = useState(false),
     [rerunOperation, setRerunOperation] = useState<Data | null>(null);
   useEffect(() => {
@@ -116,15 +115,6 @@ export function ResultsView({
   if (annotationContext.current.runId !== run?.runId)
     annotationContext.current = { runId: run?.runId };
   const renderedAnnotationContext = annotationContext.current;
-  async function inspectFrozenInputs() {
-    if (!run) return;
-    const response = await api(`/runs/${run.runId}/snapshot`);
-    if (response.integrity !== "valid" || response.readOnly !== true)
-      throw new Error(
-        "The backend could not verify the immutable snapshot for read-only inspection.",
-      );
-    setFrozenInputs(response.snapshot);
-  }
   // The backend owns execution; this component may select an acknowledged child
   // only while the original run/tab and the user's focus intent are still current.
   const rerunMounted = useRef(false),
@@ -167,9 +157,12 @@ export function ResultsView({
           "The rerun acknowledgement cannot be identified. Retry retains the same request key.",
         );
       while (performance.now() < deadline) {
-        const operation: Data = await api(`/operations/${accepted.operationId}`, {
-          signal: abort.signal,
-        });
+        const operation: Data = await api(
+          `/operations/${accepted.operationId}`,
+          {
+            signal: abort.signal,
+          },
+        );
         if (
           operation.operationId !== accepted.operationId ||
           operation.kind !== "rerun" ||
@@ -532,19 +525,18 @@ export function ResultsView({
               ))}
             </select>
           </label>
-          <button
-            className="button"
-            data-frozen-inputs-trigger=""
-            onClick={() =>
-              void doAction(
-                "Verifying immutable run inputs",
-                inspectFrozenInputs,
-              )
-            }
-          >
-            <Icon name="code" />
-            Frozen inputs
-          </button>
+          <FrozenInputsControl
+            key={JSON.stringify([
+              run.runId,
+              run.snapshotId,
+              run.projectId,
+              run.revision,
+              run.planDigest,
+              run.semanticDigest,
+              tab,
+            ])}
+            run={run}
+          />
           {run.providerId === "studio.reference" &&
             run.evidenceScope === "owned_reference" && (
               <button
@@ -1405,12 +1397,6 @@ export function ResultsView({
             />
           </aside>
         </div>
-      )}
-      {frozenInputs && (
-        <FrozenInputs
-          snapshot={frozenInputs}
-          onClose={() => setFrozenInputs(null)}
-        />
       )}
     </div>
   );

@@ -1,0 +1,108 @@
+
+Running 31 tests using 1 worker
+
+(node:363138) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 .studio-local/frozen-input-read-context/deadline.spec.ts:8:5 › frozen input inspection: actual thirty-second deadline permits a fresh read (37.3s)
+  ✓   2 .studio-local/frozen-input-read-context/expanded.spec.ts:10:6 › frozen input inspection normal at 1024 (7.7s)
+  ✓   3 .studio-local/frozen-input-read-context/expanded.spec.ts:10:6 › frozen input inspection normal at 1440 (8.0s)
+  ✓   4 .studio-local/frozen-input-read-context/expanded.spec.ts:10:6 › frozen input inspection new run at 1024 (7.4s)
+  ✓   5 .studio-local/frozen-input-read-context/expanded.spec.ts:10:6 › frozen input inspection new run at 1440 (6.2s)
+  ✓   6 .studio-local/frozen-input-read-context/expanded.spec.ts:10:6 › frozen input inspection Model at 1024 (6.3s)
+  ✓   7 .studio-local/frozen-input-read-context/expanded.spec.ts:10:6 › frozen input inspection Model at 1440 (6.3s)
+  ✓   8 .studio-local/frozen-input-read-context/expanded.spec.ts:10:6 › frozen input inspection Home at 1024 (6.4s)
+  ✓   9 .studio-local/frozen-input-read-context/expanded.spec.ts:10:6 › frozen input inspection Home at 1440 (8.5s)
+  ✓  10 .studio-local/frozen-input-read-context/expanded.spec.ts:10:6 › frozen input inspection tab at 1024 (8.3s)
+  ✓  11 .studio-local/frozen-input-read-context/expanded.spec.ts:10:6 › frozen input inspection tab at 1440 (6.5s)
+  ✓  12 .studio-local/frozen-input-read-context/expanded.spec.ts:10:6 › frozen input inspection focus at 1024 (6.2s)
+  ✓  13 .studio-local/frozen-input-read-context/expanded.spec.ts:10:6 › frozen input inspection focus at 1440 (7.3s)
+  ✓  14 .studio-local/frozen-input-read-context/expanded.spec.ts:10:6 › frozen input inspection back at 1024 (8.6s)
+  ✓  15 .studio-local/frozen-input-read-context/expanded.spec.ts:10:6 › frozen input inspection back at 1440 (6.5s)
+  ✓  16 .studio-local/frozen-input-read-context/expanded.spec.ts:10:6 › frozen input inspection HTTP503 at 1024 (8.3s)
+  ✓  17 .studio-local/frozen-input-read-context/expanded.spec.ts:10:6 › frozen input inspection HTTP503 at 1440 (7.3s)
+  ✓  18 .studio-local/frozen-input-read-context/expanded.spec.ts:10:6 › frozen input inspection wrong snapshot at 1024 (7.6s)
+  ✓  19 .studio-local/frozen-input-read-context/expanded.spec.ts:10:6 › frozen input inspection wrong snapshot at 1440 (7.8s)
+  ✓  20 .studio-local/frozen-input-read-context/expanded.spec.ts:10:6 › frozen input inspection wrong plan at 1024 (7.4s)
+  ✓  21 .studio-local/frozen-input-read-context/expanded.spec.ts:10:6 › frozen input inspection wrong plan at 1440 (6.4s)
+  ✓  22 .studio-local/frozen-input-read-context/expanded.spec.ts:10:6 › frozen input inspection malformed documents at 1024 (7.4s)
+  ✓  23 .studio-local/frozen-input-read-context/expanded.spec.ts:10:6 › frozen input inspection malformed documents at 1440 (7.5s)
+  ✓  24 .studio-local/frozen-input-read-context/expanded.spec.ts:10:6 › frozen input inspection unverified at 1024 (6.5s)
+  ✓  25 .studio-local/frozen-input-read-context/expanded.spec.ts:10:6 › frozen input inspection unverified at 1440 (6.4s)
+  ✓  26 .studio-local/frozen-input-read-context/expanded.spec.ts:10:6 › frozen input inspection missing authored at 1024 (7.2s)
+  ✓  27 .studio-local/frozen-input-read-context/expanded.spec.ts:10:6 › frozen input inspection missing authored at 1440 (8.5s)
+  ✘  28 .studio-local/frozen-input-read-context/expanded.spec.ts:10:6 › frozen input inspection superseded at 1024 (17.4s)
+(node:387790) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  29 .studio-local/frozen-input-read-context/expanded.spec.ts:10:6 › frozen input inspection superseded at 1440 (17.6s)
+(node:389696) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  30 .studio-local/frozen-input-read-context/expanded.spec.ts:10:6 › frozen input inspection duplicate at 1024 (8.0s)
+  ✓  31 .studio-local/frozen-input-read-context/expanded.spec.ts:10:6 › frozen input inspection duplicate at 1440 (7.7s)
+
+
+  1) .studio-local/frozen-input-read-context/expanded.spec.ts:10:6 › frozen input inspection superseded at 1024
+
+    Error: expect(locator).toHaveValue(expected) failed
+
+    Locator:  getByLabel('Recorded run', { exact: true })
+    Expected: "run-80ab5e92-4be0-49fc-9e4e-08930722546f"
+    Received: "run-536858cc-9b73-4a3c-b84f-01085f220a16"
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toHaveValue" getByLabel('Recorded run', { exact: true }) with timeout 10000ms
+      - waiting for getByLabel('Recorded run', { exact: true })
+        24 × locator resolved to <select aria-label="Recorded run">…</select>
+           - unexpected value "run-536858cc-9b73-4a3c-b84f-01085f220a16"
+
+
+      70 |   if(mode==='new run'||mode==='back'||mode==='superseded') {
+      71 |    await selected.focus();await page.keyboard.press('End');
+    > 72 |    await expect(selected).toHaveValue(newer.runId);
+         |                           ^
+      73 |    if(mode==='back') {await selected.focus();await page.keyboard.press('End');await expect(selected).toHaveValue(original.runId);}
+      74 |    if(mode==='superseded') {await button.click();await expect(page.getByRole('dialog')).toContainText(newer.snapshotId);}
+      75 |   } else if(mode==='Model') await page.getByRole('tab',{name:'Model',exact:true}).click();
+        at <repo>/.studio-local/frozen-input-read-context/expanded.spec.ts:72:27
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    .studio-local/frozen-input-read-context/native-expanded-ready-successor/browser-output/expanded-frozen-input-inspection-superseded-at-1024/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: .studio-local/frozen-input-read-context/native-expanded-ready-successor/browser-output/expanded-frozen-input-inspection-superseded-at-1024/error-context.md
+
+  2) .studio-local/frozen-input-read-context/expanded.spec.ts:10:6 › frozen input inspection superseded at 1440
+
+    Error: expect(locator).toHaveValue(expected) failed
+
+    Locator:  getByLabel('Recorded run', { exact: true })
+    Expected: "run-88a5040a-6c14-4146-a168-f2e922c9b7f5"
+    Received: "run-c9320cf0-8ecb-4608-84ad-1f04cfe2274c"
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toHaveValue" getByLabel('Recorded run', { exact: true }) with timeout 10000ms
+      - waiting for getByLabel('Recorded run', { exact: true })
+        24 × locator resolved to <select aria-label="Recorded run">…</select>
+           - unexpected value "run-c9320cf0-8ecb-4608-84ad-1f04cfe2274c"
+
+
+      70 |   if(mode==='new run'||mode==='back'||mode==='superseded') {
+      71 |    await selected.focus();await page.keyboard.press('End');
+    > 72 |    await expect(selected).toHaveValue(newer.runId);
+         |                           ^
+      73 |    if(mode==='back') {await selected.focus();await page.keyboard.press('End');await expect(selected).toHaveValue(original.runId);}
+      74 |    if(mode==='superseded') {await button.click();await expect(page.getByRole('dialog')).toContainText(newer.snapshotId);}
+      75 |   } else if(mode==='Model') await page.getByRole('tab',{name:'Model',exact:true}).click();
+        at <repo>/.studio-local/frozen-input-read-context/expanded.spec.ts:72:27
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    .studio-local/frozen-input-read-context/native-expanded-ready-successor/browser-output/expanded-frozen-input-inspection-superseded-at-1440/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: .studio-local/frozen-input-read-context/native-expanded-ready-successor/browser-output/expanded-frozen-input-inspection-superseded-at-1440/error-context.md
+
+  2 failed
+    .studio-local/frozen-input-read-context/expanded.spec.ts:10:6 › frozen input inspection superseded at 1024
+    .studio-local/frozen-input-read-context/expanded.spec.ts:10:6 › frozen input inspection superseded at 1440
+  29 passed (4.6m)

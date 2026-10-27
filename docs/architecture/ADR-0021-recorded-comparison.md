@@ -97,3 +97,29 @@ Verify normal rerun, newer views/annotations/focus/run selection, labelled respo
 identity faults and actual lost acknowledgements with same-key/no-duplicate retry.
 Retain the original red and separate isolated proposal before main verification;
 native Windows, broader provider admission and complete T091 acceptance remain open.
+
+
+Frozen-input inspection amendment: a held actual HTTP200 snapshot read opened the
+old run's dialog after selecting a newer recorded run at both desktop widths.
+The old snapshots and canonical journals remained intact. Bind the inspection
+control to run/snapshot/project/revision/digest and result-tab identity; unmounting
+aborts its pending read. Returning to the same run cannot revive an earlier read.
+Serialize pending reads synchronously and bound them to thirty seconds. Timeout
+or a rejected response enables an explicit fresh read without creating a workload.
+
+Require the existing backend integrity/read-only verdict, exact selected snapshot
+and project identities, a well-formed snapshot digest and contributing source map,
+and agreement with every known selected-run revision/plan/semantic digest. Optional
+complete authored inputs may be unavailable; do not substitute contributing inputs
+under that label. Display the run/project/snapshot provenance with read-only source
+text. Preserve newer focus or dialogs, and render the Results dialog in the document
+portal to avoid heading-specific presentation rules. The shared Model divergence
+inspector keeps its existing optional-run interface and modal keyboard behavior.
+
+Verify actual owned runs and immutable protected bytes, normal/duplicate reads,
+newer run/view/tab/focus, run-selection round trips and superseding inspection.
+Label HTTP/DTO faults separately, verify actual thirty-second timeout/fresh retry,
+and wait for recorded-history options before keyboard selection in the harness.
+The original red, TypeScript inference error and harness precondition/teardown
+failures stay retained as failures. No backend API, execution authority, XDL,
+provider admission or milestone acceptance changes.

@@ -2,9 +2,11 @@ import { useState } from "react";
 import type { Data } from "../../api/types";
 import { Badge, Json, KeyValues, Modal } from "../../app/ui";
 export function FrozenInputs({
+  runId,
   snapshot,
   onClose,
 }: {
+  runId?: string;
   snapshot: Data;
   onClose: () => void;
 }) {
@@ -14,8 +16,8 @@ export function FrozenInputs({
     [document, setDocument] = useState(
       Object.keys(snapshot.documents || {})[0] || "",
     );
-  const documents: Record<string, string> =
-    snapshot[scope] || snapshot.documents || {};
+  const authoredAvailable = snapshot.projectDocuments != null;
+  const documents: Record<string, string> = snapshot[scope] || {};
   const selected =
     document in documents ? document : Object.keys(documents)[0] || "";
   return (
@@ -33,6 +35,8 @@ export function FrozenInputs({
         <Badge tone="success">Backend integrity verified</Badge>
         <KeyValues
           values={{
+            ...(runId ? { Run: runId } : {}),
+            Project: snapshot.projectId,
             Snapshot: snapshot.snapshotId,
             "Project revision": snapshot.revision,
             "Snapshot identity": snapshot.snapshotDigest,
@@ -56,7 +60,11 @@ export function FrozenInputs({
             }
           >
             <option value="documents">Compiled contributing inputs</option>
-            <option value="projectDocuments">Complete authored revision</option>
+            <option value="projectDocuments" disabled={!authoredAvailable}>
+              {authoredAvailable
+                ? "Complete authored revision"
+                : "Complete authored revision · unavailable"}
+            </option>
           </select>
         </label>
         <label>
@@ -74,6 +82,12 @@ export function FrozenInputs({
           </select>
         </label>
       </div>
+      {!authoredAvailable && (
+        <p className="hint">
+          The complete authored revision was not recorded. Compiled contributing
+          inputs remain available.
+        </p>
+      )}
       <label className="source-pane-label" htmlFor="frozen-source">
         Frozen source text (read-only)
       </label>
