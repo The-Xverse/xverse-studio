@@ -17,8 +17,9 @@ class LabRegistry:
     """Explicit inventory and fenced leases over server-admitted providers.
 
     This registry neither discovers arbitrary endpoints nor installs providers.
-    Registering a provider is a trusted backend operation. A persisted lease is
+    Registering a provider is a trusted backend operation. A nonterminal lease is
     unknown on restore until its provider confirms the same owner and fence.
+    Confirmed released/expired records remain terminal and confer no authority.
     """
     def __init__(self, providers=None, *, clock=time.time, records=(), persist=None, max_assets=1000, max_reservations=1000, max_lease_seconds=300):
         self.providers = dict(providers or {})
@@ -27,7 +28,15 @@ class LabRegistry:
         self.max_assets = max_assets
         self.max_reservations = max_reservations
         self.max_lease_seconds = max_lease_seconds
-        self.records = {r["reservationId"]: {**deepcopy(r), "status": "unknown"} for r in records}
+        self.records = {
+            r["reservationId"]: {
+                **deepcopy(r),
+                "status": r.get("status")
+                if r.get("status") in ("released", "expired")
+                else "unknown",
+            }
+            for r in records
+        }
         self._lock = threading.RLock()
 
     def _save(self):
@@ -99,10 +108,13 @@ class LabRegistry:
             self._save()
             try:
                 observed = provider.reserve({**asset, "reservationId": reservation_id}, scope, owner, expiry)
-            except LabError:
-                del self.records[reservation_id]; self._save()
-                raise
-            except Exception:
+            except Exception as exc:
+                # RESOURCE_BUSY is the contract's refusal before allocating a
+                # lease. A typed error alone does not prove that no effect took
+                # place: uncertain or unclassified outcomes retain the intent.
+                if isinstance(exc, LabError) and exc.code == "RESOURCE_BUSY":
+                    del self.records[reservation_id]; self._save()
+                    raise
                 rec["reason"] = "RESERVATION_ACKNOWLEDGEMENT_LOST"
                 self._save()
                 raise LabError("OWNERSHIP_UNCERTAIN") from None
@@ -124,11 +136,11 @@ class LabRegistry:
     def require_authority(self, reservation_id, *, owner, action, granted_scopes=()):
         with self._lock:
             rec = self._owned(reservation_id, owner)
+            if rec["status"] != "owned":
+                raise LabError("OWNERSHIP_UNCERTAIN")
             asset = self._asset(rec["assetId"])
             if action not in asset.get("capabilities", []):
                 raise LabError("CAPABILITY_UNSUPPORTED")
-            if rec["status"] != "owned":
-                raise LabError("OWNERSHIP_UNCERTAIN")
             if action != "observe" and (rec["scope"] != action or action not in granted_scopes):
                 raise LabError("FORBIDDEN")
             return deepcopy(rec)

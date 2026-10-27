@@ -486,3 +486,115 @@ def test_requested_non_extension_is_rejected_without_provider_renewal(
         bench.registry.get(lease["reservationId"], owner="fixture-owner")["status"]
         == "owned"
     )
+
+
+@pytest.mark.parametrize("terminal", ["released", "expired"])
+def test_confirmed_terminal_lease_survives_restore_without_provider_contact(
+    persisted_fixture, terminal
+):
+    bench = persisted_fixture
+    lease = bench.registry.reserve(
+        bench.provider.asset_id, owner="original-owner", duration=10
+    )
+    if terminal == "released":
+        bench.registry.release(lease["reservationId"], owner="original-owner")
+    else:
+        bench.now[0] = 111
+        assert (
+            bench.registry.get(lease["reservationId"], owner="original-owner")["status"]
+            == "expired"
+        )
+    newer = bench.registry.reserve(
+        bench.provider.asset_id, owner="newer-owner", duration=20
+    )
+    held = deepcopy(bench.provider.held)
+    calls = list(bench.provider.calls)
+    restored = bench.restore()
+    assert (
+        restored.get(lease["reservationId"], owner="original-owner")["status"]
+        == terminal
+    )
+    for _ in range(2):
+        assert (
+            restored.release(lease["reservationId"], owner="original-owner")["status"]
+            == terminal
+        )
+        assert (
+            restored.reconcile(lease["reservationId"], owner="original-owner")["status"]
+            == terminal
+        )
+    for action in ["observe", "stimulate"]:
+        with pytest.raises(LabError, match="^OWNERSHIP_UNCERTAIN$"):
+            restored.require_authority(
+                lease["reservationId"],
+                owner="original-owner",
+                action=action,
+                granted_scopes={"stimulate"},
+            )
+    assert bench.provider.calls == calls
+    assert bench.provider.held == held
+    assert held[bench.provider.asset_id]["fencingIdentity"] == newer["fencingIdentity"]
+
+
+@pytest.mark.parametrize("code", ["OWNERSHIP_UNCERTAIN", "PROVIDER_OPERATION_UNKNOWN"])
+def test_typed_uncertain_reserve_retains_durable_intent_and_never_reacquires(
+    persisted_fixture, monkeypatch, code
+):
+    bench = persisted_fixture
+    reserve = bench.provider.reserve
+
+    def lose_typed_ack(*args, **kwargs):
+        reserve(*args, **kwargs)
+        raise LabError(code)
+
+    monkeypatch.setattr(bench.provider, "reserve", lose_typed_ack)
+    with pytest.raises(LabError, match="^OWNERSHIP_UNCERTAIN$"):
+        bench.registry.reserve(
+            bench.provider.asset_id, owner="original-owner", duration=10
+        )
+    saved = json.loads(bench.path.read_text())
+    assert (
+        len(saved) == 1
+        and saved[0]["status"] == "unknown"
+        and saved[0]["fencingIdentity"] is None
+    )
+    restored = bench.restore()
+    with pytest.raises(LabError, match="^OWNERSHIP_UNCERTAIN$"):
+        restored.require_authority(
+            saved[0]["reservationId"], owner="original-owner", action="observe"
+        )
+    with pytest.raises(LabError, match="^RESOURCE_BUSY$"):
+        restored.reserve(bench.provider.asset_id, owner="newer-owner", duration=10)
+    assert bench.provider.calls.count("reserve") == 1
+    assert bench.provider.held[bench.provider.asset_id]["owner"] == "original-owner"
+
+
+def test_uncertain_authority_denial_never_contacts_inventory(persisted_fixture):
+    bench = persisted_fixture
+    bench.provider.lose_reserve_ack = True
+    with pytest.raises(LabError, match="^OWNERSHIP_UNCERTAIN$"):
+        bench.registry.reserve(
+            bench.provider.asset_id, owner="original-owner", duration=10
+        )
+    saved = json.loads(bench.path.read_text())[0]
+    calls = list(bench.provider.calls)
+    with pytest.raises(LabError, match="^OWNERSHIP_UNCERTAIN$"):
+        bench.registry.require_authority(
+            saved["reservationId"], owner="original-owner", action="observe"
+        )
+    assert bench.provider.calls == calls
+
+
+def test_definite_busy_refusal_keeps_no_false_owned_intent(persisted_fixture):
+    bench = persisted_fixture
+    bench.provider.reserve(
+        bench.provider.assets[0], "observe", "other-coordinator", 200
+    )
+    held = deepcopy(bench.provider.held)
+    with pytest.raises(LabError, match="^RESOURCE_BUSY$"):
+        bench.registry.reserve(
+            bench.provider.asset_id, owner="original-owner", duration=10
+        )
+    assert json.loads(bench.path.read_text()) == []
+    assert bench.provider.held == held
+    assert bench.provider.calls.count("reserve") == 2
