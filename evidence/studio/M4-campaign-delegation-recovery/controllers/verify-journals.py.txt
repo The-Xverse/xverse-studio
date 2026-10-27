@@ -1,0 +1,25 @@
+"""Verify the four allowlisted original journals without rewriting canonical bytes."""
+from pathlib import Path
+import hashlib,json,re
+from xverse_studio.storage.core import canonical
+
+root=Path.cwd();base=root/'.studio-local/campaign-delegation-recovery';out=root/'evidence/studio/M4-campaign-delegation-recovery'
+record=json.loads((out/'original-worker-journal-receipts.json').read_text());rows=[]
+allowed={'while-running-successor','after-terminal','failed-continue-reader-successor','failed-stop'}
+assert {r['stage'] for r in record['journals']}==allowed
+for row in record['journals']:
+    stage=row['stage'];rid=row['runId'];assert re.fullmatch(r'run-[a-f0-9-]{36}',rid)
+    raw=(base/stage/'private Native delegation Ω data'/'runs'/rid/'evidence.jsonl').read_bytes()
+    retained=(out/stage/'original-worker-journal.jsonl').read_bytes()
+    assert raw==retained and hashlib.sha256(raw).hexdigest()==row['sha256']
+    previous='0'*64;events=[]
+    for index,line in enumerate(raw.splitlines(),1):
+        event=json.loads(line);assert event['runId']==rid and event['snapshotId']==row['snapshotId'] and event['sequence']==str(index) and event['previousDigest']==previous
+        assert hashlib.sha256(canonical({k:v for k,v in event.items() if k!='digest'}).encode()).hexdigest()==event['digest']
+        previous=event['digest'];events.append(event)
+    assert len(events)==row['records']
+    rows.append({'stage':stage,'records':len(events),'canonicalCopyByteIdentical':True,'hashChainVerified':True,'hasErrorEvent':any(e['type']=='log.appended' and e['payload'].get('severity')=='error' for e in events)})
+assert all(r['hasErrorEvent']==r['stage'].startswith('failed-') for r in rows)
+(out/'original-worker-journal-verification.json').write_text(json.dumps({'scope':'Actual private terminal journal bytes compared with their allowlisted public copies and receipt hashes; full canonical sequence/previousDigest/digest chain independently verified. No source or canonical bytes changed.','journals':rows},indent=2)+'\n')
+(out/'controllers/verify-journals.py.txt').write_text(Path(__file__).read_text())
+print(json.dumps({'originalJournalsCompared':len(rows),'allByteIdentical':True,'allHashChainsVerified':True}))

@@ -1,0 +1,130 @@
+[
+  {
+    "name": "typecheck",
+    "command": [
+      "<loop-cache>/node-v24.22.1-linux-x64/bin/node",
+      "<loop-cache>/node-v24.22.1-linux-x64/lib/node_modules/npm/bin/npm-cli.js",
+      "run",
+      "typecheck"
+    ],
+    "exitCode": 0,
+    "seconds": 3.137
+  },
+  {
+    "name": "build",
+    "command": [
+      "<loop-cache>/node-v24.22.1-linux-x64/bin/node",
+      "<loop-cache>/node-v24.22.1-linux-x64/lib/node_modules/npm/bin/npm-cli.js",
+      "run",
+      "build"
+    ],
+    "exitCode": 0,
+    "seconds": 4.7
+  },
+  {
+    "name": "architecture",
+    "command": [
+      "<repo>/.venv/bin/python",
+      "-I",
+      "scripts/check_architecture.py"
+    ],
+    "exitCode": 0,
+    "seconds": 0.668
+  },
+  {
+    "name": "spec",
+    "command": [
+      "<repo>/.venv/bin/python",
+      "-I",
+      "scripts/validate_spec_package.py"
+    ],
+    "exitCode": 0,
+    "seconds": 0.039
+  },
+  {
+    "name": "compatibility",
+    "command": [
+      "<repo>/.venv/bin/python",
+      "-I",
+      "scripts/check_platform_compatibility.py"
+    ],
+    "exitCode": 0,
+    "seconds": 0.204
+  },
+  {
+    "name": "undefined-python-names",
+    "command": [
+      "<repo>/.venv/bin/python",
+      "-I",
+      "-m",
+      "ruff",
+      "check",
+      "--select",
+      "F821",
+      "services/studio-api/src",
+      "scripts",
+      "tests"
+    ],
+    "exitCode": 0,
+    "seconds": 0.076
+  },
+  {
+    "name": "environment",
+    "command": [
+      "<repo>/.venv/bin/python",
+      "-I",
+      "scripts/record_environment.py",
+      "--output",
+      "<repo>/.studio-local/parameter-presentation-workflow/environment.json"
+    ],
+    "exitCode": 0,
+    "seconds": 0.104
+  },
+  {
+    "name": "full-browser-collection",
+    "command": [
+      "<loop-cache>/node-v24.22.1-linux-x64/bin/node",
+      "node_modules/@playwright/test/cli.js",
+      "test",
+      "-c",
+      "tests/e2e/playwright.config.ts",
+      "--list",
+      "--reporter=list",
+      "--output",
+      "<repo>/.studio-local/parameter-presentation-workflow/collection-output"
+    ],
+    "exitCode": 0,
+    "seconds": 0.794
+  },
+  {
+    "name": "targeted-browser-collection",
+    "command": [
+      "<loop-cache>/node-v24.22.1-linux-x64/bin/node",
+      "node_modules/@playwright/test/cli.js",
+      "test",
+      "-c",
+      "tests/e2e/playwright.config.ts",
+      "--list",
+      "--reporter=list",
+      "--output",
+      "<repo>/.studio-local/parameter-presentation-workflow/collection-output",
+      "--grep",
+      "parameter presentation:|parameter accessibility:|wizard accessibility:"
+    ],
+    "exitCode": 0,
+    "seconds": 0.586
+  },
+  {
+    "name": "backend-collection",
+    "command": [
+      "<repo>/.venv/bin/python",
+      "-I",
+      "-m",
+      "pytest",
+      "--collect-only",
+      "-q"
+    ],
+    "exitCode": 0,
+    "seconds": 0.953
+  }
+]

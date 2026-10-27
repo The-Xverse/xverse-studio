@@ -1,0 +1,73 @@
+{
+  "scope": "Supplemental deterministic pause fixture in actual native Linux backend, with unmodified real worker and ordinary native launcher restart. Initial backend is instrumented only at CampaignState.mark_started; this is not an uninstrumented initial-launcher timing observation.",
+  "passedLanes": 4,
+  "failedInitialFixtureAttempts": 1,
+  "initialFailure": "Wrong fixture parameterId time_step correctly rejected with PARAMETER_UNRESOLVED before campaign/worker allocation; corrected to existing timestep.",
+  "stages": [
+    "while-running-successor",
+    "after-terminal",
+    "failed-continue-reader-successor",
+    "failed-stop"
+  ],
+  "seconds": [
+    17.391,
+    17.563,
+    14.462,
+    6.668
+  ],
+  "frozenInputs": 298,
+  "allSelectedInputsUnchanged": true,
+  "canonicalProjectUnchanged": true,
+  "activeSnapshotsUnchanged": true,
+  "noDuplicateRuns": true,
+  "originalWorkerIdentityRetained": true,
+  "backendSuiteRelation": "Supplemental two native subprocess probes, not included in or added to the existing934 pytest tally.",
+  "browserSuiteRelation": "Independent from the parameter-focus browser pipeline, which was still running when these probes were retained. No full474 or performance outcome is inferred.",
+  "rootReview": "Implementation agent review only; not independent milestone acceptance.",
+  "completedTasks": 47,
+  "acceptedMilestones": [],
+  "limitations": [
+    "Initial native backend is explicitly instrumented with a test-only campaign acknowledgement pause. Actual worker code, argv, provider descriptors and stored records are not replaced or rewritten. Restart uses the ordinary unmodified launcher.",
+    "Two successful-worker lanes and two failed-worker policy lanes cover these specific Linux boundaries. Arbitrary timing, mid-journal writes, other provider failures, native Windows and complete campaign matrix acceptance remain open."
+  ],
+  "baseCandidate": "ac58e8d7c84e51b241552f063d3f8816418396ff",
+  "candidateScope": "Tested uncommitted focus-repair bytes are identified by application-and-input-hashes.json; no clean committed-package binding or new backend implementation is claimed for these supplemental probes.",
+  "commands": [
+    [
+      ".venv/bin/python",
+      "-I",
+      ".studio-local/campaign-delegation-recovery/run.py",
+      "while-running",
+      "while-running-successor"
+    ],
+    [
+      ".venv/bin/python",
+      "-I",
+      ".studio-local/campaign-delegation-recovery/run.py",
+      "after-terminal"
+    ],
+    [
+      ".venv/bin/python",
+      "-I",
+      ".studio-local/campaign-delegation-recovery/run.py",
+      "failed-continue",
+      "failed-continue-reader-successor"
+    ],
+    [
+      ".venv/bin/python",
+      "-I",
+      ".studio-local/campaign-delegation-recovery/run.py",
+      "failed-stop",
+      "failed-stop"
+    ]
+  ],
+  "additionalFailureLanes": {
+    "scope": "After the fixture-paused initial backend is killed, an exact PID/birth/argv/owner-verified native worker receives SIGINT at a Linux kernel sleep point. Its own failed/unknown-cleanup/partial-evidence state is complete before normal native launcher restart.",
+    "continue": "Same failed child retained; exactly one pending successor starts and stops normally.",
+    "stop_on_failure": "Same failed child retained; pending child cancelled with no run allocation.",
+    "evidence": "Reader reports verified_prefix; independently verified journal hash chain contains actual error event. Terminal files including canonical journal stay unchanged across restart. Verdict remains null.",
+    "history": "Earlier failed-continue pass before extra reader/hash-chain assertions is retained separately; final lanes above execute those assertions."
+  },
+  "originalWorkerJournalEvidence": "original-worker-journal-verification.json",
+  "followOnPytestPrototype": "follow-on-pytest/verification.json (four passed prototype cases; not promoted or counted in main934)"
+}

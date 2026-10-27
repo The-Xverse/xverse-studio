@@ -1,0 +1,61 @@
+"""Record supplemental native recovery observations without closing tasks."""
+from pathlib import Path
+from collections import Counter
+import json
+
+root=Path.cwd().resolve();out=root/'evidence/studio/M4-campaign-delegation-recovery';v=json.loads((out/'verification.json').read_text());assert v['passedLanes']==2 and v['allSelectedInputsUnchanged']
+(out/'README.md').write_text('''# Campaign recovery after durable Start delegation
+
+These two supplemental probes exercise a specific crash boundary in an actual isolated
+native Linux backend. A labelled test-only wrapper pauses CampaignState.mark_started
+after the real runs.start returns. The durable campaign child remains dispatching with
+no runId, while the real Start idempotency receipt and the unchanged native worker exist.
+The fixture verifies PID, process birth, exact unmodified argv, owner digest and snapshot
+relations before killing only the backend Popen process it launched. It rewrites no
+campaign, run, ownership or canonical evidence record. The initial backend is instrumented;
+this is not an uninstrumented observation of naturally occurring timing.
+
+The successor uses the ordinary unmodified native launcher. In one lane the original
+worker is still running; in the other it has already written stopped/complete cleanup
+and complete evidence. Startup turns the interrupted claim unknown, and normal polling
+looks up its durable Start receipt to recover the existing run identity. Both lanes
+finish the original child and schedule only the pending second child. The same-key
+campaign retry returns the original accepted identity. Exactly two distinct runs exist,
+with the original child keys, matrix values and first run identity preserved. No blind
+Start replay or worker respawn is observed. A separate read-only SQLite/native-state
+review confirms the original worker PID/birth in both final states.
+
+Canonical project and active snapshot bytes/identities remain unchanged. In the terminal
+lane all retained top-level worker files except the private owner key are hashed before
+restart and compared afterward, including the canonical evidence journal. The running
+lane does not claim a pre-restart terminal-file comparison. All 298 selected application,
+test, configuration, lock, ADR, guide and compiled UI inputs remain unchanged.
+
+Both lanes pass separately (17.391 s and17.563 s). They are supplemental native subprocess
+probes, not two extra pytest passes in the existing934 backend result. The parameter-focus
+full browser/performance pipeline was still running when this evidence was retained;
+these probes do not establish that pipeline's outcome. The first fixture attempt correctly
+received PARAMETER_UNRESOLVED for the mistakenly named time_step before any campaign or
+worker allocation. The successor uses the existing timestep field; the failed attempt,
+its exact source and unchanged-input maps are retained separately.
+
+This is the implementation agent's root review, not independent milestone acceptance.
+Worker failure, arbitrary interruption points, mid-journal writes, the complete campaign
+matrix, native Windows and external/physical providers retain separate gates. No hardware,
+companion repository or unrelated process was accessed. Raw authentication and owned data
+roots remain private; only allowlisted credential-free observations are retained.
+
+Counts remain47 complete/43 in progress/10 blocked with zero accepted milestones.
+''')
+path=root/'specs/001-industry-agnostic-studio/traceability.json';trace=json.loads(path.read_text());assert Counter(t['status'] for t in trace['tasks'])=={'completed':47,'in_progress':43,'blocked':10}
+note=' Supplemental campaign delegation recovery: two actual native Linux backend crash/restart probes pass with298 selected inputs unchanged. An explicitly labelled test-only pause holds campaign acknowledgement after real Start and worker launch; durable Start receipt, exact PID/birth/argv/owner and original snapshot are verified before killing only the owned backend. Normal launcher restart recovers the same child/run while active or already terminal, schedules only pending work, preserves canonical project/snapshot and creates no duplicate run. Terminal-lane worker files/journal are unchanged across restart. Initial wrong fixture parameter is correctly rejected and retained separately. These two probes are separate from934 pytest and the still-running browser pipeline; no worker-failure/arbitrary crash/Windows/provider/full-matrix or milestone acceptance. Evidence: evidence/studio/M4-campaign-delegation-recovery/. Counts47/43/10 unchanged.'
+for task in trace['tasks']:
+    if task['id'] in ['T021','T023','T089','T090','T095']:
+        assert task['status']=='in_progress';assert note.strip() not in task['implementation_note'];task['implementation_note']+=note
+        for name in ['evidence/studio/M4-campaign-delegation-recovery/verification.json','evidence/studio/M4-campaign-delegation-recovery/README.md']:
+            if name not in task['implementation_evidence']:task['implementation_evidence'].append(name)
+trace['implementation_record']['verification']['supplemental_native_campaign_delegation_recovery']='evidence/studio/M4-campaign-delegation-recovery/verification.json (two separately scoped native subprocess probes; not included in934 pytest)'
+path.write_text(json.dumps(trace,ensure_ascii=False,indent=2)+'\n')
+path=root/'specs/001-industry-agnostic-studio/tasks.md';path.write_text(path.read_text()+'\n'+note.strip()+'\n')
+path=root/'docs/implementation/STATUS.md';text=path.read_text();marker='Native campaign worker-failure successor:';assert marker in text;path.write_text(text.replace(marker,note.strip()+'\n\n'+marker,1))
+print(json.dumps({'taskStatusesUnchanged':True,'supplementalNativeLanes':2,'milestonesAccepted':0}))

@@ -203,3 +203,23 @@ repeated Enter and actual second-session stale refusal cover completion. History
 out-of-window and absent-response fixtures are explicitly labelled; absence fixtures do not prove
 actual legacy-project acceptance. Native Linux evidence belongs in
 `evidence/studio/M2-keyboard-source-recovery/`; Windows and complete milestone gates remain open.
+
+Parameter presentation focus amendment (2026-10-27): the regrouping witness now distinguishes
+the value control from its Apply button for the same project/document/Scenario/parameter identity.
+When late inert presentation metadata replaces a focused Apply button, the enabled replacement
+receives focus under the same disconnected-node, BODY and no-modal guards as the value control.
+Deliberate blur clears that witness; newer focus, an open dialog and a departed view take precedence.
+Grouping still applies immediately and preserves the current unsaved value. Regrouping itself
+submits no edit. Explicit Enter on the restored Apply button uses the existing revision transaction
+once and its current acknowledgement may restore the value control. Backend authority, canonical
+formats, provider admission and runtime timing remain unchanged.
+
+Verification adds `tests/e2e/parameter-presentation-focus.spec.ts`: actual owned presentation
+HTTP200 responses are held without payload changes until native keyboard interaction has begun.
+Both required viewports cover Apply, numeric input and enum selection, deliberately moved focus,
+a newer source dialog and Home navigation. Positive cases verify one actual edit and its canonical
+value/revision; negative cases preserve the original documents/revision. All cases create no run.
+The original wizard/history assertions remain unchanged. Original CI failure, controlled red and
+isolated proposal evidence are retained in `evidence/studio/M4-campaign-worker-failure/`;
+main-application successor evidence is recorded separately. Linux browser checks do not establish
+native Windows, actual assistive-technology, novice usability or complete milestone acceptance.

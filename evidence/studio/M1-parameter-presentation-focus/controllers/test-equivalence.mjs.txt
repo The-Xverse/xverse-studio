@@ -1,0 +1,20 @@
+import fs from 'node:fs';
+import ts from 'typescript';
+import crypto from 'node:crypto';
+
+const originalPath='.studio-local/parameter-presentation-focus/probe.spec.ts';
+const targetPath='tests/e2e/parameter-presentation-focus.spec.ts';
+const original=fs.readFileSync(originalPath,'utf8');
+const adapted=original.replaceAll('../../tests/e2e/connect-studio','./connect-studio').replaceAll('../../tests/e2e/trace-claims-flow','./trace-claims-flow');
+const target=fs.readFileSync(targetPath,'utf8');
+function semantic(node){
+  if(ts.isParenthesizedExpression(node))return semantic(node.expression);
+  const children=[];ts.forEachChild(node,child=>{children.push(semantic(child));});
+  return {kind:node.kind,...(!ts.isSourceFile(node)&&typeof node.text==='string'?{text:node.text}:{}),...(ts.isVariableDeclarationList(node)?{flags:node.flags}:{}),children};
+}
+const parse=text=>semantic(ts.createSourceFile('probe.ts',text,ts.ScriptTarget.Latest,true,ts.ScriptKind.TS));
+const a=JSON.stringify(parse(adapted)),b=JSON.stringify(parse(target));
+if(a!==b)throw Error('Semantic test ASTs differ; inspect the promotion before claiming equivalence.');
+const hash=value=>crypto.createHash('sha256').update(value).digest('hex');
+fs.writeFileSync('.studio-local/parameter-presentation-workflow/test-source-equivalence.json',JSON.stringify({allParsedTestStatementsPreserved:true,method:'Semantic TypeScript AST comparison after helper import adaptation; ignores source positions, comments, literal quote style, parentheses and list formatting. Node kinds, literal/identifier text, declaration flags and ordered semantic children compared.',isolatedSourceSha256:hash(original),mainSourceSha256:hash(target)},null,2)+'\n');
+console.log('Semantic TypeScript test AST comparison passed');

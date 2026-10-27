@@ -1,0 +1,47 @@
+"""Amend supplemental evidence after both native failed-worker policy lanes pass."""
+from pathlib import Path
+from collections import Counter
+import json
+
+root=Path.cwd().resolve();out=root/'evidence/studio/M4-campaign-delegation-recovery';v=json.loads((out/'verification.json').read_text());assert v['passedLanes']==4 and v['additionalFailureLanes']
+p=out/'README.md';text=p.read_text();old='Worker failure, arbitrary interruption points, mid-journal writes, the complete campaign\nmatrix, native Windows and external/physical providers retain separate gates.'
+assert old in text;text=text.replace(old,'The first two probes do not cover worker failure; the additional lanes below exercise\na specific failed-worker boundary. Arbitrary interruption points, mid-journal writes,\nthe complete campaign matrix, native Windows and external/physical providers retain separate gates.')
+text+='''
+## Additional failed-worker recovery lanes
+
+After killing the same exact owned, fixture-paused backend, the probe verifies the
+original worker's PID/birth, unchanged argv, owner and actual kernel sleep point before
+sending SIGINT only to that worker. The worker's own exception path writes failed state,
+unknown cleanup and partial evidence. It is not replaced, and neither canonical records
+nor its launch arguments are rewritten. The normal native launcher then restarts.
+
+Both policy lanes pass with all298 selected inputs unchanged. Continue retains the
+failed first run and starts exactly one pending successor, which stops normally.
+Stop on failure retains the failed run and cancels the pending child without allocating
+a second run. Both recover the durable original Start receipt and child key, retain
+the original worker PID/birth, preserve the canonical Project and active snapshot, and
+create no duplicate run. Campaign coordination completes independently of the first
+run's failed/unknown/partial facts and null functional verdict.
+
+The actual observations reader reports verified_prefix. An independent journal pass
+checks every sequence, previous digest and canonical record digest, including the actual
+worker error event. Terminal worker files and journal bytes stay identical across restart.
+The failed-continue lane first passed12.781s before the extra reader/hash-chain assertions;
+that exact source/result is historical. The final continue successor passes14.462s with
+those assertions, and the stop-policy lane passes6.668s. These are two additional native
+subprocess cases, not new passes added to the934 pytest tally. All four final cases use
+the labelled initial backend pause and unmodified native launcher restart. They do not
+establish arbitrary failure timing, interruption inside a journal write, Windows or
+external/physical-provider admission.
+''';p.write_text(text)
+note=' Further native campaign delegation recovery: two failed-worker policy lanes pass after the owned backend crash. Exact PID/birth/argv/owner and actual Linux sleep-point checks precede SIGINT to only its original worker; normal launcher restart retains the failed child and durable Start receipt. Continue executes one pending successor; stop_on_failure cancels pending work without another run. Reader verified_prefix, independent journal hash-chain/error checks, unknown cleanup, partial evidence and null verdict remain distinct; terminal files/journal and canonical Project/snapshot are unchanged. Four final supplemental native subprocess lanes total, separate from934 pytest and the running browser pipeline; initial pause fixture and scope remain explicit. Evidence: evidence/studio/M4-campaign-delegation-recovery/. Counts47/43/10 and milestones unchanged.'
+p=root/'specs/001-industry-agnostic-studio/traceability.json';trace=json.loads(p.read_text());assert Counter(t['status'] for t in trace['tasks'])=={'completed':47,'in_progress':43,'blocked':10}
+for task in trace['tasks']:
+    if task['id'] in ['T021','T023','T089','T090','T095']:
+        assert task['status']=='in_progress';assert note.strip() not in task['implementation_note'];task['implementation_note']+=note
+trace['implementation_record']['verification']['supplemental_native_campaign_delegation_recovery']='evidence/studio/M4-campaign-delegation-recovery/verification.json (four separately scoped native subprocess cases; not included in934 pytest)'
+p.write_text(json.dumps(trace,ensure_ascii=False,indent=2)+'\n')
+p=root/'specs/001-industry-agnostic-studio/tasks.md';p.write_text(p.read_text()+'\n'+note.strip()+'\n')
+p=root/'docs/implementation/STATUS.md';text=p.read_text();marker='Supplemental campaign delegation recovery:';start=text.index(marker);end=text.index('\n\n',start);p.write_text(text[:end]+'\n\n'+note.strip()+text[end:])
+(out/'controllers/document-failures.py.txt').write_text(Path(__file__).read_text())
+print(json.dumps({'taskStatusesUnchanged':True,'supplementalNativeLanes':4,'milestonesAccepted':0}))

@@ -879,11 +879,13 @@ function ParameterForm({
   const [draft, setDraft] = useState<Record<string, FieldDraft>>({});
   const guidancePrefix = useId(),
     controls = useRef<Record<string, HTMLInputElement | HTMLSelectElement>>({}),
+    submitControls = useRef<Record<string, HTMLButtonElement>>({}),
     mounted = useRef(false),
     currentKeys = useRef(new Set<string>());
   const focusedControl = useRef<{
     key: string;
-    node: HTMLInputElement | HTMLSelectElement;
+    kind: "value" | "submit";
+    node: HTMLInputElement | HTMLSelectElement | HTMLButtonElement;
   } | null>(null);
   currentKeys.current = new Set(parameters.map(keyOf));
   const [focusRequest, setFocusRequest] = useState<{
@@ -896,9 +898,13 @@ function ParameterForm({
     const previous = focusedControl.current;
     if (!previous || previous.node.isConnected) return;
     focusedControl.current = null;
-    const replacement = controls.current[previous.key];
+    const replacement =
+      previous.kind === "submit"
+        ? submitControls.current[previous.key]
+        : controls.current[previous.key];
     if (
       replacement &&
+      !replacement.disabled &&
       currentKeys.current.has(previous.key) &&
       document.activeElement === document.body &&
       !document.querySelector('[role="dialog"][aria-modal="true"]')
@@ -1099,7 +1105,11 @@ function ParameterForm({
                       value={text}
                       onChange={(e) => change(p, e.target.value)}
                       onFocus={(e) => {
-                        focusedControl.current = { key, node: e.currentTarget };
+                        focusedControl.current = {
+                          key,
+                          kind: "value",
+                          node: e.currentTarget,
+                        };
                       }}
                       onBlur={(e) => {
                         if (
@@ -1129,7 +1139,11 @@ function ParameterForm({
                       value={text}
                       onChange={(e) => change(p, e.target.value)}
                       onFocus={(e) => {
-                        focusedControl.current = { key, node: e.currentTarget };
+                        focusedControl.current = {
+                          key,
+                          kind: "value",
+                          node: e.currentTarget,
+                        };
                       }}
                       onBlur={(e) => {
                         if (
@@ -1163,8 +1177,26 @@ function ParameterForm({
                     {p.default !== undefined ? ` · default ${p.default}` : ""}
                   </span>
                   <button
+                    ref={(node) => {
+                      if (node) submitControls.current[key] = node;
+                      else delete submitControls.current[key];
+                    }}
                     className="small-button"
                     disabled={text === String(authoredValue(p))}
+                    onFocus={(e) => {
+                      focusedControl.current = {
+                        key,
+                        kind: "submit",
+                        node: e.currentTarget,
+                      };
+                    }}
+                    onBlur={(e) => {
+                      if (
+                        focusedControl.current?.node === e.currentTarget &&
+                        e.currentTarget.isConnected
+                      )
+                        focusedControl.current = null;
+                    }}
                   >
                     Apply
                   </button>

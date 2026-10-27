@@ -1,0 +1,22 @@
+"""Read terminal prior candidate CI; keep raw job logs private."""
+from pathlib import Path
+from datetime import datetime,timezone
+import hashlib,json,os,re,subprocess
+
+root=Path.cwd().resolve();base=root/'.studio-local/parameter-presentation-workflow/prior-ci';base.mkdir(exist_ok=False)
+cache=root.parent/'.xverse-studio-cache';env=dict(os.environ,TMPDIR=str(cache/'tmp'),TEMP=str(cache/'tmp'),TMP=str(cache/'tmp'),XDG_CACHE_HOME=str(cache/'gh-cache'))
+def api(path):return subprocess.check_output(['gh','api','repos/The-Xverse/xverse-studio/'+path],env=env)
+runs=[]
+for identity in [40517979762,40517970415]:
+    run=json.loads(api('actions/runs/'+str(identity)))
+    assert run['status']=='completed' and run['conclusion']=='success' and run['head_sha']=='39d8d46d2b82ae1ecf11a4d1c0e5148626822af4'
+    jobs=json.loads(api('actions/runs/'+str(identity)+'/jobs'))['jobs'];rows=[]
+    for job in jobs:
+        assert job['status']=='completed' and job['conclusion']=='success'
+        raw=api('actions/jobs/'+str(job['id'])+'/logs');(base/(str(job['id'])+'.private-raw.log')).write_bytes(raw);text=raw.decode()
+        row={'id':job['id'],'name':job['name'],'status':job['status'],'conclusion':job['conclusion'],'startedAt':job['started_at'],'completedAt':job['completed_at'],'steps':[{'name':s['name'],'status':s['status'],'conclusion':s['conclusion']} for s in job['steps']],'logSha256':hashlib.sha256(raw).hexdigest(),'logBytes':len(raw),'pytestPassCounts':re.findall(r'(\d+) passed[^\n]*warning',text),'browserPassCounts':re.findall(r'(\d+) passed \([\d.]+[ms]',text),'packageSmokePassed':'Native Linux package smoke passed' in text}
+        rows.append(row)
+    runs.append({'id':run['id'],'head':run['head_sha'],'event':run['event'],'url':run['html_url'],'status':run['status'],'conclusion':run['conclusion'],'jobs':rows})
+value={'observedAt':datetime.now(timezone.utc).isoformat(),'scope':'Terminal prior39d8 push/PR jobs. Raw logs remain private; counts and package checkout identity require independent extraction before publication. These results do not execute the promoted focus repair.','runs':runs}
+(base/'receipts.json').write_text(json.dumps(value,indent=2)+'\n')
+print(json.dumps({'runs':[{'id':r['id'],'event':r['event'],'jobs':[{'id':j['id'],'pytestPassCounts':j['pytestPassCounts'],'browserPassCounts':j['browserPassCounts'],'packageSmokePassed':j['packageSmokePassed']} for j in r['jobs']]} for r in runs]}))
