@@ -1,0 +1,108 @@
+"""Server-owned policy over exact fixture principal and asset identities."""
+
+import pytest
+from xverse_studio.lab import LabError
+
+from xverse_studio.lab import authority as module
+from xverse_studio.lab.authority import LabAuthority
+
+
+def test_no_implicit_grants_or_scope_hierarchy():
+    empty = LabAuthority()
+    for scope in module.SCOPES:
+        with pytest.raises(LabError, match="^FORBIDDEN$"):
+            empty.require("fixture-operator", "fixture:asset", scope)
+    policy = LabAuthority({("fixture-operator", "fixture:asset"): {"destructive"}})
+    assert policy.require(
+        "fixture-operator", "fixture:asset", "destructive"
+    ) == frozenset({"destructive"})
+    for scope in ["observe", "stimulate"]:
+        with pytest.raises(LabError, match="^FORBIDDEN$"):
+            policy.require("fixture-operator", "fixture:asset", scope)
+
+
+def test_grants_belong_to_exact_principal_and_asset_and_can_be_revoked():
+    scopes = {"observe", "stimulate"}
+    policy = LabAuthority({("fixture-operator", "fixture:asset"): scopes})
+    scopes.clear()
+    assert policy.require("fixture-operator", "fixture:asset", "observe") == frozenset(
+        {"observe", "stimulate"}
+    )
+    for principal, asset in [
+        ("other-operator", "fixture:asset"),
+        ("fixture-operator", "fixture:other"),
+    ]:
+        with pytest.raises(LabError, match="^FORBIDDEN$"):
+            policy.require(principal, asset, "observe")
+    policy.revoke("fixture-operator", "fixture:asset")
+    with pytest.raises(LabError, match="^FORBIDDEN$"):
+        policy.require("fixture-operator", "fixture:asset", "observe")
+
+
+@pytest.mark.parametrize(
+    "scopes",
+    [
+        "observe",
+        {"admin"},
+        {"*"},
+        True,
+        None,
+        {"observe": True},
+        [{}, "observe"],
+        ["observe"] * 4,
+    ],
+)
+def test_malformed_or_wider_policy_is_never_accepted(scopes):
+    with pytest.raises(LabError, match="^AUTHORITY_CONFIG_INVALID$"):
+        LabAuthority({("fixture-operator", "fixture:asset"): scopes})
+
+
+def test_bounded_updates_are_atomic_and_removing_grants_frees_only_policy_capacity():
+    policy = LabAuthority(max_grants=1)
+    policy.set_scopes("fixture-operator", "fixture:asset", {"observe"})
+    with pytest.raises(LabError, match="^LIMIT_EXCEEDED$"):
+        policy.set_scopes("fixture-operator", "fixture:other", {"stimulate"})
+    with pytest.raises(LabError, match="^AUTHORITY_CONFIG_INVALID$"):
+        policy.set_scopes("fixture-operator", "fixture:asset", {"admin"})
+    assert policy.scopes_for("fixture-operator", "fixture:asset") == frozenset(
+        {"observe"}
+    )
+    assert policy.scopes_for("fixture-operator", "fixture:other") == frozenset()
+    policy.set_scopes("fixture-operator", "fixture:asset", set())
+    policy.set_scopes("fixture-operator", "fixture:other", {"stimulate"})
+    assert policy.scopes_for("fixture-operator", "fixture:asset") == frozenset()
+    assert policy.scopes_for("fixture-operator", "fixture:other") == frozenset(
+        {"stimulate"}
+    )
+
+
+def test_successful_requirement_returns_the_same_single_decision_snapshot(monkeypatch):
+    policy = LabAuthority()
+    calls = []
+
+    def changing_observation(principal, asset):
+        calls.append((principal, asset))
+        return frozenset({"observe"}) if len(calls) == 1 else frozenset()
+
+    monkeypatch.setattr(policy, "scopes_for", changing_observation)
+    assert policy.require("fixture-operator", "fixture:asset", "observe") == frozenset(
+        {"observe"}
+    )
+    assert len(calls) == 1
+
+
+@pytest.mark.parametrize(
+    "principal,asset",
+    [
+        ("*", "fixture:asset"),
+        ("fixture-operator", "*"),
+        ("fixture-operator", "../../device"),
+        (True, "fixture:asset"),
+        ("fixture-operator", None),
+    ],
+)
+def test_invalid_or_wildcard_targets_never_grant(principal, asset):
+    policy = LabAuthority()
+    with pytest.raises(LabError, match="^AUTHORITY_CONFIG_INVALID$"):
+        policy.set_scopes(principal, asset, {"observe"})
+    assert policy.scopes_for(principal, asset) == frozenset()

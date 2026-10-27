@@ -1,0 +1,62 @@
+....F.........................FF                                         [100%]
+=================================== FAILURES ===================================
+_ test_private_exception_text_never_leaves_provider_boundary_and_slot_recovers[error2-PROVIDER_OPERATION_UNKNOWN] _
+.studio-local/lab-api-foundation/proposal/test_bounded.py:74: in test_private_exception_text_never_leaves_provider_boundary_and_slot_recovers
+    bounded.reserve({}, 'observe', 'fixture-owner', 160)
+.studio-local/lab-api-foundation/proposal/bounded.py:86: in reserve
+    return self._call('reserve', asset, scope, owner, deadline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.studio-local/lab-api-foundation/proposal/bounded.py:80: in _call
+    return result['value']
+           ^^^^^^^^^^^^^^^
+E   KeyError: 'value'
+__ test_revoked_scope_is_rechecked_inside_provider_thread_before_acquisition ___
+.studio-local/lab-api-foundation/proposal/test_operations.py:211: in test_revoked_scope_is_rechecked_inside_provider_thread_before_acquisition
+    assert operation['status'] == 'unknown'
+E   AssertionError: assert 'completed' == 'unknown'
+E
+E     - unknown
+E     + completed
+___ test_deadline_expiring_before_provider_thread_delegation_never_acquires ____
+.studio-local/lab-api-foundation/proposal/test_operations.py:228: in test_deadline_expiring_before_provider_thread_delegation_never_acquires
+    assert operation['status'] == 'unknown' and len(decisions) == 3
+E   AssertionError: assert ('completed' == 'unknown'
+E
+E     - unknown
+E     + completed)
+=============================== warnings summary ===============================
+.studio-local/lab-api-foundation/proposal/test_bounded.py::test_invalid_or_unbounded_timeout_is_refused[-1]
+  <repo>/.venv/lib/python3.13/site-packages/_pytest/threadexception.py:58: PytestUnhandledThreadExceptionWarning: Exception in thread studio-lease-call
+
+  Traceback (most recent call last):
+    File "<repo>/.studio-local/lab-api-foundation/proposal/bounded.py", line 60, in invoke
+      result['value'] = _response(name, callback(*copied))
+                                        ~~~~~~~~^^^^^^^^^
+    File "<repo>/.studio-local/lab-api-foundation/proposal/test_bounded.py", line 71, in refusal
+      raise error
+  xverse_studio.lab.reservations.LabError: {'private': 'fixture-only unstructured code'}
+
+  During handling of the above exception, another exception occurred:
+
+  Traceback (most recent call last):
+    File "<python-install>/lib/python3.13/threading.py", line 1044, in _bootstrap_inner
+      self.run()
+      ~~~~~~~~^^
+    File "<python-install>/lib/python3.13/threading.py", line 995, in run
+      self._target(*self._args, **self._kwargs)
+      ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    File "<repo>/.studio-local/lab-api-foundation/proposal/bounded.py", line 65, in invoke
+      result['error'] = error.code if isinstance(error, LabError) and error.code in allowed else 'PROVIDER_OPERATION_UNKNOWN'
+                                                                      ^^^^^^^^^^^^^^^^^^^^^
+  TypeError: unhashable type: 'dict'
+
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+    warnings.warn(pytest.PytestUnhandledThreadExceptionWarning(msg))
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED .studio-local/lab-api-foundation/proposal/test_bounded.py::test_private_exception_text_never_leaves_provider_boundary_and_slot_recovers[error2-PROVIDER_OPERATION_UNKNOWN]
+FAILED .studio-local/lab-api-foundation/proposal/test_operations.py::test_revoked_scope_is_rechecked_inside_provider_thread_before_acquisition
+FAILED .studio-local/lab-api-foundation/proposal/test_operations.py::test_deadline_expiring_before_provider_thread_delegation_never_acquires
+3 failed, 29 passed, 1 warning in 0.85s

@@ -112,10 +112,10 @@ class RetentionApply(Body):
 
 
 class Reservation(Body):
-    scope: Literal["observe", "stimulate"] = "observe"
+    scope: Literal["observe", "stimulate", "destructive"] = "observe"
     durationSeconds: int = Field(default=30, ge=1, le=300)
 
 
 class Renewal(Body):
-    fencingIdentity: str
+    fencingIdentity: str = Field(min_length=1, max_length=256)
     durationSeconds: int = Field(default=30, ge=1, le=300)

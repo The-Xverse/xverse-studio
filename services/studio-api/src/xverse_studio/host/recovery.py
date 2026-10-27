@@ -256,6 +256,25 @@ def _staged_database(source, *, sanitize=False, staging_parent=None):
                 )
 
 
+def _settled_leases(db):
+    """A stopped backend does not establish that a provider lease was released."""
+    from xverse_studio.lab import LabError
+    from xverse_studio.lab.persistence import validate_snapshot
+
+    rows = db.execute("SELECT id,length(CAST(body AS BLOB)) FROM records WHERE kind='lab_registry' LIMIT 2").fetchall()
+    if not rows:
+        return
+    if len(rows) != 1 or rows[0][0] != 'leases' or rows[0][1] > 2 * 1024 * 1024:
+        _fail('RECOVERY_DATABASE_INVALID')
+    try:
+        raw = db.execute("SELECT body FROM records WHERE kind='lab_registry' AND id='leases'").fetchone()[0]
+        snapshot = validate_snapshot(json.loads(raw))
+    except (LabError, ValueError, TypeError, RecursionError):
+        _fail('RECOVERY_DATABASE_INVALID')
+    if any(record['status'] not in {'released', 'expired'} for record in snapshot['records']):
+        _fail('RECOVERY_EXECUTION_UNSETTLED')
+
+
 def _database(path, *, immutable=False):
     try:
         with (
@@ -271,6 +290,7 @@ def _database(path, *, immutable=False):
                 _fail("RECOVERY_SCHEMA_UNSUPPORTED")
             if db.execute("PRAGMA integrity_check").fetchall() != [("ok",)]:
                 _fail("RECOVERY_DATABASE_INVALID")
+            _settled_leases(db)
             for kind, raw in db.execute(
                 "SELECT kind,body FROM records WHERE kind IN ('run','campaign','operation')"
             ):

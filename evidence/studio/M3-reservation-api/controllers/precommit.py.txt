@@ -1,0 +1,48 @@
+from collections import Counter
+from pathlib import Path
+import hashlib
+import json
+import re
+import subprocess
+
+root = Path.cwd().resolve()
+out = root / 'evidence/studio/M3-reservation-api'
+read = lambda p: json.loads(p.read_text())
+v = read(out / 'verification.json')
+assert v['backendTestsPassed'] == 1055 and v['affectedBrowserPassed'] == 83 and v['performancePassed'] == 2
+hashes = read(out / 'application-and-input-hashes.json')
+assert len(hashes) == 316
+for name, value in hashes.items():
+    assert hashlib.sha256((root / name).read_bytes()).hexdigest() == value, name
+trace = read(root / 'specs/001-industry-agnostic-studio/traceability.json')
+prior = json.loads(subprocess.check_output(['git', 'show', 'f985eb3ba02a23a48a64f013d269797236eefe2a:specs/001-industry-agnostic-studio/traceability.json']))
+assert len(trace['tasks']) == len(prior['tasks']) == 100
+assert Counter(task['status'] for task in trace['tasks']) == {'completed': 47, 'in_progress': 43, 'blocked': 10}
+for before, after in zip(prior['tasks'], trace['tasks']):
+    assert {key: value for key, value in before.items() if key not in ('implementation_note', 'implementation_evidence')} == {key: value for key, value in after.items() if key not in ('implementation_note', 'implementation_evidence')}
+for key in ['milestones', 'requirements', 'success_criteria', 'acceptance_cases']:
+    assert trace[key] == prior[key], key
+old_tasks = subprocess.check_output(['git', 'show', 'f985eb3ba02a23a48a64f013d269797236eefe2a:specs/001-industry-agnostic-studio/tasks.md'], text=True)
+new_tasks = (root / 'specs/001-industry-agnostic-studio/tasks.md').read_text()
+pattern = r'^- \[[ x]\] T\d{3} .*$'
+assert re.findall(pattern, old_tasks, re.M) == re.findall(pattern, new_tasks, re.M)
+test = (root / 'tests/integration/test_lab_http.py').read_text()
+assert 'install_proposal_routes' not in test and 'app.router.routes' not in test and '.studio-local' not in test
+ci = root / 'evidence/studio/native-ci/ubuntu-24.04-f985eb3-runs.json'
+if ci.exists():
+    receipt = read(ci)
+    assert len(receipt['runs']) == 2 and all(run['head'] == 'f985eb3ba02a23a48a64f013d269797236eefe2a' and run['conclusion'] == 'success' for run in receipt['runs'])
+    assert all(job['pytestPassCounts'] == ['944'] and job['browserPassCounts'] == ['474'] for run in receipt['runs'] for job in run['jobs'])
+    note = ('Both prior f985eb3 Ubuntu24 push/PR CI runs passed944 backend/full474 browser/104-file package smoke. Exact branch/synthetic-merge identities and terminal receipts are retained in `evidence/studio/native-ci/ubuntu-24.04-f985eb3-runs.json`. These verify the earlier lease repair, not the current configured reservation API source.\n\n')
+    path = root / 'docs/implementation/STATUS.md'
+    text = path.read_text()
+    if note not in text:
+        path.write_text(text.replace('Configured reservation API foundation:', note + 'Configured reservation API foundation:', 1))
+(out / 'precommit-review.json').write_text(json.dumps({'all316FinalInputsMatch': True,
+    'all100TaskDefinitionsStatesDependenciesAndRequirementMappingsUnchanged': True,
+    'milestonesRequirementsSuccessCriteriaAcceptanceCasesUnchanged': True,
+    'allTaskCheckboxesUnchanged': True, 'configuredHTTPTestsReplaceNoRoutes': True,
+    'backend1055': True, 'affectedBrowser83': True, 'performance2': True,
+    'generatedContractAmendmentDisclosed': True, 'rootReviewOnly': True}, indent=2) + '\n')
+(out / 'controllers/precommit.py.txt').write_text(Path(__file__).read_text())
+print('Final316 inputs, all100 task states/checkboxes and acceptance/milestone definitions preserved.')

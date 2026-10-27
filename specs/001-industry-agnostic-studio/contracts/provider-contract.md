@@ -19,6 +19,7 @@ Admission verifies descriptor/schema compatibility, pinned implementation identi
 | `probe(binding, scope, deadline)` | Bounded admitted readiness observation; declares contacted resources and observation scope. |
 | `reserve(asset, scope, owner, deadline)` | Return unique lease/fencing identity or typed conflict; does not imply start authority. |
 | `renew(reservation_ref, expected_fencing_identity, requested_deadline, authority)` | Backend-owned bounded renewal within the existing scope; reject stale/expired/unknown authority, and never silently reacquire an asset or widen permission. |
+| `inspect_reservation(reservation_ref)` | ADR-0024 amendment: bounded ownership observation for the original installed provider/asset/owner/fence; missing acknowledgement remains unknown and never authorizes reacquisition. |
 | `prepare(run_id, operation_id, snapshot, authority)` | Prepare through existing ownership/permit mechanisms; return typed ownership reference and evidence. |
 | `start(run_id, operation_id, prepared_ref)` | Start at most once for that operation; return acknowledged state or unknown, never invented success. |
 | `command(run_id, operation_id, expected_state, command)` | Apply only supported operation with current authority; preserve cancellation/cleanup semantics. |

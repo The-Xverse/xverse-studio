@@ -67,6 +67,7 @@
 | `POST /assets/{assetId}/reservations` | Requested permitted scope/duration; returns provider fencing token reference | M3 |
 | `GET /reservations/{reservationId}` | Observed ownership, scope, fencing identity, expiry, last renewal and uncertainty | M3 |
 | `POST /reservations/{reservationId}/renewals` | Expected fencing identity and requested deadline; same-scope extension only; backend performs ongoing active-run renewal | M3 |
+| `POST /reservations/{reservationId}/reconciliations` | Empty closed body and idempotency key; inspect the installed provider for the original owner/fence without reacquiring (ADR-0024 amendment) | M3 |
 | `DELETE /reservations/{reservationId}` | Release owned reservation; returns operation; cannot release another owner's token | M3 |
 | `POST /campaigns` | Frozen base snapshot, bounded parameter matrix, concurrency/stop policy | M4 |
 | `POST /campaigns/preview` | Side-effect-free authoritative bounded expansion; no campaign/child allocation | M4 |
@@ -78,6 +79,36 @@
 | `POST /retention/plans/{planId}/apply` | Explicit selected plan ID/fingerprint; idempotently applies only still-eligible removals and reports each outcome | M4 |
 
 Resource bodies, schemas and generated client types are implemented together from the data model and these contracts; contract tests must reject incompatible request variants. Unsupported milestone routes return `404` with capability discovery making their absence explicit.
+
+### Reservation authority amendment (ADR-0024)
+
+The reservation request selects `scope: observe|stimulate|destructive` (default
+`observe`) and integer `durationSeconds` from 1–300 (default 30). Each scope needs
+its own current server-owned principal/asset grant and declared provider capability.
+The body cannot supply an owner, grants, provider installation or executable data.
+Renewal takes the existing fencing identity (1–256 characters) and the same bounded
+duration; it cannot widen scope or reacquire. The additional reconciliation route
+requires an empty closed body and an idempotency key. It inspects only the original
+installed provider/fence; a lost original fence remains unknown. Explicit owner
+cleanup can release a known lease after grant revocation. Terminal history confers
+no authority and its repeated cleanup does not contact a provider.
+
+The backend persists the operation/key mapping and reservation identity before
+delegation, then commits unknown lease intent before the provider call. API results
+carry `operationId`, `reservationId`, operation status and result/error references.
+Read the reservation separately for ownership, expiry and uncertainty; a completed
+old operation receipt is not a current lease grant. Restart preserves operation
+identity, marks pending work/nonterminal leases unknown and never repeats reserve.
+
+Capabilities add `labReservations` with contract version, configured/unavailable
+status, server-installed lease descriptors, evidence scope, independent scopes and
+storage/call bounds. This is separate from executable provider admission. Existing
+asset/placement observations still report unavailable physical runtime admission
+and `activeReady=false` until that integration is implemented. A typed native-host
+configuration is required for positive reservation routes; the stock launcher
+installs none. A fixture is identified as a fixture and supplies no live-device
+acceptance. Physical commands, active-run renewal and ownership-loss integration
+remain unfinished. No HTTP/project/profile input can install this configuration.
 
 ## Catalog and profile operations
 

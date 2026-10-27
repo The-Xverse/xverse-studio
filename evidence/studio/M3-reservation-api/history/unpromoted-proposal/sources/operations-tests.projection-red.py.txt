@@ -1,0 +1,273 @@
+"""Unpromoted real SQLite operation journaling over in-memory lease fixtures."""
+from copy import deepcopy
+import importlib
+import importlib.util
+from pathlib import Path
+import sys
+from types import ModuleType, SimpleNamespace
+import pytest
+
+from xverse_studio.lab import LabError
+from xverse_studio.storage.core import Problem, Store
+
+package = ModuleType('owned_lab_operations_proposal')
+package.__path__ = [str(Path(__file__).parent)]
+sys.modules[package.__name__] = package
+module = importlib.import_module(package.__name__ + '.operations')
+LabOperations, LabAuthority = module.LabOperations, module.LabAuthority
+spec = importlib.util.spec_from_file_location('owned_lab_operations_fixture', Path(__file__).resolve().parents[3] / 'tests/fixtures/providers/physical/provider.py')
+fixture_module = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(fixture_module)
+
+
+@pytest.fixture
+def bench(tmp_path):
+    now = [100]
+    provider = fixture_module.PhysicalContractFixture(lambda: now[0])
+    store = Store(tmp_path / 'owned operation ledger Ω')
+    policy = LabAuthority({('fixture-owner', provider.asset_id): {'observe', 'stimulate', 'destructive'}})
+    identities = {provider.provider_id: 'sha256:' + 'a' * 64}
+    def create():
+        return LabOperations(store, {provider.provider_id: provider}, identities, policy, clock=lambda: now[0])
+    return SimpleNamespace(now=now, provider=provider, store=store, policy=policy,
+                           identities=identities, create=create, service=create())
+
+
+def reserve(bench, key='first', **kwargs):
+    return bench.service.reserve(bench.provider.asset_id, owner='fixture-owner', key=key, **kwargs)
+
+
+def test_operation_mapping_and_intent_are_committed_before_actual_fixture_delegation(bench, monkeypatch):
+    original = bench.provider.reserve
+    observed = []
+    def inspect(asset, *args):
+        operations = bench.store.all('operation')
+        assert len(operations) == 1 and operations[0]['status'] == 'delegated'
+        operation = operations[0]
+        rows = bench.store.get('lab_registry', 'leases')['records']
+        assert len(rows) == 1 and rows[0]['status'] == 'unknown' and rows[0]['fencingIdentity'] is None
+        assert operation['reservationId'] == rows[0]['reservationId'] == asset['reservationId']
+        with bench.store.tx() as db:
+            assert db.execute('SELECT count(*) FROM idempotency').fetchone()[0] == 1
+        observed.append(operation['operationId'])
+        return original(asset, *args)
+    monkeypatch.setattr(bench.provider, 'reserve', inspect)
+    first = reserve(bench)
+    assert first['status'] == 'completed' and observed == [first['operationId']]
+    assert reserve(bench) == first and bench.provider.calls.count('reserve') == 1
+    with pytest.raises(Problem) as conflict:
+        reserve(bench, duration=31)
+    assert conflict.value.code == 'IDEMPOTENCY_CONFLICT'
+    assert bench.provider.calls.count('reserve') == 1
+
+
+def test_ack_lost_after_acquisition_keeps_same_operation_across_restart_without_second_reserve(bench):
+    bench.provider.lose_reserve_ack = True
+    first = reserve(bench)
+    assert first['status'] == 'unknown' and first['code'] == 'OWNERSHIP_UNCERTAIN'
+    restored = bench.create()
+    assert restored.reserve(bench.provider.asset_id, owner='fixture-owner', key='first') == first
+    record = restored.get(first['reservationId'], owner='fixture-owner')
+    assert record['status'] == 'unknown' and record['fencingIdentity'] is None
+    reconciled = restored.reconcile(first['reservationId'], owner='fixture-owner', key='inspect')
+    assert reconciled['status'] == 'unknown' and bench.provider.calls.count('reserve') == 1
+    for action in ['observe', 'stimulate', 'destructive']:
+        with pytest.raises(LabError, match='^OWNERSHIP_UNCERTAIN$'):
+            restored.require_authority(first['reservationId'], owner='fixture-owner', action=action)
+
+
+def test_acknowledged_lease_restores_unknown_then_matching_inspection_recovers_same_fence(bench):
+    first = reserve(bench)
+    held = deepcopy(bench.provider.held)
+    restored = bench.create()
+    assert restored.get(first['reservationId'], owner='fixture-owner')['status'] == 'unknown'
+    result = restored.reconcile(first['reservationId'], owner='fixture-owner', key='inspect')
+    assert result['status'] == 'completed'
+    record = restored.require_authority(first['reservationId'], owner='fixture-owner', action='observe')
+    assert record['fencingIdentity'] == held[bench.provider.asset_id]['fencingIdentity']
+    assert bench.provider.calls.count('reserve') == 1 and bench.provider.held == held
+
+
+@pytest.mark.parametrize('scope', ['observe', 'stimulate', 'destructive'])
+def test_server_policy_has_no_implicit_grants_for_any_scope(bench, scope):
+    bench.policy.revoke('fixture-owner', bench.provider.asset_id)
+    calls = list(bench.provider.calls)
+    with pytest.raises(LabError, match='^FORBIDDEN$'):
+        reserve(bench, scope=scope)
+    assert bench.provider.calls == calls and bench.store.all('operation') == []
+    assert bench.store.all('lab_registry') == []
+
+
+def test_revocation_blocks_renew_and_authority_but_owner_can_release_for_cleanup(bench):
+    first = reserve(bench, scope='stimulate', duration=10)
+    record = bench.service.get(first['reservationId'], owner='fixture-owner')
+    bench.policy.revoke('fixture-owner', bench.provider.asset_id)
+    calls = list(bench.provider.calls)
+    with pytest.raises(LabError, match='^FORBIDDEN$'):
+        bench.service.renew(first['reservationId'], owner='fixture-owner', key='extend', fence=record['fencingIdentity'], duration=20)
+    with pytest.raises(LabError, match='^FORBIDDEN$'):
+        bench.service.require_authority(first['reservationId'], owner='fixture-owner', action='stimulate')
+    assert bench.provider.calls == calls
+    released = bench.service.release(first['reservationId'], owner='fixture-owner', key='cleanup')
+    assert released['status'] == 'completed' and released['result']['status'] == 'released'
+    assert bench.provider.held == {} and bench.provider.calls.count('release') == 1
+
+
+def test_provider_implementation_change_blocks_inspect_renew_release_before_contact(bench):
+    first = reserve(bench)
+    bench.identities[bench.provider.provider_id] = 'sha256:' + 'b' * 64
+    restored = bench.create()
+    calls = list(bench.provider.calls)
+    for callback in [lambda: restored.reconcile(first['reservationId'], owner='fixture-owner', key='inspect'),
+                     lambda: restored.renew(first['reservationId'], owner='fixture-owner', key='extend', fence='fixture-fence-1', duration=50),
+                     lambda: restored.release(first['reservationId'], owner='fixture-owner', key='release')]:
+        with pytest.raises(LabError, match='^PROVIDER_IDENTITY_CHANGED$'):
+            callback()
+    assert bench.provider.calls == calls and bench.provider.calls.count('reserve') == 1
+
+
+def test_missing_key_never_contacts_provider_or_creates_operation(bench):
+    with pytest.raises(Problem) as missing:
+        reserve(bench, key=None)
+    assert missing.value.code == 'IDEMPOTENCY_REQUIRED'
+    assert bench.provider.calls == [] and bench.store.all('operation') == []
+
+
+def test_response_commit_interruption_restores_unknown_and_never_replays(bench, monkeypatch):
+    put = bench.store.put
+    def interrupt(kind, identity, body, db=None):
+        if kind == 'operation' and body.get('kind') == 'lab_reserve' and body.get('status') == 'completed':
+            raise KeyboardInterrupt('owned test interruption after acknowledged acquisition')
+        return put(kind, identity, body, db)
+    monkeypatch.setattr(bench.store, 'put', interrupt)
+    with pytest.raises(KeyboardInterrupt):
+        reserve(bench)
+    monkeypatch.setattr(bench.store, 'put', put)
+    before = bench.store.all('operation')[0]
+    assert before['status'] == 'delegated'
+    restored = bench.create()
+    retry = restored.reserve(bench.provider.asset_id, owner='fixture-owner', key='first')
+    assert retry['operationId'] == before['operationId'] and retry['reservationId'] == before['reservationId']
+    assert retry['status'] == 'unknown' and retry['code'] == 'LAB_OPERATION_INTERRUPTED'
+    assert restored.get(retry['reservationId'], owner='fixture-owner')['status'] == 'unknown'
+    assert bench.provider.calls.count('reserve') == 1
+
+
+def test_unrelated_principal_cannot_read_or_release_original_lease(bench):
+    first = reserve(bench)
+    calls = list(bench.provider.calls)
+    with pytest.raises(LabError, match='^FORBIDDEN$'):
+        bench.service.get(first['reservationId'], owner='other-owner')
+    with pytest.raises(LabError, match='^FORBIDDEN$'):
+        bench.service.release(first['reservationId'], owner='other-owner', key='release')
+    assert bench.provider.calls == calls
+
+
+def test_replacement_asset_with_same_id_cannot_inherit_original_lease_authority(bench):
+    first = reserve(bench)
+    record = bench.service.get(first['reservationId'], owner='fixture-owner')
+    bench.provider.assets[0]['identity']['serial'] = 'different-fixture-device'
+    for callback in [lambda: bench.service.require_authority(first['reservationId'], owner='fixture-owner', action='observe'),
+                     lambda: bench.service.renew(first['reservationId'], owner='fixture-owner', key='extend', fence=record['fencingIdentity'], duration=60),
+                     lambda: bench.service.release(first['reservationId'], owner='fixture-owner', key='release'),
+                     lambda: bench.service.reconcile(first['reservationId'], owner='fixture-owner', key='inspect')]:
+        with pytest.raises(LabError, match='^ASSET_IDENTITY_CHANGED$'):
+            callback()
+    assert bench.provider.calls.count('renew') == bench.provider.calls.count('release') == bench.provider.calls.count('inspect') == 0
+    assert bench.provider.calls.count('reserve') == 1
+
+
+def test_confirmed_terminal_release_does_not_require_old_provider_or_touch_new_owner(bench):
+    first = reserve(bench)
+    bench.service.release(first['reservationId'], owner='fixture-owner', key='first-release')
+    newer = reserve(bench, key='newer')
+    held = deepcopy(bench.provider.held)
+    bench.identities[bench.provider.provider_id] = 'sha256:' + 'b' * 64
+    restored = bench.create()
+    calls = list(bench.provider.calls)
+    terminal = restored.release(first['reservationId'], owner='fixture-owner', key='terminal-again')
+    assert terminal['status'] == 'completed' and terminal['result']['status'] == 'released'
+    assert bench.provider.calls == calls and bench.provider.held == held
+    assert newer['reservationId'] != first['reservationId']
+
+
+def test_current_asset_identity_is_required_before_acquisition_and_no_intent_is_created(bench):
+    bench.provider.assets[0]['identity'] = {'model': 'not-a-unique-identity'}
+    with pytest.raises(LabError, match='^ASSET_IDENTITY_UNRESOLVED$'):
+        reserve(bench)
+    assert bench.provider.calls.count('reserve') == 0 and bench.store.all('operation') == []
+
+
+def test_revoked_scope_is_rechecked_inside_provider_thread_before_acquisition(bench, monkeypatch):
+    require = bench.policy.require
+    decisions = []
+    def revoke_at_delegation(*args):
+        decisions.append(args)
+        if len(decisions) == 3:
+            bench.policy.revoke('fixture-owner', bench.provider.asset_id)
+        return require(*args)
+    monkeypatch.setattr(bench.policy, 'require', revoke_at_delegation)
+    operation = reserve(bench)
+    assert operation['status'] == 'unknown'
+    assert len(decisions) == 3 and bench.provider.calls.count('reserve') == 0
+    assert bench.provider.held == {}
+    record = bench.service.get(operation['reservationId'], owner='fixture-owner')
+    assert record['status'] == 'unknown' and record['fencingIdentity'] is None
+
+
+def test_deadline_expiring_before_provider_thread_delegation_never_acquires(bench, monkeypatch):
+    require = bench.policy.require
+    decisions = []
+    def expire_at_delegation(*args):
+        decisions.append(args)
+        if len(decisions) == 3:
+            bench.now[0] = 131
+        return require(*args)
+    monkeypatch.setattr(bench.policy, 'require', expire_at_delegation)
+    operation = reserve(bench)
+    assert operation['status'] == 'unknown' and len(decisions) == 3
+    assert bench.provider.calls.count('reserve') == 0 and bench.provider.held == {}
+
+
+def test_public_lease_projection_excludes_private_extensions_and_preserves_stored_payload(bench):
+    first = reserve(bench)
+    ledger = bench.store.get('lab_registry', 'leases')
+    record = ledger['records'][0]
+    record.update(privateEndpoint='private fixture endpoint', reason='private non-code explanation', evidenceScope='private unrecognized scope')
+    bench.store.put('lab_registry', 'leases', ledger)
+    restored = bench.create()
+    public = restored.get(first['reservationId'], owner='fixture-owner')
+    assert 'privateEndpoint' not in public and 'private fixture endpoint' not in str(public)
+    assert public['evidenceScope'] == 'unknown' and public['reason'] == 'LEASE_STATE_UNAVAILABLE'
+    assert bench.store.get('lab_registry', 'leases') == ledger
+
+
+def test_constructor_does_not_load_all_unrelated_operations(bench, monkeypatch):
+    all_records = bench.store.all
+    def guard(kind, db=None):
+        assert kind != 'operation', 'load only bounded lab operation rows'
+        return all_records(kind, db)
+    monkeypatch.setattr(bench.store, 'all', guard)
+    bench.create()
+
+
+def test_recovered_operation_projection_excludes_private_unknown_payload(bench):
+    first = reserve(bench)
+    stored = bench.store.get('operation', first['operationId'])
+    stored['privateProviderPayload'] = 'private fixture provider detail'
+    bench.store.put('operation', first['operationId'], stored)
+    restored = bench.create()
+    result = restored.reserve(bench.provider.asset_id, owner='fixture-owner', key='first')
+    assert result['operationId'] == first['operationId'] and 'privateProviderPayload' not in result
+    assert bench.store.get('operation', first['operationId']) == stored
+
+
+def test_oversized_recovery_operation_is_refused_without_rewriting_or_provider_contact(bench):
+    first = reserve(bench)
+    stored = bench.store.get('operation', first['operationId'])
+    stored.update(status='delegated', opaqueExtension='x' * 32768)
+    bench.store.put('operation', first['operationId'], stored)
+    calls = list(bench.provider.calls)
+    with pytest.raises(LabError, match='^LAB_STATE_UNAVAILABLE$'):
+        bench.create()
+    assert bench.store.get('operation', first['operationId']) == stored and bench.provider.calls == calls

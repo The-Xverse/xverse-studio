@@ -1,0 +1,36 @@
+................FFFF                                                     [100%]
+=================================== FAILURES ===================================
+_ test_public_lease_projection_excludes_private_extensions_and_preserves_stored_payload _
+.studio-local/lab-api-foundation/proposal/test_operations.py:240: in test_public_lease_projection_excludes_private_extensions_and_preserves_stored_payload
+    assert 'privateEndpoint' not in public and 'private fixture endpoint' not in str(public)
+E   AssertionError: assert ('privateEndpoint' not in {'assetId': 'fixture:bench-sensor', 'assetIdentity': 'sha256:594760b683fc55202fe2ba041d05759adef164234df1d81cfa829a5f9d9aab0d', 'evidenceScope': 'private unrecognized scope', 'expiry': 130, ...})
+___________ test_constructor_does_not_load_all_unrelated_operations ____________
+.studio-local/lab-api-foundation/proposal/test_operations.py:251: in test_constructor_does_not_load_all_unrelated_operations
+    bench.create()
+.studio-local/lab-api-foundation/proposal/test_operations.py:31: in create
+    return LabOperations(store, {provider.provider_id: provider}, identities, policy, clock=lambda: now[0])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.studio-local/lab-api-foundation/proposal/operations.py:39: in __init__
+    for operation in store.all('operation', db):
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+.studio-local/lab-api-foundation/proposal/test_operations.py:248: in guard
+    assert kind != 'operation', 'load only bounded lab operation rows'
+E   AssertionError: load only bounded lab operation rows
+E   assert 'operation' != 'operation'
+_____ test_recovered_operation_projection_excludes_private_unknown_payload _____
+.studio-local/lab-api-foundation/proposal/test_operations.py:261: in test_recovered_operation_projection_excludes_private_unknown_payload
+    assert result['operationId'] == first['operationId'] and 'privateProviderPayload' not in result
+E   AssertionError: assert ('op-a85ac188-...-58ae0922a922' == 'op-a85ac188-...-58ae0922a922'
+E
+E       op-a85ac188-68a2-41b3-8bab-58ae0922a922 and 'privateProviderPayload' not in {'createdAt': 1793124716.2068815, 'kind': 'lab_reserve', 'operationId': 'op-a85ac188-68a2-41b3-8bab-58ae0922a922', 'principal': 'fixture-owner', ...})
+_ test_oversized_recovery_operation_is_refused_without_rewriting_or_provider_contact _
+.studio-local/lab-api-foundation/proposal/test_operations.py:271: in test_oversized_recovery_operation_is_refused_without_rewriting_or_provider_contact
+    with pytest.raises(LabError, match='^LAB_STATE_UNAVAILABLE$'):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE <class 'xverse_studio.lab.reservations.LabError'>
+=========================== short test summary info ============================
+FAILED .studio-local/lab-api-foundation/proposal/test_operations.py::test_public_lease_projection_excludes_private_extensions_and_preserves_stored_payload
+FAILED .studio-local/lab-api-foundation/proposal/test_operations.py::test_constructor_does_not_load_all_unrelated_operations
+FAILED .studio-local/lab-api-foundation/proposal/test_operations.py::test_recovered_operation_projection_excludes_private_unknown_payload
+FAILED .studio-local/lab-api-foundation/proposal/test_operations.py::test_oversized_recovery_operation_is_refused_without_rewriting_or_provider_contact
+4 failed, 16 passed in 5.84s

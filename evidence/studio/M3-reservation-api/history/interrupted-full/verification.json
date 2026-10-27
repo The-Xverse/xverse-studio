@@ -1,0 +1,101 @@
+[
+  {
+    "name": "spec",
+    "command": [
+      "<repo>/.venv/bin/python",
+      "-I",
+      "scripts/validate_spec_package.py"
+    ],
+    "exitCode": 0,
+    "seconds": 0.044,
+    "selectedInputs": 316,
+    "sourceUnchanged": true
+  },
+  {
+    "name": "architecture",
+    "command": [
+      "<repo>/.venv/bin/python",
+      "-I",
+      "scripts/check_architecture.py"
+    ],
+    "exitCode": 0,
+    "seconds": 0.708,
+    "selectedInputs": 316,
+    "sourceUnchanged": true
+  },
+  {
+    "name": "compatibility",
+    "command": [
+      "<repo>/.venv/bin/python",
+      "-I",
+      "scripts/check_platform_compatibility.py"
+    ],
+    "exitCode": 0,
+    "seconds": 0.185,
+    "selectedInputs": 316,
+    "sourceUnchanged": true
+  },
+  {
+    "name": "ruff",
+    "command": [
+      "<repo>/.venv/bin/ruff",
+      "check",
+      "--select",
+      "F821",
+      "services/studio-api/src",
+      "scripts",
+      "tests"
+    ],
+    "exitCode": 0,
+    "seconds": 0.023,
+    "selectedInputs": 316,
+    "sourceUnchanged": true
+  },
+  {
+    "name": "environment",
+    "command": [
+      "<repo>/.venv/bin/python",
+      "-I",
+      "scripts/record_environment.py",
+      "--output",
+      "<repo>/.studio-local/lab-api-integration/verified/environment.json"
+    ],
+    "exitCode": 0,
+    "seconds": 0.169,
+    "selectedInputs": 316,
+    "sourceUnchanged": true
+  },
+  {
+    "name": "collection",
+    "command": [
+      "<repo>/.venv/bin/python",
+      "-I",
+      "-m",
+      "pytest",
+      "--collect-only",
+      "-q"
+    ],
+    "exitCode": 0,
+    "seconds": 0.909,
+    "selectedInputs": 316,
+    "sourceUnchanged": true
+  },
+  {
+    "name": "pytest",
+    "command": [
+      "<repo>/.venv/bin/python",
+      "-I",
+      "-m",
+      "pytest",
+      "tests",
+      "-q",
+      "--tb=short",
+      "--basetemp=<repo>/.studio-local/lab-api-integration/owned-full-test-data-0341341bdb1b4ac4a1a456db5314181e",
+      "--junitxml=<repo>/.studio-local/lab-api-integration/verified/junit.xml"
+    ],
+    "exitCode": 1,
+    "seconds": 62.304,
+    "selectedInputs": 316,
+    "sourceUnchanged": true
+  }
+]

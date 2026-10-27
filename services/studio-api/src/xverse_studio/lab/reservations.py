@@ -6,6 +6,8 @@ import threading
 import time
 import uuid
 
+from xverse_studio.storage.core import digest
+
 
 class LabError(ValueError):
     def __init__(self, code):
@@ -41,7 +43,15 @@ class LabRegistry:
 
     def _save(self):
         if self.persist:
-            self.persist(deepcopy(list(self.records.values())))
+            try:
+                self.persist(deepcopy(list(self.records.values())))
+            except Exception:
+                # A failed durable acknowledgement must not leave memory with
+                # usable authority that the caller was told is uncertain.
+                for record in self.records.values():
+                    if record['status'] == 'owned':
+                        record.update(status='unknown', reason='LEASE_PERSISTENCE_UNCERTAIN')
+                raise
 
     def inventory(self):
         assets = []
@@ -82,12 +92,14 @@ class LabRegistry:
             self._save()
         return rec
 
-    def reserve(self, asset_id, *, owner, duration=60, scope="observe", granted_scopes=()):
+    def reserve(self, asset_id, *, owner, duration=60, scope="observe", granted_scopes=(), reservation_id=None, provider_identity=None, asset_identity=None):
         with self._lock:
             expiry = self._duration(duration)
             if not isinstance(owner, str) or not owner:
                 raise LabError("FORBIDDEN")
             asset = self._asset(asset_id)
+            if asset_identity is not None and digest(asset.get("identity")) != asset_identity:
+                raise LabError("ASSET_IDENTITY_CHANGED")
             if scope not in {"observe", "stimulate", "destructive"}:
                 raise LabError("CAPABILITY_UNSUPPORTED")
             if scope not in asset.get("capabilities", []):
@@ -100,10 +112,16 @@ class LabRegistry:
                 if current["assetId"] == asset_id and current["status"] in {"owned", "unknown"} and current["expiry"] > self.clock():
                     raise LabError("RESOURCE_BUSY")
             provider = self.providers[asset["providerId"]]
-            reservation_id = str(uuid.uuid4())
+            reservation_id = reservation_id or str(uuid.uuid4())
+            if reservation_id in self.records:
+                raise LabError("RESERVATION_ID_CONFLICT")
             # Intent is durable before delegation. If acknowledgement is lost it
             # must remain unknown and the provider reconciles this identity.
             rec = {"reservationId": reservation_id, "assetId": asset_id, "providerId": asset["providerId"], "owner": owner, "scope": scope, "expiry": expiry, "status": "unknown", "fencingIdentity": None, "lastRenewal": None, "evidenceScope": asset.get("evidenceScope", "unknown")}
+            if provider_identity is not None:
+                rec["providerIdentity"] = provider_identity
+            if asset_identity is not None:
+                rec["assetIdentity"] = asset_identity
             self.records[reservation_id] = rec
             self._save()
             try:

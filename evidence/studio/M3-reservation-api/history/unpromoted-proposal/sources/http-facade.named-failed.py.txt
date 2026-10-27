@@ -1,0 +1,72 @@
+"""Unpromoted facade over the isolated service, mounted only by owned tests.
+
+This is not installed by production create_app. The test harness removes the
+existing refusal routes so these proposed handlers can use real session/CSRF
+middleware. Actual production HTTP authorization remains unfinished.
+"""
+from typing import Literal
+from fastapi import Request
+from pydantic import Field
+from xverse_studio.api.models import Body
+from xverse_studio.lab import LabError
+from xverse_studio.storage.core import Problem
+
+
+class Reservation(Body):
+    scope: Literal['observe', 'stimulate', 'destructive'] = 'observe'
+    durationSeconds: int = Field(default=30, ge=1, le=300)
+
+
+class Renewal(Body):
+    fencingIdentity: str = Field(min_length=1, max_length=256)
+    durationSeconds: int = Field(default=30, ge=1, le=300)
+
+
+class Empty(Body):
+    pass
+
+
+def install_proposal_routes(app, service):
+    def failure(error):
+        status = {'FORBIDDEN': 403, 'RESOURCE_BUSY': 409, 'ASSET_UNAVAILABLE': 503,
+                  'RESERVATION_NOT_FOUND': 404, 'LAB_STATE_STALE': 409}.get(error.code, 422)
+        raise Problem(error.code, 'The reservation was refused by its ownership, scope or provider contract.', status) from None
+
+    @app.post('/api/v1/assets/{assetId}/reservations', status_code=202)
+    def reserve(assetId: str, body: Reservation, request: Request):
+        try:
+            return service.reserve(assetId, owner=request.state.principal,
+                key=request.headers.get('idempotency-key'), scope=body.scope, duration=body.durationSeconds)
+        except LabError as error:
+            failure(error)
+
+    @app.get('/api/v1/reservations/{reservationId}')
+    def get(reservationId: str, request: Request):
+        try:
+            return service.get(reservationId, owner=request.state.principal)
+        except LabError as error:
+            failure(error)
+
+    @app.post('/api/v1/reservations/{reservationId}/renewals', status_code=202)
+    def renew(reservationId: str, body: Renewal, request: Request):
+        try:
+            return service.renew(reservationId, owner=request.state.principal,
+                key=request.headers.get('idempotency-key'), fence=body.fencingIdentity, duration=body.durationSeconds)
+        except LabError as error:
+            failure(error)
+
+    @app.delete('/api/v1/reservations/{reservationId}', status_code=202)
+    def release(reservationId: str, request: Request):
+        try:
+            return service.release(reservationId, owner=request.state.principal,
+                key=request.headers.get('idempotency-key'))
+        except LabError as error:
+            failure(error)
+
+    @app.post('/api/v1/reservations/{reservationId}/reconciliations', status_code=202)
+    def reconcile(reservationId: str, body: Empty, request: Request):
+        try:
+            return service.reconcile(reservationId, owner=request.state.principal,
+                key=request.headers.get('idempotency-key'))
+        except LabError as error:
+            failure(error)

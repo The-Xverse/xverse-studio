@@ -1,0 +1,46 @@
+from pathlib import Path
+import base64
+import json
+import re
+
+root = Path.cwd()
+out = root/'evidence/studio/M3-reservation-api'
+assert (out/'verification.json').is_file(), 'Retain verified terminal evidence before scanning.'
+problems = []
+
+def check(value, name):
+    if isinstance(value, str):
+        if str(root.resolve()) in value or str(Path.home()) + '/' in value:
+            problems.append((name, 'machine-specific path'))
+        if re.search(r'''(?i)studio_session=[A-Za-z0-9_-]{16,}|x-csrf-token["']?\s*[:=]\s*["']?[A-Za-z0-9._-]{16,}''', value):
+            problems.append((name, 'session or CSRF credential-shaped literal'))
+        if re.search(r'(?i)(?:bearer\s+[A-Za-z0-9._-]{20,}|authorization[\"\x27]?\s*:\s*[\"\x27]?(?:basic|bearer)\s+[A-Za-z0-9+/=_-]+)', value):
+            problems.append((name, 'credential-shaped literal'))
+    elif isinstance(value, list):
+        for item in value:
+            check(item, name)
+    elif isinstance(value, dict):
+        for item in value.values():
+            check(item, name)
+        if value.get('contentType', '').startswith(('application/json', 'text/')) and 'body' in value:
+            try:
+                check(base64.b64decode(value['body']).decode(), name+' (embedded attachment)')
+            except (ValueError, UnicodeError):
+                pass
+
+files = list(out.rglob('*'))
+text_count = image_count = 0
+for p in files:
+    if p.is_file():
+        if p.suffix == '.png':
+            image_count += 1
+            continue
+        text_count += 1
+        content = p.read_text()
+        check(content, str(p.relative_to(root)))
+        if p.suffix == '.json':
+            check(json.loads(content), str(p.relative_to(root)))
+assert not problems, problems
+print(json.dumps({'dossierFilesEnumerated': sum(p.is_file() for p in files), 'textFilesChecked': text_count,
+    'pngImagesExcludedFromTextScan': image_count, 'machinePathsOrCredentialShapedLiterals': problems,
+    'scope': 'Supplemental literal text and decoded text/JSON attachment scan plus allowlisted artifact retention; not a universal secret detector or image scan'}))

@@ -1,0 +1,40 @@
+[
+  {
+    "name": "generate",
+    "command": [
+      "<repo>/.venv/bin/python",
+      "-I",
+      "scripts/generate_contracts.py"
+    ],
+    "exitCode": 0,
+    "seconds": 0.61
+  },
+  {
+    "name": "build",
+    "command": [
+      "<loop-cache>/node-v24.22.1-linux-x64/bin/node",
+      "<loop-cache>/node-v24.22.1-linux-x64/lib/node_modules/npm/bin/npm-cli.js",
+      "run",
+      "build"
+    ],
+    "exitCode": 0,
+    "seconds": 4.942
+  },
+  {
+    "name": "affected-api",
+    "command": [
+      "<repo>/.venv/bin/python",
+      "-I",
+      "-m",
+      "pytest",
+      "tests/integration/test_lab_http.py",
+      "tests/contract/test_api_versions.py",
+      "-q",
+      "--tb=short",
+      "--basetemp=<repo>/.studio-local/lab-api-integration/owned-final-contract-api-69cc46b4e55c43f4bf9ac2f7620d719c",
+      "--junitxml=<repo>/.studio-local/lab-api-integration/contract-amendment/junit.xml"
+    ],
+    "exitCode": 0,
+    "seconds": 3.796
+  }
+]

@@ -18,9 +18,12 @@ from xverse_studio.assertions.evaluator import evaluator_identity
 from xverse_studio.assertions.snapshot import definition_schema_digest
 from xverse_studio.comparison import ComparisonError, compare_runs, recorded_input
 from xverse_studio.evidence.reader import read_journal
-from xverse_studio.lab import LabError, LabRegistry
+from xverse_studio.lab import LabError
 from xverse_studio.lab.assets import inventory_observation
 from xverse_studio.lab.bindings import resolve_physical_bindings
+from xverse_studio.lab.authority import LabAuthority
+from xverse_studio.lab.configuration import LabHostConfiguration
+from xverse_studio.lab.operations import LabOperations
 from xverse_studio.storage.core import Problem, atomic, canonical, digest, uid
 from xverse_studio.xdl import XDLRejected, reference_configuration
 from xverse_studio.xdl.edits import semantic_edits
@@ -82,9 +85,13 @@ class Compare(Body):
     rightRunId: str = Field(max_length=80)
 
 
-def install_advanced(app, store, projects, runs, adapter):
-    lab = LabRegistry()  # No unapproved physical provider or automatic scanning.
+def install_advanced(app, store, projects, runs, adapter, *, lab_host=None):
+    if lab_host is not None and not isinstance(lab_host, LabHostConfiguration):
+        raise LabError('PROVIDER_CONFIG_INVALID')
+    lab_service = lab_host.bind(store) if lab_host is not None else LabOperations(store, {}, {}, LabAuthority())
+    lab = lab_service.registry  # Stock native launcher installs no provider or grants.
     app.state.studio.lab = lab
+    app.state.studio.lab_reservations = lab_service
     for pending in store.all("evaluation"):
         if pending.get("status") in {"running", "not_started"}:
             pending.update(status="error", verdict=None, reasons=["EVALUATION_INTERRUPTED"], completedAt=time.time())
@@ -92,7 +99,7 @@ def install_advanced(app, store, projects, runs, adapter):
             operation = store.get("operation", pending["operationId"])
             operation.update(status="failed", code="EVALUATION_INTERRUPTED")
             store.put("operation", operation["operationId"], operation)
-    for pending in store.all("operation"):
+    for pending in store.find("operation", "kind", "campaign_cancel"):
         if pending.get("kind") == "campaign_cancel" and pending.get("status") in {"accepted", "delegated"}:
             pending.update(status="unknown", code="CAMPAIGN_CANCELLATION_INTERRUPTED")
             store.put("operation", pending["operationId"], pending)
@@ -209,6 +216,9 @@ def install_advanced(app, store, projects, runs, adapter):
         # administrative integration must install durable lease backing before
         # registering a physical provider for API use.
         try:
+            if lab_service.enabled:
+                return lab_service.reserve(assetId, owner=request.state.principal,
+                    key=request.headers.get('idempotency-key'), scope=body.scope, duration=body.durationSeconds)
             if not any(a["assetId"] == assetId for a in lab.inventory()):
                 raise LabError("ASSET_UNAVAILABLE")
             raise LabError("PROVIDER_RESERVATION_NOT_ADMITTED")
@@ -218,13 +228,16 @@ def install_advanced(app, store, projects, runs, adapter):
     @app.get("/api/v1/reservations/{reservationId}")
     def reservation(reservationId: str, request: Request):
         try:
-            return lab.get(reservationId, owner=request.state.principal)
+            return lab_service.get(reservationId, owner=request.state.principal)
         except LabError as exc:
             _failure(exc)
 
     @app.post("/api/v1/reservations/{reservationId}/renewals", status_code=202)
     def renew(reservationId: str, body: Renewal, request: Request):
         try:
+            if lab_service.enabled:
+                return lab_service.renew(reservationId, owner=request.state.principal,
+                    key=request.headers.get('idempotency-key'), fence=body.fencingIdentity, duration=body.durationSeconds)
             lab.get(reservationId, owner=request.state.principal)
             raise LabError("PROVIDER_RESERVATION_NOT_ADMITTED")
         except LabError as exc:
@@ -233,8 +246,22 @@ def install_advanced(app, store, projects, runs, adapter):
     @app.delete("/api/v1/reservations/{reservationId}", status_code=202)
     def release(reservationId: str, request: Request):
         try:
+            if lab_service.enabled:
+                return lab_service.release(reservationId, owner=request.state.principal,
+                    key=request.headers.get('idempotency-key'))
             lab.get(reservationId, owner=request.state.principal)
             raise LabError("PROVIDER_RESERVATION_NOT_ADMITTED")
+        except LabError as exc:
+            _failure(exc)
+
+    @app.post('/api/v1/reservations/{reservationId}/reconciliations', status_code=202)
+    def reconcile_reservation(reservationId: str, body: Empty, request: Request):
+        try:
+            if lab_service.enabled:
+                return lab_service.reconcile(reservationId, owner=request.state.principal,
+                    key=request.headers.get('idempotency-key'))
+            lab.get(reservationId, owner=request.state.principal)
+            raise LabError('PROVIDER_RESERVATION_NOT_ADMITTED')
         except LabError as exc:
             _failure(exc)
 

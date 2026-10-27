@@ -1,0 +1,63 @@
+"""Trusted-host grant policy prototype; no HTTP installation or device operation.
+
+Grants are server-owned data, separate from reservation ownership and from provider
+capabilities. There are no wildcard or implied scopes, and lookup performs no IO.
+"""
+from threading import RLock
+from xverse_studio.lab import LabError
+from xverse_studio.lab.assets import opaque_id
+
+SCOPES=frozenset({'observe','stimulate','destructive'})
+
+class LabAuthority:
+    def __init__(self,grants=None,*,max_grants=1000):
+        if type(max_grants) is not int or not 0<max_grants<=1000:
+            raise LabError('AUTHORITY_CONFIG_INVALID')
+        self._max_grants=max_grants
+        self._lock=RLock()
+        self._grants={}
+        if grants is not None:
+            if type(grants) is not dict or len(grants)>max_grants:
+                raise LabError('AUTHORITY_CONFIG_INVALID')
+            prepared={}
+            for key,scopes in grants.items():
+                if type(key) is not tuple or len(key)!=2:
+                    raise LabError('AUTHORITY_CONFIG_INVALID')
+                self._key(*key)
+                allowed=self._scopes(scopes)
+                if allowed:prepared[key]=allowed
+            self._grants=prepared
+
+    @staticmethod
+    def _key(principal,asset_id):
+        if type(principal) is not str or type(asset_id) is not str or not opaque_id(principal) or not opaque_id(asset_id):
+            raise LabError('AUTHORITY_CONFIG_INVALID')
+        return principal,asset_id
+
+    @staticmethod
+    def _scopes(scopes):
+        if type(scopes) not in (set,frozenset,list,tuple) or len(scopes)>3 or any(type(scope) is not str or scope not in SCOPES for scope in scopes):
+            raise LabError('AUTHORITY_CONFIG_INVALID')
+        return frozenset(scopes)
+
+    def scopes_for(self,principal,asset_id):
+        try:key=self._key(principal,asset_id)
+        except LabError:return frozenset()
+        with self._lock:return self._grants.get(key,frozenset())
+
+    def require(self,principal,asset_id,scope):
+        if type(scope) is not str or scope not in SCOPES or scope not in self.scopes_for(principal,asset_id):
+            raise LabError('FORBIDDEN')
+        return self.scopes_for(principal,asset_id)
+
+    def set_scopes(self,principal,asset_id,scopes):
+        key=self._key(principal,asset_id);allowed=self._scopes(scopes)
+        with self._lock:
+            if allowed:
+                if key not in self._grants and len(self._grants)>=self._max_grants:raise LabError('LIMIT_EXCEEDED')
+                self._grants[key]=allowed
+            else:self._grants.pop(key,None)
+
+    def revoke(self,principal,asset_id):
+        key=self._key(principal,asset_id)
+        with self._lock:self._grants.pop(key,None)

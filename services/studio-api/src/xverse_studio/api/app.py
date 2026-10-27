@@ -37,6 +37,8 @@ from xverse_studio.evidence.query import (
 )
 from xverse_studio.timeline import TimelineQuery, project_timeline, MAX_EVALUATIONS
 from xverse_studio.xdl import XDLAdapter, XDLRejected, examples
+from xverse_studio.lab.configuration import LabHostConfiguration
+from xverse_studio.lab import LabError
 
 
 class EventStreamingResponse(StreamingResponse):
@@ -84,7 +86,10 @@ def create_app(
     allowed_hosts=None,
     bootstrap_token=None,
     static_dir: Path | None = None,
+    lab_host: LabHostConfiguration | None = None,
 ):
+    if lab_host is not None and not isinstance(lab_host, LabHostConfiguration):
+        raise LabError('PROVIDER_CONFIG_INVALID')
     store = Store(Path(data_dir))
     adapter = XDLAdapter()
     projects = Projects(store, adapter)
@@ -328,7 +333,7 @@ def create_app(
 
     @app.get("/api/v1/capabilities")
     def caps():
-        return capabilities()
+        return {**capabilities(), 'labReservations': app.state.studio.lab_reservations.discovery()}
 
     @app.get("/api/v1/providers")
     def providers():
@@ -644,7 +649,15 @@ def create_app(
         )
 
     @app.get("/api/v1/operations/{operationId}")
-    def operation(operationId: str):
+    def operation(operationId: str, request: Request):
+        with store.tx() as db:
+            kind = db.execute("SELECT json_extract(body,'$.kind') FROM records WHERE kind='operation' AND id=?", (operationId,)).fetchone()
+        if kind and kind[0] in {'lab_reserve', 'lab_renew', 'lab_release', 'lab_reconcile'}:
+            from xverse_studio.api.advanced import _failure
+            try:
+                return app.state.studio.lab_reservations.get_operation(operationId, owner=request.state.principal)
+            except LabError as exc:
+                _failure(exc)
         op = store.get("operation", operationId)
         if op.get("kind") == "rerun":
             app.state.studio.reruns.reconcile_operation(operationId)
@@ -817,7 +830,7 @@ def create_app(
     # Later feature facades are installed only when their implementations exist.
     from xverse_studio.api.advanced import install_advanced
 
-    install_advanced(app, store, projects, runs, adapter)
+    install_advanced(app, store, projects, runs, adapter, lab_host=lab_host)
 
     webroot = static_dir or Path(__file__).resolve().parents[5] / "apps/studio-web/dist"
 

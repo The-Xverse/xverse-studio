@@ -3158,6 +3158,53 @@
         }
       }
     },
+    "/api/v1/reservations/{reservationId}/reconciliations": {
+      "post": {
+        "summary": "Reconcile Reservation",
+        "operationId": "reconcile_reservation_api_v1_reservations__reservationId__reconciliations_post",
+        "parameters": [
+          {
+            "name": "reservationId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Reservationid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Empty"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/runs/{runId}/definitions": {
       "get": {
         "summary": "Run Definitions",
@@ -4672,6 +4719,8 @@
         "properties": {
           "fencingIdentity": {
             "type": "string",
+            "maxLength": 256,
+            "minLength": 1,
             "title": "Fencingidentity"
           },
           "durationSeconds": {
@@ -4701,7 +4750,8 @@
             "type": "string",
             "enum": [
               "observe",
-              "stimulate"
+              "stimulate",
+              "destructive"
             ],
             "title": "Scope",
             "default": "observe"
