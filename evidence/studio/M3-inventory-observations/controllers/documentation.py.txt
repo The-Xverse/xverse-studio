@@ -1,0 +1,171 @@
+from pathlib import Path
+from collections import Counter
+import json
+
+root = Path.cwd()
+out = root/'evidence/studio/M3-inventory-observations'
+v = json.loads((out/'verification.json').read_text())
+assert v['targeted']['expected'] == 36 and v['full']['expected'] == 293
+assert v['performance']['expected'] == 2 and v['allFinalStageInputsIdentical']
+rows = []
+for viewport in ['1024x768', '1440x900']:
+    model = json.loads((out/f'performance/{viewport}/model-performance.json').read_text())
+    history = json.loads((out/f'performance/{viewport}/history-performance.json').read_text())
+    rows.append((viewport, model['selectionAndInspector']['p95'], model['openAndValidationPresentation']['p95'], history['p95']))
+table = '\n'.join(f'| {vp} | {selection:.1f} ms | {opening:.1f} ms | {history:.1f} ms |' for vp, selection, opening, history in rows)
+contrast = json.loads((out/'contrast-summary.json').read_text())
+(out/'README.md').write_text(f'''# Read-only inventory presentation — Linux partial evidence
+
+The independent inventory portion of T075 now presents the existing T072 public
+projection. Thirty-six native keyboard journeys pass at 1024×768 and 1440×900,
+together with the full 293-case browser suite and separate two-case performance
+check. All {v['frozenInputs']} source, compiled UI and fixed inputs match across the
+final stages and remain unchanged within each run. Type/build, architecture,
+compatibility and spec structure checks pass. This adds no backend API or authority.
+
+T075 remains in progress because admitted reservations, connection tests and the
+actual physical-device environment remain unavailable. T074's durable reservation
+integration is not implemented by this view. AC-021–024 remain blocked, native
+Windows is held and actual assistive-technology assessment remains open. The task
+count stays 47/100 and no milestone is accepted.
+
+## Resulting behavior
+
+The existing LabView export now leads to features/lab/LabView.tsx. The current
+physical-provider admission fact stays visibly unavailable. Separately, the inventory
+observation can be loading, successful or unavailable. Successful incomplete/truncated
+observations retain their provider diagnostics and do not establish absence. Empty
+success describes only the current page. HTTP or malformed/unsupported response
+failure leaves availability unknown and offers explicit refresh.
+
+Cards use the actual public firmware/artifact status/version/digest fields. Identity,
+metadata coverage, declared interfaces, provider OS declaration, evidence scope,
+availability, permission and active readiness remain distinct. An unobserved revision
+declaration stays Unknown. The positive fixture is observed available while permission
+is unknown and active readiness is Blocked; no status promotes those missing facts.
+Fixture scope, uncertain physical declarations and truncation are labelled. Raw inspection retains
+bounded public fields, excludes unsupported extras and renders markup-like text inertly.
+
+Refresh starts at page one. Pages are separate current observations, not a merged
+frozen inventory. Native next/previous navigation uses the actual default 100-row
+API convention and bounded forward cursors; 100+1 transport fixtures verify both
+directions. A failed page removes its rows, focuses the current error conditionally
+and retries the actual empty inventory from page one. At most one client read is
+active, with an abortable 30-second deadline and departure/generation guards. Fetch
+cancellation does not assert that a provider inventory method was stopped.
+
+Initial loading preserves navigation focus. Explicit current refresh/page completion
+can focus its observation heading or error only while its origin/BODY still owns
+focus and no modal supersedes it. Pending repeated Enter produces no extra read;
+deliberately moved focus survives completion. Actual held HTTP 200 and labelled held
+HTTP 503 observations cannot publish errors or steal focus after Home departure.
+Existing reservation response UI/handlers remain behind unchanged backend admission;
+current public inventory fields cannot enable an active action.
+
+## Evidence scope, failures and review
+
+The fixture generator invokes the real public inventory projection on an owned
+in-memory provider, then saves its exact public-shape output. It never registers a
+device provider in the application or performs a device operation. Browser route
+fixtures cover observation/HTTP/shape/paging/metadata behavior; they are not evidence
+of live inventory, actual device OS support, reservation admission or physical fidelity.
+Actual refresh reads the native backend's empty/unadmitted inventory.
+
+Every focused journey verifies zero mutative requests after authentication and
+unchanged actual public inventory/project/run lists. No reservation, Start, probe,
+flash, reset or device operation occurs. Malformed missing-completeness, duplicate
+identity, non-progressing cursor and admission-looking active flags remain unknown.
+The source fixture and generator preserve this boundary explicitly.
+
+initial-red/ retains four failures on the unchanged ecaba3f baseline: missing provider
+inventory diagnostics and obsolete firmware presentation at both viewports. The
+public-state preservation assertions ran after each soft UI failure and passed.
+The original suspicion is qualified: No physical provider admitted is a true separate
+backend admission fact, not a reproduced false admission statement. The first repaired
+four cases pass. thirty-before-review/ retains the expanded 30-case pass. Review added
+cursor progress refusal and stronger positive identity/firmware/scope/readiness checks,
+then physical-declaration review found another uncertainty gap.
+The earlier 32 passed, but that full run was deliberately interrupted: 188 passed,
+101 not run (raw Playwright stats mark them skipped), exit 130. It is never presented
+as a passing full cohort. The backend normalizes an omitted physical property to false;
+the UI incorrectly inferred a non-physical asset. Two actual red journeys preceded
+the declaration correction and rebuild. The subsequent 34/full 291/performance 2 passed
+and are retained under before-unicode-*/ with their original exact maps.
+
+A further contract boundary check found that the backend accepts 256 Unicode code
+points, while JavaScript string.length can count them as 512 UTF-16 code units. The
+first client decoder rejected valid public firmware/model observations. unicode-red/
+retains two actual failures before repair. The decoder now counts code points with
+a bounded UTF-16 precheck; supported supplementary characters remain observable.
+The candidate was rebuilt before final 36/full 293/performance 2, which share all 272
+exact frozen source/compiled/fixed inputs. Earlier failures remain failures.
+
+checks/ retains the local wrapper's initial npm-resolution error (before application
+checking) and a typecheck refusal for incomplete Diagnostic typing. Both are repaired
+before the passing build/final gates, and are not presented as provider failures or
+passing cohorts. The implementation review is root's source review, explicitly not
+an independent agent review or M3 acceptance; see implementation-review.md. The usual
+milestone review/acceptance gates remain open.
+
+## Measurements and candidate identity
+
+One documented warm-up plus 30 measurements per viewport, retaining the unchanged
+200-element/400-connection and 50,000-record/200-row reference workloads:
+
+| Viewport | Selection/inspector p95 | Open/validation p95 | History p95 |
+|---|---:|---:|---:|
+{table}
+
+All {contrast['selectedPairs']} selected inventory guidance/status, firmware, fixture
+scope and blocked-readiness paint pairs pass 4.5:1, minimum {contrast['minimumRatio']:.4f}:1.
+Selected native controls and completion focus have viewport/visible-outline checks.
+This is scoped Linux Chromium evidence, not global accessibility certification.
+The environment includes an actual executable/version/hash observation of descendants
+of the owned live test pipeline; no private browser arguments or credentials were collected.
+
+Final input digest: `{v['applicationAndInputDigest']}`. The environment recorder's
+tracked subset is supplemental; the full map includes the new component/test/fixture
+and six compiled assets. Its Git identity names the predecessor. Later committed
+candidate/package binding establishes this successor's exact clean package identity.
+Backend 851 results are inherited through 163 exact unchanged backend/Python/contributor/
+compatibility inputs plus the reviewed unchanged-command CI scheduling control, not a
+new local backend run. Predecessor/current CI remain separate outcomes with their own
+actual receipts; no live or cross-platform acceptance follows from this dossier.
+''')
+note = ' Linux read-only inventory successor: partial T075 consumes T072 public observations through the preserved LabView export. Final 36 native keyboard journeys, full 293 browser and separate two-viewport performance pass all 272 identical frozen source/compiled/fixed inputs. Inventory completeness/diagnostics, actual firmware/identity, declared OS/scope, availability/permission/readiness, bounded independent pages, actual empty refresh, labelled HTTP/shape failures, departed read suppression and guarded focus are verified. Missing physical declarations remain unconfirmed and Unicode code-point bounds match the backend. Focused checks perform zero mutative requests and preserve actual inventory/project/run lists. Reservation response UI remains behind unchanged unavailable backend admission; no physical provider, durable reservation integration or device operation is admitted. ADR0018 amended; initial four reds, two physical-declaration reds, two Unicode reds, the interrupted full run, earlier passing cohorts, root implementation review and measurements retained in evidence/studio/M3-inventory-observations/. Backend851 inherited by163 exact unchanged inputs plus CI scheduling control. T075/T038/T067/T097 remain partial;47 completed, no milestones; Windows/actual AT/live-device gates remain open.'
+note = note.replace('Backend851', 'Backend 851').replace('by163', 'by 163').replace('partial;47', 'partial; 47')
+p = root/'specs/001-industry-agnostic-studio/traceability.json'
+trace = json.loads(p.read_text())
+for task in trace['tasks']:
+    if task['id'] in ['T038', 'T067', 'T072', 'T075', 'T097']:
+        if note.strip() not in task['implementation_note']:
+            task['implementation_note'] += note
+        for item in ['evidence/studio/M3-inventory-observations/', 'tests/e2e/lab-inventory-accessibility.spec.ts',
+                'tests/fixtures/providers/lab-inventory-observation.json', 'docs/architecture/ADR-0018-physical-binding-observations.md']:
+            if item not in task.setdefault('implementation_evidence', []):
+                task['implementation_evidence'].append(item)
+assert Counter(t['status'] for t in trace['tasks']) == {'completed':47, 'in_progress':43, 'blocked':10}
+record = trace['implementation_record']
+record['code_candidate'] = f"Base ecaba3f plus inventory source/input digest {v['applicationAndInputDigest']}; committed candidate binding pending clean package"
+record['verification'].update(playwright_checks_passed=293, playwright_checks_failed=0,
+    playwright_scope='Full native Linux Chromium 293, focused 36 and separate two-viewport performance; all 272 source/compiled/fixed inputs identical across and within final runs. Backend851 inherited through163 exact unchanged inputs plus CI scheduling control; not rerun locally.',
+    evidence='evidence/studio/M3-inventory-observations/', backend_evidence='evidence/studio/M3-inventory-observations/backend-input-inheritance.json',
+    prior_package_evidence='evidence/studio/M2-keyboard-profile-bindings/package/receipt.json (clean2ea4ec5 native Linux source)',
+    package_evidence='Pending exact-candidate clean inventory package')
+for key in ['playwright_scope', 'prior_package_evidence']:
+    for a, b in {'Backend851':'Backend 851','through163':'through 163','clean2ea':'clean 2ea'}.items():
+        record['verification'][key] = record['verification'][key].replace(a, b)
+p.write_text(json.dumps(trace, ensure_ascii=False, indent=2)+'\n')
+p = root/'specs/001-industry-agnostic-studio/tasks.md'
+text = p.read_text()
+if note.strip() not in text:
+    p.write_text(text+'\n'+note.strip()+'\n')
+p = root/'docs/implementation/STATUS.md'
+text = p.read_text()
+paragraph = 'The latest read-only inventory successor passes 36 native keyboard cases, full 293 browser and separate two-viewport performance, with all 272 source/compiled/fixed inputs identical across final stages. The inventory portion of T075 presents current T072 completeness/provider diagnostics, observed identity and firmware, declared OS/scope and separate availability/permission/readiness. Independent bounded pages, actual empty refresh, labelled malformed/HTTP observations and departed reply/focus guards are verified without mutative requests. The LabView export and unavailable reservation integration remain intact. ADR0018 and tasks/traces are amended together. Backend 851 is inherited through 163 unchanged inputs plus CI scheduling control. See `evidence/studio/M3-inventory-observations/`; original failures/root review retained. T075 remains partial; actual provider/reservation/Windows/AT/milestone gates stay open. Count 47/100, no milestones accepted.\n\nBoth ecaba3f Ubuntu24 push/PR CI runs completed successfully, including backend/browser/package stages. Their actual receipt is `evidence/studio/native-ci/ubuntu-24.04-ecaba3f-runs.json`, separate from this new inventory candidate.\n\n'
+if paragraph not in text:
+    anchor = 'The latest profile-binding successor'
+    assert anchor in text
+    p.write_text(text.replace(anchor, paragraph+anchor, 1))
+(out/'controllers/documentation.py.txt').write_text(Path(__file__).read_text())
+print('Documented verified read-only inventory scope; task/trace states preserved together')

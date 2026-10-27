@@ -1,0 +1,844 @@
+{
+  "preflightId": "pf-05aac22c-1925-45b3-94fd-66ca15d8b35f",
+  "snapshotId": "snap-aad226c0-e80c-4a27-be0b-c1b9f1583cf2",
+  "snapshotDigest": "sha256:ad2d20c4c117b0d4b5f66135c1a5407fe5a04f7d59cee25b1d88442c57d0a9da",
+  "revision": 6,
+  "providerId": "studio.reference",
+  "providerIdentity": {
+    "providerId": "studio.reference",
+    "providerVersion": "1.0.0",
+    "contractVersion": "1.0",
+    "name": "Studio executable reference",
+    "maturity": "fixture",
+    "evidenceScope": "owned_reference",
+    "supportedHostOS": [
+      "Linux",
+      "Windows"
+    ],
+    "architectures": [
+      "x86_64",
+      "AMD64"
+    ],
+    "realizationClasses": [
+      "simulated"
+    ],
+    "targetClasses": [
+      "model-unit"
+    ],
+    "hostExecutionClass": "native-process",
+    "operations": [
+      "start",
+      "stop",
+      "cancel"
+    ],
+    "clockDomains": [
+      "simulation-time"
+    ],
+    "connectionContracts": {
+      "causality": [
+        "unit-delay"
+      ],
+      "converters": [
+        "linear"
+      ]
+    },
+    "limits": {
+      "maxDurationSeconds": 30,
+      "maxSamples": 3000,
+      "maxConcurrentRuns": 4,
+      "maxElements": 200,
+      "maxConnections": 400
+    },
+    "limitations": [
+      "Scalar first-order reference model only; no external simulator, physical device, native X-COM, or industrial fidelity claim.",
+      "Pause, rewind, step, live mutation and physical coupling are unsupported."
+    ],
+    "supportedXdlVersions": [
+      "xverse.io/xdl/v1alpha1"
+    ],
+    "capabilityRecords": [
+      {
+        "kind": "start",
+        "targetClass": "model-unit",
+        "legalStates": [
+          "ready"
+        ],
+        "parametersSchema": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "authorityRequirements": [
+          "native-backend-owned"
+        ],
+        "physicalEffects": false,
+        "maxDurationSeconds": 30,
+        "completion": "observed_worker_state"
+      },
+      {
+        "kind": "stop",
+        "targetClass": "model-unit",
+        "legalStates": [
+          "running",
+          "preparing",
+          "ready"
+        ],
+        "parametersSchema": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "authorityRequirements": [
+          "native-backend-owned"
+        ],
+        "physicalEffects": false,
+        "maxDurationSeconds": 30,
+        "completion": "observed_worker_state"
+      },
+      {
+        "kind": "cancel",
+        "targetClass": "model-unit",
+        "legalStates": [
+          "running",
+          "preparing",
+          "ready"
+        ],
+        "parametersSchema": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "authorityRequirements": [
+          "native-backend-owned"
+        ],
+        "physicalEffects": false,
+        "maxDurationSeconds": 30,
+        "completion": "observed_worker_state"
+      }
+    ],
+    "available": true,
+    "hostCompatible": true,
+    "implementationDigest": "sha256:d544ae4d0fe1609fc5482d91334b211f96e75165e7bbaf5c62c72b7b2690631a"
+  },
+  "readinessVersion": "1.0",
+  "readiness": {
+    "backend": {
+      "status": "available",
+      "message": "The authenticated native Studio backend is responding; no runtime liveness is inferred.",
+      "elementRefs": [
+        "xdl://org.xverse.studio.process-control/system/reference-loop"
+      ],
+      "diagnosticCodes": [],
+      "remediation": "",
+      "facts": {
+        "probe": "local_control_service",
+        "hostOS": "Linux",
+        "hostArchitecture": "x86_64"
+      }
+    },
+    "model": {
+      "status": "valid",
+      "message": "Public XDL validation and declared-intent compilation succeeded.",
+      "elementRefs": [
+        "xdl://org.xverse.studio.process-control/system/reference-loop"
+      ],
+      "diagnosticCodes": [],
+      "remediation": ""
+    },
+    "provider": {
+      "status": "available",
+      "message": "The installed owned reference provider declares compatibility with this native OS/architecture.",
+      "elementRefs": [
+        "xdl://org.xverse.studio.process-control/system/reference-loop"
+      ],
+      "diagnosticCodes": [],
+      "remediation": "",
+      "facts": {
+        "providerId": "studio.reference",
+        "hostCompatible": true,
+        "supportedHostOS": [
+          "Linux",
+          "Windows"
+        ],
+        "architectures": [
+          "x86_64",
+          "AMD64"
+        ],
+        "evidenceScope": "owned_reference"
+      }
+    },
+    "authority": {
+      "status": "available",
+      "message": "Backend-owned reference execution is admitted; no physical permit is acquired.",
+      "elementRefs": [
+        "xdl://org.xverse.studio.process-control/system/reference-loop"
+      ],
+      "diagnosticCodes": [],
+      "remediation": "",
+      "facts": {
+        "physicalEffects": false
+      }
+    },
+    "capabilities": {
+      "status": "unsupported",
+      "message": "The owned reference provider cannot execute this topology, deployment, schedule or extension. Select its admitted template or another compatible provider.",
+      "elementRefs": [
+        "xdl://org.xverse.studio.process-control/system/reference-loop#measurement-device",
+        "xdl://org.xverse.studio.process-control/system/reference-loop#state-sensor",
+        "xdl://org.xverse.studio.process-control/system/reference-loop#command-actuator",
+        "xdl://org.xverse.studio.process-control/system/reference-loop#logical-model"
+      ],
+      "diagnosticCodes": [
+        "CAPABILITY_UNSUPPORTED"
+      ],
+      "remediation": "Select the owned reference template or another independently admitted compatible provider."
+    },
+    "artifacts": {
+      "status": "unknown",
+      "message": "Artifact availability/integrity cannot be established for all selected references.",
+      "elementRefs": [
+        "xdl://org.xverse.studio.process-control/system/reference-loop"
+      ],
+      "diagnosticCodes": [
+        "ARTIFACT_UNAVAILABLE"
+      ],
+      "remediation": "Supply admitted exact artifact identities; registration metadata alone is not availability.",
+      "facts": {
+        "artifacts": [
+          {
+            "id": "reference-model",
+            "artifactKind": "model",
+            "version": "1.0.0",
+            "digest": "sha256:5e166063f7d506c139b9c3a9f2545ba2983c82b6035af67e68051e90feef0095",
+            "sourceRef": "urn:xverse:studio:reference:first-order:v1",
+            "maturity": "prototype"
+          },
+          {
+            "id": "reference-model",
+            "artifactKind": "model",
+            "version": "1.0.0",
+            "digest": "sha256:5e166063f7d506c139b9c3a9f2545ba2983c82b6035af67e68051e90feef0095",
+            "sourceRef": "urn:xverse:studio:reference:first-order:v1",
+            "maturity": "prototype"
+          }
+        ]
+      }
+    },
+    "clocks": {
+      "status": "compatible",
+      "message": "The owned simulation clock is declared; no cross-clock mapping or physical synchronization is claimed.",
+      "elementRefs": [
+        "xdl://org.xverse.studio.process-control/system/reference-loop"
+      ],
+      "diagnosticCodes": [],
+      "remediation": "",
+      "facts": {
+        "domains": [
+          "simulation-time"
+        ]
+      }
+    },
+    "resources": {
+      "status": "unknown",
+      "message": "Workload requirements cannot be established for the unadmitted configuration.",
+      "elementRefs": [
+        "xdl://org.xverse.studio.process-control/system/reference-loop"
+      ],
+      "diagnosticCodes": [],
+      "remediation": "Wait for owned runs to finish or reduce the authored workload within advertised limits.",
+      "facts": {
+        "activeOwnedRuns": 0,
+        "reserved": false
+      }
+    },
+    "ownership": {
+      "status": "available",
+      "message": "A new reference run will be owned by the native backend; browser disconnection does not own its lifetime.",
+      "elementRefs": [
+        "xdl://org.xverse.studio.process-control/system/reference-loop"
+      ],
+      "diagnosticCodes": [],
+      "remediation": "",
+      "facts": {
+        "owner": "native_backend",
+        "reservationAcquired": false
+      }
+    },
+    "target": {
+      "status": "blocked",
+      "message": "This target cannot accept execution under the current source/provider/resource facts.",
+      "elementRefs": [
+        "xdl://org.xverse.studio.process-control/system/reference-loop"
+      ],
+      "diagnosticCodes": [],
+      "remediation": "Resolve the independent blocked/unknown dimensions, then recheck."
+    }
+  },
+  "status": "blocked",
+  "planDigest": "sha256:6f026de2f01822172b305d2ac2436e8fcdc4fc80c671ab1d8a425ecf1cc3d030",
+  "semanticDigest": "sha256:f2842dfff44724b57497937c227b13bd47c655bca54be7ac2f6841a7c171b840",
+  "capabilityDigest": "sha256:c16a8f54e1b9276ab1a78399b4948d64ce6e58f7ce1d50b8c56720d389ec952e",
+  "expiresAt": 1793062431.9445174,
+  "diagnostics": [
+    {
+      "code": "CAPABILITY_UNSUPPORTED",
+      "severity": "error",
+      "message": "The owned reference provider cannot execute this topology, deployment, schedule or extension. Select its admitted template or another compatible provider.",
+      "elementRef": "xdl://org.xverse.studio.process-control/system/reference-loop#measurement-device",
+      "elementRefs": [
+        "xdl://org.xverse.studio.process-control/system/reference-loop#measurement-device",
+        "xdl://org.xverse.studio.process-control/system/reference-loop#state-sensor",
+        "xdl://org.xverse.studio.process-control/system/reference-loop#command-actuator",
+        "xdl://org.xverse.studio.process-control/system/reference-loop#logical-model"
+      ],
+      "remediation": "Select the owned reference template or another independently admitted compatible provider."
+    },
+    {
+      "code": "ARTIFACT_UNAVAILABLE",
+      "severity": "error",
+      "message": "Artifact availability/integrity cannot be established for all selected references.",
+      "elementRef": "xdl://org.xverse.studio.process-control/system/reference-loop",
+      "elementRefs": [
+        "xdl://org.xverse.studio.process-control/system/reference-loop"
+      ],
+      "remediation": "Supply admitted exact artifact identities; registration metadata alone is not availability."
+    },
+    {
+      "code": "MODEL_COUPLING_UNSUPPORTED",
+      "severity": "error",
+      "message": "This model couples declared interfaces; no model-coupling provider or solver is admitted, so it cannot execute. Communication flows are not couplings.",
+      "elementRef": "xdl://org.xverse.studio.process-control/system/reference-loop#logical-model",
+      "elementRefs": [
+        "xdl://org.xverse.studio.process-control/system/reference-loop#logical-model"
+      ],
+      "remediation": "Use a provider that admits this model coupling, or remove it."
+    }
+  ],
+  "dimensions": {
+    "backend": "available",
+    "model": "valid",
+    "provider": "available",
+    "authority": "available",
+    "capabilities": "unsupported",
+    "artifacts": "unknown",
+    "clocks": "compatible",
+    "resources": "unknown",
+    "ownership": "available",
+    "target": "blocked",
+    "evidenceScope": "owned_reference"
+  },
+  "limits": {
+    "maxDurationSeconds": 30,
+    "maxSamples": 3000,
+    "maxConcurrentRuns": 4,
+    "maxElements": 200,
+    "maxConnections": 400
+  },
+  "selection": {
+    "systemRef": "xdl://org.xverse.studio.process-control/system/reference-loop",
+    "deploymentRef": "xdl://org.xverse.studio.process-control/deployment/local-reference",
+    "scenarioRef": "xdl://org.xverse.studio.process-control/scenario/reference-response"
+  },
+  "contributingDocuments": [
+    "xdl/controller.xdl.yaml",
+    "xdl/plant.xdl.yaml",
+    "xdl/system.xdl.yaml",
+    "xdl/deployment.xdl.yaml",
+    "xdl/scenario.xdl.yaml",
+    "xdl/profile.xdl.yaml",
+    "xdl/evaluation-profile.xdl.yaml"
+  ],
+  "planPreview": {
+    "snapshotId": "snap-aad226c0-e80c-4a27-be0b-c1b9f1583cf2",
+    "snapshotDigest": "sha256:ad2d20c4c117b0d4b5f66135c1a5407fe5a04f7d59cee25b1d88442c57d0a9da",
+    "revision": 6,
+    "selection": {
+      "systemRef": "xdl://org.xverse.studio.process-control/system/reference-loop",
+      "deploymentRef": "xdl://org.xverse.studio.process-control/deployment/local-reference",
+      "scenarioRef": "xdl://org.xverse.studio.process-control/scenario/reference-response"
+    },
+    "planDigest": "sha256:6f026de2f01822172b305d2ac2436e8fcdc4fc80c671ab1d8a425ecf1cc3d030",
+    "semanticDigest": "sha256:f2842dfff44724b57497937c227b13bd47c655bca54be7ac2f6841a7c171b840",
+    "compiler": {
+      "package": "xverse-xdl",
+      "version": "0.4.0",
+      "revision": "7fab6a290c3731533c2b88517158055c768b9d4e",
+      "apiVersions": [
+        "xverse.io/xdl/v1alpha1"
+      ],
+      "compilerPlanVersion": "1",
+      "scope": "offline_validation_and_declared_intent_compilation"
+    },
+    "contributingDocuments": [
+      "xdl/controller.xdl.yaml",
+      "xdl/plant.xdl.yaml",
+      "xdl/system.xdl.yaml",
+      "xdl/deployment.xdl.yaml",
+      "xdl/scenario.xdl.yaml",
+      "xdl/profile.xdl.yaml",
+      "xdl/evaluation-profile.xdl.yaml"
+    ],
+    "plan": {
+      "planVersion": "1",
+      "generator": {
+        "task": "XDL1",
+        "version": "0.1.0"
+      },
+      "profile": {
+        "namespace": "io.xverse.experiment",
+        "schemaVersion": "0.1",
+        "schemaRef": "https://xverse.io/profiles/experiment-lite/v0.1/schema.json",
+        "resource": {
+          "apiVersion": "xverse.io/xdl/v1alpha1",
+          "kind": "Profile",
+          "namespace": "org.xverse.studio.process-control",
+          "name": "experiment-lite",
+          "uri": "xdl://org.xverse.studio.process-control/profile/experiment-lite",
+          "version": "0.1.0"
+        },
+        "resourceDigest": {
+          "algorithm": "sha256",
+          "value": "b2458ac95cfaad9be8e7c69ef7e6ed58d1262efb6bbd2a09549416d6edbc8fd0"
+        }
+      },
+      "selection": {
+        "system": {
+          "apiVersion": "xverse.io/xdl/v1alpha1",
+          "kind": "System",
+          "namespace": "org.xverse.studio.process-control",
+          "name": "reference-loop",
+          "uri": "xdl://org.xverse.studio.process-control/system/reference-loop",
+          "version": "1.0.0",
+          "semanticDigest": {
+            "algorithm": "sha256",
+            "value": "17759909b4196fa0eb5d3ef1c2e1cf47c2b90db46565702890dfe89385756bb5"
+          }
+        },
+        "deployment": {
+          "apiVersion": "xverse.io/xdl/v1alpha1",
+          "kind": "Deployment",
+          "namespace": "org.xverse.studio.process-control",
+          "name": "local-reference",
+          "uri": "xdl://org.xverse.studio.process-control/deployment/local-reference",
+          "version": "1.0.0",
+          "semanticDigest": {
+            "algorithm": "sha256",
+            "value": "5ab131eeb0c79ff01e8aefce9c88805280678631abcac1ac49cdbc820f08bdad"
+          }
+        },
+        "scenario": {
+          "apiVersion": "xverse.io/xdl/v1alpha1",
+          "kind": "Scenario",
+          "namespace": "org.xverse.studio.process-control",
+          "name": "reference-response",
+          "uri": "xdl://org.xverse.studio.process-control/scenario/reference-response",
+          "version": "1.0.0",
+          "semanticDigest": {
+            "algorithm": "sha256",
+            "value": "215287bfc4cfd39775d3cb646723f179ea0b34a115e5e1d540427ad4a1dc7aee"
+          }
+        },
+        "staticReadiness": {
+          "xdl://org.xverse.studio.process-control/deployment/local-reference": "Ready"
+        }
+      },
+      "seed": {
+        "value": 7,
+        "unitSemantics": "reference-seed"
+      },
+      "parameters": [
+        {
+          "id": "target",
+          "valueType": "number",
+          "value": 1,
+          "unitSemantics": "1",
+          "mutability": "configuration"
+        },
+        {
+          "id": "gain",
+          "valueType": "number",
+          "value": 0.8,
+          "unitSemantics": "1",
+          "mutability": "configuration"
+        },
+        {
+          "id": "initial",
+          "valueType": "number",
+          "value": 0,
+          "unitSemantics": "1",
+          "mutability": "configuration"
+        },
+        {
+          "id": "duration",
+          "valueType": "number",
+          "value": 5,
+          "unitSemantics": "s",
+          "mutability": "configuration"
+        },
+        {
+          "id": "timestep",
+          "valueType": "number",
+          "value": 0.1,
+          "unitSemantics": "s",
+          "mutability": "configuration"
+        },
+        {
+          "id": "fault",
+          "valueType": "string",
+          "value": "none",
+          "unitSemantics": "1",
+          "mutability": "configuration"
+        }
+      ],
+      "components": [
+        {
+          "scope": "system",
+          "instanceId": null,
+          "componentRef": null,
+          "nodeId": null,
+          "declaredParameters": [],
+          "modelRefs": [
+            {
+              "id": "logical-model",
+              "modelKind": "opaque-reference",
+              "externalRef": "urn:example:model:1",
+              "maturity": "architectural-target"
+            }
+          ]
+        },
+        {
+          "scope": "component-instance",
+          "instanceId": "controller",
+          "componentRef": {
+            "apiVersion": "xverse.io/xdl/v1alpha1",
+            "kind": "Component",
+            "namespace": "org.xverse.studio.process-control",
+            "name": "reference-controller",
+            "uri": "xdl://org.xverse.studio.process-control/component/reference-controller"
+          },
+          "nodeId": "controller-node",
+          "declaredParameters": [],
+          "modelRefs": []
+        },
+        {
+          "scope": "component-instance",
+          "instanceId": "plant",
+          "componentRef": {
+            "apiVersion": "xverse.io/xdl/v1alpha1",
+            "kind": "Component",
+            "namespace": "org.xverse.studio.process-control",
+            "name": "reference-plant",
+            "uri": "xdl://org.xverse.studio.process-control/component/reference-plant"
+          },
+          "nodeId": "plant-node",
+          "declaredParameters": [],
+          "modelRefs": [
+            {
+              "id": "first-order",
+              "modelKind": "behavioral",
+              "externalRef": "urn:xverse:studio:reference:first-order:v1",
+              "maturity": "prototype"
+            }
+          ]
+        }
+      ],
+      "timeDomains": [
+        {
+          "id": "simulation-time",
+          "clockClass": "simulation",
+          "epoch": "0",
+          "rate": "1",
+          "monotonic": true,
+          "canonicalUnit": "tick",
+          "usedBy": [
+            "step:start-reference",
+            "observer:state-observer",
+            "flow:command-flow",
+            "flow:state-flow"
+          ]
+        }
+      ],
+      "timeMappings": [],
+      "dependencyOrder": [
+        {
+          "rank": 0,
+          "kind": "node",
+          "id": "controller-node",
+          "owner": "system"
+        },
+        {
+          "rank": 1,
+          "kind": "node",
+          "id": "plant-node",
+          "owner": "system"
+        },
+        {
+          "rank": 2,
+          "kind": "component-instance",
+          "id": "controller",
+          "owner": "system"
+        },
+        {
+          "rank": 3,
+          "kind": "component-instance",
+          "id": "plant",
+          "owner": "system"
+        },
+        {
+          "rank": 4,
+          "kind": "step",
+          "id": "start-reference",
+          "owner": "scenario"
+        }
+      ],
+      "flows": [
+        {
+          "id": "command-flow",
+          "sourceEndpointId": "controller-out",
+          "destinationEndpointIds": [
+            "plant-in"
+          ],
+          "interfaceId": "command",
+          "deliveryIntent": "ordered",
+          "networkId": null,
+          "timeDomainId": "simulation-time"
+        },
+        {
+          "id": "state-flow",
+          "sourceEndpointId": "plant-out",
+          "destinationEndpointIds": [
+            "observer-in"
+          ],
+          "interfaceId": "state",
+          "deliveryIntent": "ordered",
+          "networkId": null,
+          "timeDomainId": "simulation-time"
+        }
+      ],
+      "bindings": [
+        {
+          "id": "controller-binding",
+          "logicalRef": {
+            "apiVersion": "xverse.io/xdl/v1alpha1",
+            "kind": "System",
+            "namespace": "org.xverse.studio.process-control",
+            "name": "reference-loop",
+            "uri": "xdl://org.xverse.studio.process-control/system/reference-loop",
+            "element": "controller"
+          },
+          "collection": "componentInstances",
+          "realizationClass": "simulated",
+          "targetId": "reference-target",
+          "targetClass": "model-unit",
+          "artifactRefs": [
+            {
+              "id": "reference-model",
+              "artifactKind": "model",
+              "version": "1.0.0",
+              "digest": "sha256:5e166063f7d506c139b9c3a9f2545ba2983c82b6035af67e68051e90feef0095",
+              "sourceRef": "urn:xverse:studio:reference:first-order:v1",
+              "maturity": "prototype"
+            }
+          ],
+          "resourceIds": [],
+          "delivery": null,
+          "retry": null,
+          "protocolBinding": null
+        },
+        {
+          "id": "plant-binding",
+          "logicalRef": {
+            "apiVersion": "xverse.io/xdl/v1alpha1",
+            "kind": "System",
+            "namespace": "org.xverse.studio.process-control",
+            "name": "reference-loop",
+            "uri": "xdl://org.xverse.studio.process-control/system/reference-loop",
+            "element": "plant"
+          },
+          "collection": "componentInstances",
+          "realizationClass": "simulated",
+          "targetId": "reference-target",
+          "targetClass": "model-unit",
+          "artifactRefs": [
+            {
+              "id": "reference-model",
+              "artifactKind": "model",
+              "version": "1.0.0",
+              "digest": "sha256:5e166063f7d506c139b9c3a9f2545ba2983c82b6035af67e68051e90feef0095",
+              "sourceRef": "urn:xverse:studio:reference:first-order:v1",
+              "maturity": "prototype"
+            }
+          ],
+          "resourceIds": [],
+          "delivery": null,
+          "retry": null,
+          "protocolBinding": null
+        }
+      ],
+      "lifecycleIntent": [
+        {
+          "stepId": "start-reference",
+          "actionKind": "start",
+          "targetRef": {
+            "apiVersion": "xverse.io/xdl/v1alpha1",
+            "kind": "System",
+            "namespace": "org.xverse.studio.process-control",
+            "name": "reference-loop",
+            "uri": "xdl://org.xverse.studio.process-control/system/reference-loop",
+            "element": "plant"
+          },
+          "timeDomainId": "simulation-time",
+          "phase": null,
+          "schedule": {
+            "declaredAt": 0,
+            "declaredUnit": "s",
+            "atTicks": 0,
+            "tolerance": null
+          },
+          "dependsOn": [],
+          "duration": null,
+          "parameters": []
+        }
+      ],
+      "faultSchedule": [],
+      "observers": [
+        {
+          "observerId": "state-observer",
+          "targetRef": {
+            "apiVersion": "xverse.io/xdl/v1alpha1",
+            "kind": "System",
+            "namespace": "org.xverse.studio.process-control",
+            "name": "reference-loop",
+            "uri": "xdl://org.xverse.studio.process-control/system/reference-loop",
+            "element": "state-flow"
+          },
+          "collection": "flows",
+          "timeDomainId": "simulation-time",
+          "samplingIntent": "every fixed model step including initial state",
+          "payloadPolicy": {
+            "payloadSchema": "urn:xverse:studio:normalized-scalar:v1",
+            "unitSemantics": "1"
+          },
+          "evidenceSinkRef": "urn:xverse:studio:reference:evidence"
+        }
+      ],
+      "metrics": [
+        {
+          "metricId": "final-state",
+          "observerIds": [
+            "state-observer"
+          ],
+          "calculationRef": "urn:xverse:studio:metric:last",
+          "unitSemantics": "1",
+          "acceptance": "Opaque intent only; use an admitted bounded assertion definition to assess evidence.",
+          "timeDomainIds": [
+            "simulation-time"
+          ],
+          "status": "reference-only"
+        }
+      ],
+      "initialConditions": {
+        "stateParameterRef": "initial"
+      },
+      "acceptanceIntent": "Exercise the owned reference provider; completion alone is not an assertion pass.",
+      "limitations": [
+        "Owned executable reference only; no external simulator, device or scientific fidelity claim.",
+        "Normalized first-order scalar response only; no automotive, industrial, simulator or hardware fidelity."
+      ],
+      "nonReadiness": {
+        "statement": "This resolved plan records declared intent validation only; it is not evidence of executable artifact availability, runtime fitness, live readiness, compatibility, parity, certification, or execution.",
+        "claim": "declared-intent-validation-only",
+        "executableArtifactAvailability": false,
+        "runtimeFitness": false,
+        "liveReadiness": false,
+        "compatibilityOrParity": false
+      },
+      "provenance": {
+        "inputSemanticDigest": {
+          "algorithm": "sha256",
+          "value": "f2842dfff44724b57497937c227b13bd47c655bca54be7ac2f6841a7c171b840"
+        },
+        "resources": [
+          {
+            "apiVersion": "xverse.io/xdl/v1alpha1",
+            "kind": "Component",
+            "namespace": "org.xverse.studio.process-control",
+            "name": "reference-controller",
+            "uri": "xdl://org.xverse.studio.process-control/component/reference-controller",
+            "version": "1.0.0",
+            "semanticDigest": {
+              "algorithm": "sha256",
+              "value": "4124b8af7fa12df0fecc31eaa07e88ae06ce28ef9f4d5845b42de985c0b0ceda"
+            }
+          },
+          {
+            "apiVersion": "xverse.io/xdl/v1alpha1",
+            "kind": "Component",
+            "namespace": "org.xverse.studio.process-control",
+            "name": "reference-plant",
+            "uri": "xdl://org.xverse.studio.process-control/component/reference-plant",
+            "version": "1.0.0",
+            "semanticDigest": {
+              "algorithm": "sha256",
+              "value": "48d632c936bc69a59abcf414f71687de478793991df992f44ac29e40a7195a97"
+            }
+          },
+          {
+            "apiVersion": "xverse.io/xdl/v1alpha1",
+            "kind": "Deployment",
+            "namespace": "org.xverse.studio.process-control",
+            "name": "local-reference",
+            "uri": "xdl://org.xverse.studio.process-control/deployment/local-reference",
+            "version": "1.0.0",
+            "semanticDigest": {
+              "algorithm": "sha256",
+              "value": "5ab131eeb0c79ff01e8aefce9c88805280678631abcac1ac49cdbc820f08bdad"
+            }
+          },
+          {
+            "apiVersion": "xverse.io/xdl/v1alpha1",
+            "kind": "Profile",
+            "namespace": "org.xverse.studio.process-control",
+            "name": "experiment-lite",
+            "uri": "xdl://org.xverse.studio.process-control/profile/experiment-lite",
+            "version": "0.1.0",
+            "semanticDigest": {
+              "algorithm": "sha256",
+              "value": "b2458ac95cfaad9be8e7c69ef7e6ed58d1262efb6bbd2a09549416d6edbc8fd0"
+            }
+          },
+          {
+            "apiVersion": "xverse.io/xdl/v1alpha1",
+            "kind": "Scenario",
+            "namespace": "org.xverse.studio.process-control",
+            "name": "reference-response",
+            "uri": "xdl://org.xverse.studio.process-control/scenario/reference-response",
+            "version": "1.0.0",
+            "semanticDigest": {
+              "algorithm": "sha256",
+              "value": "215287bfc4cfd39775d3cb646723f179ea0b34a115e5e1d540427ad4a1dc7aee"
+            }
+          },
+          {
+            "apiVersion": "xverse.io/xdl/v1alpha1",
+            "kind": "System",
+            "namespace": "org.xverse.studio.process-control",
+            "name": "reference-loop",
+            "uri": "xdl://org.xverse.studio.process-control/system/reference-loop",
+            "version": "1.0.0",
+            "semanticDigest": {
+              "algorithm": "sha256",
+              "value": "17759909b4196fa0eb5d3ef1c2e1cf47c2b90db46565702890dfe89385756bb5"
+            }
+          }
+        ]
+      },
+      "status": "resolved",
+      "digest": {
+        "algorithm": "sha256",
+        "value": "6f026de2f01822172b305d2ac2436e8fcdc4fc80c671ab1d8a425ecf1cc3d030"
+      }
+    },
+    "scope": "declared_intent_only"
+  }
+}

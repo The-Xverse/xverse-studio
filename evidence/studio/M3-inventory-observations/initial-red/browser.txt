@@ -1,0 +1,146 @@
+
+> xverse-studio-workspace@0.1.0 test:e2e
+> playwright test -c tests/e2e/playwright.config.ts --grep lab inventory:
+
+
+Running 4 tests using 1 worker
+
+(node:2104714) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 tests/e2e/lab-inventory-accessibility.spec.ts:43:9 › lab inventory: incomplete public observation at 1024x768 (10.6s)
+(node:2104887) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 tests/e2e/lab-inventory-accessibility.spec.ts:43:9 › lab inventory: observed public observation at 1024x768 (10.6s)
+(node:2105084) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  3 tests/e2e/lab-inventory-accessibility.spec.ts:43:9 › lab inventory: incomplete public observation at 1440x900 (10.5s)
+(node:2105251) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  4 tests/e2e/lab-inventory-accessibility.spec.ts:43:9 › lab inventory: observed public observation at 1440x900 (10.5s)
+
+
+  1) tests/e2e/lab-inventory-accessibility.spec.ts:43:9 › lab inventory: incomplete public observation at 1024x768
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('.diagnostic-list strong').filter({ hasText: /^PROVIDER_INVENTORY_UNAVAILABLE$/ })
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "soft toBeVisible" locator('.diagnostic-list strong').filter({ hasText: /^PROVIDER_INVENTORY_UNAVAILABLE$/ }) with timeout 10000ms
+      - waiting for locator('.diagnostic-list strong').filter({ hasText: /^PROVIDER_INVENTORY_UNAVAILABLE$/ })
+
+
+      89 |                 .filter({ hasText: /^PROVIDER_INVENTORY_UNAVAILABLE$/ }),
+      90 |             )
+    > 91 |             .toBeVisible();
+         |              ^
+      92 |         } else {
+      93 |           const card = page
+      94 |             .locator("section.panel")
+        at <repo>/tests/e2e/lab-inventory-accessibility.spec.ts:91:14
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/lab-inventory-accessibilit-34891-lic-observation-at-1024x768/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/lab-inventory-accessibilit-34891-lic-observation-at-1024x768/error-context.md
+
+  2) tests/e2e/lab-inventory-accessibility.spec.ts:43:9 › lab inventory: observed public observation at 1024x768
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: locator('section.panel').filter({ has: getByRole('heading', { name: 'urn:fixture:inventory-presentation', exact: true }) }).locator('.key-values > div').filter({ has: getByText('Firmware', { exact: true }) }).locator('dd')
+    Expected substring: "fixture-1.2.3"
+    Received string:    "Unknown"
+    Timeout: 10000ms
+
+    Call log:
+      - Expect "soft toContainText" locator('section.panel').filter({ has: getByRole('heading', { name: 'urn:fixture:inventory-presentation', exact: true }) }).locator('.key-values > div').filter({ has: getByText('Firmware', { exact: true }) }).locator('dd') with timeout 10000ms
+      - waiting for locator('section.panel').filter({ has: getByRole('heading', { name: 'urn:fixture:inventory-presentation', exact: true }) }).locator('.key-values > div').filter({ has: getByText('Firmware', { exact: true }) }).locator('dd')
+        24 × locator resolved to <dd>Unknown</dd>
+           - unexpected value "Unknown"
+
+
+      103 |             .filter({ has: page.getByText("Firmware", { exact: true }) })
+      104 |             .locator("dd");
+    > 105 |           await expect.soft(firmware).toContainText("fixture-1.2.3");
+          |                                       ^
+      106 |           await expect(
+      107 |             card.getByRole("button", {
+      108 |               name: "Reserve observe-only",
+        at <repo>/tests/e2e/lab-inventory-accessibility.spec.ts:105:39
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/lab-inventory-accessibilit-d70d3-lic-observation-at-1024x768/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/lab-inventory-accessibilit-d70d3-lic-observation-at-1024x768/error-context.md
+
+  3) tests/e2e/lab-inventory-accessibility.spec.ts:43:9 › lab inventory: incomplete public observation at 1440x900
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('.diagnostic-list strong').filter({ hasText: /^PROVIDER_INVENTORY_UNAVAILABLE$/ })
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "soft toBeVisible" locator('.diagnostic-list strong').filter({ hasText: /^PROVIDER_INVENTORY_UNAVAILABLE$/ }) with timeout 10000ms
+      - waiting for locator('.diagnostic-list strong').filter({ hasText: /^PROVIDER_INVENTORY_UNAVAILABLE$/ })
+
+
+      89 |                 .filter({ hasText: /^PROVIDER_INVENTORY_UNAVAILABLE$/ }),
+      90 |             )
+    > 91 |             .toBeVisible();
+         |              ^
+      92 |         } else {
+      93 |           const card = page
+      94 |             .locator("section.panel")
+        at <repo>/tests/e2e/lab-inventory-accessibility.spec.ts:91:14
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/lab-inventory-accessibilit-f8454-lic-observation-at-1440x900/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/lab-inventory-accessibilit-f8454-lic-observation-at-1440x900/error-context.md
+
+  4) tests/e2e/lab-inventory-accessibility.spec.ts:43:9 › lab inventory: observed public observation at 1440x900
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: locator('section.panel').filter({ has: getByRole('heading', { name: 'urn:fixture:inventory-presentation', exact: true }) }).locator('.key-values > div').filter({ has: getByText('Firmware', { exact: true }) }).locator('dd')
+    Expected substring: "fixture-1.2.3"
+    Received string:    "Unknown"
+    Timeout: 10000ms
+
+    Call log:
+      - Expect "soft toContainText" locator('section.panel').filter({ has: getByRole('heading', { name: 'urn:fixture:inventory-presentation', exact: true }) }).locator('.key-values > div').filter({ has: getByText('Firmware', { exact: true }) }).locator('dd') with timeout 10000ms
+      - waiting for locator('section.panel').filter({ has: getByRole('heading', { name: 'urn:fixture:inventory-presentation', exact: true }) }).locator('.key-values > div').filter({ has: getByText('Firmware', { exact: true }) }).locator('dd')
+        24 × locator resolved to <dd>Unknown</dd>
+           - unexpected value "Unknown"
+
+
+      103 |             .filter({ has: page.getByText("Firmware", { exact: true }) })
+      104 |             .locator("dd");
+    > 105 |           await expect.soft(firmware).toContainText("fixture-1.2.3");
+          |                                       ^
+      106 |           await expect(
+      107 |             card.getByRole("button", {
+      108 |               name: "Reserve observe-only",
+        at <repo>/tests/e2e/lab-inventory-accessibility.spec.ts:105:39
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/lab-inventory-accessibilit-2fb54-lic-observation-at-1440x900/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/lab-inventory-accessibilit-2fb54-lic-observation-at-1440x900/error-context.md
+
+  4 failed
+    tests/e2e/lab-inventory-accessibility.spec.ts:43:9 › lab inventory: incomplete public observation at 1024x768
+    tests/e2e/lab-inventory-accessibility.spec.ts:43:9 › lab inventory: observed public observation at 1024x768
+    tests/e2e/lab-inventory-accessibility.spec.ts:43:9 › lab inventory: incomplete public observation at 1440x900
+    tests/e2e/lab-inventory-accessibility.spec.ts:43:9 › lab inventory: observed public observation at 1440x900

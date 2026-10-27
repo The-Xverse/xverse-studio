@@ -1,0 +1,33 @@
+from pathlib import Path
+import json
+import hashlib
+import os
+import subprocess
+import shutil
+import sys
+
+root = Path.cwd()
+cache = root.parent/'.xverse-studio-cache'
+out = root/'.studio-local/lab-inventory'
+node = cache/'node-v24.22.1-linux-x64/bin/node'
+env = dict(os.environ, PATH=str(node.parent)+os.pathsep+os.environ['PATH'],
+    TMPDIR=str(cache/'tmp'), TEMP=str(cache/'tmp'), TMP=str(cache/'tmp'),
+    UV_CACHE_DIR=str(cache/'uv'), npm_config_cache=str(cache/'npm'),
+    PLAYWRIGHT_BROWSERS_PATH=str(cache/'playwright'), PYTEST_DISABLE_PLUGIN_AUTOLOAD='1')
+prettier = sorted((cache/'npm/_npx').glob('*/node_modules/prettier/bin/prettier.cjs'))[0]
+subprocess.run([str(node), str(prettier), '--write', 'apps/studio-web/src/features/lab/LabView.tsx'], env=env, check=True)
+npm_cli = Path(shutil.which('npm', path=env['PATH'])).resolve()
+commands = [[str(node), str(npm_cli), 'run', 'typecheck'],
+    [str(node), str(npm_cli), 'run', 'build'],
+    [sys.executable, '-I', 'scripts/check_architecture.py'],
+    [sys.executable, '-I', 'scripts/check_platform_compatibility.py']]
+with (out/'build.log').open('w') as log:
+    for command in commands:
+        result = subprocess.run(command, env=env, stdout=log, stderr=subprocess.STDOUT)
+        if result.returncode:
+            raise SystemExit(result.returncode)
+names = ['apps/studio-web/src/app/OperationsViews.tsx', 'apps/studio-web/src/features/lab/LabView.tsx']
+names += [str(p.relative_to(root)) for p in (root/'apps/studio-web/dist').rglob('*') if p.is_file()]
+(out/'build-observed.json').write_text(json.dumps({'scope': 'Source and compiled assets observed immediately after the successful post-review build, before final browser gates',
+    'files': {n: hashlib.sha256((root/n).read_bytes()).hexdigest() for n in sorted(names)}}, indent=2)+'\n')
+print(json.dumps({'typecheck': 'passed', 'build': 'passed', 'architecture': 'passed', 'compatibility': 'passed'}))
