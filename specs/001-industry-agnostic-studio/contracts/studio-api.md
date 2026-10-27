@@ -52,6 +52,7 @@
 | `GET /runs/{runId}/events?after={cursor}` | SSE stream; see [run-events.md](run-events.md) | M1 |
 | `GET /runs/{runId}/evidence` | Cursor-paged evidence metadata, integrity/availability and authorized download handles | M1 |
 | `GET /runs/{runId}/observations` | Bounded observer/time range; explicit clock/mapping and reduction metadata | M1/M4 |
+| `GET /runs/{runId}/timeline` | Read-only scenario/evidence timeline 1.0 (ADR-0019): verified frozen selection, distinct intention/recorded/evaluation rows, explicit admitted clock placement or unplaced reasons, original gaps/integrity, bounded pages and input-bound cursors; no execution or evaluation authority | M4 |
 | `GET /runs/{runId}/diagnostics` | Read-only explanation 1.0: evidence-linked facts, consequences, unconfirmed hypotheses, unknowns and closed next actions; see ADR-0012 | M1 |
 | `GET /projects/{projectId}/preflights/{preflightId}/diagnostics` | Read-only explanation 1.0 of a frozen preflight's coded readiness findings and stale-plan assumptions | M1 |
 | `POST /runs/{runId}/evaluations` | Snapshot-bound definition reference/digest and exact evidence selection; returns immutable evaluation ID and operation | M4 |
@@ -189,3 +190,65 @@ remains unknown. `activeReady` is false and `runtimeAdmission` unavailable; neit
 nor an `admitted_integration` string in its observation confers active authority. The report changes
 no XDL, project revision, deployment admission, run snapshot or portable export, and performs no
 reservation, command, probe or secret resolution. Physical reservation/control APIs remain unadmitted.
+
+
+## Scenario/evidence timeline 1.0 amendment (ADR-0019)
+
+`GET /runs/{runId}/timeline` is an additive read projection, not a runtime/provider
+operation. Implementation and combined UI verification are in progress. Its closed
+query accepts optional `snapshotId` (exact expected identity), `clockDomain`, opaque
+`cursor` and `limit` (1–200, default 100). Duplicate/unknown selectors and malformed
+cursors are rejected; a foreign snapshot or changed cursor context returns 409.
+
+The response carries `timelineVersion: "1.0"`, `readOnly: true`, exact `runId`,
+`snapshotId`, `snapshotDigest`, `projectId`, frozen `projectRevision` and selected
+`System`/`Deployment`/`Scenario` references. Managed snapshot verification and
+full-source authoritative validation precede parsing. Current draft source is never
+an executed-intent fallback. `inputIdentity` binds the exact bounded input observation.
+
+Rows have stable `id`, `layer` (`intent|recorded|evaluation`), `kind`, evidence scope
+and `position`. Position retains the original clock and decimal-string tick, an
+admitted tick unit or null, `aligned|unplaced`, and an explicit reason for unplaced
+facts. Evaluation positions additionally retain the half-open window's `endTick`.
+Same-axis placement does not establish causality or observed success. Receipt UTC
+and encoding are separate from source time. The installed reference-v1 codec alone
+admits its microsecond ticks. Only that exact run/provider/effective-input context
+admits authored seconds in the same simulation clock. Unsupported mappings/units,
+missing source times and opaque fault activation/recovery remain unplaced.
+
+Intent rows preserve canonical references and declared identifiers; opaque/private
+payload fields are not copied. Recorded rows preserve event identity, sequence,
+evidence integrity and source-time status. A verified prefix of an invalid journal
+remains inspectable but unplaced with invalid integrity. Unknown/malformed metadata
+and unsupported numeric values do not become zero or silently trusted observations.
+Gap details use an allowlisted projection. Original evidence bytes remain unchanged.
+Evaluation rows retain exact definition/result/evidence digests, execution status,
+verdict/value, coverage and partial state. A metric has no assertion verdict. A
+historical evaluation's verdict is not an assessment of newly changed evidence;
+`matchesCurrentEvidence` is explicit. The timeline never runs an evaluator.
+
+`assessmentDefinitions` exposes up to 32 resolved declarations from the selected
+frozen Scenario, including typed expressions, windows, declared coverage policy and
+definition/profile/schema identities. `status: available|unavailable` and `complete`
+distinguish resolved absence, truncation and resolver failure. Inspection does not
+create evaluation jobs. These declaration identities bind cursor input identity;
+evaluated rows must match the selected frozen definition pin. Provider-configuration
+intent has its own unplaced row and configuration digest, not a fabricated Scenario
+fault element or authored timestamp. Recorded source provider/version and immutable
+evaluation reason codes/evaluator identity remain inspectable.
+
+For `not_started`, `running`, `unavailable` or `error` execution, absent coverage or
+partial metadata remains JSON null and is displayed as unknown. Such a job has no
+verdict. This does not make otherwise verified recorded rows unavailable. Completed
+results retain their required coverage/partial shape, and pass/fail requires complete,
+non-partial coverage; missing metadata is never coerced into a known result.
+
+`counts`, `inputsComplete`, `clockDomainsComplete`, `diagnosticsComplete`, original
+reader gap completeness and `reduction` distinguish incomplete input observation
+from page omission. Processing considers at most 50000 canonical records, 1000 source
+intentions and 200 recent evaluation records. Existing reader byte/acquisition caps
+still apply. The timeline does not attest canonical full-data coverage. Clock option
+discovery cannot claim completeness after a processing cap. Each page contains at
+most 200 rows, with exact integer tick ordering. An opaque continuation cursor binds
+run/snapshot, clock, actual journal and evaluation input identities and interpretation.
+Changed context returns `TIMELINE_CURSOR_STALE` and requires refresh from page one.

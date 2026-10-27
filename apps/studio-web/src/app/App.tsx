@@ -1716,6 +1716,12 @@ export default function App() {
                     projection={projection}
                     selection={executionSelection}
                     edit={edit}
+                    onAuthoringIntent={() => {
+                      if (selectedProjectRef.current === project.projectId) {
+                        preflightRequestSequence.current++;
+                        workspaceInteractionSequence.current++;
+                      }
+                    }}
                     authoringLimits={
                       capabilities.limits?.scenarioAuthoring || {}
                     }

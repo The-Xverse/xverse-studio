@@ -50,6 +50,7 @@ CORE = "services/studio-api/src/xverse_studio/{}/module.py"
         # Dependency direction.
         ("from xverse_studio.profiles.presentation import DOMAIN_PROFILES", CORE.format("xdl")),
         ("from xverse_studio.runs.service import Runs", CORE.format("storage")),
+        ("from xverse_studio.timeline import project_timeline", CORE.format("evidence")),
         ("from xverse_studio.api.models import Body", CORE.format("catalog")),
         # Relative and dynamic imports resolve to the same packages.
         ("from ..profiles import presentation", CORE.format("xdl")),

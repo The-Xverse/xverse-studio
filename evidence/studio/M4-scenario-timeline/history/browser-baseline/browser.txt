@@ -1,0 +1,62 @@
+
+> xverse-studio-workspace@0.1.0 test:e2e
+> playwright test -c tests/e2e/playwright.config.ts --grep scenario timeline: native frozen
+
+
+Running 2 tests using 1 worker
+
+(node:2333955) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 tests/e2e/scenario-timeline.spec.ts:52:7 › scenario timeline: native frozen intent, observed faults and evaluation windows at 1024 (19.7s)
+(node:2334237) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 tests/e2e/scenario-timeline.spec.ts:52:7 › scenario timeline: native frozen intent, observed faults and evaluation windows at 1440 (19.1s)
+
+
+  1) tests/e2e/scenario-timeline.spec.ts:52:7 › scenario timeline: native frozen intent, observed faults and evaluation windows at 1024
+
+    TimeoutError: locator.focus: Timeout 15000ms exceeded.
+    Call log:
+      - waiting for getByRole('tab', { name: 'Timeline', exact: true })
+
+
+      57 |     page.on("request",r => {if (!["GET","HEAD","OPTIONS"].includes(r.method())) writes.push(r.method()+" "+new URL(r.url()).pathname);});
+      58 |     page.on("pageerror",e => errors.push(e.message));
+    > 59 |     await page.getByRole("tab",{name:"Timeline",exact:true}).focus();
+         |                                                              ^
+      60 |     await page.keyboard.press("Enter");
+      61 |     const panel = page.getByRole("region",{name:"Selected run timeline",exact:true});
+      62 |     await panel.getByRole("button",{name:"Inspect selected run timeline",exact:true}).focus();
+        at <repo>/tests/e2e/scenario-timeline.spec.ts:59:62
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/scenario-timeline-scenario-c479a--evaluation-windows-at-1024/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/scenario-timeline-scenario-c479a--evaluation-windows-at-1024/error-context.md
+
+  2) tests/e2e/scenario-timeline.spec.ts:52:7 › scenario timeline: native frozen intent, observed faults and evaluation windows at 1440
+
+    TimeoutError: locator.focus: Timeout 15000ms exceeded.
+    Call log:
+      - waiting for getByRole('tab', { name: 'Timeline', exact: true })
+
+
+      57 |     page.on("request",r => {if (!["GET","HEAD","OPTIONS"].includes(r.method())) writes.push(r.method()+" "+new URL(r.url()).pathname);});
+      58 |     page.on("pageerror",e => errors.push(e.message));
+    > 59 |     await page.getByRole("tab",{name:"Timeline",exact:true}).focus();
+         |                                                              ^
+      60 |     await page.keyboard.press("Enter");
+      61 |     const panel = page.getByRole("region",{name:"Selected run timeline",exact:true});
+      62 |     await panel.getByRole("button",{name:"Inspect selected run timeline",exact:true}).focus();
+        at <repo>/tests/e2e/scenario-timeline.spec.ts:59:62
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/scenario-timeline-scenario-6cb64--evaluation-windows-at-1440/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/scenario-timeline-scenario-6cb64--evaluation-windows-at-1440/error-context.md
+
+  2 failed
+    tests/e2e/scenario-timeline.spec.ts:52:7 › scenario timeline: native frozen intent, observed faults and evaluation windows at 1024
+    tests/e2e/scenario-timeline.spec.ts:52:7 › scenario timeline: native frozen intent, observed faults and evaluation windows at 1440

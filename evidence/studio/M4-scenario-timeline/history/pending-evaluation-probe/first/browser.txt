@@ -1,0 +1,72 @@
+
+Running 2 tests using 1 worker
+
+(node:2407935) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 .studio-local/scenario-timeline/pending-evaluation-probe/outcomes.spec.ts:129:6 › scenario timeline pending: labelled valid pending and interrupted result shapes at 1024 (14.0s)
+(node:2408415) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 .studio-local/scenario-timeline/pending-evaluation-probe/outcomes.spec.ts:129:6 › scenario timeline pending: labelled valid pending and interrupted result shapes at 1440 (13.3s)
+
+
+  1) .studio-local/scenario-timeline/pending-evaluation-probe/outcomes.spec.ts:129:6 › scenario timeline pending: labelled valid pending and interrupted result shapes at 1024
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('region', { name: 'Selected run timeline', exact: true }).locator('tr[data-timeline-id]').filter({ hasText: 'evaluation · assertion' }).getByText('Execution: running', { exact: true })
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('region', { name: 'Selected run timeline', exact: true }).locator('tr[data-timeline-id]').filter({ hasText: 'evaluation · assertion' }).getByText('Execution: running', { exact: true }) with timeout 10000ms
+      - waiting for getByRole('region', { name: 'Selected run timeline', exact: true }).locator('tr[data-timeline-id]').filter({ hasText: 'evaluation · assertion' }).getByText('Execution: running', { exact: true })
+
+
+      142 |    status=selected;await expect(inspect).toBeEnabled();await inspect.focus();await page.keyboard.press("Enter");
+      143 |    const row=panel.locator('tr[data-timeline-id]').filter({hasText:"evaluation · assertion"});
+    > 144 |    await expect(row.getByText("Execution: "+status,{exact:true})).toBeVisible();
+          |                                                                   ^
+      145 |    await expect(row.getByText("No verdict",{exact:true})).toBeVisible();
+      146 |    await expect(row).toContainText("Coverage: Unknown; partial: Unknown");
+      147 |    await expect(row.getByText("Assertion verdict: pass",{exact:true})).toHaveCount(0);
+        at <repo>/.studio-local/scenario-timeline/pending-evaluation-probe/outcomes.spec.ts:144:67
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    .studio-local/scenario-timeline/pending-evaluation-probe/first/browser-output/outcomes-scenario-timeline-20c2c-upted-result-shapes-at-1024/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: .studio-local/scenario-timeline/pending-evaluation-probe/first/browser-output/outcomes-scenario-timeline-20c2c-upted-result-shapes-at-1024/error-context.md
+
+  2) .studio-local/scenario-timeline/pending-evaluation-probe/outcomes.spec.ts:129:6 › scenario timeline pending: labelled valid pending and interrupted result shapes at 1440
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('region', { name: 'Selected run timeline', exact: true }).locator('tr[data-timeline-id]').filter({ hasText: 'evaluation · assertion' }).getByText('Execution: running', { exact: true })
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('region', { name: 'Selected run timeline', exact: true }).locator('tr[data-timeline-id]').filter({ hasText: 'evaluation · assertion' }).getByText('Execution: running', { exact: true }) with timeout 10000ms
+      - waiting for getByRole('region', { name: 'Selected run timeline', exact: true }).locator('tr[data-timeline-id]').filter({ hasText: 'evaluation · assertion' }).getByText('Execution: running', { exact: true })
+
+
+      142 |    status=selected;await expect(inspect).toBeEnabled();await inspect.focus();await page.keyboard.press("Enter");
+      143 |    const row=panel.locator('tr[data-timeline-id]').filter({hasText:"evaluation · assertion"});
+    > 144 |    await expect(row.getByText("Execution: "+status,{exact:true})).toBeVisible();
+          |                                                                   ^
+      145 |    await expect(row.getByText("No verdict",{exact:true})).toBeVisible();
+      146 |    await expect(row).toContainText("Coverage: Unknown; partial: Unknown");
+      147 |    await expect(row.getByText("Assertion verdict: pass",{exact:true})).toHaveCount(0);
+        at <repo>/.studio-local/scenario-timeline/pending-evaluation-probe/outcomes.spec.ts:144:67
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    .studio-local/scenario-timeline/pending-evaluation-probe/first/browser-output/outcomes-scenario-timeline-df35b-upted-result-shapes-at-1440/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: .studio-local/scenario-timeline/pending-evaluation-probe/first/browser-output/outcomes-scenario-timeline-df35b-upted-result-shapes-at-1440/error-context.md
+
+  2 failed
+    .studio-local/scenario-timeline/pending-evaluation-probe/outcomes.spec.ts:129:6 › scenario timeline pending: labelled valid pending and interrupted result shapes at 1024
+    .studio-local/scenario-timeline/pending-evaluation-probe/outcomes.spec.ts:129:6 › scenario timeline pending: labelled valid pending and interrupted result shapes at 1440

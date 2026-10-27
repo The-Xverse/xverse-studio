@@ -1,0 +1,609 @@
+.....FFFF..F...                                                          [100%]
+=================================== FAILURES ===================================
+_ test_labelled_reader_metadata_failures_stay_unknown_and_omit_private_extras[source-time] _
+
+client = <starlette.testclient.TestClient object at 0x71a707783890>
+recorded_fault = ({'createdAt': 1793074537.72713, 'documents': {'doc-0': {'content': 'apiVersion: xverse.io/xdl/v1alpha1\nkind: Compone...meline/metadata-red/tmp/test_labelled_reader_metadata_0/runs/run-96bce2de-2680-4f3b-823c-5937efe77026/evidence.jsonl'))
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x71a715d71220>
+malformation = 'source-time'
+
+    @pytest.mark.parametrize("malformation", ["source-time", "observation-values", "large-value", "gap-private-payload"])
+    def test_labelled_reader_metadata_failures_stay_unknown_and_omit_private_extras(client, recorded_fault, monkeypatch, malformation):
+        _, _, _, run, _, journal = recorded_fault
+        original = journal.read_bytes()
+        # Deliberately malformed DTOs from a synthetic reader, not a canonical/live evidence claim.
+        records = deepcopy(client.get(f"/api/v1/runs/{run['runId']}/history").json()["items"])
+        sample = next(r for r in records if r["type"] == "observation.available")
+        sample["payload"]["privateUnsupported"] = "OMIT-PRIVATE-SENTINEL"
+        if malformation == "source-time":
+            sample["sourceTime"] = "unsupported-clock-encoding"
+        if malformation == "observation-values":
+            sample["payload"]["values"] = ["unsupported-metadata"]
+        if malformation == "large-value":
+            sample["payload"]["values"]["value"] = 10 ** 500
+        if malformation == "gap-private-payload":
+            sample["type"] = "observation.gap"
+            sample["payload"] = {"reason": "Synthetic fixture gap", "privateEndpoint": "OMIT-PRIVATE-SENTINEL"}
+        monkeypatch.setattr("xverse_studio.api.app.read_journal", lambda *args: (records, "valid"))
+>       response = client.get(f"/api/v1/runs/{run['runId']}/timeline")
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/integration/test_scenario_timeline.py:202:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv/lib/python3.13/site-packages/httpx/_client.py:1053: in get
+    return self.request(
+.venv/lib/python3.13/site-packages/starlette/testclient.py:518: in request
+    return super().request(
+.venv/lib/python3.13/site-packages/httpx/_client.py:825: in request
+    return self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/httpx/_client.py:928: in send
+    raise exc
+.venv/lib/python3.13/site-packages/httpx/_client.py:922: in send
+    response.read()
+.venv/lib/python3.13/site-packages/httpx/_models.py:881: in read
+    self._content = b"".join(self.iter_bytes())
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/httpx/_models.py:897: in iter_bytes
+    for raw_bytes in self.iter_raw():
+                     ^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/httpx/_models.py:951: in iter_raw
+    for raw_stream_bytes in self.stream:
+                            ^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/httpx/_client.py:153: in __iter__
+    for chunk in self._stream:
+                 ^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/starlette/testclient.py:384: in iter_body
+    exit_stack.close()
+<python-install>/lib/python3.13/contextlib.py:627: in close
+    self.__exit__(None, None, None)
+<python-install>/lib/python3.13/contextlib.py:619: in __exit__
+    raise exc
+<python-install>/lib/python3.13/contextlib.py:604: in __exit__
+    if cb(*exc_details):
+       ^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/starlette/testclient.py:399: in close_app
+    raise exception
+.venv/lib/python3.13/site-packages/anyio/from_thread.py:265: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/starlette/testclient.py:366: in run_app
+    await self.app(scope, receive, send)
+.venv/lib/python3.13/site-packages/fastapi/applications.py:1160: in __call__
+    await super().__call__(scope, receive, send)
+.venv/lib/python3.13/site-packages/starlette/applications.py:96: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv/lib/python3.13/site-packages/starlette/middleware/errors.py:186: in __call__
+    raise exc
+.venv/lib/python3.13/site-packages/starlette/middleware/errors.py:164: in __call__
+    await self.app(scope, receive, _send)
+.venv/lib/python3.13/site-packages/starlette/middleware/base.py:203: in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+services/studio-api/src/xverse_studio/api/app.py:233: in boundary
+    result = await call_next(request)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/starlette/middleware/base.py:179: in call_next
+    raise app_exc from app_exc.__cause__ or app_exc.__context__
+.venv/lib/python3.13/site-packages/starlette/middleware/base.py:149: in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+.venv/lib/python3.13/site-packages/starlette/middleware/exceptions.py:63: in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+.venv/lib/python3.13/site-packages/starlette/_exception_handler.py:53: in wrapped_app
+    raise exc
+.venv/lib/python3.13/site-packages/starlette/_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+.venv/lib/python3.13/site-packages/fastapi/middleware/asyncexitstack.py:18: in __call__
+    await self.app(scope, receive, send)
+.venv/lib/python3.13/site-packages/starlette/routing.py:683: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv/lib/python3.13/site-packages/starlette/routing.py:704: in app
+    await route.handle(scope, receive, send)
+.venv/lib/python3.13/site-packages/starlette/routing.py:289: in handle
+    await self.app(scope, receive, send)
+.venv/lib/python3.13/site-packages/fastapi/routing.py:130: in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+.venv/lib/python3.13/site-packages/starlette/_exception_handler.py:53: in wrapped_app
+    raise exc
+.venv/lib/python3.13/site-packages/starlette/_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+.venv/lib/python3.13/site-packages/fastapi/routing.py:116: in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/fastapi/routing.py:670: in app
+    raw_response = await run_endpoint_function(
+.venv/lib/python3.13/site-packages/fastapi/routing.py:326: in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/starlette/concurrency.py:34: in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/anyio/to_thread.py:65: in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+.venv/lib/python3.13/site-packages/anyio/_backends/_asyncio.py:2706: in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/anyio/_backends/_asyncio.py:1100: in run
+    result = context.run(func, *args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+services/studio-api/src/xverse_studio/api/app.py:643: in timeline
+    return project_timeline(run, snapshot, records, integrity, observed[:MAX_EVALUATIONS], adapter, query,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+run = {'capabilities': ['stop', 'cancel'], 'cleanup': 'complete', 'createTime': 1793074539.02, 'createdAt': 1793074539.3728733, ...}
+snapshot = {'capabilityDigest': 'sha256:c16a8f54e1b9276ab1a78399b4948d64ce6e58f7ce1d50b8c56720d389ec952e', 'compiler': {'apiVersi...rocess-control/system/reference-loop#state-flow'], 'fault': 'stuck-sensor', ...}, 'createdAt': 1793074538.8347454, ...}
+records = [{'digest': '2efa441d36b7a485d4e31356968420fdbffc2c72ba2c8e608cc7f8274623e40f', 'elementRefs': ['xdl://org.xverse.stud...nce-loop#state-flow'], 'eventId': 'run-96bce2de-2680-4f3b-823c-5937efe77026:6', 'evidenceClass': 'observed', ...}, ...]
+integrity = 'valid', evaluations = []
+adapter = <xverse_studio.xdl.XDLAdapter object at 0x71a7142460b0>
+query = TimelineQuery(snapshotId=None, clockDomain=None, cursor=None, limit=100)
+
+    def project_timeline(run, snapshot, records, integrity, evaluations, adapter, query, *, evaluations_complete=True):
+        """Caller supplies the protected snapshot and existing canonical-reader output."""
+        if query.snapshotId is not None and query.snapshotId != run["snapshotId"]:
+            raise Problem("SNAPSHOT_SELECTION_MISMATCH", "Select this run's exact snapshot.", 409)
+        if snapshot.get("snapshotId") != run["snapshotId"] or snapshot.get("projectId") != run["projectId"]:
+            raise Problem("SNAPSHOT_SELECTION_MISMATCH", "Run and snapshot identities disagree.", 409)
+        system, scenario = _selected(snapshot, adapter)
+        scope, spec = run.get("evidenceScope", "unknown"), scenario["spec"]
+        declared = {entry["id"] for entry in system["spec"].get("timeDomains", [])}
+        observed = {clock for record in records[:MAX_RECORDS] if (clock := source_time(record)[1]) is not None}
+        clocks = sorted(declared | observed)
+        selected_clock = query.clockDomain or system["spec"].get("defaultTimeDomainId")
+        if selected_clock is not None and selected_clock not in clocks:
+            raise Problem("CLOCK_SELECTION_UNRESOLVED", "Select a declared or observed clock domain.")
+        codec = _seconds_codec(run, snapshot)
+        rows, diagnostics = [], []
+        intent_count = 0
+        for collection, kind in [("steps", "step"), ("faults", "fault"), ("observers", "observer"), ("metrics", "metric")]:
+            for item in spec.get(collection, []):
+                intent_count += 1
+                if intent_count > MAX_INTENTS:
+                    continue
+                row = {"id": f"intent:{collection}:{item['id']}", "layer": "intent", "kind": "intent." + kind,
+                       "intentId": item["id"], "logicalRef": snapshot["selection"]["scenarioRef"] + "#" + item["id"],
+                       "targetRef": _reference(item.get("targetRef")), "evidenceScope": "declared_intent_only",
+                       "position": _intent_position(item, selected_clock, codec)}
+                if kind == "step":
+                    row.update(actionKind=public_text(item.get("actionKind")),
+                               schedule={"at": item.get("schedule", {}).get("at"), "unit": public_text(item.get("schedule", {}).get("unit"))},
+                               opaqueActionPreservedInSource=bool(item.get("action")))
+                if kind == "fault":
+                    row.update(faultKind=public_text(item.get("faultKind")), activation="opaque_declared_intent",
+                               recovery="opaque_declared_intent", position=_position(reason="OPAQUE_FAULT_SCHEDULE"))
+                if kind == "observer":
+                    row.update(clockDomain=item.get("timeDomainId"), unit=public_text(item.get("unitSemantics")), sampling="declared_intent")
+                if kind == "metric":
+                    row.update(unit=public_text(item.get("unitSemantics")), evaluationStatus="not_evaluated_by_intent")
+                rows.append(row)
+        for record in records[:MAX_RECORDS]:
+            tick, clock, status = source_time(record)
+            unit = reference_tick_unit(record, scope)
+            reason = ("SOURCE_TIME_UNAVAILABLE" if status != "known" else "CLOCK_NOT_SELECTED" if clock != selected_clock
+                      else "TICK_ENCODING_UNADMITTED" if unit is None else None)
+            row = {"id": "recorded:" + record["eventId"], "layer": "recorded", "kind": record["type"],
+                   "eventId": record["eventId"], "sequence": record["sequence"], "evidenceScope": scope,
+                   "position": _position(clock, str(tick) if tick is not None else None, unit, reason),
+>                  "sourceTime": {k: v for k, v in (record.get("sourceTime") or {}).items() if k in ["tick", "clockDomain", "resolution", "uncertainty"] and _scalar(v) is not None},
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                   "recordedAtUtc": receipt_time(record)[1], "receiptEncoding": receipt_time(record)[2],
+                   "evidenceRefs": [run["runId"] + ":reference-journal"] if scope == "owned_reference" else [],
+                   "elementRefs": record.get("elementRefs", [])[:64]}
+E           AttributeError: 'str' object has no attribute 'items'
+
+services/studio-api/src/xverse_studio/timeline/__init__.py:178: AttributeError
+_ test_labelled_reader_metadata_failures_stay_unknown_and_omit_private_extras[observation-values] _
+
+client = <starlette.testclient.TestClient object at 0x71a70691e250>
+recorded_fault = ({'createdAt': 1793074540.9478314, 'documents': {'doc-0': {'content': 'apiVersion: xverse.io/xdl/v1alpha1\nkind: Compo...meline/metadata-red/tmp/test_labelled_reader_metadata_1/runs/run-6f1f3483-6c5a-4a54-a4ae-bd4fede8d57d/evidence.jsonl'))
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x71a7161c3a80>
+malformation = 'observation-values'
+
+    @pytest.mark.parametrize("malformation", ["source-time", "observation-values", "large-value", "gap-private-payload"])
+    def test_labelled_reader_metadata_failures_stay_unknown_and_omit_private_extras(client, recorded_fault, monkeypatch, malformation):
+        _, _, _, run, _, journal = recorded_fault
+        original = journal.read_bytes()
+        # Deliberately malformed DTOs from a synthetic reader, not a canonical/live evidence claim.
+        records = deepcopy(client.get(f"/api/v1/runs/{run['runId']}/history").json()["items"])
+        sample = next(r for r in records if r["type"] == "observation.available")
+        sample["payload"]["privateUnsupported"] = "OMIT-PRIVATE-SENTINEL"
+        if malformation == "source-time":
+            sample["sourceTime"] = "unsupported-clock-encoding"
+        if malformation == "observation-values":
+            sample["payload"]["values"] = ["unsupported-metadata"]
+        if malformation == "large-value":
+            sample["payload"]["values"]["value"] = 10 ** 500
+        if malformation == "gap-private-payload":
+            sample["type"] = "observation.gap"
+            sample["payload"] = {"reason": "Synthetic fixture gap", "privateEndpoint": "OMIT-PRIVATE-SENTINEL"}
+        monkeypatch.setattr("xverse_studio.api.app.read_journal", lambda *args: (records, "valid"))
+>       response = client.get(f"/api/v1/runs/{run['runId']}/timeline")
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/integration/test_scenario_timeline.py:202:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv/lib/python3.13/site-packages/httpx/_client.py:1053: in get
+    return self.request(
+.venv/lib/python3.13/site-packages/starlette/testclient.py:518: in request
+    return super().request(
+.venv/lib/python3.13/site-packages/httpx/_client.py:825: in request
+    return self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/httpx/_client.py:928: in send
+    raise exc
+.venv/lib/python3.13/site-packages/httpx/_client.py:922: in send
+    response.read()
+.venv/lib/python3.13/site-packages/httpx/_models.py:881: in read
+    self._content = b"".join(self.iter_bytes())
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/httpx/_models.py:897: in iter_bytes
+    for raw_bytes in self.iter_raw():
+                     ^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/httpx/_models.py:951: in iter_raw
+    for raw_stream_bytes in self.stream:
+                            ^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/httpx/_client.py:153: in __iter__
+    for chunk in self._stream:
+                 ^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/starlette/testclient.py:384: in iter_body
+    exit_stack.close()
+<python-install>/lib/python3.13/contextlib.py:627: in close
+    self.__exit__(None, None, None)
+<python-install>/lib/python3.13/contextlib.py:619: in __exit__
+    raise exc
+<python-install>/lib/python3.13/contextlib.py:604: in __exit__
+    if cb(*exc_details):
+       ^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/starlette/testclient.py:399: in close_app
+    raise exception
+.venv/lib/python3.13/site-packages/anyio/from_thread.py:265: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/starlette/testclient.py:366: in run_app
+    await self.app(scope, receive, send)
+.venv/lib/python3.13/site-packages/fastapi/applications.py:1160: in __call__
+    await super().__call__(scope, receive, send)
+.venv/lib/python3.13/site-packages/starlette/applications.py:96: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv/lib/python3.13/site-packages/starlette/middleware/errors.py:186: in __call__
+    raise exc
+.venv/lib/python3.13/site-packages/starlette/middleware/errors.py:164: in __call__
+    await self.app(scope, receive, _send)
+.venv/lib/python3.13/site-packages/starlette/middleware/base.py:203: in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+services/studio-api/src/xverse_studio/api/app.py:233: in boundary
+    result = await call_next(request)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/starlette/middleware/base.py:179: in call_next
+    raise app_exc from app_exc.__cause__ or app_exc.__context__
+.venv/lib/python3.13/site-packages/starlette/middleware/base.py:149: in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+.venv/lib/python3.13/site-packages/starlette/middleware/exceptions.py:63: in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+.venv/lib/python3.13/site-packages/starlette/_exception_handler.py:53: in wrapped_app
+    raise exc
+.venv/lib/python3.13/site-packages/starlette/_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+.venv/lib/python3.13/site-packages/fastapi/middleware/asyncexitstack.py:18: in __call__
+    await self.app(scope, receive, send)
+.venv/lib/python3.13/site-packages/starlette/routing.py:683: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv/lib/python3.13/site-packages/starlette/routing.py:704: in app
+    await route.handle(scope, receive, send)
+.venv/lib/python3.13/site-packages/starlette/routing.py:289: in handle
+    await self.app(scope, receive, send)
+.venv/lib/python3.13/site-packages/fastapi/routing.py:130: in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+.venv/lib/python3.13/site-packages/starlette/_exception_handler.py:53: in wrapped_app
+    raise exc
+.venv/lib/python3.13/site-packages/starlette/_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+.venv/lib/python3.13/site-packages/fastapi/routing.py:116: in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/fastapi/routing.py:670: in app
+    raw_response = await run_endpoint_function(
+.venv/lib/python3.13/site-packages/fastapi/routing.py:326: in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/starlette/concurrency.py:34: in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/anyio/to_thread.py:65: in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+.venv/lib/python3.13/site-packages/anyio/_backends/_asyncio.py:2706: in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/anyio/_backends/_asyncio.py:1100: in run
+    result = context.run(func, *args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+services/studio-api/src/xverse_studio/api/app.py:643: in timeline
+    return project_timeline(run, snapshot, records, integrity, observed[:MAX_EVALUATIONS], adapter, query,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+run = {'capabilities': ['stop', 'cancel'], 'cleanup': 'complete', 'createTime': 1793074542.26, 'createdAt': 1793074542.6165106, ...}
+snapshot = {'capabilityDigest': 'sha256:c16a8f54e1b9276ab1a78399b4948d64ce6e58f7ce1d50b8c56720d389ec952e', 'compiler': {'apiVersi...rocess-control/system/reference-loop#state-flow'], 'fault': 'stuck-sensor', ...}, 'createdAt': 1793074542.0553994, ...}
+records = [{'digest': '035a590991e03d0950d361afee1c87a87e11991df73c845b223812a2ff3dfca2', 'elementRefs': ['xdl://org.xverse.stud...nce-loop#state-flow'], 'eventId': 'run-6f1f3483-6c5a-4a54-a4ae-bd4fede8d57d:6', 'evidenceClass': 'observed', ...}, ...]
+integrity = 'valid', evaluations = []
+adapter = <xverse_studio.xdl.XDLAdapter object at 0x71a714c59f10>
+query = TimelineQuery(snapshotId=None, clockDomain=None, cursor=None, limit=100)
+
+    def project_timeline(run, snapshot, records, integrity, evaluations, adapter, query, *, evaluations_complete=True):
+        """Caller supplies the protected snapshot and existing canonical-reader output."""
+        if query.snapshotId is not None and query.snapshotId != run["snapshotId"]:
+            raise Problem("SNAPSHOT_SELECTION_MISMATCH", "Select this run's exact snapshot.", 409)
+        if snapshot.get("snapshotId") != run["snapshotId"] or snapshot.get("projectId") != run["projectId"]:
+            raise Problem("SNAPSHOT_SELECTION_MISMATCH", "Run and snapshot identities disagree.", 409)
+        system, scenario = _selected(snapshot, adapter)
+        scope, spec = run.get("evidenceScope", "unknown"), scenario["spec"]
+        declared = {entry["id"] for entry in system["spec"].get("timeDomains", [])}
+        observed = {clock for record in records[:MAX_RECORDS] if (clock := source_time(record)[1]) is not None}
+        clocks = sorted(declared | observed)
+        selected_clock = query.clockDomain or system["spec"].get("defaultTimeDomainId")
+        if selected_clock is not None and selected_clock not in clocks:
+            raise Problem("CLOCK_SELECTION_UNRESOLVED", "Select a declared or observed clock domain.")
+        codec = _seconds_codec(run, snapshot)
+        rows, diagnostics = [], []
+        intent_count = 0
+        for collection, kind in [("steps", "step"), ("faults", "fault"), ("observers", "observer"), ("metrics", "metric")]:
+            for item in spec.get(collection, []):
+                intent_count += 1
+                if intent_count > MAX_INTENTS:
+                    continue
+                row = {"id": f"intent:{collection}:{item['id']}", "layer": "intent", "kind": "intent." + kind,
+                       "intentId": item["id"], "logicalRef": snapshot["selection"]["scenarioRef"] + "#" + item["id"],
+                       "targetRef": _reference(item.get("targetRef")), "evidenceScope": "declared_intent_only",
+                       "position": _intent_position(item, selected_clock, codec)}
+                if kind == "step":
+                    row.update(actionKind=public_text(item.get("actionKind")),
+                               schedule={"at": item.get("schedule", {}).get("at"), "unit": public_text(item.get("schedule", {}).get("unit"))},
+                               opaqueActionPreservedInSource=bool(item.get("action")))
+                if kind == "fault":
+                    row.update(faultKind=public_text(item.get("faultKind")), activation="opaque_declared_intent",
+                               recovery="opaque_declared_intent", position=_position(reason="OPAQUE_FAULT_SCHEDULE"))
+                if kind == "observer":
+                    row.update(clockDomain=item.get("timeDomainId"), unit=public_text(item.get("unitSemantics")), sampling="declared_intent")
+                if kind == "metric":
+                    row.update(unit=public_text(item.get("unitSemantics")), evaluationStatus="not_evaluated_by_intent")
+                rows.append(row)
+        for record in records[:MAX_RECORDS]:
+            tick, clock, status = source_time(record)
+            unit = reference_tick_unit(record, scope)
+            reason = ("SOURCE_TIME_UNAVAILABLE" if status != "known" else "CLOCK_NOT_SELECTED" if clock != selected_clock
+                      else "TICK_ENCODING_UNADMITTED" if unit is None else None)
+            row = {"id": "recorded:" + record["eventId"], "layer": "recorded", "kind": record["type"],
+                   "eventId": record["eventId"], "sequence": record["sequence"], "evidenceScope": scope,
+                   "position": _position(clock, str(tick) if tick is not None else None, unit, reason),
+                   "sourceTime": {k: v for k, v in (record.get("sourceTime") or {}).items() if k in ["tick", "clockDomain", "resolution", "uncertainty"] and _scalar(v) is not None},
+                   "recordedAtUtc": receipt_time(record)[1], "receiptEncoding": receipt_time(record)[2],
+                   "evidenceRefs": [run["runId"] + ":reference-journal"] if scope == "owned_reference" else [],
+                   "elementRefs": record.get("elementRefs", [])[:64]}
+            payload = record.get("payload") or {}
+            row["facts"] = {k: shown for k in ["state", "status", "code", "kind", "observerRef", "measuredValue"]
+                            if (shown := _scalar(payload.get(k))) is not None}
+            if record["type"] == "observation.available":
+>               row["values"] = {key: value for key, value in list((payload.get("values") or {}).items())[:64] if _number(value) or isinstance(value, bool)}
+                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E               AttributeError: 'list' object has no attribute 'items'
+
+services/studio-api/src/xverse_studio/timeline/__init__.py:186: AttributeError
+_ test_labelled_reader_metadata_failures_stay_unknown_and_omit_private_extras[large-value] _
+
+client = <starlette.testclient.TestClient object at 0x71a715f26ad0>
+recorded_fault = ({'createdAt': 1793074544.1301277, 'documents': {'doc-0': {'content': 'apiVersion: xverse.io/xdl/v1alpha1\nkind: Compo...meline/metadata-red/tmp/test_labelled_reader_metadata_2/runs/run-ba4bbcdb-d702-4922-8b87-ed14b60fcf65/evidence.jsonl'))
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x71a715f5ab10>
+malformation = 'large-value'
+
+    @pytest.mark.parametrize("malformation", ["source-time", "observation-values", "large-value", "gap-private-payload"])
+    def test_labelled_reader_metadata_failures_stay_unknown_and_omit_private_extras(client, recorded_fault, monkeypatch, malformation):
+        _, _, _, run, _, journal = recorded_fault
+        original = journal.read_bytes()
+        # Deliberately malformed DTOs from a synthetic reader, not a canonical/live evidence claim.
+        records = deepcopy(client.get(f"/api/v1/runs/{run['runId']}/history").json()["items"])
+        sample = next(r for r in records if r["type"] == "observation.available")
+        sample["payload"]["privateUnsupported"] = "OMIT-PRIVATE-SENTINEL"
+        if malformation == "source-time":
+            sample["sourceTime"] = "unsupported-clock-encoding"
+        if malformation == "observation-values":
+            sample["payload"]["values"] = ["unsupported-metadata"]
+        if malformation == "large-value":
+            sample["payload"]["values"]["value"] = 10 ** 500
+        if malformation == "gap-private-payload":
+            sample["type"] = "observation.gap"
+            sample["payload"] = {"reason": "Synthetic fixture gap", "privateEndpoint": "OMIT-PRIVATE-SENTINEL"}
+        monkeypatch.setattr("xverse_studio.api.app.read_journal", lambda *args: (records, "valid"))
+>       response = client.get(f"/api/v1/runs/{run['runId']}/timeline")
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/integration/test_scenario_timeline.py:202:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv/lib/python3.13/site-packages/httpx/_client.py:1053: in get
+    return self.request(
+.venv/lib/python3.13/site-packages/starlette/testclient.py:518: in request
+    return super().request(
+.venv/lib/python3.13/site-packages/httpx/_client.py:825: in request
+    return self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/httpx/_client.py:928: in send
+    raise exc
+.venv/lib/python3.13/site-packages/httpx/_client.py:922: in send
+    response.read()
+.venv/lib/python3.13/site-packages/httpx/_models.py:881: in read
+    self._content = b"".join(self.iter_bytes())
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/httpx/_models.py:897: in iter_bytes
+    for raw_bytes in self.iter_raw():
+                     ^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/httpx/_models.py:951: in iter_raw
+    for raw_stream_bytes in self.stream:
+                            ^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/httpx/_client.py:153: in __iter__
+    for chunk in self._stream:
+                 ^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/starlette/testclient.py:384: in iter_body
+    exit_stack.close()
+<python-install>/lib/python3.13/contextlib.py:627: in close
+    self.__exit__(None, None, None)
+<python-install>/lib/python3.13/contextlib.py:619: in __exit__
+    raise exc
+<python-install>/lib/python3.13/contextlib.py:604: in __exit__
+    if cb(*exc_details):
+       ^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/starlette/testclient.py:399: in close_app
+    raise exception
+.venv/lib/python3.13/site-packages/anyio/from_thread.py:265: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/starlette/testclient.py:366: in run_app
+    await self.app(scope, receive, send)
+.venv/lib/python3.13/site-packages/fastapi/applications.py:1160: in __call__
+    await super().__call__(scope, receive, send)
+.venv/lib/python3.13/site-packages/starlette/applications.py:96: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv/lib/python3.13/site-packages/starlette/middleware/errors.py:186: in __call__
+    raise exc
+.venv/lib/python3.13/site-packages/starlette/middleware/errors.py:164: in __call__
+    await self.app(scope, receive, _send)
+.venv/lib/python3.13/site-packages/starlette/middleware/base.py:203: in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+services/studio-api/src/xverse_studio/api/app.py:233: in boundary
+    result = await call_next(request)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/starlette/middleware/base.py:179: in call_next
+    raise app_exc from app_exc.__cause__ or app_exc.__context__
+.venv/lib/python3.13/site-packages/starlette/middleware/base.py:149: in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+.venv/lib/python3.13/site-packages/starlette/middleware/exceptions.py:63: in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+.venv/lib/python3.13/site-packages/starlette/_exception_handler.py:53: in wrapped_app
+    raise exc
+.venv/lib/python3.13/site-packages/starlette/_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+.venv/lib/python3.13/site-packages/fastapi/middleware/asyncexitstack.py:18: in __call__
+    await self.app(scope, receive, send)
+.venv/lib/python3.13/site-packages/starlette/routing.py:683: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv/lib/python3.13/site-packages/starlette/routing.py:704: in app
+    await route.handle(scope, receive, send)
+.venv/lib/python3.13/site-packages/starlette/routing.py:289: in handle
+    await self.app(scope, receive, send)
+.venv/lib/python3.13/site-packages/fastapi/routing.py:130: in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+.venv/lib/python3.13/site-packages/starlette/_exception_handler.py:53: in wrapped_app
+    raise exc
+.venv/lib/python3.13/site-packages/starlette/_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+.venv/lib/python3.13/site-packages/fastapi/routing.py:116: in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/fastapi/routing.py:670: in app
+    raw_response = await run_endpoint_function(
+.venv/lib/python3.13/site-packages/fastapi/routing.py:326: in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/starlette/concurrency.py:34: in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/anyio/to_thread.py:65: in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+.venv/lib/python3.13/site-packages/anyio/_backends/_asyncio.py:2706: in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/anyio/_backends/_asyncio.py:1100: in run
+    result = context.run(func, *args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+services/studio-api/src/xverse_studio/api/app.py:643: in timeline
+    return project_timeline(run, snapshot, records, integrity, observed[:MAX_EVALUATIONS], adapter, query,
+services/studio-api/src/xverse_studio/timeline/__init__.py:186: in project_timeline
+    row["values"] = {key: value for key, value in list((payload.get("values") or {}).items())[:64] if _number(value) or isinstance(value, bool)}
+                                                                                                      ^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+value = 100000000000000000...0000000000000000000
+
+    def _number(value):
+>       return isinstance(value, (int, float)) and not isinstance(value, bool) and math.isfinite(value)
+                                                                                   ^^^^^^^^^^^^^^^^^^^^
+E       OverflowError: int too large to convert to float
+
+services/studio-api/src/xverse_studio/timeline/__init__.py:45: OverflowError
+_ test_labelled_reader_metadata_failures_stay_unknown_and_omit_private_extras[gap-private-payload] _
+
+client = <starlette.testclient.TestClient object at 0x71a70691fbd0>
+recorded_fault = ({'createdAt': 1793074547.2789714, 'documents': {'doc-0': {'content': 'apiVersion: xverse.io/xdl/v1alpha1\nkind: Compo...meline/metadata-red/tmp/test_labelled_reader_metadata_3/runs/run-69843e82-5a1d-4748-b521-c29fb37cccf5/evidence.jsonl'))
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x71a70691ff00>
+malformation = 'gap-private-payload'
+
+    @pytest.mark.parametrize("malformation", ["source-time", "observation-values", "large-value", "gap-private-payload"])
+    def test_labelled_reader_metadata_failures_stay_unknown_and_omit_private_extras(client, recorded_fault, monkeypatch, malformation):
+        _, _, _, run, _, journal = recorded_fault
+        original = journal.read_bytes()
+        # Deliberately malformed DTOs from a synthetic reader, not a canonical/live evidence claim.
+        records = deepcopy(client.get(f"/api/v1/runs/{run['runId']}/history").json()["items"])
+        sample = next(r for r in records if r["type"] == "observation.available")
+        sample["payload"]["privateUnsupported"] = "OMIT-PRIVATE-SENTINEL"
+        if malformation == "source-time":
+            sample["sourceTime"] = "unsupported-clock-encoding"
+        if malformation == "observation-values":
+            sample["payload"]["values"] = ["unsupported-metadata"]
+        if malformation == "large-value":
+            sample["payload"]["values"]["value"] = 10 ** 500
+        if malformation == "gap-private-payload":
+            sample["type"] = "observation.gap"
+            sample["payload"] = {"reason": "Synthetic fixture gap", "privateEndpoint": "OMIT-PRIVATE-SENTINEL"}
+        monkeypatch.setattr("xverse_studio.api.app.read_journal", lambda *args: (records, "valid"))
+        response = client.get(f"/api/v1/runs/{run['runId']}/timeline")
+        assert response.status_code == 200, response.text
+>       assert "OMIT-PRIVATE-SENTINEL" not in response.text
+E       assert 'OMIT-PRIVATE-SENTINEL' not in '{"timelineV...ifecycle."]}'
+E
+E         'OMIT-PRIVATE-SENTINEL' is contained here:
+E           ndpoint":"OMIT-PRIVATE-SENTINEL"}}],"gapCount":1,"gapsComplete":true},"diagnostics":[],"limitations":["Same-axis placement is not causality or proof of an intended effect.","Unplaced declarations and unknown clocks remain unsupported; receipt time is independent.","Windowed evaluations retain their own exact evidence provenance and do not change lifecycle."]}
+E         ?           +++++++++++++++++++++
+
+tests/integration/test_scenario_timeline.py:204: AssertionError
+_ test_actual_corrupt_journal_is_not_observed_absence_and_bytes_are_preserved __
+
+client = <starlette.testclient.TestClient object at 0x71a706c6e7a0>
+recorded_fault = ({'createdAt': 1793074556.0324259, 'documents': {'doc-0': {'content': 'apiVersion: xverse.io/xdl/v1alpha1\nkind: Compo...meline/metadata-red/tmp/test_actual_corrupt_journal_is0/runs/run-e6e63c17-ab2a-48e2-9729-ba9c80ee2eed/evidence.jsonl'))
+
+    def test_actual_corrupt_journal_is_not_observed_absence_and_bytes_are_preserved(client, recorded_fault):
+        _, _, _, run, _, journal = recorded_fault
+        original = journal.read_bytes()
+        try:
+            changed = original + b"invalid journal\n"
+            journal.write_bytes(changed)
+            response = client.get(f"/api/v1/runs/{run['runId']}/timeline")
+            assert response.status_code == 200, response.text
+            assert response.json()["recorded"]["integrity"] == "invalid"
+            assert response.json()["recorded"]["coverage"] == "not_attested_by_timeline"
+>           assert not any(r["layer"] == "recorded" for r in response.json()["items"])
+E           assert not True
+E            +  where True = any(<generator object test_actual_corrupt_journal_is_not_observed_absence_and_bytes_are_preserved.<locals>.<genexpr> at 0x71a706b357d0>)
+
+tests/integration/test_scenario_timeline.py:237: AssertionError
+=============================== warnings summary ===============================
+.venv/lib/python3.13/site-packages/fastapi/testclient.py:1
+  <repo>/.venv/lib/python3.13/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+==================================== PASSES ====================================
+=========================== short test summary info ============================
+PASSED tests/integration/test_scenario_timeline.py::test_actual_fault_timeline_uses_frozen_intent_and_preserves_inputs
+PASSED tests/integration/test_scenario_timeline.py::test_timeline_requires_exact_snapshot_selection
+PASSED tests/integration/test_scenario_timeline.py::test_timeline_pages_preserve_all_record_and_intent_identities
+PASSED tests/integration/test_scenario_timeline.py::test_timeline_query_bound_is_closed_before_reading_unknown_run
+PASSED tests/integration/test_scenario_timeline.py::test_actual_evaluations_are_windows_with_separate_metric_and_assertion_results
+PASSED tests/integration/test_scenario_timeline.py::test_labelled_unadmitted_resolution_never_becomes_microseconds[nanosecond]
+PASSED tests/integration/test_scenario_timeline.py::test_labelled_unadmitted_resolution_never_becomes_microseconds[unknown]
+PASSED tests/integration/test_scenario_timeline.py::test_timeline_rejects_unsupported_duplicate_and_malformed_selectors[query0]
+PASSED tests/integration/test_scenario_timeline.py::test_timeline_rejects_unsupported_duplicate_and_malformed_selectors[query1]
+PASSED tests/integration/test_scenario_timeline.py::test_timeline_rejects_unsupported_duplicate_and_malformed_selectors[query2]
+FAILED tests/integration/test_scenario_timeline.py::test_labelled_reader_metadata_failures_stay_unknown_and_omit_private_extras[source-time]
+FAILED tests/integration/test_scenario_timeline.py::test_labelled_reader_metadata_failures_stay_unknown_and_omit_private_extras[observation-values]
+FAILED tests/integration/test_scenario_timeline.py::test_labelled_reader_metadata_failures_stay_unknown_and_omit_private_extras[large-value]
+FAILED tests/integration/test_scenario_timeline.py::test_labelled_reader_metadata_failures_stay_unknown_and_omit_private_extras[gap-private-payload]
+FAILED tests/integration/test_scenario_timeline.py::test_actual_corrupt_journal_is_not_observed_absence_and_bytes_are_preserved
+5 failed, 10 passed, 1 warning in 43.39s

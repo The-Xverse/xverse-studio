@@ -1,0 +1,137 @@
+"""Owned reference timeline witnesses, never a live-device/provider claim."""
+
+from copy import deepcopy
+from io import StringIO
+import time
+
+import pytest
+from ruamel.yaml import YAML
+
+
+@pytest.fixture
+def recorded_fault(client):
+    response = client.post("/api/v1/projects", json={"name": "Owned timeline source"})
+    assert response.status_code == 201, response.text
+    project = response.json()
+    document_id, document = next(
+        (key, value) for key, value in project["documents"].items()
+        if value["path"].endswith("/scenario.xdl.yaml")
+    )
+    yaml = YAML()
+    scenario = yaml.load(document["content"])
+    parameters = scenario["extensions"]["io.xverse.experiment"]["parameters"]
+    next(p for p in parameters if p["id"] == "duration")["value"] = 0.2
+    next(p for p in parameters if p["id"] == "fault")["value"] = "stuck-sensor"
+    for definition in scenario["extensions"]["io.xverse.studio.experiments"]["definitions"]:
+        definition["window"]["endTick"] = "200000"
+    stream = StringIO()
+    yaml.dump(scenario, stream)
+    response = client.put(
+        f"/api/v1/projects/{project['projectId']}/documents/{document_id}",
+        headers={"If-Match": str(project["revision"])},
+        json={"content": stream.getvalue(), "format": "yaml"},
+    )
+    assert response.status_code == 200, response.text
+    project = response.json()
+    response = client.post(
+        f"/api/v1/projects/{project['projectId']}/preflights",
+        json={"revision": project["revision"]},
+    )
+    assert response.status_code == 200, response.text
+    preflight = response.json()
+    assert preflight["status"] == "ready", preflight
+    response = client.post(
+        "/api/v1/runs", headers={"Idempotency-Key": "owned-timeline-run"},
+        json={"preflightId": preflight["preflightId"], "snapshotId": preflight["snapshotId"]},
+    )
+    assert response.status_code == 202, response.text
+    run_id = response.json()["runId"]
+    deadline = time.monotonic() + 20
+    while time.monotonic() < deadline:
+        run = client.get(f"/api/v1/runs/{run_id}").json()
+        if run["state"] in ("stopped", "failed", "unknown"):
+            break
+        time.sleep(0.05)
+    assert run["state"] == "stopped", run
+    snapshot = client.get(f"/api/v1/runs/{run_id}/snapshot").json()["snapshot"]
+    journal = client.app.state.studio.runs.directory(run_id) / "evidence.jsonl"
+    history = client.get(f"/api/v1/runs/{run_id}/history").json()
+    assert {"fault.activation_requested", "fault.activation_observed"} <= {
+        item["type"] for item in history["items"]
+    }
+    return project, document_id, scenario, run, snapshot, journal
+
+
+def test_actual_fault_timeline_uses_frozen_intent_and_preserves_inputs(client, recorded_fault):
+    project, document_id, scenario, run, snapshot, journal = recorded_fault
+    later = deepcopy(scenario)
+    later["spec"]["steps"][0]["id"] = "later-start"
+    stream = StringIO()
+    YAML().dump(later, stream)
+    response = client.put(
+        f"/api/v1/projects/{project['projectId']}/documents/{document_id}",
+        headers={"If-Match": str(project["revision"])},
+        json={"content": stream.getvalue(), "format": "yaml"},
+    )
+    assert response.status_code == 200, response.text
+    current = response.json()
+    original_bytes = journal.read_bytes()
+    response = client.get(f"/api/v1/runs/{run['runId']}/timeline")
+    assert response.status_code == 200, response.text
+    report = response.json()
+    assert report["timelineVersion"] == "1.0" and report["readOnly"] is True
+    assert report["snapshotId"] == snapshot["snapshotId"]
+    assert report["snapshotDigest"] == snapshot["snapshotDigest"]
+    assert report["projectRevision"] == project["revision"] != current["revision"]
+    assert report["selection"] == snapshot["selection"]
+    rows = report["items"]
+    assert any(row.get("intentId") == "start-reference" for row in rows)
+    assert not any(row.get("intentId") == "later-start" for row in rows)
+    requested = next(row for row in rows if row["kind"] == "fault.activation_requested")
+    observed = next(row for row in rows if row["kind"] == "fault.activation_observed")
+    assert requested["layer"] == observed["layer"] == "recorded"
+    assert requested["eventId"] != observed["eventId"]
+    assert requested["position"]["tick"] == observed["position"]["tick"] == "100000"
+    assert requested["position"]["tickUnit"] == "microsecond"
+    assert requested["evidenceScope"] == observed["evidenceScope"] == "owned_reference"
+    assert journal.read_bytes() == original_bytes
+    assert client.get(f"/api/v1/runs/{run['runId']}/snapshot").json()["snapshot"] == snapshot
+    assert client.get(f"/api/v1/projects/{project['projectId']}").json() == current
+
+
+def test_timeline_requires_exact_snapshot_selection(client, recorded_fault):
+    _, _, _, run, _, _ = recorded_fault
+    response = client.get(
+        f"/api/v1/runs/{run['runId']}/timeline", params={"snapshotId": "foreign-snapshot"}
+    )
+    assert response.status_code == 409, response.text
+    assert response.json()["code"] == "SNAPSHOT_SELECTION_MISMATCH"
+
+
+def test_timeline_pages_preserve_all_record_and_intent_identities(client, recorded_fault):
+    _, _, _, run, snapshot, journal = recorded_fault
+    original = journal.read_bytes()
+    url = f"/api/v1/runs/{run['runId']}/timeline"
+    first = client.get(url, params={"limit": 1})
+    assert first.status_code == 200, first.text
+    page = first.json()
+    total = page["counts"]["matchedRows"]
+    rows = list(page["items"])
+    while page["nextCursor"] is not None:
+        response = client.get(url, params={"limit": 1, "cursor": page["nextCursor"]})
+        assert response.status_code == 200, response.text
+        page = response.json()
+        assert page["snapshotId"] == snapshot["snapshotId"]
+        rows.extend(page["items"])
+        assert len(rows) <= total
+    assert len(rows) == total and len({row["id"] for row in rows}) == total
+    history = client.get(f"/api/v1/runs/{run['runId']}/history").json()["items"]
+    assert {row["eventId"] for row in rows if row["layer"] == "recorded"} == {
+        item["eventId"] for item in history
+    }
+    assert journal.read_bytes() == original
+
+
+def test_timeline_query_bound_is_closed_before_reading_unknown_run(client):
+    response = client.get("/api/v1/runs/absent/timeline", params={"limit": 201})
+    assert response.status_code == 422, response.text

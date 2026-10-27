@@ -1,0 +1,738 @@
+{
+  "config": {
+    "argv": [
+      "<loop-cache>/node-v24.22.1-linux-x64/bin/node",
+      "<repo>/node_modules/.bin/playwright",
+      "test",
+      "-c",
+      "tests/e2e/playwright.config.ts",
+      "--grep",
+      "scenario timeline:|scenario authoring completion:|scenario intent:"
+    ],
+    "configFile": "<repo>/tests/e2e/playwright.config.ts",
+    "rootDir": "<repo>/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "<repo>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "<repo>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "*.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "<repo>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "<repo>/tests/e2e",
+        "snapshotDir": "<repo>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": "*.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "baseURL": "http://127.0.0.1:42983",
+          "browserName": "chromium",
+          "actionTimeout": 15000,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "trace": "off",
+          "screenshot": "only-on-failure",
+          "video": "off"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "<repo>/test-results/browser-report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "scenario-authoring.spec.ts",
+      "file": "scenario-authoring.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "scenario intent: typed stimulus, fault, observer and metric forms preserve opaque source and block unsupported execution",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 11196,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T04:49:05.938Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "scenario-admission-refusal",
+                      "contentType": "application/json",
+                      "body": "ewogICJwcmVmbGlnaHRJZCI6ICJwZi03ZDkzYWJkYS0zZmY1LTQzZGMtOTBkOS1iZTBjNjAzMWI2OWQiLAogICJzbmFwc2hvdElkIjogInNuYXAtNzZlNzlmMzUtYzMyMC00NGUyLWFiNjctZjI0Yzc2NzhhN2Y2IiwKICAic25hcHNob3REaWdlc3QiOiAic2hhMjU2OmVhOGM3Y2I2YTYxNWM4NzEzNzQxMjA4ZWUzYjJjODg2N2YzODcwYTgwNmUxYzU1ZjJjYmI0NjU0NDRjZmIwNDAiLAogICJyZXZpc2lvbiI6IDcsCiAgInByb3ZpZGVySWQiOiAic3R1ZGlvLnJlZmVyZW5jZSIsCiAgInByb3ZpZGVySWRlbnRpdHkiOiB7CiAgICAicHJvdmlkZXJJZCI6ICJzdHVkaW8ucmVmZXJlbmNlIiwKICAgICJwcm92aWRlclZlcnNpb24iOiAiMS4wLjAiLAogICAgImNvbnRyYWN0VmVyc2lvbiI6ICIxLjAiLAogICAgIm5hbWUiOiAiU3R1ZGlvIGV4ZWN1dGFibGUgcmVmZXJlbmNlIiwKICAgICJtYXR1cml0eSI6ICJmaXh0dXJlIiwKICAgICJldmlkZW5jZVNjb3BlIjogIm93bmVkX3JlZmVyZW5jZSIsCiAgICAic3VwcG9ydGVkSG9zdE9TIjogWwogICAgICAiTGludXgiLAogICAgICAiV2luZG93cyIKICAgIF0sCiAgICAiYXJjaGl0ZWN0dXJlcyI6IFsKICAgICAgIng4Nl82NCIsCiAgICAgICJBTUQ2NCIKICAgIF0sCiAgICAicmVhbGl6YXRpb25DbGFzc2VzIjogWwogICAgICAic2ltdWxhdGVkIgogICAgXSwKICAgICJ0YXJnZXRDbGFzc2VzIjogWwogICAgICAibW9kZWwtdW5pdCIKICAgIF0sCiAgICAiaG9zdEV4ZWN1dGlvbkNsYXNzIjogIm5hdGl2ZS1wcm9jZXNzIiwKICAgICJvcGVyYXRpb25zIjogWwogICAgICAic3RhcnQiLAogICAgICAic3RvcCIsCiAgICAgICJjYW5jZWwiCiAgICBdLAogICAgImNsb2NrRG9tYWlucyI6IFsKICAgICAgInNpbXVsYXRpb24tdGltZSIKICAgIF0sCiAgICAiY29ubmVjdGlvbkNvbnRyYWN0cyI6IHsKICAgICAgImNhdXNhbGl0eSI6IFsKICAgICAgICAidW5pdC1kZWxheSIKICAgICAgXSwKICAgICAgImNvbnZlcnRlcnMiOiBbCiAgICAgICAgImxpbmVhciIKICAgICAgXQogICAgfSwKICAgICJsaW1pdHMiOiB7CiAgICAgICJtYXhEdXJhdGlvblNlY29uZHMiOiAzMCwKICAgICAgIm1heFNhbXBsZXMiOiAzMDAwLAogICAgICAibWF4Q29uY3VycmVudFJ1bnMiOiA0LAogICAgICAibWF4RWxlbWVudHMiOiAyMDAsCiAgICAgICJtYXhDb25uZWN0aW9ucyI6IDQwMAogICAgfSwKICAgICJsaW1pdGF0aW9ucyI6IFsKICAgICAgIlNjYWxhciBmaXJzdC1vcmRlciByZWZlcmVuY2UgbW9kZWwgb25seTsgbm8gZXh0ZXJuYWwgc2ltdWxhdG9yLCBwaHlzaWNhbCBkZXZpY2UsIG5hdGl2ZSBYLUNPTSwgb3IgaW5kdXN0cmlhbCBmaWRlbGl0eSBjbGFpbS4iLAogICAgICAiUGF1c2UsIHJld2luZCwgc3RlcCwgbGl2ZSBtdXRhdGlvbiBhbmQgcGh5c2ljYWwgY291cGxpbmcgYXJlIHVuc3VwcG9ydGVkLiIKICAgIF0sCiAgICAic3VwcG9ydGVkWGRsVmVyc2lvbnMiOiBbCiAgICAgICJ4dmVyc2UuaW8veGRsL3YxYWxwaGExIgogICAgXSwKICAgICJjYXBhYmlsaXR5UmVjb3JkcyI6IFsKICAgICAgewogICAgICAgICJraW5kIjogInN0YXJ0IiwKICAgICAgICAidGFyZ2V0Q2xhc3MiOiAibW9kZWwtdW5pdCIsCiAgICAgICAgImxlZ2FsU3RhdGVzIjogWwogICAgICAgICAgInJlYWR5IgogICAgICAgIF0sCiAgICAgICAgInBhcmFtZXRlcnNTY2hlbWEiOiB7CiAgICAgICAgICAidHlwZSI6ICJvYmplY3QiLAogICAgICAgICAgInByb3BlcnRpZXMiOiB7fSwKICAgICAgICAgICJhZGRpdGlvbmFsUHJvcGVydGllcyI6IGZhbHNlCiAgICAgICAgfSwKICAgICAgICAiYXV0aG9yaXR5UmVxdWlyZW1lbnRzIjogWwogICAgICAgICAgIm5hdGl2ZS1iYWNrZW5kLW93bmVkIgogICAgICAgIF0sCiAgICAgICAgInBoeXNpY2FsRWZmZWN0cyI6IGZhbHNlLAogICAgICAgICJtYXhEdXJhdGlvblNlY29uZHMiOiAzMCwKICAgICAgICAiY29tcGxldGlvbiI6ICJvYnNlcnZlZF93b3JrZXJfc3RhdGUiCiAgICAgIH0sCiAgICAgIHsKICAgICAgICAia2luZCI6ICJzdG9wIiwKICAgICAgICAidGFyZ2V0Q2xhc3MiOiAibW9kZWwtdW5pdCIsCiAgICAgICAgImxlZ2FsU3RhdGVzIjogWwogICAgICAgICAgInJ1bm5pbmciLAogICAgICAgICAgInByZXBhcmluZyIsCiAgICAgICAgICAicmVhZHkiCiAgICAgICAgXSwKICAgICAgICAicGFyYW1ldGVyc1NjaGVtYSI6IHsKICAgICAgICAgICJ0eXBlIjogIm9iamVjdCIsCiAgICAgICAgICAicHJvcGVydGllcyI6IHt9LAogICAgICAgICAgImFkZGl0aW9uYWxQcm9wZXJ0aWVzIjogZmFsc2UKICAgICAgICB9LAogICAgICAgICJhdXRob3JpdHlSZXF1aXJlbWVudHMiOiBbCiAgICAgICAgICAibmF0aXZlLWJhY2tlbmQtb3duZWQiCiAgICAgICAgXSwKICAgICAgICAicGh5c2ljYWxFZmZlY3RzIjogZmFsc2UsCiAgICAgICAgIm1heER1cmF0aW9uU2Vjb25kcyI6IDMwLAogICAgICAgICJjb21wbGV0aW9uIjogIm9ic2VydmVkX3dvcmtlcl9zdGF0ZSIKICAgICAgfSwKICAgICAgewogICAgICAgICJraW5kIjogImNhbmNlbCIsCiAgICAgICAgInRhcmdldENsYXNzIjogIm1vZGVsLXVuaXQiLAogICAgICAgICJsZWdhbFN0YXRlcyI6IFsKICAgICAgICAgICJydW5uaW5nIiwKICAgICAgICAgICJwcmVwYXJpbmciLAogICAgICAgICAgInJlYWR5IgogICAgICAgIF0sCiAgICAgICAgInBhcmFtZXRlcnNTY2hlbWEiOiB7CiAgICAgICAgICAidHlwZSI6ICJvYmplY3QiLAogICAgICAgICAgInByb3BlcnRpZXMiOiB7fSwKICAgICAgICAgICJhZGRpdGlvbmFsUHJvcGVydGllcyI6IGZhbHNlCiAgICAgICAgfSwKICAgICAgICAiYXV0aG9yaXR5UmVxdWlyZW1lbnRzIjogWwogICAgICAgICAgIm5hdGl2ZS1iYWNrZW5kLW93bmVkIgogICAgICAgIF0sCiAgICAgICAgInBoeXNpY2FsRWZmZWN0cyI6IGZhbHNlLAogICAgICAgICJtYXhEdXJhdGlvblNlY29uZHMiOiAzMCwKICAgICAgICAiY29tcGxldGlvbiI6ICJvYnNlcnZlZF93b3JrZXJfc3RhdGUiCiAgICAgIH0KICAgIF0sCiAgICAiYXZhaWxhYmxlIjogdHJ1ZSwKICAgICJob3N0Q29tcGF0aWJsZSI6IHRydWUsCiAgICAiaW1wbGVtZW50YXRpb25EaWdlc3QiOiAic2hhMjU2OmQ1NDRhZTRkMGZlMTYwOWZjNTQ4MmQ5MTMzNGIyMTFmOTZlNzUxNjVlN2JiYWY1YzYyYzcyYjdiMjY5MDYzMWEiCiAgfSwKICAicmVhZGluZXNzVmVyc2lvbiI6ICIxLjAiLAogICJyZWFkaW5lc3MiOiB7CiAgICAiYmFja2VuZCI6IHsKICAgICAgInN0YXR1cyI6ICJhdmFpbGFibGUiLAogICAgICAibWVzc2FnZSI6ICJUaGUgYXV0aGVudGljYXRlZCBuYXRpdmUgU3R1ZGlvIGJhY2tlbmQgaXMgcmVzcG9uZGluZzsgbm8gcnVudGltZSBsaXZlbmVzcyBpcyBpbmZlcnJlZC4iLAogICAgICAiZWxlbWVudFJlZnMiOiBbCiAgICAgICAgInhkbDovL29yZy54dmVyc2Uuc3R1ZGlvLnByb2Nlc3MtY29udHJvbC9zeXN0ZW0vcmVmZXJlbmNlLWxvb3AiCiAgICAgIF0sCiAgICAgICJkaWFnbm9zdGljQ29kZXMiOiBbXSwKICAgICAgInJlbWVkaWF0aW9uIjogIiIsCiAgICAgICJmYWN0cyI6IHsKICAgICAgICAicHJvYmUiOiAibG9jYWxfY29udHJvbF9zZXJ2aWNlIiwKICAgICAgICAiaG9zdE9TIjogIkxpbnV4IiwKICAgICAgICAiaG9zdEFyY2hpdGVjdHVyZSI6ICJ4ODZfNjQiCiAgICAgIH0KICAgIH0sCiAgICAibW9kZWwiOiB7CiAgICAgICJzdGF0dXMiOiAiaW52YWxpZCIsCiAgICAgICJtZXNzYWdlIjogIlRoZSBwdWJsaWMgWERMIHZhbGlkYXRvci9jb21waWxlciByZWplY3RlZCB0aGVzZSBpbnB1dHMuIiwKICAgICAgImVsZW1lbnRSZWZzIjogWwogICAgICAgICJ4ZGw6Ly9vcmcueHZlcnNlLnN0dWRpby5wcm9jZXNzLWNvbnRyb2wvc3lzdGVtL3JlZmVyZW5jZS1sb29wIgogICAgICBdLAogICAgICAiZGlhZ25vc3RpY0NvZGVzIjogW10sCiAgICAgICJyZW1lZGlhdGlvbiI6ICJDb3JyZWN0IHRoZSByZXBvcnRlZCBzb3VyY2UgZGlhZ25vc3RpY3MgYmVmb3JlIGV4ZWN1dGlvbi4iCiAgICB9LAogICAgInByb3ZpZGVyIjogewogICAgICAic3RhdHVzIjogImF2YWlsYWJsZSIsCiAgICAgICJtZXNzYWdlIjogIlRoZSBpbnN0YWxsZWQgb3duZWQgcmVmZXJlbmNlIHByb3ZpZGVyIGRlY2xhcmVzIGNvbXBhdGliaWxpdHkgd2l0aCB0aGlzIG5hdGl2ZSBPUy9hcmNoaXRlY3R1cmUuIiwKICAgICAgImVsZW1lbnRSZWZzIjogWwogICAgICAgICJ4ZGw6Ly9vcmcueHZlcnNlLnN0dWRpby5wcm9jZXNzLWNvbnRyb2wvc3lzdGVtL3JlZmVyZW5jZS1sb29wIgogICAgICBdLAogICAgICAiZGlhZ25vc3RpY0NvZGVzIjogW10sCiAgICAgICJyZW1lZGlhdGlvbiI6ICIiLAogICAgICAiZmFjdHMiOiB7CiAgICAgICAgInByb3ZpZGVySWQiOiAic3R1ZGlvLnJlZmVyZW5jZSIsCiAgICAgICAgImhvc3RDb21wYXRpYmxlIjogdHJ1ZSwKICAgICAgICAic3VwcG9ydGVkSG9zdE9TIjogWwogICAgICAgICAgIkxpbnV4IiwKICAgICAgICAgICJXaW5kb3dzIgogICAgICAgIF0sCiAgICAgICAgImFyY2hpdGVjdHVyZXMiOiBbCiAgICAgICAgICAieDg2XzY0IiwKICAgICAgICAgICJBTUQ2NCIKICAgICAgICBdLAogICAgICAgICJldmlkZW5jZVNjb3BlIjogIm93bmVkX3JlZmVyZW5jZSIKICAgICAgfQogICAgfSwKICAgICJhdXRob3JpdHkiOiB7CiAgICAgICJzdGF0dXMiOiAiYXZhaWxhYmxlIiwKICAgICAgIm1lc3NhZ2UiOiAiQmFja2VuZC1vd25lZCByZWZlcmVuY2UgZXhlY3V0aW9uIGlzIGFkbWl0dGVkOyBubyBwaHlzaWNhbCBwZXJtaXQgaXMgYWNxdWlyZWQuIiwKICAgICAgImVsZW1lbnRSZWZzIjogWwogICAgICAgICJ4ZGw6Ly9vcmcueHZlcnNlLnN0dWRpby5wcm9jZXNzLWNvbnRyb2wvc3lzdGVtL3JlZmVyZW5jZS1sb29wIgogICAgICBdLAogICAgICAiZGlhZ25vc3RpY0NvZGVzIjogW10sCiAgICAgICJyZW1lZGlhdGlvbiI6ICIiLAogICAgICAiZmFjdHMiOiB7CiAgICAgICAgInBoeXNpY2FsRWZmZWN0cyI6IGZhbHNlCiAgICAgIH0KICAgIH0sCiAgICAiY2FwYWJpbGl0aWVzIjogewogICAgICAic3RhdHVzIjogInVuc3VwcG9ydGVkIiwKICAgICAgIm1lc3NhZ2UiOiAiVGhlIGRlc2NyaXB0b3IgZG9lcyBub3QgYWRtaXQgdGhpcyBtb2RlbC9jb250cm9sIGNvbnRyYWN0LiIsCiAgICAgICJlbGVtZW50UmVmcyI6IFsKICAgICAgICAieGRsOi8vb3JnLnh2ZXJzZS5zdHVkaW8ucHJvY2Vzcy1jb250cm9sL3N5c3RlbS9yZWZlcmVuY2UtbG9vcCIKICAgICAgXSwKICAgICAgImRpYWdub3N0aWNDb2RlcyI6IFsKICAgICAgICAiQ0FQQUJJTElUWV9VTlNVUFBPUlRFRCIKICAgICAgXSwKICAgICAgInJlbWVkaWF0aW9uIjogIlNlbGVjdCB0aGUgb3duZWQgcmVmZXJlbmNlIHRlbXBsYXRlIG9yIGFub3RoZXIgaW5kZXBlbmRlbnRseSBhZG1pdHRlZCBjb21wYXRpYmxlIHByb3ZpZGVyLiIKICAgIH0sCiAgICAiYXJ0aWZhY3RzIjogewogICAgICAic3RhdHVzIjogInVua25vd24iLAogICAgICAibWVzc2FnZSI6ICJBcnRpZmFjdCBhdmFpbGFiaWxpdHkvaW50ZWdyaXR5IGNhbm5vdCBiZSBlc3RhYmxpc2hlZCBmb3IgYWxsIHNlbGVjdGVkIHJlZmVyZW5jZXMuIiwKICAgICAgImVsZW1lbnRSZWZzIjogWwogICAgICAgICJ4ZGw6Ly9vcmcueHZlcnNlLnN0dWRpby5wcm9jZXNzLWNvbnRyb2wvc3lzdGVtL3JlZmVyZW5jZS1sb29wIgogICAgICBdLAogICAgICAiZGlhZ25vc3RpY0NvZGVzIjogWwogICAgICAgICJBUlRJRkFDVF9VTkFWQUlMQUJMRSIKICAgICAgXSwKICAgICAgInJlbWVkaWF0aW9uIjogIlN1cHBseSBhZG1pdHRlZCBleGFjdCBhcnRpZmFjdCBpZGVudGl0aWVzOyByZWdpc3RyYXRpb24gbWV0YWRhdGEgYWxvbmUgaXMgbm90IGF2YWlsYWJpbGl0eS4iLAogICAgICAiZmFjdHMiOiB7CiAgICAgICAgImFydGlmYWN0cyI6IFtdCiAgICAgIH0KICAgIH0sCiAgICAiY2xvY2tzIjogewogICAgICAic3RhdHVzIjogInVua25vd24iLAogICAgICAibWVzc2FnZSI6ICJBbiBhZG1pdHRlZCBjbG9jayBvciBtYXBwaW5nIGlzIG1pc3NpbmcgZm9yIHRoaXMgcHJvdmlkZXIuIiwKICAgICAgImVsZW1lbnRSZWZzIjogWwogICAgICAgICJ4ZGw6Ly9vcmcueHZlcnNlLnN0dWRpby5wcm9jZXNzLWNvbnRyb2wvc3lzdGVtL3JlZmVyZW5jZS1sb29wIgogICAgICBdLAogICAgICAiZGlhZ25vc3RpY0NvZGVzIjogWwogICAgICAgICJDTE9DS19NQVBQSU5HX1VOQVZBSUxBQkxFIgogICAgICBdLAogICAgICAicmVtZWRpYXRpb24iOiAiRGVjbGFyZSBhbiBhZG1pdHRlZCBjbG9jay9tYXBwaW5nIGJlZm9yZSBleGVjdXRpb24uIiwKICAgICAgImZhY3RzIjogewogICAgICAgICJkb21haW5zIjogW10KICAgICAgfQogICAgfSwKICAgICJyZXNvdXJjZXMiOiB7CiAgICAgICJzdGF0dXMiOiAidW5rbm93biIsCiAgICAgICJtZXNzYWdlIjogIldvcmtsb2FkIHJlcXVpcmVtZW50cyBjYW5ub3QgYmUgZXN0YWJsaXNoZWQgZm9yIHRoZSB1bmFkbWl0dGVkIGNvbmZpZ3VyYXRpb24uIiwKICAgICAgImVsZW1lbnRSZWZzIjogWwogICAgICAgICJ4ZGw6Ly9vcmcueHZlcnNlLnN0dWRpby5wcm9jZXNzLWNvbnRyb2wvc3lzdGVtL3JlZmVyZW5jZS1sb29wIgogICAgICBdLAogICAgICAiZGlhZ25vc3RpY0NvZGVzIjogW10sCiAgICAgICJyZW1lZGlhdGlvbiI6ICJXYWl0IGZvciBvd25lZCBydW5zIHRvIGZpbmlzaCBvciByZWR1Y2UgdGhlIGF1dGhvcmVkIHdvcmtsb2FkIHdpdGhpbiBhZHZlcnRpc2VkIGxpbWl0cy4iLAogICAgICAiZmFjdHMiOiB7CiAgICAgICAgImFjdGl2ZU93bmVkUnVucyI6IDAsCiAgICAgICAgInJlc2VydmVkIjogZmFsc2UKICAgICAgfQogICAgfSwKICAgICJvd25lcnNoaXAiOiB7CiAgICAgICJzdGF0dXMiOiAiYXZhaWxhYmxlIiwKICAgICAgIm1lc3NhZ2UiOiAiQSBuZXcgcmVmZXJlbmNlIHJ1biB3aWxsIGJlIG93bmVkIGJ5IHRoZSBuYXRpdmUgYmFja2VuZDsgYnJvd3NlciBkaXNjb25uZWN0aW9uIGRvZXMgbm90IG93biBpdHMgbGlmZXRpbWUuIiwKICAgICAgImVsZW1lbnRSZWZzIjogWwogICAgICAgICJ4ZGw6Ly9vcmcueHZlcnNlLnN0dWRpby5wcm9jZXNzLWNvbnRyb2wvc3lzdGVtL3JlZmVyZW5jZS1sb29wIgogICAgICBdLAogICAgICAiZGlhZ25vc3RpY0NvZGVzIjogW10sCiAgICAgICJyZW1lZGlhdGlvbiI6ICIiLAogICAgICAiZmFjdHMiOiB7CiAgICAgICAgIm93bmVyIjogIm5hdGl2ZV9iYWNrZW5kIiwKICAgICAgICAicmVzZXJ2YXRpb25BY3F1aXJlZCI6IGZhbHNlCiAgICAgIH0KICAgIH0sCiAgICAidGFyZ2V0IjogewogICAgICAic3RhdHVzIjogImJsb2NrZWQiLAogICAgICAibWVzc2FnZSI6ICJUaGlzIHRhcmdldCBjYW5ub3QgYWNjZXB0IGV4ZWN1dGlvbiB1bmRlciB0aGUgY3VycmVudCBzb3VyY2UvcHJvdmlkZXIvcmVzb3VyY2UgZmFjdHMuIiwKICAgICAgImVsZW1lbnRSZWZzIjogWwogICAgICAgICJ4ZGw6Ly9vcmcueHZlcnNlLnN0dWRpby5wcm9jZXNzLWNvbnRyb2wvc3lzdGVtL3JlZmVyZW5jZS1sb29wIgogICAgICBdLAogICAgICAiZGlhZ25vc3RpY0NvZGVzIjogW10sCiAgICAgICJyZW1lZGlhdGlvbiI6ICJSZXNvbHZlIHRoZSBpbmRlcGVuZGVudCBibG9ja2VkL3Vua25vd24gZGltZW5zaW9ucywgdGhlbiByZWNoZWNrLiIKICAgIH0KICB9LAogICJzdGF0dXMiOiAiYmxvY2tlZCIsCiAgInBsYW5EaWdlc3QiOiBudWxsLAogICJzZW1hbnRpY0RpZ2VzdCI6IG51bGwsCiAgImNhcGFiaWxpdHlEaWdlc3QiOiAic2hhMjU2OmMxNmE4ZjU0ZTFiOTI3NmFiMWE3ODM5OWI0OTQ4ZDY0Y2U2ZTU4ZjdjZTFkNTBiOGM1NjcyMGQzODllYzk1MmUiLAogICJleHBpcmVzQXQiOiAxNzkzMDc2NjE1LjA0NzA3MjYsCiAgImRpYWdub3N0aWNzIjogWwogICAgewogICAgICAiY29kZSI6ICJYREwxLVBMQU4tRkFVTFQtRFVSQVRJT04tSU5WQUxJRCIsCiAgICAgICJzZXZlcml0eSI6ICJlcnJvciIsCiAgICAgICJnYXRlIjogNCwKICAgICAgIm1lc3NhZ2UiOiAiZmF1bHQgJ2Jyb3dzZXItZmF1bHQnIGRlY2xhcmVzIG5vIGR1cmF0aW9uIiwKICAgICAgImNvcnJlY3Rpb24iOiAiRGVjbGFyZSBhbiBleHBsaWNpdCBub24tbmVnYXRpdmUgZHVyYXRpb24uIiwKICAgICAgInBvaW50ZXIiOiAiIiwKICAgICAgImVsZW1lbnRSZWYiOiAieGRsOi8vb3JnLnh2ZXJzZS5zdHVkaW8ucHJvY2Vzcy1jb250cm9sL3NjZW5hcmlvL3JlZmVyZW5jZS1yZXNwb25zZSIsCiAgICAgICJsb2NhdGlvbiI6IG51bGwKICAgIH0sCiAgICB7CiAgICAgICJjb2RlIjogIlhETDEtUExBTi1GQVVMVC1UUklHR0VSLU1JU1NJTkciLAogICAgICAic2V2ZXJpdHkiOiAiZXJyb3IiLAogICAgICAiZ2F0ZSI6IDQsCiAgICAgICJtZXNzYWdlIjogImZhdWx0ICdicm93c2VyLWZhdWx0JyBjYXJyaWVzIG5vIHJlc29sdmFibGUgdHJpZ2dlciIsCiAgICAgICJjb3JyZWN0aW9uIjogIkRlY2xhcmUgZXhhY3RseSBvbmUgdGltZSBvciBkZWNsYXJlZC1vcmRlciB0cmlnZ2VyLiIsCiAgICAgICJwb2ludGVyIjogIiIsCiAgICAgICJlbGVtZW50UmVmIjogInhkbDovL29yZy54dmVyc2Uuc3R1ZGlvLnByb2Nlc3MtY29udHJvbC9zY2VuYXJpby9yZWZlcmVuY2UtcmVzcG9uc2UiLAogICAgICAibG9jYXRpb24iOiBudWxsCiAgICB9LAogICAgewogICAgICAiY29kZSI6ICJDQVBBQklMSVRZX1VOU1VQUE9SVEVEIiwKICAgICAgInNldmVyaXR5IjogImVycm9yIiwKICAgICAgIm1lc3NhZ2UiOiAiVGhlIGRlc2NyaXB0b3IgZG9lcyBub3QgYWRtaXQgdGhpcyBtb2RlbC9jb250cm9sIGNvbnRyYWN0LiIsCiAgICAgICJlbGVtZW50UmVmIjogInhkbDovL29yZy54dmVyc2Uuc3R1ZGlvLnByb2Nlc3MtY29udHJvbC9zeXN0ZW0vcmVmZXJlbmNlLWxvb3AiLAogICAgICAiZWxlbWVudFJlZnMiOiBbCiAgICAgICAgInhkbDovL29yZy54dmVyc2Uuc3R1ZGlvLnByb2Nlc3MtY29udHJvbC9zeXN0ZW0vcmVmZXJlbmNlLWxvb3AiCiAgICAgIF0sCiAgICAgICJyZW1lZGlhdGlvbiI6ICJTZWxlY3QgdGhlIG93bmVkIHJlZmVyZW5jZSB0ZW1wbGF0ZSBvciBhbm90aGVyIGluZGVwZW5kZW50bHkgYWRtaXR0ZWQgY29tcGF0aWJsZSBwcm92aWRlci4iCiAgICB9LAogICAgewogICAgICAiY29kZSI6ICJBUlRJRkFDVF9VTkFWQUlMQUJMRSIsCiAgICAgICJzZXZlcml0eSI6ICJlcnJvciIsCiAgICAgICJtZXNzYWdlIjogIkFydGlmYWN0IGF2YWlsYWJpbGl0eS9pbnRlZ3JpdHkgY2Fubm90IGJlIGVzdGFibGlzaGVkIGZvciBhbGwgc2VsZWN0ZWQgcmVmZXJlbmNlcy4iLAogICAgICAiZWxlbWVudFJlZiI6ICJ4ZGw6Ly9vcmcueHZlcnNlLnN0dWRpby5wcm9jZXNzLWNvbnRyb2wvc3lzdGVtL3JlZmVyZW5jZS1sb29wIiwKICAgICAgImVsZW1lbnRSZWZzIjogWwogICAgICAgICJ4ZGw6Ly9vcmcueHZlcnNlLnN0dWRpby5wcm9jZXNzLWNvbnRyb2wvc3lzdGVtL3JlZmVyZW5jZS1sb29wIgogICAgICBdLAogICAgICAicmVtZWRpYXRpb24iOiAiU3VwcGx5IGFkbWl0dGVkIGV4YWN0IGFydGlmYWN0IGlkZW50aXRpZXM7IHJlZ2lzdHJhdGlvbiBtZXRhZGF0YSBhbG9uZSBpcyBub3QgYXZhaWxhYmlsaXR5LiIKICAgIH0sCiAgICB7CiAgICAgICJjb2RlIjogIkNMT0NLX01BUFBJTkdfVU5BVkFJTEFCTEUiLAogICAgICAic2V2ZXJpdHkiOiAiZXJyb3IiLAogICAgICAibWVzc2FnZSI6ICJBbiBhZG1pdHRlZCBjbG9jayBvciBtYXBwaW5nIGlzIG1pc3NpbmcgZm9yIHRoaXMgcHJvdmlkZXIuIiwKICAgICAgImVsZW1lbnRSZWYiOiAieGRsOi8vb3JnLnh2ZXJzZS5zdHVkaW8ucHJvY2Vzcy1jb250cm9sL3N5c3RlbS9yZWZlcmVuY2UtbG9vcCIsCiAgICAgICJlbGVtZW50UmVmcyI6IFsKICAgICAgICAieGRsOi8vb3JnLnh2ZXJzZS5zdHVkaW8ucHJvY2Vzcy1jb250cm9sL3N5c3RlbS9yZWZlcmVuY2UtbG9vcCIKICAgICAgXSwKICAgICAgInJlbWVkaWF0aW9uIjogIkRlY2xhcmUgYW4gYWRtaXR0ZWQgY2xvY2svbWFwcGluZyBiZWZvcmUgZXhlY3V0aW9uLiIKICAgIH0KICBdLAogICJkaW1lbnNpb25zIjogewogICAgImJhY2tlbmQiOiAiYXZhaWxhYmxlIiwKICAgICJtb2RlbCI6ICJpbnZhbGlkIiwKICAgICJwcm92aWRlciI6ICJhdmFpbGFibGUiLAogICAgImF1dGhvcml0eSI6ICJhdmFpbGFibGUiLAogICAgImNhcGFiaWxpdGllcyI6ICJ1bnN1cHBvcnRlZCIsCiAgICAiYXJ0aWZhY3RzIjogInVua25vd24iLAogICAgImNsb2NrcyI6ICJ1bmtub3duIiwKICAgICJyZXNvdXJjZXMiOiAidW5rbm93biIsCiAgICAib3duZXJzaGlwIjogImF2YWlsYWJsZSIsCiAgICAidGFyZ2V0IjogImJsb2NrZWQiLAogICAgImV2aWRlbmNlU2NvcGUiOiAib3duZWRfcmVmZXJlbmNlIgogIH0sCiAgImxpbWl0cyI6IHsKICAgICJtYXhEdXJhdGlvblNlY29uZHMiOiAzMCwKICAgICJtYXhTYW1wbGVzIjogMzAwMCwKICAgICJtYXhDb25jdXJyZW50UnVucyI6IDQsCiAgICAibWF4RWxlbWVudHMiOiAyMDAsCiAgICAibWF4Q29ubmVjdGlvbnMiOiA0MDAKICB9LAogICJzZWxlY3Rpb24iOiB7CiAgICAic3lzdGVtUmVmIjogInhkbDovL29yZy54dmVyc2Uuc3R1ZGlvLnByb2Nlc3MtY29udHJvbC9zeXN0ZW0vcmVmZXJlbmNlLWxvb3AiLAogICAgImRlcGxveW1lbnRSZWYiOiAieGRsOi8vb3JnLnh2ZXJzZS5zdHVkaW8ucHJvY2Vzcy1jb250cm9sL2RlcGxveW1lbnQvbG9jYWwtcmVmZXJlbmNlIiwKICAgICJzY2VuYXJpb1JlZiI6ICJ4ZGw6Ly9vcmcueHZlcnNlLnN0dWRpby5wcm9jZXNzLWNvbnRyb2wvc2NlbmFyaW8vcmVmZXJlbmNlLXJlc3BvbnNlIgogIH0sCiAgImNvbnRyaWJ1dGluZ0RvY3VtZW50cyI6IFsKICAgICJ4ZGwvY29udHJvbGxlci54ZGwueWFtbCIsCiAgICAieGRsL3BsYW50LnhkbC55YW1sIiwKICAgICJ4ZGwvc3lzdGVtLnhkbC55YW1sIiwKICAgICJ4ZGwvZGVwbG95bWVudC54ZGwueWFtbCIsCiAgICAieGRsL3NjZW5hcmlvLnhkbC55YW1sIiwKICAgICJ4ZGwvcHJvZmlsZS54ZGwueWFtbCIsCiAgICAieGRsL2V2YWx1YXRpb24tcHJvZmlsZS54ZGwueWFtbCIKICBdLAogICJwbGFuUHJldmlldyI6IG51bGwKfQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1af33152dd6ab0fc700b-7c593d5b491e80739cb4",
+          "file": "scenario-authoring.spec.ts",
+          "line": 4,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "scenario-timeline.spec.ts",
+      "file": "scenario-timeline.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "scenario timeline: native frozen intent, observed faults and evaluation windows at 1024",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4773,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T04:49:17.215Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "owned-timeline-context",
+                      "contentType": "application/json",
+                      "body": "eyJydW5JZCI6InJ1bi1kN2RkNzhmYy0zOTYyLTRjMWItYjUzZC0xN2QwMjNhOTc4MmQiLCJzbmFwc2hvdElkIjoic25hcC05ZTM0MjVlNi00OGJkLTQ4ZDUtYmU3Yi0wMGJhNmVmNmY3NmIiLCJyZXZpc2lvbiI6MiwicHJvamVjdFJldmlzaW9uIjozLCJzY29wZSI6Im93bmVkX3JlZmVyZW5jZSJ9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f5fd080c3aa87a50f4ef-2b7e6632914510c12d6e",
+          "file": "scenario-timeline.spec.ts",
+          "line": 128,
+          "column": 7
+        },
+        {
+          "title": "scenario timeline: native frozen intent, observed faults and evaluation windows at 1440",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3857,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T04:49:22.000Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "owned-timeline-context",
+                      "contentType": "application/json",
+                      "body": "eyJydW5JZCI6InJ1bi1jNTkyNWE3Yi02MzE0LTQ1M2UtOGM0Mi1kNmEzMjFlOGZkYTAiLCJzbmFwc2hvdElkIjoic25hcC03ZjcwNDMzMS1iMzYxLTRiZDgtODJiZC1kZDdiMTUwNTAzZDgiLCJyZXZpc2lvbiI6MiwicHJvamVjdFJldmlzaW9uIjozLCJzY29wZSI6Im93bmVkX3JlZmVyZW5jZSJ9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f5fd080c3aa87a50f4ef-2744d2b608ea7083b8a3",
+          "file": "scenario-timeline.spec.ts",
+          "line": 128,
+          "column": 7
+        },
+        {
+          "title": "scenario authoring completion: held conditions acknowledgement preserves a reopened draft at 1024",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4334,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T04:49:25.868Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f5fd080c3aa87a50f4ef-702f7022194b2dcded10",
+          "file": "scenario-timeline.spec.ts",
+          "line": 230,
+          "column": 7
+        },
+        {
+          "title": "scenario authoring completion: held conditions acknowledgement preserves a reopened draft at 1440",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4377,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T04:49:30.214Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f5fd080c3aa87a50f4ef-e08386387aaee8019521",
+          "file": "scenario-timeline.spec.ts",
+          "line": 230,
+          "column": 7
+        },
+        {
+          "title": "scenario timeline: malformed transport contracts and HTTP retry stay unknown at 1024",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3646,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T04:49:34.600Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f5fd080c3aa87a50f4ef-893b0e494dd922a1e970",
+          "file": "scenario-timeline.spec.ts",
+          "line": 324,
+          "column": 7
+        },
+        {
+          "title": "scenario timeline: labelled exact large ticks, gaps and unsupported clock remain separate at 1024",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3414,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T04:49:38.254Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "fixture-scope",
+                      "contentType": "text/plain",
+                      "body": "TGFiZWxsZWQgdHJhbnNwb3J0IHByb2plY3Rpb24gb25seTsgb3JpZ2luYWwgam91cm5hbCBhbmQgc25hcHNob3QgYXJlIHVuY2hhbmdlZC4gTm8gZGV2aWNlIGNsb2NrIHN1cHBvcnQgb3IgcGh5c2ljYWwgZXhlY3V0aW9uIGNsYWltLg=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f5fd080c3aa87a50f4ef-9602f0f7e227763642fb",
+          "file": "scenario-timeline.spec.ts",
+          "line": 402,
+          "column": 7
+        },
+        {
+          "title": "scenario timeline: native canonical pages preserve identities and reject changed evaluation cursors at 1024",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 7415,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T04:49:41.680Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f5fd080c3aa87a50f4ef-a68c0fa7e25f9eda0039",
+          "file": "scenario-timeline.spec.ts",
+          "line": 530,
+          "column": 7
+        },
+        {
+          "title": "scenario timeline: held actual read preserves focus at 1024",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3687,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T04:49:49.103Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f5fd080c3aa87a50f4ef-0baad849179ecdfef400",
+          "file": "scenario-timeline.spec.ts",
+          "line": 606,
+          "column": 9
+        },
+        {
+          "title": "scenario timeline: held actual read preserves home at 1024",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3584,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T04:49:52.799Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f5fd080c3aa87a50f4ef-bdb57624c68003868bf0",
+          "file": "scenario-timeline.spec.ts",
+          "line": 606,
+          "column": 9
+        },
+        {
+          "title": "scenario timeline: draft marker opens the typed form and saves canonical intent at 1024",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4182,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T04:49:56.391Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f5fd080c3aa87a50f4ef-040a4427ae9e2359789a",
+          "file": "scenario-timeline.spec.ts",
+          "line": 667,
+          "column": 7
+        },
+        {
+          "title": "scenario timeline: malformed transport contracts and HTTP retry stay unknown at 1440",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3825,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T04:50:00.582Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f5fd080c3aa87a50f4ef-889329594b9f09957fa4",
+          "file": "scenario-timeline.spec.ts",
+          "line": 324,
+          "column": 7
+        },
+        {
+          "title": "scenario timeline: labelled exact large ticks, gaps and unsupported clock remain separate at 1440",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3411,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T04:50:04.417Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "fixture-scope",
+                      "contentType": "text/plain",
+                      "body": "TGFiZWxsZWQgdHJhbnNwb3J0IHByb2plY3Rpb24gb25seTsgb3JpZ2luYWwgam91cm5hbCBhbmQgc25hcHNob3QgYXJlIHVuY2hhbmdlZC4gTm8gZGV2aWNlIGNsb2NrIHN1cHBvcnQgb3IgcGh5c2ljYWwgZXhlY3V0aW9uIGNsYWltLg=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f5fd080c3aa87a50f4ef-aaaf99871b258d16ba0c",
+          "file": "scenario-timeline.spec.ts",
+          "line": 402,
+          "column": 7
+        },
+        {
+          "title": "scenario timeline: native canonical pages preserve identities and reject changed evaluation cursors at 1440",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 7189,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T04:50:07.838Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f5fd080c3aa87a50f4ef-000093d8c651a4b2e8e9",
+          "file": "scenario-timeline.spec.ts",
+          "line": 530,
+          "column": 7
+        },
+        {
+          "title": "scenario timeline: held actual read preserves focus at 1440",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3667,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T04:50:15.037Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f5fd080c3aa87a50f4ef-dcab692ae4131db20c3c",
+          "file": "scenario-timeline.spec.ts",
+          "line": 606,
+          "column": 9
+        },
+        {
+          "title": "scenario timeline: held actual read preserves home at 1440",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3655,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T04:50:18.716Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f5fd080c3aa87a50f4ef-0e1016c9a71ccbe104e2",
+          "file": "scenario-timeline.spec.ts",
+          "line": 606,
+          "column": 9
+        },
+        {
+          "title": "scenario timeline: draft marker opens the typed form and saves canonical intent at 1440",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4280,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T04:50:22.379Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f5fd080c3aa87a50f4ef-f22c766e82a6412c2ecc",
+          "file": "scenario-timeline.spec.ts",
+          "line": 667,
+          "column": 7
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-27T04:49:05.367Z",
+    "duration": 81356.53499999999,
+    "expected": 17,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

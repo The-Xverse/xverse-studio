@@ -1,0 +1,21 @@
+{
+  "outcome": "24 passed, 1 failed; pipeline stopped before full/performance",
+  "failurePhase": "Second reload, before evaluation-result inspection; expected report heading focus was absent.",
+  "observedOriginalFacts": [
+    "Screenshot shows idle timeline and focus on the Timeline tab.",
+    "Original per-GET readiness/focus timing was not retained; original precise cause is unproven."
+  ],
+  "controlledSuccessor": {
+    "directory": ".studio-local/scenario-timeline/readiness-probe/actual",
+    "outcome": "2 passed",
+    "seconds": 11.864,
+    "facts": [
+      "Held the actual selected-run GET at both required viewports.",
+      "Inspect is disabled until selected-run hydration completes.",
+      "Focusing the disabled button and pressing Enter leaves the tab focused and produces no timeline rows.",
+      "After releasing the real read and observing enabled state, inspection, typed declarations and all four actual evaluation outcomes pass."
+    ]
+  },
+  "proposedRepair": "Fixture records exact snapshot selection and awaits the Inspect button enabled state before native activation; all existing assertions retained.",
+  "productRepair": "None indicated by this failure or controlled probe."
+}

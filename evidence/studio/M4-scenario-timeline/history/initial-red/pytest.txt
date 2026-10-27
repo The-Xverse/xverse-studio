@@ -1,0 +1,84 @@
+FFFF                                                                     [100%]
+=================================== FAILURES ===================================
+______ test_actual_fault_timeline_uses_frozen_intent_and_preserves_inputs ______
+
+client = <starlette.testclient.TestClient object at 0x794dda8881a0>
+recorded_fault = ({'createdAt': 1793073922.6041455, 'documents': {'doc-0': {'content': 'apiVersion: xverse.io/xdl/v1alpha1\nkind: Compo...imeline/initial-red/tmp/test_actual_fault_timeline_use0/runs/run-27c59247-6898-40aa-b247-150844e87941/evidence.jsonl'))
+
+    def test_actual_fault_timeline_uses_frozen_intent_and_preserves_inputs(client, recorded_fault):
+        project, document_id, scenario, run, snapshot, journal = recorded_fault
+        later = deepcopy(scenario)
+        later["spec"]["steps"][0]["id"] = "later-start"
+        stream = StringIO()
+        YAML().dump(later, stream)
+        response = client.put(
+            f"/api/v1/projects/{project['projectId']}/documents/{document_id}",
+            headers={"If-Match": str(project["revision"])},
+            json={"content": stream.getvalue(), "format": "yaml"},
+        )
+        assert response.status_code == 200, response.text
+        current = response.json()
+        original_bytes = journal.read_bytes()
+        response = client.get(f"/api/v1/runs/{run['runId']}/timeline")
+>       assert response.status_code == 200, response.text
+E       AssertionError: {"code":"NOT_FOUND","message":"This API version or route is unsupported.","requestId":"req-9d7e01e0-c820-4b13-9662-b3e1c51c319b","retryable":false}
+E       assert 404 == 200
+E        +  where 404 = <Response [404 Not Found]>.status_code
+
+tests/integration/test_scenario_timeline.py:80: AssertionError
+_______________ test_timeline_requires_exact_snapshot_selection ________________
+
+client = <starlette.testclient.TestClient object at 0x794dd83a56d0>
+recorded_fault = ({'createdAt': 1793073925.223719, 'documents': {'doc-0': {'content': 'apiVersion: xverse.io/xdl/v1alpha1\nkind: Compon...imeline/initial-red/tmp/test_timeline_requires_exact_s0/runs/run-2cc73724-45b0-43ef-ae31-ad52cc171b38/evidence.jsonl'))
+
+    def test_timeline_requires_exact_snapshot_selection(client, recorded_fault):
+        _, _, _, run, _, _ = recorded_fault
+        response = client.get(
+            f"/api/v1/runs/{run['runId']}/timeline", params={"snapshotId": "foreign-snapshot"}
+        )
+>       assert response.status_code == 409, response.text
+E       AssertionError: {"code":"NOT_FOUND","message":"This API version or route is unsupported.","requestId":"req-296a42a7-b7fc-4698-82e1-06cab86ed88b","retryable":false}
+E       assert 404 == 409
+E        +  where 404 = <Response [404 Not Found]>.status_code
+
+tests/integration/test_scenario_timeline.py:107: AssertionError
+________ test_timeline_pages_preserve_all_record_and_intent_identities _________
+
+client = <starlette.testclient.TestClient object at 0x794dd834ad50>
+recorded_fault = ({'createdAt': 1793073927.7865684, 'documents': {'doc-0': {'content': 'apiVersion: xverse.io/xdl/v1alpha1\nkind: Compo...imeline/initial-red/tmp/test_timeline_pages_preserve_a0/runs/run-4eb2b841-9f28-44f5-8be5-fa222f6f4637/evidence.jsonl'))
+
+    def test_timeline_pages_preserve_all_record_and_intent_identities(client, recorded_fault):
+        _, _, _, run, snapshot, journal = recorded_fault
+        original = journal.read_bytes()
+        url = f"/api/v1/runs/{run['runId']}/timeline"
+        first = client.get(url, params={"limit": 1})
+>       assert first.status_code == 200, first.text
+E       AssertionError: {"code":"NOT_FOUND","message":"This API version or route is unsupported.","requestId":"req-79789a61-c847-42aa-969e-b94dd0bacdde","retryable":false}
+E       assert 404 == 200
+E        +  where 404 = <Response [404 Not Found]>.status_code
+
+tests/integration/test_scenario_timeline.py:116: AssertionError
+________ test_timeline_query_bound_is_closed_before_reading_unknown_run ________
+
+client = <starlette.testclient.TestClient object at 0x794dda750e90>
+
+    def test_timeline_query_bound_is_closed_before_reading_unknown_run(client):
+        response = client.get("/api/v1/runs/absent/timeline", params={"limit": 201})
+>       assert response.status_code == 422, response.text
+E       AssertionError: {"code":"NOT_FOUND","message":"This API version or route is unsupported.","requestId":"req-875c4c17-8ef4-4083-8275-59490096a7ad","retryable":false}
+E       assert 404 == 422
+E        +  where 404 = <Response [404 Not Found]>.status_code
+
+tests/integration/test_scenario_timeline.py:137: AssertionError
+=============================== warnings summary ===============================
+.venv/lib/python3.13/site-packages/fastapi/testclient.py:1
+  <repo>/.venv/lib/python3.13/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/integration/test_scenario_timeline.py::test_actual_fault_timeline_uses_frozen_intent_and_preserves_inputs
+FAILED tests/integration/test_scenario_timeline.py::test_timeline_requires_exact_snapshot_selection
+FAILED tests/integration/test_scenario_timeline.py::test_timeline_pages_preserve_all_record_and_intent_identities
+FAILED tests/integration/test_scenario_timeline.py::test_timeline_query_bound_is_closed_before_reading_unknown_run
+4 failed, 1 warning in 7.98s

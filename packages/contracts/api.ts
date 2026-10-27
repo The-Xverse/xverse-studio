@@ -20,6 +20,7 @@ export type Login = { "bootstrapToken": string };
 export type NewProject = { "name": string; "blueprintRef"?: (string | null) };
 export type ProfileBindings = { "baseRevision": number; "profiles": Array<ProfileLock> };
 export type ProfileLock = { "profileId": string; "version": string; "schemaDigest": string; "presentationDigest": string };
+export type Recovery = { "expectedRevision": number; "action": "adopt_external" | "restore_revision"; "revision"?: (number | null) };
 export type Renewal = { "fencingIdentity": string; "durationSeconds"?: number };
 export type RerunRequest = Record<string, unknown>;
 export type Reservation = { "scope"?: "observe" | "stimulate"; "durationSeconds"?: number };

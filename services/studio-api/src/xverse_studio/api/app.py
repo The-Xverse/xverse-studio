@@ -35,6 +35,7 @@ from xverse_studio.evidence.query import (
     ObservationQuery,
     project_evidence,
 )
+from xverse_studio.timeline import TimelineQuery, project_timeline, MAX_EVALUATIONS
 from xverse_studio.xdl import XDLAdapter, XDLRejected, examples
 
 
@@ -624,6 +625,23 @@ def create_app(
         snapshot = store.get("snapshot", run["snapshotId"])
         runs.verify_snapshot(snapshot)
         return {"snapshot": snapshot, "integrity": "valid", "readOnly": True}
+
+    @app.get("/api/v1/runs/{runId}/timeline")
+    def timeline(runId: str, query: Annotated[TimelineQuery, Query()], request: Request):
+        if len(request.query_params.multi_items()) != len(request.query_params):
+            raise Problem("TIMELINE_QUERY_INVALID", "Each timeline selector may occur only once.")
+        run = runs.read(runId)
+        if query.snapshotId is not None and query.snapshotId != run["snapshotId"]:
+            raise Problem("SNAPSHOT_SELECTION_MISMATCH", "Select this run's exact snapshot.", 409)
+        snapshot = store.get("snapshot", run["snapshotId"])
+        runs.verify_snapshot(snapshot)
+        records, integrity = read_journal(runs.directory(runId), run)
+        with store.tx() as db:
+            observed = [json.loads(row[0]) for row in db.execute(
+                "SELECT body FROM records WHERE kind='evaluation' AND json_extract(body, '$.runId')=? "
+                "ORDER BY rowid DESC LIMIT ?", (runId, MAX_EVALUATIONS + 1))]
+        return project_timeline(run, snapshot, records, integrity, observed[:MAX_EVALUATIONS], adapter, query,
+                                evaluations_complete=len(observed) <= MAX_EVALUATIONS)
 
     @app.post("/api/v1/runs/{runId}/commands", status_code=202)
     def command(runId: str, body: Command, request: Request):

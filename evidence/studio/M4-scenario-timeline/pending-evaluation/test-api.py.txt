@@ -1,0 +1,127 @@
+from pathlib import Path
+from concurrent.futures import ThreadPoolExecutor
+from threading import Event
+from fastapi.testclient import TestClient
+"""Owned reference timeline witnesses, never a live-device/provider claim."""
+
+from copy import deepcopy
+import base64
+from io import StringIO
+import json
+import time
+
+import pytest
+from ruamel.yaml import YAML
+
+from xverse_studio.assertions import definition_digest
+
+
+@pytest.fixture
+def recorded_fault(client):
+    response = client.post("/api/v1/projects", json={"name": "Owned timeline source"})
+    assert response.status_code == 201, response.text
+    project = response.json()
+    document_id, document = next(
+        (key, value) for key, value in project["documents"].items()
+        if value["path"].endswith("/scenario.xdl.yaml")
+    )
+    yaml = YAML()
+    scenario = yaml.load(document["content"])
+    parameters = scenario["extensions"]["io.xverse.experiment"]["parameters"]
+    next(p for p in parameters if p["id"] == "duration")["value"] = 0.2
+    next(p for p in parameters if p["id"] == "fault")["value"] = "stuck-sensor"
+    for definition in scenario["extensions"]["io.xverse.studio.experiments"]["definitions"]:
+        definition["window"]["endTick"] = "200000"
+    original = scenario["extensions"]["io.xverse.studio.experiments"]["definitions"][0]
+    metric = {**deepcopy(original), "evaluationId": "timeline-peak", "name": "Timeline peak",
+              "kind": "metric", "resultUnit": "1", "expression": deepcopy(original["expression"]["left"])}
+    scenario["extensions"]["io.xverse.studio.experiments"]["definitions"].append(metric)
+    stream = StringIO()
+    yaml.dump(scenario, stream)
+    response = client.put(
+        f"/api/v1/projects/{project['projectId']}/documents/{document_id}",
+        headers={"If-Match": str(project["revision"])},
+        json={"content": stream.getvalue(), "format": "yaml"},
+    )
+    assert response.status_code == 200, response.text
+    project = response.json()
+    response = client.post(
+        f"/api/v1/projects/{project['projectId']}/preflights",
+        json={"revision": project["revision"]},
+    )
+    assert response.status_code == 200, response.text
+    preflight = response.json()
+    assert preflight["status"] == "ready", preflight
+    response = client.post(
+        "/api/v1/runs", headers={"Idempotency-Key": "owned-timeline-run"},
+        json={"preflightId": preflight["preflightId"], "snapshotId": preflight["snapshotId"]},
+    )
+    assert response.status_code == 202, response.text
+    run_id = response.json()["runId"]
+    deadline = time.monotonic() + 20
+    while time.monotonic() < deadline:
+        run = client.get(f"/api/v1/runs/{run_id}").json()
+        if run["state"] in ("stopped", "failed", "unknown"):
+            break
+        time.sleep(0.05)
+    assert run["state"] == "stopped", run
+    snapshot = client.get(f"/api/v1/runs/{run_id}/snapshot").json()["snapshot"]
+    journal = client.app.state.studio.runs.directory(run_id) / "evidence.jsonl"
+    history = client.get(f"/api/v1/runs/{run_id}/history").json()
+    assert {"fault.activation_requested", "fault.activation_observed"} <= {
+        item["type"] for item in history["items"]
+    }
+    return project, document_id, scenario, run, snapshot, journal
+
+
+
+@pytest.fixture
+def client(tmp_path):
+    from xverse_studio.api.app import create_app
+
+    app = create_app(
+        tmp_path, allowed_hosts=["testserver"], bootstrap_token="test-bootstrap"
+    )
+    with TestClient(app, base_url="http://testserver") as c:
+        c.headers["Origin"] = "http://testserver"
+        response = c.post("/api/v1/session", json={"bootstrapToken": "test-bootstrap"})
+        assert response.status_code == 200, response.text
+        c.headers["X-CSRF-Token"] = response.json()["csrfToken"]
+        yield c
+
+
+def test_actual_accepted_evaluation_exposes_unknown_coverage_while_processing(client, recorded_fault, monkeypatch):
+    import xverse_studio.api.advanced as advanced
+    run, snapshot, journal = recorded_fault[3:]
+    original_bytes = journal.read_bytes()
+    original = advanced.evaluate
+    entered, release = Event(), Event()
+    def held_evaluator(*args, **kwargs):
+        entered.set()
+        assert release.wait(20), "Owned test evaluator barrier was not released"
+        return original(*args, **kwargs)
+    monkeypatch.setattr(advanced, "evaluate", held_evaluator)
+    definition = client.get(f"/api/v1/runs/{run['runId']}/definitions").json()["items"][0]
+    with ThreadPoolExecutor(max_workers=1) as executor:
+        pending = executor.submit(client.post, f"/api/v1/runs/{run['runId']}/evaluations",
+            headers={"Idempotency-Key":"owned-pending-evaluation"},
+            json={"snapshotId":snapshot["snapshotId"],"definitionRef":definition["definitionRef"],"definitionDigest":definition["definitionDigest"],"evidenceRefs":[run["runId"]+":reference-journal"]})
+        try:
+            assert entered.wait(20)
+            jobs = client.get(f"/api/v1/runs/{run['runId']}/evaluations").json()["items"]
+            assert len(jobs) == 1 and jobs[0]["status"] == "running" and jobs[0]["verdict"] is None
+            response = client.get(f"/api/v1/runs/{run['runId']}/timeline")
+            assert response.status_code == 200, response.text
+            row = next(r for r in response.json()["items"] if r["layer"] == "evaluation")
+            assert row["executionStatus"] == "running" and row["verdict"] is None
+            assert row["coverage"] is None and row["partial"] is None
+            assert row["value"] is None and row["matchesCurrentEvidence"] is False
+            assert journal.read_bytes() == original_bytes
+            assert client.get(f"/api/v1/runs/{run['runId']}/snapshot").json()["snapshot"] == snapshot
+            Path(__file__).with_name("actual-pending-row.json").write_text(json.dumps({"scope":"Actual public evaluation acceptance and persisted running record under an owned pure-evaluator processing barrier; no fabricated DB record and no native process interruption claim.","row":row},indent=2)+"\n")
+        finally:
+            release.set()
+        accepted = pending.result(timeout=20)
+        assert accepted.status_code == 202, accepted.text
+        finished = client.get("/api/v1/evaluations/"+accepted.json()["evaluationId"]).json()
+        assert finished["status"] == "complete" and finished["verdict"] == "pass"

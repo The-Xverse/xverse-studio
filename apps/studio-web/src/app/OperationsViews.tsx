@@ -1,4 +1,5 @@
 import { ScenarioAuthoring } from "../features/experiments/ScenarioAuthoring";
+import { ScenarioTimeline } from "../features/experiments/ScenarioTimeline";
 import type { SourceTarget } from "../features/model/Views";
 import { useEffect, useState, useRef } from "react";
 import type { Campaign, Evaluation } from "../../../../packages/contracts/api";
@@ -27,6 +28,7 @@ export function ExperimentsView({
   onSource,
   edit,
   authoringLimits,
+  onAuthoringIntent,
 }: {
   project: Project;
   projection: Projection;
@@ -38,6 +40,7 @@ export function ExperimentsView({
   onSource: (target?: SourceTarget) => void;
   edit: (edits: Data[]) => Promise<unknown>;
   authoringLimits: Data;
+  onAuthoringIntent: () => void;
 }) {
   const [tab, setTab] = useState("Scenario"),
     [matrix, setMatrix] = useState('{"gain": [0.5, 0.8, 1.2]}'),
@@ -126,7 +129,7 @@ export function ExperimentsView({
         </button>
       </div>
       <div className="sub-tabs" role="tablist" aria-label="Experiment sections">
-        {["Scenario", "Assertions", "Campaigns"].map((t) => (
+        {["Scenario", "Timeline", "Assertions", "Campaigns"].map((t) => (
           <button
             role="tab"
             aria-selected={tab === t}
@@ -142,11 +145,18 @@ export function ExperimentsView({
         scenario ? (
           <>
             <ScenarioAuthoring
+              key={JSON.stringify([
+                project.projectId,
+                scenario.documentId,
+                scenario.metadata.namespace,
+                scenario.metadata.name,
+              ])}
               scenario={scenario}
               projection={projection}
               limits={authoringLimits}
               edit={edit}
               onSource={onSource}
+              onIntent={onAuthoringIntent}
             />
             <div className="deployment-summary">
               <section className="panel">
@@ -157,8 +167,14 @@ export function ExperimentsView({
                   values={{
                     System: textRef(spec.systemRef),
                     Deployment: textRef(spec.deploymentRef),
-                    "Clock domain":
-                      spec.steps?.[0]?.timeDomainId || "Not declared",
+                    "Declared clocks":
+                      [
+                        ...new Set(
+                          [...(spec.steps || []), ...(spec.observers || [])]
+                            .map((item: Data) => item.timeDomainId)
+                            .filter(Boolean),
+                        ),
+                      ].join(", ") || "Not declared",
                     "Initial conditions":
                       spec.initialConditions || "Not declared",
                   }}
@@ -239,6 +255,14 @@ export function ExperimentsView({
             provider semantics.
           </Empty>
         )
+      ) : tab === "Timeline" ? (
+        <ScenarioTimeline
+          key={JSON.stringify([project.projectId, run?.runId, run?.snapshotId])}
+          projectId={project.projectId}
+          revision={project.revision}
+          scenarioRef={selection.scenarioRef}
+          run={run}
+        />
       ) : tab === "Assertions" ? (
         <div className="connection-layout">
           <section className="panel">

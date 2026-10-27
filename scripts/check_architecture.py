@@ -18,7 +18,7 @@ DOMAINS = {"automotive", "process_control", "process-control", "ecu", "plc", "ca
 FOUNDATIONAL = {"storage", "security", "evidence", "events", "xdl"}
 FEATURES = {"profiles", "connections", "deployments", "projects", "runs", "api", "catalog", "preflight",
             "providers", "retention", "lab", "campaigns", "comparison", "annotations", "diagnostics", "host",
-            "exchange", "integrations"}
+            "exchange", "integrations", "timeline"}
 # Deliberate exemption: `xdl` edits delegate to the assertion and scenario-authoring helpers, which in
 # turn use `xdl`; they are semantic helpers of the XDL layer, recorded in the T063 evidence.
 SEMANTIC_HELPERS = {"assertions", "experiments"}

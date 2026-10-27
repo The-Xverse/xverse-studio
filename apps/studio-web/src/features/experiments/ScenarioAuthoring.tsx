@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { DraftScenarioTimeline } from "./DraftScenarioTimeline";
 import { useTerm } from "../profiles/presentation";
 import type { Data } from "../../api/types";
 import type { Projection } from "../model/projection";
@@ -46,12 +47,14 @@ export function ScenarioAuthoring({
   limits,
   edit,
   onSource,
+  onIntent,
 }: {
   scenario: Data;
   projection: Projection;
   limits: Data;
   edit: (edits: Data[]) => Promise<unknown>;
   onSource: (target?: SourceTarget) => void;
+  onIntent: () => void;
 }) {
   const term = useTerm();
   const [selection, setSelection] = useState<{
@@ -64,6 +67,31 @@ export function ScenarioAuthoring({
     [busy, setBusy] = useState(false);
   const spec = scenario.spec,
     ref = reference(scenario);
+  const intentSequence = useRef(0),
+    sending = useRef(false),
+    mounted = useRef(false);
+  useEffect(() => {
+    mounted.current = true;
+    return () => {
+      mounted.current = false;
+      intentSequence.current++;
+    };
+  }, []);
+  function intent() {
+    intentSequence.current++;
+    onIntent();
+  }
+  async function commit(edits: Data[]) {
+    if (sending.current) return undefined;
+    sending.current = true;
+    setBusy(true);
+    try {
+      return await edit(edits);
+    } finally {
+      sending.current = false;
+      if (mounted.current) setBusy(false);
+    }
+  }
   const source = (kind?: ItemKind, item?: Data) =>
     onSource({
       documentId: scenario.documentId,
@@ -73,11 +101,11 @@ export function ScenarioAuthoring({
         : {}),
     });
   async function removeItem() {
-    if (!remove) return;
-    setBusy(true);
+    if (!remove || sending.current) return;
+    const submitted = intentSequence.current;
     setError("");
     try {
-      await edit([
+      const saved = await commit([
         {
           kind: "remove_scenario_item",
           documentId: scenario.documentId,
@@ -86,17 +114,21 @@ export function ScenarioAuthoring({
           itemId: remove.item.id,
         },
       ]);
-      setRemove(null);
+      if (saved && mounted.current && submitted === intentSequence.current)
+        setRemove(null);
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Removal failed.");
-    } finally {
-      setBusy(false);
+      if (mounted.current && submitted === intentSequence.current)
+        setError(e instanceof Error ? e.message : "Removal failed.");
     }
   }
   return (
     <section
       className="panel scenario-authoring"
       aria-label="Scenario authoring"
+      aria-busy={busy}
+      onPointerDownCapture={intent}
+      onKeyDownCapture={intent}
+      onInputCapture={intent}
     >
       <div className="section-heading">
         <div>
@@ -106,7 +138,13 @@ export function ScenarioAuthoring({
             frozen.
           </p>
         </div>
-        <button className="button" onClick={() => setConditions(true)}>
+        <button
+          className="button"
+          onClick={() => {
+            intent();
+            setConditions(true);
+          }}
+        >
           Edit initial conditions
         </button>
       </div>
@@ -115,6 +153,20 @@ export function ScenarioAuthoring({
         intent. They are not runtime permissions, observed effects or evaluated
         assertions. Unsupported schedules block preflight.
       </p>
+      {busy && (
+        <p role="status">
+          Saving a scenario edit. A newer draft stays separate from the pending
+          request.
+        </p>
+      )}
+      <DraftScenarioTimeline
+        scenario={scenario}
+        projection={projection}
+        onEdit={(kind, item) => {
+          intent();
+          setSelection({ kind, item });
+        }}
+      />
       <div className="scenario-item-grid">
         {(Object.keys(collections) as ItemKind[]).map((kind) => {
           const rows: Data[] = spec[collections[kind]] || [],
@@ -136,7 +188,10 @@ export function ScenarioAuthoring({
                 <button
                   className="small-button"
                   disabled={!!limit && rows.length >= limit}
-                  onClick={() => setSelection({ kind })}
+                  onClick={() => {
+                    intent();
+                    setSelection({ kind });
+                  }}
                 >
                   Add {names[kind].toLowerCase()}
                 </button>
@@ -148,7 +203,10 @@ export function ScenarioAuthoring({
                     <button
                       className="small-button"
                       aria-label={`Edit ${kind} ${item.id}`}
-                      onClick={() => setSelection({ kind, item })}
+                      onClick={() => {
+                        intent();
+                        setSelection({ kind, item });
+                      }}
                     >
                       Edit
                     </button>
@@ -169,6 +227,7 @@ export function ScenarioAuthoring({
                           : undefined
                       }
                       onClick={() => {
+                        intent();
                         setError("");
                         setRemove({ kind, item });
                       }}
@@ -196,7 +255,10 @@ export function ScenarioAuthoring({
         <Modal
           title={`${selection.item ? "Edit" : "Add"} ${names[selection.kind].toLowerCase()}`}
           wide
-          onClose={() => setSelection(null)}
+          onClose={() => {
+            intent();
+            setSelection(null);
+          }}
         >
           <ScenarioItemForm
             key={selection.kind + ":" + (selection.item?.id || "new")}
@@ -204,8 +266,10 @@ export function ScenarioAuthoring({
             projection={projection}
             kind={selection.kind}
             item={selection.item}
+            saving={busy}
             onSave={async (properties, itemId) => {
-              await edit([
+              const submitted = intentSequence.current;
+              const saved = await commit([
                 {
                   kind: selection.item
                     ? "update_scenario_item"
@@ -217,7 +281,12 @@ export function ScenarioAuthoring({
                   properties,
                 },
               ]);
-              setSelection(null);
+              if (
+                saved &&
+                mounted.current &&
+                submitted === intentSequence.current
+              )
+                setSelection(null);
             }}
           />
         </Modal>
@@ -226,12 +295,17 @@ export function ScenarioAuthoring({
         <Modal
           title="Edit scenario conditions"
           wide
-          onClose={() => setConditions(false)}
+          onClose={() => {
+            intent();
+            setConditions(false);
+          }}
         >
           <ConditionsForm
             spec={spec}
+            saving={busy}
             onSave={async (properties) => {
-              await edit([
+              const submitted = intentSequence.current;
+              const saved = await commit([
                 {
                   kind: "set_scenario_conditions",
                   documentId: scenario.documentId,
@@ -239,7 +313,12 @@ export function ScenarioAuthoring({
                   properties,
                 },
               ]);
-              setConditions(false);
+              if (
+                saved &&
+                mounted.current &&
+                submitted === intentSequence.current
+              )
+                setConditions(false);
             }}
           />
         </Modal>
@@ -247,7 +326,10 @@ export function ScenarioAuthoring({
       {remove && (
         <Modal
           title="Remove authored scenario item"
-          onClose={() => setRemove(null)}
+          onClose={() => {
+            intent();
+            setRemove(null);
+          }}
         >
           <p>
             Remove{" "}
@@ -263,7 +345,13 @@ export function ScenarioAuthoring({
             </p>
           )}
           <div className="form-actions">
-            <button className="button" onClick={() => setRemove(null)}>
+            <button
+              className="button"
+              onClick={() => {
+                intent();
+                setRemove(null);
+              }}
+            >
               Keep item
             </button>
             <button
@@ -282,9 +370,11 @@ export function ScenarioAuthoring({
 function ConditionsForm({
   spec,
   onSave,
+  saving,
 }: {
   spec: Data;
   onSave: (properties: Data) => Promise<void>;
+  saving: boolean;
 }) {
   const [initial, setInitial] = useState(
       JSON.stringify(spec.initialConditions, null, 2),
@@ -292,10 +382,13 @@ function ConditionsForm({
     [acceptance, setAcceptance] = useState(spec.acceptanceIntent || ""),
     [error, setError] = useState(""),
     [busy, setBusy] = useState(false);
+  const sending = useRef(false);
   return (
     <form
       onSubmit={(e) => {
         e.preventDefault();
+        if (sending.current || saving) return;
+        sending.current = true;
         setError("");
         setBusy(true);
         void (async () => {
@@ -309,6 +402,7 @@ function ConditionsForm({
               e instanceof Error ? e.message : "Saving conditions failed.",
             );
           } finally {
+            sending.current = false;
             setBusy(false);
           }
         })();
@@ -348,7 +442,7 @@ function ConditionsForm({
         </p>
       )}
       <div className="form-actions">
-        <button className="button primary" disabled={busy}>
+        <button className="button primary" disabled={busy || saving}>
           Save scenario conditions
         </button>
       </div>
@@ -361,12 +455,14 @@ function ScenarioItemForm({
   kind,
   item,
   onSave,
+  saving,
 }: {
   scenario: Data;
   projection: Projection;
   kind: ItemKind;
   item?: Data;
   onSave: (properties: Data, itemId: string) => Promise<void>;
+  saving: boolean;
 }) {
   const spec = scenario.spec,
     system = projection.resources.find(
@@ -448,8 +544,11 @@ function ScenarioItemForm({
     [acceptance, setAcceptance] = useState(item?.acceptance || ""),
     [error, setError] = useState(""),
     [busy, setBusy] = useState(false);
+  const sending = useRef(false);
   async function save(e: React.FormEvent) {
     e.preventDefault();
+    if (sending.current || saving) return;
+    sending.current = true;
     setError("");
     setBusy(true);
     try {
@@ -492,6 +591,7 @@ function ScenarioItemForm({
     } catch (e) {
       setError(e instanceof Error ? e.message : "The item could not be saved.");
     } finally {
+      sending.current = false;
       setBusy(false);
     }
   }
@@ -749,7 +849,7 @@ function ScenarioItemForm({
       <div className="form-actions">
         <button
           className="button primary"
-          disabled={busy || (kind === "metric" && !observers.length)}
+          disabled={busy || saving || (kind === "metric" && !observers.length)}
         >
           {busy
             ? "Validating intent…"

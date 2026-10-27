@@ -176,6 +176,25 @@ def _source_time(record):
     return parsed, clock, "known"
 
 
+def source_time(record):
+    """Original tick/domain interpretation; this does not attest a tick unit."""
+    return _source_time(record)
+
+
+def reference_tick_unit(record, evidence_scope):
+    """The existing installed reference-v1 codec, never a generic resolution map."""
+    source, original = record.get("source"), record.get("sourceTime")
+    return "microsecond" if (
+        evidence_scope == "owned_reference"
+        and isinstance(source, dict)
+        and source.get("providerId") == "studio.reference"
+        and source.get("version") == "1.0.0"
+        and isinstance(original, dict)
+        and original.get("clockDomain") == "simulation-time"
+        and original.get("resolution") == "microsecond"
+    ) else None
+
+
 def _facets(records):
     values = {
         key: set()
@@ -470,15 +489,9 @@ def project_evidence(
             # conversion table or proof of the tick encoding's unit.
             tickUnit="microsecond"
             if (
-                evidence_scope == "owned_reference"
-                and bool(items)
+                bool(items)
                 and all(
-                    isinstance(item.get("source"), dict)
-                    and item["source"].get("providerId") == "studio.reference"
-                    and item["source"].get("version") == "1.0.0"
-                    and isinstance(item.get("sourceTime"), dict)
-                    and item["sourceTime"].get("clockDomain") == "simulation-time"
-                    and item["sourceTime"].get("resolution") == "microsecond"
+                    reference_tick_unit(item, evidence_scope) == "microsecond"
                     for item in items
                 )
             )
