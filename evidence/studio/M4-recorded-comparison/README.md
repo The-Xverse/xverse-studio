@@ -146,4 +146,6 @@ Selected candidate digest: `sha256:39d18a269ab23c56cf75eccb79de9a51de9d40feacf12
 receipts name the predecessor HEAD; the later clean committed source/package binding
 identifies exact tested bytes. Environment helper sourceDigest is tracked-only before
 commit and excludes untracked new files/dist; application-and-input-hashes.json is the
-full selected map. Clean committed comparison package verification is pending here.
+full selected map. Clean committed comparison package verification is retained below.
+
+Clean candidate `9a0f189d3c7c87b2d945dc8ffbf57ae575cc9a91` passed offline native Linux package provisioning from the prepared cache, startup/UI, Unicode persistence, public compilation and owned shutdown. All 104 manifest/archive/file hashes and six tested UI assets are verified; candidate-binding.json checks 280 committed source/fixed inputs plus six compiled assets. Native Windows remains held.
