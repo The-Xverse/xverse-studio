@@ -39,4 +39,6 @@ Native Windows is held. Actual AT, novice users, live external/physical provider
 full task/milestone gates remain open. Counts stay47 completed/43 in progress/10 blocked;
 zero milestones accepted. Full M0–M4 remains the objective and M5 stays deferred.
 
-Clean committed successor package verification is pending.
+Clean committed successor package verification is retained below.
+
+Clean candidate `573627647ad3fc853caf18f7fc6e6c412fe3fa18` passed offline native Linux package provisioning from the prepared cache, startup/UI, Unicode persistence, public compilation and owned shutdown. All 104 manifest/archive/file hashes and six tested UI assets are verified; candidate-binding.json checks 292 committed source/fixed inputs plus six compiled assets. Native Windows remains held.
