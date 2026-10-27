@@ -55,4 +55,6 @@ one warm-up and30 repetitions. It does not prove live rerun/campaign scalability
 | 1024x768 | 28.0 ms | 1659.5 ms | 447.0 ms |
 | 1440x900 | 27.4 ms | 1644.9 ms | 446.1 ms |
 
-Selected candidate digest: `sha256:614fe52d94b32609b74a98e5308522fc564a51a6c5c5998159957e927abc096b`. Environment sourceDigest is tracked-only before commit; the289-input map includes new files and compiled assets. Clean committed successor package verification is pending.
+Selected candidate digest: `sha256:614fe52d94b32609b74a98e5308522fc564a51a6c5c5998159957e927abc096b`. Environment sourceDigest is tracked-only before commit; the289-input map includes new files and compiled assets. Clean committed successor package verification is retained below.
+
+Clean candidate `24050875d8b0169f4d4e384a32776425bc7e577d` passed offline native Linux package provisioning from the prepared cache, startup/UI, Unicode persistence, public compilation and owned shutdown. All 104 manifest/archive/file hashes and six tested UI assets are verified; candidate-binding.json checks 283 committed source/fixed inputs plus six compiled assets. Native Windows remains held.

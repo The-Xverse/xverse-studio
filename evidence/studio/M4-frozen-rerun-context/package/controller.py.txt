@@ -1,0 +1,61 @@
+from pathlib import Path
+import hashlib
+import json
+import os
+import shutil
+import subprocess
+import sys
+import zipfile
+
+root = Path.cwd()
+out = root / '.studio-local/frozen-rerun-workflow-package/artifacts'
+cache = root.parent / '.xverse-studio-cache'
+candidate = subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip()
+dossier = root / 'evidence/studio/M4-frozen-rerun-context'
+verified = json.loads((dossier / 'verification.json').read_text())
+assert verified['inheritedBackendTestsPassed'] == 932
+assert verified['targeted']['expected'] == 37 and verified['performance']['expected'] == 2 and verified['currentFull413'] == 'NOT_RUN'
+assert verified['allCurrentStageInputsIdentical']
+tested = json.loads((dossier / 'application-and-input-hashes.json').read_text())
+for name, expected in tested.items():
+    if name.startswith('apps/studio-web/dist/'):
+        data = (root / name).read_bytes()
+    else:
+        data = subprocess.check_output(['git', 'show', candidate + ':' + name])
+    assert hashlib.sha256(data).hexdigest() == expected, name
+out.mkdir(exist_ok=False)
+checkout = root / '.studio-local/frozen-rerun-workflow-package-source' / candidate[:7]
+checkout.parent.mkdir(exist_ok=True)
+subprocess.run(['git', 'worktree', 'add', '--detach', str(checkout), candidate], check=True, stdout=subprocess.DEVNULL)
+shutil.copytree(root / 'apps/studio-web/dist', checkout / 'apps/studio-web/dist')
+env = dict(os.environ, PATH=os.pathsep.join([str(cache / 'node-v24.22.1-linux-x64/bin'),
+    str(Path(sys.base_prefix) / 'bin'), str(root / '.venv/bin'), os.environ['PATH']]),
+    TMPDIR=str(cache / 'tmp'), TEMP=str(cache / 'tmp'), TMP=str(cache / 'tmp'),
+    UV_CACHE_DIR=str(cache / 'uv'), npm_config_cache=str(cache / 'npm'),
+    UV_PYTHON=str(root / '.venv/bin/python'), UV_PYTHON_DOWNLOADS='never', PYTEST_DISABLE_PLUGIN_AUTOLOAD='1')
+env.pop('PYTHONPATH', None)
+command = [str(root / '.venv/bin/python'), '-I', str(checkout / 'scripts/smoke_package.py'), '--output', str(out / 'receipt.json')]
+with (out / 'smoke.log').open('w') as log:
+    result = subprocess.run(command, cwd=checkout, env=env, stdout=log, stderr=subprocess.STDOUT)
+assert result.returncode == 0
+receipt = json.loads((out / 'receipt.json').read_text())
+assert receipt['outcome'] == 'passed' and receipt['package']['candidate'] == candidate
+archives = list((checkout / '.studio-local/package-smoke').glob('*/studio.zip'))
+assert len(archives) == 1
+archive = archives[0]
+assert hashlib.sha256(archive.read_bytes()).hexdigest() == receipt['package']['sha256']
+with zipfile.ZipFile(archive) as z:
+    manifest = json.loads(z.read('xverse-studio/package-manifest.json'))
+    assert not manifest['workingTreeDirty'] and manifest['candidate'] == candidate
+    assert len(manifest['files']) == receipt['package']['files']
+    for name, digest in manifest['files'].items():
+        assert 'sha256:' + hashlib.sha256(z.read('xverse-studio/' + name)).hexdigest() == digest
+    ui = {n: h for n, h in manifest['files'].items() if n.startswith('apps/studio-web/dist/')}
+    assert ui and all('sha256:' + hashlib.sha256((root / n).read_bytes()).hexdigest() == h for n, h in ui.items())
+assert manifest['sourceTreeDigest'] == 'sha256:' + hashlib.sha256(json.dumps(manifest['files'], sort_keys=True, separators=(',', ':')).encode()).hexdigest()
+proof = {'candidate': candidate, 'command': ['.venv/bin/python', '-I', '<isolated-clean-source>/scripts/smoke_package.py', '--output', '<local-receipt>'],
+    'workingTreeDirty': False, 'files': len(manifest['files']), 'allArchiveAndFileHashesVerified': True, 'testedUIBytesIdentical': True,
+    'scope': 'Fresh native Linux offline extraction with prepared cache; browser scope verified separately; Windows held'}
+(out / 'package-manifest.json').write_text(json.dumps(manifest, indent=2) + '\n')
+(out / 'verification.json').write_text(json.dumps(proof, indent=2) + '\n')
+print(json.dumps({'outcome': receipt['outcome'], 'candidate': candidate, 'files': proof['files']}))
