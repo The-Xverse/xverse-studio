@@ -115,3 +115,5 @@ identity. Backend 851 results are inherited through 163 exact unchanged backend/
 contributor/compatibility inputs and unchanged-command CI scheduling control, not a
 new local backend run. Both predecessor 24c55d5 CI runs succeeded with their own
 terminal receipt; those outcomes cover that predecessor and successor CI is separate.
+
+Clean candidate `6d21e8f8d12909b5448b44d3b25d7ece4a7d905c` passed offline native Linux package provisioning from the prepared cache, startup/UI, Unicode persistence, public compilation and owned shutdown. All 100 manifest/archive/file hashes and six tested UI assets are verified; candidate-binding.json checks 270 committed source/fixed inputs plus six compiled assets. Native Windows remains held.
