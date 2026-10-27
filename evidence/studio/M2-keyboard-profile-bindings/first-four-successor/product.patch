@@ -1,0 +1,494 @@
+diff --git a/apps/studio-web/src/app/App.tsx b/apps/studio-web/src/app/App.tsx
+index e476bbb..e16bbdc 100644
+--- a/apps/studio-web/src/app/App.tsx
++++ b/apps/studio-web/src/app/App.tsx
+@@ -35,7 +35,11 @@ import {
+   DeploymentComposer,
+   type ExecutionSelection,
+ } from "../features/deployments/DeploymentComposer";
+-import { ProfileBindingsPanel } from "../features/profiles/ProfileBindingsPanel";
++import {
++  ProfileBindingsPanel,
++  type ProfileBindingCommit,
++  type ProfileBindingRefusal,
++} from "../features/profiles/ProfileBindingsPanel";
+ import {
+   DomainBadge,
+   PresentationContext,
+@@ -237,7 +241,7 @@ export default function App() {
+   }
+   const sourceControl = useRef<HTMLButtonElement>(null),
+     operationError = useRef<HTMLDivElement>(null);
+-  const [recoveryFocus, setRecoveryFocus] = useState<{
++  const [projectActionFocus, setProjectActionFocus] = useState<{
+     projectId: string;
+     loadSequence: number;
+     intentSequence: number;
+@@ -245,25 +249,25 @@ export default function App() {
+     target: "source" | "error";
+   } | null>(null);
+   useEffect(() => {
+-    if (busy || !recoveryFocus) return;
+-    setRecoveryFocus(null);
++    if (busy || !projectActionFocus) return;
++    setProjectActionFocus(null);
+     if (
+-      selectedProjectRef.current !== recoveryFocus.projectId ||
+-      projectLoadSequence.current !== recoveryFocus.loadSequence ||
+-      preflightRequestSequence.current !== recoveryFocus.intentSequence ||
++      selectedProjectRef.current !== projectActionFocus.projectId ||
++      projectLoadSequence.current !== projectActionFocus.loadSequence ||
++      preflightRequestSequence.current !== projectActionFocus.intentSequence ||
+       modal ||
+       document.querySelector('[role="dialog"]') ||
+       (document.activeElement !== document.body &&
+-        document.activeElement !== recoveryFocus.origin)
++        document.activeElement !== projectActionFocus.origin)
+     )
+       return;
+-    if (recoveryFocus.target === "error") operationError.current?.focus();
++    if (projectActionFocus.target === "error") operationError.current?.focus();
+     else if (
+-      project?.projectId === recoveryFocus.projectId &&
++      project?.projectId === projectActionFocus.projectId &&
+       section === "workspace"
+     )
+       sourceControl.current?.focus();
+-  }, [busy, recoveryFocus, project?.projectId, section, modal]);
++  }, [busy, projectActionFocus, project?.projectId, section, modal]);
+   function recoveryHandlers(projectId: string) {
+     let context: ProjectIntent | undefined;
+     return {
+@@ -278,7 +282,7 @@ export default function App() {
+             return await action();
+           } catch (error) {
+             if (sameProjectIntent(initiating)) {
+-              setRecoveryFocus({ ...initiating, origin, target: "error" });
++              setProjectActionFocus({ ...initiating, origin, target: "error" });
+               throw projectRequestError(error, projectId);
+             }
+           }
+@@ -366,7 +370,7 @@ export default function App() {
+       setNotice(
+         `Recovered as revision ${saved.revision}. The observed external bytes are preserved in backup ${result.recovery.recoveryId}.`,
+       );
+-      setRecoveryFocus({
++      setProjectActionFocus({
+         projectId,
+         loadSequence: context.loadSequence,
+         intentSequence: preflightRequestSequence.current,
+@@ -1374,11 +1378,39 @@ export default function App() {
+                 capabilities={capabilities}
+                 providers={providers}
+                 project={project}
+-                refresh={async () => {
+-                  await refreshProject();
+-                  setNotice(
+-                    "Profile locks saved with exact schema and presentation identities.",
+-                  );
++                onCommitted={(saved, navigate, origin) => {
++                  const visible = commitProjectRevision(saved);
++                  if (visible && navigate) {
++                    setSection("workspace");
++                    setNotice(
++                      "Profile locks saved with exact schema and presentation identities.",
++                    );
++                    setProjectActionFocus({
++                      projectId: saved.projectId,
++                      loadSequence: renderedLoadSequence,
++                      intentSequence: preflightRequestSequence.current,
++                      origin,
++                      target: "source",
++                    });
++                  }
++                  return visible;
++                }}
++                onRefused={(origin) => {
++                  if (
++                    !project ||
++                    selectedProjectRef.current !== project.projectId ||
++                    projectLoadSequence.current !== renderedLoadSequence ||
++                    preflightRequestSequence.current !== renderedIntentSequence
++                  )
++                    return false;
++                  setProjectActionFocus({
++                    projectId: project.projectId,
++                    loadSequence: renderedLoadSequence,
++                    intentSequence: renderedIntentSequence,
++                    origin,
++                    target: "error",
++                  });
++                  return true;
+                 }}
+                 doAction={doAction}
+               />
+@@ -2399,13 +2431,15 @@ function Environment({
+   capabilities,
+   providers,
+   project,
+-  refresh,
++  onCommitted,
++  onRefused,
+   doAction,
+ }: {
+   capabilities: Data;
+   providers: Data[];
+   project: Project | null;
+-  refresh: () => Promise<unknown>;
++  onCommitted: ProfileBindingCommit;
++  onRefused: ProfileBindingRefusal;
+   doAction: DoAction;
+ }) {
+   return (
+@@ -2475,7 +2509,8 @@ function Environment({
+       </div>
+       <ProfileBindingsPanel
+         project={project}
+-        refresh={refresh}
++        onCommitted={onCommitted}
++        onRefused={onRefused}
+         doAction={doAction}
+       />
+     </div>
+diff --git a/apps/studio-web/src/features/profiles/ProfileBindingsPanel.tsx b/apps/studio-web/src/features/profiles/ProfileBindingsPanel.tsx
+index b3a367d..dd902b2 100644
+--- a/apps/studio-web/src/features/profiles/ProfileBindingsPanel.tsx
++++ b/apps/studio-web/src/features/profiles/ProfileBindingsPanel.tsx
+@@ -1,74 +1,291 @@
+-import { useEffect, useState } from "react";
++import { useEffect, useState, useRef, useId } from "react";
+ import { PresentationPreview } from "./presentation";
+ import type { ProfileBindings } from "../../../../../packages/contracts/api";
+ import type { Data, Project } from "../../api/types";
+-import { api, items } from "../../api/client";
++import { api, ApiError } from "../../api/client";
+ import type { DoAction } from "../../app/App";
+ import { Badge, Json, KeyValues } from "../../app/ui";
++
++export type ProfileBindingCommit = (
++  saved: Project,
++  navigate: boolean,
++  origin: Element | null,
++) => boolean;
++export type ProfileBindingRefusal = (origin: Element | null) => boolean;
++type Discovery = {
++  status: "loading" | "available" | "unavailable";
++  profiles: Data[];
++  error?: string;
++};
++
++function discoveredProfiles(response: Data): Data[] {
++  const text = (value: unknown, bound: number) =>
++      typeof value === "string" && value.length > 0 && value.length <= bound,
++    digest = (value: unknown) =>
++      typeof value === "string" && /^sha256:[0-9a-f]{64}$/.test(value);
++  if (
++    !response ||
++    !Array.isArray(response.items) ||
++    response.items.length > 200 ||
++    response.nextCursor != null ||
++    response.items.some(
++      (profile: Data) =>
++        !profile ||
++        !text(profile.profileId, 512) ||
++        !text(profile.namespace, 512) ||
++        !text(profile.version, 128) ||
++        !digest(profile.schemaDigest) ||
++        !digest(profile.presentationDigest) ||
++        !profile.presentation ||
++        typeof profile.presentation !== "object" ||
++        Array.isArray(profile.presentation) ||
++        ["name", "description", "domain", "documentation"].some(
++          (key) =>
++            profile.presentation[key] !== undefined &&
++            typeof profile.presentation[key] !== "string",
++        ) ||
++        (profile.maturity !== undefined &&
++          typeof profile.maturity !== "string"),
++    ) ||
++    new Set(response.items.map((p: Data) => p.profileId)).size !==
++      response.items.length ||
++    new Set(response.items.map((p: Data) => p.namespace)).size !==
++      response.items.length
++  )
++    throw new Error(
++      "The admitted profile response is incomplete or malformed.",
++    );
++  return response.items;
++}
++
+ export function ProfileBindingsPanel({
+   project,
+-  refresh,
++  onCommitted,
++  onRefused,
+   doAction,
+ }: {
+   project: Project | null;
+-  refresh: () => Promise<unknown>;
++  onCommitted: ProfileBindingCommit;
++  onRefused: ProfileBindingRefusal;
+   doAction: DoAction;
+ }) {
+-  const [profiles, setProfiles] = useState<Data[]>([]),
+-    [selected, setSelected] = useState<string[]>([]);
++  const [discovery, setDiscovery] = useState<Discovery>({
++      status: "loading",
++      profiles: [],
++    }),
++    [selected, setSelected] = useState<string[]>([]),
++    [attempt, setAttempt] = useState(0),
++    [pending, setPending] = useState(false),
++    [receipt, setReceipt] = useState("");
++  const mounted = useRef(true),
++    currentProject = useRef(project),
++    sending = useRef(false),
++    discovering = useRef(true),
++    selectionGeneration = useRef(0),
++    retryOrigin = useRef<Element | null>(null),
++    firstChoice = useRef<HTMLInputElement>(null),
++    retryControl = useRef<HTMLButtonElement>(null),
++    emptyNotice = useRef<HTMLParagraphElement>(null),
++    guidanceId = useId(),
++    errorId = useId();
++  currentProject.current = project;
++  const profiles = discovery.profiles,
++    choices = profiles.filter((profile) =>
++      selected.includes(profile.profileId),
++    ),
++    canBind =
++      !!project &&
++      discovery.status === "available" &&
++      choices.length > 0 &&
++      choices.length <= 16;
+   useEffect(() => {
+-    void api("/profiles")
+-      .then((response) => setProfiles(items(response)))
+-      .catch(() => {});
++    mounted.current = true;
++    return () => {
++      mounted.current = false;
++    };
+   }, []);
++  useEffect(() => {
++    const controller = new AbortController();
++    discovering.current = true;
++    setDiscovery({ status: "loading", profiles: [] });
++    void api("/profiles", { signal: controller.signal })
++      .then((response) => {
++        const profiles = discoveredProfiles(response);
++        if (!controller.signal.aborted)
++          setDiscovery({ status: "available", profiles });
++      })
++      .catch((error) => {
++        if (!controller.signal.aborted)
++          setDiscovery({
++            status: "unavailable",
++            profiles: [],
++            error:
++              `${error instanceof ApiError ? error.code + ": " : ""}${error instanceof Error ? error.message : "Profile discovery failed."}`.slice(
++                0,
++                1000,
++              ),
++          });
++      })
++      .finally(() => {
++        if (!controller.signal.aborted) discovering.current = false;
++      });
++    return () => controller.abort();
++  }, [attempt]);
++  useEffect(() => {
++    if (discovery.status === "loading" || !retryOrigin.current) return;
++    const origin = retryOrigin.current;
++    retryOrigin.current = null;
++    if (
++      document.querySelector('[role="dialog"]') ||
++      (document.activeElement !== document.body &&
++        document.activeElement !== origin)
++    )
++      return;
++    (discovery.status === "unavailable"
++      ? retryControl.current
++      : profiles.length
++        ? firstChoice.current
++        : emptyNotice.current
++    )?.focus();
++  }, [discovery, profiles.length]);
++
++  async function bindProfiles() {
++    if (sending.current || !project || !canBind) return;
++    const submitted = project,
++      generation = selectionGeneration.current,
++      origin = document.activeElement,
++      locks = choices.map((profile) => ({
++        profileId: profile.profileId,
++        version: profile.version,
++        schemaDigest: profile.schemaDigest,
++        presentationDigest: profile.presentationDigest,
++      })),
++      current = () =>
++        mounted.current &&
++        currentProject.current?.projectId === submitted.projectId;
++    sending.current = true;
++    setPending(true);
++    setReceipt("");
++    try {
++      await doAction("Binding immutable profile identities", async () => {
++        try {
++          const saved = await api<Project>(
++            `/projects/${encodeURIComponent(submitted.projectId)}/profile-bindings`,
++            {
++              method: "POST",
++              revision: submitted.revision,
++              body: {
++                baseRevision: submitted.revision,
++                profiles: locks,
++              } satisfies ProfileBindings,
++            },
++          );
++          if (!current()) return;
++          const navigate =
++            generation === selectionGeneration.current &&
++            (document.activeElement === origin ||
++              document.activeElement === document.body) &&
++            !document.querySelector('[role="dialog"]');
++          if (onCommitted(saved, navigate, origin) && !navigate)
++            setReceipt(
++              `Saved the submitted profile locks as revision ${saved.revision}. Current project locks are listed below.`,
++            );
++          return saved;
++        } catch (error) {
++          if (
++            current() &&
++            currentProject.current?.revision === submitted.revision &&
++            generation === selectionGeneration.current &&
++            onRefused(origin)
++          )
++            throw error;
++        }
++      });
++    } finally {
++      sending.current = false;
++      if (mounted.current) setPending(false);
++    }
++  }
+   return (
+-    <section className="panel profile-binding-panel">
++    <section
++      className="panel profile-binding-panel"
++      aria-busy={pending || discovery.status === "loading"}
++    >
+       <h2>Admitted profile locks</h2>
+       <p>
+         Profiles supply versioned semantics and inert presentation metadata.
+         Provider installation and execution authority are separate.
+       </p>
++      <p id={guidanceId} className="field-hint">
++        Select one to 16 admitted profiles. Binding adds these exact locks and
++        keeps existing locks. Unchecking a box only changes your next
++        submission; it does not remove a project lock. Changes made while a
++        request is pending are not included in that request.
++      </p>
++      {discovery.status === "loading" && (
++        <p role="status">Checking admitted profiles…</p>
++      )}
++      {discovery.status === "unavailable" && (
++        <p id={errorId} role="alert" className="notice error">
++          Could not check admitted profiles. Availability is unknown.{" "}
++          {discovery.error} Retry profile discovery.
++        </p>
++      )}
++      {(discovery.status === "unavailable" ||
++        (discovery.status === "loading" && attempt > 0)) && (
++        <button
++          ref={retryControl}
++          className="button"
++          type="button"
++          disabled={discovery.status === "loading" || pending}
++          onClick={(event) => {
++            if (discovering.current || sending.current) return;
++            discovering.current = true;
++            retryOrigin.current = event.currentTarget;
++            setDiscovery({ status: "loading", profiles: [] });
++            setAttempt((value) => value + 1);
++          }}
++        >
++          Retry profile discovery
++        </button>
++      )}
++      {discovery.status === "available" && !profiles.length && (
++        <p ref={emptyNotice} tabIndex={-1} role="status">
++          No admitted profiles were returned by this discovery request.
++        </p>
++      )}
++      {pending && (
++        <p role="status">
++          Binding the submitted profile locks. This request is still pending.
++        </p>
++      )}
++      {receipt && <p role="status">{receipt}</p>}
+       <form
++        aria-label="Bind admitted profile locks"
++        aria-describedby={`${guidanceId}${discovery.status === "unavailable" ? " " + errorId : ""}`}
+         onSubmit={(event) => {
+           event.preventDefault();
+-          void doAction("Binding immutable profile identities", async () => {
+-            if (!project)
+-              throw new Error(
+-                "Open a System project before binding profile locks.",
+-              );
+-            await api(`/projects/${project.projectId}/profile-bindings`, {
+-              method: "POST",
+-              revision: project.revision,
+-              body: {
+-                baseRevision: project.revision,
+-                profiles: profiles
+-                  .filter((profile) => selected.includes(profile.profileId))
+-                  .map((profile) => ({
+-                    profileId: profile.profileId,
+-                    version: profile.version,
+-                    schemaDigest: profile.schemaDigest,
+-                    presentationDigest: profile.presentationDigest,
+-                  })),
+-              } satisfies ProfileBindings,
+-            });
+-            await refresh();
+-          });
++          void bindProfiles();
+         }}
+       >
+         <div className="catalog-grid">
+-          {profiles.map((profile) => (
++          {profiles.map((profile, index) => (
+             <article className="profile-choice" key={profile.profileId}>
+               <label className="checkbox-label">
+                 <input
+                   type="checkbox"
++                  ref={index === 0 ? firstChoice : undefined}
++                  aria-describedby={guidanceId}
+                   checked={selected.includes(profile.profileId)}
+-                  onChange={(event) =>
++                  onChange={(event) => {
++                    selectionGeneration.current++;
++                    setReceipt("");
+                     setSelected((ids) =>
+                       event.target.checked
+                         ? [...ids, profile.profileId]
+                         : ids.filter((id) => id !== profile.profileId),
+-                    )
+-                  }
++                    );
++                  }}
+                 />
+                 <span>
+                   Select profile{" "}
+@@ -99,7 +316,8 @@ export function ProfileBindingsPanel({
+           </span>
+           <button
+             className="button primary"
+-            disabled={!project || !selected.length}
++            aria-describedby={guidanceId}
++            disabled={!canBind || pending}
+           >
+             Bind selected profile locks
+           </button>

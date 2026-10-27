@@ -48,3 +48,43 @@ The core workflows and identities are unchanged. The owned profiles make no doma
 Real industry profiles replace or extend them through the same registry, after T064 nomination.
 
 Verification: `tests/contract/test_profile_presentation.py` and `tests/e2e/profile-presentation.spec.ts`.
+
+## Client discovery and binding completion amendment — 2026-10-27
+
+Admitted-profile discovery is a loading, available or unavailable observation. A failed,
+malformed, duplicate or incomplete collection leaves availability unknown and offers an
+abortable retry; it cannot establish absence. Only a successful well-formed empty response
+reports that no profiles were returned. Retry can focus the first available choice, the
+empty observation or the retry control while focus still belongs to its origin or BODY
+and no modal has superseded it. This does not grant binding or provider authority.
+
+Binding is additive: select one to 16 exact admitted identities; unchecking a choice changes
+the next submission and never removes an existing project lock. Submission freezes the
+project/revision, profile/version/schema/presentation identities, selection generation and
+focus origin. A synchronous send guard and disabled submit control prevent another pending
+submission; checkbox changes remain editable and are not included in that earlier request.
+
+The full Project returned by the authoritative transaction updates the active project through
+the shared project/load/newer-head guard, rather than a captured reload. Equal or older
+acknowledgements preserve newer history and readiness. State application is separate from
+visible completion: the existing Workspace return and exact success notice occur only while
+submission, selection and focus intent remain current. New checkbox edits or deliberately
+moved focus keep Environment open with its selection intact and identify only the submitted
+locks as saved. Obsolete completion/refusal cannot publish feedback in a departed context;
+current refusal keeps the selection and supports explicit loading of the current revision.
+
+App owns final source/error focus because normal success unmounts the binding panel. Focus
+waits for busy state to settle and requires matching project/load/post-commit intent, origin
+or BODY focus and no modal. Profile-panel pointer/keyboard/input interaction also advances
+the shared authoring interaction sequence. It supersedes a pending foreign-project load or
+recovery without changing the separate generations used to acknowledge its own revision.
+Programmatic retry focus is not itself an authoring interaction.
+
+Verification adds `tests/e2e/profile-bindings-accessibility.spec.ts`: native keyboard journeys
+at both required viewports use actual additive binding and stale-refusal transactions,
+canonical document/lock/sidecar preservation, validation and unchanged executable plan/provider
+scope, and held replies with newer selection/focus/history/readiness or foreign recovery.
+Discovery HTTP/shape/empty responses are explicitly controlled transport observations, not
+live registry-absence evidence. Owned presentation remains a fixture, not domain fidelity or
+runtime/device permission. Final candidate evidence and full native-platform/AT/milestone
+acceptance remain separate; Windows is held at user request.

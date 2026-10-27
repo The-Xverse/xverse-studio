@@ -1,0 +1,346 @@
+import { test, expect, type Page, type Locator } from "@playwright/test";
+import { createHash } from "node:crypto";
+import { parse } from "yaml";
+import { connectStudio } from "./connect-studio";
+
+async function tabTo(page: Page, target: Locator) {
+  await expect(target).toBeVisible();
+  for (const [key, limit] of [
+    ["Shift+Tab", 40],
+    ["Tab", 220],
+  ] as const) {
+    for (let i = 0; i < limit; i++) {
+      if (await target.evaluate((n) => document.activeElement === n)) return;
+      await page.keyboard.press(key);
+    }
+  }
+  await expect(target).toBeFocused();
+}
+async function activate(page: Page, target: Locator) {
+  await tabTo(page, target);
+  await page.keyboard.press("Enter");
+}
+async function request(page: Page, route: string, body?: unknown) {
+  return page.evaluate(
+    async ({ route, body }) => {
+      const { csrfToken } = await fetch("/api/v1/session").then((r) =>
+        r.json(),
+      );
+      const response = await fetch("/api/v1" + route, {
+        method: body === undefined ? "GET" : "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRF-Token": csrfToken,
+        },
+        body: body === undefined ? undefined : JSON.stringify(body),
+      });
+      const value = await response.json();
+      if (!response.ok)
+        throw Error(
+          `Owned profile fixture request failed: ${response.status} ${value.code}`,
+        );
+      return value;
+    },
+    { route, body },
+  );
+}
+async function create(page: Page, name: string) {
+  const project = await request(page, "/projects", { name });
+  await page.evaluate(
+    (pid) => localStorage.setItem("studio.projectId", pid),
+    project.projectId,
+  );
+  await page.reload();
+  await expect(page.getByRole("heading", { name, exact: true })).toBeVisible();
+  return project;
+}
+const panel = (page: Page) => page.locator(".profile-binding-panel");
+const bind = (page: Page) =>
+  panel(page).getByRole("button", {
+    name: "Bind selected profile locks",
+    exact: true,
+  });
+async function environment(page: Page) {
+  await activate(
+    page,
+    page.getByRole("button", { name: "Environment", exact: true }),
+  );
+  await expect(
+    panel(page).getByRole("heading", {
+      name: "Admitted profile locks",
+      exact: true,
+    }),
+  ).toBeVisible();
+}
+async function settle(page: Page) {
+  await page.waitForLoadState("networkidle");
+  await page.evaluate(
+    () =>
+      new Promise<void>((resolve) =>
+        requestAnimationFrame(() => requestAnimationFrame(() => resolve())),
+      ),
+  );
+  await page.waitForLoadState("networkidle");
+}
+async function runs(page: Page, pid: string) {
+  return (await request(page, "/runs")).items
+    .filter((r: any) => r.projectId === pid)
+    .map((r: any) => r.runId)
+    .sort();
+}
+const digest = (value: string) =>
+  "sha256:" + createHash("sha256").update(value).digest("hex");
+
+for (const viewport of [
+  { width: 1024, height: 768 },
+  { width: 1440, height: 900 },
+]) {
+  test(`profile bindings: discovery failure stays unknown and retries actual registry at ${viewport.width}x${viewport.height}`, async ({
+    page,
+  }, info) => {
+    test.setTimeout(60000);
+    await page.setViewportSize(viewport);
+    await connectStudio(page, info);
+    const project = await create(page, `Profile discovery ${viewport.width}`),
+      beforeRuns = await runs(page, project.projectId);
+    let reads = 0,
+      writes = 0;
+    page.on("request", (r) => {
+      if (
+        r.method() === "POST" &&
+        new URL(r.url()).pathname.endsWith("/profile-bindings")
+      )
+        writes++;
+    });
+    const pattern = "**/api/v1/profiles";
+    await page.route(pattern, async (route) => {
+      reads++;
+      if (reads === 1)
+        await route.fulfill({
+          status: 503,
+          contentType: "application/json",
+          body: JSON.stringify({
+            code: "PROFILE_DISCOVERY_UNAVAILABLE",
+            message: "Controlled registry transport failure",
+            retryable: true,
+          }),
+        });
+      else {
+        const response = await route.fetch();
+        expect(response.status()).toBe(200);
+        await route.fulfill({ response });
+      }
+    });
+    try {
+      await environment(page);
+      await expect.poll(() => reads).toBe(1);
+      await expect(panel(page).getByRole("alert")).toContainText(
+        /unknown|unavailable|could not/i,
+      );
+      await expect(panel(page).getByRole("checkbox")).toHaveCount(0);
+      await expect(bind(page)).toBeDisabled();
+      await activate(
+        page,
+        panel(page).getByRole("button", {
+          name: "Retry profile discovery",
+          exact: true,
+        }),
+      );
+      await expect(
+        panel(page).getByRole("checkbox", {
+          name: "Select profile Automotive terminology",
+          exact: true,
+        }),
+      ).toBeVisible();
+      expect(reads).toBe(2);
+      await expect(panel(page).getByRole("alert")).toHaveCount(0);
+      expect(writes).toBe(0);
+      expect(
+        (await request(page, `/projects/${project.projectId}`)).documents,
+      ).toEqual(project.documents);
+      expect(await runs(page, project.projectId)).toEqual(beforeRuns);
+      await info.attach("profile-discovery.json", {
+        body: JSON.stringify({
+          viewport,
+          controlledInitialStatus: 503,
+          retryStatus: 200,
+          actualRegistryRetried: true,
+          observationsStayUnknownOnFailure: true,
+          bindingWrites: writes,
+          noStart: true,
+          scope:
+            "Labelled discovery transport failure then actual admitted registry; no provider installation or execution authority",
+        }),
+        contentType: "application/json",
+      });
+    } finally {
+      await page.unroute(pattern);
+    }
+  });
+
+  test(`profile bindings: committed reply cannot announce success on departed Home at ${viewport.width}x${viewport.height}`, async ({
+    page,
+  }, info) => {
+    test.setTimeout(90000);
+    await page.setViewportSize(viewport);
+    await connectStudio(page, info);
+    const project = await create(
+        page,
+        `Profile binding departure ${viewport.width}`,
+      ),
+      beforeRuns = await runs(page, project.projectId),
+      beforeProviders = await request(page, "/providers"),
+      beforePlan = await request(
+        page,
+        `/projects/${project.projectId}/compilations`,
+        { revision: project.revision },
+      ),
+      entries = (await request(page, "/profiles")).items,
+      selected = entries.find(
+        (p: any) => p.namespace === "io.xverse.studio.domain.automotive",
+      );
+    expect(selected.presentation.name).toBe("Automotive terminology");
+    expect(selected.executionAllowed).toBe(false);
+    await environment(page);
+    const checkbox = panel(page).getByRole("checkbox", {
+      name: "Select profile Automotive terminology",
+      exact: true,
+    });
+    await tabTo(page, checkbox);
+    await page.keyboard.press("Space");
+    await expect(checkbox).toBeChecked();
+    let release!: () => void,
+      finish!: () => void,
+      ready = false,
+      committed: any;
+    const gate = new Promise<void>((r) => (release = r)),
+      finished = new Promise<void>((r) => (finish = r)),
+      pattern = `**/api/v1/projects/${project.projectId}/profile-bindings`;
+    const writes: { ifMatch?: string; body: any }[] = [];
+    await page.route(pattern, async (route) => {
+      try {
+        expect(route.request().method()).toBe("POST");
+        writes.push({
+          ifMatch: route.request().headers()["if-match"],
+          body: route.request().postDataJSON(),
+        });
+        const response = await route.fetch();
+        expect(response.status()).toBe(200);
+        committed = await response.json();
+        ready = true;
+        await gate;
+        await route.fulfill({ response });
+      } finally {
+        finish();
+      }
+    });
+    try {
+      await activate(page, bind(page));
+      await expect.poll(() => ready).toBe(true);
+      expect(committed.projectId).toBe(project.projectId);
+      expect(committed.revision).toBe(project.revision + 1);
+      await activate(
+        page,
+        page.getByRole("button", { name: "X-Verse Studio home", exact: true }),
+      );
+      await expect(
+        page.getByRole("heading", { name: "Recent projects", exact: true }),
+      ).toBeVisible();
+      release();
+      await finished;
+      await settle(page);
+      await expect.soft(page.locator(".project-header")).toHaveCount(0);
+      await expect
+        .soft(page.locator(".alerts .notice:not(.busy)"))
+        .toHaveCount(0);
+      const saved = await request(page, `/projects/${project.projectId}`);
+      expect(writes).toEqual([
+        {
+          ifMatch: `"${project.revision}"`,
+          body: {
+            baseRevision: project.revision,
+            profiles: [
+              {
+                profileId: selected.profileId,
+                version: selected.version,
+                schemaDigest: selected.schemaDigest,
+                presentationDigest: selected.presentationDigest,
+              },
+            ],
+          },
+        },
+      ]);
+      expect(saved.revision).toBe(project.revision + 1);
+      for (const [id, document] of Object.entries<any>(project.documents))
+        expect(saved.documents[id]).toEqual(document);
+      for (const [name, content] of Object.entries(project.supportingFiles))
+        expect(saved.supportingFiles[name]).toBe(content);
+      const added = Object.keys(saved.documents).filter(
+        (id) => !(id in project.documents),
+      );
+      expect(added).toHaveLength(1);
+      const resource = parse(saved.documents[added[0]].content);
+      expect(resource.kind).toBe("Profile");
+      expect(resource.spec.extensionNamespace).toBe(selected.namespace);
+      expect(resource.metadata.version).toBe(selected.version);
+      const lock = saved.manifest.profiles.find(
+        (p: any) => p.namespace === selected.namespace,
+      );
+      expect(lock).toMatchObject({
+        namespace: selected.namespace,
+        version: selected.version,
+        schemaDigest: selected.schemaDigest,
+        presentationDigest: selected.presentationDigest,
+      });
+      expect(digest(saved.supportingFiles[lock.schemaPath])).toBe(
+        lock.schemaDigest,
+      );
+      expect(digest(saved.supportingFiles[lock.presentationPath])).toBe(
+        lock.presentationDigest,
+      );
+      for (const previous of project.manifest.profiles)
+        expect(saved.manifest.profiles).toContainEqual(previous);
+      expect(saved.manifest.profiles).toHaveLength(
+        project.manifest.profiles.length + 1,
+      );
+      expect(
+        (
+          await request(page, `/projects/${project.projectId}/validations`, {
+            revision: saved.revision,
+          })
+        ).valid,
+      ).toBe(true);
+      expect(
+        (
+          await request(page, `/projects/${project.projectId}/compilations`, {
+            revision: saved.revision,
+          })
+        ).planDigest,
+      ).toBe(beforePlan.planDigest);
+      expect(await request(page, "/providers")).toEqual(beforeProviders);
+      expect(await runs(page, project.projectId)).toEqual(beforeRuns);
+      await info.attach("profile-binding-departure.json", {
+        body: JSON.stringify({
+          viewport,
+          projectId: project.projectId,
+          profileId: selected.profileId,
+          committedRevision: saved.revision,
+          originalDocumentsPreserved: true,
+          additiveLocksPreserved: true,
+          exactSidecarDigests: true,
+          authoritativeValidation: true,
+          executablePlanUnchanged: true,
+          providerDiscoveryUnchanged: true,
+          noStart: true,
+          scope:
+            "Actual additive presentation-only lock transaction held after commit; departed workspace must not display stale success",
+        }),
+        contentType: "application/json",
+      });
+    } finally {
+      release();
+      await finished;
+      await page.unroute(pattern);
+    }
+  });
+}

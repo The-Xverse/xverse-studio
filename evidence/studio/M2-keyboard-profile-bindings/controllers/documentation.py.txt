@@ -1,0 +1,148 @@
+from pathlib import Path
+from collections import Counter
+import json
+
+root = Path.cwd()
+out = root/'evidence/studio/M2-keyboard-profile-bindings'
+v = json.loads((out/'verification.json').read_text())
+assert v['targeted']['expected'] == 24 and v['full']['expected'] == 257
+assert v['performance']['expected'] == 2 and v['allFinalStageInputsIdentical']
+rows = []
+for viewport in ['1024x768', '1440x900']:
+    model = json.loads((out/f'performance/{viewport}/model-performance.json').read_text())
+    history = json.loads((out/f'performance/{viewport}/history-performance.json').read_text())
+    rows.append((viewport, model['selectionAndInspector']['p95'], model['openAndValidationPresentation']['p95'], history['p95']))
+table = '\n'.join(f'| {vp} | {selection:.1f} ms | {opening:.1f} ms | {history:.1f} ms |' for vp, selection, opening, history in rows)
+contrast = json.loads((out/'contrast-summary.json').read_text())
+(out/'README.md').write_text(f'''# Profile discovery and binding completion — Linux partial evidence
+
+Twenty-four native keyboard journeys at 1024×768 and 1440×900 pass, together
+with the full 257-case browser suite and separate two-case performance check.
+All {v['frozenInputs']} inputs, including source, six compiled UI assets and fixed records, match across
+these final stages and unchanged within each run. Type/build, architecture,
+compatibility and spec structure checks pass. Backend 851 results are inherited
+through 163 exact unchanged inputs and the reviewed unchanged-command CI scheduling
+control; they were not rerun locally for this frontend-only repair.
+
+This is partial T038/T067 and component T062 evidence for FR-043–045/047,
+AC-019 and NFR-006. Count remains 47/100; no milestone is accepted. Native
+Windows is held at user request, and actual assistive-technology evaluation remains
+open. Owned presentation fixtures establish no live industry fidelity or provider
+authority. The focused 24 never invoke Start or physical operations.
+
+## Resulting behavior and actual witnesses
+
+Discovery distinguishes loading, available and unavailable. Failed, malformed,
+duplicate or incomplete responses leave availability unknown and offer an abortable
+retry; a well-formed empty response states only what that request returned. Associated
+guidance explains the additive one to 16 profile selection, exact immutable identities,
+unchanged existing locks and edits made while a request is pending. Native retry
+loads the actual registry and restores focus while the origin remains current.
+
+Binding freezes the submitted project/revision, exact lock identities, selection
+generation and focus origin. Repeated Enter while pending produces exactly one
+actual transaction. Checkboxes remain editable. The authoritative returned Project
+uses the existing current-project/load/newer-head guard. A current successful request
+returns to Workspace, preserves the existing exact success notice and restores XDL
+source focus. A newer checkbox choice or deliberately moved focus keeps Environment
+open and retains its selection, with a receipt only for the submitted locks.
+
+Held actual HTTP 200 responses verify departed Home receives no stale success notice.
+The canonical transaction still commits one revision and exactly one new Profile
+resource, preserving complete original document objects, supporting files and existing
+locks. New schema/presentation sidecars match admitted digests; authoritative validation,
+compiled plan identity, provider discovery and project run sets remain consistent.
+This unchanged executable identity follows the selected pure presentation profiles;
+it is not a general claim that semantic profiles never affect compilation.
+
+Other held replies preserve a reopened newer revision, exact graph history and a real
+ready preflight ID/snapshot. Actual HTTP 412 current and departed refusals are produced
+by a public-API writer; selection/current error focus and explicit load-current recovery
+are retained, with no unintended transaction. A foreign-project recovery uses only a
+newly owned source fixture, restored in finally; while its actual committed reply is
+held, a newer Environment checkbox draft stays active, focused and unsubmitted.
+The backend recovery still commits independently. Profile interaction advances only
+the shared authoring interaction sequence, preserving its own acknowledgement guards.
+
+HTTP 503, missing digest, duplicate and empty discovery responses are explicitly
+controlled transport observations. The negative cases perform zero binding writes,
+preserve revision/documents/locks and retry the actual registry where offered. Empty
+fixture data is never evidence that the actual registry lacks profiles.
+
+## Failures and review
+
+initial-red/ retains four failures on the unchanged baseline. Besides the two UI
+failures, the departure fixture expected an unquoted If-Match value; the compliant
+client sends a quoted revision. Canonical preservation claims use corrected-red/,
+where each case fails only its UI assertion and both departure cases pass all
+subsequent canonical/identity checks. The first four-case successor then passes.
+
+Read-only review found the cross-slice Environment interaction gap. The actual
+foreign-recovery-red/ records two failures before the scoped onIntent repair;
+six-successor/ passes the original four and these two integration cases. The
+reviewer performed no edits or tests; root's successor results are separate from
+its source-review checkpoint. See independent-review.md.
+
+The expanded cohort first ended 20 passed/four failed: two fixture names omitted
+the actual Process-control hyphen and two snapshot locators matched both header and
+identity details. twenty-four-selectors/ retains those failures and their classification.
+No product change was made for these selectors. Corrected 24 passed before the two
+ADR amendments (twenty-four-before-doc/). The final 24 was rerun after those amendments;
+all 268 inputs then match the full 257 and performance 2 runs exactly. Prior failures
+remain failures, not replacements for successful candidate evidence.
+
+## Measurements and candidate identity
+
+One documented warm-up plus 30 repetitions per viewport, using the unchanged
+200-element/400-connection model and 50,000-record/200-row history workloads:
+
+| Viewport | Selection/inspector p95 | Open/validation p95 | History p95 |
+|---|---:|---:|---:|
+{table}
+
+All {contrast['selectedPairs']} selected discovery/guidance/receipt paint pairs pass 4.5:1;
+minimum {contrast['minimumRatio']:.4f}:1. Associated descriptions, viewport bounds and
+visible outlines are checked for the selected native controls. This is scoped
+evidence, not global accessibility certification; no CSS change was required.
+
+Final input digest: `{v['applicationAndInputDigest']}`. Environment Git identity
+names the predecessor; the complete input map and later committed candidate/package
+binding identify this tested successor. Both predecessor 9ab5883 Ubuntu24 push/PR
+CI runs passed, including backend/browser/package stages; their actual receipt is
+`../native-ci/ubuntu-24.04-9ab5883-runs.json`. New-candidate CI and clean package
+verification require their own identities and are separate outcomes.
+''')
+note = ' Linux profile-binding successor: 24 native keyboard cases at both required viewports, full 257 browser and separate performance 2 pass all 268 identical frozen source/compiled/fixed inputs. Discovery failures/malformed/duplicate/incomplete responses stay unknown with retry; empty success is a labelled observation. Additive exact lock submission uses synchronous pending protection and direct authoritative Project acknowledgement; normal Workspace/exact-notice focus, newer selection/focus/Home/head/history/readiness, actual current/departed412 and foreign recovery preserving a newer profile draft are verified. Exact canonical documents/locks/sidecars/compiled plan/provider/run scope retained. Scoped onIntent changes interaction sequence only. ADR0013/17 amended; all reds/fixture corrections/review retained at evidence/studio/M2-keyboard-profile-bindings/. Backend 851 inherited by 163 unchanged inputs plus CI scheduling control; no local backend rerun. T038/T067 remain partial, 47 completed, no milestone accepted; Windows/actual AT/live/hardware gates stay open.'
+p = root/'specs/001-industry-agnostic-studio/traceability.json'
+trace = json.loads(p.read_text())
+for task in trace['tasks']:
+    if task['id'] in ['T038', 'T062', 'T067']:
+        if note.strip() not in task['implementation_note']:
+            task['implementation_note'] += note
+        for item in ['evidence/studio/M2-keyboard-profile-bindings/', 'tests/e2e/profile-bindings-accessibility.spec.ts',
+                'docs/architecture/ADR-0017-owned-domain-presentation.md']:
+            if item not in task.setdefault('implementation_evidence', []):
+                task['implementation_evidence'].append(item)
+assert Counter(t['status'] for t in trace['tasks']) == {'completed':47, 'in_progress':43, 'blocked':10}
+record = trace['implementation_record']
+record['code_candidate'] = f"Base 9ab5883 plus profile-binding source/input digest {v['applicationAndInputDigest']}; committed candidate binding pending clean package"
+record['verification'].update(playwright_checks_passed=257, playwright_checks_failed=0,
+    playwright_scope='Full native Linux Chromium 257, focused 24 and separate two-viewport performance; all 268 source/compiled/fixed inputs identical across and within final runs. Backend 851 inherited through 163 exact unchanged inputs plus CI scheduling control; not rerun locally.',
+    evidence='evidence/studio/M2-keyboard-profile-bindings/',
+    backend_evidence='evidence/studio/M2-keyboard-profile-bindings/backend-input-inheritance.json',
+    prior_package_evidence='evidence/studio/M2-project-context/package/receipt.json (clean e82b511 native Linux source)',
+    package_evidence='Pending exact-candidate clean profile-binding package')
+p.write_text(json.dumps(trace, ensure_ascii=False, indent=2)+'\n')
+p = root/'specs/001-industry-agnostic-studio/tasks.md'
+text = p.read_text()
+if note.strip() not in text:
+    p.write_text(text+'\n'+note.strip()+'\n')
+p = root/'docs/implementation/STATUS.md'
+text = p.read_text()
+paragraph = 'The latest profile-binding successor passes 24 native keyboard cases, full 257 browser and separate two-viewport performance, with all 268 source/compiled/fixed inputs identical across final runs. Discovery is truthful and retryable; additive exact-lock completion preserves newer selection/focus/navigation/head/history/readiness and actual stale refusals. Environment authoring supersedes foreign recovery without invalidating its own acknowledgement. Canonical documents/locks/sidecars and selected pure-presentation executable/provider/run identities are verified. ADR0013/17 and tasks/traces are amended together; T038/T067 stay partial. Backend 851 is inherited through 163 unchanged inputs plus CI scheduling control. See `evidence/studio/M2-keyboard-profile-bindings/`; all reds and fixture corrections retained. Count 47/100, no milestones; Windows/actual AT/live/physical gates remain open.\n\nBoth 9ab5883 Ubuntu24 push/PR CI runs completed successfully, including backend/browser/package stages. Their actual receipt is `evidence/studio/native-ci/ubuntu-24.04-9ab5883-runs.json`, separate from this new successor.\n\n'
+if paragraph not in text:
+    anchor = 'The latest project-context successor'
+    assert anchor in text
+    p.write_text(text.replace(anchor, paragraph+anchor, 1))
+(out/'controllers/documentation.py.txt').write_text(Path(__file__).read_text())
+print('Documented verified profile slice; task/trace states preserved together')

@@ -1,0 +1,1198 @@
+{
+  "config": {
+    "argv": [
+      "<loop-cache>/node-v24.22.1-linux-x64/bin/node",
+      "<repo>/node_modules/.bin/playwright",
+      "test",
+      "-c",
+      "tests/e2e/playwright.config.ts",
+      "--grep",
+      "profile bindings:"
+    ],
+    "configFile": "<repo>/tests/e2e/playwright.config.ts",
+    "rootDir": "<repo>/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "<repo>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "<repo>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "*.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "<repo>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "<repo>/tests/e2e",
+        "snapshotDir": "<repo>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": "*.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "baseURL": "http://127.0.0.1:47935",
+          "browserName": "chromium",
+          "actionTimeout": 15000,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "trace": "off",
+          "screenshot": "only-on-failure",
+          "video": "off"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "<repo>/test-results/browser-report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "profile-bindings-accessibility.spec.ts",
+      "file": "profile-bindings-accessibility.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "profile bindings: current pending at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3634,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T00:01:41.049Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "profile-completion.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJtb2RlIjoiY3VycmVudCBwZW5kaW5nIiwicHJvamVjdElkIjoicHJqLWM3ZTdkMDE1LTI3MjYtNGRmOS05YTg2LTdiNmZiNThmYzFkNiIsImNvbW1pdHRlZFJldmlzaW9uIjoyLCJjdXJyZW50UmV2aXNpb24iOjIsImFjdHVhbFBlbmRpbmdQb3N0cyI6MSwibWVhc3VyZW1lbnRzIjpbeyJsYWJlbCI6IkFkZGl0aXZlIGltbXV0YWJsZSBwcm9maWxlIGJpbmRpbmcgZ3VpZGFuY2UiLCJ0ZXh0IjoiU2VsZWN0IG9uZSB0byAxNiBhZG1pdHRlZCBwcm9maWxlcy4gQmluZGluZyBhZGRzIHRoZXNlIGV4YWN0IGxvY2tzIGFuZCBrZWVwcyBleGlzdGluZyBsb2Nrcy4gVW5jaGVja2luZyBhIGJveCBvbmx5IGNoYW5nZXMgeW91ciBuZXh0IHN1Ym1pc3Npb247IGl0IGRvZXMgbm90IHJlbW92ZSBhIHByb2plY3QgbG9jay4gIiwiY29sb3IiOiJyZ2IoMTAxLCAxMTcsIDE0MSkiLCJmb250U2l6ZSI6IjEycHgiLCJmb250V2VpZ2h0IjoiNDAwIiwidGhyZXNob2xkIjo0LjUsInNjb3BlIjoiU2VsZWN0ZWQgbm9ybWFsLXNpemUgcmVuZGVyZWQgdGV4dDsgbm8gb3ZlcmFsbCBhY2Nlc3NpYmlsaXR5IGNlcnRpZmljYXRpb24iLCJzdXBwb3J0ZWQiOnRydWUsImxheWVycyI6WyJyZ2JhKDAsIDAsIDAsIDApIiwicmdiKDI1NSwgMjU1LCAyNTUpIl0sImJhY2tncm91bmQiOlsxLDEsMSwxXSwiY29tcG9zaXRlZEZvcmVncm91bmQiOlswLjM5NjA3ODQzMTM3MjU0OSwwLjQ1ODgyMzUyOTQxMTc2NDcsMC41NTI5NDExNzY0NzA1ODgzLDFdLCJyYXRpbyI6NC42ODQ5MTMxNTk4ODk2MjA1LCJwYXNzZWQiOnRydWUsImFzc3VtcHRpb25zIjoiQ1NTIHNSR0IgY29sb3JzOyBhbHBoYSBjb21wb3NpdGVkIHRocm91Z2ggZXhwbGljaXQgYmFja2dyb3VuZHM7IG5vIGFudGktYWxpYXNpbmcgYXBwcm94aW1hdGlvbiJ9XSwibm9TdGFydCI6dHJ1ZSwic2NvcGUiOiJBY3R1YWwgaW1tdXRhYmxlIHByb2ZpbGUgdHJhbnNhY3Rpb247IHByZXNlcnZlIGN1cnJlbnQgbmF2aWdhdGlvbiwgY2hlY2tib3gvZm9jdXMgaW50ZW50LCBuZXdlciBjYW5vbmljYWwgaGlzdG9yeSBhbmQgcmVhbCByZWFkeSBwcmVmbGlnaHQifQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a3ae0304583934462bf9-d1098d2e110525bf4710",
+          "file": "profile-bindings-accessibility.spec.ts",
+          "line": 177,
+          "column": 9
+        },
+        {
+          "title": "profile bindings: newer selection at 1024x768",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 11744,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('.profile-binding-panel').getByRole('checkbox', { name: 'Select profile Process control terminology', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" locator('.profile-binding-panel').getByRole('checkbox', { name: 'Select profile Process control terminology', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('.profile-binding-panel').getByRole('checkbox', { name: 'Select profile Process control terminology', exact: true })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('.profile-binding-panel').getByRole('checkbox', { name: 'Select profile Process control terminology', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" locator('.profile-binding-panel').getByRole('checkbox', { name: 'Select profile Process control terminology', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('.profile-binding-panel').getByRole('checkbox', { name: 'Select profile Process control terminology', exact: true })\u001b[22m\n\n    at tabTo (<repo>/tests/e2e/profile-bindings-accessibility.spec.ts:10:24)\n    at choose (<repo>/tests/e2e/profile-bindings-accessibility.spec.ts:113:9)\n    at <repo>/tests/e2e/profile-bindings-accessibility.spec.ts:207:31",
+                    "location": {
+                      "file": "<repo>/tests/e2e/profile-bindings-accessibility.spec.ts",
+                      "column": 24,
+                      "line": 10
+                    },
+                    "snippet": "   8 |\n   9 | async function tabTo(page: Page, target: Locator) {\n> 10 |   await expect(target).toBeVisible();\n     |                        ^\n  11 |   for (const [key, limit] of [\n  12 |     [\"Shift+Tab\", 40],\n  13 |     [\"Tab\", 220],"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/profile-bindings-accessibility.spec.ts",
+                        "column": 24,
+                        "line": 10
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('.profile-binding-panel').getByRole('checkbox', { name: 'Select profile Process control terminology', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" locator('.profile-binding-panel').getByRole('checkbox', { name: 'Select profile Process control terminology', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('.profile-binding-panel').getByRole('checkbox', { name: 'Select profile Process control terminology', exact: true })\u001b[22m\n\n\n   8 |\n   9 | async function tabTo(page: Page, target: Locator) {\n> 10 |   await expect(target).toBeVisible();\n     |                        ^\n  11 |   for (const [key, limit] of [\n  12 |     [\"Shift+Tab\", 40],\n  13 |     [\"Tab\", 220],\n    at tabTo (<repo>/tests/e2e/profile-bindings-accessibility.spec.ts:10:24)\n    at choose (<repo>/tests/e2e/profile-bindings-accessibility.spec.ts:113:9)\n    at <repo>/tests/e2e/profile-bindings-accessibility.spec.ts:207:31"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T00:01:44.745Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/profile-bindings-accessibi-d9452-newer-selection-at-1024x768/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/profile-bindings-accessibi-d9452-newer-selection-at-1024x768/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/profile-bindings-accessibility.spec.ts",
+                    "column": 24,
+                    "line": 10
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "a3ae0304583934462bf9-fd4f85623ae029777b9c",
+          "file": "profile-bindings-accessibility.spec.ts",
+          "line": 177,
+          "column": 9
+        },
+        {
+          "title": "profile bindings: deliberate focus at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2900,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T00:01:56.818Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "profile-completion.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJtb2RlIjoiZGVsaWJlcmF0ZSBmb2N1cyIsInByb2plY3RJZCI6InByai04YzA4ODcxNS1mMTY1LTRkMmUtYjZhZC00NTk4NjFlNTY4NDYiLCJjb21taXR0ZWRSZXZpc2lvbiI6MiwiY3VycmVudFJldmlzaW9uIjoyLCJhY3R1YWxQZW5kaW5nUG9zdHMiOjEsIm1lYXN1cmVtZW50cyI6W3sibGFiZWwiOiJBZGRpdGl2ZSBpbW11dGFibGUgcHJvZmlsZSBiaW5kaW5nIGd1aWRhbmNlIiwidGV4dCI6IlNlbGVjdCBvbmUgdG8gMTYgYWRtaXR0ZWQgcHJvZmlsZXMuIEJpbmRpbmcgYWRkcyB0aGVzZSBleGFjdCBsb2NrcyBhbmQga2VlcHMgZXhpc3RpbmcgbG9ja3MuIFVuY2hlY2tpbmcgYSBib3ggb25seSBjaGFuZ2VzIHlvdXIgbmV4dCBzdWJtaXNzaW9uOyBpdCBkb2VzIG5vdCByZW1vdmUgYSBwcm9qZWN0IGxvY2suICIsImNvbG9yIjoicmdiKDEwMSwgMTE3LCAxNDEpIiwiZm9udFNpemUiOiIxMnB4IiwiZm9udFdlaWdodCI6IjQwMCIsInRocmVzaG9sZCI6NC41LCJzY29wZSI6IlNlbGVjdGVkIG5vcm1hbC1zaXplIHJlbmRlcmVkIHRleHQ7IG5vIG92ZXJhbGwgYWNjZXNzaWJpbGl0eSBjZXJ0aWZpY2F0aW9uIiwic3VwcG9ydGVkIjp0cnVlLCJsYXllcnMiOlsicmdiYSgwLCAwLCAwLCAwKSIsInJnYigyNTUsIDI1NSwgMjU1KSJdLCJiYWNrZ3JvdW5kIjpbMSwxLDEsMV0sImNvbXBvc2l0ZWRGb3JlZ3JvdW5kIjpbMC4zOTYwNzg0MzEzNzI1NDksMC40NTg4MjM1Mjk0MTE3NjQ3LDAuNTUyOTQxMTc2NDcwNTg4MywxXSwicmF0aW8iOjQuNjg0OTEzMTU5ODg5NjIwNSwicGFzc2VkIjp0cnVlLCJhc3N1bXB0aW9ucyI6IkNTUyBzUkdCIGNvbG9yczsgYWxwaGEgY29tcG9zaXRlZCB0aHJvdWdoIGV4cGxpY2l0IGJhY2tncm91bmRzOyBubyBhbnRpLWFsaWFzaW5nIGFwcHJveGltYXRpb24ifV0sIm5vU3RhcnQiOnRydWUsInNjb3BlIjoiQWN0dWFsIGltbXV0YWJsZSBwcm9maWxlIHRyYW5zYWN0aW9uOyBwcmVzZXJ2ZSBjdXJyZW50IG5hdmlnYXRpb24sIGNoZWNrYm94L2ZvY3VzIGludGVudCwgbmV3ZXIgY2Fub25pY2FsIGhpc3RvcnkgYW5kIHJlYWwgcmVhZHkgcHJlZmxpZ2h0In0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a3ae0304583934462bf9-0f881e386b4d80b8ac6f",
+          "file": "profile-bindings-accessibility.spec.ts",
+          "line": 177,
+          "column": 9
+        },
+        {
+          "title": "profile bindings: newer head and readiness at 1024x768",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 5792,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('dialog', { name: 'Execution preflight', exact: true }).getByText('snap-790a16f5-21ac-4b6c-81df-171e1a92c81c', { exact: true })\nExpected: visible\nError: strict mode violation: getByRole('dialog', { name: 'Execution preflight', exact: true }).getByText('snap-790a16f5-21ac-4b6c-81df-171e1a92c81c', { exact: true }) resolved to 2 elements:\n    1) <code>snap-790a16f5-21ac-4b6c-81df-171e1a92c81c</code> aka getByRole('code').filter({ hasText: 'snap-790a16f5-21ac-4b6c-81df-' })\n    2) <dd>snap-790a16f5-21ac-4b6c-81df-171e1a92c81c</dd> aka getByRole('definition').filter({ hasText: 'snap-790a16f5-21ac-4b6c-81df-' })\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('dialog', { name: 'Execution preflight', exact: true }).getByText('snap-790a16f5-21ac-4b6c-81df-171e1a92c81c', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: 'Execution preflight', exact: true }).getByText('snap-790a16f5-21ac-4b6c-81df-171e1a92c81c', { exact: true })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('dialog', { name: 'Execution preflight', exact: true }).getByText('snap-790a16f5-21ac-4b6c-81df-171e1a92c81c', { exact: true })\nExpected: visible\nError: strict mode violation: getByRole('dialog', { name: 'Execution preflight', exact: true }).getByText('snap-790a16f5-21ac-4b6c-81df-171e1a92c81c', { exact: true }) resolved to 2 elements:\n    1) <code>snap-790a16f5-21ac-4b6c-81df-171e1a92c81c</code> aka getByRole('code').filter({ hasText: 'snap-790a16f5-21ac-4b6c-81df-' })\n    2) <dd>snap-790a16f5-21ac-4b6c-81df-171e1a92c81c</dd> aka getByRole('definition').filter({ hasText: 'snap-790a16f5-21ac-4b6c-81df-' })\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('dialog', { name: 'Execution preflight', exact: true }).getByText('snap-790a16f5-21ac-4b6c-81df-171e1a92c81c', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: 'Execution preflight', exact: true }).getByText('snap-790a16f5-21ac-4b6c-81df-171e1a92c81c', { exact: true })\u001b[22m\n\n    at <repo>/tests/e2e/profile-bindings-accessibility.spec.ts:361:13",
+                    "location": {
+                      "file": "<repo>/tests/e2e/profile-bindings-accessibility.spec.ts",
+                      "column": 13,
+                      "line": 361
+                    },
+                    "snippet": "  359 |           await expect(\n  360 |             dialog.getByText(readySnapshot!, { exact: true }),\n> 361 |           ).toBeVisible();\n      |             ^\n  362 |           await expect(\n  363 |             dialog.getByRole(\"button\", {\n  364 |               name: \"Start frozen snapshot\","
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/profile-bindings-accessibility.spec.ts",
+                        "column": 13,
+                        "line": 361
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('dialog', { name: 'Execution preflight', exact: true }).getByText('snap-790a16f5-21ac-4b6c-81df-171e1a92c81c', { exact: true })\nExpected: visible\nError: strict mode violation: getByRole('dialog', { name: 'Execution preflight', exact: true }).getByText('snap-790a16f5-21ac-4b6c-81df-171e1a92c81c', { exact: true }) resolved to 2 elements:\n    1) <code>snap-790a16f5-21ac-4b6c-81df-171e1a92c81c</code> aka getByRole('code').filter({ hasText: 'snap-790a16f5-21ac-4b6c-81df-' })\n    2) <dd>snap-790a16f5-21ac-4b6c-81df-171e1a92c81c</dd> aka getByRole('definition').filter({ hasText: 'snap-790a16f5-21ac-4b6c-81df-' })\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('dialog', { name: 'Execution preflight', exact: true }).getByText('snap-790a16f5-21ac-4b6c-81df-171e1a92c81c', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: 'Execution preflight', exact: true }).getByText('snap-790a16f5-21ac-4b6c-81df-171e1a92c81c', { exact: true })\u001b[22m\n\n\n  359 |           await expect(\n  360 |             dialog.getByText(readySnapshot!, { exact: true }),\n> 361 |           ).toBeVisible();\n      |             ^\n  362 |           await expect(\n  363 |             dialog.getByRole(\"button\", {\n  364 |               name: \"Start frozen snapshot\",\n    at <repo>/tests/e2e/profile-bindings-accessibility.spec.ts:361:13"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T00:01:59.781Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/profile-bindings-accessibi-d7f0f-d-and-readiness-at-1024x768/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/profile-bindings-accessibi-d7f0f-d-and-readiness-at-1024x768/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/profile-bindings-accessibility.spec.ts",
+                    "column": 13,
+                    "line": 361
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "a3ae0304583934462bf9-03ba74cd7545fd5a911c",
+          "file": "profile-bindings-accessibility.spec.ts",
+          "line": 177,
+          "column": 9
+        },
+        {
+          "title": "profile bindings: actual stale refusal current at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3233,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T00:02:05.931Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "profile-stale.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJkZXBhcnRlZCI6ZmFsc2UsInByb2plY3RJZCI6InByai1lNWIxMGNkNC04ZWY2LTQ4YzUtOTljNi1jZTliZjZiY2VmYjAiLCJhY3R1YWxTdGF0dXMiOjQxMiwiY29kZSI6IlJFVklTSU9OX0NPTkZMSUNUIiwicmV2aXNpb25VbmNoYW5nZWRBZnRlclJlZnVzYWwiOnRydWUsInNlbGVjdGlvblJldGFpbmVkVW50aWxFeHBsaWNpdFJlbG9hZCI6dHJ1ZSwibm9TdGFydCI6dHJ1ZX0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a3ae0304583934462bf9-278edf1942c0c1295034",
+          "file": "profile-bindings-accessibility.spec.ts",
+          "line": 399,
+          "column": 9
+        },
+        {
+          "title": "profile bindings: actual stale refusal after departure at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2214,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T00:02:09.224Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "profile-stale.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJkZXBhcnRlZCI6dHJ1ZSwicHJvamVjdElkIjoicHJqLTVjNjgyNzBmLWYzZGQtNGFjOS05N2MwLTBmNTZiYzc3MmUyYiIsImFjdHVhbFN0YXR1cyI6NDEyLCJjb2RlIjoiUkVWSVNJT05fQ09ORkxJQ1QiLCJyZXZpc2lvblVuY2hhbmdlZEFmdGVyUmVmdXNhbCI6dHJ1ZSwic2VsZWN0aW9uUmV0YWluZWRVbnRpbEV4cGxpY2l0UmVsb2FkIjpmYWxzZSwibm9TdGFydCI6dHJ1ZX0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a3ae0304583934462bf9-6f39e5f9233879ea38c2",
+          "file": "profile-bindings-accessibility.spec.ts",
+          "line": 399,
+          "column": 9
+        },
+        {
+          "title": "profile bindings: discovery missing digest observation at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1736,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T00:02:11.445Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "profile-observation.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJtb2RlIjoibWlzc2luZyBkaWdlc3QiLCJtZWFzdXJlbWVudHMiOlt7ImxhYmVsIjoiVW5rbm93biBtYWxmb3JtZWQgcHJvZmlsZSBkaXNjb3ZlcnkiLCJ0ZXh0IjoiQ291bGQgbm90IGNoZWNrIGFkbWl0dGVkIHByb2ZpbGVzLiBBdmFpbGFiaWxpdHkgaXMgdW5rbm93bi4gVGhlIGFkbWl0dGVkIHByb2ZpbGUgcmVzcG9uc2UgaXMgaW5jb21wbGV0ZSBvciBtYWxmb3JtZWQuIFJldHJ5IHByb2ZpbGUgZGlzY292ZXJ5LiIsImNvbG9yIjoicmdiKDE2MSwgODksIDgxKSIsImZvbnRTaXplIjoiMTJweCIsImZvbnRXZWlnaHQiOiI0MDAiLCJ0aHJlc2hvbGQiOjQuNSwic2NvcGUiOiJTZWxlY3RlZCBub3JtYWwtc2l6ZSByZW5kZXJlZCB0ZXh0OyBubyBvdmVyYWxsIGFjY2Vzc2liaWxpdHkgY2VydGlmaWNhdGlvbiIsInN1cHBvcnRlZCI6dHJ1ZSwibGF5ZXJzIjpbInJnYigyNTUsIDI0MywgMjQyKSJdLCJiYWNrZ3JvdW5kIjpbMSwwLjk1Mjk0MTE3NjQ3MDU4ODIsMC45NDkwMTk2MDc4NDMxMzcyLDFdLCJjb21wb3NpdGVkRm9yZWdyb3VuZCI6WzAuNjMxMzcyNTQ5MDE5NjA3OCwwLjM0OTAxOTYwNzg0MzEzNzI0LDAuMzE3NjQ3MDU4ODIzNTI5NCwxXSwicmF0aW8iOjQuNzYzMzYwOTE2MTU1NzcyLCJwYXNzZWQiOnRydWUsImFzc3VtcHRpb25zIjoiQ1NTIHNSR0IgY29sb3JzOyBhbHBoYSBjb21wb3NpdGVkIHRocm91Z2ggZXhwbGljaXQgYmFja2dyb3VuZHM7IG5vIGFudGktYWxpYXNpbmcgYXBwcm94aW1hdGlvbiJ9XSwibGFiZWxsZWRUcmFuc3BvcnRGaXh0dXJlIjp0cnVlLCJhY3R1YWxSZWdpc3RyeUNvdW50Ijo1LCJiaW5kaW5nV3JpdGVzIjowLCJzY29wZSI6IkNvbnRyb2xsZWQgZGlzY292ZXJ5IHJlc3BvbnNlIG9ubHk7IGVtcHR5IG9ic2VydmF0aW9uIGlzIG5vdCBldmlkZW5jZSB0aGF0IHRoZSBhY3R1YWwgcmVnaXN0cnkgaGFzIG5vIHByb2ZpbGVzOyBubyBwcm92aWRlciBvciBleGVjdXRpb24gYXV0aG9yaXR5In0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a3ae0304583934462bf9-ed1934a7ba27340c42c2",
+          "file": "profile-bindings-accessibility.spec.ts",
+          "line": 487,
+          "column": 9
+        },
+        {
+          "title": "profile bindings: discovery duplicate observation at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1589,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T00:02:13.189Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "profile-observation.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJtb2RlIjoiZHVwbGljYXRlIiwibWVhc3VyZW1lbnRzIjpbeyJsYWJlbCI6IlVua25vd24gbWFsZm9ybWVkIHByb2ZpbGUgZGlzY292ZXJ5IiwidGV4dCI6IkNvdWxkIG5vdCBjaGVjayBhZG1pdHRlZCBwcm9maWxlcy4gQXZhaWxhYmlsaXR5IGlzIHVua25vd24uIFRoZSBhZG1pdHRlZCBwcm9maWxlIHJlc3BvbnNlIGlzIGluY29tcGxldGUgb3IgbWFsZm9ybWVkLiBSZXRyeSBwcm9maWxlIGRpc2NvdmVyeS4iLCJjb2xvciI6InJnYigxNjEsIDg5LCA4MSkiLCJmb250U2l6ZSI6IjEycHgiLCJmb250V2VpZ2h0IjoiNDAwIiwidGhyZXNob2xkIjo0LjUsInNjb3BlIjoiU2VsZWN0ZWQgbm9ybWFsLXNpemUgcmVuZGVyZWQgdGV4dDsgbm8gb3ZlcmFsbCBhY2Nlc3NpYmlsaXR5IGNlcnRpZmljYXRpb24iLCJzdXBwb3J0ZWQiOnRydWUsImxheWVycyI6WyJyZ2IoMjU1LCAyNDMsIDI0MikiXSwiYmFja2dyb3VuZCI6WzEsMC45NTI5NDExNzY0NzA1ODgyLDAuOTQ5MDE5NjA3ODQzMTM3MiwxXSwiY29tcG9zaXRlZEZvcmVncm91bmQiOlswLjYzMTM3MjU0OTAxOTYwNzgsMC4zNDkwMTk2MDc4NDMxMzcyNCwwLjMxNzY0NzA1ODgyMzUyOTQsMV0sInJhdGlvIjo0Ljc2MzM2MDkxNjE1NTc3MiwicGFzc2VkIjp0cnVlLCJhc3N1bXB0aW9ucyI6IkNTUyBzUkdCIGNvbG9yczsgYWxwaGEgY29tcG9zaXRlZCB0aHJvdWdoIGV4cGxpY2l0IGJhY2tncm91bmRzOyBubyBhbnRpLWFsaWFzaW5nIGFwcHJveGltYXRpb24ifV0sImxhYmVsbGVkVHJhbnNwb3J0Rml4dHVyZSI6dHJ1ZSwiYWN0dWFsUmVnaXN0cnlDb3VudCI6NSwiYmluZGluZ1dyaXRlcyI6MCwic2NvcGUiOiJDb250cm9sbGVkIGRpc2NvdmVyeSByZXNwb25zZSBvbmx5OyBlbXB0eSBvYnNlcnZhdGlvbiBpcyBub3QgZXZpZGVuY2UgdGhhdCB0aGUgYWN0dWFsIHJlZ2lzdHJ5IGhhcyBubyBwcm9maWxlczsgbm8gcHJvdmlkZXIgb3IgZXhlY3V0aW9uIGF1dGhvcml0eSJ9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a3ae0304583934462bf9-bf5f4a7a43e63416f669",
+          "file": "profile-bindings-accessibility.spec.ts",
+          "line": 487,
+          "column": 9
+        },
+        {
+          "title": "profile bindings: discovery empty observation at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1081,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T00:02:14.787Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "profile-observation.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJtb2RlIjoiZW1wdHkiLCJtZWFzdXJlbWVudHMiOlt7ImxhYmVsIjoiT2JzZXJ2ZWQgZW1wdHkgcHJvZmlsZSByZXNwb25zZSIsInRleHQiOiJObyBhZG1pdHRlZCBwcm9maWxlcyB3ZXJlIHJldHVybmVkIGJ5IHRoaXMgZGlzY292ZXJ5IHJlcXVlc3QuIiwiY29sb3IiOiJyZ2IoMTAxLCAxMTcsIDE0MSkiLCJmb250U2l6ZSI6IjEycHgiLCJmb250V2VpZ2h0IjoiNDAwIiwidGhyZXNob2xkIjo0LjUsInNjb3BlIjoiU2VsZWN0ZWQgbm9ybWFsLXNpemUgcmVuZGVyZWQgdGV4dDsgbm8gb3ZlcmFsbCBhY2Nlc3NpYmlsaXR5IGNlcnRpZmljYXRpb24iLCJzdXBwb3J0ZWQiOnRydWUsImxheWVycyI6WyJyZ2JhKDAsIDAsIDAsIDApIiwicmdiKDI1NSwgMjU1LCAyNTUpIl0sImJhY2tncm91bmQiOlsxLDEsMSwxXSwiY29tcG9zaXRlZEZvcmVncm91bmQiOlswLjM5NjA3ODQzMTM3MjU0OSwwLjQ1ODgyMzUyOTQxMTc2NDcsMC41NTI5NDExNzY0NzA1ODgzLDFdLCJyYXRpbyI6NC42ODQ5MTMxNTk4ODk2MjA1LCJwYXNzZWQiOnRydWUsImFzc3VtcHRpb25zIjoiQ1NTIHNSR0IgY29sb3JzOyBhbHBoYSBjb21wb3NpdGVkIHRocm91Z2ggZXhwbGljaXQgYmFja2dyb3VuZHM7IG5vIGFudGktYWxpYXNpbmcgYXBwcm94aW1hdGlvbiJ9XSwibGFiZWxsZWRUcmFuc3BvcnRGaXh0dXJlIjp0cnVlLCJhY3R1YWxSZWdpc3RyeUNvdW50Ijo1LCJiaW5kaW5nV3JpdGVzIjowLCJzY29wZSI6IkNvbnRyb2xsZWQgZGlzY292ZXJ5IHJlc3BvbnNlIG9ubHk7IGVtcHR5IG9ic2VydmF0aW9uIGlzIG5vdCBldmlkZW5jZSB0aGF0IHRoZSBhY3R1YWwgcmVnaXN0cnkgaGFzIG5vIHByb2ZpbGVzOyBubyBwcm92aWRlciBvciBleGVjdXRpb24gYXV0aG9yaXR5In0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a3ae0304583934462bf9-2038603508d3eaf64008",
+          "file": "profile-bindings-accessibility.spec.ts",
+          "line": 487,
+          "column": 9
+        },
+        {
+          "title": "profile bindings: foreign recovery preserves newer profile draft at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2291,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T00:02:15.875Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "profile-foreign-recovery.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJhY3RpdmVQcm9qZWN0SWQiOiJwcmotYTkwOTQxOTgtNTgyYi00OTM4LThlNDUtODVjNGU1NDIwYjc3IiwicmVjb3ZlcmVkUHJvamVjdElkIjoicHJqLTRhMTI4ZTA5LTA1N2MtNDdhZS05Y2I0LTdkOWM1M2RiMjUyNSIsIm1lYXN1cmVkQ29udGV4dCI6eyJwYW5lbENvdW50IjoxLCJjaGVja2VkIjp0cnVlLCJmb2N1c2VkIjp0cnVlLCJzZWxlY3Rpb25MYWJlbCI6MSwic3RvcmVkUHJvamVjdCI6InByai1hOTA5NDE5OC01ODJiLTQ5MzgtOGU0NS04NWM0ZTU0MjBiNzcifSwiYmFja2VuZFJlY292ZXJ5Q29tbWl0dGVkIjp0cnVlLCJwcm9maWxlRHJhZnRVbnN1Ym1pdHRlZCI6dHJ1ZSwiYWN0aXZlQ2Fub25pY2FsVW5jaGFuZ2VkIjp0cnVlLCJub1N0YXJ0Ijp0cnVlLCJzY29wZSI6Ik9ubHkgbmV3bHkgb3duZWQgdGVzdCBzb3VyY2UgbWFkZSB1bnJlYWRhYmxlOyByZWFsIGZvcmVpZ24gcmVjb3ZlcnkgaGVsZCBhZnRlciBjb21taXQgd2hpbGUgYWN0aXZlIEVudmlyb25tZW50IHByb2ZpbGUgY2hlY2tib3ggY2hhbmdlcyJ9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a3ae0304583934462bf9-c3619076c55dabfcac50",
+          "file": "profile-bindings-accessibility.spec.ts",
+          "line": 581,
+          "column": 7
+        },
+        {
+          "title": "profile bindings: discovery failure stays unknown and retries actual registry at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1685,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T00:02:18.177Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "profile-discovery.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJjb250cm9sbGVkSW5pdGlhbFN0YXR1cyI6NTAzLCJyZXRyeVN0YXR1cyI6MjAwLCJhY3R1YWxSZWdpc3RyeVJldHJpZWQiOnRydWUsIm9ic2VydmF0aW9uc1N0YXlVbmtub3duT25GYWlsdXJlIjp0cnVlLCJiaW5kaW5nV3JpdGVzIjowLCJub1N0YXJ0Ijp0cnVlLCJzY29wZSI6IkxhYmVsbGVkIGRpc2NvdmVyeSB0cmFuc3BvcnQgZmFpbHVyZSB0aGVuIGFjdHVhbCBhZG1pdHRlZCByZWdpc3RyeTsgbm8gcHJvdmlkZXIgaW5zdGFsbGF0aW9uIG9yIGV4ZWN1dGlvbiBhdXRob3JpdHkifQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a3ae0304583934462bf9-4156d03c6f619f3d0be3",
+          "file": "profile-bindings-accessibility.spec.ts",
+          "line": 760,
+          "column": 7
+        },
+        {
+          "title": "profile bindings: committed reply cannot announce success on departed Home at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2935,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T00:02:19.875Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "profile-binding-departure.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJwcm9qZWN0SWQiOiJwcmotMmIwOTNhZTItNTA0YS00OTFlLWE4MjQtNGYzYzVhZTAzY2JkIiwicHJvZmlsZUlkIjoiaW8ueHZlcnNlLnN0dWRpby5kb21haW4uYXV0b21vdGl2ZSIsImNvbW1pdHRlZFJldmlzaW9uIjoyLCJvcmlnaW5hbERvY3VtZW50c1ByZXNlcnZlZCI6dHJ1ZSwiYWRkaXRpdmVMb2Nrc1ByZXNlcnZlZCI6dHJ1ZSwiZXhhY3RTaWRlY2FyRGlnZXN0cyI6dHJ1ZSwiYXV0aG9yaXRhdGl2ZVZhbGlkYXRpb24iOnRydWUsImV4ZWN1dGFibGVQbGFuVW5jaGFuZ2VkIjp0cnVlLCJwcm92aWRlckRpc2NvdmVyeVVuY2hhbmdlZCI6dHJ1ZSwibm9TdGFydCI6dHJ1ZSwic2NvcGUiOiJBY3R1YWwgYWRkaXRpdmUgcHJlc2VudGF0aW9uLW9ubHkgbG9jayB0cmFuc2FjdGlvbiBoZWxkIGFmdGVyIGNvbW1pdDsgZGVwYXJ0ZWQgd29ya3NwYWNlIG11c3Qgbm90IGRpc3BsYXkgc3RhbGUgc3VjY2VzcyJ9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a3ae0304583934462bf9-772d344d24ded8cc6b48",
+          "file": "profile-bindings-accessibility.spec.ts",
+          "line": 843,
+          "column": 7
+        },
+        {
+          "title": "profile bindings: current pending at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1928,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T00:02:22.818Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "profile-completion.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJtb2RlIjoiY3VycmVudCBwZW5kaW5nIiwicHJvamVjdElkIjoicHJqLWViZGUyNDgwLTY5OTctNDFmYS05OTE3LTYzNGZmZDA5YjI0NiIsImNvbW1pdHRlZFJldmlzaW9uIjoyLCJjdXJyZW50UmV2aXNpb24iOjIsImFjdHVhbFBlbmRpbmdQb3N0cyI6MSwibWVhc3VyZW1lbnRzIjpbeyJsYWJlbCI6IkFkZGl0aXZlIGltbXV0YWJsZSBwcm9maWxlIGJpbmRpbmcgZ3VpZGFuY2UiLCJ0ZXh0IjoiU2VsZWN0IG9uZSB0byAxNiBhZG1pdHRlZCBwcm9maWxlcy4gQmluZGluZyBhZGRzIHRoZXNlIGV4YWN0IGxvY2tzIGFuZCBrZWVwcyBleGlzdGluZyBsb2Nrcy4gVW5jaGVja2luZyBhIGJveCBvbmx5IGNoYW5nZXMgeW91ciBuZXh0IHN1Ym1pc3Npb247IGl0IGRvZXMgbm90IHJlbW92ZSBhIHByb2plY3QgbG9jay4gIiwiY29sb3IiOiJyZ2IoMTAxLCAxMTcsIDE0MSkiLCJmb250U2l6ZSI6IjEycHgiLCJmb250V2VpZ2h0IjoiNDAwIiwidGhyZXNob2xkIjo0LjUsInNjb3BlIjoiU2VsZWN0ZWQgbm9ybWFsLXNpemUgcmVuZGVyZWQgdGV4dDsgbm8gb3ZlcmFsbCBhY2Nlc3NpYmlsaXR5IGNlcnRpZmljYXRpb24iLCJzdXBwb3J0ZWQiOnRydWUsImxheWVycyI6WyJyZ2JhKDAsIDAsIDAsIDApIiwicmdiKDI1NSwgMjU1LCAyNTUpIl0sImJhY2tncm91bmQiOlsxLDEsMSwxXSwiY29tcG9zaXRlZEZvcmVncm91bmQiOlswLjM5NjA3ODQzMTM3MjU0OSwwLjQ1ODgyMzUyOTQxMTc2NDcsMC41NTI5NDExNzY0NzA1ODgzLDFdLCJyYXRpbyI6NC42ODQ5MTMxNTk4ODk2MjA1LCJwYXNzZWQiOnRydWUsImFzc3VtcHRpb25zIjoiQ1NTIHNSR0IgY29sb3JzOyBhbHBoYSBjb21wb3NpdGVkIHRocm91Z2ggZXhwbGljaXQgYmFja2dyb3VuZHM7IG5vIGFudGktYWxpYXNpbmcgYXBwcm94aW1hdGlvbiJ9XSwibm9TdGFydCI6dHJ1ZSwic2NvcGUiOiJBY3R1YWwgaW1tdXRhYmxlIHByb2ZpbGUgdHJhbnNhY3Rpb247IHByZXNlcnZlIGN1cnJlbnQgbmF2aWdhdGlvbiwgY2hlY2tib3gvZm9jdXMgaW50ZW50LCBuZXdlciBjYW5vbmljYWwgaGlzdG9yeSBhbmQgcmVhbCByZWFkeSBwcmVmbGlnaHQifQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a3ae0304583934462bf9-3c69e6af58c14af75bcf",
+          "file": "profile-bindings-accessibility.spec.ts",
+          "line": 177,
+          "column": 9
+        },
+        {
+          "title": "profile bindings: newer selection at 1440x900",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 12230,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('.profile-binding-panel').getByRole('checkbox', { name: 'Select profile Process control terminology', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" locator('.profile-binding-panel').getByRole('checkbox', { name: 'Select profile Process control terminology', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('.profile-binding-panel').getByRole('checkbox', { name: 'Select profile Process control terminology', exact: true })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('.profile-binding-panel').getByRole('checkbox', { name: 'Select profile Process control terminology', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" locator('.profile-binding-panel').getByRole('checkbox', { name: 'Select profile Process control terminology', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('.profile-binding-panel').getByRole('checkbox', { name: 'Select profile Process control terminology', exact: true })\u001b[22m\n\n    at tabTo (<repo>/tests/e2e/profile-bindings-accessibility.spec.ts:10:24)\n    at choose (<repo>/tests/e2e/profile-bindings-accessibility.spec.ts:113:9)\n    at <repo>/tests/e2e/profile-bindings-accessibility.spec.ts:207:31",
+                    "location": {
+                      "file": "<repo>/tests/e2e/profile-bindings-accessibility.spec.ts",
+                      "column": 24,
+                      "line": 10
+                    },
+                    "snippet": "   8 |\n   9 | async function tabTo(page: Page, target: Locator) {\n> 10 |   await expect(target).toBeVisible();\n     |                        ^\n  11 |   for (const [key, limit] of [\n  12 |     [\"Shift+Tab\", 40],\n  13 |     [\"Tab\", 220],"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/profile-bindings-accessibility.spec.ts",
+                        "column": 24,
+                        "line": 10
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('.profile-binding-panel').getByRole('checkbox', { name: 'Select profile Process control terminology', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" locator('.profile-binding-panel').getByRole('checkbox', { name: 'Select profile Process control terminology', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('.profile-binding-panel').getByRole('checkbox', { name: 'Select profile Process control terminology', exact: true })\u001b[22m\n\n\n   8 |\n   9 | async function tabTo(page: Page, target: Locator) {\n> 10 |   await expect(target).toBeVisible();\n     |                        ^\n  11 |   for (const [key, limit] of [\n  12 |     [\"Shift+Tab\", 40],\n  13 |     [\"Tab\", 220],\n    at tabTo (<repo>/tests/e2e/profile-bindings-accessibility.spec.ts:10:24)\n    at choose (<repo>/tests/e2e/profile-bindings-accessibility.spec.ts:113:9)\n    at <repo>/tests/e2e/profile-bindings-accessibility.spec.ts:207:31"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T00:02:24.757Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/profile-bindings-accessibi-967c0-newer-selection-at-1440x900/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/profile-bindings-accessibi-967c0-newer-selection-at-1440x900/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/profile-bindings-accessibility.spec.ts",
+                    "column": 24,
+                    "line": 10
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "a3ae0304583934462bf9-edd6b7434ef248a39cbb",
+          "file": "profile-bindings-accessibility.spec.ts",
+          "line": 177,
+          "column": 9
+        },
+        {
+          "title": "profile bindings: deliberate focus at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2503,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T00:02:37.327Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "profile-completion.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJtb2RlIjoiZGVsaWJlcmF0ZSBmb2N1cyIsInByb2plY3RJZCI6InByai05Y2QzODNjZC1jMTgzLTRlZmUtYmIzNS0zZDU0NTMwNWJjOWEiLCJjb21taXR0ZWRSZXZpc2lvbiI6MiwiY3VycmVudFJldmlzaW9uIjoyLCJhY3R1YWxQZW5kaW5nUG9zdHMiOjEsIm1lYXN1cmVtZW50cyI6W3sibGFiZWwiOiJBZGRpdGl2ZSBpbW11dGFibGUgcHJvZmlsZSBiaW5kaW5nIGd1aWRhbmNlIiwidGV4dCI6IlNlbGVjdCBvbmUgdG8gMTYgYWRtaXR0ZWQgcHJvZmlsZXMuIEJpbmRpbmcgYWRkcyB0aGVzZSBleGFjdCBsb2NrcyBhbmQga2VlcHMgZXhpc3RpbmcgbG9ja3MuIFVuY2hlY2tpbmcgYSBib3ggb25seSBjaGFuZ2VzIHlvdXIgbmV4dCBzdWJtaXNzaW9uOyBpdCBkb2VzIG5vdCByZW1vdmUgYSBwcm9qZWN0IGxvY2suICIsImNvbG9yIjoicmdiKDEwMSwgMTE3LCAxNDEpIiwiZm9udFNpemUiOiIxMnB4IiwiZm9udFdlaWdodCI6IjQwMCIsInRocmVzaG9sZCI6NC41LCJzY29wZSI6IlNlbGVjdGVkIG5vcm1hbC1zaXplIHJlbmRlcmVkIHRleHQ7IG5vIG92ZXJhbGwgYWNjZXNzaWJpbGl0eSBjZXJ0aWZpY2F0aW9uIiwic3VwcG9ydGVkIjp0cnVlLCJsYXllcnMiOlsicmdiYSgwLCAwLCAwLCAwKSIsInJnYigyNTUsIDI1NSwgMjU1KSJdLCJiYWNrZ3JvdW5kIjpbMSwxLDEsMV0sImNvbXBvc2l0ZWRGb3JlZ3JvdW5kIjpbMC4zOTYwNzg0MzEzNzI1NDksMC40NTg4MjM1Mjk0MTE3NjQ3LDAuNTUyOTQxMTc2NDcwNTg4MywxXSwicmF0aW8iOjQuNjg0OTEzMTU5ODg5NjIwNSwicGFzc2VkIjp0cnVlLCJhc3N1bXB0aW9ucyI6IkNTUyBzUkdCIGNvbG9yczsgYWxwaGEgY29tcG9zaXRlZCB0aHJvdWdoIGV4cGxpY2l0IGJhY2tncm91bmRzOyBubyBhbnRpLWFsaWFzaW5nIGFwcHJveGltYXRpb24ifV0sIm5vU3RhcnQiOnRydWUsInNjb3BlIjoiQWN0dWFsIGltbXV0YWJsZSBwcm9maWxlIHRyYW5zYWN0aW9uOyBwcmVzZXJ2ZSBjdXJyZW50IG5hdmlnYXRpb24sIGNoZWNrYm94L2ZvY3VzIGludGVudCwgbmV3ZXIgY2Fub25pY2FsIGhpc3RvcnkgYW5kIHJlYWwgcmVhZHkgcHJlZmxpZ2h0In0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a3ae0304583934462bf9-3a8edd4cf213166dc3eb",
+          "file": "profile-bindings-accessibility.spec.ts",
+          "line": 177,
+          "column": 9
+        },
+        {
+          "title": "profile bindings: newer head and readiness at 1440x900",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 5265,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('dialog', { name: 'Execution preflight', exact: true }).getByText('snap-f6bba753-fca8-4f8b-b3ee-58ff6aed5050', { exact: true })\nExpected: visible\nError: strict mode violation: getByRole('dialog', { name: 'Execution preflight', exact: true }).getByText('snap-f6bba753-fca8-4f8b-b3ee-58ff6aed5050', { exact: true }) resolved to 2 elements:\n    1) <code>snap-f6bba753-fca8-4f8b-b3ee-58ff6aed5050</code> aka getByRole('code').filter({ hasText: 'snap-f6bba753-fca8-4f8b-b3ee-' })\n    2) <dd>snap-f6bba753-fca8-4f8b-b3ee-58ff6aed5050</dd> aka getByRole('definition').filter({ hasText: 'snap-f6bba753-fca8-4f8b-b3ee-' })\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('dialog', { name: 'Execution preflight', exact: true }).getByText('snap-f6bba753-fca8-4f8b-b3ee-58ff6aed5050', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: 'Execution preflight', exact: true }).getByText('snap-f6bba753-fca8-4f8b-b3ee-58ff6aed5050', { exact: true })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('dialog', { name: 'Execution preflight', exact: true }).getByText('snap-f6bba753-fca8-4f8b-b3ee-58ff6aed5050', { exact: true })\nExpected: visible\nError: strict mode violation: getByRole('dialog', { name: 'Execution preflight', exact: true }).getByText('snap-f6bba753-fca8-4f8b-b3ee-58ff6aed5050', { exact: true }) resolved to 2 elements:\n    1) <code>snap-f6bba753-fca8-4f8b-b3ee-58ff6aed5050</code> aka getByRole('code').filter({ hasText: 'snap-f6bba753-fca8-4f8b-b3ee-' })\n    2) <dd>snap-f6bba753-fca8-4f8b-b3ee-58ff6aed5050</dd> aka getByRole('definition').filter({ hasText: 'snap-f6bba753-fca8-4f8b-b3ee-' })\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('dialog', { name: 'Execution preflight', exact: true }).getByText('snap-f6bba753-fca8-4f8b-b3ee-58ff6aed5050', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: 'Execution preflight', exact: true }).getByText('snap-f6bba753-fca8-4f8b-b3ee-58ff6aed5050', { exact: true })\u001b[22m\n\n    at <repo>/tests/e2e/profile-bindings-accessibility.spec.ts:361:13",
+                    "location": {
+                      "file": "<repo>/tests/e2e/profile-bindings-accessibility.spec.ts",
+                      "column": 13,
+                      "line": 361
+                    },
+                    "snippet": "  359 |           await expect(\n  360 |             dialog.getByText(readySnapshot!, { exact: true }),\n> 361 |           ).toBeVisible();\n      |             ^\n  362 |           await expect(\n  363 |             dialog.getByRole(\"button\", {\n  364 |               name: \"Start frozen snapshot\","
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/profile-bindings-accessibility.spec.ts",
+                        "column": 13,
+                        "line": 361
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('dialog', { name: 'Execution preflight', exact: true }).getByText('snap-f6bba753-fca8-4f8b-b3ee-58ff6aed5050', { exact: true })\nExpected: visible\nError: strict mode violation: getByRole('dialog', { name: 'Execution preflight', exact: true }).getByText('snap-f6bba753-fca8-4f8b-b3ee-58ff6aed5050', { exact: true }) resolved to 2 elements:\n    1) <code>snap-f6bba753-fca8-4f8b-b3ee-58ff6aed5050</code> aka getByRole('code').filter({ hasText: 'snap-f6bba753-fca8-4f8b-b3ee-' })\n    2) <dd>snap-f6bba753-fca8-4f8b-b3ee-58ff6aed5050</dd> aka getByRole('definition').filter({ hasText: 'snap-f6bba753-fca8-4f8b-b3ee-' })\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('dialog', { name: 'Execution preflight', exact: true }).getByText('snap-f6bba753-fca8-4f8b-b3ee-58ff6aed5050', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog', { name: 'Execution preflight', exact: true }).getByText('snap-f6bba753-fca8-4f8b-b3ee-58ff6aed5050', { exact: true })\u001b[22m\n\n\n  359 |           await expect(\n  360 |             dialog.getByText(readySnapshot!, { exact: true }),\n> 361 |           ).toBeVisible();\n      |             ^\n  362 |           await expect(\n  363 |             dialog.getByRole(\"button\", {\n  364 |               name: \"Start frozen snapshot\",\n    at <repo>/tests/e2e/profile-bindings-accessibility.spec.ts:361:13"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T00:02:39.900Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/profile-bindings-accessibi-5fa54-d-and-readiness-at-1440x900/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/profile-bindings-accessibi-5fa54-d-and-readiness-at-1440x900/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/profile-bindings-accessibility.spec.ts",
+                    "column": 13,
+                    "line": 361
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "a3ae0304583934462bf9-80c4e93b3be9f3a1fed5",
+          "file": "profile-bindings-accessibility.spec.ts",
+          "line": 177,
+          "column": 9
+        },
+        {
+          "title": "profile bindings: actual stale refusal current at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2808,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T00:02:45.505Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "profile-stale.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJkZXBhcnRlZCI6ZmFsc2UsInByb2plY3RJZCI6InByai01YjAzYzAyYy1hZmZiLTQ4YWQtOWU1MS1hMmJmYjRlNDRlOTUiLCJhY3R1YWxTdGF0dXMiOjQxMiwiY29kZSI6IlJFVklTSU9OX0NPTkZMSUNUIiwicmV2aXNpb25VbmNoYW5nZWRBZnRlclJlZnVzYWwiOnRydWUsInNlbGVjdGlvblJldGFpbmVkVW50aWxFeHBsaWNpdFJlbG9hZCI6dHJ1ZSwibm9TdGFydCI6dHJ1ZX0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a3ae0304583934462bf9-5ca5cafe15a87b918d06",
+          "file": "profile-bindings-accessibility.spec.ts",
+          "line": 399,
+          "column": 9
+        },
+        {
+          "title": "profile bindings: actual stale refusal after departure at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2226,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T00:02:48.374Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "profile-stale.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJkZXBhcnRlZCI6dHJ1ZSwicHJvamVjdElkIjoicHJqLWQxM2MzNmJlLWFhMjktNGI0My05YjRmLTEwYWEzODRmOWUyNSIsImFjdHVhbFN0YXR1cyI6NDEyLCJjb2RlIjoiUkVWSVNJT05fQ09ORkxJQ1QiLCJyZXZpc2lvblVuY2hhbmdlZEFmdGVyUmVmdXNhbCI6dHJ1ZSwic2VsZWN0aW9uUmV0YWluZWRVbnRpbEV4cGxpY2l0UmVsb2FkIjpmYWxzZSwibm9TdGFydCI6dHJ1ZX0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a3ae0304583934462bf9-103367f4cc937504f5ee",
+          "file": "profile-bindings-accessibility.spec.ts",
+          "line": 399,
+          "column": 9
+        },
+        {
+          "title": "profile bindings: discovery missing digest observation at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1547,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T00:02:50.608Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "profile-observation.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJtb2RlIjoibWlzc2luZyBkaWdlc3QiLCJtZWFzdXJlbWVudHMiOlt7ImxhYmVsIjoiVW5rbm93biBtYWxmb3JtZWQgcHJvZmlsZSBkaXNjb3ZlcnkiLCJ0ZXh0IjoiQ291bGQgbm90IGNoZWNrIGFkbWl0dGVkIHByb2ZpbGVzLiBBdmFpbGFiaWxpdHkgaXMgdW5rbm93bi4gVGhlIGFkbWl0dGVkIHByb2ZpbGUgcmVzcG9uc2UgaXMgaW5jb21wbGV0ZSBvciBtYWxmb3JtZWQuIFJldHJ5IHByb2ZpbGUgZGlzY292ZXJ5LiIsImNvbG9yIjoicmdiKDE2MSwgODksIDgxKSIsImZvbnRTaXplIjoiMTJweCIsImZvbnRXZWlnaHQiOiI0MDAiLCJ0aHJlc2hvbGQiOjQuNSwic2NvcGUiOiJTZWxlY3RlZCBub3JtYWwtc2l6ZSByZW5kZXJlZCB0ZXh0OyBubyBvdmVyYWxsIGFjY2Vzc2liaWxpdHkgY2VydGlmaWNhdGlvbiIsInN1cHBvcnRlZCI6dHJ1ZSwibGF5ZXJzIjpbInJnYigyNTUsIDI0MywgMjQyKSJdLCJiYWNrZ3JvdW5kIjpbMSwwLjk1Mjk0MTE3NjQ3MDU4ODIsMC45NDkwMTk2MDc4NDMxMzcyLDFdLCJjb21wb3NpdGVkRm9yZWdyb3VuZCI6WzAuNjMxMzcyNTQ5MDE5NjA3OCwwLjM0OTAxOTYwNzg0MzEzNzI0LDAuMzE3NjQ3MDU4ODIzNTI5NCwxXSwicmF0aW8iOjQuNzYzMzYwOTE2MTU1NzcyLCJwYXNzZWQiOnRydWUsImFzc3VtcHRpb25zIjoiQ1NTIHNSR0IgY29sb3JzOyBhbHBoYSBjb21wb3NpdGVkIHRocm91Z2ggZXhwbGljaXQgYmFja2dyb3VuZHM7IG5vIGFudGktYWxpYXNpbmcgYXBwcm94aW1hdGlvbiJ9XSwibGFiZWxsZWRUcmFuc3BvcnRGaXh0dXJlIjp0cnVlLCJhY3R1YWxSZWdpc3RyeUNvdW50Ijo1LCJiaW5kaW5nV3JpdGVzIjowLCJzY29wZSI6IkNvbnRyb2xsZWQgZGlzY292ZXJ5IHJlc3BvbnNlIG9ubHk7IGVtcHR5IG9ic2VydmF0aW9uIGlzIG5vdCBldmlkZW5jZSB0aGF0IHRoZSBhY3R1YWwgcmVnaXN0cnkgaGFzIG5vIHByb2ZpbGVzOyBubyBwcm92aWRlciBvciBleGVjdXRpb24gYXV0aG9yaXR5In0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a3ae0304583934462bf9-9a228a0c2f52bf77843c",
+          "file": "profile-bindings-accessibility.spec.ts",
+          "line": 487,
+          "column": 9
+        },
+        {
+          "title": "profile bindings: discovery duplicate observation at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1347,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T00:02:52.160Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "profile-observation.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJtb2RlIjoiZHVwbGljYXRlIiwibWVhc3VyZW1lbnRzIjpbeyJsYWJlbCI6IlVua25vd24gbWFsZm9ybWVkIHByb2ZpbGUgZGlzY292ZXJ5IiwidGV4dCI6IkNvdWxkIG5vdCBjaGVjayBhZG1pdHRlZCBwcm9maWxlcy4gQXZhaWxhYmlsaXR5IGlzIHVua25vd24uIFRoZSBhZG1pdHRlZCBwcm9maWxlIHJlc3BvbnNlIGlzIGluY29tcGxldGUgb3IgbWFsZm9ybWVkLiBSZXRyeSBwcm9maWxlIGRpc2NvdmVyeS4iLCJjb2xvciI6InJnYigxNjEsIDg5LCA4MSkiLCJmb250U2l6ZSI6IjEycHgiLCJmb250V2VpZ2h0IjoiNDAwIiwidGhyZXNob2xkIjo0LjUsInNjb3BlIjoiU2VsZWN0ZWQgbm9ybWFsLXNpemUgcmVuZGVyZWQgdGV4dDsgbm8gb3ZlcmFsbCBhY2Nlc3NpYmlsaXR5IGNlcnRpZmljYXRpb24iLCJzdXBwb3J0ZWQiOnRydWUsImxheWVycyI6WyJyZ2IoMjU1LCAyNDMsIDI0MikiXSwiYmFja2dyb3VuZCI6WzEsMC45NTI5NDExNzY0NzA1ODgyLDAuOTQ5MDE5NjA3ODQzMTM3MiwxXSwiY29tcG9zaXRlZEZvcmVncm91bmQiOlswLjYzMTM3MjU0OTAxOTYwNzgsMC4zNDkwMTk2MDc4NDMxMzcyNCwwLjMxNzY0NzA1ODgyMzUyOTQsMV0sInJhdGlvIjo0Ljc2MzM2MDkxNjE1NTc3MiwicGFzc2VkIjp0cnVlLCJhc3N1bXB0aW9ucyI6IkNTUyBzUkdCIGNvbG9yczsgYWxwaGEgY29tcG9zaXRlZCB0aHJvdWdoIGV4cGxpY2l0IGJhY2tncm91bmRzOyBubyBhbnRpLWFsaWFzaW5nIGFwcHJveGltYXRpb24ifV0sImxhYmVsbGVkVHJhbnNwb3J0Rml4dHVyZSI6dHJ1ZSwiYWN0dWFsUmVnaXN0cnlDb3VudCI6NSwiYmluZGluZ1dyaXRlcyI6MCwic2NvcGUiOiJDb250cm9sbGVkIGRpc2NvdmVyeSByZXNwb25zZSBvbmx5OyBlbXB0eSBvYnNlcnZhdGlvbiBpcyBub3QgZXZpZGVuY2UgdGhhdCB0aGUgYWN0dWFsIHJlZ2lzdHJ5IGhhcyBubyBwcm9maWxlczsgbm8gcHJvdmlkZXIgb3IgZXhlY3V0aW9uIGF1dGhvcml0eSJ9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a3ae0304583934462bf9-06f9e6501b43b2eb0219",
+          "file": "profile-bindings-accessibility.spec.ts",
+          "line": 487,
+          "column": 9
+        },
+        {
+          "title": "profile bindings: discovery empty observation at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1400,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T00:02:53.513Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "profile-observation.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJtb2RlIjoiZW1wdHkiLCJtZWFzdXJlbWVudHMiOlt7ImxhYmVsIjoiT2JzZXJ2ZWQgZW1wdHkgcHJvZmlsZSByZXNwb25zZSIsInRleHQiOiJObyBhZG1pdHRlZCBwcm9maWxlcyB3ZXJlIHJldHVybmVkIGJ5IHRoaXMgZGlzY292ZXJ5IHJlcXVlc3QuIiwiY29sb3IiOiJyZ2IoMTAxLCAxMTcsIDE0MSkiLCJmb250U2l6ZSI6IjEycHgiLCJmb250V2VpZ2h0IjoiNDAwIiwidGhyZXNob2xkIjo0LjUsInNjb3BlIjoiU2VsZWN0ZWQgbm9ybWFsLXNpemUgcmVuZGVyZWQgdGV4dDsgbm8gb3ZlcmFsbCBhY2Nlc3NpYmlsaXR5IGNlcnRpZmljYXRpb24iLCJzdXBwb3J0ZWQiOnRydWUsImxheWVycyI6WyJyZ2JhKDAsIDAsIDAsIDApIiwicmdiKDI1NSwgMjU1LCAyNTUpIl0sImJhY2tncm91bmQiOlsxLDEsMSwxXSwiY29tcG9zaXRlZEZvcmVncm91bmQiOlswLjM5NjA3ODQzMTM3MjU0OSwwLjQ1ODgyMzUyOTQxMTc2NDcsMC41NTI5NDExNzY0NzA1ODgzLDFdLCJyYXRpbyI6NC42ODQ5MTMxNTk4ODk2MjA1LCJwYXNzZWQiOnRydWUsImFzc3VtcHRpb25zIjoiQ1NTIHNSR0IgY29sb3JzOyBhbHBoYSBjb21wb3NpdGVkIHRocm91Z2ggZXhwbGljaXQgYmFja2dyb3VuZHM7IG5vIGFudGktYWxpYXNpbmcgYXBwcm94aW1hdGlvbiJ9XSwibGFiZWxsZWRUcmFuc3BvcnRGaXh0dXJlIjp0cnVlLCJhY3R1YWxSZWdpc3RyeUNvdW50Ijo1LCJiaW5kaW5nV3JpdGVzIjowLCJzY29wZSI6IkNvbnRyb2xsZWQgZGlzY292ZXJ5IHJlc3BvbnNlIG9ubHk7IGVtcHR5IG9ic2VydmF0aW9uIGlzIG5vdCBldmlkZW5jZSB0aGF0IHRoZSBhY3R1YWwgcmVnaXN0cnkgaGFzIG5vIHByb2ZpbGVzOyBubyBwcm92aWRlciBvciBleGVjdXRpb24gYXV0aG9yaXR5In0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a3ae0304583934462bf9-25746cea1a5bc9e1cbe4",
+          "file": "profile-bindings-accessibility.spec.ts",
+          "line": 487,
+          "column": 9
+        },
+        {
+          "title": "profile bindings: foreign recovery preserves newer profile draft at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2537,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T00:02:54.920Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "profile-foreign-recovery.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJhY3RpdmVQcm9qZWN0SWQiOiJwcmotMzg3NzhhYWYtMTU4Yi00ZWEzLWJmZmUtNzFkMjI2YjU4MmUxIiwicmVjb3ZlcmVkUHJvamVjdElkIjoicHJqLWU0OTIwMTJhLWFjNWUtNGQ3OC04YmE2LWM4NmIzY2RjMDRjNiIsIm1lYXN1cmVkQ29udGV4dCI6eyJwYW5lbENvdW50IjoxLCJjaGVja2VkIjp0cnVlLCJmb2N1c2VkIjp0cnVlLCJzZWxlY3Rpb25MYWJlbCI6MSwic3RvcmVkUHJvamVjdCI6InByai0zODc3OGFhZi0xNThiLTRlYTMtYmZmZS03MWQyMjZiNTgyZTEifSwiYmFja2VuZFJlY292ZXJ5Q29tbWl0dGVkIjp0cnVlLCJwcm9maWxlRHJhZnRVbnN1Ym1pdHRlZCI6dHJ1ZSwiYWN0aXZlQ2Fub25pY2FsVW5jaGFuZ2VkIjp0cnVlLCJub1N0YXJ0Ijp0cnVlLCJzY29wZSI6Ik9ubHkgbmV3bHkgb3duZWQgdGVzdCBzb3VyY2UgbWFkZSB1bnJlYWRhYmxlOyByZWFsIGZvcmVpZ24gcmVjb3ZlcnkgaGVsZCBhZnRlciBjb21taXQgd2hpbGUgYWN0aXZlIEVudmlyb25tZW50IHByb2ZpbGUgY2hlY2tib3ggY2hhbmdlcyJ9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a3ae0304583934462bf9-88d0cc46517f2fe84344",
+          "file": "profile-bindings-accessibility.spec.ts",
+          "line": 581,
+          "column": 7
+        },
+        {
+          "title": "profile bindings: discovery failure stays unknown and retries actual registry at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1407,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T00:02:57.466Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "profile-discovery.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJjb250cm9sbGVkSW5pdGlhbFN0YXR1cyI6NTAzLCJyZXRyeVN0YXR1cyI6MjAwLCJhY3R1YWxSZWdpc3RyeVJldHJpZWQiOnRydWUsIm9ic2VydmF0aW9uc1N0YXlVbmtub3duT25GYWlsdXJlIjp0cnVlLCJiaW5kaW5nV3JpdGVzIjowLCJub1N0YXJ0Ijp0cnVlLCJzY29wZSI6IkxhYmVsbGVkIGRpc2NvdmVyeSB0cmFuc3BvcnQgZmFpbHVyZSB0aGVuIGFjdHVhbCBhZG1pdHRlZCByZWdpc3RyeTsgbm8gcHJvdmlkZXIgaW5zdGFsbGF0aW9uIG9yIGV4ZWN1dGlvbiBhdXRob3JpdHkifQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a3ae0304583934462bf9-244c8bd07f350f3f8fbe",
+          "file": "profile-bindings-accessibility.spec.ts",
+          "line": 760,
+          "column": 7
+        },
+        {
+          "title": "profile bindings: committed reply cannot announce success on departed Home at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2425,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T00:02:58.883Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "profile-binding-departure.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJwcm9qZWN0SWQiOiJwcmotNDE2M2MzYWYtYWNiOC00YWU3LWFlODQtYmI1YWRiMjRlODM1IiwicHJvZmlsZUlkIjoiaW8ueHZlcnNlLnN0dWRpby5kb21haW4uYXV0b21vdGl2ZSIsImNvbW1pdHRlZFJldmlzaW9uIjoyLCJvcmlnaW5hbERvY3VtZW50c1ByZXNlcnZlZCI6dHJ1ZSwiYWRkaXRpdmVMb2Nrc1ByZXNlcnZlZCI6dHJ1ZSwiZXhhY3RTaWRlY2FyRGlnZXN0cyI6dHJ1ZSwiYXV0aG9yaXRhdGl2ZVZhbGlkYXRpb24iOnRydWUsImV4ZWN1dGFibGVQbGFuVW5jaGFuZ2VkIjp0cnVlLCJwcm92aWRlckRpc2NvdmVyeVVuY2hhbmdlZCI6dHJ1ZSwibm9TdGFydCI6dHJ1ZSwic2NvcGUiOiJBY3R1YWwgYWRkaXRpdmUgcHJlc2VudGF0aW9uLW9ubHkgbG9jayB0cmFuc2FjdGlvbiBoZWxkIGFmdGVyIGNvbW1pdDsgZGVwYXJ0ZWQgd29ya3NwYWNlIG11c3Qgbm90IGRpc3BsYXkgc3RhbGUgc3VjY2VzcyJ9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a3ae0304583934462bf9-a862f371b340252202fb",
+          "file": "profile-bindings-accessibility.spec.ts",
+          "line": 843,
+          "column": 7
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-27T00:01:40.466Z",
+    "duration": 80881.404,
+    "expected": 20,
+    "skipped": 0,
+    "unexpected": 4,
+    "flaky": 0
+  }
+}

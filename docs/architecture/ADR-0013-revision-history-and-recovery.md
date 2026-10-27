@@ -178,7 +178,8 @@ that target explicitly. The previous workspace remains authorable, and its revis
 continue to belong to that workspace. A recovery captures its active context when submitted, rather
 than when its panel rendered. It can commit the requested project's recovery independently, but
 switches the visible project only while that request's navigation and authoring intent remain current.
-Opening another modal or resuming keyboard, pointer or input interaction in the workspace supersedes
+Opening another modal or resuming keyboard, pointer or input interaction in Workspace or
+Environment's profile-binding controls supersedes
 that switch. Interaction tracking is separate from revision acknowledgement generations so typing
 does not invalidate an otherwise current save.
 

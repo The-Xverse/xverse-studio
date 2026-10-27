@@ -1,0 +1,196 @@
+
+> xverse-studio-workspace@0.1.0 test:e2e
+> playwright test -c tests/e2e/playwright.config.ts --grep profile bindings:
+
+
+Running 4 tests using 1 worker
+
+(node:2064464) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 tests/e2e/profile-bindings-accessibility.spec.ts:98:7 › profile bindings: discovery failure stays unknown and retries actual registry at 1024x768 (12.1s)
+(node:2064638) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 tests/e2e/profile-bindings-accessibility.spec.ts:181:7 › profile bindings: committed reply cannot announce success on departed Home at 1024x768 (13.5s)
+(node:2064882) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  3 tests/e2e/profile-bindings-accessibility.spec.ts:98:7 › profile bindings: discovery failure stays unknown and retries actual registry at 1440x900 (12.0s)
+(node:2065083) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  4 tests/e2e/profile-bindings-accessibility.spec.ts:181:7 › profile bindings: committed reply cannot announce success on departed Home at 1440x900 (13.2s)
+
+
+  1) tests/e2e/profile-bindings-accessibility.spec.ts:98:7 › profile bindings: discovery failure stays unknown and retries actual registry at 1024x768
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: locator('.profile-binding-panel').getByRole('alert')
+    Expected pattern: /unknown|unavailable|could not/i
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toContainText" locator('.profile-binding-panel').getByRole('alert') with timeout 10000ms
+      - waiting for locator('.profile-binding-panel').getByRole('alert')
+
+
+      135 |       await environment(page);
+      136 |       await expect.poll(() => reads).toBe(1);
+    > 137 |       await expect(panel(page).getByRole("alert")).toContainText(
+          |                                                    ^
+      138 |         /unknown|unavailable|could not/i,
+      139 |       );
+      140 |       await expect(panel(page).getByRole("checkbox")).toHaveCount(0);
+        at <repo>/tests/e2e/profile-bindings-accessibility.spec.ts:137:52
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/profile-bindings-accessibi-2d4dd-actual-registry-at-1024x768/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/profile-bindings-accessibi-2d4dd-actual-registry-at-1024x768/error-context.md
+
+  2) tests/e2e/profile-bindings-accessibility.spec.ts:181:7 › profile bindings: committed reply cannot announce success on departed Home at 1024x768
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('.alerts .notice:not(.busy)')
+    Expected: 0
+    Received: 1
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "soft toHaveCount" locator('.alerts .notice:not(.busy)') with timeout 10000ms
+      - waiting for locator('.alerts .notice:not(.busy)')
+        24 × locator resolved to 1 element
+           - unexpected value "1"
+
+
+      253 |       await expect
+      254 |         .soft(page.locator(".alerts .notice:not(.busy)"))
+    > 255 |         .toHaveCount(0);
+          |          ^
+      256 |       const saved = await request(page, `/projects/${project.projectId}`);
+      257 |       expect(writes).toEqual([
+      258 |         {
+        at <repo>/tests/e2e/profile-bindings-accessibility.spec.ts:255:10
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 1
+
+    @@ -9,8 +9,8 @@
+                "schemaDigest": "sha256:43d97f8dcadfa1246450121be31fc8c333f617301d29cf9cee100d8a8365bb6b",
+                "version": "1.0.0",
+              },
+            ],
+          },
+    -     "ifMatch": "1",
+    +     "ifMatch": "\"1\"",
+        },
+      ]
+
+      255 |         .toHaveCount(0);
+      256 |       const saved = await request(page, `/projects/${project.projectId}`);
+    > 257 |       expect(writes).toEqual([
+          |                      ^
+      258 |         {
+      259 |           ifMatch: String(project.revision),
+      260 |           body: {
+        at <repo>/tests/e2e/profile-bindings-accessibility.spec.ts:257:22
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/profile-bindings-accessibi-570f8-n-departed-Home-at-1024x768/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/profile-bindings-accessibi-570f8-n-departed-Home-at-1024x768/error-context.md
+
+  3) tests/e2e/profile-bindings-accessibility.spec.ts:98:7 › profile bindings: discovery failure stays unknown and retries actual registry at 1440x900
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: locator('.profile-binding-panel').getByRole('alert')
+    Expected pattern: /unknown|unavailable|could not/i
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toContainText" locator('.profile-binding-panel').getByRole('alert') with timeout 10000ms
+      - waiting for locator('.profile-binding-panel').getByRole('alert')
+
+
+      135 |       await environment(page);
+      136 |       await expect.poll(() => reads).toBe(1);
+    > 137 |       await expect(panel(page).getByRole("alert")).toContainText(
+          |                                                    ^
+      138 |         /unknown|unavailable|could not/i,
+      139 |       );
+      140 |       await expect(panel(page).getByRole("checkbox")).toHaveCount(0);
+        at <repo>/tests/e2e/profile-bindings-accessibility.spec.ts:137:52
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/profile-bindings-accessibi-03ef3-actual-registry-at-1440x900/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/profile-bindings-accessibi-03ef3-actual-registry-at-1440x900/error-context.md
+
+  4) tests/e2e/profile-bindings-accessibility.spec.ts:181:7 › profile bindings: committed reply cannot announce success on departed Home at 1440x900
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('.alerts .notice:not(.busy)')
+    Expected: 0
+    Received: 1
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "soft toHaveCount" locator('.alerts .notice:not(.busy)') with timeout 10000ms
+      - waiting for locator('.alerts .notice:not(.busy)')
+        24 × locator resolved to 1 element
+           - unexpected value "1"
+
+
+      253 |       await expect
+      254 |         .soft(page.locator(".alerts .notice:not(.busy)"))
+    > 255 |         .toHaveCount(0);
+          |          ^
+      256 |       const saved = await request(page, `/projects/${project.projectId}`);
+      257 |       expect(writes).toEqual([
+      258 |         {
+        at <repo>/tests/e2e/profile-bindings-accessibility.spec.ts:255:10
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 1
+
+    @@ -9,8 +9,8 @@
+                "schemaDigest": "sha256:43d97f8dcadfa1246450121be31fc8c333f617301d29cf9cee100d8a8365bb6b",
+                "version": "1.0.0",
+              },
+            ],
+          },
+    -     "ifMatch": "1",
+    +     "ifMatch": "\"1\"",
+        },
+      ]
+
+      255 |         .toHaveCount(0);
+      256 |       const saved = await request(page, `/projects/${project.projectId}`);
+    > 257 |       expect(writes).toEqual([
+          |                      ^
+      258 |         {
+      259 |           ifMatch: String(project.revision),
+      260 |           body: {
+        at <repo>/tests/e2e/profile-bindings-accessibility.spec.ts:257:22
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/profile-bindings-accessibi-629df-n-departed-Home-at-1440x900/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/profile-bindings-accessibi-629df-n-departed-Home-at-1440x900/error-context.md
+
+  4 failed
+    tests/e2e/profile-bindings-accessibility.spec.ts:98:7 › profile bindings: discovery failure stays unknown and retries actual registry at 1024x768
+    tests/e2e/profile-bindings-accessibility.spec.ts:181:7 › profile bindings: committed reply cannot announce success on departed Home at 1024x768
+    tests/e2e/profile-bindings-accessibility.spec.ts:98:7 › profile bindings: discovery failure stays unknown and retries actual registry at 1440x900
+    tests/e2e/profile-bindings-accessibility.spec.ts:181:7 › profile bindings: committed reply cannot announce success on departed Home at 1440x900

@@ -35,7 +35,11 @@ import {
   DeploymentComposer,
   type ExecutionSelection,
 } from "../features/deployments/DeploymentComposer";
-import { ProfileBindingsPanel } from "../features/profiles/ProfileBindingsPanel";
+import {
+  ProfileBindingsPanel,
+  type ProfileBindingCommit,
+  type ProfileBindingRefusal,
+} from "../features/profiles/ProfileBindingsPanel";
 import {
   DomainBadge,
   PresentationContext,
@@ -237,7 +241,7 @@ export default function App() {
   }
   const sourceControl = useRef<HTMLButtonElement>(null),
     operationError = useRef<HTMLDivElement>(null);
-  const [recoveryFocus, setRecoveryFocus] = useState<{
+  const [projectActionFocus, setProjectActionFocus] = useState<{
     projectId: string;
     loadSequence: number;
     intentSequence: number;
@@ -245,25 +249,25 @@ export default function App() {
     target: "source" | "error";
   } | null>(null);
   useEffect(() => {
-    if (busy || !recoveryFocus) return;
-    setRecoveryFocus(null);
+    if (busy || !projectActionFocus) return;
+    setProjectActionFocus(null);
     if (
-      selectedProjectRef.current !== recoveryFocus.projectId ||
-      projectLoadSequence.current !== recoveryFocus.loadSequence ||
-      preflightRequestSequence.current !== recoveryFocus.intentSequence ||
+      selectedProjectRef.current !== projectActionFocus.projectId ||
+      projectLoadSequence.current !== projectActionFocus.loadSequence ||
+      preflightRequestSequence.current !== projectActionFocus.intentSequence ||
       modal ||
       document.querySelector('[role="dialog"]') ||
       (document.activeElement !== document.body &&
-        document.activeElement !== recoveryFocus.origin)
+        document.activeElement !== projectActionFocus.origin)
     )
       return;
-    if (recoveryFocus.target === "error") operationError.current?.focus();
+    if (projectActionFocus.target === "error") operationError.current?.focus();
     else if (
-      project?.projectId === recoveryFocus.projectId &&
+      project?.projectId === projectActionFocus.projectId &&
       section === "workspace"
     )
       sourceControl.current?.focus();
-  }, [busy, recoveryFocus, project?.projectId, section, modal]);
+  }, [busy, projectActionFocus, project?.projectId, section, modal]);
   function recoveryHandlers(projectId: string) {
     let context: ProjectIntent | undefined;
     return {
@@ -278,7 +282,7 @@ export default function App() {
             return await action();
           } catch (error) {
             if (sameProjectIntent(initiating)) {
-              setRecoveryFocus({ ...initiating, origin, target: "error" });
+              setProjectActionFocus({ ...initiating, origin, target: "error" });
               throw projectRequestError(error, projectId);
             }
           }
@@ -366,7 +370,7 @@ export default function App() {
       setNotice(
         `Recovered as revision ${saved.revision}. The observed external bytes are preserved in backup ${result.recovery.recoveryId}.`,
       );
-      setRecoveryFocus({
+      setProjectActionFocus({
         projectId,
         loadSequence: context.loadSequence,
         intentSequence: preflightRequestSequence.current,
@@ -1374,11 +1378,43 @@ export default function App() {
                 capabilities={capabilities}
                 providers={providers}
                 project={project}
-                refresh={async () => {
-                  await refreshProject();
-                  setNotice(
-                    "Profile locks saved with exact schema and presentation identities.",
-                  );
+                onIntent={() => {
+                  if (project && selectedProjectRef.current === project.projectId)
+                    workspaceInteractionSequence.current++;
+                }}
+                onCommitted={(saved, navigate, origin) => {
+                  const visible = commitProjectRevision(saved);
+                  if (visible && navigate) {
+                    setSection("workspace");
+                    setNotice(
+                      "Profile locks saved with exact schema and presentation identities.",
+                    );
+                    setProjectActionFocus({
+                      projectId: saved.projectId,
+                      loadSequence: renderedLoadSequence,
+                      intentSequence: preflightRequestSequence.current,
+                      origin,
+                      target: "source",
+                    });
+                  }
+                  return visible;
+                }}
+                onRefused={(origin) => {
+                  if (
+                    !project ||
+                    selectedProjectRef.current !== project.projectId ||
+                    projectLoadSequence.current !== renderedLoadSequence ||
+                    preflightRequestSequence.current !== renderedIntentSequence
+                  )
+                    return false;
+                  setProjectActionFocus({
+                    projectId: project.projectId,
+                    loadSequence: renderedLoadSequence,
+                    intentSequence: renderedIntentSequence,
+                    origin,
+                    target: "error",
+                  });
+                  return true;
                 }}
                 doAction={doAction}
               />
@@ -2399,13 +2435,17 @@ function Environment({
   capabilities,
   providers,
   project,
-  refresh,
+  onCommitted,
+  onRefused,
+  onIntent,
   doAction,
 }: {
   capabilities: Data;
   providers: Data[];
   project: Project | null;
-  refresh: () => Promise<unknown>;
+  onCommitted: ProfileBindingCommit;
+  onRefused: ProfileBindingRefusal;
+  onIntent: () => void;
   doAction: DoAction;
 }) {
   return (
@@ -2475,7 +2515,9 @@ function Environment({
       </div>
       <ProfileBindingsPanel
         project={project}
-        refresh={refresh}
+        onCommitted={onCommitted}
+        onRefused={onRefused}
+        onIntent={onIntent}
         doAction={doAction}
       />
     </div>
