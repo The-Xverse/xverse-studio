@@ -225,6 +225,22 @@ def install_advanced(app, store, projects, runs, adapter, *, lab_host=None):
         except LabError as exc:
             _failure(exc)
 
+    @app.get("/api/v1/assets/{assetId}/reservation-options")
+    def reservation_options(assetId: str, request: Request):
+        try:
+            return lab_service.options(assetId, owner=request.state.principal)
+        except LabError as exc:
+            _failure(exc)
+
+    @app.get("/api/v1/reservations")
+    def reservation_history(request: Request, cursor: str | None = None, limit: int = 100):
+        _page([], cursor, limit)
+        try:
+            observed = lab_service.history(owner=request.state.principal)
+            return {**observed, **_page(observed["items"], cursor, limit)}
+        except LabError as exc:
+            _failure(exc)
+
     @app.get("/api/v1/reservations/{reservationId}")
     def reservation(reservationId: str, request: Request):
         try:

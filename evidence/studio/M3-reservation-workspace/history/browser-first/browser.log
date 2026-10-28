@@ -1,0 +1,85 @@
+
+Running 14 tests using 1 worker
+
+(node:1801020) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 tests/e2e/lab-reservations.spec.ts:21:9 › lab reservations at 1024 › native keyboard reserve renew release preserves identity and runtime boundary (2.2s)
+  ✓   2 tests/e2e/lab-reservations.spec.ts:45:9 › lab reservations at 1024 › lost HTTP response retries the original accepted key after leaving and reopening (1.8s)
+  ✓   3 tests/e2e/lab-reservations.spec.ts:86:13 › lab reservations at 1024 › reserve-unknown › actual configured ownership and independent permission states (1.8s)
+  ✓   4 tests/e2e/lab-reservations.spec.ts:86:13 › lab reservations at 1024 › release-unknown › actual configured ownership and independent permission states (1.8s)
+  ✓   5 tests/e2e/lab-reservations.spec.ts:86:13 › lab reservations at 1024 › revoked › actual configured ownership and independent permission states (1.9s)
+  ✓   6 tests/e2e/lab-reservations.spec.ts:86:13 › lab reservations at 1024 › restart › actual configured ownership and independent permission states (1.5s)
+  ✘   7 tests/e2e/lab-reservations.spec.ts:86:13 › lab reservations at 1024 › scopes › actual configured ownership and independent permission states (11.3s)
+(node:1801492) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   8 tests/e2e/lab-reservations.spec.ts:21:9 › lab reservations at 1440 › native keyboard reserve renew release preserves identity and runtime boundary (2.2s)
+  ✓   9 tests/e2e/lab-reservations.spec.ts:45:9 › lab reservations at 1440 › lost HTTP response retries the original accepted key after leaving and reopening (1.7s)
+  ✓  10 tests/e2e/lab-reservations.spec.ts:86:13 › lab reservations at 1440 › reserve-unknown › actual configured ownership and independent permission states (1.7s)
+  ✓  11 tests/e2e/lab-reservations.spec.ts:86:13 › lab reservations at 1440 › release-unknown › actual configured ownership and independent permission states (1.8s)
+  ✓  12 tests/e2e/lab-reservations.spec.ts:86:13 › lab reservations at 1440 › revoked › actual configured ownership and independent permission states (2.0s)
+  ✓  13 tests/e2e/lab-reservations.spec.ts:86:13 › lab reservations at 1440 › restart › actual configured ownership and independent permission states (1.7s)
+  ✘  14 tests/e2e/lab-reservations.spec.ts:86:13 › lab reservations at 1440 › scopes › actual configured ownership and independent permission states (11.3s)
+
+
+  1) tests/e2e/lab-reservations.spec.ts:86:13 › lab reservations at 1024 › scopes › actual configured ownership and independent permission states
+
+    Error: expect(locator).toHaveValue(expected) failed
+
+    Locator: locator('section.panel').filter({ has: getByRole('heading', { name: 'fixture:bench-sensor', exact: true }) }).getByLabel('Reservation scope', { exact: true })
+    Expected: "observe"
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toHaveValue" locator('section.panel').filter({ has: getByRole('heading', { name: 'fixture:bench-sensor', exact: true }) }).getByLabel('Reservation scope', { exact: true }) with timeout 10000ms
+      - waiting for locator('section.panel').filter({ has: getByRole('heading', { name: 'fixture:bench-sensor', exact: true }) }).getByLabel('Reservation scope', { exact: true })
+
+
+       98 |             await options(page);
+       99 |             const select = card(page).getByLabel("Reservation scope", { exact: true });
+    > 100 |             await expect(select).toHaveValue("observe");
+          |                                  ^
+      101 |             await select.selectOption("destructive");
+      102 |             await keyboard(page, card(page).getByRole("button", { name: "Reserve destructive scope", exact: true }));
+      103 |             await expect(record(page)).toContainText("destructive");
+        at <repo>/tests/e2e/lab-reservations.spec.ts:100:34
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    .studio-local/reservation-ui-read/browser-first/journeys/lab-reservations-lab-reser-4ce13-dependent-permission-states/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: .studio-local/reservation-ui-read/browser-first/journeys/lab-reservations-lab-reser-4ce13-dependent-permission-states/error-context.md
+
+  2) tests/e2e/lab-reservations.spec.ts:86:13 › lab reservations at 1440 › scopes › actual configured ownership and independent permission states
+
+    Error: expect(locator).toHaveValue(expected) failed
+
+    Locator: locator('section.panel').filter({ has: getByRole('heading', { name: 'fixture:bench-sensor', exact: true }) }).getByLabel('Reservation scope', { exact: true })
+    Expected: "observe"
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toHaveValue" locator('section.panel').filter({ has: getByRole('heading', { name: 'fixture:bench-sensor', exact: true }) }).getByLabel('Reservation scope', { exact: true }) with timeout 10000ms
+      - waiting for locator('section.panel').filter({ has: getByRole('heading', { name: 'fixture:bench-sensor', exact: true }) }).getByLabel('Reservation scope', { exact: true })
+
+
+       98 |             await options(page);
+       99 |             const select = card(page).getByLabel("Reservation scope", { exact: true });
+    > 100 |             await expect(select).toHaveValue("observe");
+          |                                  ^
+      101 |             await select.selectOption("destructive");
+      102 |             await keyboard(page, card(page).getByRole("button", { name: "Reserve destructive scope", exact: true }));
+      103 |             await expect(record(page)).toContainText("destructive");
+        at <repo>/tests/e2e/lab-reservations.spec.ts:100:34
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    .studio-local/reservation-ui-read/browser-first/journeys/lab-reservations-lab-reser-e18c2-dependent-permission-states/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: .studio-local/reservation-ui-read/browser-first/journeys/lab-reservations-lab-reser-e18c2-dependent-permission-states/error-context.md
+
+  2 failed
+    tests/e2e/lab-reservations.spec.ts:86:13 › lab reservations at 1024 › scopes › actual configured ownership and independent permission states
+    tests/e2e/lab-reservations.spec.ts:86:13 › lab reservations at 1440 › scopes › actual configured ownership and independent permission states
+  12 passed (45.7s)

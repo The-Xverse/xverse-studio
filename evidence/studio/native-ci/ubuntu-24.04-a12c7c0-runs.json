@@ -1,0 +1,253 @@
+{
+  "observedAt": "2026-10-27T21:02:10.489509+00:00",
+  "runs": [
+    {
+      "id": 40571916125,
+      "jobId": 122428073069,
+      "event": "pull_request",
+      "head": "a12c7c06f988cf59c210931d8c080a853a77a29e",
+      "url": "https://github.com/The-Xverse/xverse-studio/actions/runs/40571916125",
+      "status": "completed",
+      "conclusion": "failure",
+      "jobStatus": "completed",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run python -m pip install uv==0.12.17",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run uv sync --frozen",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run npm ci",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run npm run build",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run uv run python scripts/record_environment.py --output evidence/studio/native-ci/environment.json",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run uv run ruff check --select F821 services/studio-api/src scripts tests",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run uv run python scripts/run_checks.py",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run npx playwright install chromium",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run uv run python scripts/test_browser.py",
+          "status": "completed",
+          "conclusion": "failure"
+        },
+        {
+          "name": "Run uv run python scripts/package_studio.py",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "Run uv run python scripts/smoke_package.py --output evidence/studio/native-ci/package.json",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "Run actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "Post Run actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ],
+      "rawLogSha256": "c3a56edd9d1835296a21bbfb72b046b62c055b9f8b051d5bd08b26032e62b87f",
+      "rawLogBytes": 138203,
+      "backendPassed": 1055,
+      "browserPassed": 473,
+      "packageObservations": [],
+      "browserFailed": 1,
+      "packageExecution": "NOT_RUN"
+    },
+    {
+      "id": 40571903302,
+      "jobId": 122428029830,
+      "event": "push",
+      "head": "a12c7c06f988cf59c210931d8c080a853a77a29e",
+      "url": "https://github.com/The-Xverse/xverse-studio/actions/runs/40571903302",
+      "status": "completed",
+      "conclusion": "success",
+      "jobStatus": "completed",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run python -m pip install uv==0.12.17",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run uv sync --frozen",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run npm ci",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run npm run build",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run uv run python scripts/record_environment.py --output evidence/studio/native-ci/environment.json",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run uv run ruff check --select F821 services/studio-api/src scripts tests",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run uv run python scripts/run_checks.py",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run npx playwright install chromium",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run uv run python scripts/test_browser.py",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run uv run python scripts/package_studio.py",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run uv run python scripts/smoke_package.py --output evidence/studio/native-ci/package.json",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ],
+      "rawLogSha256": "b679a016517e39c7d1cec82138ddc5c6e58cb2a8fb8e23058f3a855cb28cf130",
+      "rawLogBytes": 138597,
+      "backendPassed": 1055,
+      "browserPassed": 474,
+      "packageObservations": [
+        {
+          "candidate": "a12c7c06f988cf59c210931d8c080a853a77a29e",
+          "files": 110,
+          "archiveSha256": "8215e166033a47f926fc3142be9370de049ecf6c984253b579677ec43140378e",
+          "scope": "fresh_local_package_extraction_offline_with_prepared_dependency_cache",
+          "outcome": "passed",
+          "provisionExit": 0
+        }
+      ],
+      "browserFailed": 0,
+      "packageExecution": "passed"
+    }
+  ],
+  "scope": "Exact a12c7c0 remote Ubuntu 24.04 push/PR outcomes for configured reservation API and presentation callback cleanup. New reservation observation/UI work has separate later source/evidence and is not verified by these runs. PR package candidate may be the actual synthetic merge commit, separately recorded."
+}

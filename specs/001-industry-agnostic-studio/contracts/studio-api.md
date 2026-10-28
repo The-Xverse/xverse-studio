@@ -64,7 +64,9 @@
 | `DELETE /annotations/{annotationId}` | Expected revision; creates a tombstone without altering referenced evidence | M4 |
 | `GET /providers` | Admitted providers, versions, capabilities and unavailable dependencies | M0 |
 | `GET /assets` | Explicitly scoped provider inventory; no unrestricted network scan | M3 |
+| `GET /assets/{assetId}/reservation-options` | ADR-0025 amendment: current principal/asset request eligibility for each independently granted scope; bounded explicit inventory only, no lease or runtime grant | M3 |
 | `POST /assets/{assetId}/reservations` | Requested permitted scope/duration; returns provider fencing token reference | M3 |
+| `GET /reservations` | ADR-0025 amendment: cursor-paged signed-in principal's local ownership history and request eligibility; no provider inspection or reacquisition | M3 |
 | `GET /reservations/{reservationId}` | Observed ownership, scope, fencing identity, expiry, last renewal and uncertainty | M3 |
 | `POST /reservations/{reservationId}/renewals` | Expected fencing identity and requested deadline; same-scope extension only; backend performs ongoing active-run renewal | M3 |
 | `POST /reservations/{reservationId}/reconciliations` | Empty closed body and idempotency key; inspect the installed provider for the original owner/fence without reacquiring (ADR-0024 amendment) | M3 |
@@ -109,6 +111,27 @@ configuration is required for positive reservation routes; the stock launcher
 installs none. A fixture is identified as a fixture and supplies no live-device
 acceptance. Physical commands, active-run renewal and ownership-loss integration
 remain unfinished. No HTTP/project/profile input can install this configuration.
+
+### Reservation observation amendment (ADR-0025)
+
+Both added GETs carry `contractVersion=1.0`, the authenticated `principal`, numeric
+`observedAt` in the server lease clock, `runtimeAdmission=unavailable` and empty
+`physicalCommands`. Request options bind the exact `assetId`, configured/unavailable
+lease-service status, provider ID/evidence scope, maximum duration of 300 seconds,
+and three ordered `scopes` entries (`scope`, boolean `eligible`, bounded reason codes).
+Eligibility requires the exact current grant, declared capability, resolved identity
+and observed availability. It is advisory: reserve independently rechecks its contract.
+No client principal/grant/provider-installation parameter is accepted.
+
+`GET /reservations` uses the standard cursor/1–200 limit contract and returns only
+the principal's records. Each closed lease view adds `requests.renew|release|reconcile`
+booleans describing operations available to request from this local observation.
+The mutating endpoints still recheck current provider/asset pins and ownership.
+History performs no provider call and never implicitly reconciles. It preserves
+unknown ownership; an elapsed owned deadline uses the existing expiry transition.
+Terminal history has no active authority. Each page is an independent observation;
+concurrent changes can alter page membership. The browser requests 50 rows and at
+most 20 pages from the bounded 1,000-record ledger, with explicit refresh/retry.
 
 ## Catalog and profile operations
 

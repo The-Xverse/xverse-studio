@@ -1,10 +1,11 @@
 import { useEffect, useState, useRef, useId } from "react";
-import { api, ApiError, mutationKey } from "../../api/client";
+import { api, ApiError } from "../../api/client";
 import type { Data, Diagnostic } from "../../api/types";
 import type { DoAction } from "../../app/App";
 import { Icon, Badge, Json, KeyValues, Diagnostics } from "../../app/ui";
 
 import { inventoryPage, revisionText } from "./public-observations";
+import { ReservationWorkspace, ReservationRequest } from "./ReservationWorkspace";
 
 type Observation = {
   status: "loading" | "available" | "unavailable";
@@ -22,7 +23,6 @@ type Observation = {
 
 export function LabView({
   providers,
-  doAction,
 }: {
   providers: Data[];
   doAction: DoAction;
@@ -33,8 +33,7 @@ export function LabView({
       cursor: "",
       previous: [],
       request: 0,
-    }),
-    [reservation, setReservation] = useState<Data | null>(null);
+    });
   const mounted = useRef(false),
     sequence = useRef(0),
     controller = useRef<AbortController | null>(null),
@@ -160,13 +159,14 @@ export function LabView({
           Refresh inventory
         </button>
       </div>
+      <ReservationWorkspace>
       <section className="panel">
         <h2>No physical provider admitted</h2>
         <p id={authorityId}>
-          Inventory is read-only. Reservations and active operations are
-          unavailable until a physical provider with durable ownership and
-          permitted actions is admitted. Declared capabilities and observed
-          availability do not grant permission.
+          Inventory observations do not grant permission. Physical runtime and
+          active commands are unavailable. A separately configured lease service
+          can accept explicitly granted reservation requests; check its eligibility
+          and evidence scope below.
         </p>
       </section>
       <div className="notice">
@@ -312,85 +312,12 @@ export function LabView({
                 </p>
               )}
               <Diagnostics diagnostics={a.diagnostics} />
-              <button
-                className="button"
-                disabled={!a.reservable || !a.activeReady}
-                aria-describedby={authorityId}
-                onClick={() =>
-                  void doAction("Reserving observe-only access", async () => {
-                    setReservation(
-                      await api(
-                        `/assets/${encodeURIComponent(a.assetId)}/reservations`,
-                        {
-                          method: "POST",
-                          key: mutationKey(),
-                          body: { scope: "observe", durationSeconds: 30 },
-                        },
-                      ),
-                    );
-                  })
-                }
-              >
-                Reserve observe-only
-              </button>
+              <ReservationRequest assetId={a.assetId} />
               <Json value={a} />
             </section>
           ))}
         </div>
       ) : null}
-      {reservation && (
-        <section className="panel">
-          <h2>Reservation ownership</h2>
-          <KeyValues
-            values={{
-              ID: reservation.reservationId,
-              Scope: reservation.scope,
-              Expires: reservation.expiresAt,
-              Ownership:
-                reservation.ownership || reservation.status || "Unknown",
-            }}
-          />
-          <div className="form-actions">
-            <button
-              className="button"
-              onClick={() =>
-                void doAction("Renewing reservation", async () =>
-                  setReservation(
-                    await api(
-                      `/reservations/${reservation.reservationId}/renewals`,
-                      {
-                        method: "POST",
-                        key: mutationKey(),
-                        body: {
-                          fencingIdentity: reservation.fencingIdentity,
-                          durationSeconds: 30,
-                        },
-                      },
-                    ),
-                  ),
-                )
-              }
-            >
-              Renew same scope
-            </button>
-            <button
-              className="button"
-              onClick={() =>
-                void doAction("Releasing reservation", async () => {
-                  await api(`/reservations/${reservation.reservationId}`, {
-                    method: "DELETE",
-                    key: mutationKey(),
-                  });
-                  setReservation(null);
-                })
-              }
-            >
-              Release reservation
-            </button>
-          </div>
-          <Json value={reservation} />
-        </section>
-      )}
       <h2 className="section-title">Provider capability boundaries</h2>
       <div className="catalog-grid">
         {providers.map((p) => (
@@ -408,6 +335,7 @@ export function LabView({
           </section>
         ))}
       </div>
+      </ReservationWorkspace>
     </div>
   );
 }

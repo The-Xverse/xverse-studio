@@ -1,0 +1,16 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_______ test_history_batches_simultaneous_expiry_into_one_durable_write ________
+tests/integration/test_lab_http.py:689: in test_history_batches_simultaneous_expiry_into_one_durable_write
+    assert len(writes) == 1
+E   assert 20 == 1
+E    +  where 20 = len([41, 42, 43, 44, 45, 46, ...])
+=============================== warnings summary ===============================
+.venv/lib/python3.13/site-packages/fastapi/testclient.py:1
+  <repo>/.venv/lib/python3.13/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/integration/test_lab_http.py::test_history_batches_simultaneous_expiry_into_one_durable_write
+1 failed, 35 deselected, 1 warning in 3.80s

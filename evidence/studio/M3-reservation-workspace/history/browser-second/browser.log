@@ -1,0 +1,47 @@
+
+Running 22 tests using 1 worker
+
+(node:1802644) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 tests/e2e/lab-reservations.spec.ts:21:9 › lab reservations at 1024 › expired deadline removes renewal eligibility and explicit refresh retains terminal history (3.2s)
+  ✘   2 tests/e2e/lab-reservations.spec.ts:36:9 › lab reservations at 1024 › ungranted scope is explicit and invalid option authority never enables reservation (11.3s)
+(node:1802878) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   3 tests/e2e/lab-reservations.spec.ts:58:11 › lab reservations at 1024 › departed options ignore held actual response with labelled status 200 (1.6m)
+
+
+  1) tests/e2e/lab-reservations.spec.ts:36:9 › lab reservations at 1024 › ungranted scope is explicit and invalid option authority never enables reservation
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: locator('section.panel').filter({ has: getByRole('heading', { name: 'fixture:bench-sensor', exact: true }) }).getByRole('alert')
+    Expected substring: "Reservation eligibility is unknown"
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toContainText" locator('section.panel').filter({ has: getByRole('heading', { name: 'fixture:bench-sensor', exact: true }) }).getByRole('alert') with timeout 10000ms
+      - waiting for locator('section.panel').filter({ has: getByRole('heading', { name: 'fixture:bench-sensor', exact: true }) }).getByRole('alert')
+
+
+      48 |       try {
+      49 |         await keyboard(page, card(page).getByRole("button", { name: "Check reservation options", exact: true }));
+    > 50 |         await expect(card(page).getByRole("alert")).toContainText("Reservation eligibility is unknown");
+         |                                                     ^
+      51 |         await expect(card(page).getByRole("alert")).toBeFocused();
+      52 |         await expect(card(page).getByRole("button", { name: "Reserve stimulate scope", exact: true })).toBeDisabled();
+      53 |         expect((await (await page.request.get(labHost.origin + "/api/v1/reservations")).json()).items).toHaveLength(0);
+        at <repo>/tests/e2e/lab-reservations.spec.ts:50:53
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    .studio-local/reservation-ui-read/browser-second/journeys/lab-reservations-lab-reser-46e88-y-never-enables-reservation/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: .studio-local/reservation-ui-read/browser-second/journeys/lab-reservations-lab-reser-46e88-y-never-enables-reservation/error-context.md
+
+  1 failed
+    tests/e2e/lab-reservations.spec.ts:36:9 › lab reservations at 1024 › ungranted scope is explicit and invalid option authority never enables reservation
+  1 interrupted
+    tests/e2e/lab-reservations.spec.ts:58:11 › lab reservations at 1024 › departed options ignore held actual response with labelled status 200
+  19 did not run
+  1 passed (1.8m)

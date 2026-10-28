@@ -33,8 +33,9 @@ implemented by this facade; reserving a scope does not issue a device command.
 `GET /capabilities` exposes `labReservations`, the installed lease descriptors,
 scope, bounds and separate unavailable runtime admission. Asset/placement views
 continue to show read-only observations and unavailable physical runtime readiness.
-The reservation UI, physical run adapter, automatic active-run renewal and
-ownership-loss/stop integration remain unfinished. An installed lease interface
+The reservation UI reads separately versioned eligibility and local owner history,
+and sends explicit idempotent requests. The physical run adapter, connection tests,
+automatic active-run renewal and ownership-loss/stop integration remain unfinished. An installed lease interface
 does not make an XDL physical deployment executable.
 
 Explicit authenticated requests use the existing exact Host/Origin and CSRF
@@ -45,6 +46,14 @@ operation result and the reservation's current ownership. Defaults are observati
 and 30 seconds; requested integer leases range from one to 300 seconds. Renewal
 retains the original scope and fence. Reconciliation inspects the original
 provider/asset identity and never acquires another lease.
+
+`GET /assets/{assetId}/reservation-options` reads current eligibility for each
+independent scope; it is advisory and cannot bypass mutation checks. `GET
+/reservations` pages only the signed-in principal's bounded local history and
+available request controls, without provider calls. Both carry version 1.0,
+server observation time and separate unavailable runtime admission. Unknown private
+payloads remain excluded. Without an installation, durable history remains visible
+and provider mutations remain unavailable, including terminal cleanup requests.
 
 SQLite stores intent before delegation and acknowledgement separately. Restart
 marks pending operations and nonterminal leases unknown. A matching observed

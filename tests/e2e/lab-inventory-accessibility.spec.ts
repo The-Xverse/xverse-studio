@@ -110,6 +110,7 @@ async function tabTo(page: Page, target: Locator) {
 }
 
 const lab = (page: Page) => page.locator(".lab-page");
+const inventory = (page: Page) => lab(page).getByRole("region", { name: "Inventory observation", exact: true });
 const refresh = (page: Page) =>
   lab(page).getByRole("button", { name: "Refresh inventory", exact: true });
 const observationHeading = (page: Page) =>
@@ -231,7 +232,7 @@ for (const viewport of [
         exact: true,
       }),
     ).toBeVisible();
-    await expect(lab(page).getByRole("status")).toHaveText(
+    await expect(inventory(page).getByRole("status")).toHaveText(
       "Provider inventory observation is complete.",
     );
     await expect(
@@ -255,7 +256,7 @@ for (const viewport of [
     expect(reads).toBe(2);
     const measurements = [
       await paint(
-        lab(page).getByRole("status"),
+        inventory(page).getByRole("status"),
         "Complete actual inventory observation",
       ),
       await paint(
@@ -297,7 +298,7 @@ for (const viewport of [
       }
     });
     await openLab(page);
-    const error = lab(page).getByRole("alert");
+    const error = inventory(page).getByRole("alert");
     await expect(error).toContainText("Inventory availability is unknown");
     await expect(page.locator(".alerts [role=alert]")).toHaveCount(0);
     const measurements = [
@@ -347,7 +348,7 @@ for (const viewport of [
         }),
       );
       await openLab(page);
-      const error = lab(page).getByRole("alert");
+      const error = inventory(page).getByRole("alert");
       await expect(error).toContainText("Inventory availability is unknown");
       await expect(error).toContainText(/malformed or unsupported/);
       await expect(assetCard(page)).toHaveCount(0);
@@ -532,7 +533,7 @@ for (const viewport of [
           });
       });
       await openLab(page);
-      await expect(lab(page).getByRole("status")).toContainText(
+      await expect(inventory(page).getByRole("status")).toContainText(
         "More assets are available on another page",
       );
       await expect(
@@ -540,8 +541,8 @@ for (const viewport of [
       ).toBeVisible();
       await activate(page, nextPage(page));
       if (pageFailure) {
-        await expect(lab(page).getByRole("alert")).toBeFocused();
-        await expect(lab(page).getByRole("alert")).toContainText(
+        await expect(inventory(page).getByRole("alert")).toBeFocused();
+        await expect(inventory(page).getByRole("alert")).toContainText(
           "Inventory availability is unknown",
         );
         await expect(assetCard(page, "urn:fixture:paged-0")).toHaveCount(0);
@@ -626,7 +627,7 @@ for (const viewport of [
         await openLab(page);
         await expect.poll(() => ready).toBe(true);
         await expect(refresh(page)).toBeDisabled();
-        await expect(lab(page).getByRole("status")).toHaveText(
+        await expect(inventory(page).getByRole("status")).toHaveText(
           "Reading inventory observations…",
         );
         const home = page.getByRole("button", {
@@ -683,7 +684,7 @@ for (const viewport of [
     });
     try {
       await openLab(page);
-      await expect(lab(page).getByRole("status")).toContainText(
+      await expect(inventory(page).getByRole("status")).toContainText(
         "observation is complete",
       );
       await activate(page, refresh(page));
@@ -699,7 +700,7 @@ for (const viewport of [
       await tabTo(page, home);
       release();
       await done;
-      await expect(lab(page).getByRole("status")).toContainText(
+      await expect(inventory(page).getByRole("status")).toContainText(
         "observation is complete",
       );
       await expect(home).toBeFocused();

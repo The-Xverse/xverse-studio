@@ -372,6 +372,129 @@ class LabOperations:
     def get(self, reservation_id, *, owner):
         return _lease_view(self._record(reservation_id, owner=owner))
 
+    def options(self, asset_id, *, owner):
+        """An observation of request eligibility, never a lease or runtime grant."""
+        if not opaque_id(asset_id) or not opaque_id(owner):
+            raise LabError("FORBIDDEN")
+        with self._lock:
+            self.backing.assert_current()
+            base = {
+                "contractVersion": "1.0",
+                "assetId": asset_id,
+                "principal": owner,
+                "observedAt": self.registry.clock(),
+                "runtimeAdmission": "unavailable",
+                "physicalCommands": [],
+                "maximumDurationSeconds": self.registry.max_lease_seconds,
+            }
+            if not self.enabled:
+                return {
+                    **base,
+                    "status": "unavailable",
+                    "providerId": None,
+                    "evidenceScope": "unavailable",
+                    "scopes": [
+                        {
+                            "scope": scope,
+                            "eligible": False,
+                            "reasons": ["PROVIDER_RESERVATION_NOT_ADMITTED"],
+                        }
+                        for scope in ("observe", "stimulate", "destructive")
+                    ],
+                }
+            asset = self.registry._asset(asset_id)
+            try:
+                self._asset_identity(asset)
+                identified = True
+            except LabError:
+                identified = False
+            granted = self.policy.scopes_for(owner, asset_id)
+            descriptor = next(
+                (
+                    d
+                    for d in self.installation_descriptors
+                    if d["providerId"] == asset["providerId"]
+                ),
+                {},
+            )
+            scopes = []
+            for scope in ("observe", "stimulate", "destructive"):
+                reasons = []
+                if scope not in granted:
+                    reasons.append("FORBIDDEN")
+                if scope not in asset.get("capabilities", []):
+                    reasons.append("CAPABILITY_UNSUPPORTED")
+                if not identified:
+                    reasons.append("ASSET_IDENTITY_UNRESOLVED")
+                if asset.get("available") is not True:
+                    reasons.append("ASSET_AVAILABILITY_UNCONFIRMED")
+                scopes.append(
+                    {"scope": scope, "eligible": not reasons, "reasons": reasons}
+                )
+            return {
+                **base,
+                "status": "configured",
+                "providerId": asset["providerId"],
+                "evidenceScope": descriptor.get("evidenceScope", "unknown"),
+                "scopes": scopes,
+            }
+
+    def history(self, *, owner):
+        """Bounded local ownership history; reading never inspects a provider."""
+        if not opaque_id(owner):
+            raise LabError("FORBIDDEN")
+        with self._lock, self.registry._lock:
+            self.backing.assert_current()
+            observed_at = self.registry.clock()
+            owned_records = [
+                self.registry.records[identity]
+                for identity in sorted(self.registry.records)
+                if self.registry.records[identity]["owner"] == owner
+            ]
+            expired = [
+                record
+                for record in owned_records
+                if record["status"] == "owned" and observed_at >= record["expiry"]
+            ]
+            for record in expired:
+                record["status"] = "expired"
+            if expired:
+                # The ledger is bounded but a write per elapsed lease would
+                # rewrite it up to 1,000 times during one read. Commit once.
+                self.registry._save()
+            records = []
+            for record in owned_records:
+                terminal = record["status"] in {"released", "expired"}
+                installed = record.get("providerIdentity") is not None and record.get(
+                    "providerIdentity"
+                ) == self.identities.get(record["providerId"])
+                grant = record["scope"] in self.policy.scopes_for(
+                    owner, record["assetId"]
+                )
+                records.append(
+                    {
+                        **_lease_view(record),
+                        "requests": {
+                            "renew": installed
+                            and grant
+                            and record["status"] == "owned",
+                            "release": self.enabled
+                            and (
+                                terminal or (installed and record["status"] == "owned")
+                            ),
+                            "reconcile": installed and not terminal,
+                        },
+                    }
+                )
+            return {
+                "contractVersion": "1.0",
+                "principal": owner,
+                "observedAt": observed_at,
+                "items": records,
+                "runtimeAdmission": "unavailable",
+                "physicalCommands": [],
+            }
+
     def get_operation(self, operation_id, *, owner):
         with self.store.tx() as db:
             record = self._read_operation(operation_id, db)

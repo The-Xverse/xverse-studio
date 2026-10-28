@@ -557,3 +557,219 @@ def test_unavailable_final_receipt_storage_keeps_unknown_reads_and_same_identity
         assert reply.json()["code"] == "LAB_OPERATION_RECORD_UNCERTAIN"
     assert bench.provider.calls.count("reserve") == 1
     assert bench.service.store.get("operation", operation_id)["status"] == "delegated"
+
+
+def test_request_options_are_exact_grants_not_runtime_or_device_authority(bench):
+    url = "/api/v1/assets/" + bench.provider.asset_id + "/reservation-options"
+    response = bench.client.get(url)
+    assert response.status_code == 200
+    value = response.json()
+    assert value["contractVersion"] == "1.0" and value["principal"] == "local-operator"
+    assert value["assetId"] == bench.provider.asset_id and value["observedAt"] == 100
+    assert value["status"] == "configured" and value["evidenceScope"] == "fixture"
+    assert (
+        value["runtimeAdmission"] == "unavailable" and value["physicalCommands"] == []
+    )
+    scopes = {entry["scope"]: entry for entry in value["scopes"]}
+    assert scopes["observe"] == {"scope": "observe", "eligible": True, "reasons": []}
+    assert scopes["stimulate"]["eligible"] is False
+    assert scopes["stimulate"]["reasons"] == ["FORBIDDEN"]
+    assert scopes["destructive"]["reasons"] == ["FORBIDDEN", "CAPABILITY_UNSUPPORTED"]
+    assert bench.provider.calls == ["inventory"]
+    assert (
+        bench.service.store.all("operation") == []
+        and bench.service.registry.records == {}
+    )
+    bench.policy.set_scopes("local-operator", bench.provider.asset_id, {"stimulate"})
+    scopes = {entry["scope"]: entry for entry in bench.client.get(url).json()["scopes"]}
+    assert not scopes["observe"]["eligible"] and scopes["stimulate"]["eligible"]
+    bench.policy.revoke("local-operator", bench.provider.asset_id)
+    # A formerly eligible observation cannot bypass the mutation's current policy.
+    result = acquire(bench)
+    assert result.status_code == 403 and bench.provider.calls.count("reserve") == 0
+
+
+@pytest.mark.parametrize(
+    "change,reason",
+    [
+        ({"identity": {}}, "ASSET_IDENTITY_UNRESOLVED"),
+        ({"available": False}, "ASSET_AVAILABILITY_UNCONFIRMED"),
+    ],
+)
+def test_options_do_not_advertise_unresolved_or_unavailable_asset(
+    bench, change, reason
+):
+    bench.provider.assets[0].update(change)
+    response = bench.client.get(
+        "/api/v1/assets/" + bench.provider.asset_id + "/reservation-options"
+    )
+    assert response.status_code == 200
+    assert all(
+        not entry["eligible"] and reason in entry["reasons"]
+        for entry in response.json()["scopes"]
+    )
+    assert bench.provider.calls == ["inventory"]
+
+
+def test_local_history_is_owner_scoped_closed_paged_and_makes_no_provider_call(bench):
+    accepted = acquire(bench)
+    rid = accepted.json()["reservationId"]
+    bench.service.registry.records[rid]["privateExtension"] = {
+        "endpoint": "private-fixture.invalid"
+    }
+    bench.service.registry._save()
+    # A second user's historical record must not cross the current session boundary.
+    foreign = dict(
+        bench.service.registry.records[rid],
+        reservationId="foreign-history",
+        owner="other-operator",
+    )
+    bench.service.registry.records[foreign["reservationId"]] = foreign
+    bench.service.registry._save()
+    calls = list(bench.provider.calls)
+    result = bench.client.get("/api/v1/reservations?limit=1").json()
+    assert result["contractVersion"] == "1.0" and result["nextCursor"] is None
+    assert len(result["items"]) == 1 and result["items"][0]["reservationId"] == rid
+    assert result["items"][0]["requests"] == {
+        "renew": True,
+        "release": True,
+        "reconcile": True,
+    }
+    assert (
+        result["runtimeAdmission"] == "unavailable" and result["physicalCommands"] == []
+    )
+    assert "privateExtension" not in str(
+        result
+    ) and "private-fixture.invalid" not in str(result)
+    assert "providerIdentity" not in str(result) and "assetIdentity" not in str(result)
+    assert (
+        bench.client.get("/api/v1/reservations?cursor=1&limit=1").json()["items"] == []
+    )
+    assert bench.provider.calls == calls
+
+
+def test_history_reports_revocation_expiry_and_terminal_cleanup_without_contact(bench):
+    rid = acquire(bench).json()["reservationId"]
+    calls = list(bench.provider.calls)
+    bench.policy.revoke("local-operator", bench.provider.asset_id)
+    record = bench.client.get("/api/v1/reservations").json()["items"][0]
+    assert record["status"] == "owned"
+    assert record["requests"] == {"renew": False, "release": True, "reconcile": True}
+    bench.now[0] = 131
+    record = bench.client.get("/api/v1/reservations").json()["items"][0]
+    assert record["status"] == "expired"
+    assert record["requests"] == {"renew": False, "release": True, "reconcile": False}
+    assert bench.provider.calls == calls
+    assert bench.service.registry.records[rid]["status"] == "expired"
+
+
+def test_history_batches_simultaneous_expiry_into_one_durable_write(bench, monkeypatch):
+    from copy import deepcopy
+
+    for index in range(20):
+        asset = deepcopy(bench.provider.assets[0])
+        asset.update(
+            assetId=f"fixture:expiry-{index}", identity={"serial": f"SYNTHETIC-{index}"}
+        )
+        bench.provider.assets.append(asset)
+        bench.policy.set_scopes("local-operator", asset["assetId"], {"observe"})
+        accepted = bench.service.reserve(
+            asset["assetId"], owner="local-operator", key=f"batch-{index}"
+        )
+        assert accepted["status"] == "completed"
+    writes, put = [], bench.service.store.put
+
+    def record_write(kind, identity, body, db=None):
+        if kind == "lab_registry":
+            writes.append(body["revision"])
+        return put(kind, identity, body, db)
+
+    monkeypatch.setattr(bench.service.store, "put", record_write)
+    calls = list(bench.provider.calls)
+    bench.now[0] = 131
+    response = bench.client.get("/api/v1/reservations")
+    assert response.status_code == 200 and len(response.json()["items"]) == 20
+    assert all(row["status"] == "expired" for row in response.json()["items"])
+    assert len(writes) == 1
+    assert bench.provider.calls == calls
+
+
+@pytest.mark.parametrize("query", ["cursor=-1", "cursor=no", "limit=0", "limit=201"])
+def test_history_paging_rejects_before_any_provider_or_storage_write(bench, query):
+    response = bench.client.get("/api/v1/reservations?" + query)
+    assert response.status_code == 422
+    assert bench.provider.calls == [] and bench.service.store.all("operation") == []
+
+
+def test_history_preserves_unknown_without_reacquisition_and_requires_authentication(
+    bench,
+):
+    bench.provider.lose_reserve_ack = True
+    rid = acquire(bench).json()["reservationId"]
+    calls = list(bench.provider.calls)
+    record = bench.client.get("/api/v1/reservations").json()["items"][0]
+    assert record["reservationId"] == rid and record["status"] == "unknown"
+    assert record["fencingIdentity"] is None
+    assert record["requests"] == {"renew": False, "release": False, "reconcile": True}
+    assert bench.provider.calls == calls
+    with TestClient(bench.client.app, base_url="http://testserver") as anonymous:
+        for route in [
+            "/reservations",
+            "/assets/" + bench.provider.asset_id + "/reservation-options",
+        ]:
+            result = anonymous.get("/api/v1" + route)
+            assert result.status_code in {401, 403}
+    assert bench.provider.calls == calls
+
+
+@pytest.mark.parametrize("terminal", [False, True])
+def test_unconfigured_host_lists_recovered_history_without_enabling_provider_requests(
+    tmp_path, terminal
+):
+    now = [100]
+    provider = fixtures.PhysicalContractFixture(lambda: now[0])
+    root = tmp_path / "owned read projections Ω"
+    app, _ = prepare(
+        root,
+        provider,
+        LabAuthority({("local-operator", provider.asset_id): {"observe"}}),
+        now,
+    )
+    with TestClient(app, base_url="http://testserver") as client:
+        login(client)
+        acquired = client.post(
+            "/api/v1/assets/" + provider.asset_id + "/reservations",
+            json={},
+            headers={"Idempotency-Key": "original"},
+        )
+        assert acquired.status_code == 202
+        if terminal:
+            released = client.delete(
+                "/api/v1/reservations/" + acquired.json()["reservationId"],
+                headers={"Idempotency-Key": "released"},
+            )
+            assert (
+                released.status_code == 202
+                and released.json()["result"]["status"] == "released"
+            )
+    app = create_app(
+        root,
+        allowed_hosts=["testserver"],
+        bootstrap_token="owned-http-fixture-bootstrap",
+    )
+    calls = list(provider.calls)
+    with TestClient(app, base_url="http://testserver") as client:
+        login(client)
+        record = client.get("/api/v1/reservations").json()["items"][0]
+        assert record["status"] == ("released" if terminal else "unknown")
+        assert record["requests"] == {
+            "renew": False,
+            "release": False,
+            "reconcile": False,
+        }
+        options = client.get(
+            "/api/v1/assets/" + provider.asset_id + "/reservation-options"
+        ).json()
+        assert options["status"] == "unavailable" and options["providerId"] is None
+        assert all(not entry["eligible"] for entry in options["scopes"])
+    assert provider.calls == calls
