@@ -31,8 +31,9 @@ The earlier68-case backend pass records the authenticated-principal addition.
 
 Fresh combined verification passes1146 backend, full562 browser and separate
 performance2 with335 selected inputs unchanged across all stages. See final/ for
-actual reports, JUnit, logs and hashes. Clean committed package binding remains
-NOT_RUN pending the source commit and actual native Linux package check.
+actual reports, JUnit, logs and hashes. Clean source974c783 now passes the actual
+113-file native Linux package check; candidate-binding.json binds every selected
+input, payload/archive hash and six tested UI assets to that source.
 Published6183e5e push/PR1078/516/package110 results predate this successor.
 Native Windows, actual device/provider/driver/permission/clocks/stop, human/AT/SADS
 and independent full gates remain open. Counts47/43/10 and zero accepted milestones
@@ -40,3 +41,6 @@ are unchanged; no T075/full physical acceptance follows from fixtures alone.
 
 
 Fresh combined observation successor verification passes1146 backend/full562 browser/performance2 with335 source/config/compiled inputs unchanged across lint, collection and every execution stage. Zero failures/errors/skips/flaky outcomes. Focused46 and supplementary canonical2 retain separate reports and are not added to562. Actual native fixture permission/idempotency/owner/clock/navigation/focus/storage boundaries pass; original1144/1backend and15/1,70/94,163/1GUI failures remain retained. Evidence: evidence/studio/M3-connection-observation-workspace/final/. Source commit and actual clean113-file native Linux package remain pending. Counts47/43/10 andzero accepted milestones unchanged; nativeWindows held, actualhardware/human/AT/SADS/independent gates open.
+
+
+Clean native Linux observation successor source 974c783ee602d18e597bbe66a5b55d734dcdc7f7 passes prepared-cache offline extraction/provisioning, startup/UI, Unicode project persistence, public compilation and owned shutdown. All113 payload hashes, archive digest and six tested UI assets match;335 inputs bind1146 backend/46 focused/full562 browser/performance2. Supplementary canonical2 is separate from562. Evidence: evidence/studio/M3-connection-observation-workspace/candidate-binding.json. Native Windows held; actual hardware and independent gates remain open;47/43/10 andzero accepted milestones unchanged.
