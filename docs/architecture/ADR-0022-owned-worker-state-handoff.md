@@ -41,3 +41,30 @@ negative file/process fixtures for owner/PID/birth changes and omissions,
 nonterminal/malformed/disappeared files, denied access and PID reuse. Rerun
 existing restart/crash, command, campaign, history and comparison checks, followed
 by fresh full backend/browser and performance verification on frozen inputs.
+
+## Startup rejection identity amendment — 2026-10-28
+
+An owned worker can reject effective-input equality before opening its journal or
+starting the workload. Its terminal rejection must carry the same PID, process
+birth and owner digest as other worker observations. Without those fields, the
+backend correctly refuses to adopt the record and eventually reports ownership
+unknown, losing the available startup-failure fact.
+
+The rejection now records those identity fields and its actual terminal receipt
+time. It reports no workload start time or effective execution identities. No
+journal is invented; evidence remains unavailable. The existing backend identity
+checks and authoritative snapshot validation remain unchanged. The worker bytes
+and therefore its existing implementation digest change; earlier preflights do
+not gain admission to the successor implementation.
+
+The browser presents reported startup separately from execution, cleanup,
+evidence and verdict. A recorded start followed by failure is distinguished from
+explicit launch/effective-input rejection. Missing history and uncertain ownership
+remain unknown. These facts grant no controls or physical-state assurance.
+
+Native regression faults only the private delegated request copy after normal
+admission. Canonical Project/snapshot bytes remain unchanged, and the real worker
+uses its original argument vector. Browser fixtures additionally label injected
+launch refusal, actual ownership-verified Linux SIGINT after a sample, and normal
+Stop. Neither fixture results nor this repair establish Windows, live-provider or
+milestone acceptance.

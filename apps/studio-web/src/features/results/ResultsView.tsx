@@ -16,6 +16,7 @@ import { ObservationPlot, ObservationTable } from "./ObservationDisplay";
 import { RetentionDialog } from "../retention/RetentionDialog";
 import { FrozenInputsControl } from "./FrozenInputsControl";
 import { RunControls } from "../runs/RunControls";
+import { RunStartupStatus } from "../runs/RunStartupStatus";
 import { DiagnosticExplanations } from "../diagnostics/DiagnosticExplanations";
 import { projectDisplay } from "../model/projection";
 import type { Project } from "../../api/types";
@@ -592,6 +593,7 @@ export function ResultsView({
         </div>
       </div>
       <RunControls run={run} onRunUpdated={onRunUpdated} />
+      <RunStartupStatus run={run} />
       {rerunOperation && (
         <section className="panel">
           <div className="section-heading">

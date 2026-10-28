@@ -1,0 +1,139 @@
+<testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="2" time="11.290" timestamp="2026-10-28T18:11:36.797726+00:00" hostname="&lt;native-linux-host&gt;"><testcase classname="tests.integration.test_worker_startup_failure" name="test_native_startup_rejection_preserves_identity_without_start_or_evidence[configuration]" time="5.717"><failure message="AssertionError: {'capabilities': ['stop', 'cancel'], 'cleanup': 'not_started', 'createdAt': 1793211098.7452304, 'evaluation': 'not_started', ...}&#10;assert 'preparing' == 'failed'&#10;&#10;  - failed&#10;  + preparing">client = &lt;starlette.testclient.TestClient object at 0x703acb0fcec0&gt;
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x703acb185e00&gt;
+fault = 'configuration'
+
+    @pytest.mark.parametrize("fault", ["configuration", "plan_digest"])
+    def test_native_startup_rejection_preserves_identity_without_start_or_evidence(
+        client, monkeypatch, fault
+    ):
+        from xverse_studio.runs import service as run_module
+
+        created = client.post("/api/v1/projects", json={"name": "Owned startup rejection"})
+        assert created.status_code == 201
+        project = created.json()
+        studio = client.app.state.studio
+        preflight = client.post(
+            f"/api/v1/projects/{project['projectId']}/preflights",
+            json={"revision": project["revision"]},
+        ).json()
+        assert preflight["status"] == "ready"
+        snapshot_id = preflight["snapshotId"]
+        snapshot_file = studio.store.root / "snapshots" / snapshot_id / "snapshot.json"
+        immutable_bytes = snapshot_file.read_bytes()
+        immutable_record = canonical(studio.store.get("snapshot", snapshot_id))
+        write = run_module.atomic
+        injected = []
+
+        def corrupt_delegated_copy(path, body):
+            target = Path(path)
+            if target.name == "request.json" and target.parent.parent == studio.store.root / "runs":
+                request = json.loads(body)
+                assert request["snapshot"]["snapshotId"] == snapshot_id
+                assert request["snapshot"]["providerId"] == "studio.reference"
+                if fault == "configuration":
+                    request["configuration"]["gain"] += 0.125
+                else:
+                    request["snapshot"]["planDigest"] = "sha256:" + "f" * 64
+                injected.append(request["runId"])
+                return write(path, canonical(request).encode())
+            return write(path, body)
+
+        monkeypatch.setattr(run_module, "atomic", corrupt_delegated_copy)
+        payload = {"snapshotId": snapshot_id, "preflightId": preflight["preflightId"]}
+        accepted = client.post(
+            "/api/v1/runs",
+            headers={"Idempotency-Key": "owned-startup-rejection-" + fault},
+            json=payload,
+        )
+        assert accepted.status_code == 202
+        result = accepted.json()
+        run_id = result["runId"]
+        worker = studio.runs.children[run_id]
+        assert worker.wait(timeout=20) == 2
+        assert injected == [run_id]
+        directory = studio.runs.directory(run_id)
+        state = json.loads((directory / "state.json").read_text())
+        known = studio.store.get("run", run_id)
+        assert known["launchArgvDigest"] == digest(
+            [sys.executable, "-I", "-m", "xverse_studio.providers.worker", str(directory)]
+        )
+        response = client.get("/api/v1/runs/" + run_id)
+        assert response.status_code == 200
+        observed = response.json()
+&gt;       assert observed["state"] == "failed", observed
+E       AssertionError: {'capabilities': ['stop', 'cancel'], 'cleanup': 'not_started', 'createdAt': 1793211098.7452304, 'evaluation': 'not_started', ...}
+E       assert 'preparing' == 'failed'
+E
+E         - failed
+E         + preparing
+
+tests/integration/test_worker_startup_failure.py:76: AssertionError</failure></testcase><testcase classname="tests.integration.test_worker_startup_failure" name="test_native_startup_rejection_preserves_identity_without_start_or_evidence[plan_digest]" time="5.515"><failure message="AssertionError: {'capabilities': ['stop', 'cancel'], 'cleanup': 'not_started', 'createdAt': 1793211104.2903383, 'evaluation': 'not_started', ...}&#10;assert 'preparing' == 'failed'&#10;&#10;  - failed&#10;  + preparing">client = &lt;starlette.testclient.TestClient object at 0x703ac9665450&gt;
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x703acb186520&gt;
+fault = 'plan_digest'
+
+    @pytest.mark.parametrize("fault", ["configuration", "plan_digest"])
+    def test_native_startup_rejection_preserves_identity_without_start_or_evidence(
+        client, monkeypatch, fault
+    ):
+        from xverse_studio.runs import service as run_module
+
+        created = client.post("/api/v1/projects", json={"name": "Owned startup rejection"})
+        assert created.status_code == 201
+        project = created.json()
+        studio = client.app.state.studio
+        preflight = client.post(
+            f"/api/v1/projects/{project['projectId']}/preflights",
+            json={"revision": project["revision"]},
+        ).json()
+        assert preflight["status"] == "ready"
+        snapshot_id = preflight["snapshotId"]
+        snapshot_file = studio.store.root / "snapshots" / snapshot_id / "snapshot.json"
+        immutable_bytes = snapshot_file.read_bytes()
+        immutable_record = canonical(studio.store.get("snapshot", snapshot_id))
+        write = run_module.atomic
+        injected = []
+
+        def corrupt_delegated_copy(path, body):
+            target = Path(path)
+            if target.name == "request.json" and target.parent.parent == studio.store.root / "runs":
+                request = json.loads(body)
+                assert request["snapshot"]["snapshotId"] == snapshot_id
+                assert request["snapshot"]["providerId"] == "studio.reference"
+                if fault == "configuration":
+                    request["configuration"]["gain"] += 0.125
+                else:
+                    request["snapshot"]["planDigest"] = "sha256:" + "f" * 64
+                injected.append(request["runId"])
+                return write(path, canonical(request).encode())
+            return write(path, body)
+
+        monkeypatch.setattr(run_module, "atomic", corrupt_delegated_copy)
+        payload = {"snapshotId": snapshot_id, "preflightId": preflight["preflightId"]}
+        accepted = client.post(
+            "/api/v1/runs",
+            headers={"Idempotency-Key": "owned-startup-rejection-" + fault},
+            json=payload,
+        )
+        assert accepted.status_code == 202
+        result = accepted.json()
+        run_id = result["runId"]
+        worker = studio.runs.children[run_id]
+        assert worker.wait(timeout=20) == 2
+        assert injected == [run_id]
+        directory = studio.runs.directory(run_id)
+        state = json.loads((directory / "state.json").read_text())
+        known = studio.store.get("run", run_id)
+        assert known["launchArgvDigest"] == digest(
+            [sys.executable, "-I", "-m", "xverse_studio.providers.worker", str(directory)]
+        )
+        response = client.get("/api/v1/runs/" + run_id)
+        assert response.status_code == 200
+        observed = response.json()
+&gt;       assert observed["state"] == "failed", observed
+E       AssertionError: {'capabilities': ['stop', 'cancel'], 'cleanup': 'not_started', 'createdAt': 1793211104.2903383, 'evaluation': 'not_started', ...}
+E       assert 'preparing' == 'failed'
+E
+E         - failed
+E         + preparing
+
+tests/integration/test_worker_startup_failure.py:76: AssertionError</failure></testcase></testsuite></testsuites>

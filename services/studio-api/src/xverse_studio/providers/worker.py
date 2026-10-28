@@ -39,6 +39,10 @@ def main():
                     "cleanup": "complete",
                     "evidence": "unavailable",
                     "reason": "EFFECTIVE_INPUT_MISMATCH",
+                    "pid": os.getpid(),
+                    "createTime": psutil.Process().create_time(),
+                    "ownerDigest": digest(secret),
+                    "endedAt": time.time(),
                 }
             ).encode(),
         )

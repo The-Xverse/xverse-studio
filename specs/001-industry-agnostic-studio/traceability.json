@@ -2874,11 +2874,13 @@
         "AC-027"
       ],
       "status": "in_progress",
-      "implementation_note": "In progress: capability-admitted Stop/Cancel with stated unavailable reasons, durable control receipts, accepted/delegated/completed/rejected/failed/unknown operation views, and an unresolved-ownership/cleanup view are implemented and browser-verified on Linux. Remaining: AC-006/007/027 environment clauses, observed partial-start/cleanup-failure transitions, and optional controls from an admitted provider.",
+      "implementation_note": "In progress: immutable-input review, admitted Stop/Cancel and durable operation/ownership/cleanup/evidence views exist. The startup rejection worker now retains PID/birth/owner identity without inventing a start or journal; two actual native regressions and eight native browser startup/rejection/active-failure/Stop journeys pass, included in 30 affected lifecycle cases. Fresh full1166 backend passes on372 unchanged inputs. Remaining: optional-operation views/transitions from an admitted capable provider, the full partial-start/cleanup/evidence fault matrix, and native Windows/live AC-006/007/027 clauses. Neither labelled injected launch denial nor Linux-only interruption closes those gates.",
       "implementation_evidence": [
         "evidence/studio/M1-session/literal-scope.md",
         "evidence/studio/M1-session/evidence-card-before-repair.md",
-        "evidence/studio/M1-control-receipts/verification.json"
+        "evidence/studio/M1-control-receipts/verification.json",
+        "evidence/studio/M1-startup-failure-views/verification.json",
+        "evidence/studio/M1-startup-failure-views/backend-full/backend.junit.xml"
       ]
     },
     {
@@ -7135,7 +7137,7 @@
     "status_document": "../../docs/implementation/STATUS.md",
     "native_windows": "BLOCKED at user request. Initial native Server 2022 install failed on upstream Git filenames; application/browser NOT_RUN.",
     "m5": "deferred",
-    "code_candidate": "60b668ab49a01e6179f94f57e463b0058a89438e verified parameter-selection successor:71 affected native browser/performance2 pass on342 unchanged inputs;1164 backend preserved through188 unchanged backend inputs and108 identical non-UI package payloads. Clean114-file native Linux package passes. Prior full602 remains601pass/1fail; current604 collection is not execution.48/42/10, zero accepted milestones.",
+    "code_candidate": "Uncommitted startup-rejection successor of a59151d: actual full1166 backend/30 affected browser pass with a descriptor-only browser/backend source bridge; separate performance2 passes; clean successor packaging pending.48/42/10, zero accepted milestones. Prior published product60b668a retains its separate evidence.",
     "component_completed": 48,
     "verification": {
       "backend_tests_passed": 1164,
@@ -7569,6 +7571,21 @@
         },
         "qualification": "Published974c783 product/449fbd5 metadata; verification predates uncommitted comparison and reservation focus repair."
       }
-    ]
+    ],
+    "startup_failure_successor": {
+      "status": "verification_in_progress",
+      "evidence": "evidence/studio/M1-startup-failure-views/",
+      "backend_passed": 1166,
+      "affected_browser_passed": 30,
+      "new_native_browser_cases": 8,
+      "new_native_backend_cases": 2,
+      "selected_inputs": 372,
+      "performance": "PASSED_2",
+      "package": "NOT_RUN_FOR_THIS_SUCCESSOR",
+      "task_status": "T027 in_progress",
+      "milestones_accepted": 0,
+      "current_full_browser_collection": 612,
+      "current_full_browser_execution": "NOT_RUN_LOCALLY_FOR_THIS_SUCCESSOR"
+    }
   }
 }
