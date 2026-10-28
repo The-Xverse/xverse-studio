@@ -11,7 +11,7 @@ export const test = base.extend<{ scenario: string; labHost: Host }>({
       python = process.env.STUDIO_TEST_PYTHON || path.resolve(process.platform === "win32" ? ".venv/Scripts/python.exe" : ".venv/bin/python"),
       child = spawn(python, ["-I", "tests/fixtures/providers/physical/browser_host.py", "--data", data, "--scenario", scenario],
         { stdio: ["ignore", "pipe", "pipe"] });
-    let diagnostic = "";
+    let diagnostic = "", started = false;
     child.stderr.on("data", (chunk) => { diagnostic = (diagnostic + String(chunk)).slice(-4000); });
     try {
       const origin = await new Promise<string>((resolve, reject) => {
@@ -34,6 +34,7 @@ export const test = base.extend<{ scenario: string; labHost: Host }>({
       await expect.poll(async () => {
         try { return (await fetch(origin + "/api/v1/session")).status; } catch { return 0; }
       }).toBe(401);
+      started = true;
       await use({ origin, data });
     } finally {
       if (child.exitCode === null && child.signalCode === null) child.kill("SIGTERM");
@@ -43,9 +44,21 @@ export const test = base.extend<{ scenario: string; labHost: Host }>({
         child.once("exit", () => { clearTimeout(timer); resolve(); });
       });
       const observation = path.join(data, "fixture-observation.json");
-      if (existsSync(observation)) await info.attach("owned-provider-observation", {
-        body: readFileSync(observation), contentType: "application/json",
-      });
+      if (started) {
+        expect(existsSync(observation), "Owned fixture shutdown observation was not retained").toBe(true);
+        const value = JSON.parse(readFileSync(observation, "utf8"));
+        expect(Object.keys(value).sort()).toEqual(["scope", "scenario", "calls", "reservationCount", "remainingProviderLeases", "preparationSeconds"].sort());
+        expect(value.scope).toBe("owned in-memory fixture; no equipment");
+        expect(value.scenario).toBe(scenario);
+        expect(Array.isArray(value.calls) && value.calls.length <= 1000).toBe(true);
+        expect(value.calls.every((name: unknown) => ["inventory", "reserve", "renew", "release", "inspect"].includes(name as string))).toBe(true);
+        expect(Number.isInteger(value.reservationCount) && value.reservationCount >= 0 && value.reservationCount <= 51).toBe(true);
+        expect(Number.isInteger(value.remainingProviderLeases) && value.remainingProviderLeases >= 0 && value.remainingProviderLeases <= 1).toBe(true);
+        expect(typeof value.preparationSeconds === "number" && Number.isFinite(value.preparationSeconds) && value.preparationSeconds >= 0).toBe(true);
+        await info.attach("owned-provider-observation", {
+          body: readFileSync(observation), contentType: "application/json",
+        });
+      }
     }
   },
 });

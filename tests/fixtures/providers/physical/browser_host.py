@@ -5,6 +5,7 @@ middleware are installed unchanged, with a typed in-memory lease provider.
 """
 
 import argparse
+from contextlib import asynccontextmanager
 import importlib.util
 import json
 from pathlib import Path
@@ -122,10 +123,20 @@ def main():
             ),
             flush=True,
         )
-        try:
-            uvicorn.Server(config).run(sockets=[listener])
-        finally:
+        original_lifespan = app.router.lifespan_context
+
+        @asynccontextmanager
+        async def observed_lifespan(application):
+            try:
+                async with original_lifespan(application):
+                    yield
+            finally:
+                record_observation()
+
+        def record_observation():
             # Counts/immutable fixture declarations only, never bootstrap/session data.
+            # Uvicorn replays SIGTERM after lifespan shutdown; an outer finally
+            # around Server.run cannot reliably run after that default signal.
             (args.data / "fixture-observation.json").write_text(
                 json.dumps(
                     {
@@ -139,6 +150,9 @@ def main():
                 ),
                 encoding="utf-8",
             )
+
+        app.router.lifespan_context = observed_lifespan
+        uvicorn.Server(config).run(sockets=[listener])
 
 
 if __name__ == "__main__":

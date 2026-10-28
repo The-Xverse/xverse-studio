@@ -1,0 +1,30 @@
+
+Running 1 test using 1 worker
+
+(node:2120369) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 .studio-local/lab-fixture-shutdown/setup-refusal.spec.ts:3:5 › labelled setup failure propagates instead of requiring a shutdown record (388ms)
+
+
+  1) .studio-local/lab-fixture-shutdown/setup-refusal.spec.ts:3:5 › labelled setup failure propagates instead of requiring a shutdown record
+
+    Error: Owned fixture exited before readiness (2): usage: browser_host.py [-h] --data DATA
+                           --scenario {observe,scopes,reserve-unknown,release-unknown,revoked,restart,history}
+    browser_host.py: error: argument --scenario: invalid choice: 'owned-invalid-scenario-control' (choose from observe, scopes, reserve-unknown, release-unknown, revoked, restart, history)
+
+
+       at ../../tests/e2e/lab-fixture.ts:24
+
+      22 |         const timer = setTimeout(() => reject(new Error("Owned fixture preparation timed out.")), preparationBudget);
+      23 |         child.once("error", (error) => { clearTimeout(timer); reject(error); });
+    > 24 |         child.once("exit", (code) => { clearTimeout(timer); reject(new Error(`Owned fixture exited before readiness (${code}): ${diagnostic}`)); });
+         |                                                                    ^
+      25 |         child.stdout.on("data", (chunk) => {
+      26 |           buffer += String(chunk);
+      27 |           if (buffer.length > 4096) { clearTimeout(timer); reject(new Error("Fixture readiness exceeded its bound.")); return; }
+        at ChildProcess.<anonymous> (<repo>/tests/e2e/lab-fixture.ts:24:68)
+
+    Error Context: .studio-local/lab-fixture-shutdown/setup-results/setup-refusal-labelled-set-355a0-requiring-a-shutdown-record/error-context.md
+
+  1 failed
+    .studio-local/lab-fixture-shutdown/setup-refusal.spec.ts:3:5 › labelled setup failure propagates instead of requiring a shutdown record
