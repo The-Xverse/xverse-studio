@@ -3,7 +3,7 @@
 Scope: runnable development reference implementation on `implement/studio-m0-m4`. No M0–M4 milestone
 or Studio 1.0 release is accepted. The supplied requirements/task IDs and acceptance targets remain.
 
-Latest verified work adds the reservation workspace over the configured native-host API: fresh full1,068 backend tests,117 affected browser checks and2 performance checks pass unchanged selected inputs. Verified source is being prepared for a clean native Linux package; full508 browser verification is not run for this UI. Fixture scope and missing optional raw callback/preparation observations remain explicit. Work resumed on2026-10-28 after the requested verification pause. No M0–M4 milestone is accepted; actual hardware, native Windows, connection tests and active-run integration remain open.
+Latest verified work adds the reservation workspace over the configured native-host API: fresh full1,068 backend tests,117 affected browser checks and2 performance checks pass unchanged selected inputs. The clean f921d52 Linux package passes with110 verified files and6 identical tested UI assets; full508 browser verification is not run for this UI. Fixture scope and missing optional raw callback/preparation observations remain explicit. Work resumed on2026-10-28 after the requested verification pause. No M0–M4 milestone is accepted; actual hardware, native Windows, connection tests and active-run integration remain open.
 
 Latest recorded task completion: **47/100 components**, most recently T072's read-only inventory/binding observations
 (ADR-0018) and T076's hybrid substitution/loss fixtures (`evidence/studio/M3-assets/`,
@@ -429,3 +429,6 @@ Reservation workspace successor: authenticated versioned request eligibility and
 
 
 Prior a12 CI terminal result: push passed1055 backend/full474 browser/package110; PR passed1055 backend but full browser failed473/1 in source-recovery-accessibility.spec.ts:770 (1440 unreadable-target context; expected Process control reference heading absent at10000ms), so PR package was not run. Exact mixed outcomes and failure are retained under evidence/studio/native-ci/ubuntu-24.04-a12c7c0-runs.json and ubuntu-24.04-a12c7c0-pr-failure.json. Root cause is not established; no new investigation or repair began after the user requested stopping. These older results do not verify the newer uncommitted UI or full508.
+
+
+Clean reservation-workspace package successor on2026-10-28: product f921d52330a65db41cefff0f6981e10247fd6b18 passes fresh native Linux prepared-cache offline extraction/provision/start/UI/Unicode persistence/public compile/owned stop. All110 manifest/archive/file hashes and6 tested UI assets match;307 tracked inputs plus6 compiled inputs bind the1068/117/performance2 candidate, with2 inert ignored historical controls separately disclosed. ArchiveSHA42ddbc3d7a0bcab31381bbd0c6fbf52f992278ae2a8ed3794dbadcd5fcce01ab. Evidence evidence/studio/M3-reservation-workspace/package/. No new full508 browser, raw fixture callback/timing observation, Windows or hardware acceptance. Task states47/43/10 and zero accepted milestones unchanged.
