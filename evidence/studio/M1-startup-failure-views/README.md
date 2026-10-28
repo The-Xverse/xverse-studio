@@ -35,6 +35,8 @@ Fresh full1166 backend and separate performance2 pass on the same372 unchanged
 inputs. Current612 browser cases are collected, not fully executed locally; the
 30 affected cases remain the current browser execution. Prior published a59151d
 push CI passes1164/full604/package114 and does not verify this successor. Clean
-successor packaging, complete T027 closure and all native Windows/live/physical/
-human/AT/SADS/independent milestone gates remain unproven. Counts remain48/42/10,
+native Linux packaging of source `685603a938073196f30bfb44f569427134c0d847` passes114 payloads,
+all archive/file hashes and six identical tested UI assets. See
+[candidate binding](candidate-binding.json). Complete T027 closure and all native
+Windows/live/physical/human/AT/SADS/independent milestone gates remain unproven. Counts remain48/42/10,
 with zero accepted milestones.
