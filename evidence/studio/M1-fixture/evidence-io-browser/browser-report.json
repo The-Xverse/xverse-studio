@@ -1,0 +1,335 @@
+{
+  "config": {
+    "argv": [
+      "<tool-cache>/node-v24.22.1-linux-x64/bin/node",
+      "<repo>/node_modules/.bin/playwright",
+      "test",
+      "-c",
+      "tests/e2e/playwright.config.ts",
+      "--grep",
+      "run startup journal_"
+    ],
+    "configFile": "<repo>/tests/e2e/playwright.config.ts",
+    "rootDir": "<repo>/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "<repo>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "<repo>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "*.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "<repo>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "<repo>/tests/e2e",
+        "snapshotDir": "<repo>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": "*.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "baseURL": "http://127.0.0.1:39445",
+          "browserName": "chromium",
+          "actionTimeout": 15000,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "trace": "off",
+          "screenshot": "only-on-failure",
+          "video": "off"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "<repo>/test-results/browser-report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "run-startup-outcomes.spec.ts",
+      "file": "run-startup-outcomes.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "run startup journal_open at 1024",
+          "file": "run-startup-outcomes.spec.ts",
+          "line": 16,
+          "column": 10,
+          "specs": [
+            {
+              "title": "actual startup and cleanup facts preserve immutable inputs",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 6607,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-28T22:00:34.614Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "owned-startup-outcome",
+                          "contentType": "application/json",
+                          "body": "eyJzY29wZSI6Ik93bmVkIG5hdGl2ZSBmaXh0dXJlOyBubyBlcXVpcG1lbnQiLCJzY2VuYXJpbyI6ImpvdXJuYWxfb3BlbiIsInN0YXRlIjoiZmFpbGVkIiwiY2xlYW51cCI6ImNvbXBsZXRlIiwiZXZpZGVuY2UiOiJpbnZhbGlkIiwicmVhc29uIjoiRVZJREVOQ0VfT1BFTl9GQUlMRUQiLCJzdGFydFJlY29yZGVkIjpmYWxzZSwic25hcHNob3RJZCI6InNuYXAtMGZlMzk5YjYtMTA4Zi00YzZmLTgxNGEtNTE0MzMxODViNTUxIiwicHJvamVjdFVuY2hhbmdlZCI6dHJ1ZX0K"
+                        },
+                        {
+                          "name": "owned-native-fault-observation",
+                          "contentType": "application/json",
+                          "body": "eyJzY29wZSI6Im93bmVkIG5hdGl2ZSBmYXVsdCBmaXh0dXJlOyBubyBlcXVpcG1lbnQiLCJzY2VuYXJpbyI6ImpvdXJuYWxfb3BlbiIsIndvcmtlckF0dGVtcHRzIjoxLCJjb3JydXB0aW9ucyI6MCwibGF1bmNoUmVmdXNhbHMiOjAsImludGVycnVwdGlvbnMiOjAsIm93bmVyc2hpcERlbmlhbHMiOjAsInByZXBhcmF0aW9uUmVmdXNhbHMiOjAsImpvdXJuYWxPcGVuRmF1bHRzIjoxLCJqb3VybmFsRmluYWxpemF0aW9uRmF1bHRzIjowLCJlcnJvcnMiOltdfQo="
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "4958c1dc3ba90309abf0-93ec2ca0c9a9f7f68282",
+              "file": "run-startup-outcomes.spec.ts",
+              "line": 23,
+              "column": 11
+            }
+          ]
+        },
+        {
+          "title": "run startup journal_finalize at 1024",
+          "file": "run-startup-outcomes.spec.ts",
+          "line": 16,
+          "column": 10,
+          "specs": [
+            {
+              "title": "actual startup and cleanup facts preserve immutable inputs",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 10450,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-28T22:00:41.282Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "owned-startup-outcome",
+                          "contentType": "application/json",
+                          "body": "eyJzY29wZSI6Ik93bmVkIG5hdGl2ZSBmaXh0dXJlOyBubyBlcXVpcG1lbnQiLCJzY2VuYXJpbyI6ImpvdXJuYWxfZmluYWxpemUiLCJzdGF0ZSI6InN0b3BwZWQiLCJjbGVhbnVwIjoiY29tcGxldGUiLCJldmlkZW5jZSI6ImludmFsaWQiLCJyZWFzb24iOiJFVklERU5DRV9GSU5BTElaQVRJT05fRkFJTEVEIiwic3RhcnRSZWNvcmRlZCI6dHJ1ZSwic25hcHNob3RJZCI6InNuYXAtMjVhNmMzNjEtNmY2NC00ZWMzLTk2NzAtMTFhNjJiNWE3YzMyIiwicHJvamVjdFVuY2hhbmdlZCI6dHJ1ZX0K"
+                        },
+                        {
+                          "name": "owned-native-fault-observation",
+                          "contentType": "application/json",
+                          "body": "eyJzY29wZSI6Im93bmVkIG5hdGl2ZSBmYXVsdCBmaXh0dXJlOyBubyBlcXVpcG1lbnQiLCJzY2VuYXJpbyI6ImpvdXJuYWxfZmluYWxpemUiLCJ3b3JrZXJBdHRlbXB0cyI6MSwiY29ycnVwdGlvbnMiOjAsImxhdW5jaFJlZnVzYWxzIjowLCJpbnRlcnJ1cHRpb25zIjowLCJvd25lcnNoaXBEZW5pYWxzIjowLCJwcmVwYXJhdGlvblJlZnVzYWxzIjowLCJqb3VybmFsT3BlbkZhdWx0cyI6MCwiam91cm5hbEZpbmFsaXphdGlvbkZhdWx0cyI6MSwiZXJyb3JzIjpbXX0K"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "4958c1dc3ba90309abf0-10ce149bed8c4221d17a",
+              "file": "run-startup-outcomes.spec.ts",
+              "line": 23,
+              "column": 11
+            }
+          ]
+        },
+        {
+          "title": "run startup journal_open at 1440",
+          "file": "run-startup-outcomes.spec.ts",
+          "line": 16,
+          "column": 10,
+          "specs": [
+            {
+              "title": "actual startup and cleanup facts preserve immutable inputs",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 7193,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-28T22:00:51.741Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "owned-startup-outcome",
+                          "contentType": "application/json",
+                          "body": "eyJzY29wZSI6Ik93bmVkIG5hdGl2ZSBmaXh0dXJlOyBubyBlcXVpcG1lbnQiLCJzY2VuYXJpbyI6ImpvdXJuYWxfb3BlbiIsInN0YXRlIjoiZmFpbGVkIiwiY2xlYW51cCI6ImNvbXBsZXRlIiwiZXZpZGVuY2UiOiJpbnZhbGlkIiwicmVhc29uIjoiRVZJREVOQ0VfT1BFTl9GQUlMRUQiLCJzdGFydFJlY29yZGVkIjpmYWxzZSwic25hcHNob3RJZCI6InNuYXAtZjE1ZmRiZjEtNDI1NS00YjE3LTg2NmEtZmI5OGE1ZDhlMThiIiwicHJvamVjdFVuY2hhbmdlZCI6dHJ1ZX0K"
+                        },
+                        {
+                          "name": "owned-native-fault-observation",
+                          "contentType": "application/json",
+                          "body": "eyJzY29wZSI6Im93bmVkIG5hdGl2ZSBmYXVsdCBmaXh0dXJlOyBubyBlcXVpcG1lbnQiLCJzY2VuYXJpbyI6ImpvdXJuYWxfb3BlbiIsIndvcmtlckF0dGVtcHRzIjoxLCJjb3JydXB0aW9ucyI6MCwibGF1bmNoUmVmdXNhbHMiOjAsImludGVycnVwdGlvbnMiOjAsIm93bmVyc2hpcERlbmlhbHMiOjAsInByZXBhcmF0aW9uUmVmdXNhbHMiOjAsImpvdXJuYWxPcGVuRmF1bHRzIjoxLCJqb3VybmFsRmluYWxpemF0aW9uRmF1bHRzIjowLCJlcnJvcnMiOltdfQo="
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "4958c1dc3ba90309abf0-a1170f0881fecb8d5e22",
+              "file": "run-startup-outcomes.spec.ts",
+              "line": 23,
+              "column": 11
+            }
+          ]
+        },
+        {
+          "title": "run startup journal_finalize at 1440",
+          "file": "run-startup-outcomes.spec.ts",
+          "line": 16,
+          "column": 10,
+          "specs": [
+            {
+              "title": "actual startup and cleanup facts preserve immutable inputs",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 10604,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-28T22:00:58.944Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "owned-startup-outcome",
+                          "contentType": "application/json",
+                          "body": "eyJzY29wZSI6Ik93bmVkIG5hdGl2ZSBmaXh0dXJlOyBubyBlcXVpcG1lbnQiLCJzY2VuYXJpbyI6ImpvdXJuYWxfZmluYWxpemUiLCJzdGF0ZSI6InN0b3BwZWQiLCJjbGVhbnVwIjoiY29tcGxldGUiLCJldmlkZW5jZSI6ImludmFsaWQiLCJyZWFzb24iOiJFVklERU5DRV9GSU5BTElaQVRJT05fRkFJTEVEIiwic3RhcnRSZWNvcmRlZCI6dHJ1ZSwic25hcHNob3RJZCI6InNuYXAtNjg4MDQ5MGYtN2E5Ny00ZTY3LThiNTYtMTc4N2FmYTU0YTg1IiwicHJvamVjdFVuY2hhbmdlZCI6dHJ1ZX0K"
+                        },
+                        {
+                          "name": "owned-native-fault-observation",
+                          "contentType": "application/json",
+                          "body": "eyJzY29wZSI6Im93bmVkIG5hdGl2ZSBmYXVsdCBmaXh0dXJlOyBubyBlcXVpcG1lbnQiLCJzY2VuYXJpbyI6ImpvdXJuYWxfZmluYWxpemUiLCJ3b3JrZXJBdHRlbXB0cyI6MSwiY29ycnVwdGlvbnMiOjAsImxhdW5jaFJlZnVzYWxzIjowLCJpbnRlcnJ1cHRpb25zIjowLCJvd25lcnNoaXBEZW5pYWxzIjowLCJwcmVwYXJhdGlvblJlZnVzYWxzIjowLCJqb3VybmFsT3BlbkZhdWx0cyI6MCwiam91cm5hbEZpbmFsaXphdGlvbkZhdWx0cyI6MSwiZXJyb3JzIjpbXX0K"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "4958c1dc3ba90309abf0-169168019f77b9765a7d",
+              "file": "run-startup-outcomes.spec.ts",
+              "line": 23,
+              "column": 11
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-28T22:00:33.978Z",
+    "duration": 35642.304,
+    "expected": 4,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

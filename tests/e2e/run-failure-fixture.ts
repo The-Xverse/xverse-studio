@@ -101,7 +101,18 @@ export const test = base.extend<{ scenario: string; failureHost: Host }>({
         expect(observed.scope).toBe("owned native fault fixture; no equipment");
         expect(observed.scenario).toBe(scenario);
         expect(observed.errors).toEqual([]);
-        expect(observed.workerAttempts).toBe(1);
+        expect(observed.workerAttempts).toBe(
+          scenario === "prepare_denied" ? 0 : 1,
+        );
+        expect(observed.preparationRefusals).toBe(
+          scenario === "prepare_denied" ? 1 : 0,
+        );
+        expect(observed.journalOpenFaults).toBe(
+          scenario === "journal_open" ? 1 : 0,
+        );
+        expect(observed.journalFinalizationFaults).toBe(
+          scenario === "journal_finalize" ? 1 : 0,
+        );
         expect(observed.corruptions).toBe(scenario === "mismatch" ? 1 : 0);
         expect(observed.launchRefusals).toBe(
           scenario === "launch_denied" ? 1 : 0,

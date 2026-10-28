@@ -61,15 +61,14 @@ def main():
         "ownerDigest": digest(secret),
         "effectivePlanDigest": compiled["planDigest"],
         "effectiveSemanticDigest": compiled.get("semanticDigest"),
-        "startedAt": time.time(),
         "commandResults": {},
     }
-    atomic(root / "state.json", canonical(state).encode())
     previous = "0" * 64
     count = 0
     runid = request["runId"]
     snapid = snapshot["snapshotId"]
-    evidence = (root / "evidence.jsonl").open("xb", buffering=0)
+    evidence = None
+    phase = "journal_open"
 
     def emit(kind, payload, tick=None):
         nonlocal previous, count
@@ -137,6 +136,10 @@ def main():
         )
 
     try:
+        evidence = (root / "evidence.jsonl").open("xb", buffering=0)
+        phase = "execution"
+        state["startedAt"] = time.time()
+        save()
         emit(
             "run.state_changed",
             {"state": "running", "stateVersion": 1, "evidenceScope": "owned_reference"},
@@ -275,6 +278,7 @@ def main():
         state["cleanup"] = "complete"
         state["evidence"] = "complete"
         state["endedAt"] = time.time()
+        phase = "finalization"
         emit(
             "run.state_changed",
             {
@@ -311,37 +315,68 @@ def main():
         os.fsync(evidence.fileno())
         state["journalDigest"] = digest((root / "evidence.jsonl").read_bytes())
         state["eventCount"] = count
+        evidence.close()
         save()
     except BaseException as error:
-        state.update(
-            state="failed",
-            stateVersion=state["stateVersion"] + 1,
-            cleanup="unknown",
-            evidence="partial",
-            reason="REFERENCE_WORKER_ERROR",
-        )
-        try:
-            emit(
-                "log.appended",
-                {
-                    "severity": "error",
-                    "message": "Reference workload failed; inspect canonical evidence and ownership.",
-                },
+        if phase == "journal_open":
+            state.update(
+                state="failed", stateVersion=1, cleanup="complete",
+                evidence="unavailable", reason="EVIDENCE_OPEN_FAILED", endedAt=time.time(),
             )
+            state.pop("effectivePlanDigest", None)
+            state.pop("effectiveSemanticDigest", None)
+        elif phase == "finalization":
+            # The model already stopped and its runtime cleanup is known. An
+            # evidence commit failure cannot undo those independent facts.
+            state["evidence"] = "partial"
+            state.pop("journalDigest", None)
+            state.pop("eventCount", None)
+            state["evidenceFailure"] = "EVIDENCE_FINALIZATION_FAILED"
+            state.setdefault("reason", "EVIDENCE_FINALIZATION_FAILED")
+        else:
+            state.update(
+                state="failed",
+                stateVersion=state["stateVersion"] + 1,
+                cleanup="unknown",
+                evidence="partial",
+                reason="REFERENCE_WORKER_ERROR",
+            )
+        code = state.get("evidenceFailure", state["reason"])
+        if evidence is not None:
+            try:
+                emit(
+                    "log.appended",
+                    {
+                        "severity": "error", "code": code,
+                        "message": (
+                            "The owned model stopped and cleanup completed, but its evidence could not be finalized."
+                            if phase == "finalization"
+                            else "Reference workload failed; inspect canonical evidence and ownership."
+                        ),
+                    },
+                )
+            except (OSError, ValueError):
+                pass
+            try:
+                fail_pending_command(
+                    code,
+                    "The reference workload ended before this accepted command took effect.",
+                )
+            except (OSError, ValueError, KeyError, TypeError):
+                pass
+        # A journal append/close error must not prevent the separate trusted
+        # state report. If that state write also fails, uncertainty is retained.
+        try:
             save()
         except OSError:
             pass
-        try:
-            fail_pending_command(
-                "REFERENCE_WORKER_ERROR",
-                "The reference workload failed before this accepted command took effect.",
-            )
-            save()
-        except (OSError, ValueError, KeyError, TypeError):
-            pass
         return 1
     finally:
-        evidence.close()
+        if evidence is not None:
+            try:
+                evidence.close()
+            except OSError:
+                pass
     return 0
 
 

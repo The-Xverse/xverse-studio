@@ -1,0 +1,11 @@
+<testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="2" time="15.427" timestamp="2026-10-28T21:49:50.418210+00:00" hostname="&lt;native-linux-host&gt;"><testcase classname="tests.integration.test_worker_evidence_io" name="test_native_evidence_io_failure_preserves_known_lifecycle_and_cleanup[journal_open]" time="7.236"><failure message="AssertionError: assert 'not_started' == 'complete'&#10;&#10;  - complete&#10;  + not_started">tests/integration/test_worker_evidence_io.py:114: in test_native_evidence_io_failure_preserves_known_lifecycle_and_cleanup
+    assert state["cleanup"] == "complete"
+E   AssertionError: assert 'not_started' == 'complete'
+E
+E     - complete
+E     + not_started</failure></testcase><testcase classname="tests.integration.test_worker_evidence_io" name="test_native_evidence_io_failure_preserves_known_lifecycle_and_cleanup[journal_finalize]" time="8.107"><failure message="AssertionError: assert 'unknown' == 'complete'&#10;&#10;  - complete&#10;  + unknown">tests/integration/test_worker_evidence_io.py:114: in test_native_evidence_io_failure_preserves_known_lifecycle_and_cleanup
+    assert state["cleanup"] == "complete"
+E   AssertionError: assert 'unknown' == 'complete'
+E
+E     - complete
+E     + unknown</failure></testcase></testsuite></testsuites>

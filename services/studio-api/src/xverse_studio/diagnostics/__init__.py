@@ -373,7 +373,7 @@ def _source_clock(record):
 
 
 # The workload never executed: no process ran and no journal was produced.
-NOT_STARTED = {"LAUNCH_FAILED", "EFFECTIVE_INPUT_MISMATCH"}
+NOT_STARTED = {"PREPARATION_FAILED", "EVIDENCE_OPEN_FAILED", "LAUNCH_FAILED", "EFFECTIVE_INPUT_MISMATCH"}
 ACTIVE_STATES = {"requested", "preparing", "running", "stopping"}
 
 
@@ -417,6 +417,20 @@ def explain_run(
                 "The workload reported that its effective inputs did not match the frozen snapshot.",
                 [_run_ref(run, "reason")],
             )
+        elif reason == "EVIDENCE_OPEN_FAILED":
+            finding.fact(
+                "The provider could not create its canonical journal before starting the workload.",
+                [_run_ref(run, "reason")],
+            )
+            finding.unknown("The storage or access condition that prevented journal creation.")
+            finding.actions("follow_recovery_guide")
+        elif reason == "PREPARATION_FAILED":
+            finding.fact(
+                "The backend reported a preparation I/O failure before attempting native launch.",
+                [_run_ref(run, "reason")],
+            )
+            finding.unknown("The storage or access condition that caused preparation to fail.")
+            finding.actions("follow_recovery_guide")
         else:
             finding.unknown("Why the launch failed is not established.")
         finding.actions("recheck_preflight")
@@ -568,6 +582,11 @@ def explain_run(
                 _run_ref(run, "evidence"),
             ],
         )
+        if run.get("evidenceFailure") == "EVIDENCE_FINALIZATION_FAILED":
+            finding.fact(
+                "The worker reported an evidence finalization failure after its workload stopped.",
+                [_run_ref(run, "evidenceFailure"), _run_ref(run, "cleanup")],
+            )
         finding.consequence(
             "Assessments over this run cannot claim complete coverage.", [f1]
         )

@@ -9,17 +9,21 @@ for (const viewport of [
     "launch_denied",
     "active_failure",
     "normal",
+    "prepare_denied",
+    "journal_open",
+    "journal_finalize",
   ]) {
     test.describe(`run startup ${scenario} at ${viewport.width}`, () => {
       test.use({ viewport, scenario });
+      test.skip(
+        ["active_failure", "journal_finalize"].includes(scenario) &&
+          process.platform !== "linux",
+        "Owned Linux signal/open-file fault; no native Windows claim",
+      );
       test("actual startup and cleanup facts preserve immutable inputs", async ({
         page,
         failureHost,
       }, info) => {
-        test.skip(
-          scenario === "active_failure" && process.platform !== "linux",
-          "Owned Linux SIGINT/sleep fault; no native Windows claim",
-        );
         await authenticate(page, failureHost);
         const project = await page.evaluate(
           async (duration) => {
@@ -108,6 +112,8 @@ for (const viewport of [
               .getByRole("region", { name: "Run controls", exact: true })
               .getByRole("button", { name: "Stop", exact: true }),
           );
+        } else if (scenario === "journal_finalize") {
+          await expect(startup).toContainText("Workload start recorded");
         } else if (scenario === "active_failure") {
           await expect(startup).toContainText(
             "Start recorded; execution failed",
@@ -116,12 +122,19 @@ for (const viewport of [
         } else {
           await expect(startup).toContainText("Startup rejected");
           await expect(startup).toContainText(
-            scenario === "mismatch"
-              ? "EFFECTIVE_INPUT_MISMATCH"
-              : "LAUNCH_FAILED",
+            scenario === "journal_open"
+              ? "EVIDENCE_OPEN_FAILED"
+              : scenario === "prepare_denied"
+                ? "PREPARATION_FAILED"
+                : scenario === "mismatch"
+                  ? "EFFECTIVE_INPUT_MISMATCH"
+                  : "LAUNCH_FAILED",
           );
         }
-        const expected = scenario === "normal" ? "stopped" : "failed";
+        const expected =
+          scenario === "normal" || scenario === "journal_finalize"
+            ? "stopped"
+            : "failed";
         await expect
           .poll(async () => {
             const response = await page.request.get(
@@ -142,11 +155,26 @@ for (const viewport of [
           ).json()
         ).items[0];
         const cleanup =
-          scenario === "normal" || scenario === "mismatch"
+          scenario === "normal" ||
+          scenario === "mismatch" ||
+          scenario === "prepare_denied" ||
+          scenario === "journal_open" ||
+          scenario === "journal_finalize"
             ? "complete"
             : "unknown";
         expect(run.cleanup).toBe(cleanup);
         expect(run.verdict).toBeNull();
+        if (scenario === "journal_open" || scenario === "journal_finalize") {
+          expect(run.evidence).toBe("invalid");
+          expect(run.reason).toBe(
+            scenario === "journal_open"
+              ? "EVIDENCE_OPEN_FAILED"
+              : "EVIDENCE_FINALIZATION_FAILED",
+          );
+          if (scenario === "journal_open")
+            expect(run).not.toHaveProperty("startedAt");
+          else expect(run.evidenceFailure).toBe("EVIDENCE_FINALIZATION_FAILED");
+        }
         await expect(
           page
             .locator(".result-status-grid .status-card")

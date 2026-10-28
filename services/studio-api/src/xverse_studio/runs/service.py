@@ -27,6 +27,21 @@ from xverse_studio.profiles import ProfileRegistry
 from xverse_studio.preflight import reference_readiness
 from xverse_studio.providers.reference_control import CONTROL_STATES, MAX_PAUSED_WALL_SECONDS, admitted_controls
 
+
+def _observation_version(run):
+    version = run.get("observationVersion", 0)
+    if type(version) is not int or not 0 <= version <= 2**53 - 1:
+        raise Problem("RUN_OBSERVATION_UNAVAILABLE", "The stored observation version is invalid; inspect the retained data or restore a verified backup.", 503)
+    return version
+
+
+def _advance_observation(run):
+    version = _observation_version(run)
+    if version == 2**53 - 1:
+        raise Problem("RUN_OBSERVATION_UNAVAILABLE", "The observation version limit was reached; retain this run and inspect its evidence before making another request.", 503)
+    run["observationVersion"] = version + 1
+
+
 ACTIVE = {
     "requested",
     "preparing",
@@ -404,28 +419,77 @@ class Runs:
             self._dispatch(result["runId"])
         return result
 
+    def _record_dispatch(self, rid, changes, operation_changes=None, *, acknowledged_pid=None):
+        # A read may reconcile accepted/preparing state while file or process I/O
+        # is in flight. Merge only this handoff's facts into the latest record.
+        with self.store.tx() as db:
+            run = self.store.get("run", rid, db)
+            previous = canonical(run)
+            if (
+                changes.get("reason") == "LAUNCH_ACKNOWLEDGEMENT_LOST"
+                and acknowledged_pid is not None
+                and run.get("pid") == acknowledged_pid
+                and run.get("createTime") is not None
+                and run.get("ownerDigest")
+                and run.get("state") in ("stopped", "failed")
+            ):
+                # A read already verified this exact child's terminal report.
+                # A late parent lookup grants no new authority and cannot undo it.
+                changes = {k: v for k, v in changes.items() if k not in {"state", "cleanup", "reason"}}
+            run.update(changes)
+            if changes.get("state") == "preparing" and run.get("reason") == "OWNERSHIP_UNKNOWN":
+                run.pop("reason")
+            if canonical(run) != previous:
+                _advance_observation(run)
+                self.store.put("run", rid, run, db)
+            if operation_changes is not None:
+                operation = self.store.get("operation", run["operationId"], db)
+                previous_operation = canonical(operation)
+                if not (
+                    operation_changes.get("status") == "unknown"
+                    and operation.get("status") in ("completed", "failed")
+                ):
+                    # Start completion is a historical receipt, independent of
+                    # whether a later observation can establish current ownership.
+                    operation.update(operation_changes)
+                if canonical(operation) != previous_operation:
+                    self.store.put("operation", operation["operationId"], operation, db)
+
     def _dispatch(self, rid):
         run = self.store.get("run", rid)
         snap = self.store.get("snapshot", run["snapshotId"])
         root = self.directory(rid)
-        root.mkdir(parents=True, exist_ok=True)
-        secret = secrets.token_bytes(32)
-        atomic(root / "owner.key", secret)
         try:
-            (root / "owner.key").chmod(0o600)
+            root.mkdir(parents=True, exist_ok=True)
+            secret = secrets.token_bytes(32)
+            atomic(root / "owner.key", secret)
+            try:
+                (root / "owner.key").chmod(0o600)
+            except OSError:
+                pass
+            atomic(
+                root / "request.json",
+                canonical(
+                    {
+                        "runId": rid,
+                        "operationId": run["operationId"],
+                        "snapshot": snap,
+                        "configuration": snap["configuration"],
+                    }
+                ).encode(),
+            )
+            worker_tmp = root / "tmp"
+            worker_tmp.mkdir(exist_ok=True)
         except OSError:
-            pass
-        atomic(
-            root / "request.json",
-            canonical(
-                {
-                    "runId": rid,
-                    "operationId": run["operationId"],
-                    "snapshot": snap,
-                    "configuration": snap["configuration"],
-                }
-            ).encode(),
-        )
+            # No native launch was attempted. Retain partial private files for
+            # inspection; there are no runtime resources or workload results.
+            self._record_dispatch(
+                rid,
+                dict(state="failed", cleanup="complete", evidence="unavailable",
+                     reason="PREPARATION_FAILED", endedAt=time.time()),
+                dict(status="failed", code="PREPARATION_FAILED"),
+            )
+            return
         launch_argv = [
             sys.executable,
             "-I",
@@ -433,15 +497,11 @@ class Runs:
             "xverse_studio.providers.worker",
             str(root),
         ]
-        run.update(
-            ownerDigest=digest(secret),
-            state="preparing",
-            launchArgvDigest=digest(launch_argv),
+        self._record_dispatch(
+            rid,
+            dict(ownerDigest=digest(secret), state="preparing", launchArgvDigest=digest(launch_argv)),
+            dict(status="delegated"),
         )
-        self.store.put("run", rid, run)
-        op = self.store.get("operation", run["operationId"])
-        op["status"] = "delegated"
-        self.store.put("operation", op["operationId"], op)
         try:
             kwargs = (
                 {"start_new_session": True}
@@ -451,8 +511,6 @@ class Runs:
                     | subprocess.DETACHED_PROCESS
                 }
             )
-            worker_tmp = root / "tmp"
-            worker_tmp.mkdir(exist_ok=True)
             child_env = {
                 key: os.environ[key]
                 for key in (
@@ -481,29 +539,25 @@ class Runs:
             self.children[rid] = process
             # Preparation can take longer than the worker's observation window.
             # Start the existing budget only once the native launch is acknowledged.
-            run["launchStartedAt"] = time.time()
+            acknowledgement = {"launchStartedAt": time.time()}
         except OSError:
-            run.update(
-                state="failed",
-                cleanup="unknown",
-                evidence="unavailable",
-                reason="LAUNCH_FAILED",
+            self._record_dispatch(
+                rid,
+                dict(state="failed", cleanup="unknown", evidence="unavailable", reason="LAUNCH_FAILED"),
+                dict(status="failed", code="LAUNCH_FAILED"),
             )
-            op.update(status="failed", code="LAUNCH_FAILED")
-            self.store.put("run", rid, run)
-            self.store.put("operation", op["operationId"], op)
             return
+        operation_changes = None
         try:
-            run.update(
+            acknowledgement.update(
                 pid=process.pid, createTime=psutil.Process(process.pid).create_time()
             )
         except psutil.Error:
-            run.update(
+            acknowledgement.update(
                 state="unknown", cleanup="unknown", reason="LAUNCH_ACKNOWLEDGEMENT_LOST"
             )
-            op["status"] = "unknown"
-            self.store.put("operation", op["operationId"], op)
-        self.store.put("run", rid, run)
+            operation_changes = {"status": "unknown"}
+        self._record_dispatch(rid, acknowledgement, operation_changes, acknowledged_pid=process.pid)
 
     @staticmethod
     def _terminal_after_exit(statepath, run):
@@ -528,9 +582,7 @@ class Runs:
     def read(self, rid):
         with self.store.lock:
             run = self.store.get("run", rid)
-            observation_version = run.get("observationVersion", 0)
-            if type(observation_version) is not int or not 0 <= observation_version <= 2**53 - 1:
-                raise Problem("RUN_OBSERVATION_UNAVAILABLE", "The stored observation version is invalid; inspect the retained data or restore a verified backup.", 503)
+            _observation_version(run)
             previous_run = canonical(run)
             root = self.directory(rid)
             statepath = root / "state.json"
@@ -602,6 +654,7 @@ class Runs:
                             "stateVersion",
                             "cleanup",
                             "evidence",
+                            "evidenceFailure",
                             "reason",
                             "effectivePlanDigest",
                             "effectiveSemanticDigest",
@@ -662,9 +715,7 @@ class Runs:
             # Ownership, journal integrity and assessments are still observed on
             # every read. Only an actual metadata change needs a durable write.
             if canonical(run) != previous_run:
-                if observation_version == 2**53 - 1:
-                    raise Problem("RUN_OBSERVATION_UNAVAILABLE", "The observation version limit was reached; retain this run and inspect its evidence before making another request.", 503)
-                run["observationVersion"] = observation_version + 1
+                _advance_observation(run)
                 self.store.put("run", rid, run)
             if rid in self.children and self.children[rid].poll() is not None:
                 self.children.pop(rid)

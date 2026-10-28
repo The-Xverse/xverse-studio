@@ -216,8 +216,16 @@ def test_pause_requires_the_frozen_scoped_nonphysical_capability(client, monkeyp
                            json={'kind': 'pause', 'expectedStateVersion': run['stateVersion']})
     assert response.status_code == 422 and response.json()['code'] == 'CAPABILITY_UNSUPPORTED'
     assert not (directory / 'command.json').exists()
-    command(client, run, 'cancel')
-    wait_state(client, run['runId'], 'stopped')
+    # This capability negative needs no cleanup command: the bounded model may
+    # already have finished while the denial is being inspected. Its unchanged
+    # lifecycle/CAS guard must keep rejecting a stale control version.
+    ended = wait_state(client, run['runId'], 'stopped')
+    assert ended['cleanup'] == 'complete' and ended['evidence'] == 'complete'
+    assert not (directory / 'command.json').exists()
+    journal = records(directory)
+    assert not any(row['type'].startswith('command.') for row in journal)
+    completion = [row for row in journal if row['type'] == 'evidence.updated'][-1]
+    assert completion['payload']['coverage']['complete'] is True
 
 
 def test_worker_independently_refuses_a_stale_owner_signed_optional_transition(client, monkeypatch):

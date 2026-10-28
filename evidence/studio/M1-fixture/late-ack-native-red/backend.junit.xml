@@ -1,0 +1,13 @@
+<testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="2" time="14.290" timestamp="2026-10-28T22:55:09.227261+00:00" hostname="&lt;native-linux-host&gt;"><testcase classname="tests.integration.test_run_preparation_failure" name="test_late_parent_acknowledgement_preserves_confirmed_start_and_terminal_facts[exited]" time="9.477"><failure message="AssertionError: {'kind': 'start', 'operationId': 'op-1ecb080c-20d5-4ca2-80c9-c1b8556746b1', 'result': {'effectivePlanDigest': 'sha256:...856a134cf0ae8f890428071ca77c61c2d737efb035921257b2f4c7e73a'}, 'runId': 'run-e8dabf97-1923-4398-adb0-60942186de92', ...}&#10;assert 'unknown' == 'completed'&#10;&#10;  - completed&#10;  + unknown">tests/integration/test_run_preparation_failure.py:271: in test_late_parent_acknowledgement_preserves_confirmed_start_and_terminal_facts
+    assert operation["status"] == "completed", operation
+E   AssertionError: {'kind': 'start', 'operationId': 'op-1ecb080c-20d5-4ca2-80c9-c1b8556746b1', 'result': {'effectivePlanDigest': 'sha256:...856a134cf0ae8f890428071ca77c61c2d737efb035921257b2f4c7e73a'}, 'runId': 'run-e8dabf97-1923-4398-adb0-60942186de92', ...}
+E   assert 'unknown' == 'completed'
+E
+E     - completed
+E     + unknown</failure></testcase><testcase classname="tests.integration.test_run_preparation_failure" name="test_late_parent_acknowledgement_preserves_confirmed_start_and_terminal_facts[denied]" time="4.704"><failure message="AssertionError: {'kind': 'start', 'operationId': 'op-4c60c5d9-3694-4c59-aea2-6c57f99a1d7b', 'result': {'effectivePlanDigest': 'sha256:...493c17bc6e6619b4abc8bf4457b865376bf8c64848b5872d8f2c256c7a'}, 'runId': 'run-62db3729-3c9a-4ded-b4a1-78c2ee426321', ...}&#10;assert 'unknown' == 'completed'&#10;&#10;  - completed&#10;  + unknown">tests/integration/test_run_preparation_failure.py:271: in test_late_parent_acknowledgement_preserves_confirmed_start_and_terminal_facts
+    assert operation["status"] == "completed", operation
+E   AssertionError: {'kind': 'start', 'operationId': 'op-4c60c5d9-3694-4c59-aea2-6c57f99a1d7b', 'result': {'effectivePlanDigest': 'sha256:...493c17bc6e6619b4abc8bf4457b865376bf8c64848b5872d8f2c256c7a'}, 'runId': 'run-62db3729-3c9a-4ded-b4a1-78c2ee426321', ...}
+E   assert 'unknown' == 'completed'
+E
+E     - completed
+E     + unknown</failure></testcase></testsuite></testsuites>

@@ -20,12 +20,12 @@ from xverse_studio.storage.core import canonical
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--data", type=Path, required=True)
-    parser.add_argument("--scenario", choices=["mismatch", "launch_denied", "active_failure", "normal", "ownership_recovery"], required=True)
+    parser.add_argument("--scenario", choices=["mismatch", "launch_denied", "active_failure", "normal", "ownership_recovery", "prepare_denied", "journal_open", "journal_finalize"], required=True)
     args = parser.parse_args()
     args.data = args.data.resolve()
     root = Path(__file__).resolve().parents[4]
     observation = dict(scope="owned native fault fixture; no equipment", scenario=args.scenario,
-                       workerAttempts=0, corruptions=0, launchRefusals=0, interruptions=0, ownershipDenials=0, errors=[])
+                       workerAttempts=0, corruptions=0, launchRefusals=0, interruptions=0, ownershipDenials=0, preparationRefusals=0, journalOpenFaults=0, journalFinalizationFaults=0, errors=[])
     threads = []
     with socket.socket() as listener:
         listener.bind(("127.0.0.1", 0))
@@ -54,6 +54,9 @@ def main():
 
         def injected_write(path, body):
             target = Path(path)
+            if args.scenario == "prepare_denied" and target.name == "request.json" and target.parent.parent == args.data / "runs":
+                observation["preparationRefusals"] += 1
+                raise PermissionError("Labelled owned preparation denial")
             if args.scenario == "mismatch" and target.name == "request.json" and target.parent.parent == args.data / "runs":
                 request = json.loads(body)
                 assert request["snapshot"]["providerId"] == "studio.reference"
@@ -81,18 +84,62 @@ def main():
             except Exception as error:
                 observation["errors"].append(type(error).__name__)
 
+        def obstruct_owned_journal_after_sample(run_id):
+            try:
+                directory = runs.directory(run_id)
+                journal = directory / "evidence.jsonl"
+                deadline = time.monotonic() + 10
+                while time.monotonic() < deadline:
+                    known = store.get("run", run_id)
+                    if known.get("pid") and run_id in runs.children and journal.is_file():
+                        complete = journal.read_bytes().splitlines(keepends=True)
+                        records = [json.loads(line) for line in complete if line.endswith(b"\n")]
+                        if any(row.get("type") == "observation.available" for row in records):
+                            break
+                    time.sleep(0.02)
+                else:
+                    raise AssertionError("No actual sample preceded the owned journal fault")
+                import psutil
+                from xverse_studio.storage.core import digest
+                with store.lock:
+                    known = store.get("run", run_id)
+                    child = runs.children[run_id]
+                    process = psutil.Process(child.pid)
+                    state = json.loads((directory / "state.json").read_text())
+                    expected = [run_module.sys.executable, "-I", "-m", "xverse_studio.providers.worker", str(directory)]
+                    assert child.poll() is None and process.is_running()
+                    assert process.cmdline() == expected and digest(expected) == known["launchArgvDigest"]
+                    assert process.create_time() == known["createTime"] == state["createTime"]
+                    assert process.pid == known["pid"] == state["pid"]
+                    assert state["ownerDigest"] == known["ownerDigest"] == digest((directory / "owner.key").read_bytes())
+                    assert state["state"] == "running"
+                    retained = directory / "retained-before-finalization-fault.jsonl"
+                    assert not retained.exists()
+                    journal.rename(retained)
+                    journal.mkdir()
+                    observation["journalFinalizationFaults"] += 1
+            except Exception as error:
+                observation["errors"].append(type(error).__name__)
+
         def injected_launch(argv, *values, **options):
             worker = isinstance(argv, list) and len(argv) == 5 and argv[1:4] == ["-I", "-m", "xverse_studio.providers.worker"]
             if worker:
                 directory = Path(argv[4])
                 assert directory.parent == args.data / "runs"
                 observation["workerAttempts"] += 1
+                if args.scenario == "journal_open":
+                    (directory / "evidence.jsonl").mkdir()
+                    observation["journalOpenFaults"] += 1
                 if args.scenario == "launch_denied":
                     observation["launchRefusals"] += 1
                     raise OSError("Labelled owned launch refusal")
             child = original_launch(argv, *values, **options)
             if worker and args.scenario == "active_failure":
                 thread = threading.Thread(target=interrupt_after_sample, args=(directory.name,), daemon=True)
+                threads.append(thread)
+                thread.start()
+            if worker and args.scenario == "journal_finalize":
+                thread = threading.Thread(target=obstruct_owned_journal_after_sample, args=(directory.name,), daemon=True)
                 threads.append(thread)
                 thread.start()
             return child

@@ -9,6 +9,9 @@
 | `PREFLIGHT_STALE` | Recompute preflight for the current exact inputs/capabilities before starting. |
 | `CAPABILITY_UNSUPPORTED` | Select an admitted operation/template. Step/reset/live mutation are unavailable in this reference provider. Pause/Resume apply only to its owned simulation clock. |
 | `PAUSE_BUDGET_EXHAUSTED` | The owned model reached its cumulative 30-second wall-time pause budget and stopped with incomplete simulation coverage. Inspect retained evidence and create a fresh run if needed. |
+| `PREPARATION_FAILED` | The local run files could not be prepared; no workload launch was attempted. Retain the failed run, check local storage access and capacity, then recheck preflight before creating a fresh request. Retrying the original request returns its original receipt. |
+| `EVIDENCE_OPEN_FAILED` | The provider could not create its canonical journal and did not start the workload. Preserve any existing files, check local storage access and capacity, and recheck preflight before a fresh request. |
+| `EVIDENCE_FINALIZATION_FAILED` | The workload stopped and runtime cleanup completed, but its evidence could not be finalized. Preserve the retained files and inspect the evidence diagnosis; stopped execution does not imply valid or complete results. |
 | `DEP-RUN-CONFIG` | An external public effective-input/plan contract is missing. Reference success cannot admit Lite/CARLA. |
 | `OWNERSHIP_UNKNOWN` | Reconcile exact native ownership. Do not kill by PID/name/address or blindly restart. |
 | `EVIDENCE_INVALID` | Preserve original bytes; do not use corrupted evidence to establish a verdict. |

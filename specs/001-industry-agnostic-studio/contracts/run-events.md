@@ -147,7 +147,7 @@ Exercise duplicate delivery, reconnect, expired cursors, backend recovery, out-o
 
 Full run metadata may include a nonnegative safe-integer `observationVersion`.
 This is a durable backend projection order, independent of the worker-owned
-`stateVersion` used for command CAS. Reconciliation increments it only when an
+`stateVersion` used for command CAS. Reconciliation and dispatch increment it only when an
 already changed run projection needs persistence; unchanged reads and legacy
 records do not acquire extra writes merely to initialize it.
 
@@ -157,3 +157,17 @@ observations cannot overwrite newer truth. Worker lifecycle regression guards
 remain authoritative; legacy responses retain conservative behavior. This
 additive metadata field changes no canonical journal sequence, cursor, source
 clock, executable identity or command authority.
+
+A durably accepted Start whose private-file preparation fails before native
+launch settles the original run/operation as `PREPARATION_FAILED`. Its immutable
+inputs and request identity remain retained. No workload start, journal or result
+is inferred. This differs from an attempted native launch with uncertain cleanup;
+storage outcome persistence must succeed before the new failure is reported.
+
+The owned reference reports a journal-opening failure as `EVIDENCE_OPEN_FAILED`
+before recording any workload start. A later evidence-finalization failure retains
+known stopped lifecycle and complete runtime cleanup while marking evidence
+partial and reporting `evidenceFailure: EVIDENCE_FINALIZATION_FAILED`. These facts
+do not establish canonical source validity, complete coverage or a functional
+verdict. Existing termination reasons remain separate; no alternate retained file
+is implicitly admitted as the canonical journal.

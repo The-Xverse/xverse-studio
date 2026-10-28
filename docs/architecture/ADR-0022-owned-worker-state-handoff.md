@@ -88,7 +88,7 @@ The worker's `stateVersion` remains authoritative for command comparison and
 signed optional transitions. Losing or recovering a backend observation cannot
 increment that worker-owned version. Run metadata therefore carries a separate
 durable `observationVersion`, initialized to zero for new runs and advanced only
-when reconciliation already needs to persist changed metadata. Legacy records
+when reconciliation or a dispatch handoff needs to persist changed metadata. Legacy records
 are not rewritten merely to initialize it. Stable reads still perform no writes.
 
 At the same worker lifecycle version, the browser accepts a newer complete
@@ -98,3 +98,69 @@ refused. Legacy responses retain their existing conservative merge behavior;
 they cannot overwrite an already ordered modern observation. This counter grants
 no command, process or physical authority. Native denial/recovery and browser
 polling tests retain the same worker version and immutable run identities.
+
+### Accepted preparation failures and dispatch observations
+
+Start acceptance is durable before the backend prepares its private run files.
+An I/O failure creating the run directory, owner key, delegated request or worker
+temporary directory now settles that same run and Start operation atomically as
+`PREPARATION_FAILED`. No native launch was attempted, no workload start or journal
+is invented, and runtime cleanup is complete because no runtime resources were
+created. Partial private preparation files remain available for inspection. This
+classification does not claim that storage is healthy or erase those files.
+The ordinary Start receipt remains retryable with its original identity; removing
+the fault never replays that accepted request. A new request needs a fresh review.
+
+The existing native-launch failure path retains its distinct `LAUNCH_FAILED` and
+unknown-cleanup outcome. Metadata persistence errors propagate; recording the run
+and operation outcome in one transaction prevents a partially settled failure.
+
+Preparation, launch and acknowledgement may overlap a run read. Each dispatch
+handoff merges only its own new facts into the latest stored record and advances
+the independent observation order in the same transaction. A late parent
+acknowledgement therefore preserves a worker state/start/effective identity that
+a read has already verified, along with a completed Start operation. This changes
+no worker lifecycle version, command CAS, process adoption check, executable input
+or native launch argument. Actual owned-worker interleaving tests distinguish
+these boundaries from labelled I/O failures and presentation fixtures.
+
+A completed or failed Start receipt is a historical outcome. A later parent-side
+observation failure cannot regress it to unknown. When an earlier read has already
+verified a terminal report with recorded PID, birth and owner identity matching
+the parent's exact `Popen` child, a late missing-process acknowledgement also
+preserves that terminal lifecycle and cleanup report. No new process identity is
+adopted through this exception. A denied observation of a still-running worker
+continues to make current ownership/cleanup unknown and blocks controls, while
+the earlier confirmed Start remains completed. Native tests exercise both cases
+with the original worker and verify the denied live control request.
+
+### Journal opening and finalization failures
+
+The owned worker creates its canonical journal before reporting a workload start.
+An opening failure reports `EVIDENCE_OPEN_FAILED` with its trusted PID/birth/owner
+identity, failed startup, complete runtime cleanup and unavailable evidence. No
+start time or effective execution identity is invented. Exclusive creation stays
+in place: an existing journal is preserved rather than truncated or replaced.
+
+Once model execution has stopped and runtime cleanup has completed, a failure in
+evidence flush, synchronization, digest acquisition, close or final publication
+does not undo those lifecycle facts. The worker retains stopped/complete cleanup,
+marks evidence partial and reports `EVIDENCE_FINALIZATION_FAILED` separately in
+`evidenceFailure`. An existing termination reason, such as pause-budget exhaustion,
+is preserved. Unpublished journal-completion markers are removed. The backend
+still verifies the actual canonical source; an unsafe source stays invalid and
+retained bytes at another private path are not silently substituted.
+
+A failed journal append cannot prevent a separate terminal-state write. If that
+write also fails, the backend retains its existing ownership uncertainty. Active
+workload failures continue to report failed execution and unknown cleanup. No
+exception is converted to functional success, and no imported command or private
+platform API is introduced. Only the owned reference implementation digest changes;
+source clock encodings, declared capabilities and external admission stay fixed.
+
+Native Linux tests obstruct only their own journal path. One faults opening; one
+retains an already-open journal under another owned name before obstructing its
+original path, then verifies its unchanged prefix and complete hash chain after
+the real worker exits. Browser fixtures use the same unmodified worker argv and
+verify PID/birth/owner before the latter fault. These are filesystem failures,
+not physical-provider cleanup or native Windows acceptance.

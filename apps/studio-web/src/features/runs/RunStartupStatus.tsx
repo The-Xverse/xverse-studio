@@ -23,13 +23,22 @@ export function RunStartupStatus({ run }: { run: Data }) {
       "The recorded start is separate from the execution outcome, cleanup, evidence integrity and assertion verdict.";
   } else if (
     state === "failed" &&
-    ["LAUNCH_FAILED", "EFFECTIVE_INPUT_MISMATCH"].includes(reason)
+    [
+      "PREPARATION_FAILED",
+      "EVIDENCE_OPEN_FAILED",
+      "LAUNCH_FAILED",
+      "EFFECTIVE_INPUT_MISMATCH",
+    ].includes(reason)
   ) {
     summary = "Startup rejected";
     detail =
-      reason === "EFFECTIVE_INPUT_MISMATCH"
-        ? "The provider rejected effective inputs before the workload started. Inspect the frozen inputs and diagnosis before making a fresh request."
-        : "The backend reported a launch failure before a workload start was recorded. Cleanup and evidence remain separate reported outcomes.";
+      reason === "PREPARATION_FAILED"
+        ? "The backend could not prepare the local run files and did not attempt a workload launch. Retain this run, check local storage access and capacity, then recheck preflight before a fresh request."
+        : reason === "EVIDENCE_OPEN_FAILED"
+          ? "The provider could not create its canonical evidence journal and did not start the workload. Retain the run, check local storage access and capacity, then recheck preflight before a fresh request."
+          : reason === "EFFECTIVE_INPUT_MISMATCH"
+            ? "The provider rejected effective inputs before the workload started. Inspect the frozen inputs and diagnosis before making a fresh request."
+            : "The backend reported a launch failure before a workload start was recorded. Cleanup and evidence remain separate reported outcomes.";
   } else if (
     ["requested", "accepted", "preparing", "ready", "starting"].includes(state)
   ) {

@@ -1,0 +1,23 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_ test_native_evidence_io_failure_preserves_known_lifecycle_and_cleanup[journal_finalize] _
+tests/integration/test_worker_evidence_io.py:104: in test_native_evidence_io_failure_preserves_known_lifecycle_and_cleanup
+    assert current["state"] == state["state"] == "running"
+E   AssertionError: assert 'preparing' == 'running'
+E
+E     - running
+E     + preparing
+=============================== warnings summary ===============================
+.venv/lib/python3.13/site-packages/fastapi/testclient.py:1
+  <repo>/.venv/lib/python3.13/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+tests/integration/test_worker_evidence_io.py::test_native_evidence_io_failure_preserves_known_lifecycle_and_cleanup[journal_finalize]
+  tests/integration/test_worker_evidence_io.py:22: PytestWarning: record_property is incompatible with junit_family 'xunit2' (use 'legacy' or 'xunit1')
+    @pytest.mark.skipif(sys.platform != "linux", reason="Owned Linux filesystem-fault lane; native Windows remains held")
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/integration/test_worker_evidence_io.py::test_native_evidence_io_failure_preserves_known_lifecycle_and_cleanup[journal_finalize]
+1 failed, 2 warnings in 5.39s
+{"command": ["<repo>/.venv/bin/python", "-I", "<repo>/.studio-local/fixture-matrix/probe-interleavings.py", "journal", "journal-response-before", "--expected", "1"], "probeSourceSha256": "3a7c36334da8216f79245839b43a05826d59a1b58ce6bb388df6c47eaab85271", "exitCode": 1, "expectedExitCode": 1, "inputsIdentical": true, "selectedInputs": 379, "witness": {"mode": "journal", "scope": "Controlled scheduling of actual owned native model and genuine metadata; no equipment or manufactured responses", "triggered": 1, "observations": [{"stage": "held genuine preparing response until actual sample", "returnedState": "preparing", "workerState": "running", "actualSample": true}]}}

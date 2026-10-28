@@ -1,0 +1,277 @@
+{
+  "config": {
+    "argv": [
+      "<tool-cache>/node-v24.22.1-linux-x64/bin/node",
+      "<repo>/node_modules/.bin/playwright",
+      "test",
+      "-c",
+      "tests/e2e/playwright.config.ts",
+      "--grep",
+      "run startup prepare_denied"
+    ],
+    "configFile": "<repo>/tests/e2e/playwright.config.ts",
+    "rootDir": "<repo>/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "<repo>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "<repo>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "*.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "<repo>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "<repo>/tests/e2e",
+        "snapshotDir": "<repo>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": "*.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "baseURL": "http://127.0.0.1:33507",
+          "browserName": "chromium",
+          "actionTimeout": 15000,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "trace": "off",
+          "screenshot": "only-on-failure",
+          "video": "off"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "<repo>/test-results/browser-report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "run-startup-outcomes.spec.ts",
+      "file": "run-startup-outcomes.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "run startup prepare_denied at 1024",
+          "file": "run-startup-outcomes.spec.ts",
+          "line": 14,
+          "column": 10,
+          "specs": [
+            {
+              "title": "actual startup and cleanup facts preserve immutable inputs",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 15588,
+                      "error": {
+                        "message": "Error: expect(locator).toBeVisible() failed\n\nLocator: getByRole('region', { name: 'Reported startup', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"toBeVisible\" getByRole('region', { name: 'Reported startup', exact: true }) with timeout 10000ms\n  - waiting for getByRole('region', { name: 'Reported startup', exact: true })",
+                        "stack": "Error: expect(locator).toBeVisible() failed\n\nLocator: getByRole('region', { name: 'Reported startup', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"toBeVisible\" getByRole('region', { name: 'Reported startup', exact: true }) with timeout 10000ms\n  - waiting for getByRole('region', { name: 'Reported startup', exact: true })\n\n    at <repo>/tests/e2e/run-startup-outcomes.spec.ts:103:31",
+                        "location": {
+                          "file": "<repo>/tests/e2e/run-startup-outcomes.spec.ts",
+                          "column": 31,
+                          "line": 103
+                        },
+                        "snippet": "  101 |           exact: true,\n  102 |         });\n> 103 |         await expect(startup).toBeVisible();\n      |                               ^\n  104 |         if (scenario === \"normal\") {\n  105 |           await expect(startup).toContainText(\"Workload start recorded\");\n  106 |           await keyboard("
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "<repo>/tests/e2e/run-startup-outcomes.spec.ts",
+                            "column": 31,
+                            "line": 103
+                          },
+                          "message": "Error: expect(locator).toBeVisible() failed\n\nLocator: getByRole('region', { name: 'Reported startup', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"toBeVisible\" getByRole('region', { name: 'Reported startup', exact: true }) with timeout 10000ms\n  - waiting for getByRole('region', { name: 'Reported startup', exact: true })\n\n\n  101 |           exact: true,\n  102 |         });\n> 103 |         await expect(startup).toBeVisible();\n      |                               ^\n  104 |         if (scenario === \"normal\") {\n  105 |           await expect(startup).toContainText(\"Workload start recorded\");\n  106 |           await keyboard(\n    at <repo>/tests/e2e/run-startup-outcomes.spec.ts:103:31"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-28T21:30:47.618Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "owned-native-fault-observation",
+                          "contentType": "application/json",
+                          "body": "eyJzY29wZSI6Im93bmVkIG5hdGl2ZSBmYXVsdCBmaXh0dXJlOyBubyBlcXVpcG1lbnQiLCJzY2VuYXJpbyI6InByZXBhcmVfZGVuaWVkIiwid29ya2VyQXR0ZW1wdHMiOjAsImNvcnJ1cHRpb25zIjowLCJsYXVuY2hSZWZ1c2FscyI6MCwiaW50ZXJydXB0aW9ucyI6MCwib3duZXJzaGlwRGVuaWFscyI6MCwicHJlcGFyYXRpb25SZWZ1c2FscyI6MSwiZXJyb3JzIjpbXX0K"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "<repo>/test-results/browser/run-startup-outcomes-run-s-4eade-s-preserve-immutable-inputs/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "<repo>/tests/e2e/run-startup-outcomes.spec.ts",
+                        "column": 31,
+                        "line": 103
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "4958c1dc3ba90309abf0-7feefafddfaa0e51c3ee",
+              "file": "run-startup-outcomes.spec.ts",
+              "line": 16,
+              "column": 11
+            }
+          ]
+        },
+        {
+          "title": "run startup prepare_denied at 1440",
+          "file": "run-startup-outcomes.spec.ts",
+          "line": 14,
+          "column": 10,
+          "specs": [
+            {
+              "title": "actual startup and cleanup facts preserve immutable inputs",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 23431,
+                      "error": {
+                        "message": "Error: expect(locator).toBeVisible() failed\n\nLocator: getByRole('region', { name: 'Reported startup', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"toBeVisible\" getByRole('region', { name: 'Reported startup', exact: true }) with timeout 10000ms\n  - waiting for getByRole('region', { name: 'Reported startup', exact: true })",
+                        "stack": "Error: expect(locator).toBeVisible() failed\n\nLocator: getByRole('region', { name: 'Reported startup', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"toBeVisible\" getByRole('region', { name: 'Reported startup', exact: true }) with timeout 10000ms\n  - waiting for getByRole('region', { name: 'Reported startup', exact: true })\n\n    at <repo>/tests/e2e/run-startup-outcomes.spec.ts:103:31",
+                        "location": {
+                          "file": "<repo>/tests/e2e/run-startup-outcomes.spec.ts",
+                          "column": 31,
+                          "line": 103
+                        },
+                        "snippet": "  101 |           exact: true,\n  102 |         });\n> 103 |         await expect(startup).toBeVisible();\n      |                               ^\n  104 |         if (scenario === \"normal\") {\n  105 |           await expect(startup).toContainText(\"Workload start recorded\");\n  106 |           await keyboard("
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "<repo>/tests/e2e/run-startup-outcomes.spec.ts",
+                            "column": 31,
+                            "line": 103
+                          },
+                          "message": "Error: expect(locator).toBeVisible() failed\n\nLocator: getByRole('region', { name: 'Reported startup', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"toBeVisible\" getByRole('region', { name: 'Reported startup', exact: true }) with timeout 10000ms\n  - waiting for getByRole('region', { name: 'Reported startup', exact: true })\n\n\n  101 |           exact: true,\n  102 |         });\n> 103 |         await expect(startup).toBeVisible();\n      |                               ^\n  104 |         if (scenario === \"normal\") {\n  105 |           await expect(startup).toContainText(\"Workload start recorded\");\n  106 |           await keyboard(\n    at <repo>/tests/e2e/run-startup-outcomes.spec.ts:103:31"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-28T21:31:03.620Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "owned-native-fault-observation",
+                          "contentType": "application/json",
+                          "body": "eyJzY29wZSI6Im93bmVkIG5hdGl2ZSBmYXVsdCBmaXh0dXJlOyBubyBlcXVpcG1lbnQiLCJzY2VuYXJpbyI6InByZXBhcmVfZGVuaWVkIiwid29ya2VyQXR0ZW1wdHMiOjAsImNvcnJ1cHRpb25zIjowLCJsYXVuY2hSZWZ1c2FscyI6MCwiaW50ZXJydXB0aW9ucyI6MCwib3duZXJzaGlwRGVuaWFscyI6MCwicHJlcGFyYXRpb25SZWZ1c2FscyI6MSwiZXJyb3JzIjpbXX0K"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "<repo>/test-results/browser/run-startup-outcomes-run-s-e7070-s-preserve-immutable-inputs/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "<repo>/tests/e2e/run-startup-outcomes.spec.ts",
+                        "column": 31,
+                        "line": 103
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "4958c1dc3ba90309abf0-fbd7ee3ea0b1dc75a377",
+              "file": "run-startup-outcomes.spec.ts",
+              "line": 16,
+              "column": 11
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-28T21:30:46.983Z",
+    "duration": 40180.827,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  }
+}
