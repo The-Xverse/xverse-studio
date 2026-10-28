@@ -1,0 +1,335 @@
+{
+  "config": {
+    "argv": [
+      "<tool-cache>/node-v24.22.1-linux-x64/bin/node",
+      "<repo>/node_modules/.bin/playwright",
+      "test",
+      "-c",
+      "tests/e2e/playwright.config.ts",
+      "--grep",
+      "owned optional controls:|configured lab probes at .*timeout"
+    ],
+    "configFile": "<repo>/tests/e2e/playwright.config.ts",
+    "rootDir": "<repo>/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "<repo>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "<repo>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "*.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "<repo>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "<repo>/tests/e2e",
+        "snapshotDir": "<repo>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": "*.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "baseURL": "http://127.0.0.1:47419",
+          "browserName": "chromium",
+          "actionTimeout": 15000,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "trace": "off",
+          "screenshot": "only-on-failure",
+          "video": "off"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "<repo>/test-results/browser-report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "lab-probes-configured.spec.ts",
+      "file": "lab-probes-configured.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "configured lab probes at 1024",
+          "file": "lab-probes-configured.spec.ts",
+          "line": 26,
+          "column": 8,
+          "specs": [],
+          "suites": [
+            {
+              "title": "timeout",
+              "file": "lab-probes-configured.spec.ts",
+              "line": 78,
+              "column": 12,
+              "specs": [
+                {
+                  "title": "negative or uncertain observation remains separate from readiness and is never repeated by inspection",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 120000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "",
+                      "projectName": "",
+                      "results": [
+                        {
+                          "workerIndex": 0,
+                          "parallelIndex": 0,
+                          "status": "passed",
+                          "duration": 2582,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2026-10-28T19:53:05.673Z",
+                          "annotations": [],
+                          "attachments": [
+                            {
+                              "name": "owned-probe-timeout-boundary",
+                              "contentType": "application/json",
+                              "body": "eyJzY29wZSI6Ik93bmVkIG5hdGl2ZSBmaXh0dXJlOyBubyBlcXVpcG1lbnQiLCJvcGVyYXRpb25JZCI6Im9wLWE0ZGMwZDIwLWZiOGMtNGUwZS04NTkzLWM0MjQzZmRjNDdhMiIsImNvZGUiOiJQUk9CRV9VTktOT1dOIiwic3RhdHVzIjoidW5rbm93biIsImV4cGVjdGVkQ2FsbHMiOjEsIm9ic2VydmVkQ2FsbHMiOjEsImRlYWRsaW5lU2Vjb25kcyI6MX0K"
+                            },
+                            {
+                              "name": "owned-observation-provider-witness",
+                              "contentType": "application/json",
+                              "body": "eyJsZWFzZUNhbGxzIjpbImludmVudG9yeSJdLCJvcGVyYXRpb25zIjpbeyJhc3NldElkIjoiZml4dHVyZTpiZW5jaC1zZW5zb3IiLCJiaW5kaW5nRGlnZXN0Ijoic2hhMjU2OjNhZjlkMWZjNDNlYjUxMzM0NmU0MjIwODBkMGM2YzA3OGQ5ZWM3YmI3OGM5YmIwNTVkMGIwNjMxOTk0ODk0YzAiLCJvcGVyYXRpb25JZCI6Im9wLWE0ZGMwZDIwLWZiOGMtNGUwZS04NTkzLWM0MjQzZmRjNDdhMiIsInByaW5jaXBhbCI6ImxvY2FsLW9wZXJhdG9yIiwic3RhdHVzIjoidW5rbm93biJ9XSwicHJvYmVDYWxscyI6WyJvcC1hNGRjMGQyMC1mYjhjLTRlMGUtODU5My1jNDI0M2ZkYzQ3YTIiXSwicmVtYWluaW5nUHJvdmlkZXJMZWFzZXMiOjAsInJlc2VydmF0aW9uQ291bnQiOjAsInNjZW5hcmlvIjoidGltZW91dCIsInNjb3BlIjoib3duZWQgbmF0aXZlIG9ic2VydmF0aW9uIGZpeHR1cmU7IG5vIGVxdWlwbWVudCJ9Cg=="
+                            }
+                          ]
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "42e547a3c41e82425ecc-ef23cd036a59ddd3db0e",
+                  "file": "lab-probes-configured.spec.ts",
+                  "line": 80,
+                  "column": 13
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "title": "configured lab probes at 1440",
+          "file": "lab-probes-configured.spec.ts",
+          "line": 26,
+          "column": 8,
+          "specs": [],
+          "suites": [
+            {
+              "title": "timeout",
+              "file": "lab-probes-configured.spec.ts",
+              "line": 78,
+              "column": 12,
+              "specs": [
+                {
+                  "title": "negative or uncertain observation remains separate from readiness and is never repeated by inspection",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 120000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "",
+                      "projectName": "",
+                      "results": [
+                        {
+                          "workerIndex": 0,
+                          "parallelIndex": 0,
+                          "status": "passed",
+                          "duration": 2512,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2026-10-28T19:53:08.391Z",
+                          "annotations": [],
+                          "attachments": [
+                            {
+                              "name": "owned-probe-timeout-boundary",
+                              "contentType": "application/json",
+                              "body": "eyJzY29wZSI6Ik93bmVkIG5hdGl2ZSBmaXh0dXJlOyBubyBlcXVpcG1lbnQiLCJvcGVyYXRpb25JZCI6Im9wLTYwMjRkMjBlLTVmZmItNDEzYi04MWE5LWNjNzY3NDc0MWMxOSIsImNvZGUiOiJQUk9CRV9VTktOT1dOIiwic3RhdHVzIjoidW5rbm93biIsImV4cGVjdGVkQ2FsbHMiOjEsIm9ic2VydmVkQ2FsbHMiOjEsImRlYWRsaW5lU2Vjb25kcyI6MX0K"
+                            },
+                            {
+                              "name": "owned-observation-provider-witness",
+                              "contentType": "application/json",
+                              "body": "eyJsZWFzZUNhbGxzIjpbImludmVudG9yeSJdLCJvcGVyYXRpb25zIjpbeyJhc3NldElkIjoiZml4dHVyZTpiZW5jaC1zZW5zb3IiLCJiaW5kaW5nRGlnZXN0Ijoic2hhMjU2OjNhZjlkMWZjNDNlYjUxMzM0NmU0MjIwODBkMGM2YzA3OGQ5ZWM3YmI3OGM5YmIwNTVkMGIwNjMxOTk0ODk0YzAiLCJvcGVyYXRpb25JZCI6Im9wLTYwMjRkMjBlLTVmZmItNDEzYi04MWE5LWNjNzY3NDc0MWMxOSIsInByaW5jaXBhbCI6ImxvY2FsLW9wZXJhdG9yIiwic3RhdHVzIjoidW5rbm93biJ9XSwicHJvYmVDYWxscyI6WyJvcC02MDI0ZDIwZS01ZmZiLTQxM2ItODFhOS1jYzc2NzQ3NDFjMTkiXSwicmVtYWluaW5nUHJvdmlkZXJMZWFzZXMiOjAsInJlc2VydmF0aW9uQ291bnQiOjAsInNjZW5hcmlvIjoidGltZW91dCIsInNjb3BlIjoib3duZWQgbmF0aXZlIG9ic2VydmF0aW9uIGZpeHR1cmU7IG5vIGVxdWlwbWVudCJ9Cg=="
+                            }
+                          ]
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "42e547a3c41e82425ecc-ace040c80f364e826664",
+                  "file": "lab-probes-configured.spec.ts",
+                  "line": 80,
+                  "column": 13
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "reference-pause.spec.ts",
+      "file": "reference-pause.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "owned optional controls: keyboard Pause, reload, Resume and Stop at 1024",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 9535,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T19:53:10.921Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "owned-optional-control-scope",
+                      "contentType": "application/json",
+                      "body": "eyJzY29wZSI6IkFjdHVhbCBvd25lZCBuYXRpdmUgbW9kZWwgYW5kIGF1dGhlbnRpY2F0ZWQgYnJvd3NlciBjb250cm9sczsgbm8gcGh5c2ljYWwgZXF1aXBtZW50Iiwidmlld3BvcnQiOnsid2lkdGgiOjEwMjQsImhlaWdodCI6NzY4fSwicnVuSWQiOiJydW4tMGI5ZGRkMGUtZWE2Mi00N2RmLWI3ODgtYzUyYjA5NTU1ODFiIiwic25hcHNob3RJZCI6InNuYXAtMjlhMzMyMWUtNWNlZi00MzJhLWFmYmEtODZjNzVlNDVmM2M1Iiwic2F2ZWRQYXVzZU9wZXJhdGlvbiI6Im9wLTAzYWUxYzNlLWIzNWItNDdhYy1iNmM1LTQwNjIzYmI2YTU1YyIsInBhdXNlZFNhbXBsZXMiOjE1LCJmaW5hbFN0YXRlIjoic3RvcHBlZCJ9Cg=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "990e629341f27da26c3d-b7ac76ee5ab4d4f83482",
+          "file": "reference-pause.spec.ts",
+          "line": 18,
+          "column": 7
+        },
+        {
+          "title": "owned optional controls: keyboard Pause, reload, Resume and Stop at 1440",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 8726,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T19:53:20.471Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "owned-optional-control-scope",
+                      "contentType": "application/json",
+                      "body": "eyJzY29wZSI6IkFjdHVhbCBvd25lZCBuYXRpdmUgbW9kZWwgYW5kIGF1dGhlbnRpY2F0ZWQgYnJvd3NlciBjb250cm9sczsgbm8gcGh5c2ljYWwgZXF1aXBtZW50Iiwidmlld3BvcnQiOnsid2lkdGgiOjE0NDAsImhlaWdodCI6OTAwfSwicnVuSWQiOiJydW4tZDk3YmM4MTAtYzhkOS00ZmUzLWE5YmMtZDJlN2ZiMzM0NjIyIiwic25hcHNob3RJZCI6InNuYXAtNzIxYjM1NzItZjBjMC00ZDBmLTg0NjktZGU2Y2FkNGE1YzIzIiwic2F2ZWRQYXVzZU9wZXJhdGlvbiI6Im9wLTNmMTFiNWNhLTM3OGMtNDBlZC05ZTY1LTkzYjc3N2QyNTA1NiIsInBhdXNlZFNhbXBsZXMiOjE0LCJmaW5hbFN0YXRlIjoic3RvcHBlZCJ9Cg=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "990e629341f27da26c3d-8316e624e55929f59524",
+          "file": "reference-pause.spec.ts",
+          "line": 18,
+          "column": 7
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-28T19:53:04.909Z",
+    "duration": 24342.164999999997,
+    "expected": 4,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

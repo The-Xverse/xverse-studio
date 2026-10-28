@@ -81,7 +81,7 @@ export function readPendingCommand(runId: string): PendingCommand | null {
   return value &&
     typeof value.key === "string" &&
     value.runId === runId &&
-    ["stop", "cancel"].includes(value.kind) &&
+    ["stop", "cancel", "pause", "resume"].includes(value.kind) &&
     Number.isInteger(value.expectedStateVersion) &&
     Number.isFinite(value.sentAt) &&
     (value.operationId === undefined ||
@@ -178,7 +178,13 @@ export function controlAvailability(
       available: false,
       reason: `The run's provider does not admit ${kind}.`,
     };
-  if (!COMMAND_STATES.includes(state))
+  const states =
+    kind === "pause"
+      ? ["running"]
+      : kind === "resume"
+        ? ["paused"]
+        : COMMAND_STATES;
+  if (!states.includes(state))
     return {
       available: false,
       reason:

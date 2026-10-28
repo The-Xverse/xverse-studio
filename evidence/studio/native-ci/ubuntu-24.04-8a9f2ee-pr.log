@@ -1,0 +1,1250 @@
+﻿2026-10-28T18:52:20.9638553Z Current runner version: '2.338.0'
+2026-10-28T18:52:20.9664408Z ##[group]Runner Image Provisioner
+2026-10-28T18:52:20.9665292Z Hosted Compute Agent
+2026-10-28T18:52:20.9665799Z Version: 20261021.618
+2026-10-28T18:52:20.9666386Z Commit: 21505ad2541d5be6135ed84fc33697146cf75b8e
+2026-10-28T18:52:20.9667082Z Build Date: 2026-10-21T00:45:21Z
+2026-10-28T18:52:20.9667676Z Worker ID: {e483d9fa-ecc5-4662-a5a6-8baad6b54495}
+2026-10-28T18:52:20.9668348Z Region: centralus
+2026-10-28T18:52:20.9668839Z Cloud: Azure
+2026-10-28T18:52:20.9669383Z ##[endgroup]
+2026-10-28T18:52:20.9671020Z ##[group]Operating System
+2026-10-28T18:52:20.9671557Z Ubuntu
+2026-10-28T18:52:20.9672098Z 24.04.5
+2026-10-28T18:52:20.9672552Z LTS
+2026-10-28T18:52:20.9672983Z ##[endgroup]
+2026-10-28T18:52:20.9673589Z ##[group]Runner Image
+2026-10-28T18:52:20.9674109Z Image: ubuntu-24.04
+2026-10-28T18:52:20.9674662Z Version: 20261025.353.1
+2026-10-28T18:52:20.9675875Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261025.353/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-28T18:52:20.9677495Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261025.353
+2026-10-28T18:52:20.9678428Z ##[endgroup]
+2026-10-28T18:52:20.9679493Z ##[group]GITHUB_TOKEN Permissions
+2026-10-28T18:52:20.9681586Z Contents: read
+2026-10-28T18:52:20.9682274Z Metadata: read
+2026-10-28T18:52:20.9682773Z ##[endgroup]
+2026-10-28T18:52:20.9684890Z Secret source: Actions
+2026-10-28T18:52:20.9685777Z Cache mode: write
+2026-10-28T18:52:20.9686430Z Prepare workflow directory
+2026-10-28T18:52:21.0140332Z Prepare all required actions
+2026-10-28T18:52:21.0179059Z Getting action download info
+2026-10-28T18:52:21.2638239Z Download action repository 'actions/checkout@11d5960a326750d5838078e36cf38b85af677262' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+2026-10-28T18:52:21.3390280Z Download action repository 'actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065' (SHA:a26af69be951a213d495a4c3e4e4022e16d87065)
+2026-10-28T18:52:21.4341958Z Download action repository 'actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+2026-10-28T18:52:21.5515619Z Download action repository 'actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+2026-10-28T18:52:21.7327571Z Complete job name: native (ubuntu-24.04)
+2026-10-28T18:52:21.7931783Z ##[group]Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+2026-10-28T18:52:21.7932342Z with:
+2026-10-28T18:52:21.7932599Z   repository: The-Xverse/xverse-studio
+2026-10-28T18:52:21.7934748Z   token: ***
+2026-10-28T18:52:21.7934988Z   ssh-strict: true
+2026-10-28T18:52:21.7935235Z   ssh-user: git
+2026-10-28T18:52:21.7935486Z   persist-credentials: true
+2026-10-28T18:52:21.7935759Z   clean: true
+2026-10-28T18:52:21.7936015Z   sparse-checkout-cone-mode: true
+2026-10-28T18:52:21.7936307Z   fetch-depth: 1
+2026-10-28T18:52:21.7936545Z   fetch-tags: false
+2026-10-28T18:52:21.7936798Z   show-progress: true
+2026-10-28T18:52:21.7937074Z   lfs: false
+2026-10-28T18:52:21.7937305Z   submodules: false
+2026-10-28T18:52:21.7937557Z   set-safe-directory: true
+2026-10-28T18:52:21.7937839Z   allow-unsafe-pr-checkout: false
+2026-10-28T18:52:21.7938199Z env:
+2026-10-28T18:52:21.7938438Z   PYTEST_DISABLE_PLUGIN_AUTOLOAD: 1
+2026-10-28T18:52:21.7938881Z   UV_CACHE_DIR: <ci-repo>/.studio-local/uv
+2026-10-28T18:52:21.7939479Z   PLAYWRIGHT_BROWSERS_PATH: <ci-repo>/.studio-local/browsers
+2026-10-28T18:52:21.7940200Z   npm_config_cache: <ci-repo>/.studio-local/npm
+2026-10-28T18:52:21.7940632Z ##[endgroup]
+2026-10-28T18:52:22.0441968Z Syncing repository: The-Xverse/xverse-studio
+2026-10-28T18:52:22.0443617Z ##[group]Getting Git version info
+2026-10-28T18:52:22.0444205Z Working directory is '<ci-repo>'
+2026-10-28T18:52:22.0444815Z [command]/usr/bin/git version
+2026-10-28T18:52:22.0537823Z git version 2.56.0
+2026-10-28T18:52:22.0560300Z ##[endgroup]
+2026-10-28T18:52:22.0571281Z Temporarily overriding HOME='<ci-home>/work/_temp/645535ff-847d-4ed3-a7be-65b1c853ddeb' before making global git config changes
+2026-10-28T18:52:22.0572825Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-28T18:52:22.0581245Z [command]/usr/bin/git config --global --add safe.directory <ci-repo>
+2026-10-28T18:52:22.0640587Z Deleting the contents of '<ci-repo>'
+2026-10-28T18:52:22.0644186Z ##[group]Initializing the repository
+2026-10-28T18:52:22.0647969Z [command]/usr/bin/git init <ci-repo>
+2026-10-28T18:52:22.0763102Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-28T18:52:22.0764294Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-28T18:52:22.0765241Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-28T18:52:22.0766077Z hint: call:
+2026-10-28T18:52:22.0766512Z hint:
+2026-10-28T18:52:22.0766971Z hint: 	git config --global init.defaultBranch <name>
+2026-10-28T18:52:22.0767452Z hint:
+2026-10-28T18:52:22.0767773Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-28T18:52:22.0768289Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-28T18:52:22.0768694Z hint:
+2026-10-28T18:52:22.0768926Z hint: 	git branch -m <name>
+2026-10-28T18:52:22.0769186Z hint:
+2026-10-28T18:52:22.0769527Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-28T18:52:22.0771313Z Initialized empty Git repository in <ci-repo>/.git/
+2026-10-28T18:52:22.0782044Z [command]/usr/bin/git remote add origin https://github.com/The-Xverse/xverse-studio
+2026-10-28T18:52:22.0850209Z ##[endgroup]
+2026-10-28T18:52:22.0850705Z ##[group]Disabling automatic garbage collection
+2026-10-28T18:52:22.0855162Z [command]/usr/bin/git config --local gc.auto 0
+2026-10-28T18:52:22.0895148Z ##[endgroup]
+2026-10-28T18:52:22.0895803Z ##[group]Setting up auth
+2026-10-28T18:52:22.0907101Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-28T18:52:22.0949549Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-28T18:52:22.1304762Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-28T18:52:22.1347158Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-28T18:52:22.1565511Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-28T18:52:22.1608246Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-28T18:52:22.1827054Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-28T18:52:22.1876218Z ##[endgroup]
+2026-10-28T18:52:22.1876789Z ##[group]Fetching the repository
+2026-10-28T18:52:22.1886212Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +ddaa7366478d6c66c85a3f4a0d24c8ee35ce7689:refs/remotes/pull/1/merge
+2026-10-28T18:52:34.9420675Z From https://github.com/The-Xverse/xverse-studio
+2026-10-28T18:52:34.9422059Z  * [new ref]         ddaa7366478d6c66c85a3f4a0d24c8ee35ce7689 -> pull/1/merge
+2026-10-28T18:52:34.9424822Z ##[endgroup]
+2026-10-28T18:52:34.9425742Z ##[group]Determining the checkout info
+2026-10-28T18:52:34.9426794Z ##[endgroup]
+2026-10-28T18:52:34.9437732Z [command]/usr/bin/git sparse-checkout disable
+2026-10-28T18:52:34.9497649Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-28T18:52:34.9536500Z ##[group]Checking out the ref
+2026-10-28T18:52:34.9539945Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/1/merge
+2026-10-28T18:52:35.7126463Z Note: switching to 'refs/remotes/pull/1/merge'.
+2026-10-28T18:52:35.7126975Z
+2026-10-28T18:52:35.7127279Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-10-28T18:52:35.7127764Z changes and commit them, and you can discard any commits you make in this
+2026-10-28T18:52:35.7128265Z state without impacting any branches by switching back to a branch.
+2026-10-28T18:52:35.7128535Z
+2026-10-28T18:52:35.7128764Z If you want to create a new branch to retain commits you create, you may
+2026-10-28T18:52:35.7129229Z do so (now or later) by using -c with the switch command. Example:
+2026-10-28T18:52:35.7129506Z
+2026-10-28T18:52:35.7129820Z   git switch -c <new-branch-name>
+2026-10-28T18:52:35.7129996Z
+2026-10-28T18:52:35.7130142Z Or undo this operation with:
+2026-10-28T18:52:35.7130323Z
+2026-10-28T18:52:35.7130430Z   git switch -
+2026-10-28T18:52:35.7130603Z
+2026-10-28T18:52:35.7130827Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-10-28T18:52:35.7131107Z
+2026-10-28T18:52:35.7131493Z HEAD is now at ddaa736 Merge 8a9f2ee27113a9d1b199fc5f8add6f101f48d8e2 into 9b1d5fe0772feb8bf6110eae5eddb2c1d393588d
+2026-10-28T18:52:35.7200847Z ##[endgroup]
+2026-10-28T18:52:35.7258823Z [command]/usr/bin/git log -1 --format=%H
+2026-10-28T18:52:35.7292736Z ddaa7366478d6c66c85a3f4a0d24c8ee35ce7689
+2026-10-28T18:52:35.7518618Z ##[group]Run actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+2026-10-28T18:52:35.7518899Z with:
+2026-10-28T18:52:35.7519060Z   python-version: 3.13.13
+2026-10-28T18:52:35.7519227Z   check-latest: false
+2026-10-28T18:52:35.7520693Z   token: ***
+2026-10-28T18:52:35.7520844Z   update-environment: true
+2026-10-28T18:52:35.7521018Z   allow-prereleases: false
+2026-10-28T18:52:35.7521199Z   freethreaded: false
+2026-10-28T18:52:35.7521372Z env:
+2026-10-28T18:52:35.7521522Z   PYTEST_DISABLE_PLUGIN_AUTOLOAD: 1
+2026-10-28T18:52:35.7521768Z   UV_CACHE_DIR: <ci-repo>/.studio-local/uv
+2026-10-28T18:52:35.7522111Z   PLAYWRIGHT_BROWSERS_PATH: <ci-repo>/.studio-local/browsers
+2026-10-28T18:52:35.7522461Z   npm_config_cache: <ci-repo>/.studio-local/npm
+2026-10-28T18:52:35.7522713Z ##[endgroup]
+2026-10-28T18:52:35.8520888Z ##[group]Installed versions
+2026-10-28T18:52:35.8536241Z Version 3.13.13 was not found in the local cache
+2026-10-28T18:52:35.8712612Z (node:2092) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-28T18:52:35.8713205Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-28T18:52:36.8020043Z Version 3.13.13 is available for downloading
+2026-10-28T18:52:36.8021176Z Download from "https://github.com/actions/python-versions/releases/download/3.13.13-27225391538/python-3.13.13-linux-24.04-x64.tar.gz"
+2026-10-28T18:52:37.3437012Z Extract downloaded archive
+2026-10-28T18:52:37.3560389Z [command]/usr/bin/tar xz --warning=no-unknown-keyword --overwrite -C <ci-home>/work/_temp/d7643a77-e78e-4669-a35b-38d991ff52f1 -f <ci-home>/work/_temp/93c5ad25-10c0-4833-adce-1daf63aee2b2
+2026-10-28T18:52:39.0141030Z Execute installation script
+2026-10-28T18:52:39.0245719Z Check if Python hostedtoolcache folder exist...
+2026-10-28T18:52:39.0246124Z Create Python 3.13.13 folder
+2026-10-28T18:52:39.0256090Z Copy Python binaries to hostedtoolcache folder
+2026-10-28T18:52:39.4325760Z Create additional symlinks (Required for the UsePythonVersion Azure Pipelines task and the setup-python GitHub Action)
+2026-10-28T18:52:39.4367175Z Upgrading pip...
+2026-10-28T18:52:40.8424062Z Collecting pip
+2026-10-28T18:52:40.9143476Z Downloading pip-26.2.2-py3-none-any.whl.metadata (4.6 kB)
+2026-10-28T18:52:40.9328476Z Downloading pip-26.2.2-py3-none-any.whl (1.8 MB)
+2026-10-28T18:52:41.0111908Z ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.8/1.8 MB 36.2 MB/s  0:00:00
+2026-10-28T18:52:41.0112274Z
+2026-10-28T18:52:41.0243113Z Installing collected packages: pip
+2026-10-28T18:52:41.0243519Z Attempting uninstall: pip
+2026-10-28T18:52:41.0262165Z Found existing installation: pip 26.0.1
+2026-10-28T18:52:41.0472445Z Uninstalling pip-26.0.1:
+2026-10-28T18:52:41.0512354Z Successfully uninstalled pip-26.0.1
+2026-10-28T18:52:41.6798012Z Successfully installed pip-26.2.2
+2026-10-28T18:52:41.7609570Z Create complete file
+2026-10-28T18:52:41.7646805Z Successfully set up CPython (3.13.13)
+2026-10-28T18:52:41.7647308Z ##[endgroup]
+2026-10-28T18:52:41.7850894Z ##[group]Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+2026-10-28T18:52:41.7851131Z with:
+2026-10-28T18:52:41.7851262Z   node-version: 24.22.1
+2026-10-28T18:52:41.7851393Z   always-auth: false
+2026-10-28T18:52:41.7851519Z   check-latest: false
+2026-10-28T18:52:41.7852813Z   token: ***
+2026-10-28T18:52:41.7852970Z env:
+2026-10-28T18:52:41.7853129Z   PYTEST_DISABLE_PLUGIN_AUTOLOAD: 1
+2026-10-28T18:52:41.7853349Z   UV_CACHE_DIR: <ci-repo>/.studio-local/uv
+2026-10-28T18:52:41.7853663Z   PLAYWRIGHT_BROWSERS_PATH: <ci-repo>/.studio-local/browsers
+2026-10-28T18:52:41.7853982Z   npm_config_cache: <ci-repo>/.studio-local/npm
+2026-10-28T18:52:41.7854248Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.13/x64
+2026-10-28T18:52:41.7854506Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.13/x64/lib/pkgconfig
+2026-10-28T18:52:41.7854773Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.13/x64
+2026-10-28T18:52:41.7854988Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.13/x64
+2026-10-28T18:52:41.7855200Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.13/x64
+2026-10-28T18:52:41.7855413Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.13/x64/lib
+2026-10-28T18:52:41.7855592Z ##[endgroup]
+2026-10-28T18:52:41.8889832Z Found in cache @ /opt/hostedtoolcache/node/24.22.1/x64
+2026-10-28T18:52:41.8893447Z (node:2152) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-28T18:52:41.8894007Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-28T18:52:41.8896335Z ##[group]Environment details
+2026-10-28T18:52:42.2240701Z node: v24.22.1
+2026-10-28T18:52:42.2241545Z npm: 11.19.1
+2026-10-28T18:52:42.2241991Z yarn: 1.22.22
+2026-10-28T18:52:42.2242761Z ##[endgroup]
+2026-10-28T18:52:42.2417811Z ##[group]Run python -m pip install uv==0.12.17
+2026-10-28T18:52:42.2418097Z python -m pip install uv==0.12.17
+2026-10-28T18:52:42.2459523Z shell: /usr/bin/bash -e {0}
+2026-10-28T18:52:42.2461516Z env:
+2026-10-28T18:52:42.2462132Z   PYTEST_DISABLE_PLUGIN_AUTOLOAD: 1
+2026-10-28T18:52:42.2462427Z   UV_CACHE_DIR: <ci-repo>/.studio-local/uv
+2026-10-28T18:52:42.2463007Z   PLAYWRIGHT_BROWSERS_PATH: <ci-repo>/.studio-local/browsers
+2026-10-28T18:52:42.2463939Z   npm_config_cache: <ci-repo>/.studio-local/npm
+2026-10-28T18:52:42.2464748Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.13/x64
+2026-10-28T18:52:42.2464989Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.13/x64/lib/pkgconfig
+2026-10-28T18:52:42.2465224Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.13/x64
+2026-10-28T18:52:42.2467005Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.13/x64
+2026-10-28T18:52:42.2467835Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.13/x64
+2026-10-28T18:52:42.2468124Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.13/x64/lib
+2026-10-28T18:52:42.2468643Z ##[endgroup]
+2026-10-28T18:52:42.7802290Z Collecting uv==0.12.17
+2026-10-28T18:52:42.8462137Z   Downloading uv-0.12.17-py3-none-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (11 kB)
+2026-10-28T18:52:42.8756092Z Downloading uv-0.12.17-py3-none-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (20.4 MB)
+2026-10-28T18:52:43.1523198Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 20.4/20.4 MB 83.3 MB/s  0:00:00
+2026-10-28T18:52:43.1831995Z Installing collected packages: uv
+2026-10-28T18:52:43.3651905Z Successfully installed uv-0.12.17
+2026-10-28T18:52:43.4437837Z ##[group]Run uv sync --frozen
+2026-10-28T18:52:43.4438053Z uv sync --frozen
+2026-10-28T18:52:43.4455487Z shell: /usr/bin/bash -e {0}
+2026-10-28T18:52:43.4455625Z env:
+2026-10-28T18:52:43.4455750Z   PYTEST_DISABLE_PLUGIN_AUTOLOAD: 1
+2026-10-28T18:52:43.4455972Z   UV_CACHE_DIR: <ci-repo>/.studio-local/uv
+2026-10-28T18:52:43.4456279Z   PLAYWRIGHT_BROWSERS_PATH: <ci-repo>/.studio-local/browsers
+2026-10-28T18:52:43.4456596Z   npm_config_cache: <ci-repo>/.studio-local/npm
+2026-10-28T18:52:43.4456852Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.13/x64
+2026-10-28T18:52:43.4457081Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.13/x64/lib/pkgconfig
+2026-10-28T18:52:43.4457330Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.13/x64
+2026-10-28T18:52:43.4457536Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.13/x64
+2026-10-28T18:52:43.4457792Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.13/x64
+2026-10-28T18:52:43.4458002Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.13/x64/lib
+2026-10-28T18:52:43.4458182Z ##[endgroup]
+2026-10-28T18:52:43.4883727Z Using CPython 3.13.13 interpreter at: /opt/hostedtoolcache/Python/3.13.13/x64/bin/python3.13
+2026-10-28T18:52:43.4884130Z Creating virtual environment at: .venv
+2026-10-28T18:52:43.4941793Z    Updating https://github.com/The-Xverse/xverse-platform.git (7fab6a290c3731533c2b88517158055c768b9d4e)
+2026-10-28T18:52:43.4997558Z    Building xverse-studio @ file://<ci-repo>/services/studio-api
+2026-10-28T18:52:43.5740335Z Downloading pydantic-core (2.0MiB)
+2026-10-28T18:52:43.5747289Z Downloading pygments (1.2MiB)
+2026-10-28T18:52:43.5753404Z Downloading ruff (10.7MiB)
+2026-10-28T18:52:43.8824781Z  Downloaded pygments
+2026-10-28T18:52:43.9123241Z  Downloaded pydantic-core
+2026-10-28T18:52:44.0244460Z  Downloaded ruff
+2026-10-28T18:52:44.1074055Z       Built xverse-studio @ file://<ci-repo>/services/studio-api
+2026-10-28T18:53:50.9067135Z     Updated https://github.com/The-Xverse/xverse-platform.git (7fab6a290c3731533c2b88517158055c768b9d4e)
+2026-10-28T18:53:50.9068915Z    Building xverse-xdl @ git+https://github.com/The-Xverse/xverse-platform.git@7fab6a290c3731533c2b88517158055c768b9d4e
+2026-10-28T18:53:51.2461562Z       Built xverse-xdl @ git+https://github.com/The-Xverse/xverse-platform.git@7fab6a290c3731533c2b88517158055c768b9d4e
+2026-10-28T18:53:51.2652186Z Prepared 42 packages in 1m 07s
+2026-10-28T18:53:51.3411854Z Installed 42 packages in 74ms
+2026-10-28T18:53:51.3412177Z  + annotated-doc==0.0.5
+2026-10-28T18:53:51.3412546Z  + annotated-types==0.8.0
+2026-10-28T18:53:51.3412805Z  + anyio==4.15.1
+2026-10-28T18:53:51.3412984Z  + arrow==1.4.0
+2026-10-28T18:53:51.3413166Z  + attrs==26.1.0
+2026-10-28T18:53:51.3413342Z  + certifi==2026.10.23
+2026-10-28T18:53:51.3413530Z  + click==8.5.0
+2026-10-28T18:53:51.3415127Z  + fastapi==0.135.1
+2026-10-28T18:53:51.3415343Z  + fqdn==1.6.0
+2026-10-28T18:53:51.3415528Z  + h11==0.16.0
+2026-10-28T18:53:51.3415766Z  + httpcore==1.0.9
+2026-10-28T18:53:51.3415954Z  + httpx==0.28.1
+2026-10-28T18:53:51.3416133Z  + idna==3.20
+2026-10-28T18:53:51.3416312Z  + iniconfig==2.3.1
+2026-10-28T18:53:51.3416504Z  + isoduration==20.11.0
+2026-10-28T18:53:51.3416705Z  + jsonpointer==3.5
+2026-10-28T18:53:51.3416895Z  + jsonschema==4.26.0
+2026-10-28T18:53:51.3417140Z  + jsonschema-specifications==2025.9.1
+2026-10-28T18:53:51.3417389Z  + packaging==26.3
+2026-10-28T18:53:51.3417573Z  + pluggy==1.7.0
+2026-10-28T18:53:51.3417756Z  + psutil==7.2.2
+2026-10-28T18:53:51.3417938Z  + pydantic==2.12.5
+2026-10-28T18:53:51.3418131Z  + pydantic-core==2.41.5
+2026-10-28T18:53:51.3418590Z  + pygments==2.21.0
+2026-10-28T18:53:51.3418772Z  + pytest==9.0.2
+2026-10-28T18:53:51.3418962Z  + python-dateutil==3.0.0
+2026-10-28T18:53:51.3419177Z  + referencing==0.37.0
+2026-10-28T18:53:51.3419316Z  + rfc3339-validator==0.1.4
+2026-10-28T18:53:51.3419757Z  + rfc3987==1.3.8
+2026-10-28T18:53:51.3419915Z  + rpds-py==2026.9.1
+2026-10-28T18:53:51.3420044Z  + ruamel-yaml==0.19.1
+2026-10-28T18:53:51.3420184Z  + ruff==0.15.4
+2026-10-28T18:53:51.3420301Z  + six==1.17.0
+2026-10-28T18:53:51.3420455Z  + starlette==1.10.0
+2026-10-28T18:53:51.3420656Z  + typing-extensions==4.16.0
+2026-10-28T18:53:51.3420878Z  + typing-inspection==0.4.4
+2026-10-28T18:53:51.3421083Z  + tzdata==2026.5
+2026-10-28T18:53:51.3421295Z  + uri-template==1.3.0
+2026-10-28T18:53:51.3421494Z  + uvicorn==0.41.0
+2026-10-28T18:53:51.3421677Z  + webcolors==25.10.0
+2026-10-28T18:53:51.3422111Z  + xverse-studio==0.1.0.dev0 (from file://<ci-repo>/services/studio-api)
+2026-10-28T18:53:51.3422813Z  + xverse-xdl==0.4.0 (from git+https://github.com/The-Xverse/xverse-platform.git@7fab6a290c3731533c2b88517158055c768b9d4e)
+2026-10-28T18:53:51.3702828Z ##[group]Run npm ci
+2026-10-28T18:53:51.3703079Z npm ci
+2026-10-28T18:53:51.3721212Z shell: /usr/bin/bash -e {0}
+2026-10-28T18:53:51.3721369Z env:
+2026-10-28T18:53:51.3721505Z   PYTEST_DISABLE_PLUGIN_AUTOLOAD: 1
+2026-10-28T18:53:51.3721739Z   UV_CACHE_DIR: <ci-repo>/.studio-local/uv
+2026-10-28T18:53:51.3722067Z   PLAYWRIGHT_BROWSERS_PATH: <ci-repo>/.studio-local/browsers
+2026-10-28T18:53:51.3722398Z   npm_config_cache: <ci-repo>/.studio-local/npm
+2026-10-28T18:53:51.3722688Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.13/x64
+2026-10-28T18:53:51.3722931Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.13/x64/lib/pkgconfig
+2026-10-28T18:53:51.3723175Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.13/x64
+2026-10-28T18:53:51.3723393Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.13/x64
+2026-10-28T18:53:51.3723684Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.13/x64
+2026-10-28T18:53:51.3723995Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.13/x64/lib
+2026-10-28T18:53:51.3724184Z ##[endgroup]
+2026-10-28T18:53:53.1092655Z
+2026-10-28T18:53:53.1093506Z added 47 packages, and audited 49 packages in 2s
+2026-10-28T18:53:53.1093827Z
+2026-10-28T18:53:53.1094016Z 6 packages are looking for funding
+2026-10-28T18:53:53.1094297Z   run `npm fund` for details
+2026-10-28T18:53:53.1101198Z
+2026-10-28T18:53:53.1101799Z found 0 vulnerabilities
+2026-10-28T18:53:53.1107947Z npm warn install-scripts 1 package has install scripts not yet covered by allowScripts:
+2026-10-28T18:53:53.1108337Z npm warn install-scripts   esbuild@0.28.1 (postinstall: node install.js)
+2026-10-28T18:53:53.1108568Z npm warn install-scripts
+2026-10-28T18:53:53.1108894Z npm warn install-scripts Run `npm install-scripts ls` to review, or `npm install-scripts approve <pkg>` to allow.
+2026-10-28T18:53:53.1523769Z ##[group]Run npm run build
+2026-10-28T18:53:53.1524034Z npm run build
+2026-10-28T18:53:53.1545057Z shell: /usr/bin/bash -e {0}
+2026-10-28T18:53:53.1546024Z env:
+2026-10-28T18:53:53.1546161Z   PYTEST_DISABLE_PLUGIN_AUTOLOAD: 1
+2026-10-28T18:53:53.1546388Z   UV_CACHE_DIR: <ci-repo>/.studio-local/uv
+2026-10-28T18:53:53.1546717Z   PLAYWRIGHT_BROWSERS_PATH: <ci-repo>/.studio-local/browsers
+2026-10-28T18:53:53.1547044Z   npm_config_cache: <ci-repo>/.studio-local/npm
+2026-10-28T18:53:53.1547310Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.13/x64
+2026-10-28T18:53:53.1547550Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.13/x64/lib/pkgconfig
+2026-10-28T18:53:53.1547786Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.13/x64
+2026-10-28T18:53:53.1548002Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.13/x64
+2026-10-28T18:53:53.1548273Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.13/x64
+2026-10-28T18:53:53.1548869Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.13/x64/lib
+2026-10-28T18:53:53.1549054Z ##[endgroup]
+2026-10-28T18:53:53.2384668Z
+2026-10-28T18:53:53.2385269Z > xverse-studio-workspace@0.1.0 build
+2026-10-28T18:53:53.2385613Z > npm run build --workspace @xverse/studio-web
+2026-10-28T18:53:53.2385750Z
+2026-10-28T18:53:53.3265612Z
+2026-10-28T18:53:53.3266394Z > @xverse/studio-web@0.1.0 build
+2026-10-28T18:53:53.3266802Z > tsc --noEmit && vite build
+2026-10-28T18:53:53.3266958Z
+2026-10-28T18:53:57.4027011Z vite v7.3.7 building client environment for production...
+2026-10-28T18:53:57.4538642Z transforming...
+2026-10-28T18:53:58.0443230Z ../../node_modules/@xyflow/react/dist/esm/index.js (1:0): Module level directives cause errors when bundled, "use client" in "../../node_modules/@xyflow/react/dist/esm/index.js" was ignored.
+2026-10-28T18:53:59.3578392Z ✓ 323 modules transformed.
+2026-10-28T18:53:59.4871791Z Generated an empty chunk: "react".
+2026-10-28T18:53:59.5900374Z rendering chunks...
+2026-10-28T18:53:59.7614660Z computing gzip size...
+2026-10-28T18:53:59.7781565Z dist/index.html                   0.55 kB │ gzip:   0.32 kB
+2026-10-28T18:53:59.7791014Z
+2026-10-28T18:53:59.7791738Z dist/assets/index-e1-wnYpS.css   69.89 kB │ gzip:  14.64 kB
+2026-10-28T18:53:59.7792890Z dist/assets/react-l0sNRNKZ.js     0.00 kB │ gzip:   0.02 kB
+2026-10-28T18:53:59.7794086Z dist/assets/yaml-q0AlIuTs.js     97.10 kB │ gzip:  30.34 kB
+2026-10-28T18:53:59.7795024Z dist/assets/graph-C6m1R887.js   192.75 kB │ gzip:  63.25 kB
+2026-10-28T18:53:59.7796022Z dist/assets/index-DcdN2McW.js   642.39 kB │ gzip: 188.74 kB
+2026-10-28T18:53:59.7796677Z ✓ built in 2.35s
+2026-10-28T18:53:59.7820787Z (!) Some chunks are larger than 500 kB after minification. Consider:
+2026-10-28T18:53:59.7821680Z - Using dynamic import() to code-split the application
+2026-10-28T18:53:59.7834453Z - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+2026-10-28T18:53:59.7835700Z - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+2026-10-28T18:53:59.8567855Z ##[group]Run uv run python scripts/record_environment.py --output evidence/studio/native-ci/environment.json
+2026-10-28T18:53:59.8568561Z uv run python scripts/record_environment.py --output evidence/studio/native-ci/environment.json
+2026-10-28T18:53:59.8590861Z shell: /usr/bin/bash -e {0}
+2026-10-28T18:53:59.8591100Z env:
+2026-10-28T18:53:59.8591300Z   PYTEST_DISABLE_PLUGIN_AUTOLOAD: 1
+2026-10-28T18:53:59.8591685Z   UV_CACHE_DIR: <ci-repo>/.studio-local/uv
+2026-10-28T18:53:59.8592209Z   PLAYWRIGHT_BROWSERS_PATH: <ci-repo>/.studio-local/browsers
+2026-10-28T18:53:59.8592743Z   npm_config_cache: <ci-repo>/.studio-local/npm
+2026-10-28T18:53:59.8593168Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.13/x64
+2026-10-28T18:53:59.8593545Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.13/x64/lib/pkgconfig
+2026-10-28T18:53:59.8593981Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.13/x64
+2026-10-28T18:53:59.8594326Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.13/x64
+2026-10-28T18:53:59.8594672Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.13/x64
+2026-10-28T18:53:59.8595026Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.13/x64/lib
+2026-10-28T18:53:59.8595325Z ##[endgroup]
+2026-10-28T18:54:00.0356327Z {"scope": "native_verification_environment", "gitCandidate": "ddaa7366478d6c66c85a3f4a0d24c8ee35ce7689", "os": "Linux", "release": "7.0.0-1017-azure", "version": "#17~24.04.1-Ubuntu SMP PREEMPT Thu Sep 24 18:46:57 UTC 2026", "architecture": "x86_64", "distribution": {"PRETTY_NAME": "Ubuntu 24.04.5 LTS", "VERSION_ID": "24.04", "ID": "ubuntu"}, "windows": {"release": ["", "", "", ""], "edition": null}, "python": "3.13.13", "node": "v24.22.1", "cpuLogicalCount": 4, "memoryBytes": 16760344576, "providerScope": "owned_reference; external and physical admission recorded separately", "sourceDigest": "sha256:b62e8cae83fc9904d99835697e9a41d699bb6a7cd0eeab191444ac7a2b6865aa"}
+2026-10-28T18:54:00.0568167Z ##[group]Run uv run ruff check --select F821 services/studio-api/src scripts tests
+2026-10-28T18:54:00.0568705Z uv run ruff check --select F821 services/studio-api/src scripts tests
+2026-10-28T18:54:00.0593367Z shell: /usr/bin/bash -e {0}
+2026-10-28T18:54:00.0593611Z env:
+2026-10-28T18:54:00.0593816Z   PYTEST_DISABLE_PLUGIN_AUTOLOAD: 1
+2026-10-28T18:54:00.0594180Z   UV_CACHE_DIR: <ci-repo>/.studio-local/uv
+2026-10-28T18:54:00.0594708Z   PLAYWRIGHT_BROWSERS_PATH: <ci-repo>/.studio-local/browsers
+2026-10-28T18:54:00.0595179Z   npm_config_cache: <ci-repo>/.studio-local/npm
+2026-10-28T18:54:00.0595572Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.13/x64
+2026-10-28T18:54:00.0595960Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.13/x64/lib/pkgconfig
+2026-10-28T18:54:00.0596337Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.13/x64
+2026-10-28T18:54:00.0596749Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.13/x64
+2026-10-28T18:54:00.0597105Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.13/x64
+2026-10-28T18:54:00.0597461Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.13/x64/lib
+2026-10-28T18:54:00.0597759Z ##[endgroup]
+2026-10-28T18:54:00.1078556Z All checks passed!
+2026-10-28T18:54:00.1283632Z ##[group]Run uv run python scripts/run_checks.py
+2026-10-28T18:54:00.1284039Z uv run python scripts/run_checks.py
+2026-10-28T18:54:00.1302085Z shell: /usr/bin/bash -e {0}
+2026-10-28T18:54:00.1302245Z env:
+2026-10-28T18:54:00.1302385Z   PYTEST_DISABLE_PLUGIN_AUTOLOAD: 1
+2026-10-28T18:54:00.1302618Z   UV_CACHE_DIR: <ci-repo>/.studio-local/uv
+2026-10-28T18:54:00.1302951Z   PLAYWRIGHT_BROWSERS_PATH: <ci-repo>/.studio-local/browsers
+2026-10-28T18:54:00.1303279Z   npm_config_cache: <ci-repo>/.studio-local/npm
+2026-10-28T18:54:00.1303558Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.13/x64
+2026-10-28T18:54:00.1303803Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.13/x64/lib/pkgconfig
+2026-10-28T18:54:00.1304047Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.13/x64
+2026-10-28T18:54:00.1304269Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.13/x64
+2026-10-28T18:54:00.1304560Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.13/x64
+2026-10-28T18:54:00.1304793Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.13/x64/lib
+2026-10-28T18:54:00.1304985Z ##[endgroup]
+2026-10-28T18:54:00.2006120Z {
+2026-10-28T18:54:00.2006532Z   "valid": true,
+2026-10-28T18:54:00.2006877Z   "scope": "planning-package",
+2026-10-28T18:54:00.2007279Z   "application_acceptance": "not_evaluated_by_this_check",
+2026-10-28T18:54:00.2007653Z   "requirements": 75,
+2026-10-28T18:54:00.2007950Z   "success_criteria": 8,
+2026-10-28T18:54:00.2008235Z   "tasks": 100,
+2026-10-28T18:54:00.2008451Z   "acceptance_cases": 32,
+2026-10-28T18:54:00.2008713Z   "milestones": 5,
+2026-10-28T18:54:00.2008914Z   "errors": []
+2026-10-28T18:54:00.2009133Z }
+2026-10-28T18:54:00.8233553Z {
+2026-10-28T18:54:00.8233816Z   "valid": true,
+2026-10-28T18:54:00.8234130Z   "scope": "descriptive_platform_baseline_only",
+2026-10-28T18:54:00.8234450Z   "runtimeAdmission": false,
+2026-10-28T18:54:00.8234715Z   "errors": []
+2026-10-28T18:54:00.8234898Z }
+2026-10-28T18:54:01.4408959Z Architecture boundaries: passed (imports, dependency direction, industry dispatch, private runtime, executable input and browser executable hooks).
+2026-10-28T18:54:06.7807361Z ........................................................................ [  6%]
+2026-10-28T18:54:18.3038236Z ........................................................................ [ 12%]
+2026-10-28T18:54:39.7982593Z ........................................................................ [ 18%]
+2026-10-28T18:54:52.8066340Z ........................................................................ [ 24%]
+2026-10-28T18:55:35.8076533Z ........................................................................ [ 30%]
+2026-10-28T18:56:34.1440551Z ........................................................................ [ 37%]
+2026-10-28T18:57:45.5212463Z ........................................................................ [ 43%]
+2026-10-28T18:58:54.8016659Z ........................................................................ [ 49%]
+2026-10-28T18:59:03.0264795Z ........................................................................ [ 55%]
+2026-10-28T18:59:14.3771471Z ........................................................................ [ 61%]
+2026-10-28T18:59:25.5763780Z ........................................................................ [ 67%]
+2026-10-28T18:59:28.6622772Z ........................................................................ [ 74%]
+2026-10-28T19:00:23.1542934Z ........................................................................ [ 80%]
+2026-10-28T19:01:31.5327183Z ........................................................................ [ 86%]
+2026-10-28T19:03:08.4938249Z ........................................................................ [ 92%]
+2026-10-28T19:04:23.0003477Z ........................................................................ [ 98%]
+2026-10-28T19:04:23.6364146Z ..............                                                           [100%]
+2026-10-28T19:04:23.6365525Z =============================== warnings summary ===============================
+2026-10-28T19:04:23.6366317Z .venv/lib/python3.13/site-packages/fastapi/testclient.py:1
+2026-10-28T19:04:23.6367304Z   <ci-repo>/.venv/lib/python3.13/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+2026-10-28T19:04:23.6368186Z     from starlette.testclient import TestClient as TestClient  # noqa
+2026-10-28T19:04:23.6368427Z
+2026-10-28T19:04:23.6368689Z -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+2026-10-28T19:04:23.6369107Z 1166 passed, 1 warning in 619.81s (0:10:19)
+2026-10-28T19:04:23.9097044Z ##[group]Run npx playwright install chromium
+2026-10-28T19:04:23.9097404Z npx playwright install chromium
+2026-10-28T19:04:23.9121252Z shell: /usr/bin/bash -e {0}
+2026-10-28T19:04:23.9121481Z env:
+2026-10-28T19:04:23.9121671Z   PYTEST_DISABLE_PLUGIN_AUTOLOAD: 1
+2026-10-28T19:04:23.9122025Z   UV_CACHE_DIR: <ci-repo>/.studio-local/uv
+2026-10-28T19:04:23.9122559Z   PLAYWRIGHT_BROWSERS_PATH: <ci-repo>/.studio-local/browsers
+2026-10-28T19:04:23.9123080Z   npm_config_cache: <ci-repo>/.studio-local/npm
+2026-10-28T19:04:23.9123505Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.13/x64
+2026-10-28T19:04:23.9123893Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.13/x64/lib/pkgconfig
+2026-10-28T19:04:23.9124266Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.13/x64
+2026-10-28T19:04:23.9124606Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.13/x64
+2026-10-28T19:04:23.9124995Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.13/x64
+2026-10-28T19:04:23.9125344Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.13/x64/lib
+2026-10-28T19:04:23.9125628Z ##[endgroup]
+2026-10-28T19:04:24.4796636Z Downloading Chrome for Testing 156.0.8078.4 (playwright chromium v1248) from https://cdn.playwright.dev/builds/cft/156.0.8078.4/linux64/chrome-linux64.zip
+2026-10-28T19:04:24.8246300Z |                                                                                |   0% of 191.1 MiB
+2026-10-28T19:04:25.0193544Z |■■■■■■■■                                                                        |  10% of 191.1 MiB
+2026-10-28T19:04:25.0715594Z |■■■■■■■■■■■■■■■■                                                                |  20% of 191.1 MiB
+2026-10-28T19:04:25.1349314Z |■■■■■■■■■■■■■■■■■■■■■■■■                                                        |  30% of 191.1 MiB
+2026-10-28T19:04:25.1960628Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                                |  40% of 191.1 MiB
+2026-10-28T19:04:25.2330120Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                        |  50% of 191.1 MiB
+2026-10-28T19:04:25.2950566Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                |  60% of 191.1 MiB
+2026-10-28T19:04:25.3338678Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        |  70% of 191.1 MiB
+2026-10-28T19:04:25.3967811Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 191.1 MiB
+2026-10-28T19:04:25.4685957Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 191.1 MiB
+2026-10-28T19:04:25.5244221Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 191.1 MiB
+2026-10-28T19:04:27.7796044Z Chrome for Testing 156.0.8078.4 (playwright chromium v1248) downloaded to <ci-repo>/.studio-local/browsers/chromium-1248
+2026-10-28T19:04:27.7800677Z Downloading FFmpeg (playwright ffmpeg v1013) from https://cdn.playwright.dev/dbazure/download/playwright/builds/ffmpeg/1013/ffmpeg-linux.zip
+2026-10-28T19:04:28.1273039Z |                                                                                |   0% of 2.2 MiB
+2026-10-28T19:04:28.1570200Z |■■■■■■■■                                                                        |  10% of 2.2 MiB
+2026-10-28T19:04:28.1710188Z |■■■■■■■■■■■■■■■■                                                                |  20% of 2.2 MiB
+2026-10-28T19:04:28.1792836Z |■■■■■■■■■■■■■■■■■■■■■■■■                                                        |  30% of 2.2 MiB
+2026-10-28T19:04:28.1847343Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                                |  40% of 2.2 MiB
+2026-10-28T19:04:28.1892420Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                        |  50% of 2.2 MiB
+2026-10-28T19:04:28.1933432Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                |  60% of 2.2 MiB
+2026-10-28T19:04:28.1966517Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        |  70% of 2.2 MiB
+2026-10-28T19:04:28.1994415Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 2.2 MiB
+2026-10-28T19:04:28.2020081Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 2.2 MiB
+2026-10-28T19:04:28.2040861Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 2.2 MiB
+2026-10-28T19:04:28.2472058Z FFmpeg (playwright ffmpeg v1013) downloaded to <ci-repo>/.studio-local/browsers/ffmpeg-1013
+2026-10-28T19:04:28.2474359Z Downloading Chrome Headless Shell 156.0.8078.4 (playwright chromium-headless-shell v1248) from https://cdn.playwright.dev/builds/cft/156.0.8078.4/linux64/chrome-headless-shell-linux64.zip
+2026-10-28T19:04:28.6047568Z |                                                                                |   0% of 120 MiB
+2026-10-28T19:04:28.7555590Z |■■■■■■■■                                                                        |  10% of 120 MiB
+2026-10-28T19:04:28.8130581Z |■■■■■■■■■■■■■■■■                                                                |  20% of 120 MiB
+2026-10-28T19:04:28.8563570Z |■■■■■■■■■■■■■■■■■■■■■■■■                                                        |  30% of 120 MiB
+2026-10-28T19:04:28.9057454Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                                |  40% of 120 MiB
+2026-10-28T19:04:28.9251700Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                        |  50% of 120 MiB
+2026-10-28T19:04:28.9443164Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                |  60% of 120 MiB
+2026-10-28T19:04:28.9831559Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        |  70% of 120 MiB
+2026-10-28T19:04:29.0062357Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 120 MiB
+2026-10-28T19:04:29.0231965Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 120 MiB
+2026-10-28T19:04:29.0618118Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 120 MiB
+2026-10-28T19:04:30.6513444Z Chrome Headless Shell 156.0.8078.4 (playwright chromium-headless-shell v1248) downloaded to <ci-repo>/.studio-local/browsers/chromium_headless_shell-1248
+2026-10-28T19:04:30.6900454Z ##[group]Run uv run python scripts/test_browser.py
+2026-10-28T19:04:30.6900706Z uv run python scripts/test_browser.py
+2026-10-28T19:04:30.6918225Z shell: /usr/bin/bash -e {0}
+2026-10-28T19:04:30.6918376Z env:
+2026-10-28T19:04:30.6918508Z   PYTEST_DISABLE_PLUGIN_AUTOLOAD: 1
+2026-10-28T19:04:30.6918735Z   UV_CACHE_DIR: <ci-repo>/.studio-local/uv
+2026-10-28T19:04:30.6919064Z   PLAYWRIGHT_BROWSERS_PATH: <ci-repo>/.studio-local/browsers
+2026-10-28T19:04:30.6919390Z   npm_config_cache: <ci-repo>/.studio-local/npm
+2026-10-28T19:04:30.6919839Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.13/x64
+2026-10-28T19:04:30.6920088Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.13/x64/lib/pkgconfig
+2026-10-28T19:04:30.6920326Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.13/x64
+2026-10-28T19:04:30.6920730Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.13/x64
+2026-10-28T19:04:30.6920948Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.13/x64
+2026-10-28T19:04:30.6921164Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.13/x64/lib
+2026-10-28T19:04:30.6921350Z ##[endgroup]
+2026-10-28T19:04:31.3487185Z
+2026-10-28T19:04:31.3488260Z > xverse-studio-workspace@0.1.0 test:e2e
+2026-10-28T19:04:31.3488902Z > playwright test -c tests/e2e/playwright.config.ts
+2026-10-28T19:04:31.3489198Z
+2026-10-28T19:04:34.8609956Z
+2026-10-28T19:04:34.8610684Z Running 612 tests using 1 worker
+2026-10-28T19:04:34.8610954Z
+2026-10-28T19:04:41.0972636Z   ✓    1 tests/e2e/accessibility.spec.ts:30:7 › operability: keyboard, focus, textual status and reference workloads at 1024x768 (5.7s)
+2026-10-28T19:04:46.5827758Z   ✓    2 tests/e2e/accessibility.spec.ts:30:7 › operability: keyboard, focus, textual status and reference workloads at 1440x900 (5.5s)
+2026-10-28T19:04:54.5496766Z   ✓    3 tests/e2e/annotation-context.spec.ts:5:5 › annotation run context: rerun resets prior edits and ignores a delayed prior save refresh (8.0s)
+2026-10-28T19:05:02.4386349Z   ✓    4 tests/e2e/authoring-retention.spec.ts:5:5 › neutral logical assets: keyboard author, inspect, source anchor and reload without execution (7.9s)
+2026-10-28T19:05:09.5932533Z   ✓    5 tests/e2e/authoring-retention.spec.ts:15:5 › explicit retention: protected project, disposable project and artifact metadata-only deletion (7.1s)
+2026-10-28T19:05:15.4648207Z   ✓    6 tests/e2e/campaign-workflow.spec.ts:78:9 › campaign completion: accepted creation preserves newer draft at 1024 (5.9s)
+2026-10-28T19:05:21.1611731Z   ✓    7 tests/e2e/campaign-workflow.spec.ts:78:9 › campaign completion: accepted creation preserves Home at 1024 (5.7s)
+2026-10-28T19:05:25.9228075Z   ✓    8 tests/e2e/campaign-workflow.spec.ts:207:7 › campaign response guards: labelled history pages and unavailable provenance at 1024 (4.8s)
+2026-10-28T19:05:28.5371727Z   ✓    9 tests/e2e/campaign-workflow.spec.ts:327:7 › campaign control: actual admission failure policy and pending cancellation at 1024 (2.6s)
+2026-10-28T19:05:30.6210109Z   ✓   10 tests/e2e/campaign-workflow.spec.ts:432:7 › campaign input bounds: deep imported matrix keeps authoring available at 1024 (2.1s)
+2026-10-28T19:05:39.3462024Z   ✓   11 tests/e2e/campaign-workflow.spec.ts:474:7 › campaign workflow: authoritative budgets, scheduling and immutable child inputs at 1024 (8.7s)
+2026-10-28T19:05:45.9198205Z   ✓   12 tests/e2e/campaign-workflow.spec.ts:600:7 › campaign workflow: retained native children reopen without scheduling at 1024 (6.6s)
+2026-10-28T19:05:51.0222687Z   ✓   13 tests/e2e/campaign-workflow.spec.ts:78:9 › campaign completion: accepted creation preserves newer draft at 1440 (5.1s)
+2026-10-28T19:05:56.0455130Z   ✓   14 tests/e2e/campaign-workflow.spec.ts:78:9 › campaign completion: accepted creation preserves Home at 1440 (5.0s)
+2026-10-28T19:06:01.1696927Z   ✓   15 tests/e2e/campaign-workflow.spec.ts:207:7 › campaign response guards: labelled history pages and unavailable provenance at 1440 (5.1s)
+2026-10-28T19:06:03.8164098Z   ✓   16 tests/e2e/campaign-workflow.spec.ts:327:7 › campaign control: actual admission failure policy and pending cancellation at 1440 (2.6s)
+2026-10-28T19:06:05.9148716Z   ✓   17 tests/e2e/campaign-workflow.spec.ts:432:7 › campaign input bounds: deep imported matrix keeps authoring available at 1440 (2.1s)
+2026-10-28T19:06:14.7844541Z   ✓   18 tests/e2e/campaign-workflow.spec.ts:474:7 › campaign workflow: authoritative budgets, scheduling and immutable child inputs at 1440 (8.9s)
+2026-10-28T19:06:21.8621005Z   ✓   19 tests/e2e/campaign-workflow.spec.ts:600:7 › campaign workflow: retained native children reopen without scheduling at 1440 (7.1s)
+2026-10-28T19:06:23.8497517Z   ✓   20 tests/e2e/catalog-wizard.spec.ts:10:5 › instance wizard: role, placement and realization are separate choices committed as existing XDL (2.0s)
+2026-10-28T19:06:25.5005085Z   ✓   21 tests/e2e/catalog-wizard.spec.ts:134:5 › instance wizard: configuration follows the definition's typed parameters and hidden selections cannot be submitted (1.6s)
+2026-10-28T19:06:28.6187587Z   ✓   22 tests/e2e/catalog-wizard.spec.ts:243:5 › instance wizard: representative service and controller instances are generic roles, not core types (3.1s)
+2026-10-28T19:06:29.7335407Z   ✓   23 tests/e2e/catalog-wizard.spec.ts:312:5 › instance wizard: a definition in a non-admitted XDL version stays inspectable but cannot be instantiated (1.1s)
+2026-10-28T19:06:30.6692306Z   ✓   24 tests/e2e/catalog-wizard.spec.ts:352:5 › implementation registration: invalid versions are refused and a registered artifact stays inert metadata (928ms)
+2026-10-28T19:06:33.7190056Z   ✓   25 tests/e2e/connection-accessibility.spec.ts:50:7 › connection accessibility: native typed flow and rejected identifier recovery at 1024x768 (3.0s)
+2026-10-28T19:06:36.4414894Z   ✓   26 tests/e2e/connection-accessibility.spec.ts:50:7 › connection accessibility: native typed flow and rejected identifier recovery at 1440x900 (2.7s)
+2026-10-28T19:06:37.9357510Z   ✓   27 tests/e2e/connections.spec.ts:65:5 › connections: admission is shown per flow and the connect form guides compatible targets (1.5s)
+2026-10-28T19:06:40.9346518Z   ✓   28 tests/e2e/connections.spec.ts:114:5 › connections: an undelayed feedback cycle and an undeclared converter are never admitted or converted (3.0s)
+2026-10-28T19:06:42.4552375Z   ✓   29 tests/e2e/connections.spec.ts:144:5 › connections: the owned feedback blueprint shows its admitted unit-delay loop and linear converter (1.5s)
+2026-10-28T19:06:45.6061215Z   ✓   30 tests/e2e/connections.spec.ts:192:5 › connections: relations are shown by kind with their own meaning and actions, and contracts are declared per flow (3.1s)
+2026-10-28T19:06:50.6548268Z   ✓   31 tests/e2e/connections.spec.ts:239:5 › connections: declared, resolved and observed communication are separate perspectives (5.0s)
+2026-10-28T19:06:58.7725976Z   ✓   32 tests/e2e/connections.spec.ts:312:5 › connections: an open observed perspective follows a running run to its final state (8.1s)
+2026-10-28T19:07:06.4823457Z   ✓   33 tests/e2e/deployment-accessibility.spec.ts:203:7 › deployment accessibility: native variant resource and mapping authoring at 1024x768 (7.7s)
+2026-10-28T19:07:08.1398519Z   ✓   34 tests/e2e/deployment-accessibility.spec.ts:495:9 › deployment accessibility: late clone preserves Home at 1024x768 (1.6s)
+2026-10-28T19:07:11.3383866Z   ✓   35 tests/e2e/deployment-accessibility.spec.ts:495:9 › deployment accessibility: late resource preserves Home at 1024x768 (3.2s)
+2026-10-28T19:07:13.5916330Z   ✓   36 tests/e2e/deployment-accessibility.spec.ts:495:9 › deployment accessibility: late mapping preserves Home at 1024x768 (2.2s)
+2026-10-28T19:07:18.0283838Z   ✓   37 tests/e2e/deployment-accessibility.spec.ts:630:9 › deployment accessibility: completion preserves newer reopened head at 1024x768 (4.4s)
+2026-10-28T19:07:22.1996631Z   ✓   38 tests/e2e/deployment-accessibility.spec.ts:630:9 › deployment accessibility: completion preserves deliberate focus at 1024x768 (4.2s)
+2026-10-28T19:07:26.7497686Z   ✓   39 tests/e2e/deployment-accessibility.spec.ts:630:9 › deployment accessibility: completion preserves different variant at 1024x768 (4.5s)
+2026-10-28T19:07:28.6527868Z   ✓   40 tests/e2e/deployment-accessibility.spec.ts:857:9 › deployment accessibility: explicit clone loading at 1024x768 (1.9s)
+2026-10-28T19:07:31.7601603Z   ✓   41 tests/e2e/deployment-accessibility.spec.ts:857:9 › deployment accessibility: newer readiness at 1024x768 (3.1s)
+2026-10-28T19:07:39.7653995Z   ✓   42 tests/e2e/deployment-accessibility.spec.ts:203:7 › deployment accessibility: native variant resource and mapping authoring at 1440x900 (8.0s)
+2026-10-28T19:07:41.3471967Z   ✓   43 tests/e2e/deployment-accessibility.spec.ts:495:9 › deployment accessibility: late clone preserves Home at 1440x900 (1.6s)
+2026-10-28T19:07:44.4287294Z   ✓   44 tests/e2e/deployment-accessibility.spec.ts:495:9 › deployment accessibility: late resource preserves Home at 1440x900 (3.1s)
+2026-10-28T19:07:46.5953513Z   ✓   45 tests/e2e/deployment-accessibility.spec.ts:495:9 › deployment accessibility: late mapping preserves Home at 1440x900 (2.2s)
+2026-10-28T19:07:50.7475401Z   ✓   46 tests/e2e/deployment-accessibility.spec.ts:630:9 › deployment accessibility: completion preserves newer reopened head at 1440x900 (4.1s)
+2026-10-28T19:07:54.2956816Z   ✓   47 tests/e2e/deployment-accessibility.spec.ts:630:9 › deployment accessibility: completion preserves deliberate focus at 1440x900 (3.5s)
+2026-10-28T19:07:58.6703801Z   ✓   48 tests/e2e/deployment-accessibility.spec.ts:630:9 › deployment accessibility: completion preserves different variant at 1440x900 (4.4s)
+2026-10-28T19:08:00.4761739Z   ✓   49 tests/e2e/deployment-accessibility.spec.ts:857:9 › deployment accessibility: explicit clone loading at 1440x900 (1.8s)
+2026-10-28T19:08:03.9116454Z   ✓   50 tests/e2e/deployment-accessibility.spec.ts:857:9 › deployment accessibility: newer readiness at 1440x900 (3.4s)
+2026-10-28T19:08:10.3696952Z   ✓   51 tests/e2e/deployment-resolution.spec.ts:44:5 › deployment resolution: effective values, bound resources and variant comparison (6.4s)
+2026-10-28T19:08:11.1401926Z   ✓   52 tests/e2e/deployment-resolution.spec.ts:207:5 › deployment binding form offers XDL realization classes and marks those the provider cannot execute (764ms)
+2026-10-28T19:08:13.1506465Z   ✓   53 tests/e2e/diagnostic-accessibility.spec.ts:53:7 › diagnostic accessibility: real invalid-source keyboard recovery at 1024x768 (2.0s)
+2026-10-28T19:08:15.2359576Z   ✓   54 tests/e2e/diagnostic-accessibility.spec.ts:108:7 › diagnostic accessibility: recorded and labeled transport outcomes at 1024x768 (2.1s)
+2026-10-28T19:08:19.1911663Z   ✓   55 tests/e2e/diagnostic-accessibility.spec.ts:174:7 › diagnostic accessibility: late preflight cannot reopen a departed workspace at 1024x768 (3.9s)
+2026-10-28T19:08:24.0146902Z   ✓   56 tests/e2e/diagnostic-accessibility.spec.ts:219:7 › diagnostic accessibility: real stale plan and labeled artifact recovery at 1024x768 (4.8s)
+2026-10-28T19:08:26.0232052Z   ✓   57 tests/e2e/diagnostic-accessibility.spec.ts:53:7 › diagnostic accessibility: real invalid-source keyboard recovery at 1440x900 (2.0s)
+2026-10-28T19:08:28.1967133Z   ✓   58 tests/e2e/diagnostic-accessibility.spec.ts:108:7 › diagnostic accessibility: recorded and labeled transport outcomes at 1440x900 (2.2s)
+2026-10-28T19:08:32.1422495Z   ✓   59 tests/e2e/diagnostic-accessibility.spec.ts:174:7 › diagnostic accessibility: late preflight cannot reopen a departed workspace at 1440x900 (3.9s)
+2026-10-28T19:08:37.0118328Z   ✓   60 tests/e2e/diagnostic-accessibility.spec.ts:219:7 › diagnostic accessibility: real stale plan and labeled artifact recovery at 1440x900 (4.9s)
+2026-10-28T19:08:38.9846839Z   ✓   61 tests/e2e/diagnostics.spec.ts:65:5 › diagnosis: recorded evidence separates facts, consequences and unknowns without inferring a cause (2.0s)
+2026-10-28T19:08:43.8277436Z   ✓   62 tests/e2e/diagnostics.spec.ts:139:5 › diagnosis: a completed owned run reports no findings and claims no functional health (4.8s)
+2026-10-28T19:08:45.9568103Z   ✓   63 tests/e2e/diagnostics.spec.ts:167:5 › diagnosis: an unavailable provider explains the blocked snapshot without misattributing unestablished facts (2.1s)
+2026-10-28T19:08:53.0752026Z   ✓   64 tests/e2e/draft-run-isolation.spec.ts:71:5 › draft/run isolation: graph undo and redo are new revisions that never change the running snapshot (7.1s)
+2026-10-28T19:08:54.4267931Z   ✓   65 tests/e2e/draft-run-isolation.spec.ts:186:5 › draft/run isolation: externally modified sources are preserved before an explicit recovery (1.3s)
+2026-10-28T19:08:57.8938149Z   ✓   66 tests/e2e/draft-run-isolation.spec.ts:238:5 › draft/run isolation: undo never crosses a change it did not record (3.5s)
+2026-10-28T19:08:59.0378853Z   ✓   67 tests/e2e/draft-run-isolation.spec.ts:295:5 › draft/run isolation: an unreadable committed source is restored from recorded history (1.1s)
+2026-10-28T19:09:02.7047113Z   ✓   68 tests/e2e/evidence-filters.spec.ts:69:5 › evidence filters: native receipt UTC, explicit source window and read-only emitter filtering (3.7s)
+2026-10-28T19:09:05.9147721Z   ✓   69 tests/e2e/evidence-filters.spec.ts:141:5 › evidence filters: display fixture never plots missing source time as zero or array index (3.2s)
+2026-10-28T19:09:11.0844678Z   ✓   70 tests/e2e/evidence-filters.spec.ts:237:5 › evidence filters: late original-run observations cannot overwrite an explicitly selected rerun (5.2s)
+2026-10-28T19:09:17.2658025Z   ✓   71 tests/e2e/evidence-filters.spec.ts:308:5 › evidence filters: sealed recorded fixture exact clocks, whole-run facets and bounded read-only pages at both viewports (6.2s)
+2026-10-28T19:09:20.3551950Z   ✓   72 tests/e2e/evidence-filters.spec.ts:580:5 › evidence filters: incompatible time resolution and numeric units remain table-only (3.1s)
+2026-10-28T19:09:23.4879476Z   ✓   73 tests/e2e/evidence-filters.spec.ts:708:5 › evidence filters: live buffer remains filterable after an aborted retained read (3.1s)
+2026-10-28T19:09:59.2535117Z   ✓   74 tests/e2e/frozen-input-deadline.spec.ts:8:5 › frozen input inspection: actual thirty-second deadline permits a fresh read (35.8s)
+2026-10-28T19:10:04.8313371Z   ✓   75 tests/e2e/frozen-input-inspection.spec.ts:26:9 › frozen input inspection normal at 1024 (5.6s)
+2026-10-28T19:10:10.4096827Z   ✓   76 tests/e2e/frozen-input-inspection.spec.ts:26:9 › frozen input inspection normal at 1440 (5.6s)
+2026-10-28T19:10:15.7653621Z   ✓   77 tests/e2e/frozen-input-inspection.spec.ts:26:9 › frozen input inspection new run at 1024 (5.3s)
+2026-10-28T19:10:21.1272489Z   ✓   78 tests/e2e/frozen-input-inspection.spec.ts:26:9 › frozen input inspection new run at 1440 (5.4s)
+2026-10-28T19:10:26.5302585Z   ✓   79 tests/e2e/frozen-input-inspection.spec.ts:26:9 › frozen input inspection Model at 1024 (5.4s)
+2026-10-28T19:10:31.9084872Z   ✓   80 tests/e2e/frozen-input-inspection.spec.ts:26:9 › frozen input inspection Model at 1440 (5.4s)
+2026-10-28T19:10:37.1959472Z   ✓   81 tests/e2e/frozen-input-inspection.spec.ts:26:9 › frozen input inspection Home at 1024 (5.3s)
+2026-10-28T19:10:42.5414687Z   ✓   82 tests/e2e/frozen-input-inspection.spec.ts:26:9 › frozen input inspection Home at 1440 (5.3s)
+2026-10-28T19:10:47.9765876Z   ✓   83 tests/e2e/frozen-input-inspection.spec.ts:26:9 › frozen input inspection tab at 1024 (5.4s)
+2026-10-28T19:10:53.2972406Z   ✓   84 tests/e2e/frozen-input-inspection.spec.ts:26:9 › frozen input inspection tab at 1440 (5.3s)
+2026-10-28T19:10:58.7592237Z   ✓   85 tests/e2e/frozen-input-inspection.spec.ts:26:9 › frozen input inspection focus at 1024 (5.5s)
+2026-10-28T19:11:04.1238946Z   ✓   86 tests/e2e/frozen-input-inspection.spec.ts:26:9 › frozen input inspection focus at 1440 (5.4s)
+2026-10-28T19:11:09.6162000Z   ✓   87 tests/e2e/frozen-input-inspection.spec.ts:26:9 › frozen input inspection back at 1024 (5.5s)
+2026-10-28T19:11:15.3316405Z   ✓   88 tests/e2e/frozen-input-inspection.spec.ts:26:9 › frozen input inspection back at 1440 (5.7s)
+2026-10-28T19:11:20.9753939Z   ✓   89 tests/e2e/frozen-input-inspection.spec.ts:26:9 › frozen input inspection HTTP503 at 1024 (5.6s)
+2026-10-28T19:11:26.4918566Z   ✓   90 tests/e2e/frozen-input-inspection.spec.ts:26:9 › frozen input inspection HTTP503 at 1440 (5.5s)
+2026-10-28T19:11:31.8897180Z   ✓   91 tests/e2e/frozen-input-inspection.spec.ts:26:9 › frozen input inspection wrong snapshot at 1024 (5.4s)
+2026-10-28T19:11:37.4132635Z   ✓   92 tests/e2e/frozen-input-inspection.spec.ts:26:9 › frozen input inspection wrong snapshot at 1440 (5.5s)
+2026-10-28T19:11:42.8730336Z   ✓   93 tests/e2e/frozen-input-inspection.spec.ts:26:9 › frozen input inspection wrong plan at 1024 (5.4s)
+2026-10-28T19:11:48.3523396Z   ✓   94 tests/e2e/frozen-input-inspection.spec.ts:26:9 › frozen input inspection wrong plan at 1440 (5.5s)
+2026-10-28T19:11:53.6562218Z   ✓   95 tests/e2e/frozen-input-inspection.spec.ts:26:9 › frozen input inspection malformed documents at 1024 (5.3s)
+2026-10-28T19:11:59.0315623Z   ✓   96 tests/e2e/frozen-input-inspection.spec.ts:26:9 › frozen input inspection malformed documents at 1440 (5.4s)
+2026-10-28T19:12:04.5791973Z   ✓   97 tests/e2e/frozen-input-inspection.spec.ts:26:9 › frozen input inspection unverified at 1024 (5.5s)
+2026-10-28T19:12:10.0292352Z   ✓   98 tests/e2e/frozen-input-inspection.spec.ts:26:9 › frozen input inspection unverified at 1440 (5.4s)
+2026-10-28T19:12:15.6068717Z   ✓   99 tests/e2e/frozen-input-inspection.spec.ts:26:9 › frozen input inspection missing authored at 1024 (5.6s)
+2026-10-28T19:12:21.0906309Z   ✓  100 tests/e2e/frozen-input-inspection.spec.ts:26:9 › frozen input inspection missing authored at 1440 (5.5s)
+2026-10-28T19:12:26.7578436Z   ✓  101 tests/e2e/frozen-input-inspection.spec.ts:26:9 › frozen input inspection superseded at 1024 (5.7s)
+2026-10-28T19:12:32.4152964Z   ✓  102 tests/e2e/frozen-input-inspection.spec.ts:26:9 › frozen input inspection superseded at 1440 (5.7s)
+2026-10-28T19:12:37.7461652Z   ✓  103 tests/e2e/frozen-input-inspection.spec.ts:26:9 › frozen input inspection duplicate at 1024 (5.3s)
+2026-10-28T19:12:43.2265489Z   ✓  104 tests/e2e/frozen-input-inspection.spec.ts:26:9 › frozen input inspection duplicate at 1440 (5.5s)
+2026-10-28T19:12:48.3103562Z   ✓  105 tests/e2e/frozen-rerun-acknowledgements.spec.ts:15:9 › owned rerun acknowledgement: normal at 1024 (5.1s)
+2026-10-28T19:12:53.5853897Z   ✓  106 tests/e2e/frozen-rerun-acknowledgements.spec.ts:15:9 › owned rerun acknowledgement: normal at 1440 (5.3s)
+2026-10-28T19:12:58.8869560Z   ✓  107 tests/e2e/frozen-rerun-acknowledgements.spec.ts:15:9 › owned rerun acknowledgement: annotations at 1024 (5.3s)
+2026-10-28T19:13:04.1280226Z   ✓  108 tests/e2e/frozen-rerun-acknowledgements.spec.ts:15:9 › owned rerun acknowledgement: annotations at 1440 (5.2s)
+2026-10-28T19:13:09.1540002Z   ✓  109 tests/e2e/frozen-rerun-acknowledgements.spec.ts:15:9 › owned rerun acknowledgement: focus at 1024 (5.0s)
+2026-10-28T19:13:14.2221855Z   ✓  110 tests/e2e/frozen-rerun-acknowledgements.spec.ts:15:9 › owned rerun acknowledgement: focus at 1440 (5.1s)
+2026-10-28T19:13:20.7386474Z   ✓  111 tests/e2e/frozen-rerun-acknowledgements.spec.ts:15:9 › owned rerun acknowledgement: newer run at 1024 (6.5s)
+2026-10-28T19:13:27.1108658Z   ✓  112 tests/e2e/frozen-rerun-acknowledgements.spec.ts:15:9 › owned rerun acknowledgement: newer run at 1440 (6.4s)
+2026-10-28T19:13:32.2524405Z   ✓  113 tests/e2e/frozen-rerun-acknowledgements.spec.ts:15:9 › owned rerun acknowledgement: operation identity at 1024 (5.1s)
+2026-10-28T19:13:37.5472346Z   ✓  114 tests/e2e/frozen-rerun-acknowledgements.spec.ts:15:9 › owned rerun acknowledgement: operation identity at 1440 (5.3s)
+2026-10-28T19:13:42.7901882Z   ✓  115 tests/e2e/frozen-rerun-acknowledgements.spec.ts:15:9 › owned rerun acknowledgement: child identity at 1024 (5.2s)
+2026-10-28T19:13:47.9522162Z   ✓  116 tests/e2e/frozen-rerun-acknowledgements.spec.ts:15:9 › owned rerun acknowledgement: child identity at 1440 (5.2s)
+2026-10-28T19:13:53.1344295Z   ✓  117 tests/e2e/frozen-rerun-acknowledgements.spec.ts:15:9 › owned rerun acknowledgement: lost acknowledgement at 1024 (5.2s)
+2026-10-28T19:13:58.2511999Z   ✓  118 tests/e2e/frozen-rerun-acknowledgements.spec.ts:15:9 › owned rerun acknowledgement: lost acknowledgement at 1440 (5.1s)
+2026-10-28T19:14:03.5129832Z   ✓  119 tests/e2e/frozen-rerun-completion.spec.ts:6:7 › frozen rerun context: actual acknowledgement preserves a newer Model view at 1024 (5.3s)
+2026-10-28T19:14:08.6802524Z   ✓  120 tests/e2e/frozen-rerun-completion.spec.ts:6:7 › frozen rerun context: actual acknowledgement preserves a newer Model view at 1440 (5.2s)
+2026-10-28T19:14:13.6382406Z   ✓  121 tests/e2e/frozen-rerun-receipt-guards.spec.ts:17:9 › rejected rerun receipt guard: failed at 1024 (4.9s)
+2026-10-28T19:14:18.7934114Z   ✓  122 tests/e2e/frozen-rerun-receipt-guards.spec.ts:17:9 › rejected rerun receipt guard: failed at 1440 (5.1s)
+2026-10-28T19:14:23.9386414Z   ✓  123 tests/e2e/frozen-rerun-receipt-guards.spec.ts:17:9 › rejected rerun receipt guard: unknown at 1024 (5.1s)
+2026-10-28T19:14:29.2359255Z   ✓  124 tests/e2e/frozen-rerun-receipt-guards.spec.ts:17:9 › rejected rerun receipt guard: unknown at 1440 (5.3s)
+2026-10-28T19:14:34.4194575Z   ✓  125 tests/e2e/frozen-rerun-receipt-guards.spec.ts:17:9 › rejected rerun receipt guard: rejected with child at 1024 (5.2s)
+2026-10-28T19:14:39.6791842Z   ✓  126 tests/e2e/frozen-rerun-receipt-guards.spec.ts:17:9 › rejected rerun receipt guard: rejected with child at 1440 (5.3s)
+2026-10-28T19:14:44.8712338Z   ✓  127 tests/e2e/frozen-rerun-receipt-guards.spec.ts:17:9 › rejected rerun receipt guard: rejected without error at 1024 (5.2s)
+2026-10-28T19:14:50.2104488Z   ✓  128 tests/e2e/frozen-rerun-receipt-guards.spec.ts:17:9 › rejected rerun receipt guard: rejected without error at 1440 (5.3s)
+2026-10-28T19:14:55.4689448Z   ✓  129 tests/e2e/frozen-rerun-receipt-guards.spec.ts:17:9 › rejected rerun receipt guard: rejected retryable at 1024 (5.2s)
+2026-10-28T19:15:00.7951108Z   ✓  130 tests/e2e/frozen-rerun-receipt-guards.spec.ts:17:9 › rejected rerun receipt guard: rejected retryable at 1440 (5.3s)
+2026-10-28T19:15:06.0232227Z   ✓  131 tests/e2e/frozen-rerun-receipt-guards.spec.ts:17:9 › rejected rerun receipt guard: rejected foreign scope at 1024 (5.2s)
+2026-10-28T19:15:11.3944008Z   ✓  132 tests/e2e/frozen-rerun-receipt-guards.spec.ts:17:9 › rejected rerun receipt guard: rejected foreign scope at 1440 (5.4s)
+2026-10-28T19:15:22.6793636Z   ✓  133 tests/e2e/frozen-rerun-rejections.spec.ts:10:9 › rejected rerun: normal actual capacity release permits explicit new admission at 1024 (11.3s)
+2026-10-28T19:15:33.2068679Z   ✓  134 tests/e2e/frozen-rerun-rejections.spec.ts:10:9 › rejected rerun: normal actual capacity release permits explicit new admission at 1440 (10.5s)
+2026-10-28T19:15:45.6801998Z   ✓  135 tests/e2e/frozen-rerun-rejections.spec.ts:10:9 › rejected rerun: reopen actual capacity release permits explicit new admission at 1024 (12.5s)
+2026-10-28T19:15:57.8394744Z   ✓  136 tests/e2e/frozen-rerun-rejections.spec.ts:10:9 › rejected rerun: reopen actual capacity release permits explicit new admission at 1440 (12.2s)
+2026-10-28T19:16:09.9657328Z   ✓  137 tests/e2e/frozen-rerun-rejections.spec.ts:10:9 › rejected rerun: newer key actual capacity release permits explicit new admission at 1024 (12.1s)
+2026-10-28T19:16:21.8786278Z   ✓  138 tests/e2e/frozen-rerun-rejections.spec.ts:10:9 › rejected rerun: newer key actual capacity release permits explicit new admission at 1440 (11.9s)
+2026-10-28T19:16:21.8947856Z   ✓  139 tests/e2e/html-patterns.spec.ts:7:5 › every HTML input pattern in the UI compiles with the Unicode-sets flag (10ms)
+2026-10-28T19:16:24.0088652Z   ✓  140 tests/e2e/hybrid-comparison.spec.ts:211:9 › hybrid comparison: coherent declarations at 1024 › native comparison separates declared clocks and controls from physical evidence (2.1s)
+2026-10-28T19:16:26.3781979Z   ✓  141 tests/e2e/hybrid-comparison.spec.ts:257:11 › hybrid comparison: coherent declarations at 1024 › actual mappings declarations preserve source and separate capability evidence (2.4s)
+2026-10-28T19:16:28.6026641Z   ✓  142 tests/e2e/hybrid-comparison.spec.ts:257:11 › hybrid comparison: coherent declarations at 1024 › actual physical declarations preserve source and separate capability evidence (2.2s)
+2026-10-28T19:16:31.4385092Z   ✓  143 tests/e2e/hybrid-comparison.spec.ts:257:11 › hybrid comparison: coherent declarations at 1024 › actual pages declarations preserve source and separate capability evidence (2.8s)
+2026-10-28T19:16:32.5650948Z   ✓  144 tests/e2e/hybrid-comparison.spec.ts:350:9 › hybrid comparison: coherent declarations at 1024 › actual stale revision refuses before comparison instead of adopting newer source (1.1s)
+2026-10-28T19:16:34.0222101Z   ✓  145 tests/e2e/hybrid-comparison.spec.ts:416:11 › hybrid comparison: coherent declarations at 1024 › labelled malformed project response is unavailable (1.4s)
+2026-10-28T19:16:35.3676457Z   ✓  146 tests/e2e/hybrid-comparison.spec.ts:416:11 › hybrid comparison: coherent declarations at 1024 › labelled malformed revision response is unavailable (1.3s)
+2026-10-28T19:16:36.8653963Z   ✓  147 tests/e2e/hybrid-comparison.spec.ts:416:11 › hybrid comparison: coherent declarations at 1024 › labelled malformed provider response is unavailable (1.5s)
+2026-10-28T19:16:38.5032628Z   ✓  148 tests/e2e/hybrid-comparison.spec.ts:416:11 › hybrid comparison: coherent declarations at 1024 › labelled malformed document response is unavailable (1.6s)
+2026-10-28T19:16:39.8321918Z   ✓  149 tests/e2e/hybrid-comparison.spec.ts:416:11 › hybrid comparison: coherent declarations at 1024 › labelled malformed source response is unavailable (1.3s)
+2026-10-28T19:16:41.4153776Z   ✓  150 tests/e2e/hybrid-comparison.spec.ts:416:11 › hybrid comparison: coherent declarations at 1024 › labelled malformed physical response is unavailable (1.6s)
+2026-10-28T19:16:42.7652382Z   ✓  151 tests/e2e/hybrid-comparison.spec.ts:416:11 › hybrid comparison: coherent declarations at 1024 › labelled malformed clock response is unavailable (1.3s)
+2026-10-28T19:16:44.1325152Z   ✓  152 tests/e2e/hybrid-comparison.spec.ts:416:11 › hybrid comparison: coherent declarations at 1024 › labelled malformed binding response is unavailable (1.4s)
+2026-10-28T19:16:45.4681541Z   ✓  153 tests/e2e/hybrid-comparison.spec.ts:416:11 › hybrid comparison: coherent declarations at 1024 › labelled malformed size response is unavailable (1.3s)
+2026-10-28T19:16:46.8906348Z   ✓  154 tests/e2e/hybrid-comparison.spec.ts:416:11 › hybrid comparison: coherent declarations at 1024 › labelled malformed tree response is unavailable (1.4s)
+2026-10-28T19:16:48.5379353Z   ✓  155 tests/e2e/hybrid-comparison.spec.ts:484:11 › hybrid comparison: coherent declarations at 1024 › held real response respects newer Home intent (1.6s)
+2026-10-28T19:16:50.1692085Z   ✓  156 tests/e2e/hybrid-comparison.spec.ts:484:11 › hybrid comparison: coherent declarations at 1024 › held real response respects newer selection intent (1.6s)
+2026-10-28T19:16:51.9613429Z   ✓  157 tests/e2e/hybrid-comparison.spec.ts:484:11 › hybrid comparison: coherent declarations at 1024 › held real response respects newer focus intent (1.8s)
+2026-10-28T19:16:53.3996106Z   ✓  158 tests/e2e/hybrid-comparison.spec.ts:484:11 › hybrid comparison: coherent declarations at 1024 › held real response respects newer dialog intent (1.4s)
+2026-10-28T19:16:55.3132007Z   ✓  159 tests/e2e/hybrid-comparison.spec.ts:211:9 › hybrid comparison: coherent declarations at 1440 › native comparison separates declared clocks and controls from physical evidence (1.9s)
+2026-10-28T19:16:57.3618520Z   ✓  160 tests/e2e/hybrid-comparison.spec.ts:257:11 › hybrid comparison: coherent declarations at 1440 › actual mappings declarations preserve source and separate capability evidence (2.0s)
+2026-10-28T19:16:59.3370595Z   ✓  161 tests/e2e/hybrid-comparison.spec.ts:257:11 › hybrid comparison: coherent declarations at 1440 › actual physical declarations preserve source and separate capability evidence (2.0s)
+2026-10-28T19:17:01.6898052Z   ✓  162 tests/e2e/hybrid-comparison.spec.ts:257:11 › hybrid comparison: coherent declarations at 1440 › actual pages declarations preserve source and separate capability evidence (2.3s)
+2026-10-28T19:17:02.9420404Z   ✓  163 tests/e2e/hybrid-comparison.spec.ts:350:9 › hybrid comparison: coherent declarations at 1440 › actual stale revision refuses before comparison instead of adopting newer source (1.2s)
+2026-10-28T19:17:04.4430552Z   ✓  164 tests/e2e/hybrid-comparison.spec.ts:416:11 › hybrid comparison: coherent declarations at 1440 › labelled malformed project response is unavailable (1.5s)
+2026-10-28T19:17:05.7733888Z   ✓  165 tests/e2e/hybrid-comparison.spec.ts:416:11 › hybrid comparison: coherent declarations at 1440 › labelled malformed revision response is unavailable (1.3s)
+2026-10-28T19:17:07.3013441Z   ✓  166 tests/e2e/hybrid-comparison.spec.ts:416:11 › hybrid comparison: coherent declarations at 1440 › labelled malformed provider response is unavailable (1.5s)
+2026-10-28T19:17:08.9408816Z   ✓  167 tests/e2e/hybrid-comparison.spec.ts:416:11 › hybrid comparison: coherent declarations at 1440 › labelled malformed document response is unavailable (1.6s)
+2026-10-28T19:17:10.3102480Z   ✓  168 tests/e2e/hybrid-comparison.spec.ts:416:11 › hybrid comparison: coherent declarations at 1440 › labelled malformed source response is unavailable (1.4s)
+2026-10-28T19:17:11.6435099Z   ✓  169 tests/e2e/hybrid-comparison.spec.ts:416:11 › hybrid comparison: coherent declarations at 1440 › labelled malformed physical response is unavailable (1.3s)
+2026-10-28T19:17:13.1577876Z   ✓  170 tests/e2e/hybrid-comparison.spec.ts:416:11 › hybrid comparison: coherent declarations at 1440 › labelled malformed clock response is unavailable (1.5s)
+2026-10-28T19:17:15.1065548Z   ✓  171 tests/e2e/hybrid-comparison.spec.ts:416:11 › hybrid comparison: coherent declarations at 1440 › labelled malformed binding response is unavailable (1.9s)
+2026-10-28T19:17:16.6237196Z   ✓  172 tests/e2e/hybrid-comparison.spec.ts:416:11 › hybrid comparison: coherent declarations at 1440 › labelled malformed size response is unavailable (1.5s)
+2026-10-28T19:17:18.0227497Z   ✓  173 tests/e2e/hybrid-comparison.spec.ts:416:11 › hybrid comparison: coherent declarations at 1440 › labelled malformed tree response is unavailable (1.4s)
+2026-10-28T19:17:19.5015740Z   ✓  174 tests/e2e/hybrid-comparison.spec.ts:484:11 › hybrid comparison: coherent declarations at 1440 › held real response respects newer Home intent (1.5s)
+2026-10-28T19:17:20.9758602Z   ✓  175 tests/e2e/hybrid-comparison.spec.ts:484:11 › hybrid comparison: coherent declarations at 1440 › held real response respects newer selection intent (1.5s)
+2026-10-28T19:17:22.6231885Z   ✓  176 tests/e2e/hybrid-comparison.spec.ts:484:11 › hybrid comparison: coherent declarations at 1440 › held real response respects newer focus intent (1.6s)
+2026-10-28T19:17:23.9548487Z   ✓  177 tests/e2e/hybrid-comparison.spec.ts:484:11 › hybrid comparison: coherent declarations at 1440 › held real response respects newer dialog intent (1.3s)
+2026-10-28T19:17:27.2768808Z   ✓  178 tests/e2e/lab-inventory-accessibility.spec.ts:24:7 › lab inventory: maximum Unicode metadata remains observable at 1024x768 (3.3s)
+2026-10-28T19:17:30.8091831Z   ✓  179 tests/e2e/lab-inventory-accessibility.spec.ts:24:7 › lab inventory: maximum Unicode metadata remains observable at 1440x900 (3.5s)
+2026-10-28T19:17:34.1396637Z   ✓  180 tests/e2e/lab-inventory-accessibility.spec.ts:70:7 › lab inventory: missing physical declaration stays unknown at 1024x768 (3.3s)
+2026-10-28T19:17:37.5616164Z   ✓  181 tests/e2e/lab-inventory-accessibility.spec.ts:70:7 › lab inventory: missing physical declaration stays unknown at 1440x900 (3.4s)
+2026-10-28T19:17:40.9411087Z   ✓  182 tests/e2e/lab-inventory-accessibility.spec.ts:220:7 › lab inventory: actual empty observation and native refresh at 1024x768 (3.4s)
+2026-10-28T19:17:44.4249892Z   ✓  183 tests/e2e/lab-inventory-accessibility.spec.ts:278:7 › lab inventory: HTTP503 retry reads actual inventory at 1024x768 (3.5s)
+2026-10-28T19:17:47.8765999Z   ✓  184 tests/e2e/lab-inventory-accessibility.spec.ts:330:9 › lab inventory: missing completeness remains unknown at 1024x768 (3.4s)
+2026-10-28T19:17:51.4606951Z   ✓  185 tests/e2e/lab-inventory-accessibility.spec.ts:330:9 › lab inventory: duplicate identity remains unknown at 1024x768 (3.6s)
+2026-10-28T19:17:54.9112064Z   ✓  186 tests/e2e/lab-inventory-accessibility.spec.ts:330:9 › lab inventory: unsupported authority remains unknown at 1024x768 (3.4s)
+2026-10-28T19:17:58.4404703Z   ✓  187 tests/e2e/lab-inventory-accessibility.spec.ts:330:9 › lab inventory: non-progressing cursor remains unknown at 1024x768 (3.5s)
+2026-10-28T19:18:01.9989071Z   ✓  188 tests/e2e/lab-inventory-accessibility.spec.ts:378:9 › lab inventory: unknown metadata has explicit limits at 1024x768 (3.6s)
+2026-10-28T19:18:05.3241542Z   ✓  189 tests/e2e/lab-inventory-accessibility.spec.ts:378:9 › lab inventory: truncated observation has explicit limits at 1024x768 (3.3s)
+2026-10-28T19:18:08.9769879Z   ✓  190 tests/e2e/lab-inventory-accessibility.spec.ts:378:9 › lab inventory: inert metadata has explicit limits at 1024x768 (3.6s)
+2026-10-28T19:18:14.6856748Z   ✓  191 tests/e2e/lab-inventory-accessibility.spec.ts:495:9 › lab inventory: native pages preserve bounded page observations at 1024x768 (5.7s)
+2026-10-28T19:18:20.2000648Z   ✓  192 tests/e2e/lab-inventory-accessibility.spec.ts:495:9 › lab inventory: native pages recover actual first page after failure at 1024x768 (5.5s)
+2026-10-28T19:18:23.6331564Z   ✓  193 tests/e2e/lab-inventory-accessibility.spec.ts:594:9 › lab inventory: departed context ignores held HTTP200 at 1024x768 (3.4s)
+2026-10-28T19:18:27.1765739Z   ✓  194 tests/e2e/lab-inventory-accessibility.spec.ts:594:9 › lab inventory: departed context ignores held HTTP503 at 1024x768 (3.5s)
+2026-10-28T19:18:30.7265301Z   ✓  195 tests/e2e/lab-inventory-accessibility.spec.ts:661:7 › lab inventory: pending repeat and moved focus retain one observation at 1024x768 (3.5s)
+2026-10-28T19:18:34.2987579Z   ✓  196 tests/e2e/lab-inventory-accessibility.spec.ts:220:7 › lab inventory: actual empty observation and native refresh at 1440x900 (3.6s)
+2026-10-28T19:18:37.8176861Z   ✓  197 tests/e2e/lab-inventory-accessibility.spec.ts:278:7 › lab inventory: HTTP503 retry reads actual inventory at 1440x900 (3.5s)
+2026-10-28T19:18:41.3071666Z   ✓  198 tests/e2e/lab-inventory-accessibility.spec.ts:330:9 › lab inventory: missing completeness remains unknown at 1440x900 (3.5s)
+2026-10-28T19:18:44.8311499Z   ✓  199 tests/e2e/lab-inventory-accessibility.spec.ts:330:9 › lab inventory: duplicate identity remains unknown at 1440x900 (3.5s)
+2026-10-28T19:18:48.3809853Z   ✓  200 tests/e2e/lab-inventory-accessibility.spec.ts:330:9 › lab inventory: unsupported authority remains unknown at 1440x900 (3.5s)
+2026-10-28T19:18:51.9162021Z   ✓  201 tests/e2e/lab-inventory-accessibility.spec.ts:330:9 › lab inventory: non-progressing cursor remains unknown at 1440x900 (3.5s)
+2026-10-28T19:18:55.3815068Z   ✓  202 tests/e2e/lab-inventory-accessibility.spec.ts:378:9 › lab inventory: unknown metadata has explicit limits at 1440x900 (3.5s)
+2026-10-28T19:18:58.9653975Z   ✓  203 tests/e2e/lab-inventory-accessibility.spec.ts:378:9 › lab inventory: truncated observation has explicit limits at 1440x900 (3.6s)
+2026-10-28T19:19:02.4550038Z   ✓  204 tests/e2e/lab-inventory-accessibility.spec.ts:378:9 › lab inventory: inert metadata has explicit limits at 1440x900 (3.5s)
+2026-10-28T19:19:08.4514122Z   ✓  205 tests/e2e/lab-inventory-accessibility.spec.ts:495:9 › lab inventory: native pages preserve bounded page observations at 1440x900 (6.0s)
+2026-10-28T19:19:13.9189033Z   ✓  206 tests/e2e/lab-inventory-accessibility.spec.ts:495:9 › lab inventory: native pages recover actual first page after failure at 1440x900 (5.5s)
+2026-10-28T19:19:17.5011067Z   ✓  207 tests/e2e/lab-inventory-accessibility.spec.ts:594:9 › lab inventory: departed context ignores held HTTP200 at 1440x900 (3.6s)
+2026-10-28T19:19:21.0191975Z   ✓  208 tests/e2e/lab-inventory-accessibility.spec.ts:594:9 › lab inventory: departed context ignores held HTTP503 at 1440x900 (3.5s)
+2026-10-28T19:19:24.7150158Z   ✓  209 tests/e2e/lab-inventory-accessibility.spec.ts:661:7 › lab inventory: pending repeat and moved focus retain one observation at 1440x900 (3.7s)
+2026-10-28T19:19:28.0289343Z   ✓  210 tests/e2e/lab-inventory-accessibility.spec.ts:737:9 › lab inventory: incomplete public observation at 1024x768 (3.3s)
+2026-10-28T19:19:31.4182425Z   ✓  211 tests/e2e/lab-inventory-accessibility.spec.ts:737:9 › lab inventory: observed public observation at 1024x768 (3.4s)
+2026-10-28T19:19:34.8274321Z   ✓  212 tests/e2e/lab-inventory-accessibility.spec.ts:737:9 › lab inventory: incomplete public observation at 1440x900 (3.4s)
+2026-10-28T19:19:38.1791428Z   ✓  213 tests/e2e/lab-inventory-accessibility.spec.ts:737:9 › lab inventory: observed public observation at 1440x900 (3.3s)
+2026-10-28T19:19:39.5844864Z   ✓  214 tests/e2e/lab-probes-configured.spec.ts:28:9 › configured lab probes at 1024 › explicit observation preserves clocks, private boundaries and canonical run state (1.4s)
+2026-10-28T19:19:40.8822235Z   ✓  215 tests/e2e/lab-probes-configured.spec.ts:60:11 › configured lab probes at 1024 › observation grant is independent › lease observe permission cannot enable a probe or bypass backend authority (1.3s)
+2026-10-28T19:19:42.1605585Z   ✓  216 tests/e2e/lab-probes-configured.spec.ts:80:13 › configured lab probes at 1024 › unavailable › negative or uncertain observation remains separate from readiness and is never repeated by inspection (1.3s)
+2026-10-28T19:19:43.4881020Z   ✓  217 tests/e2e/lab-probes-configured.spec.ts:80:13 › configured lab probes at 1024 › unknown › negative or uncertain observation remains separate from readiness and is never repeated by inspection (1.3s)
+2026-10-28T19:19:44.8245449Z   ✓  218 tests/e2e/lab-probes-configured.spec.ts:80:13 › configured lab probes at 1024 › revoked › negative or uncertain observation remains separate from readiness and is never repeated by inspection (1.3s)
+2026-10-28T19:19:46.2177479Z   ✓  219 tests/e2e/lab-probes-configured.spec.ts:80:13 › configured lab probes at 1024 › timeout › negative or uncertain observation remains separate from readiness and is never repeated by inspection (1.4s)
+2026-10-28T19:19:47.5355181Z   ✓  220 tests/e2e/lab-probes-configured.spec.ts:100:11 › configured lab probes at 1024 › changed host binding › typed predelegation refusal settles the first request without a provider call (1.3s)
+2026-10-28T19:19:48.9503196Z   ✓  221 tests/e2e/lab-probes-configured.spec.ts:28:9 › configured lab probes at 1440 › explicit observation preserves clocks, private boundaries and canonical run state (1.4s)
+2026-10-28T19:19:50.2428985Z   ✓  222 tests/e2e/lab-probes-configured.spec.ts:60:11 › configured lab probes at 1440 › observation grant is independent › lease observe permission cannot enable a probe or bypass backend authority (1.3s)
+2026-10-28T19:19:51.6449257Z   ✓  223 tests/e2e/lab-probes-configured.spec.ts:80:13 › configured lab probes at 1440 › unavailable › negative or uncertain observation remains separate from readiness and is never repeated by inspection (1.4s)
+2026-10-28T19:19:52.8327074Z   ✓  224 tests/e2e/lab-probes-configured.spec.ts:80:13 › configured lab probes at 1440 › unknown › negative or uncertain observation remains separate from readiness and is never repeated by inspection (1.2s)
+2026-10-28T19:19:54.1518105Z   ✓  225 tests/e2e/lab-probes-configured.spec.ts:80:13 › configured lab probes at 1440 › revoked › negative or uncertain observation remains separate from readiness and is never repeated by inspection (1.3s)
+2026-10-28T19:19:55.4447393Z   ✓  226 tests/e2e/lab-probes-configured.spec.ts:80:13 › configured lab probes at 1440 › timeout › negative or uncertain observation remains separate from readiness and is never repeated by inspection (1.3s)
+2026-10-28T19:19:56.7689019Z   ✓  227 tests/e2e/lab-probes-configured.spec.ts:100:11 › configured lab probes at 1440 › changed host binding › typed predelegation refusal settles the first request without a provider call (1.3s)
+2026-10-28T19:19:58.7012813Z   ✓  228 tests/e2e/lab-probes-recovery.spec.ts:43:9 › lab probe recovery at 1024 › lost actual acknowledgement survives reload and retries the exact original identity (1.9s)
+2026-10-28T19:19:59.9931822Z   ✓  229 tests/e2e/lab-probes-recovery.spec.ts:67:9 › lab probe recovery at 1024 › departure preserves the original pending operation without reopening the view (1.3s)
+2026-10-28T19:20:01.1826561Z   ✓  230 tests/e2e/lab-probes-recovery.spec.ts:84:9 › lab probe recovery at 1024 › departed options cannot restore stale eligibility or focus (1.2s)
+2026-10-28T19:20:02.3912837Z   ✓  231 tests/e2e/lab-probes-recovery.spec.ts:100:11 › lab probe recovery at 1024 › options preserves deliberate keyboard focus (1.2s)
+2026-10-28T19:20:03.5851963Z   ✓  232 tests/e2e/lab-probes-recovery.spec.ts:100:11 › lab probe recovery at 1024 › acknowledgement preserves deliberate keyboard focus (1.2s)
+2026-10-28T19:20:04.7082046Z   ✓  233 tests/e2e/lab-probes-recovery.spec.ts:114:9 › lab probe recovery at 1024 › acknowledgement cannot steal focus from a labelled native dialog guard control (1.1s)
+2026-10-28T19:20:05.9053977Z   ✓  234 tests/e2e/lab-probes-recovery.spec.ts:132:9 › lab probe recovery at 1024 › repeat pending Enter never creates another observation (1.2s)
+2026-10-28T19:20:07.0070265Z   ✓  235 tests/e2e/lab-probes-recovery.spec.ts:144:11 › lab probe recovery at 1024 › labelled malformed version options remain unknown and disable contact (1.1s)
+2026-10-28T19:20:08.0980900Z   ✓  236 tests/e2e/lab-probes-recovery.spec.ts:144:11 › lab probe recovery at 1024 › labelled malformed asset options remain unknown and disable contact (1.1s)
+2026-10-28T19:20:09.1893434Z   ✓  237 tests/e2e/lab-probes-recovery.spec.ts:144:11 › lab probe recovery at 1024 › labelled malformed authority options remain unknown and disable contact (1.1s)
+2026-10-28T19:20:10.3889052Z   ✓  238 tests/e2e/lab-probes-recovery.spec.ts:164:11 › lab probe recovery at 1024 › labelled malformed binding acknowledgement retains same-key recovery (1.2s)
+2026-10-28T19:20:11.5847387Z   ✓  239 tests/e2e/lab-probes-recovery.spec.ts:164:11 › lab probe recovery at 1024 › labelled malformed authority acknowledgement retains same-key recovery (1.2s)
+2026-10-28T19:20:12.8828118Z   ✓  240 tests/e2e/lab-probes-recovery.spec.ts:183:11 › lab probe recovery at 1024 › storage failure before-send preserves original request and never duplicates provider work (1.3s)
+2026-10-28T19:20:14.1854931Z   ✓  241 tests/e2e/lab-probes-recovery.spec.ts:183:11 › lab probe recovery at 1024 › storage failure after-ack preserves original request and never duplicates provider work (1.3s)
+2026-10-28T19:20:15.3887649Z   ✓  242 tests/e2e/lab-probes-recovery.spec.ts:204:9 › lab probe recovery at 1024 › unreadable saved metadata is preserved and cannot start another observation (1.2s)
+2026-10-28T19:20:17.2209474Z   ✓  243 tests/e2e/lab-probes-recovery.spec.ts:43:9 › lab probe recovery at 1440 › lost actual acknowledgement survives reload and retries the exact original identity (1.8s)
+2026-10-28T19:20:18.5108354Z   ✓  244 tests/e2e/lab-probes-recovery.spec.ts:67:9 › lab probe recovery at 1440 › departure preserves the original pending operation without reopening the view (1.3s)
+2026-10-28T19:20:19.6981907Z   ✓  245 tests/e2e/lab-probes-recovery.spec.ts:84:9 › lab probe recovery at 1440 › departed options cannot restore stale eligibility or focus (1.2s)
+2026-10-28T19:20:20.7820992Z   ✓  246 tests/e2e/lab-probes-recovery.spec.ts:100:11 › lab probe recovery at 1440 › options preserves deliberate keyboard focus (1.1s)
+2026-10-28T19:20:22.0657556Z   ✓  247 tests/e2e/lab-probes-recovery.spec.ts:100:11 › lab probe recovery at 1440 › acknowledgement preserves deliberate keyboard focus (1.3s)
+2026-10-28T19:20:23.2545425Z   ✓  248 tests/e2e/lab-probes-recovery.spec.ts:114:9 › lab probe recovery at 1440 › acknowledgement cannot steal focus from a labelled native dialog guard control (1.2s)
+2026-10-28T19:20:24.4475515Z   ✓  249 tests/e2e/lab-probes-recovery.spec.ts:132:9 › lab probe recovery at 1440 › repeat pending Enter never creates another observation (1.2s)
+2026-10-28T19:20:25.5662783Z   ✓  250 tests/e2e/lab-probes-recovery.spec.ts:144:11 › lab probe recovery at 1440 › labelled malformed version options remain unknown and disable contact (1.1s)
+2026-10-28T19:20:26.6471758Z   ✓  251 tests/e2e/lab-probes-recovery.spec.ts:144:11 › lab probe recovery at 1440 › labelled malformed asset options remain unknown and disable contact (1.1s)
+2026-10-28T19:20:27.7141888Z   ✓  252 tests/e2e/lab-probes-recovery.spec.ts:144:11 › lab probe recovery at 1440 › labelled malformed authority options remain unknown and disable contact (1.1s)
+2026-10-28T19:20:28.9810878Z   ✓  253 tests/e2e/lab-probes-recovery.spec.ts:164:11 › lab probe recovery at 1440 › labelled malformed binding acknowledgement retains same-key recovery (1.3s)
+2026-10-28T19:20:30.1464635Z   ✓  254 tests/e2e/lab-probes-recovery.spec.ts:164:11 › lab probe recovery at 1440 › labelled malformed authority acknowledgement retains same-key recovery (1.2s)
+2026-10-28T19:20:31.3262845Z   ✓  255 tests/e2e/lab-probes-recovery.spec.ts:183:11 › lab probe recovery at 1440 › storage failure before-send preserves original request and never duplicates provider work (1.2s)
+2026-10-28T19:20:32.5098377Z   ✓  256 tests/e2e/lab-probes-recovery.spec.ts:183:11 › lab probe recovery at 1440 › storage failure after-ack preserves original request and never duplicates provider work (1.2s)
+2026-10-28T19:20:33.6325060Z   ✓  257 tests/e2e/lab-probes-recovery.spec.ts:204:9 › lab probe recovery at 1440 › unreadable saved metadata is preserved and cannot start another observation (1.1s)
+2026-10-28T19:20:34.9411463Z   ✓  258 tests/e2e/lab-probes.spec.ts:6:9 › lab probes at 1024 › lease installation alone shows explicit observation unavailable without contact (1.3s)
+2026-10-28T19:20:36.1071897Z   ✓  259 tests/e2e/lab-probes.spec.ts:6:9 › lab probes at 1440 › lease installation alone shows explicit observation unavailable without contact (1.2s)
+2026-10-28T19:20:37.3729088Z   ✓  260 tests/e2e/lab-reservations.spec.ts:21:9 › lab reservations at 1024 › a failed saved-request deletion reports the refusal and preserves explicit retry (1.2s)
+2026-10-28T19:20:39.9374121Z   ✓  261 tests/e2e/lab-reservations.spec.ts:49:9 › lab reservations at 1024 › expired deadline removes renewal eligibility and explicit refresh retains terminal history (2.6s)
+2026-10-28T19:20:41.1332177Z   ✓  262 tests/e2e/lab-reservations.spec.ts:65:11 › lab reservations at 1024 › ungranted scope is explicit and invalid option authority never enables reservation (1.2s)
+2026-10-28T19:20:43.6172042Z   ✓  263 tests/e2e/lab-reservations.spec.ts:65:11 › lab reservations at 1024 › ungranted scope is explicit and invalid option authority never enables reservation — labelled delayed React commit (2.5s)
+2026-10-28T19:20:44.7854401Z   ✓  264 tests/e2e/lab-reservations.spec.ts:108:11 › lab reservations at 1024 › departed options ignore held actual response with labelled status 200 (1.2s)
+2026-10-28T19:20:45.9477861Z   ✓  265 tests/e2e/lab-reservations.spec.ts:108:11 › lab reservations at 1024 › departed options ignore held actual response with labelled status 503 (1.2s)
+2026-10-28T19:20:46.9978323Z   ✓  266 tests/e2e/lab-reservations.spec.ts:134:11 › lab reservations at 1024 › options completion preserves moved focus (1.0s)
+2026-10-28T19:20:48.0474266Z   ✓  267 tests/e2e/lab-reservations.spec.ts:134:11 › lab reservations at 1024 › options completion preserves labelled native dialog (1.0s)
+2026-10-28T19:20:49.3985122Z   ✓  268 tests/e2e/lab-reservations.spec.ts:175:9 › lab reservations at 1024 › late mutation after Home retains original request for explicit recovery (1.3s)
+2026-10-28T19:20:50.9637914Z   ✓  269 tests/e2e/lab-reservations.spec.ts:206:9 › lab reservations at 1024 › native keyboard reserve renew release preserves identity and runtime boundary (1.6s)
+2026-10-28T19:20:52.3198257Z   ✓  270 tests/e2e/lab-reservations.spec.ts:232:9 › lab reservations at 1024 › refused retry and foreign receipt cannot erase an earlier unconfirmed operation (1.4s)
+2026-10-28T19:20:55.5702497Z   ✓  271 tests/e2e/lab-reservations.spec.ts:270:11 › lab reservations at 1024 › local history pages › bounded independent pages preserve released ownership (3.2s)
+2026-10-28T19:20:56.9161862Z   ✓  272 tests/e2e/lab-reservations.spec.ts:285:9 › lab reservations at 1024 › lost HTTP response retries the original accepted key after leaving and reopening (1.3s)
+2026-10-28T19:20:58.2701205Z   ✓  273 tests/e2e/lab-reservations.spec.ts:326:13 › lab reservations at 1024 › reserve-unknown › actual configured ownership and independent permission states (1.3s)
+2026-10-28T19:20:59.5725320Z   ✓  274 tests/e2e/lab-reservations.spec.ts:326:13 › lab reservations at 1024 › release-unknown › actual configured ownership and independent permission states (1.3s)
+2026-10-28T19:21:00.8341566Z   ✓  275 tests/e2e/lab-reservations.spec.ts:326:13 › lab reservations at 1024 › revoked › actual configured ownership and independent permission states (1.3s)
+2026-10-28T19:21:01.9559058Z   ✓  276 tests/e2e/lab-reservations.spec.ts:326:13 › lab reservations at 1024 › restart › actual configured ownership and independent permission states (1.1s)
+2026-10-28T19:21:03.2212556Z   ✓  277 tests/e2e/lab-reservations.spec.ts:326:13 › lab reservations at 1024 › scopes › actual configured ownership and independent permission states (1.3s)
+2026-10-28T19:21:04.4971563Z   ✓  278 tests/e2e/lab-reservations.spec.ts:21:9 › lab reservations at 1440 › a failed saved-request deletion reports the refusal and preserves explicit retry (1.3s)
+2026-10-28T19:21:07.0967792Z   ✓  279 tests/e2e/lab-reservations.spec.ts:49:9 › lab reservations at 1440 › expired deadline removes renewal eligibility and explicit refresh retains terminal history (2.6s)
+2026-10-28T19:21:08.3797827Z   ✓  280 tests/e2e/lab-reservations.spec.ts:65:11 › lab reservations at 1440 › ungranted scope is explicit and invalid option authority never enables reservation (1.3s)
+2026-10-28T19:21:10.8618078Z   ✓  281 tests/e2e/lab-reservations.spec.ts:65:11 › lab reservations at 1440 › ungranted scope is explicit and invalid option authority never enables reservation — labelled delayed React commit (2.5s)
+2026-10-28T19:21:12.0406262Z   ✓  282 tests/e2e/lab-reservations.spec.ts:108:11 › lab reservations at 1440 › departed options ignore held actual response with labelled status 200 (1.2s)
+2026-10-28T19:21:13.2478192Z   ✓  283 tests/e2e/lab-reservations.spec.ts:108:11 › lab reservations at 1440 › departed options ignore held actual response with labelled status 503 (1.2s)
+2026-10-28T19:21:14.4261037Z   ✓  284 tests/e2e/lab-reservations.spec.ts:134:11 › lab reservations at 1440 › options completion preserves moved focus (1.2s)
+2026-10-28T19:21:15.5201642Z   ✓  285 tests/e2e/lab-reservations.spec.ts:134:11 › lab reservations at 1440 › options completion preserves labelled native dialog (1.1s)
+2026-10-28T19:21:16.8981913Z   ✓  286 tests/e2e/lab-reservations.spec.ts:175:9 › lab reservations at 1440 › late mutation after Home retains original request for explicit recovery (1.4s)
+2026-10-28T19:21:18.4729043Z   ✓  287 tests/e2e/lab-reservations.spec.ts:206:9 › lab reservations at 1440 › native keyboard reserve renew release preserves identity and runtime boundary (1.6s)
+2026-10-28T19:21:19.8604967Z   ✓  288 tests/e2e/lab-reservations.spec.ts:232:9 › lab reservations at 1440 › refused retry and foreign receipt cannot erase an earlier unconfirmed operation (1.4s)
+2026-10-28T19:21:22.9771393Z   ✓  289 tests/e2e/lab-reservations.spec.ts:270:11 › lab reservations at 1440 › local history pages › bounded independent pages preserve released ownership (3.1s)
+2026-10-28T19:21:24.2581705Z   ✓  290 tests/e2e/lab-reservations.spec.ts:285:9 › lab reservations at 1440 › lost HTTP response retries the original accepted key after leaving and reopening (1.3s)
+2026-10-28T19:21:25.4574316Z   ✓  291 tests/e2e/lab-reservations.spec.ts:326:13 › lab reservations at 1440 › reserve-unknown › actual configured ownership and independent permission states (1.2s)
+2026-10-28T19:21:26.8257716Z   ✓  292 tests/e2e/lab-reservations.spec.ts:326:13 › lab reservations at 1440 › release-unknown › actual configured ownership and independent permission states (1.4s)
+2026-10-28T19:21:28.0906412Z   ✓  293 tests/e2e/lab-reservations.spec.ts:326:13 › lab reservations at 1440 › revoked › actual configured ownership and independent permission states (1.3s)
+2026-10-28T19:21:29.2931679Z   ✓  294 tests/e2e/lab-reservations.spec.ts:326:13 › lab reservations at 1440 › restart › actual configured ownership and independent permission states (1.2s)
+2026-10-28T19:21:30.5737977Z   ✓  295 tests/e2e/lab-reservations.spec.ts:326:13 › lab reservations at 1440 › scopes › actual configured ownership and independent permission states (1.3s)
+2026-10-28T19:21:30.8379863Z   ✓  296 tests/e2e/modal-keyboard.spec.ts:74:5 › modal early keyboard: New dialog handles Escape immediately after mount (256ms)
+2026-10-28T19:21:32.2432462Z   ✓  297 tests/e2e/modal-keyboard.spec.ts:93:5 › modal early keyboard: async Preflight dialog handles Escape immediately after mount (1.4s)
+2026-10-28T19:21:33.2662842Z   ✓  298 tests/e2e/model-structure.spec.ts:30:7 › model structure: node grouping, keyboard tree and definition drill-down stay presentation-only at 1024x768 (1.0s)
+2026-10-28T19:21:34.3295844Z   ✓  299 tests/e2e/model-structure.spec.ts:30:7 › model structure: node grouping, keyboard tree and definition drill-down stay presentation-only at 1440x900 (1.1s)
+2026-10-28T19:21:37.0838318Z   ✓  300 tests/e2e/parameter-accessibility.spec.ts:147:7 › parameter accessibility: native range recovery and save at 1024x768 (2.7s)
+2026-10-28T19:21:40.0178482Z   ✓  301 tests/e2e/parameter-accessibility.spec.ts:268:9 › parameter accessibility: late save preserves Home at 1024x768 (2.9s)
+2026-10-28T19:21:45.3492494Z   ✓  302 tests/e2e/parameter-accessibility.spec.ts:268:9 › parameter accessibility: late save preserves other project at 1024x768 (5.3s)
+2026-10-28T19:21:49.5332830Z   ✓  303 tests/e2e/parameter-accessibility.spec.ts:268:9 › parameter accessibility: late save preserves newer head at 1024x768 (4.2s)
+2026-10-28T19:21:52.7830901Z   ✓  304 tests/e2e/parameter-accessibility.spec.ts:268:9 › parameter accessibility: late save preserves newer same-field draft at 1024x768 (3.2s)
+2026-10-28T19:21:56.0674187Z   ✓  305 tests/e2e/parameter-accessibility.spec.ts:268:9 › parameter accessibility: late save preserves reverted same-field draft at 1024x768 (3.3s)
+2026-10-28T19:21:59.3325281Z   ✓  306 tests/e2e/parameter-accessibility.spec.ts:268:9 › parameter accessibility: late save preserves other field draft at 1024x768 (3.3s)
+2026-10-28T19:22:02.3947120Z   ✓  307 tests/e2e/parameter-accessibility.spec.ts:268:9 › parameter accessibility: late save preserves deliberate focus at 1024x768 (3.1s)
+2026-10-28T19:22:06.2308740Z   ✓  308 tests/e2e/parameter-accessibility.spec.ts:268:9 › parameter accessibility: late save preserves newer readiness at 1024x768 (3.8s)
+2026-10-28T19:22:08.7805509Z   ✓  309 tests/e2e/parameter-accessibility.spec.ts:527:9 › parameter accessibility: real stale failure in current form at 1024x768 (2.5s)
+2026-10-28T19:22:11.3498182Z   ✓  310 tests/e2e/parameter-accessibility.spec.ts:527:9 › parameter accessibility: real stale failure after departure at 1024x768 (2.6s)
+2026-10-28T19:22:14.0663493Z   ✓  311 tests/e2e/parameter-accessibility.spec.ts:620:9 › parameter accessibility: delayed presentation preserves field focus at 1024x768 (2.7s)
+2026-10-28T19:22:16.6582791Z   ✓  312 tests/e2e/parameter-accessibility.spec.ts:620:9 › parameter accessibility: delayed presentation preserves moved focus at 1024x768 (2.6s)
+2026-10-28T19:22:19.3560813Z   ✓  313 tests/e2e/parameter-accessibility.spec.ts:707:7 › parameter accessibility: numeric normalization at 1024x768 (2.7s)
+2026-10-28T19:22:21.9595126Z   ✓  314 tests/e2e/parameter-accessibility.spec.ts:147:7 › parameter accessibility: native range recovery and save at 1440x900 (2.6s)
+2026-10-28T19:22:24.9984110Z   ✓  315 tests/e2e/parameter-accessibility.spec.ts:268:9 › parameter accessibility: late save preserves Home at 1440x900 (3.0s)
+2026-10-28T19:22:30.7629812Z   ✓  316 tests/e2e/parameter-accessibility.spec.ts:268:9 › parameter accessibility: late save preserves other project at 1440x900 (5.8s)
+2026-10-28T19:22:35.0080592Z   ✓  317 tests/e2e/parameter-accessibility.spec.ts:268:9 › parameter accessibility: late save preserves newer head at 1440x900 (4.2s)
+2026-10-28T19:22:38.3253370Z   ✓  318 tests/e2e/parameter-accessibility.spec.ts:268:9 › parameter accessibility: late save preserves newer same-field draft at 1440x900 (3.3s)
+2026-10-28T19:22:41.7137402Z   ✓  319 tests/e2e/parameter-accessibility.spec.ts:268:9 › parameter accessibility: late save preserves reverted same-field draft at 1440x900 (3.4s)
+2026-10-28T19:22:45.2195093Z   ✓  320 tests/e2e/parameter-accessibility.spec.ts:268:9 › parameter accessibility: late save preserves other field draft at 1440x900 (3.5s)
+2026-10-28T19:22:48.2930748Z   ✓  321 tests/e2e/parameter-accessibility.spec.ts:268:9 › parameter accessibility: late save preserves deliberate focus at 1440x900 (3.1s)
+2026-10-28T19:22:52.2801999Z   ✓  322 tests/e2e/parameter-accessibility.spec.ts:268:9 › parameter accessibility: late save preserves newer readiness at 1440x900 (4.0s)
+2026-10-28T19:22:54.9092601Z   ✓  323 tests/e2e/parameter-accessibility.spec.ts:527:9 › parameter accessibility: real stale failure in current form at 1440x900 (2.6s)
+2026-10-28T19:22:57.5414737Z   ✓  324 tests/e2e/parameter-accessibility.spec.ts:527:9 › parameter accessibility: real stale failure after departure at 1440x900 (2.6s)
+2026-10-28T19:23:00.2941893Z   ✓  325 tests/e2e/parameter-accessibility.spec.ts:620:9 › parameter accessibility: delayed presentation preserves field focus at 1440x900 (2.7s)
+2026-10-28T19:23:03.0602448Z   ✓  326 tests/e2e/parameter-accessibility.spec.ts:620:9 › parameter accessibility: delayed presentation preserves moved focus at 1440x900 (2.8s)
+2026-10-28T19:23:05.8161964Z   ✓  327 tests/e2e/parameter-accessibility.spec.ts:707:7 › parameter accessibility: numeric normalization at 1440x900 (2.7s)
+2026-10-28T19:23:07.8648343Z   ✓  328 tests/e2e/parameter-presentation-focus.spec.ts:16:9 › parameter presentation: apply real regrouping preserves intent at 1024 (2.0s)
+2026-10-28T19:23:09.9121969Z   ✓  329 tests/e2e/parameter-presentation-focus.spec.ts:16:9 › parameter presentation: apply real regrouping preserves intent at 1440 (2.0s)
+2026-10-28T19:23:11.9173850Z   ✓  330 tests/e2e/parameter-presentation-focus.spec.ts:16:9 › parameter presentation: field real regrouping preserves intent at 1024 (2.0s)
+2026-10-28T19:23:14.0611771Z   ✓  331 tests/e2e/parameter-presentation-focus.spec.ts:16:9 › parameter presentation: field real regrouping preserves intent at 1440 (2.1s)
+2026-10-28T19:23:16.0984380Z   ✓  332 tests/e2e/parameter-presentation-focus.spec.ts:16:9 › parameter presentation: enum real regrouping preserves intent at 1024 (2.0s)
+2026-10-28T19:23:18.0312023Z   ✓  333 tests/e2e/parameter-presentation-focus.spec.ts:16:9 › parameter presentation: enum real regrouping preserves intent at 1440 (1.9s)
+2026-10-28T19:23:19.1585962Z   ✓  334 tests/e2e/parameter-presentation-focus.spec.ts:16:9 › parameter presentation: elsewhere real regrouping preserves intent at 1024 (1.1s)
+2026-10-28T19:23:20.3105980Z   ✓  335 tests/e2e/parameter-presentation-focus.spec.ts:16:9 › parameter presentation: elsewhere real regrouping preserves intent at 1440 (1.1s)
+2026-10-28T19:23:21.6133181Z   ✓  336 tests/e2e/parameter-presentation-focus.spec.ts:16:9 › parameter presentation: dialog real regrouping preserves intent at 1024 (1.3s)
+2026-10-28T19:23:22.9586190Z   ✓  337 tests/e2e/parameter-presentation-focus.spec.ts:16:9 › parameter presentation: dialog real regrouping preserves intent at 1440 (1.3s)
+2026-10-28T19:23:24.1180169Z   ✓  338 tests/e2e/parameter-presentation-focus.spec.ts:16:9 › parameter presentation: depart real regrouping preserves intent at 1024 (1.2s)
+2026-10-28T19:23:25.3088652Z   ✓  339 tests/e2e/parameter-presentation-focus.spec.ts:16:9 › parameter presentation: depart real regrouping preserves intent at 1440 (1.2s)
+2026-10-28T19:23:26.9980986Z   ✓  340 tests/e2e/parameter-presentation-selection.spec.ts:18:9 › parameter presentation at 1024 › metadata arrival preserves native select-all and unsaved value (1.7s)
+2026-10-28T19:23:28.6086514Z   ✓  341 tests/e2e/parameter-presentation-selection.spec.ts:18:9 › parameter presentation at 1440 › metadata arrival preserves native select-all and unsaved value (1.6s)
+2026-10-28T19:23:33.4841832Z   ✓  342 tests/e2e/physical-placements-accessibility.spec.ts:220:7 › physical placements: actual absence differs from unknown at 1024x768 (4.9s)
+2026-10-28T19:23:38.3299372Z   ✓  343 tests/e2e/physical-placements-accessibility.spec.ts:253:7 › physical placements: actual stale revision refuses and explicit reopen recovers at 1024x768 (4.8s)
+2026-10-28T19:23:41.4450392Z   ✓  344 tests/e2e/physical-placements-accessibility.spec.ts:302:7 › physical placements: actual unreadable source stays unavailable without acknowledgement at 1024x768 (3.1s)
+2026-10-28T19:23:44.9461775Z   ✓  345 tests/e2e/physical-placements-accessibility.spec.ts:348:9 › physical placements: Home ignores held HTTP200 at 1024x768 (3.5s)
+2026-10-28T19:23:48.2308926Z   ✓  346 tests/e2e/physical-placements-accessibility.spec.ts:348:9 › physical placements: Home ignores held HTTP503 at 1024x768 (3.3s)
+2026-10-28T19:23:51.5137927Z   ✓  347 tests/e2e/physical-placements-accessibility.spec.ts:382:7 › physical placements: pending Enter and deliberate focus preserve one read at 1024x768 (3.3s)
+2026-10-28T19:23:56.6633267Z   ✓  348 tests/e2e/physical-placements-accessibility.spec.ts:418:7 › physical placements: changed variant ignores the prior held report at 1024x768 (5.1s)
+2026-10-28T19:24:03.2096652Z   ✓  349 tests/e2e/physical-placements-accessibility.spec.ts:492:7 › physical placements: new project ignores the prior held report at 1024x768 (6.5s)
+2026-10-28T19:24:07.7268383Z   ✓  350 tests/e2e/physical-placements-accessibility.spec.ts:562:7 › physical placements: saved newer revision ignores the prior held report at 1024x768 (4.5s)
+2026-10-28T19:24:11.1788780Z   ✓  351 tests/e2e/physical-placements-accessibility.spec.ts:654:7 › physical placements: newer source draft keeps dialog focus after held observation at 1024x768 (3.4s)
+2026-10-28T19:24:14.5015819Z   ✓  352 tests/e2e/physical-placements-accessibility.spec.ts:709:9 › physical placements: labelled wrong revision stays unknown at 1024x768 (3.3s)
+2026-10-28T19:24:17.9468712Z   ✓  353 tests/e2e/physical-placements-accessibility.spec.ts:709:9 › physical placements: labelled wrong project stays unknown at 1024x768 (3.4s)
+2026-10-28T19:24:21.2922394Z   ✓  354 tests/e2e/physical-placements-accessibility.spec.ts:709:9 › physical placements: labelled wrong deployment stays unknown at 1024x768 (3.3s)
+2026-10-28T19:24:24.5315885Z   ✓  355 tests/e2e/physical-placements-accessibility.spec.ts:709:9 › physical placements: labelled wrong system stays unknown at 1024x768 (3.2s)
+2026-10-28T19:24:27.7794061Z   ✓  356 tests/e2e/physical-placements-accessibility.spec.ts:709:9 › physical placements: labelled authority flag stays unknown at 1024x768 (3.2s)
+2026-10-28T19:24:31.0304614Z   ✓  357 tests/e2e/physical-placements-accessibility.spec.ts:709:9 › physical placements: labelled missing readiness stays unknown at 1024x768 (3.2s)
+2026-10-28T19:24:34.2746771Z   ✓  358 tests/e2e/physical-placements-accessibility.spec.ts:709:9 › physical placements: labelled duplicate binding stays unknown at 1024x768 (3.2s)
+2026-10-28T19:24:37.6474630Z   ✓  359 tests/e2e/physical-placements-accessibility.spec.ts:709:9 › physical placements: labelled incomplete inventory stays unknown at 1024x768 (3.4s)
+2026-10-28T19:24:41.1097948Z   ✓  360 tests/e2e/physical-placements-accessibility.spec.ts:758:7 › physical placements: labelled matched metadata cannot grant admission at 1024x768 (3.5s)
+2026-10-28T19:25:06.1056990Z   ✓  361 tests/e2e/physical-placements-accessibility.spec.ts:868:7 › physical placements: labelled maximum report is accessible in bounded pages at 1024x768 (25.0s)
+2026-10-28T19:25:10.5331689Z   ✓  362 tests/e2e/physical-placements-accessibility.spec.ts:220:7 › physical placements: actual absence differs from unknown at 1440x900 (4.4s)
+2026-10-28T19:25:15.1470260Z   ✓  363 tests/e2e/physical-placements-accessibility.spec.ts:253:7 › physical placements: actual stale revision refuses and explicit reopen recovers at 1440x900 (4.6s)
+2026-10-28T19:25:18.3180802Z   ✓  364 tests/e2e/physical-placements-accessibility.spec.ts:302:7 › physical placements: actual unreadable source stays unavailable without acknowledgement at 1440x900 (3.2s)
+2026-10-28T19:25:21.5373365Z   ✓  365 tests/e2e/physical-placements-accessibility.spec.ts:348:9 › physical placements: Home ignores held HTTP200 at 1440x900 (3.2s)
+2026-10-28T19:25:24.8094917Z   ✓  366 tests/e2e/physical-placements-accessibility.spec.ts:348:9 › physical placements: Home ignores held HTTP503 at 1440x900 (3.3s)
+2026-10-28T19:25:28.0478685Z   ✓  367 tests/e2e/physical-placements-accessibility.spec.ts:382:7 › physical placements: pending Enter and deliberate focus preserve one read at 1440x900 (3.2s)
+2026-10-28T19:25:32.7801655Z   ✓  368 tests/e2e/physical-placements-accessibility.spec.ts:418:7 › physical placements: changed variant ignores the prior held report at 1440x900 (4.7s)
+2026-10-28T19:25:38.4139163Z   ✓  369 tests/e2e/physical-placements-accessibility.spec.ts:492:7 › physical placements: new project ignores the prior held report at 1440x900 (5.6s)
+2026-10-28T19:25:41.9188149Z   ✓  370 tests/e2e/physical-placements-accessibility.spec.ts:562:7 › physical placements: saved newer revision ignores the prior held report at 1440x900 (3.5s)
+2026-10-28T19:25:44.9341775Z   ✓  371 tests/e2e/physical-placements-accessibility.spec.ts:654:7 › physical placements: newer source draft keeps dialog focus after held observation at 1440x900 (3.0s)
+2026-10-28T19:25:47.9214451Z   ✓  372 tests/e2e/physical-placements-accessibility.spec.ts:709:9 › physical placements: labelled wrong revision stays unknown at 1440x900 (3.0s)
+2026-10-28T19:25:50.7498635Z   ✓  373 tests/e2e/physical-placements-accessibility.spec.ts:709:9 › physical placements: labelled wrong project stays unknown at 1440x900 (2.8s)
+2026-10-28T19:25:53.6793900Z   ✓  374 tests/e2e/physical-placements-accessibility.spec.ts:709:9 › physical placements: labelled wrong deployment stays unknown at 1440x900 (2.9s)
+2026-10-28T19:25:56.5628181Z   ✓  375 tests/e2e/physical-placements-accessibility.spec.ts:709:9 › physical placements: labelled wrong system stays unknown at 1440x900 (2.9s)
+2026-10-28T19:25:59.5123290Z   ✓  376 tests/e2e/physical-placements-accessibility.spec.ts:709:9 › physical placements: labelled authority flag stays unknown at 1440x900 (2.9s)
+2026-10-28T19:26:02.5161465Z   ✓  377 tests/e2e/physical-placements-accessibility.spec.ts:709:9 › physical placements: labelled missing readiness stays unknown at 1440x900 (3.0s)
+2026-10-28T19:26:05.4837081Z   ✓  378 tests/e2e/physical-placements-accessibility.spec.ts:709:9 › physical placements: labelled duplicate binding stays unknown at 1440x900 (3.0s)
+2026-10-28T19:26:08.4799508Z   ✓  379 tests/e2e/physical-placements-accessibility.spec.ts:709:9 › physical placements: labelled incomplete inventory stays unknown at 1440x900 (3.0s)
+2026-10-28T19:26:11.5604791Z   ✓  380 tests/e2e/physical-placements-accessibility.spec.ts:758:7 › physical placements: labelled matched metadata cannot grant admission at 1440x900 (3.1s)
+2026-10-28T19:26:32.4132344Z   ✓  381 tests/e2e/physical-placements-accessibility.spec.ts:868:7 › physical placements: labelled maximum report is accessible in bounded pages at 1440x900 (20.8s)
+2026-10-28T19:26:36.1575961Z   ✓  382 tests/e2e/physical-placements-accessibility.spec.ts:1012:7 › physical placements: actual invalid source is not an empty observation at 1024x768 (3.7s)
+2026-10-28T19:26:40.2572272Z   ✓  383 tests/e2e/physical-placements-accessibility.spec.ts:1050:7 › physical placements: ambiguous authored identity cannot choose a document at 1024x768 (4.1s)
+2026-10-28T19:26:43.1789128Z   ✓  384 tests/e2e/physical-placements-accessibility.spec.ts:1104:7 › physical placements: actual unresolved authored binding is read-only at 1024x768 (2.9s)
+2026-10-28T19:26:46.9461599Z   ✓  385 tests/e2e/physical-placements-accessibility.spec.ts:1012:7 › physical placements: actual invalid source is not an empty observation at 1440x900 (3.8s)
+2026-10-28T19:26:51.2964763Z   ✓  386 tests/e2e/physical-placements-accessibility.spec.ts:1050:7 › physical placements: ambiguous authored identity cannot choose a document at 1440x900 (4.3s)
+2026-10-28T19:26:54.2842091Z   ✓  387 tests/e2e/physical-placements-accessibility.spec.ts:1104:7 › physical placements: actual unresolved authored binding is read-only at 1440x900 (3.0s)
+2026-10-28T19:26:57.4577058Z   ✓  388 tests/e2e/profile-bindings-accessibility.spec.ts:199:9 › profile bindings: current pending at 1024x768 (3.2s)
+2026-10-28T19:27:00.0550517Z   ✓  389 tests/e2e/profile-bindings-accessibility.spec.ts:199:9 › profile bindings: newer selection at 1024x768 (2.6s)
+2026-10-28T19:27:02.7816836Z   ✓  390 tests/e2e/profile-bindings-accessibility.spec.ts:199:9 › profile bindings: deliberate focus at 1024x768 (2.7s)
+2026-10-28T19:27:08.8753103Z   ✓  391 tests/e2e/profile-bindings-accessibility.spec.ts:199:9 › profile bindings: newer head and readiness at 1024x768 (6.1s)
+2026-10-28T19:27:12.0027373Z   ✓  392 tests/e2e/profile-bindings-accessibility.spec.ts:434:9 › profile bindings: actual stale refusal current at 1024x768 (3.1s)
+2026-10-28T19:27:15.0329541Z   ✓  393 tests/e2e/profile-bindings-accessibility.spec.ts:434:9 › profile bindings: actual stale refusal after departure at 1024x768 (3.0s)
+2026-10-28T19:27:16.2859900Z   ✓  394 tests/e2e/profile-bindings-accessibility.spec.ts:522:9 › profile bindings: discovery missing digest observation at 1024x768 (1.2s)
+2026-10-28T19:27:17.4775969Z   ✓  395 tests/e2e/profile-bindings-accessibility.spec.ts:522:9 › profile bindings: discovery duplicate observation at 1024x768 (1.2s)
+2026-10-28T19:27:18.7341405Z   ✓  396 tests/e2e/profile-bindings-accessibility.spec.ts:522:9 › profile bindings: discovery empty observation at 1024x768 (1.2s)
+2026-10-28T19:27:22.3678542Z   ✓  397 tests/e2e/profile-bindings-accessibility.spec.ts:626:7 › profile bindings: foreign recovery preserves newer profile draft at 1024x768 (3.6s)
+2026-10-28T19:27:24.7993172Z   ✓  398 tests/e2e/profile-bindings-accessibility.spec.ts:805:7 › profile bindings: discovery failure stays unknown and retries actual registry at 1024x768 (2.4s)
+2026-10-28T19:27:28.5056018Z   ✓  399 tests/e2e/profile-bindings-accessibility.spec.ts:888:7 › profile bindings: committed reply cannot announce success on departed Home at 1024x768 (3.7s)
+2026-10-28T19:27:31.3153324Z   ✓  400 tests/e2e/profile-bindings-accessibility.spec.ts:199:9 › profile bindings: current pending at 1440x900 (2.8s)
+2026-10-28T19:27:33.9756256Z   ✓  401 tests/e2e/profile-bindings-accessibility.spec.ts:199:9 › profile bindings: newer selection at 1440x900 (2.7s)
+2026-10-28T19:27:36.7739864Z   ✓  402 tests/e2e/profile-bindings-accessibility.spec.ts:199:9 › profile bindings: deliberate focus at 1440x900 (2.8s)
+2026-10-28T19:27:42.8800927Z   ✓  403 tests/e2e/profile-bindings-accessibility.spec.ts:199:9 › profile bindings: newer head and readiness at 1440x900 (6.1s)
+2026-10-28T19:27:45.8393719Z   ✓  404 tests/e2e/profile-bindings-accessibility.spec.ts:434:9 › profile bindings: actual stale refusal current at 1440x900 (3.0s)
+2026-10-28T19:27:48.5541690Z   ✓  405 tests/e2e/profile-bindings-accessibility.spec.ts:434:9 › profile bindings: actual stale refusal after departure at 1440x900 (2.7s)
+2026-10-28T19:27:49.8642811Z   ✓  406 tests/e2e/profile-bindings-accessibility.spec.ts:522:9 › profile bindings: discovery missing digest observation at 1440x900 (1.3s)
+2026-10-28T19:27:51.0983158Z   ✓  407 tests/e2e/profile-bindings-accessibility.spec.ts:522:9 › profile bindings: discovery duplicate observation at 1440x900 (1.2s)
+2026-10-28T19:27:52.2567318Z   ✓  408 tests/e2e/profile-bindings-accessibility.spec.ts:522:9 › profile bindings: discovery empty observation at 1440x900 (1.2s)
+2026-10-28T19:27:55.9616337Z   ✓  409 tests/e2e/profile-bindings-accessibility.spec.ts:626:7 › profile bindings: foreign recovery preserves newer profile draft at 1440x900 (3.7s)
+2026-10-28T19:27:58.4341172Z   ✓  410 tests/e2e/profile-bindings-accessibility.spec.ts:805:7 › profile bindings: discovery failure stays unknown and retries actual registry at 1440x900 (2.5s)
+2026-10-28T19:28:01.7959962Z   ✓  411 tests/e2e/profile-bindings-accessibility.spec.ts:888:7 › profile bindings: committed reply cannot announce success on departed Home at 1440x900 (3.4s)
+2026-10-28T19:28:03.5748098Z   ✓  412 tests/e2e/profile-presentation.spec.ts:25:5 › profile presentation: domain terms relabel shared workflows as inert text (1.8s)
+2026-10-28T19:28:08.4374782Z   ✓  413 tests/e2e/project-context.spec.ts:439:9 › project context: cached run metadata respects Results at 1024x768 (4.8s)
+2026-10-28T19:28:12.7006457Z   ✓  414 tests/e2e/project-context.spec.ts:439:9 › project context: cached run metadata respects Source at 1024x768 (4.3s)
+2026-10-28T19:28:16.6408242Z   ✓  415 tests/e2e/project-context.spec.ts:439:9 › project context: cached run metadata respects Home at 1024x768 (3.9s)
+2026-10-28T19:28:20.8226917Z   ✓  416 tests/e2e/project-context.spec.ts:578:9 › project context: foreign recovery preserves newer source draft at 1024x768 (4.2s)
+2026-10-28T19:28:25.4676750Z   ✓  417 tests/e2e/project-context.spec.ts:578:9 › project context: foreign recovery preserves newer source save at 1024x768 (4.6s)
+2026-10-28T19:28:29.6426211Z   ✓  418 tests/e2e/project-context.spec.ts:578:9 › project context: foreign recovery preserves newer parameter draft at 1024x768 (4.2s)
+2026-10-28T19:28:33.9016542Z   ✓  419 tests/e2e/project-context.spec.ts:731:9 › project context: obsolete successful load preserves newer source save at 1024x768 (4.3s)
+2026-10-28T19:28:37.9934542Z   ✓  420 tests/e2e/project-context.spec.ts:731:9 › project context: obsolete failed load preserves newer source save at 1024x768 (4.1s)
+2026-10-28T19:28:42.0642321Z   ✓  421 tests/e2e/project-context.spec.ts:813:7 › project context: obsolete creation reply preserves newer source save at 1024x768 (4.0s)
+2026-10-28T19:28:46.0986023Z   ✓  422 tests/e2e/project-context.spec.ts:883:7 › project context: newest creation intent wins over earlier completion at 1024x768 (4.0s)
+2026-10-28T19:28:48.6316061Z   ✓  423 tests/e2e/project-context.spec.ts:995:9 › project context: obsolete startup success preserves Home at 1024x768 (2.5s)
+2026-10-28T19:28:51.2311562Z   ✓  424 tests/e2e/project-context.spec.ts:995:9 › project context: obsolete startup failure preserves Home at 1024x768 (2.6s)
+2026-10-28T19:28:55.9568376Z   ✓  425 tests/e2e/project-context.spec.ts:439:9 › project context: cached run metadata respects Results at 1440x900 (4.7s)
+2026-10-28T19:29:00.2629079Z   ✓  426 tests/e2e/project-context.spec.ts:439:9 › project context: cached run metadata respects Source at 1440x900 (4.3s)
+2026-10-28T19:29:04.4681390Z   ✓  427 tests/e2e/project-context.spec.ts:439:9 › project context: cached run metadata respects Home at 1440x900 (4.2s)
+2026-10-28T19:29:08.4762989Z   ✓  428 tests/e2e/project-context.spec.ts:578:9 › project context: foreign recovery preserves newer source draft at 1440x900 (4.0s)
+2026-10-28T19:29:12.7461859Z   ✓  429 tests/e2e/project-context.spec.ts:578:9 › project context: foreign recovery preserves newer source save at 1440x900 (4.3s)
+2026-10-28T19:29:16.7505993Z   ✓  430 tests/e2e/project-context.spec.ts:578:9 › project context: foreign recovery preserves newer parameter draft at 1440x900 (4.0s)
+2026-10-28T19:29:20.8896569Z   ✓  431 tests/e2e/project-context.spec.ts:731:9 › project context: obsolete successful load preserves newer source save at 1440x900 (4.1s)
+2026-10-28T19:29:25.1251050Z   ✓  432 tests/e2e/project-context.spec.ts:731:9 › project context: obsolete failed load preserves newer source save at 1440x900 (4.2s)
+2026-10-28T19:29:29.1164592Z   ✓  433 tests/e2e/project-context.spec.ts:813:7 › project context: obsolete creation reply preserves newer source save at 1440x900 (4.0s)
+2026-10-28T19:29:33.1085202Z   ✓  434 tests/e2e/project-context.spec.ts:883:7 › project context: newest creation intent wins over earlier completion at 1440x900 (4.0s)
+2026-10-28T19:29:35.6308919Z   ✓  435 tests/e2e/project-context.spec.ts:995:9 › project context: obsolete startup success preserves Home at 1440x900 (2.5s)
+2026-10-28T19:29:38.1017982Z   ✓  436 tests/e2e/project-context.spec.ts:995:9 › project context: obsolete startup failure preserves Home at 1440x900 (2.5s)
+2026-10-28T19:29:40.7802789Z   ✓  437 tests/e2e/project-journeys.spec.ts:7:5 › project journeys: scoped example claims, dependency review and unresolved-content inspection (2.7s)
+2026-10-28T19:29:47.2701690Z   ✓  438 tests/e2e/project-onboarding.spec.ts:7:5 › onboarding: a prepared example opens ready, an unresolved import stays inert and out-of-range parameters block admission (6.5s)
+2026-10-28T19:29:47.2820448Z   ✓  439 tests/e2e/projection.spec.ts:7:5 › malformed imported source stays inspectable without becoming a graph or changing bytes (2ms)
+2026-10-28T19:29:47.2892255Z   ✓  440 tests/e2e/projection.spec.ts:24:5 › unknown extension payload is retained while the presentation uses stable instance references (2ms)
+2026-10-28T19:29:47.2983171Z   ✓  441 tests/e2e/projection.spec.ts:59:5 › declared logical roles remain separate from Component capabilities and source bytes (1ms)
+2026-10-28T19:29:47.3050903Z   ✓  442 tests/e2e/projection.spec.ts:108:5 › node grouping follows declared placement and memberIds, and never invents a node for unplaced elements (2ms)
+2026-10-28T19:29:47.3110324Z   ✓  443 tests/e2e/readiness-contract.spec.ts:51:5 › readiness display contract never promotes a ready aggregate into missing or unknown facts (1ms)
+2026-10-28T19:29:47.3191595Z   ✓  444 tests/e2e/readiness-contract.spec.ts:72:5 › readiness display contract rejects a plan from another snapshot, revision or resource selection (2ms)
+2026-10-28T19:29:51.2507025Z   ✓  445 tests/e2e/readiness.spec.ts:35:5 › readiness review: independent backend facts, exact limits and frozen compiled plan with keyboard and both viewports (3.9s)
+2026-10-28T19:29:55.3567493Z   ✓  446 tests/e2e/readiness.spec.ts:161:5 › readiness review: unsupported topology and unavailable provider remain separate from model and backend availability (4.1s)
+2026-10-28T19:30:08.6439834Z   ✓  447 tests/e2e/recorded-comparison.spec.ts:105:7 › recorded comparison: immutable provenance, unequal windows and playback admission at 1024 (13.3s)
+2026-10-28T19:30:21.4721938Z   ✓  448 tests/e2e/recorded-comparison.spec.ts:105:7 › recorded comparison: immutable provenance, unequal windows and playback admission at 1440 (12.8s)
+2026-10-28T19:30:33.1792979Z   ✓  449 tests/e2e/recorded-comparison.spec.ts:229:9 › comparison completion: held real report preserves newer baseline at 1024 (11.7s)
+2026-10-28T19:30:45.1361063Z   ✓  450 tests/e2e/recorded-comparison.spec.ts:229:9 › comparison completion: held real report preserves Home at 1024 (12.0s)
+2026-10-28T19:30:56.9536231Z   ✓  451 tests/e2e/recorded-comparison.spec.ts:229:9 › comparison completion: held real report preserves deliberate focus at 1024 (11.8s)
+2026-10-28T19:31:07.8291904Z   ✓  452 tests/e2e/recorded-comparison.spec.ts:336:9 › comparison response guards: wrong identity fixture is rejected and actual retry succeeds at 1024 (10.9s)
+2026-10-28T19:31:19.1921036Z   ✓  453 tests/e2e/recorded-comparison.spec.ts:336:9 › comparison response guards: unknown version fixture is rejected and actual retry succeeds at 1024 (11.4s)
+2026-10-28T19:31:30.4571931Z   ✓  454 tests/e2e/recorded-comparison.spec.ts:336:9 › comparison response guards: deep metadata fixture is rejected and actual retry succeeds at 1024 (11.3s)
+2026-10-28T19:31:41.4775225Z   ✓  455 tests/e2e/recorded-comparison.spec.ts:336:9 › comparison response guards: contradictory summary fixture is rejected and actual retry succeeds at 1024 (11.0s)
+2026-10-28T19:31:53.4663959Z   ✓  456 tests/e2e/recorded-comparison.spec.ts:229:9 › comparison completion: held real report preserves newer baseline at 1440 (12.0s)
+2026-10-28T19:32:05.6215868Z   ✓  457 tests/e2e/recorded-comparison.spec.ts:229:9 › comparison completion: held real report preserves Home at 1440 (12.1s)
+2026-10-28T19:32:17.5032230Z   ✓  458 tests/e2e/recorded-comparison.spec.ts:229:9 › comparison completion: held real report preserves deliberate focus at 1440 (11.9s)
+2026-10-28T19:32:28.9321714Z   ✓  459 tests/e2e/recorded-comparison.spec.ts:336:9 › comparison response guards: wrong identity fixture is rejected and actual retry succeeds at 1440 (11.4s)
+2026-10-28T19:32:40.3196178Z   ✓  460 tests/e2e/recorded-comparison.spec.ts:336:9 › comparison response guards: unknown version fixture is rejected and actual retry succeeds at 1440 (11.4s)
+2026-10-28T19:32:51.8151217Z   ✓  461 tests/e2e/recorded-comparison.spec.ts:336:9 › comparison response guards: deep metadata fixture is rejected and actual retry succeeds at 1440 (11.5s)
+2026-10-28T19:33:02.8203491Z   ✓  462 tests/e2e/recorded-comparison.spec.ts:336:9 › comparison response guards: contradictory summary fixture is rejected and actual retry succeeds at 1440 (11.0s)
+2026-10-28T19:33:14.9881813Z   ✓  463 tests/e2e/recorded-comparison.spec.ts:404:7 › comparison history: bounded paging, empty and unavailable transport fixtures at 1024 (12.2s)
+2026-10-28T19:33:26.7651219Z   ✓  464 tests/e2e/recorded-comparison.spec.ts:404:7 › comparison history: bounded paging, empty and unavailable transport fixtures at 1440 (11.8s)
+2026-10-28T19:33:29.7881902Z   ✓  465 tests/e2e/recovery-default-initialization.spec.ts:30:9 › recovery default initialization: newer none at 1024 (3.0s)
+2026-10-28T19:33:32.6602034Z   ✓  466 tests/e2e/recovery-default-initialization.spec.ts:30:9 › recovery default initialization: newer draft at 1024 (2.9s)
+2026-10-28T19:33:35.8862747Z   ✓  467 tests/e2e/recovery-default-initialization.spec.ts:30:9 › recovery default initialization: newer dialog at 1024 (3.2s)
+2026-10-28T19:33:38.7824808Z   ✓  468 tests/e2e/recovery-default-initialization.spec.ts:30:9 › recovery default initialization: newer none at 1440 (2.9s)
+2026-10-28T19:33:41.8151388Z   ✓  469 tests/e2e/recovery-default-initialization.spec.ts:30:9 › recovery default initialization: newer draft at 1440 (3.0s)
+2026-10-28T19:33:44.6612216Z   ✓  470 tests/e2e/recovery-default-initialization.spec.ts:30:9 › recovery default initialization: newer dialog at 1440 (2.8s)
+2026-10-28T19:33:48.3557532Z   ✓  471 tests/e2e/recovery-default-initialization.spec.ts:141:7 › recovery default initialization: closed newer Home dialog at 1024 (3.7s)
+2026-10-28T19:33:52.1471375Z   ✓  472 tests/e2e/recovery-default-initialization.spec.ts:141:7 › recovery default initialization: closed newer Home dialog at 1440 (3.8s)
+2026-10-28T19:33:52.1603319Z   ✓  473 tests/e2e/run-overlay-compare.spec.ts:55:5 › run overlay compares with the executed inputs, not the authored revision (2ms)
+2026-10-28T19:33:52.1675051Z   ✓  474 tests/e2e/run-overlay-compare.spec.ts:84:5 › run overlay ignores unused documents and other scenarios but counts profile locks (2ms)
+2026-10-28T19:33:52.1730576Z   ✓  475 tests/e2e/run-overlay-compare.spec.ts:108:5 › placing an instance on an empty node is an added element, not a removed node (1ms)
+2026-10-28T19:34:00.3396153Z   ✓  476 tests/e2e/run-overlay.spec.ts:7:5 › draft and run snapshot: divergence is shown, navigable and never changes the run (8.2s)
+2026-10-28T19:34:03.2253152Z   ✓  477 tests/e2e/run-reconnect.spec.ts:109:5 › run session: unknown recorded state awaits actual bounded resync and reconnects read-only (2.9s)
+2026-10-28T19:34:38.4931668Z   ✓  478 tests/e2e/run-reconnect.spec.ts:246:5 › run session: native owned execution survives real replay-window expiry while running without duplicate Start (35.3s)
+2026-10-28T19:34:45.4447840Z   ✓  479 tests/e2e/run-reconnect.spec.ts:606:5 › run session: UI metadata fixture updates evidence at the same lifecycle version without altering evidence (6.9s)
+2026-10-28T19:34:52.9766933Z   ✓  480 tests/e2e/run-reconnect.spec.ts:749:5 › run session: lost Start acknowledgement survives refresh and resolves one run from two tabs (7.5s)
+2026-10-28T19:35:00.9234257Z   ✓  481 tests/e2e/run-reconnect.spec.ts:827:5 › run session: double Start, page close/reopen and a lost Stop acknowledgement keep one run and one command (7.9s)
+2026-10-28T19:35:04.3011966Z   ✓  482 tests/e2e/run-reconnect.spec.ts:942:5 › run controls: UI fixture renders failed and unknown command outcomes and unresolved ownership without sending controls (3.4s)
+2026-10-28T19:35:10.0346912Z   ✓  483 tests/e2e/run-startup-outcomes.spec.ts:15:11 › run startup mismatch at 1024 › actual startup and cleanup facts preserve immutable inputs (5.7s)
+2026-10-28T19:35:13.9311736Z   ✓  484 tests/e2e/run-startup-outcomes.spec.ts:15:11 › run startup launch_denied at 1024 › actual startup and cleanup facts preserve immutable inputs (3.9s)
+2026-10-28T19:35:18.6282426Z   ✓  485 tests/e2e/run-startup-outcomes.spec.ts:15:11 › run startup active_failure at 1024 › actual startup and cleanup facts preserve immutable inputs (4.7s)
+2026-10-28T19:35:23.7309372Z   ✓  486 tests/e2e/run-startup-outcomes.spec.ts:15:11 › run startup normal at 1024 › actual startup and cleanup facts preserve immutable inputs (5.1s)
+2026-10-28T19:35:29.5069576Z   ✓  487 tests/e2e/run-startup-outcomes.spec.ts:15:11 › run startup mismatch at 1440 › actual startup and cleanup facts preserve immutable inputs (5.8s)
+2026-10-28T19:35:33.3611868Z   ✓  488 tests/e2e/run-startup-outcomes.spec.ts:15:11 › run startup launch_denied at 1440 › actual startup and cleanup facts preserve immutable inputs (3.8s)
+2026-10-28T19:35:38.1712260Z   ✓  489 tests/e2e/run-startup-outcomes.spec.ts:15:11 › run startup active_failure at 1440 › actual startup and cleanup facts preserve immutable inputs (4.8s)
+2026-10-28T19:35:43.3580475Z   ✓  490 tests/e2e/run-startup-outcomes.spec.ts:15:11 › run startup normal at 1440 › actual startup and cleanup facts preserve immutable inputs (5.2s)
+2026-10-28T19:35:54.9556226Z   ✓  491 tests/e2e/scenario-authoring.spec.ts:4:5 › scenario intent: typed stimulus, fault, observer and metric forms preserve opaque source and block unsupported execution (11.6s)
+2026-10-28T19:35:59.6357949Z   ✓  492 tests/e2e/scenario-timeline-outcomes.spec.ts:41:7 › scenario timeline outcomes: actual pass, fail, indeterminate and metric provenance at 1024 (4.7s)
+2026-10-28T19:36:03.9701871Z   ✓  493 tests/e2e/scenario-timeline-outcomes.spec.ts:41:7 › scenario timeline outcomes: actual pass, fail, indeterminate and metric provenance at 1440 (4.3s)
+2026-10-28T19:36:09.0642961Z   ✓  494 tests/e2e/scenario-timeline.spec.ts:128:7 › scenario timeline: native frozen intent, observed faults and evaluation windows at 1024 (5.1s)
+2026-10-28T19:36:14.0137739Z   ✓  495 tests/e2e/scenario-timeline.spec.ts:128:7 › scenario timeline: native frozen intent, observed faults and evaluation windows at 1440 (4.9s)
+2026-10-28T19:36:18.7155370Z   ✓  496 tests/e2e/scenario-timeline.spec.ts:230:7 › scenario authoring completion: held conditions acknowledgement preserves a reopened draft at 1024 (4.7s)
+2026-10-28T19:36:23.3626852Z   ✓  497 tests/e2e/scenario-timeline.spec.ts:230:7 › scenario authoring completion: held conditions acknowledgement preserves a reopened draft at 1440 (4.6s)
+2026-10-28T19:36:27.4126356Z   ✓  498 tests/e2e/scenario-timeline.spec.ts:324:7 › scenario timeline: malformed transport contracts and HTTP retry stay unknown at 1024 (4.0s)
+2026-10-28T19:36:31.1630537Z   ✓  499 tests/e2e/scenario-timeline.spec.ts:423:7 › scenario timeline: labelled exact large ticks, gaps and unsupported clock remain separate at 1024 (3.7s)
+2026-10-28T19:36:38.5795588Z   ✓  500 tests/e2e/scenario-timeline.spec.ts:551:7 › scenario timeline: native canonical pages preserve identities and reject changed evaluation cursors at 1024 (7.4s)
+2026-10-28T19:36:42.5293711Z   ✓  501 tests/e2e/scenario-timeline.spec.ts:627:9 › scenario timeline: held actual read preserves focus at 1024 (3.9s)
+2026-10-28T19:36:46.5645781Z   ✓  502 tests/e2e/scenario-timeline.spec.ts:627:9 › scenario timeline: held actual read preserves home at 1024 (4.0s)
+2026-10-28T19:36:51.0946089Z   ✓  503 tests/e2e/scenario-timeline.spec.ts:688:7 › scenario timeline: draft marker opens the typed form and saves canonical intent at 1024 (4.5s)
+2026-10-28T19:36:55.2740399Z   ✓  504 tests/e2e/scenario-timeline.spec.ts:324:7 › scenario timeline: malformed transport contracts and HTTP retry stay unknown at 1440 (4.2s)
+2026-10-28T19:36:59.0910091Z   ✓  505 tests/e2e/scenario-timeline.spec.ts:423:7 › scenario timeline: labelled exact large ticks, gaps and unsupported clock remain separate at 1440 (3.8s)
+2026-10-28T19:37:06.2410106Z   ✓  506 tests/e2e/scenario-timeline.spec.ts:551:7 › scenario timeline: native canonical pages preserve identities and reject changed evaluation cursors at 1440 (7.1s)
+2026-10-28T19:37:10.2371629Z   ✓  507 tests/e2e/scenario-timeline.spec.ts:627:9 › scenario timeline: held actual read preserves focus at 1440 (4.0s)
+2026-10-28T19:37:14.2410452Z   ✓  508 tests/e2e/scenario-timeline.spec.ts:627:9 › scenario timeline: held actual read preserves home at 1440 (4.0s)
+2026-10-28T19:37:18.7915703Z   ✓  509 tests/e2e/scenario-timeline.spec.ts:688:7 › scenario timeline: draft marker opens the typed form and saves canonical intent at 1440 (4.5s)
+2026-10-28T19:37:23.5270762Z   ✓  510 tests/e2e/scenario-timeline.spec.ts:732:7 › scenario authoring completion: a newer item draft survives its earlier actual save at 1024 (4.7s)
+2026-10-28T19:37:27.7934600Z   ✓  511 tests/e2e/scenario-timeline.spec.ts:788:7 › scenario authoring completion: real stale revision refuses without discarding the form at 1024 (4.3s)
+2026-10-28T19:37:33.3421784Z   ✓  512 tests/e2e/scenario-timeline.spec.ts:833:7 › scenario authoring completion: a removed fault acknowledgement preserves a newer removal dialog at 1024 (5.5s)
+2026-10-28T19:37:38.1242979Z   ✓  513 tests/e2e/scenario-timeline.spec.ts:732:7 › scenario authoring completion: a newer item draft survives its earlier actual save at 1440 (4.8s)
+2026-10-28T19:37:42.3705191Z   ✓  514 tests/e2e/scenario-timeline.spec.ts:788:7 › scenario authoring completion: real stale revision refuses without discarding the form at 1440 (4.2s)
+2026-10-28T19:37:47.8860464Z   ✓  515 tests/e2e/scenario-timeline.spec.ts:833:7 › scenario authoring completion: a removed fault acknowledgement preserves a newer removal dialog at 1440 (5.5s)
+2026-10-28T19:37:51.6585120Z   ✓  516 tests/e2e/scenario-timeline.spec.ts:922:7 › scenario timeline pending: labelled valid pending and interrupted result shapes at 1024 (3.8s)
+2026-10-28T19:37:55.5503283Z   ✓  517 tests/e2e/scenario-timeline.spec.ts:922:7 › scenario timeline pending: labelled valid pending and interrupted result shapes at 1440 (3.9s)
+2026-10-28T19:37:55.5714754Z   ✓  518 tests/e2e/session-contract.spec.ts:57:5 › session contract: reserved control slot coalesces with 200 data frames while canonical and control queues stay bounded (8ms)
+2026-10-28T19:37:57.1863661Z   ✓  519 tests/e2e/session-contract.spec.ts:69:5 › session contract: callback acceptance precedes acknowledged reconnect cursor (1.6s)
+2026-10-28T19:37:58.0474183Z   ✓  520 tests/e2e/session-contract.spec.ts:103:5 › session contract: expiry awaits full state and history resynchronization before reconnect (857ms)
+2026-10-28T19:37:58.2566120Z   ✓  521 tests/e2e/session-contract.spec.ts:149:5 › session contract: SSE CRLF split across chunks preserves one canonical frame (204ms)
+2026-10-28T19:37:58.3640334Z   ✓  522 tests/e2e/session-contract.spec.ts:186:5 › session contract: unknown presentation loss stays unknown and outside canonical records (102ms)
+2026-10-28T19:38:00.2237968Z   ✓  523 tests/e2e/session-contract.spec.ts:240:5 › session contract: retry timers remove completed abort listeners (1.9s)
+2026-10-28T19:38:00.2289926Z   ✓  524 tests/e2e/session-contract.spec.ts:295:5 › session contract: disposal cancels an idle reader without another request (1ms)
+2026-10-28T19:38:00.2335162Z   ✓  525 tests/e2e/session-contract.spec.ts:328:5 › session contract: equal lifecycle version keeps state while fresh cleanup and evidence advance (1ms)
+2026-10-28T19:38:01.0909427Z   ✓  526 tests/e2e/session-contract.spec.ts:366:5 › session contract: invalid recovery cannot acknowledge a replacement watermark (853ms)
+2026-10-28T19:38:01.2473055Z   ✓  527 tests/e2e/session-contract.spec.ts:404:5 › session contract: duplicate delivery deduplicates before consumer acceptance (152ms)
+2026-10-28T19:38:01.3536419Z   ✓  528 tests/e2e/session-contract.spec.ts:427:5 › session contract: mismatched cursor proof rejects frame before consumer acceptance (102ms)
+2026-10-28T19:38:01.4597093Z   ✓  529 tests/e2e/session-contract.spec.ts:464:5 › session contract: incompatible schema and oversized frames require verified recovery (102ms)
+2026-10-28T19:38:01.5657006Z   ✓  530 tests/e2e/session-contract.spec.ts:501:5 › session contract: running verified-prefix recovery preserves limited integrity and resumes (102ms)
+2026-10-28T19:38:03.2758632Z   ✓  531 tests/e2e/session-contract.spec.ts:537:5 › session contract: invalid and unavailable recovery bodies remain unaccepted (1.7s)
+2026-10-28T19:38:04.0336198Z   ✓  532 tests/e2e/session-contract.spec.ts:576:5 › session contract: typed oversized recovery stops without acknowledgement or retry and releases its body (753ms)
+2026-10-28T19:38:04.2768162Z   ✓  533 tests/e2e/shell-accessibility.spec.ts:37:7 › shell accessibility: login instructions and real rejected-token recovery at 1024x768 (234ms)
+2026-10-28T19:38:05.2607774Z   ✓  534 tests/e2e/shell-accessibility.spec.ts:81:7 › shell accessibility: navigation state, form and real busy response at 1024x768 (976ms)
+2026-10-28T19:38:05.5801786Z   ✓  535 tests/e2e/shell-accessibility.spec.ts:37:7 › shell accessibility: login instructions and real rejected-token recovery at 1440x900 (313ms)
+2026-10-28T19:38:06.6415943Z   ✓  536 tests/e2e/shell-accessibility.spec.ts:81:7 › shell accessibility: navigation state, form and real busy response at 1440x900 (1.1s)
+2026-10-28T19:38:09.9300602Z   ✓  537 tests/e2e/source-accessibility.spec.ts:219:9 › source accessibility: native undo redo and shortcut save at 1024x768 (3.3s)
+2026-10-28T19:38:13.0656648Z   ✓  538 tests/e2e/source-accessibility.spec.ts:219:9 › source accessibility: native undo redo and button save at 1024x768 (3.1s)
+2026-10-28T19:38:15.8605843Z   ✓  539 tests/e2e/source-accessibility.spec.ts:352:9 › source accessibility: late save preserves Home at 1024x768 (2.8s)
+2026-10-28T19:38:20.1394584Z   ✓  540 tests/e2e/source-accessibility.spec.ts:352:9 › source accessibility: late save preserves newer revision at 1024x768 (4.3s)
+2026-10-28T19:38:22.9783261Z   ✓  541 tests/e2e/source-accessibility.spec.ts:352:9 › source accessibility: late save preserves same document draft at 1024x768 (2.8s)
+2026-10-28T19:38:25.7414411Z   ✓  542 tests/e2e/source-accessibility.spec.ts:352:9 › source accessibility: late save preserves other document at 1024x768 (2.8s)
+2026-10-28T19:38:28.3992570Z   ✓  543 tests/e2e/source-accessibility.spec.ts:352:9 › source accessibility: late save preserves deliberate focus at 1024x768 (2.7s)
+2026-10-28T19:38:32.1984347Z   ✓  544 tests/e2e/source-accessibility.spec.ts:352:9 › source accessibility: late save preserves newer readiness at 1024x768 (3.8s)
+2026-10-28T19:38:35.5419544Z   ✓  545 tests/e2e/source-accessibility.spec.ts:546:9 › source accessibility: real conflict and explicit recovery at 1024x768 (3.3s)
+2026-10-28T19:38:38.2666838Z   ✓  546 tests/e2e/source-accessibility.spec.ts:546:9 › source accessibility: real conflict after departure at 1024x768 (2.7s)
+2026-10-28T19:38:41.4204687Z   ✓  547 tests/e2e/source-accessibility.spec.ts:219:9 › source accessibility: native undo redo and shortcut save at 1440x900 (3.1s)
+2026-10-28T19:38:44.5853917Z   ✓  548 tests/e2e/source-accessibility.spec.ts:219:9 › source accessibility: native undo redo and button save at 1440x900 (3.2s)
+2026-10-28T19:38:47.3354046Z   ✓  549 tests/e2e/source-accessibility.spec.ts:352:9 › source accessibility: late save preserves Home at 1440x900 (2.7s)
+2026-10-28T19:38:51.6352169Z   ✓  550 tests/e2e/source-accessibility.spec.ts:352:9 › source accessibility: late save preserves newer revision at 1440x900 (4.3s)
+2026-10-28T19:38:54.5388102Z   ✓  551 tests/e2e/source-accessibility.spec.ts:352:9 › source accessibility: late save preserves same document draft at 1440x900 (2.9s)
+2026-10-28T19:38:57.4537493Z   ✓  552 tests/e2e/source-accessibility.spec.ts:352:9 › source accessibility: late save preserves other document at 1440x900 (2.9s)
+2026-10-28T19:39:00.1898610Z   ✓  553 tests/e2e/source-accessibility.spec.ts:352:9 › source accessibility: late save preserves deliberate focus at 1440x900 (2.7s)
+2026-10-28T19:39:04.0354197Z   ✓  554 tests/e2e/source-accessibility.spec.ts:352:9 › source accessibility: late save preserves newer readiness at 1440x900 (3.8s)
+2026-10-28T19:39:07.4398823Z   ✓  555 tests/e2e/source-accessibility.spec.ts:546:9 › source accessibility: real conflict and explicit recovery at 1440x900 (3.4s)
+2026-10-28T19:39:10.2748824Z   ✓  556 tests/e2e/source-accessibility.spec.ts:546:9 › source accessibility: real conflict after departure at 1440x900 (2.8s)
+2026-10-28T19:39:13.3082893Z   ✓  557 tests/e2e/source-accessibility.spec.ts:701:7 › source accessibility: UTF-8 recovery bound and real size refusal at 1024x768 (3.0s)
+2026-10-28T19:39:15.9056184Z   ✓  558 tests/e2e/source-accessibility.spec.ts:783:9 › source accessibility: recovery read failure on open at 1024x768 (2.6s)
+2026-10-28T19:39:18.4995382Z   ✓  559 tests/e2e/source-accessibility.spec.ts:783:9 › source accessibility: recovery read failure on switch at 1024x768 (2.6s)
+2026-10-28T19:39:21.6160026Z   ✓  560 tests/e2e/source-accessibility.spec.ts:701:7 › source accessibility: UTF-8 recovery bound and real size refusal at 1440x900 (3.1s)
+2026-10-28T19:39:24.2272191Z   ✓  561 tests/e2e/source-accessibility.spec.ts:783:9 › source accessibility: recovery read failure on open at 1440x900 (2.6s)
+2026-10-28T19:39:26.8225969Z   ✓  562 tests/e2e/source-accessibility.spec.ts:783:9 › source accessibility: recovery read failure on switch at 1440x900 (2.6s)
+2026-10-28T19:39:28.3241947Z   ✓  563 tests/e2e/source-drafts.spec.ts:3:5 › source drafts: preserve empty recovery and atomically bind rapid resource switches to their own text (1.5s)
+2026-10-28T19:39:31.3269535Z   ✓  564 tests/e2e/source-integrity.spec.ts:5:5 › external source inspection: modified bytes remain readable with warning, blocked save and no execution (3.0s)
+2026-10-28T19:39:34.8290329Z   ✓  565 tests/e2e/source-recovery-accessibility.spec.ts:241:9 › recovery accessibility: native adopt at 1024x768 (3.5s)
+2026-10-28T19:39:38.2901039Z   ✓  566 tests/e2e/source-recovery-accessibility.spec.ts:241:9 › recovery accessibility: native restore at 1024x768 (3.5s)
+2026-10-28T19:39:41.6048829Z   ✓  567 tests/e2e/source-recovery-accessibility.spec.ts:241:9 › recovery accessibility: native unreadable restore at 1024x768 (3.3s)
+2026-10-28T19:39:44.0544906Z   ✓  568 tests/e2e/source-recovery-accessibility.spec.ts:365:9 › recovery accessibility: history failed lookup at 1024x768 (2.4s)
+2026-10-28T19:39:46.8064326Z   ✓  569 tests/e2e/source-recovery-accessibility.spec.ts:365:9 › recovery accessibility: history malformed response at 1024x768 (2.7s)
+2026-10-28T19:39:49.2411741Z   ✓  570 tests/e2e/source-recovery-accessibility.spec.ts:365:9 › recovery accessibility: history out-of-window response at 1024x768 (2.4s)
+2026-10-28T19:39:51.2151362Z   ✓  571 tests/e2e/source-recovery-accessibility.spec.ts:365:9 › recovery accessibility: history absent response at 1024x768 (2.0s)
+2026-10-28T19:39:54.3739346Z   ✓  572 tests/e2e/source-recovery-accessibility.spec.ts:507:11 › recovery accessibility: late modified recovery preserves Home at 1024x768 (3.2s)
+2026-10-28T19:39:59.9387340Z   ✓  573 tests/e2e/source-recovery-accessibility.spec.ts:507:11 › recovery accessibility: late modified recovery preserves newer head at 1024x768 (5.6s)
+2026-10-28T19:40:04.7478446Z   ✓  574 tests/e2e/source-recovery-accessibility.spec.ts:507:11 › recovery accessibility: late modified recovery preserves newer readiness at 1024x768 (4.8s)
+2026-10-28T19:40:08.0633561Z   ✓  575 tests/e2e/source-recovery-accessibility.spec.ts:507:11 › recovery accessibility: late modified recovery preserves deliberate focus at 1024x768 (3.3s)
+2026-10-28T19:40:11.3542346Z   ✓  576 tests/e2e/source-recovery-accessibility.spec.ts:507:11 › recovery accessibility: late modified recovery preserves repeat submit at 1024x768 (3.3s)
+2026-10-28T19:40:14.7479395Z   ✓  577 tests/e2e/source-recovery-accessibility.spec.ts:507:11 › recovery accessibility: late unreadable recovery preserves Home at 1024x768 (3.4s)
+2026-10-28T19:40:19.9222132Z   ✓  578 tests/e2e/source-recovery-accessibility.spec.ts:507:11 › recovery accessibility: late unreadable recovery preserves newer head at 1024x768 (5.2s)
+2026-10-28T19:40:24.7921087Z   ✓  579 tests/e2e/source-recovery-accessibility.spec.ts:507:11 › recovery accessibility: late unreadable recovery preserves newer readiness at 1024x768 (4.9s)
+2026-10-28T19:40:28.1103426Z   ✓  580 tests/e2e/source-recovery-accessibility.spec.ts:507:11 › recovery accessibility: late unreadable recovery preserves deliberate focus at 1024x768 (3.3s)
+2026-10-28T19:40:30.8210205Z   ✓  581 tests/e2e/source-recovery-accessibility.spec.ts:665:9 › recovery accessibility: real stale refusal current at 1024x768 (2.7s)
+2026-10-28T19:40:32.9403280Z   ✓  582 tests/e2e/source-recovery-accessibility.spec.ts:665:9 › recovery accessibility: real stale refusal after departure at 1024x768 (2.1s)
+2026-10-28T19:40:36.0699940Z   ✓  583 tests/e2e/source-recovery-accessibility.spec.ts:241:9 › recovery accessibility: native adopt at 1440x900 (3.1s)
+2026-10-28T19:40:39.2001196Z   ✓  584 tests/e2e/source-recovery-accessibility.spec.ts:241:9 › recovery accessibility: native restore at 1440x900 (3.1s)
+2026-10-28T19:40:42.3562996Z   ✓  585 tests/e2e/source-recovery-accessibility.spec.ts:241:9 › recovery accessibility: native unreadable restore at 1440x900 (3.1s)
+2026-10-28T19:40:44.6989038Z   ✓  586 tests/e2e/source-recovery-accessibility.spec.ts:365:9 › recovery accessibility: history failed lookup at 1440x900 (2.3s)
+2026-10-28T19:40:47.1154058Z   ✓  587 tests/e2e/source-recovery-accessibility.spec.ts:365:9 › recovery accessibility: history malformed response at 1440x900 (2.4s)
+2026-10-28T19:40:49.4983743Z   ✓  588 tests/e2e/source-recovery-accessibility.spec.ts:365:9 › recovery accessibility: history out-of-window response at 1440x900 (2.4s)
+2026-10-28T19:40:51.3540506Z   ✓  589 tests/e2e/source-recovery-accessibility.spec.ts:365:9 › recovery accessibility: history absent response at 1440x900 (1.9s)
+2026-10-28T19:40:54.4145800Z   ✓  590 tests/e2e/source-recovery-accessibility.spec.ts:507:11 › recovery accessibility: late modified recovery preserves Home at 1440x900 (3.1s)
+2026-10-28T19:40:59.6797151Z   ✓  591 tests/e2e/source-recovery-accessibility.spec.ts:507:11 › recovery accessibility: late modified recovery preserves newer head at 1440x900 (5.3s)
+2026-10-28T19:41:04.4121607Z   ✓  592 tests/e2e/source-recovery-accessibility.spec.ts:507:11 › recovery accessibility: late modified recovery preserves newer readiness at 1440x900 (4.7s)
+2026-10-28T19:41:07.6484970Z   ✓  593 tests/e2e/source-recovery-accessibility.spec.ts:507:11 › recovery accessibility: late modified recovery preserves deliberate focus at 1440x900 (3.2s)
+2026-10-28T19:41:10.8289818Z   ✓  594 tests/e2e/source-recovery-accessibility.spec.ts:507:11 › recovery accessibility: late modified recovery preserves repeat submit at 1440x900 (3.2s)
+2026-10-28T19:41:14.0124661Z   ✓  595 tests/e2e/source-recovery-accessibility.spec.ts:507:11 › recovery accessibility: late unreadable recovery preserves Home at 1440x900 (3.2s)
+2026-10-28T19:41:19.3369571Z   ✓  596 tests/e2e/source-recovery-accessibility.spec.ts:507:11 › recovery accessibility: late unreadable recovery preserves newer head at 1440x900 (5.3s)
+2026-10-28T19:41:24.1761555Z   ✓  597 tests/e2e/source-recovery-accessibility.spec.ts:507:11 › recovery accessibility: late unreadable recovery preserves newer readiness at 1440x900 (4.8s)
+2026-10-28T19:41:27.4986937Z   ✓  598 tests/e2e/source-recovery-accessibility.spec.ts:507:11 › recovery accessibility: late unreadable recovery preserves deliberate focus at 1440x900 (3.3s)
+2026-10-28T19:41:30.1593771Z   ✓  599 tests/e2e/source-recovery-accessibility.spec.ts:665:9 › recovery accessibility: real stale refusal current at 1440x900 (2.6s)
+2026-10-28T19:41:32.3384593Z   ✓  600 tests/e2e/source-recovery-accessibility.spec.ts:665:9 › recovery accessibility: real stale refusal after departure at 1440x900 (2.2s)
+2026-10-28T19:41:36.2698962Z   ✓  601 tests/e2e/source-recovery-accessibility.spec.ts:770:7 › recovery accessibility: unreadable target replaces previous project context at 1024x768 (3.9s)
+2026-10-28T19:41:40.2546784Z   ✓  602 tests/e2e/source-recovery-accessibility.spec.ts:770:7 › recovery accessibility: unreadable target replaces previous project context at 1440x900 (4.0s)
+2026-10-28T19:42:11.7277094Z   ✓  603 tests/e2e/studio.spec.ts:7:5 › owned reference browser workflow: author, preflight, execute, reconnect, inspect and annotate (31.4s)
+2026-10-28T19:42:17.6172476Z   ✓  604 tests/e2e/trace-claims.spec.ts:40:5 › reported external claims: frozen subjects, revision history, neutral PASS label and immutable exchange (5.9s)
+2026-10-28T19:42:19.7006129Z   ✓  605 tests/e2e/wizard-accessibility.spec.ts:69:5 › wizard accessibility: late history depart at 1024x768 (2.1s)
+2026-10-28T19:42:21.7343809Z   ✓  606 tests/e2e/wizard-accessibility.spec.ts:69:5 › wizard accessibility: late history focus elsewhere at 1024x768 (2.0s)
+2026-10-28T19:42:25.0318643Z   ✓  607 tests/e2e/wizard-accessibility.spec.ts:69:5 › wizard accessibility: late history newer head at 1024x768 (3.3s)
+2026-10-28T19:42:27.1285035Z   ✓  608 tests/e2e/wizard-accessibility.spec.ts:69:5 › wizard accessibility: late history depart at 1440x900 (2.1s)
+2026-10-28T19:42:29.2467368Z   ✓  609 tests/e2e/wizard-accessibility.spec.ts:69:5 › wizard accessibility: late history focus elsewhere at 1440x900 (2.1s)
+2026-10-28T19:42:32.6417944Z   ✓  610 tests/e2e/wizard-accessibility.spec.ts:69:5 › wizard accessibility: late history newer head at 1440x900 (3.4s)
+2026-10-28T19:42:37.0709912Z   ✓  611 tests/e2e/wizard-accessibility.spec.ts:154:7 › wizard accessibility: native keyboard instance, placement and binding at 1024x768 (4.4s)
+2026-10-28T19:42:41.4428517Z   ✓  612 tests/e2e/wizard-accessibility.spec.ts:154:7 › wizard accessibility: native keyboard instance, placement and binding at 1440x900 (4.4s)
+2026-10-28T19:42:41.5416347Z
+2026-10-28T19:42:41.5421876Z   612 passed (38.2m)
+2026-10-28T19:42:42.8561132Z ##[group]Run uv run python scripts/package_studio.py
+2026-10-28T19:42:42.8561394Z uv run python scripts/package_studio.py
+2026-10-28T19:42:42.8578655Z shell: /usr/bin/bash -e {0}
+2026-10-28T19:42:42.8578797Z env:
+2026-10-28T19:42:42.8578924Z   PYTEST_DISABLE_PLUGIN_AUTOLOAD: 1
+2026-10-28T19:42:42.8579148Z   UV_CACHE_DIR: <ci-repo>/.studio-local/uv
+2026-10-28T19:42:42.8579469Z   PLAYWRIGHT_BROWSERS_PATH: <ci-repo>/.studio-local/browsers
+2026-10-28T19:42:42.8579954Z   npm_config_cache: <ci-repo>/.studio-local/npm
+2026-10-28T19:42:42.8580220Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.13/x64
+2026-10-28T19:42:42.8580462Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.13/x64/lib/pkgconfig
+2026-10-28T19:42:42.8580703Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.13/x64
+2026-10-28T19:42:42.8580965Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.13/x64
+2026-10-28T19:42:42.8581184Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.13/x64
+2026-10-28T19:42:42.8581403Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.13/x64/lib
+2026-10-28T19:42:42.8581588Z ##[endgroup]
+2026-10-28T19:42:43.4117400Z {"package": "xverse-studio-reference.zip", "sha256": "b9cee07dde843f09fe39f9d99d3b0f5747dc85067e01122492b421d5c70a2a52", "files": 114, "candidate": "ddaa7366478d6c66c85a3f4a0d24c8ee35ce7689"}
+2026-10-28T19:42:43.4226180Z ##[group]Run uv run python scripts/smoke_package.py --output evidence/studio/native-ci/package.json
+2026-10-28T19:42:43.4226884Z uv run python scripts/smoke_package.py --output evidence/studio/native-ci/package.json
+2026-10-28T19:42:43.4250878Z shell: /usr/bin/bash -e {0}
+2026-10-28T19:42:43.4251040Z env:
+2026-10-28T19:42:43.4251172Z   PYTEST_DISABLE_PLUGIN_AUTOLOAD: 1
+2026-10-28T19:42:43.4251494Z   UV_CACHE_DIR: <ci-repo>/.studio-local/uv
+2026-10-28T19:42:43.4251825Z   PLAYWRIGHT_BROWSERS_PATH: <ci-repo>/.studio-local/browsers
+2026-10-28T19:42:43.4252161Z   npm_config_cache: <ci-repo>/.studio-local/npm
+2026-10-28T19:42:43.4252435Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.13/x64
+2026-10-28T19:42:43.4252678Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.13/x64/lib/pkgconfig
+2026-10-28T19:42:43.4252953Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.13/x64
+2026-10-28T19:42:43.4253171Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.13/x64
+2026-10-28T19:42:43.4253389Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.13/x64
+2026-10-28T19:42:43.4253613Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.13/x64/lib
+2026-10-28T19:42:43.4253804Z ##[endgroup]
+2026-10-28T19:42:45.7527397Z {"scope": "fresh_local_package_extraction_offline_with_prepared_dependency_cache", "package": {"package": "studio.zip", "sha256": "b9cee07dde843f09fe39f9d99d3b0f5747dc85067e01122492b421d5c70a2a52", "files": 114, "candidate": "ddaa7366478d6c66c85a3f4a0d24c8ee35ce7689"}, "provisionExit": 0, "os": "linux", "python": "3.13.13", "usedPreparedCache": true, "browserWorkflow": "covered separately by native browser tests", "windows": "NOT_RUN on this host", "outcome": "passed", "staticIndexHTTP": 200, "projectPersisted": true, "authoritativeCompilation": true, "planDigest": "sha256:b85a788103a4275fe84b626c4e063ab55d2bb81d7c364ddee4a0601f4d74e71a"}
+2026-10-28T19:42:45.7772603Z ##[group]Run actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+2026-10-28T19:42:45.7772831Z with:
+2026-10-28T19:42:45.7773008Z   name: native-ubuntu-24.04-ddaa7366478d6c66c85a3f4a0d24c8ee35ce7689
+2026-10-28T19:42:45.7773267Z   path: test-results/
+playwright-report/
+dist/
+evidence/studio/
+
+2026-10-28T19:42:45.7773470Z   if-no-files-found: warn
+2026-10-28T19:42:45.7773611Z   compression-level: 6
+2026-10-28T19:42:45.7773881Z   overwrite: false
+2026-10-28T19:42:45.7774010Z   include-hidden-files: false
+2026-10-28T19:42:45.7774149Z env:
+2026-10-28T19:42:45.7774272Z   PYTEST_DISABLE_PLUGIN_AUTOLOAD: 1
+2026-10-28T19:42:45.7774493Z   UV_CACHE_DIR: <ci-repo>/.studio-local/uv
+2026-10-28T19:42:45.7774812Z   PLAYWRIGHT_BROWSERS_PATH: <ci-repo>/.studio-local/browsers
+2026-10-28T19:42:45.7775137Z   npm_config_cache: <ci-repo>/.studio-local/npm
+2026-10-28T19:42:45.7775426Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.13/x64
+2026-10-28T19:42:45.7775666Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.13/x64/lib/pkgconfig
+2026-10-28T19:42:45.7775900Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.13/x64
+2026-10-28T19:42:45.7776112Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.13/x64
+2026-10-28T19:42:45.7776323Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.13/x64
+2026-10-28T19:42:45.7776539Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.13/x64/lib
+2026-10-28T19:42:45.7776732Z ##[endgroup]
+2026-10-28T19:42:45.8879845Z (node:14824) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-28T19:42:45.8880344Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-28T19:42:46.8231254Z Multiple search paths detected. Calculating the least common ancestor of all paths
+2026-10-28T19:42:46.8233400Z The least common ancestor is <ci-repo>. This will be the root directory of the artifact
+2026-10-28T19:42:46.8233892Z With the provided path, there will be 7479 files uploaded
+2026-10-28T19:42:46.8237437Z Artifact name is valid!
+2026-10-28T19:42:46.8237958Z Root directory input is valid!
+2026-10-28T19:42:47.1081167Z Beginning upload of artifact content to blob storage
+2026-10-28T19:42:47.5131286Z (node:14824) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-10-28T19:42:48.0940230Z Uploaded bytes 8388608
+2026-10-28T19:42:48.4616930Z Uploaded bytes 16777216
+2026-10-28T19:42:48.7190842Z Uploaded bytes 25165824
+2026-10-28T19:42:48.8050823Z Uploaded bytes 33554432
+2026-10-28T19:42:49.2036814Z Uploaded bytes 41943040
+2026-10-28T19:42:49.8264757Z Uploaded bytes 50331648
+2026-10-28T19:42:50.6437622Z Uploaded bytes 58720256
+2026-10-28T19:42:51.0085368Z Uploaded bytes 67108864
+2026-10-28T19:42:51.0791034Z Uploaded bytes 75497472
+2026-10-28T19:42:51.3145441Z Uploaded bytes 83886080
+2026-10-28T19:42:51.5900868Z Uploaded bytes 92274688
+2026-10-28T19:42:51.8671006Z Uploaded bytes 100663296
+2026-10-28T19:42:52.1561579Z Uploaded bytes 109051904
+2026-10-28T19:42:52.3777906Z Uploaded bytes 117440512
+2026-10-28T19:42:52.6098542Z Uploaded bytes 125829120
+2026-10-28T19:42:53.0744340Z Uploaded bytes 134217728
+2026-10-28T19:42:53.4275543Z Uploaded bytes 142606336
+2026-10-28T19:42:53.6864648Z Uploaded bytes 150994944
+2026-10-28T19:42:53.7918402Z Uploaded bytes 154024253
+2026-10-28T19:42:53.8364725Z Finished uploading artifact content to blob storage!
+2026-10-28T19:42:53.8367184Z SHA256 digest of uploaded artifact zip is c0da1c8e03523013b932eb1fc713d2756a6ce87d5d4c52181c482ee4deec6944
+2026-10-28T19:42:53.8368555Z Finalizing artifact upload
+2026-10-28T19:42:54.3403440Z Artifact native-ubuntu-24.04-ddaa7366478d6c66c85a3f4a0d24c8ee35ce7689.zip successfully finalized. Artifact ID 12845957865
+2026-10-28T19:42:54.3404526Z Artifact native-ubuntu-24.04-ddaa7366478d6c66c85a3f4a0d24c8ee35ce7689 has been successfully uploaded! Final size is 154024253 bytes. Artifact ID is 12845957865
+2026-10-28T19:42:54.3408576Z Artifact download URL: https://github.com/The-Xverse/xverse-studio/actions/runs/40749118090/artifacts/12845957865
+2026-10-28T19:42:54.3850757Z Post job cleanup.
+2026-10-28T19:42:54.4692173Z (node:14837) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-28T19:42:54.4693035Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-28T19:42:54.4836115Z Post job cleanup.
+2026-10-28T19:42:54.5673226Z (node:14845) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-28T19:42:54.5673718Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-28T19:42:54.5780224Z Post job cleanup.
+2026-10-28T19:42:54.6491796Z [command]/usr/bin/git version
+2026-10-28T19:42:54.6529801Z git version 2.56.0
+2026-10-28T19:42:54.6557248Z Temporarily overriding HOME='<ci-home>/work/_temp/00d40868-b640-4c90-8654-29d85e18d596' before making global git config changes
+2026-10-28T19:42:54.6558216Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-28T19:42:54.6560966Z [command]/usr/bin/git config --global --add safe.directory <ci-repo>
+2026-10-28T19:42:54.6600170Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-28T19:42:54.6644805Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-28T19:42:54.6884746Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-28T19:42:54.6908592Z http.https://github.com/.extraheader
+2026-10-28T19:42:54.6918515Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-10-28T19:42:54.6981138Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-28T19:42:54.7236443Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-28T19:42:54.7276348Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-28T19:42:54.7611233Z Cleaning up orphan processes
+2026-10-28T19:42:54.7866361Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11d5960a326750d5838078e36cf38b85af677262, actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020, actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065, actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

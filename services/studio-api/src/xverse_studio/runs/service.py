@@ -25,6 +25,7 @@ from xverse_studio.evidence.reader import read_journal
 from xverse_studio.deployments import compile_selection
 from xverse_studio.profiles import ProfileRegistry
 from xverse_studio.preflight import reference_readiness
+from xverse_studio.providers.reference_control import CONTROL_STATES, MAX_PAUSED_WALL_SECONDS, admitted_controls
 
 ACTIVE = {
     "requested",
@@ -370,6 +371,7 @@ class Runs:
                 "operationId": oid,
                 "state": "requested",
                 "stateVersion": 0,
+                "observationVersion": 0,
                 "cleanup": "not_started",
                 "evidence": "pending",
                 "evaluation": "not_started",
@@ -379,7 +381,8 @@ class Runs:
                 "createdAt": time.time(),
                 "planDigest": snap["planDigest"],
                 "semanticDigest": snap["semanticDigest"],
-                "capabilities": ["stop", "cancel"],
+                "capabilities": admitted_controls(snap["providerIdentity"]),
+                "controlLimits": {"maxPausedWallSeconds": MAX_PAUSED_WALL_SECONDS},
             }
             operation = {
                 "operationId": oid,
@@ -525,6 +528,9 @@ class Runs:
     def read(self, rid):
         with self.store.lock:
             run = self.store.get("run", rid)
+            observation_version = run.get("observationVersion", 0)
+            if type(observation_version) is not int or not 0 <= observation_version <= 2**53 - 1:
+                raise Problem("RUN_OBSERVATION_UNAVAILABLE", "The stored observation version is invalid; inspect the retained data or restore a verified backup.", 503)
             previous_run = canonical(run)
             root = self.directory(rid)
             statepath = root / "state.json"
@@ -582,6 +588,12 @@ class Runs:
             except (OSError, ValueError, psutil.Error):
                 observed = None
             if observed:
+                if (
+                    run.get("reason") in ("OWNERSHIP_UNKNOWN", "LAUNCH_ACKNOWLEDGEMENT_LOST")
+                    and observed.get("state") in ("running", "paused", "stopping", "stopped", "failed")
+                    and "reason" not in observed
+                ):
+                    run.pop("reason", None)
                 run.update(
                     {
                         k: observed[k]
@@ -650,6 +662,9 @@ class Runs:
             # Ownership, journal integrity and assessments are still observed on
             # every read. Only an actual metadata change needs a durable write.
             if canonical(run) != previous_run:
+                if observation_version == 2**53 - 1:
+                    raise Problem("RUN_OBSERVATION_UNAVAILABLE", "The observation version limit was reached; retain this run and inspect its evidence before making another request.", 503)
+                run["observationVersion"] = observation_version + 1
                 self.store.put("run", rid, run)
             if rid in self.children and self.children[rid].poll() is not None:
                 self.children.pop(rid)
@@ -681,7 +696,7 @@ class Runs:
             if payload.get("parameters"):
                 raise Problem(
                     "COMMAND_PARAMETERS_UNSUPPORTED",
-                    "Stop and cancel accept no additional parameters.",
+                    "The admitted reference controls accept no additional parameters.",
                 )
             if payload["kind"] not in run["capabilities"]:
                 raise Problem(
@@ -694,7 +709,7 @@ class Runs:
                     "Run state changed; refresh before controlling it.",
                     409,
                 )
-            if run["state"] not in ("running", "preparing", "ready", "paused"):
+            if run["state"] not in CONTROL_STATES.get(payload["kind"], ()):
                 raise Problem(
                     "STATE_CONFLICT",
                     "The current owned state does not permit this command.",
@@ -728,6 +743,8 @@ class Runs:
             root = self.directory(rid)
             secret = (root / "owner.key").read_bytes()
             cmd = {"operationId": result["operationId"], "kind": payload["kind"]}
+            if payload["kind"] in ("pause", "resume"):
+                cmd["expectedStateVersion"] = payload["expectedStateVersion"]
             cmd["signature"] = hmac.new(
                 secret, canonical(cmd).encode(), hashlib.sha256
             ).hexdigest()
@@ -749,7 +766,7 @@ class Runs:
         # Native foreground shutdown requests only admitted, ownership-confirmed cancellation.
         for r in self.store.all("run"):
             run = self.read(r["runId"])
-            if run["state"] == "running":
+            if run["state"] in ("running", "paused"):
                 try:
                     self.command(
                         run["runId"],

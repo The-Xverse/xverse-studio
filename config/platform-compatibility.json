@@ -163,9 +163,9 @@
   "providerDescriptorSnapshots": [
     {
       "providerId": "studio.reference",
-      "providerVersion": "1.0.0",
+      "providerVersion": "1.1.0",
       "contractVersion": "1.0",
-      "implementationDigest": "sha256:501a78ea57b35d1f70f09580b836ca65f5c9a0331a1869ebc7fcc5e4e130c71a",
+      "implementationDigest": "sha256:84f5935656b00422a160a0d9bee4e1ff4c55c4f76505e822554ce2892be7b094",
       "maturity": "fixture",
       "evidenceScope": "owned_reference",
       "supportedHostOS": [
@@ -179,7 +179,9 @@
       "operations": [
         "start",
         "stop",
-        "cancel"
+        "cancel",
+        "pause",
+        "resume"
       ],
       "connectionContracts": {
         "causality": [
@@ -194,12 +196,14 @@
         "maxSamples": 3000,
         "maxConcurrentRuns": 4,
         "maxElements": 200,
-        "maxConnections": 400
+        "maxConnections": 400,
+        "maxPausedWallSeconds": 30
       },
       "available": true,
       "limitations": [
         "Scalar first-order reference model only; no external simulator, physical device, native X-COM, or industrial fidelity claim.",
-        "Pause, rewind, step, live mutation and physical coupling are unsupported."
+        "Cooperative simulation pause has a cumulative 30-second wall-time budget; exhaustion stops the owned model with incomplete coverage.",
+        "Rewind, step, reset, live mutation and physical coupling are unsupported."
       ]
     },
     {

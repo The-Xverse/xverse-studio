@@ -11,6 +11,9 @@ import time
 import traceback
 import psutil
 from xverse_studio.storage.core import atomic, canonical, digest
+from xverse_studio.providers.reference_control import (
+    CONTROL_STATES, MAX_PAUSED_WALL_SECONDS, REFERENCE_VERSION,
+)
 
 
 def main():
@@ -29,6 +32,7 @@ def main():
     if (
         digest(actual) != digest(config)
         or compiled["planDigest"] != snapshot["planDigest"]
+        or snapshot.get("providerIdentity", {}).get("limits", {}).get("maxPausedWallSeconds") != MAX_PAUSED_WALL_SECONDS
     ):
         atomic(
             root / "state.json",
@@ -86,7 +90,7 @@ def main():
                 "resolution": "microsecond",
                 "uncertainty": 0,
             },
-            "source": {"providerId": "studio.reference", "version": "1.0.0"},
+            "source": {"providerId": "studio.reference", "version": REFERENCE_VERSION},
             "elementRefs": config.get("elementRefs", []),
             "evidenceClass": "observed",
             "payload": payload,
@@ -101,7 +105,7 @@ def main():
         atomic(root / "state.json", canonical(state).encode())
 
     def owned_command():
-        # Only an owner-signed stop/cancel request is attributable to an operation.
+        # Only an owner-signed admitted request is attributable to an operation.
         command_path = root / "command.json"
         if not command_path.exists():
             return None
@@ -110,7 +114,7 @@ def main():
         if not hmac.compare_digest(
             signature,
             hmac.new(secret, canonical(cmd).encode(), hashlib.sha256).hexdigest(),
-        ) or cmd["kind"] not in ("stop", "cancel"):
+        ) or cmd["kind"] not in CONTROL_STATES:
             return None
         if cmd["operationId"] in state["commandResults"]:
             return None
@@ -155,22 +159,66 @@ def main():
         converter = config.get("converter")
         start = time.monotonic()
         stopped = False
+        terminal_reason = None
+        paused_at = None
+        paused_total = 0.0
+        completed_controls = set()
         fault_emitted = False
         for i in range(n):
             tick = round(i * step * 1_000_000)
-            cmd = owned_command()
-            if cmd is not None:
-                operation = cmd["operationId"]
-                state["state"] = "stopping"
-                state["stateVersion"] += 1
-                save()
-                emit(
-                    "command.delegated",
-                    {"operationId": operation, "kind": cmd["kind"]},
-                    tick,
-                )
-                state["commandResults"][operation] = {"status": "completed"}
-                stopped = True
+            while True:
+                cmd = owned_command()
+                if cmd is not None:
+                    operation = cmd["operationId"]
+                    if cmd["kind"] in ("stop", "cancel"):
+                        state["state"] = "stopping"
+                        state["stateVersion"] += 1
+                        save()
+                        emit("command.delegated", {"operationId": operation, "kind": cmd["kind"]}, tick)
+                        state["commandResults"][operation] = {"status": "completed"}
+                        stopped = True
+                        break
+                    emit("command.delegated", {"operationId": operation, "kind": cmd["kind"]}, tick)
+                    version = cmd.get("expectedStateVersion")
+                    if (
+                        type(version) is not int or version != state["stateVersion"]
+                        or state["state"] not in CONTROL_STATES[cmd["kind"]]
+                    ):
+                        state["commandResults"][operation] = {"status": "failed", "code": "COMMAND_STATE_CONFLICT"}
+                        emit("command.failed", {"operationId": operation, "code": "COMMAND_STATE_CONFLICT"}, tick)
+                    else:
+                        now = time.monotonic()
+                        if cmd["kind"] == "resume" and paused_total + now - paused_at >= MAX_PAUSED_WALL_SECONDS:
+                            state["commandResults"][operation] = {"status": "failed", "code": "PAUSE_BUDGET_EXHAUSTED"}
+                            emit("command.failed", {"operationId": operation, "code": "PAUSE_BUDGET_EXHAUSTED"}, tick)
+                            save()
+                            continue
+                        if cmd["kind"] == "pause":
+                            paused_at = now
+                            state["state"] = "paused"
+                        else:
+                            elapsed = now - paused_at
+                            paused_total += elapsed
+                            start += elapsed
+                            paused_at = None
+                            state["state"] = "running"
+                        state["stateVersion"] += 1
+                        emit("run.state_changed", {"state": state["state"], "stateVersion": state["stateVersion"]}, tick)
+                        state["commandResults"][operation] = {"status": "completed"}
+                        emit("command.completed", {"operationId": operation}, tick)
+                        completed_controls.add(operation)
+                    save()
+                if state["state"] != "paused":
+                    break
+                remaining = MAX_PAUSED_WALL_SECONDS - paused_total - (time.monotonic() - paused_at)
+                if remaining <= 0:
+                    stopped = True
+                    terminal_reason = "PAUSE_BUDGET_EXHAUSTED"
+                    state["reason"] = terminal_reason
+                    emit("log.appended", {"severity": "warning", "message": "The cumulative wall-time pause budget expired; the owned model stopped without completing its simulation coverage."}, tick)
+                    break
+                time.sleep(min(0.05, remaining))
+            if stopped:
                 break
             fault = config.get("fault", "none") == "stuck-sensor" and i >= n // 2
             if fault and not fault_emitted:
@@ -232,13 +280,13 @@ def main():
             {
                 "state": "stopped",
                 "stateVersion": state["stateVersion"],
-                "reason": "cancelled" if stopped else "duration_complete",
+                "reason": terminal_reason or ("cancelled" if stopped else "duration_complete"),
             },
-            round(duration * 1e6),
+            round((i if stopped else n) * step * 1e6),
         )
         emit("cleanup.updated", {"status": "complete", "resources": []})
         for op, result in state["commandResults"].items():
-            if result["status"] == "completed":
+            if result["status"] == "completed" and op not in completed_controls:
                 emit("command.completed", {"operationId": op})
         if not stopped:
             fail_pending_command(

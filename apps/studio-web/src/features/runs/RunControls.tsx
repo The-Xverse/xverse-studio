@@ -26,8 +26,19 @@ const CONTROLS = [
     label: "Cancel",
     purpose: "Request the admitted cancellation policy.",
   },
+  {
+    kind: "pause",
+    label: "Pause",
+    purpose:
+      "Pause the owned simulation clock within its declared wall-time budget.",
+  },
+  {
+    kind: "resume",
+    label: "Resume",
+    purpose: "Resume the owned simulation from its current simulation time.",
+  },
 ];
-const OPTIONAL = ["pause", "resume", "step", "reset", "set_parameter"];
+const OPTIONAL = ["step", "reset", "set_parameter"];
 
 export function RunControls({
   run,
@@ -212,11 +223,27 @@ export function RunControls({
           </p>
         )}
       </div>
+      {capabilities.includes("pause") && (
+        <p className="hint">
+          Simulation pause preserves the current model step; it does not pause
+          physical equipment.
+          {typeof run.controlLimits?.maxPausedWallSeconds === "number" && (
+            <>
+              {" "}
+              Total pause budget: {run.controlLimits.maxPausedWallSeconds} wall
+              seconds. Exhaustion stops the model with incomplete simulation
+              coverage.
+            </>
+          )}
+        </p>
+      )}
       {pending && (
         <div className="control-operation" data-control-operation={phase}>
           <div className="section-heading">
             <h3>
-              {pending.kind === "stop" ? "Stop" : "Cancel"} request{" "}
+              {CONTROLS.find((control) => control.kind === pending.kind)
+                ?.label || pending.kind}{" "}
+              request{" "}
               <Badge
                 tone={
                   phase === "unacknowledged" ? "warning" : statusTone(phase)

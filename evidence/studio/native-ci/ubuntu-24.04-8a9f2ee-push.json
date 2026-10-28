@@ -1,0 +1,97 @@
+{
+  "runId": 40749106225,
+  "jobId": 123030687544,
+  "event": "push",
+  "head": "8a9f2ee27113a9d1b199fc5f8add6f101f48d8e2",
+  "conclusion": "success",
+  "url": "https://github.com/The-Xverse/xverse-studio/actions/runs/40749106225",
+  "backendPassed": 1166,
+  "browserPassed": 612,
+  "browserFailures": 0,
+  "packageFiles": 114,
+  "packageSmokePassed": true,
+  "nativeWindows": "HELD_NOT_RUN",
+  "scope": "Actual published8a9 push checkout, prior startup product685; does not verify uncommitted1.1 optional-control/observation successor.",
+  "steps": [
+    {
+      "name": "Set up job",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run python -m pip install uv==0.12.17",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run uv sync --frozen",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run npm ci",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run npm run build",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run uv run python scripts/record_environment.py --output evidence/studio/native-ci/environment.json",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run uv run ruff check --select F821 services/studio-api/src scripts tests",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run uv run python scripts/run_checks.py",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run npx playwright install chromium",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run uv run python scripts/test_browser.py",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run uv run python scripts/package_studio.py",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run uv run python scripts/smoke_package.py --output evidence/studio/native-ci/package.json",
+      "conclusion": "success"
+    },
+    {
+      "name": "Run actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+      "conclusion": "success"
+    },
+    {
+      "name": "Post Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+      "conclusion": "success"
+    },
+    {
+      "name": "Post Run actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065",
+      "conclusion": "success"
+    },
+    {
+      "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+      "conclusion": "success"
+    },
+    {
+      "name": "Complete job",
+      "conclusion": "success"
+    }
+  ]
+}

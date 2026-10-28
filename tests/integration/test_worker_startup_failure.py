@@ -16,7 +16,7 @@ import pytest
 from xverse_studio.storage.core import canonical, digest
 
 
-@pytest.mark.parametrize("fault", ["configuration", "plan_digest"])
+@pytest.mark.parametrize("fault", ["configuration", "plan_digest", "pause_budget"])
 def test_native_startup_rejection_preserves_identity_without_start_or_evidence(
     client, monkeypatch, fault
 ):
@@ -46,8 +46,10 @@ def test_native_startup_rejection_preserves_identity_without_start_or_evidence(
             assert request["snapshot"]["providerId"] == "studio.reference"
             if fault == "configuration":
                 request["configuration"]["gain"] += 0.125
-            else:
+            elif fault == "plan_digest":
                 request["snapshot"]["planDigest"] = "sha256:" + "f" * 64
+            else:
+                request["snapshot"]["providerIdentity"]["limits"]["maxPausedWallSeconds"] = 1
             injected.append(request["runId"])
             return write(path, canonical(request).encode())
         return write(path, body)

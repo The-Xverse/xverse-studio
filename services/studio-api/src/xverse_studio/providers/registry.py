@@ -1,10 +1,11 @@
 import platform
 from pathlib import Path
 from xverse_studio.storage.core import digest
+from .reference_control import CONTROL_STATES, MAX_PAUSED_WALL_SECONDS, REFERENCE_VERSION
 
 REFERENCE = {
     "providerId": "studio.reference",
-    "providerVersion": "1.0.0",
+    "providerVersion": REFERENCE_VERSION,
     "contractVersion": "1.0",
     "name": "Studio executable reference",
     "maturity": "fixture",
@@ -14,7 +15,7 @@ REFERENCE = {
     "realizationClasses": ["simulated"],
     "targetClasses": ["model-unit"],
     "hostExecutionClass": "native-process",
-    "operations": ["start", "stop", "cancel"],
+    "operations": ["start", *CONTROL_STATES],
     "clockDomains": ["simulation-time"],
     # Contracts this provider actually executes (ADR-0016); nothing else is admitted.
     "connectionContracts": {"causality": ["unit-delay"], "converters": ["linear"]},
@@ -24,10 +25,12 @@ REFERENCE = {
         "maxConcurrentRuns": 4,
         "maxElements": 200,
         "maxConnections": 400,
+        "maxPausedWallSeconds": MAX_PAUSED_WALL_SECONDS,
     },
     "limitations": [
         "Scalar first-order reference model only; no external simulator, physical device, native X-COM, or industrial fidelity claim.",
-        "Pause, rewind, step, live mutation and physical coupling are unsupported.",
+        "Cooperative simulation pause has a cumulative 30-second wall-time budget; exhaustion stops the owned model with incomplete coverage.",
+        "Rewind, step, reset, live mutation and physical coupling are unsupported.",
     ],
     "supportedXdlVersions": ["xverse.io/xdl/v1alpha1"],
     "capabilityRecords": [
@@ -36,7 +39,7 @@ REFERENCE = {
             "targetClass": "model-unit",
             "legalStates": ["ready"]
             if op == "start"
-            else ["running", "preparing", "ready"],
+            else list(CONTROL_STATES[op]),
             "parametersSchema": {
                 "type": "object",
                 "properties": {},
@@ -47,7 +50,7 @@ REFERENCE = {
             "maxDurationSeconds": 30,
             "completion": "observed_worker_state",
         }
-        for op in ["start", "stop", "cancel"]
+        for op in ["start", *CONTROL_STATES]
     ],
     "available": True,
 }
@@ -78,6 +81,7 @@ def descriptors():
         (source / "worker.py").read_bytes()
         + (source.parent / "xdl/__init__.py").read_bytes()
         + (source.parent / "xdl/examples.py").read_bytes()
+        + (source / "reference_control.py").read_bytes()
     )
     return [
         {

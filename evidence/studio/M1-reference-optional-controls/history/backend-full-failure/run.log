@@ -1,0 +1,74 @@
+{
+  "valid": true,
+  "scope": "planning-package",
+  "application_acceptance": "not_evaluated_by_this_check",
+  "requirements": 75,
+  "success_criteria": 8,
+  "tasks": 100,
+  "acceptance_cases": 32,
+  "milestones": 5,
+  "errors": []
+}
+{
+  "valid": true,
+  "scope": "descriptive_platform_baseline_only",
+  "runtimeAdmission": false,
+  "errors": []
+}
+Architecture boundaries: passed (imports, dependency direction, industry dispatch, private runtime, executable input and browser executable hooks).
+........................................................................ [  6%]
+........................................................................ [ 12%]
+........................................................................ [ 18%]
+........................................................................ [ 24%]
+........................................................................ [ 30%]
+................................................................F....... [ 36%]
+........................................................................ [ 42%]
+........................................................................ [ 48%]
+........................................................................ [ 54%]
+........................................................................ [ 60%]
+........................................................................ [ 66%]
+........................................................................ [ 72%]
+........................................................................ [ 78%]
+........................................................................ [ 85%]
+..............................F..................F..F................... [ 91%]
+........................................................................ [ 97%]
+.................................                                        [100%]
+=================================== FAILURES ===================================
+__ test_a_run_resolves_and_observes_flows_distinctly_with_scope_and_freshness __
+tests/integration/test_communication_projections.py:54: in test_a_run_resolves_and_observes_flows_distinctly_with_scope_and_freshness
+    assert observed["status"] == "observed" and observed["samples"] == 5 and observed["freshness"] == "final"
+E   AssertionError: assert ('observed' == 'observed'
+E
+E       observed and 5 == 5 and 'unknown' == 'final'
+E
+E     - final
+E     + unknown)
+______ test_actual_fault_timeline_uses_frozen_intent_and_preserves_inputs ______
+tests/integration/test_scenario_timeline.py:103: in test_actual_fault_timeline_uses_frozen_intent_and_preserves_inputs
+    assert requested["position"]["tickUnit"] == "microsecond"
+E   AssertionError: assert None == 'microsecond'
+_____ test_timeline_large_source_ticks_are_exact_and_clocks_not_converted ______
+tests/integration/test_scenario_timeline.py:283: in test_timeline_large_source_ticks_are_exact_and_clocks_not_converted
+    assert first["position"]["tick"] == "9007199254740993" and first["position"]["status"] == "aligned"
+E   AssertionError: assert ('9007199254740993' == '9007199254740993'
+E
+E       9007199254740993 and 'unplaced' == 'aligned'
+E
+E     - aligned
+E     + unplaced)
+_ test_recorded_clock_codec_remains_separate_from_unproven_frozen_intent_codec _
+tests/integration/test_scenario_timeline.py:334: in test_recorded_clock_codec_remains_separate_from_unproven_frozen_intent_codec
+    assert report["intentClockCodec"] is None and report["tickUnit"] == "microsecond"
+E   AssertionError: assert (None is None and None == 'microsecond')
+=============================== warnings summary ===============================
+.venv/lib/python3.13/site-packages/fastapi/testclient.py:1
+  <repo>/.venv/lib/python3.13/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/integration/test_communication_projections.py::test_a_run_resolves_and_observes_flows_distinctly_with_scope_and_freshness
+FAILED tests/integration/test_scenario_timeline.py::test_actual_fault_timeline_uses_frozen_intent_and_preserves_inputs
+FAILED tests/integration/test_scenario_timeline.py::test_timeline_large_source_ticks_are_exact_and_clocks_not_converted
+FAILED tests/integration/test_scenario_timeline.py::test_recorded_clock_codec_remains_separate_from_unproven_frozen_intent_codec
+4 failed, 1181 passed, 1 warning in 1076.39s (0:17:56)

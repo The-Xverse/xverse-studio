@@ -206,6 +206,14 @@ export function mergeRun(current: Run | null, candidate: Run): Run | null {
   )
     return current;
   if (candidate.stateVersion > current.stateVersion) return candidate;
+  const observed = (run: Run): number =>
+    Number.isSafeInteger(run.observationVersion) && run.observationVersion >= 0
+      ? run.observationVersion
+      : -1;
+  const priorObservation = observed(current),
+    nextObservation = observed(candidate);
+  if (nextObservation > priorObservation) return candidate;
+  if (nextObservation < priorObservation) return current;
   return {
     ...current,
     ...candidate,
@@ -253,11 +261,7 @@ export class SseParser {
           frames.push(frame);
           if (frame.event === "studio.stream_control") controls++;
           else canonicalFrames++;
-          if (
-            canonicalFrames > 200 ||
-            controls > 1 ||
-            total > MAX_RECOVERY
-          )
+          if (canonicalFrames > 200 || controls > 1 || total > MAX_RECOVERY)
             throw Error("Presentation read queue limit exceeded");
         }
         this.id = "";

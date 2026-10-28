@@ -68,3 +68,33 @@ uses its original argument vector. Browser fixtures additionally label injected
 launch refusal, actual ownership-verified Linux SIGINT after a sample, and normal
 Stop. Neither fixture results nor this repair establish Windows, live-provider or
 milestone acceptance.
+### Resolved ownership diagnosis
+
+After the existing PID/birth/owner checks establish a trusted worker observation,
+the mutable run projection removes a prior `OWNERSHIP_UNKNOWN` or
+`LAUNCH_ACKNOWLEDGEMENT_LOST` reason when the worker reports no current reason.
+An explicitly unknown/reconciling worker projection cannot clear that diagnosis.
+The worker lifecycle, cleanup and evidence fields already replace those uncertain
+projections; retaining an obsolete ownership diagnosis alongside them is misleading.
+Worker-reported reasons and every existing ownership/refusal check remain intact.
+Two actual native recovery cases inject an OS-observation denial; one separately
+labels a durable lost-acknowledgement reason. They verify refusal while unknown,
+preservation of an injected reported-unknown observation, recovery of the original
+worker, unchanged inputs and subsequent Pause/Cancel.
+
+### Ordered backend observations without changing worker CAS
+
+The worker's `stateVersion` remains authoritative for command comparison and
+signed optional transitions. Losing or recovering a backend observation cannot
+increment that worker-owned version. Run metadata therefore carries a separate
+durable `observationVersion`, initialized to zero for new runs and advanced only
+when reconciliation already needs to persist changed metadata. Legacy records
+are not rewritten merely to initialize it. Stable reads still perform no writes.
+
+At the same worker lifecycle version, the browser accepts a newer complete
+observation, including removal of obsolete optional reasons, and refuses an older
+observation. Different run/snapshot identities and older worker versions remain
+refused. Legacy responses retain their existing conservative merge behavior;
+they cannot overwrite an already ordered modern observation. This counter grants
+no command, process or physical authority. Native denial/recovery and browser
+polling tests retain the same worker version and immutable run identities.

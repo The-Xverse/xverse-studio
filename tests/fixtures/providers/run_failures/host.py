@@ -20,12 +20,12 @@ from xverse_studio.storage.core import canonical
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--data", type=Path, required=True)
-    parser.add_argument("--scenario", choices=["mismatch", "launch_denied", "active_failure", "normal"], required=True)
+    parser.add_argument("--scenario", choices=["mismatch", "launch_denied", "active_failure", "normal", "ownership_recovery"], required=True)
     args = parser.parse_args()
     args.data = args.data.resolve()
     root = Path(__file__).resolve().parents[4]
     observation = dict(scope="owned native fault fixture; no equipment", scenario=args.scenario,
-                       workerAttempts=0, corruptions=0, launchRefusals=0, interruptions=0, errors=[])
+                       workerAttempts=0, corruptions=0, launchRefusals=0, interruptions=0, ownershipDenials=0, errors=[])
     threads = []
     with socket.socket() as listener:
         listener.bind(("127.0.0.1", 0))
@@ -33,6 +33,24 @@ def main():
         app = create_app(args.data, allowed_hosts=[f"127.0.0.1:{port}"], static_dir=root / "apps/studio-web/dist")
         runs, store = app.state.studio.runs, app.state.studio.store
         original_write, original_launch = run_module.atomic, run_module.subprocess.Popen
+        if args.scenario == "ownership_recovery":
+            original_psutil = run_module.psutil
+
+            class OwnedObservationFault:
+                def __getattr__(self, name):
+                    return getattr(original_psutil, name)
+
+                def Process(self, pid=None, *values, **options):
+                    if (args.data / "deny-owned-observation").exists() and any(
+                        child.pid == pid for child in runs.children.values()
+                    ):
+                        observation["ownershipDenials"] += 1
+                        raise original_psutil.AccessDenied(pid)
+                    return original_psutil.Process(pid, *values, **options)
+
+            # This closed host only faults observation of its own recorded child.
+            # The actual psutil module/class and worker process remain unchanged.
+            run_module.psutil = OwnedObservationFault()
 
         def injected_write(path, body):
             target = Path(path)

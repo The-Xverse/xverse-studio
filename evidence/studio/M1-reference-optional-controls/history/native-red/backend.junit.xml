@@ -1,0 +1,29 @@
+<testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="4" skipped="0" tests="4" time="13.660" timestamp="2026-10-28T19:02:27.051799+00:00" hostname="&lt;native-linux-host&gt;"><testcase classname="tests.integration.test_reference_pause" name="test_native_pause_resume_retains_clock_inputs_and_same_key_operation" time="3.533"><failure message="AssertionError: {&quot;code&quot;:&quot;CAPABILITY_UNSUPPORTED&quot;,&quot;message&quot;:&quot;The selected provider does not support this command.&quot;,&quot;requestId&quot;:&quot;req-9e4ef20f-9fee-463a-b4bb-84c3683e3bdd&quot;,&quot;retryable&quot;:false}&#10;assert 422 == 202&#10; +  where 422 = &lt;Response [422 Unprocessable Entity]&gt;.status_code">tests/integration/test_reference_pause.py:72: in test_native_pause_resume_retains_clock_inputs_and_same_key_operation
+    payload, pause = command(client, run, 'pause')
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/integration/test_reference_pause.py:54: in command
+    assert response.status_code == 202, response.text
+E   AssertionError: {"code":"CAPABILITY_UNSUPPORTED","message":"The selected provider does not support this command.","requestId":"req-9e4ef20f-9fee-463a-b4bb-84c3683e3bdd","retryable":false}
+E   assert 422 == 202
+E    +  where 422 = &lt;Response [422 Unprocessable Entity]&gt;.status_code</failure></testcase><testcase classname="tests.integration.test_reference_pause" name="test_native_stop_and_cancel_settle_while_simulation_is_paused[stop]" time="3.302"><failure message="AssertionError: {&quot;code&quot;:&quot;CAPABILITY_UNSUPPORTED&quot;,&quot;message&quot;:&quot;The selected provider does not support this command.&quot;,&quot;requestId&quot;:&quot;req-14fcf0e5-ee68-4453-b615-d81bf80c270c&quot;,&quot;retryable&quot;:false}&#10;assert 422 == 202&#10; +  where 422 = &lt;Response [422 Unprocessable Entity]&gt;.status_code">tests/integration/test_reference_pause.py:115: in test_native_stop_and_cancel_settle_while_simulation_is_paused
+    _, pause = command(client, run, 'pause')
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/integration/test_reference_pause.py:54: in command
+    assert response.status_code == 202, response.text
+E   AssertionError: {"code":"CAPABILITY_UNSUPPORTED","message":"The selected provider does not support this command.","requestId":"req-14fcf0e5-ee68-4453-b615-d81bf80c270c","retryable":false}
+E   assert 422 == 202
+E    +  where 422 = &lt;Response [422 Unprocessable Entity]&gt;.status_code</failure></testcase><testcase classname="tests.integration.test_reference_pause" name="test_native_stop_and_cancel_settle_while_simulation_is_paused[cancel]" time="3.359"><failure message="AssertionError: {&quot;code&quot;:&quot;CAPABILITY_UNSUPPORTED&quot;,&quot;message&quot;:&quot;The selected provider does not support this command.&quot;,&quot;requestId&quot;:&quot;req-ff7d7b4b-73dc-494c-86fe-086f24281cd1&quot;,&quot;retryable&quot;:false}&#10;assert 422 == 202&#10; +  where 422 = &lt;Response [422 Unprocessable Entity]&gt;.status_code">tests/integration/test_reference_pause.py:115: in test_native_stop_and_cancel_settle_while_simulation_is_paused
+    _, pause = command(client, run, 'pause')
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/integration/test_reference_pause.py:54: in command
+    assert response.status_code == 202, response.text
+E   AssertionError: {"code":"CAPABILITY_UNSUPPORTED","message":"The selected provider does not support this command.","requestId":"req-ff7d7b4b-73dc-494c-86fe-086f24281cd1","retryable":false}
+E   assert 422 == 202
+E    +  where 422 = &lt;Response [422 Unprocessable Entity]&gt;.status_code</failure></testcase><testcase classname="tests.integration.test_reference_pause" name="test_native_pause_has_a_declared_finite_wall_budget_without_silent_resume" time="3.372"><failure message="AssertionError: {&quot;code&quot;:&quot;CAPABILITY_UNSUPPORTED&quot;,&quot;message&quot;:&quot;The selected provider does not support this command.&quot;,&quot;requestId&quot;:&quot;req-23fd68a8-d619-43b8-9595-0cab5367671d&quot;,&quot;retryable&quot;:false}&#10;assert 422 == 202&#10; +  where 422 = &lt;Response [422 Unprocessable Entity]&gt;.status_code">tests/integration/test_reference_pause.py:128: in test_native_pause_has_a_declared_finite_wall_budget_without_silent_resume
+    _, pause = command(client, run, 'pause')
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/integration/test_reference_pause.py:54: in command
+    assert response.status_code == 202, response.text
+E   AssertionError: {"code":"CAPABILITY_UNSUPPORTED","message":"The selected provider does not support this command.","requestId":"req-23fd68a8-d619-43b8-9595-0cab5367671d","retryable":false}
+E   assert 422 == 202
+E    +  where 422 = &lt;Response [422 Unprocessable Entity]&gt;.status_code</failure></testcase></testsuite></testsuites>

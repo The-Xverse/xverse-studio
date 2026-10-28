@@ -80,8 +80,8 @@ def test_capabilities_stale_state_cancel_and_evidence_tamper(client):
     running = wait(client, r["runId"], "running")
     unsupported = client.post(
         f"/api/v1/runs/{r['runId']}/commands",
-        headers={"Idempotency-Key": "pause"},
-        json={"kind": "pause", "expectedStateVersion": running["stateVersion"]},
+        headers={"Idempotency-Key": "unsupported-step"},
+        json={"kind": "step", "expectedStateVersion": running["stateVersion"]},
     )
     assert unsupported.status_code == 422
     stale = client.post(

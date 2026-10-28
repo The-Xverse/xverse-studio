@@ -65,6 +65,12 @@ The Model, Connections, Deployment, Experiments and Results views share the same
 Source edits and typed semantic edits use the public pinned XDL APIs. Unsupported topology, profiles,
 physical coupling or cyclic compiler plans remain blocked instead of being silently approximated.
 
+The owned reference model supports Pause/Resume at a model-step boundary. While paused,
+its process stays alive and simulation time stops advancing. Its cumulative pause budget
+is30 wall seconds per run; exhausting it stops the model with incomplete coverage.
+Stop/Cancel also work while paused. These controls do not pause physical equipment.
+Step, reset, rewind and live parameter mutation remain unsupported.
+
 ## Stop and remove
 
 Ctrl+C in the native foreground launcher requests cancellation only for ownership-confirmed reference

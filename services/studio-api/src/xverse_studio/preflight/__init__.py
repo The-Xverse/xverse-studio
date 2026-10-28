@@ -5,6 +5,7 @@ import math
 import platform
 
 from xverse_studio.providers.registry import admit_descriptor
+from xverse_studio.providers.reference_control import MAX_PAUSED_WALL_SECONDS
 from xverse_studio.storage.core import Problem
 from xverse_studio.xdl import XDLRejected, reference_configuration
 from xverse_studio.xdl.examples import API_VERSION, MODEL_DIGEST
@@ -15,6 +16,7 @@ REQUIRED_LIMITS = (
     "maxConcurrentRuns",
     "maxElements",
     "maxConnections",
+    "maxPausedWallSeconds",
 )
 
 
@@ -300,6 +302,7 @@ def reference_readiness(documents, compiled, provider_id, provider, active_count
         for key in REQUIRED_LIMITS
         if key != "maxDurationSeconds"
     )
+    limits_known = limits_known and limits.get("maxPausedWallSeconds") == MAX_PAUSED_WALL_SECONDS
     budget_ok = limits_known and configuration is not None
     if configuration and limits_known:
         budget_ok = (

@@ -146,7 +146,9 @@ def main():
             lab_probe_host=LabProbeConfiguration(
                 (observation,),
                 authority,
-                call_timeout=0.05 if args.scenario == "timeout" else 1,
+                # This browser case requires entry into the held callback.
+                # Admission includes durable SQLite writes before delegation.
+                call_timeout=1,
             ),
         )
         if args.scenario == "stale-binding":

@@ -555,6 +555,26 @@ def test_callback_after_absolute_deadline_is_not_published(probe):
     assert op["result"] is None
 
 
+def test_deadline_expires_during_admission_without_callback_or_inspection_replay(probe, monkeypatch):
+    """Advance the owned fixture clock after durable acceptance, before delegation."""
+    original = probe.service._perform
+
+    def expire_after_acceptance(record, item, generation):
+        assert probe.service.store.get("operation", record["operationId"])["status"] == "accepted"
+        probe.now[0] = record["deadline"] + 0.01
+        return original(record, item, generation)
+
+    monkeypatch.setattr(probe.service, "_perform", expire_after_acceptance)
+    response = request(probe)
+    assert response.status_code == 202
+    op = response.json()
+    assert op["status"] == "unknown" and op["code"] == "PROBE_DEADLINE_EXCEEDED"
+    assert op["result"] is None and probe.provider.calls == []
+    assert probe.client.get("/api/v1/operations/" + op["operationId"]).json() == op
+    assert request(probe).json() == op
+    assert probe.provider.calls == []
+
+
 @pytest.mark.parametrize("clock", [float("nan"), float("inf"), 1e300, True])
 def test_invalid_backend_deadline_refuses_before_recording_or_contact(probe, clock):
     probe.now[0] = clock

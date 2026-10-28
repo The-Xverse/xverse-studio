@@ -466,7 +466,7 @@ export default function App() {
   }, []);
   const runUpdated = useCallback(
     (updated: Run) =>
-      setRun((old) => (old?.runId === updated.runId ? updated : old)),
+      setRun((old) => mergeRun(old, updated)),
     [],
   );
   async function refreshProjects() {

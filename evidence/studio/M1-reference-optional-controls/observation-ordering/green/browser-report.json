@@ -1,0 +1,271 @@
+{
+  "config": {
+    "argv": [
+      "<tool-cache>/node-v24.22.1-linux-x64/bin/node",
+      "<repo>/node_modules/.bin/playwright",
+      "test",
+      "-c",
+      "tests/e2e/playwright.config.ts",
+      "--grep",
+      "ordered ownership observations|owned observation recovery"
+    ],
+    "configFile": "<repo>/tests/e2e/playwright.config.ts",
+    "rootDir": "<repo>/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "<repo>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "<repo>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "*.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "<repo>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "<repo>/tests/e2e",
+        "snapshotDir": "<repo>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": "*.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "baseURL": "http://127.0.0.1:50129",
+          "browserName": "chromium",
+          "actionTimeout": 15000,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "trace": "off",
+          "screenshot": "only-on-failure",
+          "video": "off"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "<repo>/test-results/browser-report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "reference-recovery.spec.ts",
+      "file": "reference-recovery.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "owned observation recovery at 1024",
+          "file": "reference-recovery.spec.ts",
+          "line": 9,
+          "column": 8,
+          "specs": [
+            {
+              "title": "same worker version updates unknown and recovered ownership without restarting",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 11356,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-28T20:52:50.555Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "owned-observation-ordering",
+                          "contentType": "application/json",
+                          "body": "eyJzY29wZSI6IkFjdHVhbCBvd25lZCBuYXRpdmUgd29ya2VyL2JhY2tlbmQvYnJvd3NlcjsgaW5qZWN0ZWQgb2JzZXJ2YXRpb24gZGVuaWFsLCBubyBlcXVpcG1lbnQiLCJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJydW5JZCI6InJ1bi1lMTVjNTgwNC05YWJhLTQ0MmItYjE3ZC1jMzI2OTkzNWFjMjQiLCJzbmFwc2hvdElkIjoic25hcC03NjczOTE1Zi0xYzIxLTQxYzktODNlYS0yNTU2NmI1MzBiYzQiLCJ3b3JrZXJTdGF0ZVZlcnNpb24iOjEsIm9ic2VydmF0aW9uVmVyc2lvbnMiOlsxLDIsM119Cg=="
+                        },
+                        {
+                          "name": "owned-native-fault-observation",
+                          "contentType": "application/json",
+                          "body": "eyJzY29wZSI6Im93bmVkIG5hdGl2ZSBmYXVsdCBmaXh0dXJlOyBubyBlcXVpcG1lbnQiLCJzY2VuYXJpbyI6Im93bmVyc2hpcF9yZWNvdmVyeSIsIndvcmtlckF0dGVtcHRzIjoxLCJjb3JydXB0aW9ucyI6MCwibGF1bmNoUmVmdXNhbHMiOjAsImludGVycnVwdGlvbnMiOjAsIm93bmVyc2hpcERlbmlhbHMiOjYsImVycm9ycyI6W119Cg=="
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "53f3a68fba730c3de205-706344554071beb1e318",
+              "file": "reference-recovery.spec.ts",
+              "line": 11,
+              "column": 9
+            }
+          ]
+        },
+        {
+          "title": "owned observation recovery at 1440",
+          "file": "reference-recovery.spec.ts",
+          "line": 9,
+          "column": 8,
+          "specs": [
+            {
+              "title": "same worker version updates unknown and recovered ownership without restarting",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 10917,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-28T20:53:01.984Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "owned-observation-ordering",
+                          "contentType": "application/json",
+                          "body": "eyJzY29wZSI6IkFjdHVhbCBvd25lZCBuYXRpdmUgd29ya2VyL2JhY2tlbmQvYnJvd3NlcjsgaW5qZWN0ZWQgb2JzZXJ2YXRpb24gZGVuaWFsLCBubyBlcXVpcG1lbnQiLCJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJydW5JZCI6InJ1bi0xYjRjZmJlZi05ZWUzLTRkYWMtOGUzMS01OTFiZTM3YWQyZDMiLCJzbmFwc2hvdElkIjoic25hcC1iYWYxMmEyNC1lOTk4LTRiMmYtODRhZS0zN2MwMDhlODk1MDYiLCJ3b3JrZXJTdGF0ZVZlcnNpb24iOjEsIm9ic2VydmF0aW9uVmVyc2lvbnMiOlsxLDIsM119Cg=="
+                        },
+                        {
+                          "name": "owned-native-fault-observation",
+                          "contentType": "application/json",
+                          "body": "eyJzY29wZSI6Im93bmVkIG5hdGl2ZSBmYXVsdCBmaXh0dXJlOyBubyBlcXVpcG1lbnQiLCJzY2VuYXJpbyI6Im93bmVyc2hpcF9yZWNvdmVyeSIsIndvcmtlckF0dGVtcHRzIjoxLCJjb3JydXB0aW9ucyI6MCwibGF1bmNoUmVmdXNhbHMiOjAsImludGVycnVwdGlvbnMiOjAsIm93bmVyc2hpcERlbmlhbHMiOjYsImVycm9ycyI6W119Cg=="
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "53f3a68fba730c3de205-4bbc3bf6180f25979a42",
+              "file": "reference-recovery.spec.ts",
+              "line": 11,
+              "column": 9
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "session-contract.spec.ts",
+      "file": "session-contract.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "session contract: ordered ownership observations advance at an unchanged worker version",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T20:53:12.926Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "867a6ceef9ff0fe48626-130d75bd26245306756a",
+          "file": "session-contract.spec.ts",
+          "line": 57,
+          "column": 5
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-28T20:52:49.848Z",
+    "duration": 23119.717999999997,
+    "expected": 3,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

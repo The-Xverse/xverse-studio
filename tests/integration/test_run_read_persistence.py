@@ -10,6 +10,38 @@ import pytest
 from test_advanced_api import prepared, start, wait_run
 
 
+@pytest.mark.parametrize("version", [True, -1, "1", 2**53])
+def test_invalid_observation_order_refuses_without_rewriting_owned_history(client, monkeypatch, version):
+    rid, _ = terminal_run(client)
+    studio = client.app.state.studio
+    original = studio.store.get("run", rid)
+    broken = {**original, "observationVersion": version}
+    studio.store.put("run", rid, broken)
+    writes = sql_writes(client, monkeypatch)
+    try:
+        response = client.get("/api/v1/runs/" + rid)
+        assert response.status_code == 503
+        assert response.json()["code"] == "RUN_OBSERVATION_UNAVAILABLE"
+        assert writes == []
+    finally:
+        studio.store.put("run", rid, original)
+
+
+def test_exhausted_observation_order_never_wraps_on_changed_truth(client, monkeypatch):
+    rid, _ = terminal_run(client)
+    studio = client.app.state.studio
+    original = studio.store.get("run", rid)
+    studio.store.put("run", rid, {**original, "observationVersion": 2**53 - 1, "cleanup": "unknown"})
+    writes = sql_writes(client, monkeypatch)
+    try:
+        response = client.get("/api/v1/runs/" + rid)
+        assert response.status_code == 503
+        assert response.json()["code"] == "RUN_OBSERVATION_UNAVAILABLE"
+        assert writes == []
+    finally:
+        studio.store.put("run", rid, original)
+
+
 def terminal_run(client, *, cancel=False):
     project, preflight = prepared(client)
     if cancel:

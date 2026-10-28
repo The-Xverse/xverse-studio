@@ -21,6 +21,9 @@ UTC_PATTERN = re.compile(
     r"(?:\.[0-9]{1,6})?(?:Z|[+-][0-9]{2}:[0-9]{2})\Z"
 )
 EPOCH = datetime(1970, 1, 1, tzinfo=timezone.utc)
+# Both installed reference versions encode schema1.0 receipt seconds and
+# simulation microsecond ticks identically. Other versions remain unresolved.
+REFERENCE_CLOCK_VERSIONS = ("1.0.0", "1.1.0")
 
 
 def invalid(message, code="EVIDENCE_FILTER_INVALID"):
@@ -75,7 +78,7 @@ def receipt_time(record):
     if (
         isinstance(source, dict)
         and source.get("providerId") == "studio.reference"
-        and source.get("version") == "1.0.0"
+        and source.get("version") in REFERENCE_CLOCK_VERSIONS
         and record.get("schemaVersion") == "1.0"
         and isinstance(raw, (int, float))
         and not isinstance(raw, bool)
@@ -188,7 +191,7 @@ def reference_tick_unit(record, evidence_scope):
         evidence_scope == "owned_reference"
         and isinstance(source, dict)
         and source.get("providerId") == "studio.reference"
-        and source.get("version") == "1.0.0"
+        and source.get("version") in REFERENCE_CLOCK_VERSIONS
         and isinstance(original, dict)
         and original.get("clockDomain") == "simulation-time"
         and original.get("resolution") == "microsecond"

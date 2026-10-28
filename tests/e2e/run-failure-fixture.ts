@@ -109,6 +109,9 @@ export const test = base.extend<{ scenario: string; failureHost: Host }>({
         expect(observed.interruptions).toBe(
           scenario === "active_failure" ? 1 : 0,
         );
+        if (scenario === "ownership_recovery")
+          expect(observed.ownershipDenials).toBeGreaterThan(0);
+        else expect(observed.ownershipDenials).toBe(0);
         await info.attach("owned-native-fault-observation", {
           body: JSON.stringify(observed),
           contentType: "application/json",

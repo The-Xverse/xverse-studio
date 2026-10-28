@@ -143,3 +143,17 @@ without stopping backend execution. See ADR-0011 for exact scope, compatibility 
 ## Verification obligations
 
 Exercise duplicate delivery, reconnect, expired cursors, backend recovery, out-of-order raw provider records, state-version checks, slow consumer gaps, canonical collection gaps, mixed clocks, unavailable source timestamps, private-log exclusion, corrupted evidence, and mapping between a selected event and its exact model revision.
+### Ordered run observations (ADR-0022 amendment)
+
+Full run metadata may include a nonnegative safe-integer `observationVersion`.
+This is a durable backend projection order, independent of the worker-owned
+`stateVersion` used for command CAS. Reconciliation increments it only when an
+already changed run projection needs persistence; unchanged reads and legacy
+records do not acquire extra writes merely to initialize it.
+
+For the same run/snapshot and worker version, a newer complete observation
+replaces the previous projection, including absent optional reasons. Older
+observations cannot overwrite newer truth. Worker lifecycle regression guards
+remain authoritative; legacy responses retain conservative behavior. This
+additive metadata field changes no canonical journal sequence, cursor, source
+clock, executable identity or command authority.

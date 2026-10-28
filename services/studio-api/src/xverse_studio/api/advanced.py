@@ -536,7 +536,7 @@ def install_advanced(app, store, projects, runs, adapter, *, lab_host=None, lab_
                 outcomes = []
                 for rid in result["activeRunIds"]:
                     observed = runs.read(rid)
-                    if observed["state"] in {"running", "preparing", "ready"}:
+                    if observed["state"] in {"running", "preparing", "ready", "paused"}:
                         try:
                             command = runs.command(rid, request.state.principal, "campaign-cancel:" + campaignId + ":" + rid, {"kind": "cancel", "expectedStateVersion": observed["stateVersion"], "parameters": {}})
                             outcomes.append({"runId": rid, "status": "accepted", "operationId": command["operationId"]})

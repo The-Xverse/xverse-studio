@@ -1,0 +1,41 @@
+.FFF..........                                                           [100%]
+=================================== FAILURES ===================================
+_____ test_native_stop_and_cancel_settle_while_simulation_is_paused[stop] ______
+tests/integration/test_reference_pause.py:119: in test_native_stop_and_cancel_settle_while_simulation_is_paused
+    _, run, directory, snapshot = running_reference(client)
+                                  ^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/integration/test_reference_pause.py:33: in running_reference
+    run = wait_state(client, accepted.json()['runId'], 'running')
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/integration/test_reference_pause.py:47: in wait_state
+    assert run['state'] not in ('failed', 'unknown'), run
+E   AssertionError: {'capabilities': ['stop', 'cancel', 'pause', 'resume'], 'cleanup': 'unknown', 'controlLimits': {'maxPausedWallSeconds': 30}, 'createdAt': 1793214774.9764469, ...}
+E   assert 'unknown' not in ('failed', 'unknown')
+____ test_native_stop_and_cancel_settle_while_simulation_is_paused[cancel] _____
+tests/integration/test_reference_pause.py:119: in test_native_stop_and_cancel_settle_while_simulation_is_paused
+    _, run, directory, snapshot = running_reference(client)
+                                  ^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/integration/test_reference_pause.py:33: in running_reference
+    run = wait_state(client, accepted.json()['runId'], 'running')
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/integration/test_reference_pause.py:47: in wait_state
+    assert run['state'] not in ('failed', 'unknown'), run
+E   AssertionError: {'capabilities': ['stop', 'cancel', 'pause', 'resume'], 'cleanup': 'unknown', 'controlLimits': {'maxPausedWallSeconds': 30}, 'createdAt': 1793214788.0036967, ...}
+E   assert 'unknown' not in ('failed', 'unknown')
+__ test_native_pause_has_a_declared_finite_wall_budget_without_silent_resume ___
+tests/integration/test_reference_pause.py:149: in test_native_pause_has_a_declared_finite_wall_budget_without_silent_resume
+    assert 26 <= time.monotonic() - begin < 29.8
+E   assert (267512.258848507 - 267481.135708479) < 29.8
+E    +  where 267512.258848507 = <built-in function monotonic>()
+E    +    where <built-in function monotonic> = time.monotonic
+=============================== warnings summary ===============================
+.venv/lib/python3.13/site-packages/fastapi/testclient.py:1
+  <repo>/.venv/lib/python3.13/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/integration/test_reference_pause.py::test_native_stop_and_cancel_settle_while_simulation_is_paused[stop]
+FAILED tests/integration/test_reference_pause.py::test_native_stop_and_cancel_settle_while_simulation_is_paused[cancel]
+FAILED tests/integration/test_reference_pause.py::test_native_pause_has_a_declared_finite_wall_budget_without_silent_resume
+3 failed, 11 passed, 1 warning in 126.37s (0:02:06)

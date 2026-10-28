@@ -182,10 +182,10 @@ for (const viewport of [
             headers: {
               "Content-Type": "application/json",
               "X-CSRF-Token": csrfToken,
-              "Idempotency-Key": "owned-unsupported-pause",
+              "Idempotency-Key": "owned-unsupported-step",
             },
             body: JSON.stringify({
-              kind: "pause",
+              kind: "step",
               expectedStateVersion: run.stateVersion,
             }),
           });

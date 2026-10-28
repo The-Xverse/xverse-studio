@@ -376,7 +376,7 @@ def test_target_capability_bounds_and_private_text_are_not_authority(client):
         project["documents"][right["documentId"]]["content"]
     )
     document["spec"]["targets"][0]["capabilities"] = [
-        "pause",
+        "step",
         "password:synthetic-hidden",
     ]
     with pytest.raises(Problem, match="inline credentials"):
@@ -388,7 +388,7 @@ def test_target_capability_bounds_and_private_text_are_not_authority(client):
             "yaml",
         )
     assert state.projects.read(project["projectId"])["revision"] == project["revision"]
-    document["spec"]["targets"][0]["capabilities"] = ["pause", "opaque@host"]
+    document["spec"]["targets"][0]["capabilities"] = ["step", "opaque@host"]
     changed = state.projects.save(
         project["projectId"],
         right["documentId"],
@@ -399,10 +399,10 @@ def test_target_capability_bounds_and_private_text_are_not_authority(client):
     response = comparison(client, changed, left, right)
     assert response.status_code == 200, response.text
     value = response.json()
-    assert value["right"]["declaredTargets"][0]["capabilities"] == ["pause"]
+    assert value["right"]["declaredTargets"][0]["capabilities"] == ["step"]
     assert value["right"]["declaredTargets"][0]["omittedCapabilities"] == 1
     assert "opaque@host" not in response.text
-    assert "pause" not in value["provider"]["operations"]
+    assert "step" not in value["provider"]["operations"]
     assert (
         value["limits"]
         == client.get("/api/v1/capabilities").json()["limits"]["deploymentComparison"]

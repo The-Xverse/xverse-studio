@@ -13,7 +13,7 @@ from xverse_studio.assertions import EvaluationError, snapshot_definitions
 from xverse_studio.deployments import resource_ref
 from xverse_studio.evidence.query import (
     HistoryQuery, parse_tick, project_evidence, receipt_time,
-    reference_tick_unit, source_time,
+    reference_tick_unit, source_time, REFERENCE_CLOCK_VERSIONS,
 )
 from xverse_studio.lab.assets import public_text
 from xverse_studio.storage.core import Problem, digest
@@ -104,7 +104,7 @@ def _seconds_codec(run, snapshot):
     return bool(
         run.get("evidenceScope") == "owned_reference"
         and run.get("providerId") == snapshot.get("providerId") == "studio.reference"
-        and isinstance(provider, dict) and provider.get("providerVersion") == "1.0.0"
+        and isinstance(provider, dict) and provider.get("providerVersion") in REFERENCE_CLOCK_VERSIONS
         and isinstance(configuration, dict) and configuration.get("clockDomain") == "simulation-time"
         and configuration.get("planDigest") == snapshot.get("planDigest") == run.get("effectivePlanDigest")
         and configuration.get("semanticDigest") == snapshot.get("semanticDigest") == run.get("effectiveSemanticDigest")

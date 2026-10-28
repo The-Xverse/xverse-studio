@@ -15,6 +15,7 @@ from xverse_studio.evidence.query import (
     parse_tick,
     project_evidence,
     receipt_time,
+    reference_tick_unit,
 )
 from xverse_studio.storage.core import Problem
 
@@ -32,6 +33,28 @@ _spec.loader.exec_module(_fixture)
 @pytest.fixture
 def recorded():
     return _fixture.fixture_records(noise=205)
+
+
+@pytest.mark.parametrize("version, admitted", [
+    ("1.0.0", True), ("1.1.0", True), ("1.0.1", False),
+    ("1.1.1", False), ("1.2.0", False), ("9.0.0", False),
+    (None, False), ([], False), ({}, False),
+])
+def test_reference_clock_codec_admits_only_the_two_known_provider_versions(version, admitted):
+    record = {
+        "schemaVersion": "1.0", "recordedAt": 123.5,
+        "source": {"providerId": "studio.reference", "version": version},
+        "sourceTime": {"clockDomain": "simulation-time", "tick": "9007199254740993", "resolution": "microsecond"},
+    }
+    seconds, _, codec = receipt_time(record)
+    assert seconds == (Decimal("123.5") if admitted else None)
+    assert codec == ("unix_seconds_reference_v1" if admitted else "unavailable")
+    assert reference_tick_unit(record, "owned_reference") == ("microsecond" if admitted else None)
+    assert reference_tick_unit(record, "recorded_fixture") is None
+    assert record["sourceTime"]["tick"] == "9007199254740993"
+    record["source"]["providerId"] = "another.provider"
+    assert receipt_time(record) == (None, None, "unavailable")
+    assert reference_tick_unit(record, "owned_reference") is None
 
 
 def project(

@@ -7,7 +7,8 @@
 | `REVISION_CONFLICT` | Preserve drafts/external changes, reload and compare; do not overwrite another revision. |
 | `MODEL_INVALID` | Inspect the authoritative XDL diagnostic and source location. Keep unknown content intact. |
 | `PREFLIGHT_STALE` | Recompute preflight for the current exact inputs/capabilities before starting. |
-| `CAPABILITY_UNSUPPORTED` | Select an admitted operation/template. Pause/step/live mutation are unavailable in this reference provider. |
+| `CAPABILITY_UNSUPPORTED` | Select an admitted operation/template. Step/reset/live mutation are unavailable in this reference provider. Pause/Resume apply only to its owned simulation clock. |
+| `PAUSE_BUDGET_EXHAUSTED` | The owned model reached its cumulative 30-second wall-time pause budget and stopped with incomplete simulation coverage. Inspect retained evidence and create a fresh run if needed. |
 | `DEP-RUN-CONFIG` | An external public effective-input/plan contract is missing. Reference success cannot admit Lite/CARLA. |
 | `OWNERSHIP_UNKNOWN` | Reconcile exact native ownership. Do not kill by PID/name/address or blindly restart. |
 | `EVIDENCE_INVALID` | Preserve original bytes; do not use corrupted evidence to establish a verdict. |

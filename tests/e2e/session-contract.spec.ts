@@ -54,17 +54,64 @@ function gate() {
   return { promise, release };
 }
 const pause = (ms: number) => new Promise((r) => setTimeout(r, ms));
+test("session contract: ordered ownership observations advance at an unchanged worker version", () => {
+  const running = {
+    runId,
+    snapshotId,
+    state: "running",
+    stateVersion: 1,
+    observationVersion: 4,
+    cleanup: "not_started",
+  };
+  const unknown = {
+    ...running,
+    state: "unknown",
+    observationVersion: 5,
+    cleanup: "unknown",
+    reason: "OWNERSHIP_UNKNOWN",
+  };
+  expect(mergeRun(running, unknown)).toEqual(unknown);
+  const recovered = { ...running, observationVersion: 6 };
+  const next = mergeRun(unknown, recovered);
+  expect(next).toEqual(recovered);
+  expect(next).not.toHaveProperty("reason");
+  expect(mergeRun(recovered, unknown)).toBe(recovered);
+  expect(mergeRun(recovered, { ...unknown, runId: "another" })).toBe(recovered);
+  expect(mergeRun(recovered, { ...unknown, snapshotId: "another" })).toBe(
+    recovered,
+  );
+  expect(
+    mergeRun(recovered, {
+      ...unknown,
+      stateVersion: 0,
+      observationVersion: 99,
+    }),
+  ).toBe(recovered);
+  const legacy = { runId, snapshotId, state: "unknown", stateVersion: 1 };
+  expect(mergeRun(recovered, legacy)).toBe(recovered);
+  expect(mergeRun(recovered, { ...legacy, stateVersion: 2 })?.state).toBe(
+    "unknown",
+  );
+});
 test("session contract: reserved control slot coalesces with 200 data frames while canonical and control queues stay bounded", () => {
   const control = `event: studio.stream_control\ndata: ${JSON.stringify({ streamVersion: "1.1", type: "stream.gap", runId, snapshotId, reason: "SLOW_CONSUMER", missingCount: 1015, firstMissingSequence: "1", lastMissingSequence: "1015" })}\n\n`;
   const data = frame.repeat(200);
   for (const wire of [control + data, data + control]) {
     const parsed = new SseParser().feed(new TextEncoder().encode(wire));
     expect(parsed).toHaveLength(201);
-    expect(parsed.filter((f) => f.event === "studio.stream_control")).toHaveLength(1);
-    expect(parsed.filter((f) => f.event !== "studio.stream_control")).toHaveLength(200);
+    expect(
+      parsed.filter((f) => f.event === "studio.stream_control"),
+    ).toHaveLength(1);
+    expect(
+      parsed.filter((f) => f.event !== "studio.stream_control"),
+    ).toHaveLength(200);
   }
-  expect(() => new SseParser().feed(new TextEncoder().encode(frame.repeat(201)))).toThrow(/queue limit/i);
-  expect(() => new SseParser().feed(new TextEncoder().encode(control.repeat(2)))).toThrow(/queue limit/i);
+  expect(() =>
+    new SseParser().feed(new TextEncoder().encode(frame.repeat(201))),
+  ).toThrow(/queue limit/i);
+  expect(() =>
+    new SseParser().feed(new TextEncoder().encode(control.repeat(2))),
+  ).toThrow(/queue limit/i);
 });
 test("session contract: callback acceptance precedes acknowledged reconnect cursor", async () => {
   const original = globalThis.fetch,

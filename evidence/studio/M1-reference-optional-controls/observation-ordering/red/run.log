@@ -1,0 +1,118 @@
+
+> xverse-studio-workspace@0.1.0 test:e2e
+> playwright test -c tests/e2e/playwright.config.ts --grep ordered ownership observations|owned observation recovery
+
+
+Running 3 tests using 1 worker
+
+(node:2669218) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 tests/e2e/reference-recovery.spec.ts:8:9 › owned observation recovery at 1024 › same worker version updates unknown and recovered ownership without restarting (20.2s)
+(node:2669475) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 tests/e2e/reference-recovery.spec.ts:8:9 › owned observation recovery at 1440 › same worker version updates unknown and recovered ownership without restarting (20.4s)
+(node:2669794) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  3 tests/e2e/session-contract.spec.ts:57:5 › session contract: ordered ownership observations advance at an unchanged worker version (6ms)
+
+
+  1) tests/e2e/reference-recovery.spec.ts:8:9 › owned observation recovery at 1024 › same worker version updates unknown and recovered ownership without restarting
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByRole('region', { name: 'Reported startup', exact: true })
+    Expected substring: "Startup or ownership unresolved"
+    Received string:    "Reported startupWorkload start recordedThe recorded start is separate from the execution outcome, cleanup, evidence integrity and assertion verdict.Reported reason: OWNERSHIP_UNKNOWN"
+    Timeout: 10000ms
+
+    Call log:
+      - Expect "toContainText" getByRole('region', { name: 'Reported startup', exact: true }) with timeout 10000ms
+      - waiting for getByRole('region', { name: 'Reported startup', exact: true })
+        3 × locator resolved to <section class="panel" aria-label="Reported startup">…</section>
+          - unexpected value "Reported startupWorkload start recordedThe recorded start is separate from the execution outcome, cleanup, evidence integrity and assertion verdict."
+        21 × locator resolved to <section class="panel" aria-label="Reported startup">…</section>
+           - unexpected value "Reported startupWorkload start recordedThe recorded start is separate from the execution outcome, cleanup, evidence integrity and assertion verdict.Reported reason: OWNERSHIP_UNKNOWN"
+
+
+      37 |       try {
+      38 |         writeFileSync(marker, 'Owned fixture observation denial only');
+    > 39 |         await expect(startup).toContainText('Startup or ownership unresolved');
+         |                               ^
+      40 |         await expect(controls.getByRole('button', { name: 'Pause', exact: true })).toBeDisabled();
+      41 |         unknown = await readRun();
+      42 |         expect(unknown.state).toBe('unknown');
+        at <repo>/tests/e2e/reference-recovery.spec.ts:39:31
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/reference-recovery-owned-o-4ceeb-wnership-without-restarting/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/reference-recovery-owned-o-4ceeb-wnership-without-restarting/error-context.md
+
+  2) tests/e2e/reference-recovery.spec.ts:8:9 › owned observation recovery at 1440 › same worker version updates unknown and recovered ownership without restarting
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByRole('region', { name: 'Reported startup', exact: true })
+    Expected substring: "Startup or ownership unresolved"
+    Received string:    "Reported startupWorkload start recordedThe recorded start is separate from the execution outcome, cleanup, evidence integrity and assertion verdict.Reported reason: OWNERSHIP_UNKNOWN"
+    Timeout: 10000ms
+
+    Call log:
+      - Expect "toContainText" getByRole('region', { name: 'Reported startup', exact: true }) with timeout 10000ms
+      - waiting for getByRole('region', { name: 'Reported startup', exact: true })
+        4 × locator resolved to <section class="panel" aria-label="Reported startup">…</section>
+          - unexpected value "Reported startupWorkload start recordedThe recorded start is separate from the execution outcome, cleanup, evidence integrity and assertion verdict."
+        20 × locator resolved to <section class="panel" aria-label="Reported startup">…</section>
+           - unexpected value "Reported startupWorkload start recordedThe recorded start is separate from the execution outcome, cleanup, evidence integrity and assertion verdict.Reported reason: OWNERSHIP_UNKNOWN"
+
+
+      37 |       try {
+      38 |         writeFileSync(marker, 'Owned fixture observation denial only');
+    > 39 |         await expect(startup).toContainText('Startup or ownership unresolved');
+         |                               ^
+      40 |         await expect(controls.getByRole('button', { name: 'Pause', exact: true })).toBeDisabled();
+      41 |         unknown = await readRun();
+      42 |         expect(unknown.state).toBe('unknown');
+        at <repo>/tests/e2e/reference-recovery.spec.ts:39:31
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/reference-recovery-owned-o-531c7-wnership-without-restarting/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/reference-recovery-owned-o-531c7-wnership-without-restarting/error-context.md
+
+  3) tests/e2e/session-contract.spec.ts:57:5 › session contract: ordered ownership observations advance at an unchanged worker version
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 2
+
+    @@ -2,8 +2,9 @@
+        "cleanup": "unknown",
+        "observationVersion": 5,
+        "reason": "OWNERSHIP_UNKNOWN",
+        "runId": "run-session-fixture",
+        "snapshotId": "snapshot-session-fixture",
+    -   "state": "unknown",
+    +   "state": "running",
+        "stateVersion": 1,
+    +   "status": undefined,
+      }
+
+      58 |   const running = { runId, snapshotId, state: "running", stateVersion: 1, observationVersion: 4, cleanup: "not_started" };
+      59 |   const unknown = { ...running, state: "unknown", observationVersion: 5, cleanup: "unknown", reason: "OWNERSHIP_UNKNOWN" };
+    > 60 |   expect(mergeRun(running, unknown)).toEqual(unknown);
+         |                                      ^
+      61 |   const recovered = { ...running, observationVersion: 6 };
+      62 |   const next = mergeRun(unknown, recovered);
+      63 |   expect(next).toEqual(recovered);
+        at <repo>/tests/e2e/session-contract.spec.ts:60:38
+
+    Error Context: test-results/browser/session-contract-session-c-e6dd4-an-unchanged-worker-version/error-context.md
+
+  3 failed
+    tests/e2e/reference-recovery.spec.ts:8:9 › owned observation recovery at 1024 › same worker version updates unknown and recovered ownership without restarting
+    tests/e2e/reference-recovery.spec.ts:8:9 › owned observation recovery at 1440 › same worker version updates unknown and recovered ownership without restarting
+    tests/e2e/session-contract.spec.ts:57:5 › session contract: ordered ownership observations advance at an unchanged worker version

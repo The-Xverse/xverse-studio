@@ -77,7 +77,7 @@ for (const viewport of [{ width: 1024, height: 768 }, { width: 1440, height: 900
     for (const scenario of ["unavailable", "unknown", "revoked", "timeout"]) {
       test.describe(scenario, () => {
         test.use({ probeScenario: scenario });
-        test("negative or uncertain observation remains separate from readiness and is never repeated by inspection", async ({ page, probeHost }) => {
+        test("negative or uncertain observation remains separate from readiness and is never repeated by inspection", async ({ page, probeHost }, info) => {
           await openLab(page, probeHost);
           const op = await observe(page);
           expect(op.status).toBe(scenario === "unavailable" ? "completed" : "unknown");
@@ -87,6 +87,9 @@ for (const viewport of [{ width: 1024, height: 768 }, { width: 1440, height: 900
           expect(probeHost.count()).toBe(1);
           await keyboard(page, history(page).getByRole("button", { name: `Inspect observation ${op.operationId}`, exact: true }));
           await expect(result(page)).toContainText(op.operationId); expect(probeHost.count()).toBe(1);
+          if (scenario === "timeout") await info.attach("owned-probe-timeout-boundary", {
+            body: JSON.stringify({ scope: "Owned native fixture; no equipment", operationId: op.operationId, code: op.code, status: op.status, expectedCalls: 1, observedCalls: probeHost.count(), deadlineSeconds: 1 }), contentType: "application/json",
+          });
           if (scenario === "revoked") {
             expect(op.code).toBe("FORBIDDEN");
             await options(page, false); await expect(card(page).getByRole("button", { name: "Observe connection", exact: true })).toBeDisabled();
