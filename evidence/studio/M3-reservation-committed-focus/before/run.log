@@ -1,0 +1,76 @@
+
+Running 2 tests using 1 worker
+
+(node:2500503) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 .studio-local/hybrid-comparison/focus-control/focus.spec.ts:22:9 › labelled delayed React commit at 1024 › ungranted scope is explicit and invalid option authority never enables reservation (12.3s)
+(node:2500726) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 .studio-local/hybrid-comparison/focus-control/focus.spec.ts:22:9 › labelled delayed React commit at 1440 › ungranted scope is explicit and invalid option authority never enables reservation (12.4s)
+
+
+  1) .studio-local/hybrid-comparison/focus-control/focus.spec.ts:22:9 › labelled delayed React commit at 1024 › ungranted scope is explicit and invalid option authority never enables reservation
+
+    Error: expect(locator).toBeFocused() failed
+
+    Locator:  locator('section.panel').filter({ has: getByRole('heading', { name: 'fixture:bench-sensor', exact: true }) }).getByRole('alert')
+    Expected: focused
+    Received: inactive
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toBeFocused" locator('section.panel').filter({ has: getByRole('heading', { name: 'fixture:bench-sensor', exact: true }) }).getByRole('alert') with timeout 10000ms
+      - waiting for locator('section.panel').filter({ has: getByRole('heading', { name: 'fixture:bench-sensor', exact: true }) }).getByRole('alert')
+        24 × locator resolved to <p role="alert" tabindex="-1">Reservation eligibility is unknown. Reservation o…</p>
+           - unexpected value "inactive"
+
+
+      60 |         await keyboard(page, card(page).getByRole("button", { name: "Check reservation options", exact: true }));
+      61 |         await expect(card(page).getByRole("alert")).toContainText("Reservation eligibility is unknown");
+    > 62 |         await expect(card(page).getByRole("alert")).toBeFocused();
+         |                                                     ^
+      63 |         await expect(card(page).getByRole("button", { name: "Reserve stimulate scope", exact: true })).toBeDisabled();
+      64 |         expect((await (await page.request.get(labHost.origin + "/api/v1/reservations")).json()).items).toHaveLength(0);
+      65 |       } finally {
+        at <repo>/.studio-local/hybrid-comparison/focus-control/focus.spec.ts:62:53
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    .studio-local/hybrid-comparison/focus-control/before/browser/focus-labelled-delayed-Rea-0c9a9-y-never-enables-reservation/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: .studio-local/hybrid-comparison/focus-control/before/browser/focus-labelled-delayed-Rea-0c9a9-y-never-enables-reservation/error-context.md
+
+  2) .studio-local/hybrid-comparison/focus-control/focus.spec.ts:22:9 › labelled delayed React commit at 1440 › ungranted scope is explicit and invalid option authority never enables reservation
+
+    Error: expect(locator).toBeFocused() failed
+
+    Locator:  locator('section.panel').filter({ has: getByRole('heading', { name: 'fixture:bench-sensor', exact: true }) }).getByRole('alert')
+    Expected: focused
+    Received: inactive
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toBeFocused" locator('section.panel').filter({ has: getByRole('heading', { name: 'fixture:bench-sensor', exact: true }) }).getByRole('alert') with timeout 10000ms
+      - waiting for locator('section.panel').filter({ has: getByRole('heading', { name: 'fixture:bench-sensor', exact: true }) }).getByRole('alert')
+        24 × locator resolved to <p role="alert" tabindex="-1">Reservation eligibility is unknown. Reservation o…</p>
+           - unexpected value "inactive"
+
+
+      60 |         await keyboard(page, card(page).getByRole("button", { name: "Check reservation options", exact: true }));
+      61 |         await expect(card(page).getByRole("alert")).toContainText("Reservation eligibility is unknown");
+    > 62 |         await expect(card(page).getByRole("alert")).toBeFocused();
+         |                                                     ^
+      63 |         await expect(card(page).getByRole("button", { name: "Reserve stimulate scope", exact: true })).toBeDisabled();
+      64 |         expect((await (await page.request.get(labHost.origin + "/api/v1/reservations")).json()).items).toHaveLength(0);
+      65 |       } finally {
+        at <repo>/.studio-local/hybrid-comparison/focus-control/focus.spec.ts:62:53
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    .studio-local/hybrid-comparison/focus-control/before/browser/focus-labelled-delayed-Rea-de7e1-y-never-enables-reservation/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: .studio-local/hybrid-comparison/focus-control/before/browser/focus-labelled-delayed-Rea-de7e1-y-never-enables-reservation/error-context.md
+
+  2 failed
+    .studio-local/hybrid-comparison/focus-control/focus.spec.ts:22:9 › labelled delayed React commit at 1024 › ungranted scope is explicit and invalid option authority never enables reservation
+    .studio-local/hybrid-comparison/focus-control/focus.spec.ts:22:9 › labelled delayed React commit at 1440 › ungranted scope is explicit and invalid option authority never enables reservation

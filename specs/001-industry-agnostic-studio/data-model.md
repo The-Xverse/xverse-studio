@@ -78,3 +78,14 @@ A terminal lifecycle state does not imply cleanup or evidence completion. A pass
 - Delete/export operations resolve explicit project/run IDs within configured roots. Symlinks, traversal and archive escapes are rejected before materialization.
 - Active run inputs and required evidence are never purged by automatic retention. Data loss, corrupted indexes and unavailable evidence are diagnosed explicitly.
 - Time values retain source clock/domain, mapping ID, uncertainty and ordering sequence. Unsynchronized domains remain distinguishable in charts and metrics.
+
+### DeploymentComparison projection (ADR-0028)
+
+An ephemeral read-only Studio projection, not an XDL resource or durable operation. Identity is its
+captured Project/revision, two Deployment document IDs, shared System source witness and provider
+descriptor digest. Both side resolutions use the same captured source set and descriptor. Declared target
+capabilities and time mappings remain separate from provider operations, measured synchronization,
+physical/cleanup state, fidelity and runtime admission. Scenario mappings retain their source owner
+and pointer with null mapping ID because the selected canonical schema has no such ID. Comparison
+creates no snapshot, run, reservation, provider probe or executable identity; source and semantic
+identities remain authoritative and unchanged.

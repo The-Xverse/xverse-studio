@@ -1,0 +1,35 @@
+  1) tests/e2e/lab-reservations.spec.ts:64:9 › lab reservations at 1440 › ungranted scope is explicit and invalid option authority never enables reservation
+2026-10-28T15:23:29.6246367Z
+2026-10-28T15:23:29.6246581Z     Error: expect(locator).toBeFocused() failed
+2026-10-28T15:23:29.6246891Z
+2026-10-28T15:23:29.6247471Z     Locator:  locator('section.panel').filter({ has: getByRole('heading', { name: 'fixture:bench-sensor', exact: true }) }).getByRole('alert')
+2026-10-28T15:23:29.6247994Z     Expected: focused
+2026-10-28T15:23:29.6248221Z     Received: inactive
+2026-10-28T15:23:29.6248444Z     Timeout:  10000ms
+2026-10-28T15:23:29.6248597Z
+2026-10-28T15:23:29.6248690Z     Call log:
+2026-10-28T15:23:29.6249332Z       - Expect "toBeFocused" locator('section.panel').filter({ has: getByRole('heading', { name: 'fixture:bench-sensor', exact: true }) }).getByRole('alert') with timeout 10000ms
+2026-10-28T15:23:29.6250245Z       - waiting for locator('section.panel').filter({ has: getByRole('heading', { name: 'fixture:bench-sensor', exact: true }) }).getByRole('alert')
+2026-10-28T15:23:29.6251177Z         24 × locator resolved to <p role="alert" tabindex="-1">Reservation eligibility is unknown. Reservation o…</p>
+2026-10-28T15:23:29.6251985Z            - unexpected value "inactive"
+2026-10-28T15:23:29.6252158Z
+2026-10-28T15:23:29.6252165Z
+2026-10-28T15:23:29.6252698Z       77 |         await keyboard(page, card(page).getByRole("button", { name: "Check reservation options", exact: true }));
+2026-10-28T15:23:29.6253527Z       78 |         await expect(card(page).getByRole("alert")).toContainText("Reservation eligibility is unknown");
+2026-10-28T15:23:29.6254097Z     > 79 |         await expect(card(page).getByRole("alert")).toBeFocused();
+2026-10-28T15:23:29.6254707Z          |                                                     ^
+2026-10-28T15:23:29.6255562Z       80 |         await expect(card(page).getByRole("button", { name: "Reserve stimulate scope", exact: true })).toBeDisabled();
+2026-10-28T15:23:29.6256732Z       81 |         expect((await (await page.request.get(labHost.origin + "/api/v1/reservations")).json()).items).toHaveLength(0);
+2026-10-28T15:23:29.6257642Z       82 |       } finally { await page.unrouteAll({ behavior: "wait" }); }
+2026-10-28T15:23:29.6258519Z         at <ci-repo>/tests/e2e/lab-reservations.spec.ts:79:53
+2026-10-28T15:23:29.6258848Z
+2026-10-28T15:23:29.6259309Z     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+2026-10-28T15:23:29.6259980Z     test-results/browser/lab-reservations-lab-reser-3223d-y-never-enables-reservation/test-failed-1.png
+2026-10-28T15:23:29.6260862Z     ────────────────────────────────────────────────────────────────────────────────────────────────
+2026-10-28T15:23:29.6261277Z
+2026-10-28T15:23:29.6261933Z     Error Context: test-results/browser/lab-reservations-lab-reser-3223d-y-never-enables-reservation/error-context.md
+2026-10-28T15:23:29.6262455Z
+2026-10-28T15:23:29.6262749Z   1 failed
+2026-10-28T15:23:29.6263475Z     tests/e2e/lab-reservations.spec.ts:64:9 › lab reservations at 1440 › ungranted scope is explicit and invalid option authority never enables reservation
+2026-10-28T15:23:29.6264060Z   561 passed (48.3m)
+2026-10-28T15:23:31.0696423Z

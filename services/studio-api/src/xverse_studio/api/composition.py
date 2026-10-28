@@ -90,8 +90,16 @@ def install_composition(app, store, projects, runs, adapter):
         return deployments.list(projectId)
 
     @app.get("/api/v1/projects/{projectId}/deployment-variants/{documentId}/resolution")
-    def variant_resolution(projectId: str, documentId: str, providerId: str = Query("studio.reference", max_length=128)):
-        return deployments.resolution(projectId, documentId, providerId)
+    def variant_resolution(projectId: str, documentId: str, providerId: str = Query("studio.reference", max_length=128),
+                           revision: int | None = Query(None, ge=1, le=9007199254740991)):
+        return deployments.resolution(projectId, documentId, providerId, revision=revision)
+
+    @app.get("/api/v1/projects/{projectId}/deployment-variants/{documentId}/comparison")
+    def variant_comparison(projectId: str, documentId: str,
+                           otherDocumentId: str = Query(min_length=1, max_length=128),
+                           revision: int = Query(ge=1, le=9007199254740991),
+                           providerId: str = Query("studio.reference", max_length=128)):
+        return deployments.comparison(projectId, documentId, otherDocumentId, revision, providerId)
 
     @app.post("/api/v1/projects/{projectId}/deployment-variants", status_code=201)
     def create_variant(projectId: str, body: VariantCreate, request: Request, response: Response):

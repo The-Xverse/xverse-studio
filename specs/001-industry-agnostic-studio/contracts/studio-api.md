@@ -36,6 +36,7 @@
 | `GET /projects/{projectId}/connections` | Read-only connection admission 1.0: per-flow checks, feedback cycles, network links, coupling status and admitted contracts; see ADR-0014 | M2 |
 | `GET/POST /projects/{projectId}/deployment-variants`, `PATCH .../deployment-variants/{documentId}` | Named authored Deployment/Scenario variants (amendment): list, clone with expected revision, and rebind (target, realization, artifacts, resources) returning recomputed compatibility and resolution without committing an ambiguous selection | M2 |
 | `GET /projects/{projectId}/deployment-variants/{documentId}/resolution` | Read-only deployment resolution 1.0 (amendment): binding compatibility, resource/time/network constraints, effective-value chains with undefined precedence rejected, and portable intent separate from unresolved environment/secret references; see ADR-0015 | M2 |
+| `GET /projects/{projectId}/deployment-variants/{documentId}/comparison` | ADR-0028: two distinct Deployment documents, one required current revision and provider descriptor; shared System source witness, paired static resolution, declared targets/mappings and explicit unmeasured/unknown outcomes; no runtime authority | M2/M3 |
 | `GET /projects/{projectId}/deployment-variants/{documentId}/physical-bindings` | Read-only physical-binding observations (amendment; ADR-0018): authoritative selected source and current revision, logical references joined to server inventory, identity/interface/metadata/readiness facts, unresolved and provider-failure diagnostics; no reservation, probe, secret resolution or execution authority | M3 |
 | `POST /projects/{projectId}/compilations` | `revision`, deployment/scenario refs; returns plan reference/digest or diagnostics | M0 |
 | `GET /catalog` | Cursor-paged admitted templates/components/models/blueprints; filters by kind, role, profile, interface and provider availability | M2 |
@@ -381,3 +382,44 @@ remain open. Browser pending requests and at most 20 operation references persis
 in a versioned session record bounded to128KiB; cached data is never an authority
 grant and contains no private binding or cached result. Explicit retry preserves
 the original request identity; inspection performs no provider callback.
+
+## Revision-coherent deployment comparison (ADR-0028)
+
+`GET /projects/{projectId}/deployment-variants/{documentId}/comparison` requires
+`otherDocumentId` (1–128 characters), `revision` (positive safe integer) and optional
+`providerId` (default `studio.reference`, at most128 characters). Both documents must be
+Deployments of the same uniquely resolved System. Read Project once, enforce the expected
+revision and committed-source integrity, validate the complete captured source set through the
+selected platform, and resolve both variants with the same source dictionary/provider descriptor.
+No installation, inventory, probe, reservation, preflight, run or command is requested.
+
+The response has `comparisonVersion: "1.0"`, `scope: "static_deployment_comparison"`, exact
+project/revision/provider identity and provider digest, `sharedSystem` with its document ID,
+reference and exact source-byte digest, and `left`/`right` projections. The source-byte witness is
+not an XDL semantic digest or a new executable identity. Each side carries its revision-bound
+resolution, public declared targets and declared mappings. External asset handles, environment
+paths and artifact source references are absent from this comparison projection. Target text
+that cannot be projected is counted as unavailable rather than silently claiming complete metadata.
+
+Mapping records retain origin, owner reference and source pointer. Deployment mapping IDs and
+qualified clock references come from its canonical source. The selected Scenario schema instead
+uses `sourceTimeDomainId`/`targetTimeDomainId` and has no mapping ID: report `mappingId: null`
+and `/spec/timeMappings/{index}` without modifying source. Qualified clock identities stay distinct
+in static relation checks. Declared mapping text/tolerance is never measured synchronization.
+
+The comparison reports synchronization `unmeasured`, precise latency false, physical state and
+cleanup `unknown`, fidelity `unverified`, and runtime admission `preflight_required`. Shared
+logical source never establishes behavioural equivalence or physical-provider support. Provider
+operations/clocks/native support are descriptor declarations, not permission from target strings.
+
+Advertise/enforce `limits.deploymentComparison`:1,000 bindings, targets and combined mappings per
+variant,64 target capability strings and2MiB response bytes. Stop mapping collection at limit+1;
+refuse excess rather than returning a misleading partial comparison. Return412 for a stale revision
+or external source drift,404 for missing documents/provider,422 for invalid/incompatible selections
+or source, and413 for bounds. Existing session/Host/Origin protections apply.
+
+The single-resolution route additionally accepts optional `revision`; supplied values are enforced,
+while omitted revision retains latest-read compatibility. Committed-source integrity is always
+required. Browser reads supply and validate revision/document/provider context, use one coherent
+comparison response, bound display data/pages and suppress obsolete responses without moving focus
+away from newer user intent. A malformed or unsupported response remains unavailable.

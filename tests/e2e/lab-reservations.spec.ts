@@ -61,26 +61,48 @@ for (const viewport of [{ width: 1024, height: 768 }, { width: 1440, height: 900
       expect(result.items[0].status).toBe("expired");
     });
 
-    test("ungranted scope is explicit and invalid option authority never enables reservation", async ({ page, labHost }) => {
-      await openLab(page, labHost);
-      await options(page);
-      await card(page).getByLabel("Reservation scope", { exact: true }).selectOption("stimulate");
-      await expect(card(page)).toContainText("This scope is unavailable: FORBIDDEN");
-      await expect(card(page).getByRole("button", { name: "Reserve stimulate scope", exact: true })).toBeDisabled();
-      const pattern = "**/api/v1/assets/fixture%3Abench-sensor/reservation-options";
-      await page.route(pattern, async (route) => {
-        const response = await route.fetch(), value = await response.json();
-        value.runtimeAdmission = "ready";
-        await route.fulfill({ response, json: value });
-      });
-      try {
-        await keyboard(page, card(page).getByRole("button", { name: "Check reservation options", exact: true }));
-        await expect(card(page).getByRole("alert")).toContainText("Reservation eligibility is unknown");
-        await expect(card(page).getByRole("alert")).toBeFocused();
+    for (const delayedCommit of [false, true]) {
+      test(`ungranted scope is explicit and invalid option authority never enables reservation${delayedCommit ? " — labelled delayed React commit" : ""}`, async ({ page, labHost }) => {
+        if (delayedCommit) {
+        await page.addInitScript(() => {
+          // Labelled timing control: delay React's MessageChannel work; retain native rAF.
+          const NativeChannel = window.MessageChannel;
+          window.MessageChannel = class extends NativeChannel {
+            constructor() {
+              super();
+              const port = this.port1;
+              let handler: ((event: MessageEvent) => void) | null = null;
+              Object.defineProperty(port, "onmessage", {
+                get: () => handler,
+                set: (value) => { handler = value; },
+              });
+              port.addEventListener("message", (event) => { setTimeout(() => handler?.call(port, event), 150); });
+              port.start();
+            }
+          } as typeof MessageChannel;
+        });
+        }
+        await openLab(page, labHost);
+        await options(page);
+        await card(page).getByLabel("Reservation scope", { exact: true }).selectOption("stimulate");
+        await expect(card(page)).toContainText("This scope is unavailable: FORBIDDEN");
         await expect(card(page).getByRole("button", { name: "Reserve stimulate scope", exact: true })).toBeDisabled();
-        expect((await (await page.request.get(labHost.origin + "/api/v1/reservations")).json()).items).toHaveLength(0);
-      } finally { await page.unrouteAll({ behavior: "wait" }); }
-    });
+        const pattern = "**/api/v1/assets/fixture%3Abench-sensor/reservation-options";
+        await page.route(pattern, async (route) => {
+          const response = await route.fetch(), value = await response.json();
+          value.runtimeAdmission = "ready";
+          await route.fulfill({ response, json: value });
+        });
+        try {
+          await keyboard(page, card(page).getByRole("button", { name: "Check reservation options", exact: true }));
+          await expect(card(page).getByRole("alert")).toContainText("Reservation eligibility is unknown");
+          await expect(card(page).getByRole("alert")).toBeFocused();
+          await expect(card(page).getByRole("button", { name: "Reserve stimulate scope", exact: true })).toBeDisabled();
+          expect((await (await page.request.get(labHost.origin + "/api/v1/reservations")).json()).items).toHaveLength(0);
+        } finally { await page.unrouteAll({ behavior: "wait" }); }
+      });
+
+    }
 
     for (const status of [200, 503]) {
       test(`departed options ignore held actual response with labelled status ${status}`, async ({ page, labHost }) => {

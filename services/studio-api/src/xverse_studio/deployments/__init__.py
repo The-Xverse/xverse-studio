@@ -105,9 +105,13 @@ class Deployments:
                            "readiness": "preflight_required", "limitations": ["Static XDL compatibility does not establish artifact availability, provider support or behavioural equivalence."]})
         return {"items": result, "revision": project["revision"], "diagnostics": [], "nextCursor": None}
 
-    def resolution(self, project_id, document_id, provider_id="studio.reference"):
+    def resolution(self, project_id, document_id, provider_id="studio.reference", *, revision=None):
         """Deployment resolution 1.0 (ADR-0015) for one authored Deployment document; read-only."""
         project = self.projects.read(project_id)
+        if revision is not None:
+            from .comparison import require_revision
+            require_revision(project, revision)
+        self.projects.assert_intact(project)
         document = project["documents"].get(document_id)
         if document is None:
             raise Problem("NOT_FOUND", "Deployment document not found.", 404)
@@ -123,11 +127,16 @@ class Deployments:
         return {**self._resolve(documents, resource_ref(resource), provider_id), "documentId": document_id,
                 "revision": project["revision"]}
 
-    def _resolve(self, documents, deployment_ref, provider_id="studio.reference"):
+    def comparison(self, project_id, left_id, right_id, revision, provider_id="studio.reference"):
+        from .comparison import compare
+        return compare(self, project_id, left_id, right_id, revision, provider_id)
+
+    def _resolve(self, documents, deployment_ref, provider_id="studio.reference", *, provider=None):
         from xverse_studio.connections import admit_connections
         from xverse_studio.providers.registry import descriptors
 
-        provider = next((value for value in descriptors() if value["providerId"] == provider_id), None)
+        if provider is None:
+            provider = next((value for value in descriptors() if value["providerId"] == provider_id), None)
         if provider is None:
             raise Problem("PROVIDER_UNAVAILABLE", "No provider descriptor has this identity.", 404)
         report = resolve_deployment(documents, deployment_ref, host_os=platform.system(), provider=provider)

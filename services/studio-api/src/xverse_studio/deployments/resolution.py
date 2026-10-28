@@ -13,12 +13,65 @@ import math
 import re
 from urllib.parse import urlsplit
 
+from copy import deepcopy
 from ruamel.yaml import YAML
 
 from xverse_studio.xdl.examples import PARAMETERS, PROFILE_NAMESPACE
 
 RESOLUTION_VERSION = "1.0"
 BLOCKING = {"fail", "unknown", "unsupported", "ambiguous", "unresolved"}
+
+
+def declared_time_mappings(deployment, resources):
+    """Project both selected v1alpha1 shapes without inventing Scenario mapping IDs."""
+
+    def resource_ref(resource):
+        return _authored({**resource["metadata"], "kind": resource["kind"]})
+
+    deployment_ref = resource_ref(deployment)
+    owners = [(deployment, "deployment")]
+    owners.extend(
+        (resource, "scenario")
+        for resource in sorted(
+            (r for r in resources if r.get("kind") == "Scenario"), key=resource_ref
+        )
+        if resource["spec"].get("deploymentRef")
+        and _authored(resource["spec"]["deploymentRef"]) == deployment_ref
+    )
+    for owner, origin in owners:
+        for index, mapping in enumerate(owner["spec"].get("timeMappings", []) or []):
+            if origin == "deployment":
+                source, target = (
+                    mapping["sourceTimeDomainRef"],
+                    mapping["targetTimeDomainRef"],
+                )
+                mapping_id = mapping["id"]
+            else:
+                source = {
+                    **owner["spec"]["systemRef"],
+                    "element": mapping["sourceTimeDomainId"],
+                }
+                target = {
+                    **owner["spec"]["systemRef"],
+                    "element": mapping["targetTimeDomainId"],
+                }
+                mapping_id = None
+            yield dict(
+                mappingId=mapping_id,
+                origin=origin,
+                ownerRef=resource_ref(owner),
+                pointer=f"/spec/timeMappings/{index}",
+                sourceTimeDomainRef=deepcopy(source),
+                targetTimeDomainRef=deepcopy(target),
+                mapping=mapping["mapping"],
+                tolerance=deepcopy(mapping["tolerance"]),
+            )
+
+
+def clock_ref(reference):
+    return _authored(reference) + "#" + reference.get("element", "")
+
+
 _COLLECTIONS = ("componentInstances", "nodes", "devices", "sensors", "actuators", "models")
 _EXACT_VERSION = re.compile(r"^\d+\.\d+\.\d+(?:[-+][0-9A-Za-z.+-]+)?$")
 _WINDOWS_PATH = re.compile(r"^[A-Za-z]:[\\/]")
@@ -281,19 +334,18 @@ def resolve_deployment(documents, deployment_ref, host_os=None, provider=None):
     # (this Deployment's, or a Scenario's authored for it); accuracy of a mapping is never evaluated.
     domains = [d.get("id") for d in system_spec.get("timeDomains", []) or [] if isinstance(d, dict)]
     reference = system_spec.get("defaultTimeDomainId") or (domains[0] if len(domains) == 1 else None)
-    mappings = [("deployment", m) for m in spec.get("timeMappings", [])]
-    for resource in parsed.values():
-        if resource.get("kind") == "Scenario" and resource["spec"].get("deploymentRef") and _authored(resource["spec"]["deploymentRef"]) == deployment_ref:
-            mappings.extend(("scenario", m) for m in resource["spec"].get("timeMappings", []) or [] if isinstance(m, dict))
+    mappings = declared_time_mappings(deployment, parsed.values())
     links = {}
-    for origin, mapping in mappings:
-        source, target = mapping["sourceTimeDomainRef"].get("element"), mapping["targetTimeDomainRef"].get("element")
+    for mapping in mappings:
+        source, target = clock_ref(mapping['sourceTimeDomainRef']), clock_ref(mapping['targetTimeDomainRef'])
         links.setdefault(source, set()).add(target)
         links.setdefault(target, set()).add(source)
+        label = mapping['mappingId'] or mapping['ownerRef'] + mapping['pointer']
+        origin = {key: mapping[key] for key in ('mappingId', 'origin', 'ownerRef', 'pointer')}
         if _number(mapping["tolerance"]["value"]) and mapping["tolerance"]["value"] < 0:
-            constraints.append(_check("time", "fail", f"Time mapping {mapping['id']} declares a negative tolerance.", "CLOCK_MAPPING_INVALID", mappingId=mapping["id"], origin=origin))
+            constraints.append(_check("time", "fail", f"Time mapping {label} declares a negative tolerance.", "CLOCK_MAPPING_INVALID", **origin))
         else:
-            constraints.append(_check("time", "declared", f"Time mapping {mapping['id']} ({mapping['mapping']}) is recorded; its accuracy is not evaluated.", mappingId=mapping["id"], origin=origin))
+            constraints.append(_check("time", "declared", f"Time mapping {label} ({mapping['mapping']}) is recorded; its accuracy is not evaluated.", **origin))
 
     def related(domain, goal):
         seen, frontier = {domain}, [domain]
@@ -308,10 +360,11 @@ def resolve_deployment(documents, deployment_ref, host_os=None, provider=None):
         return False
     for simulator in spec.get("simulators", []):
         domain = simulator["timeDomainId"]
+        qualified_domain = _authored(spec['systemRef']) + '#' + domain
         if reference is None:
-            if not links.get(domain):
+            if not links.get(qualified_domain):
                 constraints.append(_check("time", "unknown", f"Simulator {simulator['id']} runs in {domain}, but the System has no default time domain to relate it to.", "COMPATIBILITY_UNKNOWN", simulatorId=simulator["id"]))
-        elif domain != reference and not related(domain, reference):
+        elif domain != reference and not related(qualified_domain, _authored(spec['systemRef']) + '#' + reference):
             constraints.append(_check("time", "fail", f"Simulator {simulator['id']} runs in {domain} with no mapping path to {reference}.", "CLOCK_MAPPING_MISSING", simulatorId=simulator["id"]))
     bound_networks = {}
     for network_binding in spec.get("networkBindings", []):

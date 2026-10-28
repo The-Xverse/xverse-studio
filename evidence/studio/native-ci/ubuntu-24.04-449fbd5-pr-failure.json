@@ -1,0 +1,69 @@
+{
+  "stats": {
+    "startTime": "2026-10-28T14:35:10.547Z",
+    "duration": 2899074.54,
+    "expected": 561,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  },
+  "failures": [
+    {
+      "file": "lab-reservations.spec.ts",
+      "line": 64,
+      "title": "ungranted scope is explicit and invalid option authority never enables reservation",
+      "status": "unexpected",
+      "results": [
+        {
+          "workerIndex": 0,
+          "parallelIndex": 0,
+          "status": "failed",
+          "duration": 11458,
+          "error": {
+            "message": "Error: expect(locator).toBeFocused() failed\n\nLocator:  locator('section.panel').filter({ has: getByRole('heading', { name: 'fixture:bench-sensor', exact: true }) }).getByRole('alert')\nExpected: focused\nReceived: inactive\nTimeout:  10000ms\n\nCall log:\n  - Expect \"toBeFocused\" locator('section.panel').filter({ has: getByRole('heading', { name: 'fixture:bench-sensor', exact: true }) }).getByRole('alert') with timeout 10000ms\n  - waiting for locator('section.panel').filter({ has: getByRole('heading', { name: 'fixture:bench-sensor', exact: true }) }).getByRole('alert')\n    24 × locator resolved to <p role=\"alert\" tabindex=\"-1\">Reservation eligibility is unknown. Reservation o…</p>\n       - unexpected value \"inactive\"",
+            "stack": "Error: expect(locator).toBeFocused() failed\n\nLocator:  locator('section.panel').filter({ has: getByRole('heading', { name: 'fixture:bench-sensor', exact: true }) }).getByRole('alert')\nExpected: focused\nReceived: inactive\nTimeout:  10000ms\n\nCall log:\n  - Expect \"toBeFocused\" locator('section.panel').filter({ has: getByRole('heading', { name: 'fixture:bench-sensor', exact: true }) }).getByRole('alert') with timeout 10000ms\n  - waiting for locator('section.panel').filter({ has: getByRole('heading', { name: 'fixture:bench-sensor', exact: true }) }).getByRole('alert')\n    24 × locator resolved to <p role=\"alert\" tabindex=\"-1\">Reservation eligibility is unknown. Reservation o…</p>\n       - unexpected value \"inactive\"\n\n    at <ci-repo>/tests/e2e/lab-reservations.spec.ts:79:53",
+            "location": {
+              "file": "<ci-repo>/tests/e2e/lab-reservations.spec.ts",
+              "column": 53,
+              "line": 79
+            },
+            "snippet": "  77 |         await keyboard(page, card(page).getByRole(\"button\", { name: \"Check reservation options\", exact: true }));\n  78 |         await expect(card(page).getByRole(\"alert\")).toContainText(\"Reservation eligibility is unknown\");\n> 79 |         await expect(card(page).getByRole(\"alert\")).toBeFocused();\n     |                                                     ^\n  80 |         await expect(card(page).getByRole(\"button\", { name: \"Reserve stimulate scope\", exact: true })).toBeDisabled();\n  81 |         expect((await (await page.request.get(labHost.origin + \"/api/v1/reservations\")).json()).items).toHaveLength(0);\n  82 |       } finally { await page.unrouteAll({ behavior: \"wait\" }); }"
+          },
+          "errors": [
+            {
+              "location": {
+                "file": "<ci-repo>/tests/e2e/lab-reservations.spec.ts",
+                "column": 53,
+                "line": 79
+              },
+              "message": "Error: expect(locator).toBeFocused() failed\n\nLocator:  locator('section.panel').filter({ has: getByRole('heading', { name: 'fixture:bench-sensor', exact: true }) }).getByRole('alert')\nExpected: focused\nReceived: inactive\nTimeout:  10000ms\n\nCall log:\n  - Expect \"toBeFocused\" locator('section.panel').filter({ has: getByRole('heading', { name: 'fixture:bench-sensor', exact: true }) }).getByRole('alert') with timeout 10000ms\n  - waiting for locator('section.panel').filter({ has: getByRole('heading', { name: 'fixture:bench-sensor', exact: true }) }).getByRole('alert')\n    24 × locator resolved to <p role=\"alert\" tabindex=\"-1\">Reservation eligibility is unknown. Reservation o…</p>\n       - unexpected value \"inactive\"\n\n\n  77 |         await keyboard(page, card(page).getByRole(\"button\", { name: \"Check reservation options\", exact: true }));\n  78 |         await expect(card(page).getByRole(\"alert\")).toContainText(\"Reservation eligibility is unknown\");\n> 79 |         await expect(card(page).getByRole(\"alert\")).toBeFocused();\n     |                                                     ^\n  80 |         await expect(card(page).getByRole(\"button\", { name: \"Reserve stimulate scope\", exact: true })).toBeDisabled();\n  81 |         expect((await (await page.request.get(labHost.origin + \"/api/v1/reservations\")).json()).items).toHaveLength(0);\n  82 |       } finally { await page.unrouteAll({ behavior: \"wait\" }); }\n    at <ci-repo>/tests/e2e/lab-reservations.spec.ts:79:53"
+            }
+          ],
+          "stdout": [],
+          "stderr": [],
+          "retry": 0,
+          "startTime": "2026-10-28T14:56:14.194Z",
+          "annotations": [],
+          "attachments": [
+            {
+              "name": "owned-provider-observation",
+              "contentType": "application/json",
+              "body": "eyJzY29wZSI6ICJvd25lZCBpbi1tZW1vcnkgZml4dHVyZTsgbm8gZXF1aXBtZW50IiwgInNjZW5hcmlvIjogIm9ic2VydmUiLCAiY2FsbHMiOiBbImludmVudG9yeSIsICJpbnZlbnRvcnkiLCAiaW52ZW50b3J5Il0sICJyZXNlcnZhdGlvbkNvdW50IjogMCwgInJlbWFpbmluZ1Byb3ZpZGVyTGVhc2VzIjogMCwgInByZXBhcmF0aW9uU2Vjb25kcyI6IDAuMTAzMzc1NDg4OTk5OTcyNzN9Cg=="
+            },
+            {
+              "name": "error-context",
+              "contentType": "text/markdown",
+              "path": "<ci-repo>/test-results/browser/lab-reservations-lab-reser-3223d-y-never-enables-reservation/error-context.md"
+            }
+          ],
+          "errorLocation": {
+            "file": "<ci-repo>/tests/e2e/lab-reservations.spec.ts",
+            "column": 53,
+            "line": 79
+          }
+        }
+      ]
+    }
+  ],
+  "scope": "Actual retained CI report. The later controlled race does not instrument the original scheduling."
+}

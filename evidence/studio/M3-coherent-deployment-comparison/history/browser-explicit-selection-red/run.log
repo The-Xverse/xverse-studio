@@ -1,0 +1,76 @@
+
+> xverse-studio-workspace@0.1.0 test:e2e
+> playwright test -c tests/e2e/playwright.config.ts --grep hybrid comparison:
+
+
+Running 2 tests using 1 worker
+
+(node:2447311) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 tests/e2e/hybrid-comparison.spec.ts:45:9 › hybrid comparison: coherent declarations at 1024 › native comparison separates declared clocks and controls from physical evidence (12.5s)
+(node:2447494) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 tests/e2e/hybrid-comparison.spec.ts:45:9 › hybrid comparison: coherent declarations at 1440 › native comparison separates declared clocks and controls from physical evidence (11.7s)
+
+
+  1) tests/e2e/hybrid-comparison.spec.ts:45:9 › hybrid comparison: coherent declarations at 1024 › native comparison separates declared clocks and controls from physical evidence
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByRole('region', { name: 'Time, control and physical evidence', exact: true })
+    Expected substring: "Captured project revision: 2"
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toContainText" getByRole('region', { name: 'Time, control and physical evidence', exact: true }) with timeout 10000ms
+      - waiting for getByRole('region', { name: 'Time, control and physical evidence', exact: true })
+
+
+      51 |       await expect(existing).toContainText("logical element identities are shared");
+      52 |       const evidence = page.getByRole("region", { name: "Time, control and physical evidence", exact: true });
+    > 53 |       await expect(evidence).toContainText(`Captured project revision: ${value.project.revision}`);
+         |                              ^
+      54 |       await expect(evidence).toContainText("Unmeasured");
+      55 |       await expect(evidence).toContainText("Physical state");
+      56 |       await expect(evidence).toContainText("Unknown");
+        at <repo>/tests/e2e/hybrid-comparison.spec.ts:53:30
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/hybrid-comparison-hybrid-c-6827f-rols-from-physical-evidence/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/hybrid-comparison-hybrid-c-6827f-rols-from-physical-evidence/error-context.md
+
+  2) tests/e2e/hybrid-comparison.spec.ts:45:9 › hybrid comparison: coherent declarations at 1440 › native comparison separates declared clocks and controls from physical evidence
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByRole('region', { name: 'Time, control and physical evidence', exact: true })
+    Expected substring: "Captured project revision: 2"
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toContainText" getByRole('region', { name: 'Time, control and physical evidence', exact: true }) with timeout 10000ms
+      - waiting for getByRole('region', { name: 'Time, control and physical evidence', exact: true })
+
+
+      51 |       await expect(existing).toContainText("logical element identities are shared");
+      52 |       const evidence = page.getByRole("region", { name: "Time, control and physical evidence", exact: true });
+    > 53 |       await expect(evidence).toContainText(`Captured project revision: ${value.project.revision}`);
+         |                              ^
+      54 |       await expect(evidence).toContainText("Unmeasured");
+      55 |       await expect(evidence).toContainText("Physical state");
+      56 |       await expect(evidence).toContainText("Unknown");
+        at <repo>/tests/e2e/hybrid-comparison.spec.ts:53:30
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/hybrid-comparison-hybrid-c-87481-rols-from-physical-evidence/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/hybrid-comparison-hybrid-c-87481-rols-from-physical-evidence/error-context.md
+
+  2 failed
+    tests/e2e/hybrid-comparison.spec.ts:45:9 › hybrid comparison: coherent declarations at 1024 › native comparison separates declared clocks and controls from physical evidence
+    tests/e2e/hybrid-comparison.spec.ts:45:9 › hybrid comparison: coherent declarations at 1440 › native comparison separates declared clocks and controls from physical evidence

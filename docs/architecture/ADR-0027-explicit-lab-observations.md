@@ -1,7 +1,7 @@
 # ADR-0027 — Explicit, separately permitted Lab observations
 
-Status: backend and connection-observation UI implemented under combined
-verification; full candidate and milestone acceptance remain open.
+Status: implemented for owned native Linux fixtures; actual provider, native Windows
+and independent milestone acceptance remain open.
 Date: 2026-10-28.
 
 ## Context

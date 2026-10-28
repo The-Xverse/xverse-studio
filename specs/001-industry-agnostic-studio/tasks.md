@@ -583,3 +583,9 @@ Fresh combined observation successor verification passes1146 backend/full562 bro
 
 
 Clean native Linux observation successor source 974c783ee602d18e597bbe66a5b55d734dcdc7f7 passes prepared-cache offline extraction/provisioning, startup/UI, Unicode project persistence, public compilation and owned shutdown. All113 payload hashes, archive digest and six tested UI assets match;335 inputs bind1146 backend/46 focused/full562 browser/performance2. Supplementary canonical2 is separate from562. Evidence: evidence/studio/M3-connection-observation-workspace/candidate-binding.json. Native Windows held; actual hardware and independent gates remain open;47/43/10 andzero accepted milestones unchanged.
+
+
+2026-10-28 closure audit: task statuses and dependencies remain unchanged. Coherent comparison captures one revision/provider descriptor and preserves actual Scenario mapping shapes.77 affected backend plus supplementary admission1,38 focused and overlapping110 affected browser cases pass on their recorded inputs. Current full browser/performance/package remain pending after the separately reproduced reservation precommit-focus repair. T077 production disconnect/stop callers and T073 physical-command conformance are real software gaps; actual hardware/nativeWindows acceptance is separate. See docs/implementation/TASK_CLOSURE_AUDIT.md and evidence/studio/M3-coherent-deployment-comparison/.
+
+
+2026-10-28 verification checkpoint: full1164 backend passes on188 unchanged backend/fixed metadata inputs. The old341 aggregate controller then fails on a deliberately replaced compiled filename and never runs its browser/performance stages; this is retained separately. Reservation focus repair passes controlled2red/2green and36 affected browser cases. Successor full602 browser is running on341 frozen inputs; performance/package pending. No task status/dependency changes;47/43/10 andzero accepted milestones.

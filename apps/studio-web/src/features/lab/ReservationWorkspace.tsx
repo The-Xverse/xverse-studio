@@ -105,10 +105,21 @@ export function ReservationWorkspace({ children }: { children: ReactNode }) {
 /** Reads have an independent generation, timeout and lifetime per mounted context. */
 function useObservation() {
   const [value, setValue] = useState<Data | null>(null), [error, setError] = useState(""),
-    [pending, setPending] = useState(false);
+    [pending, setPending] = useState(false),
+    [focusRequest, setFocusRequest] = useState<{ request: number; origin?: Element | null; failed: boolean } | null>(null);
   const alive = useRef(false), sequence = useRef(0), abort = useRef<AbortController | null>(null),
     heading = useRef<HTMLHeadingElement>(null), failure = useRef<HTMLParagraphElement>(null);
   useEffect(() => { alive.current = true; return () => { alive.current = false; sequence.current++; abort.current?.abort(); }; }, []);
+  useEffect(() => {
+    if (!focusRequest || pending) return;
+    const { request, origin, failed } = focusRequest;
+    const frame = requestAnimationFrame(() => {
+      if (!alive.current || sequence.current !== request || !origin || document.querySelector('[role="dialog"]') ||
+        (document.activeElement !== document.body && document.activeElement !== origin)) return;
+      (failed ? failure.current : heading.current)?.focus();
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [focusRequest, pending]);
   async function read(path: string, validate: (v: Data) => Data, origin?: Element | null) {
     abort.current?.abort();
     const controller = new AbortController(), request = ++sequence.current;
@@ -117,11 +128,7 @@ function useObservation() {
     const timer = setTimeout(() => { timedOut = true; controller.abort(); }, 30000);
     setValue(null); setError(""); setPending(true);
     function focus(failed: boolean) {
-      requestAnimationFrame(() => {
-        if (!alive.current || sequence.current !== request || !origin || document.querySelector('[role="dialog"]') ||
-          (document.activeElement !== document.body && document.activeElement !== origin)) return;
-        (failed ? failure.current : heading.current)?.focus();
-      });
+      setFocusRequest({ request, origin, failed });
     }
     try {
       const result = validate(await api(path, { signal: controller.signal }));

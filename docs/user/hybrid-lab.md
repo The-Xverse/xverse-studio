@@ -73,3 +73,25 @@ at a time from the same captured response; inventory changes require a new inspe
 Inspection does not reserve an asset, contact an endpoint or grant execution permission.
 Fixture scope, declared provider OS support and observed metadata do not establish
 live hardware support. Canonical source and active runs remain unchanged by inspection.
+
+In Deployment, choose **Comparison variant** to read two variants at the current
+committed revision. Both must reference the same authored System. The comparison
+shows that System's source-byte digest, binding and authored-value differences,
+declared target capabilities, provider operations/native support, and time mappings.
+It does not reserve, probe or run an asset. A stale or externally changed source
+refuses comparison; reopen the current Project before trying again.
+
+**Time, control and physical evidence** separates target capability strings from
+provider operations. An authored `pause` string grants no control. Mapping tolerance
+is declared intent, with measured synchronization and precise latency unavailable.
+Scenario mappings use source pointers because the selected XDL schema gives them
+no mapping ID. Each mapping retains its owning Deployment or Scenario and clock
+references. Target/mapping tables show 50 rows per page.
+
+Physical state and cleanup remain **Unknown**, fidelity **Unverified**, and fresh
+preflight required. An unsupported physical declaration remains visible as a blocked
+realization; shared topology does not establish physical admission or behavioural
+equivalence. Malformed or oversized comparison metadata stays unavailable. Browser
+display bounds include 1,000 parameter entries, 16 layers per entry, 32 nested value
+levels, 20,000 value nodes and 8,192 characters per value string; use Source to
+inspect larger authored values. No source is changed by a display refusal.

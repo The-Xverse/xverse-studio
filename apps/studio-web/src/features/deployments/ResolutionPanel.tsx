@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { api } from "../../api/client";
 import type { Data } from "../../api/types";
 import { Badge } from "../../app/ui";
@@ -17,15 +17,40 @@ export function useResolution(
     value?: Data;
     failure?: string;
   } | null>(null);
-  const key = `${projectId}:${revision}:${documentId}:${providerId}`;
+  const key = JSON.stringify([projectId, revision, documentId, providerId]);
+  useLayoutEffect(() => {
+    setState(null);
+  }, [key]);
   useEffect(() => {
     if (!documentId) return;
     const controller = new AbortController();
+    const timer = setTimeout(() => {
+      if (!controller.signal.aborted) {
+        controller.abort();
+        setState({
+          key,
+          failure:
+            "The deployment resolution read timed out. Reopen the current project to read it again.",
+        });
+      }
+    }, 30000);
     api(
-      `/projects/${encodeURIComponent(projectId)}/deployment-variants/${encodeURIComponent(documentId)}/resolution?providerId=${encodeURIComponent(providerId)}`,
+      `/projects/${encodeURIComponent(projectId)}/deployment-variants/${encodeURIComponent(documentId)}/resolution?providerId=${encodeURIComponent(providerId)}&revision=${revision}`,
       { signal: controller.signal },
     )
       .then((value) => {
+        if (controller.signal.aborted) return;
+        if (
+          !value ||
+          value.resolutionVersion !== "1.0" ||
+          value.documentId !== documentId ||
+          value.revision !== revision ||
+          typeof value.sourceValid !== "boolean" ||
+          (value.sourceValid && value.providerId !== providerId)
+        )
+          throw new Error(
+            "Deployment resolution metadata does not match the requested revision, document or provider. Reopen the current project.",
+          );
         if (!controller.signal.aborted) setState({ key, value });
       })
       .catch((error) => {
@@ -37,8 +62,12 @@ export function useResolution(
                 ? error.message
                 : "Resolution unavailable.",
           });
-      });
-    return () => controller.abort();
+      })
+      .finally(() => clearTimeout(timer));
+    return () => {
+      clearTimeout(timer);
+      controller.abort();
+    };
   }, [key]);
   return state?.key === key ? state : null;
 }

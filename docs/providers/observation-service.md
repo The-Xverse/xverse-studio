@@ -2,8 +2,9 @@
 
 The stock launcher has no observation installation or observation permissions.
 There is no HTTP/project/profile provider installer. Physical execution and active
-commands remain unavailable. The backend and connection-observation UI are under
-combined verification; a full native/browser candidate and clean package are pending.
+commands remain unavailable. The backend and connection-observation UI implement
+the bounded observe-only contract below. Verification is retained per exact candidate;
+fixture results do not establish native Windows or actual hardware support.
 
 Trusted host code can pass `lab_probe_host=LabProbeConfiguration(...)` to
 `create_app`. `ProbeInstallation` names an already installed object with

@@ -97,6 +97,7 @@ def capability_digest():
 
 
 def capabilities():
+    from xverse_studio.deployments.comparison import COMPARISON_LIMITS
     from xverse_studio.xdl.edit_limits import MAX_EDIT_BYTES, MAX_EDIT_DEPTH, MAX_EDIT_NODES
     from xverse_studio.experiments.authoring import COLLECTIONS, SCENARIO_ITEM_BYTES, SCENARIO_ITEM_LIMITS
     from xverse_studio.assertions.evaluator import LIMITS
@@ -131,6 +132,7 @@ def capabilities():
         },
         "providers": descriptors(),
         "limits": {
+            "deploymentComparison": dict(COMPARISON_LIMITS),
             "requestBytes": 8 * 1024 * 1024,
             "documentBytes": 1024 * 1024,
             "typedEditPayloadBytes": MAX_EDIT_BYTES,

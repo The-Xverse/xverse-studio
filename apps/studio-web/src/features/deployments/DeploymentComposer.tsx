@@ -11,11 +11,8 @@ import { DeploymentView } from "../model/Views";
 import { Icon, Badge, Diagnostics, Empty, KeyValues } from "../../app/ui";
 import { useTerm } from "../profiles/presentation";
 import { PhysicalPlacementsPanel } from "../lab/PhysicalPlacementsPanel";
-import {
-  ResolutionPanel,
-  VariantComparison,
-  useResolution,
-} from "./ResolutionPanel";
+import { HybridInspector } from "../lab/hybrid-inspector";
+import { ResolutionPanel, useResolution } from "./ResolutionPanel";
 export interface ExecutionSelection {
   deploymentRef?: string;
   scenarioRef?: string;
@@ -140,12 +137,6 @@ export function DeploymentComposer({
     ),
     compareVariant = variants.find(
       (variant) => variant.ref === compareRef && variant.ref !== chosen?.ref,
-    ),
-    compared = useResolution(
-      project.projectId,
-      project.revision,
-      compareVariant?.documentId,
-      providerId,
     );
   const binding = chosen?.bindings.find(
       (value: Data) => value.id === resourceBinding,
@@ -701,21 +692,29 @@ export function DeploymentComposer({
                 ))}
             </select>
           </label>
-          {compareVariant &&
-            (resolved?.value?.sourceValid && compared?.value?.sourceValid ? (
-              <VariantComparison
-                left={resolved.value}
-                right={compared.value}
-                leftName={chosen.name}
-                rightName={compareVariant.name}
-              />
-            ) : (
-              <p className="muted" role="status">
-                {resolved?.failure ||
-                  compared?.failure ||
-                  "Resolving both variants…"}
-              </p>
-            ))}
+          {compareVariant && (
+            <HybridInspector
+              key={JSON.stringify([
+                project.projectId,
+                project.revision,
+                chosen.documentId,
+                compareVariant.documentId,
+                providerId,
+              ])}
+              context={{
+                projectId: project.projectId,
+                revision: project.revision,
+                providerId,
+                leftId: chosen.documentId,
+                rightId: compareVariant.documentId,
+                leftRef: chosen.ref,
+                rightRef: compareVariant.ref,
+                systemRef: chosen.systemRef,
+              }}
+              leftName={chosen.name}
+              rightName={compareVariant.name}
+            />
+          )}
         </section>
       )}
       {compatibility && (

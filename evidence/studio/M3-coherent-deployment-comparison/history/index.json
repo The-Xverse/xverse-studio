@@ -1,0 +1,475 @@
+[
+  {
+    "phase": "backend-affected-successor",
+    "verification": {
+      "observedAt": "2026-10-28T15:08:43.265920+00:00",
+      "command": [
+        "<repo>/.venv/bin/python",
+        "-I",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/integration/test_deployment_comparison.py",
+        "tests/integration/test_deployment_variants.py",
+        "tests/integration/test_hybrid_time_and_loss.py",
+        "--basetemp=<repo>/.studio-local/hybrid-comparison/backend-affected-successor/tmp",
+        "--junitxml=<repo>/.studio-local/hybrid-comparison/backend-affected-successor/junit.private.xml"
+      ],
+      "exitCode": 1,
+      "stats": {
+        "tests": 76,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      },
+      "selectedBackendInputs": 188,
+      "inputsIdentical": true,
+      "scope": "Affected backend deployment/comparison/hybrid cases only. Python and selected fixed metadata inputs frozen; no frontend/compiled-input inheritance claim."
+    }
+  },
+  {
+    "phase": "backend-corrected-baseline-red",
+    "verification": {
+      "observedAt": "2026-10-28T14:40:21.894112+00:00",
+      "baselineHead": "449fbd54006969482e7ab85b7e8d50993776be3b",
+      "exitCode": 1,
+      "stats": {
+        "tests": 2,
+        "failures": 2,
+        "errors": 0,
+        "skipped": 0
+      },
+      "all335PublishedInputsMatchedBeforeAfter": true,
+      "successorSourcesRestoredExactly": true,
+      "testSourceSha256": "7ff6bd9c1ca7d980e8961d329a5b4bad3397c7603f41d8591d224c8c088b634a",
+      "scope": "Corrected fixture uses actual required baseRevision. Failures now reach existing API revision200 and missing comparison404 assertions. Unreferenced new module remains on disk but published routes/class source are exact baseline.",
+      "failures": [
+        "AssertionError: {\"resolutionVersion\":\"1.0\",\"deploymentRef\":\"xdl://org.xverse.studio.process-control/deployment/local-reference\",\"systemRef\":\"xdl://org.xverse.studio.process-control/system/reference-loop\",\"documentId\":\"doc-3\",\"bindings\":[{\"bindingId\":\"controller-binding\",\"elementId\":\"controller\",\"elementRef\":\"xdl://org.xverse.studio.process-control/system/reference-loop#controller\",\"realizationClass\":\"simulated\",\"targetId\":\"reference-target\",\"targetClass\":\"model-unit\",\"definitionRef\":\"xdl://org.xverse.studio.process-control/component/reference-controller\",\"status\":\"compatible\",\"checks\":[{\"check\":\"realization\",\"status\":\"pass\",\"message\":\"Provider studio.reference declares support for simulated realization on model-unit targets.\"}]},{\"bindingId\":\"plant-binding\",\"elementId\":\"plant\",\"elementRef\":\"xdl://org.xverse.studio.process-control/system/reference-loop#plant\",\"realizationClass\":\"simulated\",\"targetId\":\"reference-target\",\"targetClass\":\"model-unit\",\"definitionRef\":\"xdl://org.xverse.studio.process-control/component/reference-plant\",\"status\":\"compatible\",\"checks\":[{\"check\":\"realization\",\"status\":\"pass\",\"message\":\"Provider studio.reference declares support for simulated realization on model-unit targets.\"}]}],\"constraints\":[],\"parameters\":[{\"elementId\":null,\"scenarioRef\":\"xdl://org.xverse.studio.process-control/scenario/reference-response\",\"parameterId\":\"target\",\"chain\":[{\"layer\":\"profile-default\",\"value\":1.0},{\"layer\":\"scenario\",\"documentId\":\"xdl/scenario.xdl.yaml\",\"scenarioRef\":\"xdl://org.xverse.studio.process-control/scenario/reference-response\",\"value\":1.0}],\"valueType\":\"number\",\"unitSemantics\":\"1\",\"mutability\":\"configuration\",\"effective\":1.0,\"source\":\"scenario\",\"status\":\"default\",\"message\":\"Declared by the owned reference profile: a Scenario value replaces the admitted parameter default.\"},{\"elementId\":null,\"scenarioRef\":\"xdl://org.xverse.studio.process-control/scenario/reference-response\",\"parameterId\":\"gain\",\"chain\":[{\"layer\":\"profile-default\",\"value\":0.8},{\"layer\":\"scenario\",\"documentId\":\"xdl/scenario.xdl.yaml\",\"scenarioRef\":\"xdl://org.xverse.studio.process-control/scenario/reference-response\",\"value\":0.8}],\"valueType\":\"number\",\"unitSemantics\":\"1\",\"mutability\":\"configuration\",\"effective\":0.8,\"source\":\"scenario\",\"status\":\"default\",\"message\":\"Declared by the owned reference profile: a Scenario value replaces the admitted parameter default.\"},{\"elementId\":null,\"scenarioRef\":\"xdl://org.xverse.studio.process-control/scenario/reference-response\",\"parameterId\":\"initial\",\"chain\":[{\"layer\":\"profile-default\",\"value\":0.0},{\"layer\":\"scenario\",\"documentId\":\"xdl/scenario.xdl.yaml\",\"scenarioRef\":\"xdl://org.xverse.studio.process-control/scenario/reference-response\",\"value\":0.0}],\"valueType\":\"number\",\"unitSemantics\":\"1\",\"mutability\":\"configuration\",\"effective\":0.0,\"source\":\"scenario\",\"status\":\"default\",\"message\":\"Declared by the owned reference profile: a Scenario value replaces the admitted parameter default.\"},{\"elementId\":null,\"scenarioRef\":\"xdl://org.xverse.studio.process-control/scenario/reference-response\",\"parameterId\":\"duration\",\"chain\":[{\"layer\":\"profile-default\",\"value\":5.0},{\"layer\":\"scenario\",\"documentId\":\"xdl/scenario.xdl.yaml\",\"scenarioRef\":\"xdl://org.xverse.studio.process-control/scenario/reference-response\",\"value\":5.0}],\"valueType\":\"number\",\"unitSemantics\":\"s\",\"mutability\":\"configuration\",\"effective\":5.0,\"source\":\"scenario\",\"status\":\"default\",\"message\":\"Declared by the owned reference profile: a Scenario value replaces the admitted parameter default.\"},{\"elementId\":null,\"scenarioRef\":\"xdl://org.xverse.studio.process-control/scenario/reference-response\",\"parameterId\":\"timestep\",\"chain\":[{\"layer\":\"profile-default\",\"value\":0.1},{\"layer\":\"scenario\",\"documentId\":\"xdl/scenario.xdl.yaml\",\"scenarioRef\":\"xdl://org.xverse.studio.process-control/scenario/reference-response\",\"value\":0.1}],\"valueType\":\"number\",\"unitSemantics\":\"s\",\"mutability\":\"configuration\",\"effective\":0.1,\"source\":\"scenario\",\"status\":\"default\",\"message\":\"Declared by the owned reference profile: a Scenario value replaces the admitted parameter default.\"},{\"elementId\":null,\"scenarioRef\":\"xdl://org.xverse.studio.process-control/scenario/reference-response\",\"parameterId\":\"fault\",\"chain\":[{\"layer\":\"profile-default\",\"value\":\"none\"},{\"layer\":\"scenario\",\"documentId\":\"xdl/scenario.xdl.yaml\",\"scenarioRef\":\"xdl://org.xverse.studio.process-control/scenario/reference-response\",\"value\":\"none\"}],\"valueType\":\"string\",\"unitSemantics\":\"1\",\"mutability\":\"configuration\",\"effective\":\"none\",\"source\":\"scenario\",\"status\":\"default\",\"message\":\"Declared by the owned reference profile: a Scenario value replaces the admitted parameter default.\"}],\"portableIntent\":{\"targets\":[{\"id\":\"reference-target\",\"targetClass\":\"model-unit\",\"capabilities\":[\"reference-response\"]}],\"bindings\":[{\"bindingId\":\"controller-binding\",\"elementId\":\"controller\",\"realizationClass\":\"simulated\",\"targetId\":\"reference-target\",\"artifactIds\":[\"reference-model\"],\"resourceIds\":[]},{\"bindingId\":\"plant-binding\",\"elementId\":\"plant\",\"realizationClass\":\"simulated\",\"targetId\":\"reference-target\",\"artifactIds\":[\"reference-model\"],\"resourceIds\":[]}],\"resources\":[],\"timeMappings\":[],\"networkBindings\":[]},\"environment\":[],\"portability\":[],\"hostOS\":\"Linux\",\"providerId\":\"studio.reference\",\"provider\":{\"providerId\":\"studio.reference\",\"maturity\":\"fixture\",\"realizationClasses\":[\"simulated\"],\"targetClasses\":[\"model-unit\"],\"limitations\":[\"Scalar first-order reference model only; no external simulator, physical device, native X-COM, or industrial fidelity claim.\",\"Pause, rewind, step, live mutation and physical coupling are unsupported.\"]},\"limitations\":[\"Compatibility covers declared requirements only; a preserved logical identity never implies behavioural equivalence or fidelity.\",\"Values without an admitted precedence are rejected, never ordered by Studio.\"],\"sourceValid\":true,\"diagnostics\":[],\"connections\":{\"providerId\":\"studio.reference\",\"blocking\":0,\"admittedContracts\":{\"converter\":true,\"versionCompatibility\":false,\"quality\":false,\"causality\":true,\"modelCoupling\":false},\"notAdmitted\":[],\"cycles\":[]},\"revision\":2}\nassert 200 == 412\n +  where 200 = <Response [200 OK]>.status_code",
+        "AssertionError: {\"code\":\"NOT_FOUND\",\"message\":\"This API version or route is unsupported.\",\"requestId\":\"req-ec10de80-2932-424b-8f6c-0f4f4ecb0ff9\",\"retryable\":false}\nassert 404 == 200\n +  where 404 = <Response [404 Not Found]>.status_code"
+      ]
+    }
+  },
+  {
+    "phase": "backend-corrected-green",
+    "verification": {
+      "observedAt": "2026-10-28T14:42:22.860321+00:00",
+      "exitCode": 0,
+      "stats": {
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "selectedInputs": 338,
+      "inputsIdentical": true
+    }
+  },
+  {
+    "phase": "backend-expanded",
+    "verification": {
+      "observedAt": "2026-10-28T14:47:17.786923+00:00",
+      "exitCode": 1,
+      "stats": {
+        "tests": 75,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      },
+      "selectedInputs": 338,
+      "inputsIdentical": true
+    }
+  },
+  {
+    "phase": "backend-final-affected",
+    "verification": {
+      "observedAt": "2026-10-28T15:32:54.598986+00:00",
+      "command": [
+        "<repo>/.venv/bin/python",
+        "-I",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/integration/test_deployment_comparison.py",
+        "tests/integration/test_deployment_variants.py",
+        "tests/integration/test_hybrid_time_and_loss.py",
+        "--basetemp=<repo>/.studio-local/hybrid-comparison/backend-final-affected/tmp",
+        "--junitxml=<repo>/.studio-local/hybrid-comparison/backend-final-affected/junit.private.xml"
+      ],
+      "exitCode": 0,
+      "stats": {
+        "tests": 77,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "selectedBackendInputs": 188,
+      "inputsIdentical": true,
+      "scope": "Affected backend deployment/comparison/hybrid cases only. Python and selected fixed metadata inputs frozen; no frontend/compiled-input inheritance claim."
+    }
+  },
+  {
+    "phase": "backend-red",
+    "verification": {
+      "observedAt": "2026-10-28T14:37:40.093640+00:00",
+      "command": [
+        "<repo>/.venv/bin/python",
+        "-I",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/integration/test_deployment_comparison.py",
+        "--basetemp=<repo>/.studio-local/hybrid-comparison/backend-red/tmp",
+        "--junitxml=<repo>/.studio-local/hybrid-comparison/backend-red/junit.private.xml"
+      ],
+      "exitCode": 1,
+      "seconds": 1.6732064739917405,
+      "stats": {
+        "tests": 2,
+        "failures": 2,
+        "errors": 0,
+        "skipped": 0
+      },
+      "selectedInputs": 336,
+      "inputsIdentical": true,
+      "scope": "Actual current authenticated API. Requested stale revision returns current200 instead of412; paired comparison route missing. No provider or run."
+    }
+  },
+  {
+    "phase": "backend-scenario-admission-control",
+    "verification": {
+      "observedAt": "2026-10-28T15:54:30.563873+00:00",
+      "command": [
+        "<repo>/.venv/bin/python",
+        "-I",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/integration/test_deployment_comparison.py",
+        "tests/integration/test_deployment_variants.py",
+        "tests/integration/test_hybrid_time_and_loss.py",
+        "--basetemp=<repo>/.studio-local/hybrid-comparison/backend-scenario-admission-control/tmp",
+        "--junitxml=<repo>/.studio-local/hybrid-comparison/backend-scenario-admission-control/junit.private.xml",
+        "-k",
+        "declared_deployment_and_scenario"
+      ],
+      "exitCode": 1,
+      "stats": {
+        "tests": 1,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      },
+      "selectedBackendInputs": 188,
+      "inputsIdentical": true,
+      "scope": "Affected backend deployment/comparison/hybrid cases only. Python and selected fixed metadata inputs frozen; no frontend/compiled-input inheritance claim."
+    }
+  },
+  {
+    "phase": "backend-scenario-admission-corrected",
+    "verification": {
+      "observedAt": "2026-10-28T15:57:11.723185+00:00",
+      "command": [
+        "<repo>/.venv/bin/python",
+        "-I",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/integration/test_deployment_comparison.py",
+        "tests/integration/test_deployment_variants.py",
+        "tests/integration/test_hybrid_time_and_loss.py",
+        "--basetemp=<repo>/.studio-local/hybrid-comparison/backend-scenario-admission-corrected/tmp",
+        "--junitxml=<repo>/.studio-local/hybrid-comparison/backend-scenario-admission-corrected/junit.private.xml",
+        "-k",
+        "declared_deployment_and_scenario"
+      ],
+      "exitCode": 0,
+      "stats": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "selectedBackendInputs": 188,
+      "inputsIdentical": true,
+      "scope": "Affected backend deployment/comparison/hybrid cases only. Python and selected fixed metadata inputs frozen; no frontend/compiled-input inheritance claim."
+    }
+  },
+  {
+    "phase": "backend-valid-scenario-green",
+    "verification": {
+      "observedAt": "2026-10-28T15:23:54.795880+00:00",
+      "command": [
+        "<repo>/.venv/bin/python",
+        "-I",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/integration/test_deployment_comparison.py",
+        "tests/integration/test_deployment_variants.py",
+        "tests/integration/test_hybrid_time_and_loss.py",
+        "--basetemp=<repo>/.studio-local/hybrid-comparison/backend-valid-scenario-green/tmp",
+        "--junitxml=<repo>/.studio-local/hybrid-comparison/backend-valid-scenario-green/junit.private.xml",
+        "-k",
+        "declared_deployment_and_scenario"
+      ],
+      "exitCode": 0,
+      "stats": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "selectedBackendInputs": 188,
+      "inputsIdentical": true,
+      "scope": "Affected backend deployment/comparison/hybrid cases only. Python and selected fixed metadata inputs frozen; no frontend/compiled-input inheritance claim."
+    }
+  },
+  {
+    "phase": "backend-valid-scenario-red",
+    "verification": {
+      "observedAt": "2026-10-28T15:20:44.221111+00:00",
+      "command": [
+        "<repo>/.venv/bin/python",
+        "-I",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/integration/test_deployment_comparison.py",
+        "tests/integration/test_deployment_variants.py",
+        "tests/integration/test_hybrid_time_and_loss.py",
+        "--basetemp=<repo>/.studio-local/hybrid-comparison/backend-valid-scenario-red/tmp",
+        "--junitxml=<repo>/.studio-local/hybrid-comparison/backend-valid-scenario-red/junit.private.xml",
+        "-k",
+        "declared_deployment_and_scenario"
+      ],
+      "exitCode": 1,
+      "stats": {
+        "tests": 1,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      },
+      "selectedBackendInputs": 188,
+      "inputsIdentical": true,
+      "scope": "Affected backend deployment/comparison/hybrid cases only. Python and selected fixed metadata inputs frozen; no frontend/compiled-input inheritance claim."
+    }
+  },
+  {
+    "phase": "browser-affected-regression",
+    "verification": {
+      "observedAt": "2026-10-28T16:25:05.279148+00:00",
+      "command": [
+        "<repo>/.venv/bin/python",
+        "-I",
+        "scripts/test_browser.py",
+        "--grep",
+        "deployment|physical placements|hybrid comparison|run session:|run controls:"
+      ],
+      "exitCode": 0,
+      "stats": {
+        "startTime": "2026-10-28T16:18:30.224Z",
+        "duration": 394681.873,
+        "expected": 110,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "selectedInputs": 341,
+      "inputsIdentical": true,
+      "scope": "Actual standard native launcher and current source/compiled UI. Outcomes in the actual report; no failure-cause inference from counts."
+    }
+  },
+  {
+    "phase": "browser-corrected-red",
+    "verification": {
+      "observedAt": "2026-10-28T14:55:08.254171+00:00",
+      "command": [
+        "<repo>/.venv/bin/python",
+        "-I",
+        "scripts/test_browser.py",
+        "--grep",
+        "hybrid comparison:"
+      ],
+      "exitCode": 1,
+      "stats": {
+        "startTime": "2026-10-28T14:54:44.034Z",
+        "duration": 24006.624,
+        "expected": 0,
+        "skipped": 0,
+        "unexpected": 2,
+        "flaky": 0
+      },
+      "selectedInputs": 339,
+      "inputsIdentical": true,
+      "scope": "Actual standard native launcher and current source/compiled UI. Outcomes in the actual report; no failure-cause inference from counts."
+    }
+  },
+  {
+    "phase": "browser-expanded",
+    "verification": {
+      "observedAt": "2026-10-28T15:12:51.133540+00:00",
+      "command": [
+        "<repo>/.venv/bin/python",
+        "-I",
+        "scripts/test_browser.py",
+        "--grep",
+        "hybrid comparison:"
+      ],
+      "exitCode": 1,
+      "stats": {
+        "startTime": "2026-10-28T15:11:40.019Z",
+        "duration": 70843.83499999999,
+        "expected": 37,
+        "skipped": 0,
+        "unexpected": 1,
+        "flaky": 0
+      },
+      "selectedInputs": 341,
+      "inputsIdentical": true,
+      "scope": "Actual standard native launcher and current source/compiled UI. Outcomes in the actual report; no failure-cause inference from counts."
+    }
+  },
+  {
+    "phase": "browser-explicit-selection-red",
+    "verification": {
+      "observedAt": "2026-10-28T14:56:21.722358+00:00",
+      "command": [
+        "<repo>/.venv/bin/python",
+        "-I",
+        "scripts/test_browser.py",
+        "--grep",
+        "hybrid comparison:"
+      ],
+      "exitCode": 1,
+      "stats": {
+        "startTime": "2026-10-28T14:55:56.249Z",
+        "duration": 25245.465,
+        "expected": 0,
+        "skipped": 0,
+        "unexpected": 2,
+        "flaky": 0
+      },
+      "selectedInputs": 339,
+      "inputsIdentical": true,
+      "scope": "Actual standard native launcher and current source/compiled UI. Outcomes in the actual report; no failure-cause inference from counts."
+    }
+  },
+  {
+    "phase": "browser-final-focused",
+    "verification": {
+      "observedAt": "2026-10-28T15:59:39.780194+00:00",
+      "command": [
+        "<repo>/.venv/bin/python",
+        "-I",
+        "scripts/test_browser.py",
+        "--grep",
+        "hybrid comparison:"
+      ],
+      "exitCode": 0,
+      "stats": {
+        "startTime": "2026-10-28T15:58:24.675Z",
+        "duration": 74814.872,
+        "expected": 38,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "selectedInputs": 341,
+      "inputsIdentical": true,
+      "scope": "Actual standard native launcher and current source/compiled UI. Outcomes in the actual report; no failure-cause inference from counts."
+    }
+  },
+  {
+    "phase": "browser-first-green",
+    "verification": {
+      "observedAt": "2026-10-28T15:04:57.419629+00:00",
+      "command": [
+        "<repo>/.venv/bin/python",
+        "-I",
+        "scripts/test_browser.py",
+        "--grep",
+        "hybrid comparison:"
+      ],
+      "exitCode": 0,
+      "stats": {
+        "startTime": "2026-10-28T15:04:52.341Z",
+        "duration": 4850.655,
+        "expected": 2,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "selectedInputs": 341,
+      "inputsIdentical": true,
+      "scope": "Actual standard native launcher and current source/compiled UI. Outcomes in the actual report; no failure-cause inference from counts."
+    }
+  },
+  {
+    "phase": "browser-initial-red",
+    "verification": {
+      "observedAt": "2026-10-28T14:52:12.152311+00:00",
+      "exitCode": 1,
+      "stats": {
+        "startTime": "2026-10-28T14:52:09.315Z",
+        "duration": 2604.864,
+        "expected": 0,
+        "skipped": 0,
+        "unexpected": 2,
+        "flaky": 0
+      },
+      "selectedInputs": 339,
+      "inputsIdentical": true,
+      "scope": "Actual standard native launcher, published compiled UI plus implemented comparison API. New evidence region absent; behavior after that assertion not exercised."
+    }
+  },
+  {
+    "phase": "browser-route-settlement-control",
+    "verification": {
+      "observedAt": "2026-10-28T15:42:43.270338+00:00",
+      "command": [
+        "<repo>/.venv/bin/python",
+        "-I",
+        "scripts/test_browser.py",
+        "--grep",
+        "held real response respects newer (Home|selection) intent"
+      ],
+      "exitCode": 0,
+      "stats": {
+        "startTime": "2026-10-28T15:42:34.236Z",
+        "duration": 8617.669,
+        "expected": 4,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "selectedInputs": 341,
+      "inputsIdentical": true,
+      "scope": "Actual standard native launcher and current source/compiled UI. Outcomes in the actual report; no failure-cause inference from counts."
+    }
+  },
+  {
+    "phase": "browser-scenario-successor",
+    "verification": {
+      "observedAt": "2026-10-28T15:36:37.583481+00:00",
+      "command": [
+        "<repo>/.venv/bin/python",
+        "-I",
+        "scripts/test_browser.py",
+        "--grep",
+        "hybrid comparison:"
+      ],
+      "exitCode": 1,
+      "stats": {
+        "startTime": "2026-10-28T15:31:17.956Z",
+        "duration": 319397.029,
+        "expected": 36,
+        "skipped": 0,
+        "unexpected": 2,
+        "flaky": 0
+      },
+      "selectedInputs": 341,
+      "inputsIdentical": true,
+      "scope": "Actual standard native launcher and current source/compiled UI. Outcomes in the actual report; no failure-cause inference from counts."
+    }
+  }
+]
