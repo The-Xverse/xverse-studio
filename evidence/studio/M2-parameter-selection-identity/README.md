@@ -1,5 +1,7 @@
 # Preserve native parameter selection during metadata arrival
 
+Current source `60b668a` has a passing clean114-file Linux package with all hashes/six tested UI assets matched.71 affected browser/performance2 pass on342 unchanged inputs;1164 backend is preserved through188 unchanged inputs and108 identical non-UI payloads. The earlier full601/1 remains failed; full604 has not been rerun locally. [Exact binding](candidate-binding.json).
+
 The source43aea45 full602 run passed601 cases and failed the1440px newer-head
 parameter journey: the intended replacement7 became67 before the save check.
 That run remains failed. Its exact event scheduling was not captured.
