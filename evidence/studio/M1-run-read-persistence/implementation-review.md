@@ -32,3 +32,6 @@ establish physical-provider recovery, actual cleanup or full milestone acceptanc
 
 
 Final successor verification passes1078/73/full516/performance2 with321 unchanged inputs. This closes the pending execution scope of this review, not independent milestone acceptance or the original trace-failure scheduling investigation. Clean committed source/package binding is still required.
+
+
+Clean native Linux source/package binding is verified separately in candidate-binding.json. This does not establish native Windows, physical hardware or independent milestone acceptance.

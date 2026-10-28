@@ -37,10 +37,11 @@ does not explain its old display state. Fresh full516 browser verification and p
 final-successor-verification.json links the actual combined result.
 The changed backend read-persistence implementation has its own M1 evidence.
 
-No clean successor package is claimed. Oldf921 retains its original package
-identity. Counts47/43/10 and zero accepted milestones stay unchanged. Native
+The clean successor Linux package is now verified in
+../M1-run-read-persistence/candidate-binding.json. Old f921 retains its original
+package identity. Counts47/43/10 and zero accepted milestones stay unchanged. Native
 Windows, actual hardware/provider/clock/stop evidence, human/AT/SADS and independent
 full acceptance remain open. All retained content is text; authentication, raw
 databases and screenshots remain private.
 
-Fresh full1078/73/516/2 follow-up is recorded separately from the initial snapshot. Clean committed package binding remains pending; no task or milestone closes.
+Fresh full1078/73/516/2 follow-up is recorded separately from the initial snapshot. Clean committed package binding is retained in the separate M1 candidate-binding.json; no task or milestone closes.

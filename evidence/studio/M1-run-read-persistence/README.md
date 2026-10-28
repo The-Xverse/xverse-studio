@@ -38,8 +38,10 @@ existing backend framework warning remains. Final reports, XML, logs and hashes
 are retained under final/. The original515/1 and exact uncaptured request timing
 remain qualified; a new passing cohort does not rewrite old outcomes.
 
-Source is still a verified working-tree successor, with clean committed Linux
-package binding pending. Counts47/43/10 and zero accepted milestones remain
+Source 60291f4c986ec25bdafb510bf9ced8b6b01a351e now has clean native Linux package
+verification; candidate-binding.json binds all 321 inputs, 110 payloads, archive
+digest and six tested UI assets to the actual verification. This used the prepared
+dependency cache and does not claim uncached network installation. Counts47/43/10 and zero accepted milestones remain
 unchanged; native Windows, actual hardware/provider evidence and independent
 full acceptance are still open. Preliminary snapshots remain historical.
 
