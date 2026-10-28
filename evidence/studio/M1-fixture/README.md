@@ -1,12 +1,18 @@
 # Owned-fixture lifecycle verification
 
-T033 remains in progress. The first combined full backend run finished with
-**1,207 passed /2 failed** out of 1,209, with no skips and 379 unchanged inputs.
-Both failures were reproduced with controlled native interleavings; test-only
-corrections then passed those same interleavings. The full successor then passed all 1,209 tests on 379 unchanged inputs. A later
-late-acknowledgement repair now passes the complete **1,211-test backend suite**,
-with no failures/errors/skips and379 unchanged inputs. The affected86 browser checks and two separate performance cases also pass on
-the same379 inputs. Clean Linux packaging is pending.
+T033 remains in progress. Source`0bc939d` passes **1,211 backend tests,86 affected
+browser checks and two separate performance cases** on379 identical inputs.
+Its clean native Linux offline package passes115 payloads, all archive/file hashes
+and six tested UI assets. See the [source/package binding](candidate-binding.json).
+The complete lifecycle fault matrix, including cleanup-failure and supported
+live-tune fixtures, remains open.
+
+The first combined full run retains **1,207 passed /2 failed** out of1,209. Both
+failures were reproduced using controlled native interleavings; test-only repairs
+then passed those same interleavings and a fresh full1,209 suite. Later native
+regressions reproduced a late parent-acknowledgement defect. Both cases pass after
+repair, and the current combined full1,211 execution includes them. None of the
+original failed outcomes has been relabelled.
 
 The implementation repairs these failure paths:
 
@@ -55,6 +61,6 @@ and rejects Pause. The separate [scope record](controls/late-ack-scope.json) ret
 the initial test insertion mistake, corrected layout, reviewed red and passing
 successor. The [combined full successor](full-after-late-ack/verification.json) passes all
 1,211 backend cases on379 unchanged inputs. The [current verification](verification.json) records86 affected browser and2
-performance cases on the same379 inputs. No local full623 execution or clean
-package pass is inferred. The earlier results retain their exact source scopes.
+performance cases on the same379 inputs. The clean115-payload Linux package is bound to the same tested source/UI.
+No local full623 execution is claimed. The earlier results retain their exact source scopes.
 T033 remains open.
