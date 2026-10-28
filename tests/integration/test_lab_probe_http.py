@@ -1,0 +1,589 @@
+"""Explicit observation requests use the actual HTTP/session boundary, no hardware."""
+
+from copy import deepcopy
+import platform
+import threading
+from types import SimpleNamespace
+
+import pytest
+from fastapi.testclient import TestClient
+
+from xverse_studio.api.app import create_app
+from xverse_studio.lab import LabError
+from xverse_studio.lab.probe_configuration import (
+    LabProbeConfiguration,
+    ProbeAuthority,
+    ProbeInstallation,
+)
+
+
+class OwnedProbe:
+    """Owned in-process observation fixture; never contacts equipment or a socket."""
+
+    def __init__(self):
+        self.calls = []
+        self.callback = None
+        self.service = None
+        self.thread = None
+
+    def probe(self, binding, scope, deadline):
+        self.thread = threading.current_thread()
+        self.calls.append(deepcopy((binding, scope, deadline)))
+        records = self.service.store.find("operation", "kind", "lab_probe")
+        assert any(
+            r["assetId"] == binding["assetId"] and r["status"] == "delegated"
+            for r in records
+        )
+        if self.callback:
+            return self.callback(binding)
+        return self.result(binding)
+
+    @staticmethod
+    def result(binding):
+        return dict(
+            status="observed",
+            identityDigest=binding["identityDigest"],
+            contactedResources=binding["contactedResources"],
+            sourceTime=dict(
+                clockDomain="fixture-clock",
+                tick="-9007199254740993",
+                unit="ns",
+                uncertaintySeconds=None,
+            ),
+            metadata=dict(
+                firmwareVersion="fixture-r2", artifactRevision="fixture-image-3"
+            ),
+            diagnostics=[],
+            private="never expose private provider payload",
+        )
+
+
+def configured(root, *, grants=True, timeout=1.0, max_operations=1000, lab_host=None):
+    provider = OwnedProbe()
+    authority = ProbeAuthority({("local-operator", "fixture-asset")} if grants else ())
+    item = ProbeInstallation(
+        provider=provider,
+        provider_id="fixture-probe",
+        asset_id="fixture-asset",
+        binding_ref="owned-observation-link",
+        identity_digest="sha256:" + "1" * 64,
+        implementation_digest="sha256:" + "2" * 64,
+        version="1.0.0",
+        supported_os=(platform.system(),),
+        architectures=(platform.machine(),),
+        evidence_scope="fixture",
+        conformance_ref="owned-probe-conformance",
+        authorization_ref="fixture-no-equipment",
+        contacted_resources=("fixture-observation-resource",),
+        private_binding={
+            "handle": "private-native-handle",
+            "endpoint": "private endpoint, never contacted",
+        },
+    )
+    now = [100.0]
+    config = LabProbeConfiguration(
+        (item,),
+        authority,
+        call_timeout=timeout,
+        max_operations=max_operations,
+        clock=lambda: now[0],
+    )
+    app = create_app(
+        root,
+        allowed_hosts=["testserver"],
+        bootstrap_token="probe-fixture",
+        lab_host=lab_host,
+        lab_probe_host=config,
+    )
+    provider.service = app.state.studio.lab_probes
+    return SimpleNamespace(
+        app=app,
+        provider=provider,
+        authority=authority,
+        installation=item,
+        configuration=config,
+        service=provider.service,
+        root=root,
+        now=now,
+    )
+
+
+def login(client):
+    client.headers["Origin"] = "http://testserver"
+    response = client.post("/api/v1/session", json={"bootstrapToken": "probe-fixture"})
+    assert response.status_code == 200
+    client.headers["X-CSRF-Token"] = response.json()["csrfToken"]
+
+
+@pytest.fixture
+def probe(tmp_path):
+    bench = configured(tmp_path / "Owned observation Ω")
+    with TestClient(bench.app, base_url="http://testserver") as client:
+        login(client)
+        bench.client = client
+        yield bench
+
+
+def request(bench, *, key="explicit-observation", body=None):
+    return bench.client.post(
+        "/api/v1/assets/fixture-asset/probes",
+        headers={"Idempotency-Key": key},
+        json=body
+        if body is not None
+        else {"expectedBindingDigest": bench.installation.binding_digest()},
+    )
+
+
+def test_stock_probe_discovery_does_not_install_a_provider(client):
+    discovery = client.get("/api/v1/capabilities").json()["labProbes"]
+    assert discovery["contractVersion"] == "1.0"
+    assert discovery["status"] == "unavailable"
+    assert discovery["installations"] == []
+    assert discovery["runtimeAdmission"] == "unavailable"
+    assert discovery["physicalCommands"] == []
+    assert client.app.state.studio.store.all("operation") == []
+
+
+def test_options_identifies_authenticated_principal_without_provider_contact(client):
+    response = client.get("/api/v1/assets/not-installed/probe-options")
+    assert response.status_code == 200
+    assert response.json()["principal"] == "local-operator"
+    assert response.json()["allowed"] is False
+    assert client.app.state.studio.store.all("operation") == []
+
+
+def test_stock_explicit_probe_request_is_actionably_unavailable(client):
+    response = client.post(
+        "/api/v1/assets/not-installed/probes",
+        headers={"Idempotency-Key": "explicit-observation"},
+        json={"expectedBindingDigest": "sha256:" + "a" * 64},
+    )
+    assert response.status_code == 503
+    assert response.json()["code"] == "PROBE_NOT_ADMITTED"
+    assert client.app.state.studio.store.all("operation") == []
+
+
+def test_explicit_observation_is_durable_private_bounded_and_has_no_execution_authority(
+    probe,
+):
+    original_project = probe.client.get("/api/v1/projects").json()
+    original_runs = probe.client.get("/api/v1/runs").json()
+    options = probe.client.get("/api/v1/assets/fixture-asset/probe-options").json()
+    assert options["allowed"] and options["scope"] == "observe"
+    assert options["installation"]["evidenceScope"] == "fixture"
+    assert probe.provider.calls == []
+    response = request(probe)
+    assert response.status_code == 202, response.text
+    op = response.json()
+    assert op["status"] == "completed" and op["result"]["status"] == "observed"
+    assert op["result"]["sourceTime"]["tick"] == "-9007199254740993"
+    assert op["result"]["sourceTime"]["uncertaintySeconds"] is None
+    assert op["result"]["receivedAt"] == 100
+    assert op["runtimeAdmission"] == "unavailable" and op["physicalCommands"] == []
+    assert request(probe).json() == op
+    assert probe.client.get("/api/v1/operations/" + op["operationId"]).json() == op
+    assert len(probe.provider.calls) == 1
+    binding, scope, deadline = probe.provider.calls[0]
+    assert (
+        binding["private"] == probe.installation.private_binding
+        and scope == "observe"
+        and deadline == 101
+    )
+    public = (
+        response.text + str(options) + probe.client.get("/api/v1/capabilities").text
+    )
+    assert "private-native-handle" not in public and "private endpoint" not in public
+    assert "never expose" not in public
+    assert probe.client.get("/api/v1/projects").json() == original_project
+    assert probe.client.get("/api/v1/runs").json() == original_runs
+    assert probe.app.state.studio.lab.records == {}
+
+
+def test_old_lease_descriptor_and_grants_do_not_install_or_authorize_probes(tmp_path):
+    from test_lab_configuration import installation
+    from xverse_studio.lab.authority import LabAuthority
+    from xverse_studio.lab.configuration import LabHostConfiguration
+    from xverse_studio.storage.core import digest
+
+    lease = installation()
+    lease.provider.probe = lambda *args: pytest.fail("Implicit probe invocation")
+    before = lease.descriptor()
+    pinned = digest(before)
+    host = LabHostConfiguration(
+        (lease,),
+        LabAuthority(
+            {
+                ("local-operator", "fixture-asset"): {
+                    "observe",
+                    "stimulate",
+                    "destructive",
+                }
+            }
+        ),
+    )
+    stock = create_app(
+        tmp_path / "lease only",
+        allowed_hosts=["testserver"],
+        bootstrap_token="probe-fixture",
+        lab_host=host,
+    )
+    with TestClient(stock, base_url="http://testserver") as client:
+        login(client)
+        assert (
+            client.get("/api/v1/capabilities").json()["labProbes"]["status"]
+            == "unavailable"
+        )
+    bench = configured(tmp_path / "separate native grants", grants=False, lab_host=host)
+    with TestClient(bench.app, base_url="http://testserver") as client:
+        login(client)
+        bench.client = client
+        caps = client.get("/api/v1/capabilities").json()
+        assert caps["labReservations"]["providers"] == [before]
+        assert digest(lease.descriptor()) == pinned
+        assert request(bench).status_code == 403
+        assert not client.get("/api/v1/assets/fixture-asset/probe-options").json()[
+            "allowed"
+        ]
+        assert bench.provider.calls == []
+
+
+@pytest.mark.parametrize(
+    "body",
+    [
+        {"expectedBindingDigest": "sha256:" + "3" * 64},
+        {"expectedBindingDigest": "sha256:" + "1" * 64, "scope": "stimulate"},
+        {
+            "expectedBindingDigest": "sha256:" + "1" * 64,
+            "endpoint": "imported endpoint",
+        },
+        {"expectedBindingDigest": "not-a-digest"},
+    ],
+)
+def test_stale_scope_or_browser_binding_fields_cannot_contact_provider(probe, body):
+    response = request(probe, body=body)
+    assert response.status_code in (409, 422)
+    assert probe.provider.calls == []
+    assert probe.service.store.find("operation", "kind", "lab_probe") == []
+
+
+def test_request_key_is_required_and_changed_payload_conflicts(probe):
+    body = {"expectedBindingDigest": probe.installation.binding_digest()}
+    assert (
+        probe.client.post("/api/v1/assets/fixture-asset/probes", json=body).status_code
+        == 428
+    )
+    first = request(probe)
+    assert first.status_code == 202
+    changed = request(probe, body={"expectedBindingDigest": "sha256:" + "4" * 64})
+    assert (
+        changed.status_code == 409 and changed.json()["code"] == "IDEMPOTENCY_CONFLICT"
+    )
+    assert len(probe.provider.calls) == 1
+
+
+def test_real_origin_csrf_and_session_checks_precede_probe(probe):
+    with TestClient(probe.app, base_url="http://testserver") as unauthenticated:
+        assert unauthenticated.post(
+            "/api/v1/assets/fixture-asset/probes", json={}
+        ).status_code in (401, 403)
+    csrf = probe.client.headers.pop("X-CSRF-Token")
+    assert request(probe).status_code == 403
+    probe.client.headers["X-CSRF-Token"] = csrf
+    probe.client.headers["Origin"] = "https://foreign.invalid"
+    assert request(probe).status_code == 403
+    assert probe.provider.calls == []
+
+
+@pytest.mark.parametrize("phase", ["before", "during", "regranted"])
+def test_revocation_or_new_grant_generation_cannot_publish_an_observation(
+    probe, monkeypatch, phase
+):
+    if phase == "before":
+        original = probe.service.store.put
+
+        def put(kind, identity, body, db=None):
+            result = original(kind, identity, body, db)
+            if (
+                kind == "operation"
+                and body.get("kind") == "lab_probe"
+                and body["status"] == "delegated"
+            ):
+                probe.authority.revoke("local-operator", "fixture-asset")
+            return result
+
+        monkeypatch.setattr(probe.service.store, "put", put)
+    else:
+
+        def callback(binding):
+            probe.authority.revoke("local-operator", "fixture-asset")
+            if phase == "regranted":
+                probe.authority.grant("local-operator", "fixture-asset")
+            return OwnedProbe.result(binding)
+
+        probe.provider.callback = callback
+    response = request(probe)
+    assert response.status_code == 202
+    op = response.json()
+    assert op["status"] == "unknown" and op["result"] is None
+    assert op["code"] == (
+        "PROBE_AUTHORITY_CHANGED" if phase == "regranted" else "FORBIDDEN"
+    )
+    assert len(probe.provider.calls) == (0 if phase == "before" else 1)
+    assert request(probe).json() == op
+
+
+def test_timed_out_callback_keeps_capacity_and_late_result_cannot_upgrade_unknown(
+    tmp_path,
+):
+    bench = configured(tmp_path / "bounded callback", timeout=0.05)
+    release = threading.Event()
+
+    def callback(binding):
+        assert release.wait(5)
+        return OwnedProbe.result(binding)
+
+    bench.provider.callback = callback
+    with TestClient(bench.app, base_url="http://testserver") as client:
+        login(client)
+        bench.client = client
+        try:
+            first = request(bench).json()
+            assert first["status"] == "unknown" and first["result"] is None
+            busy = request(bench, key="another-explicit-request").json()
+            assert (
+                busy["status"] == "rejected"
+                and busy["code"] == "PROVIDER_CALL_UNSETTLED"
+            )
+            assert len(bench.provider.calls) == 1
+        finally:
+            release.set()
+            if bench.provider.thread:
+                bench.provider.thread.join(2)
+        assert not bench.provider.thread.is_alive()
+        assert client.get("/api/v1/operations/" + first["operationId"]).json() == first
+        assert request(bench).json() == first
+        bench.provider.callback = None
+        assert (
+            request(bench, key="new-explicit-request-after-settlement").json()["status"]
+            == "completed"
+        )
+        assert len(bench.provider.calls) == 2
+
+
+@pytest.mark.parametrize(
+    "change",
+    [
+        lambda result: result.update(identityDigest="sha256:" + "9" * 64),
+        lambda result: result.update(contactedResources=["undeclared-resource"]),
+        lambda result: result.update(
+            contactedResources=["fixture-observation-resource"] * 2
+        ),
+        lambda result: result.update(
+            sourceTime={"clockDomain": "fixture-clock", "tick": "1.5", "unit": "ns"}
+        ),
+        lambda result: result.update(diagnostics=["unsafe private endpoint text"]),
+    ],
+)
+def test_invalid_identity_resources_clock_or_diagnostics_remain_unknown(probe, change):
+    def callback(binding):
+        result = OwnedProbe.result(binding)
+        change(result)
+        return result
+
+    probe.provider.callback = callback
+    op = request(probe).json()
+    assert op["status"] == "unknown" and op["result"] is None
+    assert op["code"] in ("ASSET_IDENTITY_CHANGED", "PROBE_RESPONSE_INVALID")
+    assert request(probe).json() == op and len(probe.provider.calls) == 1
+
+
+def test_private_provider_exception_is_not_public_or_retried(probe):
+    def callback(binding):
+        raise RuntimeError("private endpoint and credential-like provider diagnostic")
+
+    probe.provider.callback = callback
+    response = request(probe)
+    assert (
+        response.json()["status"] == "unknown"
+        and response.json()["code"] == "PROBE_UNKNOWN"
+    )
+    assert "private endpoint" not in response.text
+    assert request(probe).json() == response.json() and len(probe.provider.calls) == 1
+
+
+@pytest.mark.parametrize(
+    "phase", ["accepted", "delegated", "completed", "committed-completed"]
+)
+def test_persistence_failure_never_fabricates_an_observation_or_redelegates(
+    probe, monkeypatch, phase
+):
+    original = probe.service.store.put
+    fired = False
+
+    def put(kind, identity, body, db=None):
+        nonlocal fired
+        matches = (
+            kind == "operation"
+            and body.get("kind") == "lab_probe"
+            and body["status"] == phase.removeprefix("committed-")
+            and not fired
+        )
+        if matches:
+            fired = True
+            if phase.startswith("committed-"):
+                original(kind, identity, body, db)
+            raise RuntimeError("owned injected storage failure")
+        return original(kind, identity, body, db)
+
+    monkeypatch.setattr(probe.service.store, "put", put)
+    if phase == "accepted":
+        with pytest.raises(RuntimeError, match="owned injected storage failure"):
+            request(probe)
+        assert probe.provider.calls == []
+        assert probe.service.store.find("operation", "kind", "lab_probe") == []
+    else:
+        op = request(probe).json()
+        assert op["status"] == (
+            "completed" if phase == "committed-completed" else "unknown"
+        )
+        assert len(probe.provider.calls) == (0 if phase == "delegated" else 1)
+        assert request(probe).json() == op
+    assert fired
+
+
+def test_restart_and_missing_installation_preserve_original_unknown_receipt(tmp_path):
+    bench = configured(tmp_path / "restart observation")
+    with TestClient(bench.app, base_url="http://testserver") as client:
+        login(client)
+        bench.client = client
+        original = request(bench).json()
+        body = {"expectedBindingDigest": original["bindingDigest"]}
+        stored = bench.service.store.get("operation", original["operationId"])
+        stored.update(status="delegated", result=None)
+        bench.service.store.put("operation", stored["operationId"], stored)
+    restarted = create_app(
+        bench.root, allowed_hosts=["testserver"], bootstrap_token="probe-fixture"
+    )
+    with TestClient(restarted, base_url="http://testserver") as client:
+        login(client)
+        op = client.get("/api/v1/operations/" + original["operationId"]).json()
+        assert op["status"] == "unknown" and op["code"] == "PROBE_INTERRUPTED"
+        assert op["bindingDigest"] == original["bindingDigest"]
+        assert (
+            client.post(
+                "/api/v1/assets/fixture-asset/probes",
+                headers={"Idempotency-Key": "explicit-observation"},
+                json=body,
+            ).json()
+            == op
+        )
+        assert len(bench.provider.calls) == 1
+        assert (
+            client.get("/api/v1/capabilities").json()["labProbes"]["status"]
+            == "unavailable"
+        )
+
+
+def test_operation_route_filters_private_fields_and_rejects_other_owner(probe):
+    original = request(probe).json()
+    record = probe.service.store.get("operation", original["operationId"])
+    record["private"] = {"endpoint": "must-not-be-public"}
+    record["result"]["private"] = "provider-private-extension"
+    probe.service.store.put("operation", record["operationId"], record)
+    assert (
+        probe.client.get("/api/v1/operations/" + record["operationId"]).json()
+        == original
+    )
+    record["principal"] = "another-operator"
+    probe.service.store.put("operation", record["operationId"], record)
+    assert (
+        probe.client.get("/api/v1/operations/" + record["operationId"]).status_code
+        == 403
+    )
+
+
+def test_operation_quota_refuses_before_callback_and_preserves_history(tmp_path):
+    bench = configured(tmp_path / "bounded operation history", max_operations=1)
+    with TestClient(bench.app, base_url="http://testserver") as client:
+        login(client)
+        bench.client = client
+        original = request(bench).json()
+        response = request(bench, key="quota-refusal")
+        assert (
+            response.status_code == 422 and response.json()["code"] == "LIMIT_EXCEEDED"
+        )
+        assert request(bench).json() == original
+        assert len(bench.provider.calls) == 1
+
+
+@pytest.mark.parametrize("status", ["unavailable", "unknown"])
+def test_negative_observations_and_missing_clock_evidence_remain_distinct(
+    probe, status
+):
+    def callback(binding):
+        result = OwnedProbe.result(binding)
+        result.update(status=status, sourceTime=None, metadata={})
+        return result
+
+    probe.provider.callback = callback
+    op = request(probe).json()
+    assert op["status"] == ("completed" if status == "unavailable" else "unknown")
+    assert op["result"]["status"] == status and op["result"]["sourceTime"] is None
+    assert op["result"]["metadata"]["firmwareVersion"] is None
+    assert op["runtimeAdmission"] == "unavailable"
+
+
+def test_changed_installed_binding_refuses_before_contact(probe):
+    original = probe.installation.binding_digest()
+    probe.installation.private_binding["handle"] = "different-host-handle"
+    response = request(probe, body={"expectedBindingDigest": original})
+    assert (
+        response.status_code == 409
+        and response.json()["code"] == "PROBE_BINDING_CHANGED"
+    )
+    assert probe.provider.calls == []
+
+
+def test_callback_after_absolute_deadline_is_not_published(probe):
+    def callback(binding):
+        probe.now[0] += 2
+        return OwnedProbe.result(binding)
+
+    probe.provider.callback = callback
+    op = request(probe).json()
+    assert op["status"] == "unknown" and op["code"] == "PROBE_DEADLINE_EXCEEDED"
+    assert op["result"] is None
+
+
+@pytest.mark.parametrize("clock", [float("nan"), float("inf"), 1e300, True])
+def test_invalid_backend_deadline_refuses_before_recording_or_contact(probe, clock):
+    probe.now[0] = clock
+    response = request(probe)
+    assert (
+        response.status_code == 422
+        and response.json()["code"] == "PROBE_CLOCK_UNAVAILABLE"
+    )
+    assert probe.provider.calls == []
+    assert probe.service.store.find("operation", "kind", "lab_probe") == []
+
+
+@pytest.mark.parametrize(
+    "corrupt",
+    [
+        lambda record: record.pop("result"),
+        lambda record: record.update(status="delegated"),
+        lambda record: record.update(status="unknown"),
+        lambda record: record.update(deadline=record["createdAt"] + 6),
+    ],
+)
+def test_contradictory_stored_observation_fails_closed(probe, corrupt):
+    op = request(probe).json()
+    record = probe.service.store.get("operation", op["operationId"])
+    corrupt(record)
+    probe.service.store.put("operation", record["operationId"], record)
+    response = probe.client.get("/api/v1/operations/" + record["operationId"])
+    assert (
+        response.status_code == 422
+        and response.json()["code"] == "PROBE_STATE_UNAVAILABLE"
+    )
+    assert len(probe.provider.calls) == 1

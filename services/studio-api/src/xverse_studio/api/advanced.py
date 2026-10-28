@@ -24,6 +24,8 @@ from xverse_studio.lab.bindings import resolve_physical_bindings
 from xverse_studio.lab.authority import LabAuthority
 from xverse_studio.lab.configuration import LabHostConfiguration
 from xverse_studio.lab.operations import LabOperations
+from xverse_studio.lab.probes import LabProbes
+from xverse_studio.api.models import ProbeRequest
 from xverse_studio.storage.core import Problem, atomic, canonical, digest, uid
 from xverse_studio.xdl import XDLRejected, reference_configuration
 from xverse_studio.xdl.edits import semantic_edits
@@ -85,13 +87,15 @@ class Compare(Body):
     rightRunId: str = Field(max_length=80)
 
 
-def install_advanced(app, store, projects, runs, adapter, *, lab_host=None):
+def install_advanced(app, store, projects, runs, adapter, *, lab_host=None, lab_probe_host=None):
     if lab_host is not None and not isinstance(lab_host, LabHostConfiguration):
         raise LabError('PROVIDER_CONFIG_INVALID')
     lab_service = lab_host.bind(store) if lab_host is not None else LabOperations(store, {}, {}, LabAuthority())
     lab = lab_service.registry  # Stock native launcher installs no provider or grants.
     app.state.studio.lab = lab
     app.state.studio.lab_reservations = lab_service
+    probe_service = LabProbes(store, lab_probe_host)
+    app.state.studio.lab_probes = probe_service
     for pending in store.all("evaluation"):
         if pending.get("status") in {"running", "not_started"}:
             pending.update(status="error", verdict=None, reasons=["EVALUATION_INTERRUPTED"], completedAt=time.time())
@@ -194,6 +198,26 @@ def install_advanced(app, store, projects, runs, adapter, *, lab_host=None):
         try:
             return snapshot_definitions(snapshot, adapter)
         except EvaluationError as exc:
+            _failure(exc)
+
+    @app.get('/api/v1/assets/{assetId}/probe-options')
+    def probe_options(assetId: str, request: Request):
+        try:
+            return probe_service.options(assetId, owner=request.state.principal)
+        except LabError as exc:
+            _failure(exc)
+
+    @app.post('/api/v1/assets/{assetId}/probes', status_code=202)
+    def probe_asset(assetId: str, body: ProbeRequest, request: Request):
+        try:
+            return probe_service.request(assetId, owner=request.state.principal,
+                key=request.headers.get('idempotency-key'), expected_binding=body.expectedBindingDigest,
+                scope=body.scope)
+        except LabError as exc:
+            if exc.code == 'PROBE_NOT_ADMITTED':
+                raise Problem(exc.code, 'No reviewed observation installation is configured for this asset. Ask the host integrator to install the provider and grant explicit observation permission.', 503) from None
+            if exc.code == 'PROBE_BINDING_CHANGED':
+                raise Problem(exc.code, 'The observation binding changed. Refresh the options before submitting a new request.', 409) from None
             _failure(exc)
 
     @app.get("/api/v1/assets")

@@ -341,11 +341,30 @@ def test_native_campaign_recovers_durable_start_before_campaign_acknowledgement(
             assert terminal["evidence"] == (
                 "partial" if mode.startswith("failed-") else "complete"
             )
+            # The error path can publish failed state before its final save.
+            # Freeze immutable files only after the exact writer has exited.
+            eventually(
+                lambda: (
+                    not worker.is_running()
+                    or worker.create_time() != worker_birth
+                    or worker.status() == psutil.STATUS_ZOMBIE
+                ),
+                timeout=12,
+            )
+            final_terminal = json.loads((directory / "state.json").read_text())
+            assert (
+                final_terminal["state"] == terminal_state
+                and final_terminal["pid"] == worker.pid
+                and final_terminal["createTime"] == worker_birth
+                and final_terminal["ownerDigest"] == known["ownerDigest"]
+            )
+            receipt["terminalWriterObservedExitedBeforeFileFreeze"] = True
             terminal_bytes = {
                 str(p.relative_to(directory)): sha(p)
                 for p in directory.iterdir()
                 if p.is_file() and p.name not in ["owner.key"]
             }
+            receipt["terminalFileHashesBeforeRestart"] = terminal_bytes
             receipt["events"].append(
                 {
                     "kind": "worker-terminal-before-native-restart",
@@ -409,6 +428,9 @@ def test_native_campaign_recovers_durable_start_before_campaign_acknowledgement(
                 and snap["configuration"]["gain"] == child["parameters"]["gain"]
             )
         if terminal_bytes is not None:
+            receipt["terminalFileHashesAfterRestart"] = {
+                name: sha(directory / name) for name in terminal_bytes
+            }
             assert all(sha(directory / name) == h for name, h in terminal_bytes.items())
         if mode.startswith("failed-"):
             observations = api("/runs/" + rid + "/observations")

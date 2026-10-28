@@ -18,6 +18,7 @@ export type Import = { "archiveBase64": string };
 export type Layout = { "positions"?: Record<string, Record<string, number>>; "viewport"?: (Record<string, number> | null) };
 export type Login = { "bootstrapToken": string };
 export type NewProject = { "name": string; "blueprintRef"?: (string | null) };
+export type ProbeRequest = { "expectedBindingDigest": string; "scope"?: "observe" };
 export type ProfileBindings = { "baseRevision": number; "profiles": Array<ProfileLock> };
 export type ProfileLock = { "profileId": string; "version": string; "schemaDigest": string; "presentationDigest": string };
 export type Recovery = { "expectedRevision": number; "action": "adopt_external" | "restore_revision"; "revision"?: (number | null) };

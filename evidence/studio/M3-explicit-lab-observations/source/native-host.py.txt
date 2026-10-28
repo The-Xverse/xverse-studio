@@ -1,0 +1,54 @@
+"""Owned Linux fault host; fixed fixture only, never equipment or endpoint discovery."""
+from pathlib import Path
+import argparse
+import json
+import platform
+import socket
+import threading
+import time
+import uvicorn
+from xverse_studio.api.app import create_app
+from xverse_studio.lab.probe_configuration import LabProbeConfiguration, ProbeAuthority, ProbeInstallation
+from xverse_studio.storage.core import atomic, canonical
+
+parser = argparse.ArgumentParser()
+parser.add_argument('--data', type=Path, required=True)
+parser.add_argument('--mode', choices=['blocked', 'normal', 'uninstalled'], required=True)
+args = parser.parse_args()
+app = None
+
+class Fixture:
+    def probe(self, binding, scope, deadline):
+        assert scope == 'observe'
+        operations = app.state.studio.store.find('operation', 'kind', 'lab_probe')
+        pending = [row for row in operations if row['status'] == 'delegated']
+        assert len(pending) == 1
+        count_file = args.data / 'fixture-contact-count.json'
+        count = json.loads(count_file.read_text()) if count_file.exists() else 0
+        atomic(count_file, canonical(count + 1).encode())
+        if args.mode == 'blocked':
+            atomic(args.data / 'owned-callback-paused.json', canonical(dict(
+                operationId=pending[0]['operationId'], bindingDigest=pending[0]['bindingDigest'],
+                deadline=deadline, scope='fixture-only JSON observation; no equipment',
+            )).encode())
+            threading.Event().wait(30)  # Parent must kill the exact owned host before its 5s facade deadline.
+        return dict(status='observed', identityDigest=binding['identityDigest'],
+                    contactedResources=binding['contactedResources'], sourceTime=None,
+                    metadata={}, diagnostics=[])
+
+configuration = LabProbeConfiguration((ProbeInstallation(
+    provider=Fixture(), provider_id='native-fixture', asset_id='native-observation',
+    binding_ref='native-fixture-binding', identity_digest='sha256:' + 'a' * 64,
+    implementation_digest='sha256:' + 'b' * 64, version='1.0.0',
+    supported_os=(platform.system(),), architectures=(platform.machine(),),
+    evidence_scope='fixture', conformance_ref='native-fixture-conformance',
+    authorization_ref='owned-no-equipment', contacted_resources=('owned-json-fixture',),
+),), ProbeAuthority({('local-operator', 'native-observation')}), call_timeout=5)
+with socket.socket() as listener:
+    listener.bind(('127.0.0.1', 0))
+    port = listener.getsockname()[1]
+    app = create_app(args.data, allowed_hosts=[f'127.0.0.1:{port}'],
+                     lab_probe_host=None if args.mode == 'uninstalled' else configuration)
+    print(json.dumps(dict(origin=f'http://127.0.0.1:{port}')), flush=True)
+    uvicorn.Server(uvicorn.Config(app, host='127.0.0.1', port=port,
+                                log_level='error', access_log=False)).run(sockets=[listener])

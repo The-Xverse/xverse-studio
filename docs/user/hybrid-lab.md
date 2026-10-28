@@ -38,8 +38,29 @@ same reservation request** to recover the durable operation identity. Navigation
 or reload does not cancel backend work, and the browser never retries automatically.
 A refused retry cannot settle the earlier unconfirmed attempt. Keep the tab's
 private session data until that outcome is resolved; clearing it does not release
-a lease. Connection tests, physical commands and automatic active-run renewal
-remain unavailable.
+a lease. Physical commands and automatic active-run renewal remain unavailable.
+
+**Connection observation** has separate installation and permission. On an asset,
+choose **Check connection options** to read the signed-in principal, evidence scope,
+native host, identity/binding pin and permitted contact scope without invoking a
+probe. Missing installation or permission shows a reason and disables contact.
+Reservation scopes do not grant observation permission.
+
+Choose **Observe connection** explicitly to request the supported observe-only
+probe. A completed operation can report `observed` or `unavailable`; uncertain
+acknowledgement/result remains `unknown`. Source clock/ticks and clock uncertainty,
+backend receipt time, firmware/artifact metadata and physical state stay separate.
+An observation does not grant ownership, execution readiness or a functional verdict.
+Missing metadata and clock evidence remains unknown. Fixture scope is not hardware
+support, and opening or refreshing Laboratory does not invoke a probe.
+
+If its response is unconfirmed, **Retry same observation request** preserves the
+original key and binding through navigation/reload. No retry happens automatically.
+Keep the tab's session data until its original outcome is resolved. A local storage
+failure cannot silently allocate another provider request. **Recorded connection
+observations** retains up to 20 operation references in this tab; **Inspect recorded
+observation** reads the owner-checked historical operation and never re-probes.
+These references do not replace the backend ledger or establish current permission.
 
 In a project's Deployment view, choose an authored Deployment and activate **Inspect
 physical placements**. The report describes physical/hybrid declarations at the

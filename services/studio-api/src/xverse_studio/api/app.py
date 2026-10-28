@@ -38,6 +38,7 @@ from xverse_studio.evidence.query import (
 from xverse_studio.timeline import TimelineQuery, project_timeline, MAX_EVALUATIONS
 from xverse_studio.xdl import XDLAdapter, XDLRejected, examples
 from xverse_studio.lab.configuration import LabHostConfiguration
+from xverse_studio.lab.probe_configuration import LabProbeConfiguration
 from xverse_studio.lab import LabError
 
 
@@ -87,9 +88,12 @@ def create_app(
     bootstrap_token=None,
     static_dir: Path | None = None,
     lab_host: LabHostConfiguration | None = None,
+    lab_probe_host: LabProbeConfiguration | None = None,
 ):
     if lab_host is not None and not isinstance(lab_host, LabHostConfiguration):
         raise LabError('PROVIDER_CONFIG_INVALID')
+    if lab_probe_host is not None and not isinstance(lab_probe_host, LabProbeConfiguration):
+        raise LabError('PROBE_CONFIG_INVALID')
     store = Store(Path(data_dir))
     adapter = XDLAdapter()
     projects = Projects(store, adapter)
@@ -333,7 +337,8 @@ def create_app(
 
     @app.get("/api/v1/capabilities")
     def caps():
-        return {**capabilities(), 'labReservations': app.state.studio.lab_reservations.discovery()}
+        return {**capabilities(), 'labReservations': app.state.studio.lab_reservations.discovery(),
+                'labProbes': app.state.studio.lab_probes.discovery()}
 
     @app.get("/api/v1/providers")
     def providers():
@@ -652,6 +657,12 @@ def create_app(
     def operation(operationId: str, request: Request):
         with store.tx() as db:
             kind = db.execute("SELECT json_extract(body,'$.kind') FROM records WHERE kind='operation' AND id=?", (operationId,)).fetchone()
+        if kind and kind[0] == 'lab_probe':
+            from xverse_studio.api.advanced import _failure
+            try:
+                return app.state.studio.lab_probes.get_operation(operationId, owner=request.state.principal)
+            except LabError as exc:
+                _failure(exc)
         if kind and kind[0] in {'lab_reserve', 'lab_renew', 'lab_release', 'lab_reconcile'}:
             from xverse_studio.api.advanced import _failure
             try:
@@ -830,7 +841,7 @@ def create_app(
     # Later feature facades are installed only when their implementations exist.
     from xverse_studio.api.advanced import install_advanced
 
-    install_advanced(app, store, projects, runs, adapter, lab_host=lab_host)
+    install_advanced(app, store, projects, runs, adapter, lab_host=lab_host, lab_probe_host=lab_probe_host)
 
     webroot = static_dir or Path(__file__).resolve().parents[5] / "apps/studio-web/dist"
 

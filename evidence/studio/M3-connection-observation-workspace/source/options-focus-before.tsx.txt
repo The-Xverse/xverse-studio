@@ -1,0 +1,272 @@
+import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from "react";
+import { api, ApiError, mutationKey } from "../../api/client";
+import type { Data } from "../../api/types";
+import { KeyValues } from "../../app/ui";
+import { probeAttempt, probeOptions, probeReceipt, probeStore, type ProbeAttempt, type ProbeReference, type ProbeStore } from "./probe-observations";
+
+const savedKey = "studio.lab.observations.v1";
+const errorText = (e: unknown) => `${e instanceof ApiError ? e.code + ": " : ""}${e instanceof Error ? e.message : "The request failed."}`.slice(0, 1000);
+type Context = { busy: boolean; revision: number; principal: string; intent: () => number;
+  beginIdentityRead: () => number; identify: (principal: string, ticket: number) => void; submit: (options: Data) => void };
+const Workspace = createContext<Context | null>(null);
+type FocusRequest = { request: number; intent: number; origin: Element | null; failed: boolean };
+
+/** Persists only bounded request/operation references, never authority or cached results. */
+export function ProbeWorkspace({ children }: { children: ReactNode }) {
+  const [saved, setSaved] = useState<ProbeStore>({ version: 1, pending: null, history: [] }),
+    [loading, setLoading] = useState(true), [blocked, setBlocked] = useState(false),
+    [working, setWorking] = useState(false), [principal, setPrincipal] = useState(""),
+    [identityError, setIdentityError] = useState(""), [error, setError] = useState(""),
+    [receipt, setReceipt] = useState<Data | null>(null), [revision, setRevision] = useState(0),
+    [focusRequest, setFocusRequest] = useState<FocusRequest | null>(null);
+  const alive = useRef(false), store = useRef(saved), running = useRef(false), sequence = useRef(0),
+    interaction = useRef(0), identitySequence = useRef(0), controller = useRef<AbortController | null>(null),
+    identityController = useRef<AbortController | null>(null), principalRef = useRef(""),
+    resultHeading = useRef<HTMLHeadingElement>(null), failure = useRef<HTMLParagraphElement>(null);
+  const adopt = (value: ProbeStore) => { store.current = value; setSaved(value); };
+  function persist(value: ProbeStore) {
+    const raw = JSON.stringify(value);
+    const checked = probeStore(raw);
+    sessionStorage.setItem(savedKey, raw);
+    adopt(checked);
+  }
+  function beginIdentityRead() {
+    identityController.current?.abort(); return ++identitySequence.current;
+  }
+  function identify(value: string, ticket: number) {
+    if (ticket !== identitySequence.current) return;
+    if (principalRef.current !== value) setReceipt(null);
+    principalRef.current = value; setPrincipal(value); setIdentityError("");
+  }
+  useEffect(() => {
+    alive.current = true;
+    const interacted = () => { interaction.current++; };
+    document.addEventListener("pointerdown", interacted, true);
+    document.addEventListener("keydown", interacted, true);
+    const identityAbort = new AbortController();
+    identityController.current = identityAbort;
+    let identityTimer: ReturnType<typeof setTimeout> | undefined;
+    try {
+      const value = probeStore(sessionStorage.getItem(savedKey)); adopt(value);
+      const previous = value.pending || value.history[0]?.attempt;
+      if (previous) {
+        const request = ++identitySequence.current;
+        let timedOut = false;
+        identityTimer = setTimeout(() => { timedOut = true; identityAbort.abort(); }, 30000);
+        void api(`/assets/${encodeURIComponent(previous.assetId)}/probe-options`, { signal: identityAbort.signal })
+          .then((v) => {
+            const options = probeOptions(v, previous.assetId);
+            if (alive.current && request === identitySequence.current && !identityAbort.signal.aborted) {
+              principalRef.current = options.principal; setPrincipal(options.principal);
+            }
+          }).catch((e) => {
+            if (alive.current && request === identitySequence.current && (!identityAbort.signal.aborted || timedOut))
+              setIdentityError(`Current observation identity is unavailable. Check connection options to retry. ${errorText(e)}`);
+          }).finally(() => clearTimeout(identityTimer));
+      }
+    } catch (e) {
+      setBlocked(true); setError(`Saved observation request metadata is unavailable. Preserve its original operation for review. ${errorText(e)}`);
+    }
+    setLoading(false);
+    return () => {
+      alive.current = false; sequence.current++; clearTimeout(identityTimer); identityAbort.abort(); controller.current?.abort();
+      document.removeEventListener("pointerdown", interacted, true);
+      document.removeEventListener("keydown", interacted, true);
+    };
+  }, []);
+
+  function focus(request: number, intent: number, origin: Element | null, failed: boolean) {
+    setFocusRequest({ request, intent, origin, failed });
+  }
+  useEffect(() => {
+    if (!focusRequest || working) return;
+    const { request, intent, origin, failed } = focusRequest;
+    requestAnimationFrame(() => {
+      if (!alive.current || sequence.current !== request || interaction.current !== intent ||
+        document.querySelector('[role="dialog"]') ||
+        (document.activeElement !== document.body && document.activeElement !== origin)) return;
+      (failed ? failure.current : resultHeading.current)?.focus();
+    });
+  }, [focusRequest, working]);
+  function matching(current: ProbeStore, attempt: ProbeAttempt) {
+    if (!current.pending || JSON.stringify(current.pending) !== JSON.stringify(attempt))
+      throw new Error("The saved observation request changed. Its original outcome must be resolved before another request.");
+  }
+  async function send(attempt: ProbeAttempt, retry: boolean) {
+    if (!alive.current || running.current || attempt.principal !== principal || blocked) return;
+    running.current = true;
+    const request = ++sequence.current, intent = interaction.current, origin = document.activeElement,
+      abort = new AbortController();
+    controller.current = abort; setWorking(true); setError(""); setReceipt(null);
+    const timer = setTimeout(() => abort.abort(), 30000);
+    let failed = false;
+    try {
+      let current = probeStore(sessionStorage.getItem(savedKey));
+      // A failed first local write can leave only the in-memory original attempt.
+      // An explicit retry saves that exact identity before any provider request.
+      if (current.pending === null) { persist({ ...current, pending: attempt }); current = store.current; }
+      matching(current, attempt);
+      const value = probeReceipt(await api(`/assets/${encodeURIComponent(attempt.assetId)}/probes`, {
+        method: "POST", body: { expectedBindingDigest: attempt.bindingDigest, scope: "observe" },
+        key: attempt.key, signal: abort.signal,
+      }), attempt);
+      if (!alive.current || request !== sequence.current || abort.signal.aborted || principalRef.current !== attempt.principal) return;
+      current = probeStore(sessionStorage.getItem(savedKey)); matching(current, attempt);
+      persist({ version: 1, pending: null, history: [{ attempt, operationId: value.operationId },
+        ...current.history.filter((ref) => ref.operationId !== value.operationId)].slice(0, 20) });
+      setReceipt(value);
+    } catch (e) {
+      if (!alive.current || request !== sequence.current) return;
+      failed = true;
+      let message = errorText(e);
+      const refusal = e instanceof ApiError && ["FORBIDDEN", "PROBE_NOT_ADMITTED", "PROBE_BINDING_CHANGED", "PROBE_REQUEST_INVALID", "IDEMPOTENCY_REQUIRED", "LIMIT_EXCEEDED"].includes(e.code);
+      if (!retry && refusal) {
+        try {
+          const current = probeStore(sessionStorage.getItem(savedKey)); matching(current, attempt);
+          persist({ ...current, pending: null });
+        } catch (storageError) { message += ` Original request metadata could not be updated: ${errorText(storageError)}`; }
+      }
+      setError(message);
+    } finally {
+      clearTimeout(timer); running.current = false;
+      if (alive.current && request === sequence.current) {
+        setWorking(false); setRevision((v) => v + 1); focus(request, intent, origin, failed);
+      }
+    }
+  }
+  function submit(options: Data) {
+    if (loading || blocked || running.current || store.current.pending || !options.allowed || options.principal !== principal) return;
+    const d = options.installation;
+    let attempt: ProbeAttempt | null = null;
+    try {
+      attempt = probeAttempt({ principal, assetId: options.assetId, providerId: d.providerId,
+        bindingDigest: d.bindingDigest, identityDigest: d.identityDigest, evidenceScope: d.evidenceScope,
+        contactedResources: d.contactedResources, key: mutationKey() });
+      const current = probeStore(sessionStorage.getItem(savedKey));
+      if (current.pending) { adopt(current); throw new Error("Resolve the previous saved observation request first."); }
+      persist({ ...current, pending: attempt });
+    } catch (e) {
+      if (attempt && !store.current.pending) adopt({ ...store.current, pending: attempt });
+      setError(`The request was not sent. ${errorText(e)}`); return;
+    }
+    void send(attempt, false);
+  }
+  async function inspect(ref: ProbeReference) {
+    if (running.current || ref.attempt.principal !== principal) return;
+    running.current = true;
+    const request = ++sequence.current, intent = interaction.current, origin = document.activeElement,
+      abort = new AbortController();
+    controller.current = abort; setWorking(true); setError(""); setReceipt(null);
+    const timer = setTimeout(() => abort.abort(), 30000);
+    let failed = false;
+    try {
+      const value = probeReceipt(await api(`/operations/${encodeURIComponent(ref.operationId)}`, { signal: abort.signal }), ref.attempt, ref.operationId);
+      if (alive.current && request === sequence.current && !abort.signal.aborted && principalRef.current === ref.attempt.principal) setReceipt(value);
+    } catch (e) {
+      if (alive.current && request === sequence.current) { failed = true; setError(errorText(e)); }
+    } finally {
+      clearTimeout(timer); running.current = false;
+      if (alive.current && request === sequence.current) { setWorking(false); focus(request, intent, origin, failed); }
+    }
+  }
+  const pending = saved.pending;
+  return <Workspace.Provider value={{ busy: loading || blocked || working || !!pending, revision, principal, beginIdentityRead, identify, submit, intent: () => interaction.current }}>
+    <section className="panel" aria-label="Connection observation requests" aria-busy={working}>
+      <h2>Connection observation requests</h2>
+      <p>Explicit observe-only requests use separately installed providers and permission. Leaving this view does not cancel a backend operation.</p>
+      {identityError && <p role="alert">{identityError}</p>}
+      {error && <p ref={failure} tabIndex={-1} role="alert">{error}</p>}
+      {pending && <div role="status">
+        <p>Original request for {pending.assetId}: {working ? "waiting for acknowledgement" : "unconfirmed in this workspace"}.
+          Retry the same request to recover its durable operation identity; this does not request another observation when the backend already accepted it.</p>
+        <button className="button" disabled={working || blocked || !principal || pending.principal !== principal}
+          onClick={() => void send(pending, true)}>Retry same observation request</button>
+        {principal && principal !== pending.principal && <p>This request belongs to another principal. Its original owner must resolve the outcome.</p>}
+      </div>}
+      {receipt && <section aria-label="Connection observation result">
+        <h3 ref={resultHeading} tabIndex={-1}>Connection observation result</h3>
+        <p role="status">Operation {receipt.operationId}: {receipt.status}. {receipt.code || ""}</p>
+        <KeyValues values={{ Asset: receipt.assetId, Provider: receipt.providerId, "Evidence scope": receipt.evidenceScope,
+          "Original binding digest": receipt.bindingDigest, "Observed identity digest": receipt.identityDigest,
+          "Accepted at backend (seconds)": String(receipt.createdAt),
+          "Observation": receipt.result?.status || "Unknown; no confirmed result",
+          "Received at backend (seconds)": receipt.result ? String(receipt.result.receivedAt) : "Unknown",
+          "Source clock": receipt.result?.sourceTime?.clockDomain || "Unknown",
+          "Source tick": receipt.result?.sourceTime ? `${receipt.result.sourceTime.tick} ${receipt.result.sourceTime.unit}` : "Unknown",
+          "Clock uncertainty (seconds)": receipt.result?.sourceTime?.uncertaintySeconds === null || !receipt.result?.sourceTime ? "Unknown" : String(receipt.result.sourceTime.uncertaintySeconds),
+          Firmware: receipt.result?.metadata.firmwareVersion || "Unknown", "Artifact revision": receipt.result?.metadata.artifactRevision || "Unknown",
+          "Contacted resources": receipt.result?.contactedResources.join(", ") || "None reported", "Physical state": "Unknown", "Execution readiness": "Unavailable" }} />
+        {!!receipt.result?.diagnostics.length && <p>{receipt.result.diagnostics.join(", ")}</p>}
+        <p>This recorded observation is historical. Check current options before another explicit request. Observation does not grant ownership or execution readiness.</p>
+      </section>}
+      <section aria-label="Recorded connection observations">
+        <h3>Recorded connection observations</h3>
+        <p>Up to 20 operation references are retained in this tab. Inspecting a record never repeats the provider observation.</p>
+        {!saved.history.length && <p>No operation references are saved in this tab.</p>}
+        {saved.history.map((ref) => <article key={ref.operationId}>
+          <p>{ref.attempt.assetId} · <code>{ref.operationId}</code></p>
+          <button className="button" aria-label={`Inspect observation ${ref.operationId}`} disabled={working || !principal || ref.attempt.principal !== principal}
+            onClick={() => void inspect(ref)}>Inspect recorded observation</button>
+        </article>)}
+      </section>
+    </section>
+    {children}
+  </Workspace.Provider>;
+}
+
+export function ConnectionRequest({ assetId }: { assetId: string }) {
+  const workspace = useContext(Workspace)!;
+  const [options, setOptions] = useState<Data | null>(null), [error, setError] = useState(""), [pending, setPending] = useState(false);
+  const alive = useRef(false), sequence = useRef(0), controller = useRef<AbortController | null>(null),
+    heading = useRef<HTMLHeadingElement>(null), failure = useRef<HTMLParagraphElement>(null);
+  useEffect(() => {
+    alive.current = true;
+    return () => { alive.current = false; sequence.current++; controller.current?.abort(); };
+  }, [assetId]);
+  useEffect(() => { sequence.current++; controller.current?.abort(); setOptions(null); setError(""); setPending(false); }, [workspace.revision]);
+  async function read(origin: Element | null) {
+    controller.current?.abort();
+    const abort = new AbortController(), request = ++sequence.current, intent = workspace.intent(), identityTicket = workspace.beginIdentityRead();
+    controller.current = abort; setPending(true); setOptions(null); setError("");
+    let timedOut = false;
+    const timer = setTimeout(() => { timedOut = true; abort.abort(); }, 30000);
+    let failed = false;
+    try {
+      const value = probeOptions(await api(`/assets/${encodeURIComponent(assetId)}/probe-options`, { signal: abort.signal }), assetId);
+      if (!alive.current || request !== sequence.current || abort.signal.aborted) return;
+      workspace.identify(value.principal, identityTicket); setOptions(value);
+    } catch (e) {
+      if (!alive.current || request !== sequence.current || (abort.signal.aborted && !timedOut)) return;
+      failed = true; setError(`Connection observation eligibility is unknown. ${timedOut ? "The options request timed out." : errorText(e)}`);
+    } finally {
+      clearTimeout(timer);
+      if (alive.current && request === sequence.current) {
+        setPending(false);
+        requestAnimationFrame(() => {
+          if (!alive.current || request !== sequence.current || workspace.intent() !== intent ||
+            document.querySelector('[role="dialog"]') || (document.activeElement !== document.body && document.activeElement !== origin)) return;
+          (failed ? failure.current : heading.current)?.focus();
+        });
+      }
+    }
+  }
+  const d = options?.installation;
+  return <div aria-busy={pending}>
+    <h4 ref={heading} tabIndex={-1}>Connection observation</h4>
+    <p>Check the installed observation binding and permission before requesting contact. Observation does not grant ownership or execution readiness.</p>
+    <button className="button" disabled={pending} onClick={(event) => void read(event.currentTarget)}>Check connection options</button>
+    {pending && <p role="status">Reading connection options…</p>}
+    {error && <p role="alert" ref={failure} tabIndex={-1}>{error}</p>}
+    {options && <>
+      <p>Principal: {options.principal} · Observation permission: {options.allowed ? "allowed" : "unavailable"}.</p>
+      {!options.allowed && <p role="status">{options.reason}. {options.reason === "PROBE_NOT_ADMITTED" ? "No observation provider is configured for this asset. A host integrator must install a reviewed provider and grant observation permission." : "The backend has not granted this observation request. Refresh options after resolving the reported reason."}</p>}
+      {d && <KeyValues values={{ "Observation provider": d.providerId, "Provider version": d.providerVersion, "Evidence scope": d.evidenceScope,
+        "Binding reference": d.bindingRef, "Binding digest": d.bindingDigest, "Expected identity digest": d.identityDigest,
+        "Contact scope": d.contactedResources.join(", "), "Native host": `${d.hostOS} ${d.hostArchitecture}`,
+        "Eligibility observed at backend (seconds)": String(options.observedAt) }} />}
+    </>}
+    <button className="button" disabled={pending || workspace.busy || !options?.allowed || options.principal !== workspace.principal}
+      onClick={() => options && workspace.submit(options)}>Observe connection</button>
+    <p>Observe-only is the sole request scope. No contact occurs until you choose Observe connection. Physical commands and automatic active-run renewal remain unavailable.</p>
+  </div>;
+}

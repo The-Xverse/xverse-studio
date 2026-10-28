@@ -83,8 +83,8 @@ export function ReservationWorkspace({ children }: { children: ReactNode }) {
     <section className="panel" aria-label="Reservation requests" aria-busy={working}>
       <h2 ref={resultHeading} tabIndex={-1}>Reservation requests</h2>
       <p>Reserve an explicitly granted scope without sending a physical command. Observation is the default;
-        stimulation and destructive scopes each require their own grant. Connection tests, physical commands
-        and automatic run renewal are unavailable.</p>
+        stimulation and destructive scopes each require their own grant. Connection observations require
+        their own installation and permission; physical commands and automatic run renewal are unavailable.</p>
       {error && <p role="alert">{error}</p>}
       {attempt && <div role="status">
         <p>{attempt.label}: {working ? "Waiting for the backend." : "The response is unconfirmed. Retry this same request to recover its durable operation identity."}

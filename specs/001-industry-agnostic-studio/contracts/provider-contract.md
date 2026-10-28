@@ -31,6 +31,15 @@ Admission verifies descriptor/schema compatibility, pinned implementation identi
 
 These are conceptual callable contracts; implementation may use in-process calls or protected local IPC with a tested implementation for the host OS. A remote transport or Unix-domain socket on Windows is not implied. No API accepts arbitrary command-line strings, executable paths from the browser, unrestricted environment overrides or unrestricted process identifiers. Launchers use argument vectors, explicit working directories and declared environment variables through native host adapters. Process groups/signals on Linux and ownership/termination handles on Windows are tested independently; a PID alone is not authority.
 
+ADR-0027 adds an explicit observe-only Studio facade for the existing conceptual
+probe operation. A separate native installation and exact observation permission
+are mandatory; neither a reservation scope nor method presence authorizes contact.
+Its result remains an observation, separate from readiness/admission, ownership
+and physical commands. Original lease installation descriptors are unchanged.
+See [observation-service.md](../../../docs/providers/observation-service.md) for the
+closed callback projection, original clock metadata and bounds. This amendment
+does not admit a physical provider or establish actual hardware acceptance.
+
 ## Integration classes
 
 - **Owned fixture provider:** portable deterministic small workloads and controlled failures for native Linux/Windows conformance tests. Display `fixture` evidence scope. It cannot establish legacy, simulator or physical-device integration claims.

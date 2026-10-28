@@ -1,0 +1,24 @@
+{
+  "scope": "Controlled native wrapper of original worker.main: pause first failed atomic state write and inject KeyboardInterrupt at sleep. Not an unmodified-worker rerun or exact original-failure timing proof.",
+  "terminalStateWasVisibleWhileOriginalWriterAlive": true,
+  "actualOwnedProcess": {
+    "pid": 2313758,
+    "parent": 2313704,
+    "birthTicks": "24260154",
+    "argv": [
+      "<repo>/.venv/bin/python",
+      "-I",
+      "<repo>/.studio-local/lab-probe-foundation/campaign-failure-investigation/controlled-worker.py",
+      "<repo>/.studio-local/lab-probe-foundation/campaign-failure-investigation/controlled-owned-worker"
+    ]
+  },
+  "exitCode": 1,
+  "changedStateFields": [
+    "updatedAt"
+  ],
+  "firstStateSha256": "cd5fbb0afcc90eea5c4a3c061a96f39df80228e719c3345904e8ebc7e127376a",
+  "finalStateSha256": "92fa75e1381bd6826bf84701de5a0c80f2a3f19f33229853842f8ad5ac14e455",
+  "workerProductionSourceChanged": false,
+  "originalFailure": "Full1145 has1144pass/1failed-continue terminal-file digest assertion; original sampled hashes were not retained, so exact original differing bytes remain unestablished.",
+  "finding": "Terminal state alone does not mean the writer has exited. The error path saves failed state, then saves again after pending-command handling. Freeze immutable-file evidence only after exact-worker terminal process observation."
+}

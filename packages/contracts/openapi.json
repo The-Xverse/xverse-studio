@@ -2876,6 +2876,90 @@
         }
       }
     },
+    "/api/v1/assets/{assetId}/probe-options": {
+      "get": {
+        "summary": "Probe Options",
+        "operationId": "probe_options_api_v1_assets__assetId__probe_options_get",
+        "parameters": [
+          {
+            "name": "assetId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Assetid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/assets/{assetId}/probes": {
+      "post": {
+        "summary": "Probe Asset",
+        "operationId": "probe_asset_api_v1_assets__assetId__probes_post",
+        "parameters": [
+          {
+            "name": "assetId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Assetid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProbeRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/assets": {
       "get": {
         "summary": "Assets",
@@ -4710,6 +4794,27 @@
           "name"
         ],
         "title": "NewProject"
+      },
+      "ProbeRequest": {
+        "properties": {
+          "expectedBindingDigest": {
+            "type": "string",
+            "pattern": "^sha256:[a-f0-9]{64}$",
+            "title": "Expectedbindingdigest"
+          },
+          "scope": {
+            "type": "string",
+            "const": "observe",
+            "title": "Scope",
+            "default": "observe"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "expectedBindingDigest"
+        ],
+        "title": "ProbeRequest"
       },
       "ProfileBindings": {
         "properties": {

@@ -20,3 +20,9 @@ reconciles exact references. Reservations must fence, renew and release actual o
 unknown authority disables active operations. Browser disconnection cannot become implicit termination
 or a new owner. Conformance must run natively on each claimed OS and repeat on the actual provider,
 including partial startup, lost acknowledgements, stale capabilities, rejected control and cleanup loss.
+
+Native-host configuration is documented separately for [reservations](reservation-service.md) and
+[explicit connection observations](observation-service.md). Observation requests require their own
+exact principal/asset grant; lease scopes do not authorize a probe. Checking observation options makes
+no provider contact, and retrying an accepted request returns its original operation without repeating
+the callback. Neither service admits physical runtime execution or establishes a safe physical state.

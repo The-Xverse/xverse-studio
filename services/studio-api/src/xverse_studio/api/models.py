@@ -8,6 +8,11 @@ class Login(Body):
     bootstrapToken: str = Field(min_length=1, max_length=256)
 
 
+class ProbeRequest(Body):
+    expectedBindingDigest: str = Field(pattern=r'^sha256:[a-f0-9]{64}$')
+    scope: Literal['observe'] = 'observe'
+
+
 class NewProject(Body):
     name: str = Field(min_length=1, max_length=120)
     blueprintRef: str | None = None

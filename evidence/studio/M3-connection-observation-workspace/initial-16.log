@@ -1,0 +1,59 @@
+
+Running 16 tests using 1 worker
+
+(node:2330786) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   1 tests/e2e/lab-probes-configured.spec.ts:28:9 › configured lab probes at 1024 › explicit observation preserves clocks, private boundaries and canonical run state (11.5s)
+(node:2331001) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   2 tests/e2e/lab-probes-configured.spec.ts:60:11 › configured lab probes at 1024 › observation grant is independent › lease observe permission cannot enable a probe or bypass backend authority (1.6s)
+  ✓   3 tests/e2e/lab-probes-configured.spec.ts:80:13 › configured lab probes at 1024 › unavailable › negative or uncertain observation remains separate from readiness and is never repeated by inspection (1.4s)
+  ✓   4 tests/e2e/lab-probes-configured.spec.ts:80:13 › configured lab probes at 1024 › unknown › negative or uncertain observation remains separate from readiness and is never repeated by inspection (1.4s)
+  ✓   5 tests/e2e/lab-probes-configured.spec.ts:80:13 › configured lab probes at 1024 › revoked › negative or uncertain observation remains separate from readiness and is never repeated by inspection (1.6s)
+  ✓   6 tests/e2e/lab-probes-configured.spec.ts:80:13 › configured lab probes at 1024 › timeout › negative or uncertain observation remains separate from readiness and is never repeated by inspection (1.6s)
+  ✓   7 tests/e2e/lab-probes-configured.spec.ts:100:11 › configured lab probes at 1024 › changed host binding › typed predelegation refusal settles the first request without a provider call (1.4s)
+  ✓   8 tests/e2e/lab-probes-configured.spec.ts:28:9 › configured lab probes at 1440 › explicit observation preserves clocks, private boundaries and canonical run state (1.6s)
+  ✓   9 tests/e2e/lab-probes-configured.spec.ts:60:11 › configured lab probes at 1440 › observation grant is independent › lease observe permission cannot enable a probe or bypass backend authority (1.4s)
+  ✓  10 tests/e2e/lab-probes-configured.spec.ts:80:13 › configured lab probes at 1440 › unavailable › negative or uncertain observation remains separate from readiness and is never repeated by inspection (1.4s)
+  ✓  11 tests/e2e/lab-probes-configured.spec.ts:80:13 › configured lab probes at 1440 › unknown › negative or uncertain observation remains separate from readiness and is never repeated by inspection (1.5s)
+  ✓  12 tests/e2e/lab-probes-configured.spec.ts:80:13 › configured lab probes at 1440 › revoked › negative or uncertain observation remains separate from readiness and is never repeated by inspection (1.5s)
+  ✓  13 tests/e2e/lab-probes-configured.spec.ts:80:13 › configured lab probes at 1440 › timeout › negative or uncertain observation remains separate from readiness and is never repeated by inspection (1.5s)
+  ✓  14 tests/e2e/lab-probes-configured.spec.ts:100:11 › configured lab probes at 1440 › changed host binding › typed predelegation refusal settles the first request without a provider call (1.4s)
+  ✓  15 tests/e2e/lab-probes.spec.ts:6:9 › lab probes at 1024 › lease installation alone shows explicit observation unavailable without contact (1.5s)
+  ✓  16 tests/e2e/lab-probes.spec.ts:6:9 › lab probes at 1440 › lease installation alone shows explicit observation unavailable without contact (1.4s)
+
+
+  1) tests/e2e/lab-probes-configured.spec.ts:28:9 › configured lab probes at 1024 › explicit observation preserves clocks, private boundaries and canonical run state
+
+    Error: expect(locator).toBeFocused() failed
+
+    Locator:  getByRole('region', { name: 'Connection observation result', exact: true }).getByRole('heading', { name: 'Connection observation result', exact: true })
+    Expected: focused
+    Received: inactive
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toBeFocused" getByRole('region', { name: 'Connection observation result', exact: true }).getByRole('heading', { name: 'Connection observation result', exact: true }) with timeout 10000ms
+      - waiting for getByRole('region', { name: 'Connection observation result', exact: true }).getByRole('heading', { name: 'Connection observation result', exact: true })
+        24 × locator resolved to <h3 tabindex="-1">Connection observation result</h3>
+           - unexpected value "inactive"
+
+
+      35 |       const op = await observe(page);
+      36 |       expect(op.status).toBe("completed"); expect(op.result.status).toBe("observed");
+    > 37 |       await expect(result(page).getByRole("heading", { name: "Connection observation result", exact: true })).toBeFocused();
+         |                                                                                                               ^
+      38 |       await expect(result(page)).toContainText("-9007199254740993 ns");
+      39 |       await expect(result(page)).toContainText("fixture-probe-clock");
+      40 |       await expect(result(page)).toContainText("fixture-observation-r3");
+        at <repo>/tests/e2e/lab-probes-configured.spec.ts:37:111
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    .studio-local/lab-probe-ui/initial-browser/browser/lab-probes-configured-conf-f5126-ies-and-canonical-run-state/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: .studio-local/lab-probe-ui/initial-browser/browser/lab-probes-configured-conf-f5126-ies-and-canonical-run-state/error-context.md
+
+  1 failed
+    tests/e2e/lab-probes-configured.spec.ts:28:9 › configured lab probes at 1024 › explicit observation preserves clocks, private boundaries and canonical run state
+  15 passed (34.6s)

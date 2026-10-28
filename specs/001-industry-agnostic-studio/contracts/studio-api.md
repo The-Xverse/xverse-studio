@@ -64,6 +64,8 @@
 | `DELETE /annotations/{annotationId}` | Expected revision; creates a tombstone without altering referenced evidence | M4 |
 | `GET /providers` | Admitted providers, versions, capabilities and unavailable dependencies | M0 |
 | `GET /assets` | Explicitly scoped provider inventory; no unrestricted network scan | M3 |
+| `GET /assets/{assetId}/probe-options` | ADR-0027 amendment: independently granted observation eligibility and installed binding pin; no provider contact or runtime authority | M3 |
+| `POST /assets/{assetId}/probes` | ADR-0027 amendment: explicit current binding digest, observe-only scope and idempotency key; durable owner operation with bounded observation/unknown result; no lease or runtime grant | M3 |
 | `GET /assets/{assetId}/reservation-options` | ADR-0025 amendment: current principal/asset request eligibility for each independently granted scope; bounded explicit inventory only, no lease or runtime grant | M3 |
 | `POST /assets/{assetId}/reservations` | Requested permitted scope/duration; returns provider fencing token reference | M3 |
 | `GET /reservations` | ADR-0025 amendment: cursor-paged signed-in principal's local ownership history and request eligibility; no provider inspection or reacquisition | M3 |
@@ -341,3 +343,41 @@ are retained. Recorded observer identity/unit semantics/clock must agree with th
 compiled declaration. Source reader limits remain unchanged.
 `COMPARISON_LIMIT` is a typed 422 refusal. Inspection and recorded playback create
 no workload; fresh execution retains backend admission and a new identity.
+
+
+## Explicit observation amendment (ADR-0027)
+
+The separate `labProbes` capability defaults to unavailable. A native host must
+explicitly install the observation implementation and exact principal/asset
+permission; existing reservation grants and descriptors remain unchanged.
+`GET /assets/{assetId}/probe-options` reports version 1.0 eligibility, the separate
+binding pin, authenticated principal, evidence scope and bounds without provider contact.
+
+`POST /assets/{assetId}/probes` accepts only required `expectedBindingDigest` and
+optional `scope: "observe"`. An idempotency key is mandatory. Session/Host/Origin/
+CSRF checks apply. Missing installation returns `503 PROBE_NOT_ADMITTED`, changed
+binding `409 PROBE_BINDING_CHANGED`, and missing permission `403 FORBIDDEN`.
+Unknown fields, imported endpoints, requested owners, active scopes and deadlines
+reject before provider contact. The original operation/key mapping is durable
+before delegation; a duplicate returns that original receipt even after restart
+or installation/grant removal. A changed payload conflicts and never re-probes.
+
+`GET /operations/{operationId}` filters this operation to its owner and closed
+public projection. Operation completion acknowledges an `observed` or
+`unavailable` result, not readiness or execution. Unknown acknowledgements/results
+remain unknown. Accepted/delegated records become unknown on restart and are
+never replayed. Source clock/domain/signed ticks/uncertainty and backend receipt
+time are separate. Private bindings and unknown provider payloads stay excluded.
+
+Limits: 32 bound installations; eight contacted resource references per binding;
+1,000 operations of at most 16 KiB each; callback timeout greater than zero through
+five seconds; one outstanding callback per observation provider ID and no queue.
+Timeout retains capacity until actual return and discards late results.
+No automatic import/open/refresh/preflight probe, reservation, physical command
+or runtime-admission upgrade is introduced. The existing read-only physical-binding
+report stays free of probe side effects. Backend and UI implementation are under
+combined verification; full native/browser/package and actual hardware acceptance
+remain open. Browser pending requests and at most 20 operation references persist
+in a versioned session record bounded to128KiB; cached data is never an authority
+grant and contains no private binding or cached result. Explicit retry preserves
+the original request identity; inspection performs no provider callback.

@@ -6,6 +6,7 @@ import { Icon, Badge, Json, KeyValues, Diagnostics } from "../../app/ui";
 
 import { inventoryPage, revisionText } from "./public-observations";
 import { ReservationWorkspace, ReservationRequest } from "./ReservationWorkspace";
+import { ProbeWorkspace, ConnectionRequest } from "./ProbeWorkspace";
 
 type Observation = {
   status: "loading" | "available" | "unavailable";
@@ -160,6 +161,7 @@ export function LabView({
         </button>
       </div>
       <ReservationWorkspace>
+      <ProbeWorkspace>
       <section className="panel">
         <h2>No physical provider admitted</h2>
         <p id={authorityId}>
@@ -313,6 +315,7 @@ export function LabView({
               )}
               <Diagnostics diagnostics={a.diagnostics} />
               <ReservationRequest assetId={a.assetId} />
+              <ConnectionRequest assetId={a.assetId} />
               <Json value={a} />
             </section>
           ))}
@@ -335,6 +338,7 @@ export function LabView({
           </section>
         ))}
       </div>
+      </ProbeWorkspace>
       </ReservationWorkspace>
     </div>
   );
