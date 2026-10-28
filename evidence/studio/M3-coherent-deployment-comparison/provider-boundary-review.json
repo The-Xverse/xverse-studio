@@ -1,0 +1,55 @@
+{
+  "observedAt": "2026-10-28T16:51:01.641460+00:00",
+  "selectedRevision": "7fab6a290c3731533c2b88517158055c768b9d4e",
+  "observedMain": {
+    "observedAt": "2026-10-28T16:49:21.623975+00:00",
+    "sha": "7fab6a290c3731533c2b88517158055c768b9d4e",
+    "date": "2026-10-24T18:49:54Z",
+    "url": "https://github.com/The-Xverse/xverse-platform/commit/7fab6a290c3731533c2b88517158055c768b9d4e",
+    "qualification": "Read only current head observation, no baseline upgrade or runtime admission."
+  },
+  "mainMatchesSelected": true,
+  "selectedRootTreeSha": "7fab6a290c3731533c2b88517158055c768b9d4e",
+  "selectedSourceTreeSha": "29d180d565c858a983eed7d95afafcc9d95e7006",
+  "selectedSourceTreeTruncated": false,
+  "initialWholeRepositoryRecursiveResponseTruncated": true,
+  "qualification": "The truncated whole-tree response cannot establish absence. A complete src subtree and the listed exact files were inspected instead; this is a scoped source review, not conformance/admission.",
+  "files": {
+    "src/xverse/maestro/__init__.py": {
+      "sha256": "0fed5a8a12900c29dc55d6920aa25d645d1e1988635b4b2ed29d3e477fbb0c3f",
+      "url": "https://github.com/The-Xverse/xverse-platform/blob/7fab6a290c3731533c2b88517158055c768b9d4e/src/xverse/maestro/__init__.py"
+    },
+    "src/xverse/maestro/providers.py": {
+      "sha256": "0201367ba7a578bf8032489d13852a161b93fbcdde8bae46abb4a5afca147c79",
+      "url": "https://github.com/The-Xverse/xverse-platform/blob/7fab6a290c3731533c2b88517158055c768b9d4e/src/xverse/maestro/providers.py"
+    },
+    "src/xverse/maestro/runtime_entry.py": {
+      "sha256": "356378a0b768a47d25c575eabca37a24efbb76750fecdb8c0c73ece8a44b9f8d",
+      "url": "https://github.com/The-Xverse/xverse-platform/blob/7fab6a290c3731533c2b88517158055c768b9d4e/src/xverse/maestro/runtime_entry.py"
+    },
+    "src/xverse/maestro/runtime_service.py": {
+      "sha256": "1677e68b0f55685f8dedc45844df13c67abf9460152f260d8936915fa082f409",
+      "url": "https://github.com/The-Xverse/xverse-platform/blob/7fab6a290c3731533c2b88517158055c768b9d4e/src/xverse/maestro/runtime_service.py"
+    },
+    "src/xverse/maestro/runtime_admission.py": {
+      "sha256": "fe1054fe75562e636f48c1f242de4a3512a2d15234e558900b26723f7879fc2d",
+      "url": "https://github.com/The-Xverse/xverse-platform/blob/7fab6a290c3731533c2b88517158055c768b9d4e/src/xverse/maestro/runtime_admission.py"
+    }
+  },
+  "findings": [
+    "The selected top-level Maestro exports supply lifecycle preparation and descriptors, not a Studio-approved physical-command binding.",
+    "runtime_entry composes a private original trusted bootstrap and requires separately approved original permit scope.",
+    "RuntimeService is a candidate trusted-host interface with fixed reviewed approval pins; empty or disabled policy cannot start. Declarations/hashes do not authenticate those approvals.",
+    "runtime_admission performs read-only checks of externally supplied authorization and facility facts; it does not create approval or prove the facility."
+  ],
+  "nextPrerequisites": [
+    "An admitted provider/Maestro operation contract with exact immutable-input equality and independently scoped observe/stimulate/destructive authority.",
+    "Identified installed implementation, conformance/permission/facility evidence and declared lease-loss/stop/recovery policy for actual integration.",
+    "Fixture work may exercise a labelled owned facade, but must not fabricate externally reviewed permits or turn it into a live-device claim."
+  ],
+  "readOnly": true,
+  "companionMutations": false,
+  "runtimeImportedOrInvoked": false,
+  "baselineChanged": false,
+  "taskStatusesChanged": false
+}

@@ -88,3 +88,22 @@ Discovery HTTP/shape/empty responses are explicitly controlled transport observa
 live registry-absence evidence. Owned presentation remains a fixture, not domain fidelity or
 runtime/device permission. Final candidate evidence and full native-platform/AT/milestone
 acceptance remain separate; Windows is held at user request.
+
+## Parameter groups and active input — 2026-10-28
+
+An asynchronous presentation reply can change a parameter's group while its value
+control has focus. Moving that control between fieldsets replaces its DOM node:
+restoring focus alone cannot restore a native numeric input's Select All state.
+A held actual presentation reply reproduces the resulting `6` → `67` input when
+the user intended to replace the value with `7`.
+
+Keep group membership stable while focus remains inside the parameter form.
+Apply current group metadata when focus leaves the form, or immediately when the
+project context changes. Labels and source-backed parameter values retain their
+normal updates; deferred grouping grants no authority and changes no authored
+value. Existing draft generations and completion/focus guards remain unchanged.
+
+Verification adds `tests/e2e/parameter-presentation-selection.spec.ts` at both
+required viewports. Actual metadata arrives between native Select All and typing;
+the original input and intended draft stay intact. Leaving the form applies the
+groups while preserving newer focus, the draft and the canonical Project response.

@@ -1,0 +1,353 @@
+{
+  "observedAt": "2026-10-28T17:21:50.892917+00:00",
+  "task": "T026",
+  "verdict": "COMPONENT_COMPLETE",
+  "source": "43aea45f69b7f5965b0e5f70083658b880b5af35",
+  "unchangedDescription": "Implement resumable cursor events, explicit gap/resync responses and session reconnection independent of backend run ownership.",
+  "unchangedDependencies": [
+    "T022",
+    "T023",
+    "T025"
+  ],
+  "exactSourceAndTestHashes": {
+    "apps/studio-web/src/features/runs/session.ts": "83b7cb0cc09585f80c80dec7678acb91e7a4e728807d3574f139b3e2733a26df",
+    "apps/studio-web/src/features/runs/sessionProtocol.ts": "52c3e21890865d67805203d77ab0a35b7c70e1c980387c304fa4d3f774619247",
+    "services/studio-api/src/xverse_studio/api/app.py": "cc6c79f4287088a19db5f79a9d8ff8a1bf4cc79f8d5753743f68a6bfef36887b",
+    "services/studio-api/src/xverse_studio/events/__init__.py": "5ca8730a9065e3aac11c274bc39dba4c0de8d1233bd7a236d1653672ad260b4e",
+    "specs/001-industry-agnostic-studio/contracts/run-events.md": "fcc84917e0fcaf76f6ebac2c3fc6d52901d1bf35bcb77ecab491be100fbbb6d0",
+    "tests/contract/test_run_events.py": "b92a71fee6a1d8756d19206b2f705d3b5d4f8751ee9cbbcb503c325a389fe4d9",
+    "tests/e2e/run-reconnect.spec.ts": "3f68c53d5d5fbd02c811fe37de164829a0779cd2aacb4c8e19f5f68cbee71119",
+    "tests/e2e/session-contract.spec.ts": "6f9cd39cf596f97b60073b957973aaed693133297f36445f85f113b041b15130",
+    "tests/integration/test_stream_recovery.py": "c6e30ec118ea7672c9c8705023805a03319a7e4a1993ffed4b354139cabaa752"
+  },
+  "providerRegistryComparisonLimitOnlyExactInverseVerified": true,
+  "backendCasesPassed": [
+    {
+      "classname": "tests.contract.test_run_events",
+      "name": "test_stream_cursor_grammar_rejects_coercion_and_wrong_context"
+    },
+    {
+      "classname": "tests.contract.test_run_events",
+      "name": "test_stream_cursor_same_source_survives_manager_restart"
+    },
+    {
+      "classname": "tests.contract.test_run_events",
+      "name": "test_completed_stream_reconnect_is_read_only"
+    },
+    {
+      "classname": "tests.contract.test_run_events",
+      "name": "test_accepted_command_after_final_tick_fails_canonically_without_execution"
+    },
+    {
+      "classname": "tests.contract.test_run_events",
+      "name": "test_accepted_command_that_never_reaches_worker_reconciles_failed"
+    },
+    {
+      "classname": "tests.contract.test_run_events",
+      "name": "test_accepted_command_fails_when_owned_workload_fails_first"
+    },
+    {
+      "classname": "tests.contract.test_run_events",
+      "name": "test_pending_command_becomes_unknown_when_ownership_is_lost"
+    },
+    {
+      "classname": "tests.contract.test_run_events",
+      "name": "test_delegation_never_reopens_a_concurrently_settled_command"
+    },
+    {
+      "classname": "tests.integration.test_stream_recovery",
+      "name": "test_v11_source_proof_resume_and_resync_watermark_are_read_only"
+    },
+    {
+      "classname": "tests.integration.test_stream_recovery",
+      "name": "test_v11_digest_fork_requires_resynchronization_not_empty_success"
+    },
+    {
+      "classname": "tests.integration.test_stream_recovery",
+      "name": "test_v11_expired_replay_reports_exact_range_and_fresh_resync"
+    },
+    {
+      "classname": "tests.integration.test_stream_recovery",
+      "name": "test_v11_unavailable_and_invalid_never_look_like_empty_valid_stream[missing-503-STREAM_SOURCE_UNAVAILABLE]"
+    },
+    {
+      "classname": "tests.integration.test_stream_recovery",
+      "name": "test_v11_unavailable_and_invalid_never_look_like_empty_valid_stream[invalid-422-EVIDENCE_INVALID]"
+    },
+    {
+      "classname": "tests.integration.test_stream_recovery",
+      "name": "test_only_admitted_public_redacted_journal_is_read_or_exported"
+    },
+    {
+      "classname": "tests.integration.test_stream_recovery",
+      "name": "test_advancing_producer_slow_consumer_gets_bounded_explicit_gap"
+    },
+    {
+      "classname": "tests.integration.test_stream_recovery",
+      "name": "test_oversized_delivery_frame_is_skipped_with_gap_not_canonical_truncation"
+    },
+    {
+      "classname": "tests.integration.test_stream_recovery",
+      "name": "test_subscription_admission_is_bounded_before_any_iteration"
+    },
+    {
+      "classname": "tests.integration.test_stream_recovery",
+      "name": "test_source_read_failure_after_headers_has_explicit_control[missing-unavailable]"
+    },
+    {
+      "classname": "tests.integration.test_stream_recovery",
+      "name": "test_source_read_failure_after_headers_has_explicit_control[invalid-invalid]"
+    },
+    {
+      "classname": "tests.integration.test_stream_recovery",
+      "name": "test_new_unknown_transport_fixture_has_no_runtime_authority_or_terminal_claim"
+    },
+    {
+      "classname": "tests.integration.test_stream_recovery",
+      "name": "test_application_restart_resumes_verified_source_without_new_run"
+    },
+    {
+      "classname": "tests.integration.test_stream_recovery",
+      "name": "test_api_header_send_failure_releases_lease_before_iterator_entry[oserror]"
+    },
+    {
+      "classname": "tests.integration.test_stream_recovery",
+      "name": "test_api_header_send_failure_releases_lease_before_iterator_entry[cancelled]"
+    },
+    {
+      "classname": "tests.integration.test_stream_recovery",
+      "name": "test_hash_valid_unsupported_event_kind_rejects_transport_without_rewriting_evidence[log.appended\\ndata: {\"injected\":true}]"
+    },
+    {
+      "classname": "tests.integration.test_stream_recovery",
+      "name": "test_hash_valid_unsupported_event_kind_rejects_transport_without_rewriting_evidence[log.appended\\rdata: malformed]"
+    },
+    {
+      "classname": "tests.integration.test_stream_recovery",
+      "name": "test_hash_valid_unsupported_event_kind_rejects_transport_without_rewriting_evidence[future.unregistered_event]"
+    },
+    {
+      "classname": "tests.integration.test_stream_recovery",
+      "name": "test_hash_valid_unsupported_event_kind_rejects_transport_without_rewriting_evidence[studio.stream_control]"
+    },
+    {
+      "classname": "tests.integration.test_stream_recovery",
+      "name": "test_legacy_byte_budget_delivers_every_consecutive_record_without_silent_drop"
+    },
+    {
+      "classname": "tests.integration.test_stream_recovery",
+      "name": "test_legacy_oversized_first_record_refuses_before_headers"
+    },
+    {
+      "classname": "tests.integration.test_stream_recovery",
+      "name": "test_legacy_index_requires_explicit_resync_in_v11_but_remains_v10_compatible"
+    },
+    {
+      "classname": "tests.integration.test_stream_recovery",
+      "name": "test_whole_resync_response_including_run_metadata_obeys_utf8_budget[16384]"
+    },
+    {
+      "classname": "tests.integration.test_stream_recovery",
+      "name": "test_whole_resync_response_including_run_metadata_obeys_utf8_budget[1048576]"
+    },
+    {
+      "classname": "tests.integration.test_stream_recovery",
+      "name": "test_resync_metadata_alone_over_budget_refuses_with_typed413"
+    }
+  ],
+  "playwrightCasesPassed": [
+    {
+      "file": "run-reconnect.spec.ts",
+      "title": "run session: unknown recorded state awaits actual bounded resync and reconnects read-only",
+      "status": "expected"
+    },
+    {
+      "file": "run-reconnect.spec.ts",
+      "title": "run session: native owned execution survives real replay-window expiry while running without duplicate Start",
+      "status": "expected"
+    },
+    {
+      "file": "run-reconnect.spec.ts",
+      "title": "run session: UI metadata fixture updates evidence at the same lifecycle version without altering evidence",
+      "status": "expected"
+    },
+    {
+      "file": "run-reconnect.spec.ts",
+      "title": "run session: lost Start acknowledgement survives refresh and resolves one run from two tabs",
+      "status": "expected"
+    },
+    {
+      "file": "run-reconnect.spec.ts",
+      "title": "run session: double Start, page close/reopen and a lost Stop acknowledgement keep one run and one command",
+      "status": "expected"
+    },
+    {
+      "file": "run-reconnect.spec.ts",
+      "title": "run controls: UI fixture renders failed and unknown command outcomes and unresolved ownership without sending controls",
+      "status": "expected"
+    },
+    {
+      "file": "session-contract.spec.ts",
+      "title": "session contract: reserved control slot coalesces with 200 data frames while canonical and control queues stay bounded",
+      "status": "expected"
+    },
+    {
+      "file": "session-contract.spec.ts",
+      "title": "session contract: callback acceptance precedes acknowledged reconnect cursor",
+      "status": "expected"
+    },
+    {
+      "file": "session-contract.spec.ts",
+      "title": "session contract: expiry awaits full state and history resynchronization before reconnect",
+      "status": "expected"
+    },
+    {
+      "file": "session-contract.spec.ts",
+      "title": "session contract: SSE CRLF split across chunks preserves one canonical frame",
+      "status": "expected"
+    },
+    {
+      "file": "session-contract.spec.ts",
+      "title": "session contract: unknown presentation loss stays unknown and outside canonical records",
+      "status": "expected"
+    },
+    {
+      "file": "session-contract.spec.ts",
+      "title": "session contract: retry timers remove completed abort listeners",
+      "status": "expected"
+    },
+    {
+      "file": "session-contract.spec.ts",
+      "title": "session contract: disposal cancels an idle reader without another request",
+      "status": "expected"
+    },
+    {
+      "file": "session-contract.spec.ts",
+      "title": "session contract: equal lifecycle version keeps state while fresh cleanup and evidence advance",
+      "status": "expected"
+    },
+    {
+      "file": "session-contract.spec.ts",
+      "title": "session contract: invalid recovery cannot acknowledge a replacement watermark",
+      "status": "expected"
+    },
+    {
+      "file": "session-contract.spec.ts",
+      "title": "session contract: duplicate delivery deduplicates before consumer acceptance",
+      "status": "expected"
+    },
+    {
+      "file": "session-contract.spec.ts",
+      "title": "session contract: mismatched cursor proof rejects frame before consumer acceptance",
+      "status": "expected"
+    },
+    {
+      "file": "session-contract.spec.ts",
+      "title": "session contract: incompatible schema and oversized frames require verified recovery",
+      "status": "expected"
+    },
+    {
+      "file": "session-contract.spec.ts",
+      "title": "session contract: running verified-prefix recovery preserves limited integrity and resumes",
+      "status": "expected"
+    },
+    {
+      "file": "session-contract.spec.ts",
+      "title": "session contract: invalid and unavailable recovery bodies remain unaccepted",
+      "status": "expected"
+    },
+    {
+      "file": "session-contract.spec.ts",
+      "title": "session contract: typed oversized recovery stops without acknowledgement or retry and releases its body",
+      "status": "expected"
+    }
+  ],
+  "backendCaseCount": 33,
+  "playwrightCaseCount": 21,
+  "fullBrowserScope": "Actual602 ends601pass/1parameter-edit failure; performance not run. All21 T026 cases pass. Unrelated failure remains recorded separately and is being repaired.",
+  "playwrightScope": "15 Node/Playwright transport-contract cases plus6 browser journeys. The browser file labels recorded/presentation fixtures; three journeys use actual owned native execution for expiry/lost acknowledgements/browser departure. Fixtures are not live-provider acceptance.",
+  "clauseEvidence": {
+    "resumable_cursor_events": [
+      "test_stream_cursor_same_source_survives_manager_restart",
+      "test_v11_source_proof_resume_and_resync_watermark_are_read_only",
+      "session contract: duplicate delivery deduplicates before consumer acceptance"
+    ],
+    "explicit_gap_and_resync": [
+      "test_v11_expired_replay_reports_exact_range_and_fresh_resync",
+      "test_advancing_producer_slow_consumer_gets_bounded_explicit_gap",
+      "test_whole_resync_response_including_run_metadata_obeys_utf8_budget",
+      "test_resync_metadata_alone_over_budget_refuses_with_typed413"
+    ],
+    "reconnection_independent_of_run_ownership": [
+      "test_completed_stream_reconnect_is_read_only",
+      "test_application_restart_resumes_verified_source_without_new_run",
+      "run session: native owned execution survives real replay-window expiry while running without duplicate Start",
+      "run session: lost Start acknowledgement survives refresh and resolves one run from two tabs",
+      "run session: double Start, page close/reopen and a lost Stop acknowledgement keep one run and one command"
+    ]
+  },
+  "completionPolicy": "Existing tasks.md distinguishes checked component evidence from unverified native/live acceptance. T023/T025 supply implemented and tested Linux ownership/reconnection interfaces; their explicit native Windows conformance remains open in those tasks. This applies the existing component standard without removing any dependency or acceptance requirement.",
+  "existingCompletedComponentPrecedents": [
+    {
+      "id": "T003",
+      "status": "completed",
+      "unchangedDescription": "Specify failing contract tests for capability/version negotiation, unsupported operations, error envelopes and frontend/backend schema compatibility.",
+      "unfinishedDependencies": [
+        "T001"
+      ]
+    },
+    {
+      "id": "T006",
+      "status": "completed",
+      "unchangedDescription": "Implement the pinned platform validation/normalization/compilation adapter and source-location diagnostics without recreating XDL rules in the frontend.",
+      "unfinishedDependencies": [
+        "T002",
+        "T005"
+      ]
+    },
+    {
+      "id": "T015",
+      "status": "completed",
+      "unchangedDescription": "Add prepared-example onboarding, import, unknown-extension preservation and parameter-validation scenarios before UI implementation.",
+      "unfinishedDependencies": [
+        "T014"
+      ]
+    },
+    {
+      "id": "T030",
+      "status": "completed",
+      "unchangedDescription": "Implement selected-element logs/signals/events, source/severity/time filters, clock/quality markers and explicit display gaps with bounded rendering.",
+      "unfinishedDependencies": [
+        "T026"
+      ]
+    },
+    {
+      "id": "T085",
+      "status": "completed",
+      "unchangedDescription": "Refine the existing contracts/experiment-evaluation.md bounded typed/temporal JSON-AST contract into implementation schemas and detailed design, preserving its versioned operators, half-open run-relative windows, full-data coverage, resource caps, units/time rules and pass/fail/indeterminate outcomes. Record a versioned contract decision before any necessary semantic change; define the admitted XDL/profile mapping without inventing a competing language.",
+      "unfinishedDependencies": [
+        "T082"
+      ]
+    },
+    {
+      "id": "T087",
+      "status": "completed",
+      "unchangedDescription": "Implement or integrate the compatible bounded evaluator and explicit expression-to-contract mapping; preserve opaque unsupported expressions unevaluated and never call eval or execute arbitrary code. Implement the contract's evaluation create/result operations with separate evaluation-execution status and assertion verdict.",
+      "unfinishedDependencies": [
+        "T083"
+      ]
+    }
+  ],
+  "supersededInitialConclusion": "The initial audit kept T026 open solely because T025 native repetition was held. That conflated implementation-component status with the broader conformance gate, unlike the existing checked-component records. This review corrects that accounting conclusion after verifying every own task clause.",
+  "nativeWindows": "HELD; NOT_VERIFIED",
+  "heldTasksUnchanged": [
+    "T023",
+    "T025"
+  ],
+  "acceptanceCasesUnchanged": [
+    "AC-008",
+    "AC-010"
+  ],
+  "milestonesAccepted": 0,
+  "reviewer": "Primary implementing agent clause/source review; not an independent milestone review."
+}

@@ -1,0 +1,280 @@
+{
+  "config": {
+    "argv": [
+      "<tool-cache>/node-v24.22.1-linux-x64/bin/node",
+      "<repo>/node_modules/@playwright/test/cli.js",
+      "test",
+      "-c",
+      "<repo>/.studio-local/hybrid-comparison/parameter-group-control/playwright.config.ts"
+    ],
+    "configFile": "<repo>/.studio-local/hybrid-comparison/parameter-group-control/playwright.config.ts",
+    "rootDir": "<repo>/.studio-local/hybrid-comparison/parameter-group-control",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "<repo>/.studio-local/hybrid-comparison/parameter-group-control/corrected-before/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "<repo>/.studio-local/hybrid-comparison/parameter-group-control",
+        "testIgnore": [],
+        "testMatch": [
+          "group.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "<repo>/.studio-local/hybrid-comparison/parameter-group-control/corrected-before/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "<repo>/.studio-local/hybrid-comparison/parameter-group-control",
+        "snapshotDir": "<repo>/.studio-local/hybrid-comparison/parameter-group-control",
+        "testIgnore": [],
+        "testMatch": "group.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "browserName": "chromium",
+          "actionTimeout": 15000,
+          "screenshot": "only-on-failure",
+          "trace": "off",
+          "video": "off"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "<repo>/.studio-local/hybrid-comparison/parameter-group-control/corrected-before/report.private.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "group.spec.ts",
+      "file": "group.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "labelled held actual presentation at 1024",
+          "file": "group.spec.ts",
+          "line": 9,
+          "column": 7,
+          "specs": [
+            {
+              "title": "metadata arrival preserves native select-all and unsaved value",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 12730,
+                      "error": {
+                        "message": "Error: expect(locator).toHaveValue(expected) failed\n\nLocator:  getByLabel('Duration')\nExpected: \"7\"\nReceived: \"67\"\nTimeout:  10000ms\n\nCall log:\n  - Expect \"toHaveValue\" getByLabel('Duration') with timeout 10000ms\n  - waiting for getByLabel('Duration')\n    24 × locator resolved to <input max=\"30\" min=\"0.1\" step=\"any\" value=\"67\" required=\"\" type=\"number\" aria-describedby=\"_r_1_-duration _r_1_-duration-draft\"/>\n       - unexpected value \"67\"",
+                        "stack": "Error: expect(locator).toHaveValue(expected) failed\n\nLocator:  getByLabel('Duration')\nExpected: \"7\"\nReceived: \"67\"\nTimeout:  10000ms\n\nCall log:\n  - Expect \"toHaveValue\" getByLabel('Duration') with timeout 10000ms\n  - waiting for getByLabel('Duration')\n    24 × locator resolved to <input max=\"30\" min=\"0.1\" step=\"any\" value=\"67\" required=\"\" type=\"number\" aria-describedby=\"_r_1_-duration _r_1_-duration-draft\"/>\n       - unexpected value \"67\"\n\n    at <repo>/.studio-local/hybrid-comparison/parameter-group-control/group.spec.ts:42:28",
+                        "location": {
+                          "file": "<repo>/.studio-local/hybrid-comparison/parameter-group-control/group.spec.ts",
+                          "column": 28,
+                          "line": 42
+                        },
+                        "snippet": "  40 |     const facts={sameNativeControl:await original!.evaluate(n=>n.isConnected),value:await duration.inputValue(),active:await duration.evaluate(n=>n===document.activeElement),revision:project.revision};\n  41 |     await info.attach(\"actual-held-presentation-selection\",{body:JSON.stringify(facts),contentType:\"application/json\"});\n> 42 |     await expect(duration).toHaveValue(\"7\");expect(facts.sameNativeControl).toBe(true);expect(facts.active).toBe(true);\n     |                            ^\n  43 |     expect((await (await page.request.get(`/api/v1/projects/${project.projectId}`)).json()).revision).toBe(project.revision);\n  44 |    } finally {release();await page.unrouteAll({behavior:\"wait\"});}\n  45 |   });"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "<repo>/.studio-local/hybrid-comparison/parameter-group-control/group.spec.ts",
+                            "column": 28,
+                            "line": 42
+                          },
+                          "message": "Error: expect(locator).toHaveValue(expected) failed\n\nLocator:  getByLabel('Duration')\nExpected: \"7\"\nReceived: \"67\"\nTimeout:  10000ms\n\nCall log:\n  - Expect \"toHaveValue\" getByLabel('Duration') with timeout 10000ms\n  - waiting for getByLabel('Duration')\n    24 × locator resolved to <input max=\"30\" min=\"0.1\" step=\"any\" value=\"67\" required=\"\" type=\"number\" aria-describedby=\"_r_1_-duration _r_1_-duration-draft\"/>\n       - unexpected value \"67\"\n\n\n  40 |     const facts={sameNativeControl:await original!.evaluate(n=>n.isConnected),value:await duration.inputValue(),active:await duration.evaluate(n=>n===document.activeElement),revision:project.revision};\n  41 |     await info.attach(\"actual-held-presentation-selection\",{body:JSON.stringify(facts),contentType:\"application/json\"});\n> 42 |     await expect(duration).toHaveValue(\"7\");expect(facts.sameNativeControl).toBe(true);expect(facts.active).toBe(true);\n     |                            ^\n  43 |     expect((await (await page.request.get(`/api/v1/projects/${project.projectId}`)).json()).revision).toBe(project.revision);\n  44 |    } finally {release();await page.unrouteAll({behavior:\"wait\"});}\n  45 |   });\n    at <repo>/.studio-local/hybrid-comparison/parameter-group-control/group.spec.ts:42:28"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-28T17:19:43.563Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "actual-held-presentation-selection",
+                          "contentType": "application/json",
+                          "body": "eyJzYW1lTmF0aXZlQ29udHJvbCI6ZmFsc2UsInZhbHVlIjoiNjciLCJhY3RpdmUiOnRydWUsInJldmlzaW9uIjoyfQo="
+                        },
+                        {
+                          "name": "owned-provider-observation",
+                          "contentType": "application/json",
+                          "body": "eyJzY29wZSI6ICJvd25lZCBpbi1tZW1vcnkgZml4dHVyZTsgbm8gZXF1aXBtZW50IiwgInNjZW5hcmlvIjogIm9ic2VydmUiLCAiY2FsbHMiOiBbImludmVudG9yeSJdLCAicmVzZXJ2YXRpb25Db3VudCI6IDAsICJyZW1haW5pbmdQcm92aWRlckxlYXNlcyI6IDAsICJwcmVwYXJhdGlvblNlY29uZHMiOiAwLjA5NzczOTA5OTk5MDU3NjV9Cg=="
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "<repo>/.studio-local/hybrid-comparison/parameter-group-control/corrected-before/browser/group-labelled-held-actual-35b9e-elect-all-and-unsaved-value/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "<repo>/.studio-local/hybrid-comparison/parameter-group-control/group.spec.ts",
+                        "column": 28,
+                        "line": 42
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "fffb772da385012f6740-44273bc2dc4a80f54b08",
+              "file": "group.spec.ts",
+              "line": 11,
+              "column": 7
+            }
+          ]
+        },
+        {
+          "title": "labelled held actual presentation at 1440",
+          "file": "group.spec.ts",
+          "line": 9,
+          "column": 7,
+          "specs": [
+            {
+              "title": "metadata arrival preserves native select-all and unsaved value",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 12732,
+                      "error": {
+                        "message": "Error: expect(locator).toHaveValue(expected) failed\n\nLocator:  getByLabel('Duration')\nExpected: \"7\"\nReceived: \"67\"\nTimeout:  10000ms\n\nCall log:\n  - Expect \"toHaveValue\" getByLabel('Duration') with timeout 10000ms\n  - waiting for getByLabel('Duration')\n    24 × locator resolved to <input max=\"30\" min=\"0.1\" step=\"any\" value=\"67\" required=\"\" type=\"number\" aria-describedby=\"_r_1_-duration _r_1_-duration-draft\"/>\n       - unexpected value \"67\"",
+                        "stack": "Error: expect(locator).toHaveValue(expected) failed\n\nLocator:  getByLabel('Duration')\nExpected: \"7\"\nReceived: \"67\"\nTimeout:  10000ms\n\nCall log:\n  - Expect \"toHaveValue\" getByLabel('Duration') with timeout 10000ms\n  - waiting for getByLabel('Duration')\n    24 × locator resolved to <input max=\"30\" min=\"0.1\" step=\"any\" value=\"67\" required=\"\" type=\"number\" aria-describedby=\"_r_1_-duration _r_1_-duration-draft\"/>\n       - unexpected value \"67\"\n\n    at <repo>/.studio-local/hybrid-comparison/parameter-group-control/group.spec.ts:42:28",
+                        "location": {
+                          "file": "<repo>/.studio-local/hybrid-comparison/parameter-group-control/group.spec.ts",
+                          "column": 28,
+                          "line": 42
+                        },
+                        "snippet": "  40 |     const facts={sameNativeControl:await original!.evaluate(n=>n.isConnected),value:await duration.inputValue(),active:await duration.evaluate(n=>n===document.activeElement),revision:project.revision};\n  41 |     await info.attach(\"actual-held-presentation-selection\",{body:JSON.stringify(facts),contentType:\"application/json\"});\n> 42 |     await expect(duration).toHaveValue(\"7\");expect(facts.sameNativeControl).toBe(true);expect(facts.active).toBe(true);\n     |                            ^\n  43 |     expect((await (await page.request.get(`/api/v1/projects/${project.projectId}`)).json()).revision).toBe(project.revision);\n  44 |    } finally {release();await page.unrouteAll({behavior:\"wait\"});}\n  45 |   });"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "<repo>/.studio-local/hybrid-comparison/parameter-group-control/group.spec.ts",
+                            "column": 28,
+                            "line": 42
+                          },
+                          "message": "Error: expect(locator).toHaveValue(expected) failed\n\nLocator:  getByLabel('Duration')\nExpected: \"7\"\nReceived: \"67\"\nTimeout:  10000ms\n\nCall log:\n  - Expect \"toHaveValue\" getByLabel('Duration') with timeout 10000ms\n  - waiting for getByLabel('Duration')\n    24 × locator resolved to <input max=\"30\" min=\"0.1\" step=\"any\" value=\"67\" required=\"\" type=\"number\" aria-describedby=\"_r_1_-duration _r_1_-duration-draft\"/>\n       - unexpected value \"67\"\n\n\n  40 |     const facts={sameNativeControl:await original!.evaluate(n=>n.isConnected),value:await duration.inputValue(),active:await duration.evaluate(n=>n===document.activeElement),revision:project.revision};\n  41 |     await info.attach(\"actual-held-presentation-selection\",{body:JSON.stringify(facts),contentType:\"application/json\"});\n> 42 |     await expect(duration).toHaveValue(\"7\");expect(facts.sameNativeControl).toBe(true);expect(facts.active).toBe(true);\n     |                            ^\n  43 |     expect((await (await page.request.get(`/api/v1/projects/${project.projectId}`)).json()).revision).toBe(project.revision);\n  44 |    } finally {release();await page.unrouteAll({behavior:\"wait\"});}\n  45 |   });\n    at <repo>/.studio-local/hybrid-comparison/parameter-group-control/group.spec.ts:42:28"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-28T17:19:56.683Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "actual-held-presentation-selection",
+                          "contentType": "application/json",
+                          "body": "eyJzYW1lTmF0aXZlQ29udHJvbCI6ZmFsc2UsInZhbHVlIjoiNjciLCJhY3RpdmUiOnRydWUsInJldmlzaW9uIjoyfQo="
+                        },
+                        {
+                          "name": "owned-provider-observation",
+                          "contentType": "application/json",
+                          "body": "eyJzY29wZSI6ICJvd25lZCBpbi1tZW1vcnkgZml4dHVyZTsgbm8gZXF1aXBtZW50IiwgInNjZW5hcmlvIjogIm9ic2VydmUiLCAiY2FsbHMiOiBbImludmVudG9yeSJdLCAicmVzZXJ2YXRpb25Db3VudCI6IDAsICJyZW1haW5pbmdQcm92aWRlckxlYXNlcyI6IDAsICJwcmVwYXJhdGlvblNlY29uZHMiOiAwLjA5OTc5NDUyNjk5MTkwMDA2fQo="
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "<repo>/.studio-local/hybrid-comparison/parameter-group-control/corrected-before/browser/group-labelled-held-actual-e6249-elect-all-and-unsaved-value/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "<repo>/.studio-local/hybrid-comparison/parameter-group-control/group.spec.ts",
+                        "column": 28,
+                        "line": 42
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "fffb772da385012f6740-74c264a5c8846f19354b",
+              "file": "group.spec.ts",
+              "line": 11,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-28T17:19:43.197Z",
+    "duration": 26309.678,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  }
+}

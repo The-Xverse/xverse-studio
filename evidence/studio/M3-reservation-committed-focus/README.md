@@ -1,5 +1,7 @@
 # Reservation read focus after React commit
 
+Latest checkpoint: source43 full602 ends601pass/1parameter-selection failure, retained separately. The narrow successor repair passes71 affected browser/performance2 on342 unchanged inputs; full604 has not been rerun locally. T026 separately closes its complete transport component, bringing counts48/42/10 withzero accepted milestones. See [parameter successor](../M2-parameter-selection-identity/). Earlier checkpoint text below retains its original scope.
+
 Published `449fbd5` PR CI passed 561 browser cases and failed the 1440×900
 reservation-options alert-focus assertion. Push CI passed all 562. The PR's exact
 event scheduling was not recorded; both outcomes remain in the native CI dossier.

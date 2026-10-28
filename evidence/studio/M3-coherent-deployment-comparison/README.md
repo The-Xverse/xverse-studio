@@ -1,5 +1,7 @@
 # Coherent deployment comparison
 
+Latest checkpoint: source43 full602 ends601pass/1parameter-selection failure, retained separately. The narrow successor repair passes71 affected browser/performance2 on342 unchanged inputs; full604 has not been rerun locally. T026 separately closes its complete transport component, bringing counts48/42/10 withzero accepted milestones. See [parameter successor](../M2-parameter-selection-identity/). Earlier checkpoint text below retains its original scope.
+
 The comparison route captures one project revision, validates its complete sources
 through the selected public XDL adapter, and resolves two variants using the same
 System and provider descriptor. Stale revision, external drift, invalid sources,

@@ -1,0 +1,33 @@
+{
+  "productionBeforeSha256": "f1808790f271818c330b4ef37e5a5f8d9610a5f20822054b7f2c5cf79673fa66",
+  "productionAfterSha256": "233ea0ffae12b6af55c3fc7b18a917d286521d0bb0fc7f1441d334e8de057080",
+  "productionExactInverseMatches": true,
+  "lateSaveNewerHeadAndAllOtherAccessibilityCasesOutsideDelayedGroupBlockByteIdentical": true,
+  "assertionExpressionProof": [
+    {
+      "originalAssertions": 24,
+      "currentAssertions": 28,
+      "originalAssertionLiteralAndSyntaxTokensPreserved": true,
+      "addedAssertions": [
+        "expect(await originalControl!.evaluate((node) => node.isConnected)).toBe(true)",
+        "expect(page.getByRole(\"group\", { name: \"Run horizon\", exact: true })).toBeVisible()",
+        "expect(field).toHaveValue(expectedValue)",
+        "expect(outside).toBeFocused()"
+      ]
+    },
+    {
+      "originalAssertions": 95,
+      "currentAssertions": 99,
+      "originalAssertionLiteralAndSyntaxTokensPreserved": true,
+      "addedAssertions": [
+        "expect(await oldControl!.evaluate((node) => node.isConnected)).toBe(true)",
+        "expect(duration(page)\n    .locator(\"xpath=ancestor::fieldset\")\n    .locator(\"legend\")).toHaveText(expectedGroup.label)",
+        "expect(home).toBeFocused()",
+        "expect(duration(page)).toHaveValue(\"8\")"
+      ]
+    }
+  ],
+  "groupTimingChanged": "Focused membership applies after blur; outside-focus membership remains immediate. Original assertion expression tokens and literal values stay present; native identity and after-blur checks are added.",
+  "qualification": "Preserved assertion expressions do not mean unchanged control flow. The group-timing condition and added native Tab actions intentionally verify deferred grouping.",
+  "timeoutsChanged": false
+}

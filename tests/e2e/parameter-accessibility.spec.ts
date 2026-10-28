@@ -650,9 +650,17 @@ for (const viewport of [
         if (moved) await tabTo(page, home);
         await pending!.release();
         await page.waitForLoadState("networkidle");
-        await expect(
-          duration(page).locator("xpath=ancestor::fieldset").locator("legend"),
-        ).toHaveText(expectedGroup.label);
+        if (moved) {
+          await expect(
+            duration(page)
+              .locator("xpath=ancestor::fieldset")
+              .locator("legend"),
+          ).toHaveText(expectedGroup.label);
+        } else {
+          expect(await oldControl!.evaluate((node) => node.isConnected)).toBe(
+            true,
+          );
+        }
         const measured = await geometry(duration(page));
         await testInfo.attach("parameter-presentation.json", {
           body: JSON.stringify({
@@ -680,6 +688,17 @@ for (const viewport of [
           project.documents,
         );
         expect(await runIds(page, project.projectId)).toEqual(runs);
+        if (!moved) {
+          // Native selection remains intact until focus leaves the parameter form.
+          await tabTo(page, home);
+          await expect(
+            duration(page)
+              .locator("xpath=ancestor::fieldset")
+              .locator("legend"),
+          ).toHaveText(expectedGroup.label);
+          await expect(home).toBeFocused();
+          await expect(duration(page)).toHaveValue("8");
+        }
       } finally {
         await pending?.close();
       }

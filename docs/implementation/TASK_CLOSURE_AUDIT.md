@@ -1,6 +1,6 @@
 # Task closure audit — 2026-10-28
 
-The count is **47 completed, 43 in progress and 10 blocked out of 100 tasks**.
+The count is **48 completed, 42 in progress and 10 blocked out of 100 tasks**.
 It counts completed tasks, not percentage of implementation effort or product readiness.
 No M0–M4 milestone is accepted. M5 remains deferred.
 
@@ -9,13 +9,12 @@ recovery repairs, and coherent deployment comparison inside already open tasks. 
 changes are useful implementation progress; they did not satisfy every clause of those
 tasks. Repeated suite counts must not stand in for task closure.
 
-This audit checks the existing task wording and acceptance cases. It changes no requirement,
-dependency, acceptance environment or task status. The native Windows hold remains in force.
+This audit checks the existing task wording and acceptance cases. The subsequent T026 closure amendment corrects the initial dependency-only keep-open conclusion under the existing component standard. Requirements, dependencies and acceptance environments remain unchanged. The native Windows hold remains in force.
 
 | Task | Existing evidence / current implementation | Specific remaining obligation | Disposition |
 |---|---|---|---|
 | T025 | Lost Start/Stop acknowledgements, two tabs, browser departure, cursor expiry, resynchronization and failed-command views have actual Linux backend/browser evidence. | Repeat on both supported native backend/browser combinations. | Keep open; native Windows held. |
-| T026 | Proof-bound cursor replay, explicit gap/resync, bounded recovery and read-only reconnection are implemented. The current affected browser cohort includes the actual running replay-window expiry and reconnect journeys. | Its T023/T025 prerequisites include native Windows ownership/reconnection verification. | Implementation exists on Linux; keep dependency gate open. |
+| T026 | All task implementation clauses pass33 backend and21 Playwright cases, with exact source identity and actual native execution distinguished from fixtures. | T023/T025 retain their broader native Windows conformance; AC-008/010 remain unaccepted. | Component complete under the existing task standard; acceptance gates remain open. |
 | T027 | Immutable input presentation, capability-gated Stop/Cancel, durable command receipts and separate cleanup/evidence/unknown outcomes exist. | Observed partial-start/cleanup-failure UI transitions, admitted optional-operation transitions, and the remaining AC-006/007/027 environment matrix. An unavailable button does not demonstrate a supported operation. | Keep open; software/provider work remains as well as environment gates. |
 | T068 | Authoring, deployment, connection and negative API regressions exist. | Complete the task's migration-without-semantic-loss evidence and its T048 cross-platform exchange dependency; do not substitute aggregate test totals. | Keep open; closure evidence needs a clause-level mapping. |
 | T073 | Registry, actual authenticated HTTP, concurrent claims, independent lease-scope grants, expiry, stale fences, repeated release and native interruption fixtures pass. | Physical-command API observation/stimulation/destructive-action conformance beyond reservation scopes. A stimulation lease alone is not a tested stimulation command. | Keep open; independent software work remains. |
@@ -51,3 +50,24 @@ Subsequent checkpoint: full1,164 backend passes with188 selected backend inputs 
 The reservation focus repair passes its two controlled cases and all36 affected native journeys.
 The original CI failure stays recorded; full602 browser verification is running separately.
 No task status or acceptance gate changes follow from these results.
+
+
+The exact dependency-ready set is T001, T023, T038, T048, T067 and T073.
+Five retain native Windows obligations; T073 retains the command-authority software
+and conformance gap. The [readiness record](../../evidence/studio/M3-coherent-deployment-comparison/task-readiness-audit.json)
+retains the unchanged descriptions and dependencies. Further command work must follow
+the admitted provider/Maestro boundary; adding a standalone device-action endpoint
+solely to increase the task count would not satisfy it.
+
+
+A fresh read-only [provider boundary review](../../evidence/studio/M3-coherent-deployment-comparison/provider-boundary-review.json)
+confirms platform main still equals the selected7fab6a2 pin. The candidate trusted-host
+RuntimeService and read-only admission checks require externally reviewed authorization
+and facility facts; source presence and matching hashes do not supply those facts.
+The complete src subtree and named files were checked after the initial whole-repository
+recursive response was truncated. No runtime was imported/invoked or baseline changed.
+T073/T074 integration must retain those boundaries; no physical action was authorized
+by this source inspection.
+
+
+T026 closure amendment: [clause/source review](../../evidence/studio/M1-session-component-closure/verification.json) corrects the initial accounting conclusion after all T026 clause verification passes. One status changes, T026 in_progress→completed; all task wording/dependencies/acceptance requirements remain. Current counts48/42/10, zero accepted milestones. T027 becomes dependency-ready for its own remaining view/failure verification; the earlier six-task readiness snapshot keeps its dated scope.

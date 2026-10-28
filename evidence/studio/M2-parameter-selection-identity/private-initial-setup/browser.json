@@ -1,0 +1,270 @@
+{
+  "config": {
+    "argv": [
+      "<tool-cache>/node-v24.22.1-linux-x64/bin/node",
+      "<repo>/node_modules/@playwright/test/cli.js",
+      "test",
+      "-c",
+      "<repo>/.studio-local/hybrid-comparison/parameter-group-control/playwright.config.ts"
+    ],
+    "configFile": "<repo>/.studio-local/hybrid-comparison/parameter-group-control/playwright.config.ts",
+    "rootDir": "<repo>/.studio-local/hybrid-comparison/parameter-group-control",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "<repo>/.studio-local/hybrid-comparison/parameter-group-control/before/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "<repo>/.studio-local/hybrid-comparison/parameter-group-control",
+        "testIgnore": [],
+        "testMatch": [
+          "group.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "<repo>/.studio-local/hybrid-comparison/parameter-group-control/before/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "<repo>/.studio-local/hybrid-comparison/parameter-group-control",
+        "snapshotDir": "<repo>/.studio-local/hybrid-comparison/parameter-group-control",
+        "testIgnore": [],
+        "testMatch": "group.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "browserName": "chromium",
+          "actionTimeout": 15000,
+          "screenshot": "only-on-failure",
+          "trace": "off",
+          "video": "off"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "<repo>/.studio-local/hybrid-comparison/parameter-group-control/before/report.private.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "group.spec.ts",
+      "file": "group.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "labelled held actual presentation at 1024",
+          "file": "group.spec.ts",
+          "line": 9,
+          "column": 7,
+          "specs": [
+            {
+              "title": "metadata arrival preserves native select-all and unsaved value",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 12339,
+                      "error": {
+                        "message": "Error: expect(locator).toBeVisible() failed\n\nLocator: getByRole('heading', { name: 'Owned held presentation selection', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"toBeVisible\" getByRole('heading', { name: 'Owned held presentation selection', exact: true }) with timeout 10000ms\n  - waiting for getByRole('heading', { name: 'Owned held presentation selection', exact: true })",
+                        "stack": "Error: expect(locator).toBeVisible() failed\n\nLocator: getByRole('heading', { name: 'Owned held presentation selection', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"toBeVisible\" getByRole('heading', { name: 'Owned held presentation selection', exact: true }) with timeout 10000ms\n  - waiting for getByRole('heading', { name: 'Owned held presentation selection', exact: true })\n\n    at <repo>/.studio-local/hybrid-comparison/parameter-group-control/group.spec.ts:34:76",
+                        "location": {
+                          "file": "<repo>/.studio-local/hybrid-comparison/parameter-group-control/group.spec.ts",
+                          "column": 76,
+                          "line": 34
+                        },
+                        "snippet": "  32 |     await page.reload();\n  33 |     await page.getByRole(\"navigation\",{name:\"Main navigation\"}).getByRole(\"button\",{name:\"Workspace\",exact:true}).click();\n> 34 |     await expect(page.getByRole(\"heading\",{name:project.name,exact:true})).toBeVisible();\n     |                                                                            ^\n  35 |     const parameters=page.getByRole(\"button\",{name:\"Parameters\",exact:true});await tabTo(page,parameters);await page.keyboard.press(\"Enter\");await ready;\n  36 |     const duration=page.getByLabel(\"Duration\");await expect(duration).toHaveValue(\"6\");await tabTo(page,duration);await page.keyboard.press(\"ControlOrMeta+A\");\n  37 |     const original=await duration.elementHandle();release();await done;"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "<repo>/.studio-local/hybrid-comparison/parameter-group-control/group.spec.ts",
+                            "column": 76,
+                            "line": 34
+                          },
+                          "message": "Error: expect(locator).toBeVisible() failed\n\nLocator: getByRole('heading', { name: 'Owned held presentation selection', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"toBeVisible\" getByRole('heading', { name: 'Owned held presentation selection', exact: true }) with timeout 10000ms\n  - waiting for getByRole('heading', { name: 'Owned held presentation selection', exact: true })\n\n\n  32 |     await page.reload();\n  33 |     await page.getByRole(\"navigation\",{name:\"Main navigation\"}).getByRole(\"button\",{name:\"Workspace\",exact:true}).click();\n> 34 |     await expect(page.getByRole(\"heading\",{name:project.name,exact:true})).toBeVisible();\n     |                                                                            ^\n  35 |     const parameters=page.getByRole(\"button\",{name:\"Parameters\",exact:true});await tabTo(page,parameters);await page.keyboard.press(\"Enter\");await ready;\n  36 |     const duration=page.getByLabel(\"Duration\");await expect(duration).toHaveValue(\"6\");await tabTo(page,duration);await page.keyboard.press(\"ControlOrMeta+A\");\n  37 |     const original=await duration.elementHandle();release();await done;\n    at <repo>/.studio-local/hybrid-comparison/parameter-group-control/group.spec.ts:34:76"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-28T17:18:52.603Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "owned-provider-observation",
+                          "contentType": "application/json",
+                          "body": "eyJzY29wZSI6ICJvd25lZCBpbi1tZW1vcnkgZml4dHVyZTsgbm8gZXF1aXBtZW50IiwgInNjZW5hcmlvIjogIm9ic2VydmUiLCAiY2FsbHMiOiBbImludmVudG9yeSJdLCAicmVzZXJ2YXRpb25Db3VudCI6IDAsICJyZW1haW5pbmdQcm92aWRlckxlYXNlcyI6IDAsICJwcmVwYXJhdGlvblNlY29uZHMiOiAwLjEzMzIyMjU5NTAwMjczNTAzfQo="
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "<repo>/.studio-local/hybrid-comparison/parameter-group-control/before/browser/group-labelled-held-actual-35b9e-elect-all-and-unsaved-value/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "<repo>/.studio-local/hybrid-comparison/parameter-group-control/group.spec.ts",
+                        "column": 76,
+                        "line": 34
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "fffb772da385012f6740-44273bc2dc4a80f54b08",
+              "file": "group.spec.ts",
+              "line": 11,
+              "column": 7
+            }
+          ]
+        },
+        {
+          "title": "labelled held actual presentation at 1440",
+          "file": "group.spec.ts",
+          "line": 9,
+          "column": 7,
+          "specs": [
+            {
+              "title": "metadata arrival preserves native select-all and unsaved value",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 12497,
+                      "error": {
+                        "message": "Error: expect(locator).toBeVisible() failed\n\nLocator: getByRole('heading', { name: 'Owned held presentation selection', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"toBeVisible\" getByRole('heading', { name: 'Owned held presentation selection', exact: true }) with timeout 10000ms\n  - waiting for getByRole('heading', { name: 'Owned held presentation selection', exact: true })",
+                        "stack": "Error: expect(locator).toBeVisible() failed\n\nLocator: getByRole('heading', { name: 'Owned held presentation selection', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"toBeVisible\" getByRole('heading', { name: 'Owned held presentation selection', exact: true }) with timeout 10000ms\n  - waiting for getByRole('heading', { name: 'Owned held presentation selection', exact: true })\n\n    at <repo>/.studio-local/hybrid-comparison/parameter-group-control/group.spec.ts:34:76",
+                        "location": {
+                          "file": "<repo>/.studio-local/hybrid-comparison/parameter-group-control/group.spec.ts",
+                          "column": 76,
+                          "line": 34
+                        },
+                        "snippet": "  32 |     await page.reload();\n  33 |     await page.getByRole(\"navigation\",{name:\"Main navigation\"}).getByRole(\"button\",{name:\"Workspace\",exact:true}).click();\n> 34 |     await expect(page.getByRole(\"heading\",{name:project.name,exact:true})).toBeVisible();\n     |                                                                            ^\n  35 |     const parameters=page.getByRole(\"button\",{name:\"Parameters\",exact:true});await tabTo(page,parameters);await page.keyboard.press(\"Enter\");await ready;\n  36 |     const duration=page.getByLabel(\"Duration\");await expect(duration).toHaveValue(\"6\");await tabTo(page,duration);await page.keyboard.press(\"ControlOrMeta+A\");\n  37 |     const original=await duration.elementHandle();release();await done;"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "<repo>/.studio-local/hybrid-comparison/parameter-group-control/group.spec.ts",
+                            "column": 76,
+                            "line": 34
+                          },
+                          "message": "Error: expect(locator).toBeVisible() failed\n\nLocator: getByRole('heading', { name: 'Owned held presentation selection', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"toBeVisible\" getByRole('heading', { name: 'Owned held presentation selection', exact: true }) with timeout 10000ms\n  - waiting for getByRole('heading', { name: 'Owned held presentation selection', exact: true })\n\n\n  32 |     await page.reload();\n  33 |     await page.getByRole(\"navigation\",{name:\"Main navigation\"}).getByRole(\"button\",{name:\"Workspace\",exact:true}).click();\n> 34 |     await expect(page.getByRole(\"heading\",{name:project.name,exact:true})).toBeVisible();\n     |                                                                            ^\n  35 |     const parameters=page.getByRole(\"button\",{name:\"Parameters\",exact:true});await tabTo(page,parameters);await page.keyboard.press(\"Enter\");await ready;\n  36 |     const duration=page.getByLabel(\"Duration\");await expect(duration).toHaveValue(\"6\");await tabTo(page,duration);await page.keyboard.press(\"ControlOrMeta+A\");\n  37 |     const original=await duration.elementHandle();release();await done;\n    at <repo>/.studio-local/hybrid-comparison/parameter-group-control/group.spec.ts:34:76"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-28T17:19:05.329Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "owned-provider-observation",
+                          "contentType": "application/json",
+                          "body": "eyJzY29wZSI6ICJvd25lZCBpbi1tZW1vcnkgZml4dHVyZTsgbm8gZXF1aXBtZW50IiwgInNjZW5hcmlvIjogIm9ic2VydmUiLCAiY2FsbHMiOiBbImludmVudG9yeSJdLCAicmVzZXJ2YXRpb25Db3VudCI6IDAsICJyZW1haW5pbmdQcm92aWRlckxlYXNlcyI6IDAsICJwcmVwYXJhdGlvblNlY29uZHMiOiAwLjE1MTAwMjM0Mjk4NzMzOTk0fQo="
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "<repo>/.studio-local/hybrid-comparison/parameter-group-control/before/browser/group-labelled-held-actual-e6249-elect-all-and-unsaved-value/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "<repo>/.studio-local/hybrid-comparison/parameter-group-control/group.spec.ts",
+                        "column": 76,
+                        "line": 34
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "fffb772da385012f6740-74c264a5c8846f19354b",
+              "file": "group.spec.ts",
+              "line": 11,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-28T17:18:52.272Z",
+    "duration": 25659.083,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  }
+}

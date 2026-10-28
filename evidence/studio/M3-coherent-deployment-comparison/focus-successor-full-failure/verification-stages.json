@@ -1,0 +1,56 @@
+[
+  {
+    "stage": "lint",
+    "command": [
+      "<repo>/.venv/bin/python",
+      "-I",
+      "-m",
+      "ruff",
+      "check",
+      "--select",
+      "F821",
+      "services/studio-api/src",
+      "scripts",
+      "tests"
+    ],
+    "startedAt": "2026-10-28T16:37:13.604764+00:00",
+    "seconds": 0.052841074008028954,
+    "exitCode": 0,
+    "inputsIdentical": true
+  },
+  {
+    "stage": "collection",
+    "command": [
+      "<tool-cache>/node-v24.22.1-linux-x64/bin/node",
+      "node_modules/@playwright/test/cli.js",
+      "test",
+      "-c",
+      "tests/e2e/playwright.config.ts",
+      "--list"
+    ],
+    "startedAt": "2026-10-28T16:37:13.657720+00:00",
+    "seconds": 0.6359405650000554,
+    "exitCode": 0,
+    "inputsIdentical": true
+  },
+  {
+    "stage": "browser-full",
+    "command": [
+      "<repo>/.venv/bin/python",
+      "-I",
+      "scripts/test_browser.py"
+    ],
+    "startedAt": "2026-10-28T16:37:14.293895+00:00",
+    "seconds": 2579.0417155479954,
+    "exitCode": 1,
+    "inputsIdentical": true,
+    "stats": {
+      "startTime": "2026-10-28T16:37:15.375Z",
+      "duration": 2576628.42,
+      "expected": 601,
+      "skipped": 0,
+      "unexpected": 1,
+      "flaky": 0
+    }
+  }
+]

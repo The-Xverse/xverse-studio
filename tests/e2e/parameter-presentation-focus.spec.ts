@@ -106,10 +106,14 @@ for (const mode of ["apply", "field", "enum", "elsewhere", "dialog", "depart"])
             page.getByRole("heading", { name: "Recent projects", exact: true }),
           ).toBeVisible();
         }
+        const inForm = mode === "apply" || mode === "field" || mode === "enum";
+        const originalControl = inForm
+          ? await (mode === "apply" ? button : field).elementHandle()
+          : null;
         expect(presentation.formGroups.length).toBeGreaterThan(0);
         release();
         await delivered;
-        if (mode !== "depart")
+        if (mode !== "depart" && !inForm)
           await expect(
             page.getByRole("group", { name: "Run horizon", exact: true }),
           ).toBeVisible();
@@ -130,6 +134,10 @@ for (const mode of ["apply", "field", "enum", "elsewhere", "dialog", "depart"])
           }),
         });
         if (mode === "apply" || mode === "field" || mode === "enum") {
+          // Metadata must not replace a focused native control or its selection.
+          expect(
+            await originalControl!.evaluate((node) => node.isConnected),
+          ).toBe(true);
           await expect(mode === "apply" ? button : field).toBeFocused();
           if (mode === "enum") await tabTo(page, button);
           await page.keyboard.press("Enter");
@@ -147,6 +155,13 @@ for (const mode of ["apply", "field", "enum", "elsewhere", "dialog", "depart"])
           expect(saved.revision).toBe(project.revision + 1);
           await expect(field).toHaveValue(expectedValue);
           await expect(field).toBeFocused();
+          // Inert group membership is applied only after native focus leaves the form.
+          await tabTo(page, outside);
+          await expect(
+            page.getByRole("group", { name: "Run horizon", exact: true }),
+          ).toBeVisible();
+          await expect(outside).toBeFocused();
+          await expect(field).toHaveValue(expectedValue);
         } else {
           if (mode === "elsewhere") await expect(outside).toBeFocused();
           if (mode === "dialog") {

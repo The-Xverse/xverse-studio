@@ -894,6 +894,18 @@ function ParameterForm({
     origin: Element;
   } | null>(null);
   const presentation = useContext(PresentationContext);
+  const groupHost = useRef<HTMLDivElement>(null),
+    groupProject = useRef(projectId);
+  const [groupPresentation, setGroupPresentation] = useState(presentation);
+  // Inert metadata may arrive between native Select All and typing. Reparenting a
+  // focused input would replace its DOM node and discard the browser selection.
+  // Apply group membership after focus leaves this form; source values stay live.
+  useLayoutEffect(() => {
+    const changedProject = groupProject.current !== projectId;
+    groupProject.current = projectId;
+    if (changedProject || !groupHost.current?.contains(document.activeElement))
+      setGroupPresentation(presentation);
+  }, [presentation, projectId]);
   useLayoutEffect(() => {
     const previous = focusedControl.current;
     if (!previous || previous.node.isConnected) return;
@@ -1011,7 +1023,7 @@ function ParameterForm({
   // Domain form groups only arrange the same parameters; ungrouped ones stay listed.
   const groups: { id: string; label: string; items: Parameter[] }[] = [];
   const placed = new Set<string>();
-  for (const group of presentation.formGroups || []) {
+  for (const group of groupPresentation.formGroups || []) {
     const items = parameters.filter(
       (p) => group.parameters.includes(p.id) && !placed.has(p.id),
     );
@@ -1026,7 +1038,15 @@ function ParameterForm({
       items: rest,
     });
   return (
-    <div className="parameter-form">
+    <div
+      className="parameter-form"
+      ref={groupHost}
+      onBlurCapture={(event) => {
+        const next = event.relatedTarget;
+        if (!(next instanceof Node) || !event.currentTarget.contains(next))
+          setGroupPresentation(presentation);
+      }}
+    >
       {groups.map((group) => (
         <fieldset className="parameter-group" key={group.id}>
           {group.label && <legend>{group.label}</legend>}
