@@ -223,3 +223,30 @@ The original wizard/history assertions remain unchanged. Original CI failure, co
 isolated proposal evidence are retained in `evidence/studio/M4-campaign-worker-failure/`;
 main-application successor evidence is recorded separately. Linux browser checks do not establish
 native Windows, actual assistive-technology, novice usability or complete milestone acceptance.
+
+Automatic-default recovery amendment (2026-10-28): an asynchronous Deployment
+observation may initialize its sole compatible default after an explicit recovery
+request has started. That initialization still invalidates readiness, but is not a
+new authoring or navigation intent. A requested-project switch may therefore accept
+the authoritative recovery result while the captured project/load generation and
+actual workspace interaction remain current, with no open dialog. Same-project
+completion retains its previous intent checks. New user typing, pointer/keyboard
+interaction, another project/load, or a newer modal still supersedes the switch;
+known equal/newer heads cannot be replaced. No backend transaction, immutable backup,
+XDL identity, preflight authority or execution capability changes.
+
+Modal transitions also advance the interaction generation when no Project is
+rendered. Opening and closing a newer Home dialog therefore supersedes a pending
+recovery switch even after that dialog disappears. The backend recovery can still
+commit independently; its late reply cannot replace the user's newer Home context.
+
+The controlled native witness holds the initial default until its Deployment view
+has unmounted, then delivers the remounted prior project's real default after the
+requested recovery has committed and before its response reaches the browser.
+Both original unreadable-target cases reproduce the missing-heading symptom with
+unmodified HTTP bodies and application assertions. The exact original CI timing
+was not captured and is not inferred from this controlled reproduction. Permanent
+`recovery-default-initialization.spec.ts` covers this order alongside newer native
+variant drafts and actual source dialogs; each case checks authoritative recovered
+revision/source, preserved unreadable backup bytes, unchanged prior documents and
+absence of new runs. Existing recovery/context assertions and thresholds remain.

@@ -3,7 +3,7 @@
 Scope: runnable development reference implementation on `implement/studio-m0-m4`. No M0–M4 milestone
 or Studio 1.0 release is accepted. The supplied requirements/task IDs and acceptance targets remain.
 
-Latest verified work adds the reservation workspace over the configured native-host API: fresh full1,068 backend tests,117 affected browser checks and2 performance checks pass unchanged selected inputs. The clean f921d52 Linux package passes with110 verified files and6 identical tested UI assets; full508 browser verification is not run for this UI. Fixture scope remains explicit; a later fixture-only lifecycle repair now retains34 fresh required raw callback/preparation observations, while earlier missing records remain qualified. Work resumed on2026-10-28 after the requested verification pause. No M0–M4 milestone is accepted; actual hardware, native Windows, connection tests and active-run integration remain open.
+Latest verified work preserves requested recovery after automatic defaults while respecting newer Home/modal intent, and suppresses421 identical SQL writes per200 stable run reads without skipping ownership/evidence checks. Fresh1078 backend/73 affected browser/full516 browser/performance2 pass with321 selected source/config/compiled inputs unchanged. Cold verification remains~5.34s; no broad latency or original-failure cause is inferred. Current trace claims workflow passes with bounded metadata diagnostics; the older515/1 remains failed evidence with uncaptured scheduling. Native reservation results are fixtures, not hardware acceptance. A clean committed successor package is pending; olderf921 remains its original identity. Publishedaf45 push1068/508/package110 succeeds; PR1068/508 cases pass then75min cancels cleanup/package. The local job budget is120min with application thresholds unchanged, not yet executed remotely. Counts47/43/10 and zero accepted milestones remain unchanged. Held Windows, actual hardware, human/AT/SADS, connection tests, active-run integration and full gates remain open.
 
 Latest recorded task completion: **47/100 components**, most recently T072's read-only inventory/binding observations
 (ADR-0018) and T076's hybrid substitution/loss fixtures (`evidence/studio/M3-assets/`,
@@ -21,8 +21,8 @@ T058's resolution and T059's resolution panel, variant comparison and resource/t
 (`evidence/studio/M2-deployment-forms/`) are complete after an independent closure audit. T048's Linux round-trip execution
 against the pinned CLI is recorded in `evidence/studio/M2-roundtrip/`; its Windows exchange clause
 remains blocked. This is an audited task count,
-not an estimate of remaining effort. T026 transport implementation is substantially repaired but
-remains open pending a complete current native/browser successor. Windows installation/testing
+not an estimate of remaining effort. T026 transport implementation has fresh Linux backend/browser successor coverage;
+its full cross-host and acceptance obligations remain open. Windows installation/testing
 remains blocked at user request, and native Windows secure I/O remains unimplemented/unavailable.
 
 T001's planned machine-readable baseline is now present in `config/platform-compatibility.json`,

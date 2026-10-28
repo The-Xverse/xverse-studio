@@ -515,3 +515,53 @@ Clean reservation-workspace package successor on2026-10-28: product f921d52330a6
 
 
 Native fixture shutdown observation successor: pinned Uvicorn0.41.0 signal replay explains why an outer Server.run finally can lose the optional record. Requiring it reproduces2 native teardown failures after application assertions. The fixture preserves/wraps original ASGI lifespan, records after original shutdown before replay, and requires closed/bounded callback observations; setup failures propagate. Fresh34 configured native journeys pass with34 actual raw fixture records, including51 real history acquisitions in each pagination case. Only tests/e2e/lab-fixture.ts and tests/fixtures/providers/physical/browser_host.py change; all110 customer payloads and production/backend/UI/performance bytes remain identical, preserving1068/default83/performance2 and clean f921 package scope. No new full508/hardware/Windows/AT/milestone acceptance. Old absent records remain qualified. Existing a12 recovery CI failure remains unexplained despite its2 unchanged current native cases passing. Evidence evidence/studio/M3-fixture-shutdown-observation/. Counts47/43/10 and zero accepted milestones unchanged.
+
+T073/T074 native restart supplement: two actual Linux backend SIGKILL/restart probes and
+two permanent pytest cases pass with unchanged159 published backend/fixture/lock inputs.
+Confirmed and lost-ack leases remain unknown after volatile provider-state loss; same-key
+receipts preserve identity, renewal refuses and explicit inspection never reacquires.
+The new Python-only test changes none of the315 frozen browser inputs. Evidence:
+`evidence/studio/M3-native-reservation-restart/`. External-provider persistence, in-flight
+delegation crashes, active-run renewal/loss, actual hardware and held Windows remain
+open. T073/T074 stay unchecked; counts47/43/10 and zero accepted milestones are unchanged.
+
+T073/T074 in-flight native interruption supplement:107 focused contract/registry/HTTP/native
+tests pass on319 inputs frozen before/after, including3 new boundary crashes and2 prior
+volatile-provider crashes. Exact original operation/reservation identity survives; retries
+never reacquire and only explicit original recorded-fence inspection can restore ownership.
+Provider continuity is a durable JSON fixture. Physical-command API distinctions, automatic
+run renewal/loss, actual hardware and held Windows remain open; no task/milestone closes.
+See `evidence/studio/M3-native-reservation-interruption/`. Publishedaf45890 PR CI reported
+508 browser passes, then its75-minute job budget cancelled cleanup and skipped package;
+the successor job budget is120 minutes with unchanged application thresholds, not yet run.
+
+
+Current recovery-successor full516 verification ends515passed/1trace-claims UI failure;
+performance is NOT_RUN. Backend annotationrevision2 committed while the row stayedrevision1.
+Investigation is open; no failed run is represented as a pass and all task states remain.
+
+Failure evidence retained at `evidence/studio/M2-recovery-default-followup-failure/`;
+isolated observer-only1PASS is a countercheck, not closure. Original response timing
+is uncaptured; performance/package successor remain NOT_RUN and all task states unchanged.
+
+Run-read persistence repair: actual200 stable recorded-run reads performed421 unchanged SQL writes; canonical before/after comparisons now suppress all421 while preserving returned bodies and managed files. Every read still observes ownership, worker state, command outcomes, journal integrity and assessments; changed facts persist and changed-write errors still propagate. Five new regressions plus20 existing lifecycle/history/identity checks pass; original4red and passing persistence-failure control retained. Cold verification remainsabout5.34s and no broad latency or original trace-failure cause is inferred. The trace test adds only512-bounded metadata diagnostics with exact inverse to original assertions. Full1078 backend/73 affected/full516 browser/performance2 are pending on321 frozen inputs, so earlier515/1 stays failed and no fresh full1078 pass or package is claimed. Evidence: evidence/studio/M1-run-read-persistence/; ADR-0026.47/43/10 and zero accepted milestones unchanged; Windows/live/hardware/human/AT/SADS gates remain open.
+
+Fresh run-read successor full backend1078 passes with321 inputs unchanged;
+73 affected browser cases are running and full516/performance2 remain queued.
+See `evidence/studio/M1-run-read-persistence/full-backend-verification.json`.
+This does not close the historical515/1 UI failure, any task or milestone.
+
+Fresh run-read successor affected-browser73 passes on321 unchanged inputs,
+including trace-claims, annotation context and the full Studio workflow. Full516
+is running and performance2 is queued. The older515/1 result remains historical
+failed evidence; all task/milestone states remain unchanged.
+
+Current implementation metadata now identifies the321-input working-tree successor,
+fresh1078 backend/73 affected-browser passes and pending full516/performance/package.
+Earlier code/package descriptions and the515/1 local failure remain historical
+records. No task definition, dependency, status or checkbox changed.
+
+
+Recovery-order controls are now retained as sanitized text: original controlled2 fail before/2 pass after; first six4pass/2fail before then6pass; both newer closed-Home-dialog viewport cases fail before modal tracking; current8 pass in fresh73 affected/1078 backend successor. Two-block App inverse exactly restoresaf45890 and the complete original source-recovery test file is unchanged. Full516/performance2 remain pending; original CI timing, interrupted235/279 and failed515/1 stay qualified. Evidence: evidence/studio/M2-recovery-default-initialization/. No task/milestone closure;47/43/10 unchanged.
+
+Fresh combined successor verification passes1078 backend/73 affected browser/full516 browser/performance2 with321 source/config/compiled inputs unchanged across all stages. It covers App recovery/default/Home intent, current native reservation tests and changed-run-only persistence. Current full trace workflow passes with bounded metadata diagnostics; historical515/1 and exact original scheduling cause remain qualified. No individual timeout/assertion/performance threshold changed. Source is not yet a clean packaged commit. Evidence: evidence/studio/M1-run-read-persistence/final/ and evidence/studio/M2-recovery-default-initialization/. Counts47/43/10 and zero accepted milestones unchanged; native Windows/hardware/human/AT/SADS/full gates remain open.

@@ -1,0 +1,410 @@
+{
+  "config": {
+    "argv": [
+      "<tool-cache>/node-v24.22.1-linux-x64/bin/node",
+      "<repo>/node_modules/.bin/playwright",
+      "test",
+      "-c",
+      "tests/e2e/playwright.config.ts",
+      "--grep",
+      "recovery default initialization:"
+    ],
+    "configFile": "<repo>/tests/e2e/playwright.config.ts",
+    "rootDir": "<repo>/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "<repo>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "<repo>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "*.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "<repo>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "<repo>/tests/e2e",
+        "snapshotDir": "<repo>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": "*.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "baseURL": "http://127.0.0.1:57081",
+          "browserName": "chromium",
+          "actionTimeout": 15000,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "trace": "off",
+          "screenshot": "only-on-failure",
+          "video": "off"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "<repo>/test-results/browser-report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "recovery-default-initialization.spec.ts",
+      "file": "recovery-default-initialization.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "recovery default initialization: newer none at 1024",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 12985,
+                  "error": {
+                    "message": "Error: expect(locator).toBeVisible() failed\n\nLocator: getByRole('heading', { name: 'Process control reference', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"toBeVisible\" getByRole('heading', { name: 'Process control reference', exact: true }) with timeout 10000ms\n  - waiting for getByRole('heading', { name: 'Process control reference', exact: true })",
+                    "stack": "Error: expect(locator).toBeVisible() failed\n\nLocator: getByRole('heading', { name: 'Process control reference', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"toBeVisible\" getByRole('heading', { name: 'Process control reference', exact: true }) with timeout 10000ms\n  - waiting for getByRole('heading', { name: 'Process control reference', exact: true })\n\n    at <repo>/tests/e2e/recovery-default-initialization.spec.ts:110:94",
+                    "location": {
+                      "file": "<repo>/tests/e2e/recovery-default-initialization.spec.ts",
+                      "column": 94,
+                      "line": 110
+                    },
+                    "snippet": "  108 |         await page.waitForLoadState(\"networkidle\");\n  109 |         if (newer === \"none\") {\n> 110 |           await expect(page.getByRole(\"heading\", { name: owned.project.name, exact: true })).toBeVisible();\n      |                                                                                              ^\n  111 |           await expect(page.getByRole(\"tab\", { name: \"Model\", exact: true })).toHaveAttribute(\"aria-selected\", \"true\");\n  112 |           await expect(page.getByRole(\"button\", { name: \"XDL source\", exact: true })).toBeFocused();\n  113 |         } else {"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/recovery-default-initialization.spec.ts",
+                        "column": 94,
+                        "line": 110
+                      },
+                      "message": "Error: expect(locator).toBeVisible() failed\n\nLocator: getByRole('heading', { name: 'Process control reference', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"toBeVisible\" getByRole('heading', { name: 'Process control reference', exact: true }) with timeout 10000ms\n  - waiting for getByRole('heading', { name: 'Process control reference', exact: true })\n\n\n  108 |         await page.waitForLoadState(\"networkidle\");\n  109 |         if (newer === \"none\") {\n> 110 |           await expect(page.getByRole(\"heading\", { name: owned.project.name, exact: true })).toBeVisible();\n      |                                                                                              ^\n  111 |           await expect(page.getByRole(\"tab\", { name: \"Model\", exact: true })).toHaveAttribute(\"aria-selected\", \"true\");\n  112 |           await expect(page.getByRole(\"button\", { name: \"XDL source\", exact: true })).toBeFocused();\n  113 |         } else {\n    at <repo>/tests/e2e/recovery-default-initialization.spec.ts:110:94"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T08:29:16.508Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/recovery-default-initializ-e758f-lization-newer-none-at-1024/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/recovery-default-initialization.spec.ts",
+                    "column": 94,
+                    "line": 110
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "cdf807e7258b1f994efe-3f22d91e316c66397c9a",
+          "file": "recovery-default-initialization.spec.ts",
+          "line": 30,
+          "column": 9
+        },
+        {
+          "title": "recovery default initialization: newer draft at 1024",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3184,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T08:29:29.876Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "recovery-default-order",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJuZXdlciI6ImRyYWZ0IiwiZXZlbnRzIjpbeyJwaGFzZSI6ImRlZmF1bHQtZGVsaXZlcmVkIiwib2JzZXJ2YXRpb24iOjEsInZhcmlhbnRSZWYiOiJ4ZGw6Ly9vcmcueHZlcnNlLnN0dWRpby5wcm9jZXNzLWNvbnRyb2wvZGVwbG95bWVudC9sb2NhbC1yZWZlcmVuY2UifSx7InBoYXNlIjoicmVjb3ZlcnktY29tbWl0dGVkIiwicmV2aXNpb24iOjJ9LHsicGhhc2UiOiJkZWZhdWx0LWRlbGl2ZXJlZCIsIm9ic2VydmF0aW9uIjoyLCJ2YXJpYW50UmVmIjoieGRsOi8vb3JnLnh2ZXJzZS5zdHVkaW8ucHJvY2Vzcy1jb250cm9sL2RlcGxveW1lbnQvbG9jYWwtcmVmZXJlbmNlIn0seyJwaGFzZSI6InByaW9yLWF1dG9tYXRpYy1kZWZhdWx0LWFwcGxpZWQiLCJwcmlvcklkIjoicHJqLWFjMmNlNzVhLWE4OGItNDhlMy1hZmE2LTc5N2QxZjY4YzJiZiJ9XSwiYmFja2VuZFJldmlzaW9uIjoyLCJiYWNrdXBQcmVzZXJ2ZWQiOnRydWUsInByaW9yRG9jdW1lbnRzVW5jaGFuZ2VkIjp0cnVlLCJub1J1biI6dHJ1ZSwic2NvcGUiOiJSZWFsIEhUVFAgYm9kaWVzIGRlbGliZXJhdGVseSBvcmRlcmVkOyBvd25lZCB1bnJlYWRhYmxlLXNvdXJjZSBmaXh0dXJlLCBubyBTdGFydCJ9Cg=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "cdf807e7258b1f994efe-e6ad974c9097f55b2090",
+          "file": "recovery-default-initialization.spec.ts",
+          "line": 30,
+          "column": 9
+        },
+        {
+          "title": "recovery default initialization: newer dialog at 1024",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2625,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T08:29:33.121Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "recovery-default-order",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJuZXdlciI6ImRpYWxvZyIsImV2ZW50cyI6W3sicGhhc2UiOiJkZWZhdWx0LWRlbGl2ZXJlZCIsIm9ic2VydmF0aW9uIjoxLCJ2YXJpYW50UmVmIjoieGRsOi8vb3JnLnh2ZXJzZS5zdHVkaW8ucHJvY2Vzcy1jb250cm9sL2RlcGxveW1lbnQvbG9jYWwtcmVmZXJlbmNlIn0seyJwaGFzZSI6InJlY292ZXJ5LWNvbW1pdHRlZCIsInJldmlzaW9uIjoyfSx7InBoYXNlIjoiZGVmYXVsdC1kZWxpdmVyZWQiLCJvYnNlcnZhdGlvbiI6MiwidmFyaWFudFJlZiI6InhkbDovL29yZy54dmVyc2Uuc3R1ZGlvLnByb2Nlc3MtY29udHJvbC9kZXBsb3ltZW50L2xvY2FsLXJlZmVyZW5jZSJ9LHsicGhhc2UiOiJwcmlvci1hdXRvbWF0aWMtZGVmYXVsdC1hcHBsaWVkIiwicHJpb3JJZCI6InByai0zMjNmZjQ5OC0xNGRlLTQzMmYtYmIwNy1jNDA3MDhhNTcxMzcifV0sImJhY2tlbmRSZXZpc2lvbiI6MiwiYmFja3VwUHJlc2VydmVkIjp0cnVlLCJwcmlvckRvY3VtZW50c1VuY2hhbmdlZCI6dHJ1ZSwibm9SdW4iOnRydWUsInNjb3BlIjoiUmVhbCBIVFRQIGJvZGllcyBkZWxpYmVyYXRlbHkgb3JkZXJlZDsgb3duZWQgdW5yZWFkYWJsZS1zb3VyY2UgZml4dHVyZSwgbm8gU3RhcnQifQo="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "cdf807e7258b1f994efe-0daf365363aba37afae6",
+          "file": "recovery-default-initialization.spec.ts",
+          "line": 30,
+          "column": 9
+        },
+        {
+          "title": "recovery default initialization: newer none at 1440",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 12578,
+                  "error": {
+                    "message": "Error: expect(locator).toBeVisible() failed\n\nLocator: getByRole('heading', { name: 'Process control reference', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"toBeVisible\" getByRole('heading', { name: 'Process control reference', exact: true }) with timeout 10000ms\n  - waiting for getByRole('heading', { name: 'Process control reference', exact: true })",
+                    "stack": "Error: expect(locator).toBeVisible() failed\n\nLocator: getByRole('heading', { name: 'Process control reference', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"toBeVisible\" getByRole('heading', { name: 'Process control reference', exact: true }) with timeout 10000ms\n  - waiting for getByRole('heading', { name: 'Process control reference', exact: true })\n\n    at <repo>/tests/e2e/recovery-default-initialization.spec.ts:110:94",
+                    "location": {
+                      "file": "<repo>/tests/e2e/recovery-default-initialization.spec.ts",
+                      "column": 94,
+                      "line": 110
+                    },
+                    "snippet": "  108 |         await page.waitForLoadState(\"networkidle\");\n  109 |         if (newer === \"none\") {\n> 110 |           await expect(page.getByRole(\"heading\", { name: owned.project.name, exact: true })).toBeVisible();\n      |                                                                                              ^\n  111 |           await expect(page.getByRole(\"tab\", { name: \"Model\", exact: true })).toHaveAttribute(\"aria-selected\", \"true\");\n  112 |           await expect(page.getByRole(\"button\", { name: \"XDL source\", exact: true })).toBeFocused();\n  113 |         } else {"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/recovery-default-initialization.spec.ts",
+                        "column": 94,
+                        "line": 110
+                      },
+                      "message": "Error: expect(locator).toBeVisible() failed\n\nLocator: getByRole('heading', { name: 'Process control reference', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"toBeVisible\" getByRole('heading', { name: 'Process control reference', exact: true }) with timeout 10000ms\n  - waiting for getByRole('heading', { name: 'Process control reference', exact: true })\n\n\n  108 |         await page.waitForLoadState(\"networkidle\");\n  109 |         if (newer === \"none\") {\n> 110 |           await expect(page.getByRole(\"heading\", { name: owned.project.name, exact: true })).toBeVisible();\n      |                                                                                              ^\n  111 |           await expect(page.getByRole(\"tab\", { name: \"Model\", exact: true })).toHaveAttribute(\"aria-selected\", \"true\");\n  112 |           await expect(page.getByRole(\"button\", { name: \"XDL source\", exact: true })).toBeFocused();\n  113 |         } else {\n    at <repo>/tests/e2e/recovery-default-initialization.spec.ts:110:94"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T08:29:35.755Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/recovery-default-initializ-af712-lization-newer-none-at-1440/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/recovery-default-initialization.spec.ts",
+                    "column": 94,
+                    "line": 110
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "cdf807e7258b1f994efe-0798de8af6c358f7dfeb",
+          "file": "recovery-default-initialization.spec.ts",
+          "line": 30,
+          "column": 9
+        },
+        {
+          "title": "recovery default initialization: newer draft at 1440",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3037,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T08:29:48.654Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "recovery-default-order",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJuZXdlciI6ImRyYWZ0IiwiZXZlbnRzIjpbeyJwaGFzZSI6ImRlZmF1bHQtZGVsaXZlcmVkIiwib2JzZXJ2YXRpb24iOjEsInZhcmlhbnRSZWYiOiJ4ZGw6Ly9vcmcueHZlcnNlLnN0dWRpby5wcm9jZXNzLWNvbnRyb2wvZGVwbG95bWVudC9sb2NhbC1yZWZlcmVuY2UifSx7InBoYXNlIjoicmVjb3ZlcnktY29tbWl0dGVkIiwicmV2aXNpb24iOjJ9LHsicGhhc2UiOiJkZWZhdWx0LWRlbGl2ZXJlZCIsIm9ic2VydmF0aW9uIjoyLCJ2YXJpYW50UmVmIjoieGRsOi8vb3JnLnh2ZXJzZS5zdHVkaW8ucHJvY2Vzcy1jb250cm9sL2RlcGxveW1lbnQvbG9jYWwtcmVmZXJlbmNlIn0seyJwaGFzZSI6InByaW9yLWF1dG9tYXRpYy1kZWZhdWx0LWFwcGxpZWQiLCJwcmlvcklkIjoicHJqLTZmNGUwZGM1LWRkOTktNDE1YS1iYzU2LWI0OTc4MmFkMTBkMyJ9XSwiYmFja2VuZFJldmlzaW9uIjoyLCJiYWNrdXBQcmVzZXJ2ZWQiOnRydWUsInByaW9yRG9jdW1lbnRzVW5jaGFuZ2VkIjp0cnVlLCJub1J1biI6dHJ1ZSwic2NvcGUiOiJSZWFsIEhUVFAgYm9kaWVzIGRlbGliZXJhdGVseSBvcmRlcmVkOyBvd25lZCB1bnJlYWRhYmxlLXNvdXJjZSBmaXh0dXJlLCBubyBTdGFydCJ9Cg=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "cdf807e7258b1f994efe-9dc97b699af7d34afd20",
+          "file": "recovery-default-initialization.spec.ts",
+          "line": 30,
+          "column": 9
+        },
+        {
+          "title": "recovery default initialization: newer dialog at 1440",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2844,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T08:29:51.750Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "recovery-default-order",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJuZXdlciI6ImRpYWxvZyIsImV2ZW50cyI6W3sicGhhc2UiOiJkZWZhdWx0LWRlbGl2ZXJlZCIsIm9ic2VydmF0aW9uIjoxLCJ2YXJpYW50UmVmIjoieGRsOi8vb3JnLnh2ZXJzZS5zdHVkaW8ucHJvY2Vzcy1jb250cm9sL2RlcGxveW1lbnQvbG9jYWwtcmVmZXJlbmNlIn0seyJwaGFzZSI6InJlY292ZXJ5LWNvbW1pdHRlZCIsInJldmlzaW9uIjoyfSx7InBoYXNlIjoiZGVmYXVsdC1kZWxpdmVyZWQiLCJvYnNlcnZhdGlvbiI6MiwidmFyaWFudFJlZiI6InhkbDovL29yZy54dmVyc2Uuc3R1ZGlvLnByb2Nlc3MtY29udHJvbC9kZXBsb3ltZW50L2xvY2FsLXJlZmVyZW5jZSJ9LHsicGhhc2UiOiJwcmlvci1hdXRvbWF0aWMtZGVmYXVsdC1hcHBsaWVkIiwicHJpb3JJZCI6InByai1iNTBjNzFjMS0wNGNkLTRiMGUtOWNiZi05YmM2Yzc5NmY1ZGUifV0sImJhY2tlbmRSZXZpc2lvbiI6MiwiYmFja3VwUHJlc2VydmVkIjp0cnVlLCJwcmlvckRvY3VtZW50c1VuY2hhbmdlZCI6dHJ1ZSwibm9SdW4iOnRydWUsInNjb3BlIjoiUmVhbCBIVFRQIGJvZGllcyBkZWxpYmVyYXRlbHkgb3JkZXJlZDsgb3duZWQgdW5yZWFkYWJsZS1zb3VyY2UgZml4dHVyZSwgbm8gU3RhcnQifQo="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "cdf807e7258b1f994efe-6a2ee96f95e0778df51a",
+          "file": "recovery-default-initialization.spec.ts",
+          "line": 30,
+          "column": 9
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-28T08:29:15.796Z",
+    "duration": 38844.992999999995,
+    "expected": 4,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  }
+}

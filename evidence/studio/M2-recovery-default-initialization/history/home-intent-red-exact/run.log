@@ -1,0 +1,72 @@
+
+Running 2 tests using 1 worker
+
+(node:2166726) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 tests/e2e/recovery-default-initialization.spec.ts:141:7 › recovery default initialization: closed newer Home dialog at 1024 (23.9s)
+(node:2167125) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 tests/e2e/recovery-default-initialization.spec.ts:141:7 › recovery default initialization: closed newer Home dialog at 1440 (16.9s)
+
+
+  1) tests/e2e/recovery-default-initialization.spec.ts:141:7 › recovery default initialization: closed newer Home dialog at 1024
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('heading', { name: 'Start with an example', exact: true })
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('heading', { name: 'Start with an example', exact: true }) with timeout 10000ms
+      - waiting for getByRole('heading', { name: 'Start with an example', exact: true })
+
+
+      177 |       const reply = page.waitForResponse((r) => new URL(r.url()).pathname === `/api/v1/projects/${project.projectId}/recoveries` && r.request().method() === "POST");
+      178 |       deliver.release(); expect((await reply).status()).toBe(200); await page.waitForLoadState("networkidle");
+    > 179 |       await expect(page.getByRole("heading", { name: "Start with an example", exact: true })).toBeVisible();
+          |                                                                                               ^
+      180 |       await expect(page.getByRole("heading", { name: project.name, exact: true })).toHaveCount(0);
+      181 |       await expect(page.getByRole("dialog")).toHaveCount(0);
+      182 |       const current = await get(page, `/api/v1/projects/${project.projectId}`);
+        at <repo>/tests/e2e/recovery-default-initialization.spec.ts:179:95
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    .studio-local/source-recovery-ci-review/home-intent-red-exact/output/recovery-default-initializ-fdfd0-d-newer-Home-dialog-at-1024/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: .studio-local/source-recovery-ci-review/home-intent-red-exact/output/recovery-default-initializ-fdfd0-d-newer-Home-dialog-at-1024/error-context.md
+
+  2) tests/e2e/recovery-default-initialization.spec.ts:141:7 › recovery default initialization: closed newer Home dialog at 1440
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('heading', { name: 'Start with an example', exact: true })
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('heading', { name: 'Start with an example', exact: true }) with timeout 10000ms
+      - waiting for getByRole('heading', { name: 'Start with an example', exact: true })
+
+
+      177 |       const reply = page.waitForResponse((r) => new URL(r.url()).pathname === `/api/v1/projects/${project.projectId}/recoveries` && r.request().method() === "POST");
+      178 |       deliver.release(); expect((await reply).status()).toBe(200); await page.waitForLoadState("networkidle");
+    > 179 |       await expect(page.getByRole("heading", { name: "Start with an example", exact: true })).toBeVisible();
+          |                                                                                               ^
+      180 |       await expect(page.getByRole("heading", { name: project.name, exact: true })).toHaveCount(0);
+      181 |       await expect(page.getByRole("dialog")).toHaveCount(0);
+      182 |       const current = await get(page, `/api/v1/projects/${project.projectId}`);
+        at <repo>/tests/e2e/recovery-default-initialization.spec.ts:179:95
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    .studio-local/source-recovery-ci-review/home-intent-red-exact/output/recovery-default-initializ-9841d-d-newer-Home-dialog-at-1440/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: .studio-local/source-recovery-ci-review/home-intent-red-exact/output/recovery-default-initializ-9841d-d-newer-Home-dialog-at-1440/error-context.md
+
+  2 failed
+    tests/e2e/recovery-default-initialization.spec.ts:141:7 › recovery default initialization: closed newer Home dialog at 1024
+    tests/e2e/recovery-default-initialization.spec.ts:141:7 › recovery default initialization: closed newer Home dialog at 1440

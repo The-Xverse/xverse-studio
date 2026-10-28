@@ -1,0 +1,27 @@
+from pathlib import Path
+from datetime import datetime,timezone
+from collections import Counter
+from copy import deepcopy
+import hashlib,json,time
+from xverse_studio.api.app import create_app
+r=Path.cwd().resolve();base=r/'.studio-local/source-recovery-ci-review';out=base/'stable-run-read-baseline';out.mkdir(mode=0o700)
+frozen=json.loads((base/'lab-conformance-final/inputs-before.json').read_text());assert len(frozen)==319 and all(hashlib.sha256((r/n).read_bytes()).hexdigest()==h for n,h in frozen.items())
+data=base/'trace-claims-investigation/full-context/data';assert data.is_dir()
+app=create_app(data,bootstrap_token='<redacted-fixture-bootstrap-token>');studio=app.state.studio
+rows=[x for x in studio.store.all('run') if x['state']=='stopped'][:200];assert len(rows)==200
+ids=[x['runId'] for x in rows]
+files={str(p.relative_to(data)):hashlib.sha256(p.read_bytes()).hexdigest() for rid in ids for p in (data/'runs'/rid).rglob('*') if p.is_file()}
+start=time.monotonic();warm=[studio.runs.read(rid) for rid in ids];warm_seconds=time.monotonic()-start
+original=studio.store.put;writes=[]
+def observed(kind,identity,body,db=None):
+ if db is not None:
+  old=db.execute('SELECT body FROM records WHERE kind=? AND id=?',(kind,identity)).fetchone()
+  writes.append(dict(kind=kind,id=identity,unchanged=old is not None and json.loads(old[0])==body))
+ return original(kind,identity,body,db)
+studio.store.put=observed
+start=time.monotonic();current=[studio.runs.read(rid) for rid in ids];seconds=time.monotonic()-start
+assert current==warm
+assert all(hashlib.sha256((data/n).read_bytes()).hexdigest()==h for n,h in files.items())
+assert all(hashlib.sha256((r/n).read_bytes()).hexdigest()==h for n,h in frozen.items())
+value=dict(observedAt=datetime.now(timezone.utc).isoformat(),scope='Actual production run reads on private derived full-context copy; no original retained-data mutation, no server route replacement, no run start/command, no hardware.',reads=200,warmSeconds=warm_seconds,stableReadSeconds=seconds,sqlRecordWrites=len(writes),writesByKind=dict(Counter(x['kind'] for x in writes)),unchangedSqlRecordWrites=sum(x['unchanged'] for x in writes),allReturnedRunBodiesUnchanged=current==warm,allSelectedRunFilesUnchanged=True,all319SourceConfigInputsUnchanged=True,originalTraceFailureCause='UNESTABLISHED; this proves redundant writes, not exact original UI request scheduling.')
+(out/'result.private.json').write_text(json.dumps(value,indent=2)+'\n');(out/'write-observations.private.json').write_text(json.dumps(writes,indent=2)+'\n');(out/'selected-input-hashes.json').write_text(json.dumps(frozen,indent=2)+'\n');(out/'run-file-hashes.private.json').write_text(json.dumps(files,indent=2)+'\n');print(json.dumps(value),flush=True)

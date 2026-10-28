@@ -1,0 +1,40 @@
+
+Running 516 tests using 1 worker
+
+(node:2165831) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓    1 tests/e2e/accessibility.spec.ts:30:7 › operability: keyboard, focus, textual status and reference workloads at 1024x768 (6.8s)
+  ✓    2 tests/e2e/accessibility.spec.ts:30:7 › operability: keyboard, focus, textual status and reference workloads at 1440x900 (6.9s)
+  ✓    3 tests/e2e/annotation-context.spec.ts:5:5 › annotation run context: rerun resets prior edits and ignores a delayed prior save refresh (10.0s)
+  ✓    4 tests/e2e/authoring-retention.spec.ts:5:5 › neutral logical assets: keyboard author, inspect, source anchor and reload without execution (7.5s)
+  ✓    5 tests/e2e/authoring-retention.spec.ts:15:5 › explicit retention: protected project, disposable project and artifact metadata-only deletion (8.2s)
+  ✘    6 tests/e2e/campaign-workflow.spec.ts:78:9 › campaign completion: accepted creation preserves newer draft at 1024 (1.3s)
+
+
+  1) tests/e2e/campaign-workflow.spec.ts:78:9 › campaign completion: accepted creation preserves newer draft at 1024
+
+    Test was interrupted.
+
+    Error: page.evaluate: Test ended.
+
+      10 |   revision?: number,
+      11 | ) {
+    > 12 |   return page.evaluate(
+         |               ^
+      13 |     async ({ path, method, body, revision }) => {
+      14 |       const { csrfToken } = await fetch("/api/v1/session").then((r) =>
+      15 |         r.json(),
+        at request (<repo>/tests/e2e/campaign-workflow.spec.ts:12:15)
+        at prepare (<repo>/tests/e2e/campaign-workflow.spec.ts:54:20)
+        at <repo>/tests/e2e/campaign-workflow.spec.ts:83:27
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    .studio-local/source-recovery-ci-review/home-intent-red/output/campaign-workflow-campaign-f25a7-eserves-newer-draft-at-1024/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: .studio-local/source-recovery-ci-review/home-intent-red/output/campaign-workflow-campaign-f25a7-eserves-newer-draft-at-1024/error-context.md
+
+  1 interrupted
+    tests/e2e/campaign-workflow.spec.ts:78:9 › campaign completion: accepted creation preserves newer draft at 1024
+  510 did not run
+  5 passed (41.5s)

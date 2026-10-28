@@ -1,0 +1,104 @@
+{
+  "boundary": "before-delegation",
+  "outcome": "passed",
+  "processes": [
+    {
+      "pid": 2212068,
+      "parent": 2211540,
+      "birthTicks": "23301615",
+      "argv": [
+        "<repo>/.venv/bin/python",
+        "-I",
+        "<repo>/tests/fixtures/providers/physical/interruption_host.py",
+        "--data",
+        "<repo>/.studio-local/lab-conformance-final-data/test_native_interruption_never0/owned interrupted backend Ω",
+        "--boundary",
+        "before-delegation",
+        "--phase",
+        "initial"
+      ]
+    },
+    {
+      "pid": 2212078,
+      "parent": 2211540,
+      "birthTicks": "23301679",
+      "argv": [
+        "<repo>/.venv/bin/python",
+        "-I",
+        "<repo>/tests/fixtures/providers/physical/interruption_host.py",
+        "--data",
+        "<repo>/.studio-local/lab-conformance-final-data/test_native_interruption_never0/owned interrupted backend Ω",
+        "--boundary",
+        "before-delegation",
+        "--phase",
+        "restart"
+      ]
+    }
+  ],
+  "durableBefore": {
+    "operation": [
+      {
+        "createdAt": 1793180357.166254,
+        "kind": "lab_reserve",
+        "operationId": "op-75b95669-15b4-4d37-b35b-c3259c09327d",
+        "principal": "local-operator",
+        "reservationId": "8cb76379-b937-4ff3-8eb3-20b3e95708aa",
+        "result": {
+          "reservationId": "8cb76379-b937-4ff3-8eb3-20b3e95708aa"
+        },
+        "route": "POST /assets/fixture:bench-sensor/reservations",
+        "status": "accepted"
+      }
+    ],
+    "lab_registry": []
+  },
+  "durableAfter": {
+    "operation": [
+      {
+        "code": "LAB_OPERATION_INTERRUPTED",
+        "createdAt": 1793180357.166254,
+        "kind": "lab_reserve",
+        "operationId": "op-75b95669-15b4-4d37-b35b-c3259c09327d",
+        "principal": "local-operator",
+        "reservationId": "8cb76379-b937-4ff3-8eb3-20b3e95708aa",
+        "result": {
+          "reservationId": "8cb76379-b937-4ff3-8eb3-20b3e95708aa"
+        },
+        "route": "POST /assets/fixture:bench-sensor/reservations",
+        "status": "unknown"
+      }
+    ],
+    "lab_registry": []
+  },
+  "pauseObservation": {
+    "boundary": "before-delegation",
+    "phase": "initial",
+    "scope": "timing-only owned fixture pause",
+    "calls": [
+      "inventory"
+    ],
+    "reservationEffects": 0,
+    "operation": {
+      "createdAt": 1793180357.166254,
+      "kind": "lab_reserve",
+      "operationId": "op-75b95669-15b4-4d37-b35b-c3259c09327d",
+      "principal": "local-operator",
+      "reservationId": "8cb76379-b937-4ff3-8eb3-20b3e95708aa",
+      "result": {
+        "reservationId": "8cb76379-b937-4ff3-8eb3-20b3e95708aa"
+      },
+      "route": "POST /assets/fixture:bench-sensor/reservations",
+      "status": "delegated"
+    }
+  },
+  "restartObservation": {
+    "scope": "owned durable fixture effect; no equipment",
+    "phase": "restart",
+    "boundary": "before-delegation",
+    "calls": [],
+    "reservationEffects": 0,
+    "heldLeases": 0
+  },
+  "effectSha256": null,
+  "scope": "Actual Linux backend crash at timing-only fixture boundary; provider continuity is a durable JSON fixture, not an actual external provider/device."
+}

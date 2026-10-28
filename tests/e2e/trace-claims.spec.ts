@@ -2,6 +2,41 @@ import { test, expect } from "@playwright/test";
 import { parse, stringify } from "yaml";
 import { connectStudio } from "./connect-studio";
 import { inspectTraceForm, traceApi } from "./trace-claims-flow";
+// Keep bounded request metadata when this workflow fails; never capture auth or bodies.
+let traceRequestDiagnostics: { events: object[]; omitted: number } = { events: [], omitted: 0 };
+test.beforeEach(async ({ page }) => {
+  traceRequestDiagnostics = { events: [], omitted: 0 };
+  const requests = new WeakMap<object, number>();
+  let sequence = 0;
+  const relevant = (url: string) => {
+    const p = new URL(url).pathname;
+    return p === "/api/v1/runs" || p.startsWith("/api/v1/annotations/") || /^\/api\/v1\/runs\/[^/]+(?:\/annotations)?$/.test(p);
+  };
+  const record = (value: object) => {
+    if (traceRequestDiagnostics.events.length < 512) traceRequestDiagnostics.events.push(value);
+    else traceRequestDiagnostics.omitted++;
+  };
+  page.on("request", (request) => {
+    if (!relevant(request.url())) return;
+    const id = ++sequence; requests.set(request, id);
+    record({ event: "request", id, at: Date.now(), method: request.method(), path: new URL(request.url()).pathname });
+  });
+  page.on("response", (response) => {
+    const id = requests.get(response.request());
+    if (id !== undefined) record({ event: "response", id, at: Date.now(), status: response.status(), etag: response.headers()["etag"] });
+  });
+  page.on("requestfinished", (request) => {
+    const id = requests.get(request);
+    if (id !== undefined) record({ event: "finished", id, at: Date.now() });
+  });
+  page.on("requestfailed", (request) => {
+    const id = requests.get(request);
+    if (id !== undefined) record({ event: "failed", id, at: Date.now(), failure: request.failure()?.errorText });
+  });
+});
+test.afterEach(async ({}, info) => {
+  await info.attach("bounded-run-annotation-request-timings", { body: JSON.stringify(traceRequestDiagnostics), contentType: "application/json" });
+});
 test("reported external claims: frozen subjects, revision history, neutral PASS label and immutable exchange", async ({
   page,
 }, testInfo) => {

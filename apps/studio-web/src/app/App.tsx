@@ -313,8 +313,15 @@ export default function App() {
       (known?.projectId === projectId && saved.revision <= known.revision)
     )
       return;
-    const visible = sameProjectIntent(context),
-      changed = known?.projectId !== projectId;
+    const changed = known?.projectId !== projectId,
+      visible =
+        sameProjectIntent(context) ||
+        (changed &&
+          workspaceInteractionSequence.current === context.workspaceSequence &&
+          !document.querySelector('[role="dialog"]'));
+    // Resolving an automatic default invalidates readiness, but is not new user
+    // intent. A cross-project recovery can still initialize its requested target
+    // while the accepted load and actual workspace interaction remain current.
     if (changed && !visible) return;
     preflightRequestSequence.current++;
     selectedProjectRef.current = projectId;
@@ -425,6 +432,7 @@ export default function App() {
   }, [busy, historyFocus, project?.projectId, section, modal]);
   function setModal(value: string) {
     preflightRequestSequence.current++;
+    workspaceInteractionSequence.current++;
     storeModal(value);
   }
   function showHome(removeLastProject = false) {

@@ -1,0 +1,35 @@
+{
+  "reason": "Review-controlled actual native Home modal opened and closed while recovery was held: current fallback incorrectly replaces newer Home intent. Preserve this candidate as incomplete, repair then use fresh frozen run.",
+  "signal": "SIGINT",
+  "target": 2147368,
+  "controller": 2144187,
+  "ownership": "same UID, exact Playwright argv and ancestry verified immediately before signal",
+  "chain": [
+    {
+      "pid": 2147368,
+      "parent": 2147367,
+      "birthTicks": "22947035",
+      "cmd": "node <repo>/node_modules/.bin/playwright test -c tests/e2e/playwright.config.ts"
+    },
+    {
+      "pid": 2147367,
+      "parent": 2147356,
+      "birthTicks": "22947035",
+      "cmd": "sh -c playwright test -c tests/e2e/playwright.config.ts"
+    },
+    {
+      "pid": 2147356,
+      "parent": 2147351,
+      "birthTicks": "22947027",
+      "cmd": "npm run test:e2e"
+    },
+    {
+      "pid": 2147351,
+      "parent": 2144187,
+      "birthTicks": "22946960",
+      "cmd": "<repo>/.venv/bin/python -I scripts/test_browser.py"
+    }
+  ],
+  "fullSuiteOutcome": "interrupted; not a passing full cohort",
+  "performance": "NOT_RUN"
+}

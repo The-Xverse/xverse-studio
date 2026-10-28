@@ -14,7 +14,9 @@ jobs:
         # Windows installation/tests are blocked at the user's request (2026-10-25).
         os: [ubuntu-24.04]
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 75
+    # The full serial browser cohort reached its final summary at the old
+    # 75-minute job boundary; leave bounded time for cleanup and package smoke.
+    timeout-minutes: 120
     env:
       PYTEST_DISABLE_PLUGIN_AUTOLOAD: '1'
       UV_CACHE_DIR: ${{ github.workspace }}/.studio-local/uv

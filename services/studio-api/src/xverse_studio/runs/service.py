@@ -525,6 +525,7 @@ class Runs:
     def read(self, rid):
         with self.store.lock:
             run = self.store.get("run", rid)
+            previous_run = canonical(run)
             root = self.directory(rid)
             statepath = root / "state.json"
             observed = None
@@ -601,16 +602,20 @@ class Runs:
                     }
                 )
                 op = self.store.get("operation", run["operationId"])
+                previous_operation = canonical(op)
                 op["status"] = "completed"
                 op["result"] = {
                     "effectivePlanDigest": observed.get("effectivePlanDigest")
                 }
-                self.store.put("operation", op["operationId"], op)
+                if canonical(op) != previous_operation:
+                    self.store.put("operation", op["operationId"], op)
                 for oid, result in observed.get("commandResults", {}).items():
                     try:
                         op = self.store.get("operation", oid)
+                        previous_operation = canonical(op)
                         op.update(result)
-                        self.store.put("operation", oid, op)
+                        if canonical(op) != previous_operation:
+                            self.store.put("operation", oid, op)
                     except Problem:
                         pass
             elif run["state"] in ACTIVE:
@@ -626,7 +631,7 @@ class Runs:
                     reason="OWNERSHIP_UNKNOWN",
                 )
                 op = self.store.get("operation", run["operationId"])
-                if op["status"] not in ("completed", "failed"):
+                if op["status"] not in ("completed", "failed", "unknown"):
                     op["status"] = "unknown"
                     self.store.put("operation", op["operationId"], op)
             self._reconcile_command(run, observed)
@@ -642,7 +647,10 @@ class Runs:
             assessment = getattr(self, "assessment_summary", None)
             if assessment is not None:
                 run.update(assessment(run))
-            self.store.put("run", rid, run)
+            # Ownership, journal integrity and assessments are still observed on
+            # every read. Only an actual metadata change needs a durable write.
+            if canonical(run) != previous_run:
+                self.store.put("run", rid, run)
             if rid in self.children and self.children[rid].poll() is not None:
                 self.children.pop(rid)
             return run

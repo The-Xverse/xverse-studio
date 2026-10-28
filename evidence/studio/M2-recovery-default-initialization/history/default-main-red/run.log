@@ -1,0 +1,83 @@
+
+> xverse-studio-workspace@0.1.0 test:e2e
+> playwright test -c tests/e2e/playwright.config.ts --grep recovery default initialization:
+
+
+Running 6 tests using 1 worker
+
+(node:2138859) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 tests/e2e/recovery-default-initialization.spec.ts:30:9 › recovery default initialization: newer none at 1024 (13.0s)
+(node:2139271) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  2 tests/e2e/recovery-default-initialization.spec.ts:30:9 › recovery default initialization: newer draft at 1024 (3.2s)
+  ✓  3 tests/e2e/recovery-default-initialization.spec.ts:30:9 › recovery default initialization: newer dialog at 1024 (2.6s)
+  ✘  4 tests/e2e/recovery-default-initialization.spec.ts:30:9 › recovery default initialization: newer none at 1440 (12.6s)
+(node:2139770) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  5 tests/e2e/recovery-default-initialization.spec.ts:30:9 › recovery default initialization: newer draft at 1440 (3.0s)
+  ✓  6 tests/e2e/recovery-default-initialization.spec.ts:30:9 › recovery default initialization: newer dialog at 1440 (2.8s)
+
+
+  1) tests/e2e/recovery-default-initialization.spec.ts:30:9 › recovery default initialization: newer none at 1024
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('heading', { name: 'Process control reference', exact: true })
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('heading', { name: 'Process control reference', exact: true }) with timeout 10000ms
+      - waiting for getByRole('heading', { name: 'Process control reference', exact: true })
+
+
+      108 |         await page.waitForLoadState("networkidle");
+      109 |         if (newer === "none") {
+    > 110 |           await expect(page.getByRole("heading", { name: owned.project.name, exact: true })).toBeVisible();
+          |                                                                                              ^
+      111 |           await expect(page.getByRole("tab", { name: "Model", exact: true })).toHaveAttribute("aria-selected", "true");
+      112 |           await expect(page.getByRole("button", { name: "XDL source", exact: true })).toBeFocused();
+      113 |         } else {
+        at <repo>/tests/e2e/recovery-default-initialization.spec.ts:110:94
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/recovery-default-initializ-e758f-lization-newer-none-at-1024/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/recovery-default-initializ-e758f-lization-newer-none-at-1024/error-context.md
+
+  2) tests/e2e/recovery-default-initialization.spec.ts:30:9 › recovery default initialization: newer none at 1440
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('heading', { name: 'Process control reference', exact: true })
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('heading', { name: 'Process control reference', exact: true }) with timeout 10000ms
+      - waiting for getByRole('heading', { name: 'Process control reference', exact: true })
+
+
+      108 |         await page.waitForLoadState("networkidle");
+      109 |         if (newer === "none") {
+    > 110 |           await expect(page.getByRole("heading", { name: owned.project.name, exact: true })).toBeVisible();
+          |                                                                                              ^
+      111 |           await expect(page.getByRole("tab", { name: "Model", exact: true })).toHaveAttribute("aria-selected", "true");
+      112 |           await expect(page.getByRole("button", { name: "XDL source", exact: true })).toBeFocused();
+      113 |         } else {
+        at <repo>/tests/e2e/recovery-default-initialization.spec.ts:110:94
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/recovery-default-initializ-af712-lization-newer-none-at-1440/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/recovery-default-initializ-af712-lization-newer-none-at-1440/error-context.md
+
+  2 failed
+    tests/e2e/recovery-default-initialization.spec.ts:30:9 › recovery default initialization: newer none at 1024
+    tests/e2e/recovery-default-initialization.spec.ts:30:9 › recovery default initialization: newer none at 1440
+  4 passed (38.8s)
