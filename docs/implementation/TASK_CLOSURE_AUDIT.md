@@ -1,6 +1,6 @@
 # Task closure audit — 2026-10-28
 
-The count is **48 completed, 42 in progress and 10 blocked out of 100 tasks**.
+The count is **49 completed, 41 in progress and 10 blocked out of 100 tasks**.
 It counts completed tasks, not percentage of implementation effort or product readiness.
 No M0–M4 milestone is accepted. M5 remains deferred.
 
@@ -15,7 +15,7 @@ This audit checks the existing task wording and acceptance cases. The subsequent
 |---|---|---|---|
 | T025 | Lost Start/Stop acknowledgements, two tabs, browser departure, cursor expiry, resynchronization and failed-command views have actual Linux backend/browser evidence. | Repeat on both supported native backend/browser combinations. | Keep open; native Windows held. |
 | T026 | All task implementation clauses pass33 backend and21 Playwright cases, with exact source identity and actual native execution distinguished from fixtures. | T023/T025 retain their broader native Windows conformance; AC-008/010 remain unaccepted. | Component complete under the existing task standard; acceptance gates remain open. |
-| T027 | Bounded nonphysical Pause/Resume, paused campaign Cancel, frozen-input journeys and ordered ownership loss/recovery are verified. Fresh1199 backend/80 affected browser/2 native timeline/2 separate performance pass on377 identical inputs. | Clean package/source binding and final component closure amendment pending. Native Windows/live/fault/tune acceptance remains open. | Keep open until package binding and clause review are recorded. |
+| T027 | Clause review covers plan/Start, startup, signed durable controls, cleanup/evidence distinctions, frozen inputs and ordered ownership observations. Fresh1199 backend/80 affected browser/2 timeline/2 performance pass on377 identical inputs; source08d379c clean Linux package115 and6 UI assets match. | T021/T023/T025 native Windows and T033/T035 full fault/live lanes plus AC006/007/027 supported live tuning remain open. | Component complete under the existing T026 standard; no milestone acceptance. See M1-reference-optional-controls/task027-component-review.md and candidate-binding.json. |
 | T068 | Authoring, deployment, connection and negative API regressions exist. | Complete the task's migration-without-semantic-loss evidence and its T048 cross-platform exchange dependency; do not substitute aggregate test totals. | Keep open; closure evidence needs a clause-level mapping. |
 | T073 | Registry, actual authenticated HTTP, concurrent claims, independent lease-scope grants, expiry, stale fences, repeated release and native interruption fixtures pass. | Physical-command API observation/stimulation/destructive-action conformance beyond reservation scopes. A stimulation lease alone is not a tested stimulation command. | Keep open; independent software work remains. |
 | T074 | Typed host installation, durable reservation intent, pinned providers/assets, exact grants and same-fence reconciliation exist. | Integrate admitted active commands and ownership-loss/run policy; T073/T023 are incomplete. | Keep open; backend integration remains. |
@@ -71,3 +71,5 @@ by this source inspection.
 
 
 T026 closure amendment: [clause/source review](../../evidence/studio/M1-session-component-closure/verification.json) corrects the initial accounting conclusion after all T026 clause verification passes. One status changes, T026 in_progress→completed; all task wording/dependencies/acceptance requirements remain. Current counts48/42/10, zero accepted milestones. T027 becomes dependency-ready for its own remaining view/failure verification; the earlier six-task readiness snapshot keeps its dated scope.
+
+T027 closure amendment: primary-agent clause/source review and current1199/80/2/2 plus clean115-payload package evidence close its implementation component. Only T027 changes in_progress→completed; all task definitions/dependencies and acceptance requirements remain. Counts49/41/10, zero accepted milestones. Next independent work is the T033 owned-fixture vertical slice and complete lifecycle fault-matrix audit; the existing scattered tests do not automatically close that task.

@@ -1,4 +1,4 @@
-Current source passes fresh **1,199 backend, 80 affected browser, two native frozen-intent timeline and two separate performance checks**, all on the same377 unchanged inputs, with no skips or flaky results. Actual617/60-file browser collection is separate from execution. Clean package/source binding and T027 closure review remain pending; counts48/42/10 and no accepted milestones. [Final checks](observation-ordering/), [review](task027-component-review.md).
+Current source `08d379cc1687e7e0388a643ee62876aee2f99178` passes fresh **1,199 backend, 80 affected browser, two native frozen-intent timeline and two separate performance checks**, all on the same 377 unchanged inputs, with no skips or flaky results. Clean native Linux prepared-cache offline packaging passes all 115 payload/archive hashes and six tested UI assets. **T027 is complete as a view/control implementation component; counts 49/41/10, no accepted milestones.** The current 617-case/60-file full browser collection is not a local full execution. [Exact source/package binding](candidate-binding.json), [clause review](task027-component-review.md), [current checks and original failures](observation-ordering/).
 
 # Owned reference optional controls
 
@@ -37,5 +37,5 @@ The unsupported-control negatives now request still-unsupported Step.
 These are actual owned native model/API/browser results and explicitly labelled
 private-mailbox or transport fixtures. They do not establish native Windows,
 live Lite, physical pause, live parameter mutation or milestone acceptance.
-T027 remains in progress pending final verification and its component review;
-counts remain 48 completed, 42 in progress and 10 blocked.
+T027 closes its implementation component under the existing component standard;
+counts are 49 completed, 41 in progress and 10 blocked. Wider acceptance stays open.

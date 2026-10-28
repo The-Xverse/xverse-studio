@@ -1,10 +1,10 @@
-# T027 component review candidate
+# T027 component review
 
 The unchanged task is: “Implement run-plan/start/control views with startup,
 stop, cleanup, evidence and optional-operation states, clearly identifying current
 immutable inputs.” Its T020/T024/T026 dependencies are completed. This review
 does not change its requirements, task description, dependencies or acceptance.
-The [observed frontend merge defect](review-findings.md) is repaired: independently ordered backend observations update unknown/recovered ownership without changing worker CAS. Two actual native browser cases and one Node contract pass; 12 backend recovery/persistence checks and the broader 80-check affected cohort pass separately. Completion remains pending final verification and source/package binding.
+T027 closes as an implementation component after the unchanged clauses below have evidence. The ownership-display defect is repaired, and the full 1,199-test backend suite, 80 affected browser checks, two native timeline cases and two separate performance cases pass on 377 identical inputs. Clean native Linux source `08d379cc1687e7e0388a643ee62876aee2f99178` passes all 115 package payload/archive hashes and six tested UI assets. [Exact binding](candidate-binding.json). Broader acceptance remains open.
 
 | Task clause | Implementation and evidence | Scope boundary |
 | --- | --- | --- |
@@ -18,8 +18,10 @@ The [observed frontend merge defect](review-findings.md) is repaired: independen
 | Immutable input identity | Native cases retain canonical Project and snapshot bytes. The browser inspects the current frozen snapshot, plan and semantic identities while paused, then resumes the same run. Draft/run isolation and readiness cases repeat in the affected cohort. | AC-027's supported live parameter mutation is not claimed. |
 
 The repository already distinguishes implementation-component completion from
-broader native/live acceptance, including T026. If final checks establish this
-complete view/control component, T027 can close under that existing standard.
+broader native/live acceptance, including T026. The current clause review and exact source/package verification establish this
+complete view/control component, so T027 closes under that existing standard.
 T021/T023/T025, the complete T033/T035 fault/environment lanes, and AC-006/007/027
 remain independently open. No M1 or other milestone is accepted by this review.
 This is a primary-agent review, not independent milestone approval.
+
+Only T027 changes from in_progress to completed; counts 49/41/10 and zero accepted milestones. The current 617-case/60-file full browser collection is not a local execution. Original red and intermediate failures retain their complete scopes.

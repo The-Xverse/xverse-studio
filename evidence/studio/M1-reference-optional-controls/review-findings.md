@@ -1,7 +1,7 @@
 # Remaining verification findings
 
 Update, 2026-10-28: the observation-ordering finding below is repaired in the
-current uncommitted candidate. The backend persists an independent
+current committed candidate. The backend persists an independent
 `observationVersion` only when read metadata changes; the browser accepts newer
 observations without advancing the worker lifecycle version. Both polling and
 control callbacks use the ordering guard. Actual native browser loss/recovery
@@ -10,12 +10,9 @@ and persistence checks passed (12/12). The broader affected browser cohort passe
 80/80, with no skips or flaky results and all 377 selected inputs unchanged.
 Private originals are `observation-red`, `observation-native`,
 `observation-green`, and `observation-affected` under
-`.studio-local/reference-controls/`; sanitized publication remains pending.
+`.studio-local/reference-controls/`; sanitized public records are retained under `observation-ordering/`.
 
-Fresh full backend verification passes1,199/1,199 as `observation-backend-full`, with377 inputs unchanged. Native frozen-intent timeline2 and separate performance2 also pass on the identical map.
-The previous full result (1181 passed, four failed) remains a failed historical
-candidate; the focused clock repair passed 13 checks. T027 remains in progress
-pending the fresh full result, remaining verification, and clause review.
+The full 1,199-test backend suite, 80 affected browser checks, two native timeline cases and two separate performance cases pass on the same 377 inputs. The clean Linux package with 115 payloads and six tested UI assets match source `08d379cc1687e7e0388a643ee62876aee2f99178`. T027 closes its view/control component after the [clause review](task027-component-review.md) and [binding](candidate-binding.json); broader native/live/fault/tune acceptance remains open.
 The finding description below records the pre-repair behavior.
 
 The pre-repair full backend verification had four failures and retains its
@@ -27,7 +24,7 @@ The pre-repair review of the actual `mergeRun` function revealed a missing case.
 lifecycle version can stay unchanged while the backend temporarily loses and
 then verifies its ownership observation. At that same version, the browser merge
 preserves its previous lifecycle and spreads absent optional fields from the old
-object. An executed Node probe of the current function gives these results:
+object. An executed Node probe of the then-current function gives these results:
 
 | Incoming authoritative observation | Current browser state | Merged result |
 | --- | --- | --- |
