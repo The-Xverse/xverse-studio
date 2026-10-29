@@ -856,3 +856,19 @@ covers15 owner checks plus2 targeted durability/fixture checks,64 affected adapt
 and after repair. Complete live use on the original registration and full browser
 Start/Stop/driving/cruise/linked views remain pending. Existing task/milestone states
 unchanged. See recovery-integration.json in the platform-observability evidence folder.
+
+### Complete linked platform demo —2026-10-29
+
+The scoped ADR-0034 goal is implemented and verified on final runtime/frontend
+candidatee1fb69f, using admitted platform12615d402. Two actual full browser runs
+reuse the same backend, public Core owner and original registration. Final run
+fad40cd5 completes22phases/6ready bindings, native Pygame driving/cruise, linked
+Orchestration/Communications/Evidence views at both desktop sizes, GUI Stop and
+independent19process/3container cleanup. Public Argus verifies128original records
+and a closed writer. Coalescing retains the original incomplete evidence verdict;
+unknown causes and simulator-clock mapping remain explicit. Separate original-root
+retirement preserves the43record predecessor unchanged. The final review and
+completion audit are in live-review-02.md; exact evidence is in
+evidence/studio/platform-observability-foundation/live-browser-experiment.json.
+This completes the scoped goal, not the broader product tasks or milestones.
+States remain49completed/41in_progress/10blocked and0accepted milestones.

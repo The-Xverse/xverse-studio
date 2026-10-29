@@ -64,8 +64,9 @@ Studio displays missing or stale telemetry explicitly. Simulation timing
 is owned by the existing vehicle client's public synchronous option with a fixed
 0.05-second step. The reported clock signal is elapsed seconds; its installed metadata
 incorrectly describes frame-delta milliseconds, and Studio retains that conflict.
-No mapping to host time, deterministic replay, native X-COM, physical effects or
-Argus admission is claimed.
+The classic provider does not claim mapping to host time, deterministic replay,
+native X-COM, physical effects or Argus admission. The separately enrolled platform
+provider below supplies the actual Maestro/native-X-COM/Argus integration.
 
 A changed installation, occupied port, active container, conflicting driver lease or
 unrecognized middleware working directory blocks operation with a diagnostic. Restore
@@ -73,3 +74,40 @@ the admitted installation or resolve its reported conflict, then preflight again
 Studio stops only the processes and exact container instances it started. Middleware
 scratch is retained and can be reinitialized by the next run only while its recorded
 ownership and contents still match. Unknown resources are reported rather than killed.
+
+## Follow one run across the X-Verse platform
+
+Use the separately verified native bridge build and the admitted platform SDK:
+
+```text
+xverse-studio --autoverse-root /path/to/autoverse --autoverse-native-bridge /path/to/verified-native-build --data-dir /path/to/private/studio-data --port 8881 --static-dir /path/to/studio-web/dist
+```
+
+Choose **Autoverse with X-Verse platform**, then **Preflight & run** and **Start
+frozen snapshot**. The same original Pygame window provides driving and cruise
+controls. In **Results**, the three linked views show actual platform records:
+
+| View | What to inspect |
+|---|---|
+| **Orchestration** | Maestro's per-binding prepare, start, readiness, Stop and reverse cleanup facts. |
+| **Communications** | Native C++ X-COM ingress, sampled observations, route identities and original clocks. |
+| **Evidence** | Argus's original records, recorded/assessed verdicts, integrity diagnostics and causal links. |
+
+Use **Original cause**, **Correlated orchestration** and **Correlated communications**
+to follow the selected record between views. **Shared run, plan and evidence identities**
+shows their common binding. All three views use one immutable capture; **Refresh
+all platform views** obtains a new capture, including after Stop. Paging and
+selection refer to that capture rather than mixing changing live records.
+
+Eleven VCU boundary routes use the native bridge; three routes are sampled for
+observability. Sample coalescing remains visible and can make Argus's verdict
+**incomplete** even after successful Stop and released cleanup. Native counters,
+transport gaps, clock mappings and external vehicle effects are separate facts.
+Unknown upstream causes and absent simulator-clock mappings stay unknown.
+The Evidence view exposes admitted Argus trace records; private provider stdout
+is not relabelled as Argus evidence or exported into browser logs.
+
+The platform owner survives successive runs in one backend. After owner loss,
+claims remain fenced until the admitted host procedure in [platform recovery](platform-recovery.md)
+verifies and explicitly retires eligible predecessors. Restarting does not recreate
+old process handles, remove claims or upgrade an incomplete evidence verdict.
