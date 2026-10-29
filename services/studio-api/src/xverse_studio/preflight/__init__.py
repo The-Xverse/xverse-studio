@@ -5,10 +5,10 @@ import math
 import platform
 
 from xverse_studio.providers.registry import admit_descriptor
-from xverse_studio.providers.reference_control import MAX_PAUSED_WALL_SECONDS
+from xverse_studio.providers.reference_control import MAX_PAUSED_WALL_SECONDS, MAX_LIVE_MUTATIONS
 from xverse_studio.storage.core import Problem
 from xverse_studio.xdl import XDLRejected, reference_configuration
-from xverse_studio.xdl.examples import API_VERSION, MODEL_DIGEST
+from xverse_studio.xdl.examples import API_VERSION, MODEL_DIGEST, LIVE_MODEL_DIGEST
 
 REQUIRED_LIMITS = (
     "maxDurationSeconds",
@@ -229,12 +229,15 @@ def reference_readiness(documents, compiled, provider_id, provider, active_count
     )
     bindings = plan.get("bindings", [])
     artifacts = [a for b in bindings for a in b.get("artifactRefs", [])]
+    live_controls = bool(configuration and configuration.get("liveInputs"))
+    model_digest = LIVE_MODEL_DIGEST if live_controls else MODEL_DIGEST
+    model_ref = "urn:xverse:studio:reference:first-order:live-target:v1" if live_controls else "urn:xverse:studio:reference:first-order:v1"
     artifacts_ok = (
         bool(bindings)
         and all(b.get("artifactRefs") for b in bindings)
         and all(
-            a.get("digest") == MODEL_DIGEST
-            and a.get("sourceRef") == "urn:xverse:studio:reference:first-order:v1"
+            a.get("digest") == model_digest
+            and a.get("sourceRef") == model_ref
             for a in artifacts
         )
     )
@@ -247,7 +250,7 @@ def reference_readiness(documents, compiled, provider_id, provider, active_count
         artifacts_ok
         and bool(models)
         and all(
-            model.get("externalRef") == "urn:xverse:studio:reference:first-order:v1"
+            model.get("externalRef") == model_ref
             for model in models
         )
     )
@@ -303,6 +306,8 @@ def reference_readiness(documents, compiled, provider_id, provider, active_count
         if key != "maxDurationSeconds"
     )
     limits_known = limits_known and limits.get("maxPausedWallSeconds") == MAX_PAUSED_WALL_SECONDS
+    if configuration and configuration.get("liveInputs"):
+        limits_known = limits_known and type(limits.get("maxLiveMutations")) is int and limits.get("maxLiveMutations") == MAX_LIVE_MUTATIONS
     budget_ok = limits_known and configuration is not None
     if configuration and limits_known:
         budget_ok = (

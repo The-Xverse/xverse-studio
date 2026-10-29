@@ -23,7 +23,7 @@ UTC_PATTERN = re.compile(
 EPOCH = datetime(1970, 1, 1, tzinfo=timezone.utc)
 # Both installed reference versions encode schema1.0 receipt seconds and
 # simulation microsecond ticks identically. Other versions remain unresolved.
-REFERENCE_CLOCK_VERSIONS = ("1.0.0", "1.1.0")
+REFERENCE_CLOCK_VERSIONS = ("1.0.0", "1.1.0", "1.2.0")
 
 
 def invalid(message, code="EVIDENCE_FILTER_INVALID"):

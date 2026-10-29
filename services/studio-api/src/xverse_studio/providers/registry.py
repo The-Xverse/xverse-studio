@@ -1,7 +1,7 @@
 import platform
 from pathlib import Path
 from xverse_studio.storage.core import digest
-from .reference_control import CONTROL_STATES, MAX_PAUSED_WALL_SECONDS, REFERENCE_VERSION
+from .reference_control import CONTROL_STATES, MAX_PAUSED_WALL_SECONDS, MAX_LIVE_MUTATIONS, LIVE_PARAMETERS_SCHEMA, REFERENCE_VERSION
 
 REFERENCE = {
     "providerId": "studio.reference",
@@ -26,11 +26,12 @@ REFERENCE = {
         "maxElements": 200,
         "maxConnections": 400,
         "maxPausedWallSeconds": MAX_PAUSED_WALL_SECONDS,
+        "maxLiveMutations": MAX_LIVE_MUTATIONS,
     },
     "limitations": [
         "Scalar first-order reference model only; no external simulator, physical device, native X-COM, or industrial fidelity claim.",
         "Cooperative simulation pause has a cumulative 30-second wall-time budget; exhaustion stops the owned model with incomplete coverage.",
-        "Rewind, step, reset, live mutation and physical coupling are unsupported.",
+        "Only the explicit owned live-target profile admits bounded target input changes; other live mutations, rewind, step, reset and physical coupling are unsupported.",
     ],
     "supportedXdlVersions": ["xverse.io/xdl/v1alpha1"],
     "capabilityRecords": [
@@ -40,7 +41,7 @@ REFERENCE = {
             "legalStates": ["ready"]
             if op == "start"
             else list(CONTROL_STATES[op]),
-            "parametersSchema": {
+            "parametersSchema": LIVE_PARAMETERS_SCHEMA if op == "set_parameter" else {
                 "type": "object",
                 "properties": {},
                 "additionalProperties": False,
@@ -82,6 +83,7 @@ def descriptors():
         + (source.parent / "xdl/__init__.py").read_bytes()
         + (source.parent / "xdl/examples.py").read_bytes()
         + (source / "reference_control.py").read_bytes()
+        + (source.parent / "xdl/reference-controls-v1.schema.json").read_bytes()
     )
     return [
         {

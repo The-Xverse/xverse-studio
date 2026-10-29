@@ -11,6 +11,15 @@ It accepts bounded declared model parameters; imported project commands and arbi
 never reach subprocess. Its native worker journals observations with a hash chain and final digest;
 this is reference evidence, not an admitted Argus/CARLA/native-X-COM or physical-device claim.
 
+Owned reference1.2 adds an opt-in versioned model target input (ADR-0030), bounded
+to32 changes with finite dimensionless values in [-100,100]. The explicit
+`io.xverse.studio.reference-controls` Profile declaration and matching model
+artifact are required; installing its schema alone grants no control. The API
+and worker independently enforce current authority, legal state, state/old-value
+CAS and limits. Frozen configuration remains immutable; applied changes retain
+provenance and actual model observations. Native Windows and external/live-device
+acceptance are separate gates.
+
 External integrations must establish effective-input equality before launch; a preset-generating harness
 cannot silently ignore an edited parameter. Do not import private runtime internals, infer permits,
 operate devices or change companion repositories to bypass a missing integration contract.

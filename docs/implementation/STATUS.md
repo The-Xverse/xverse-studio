@@ -1,5 +1,7 @@
 # Current implementation status
 
+Current live-target/finite-JSON source passes **1250 backend/92 affected browser/2 separate performance checks** on the same388 unchanged inputs. It implements opt-in recorded target changes, immutable inputs, bounded authority and request recovery, with nonfinite command JSON rejected before fingerprinting. Clean native Linux package remains pending;629/61 full browser collection is separate from execution. T033 stays open;49/41/10 and zero milestones. [Current evidence](../../evidence/studio/M1-fixture/live-target/README.md).
+
 Scope: runnable development reference implementation on `implement/studio-m0-m4`. No M0–M4 milestone
 or Studio 1.0 release is accepted. The supplied requirements/task IDs and acceptance targets remain.
 

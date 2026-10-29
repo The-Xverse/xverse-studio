@@ -6,6 +6,7 @@ but it is not substituted as evidence through the application reader.
 """
 
 import hashlib
+import errno
 import json
 import os
 from pathlib import Path
@@ -20,7 +21,7 @@ from xverse_studio.storage.core import canonical, digest
 
 
 @pytest.mark.skipif(sys.platform != "linux", reason="Owned Linux filesystem-fault lane; native Windows remains held")
-@pytest.mark.parametrize("boundary", ["journal_open", "journal_exists", "journal_finalize"])
+@pytest.mark.parametrize("boundary", ["journal_open", "journal_exists", "journal_exists_delayed", "journal_finalize"])
 def test_native_evidence_io_failure_preserves_known_lifecycle_and_cleanup(
     client, monkeypatch, record_property, boundary
 ):
@@ -58,14 +59,56 @@ def test_native_evidence_io_failure_preserves_known_lifecycle_and_cleanup(
         assert known["providerId"] == "studio.reference"
         assert known["launchArgvDigest"] == digest(expected)
         assert digest((directory / "owner.key").read_bytes()) == known["ownerDigest"]
+        request_path = directory / "request.json"
+        request_bytes = request_path.read_bytes()
+        held_request = directory / "request-held-for-native-observation.json"
+        early_fault = boundary in ("journal_open", "journal_exists", "journal_exists_delayed")
+        if early_fault:
+            # The actual child can reject and exit before the parent observes
+            # its argv. Hold only its owned input read until native PID/birth/
+            # argv are verified; execute the original fixed worker unchanged.
+            request_path.rename(held_request)
+            os.mkfifo(request_path, 0o600)
         if boundary == "journal_open":
             (directory / "evidence.jsonl").mkdir()
-        elif boundary == "journal_exists":
+        elif boundary.startswith("journal_exists"):
             (directory / "evidence.jsonl").write_bytes(b'{"retained":"owned prior bytes"}\n')
         child = original_launch(argv, *args, **kwargs)
-        process = psutil.Process(child.pid)
-        assert child.pid != os.getpid() and process.cmdline() == expected
-        launches.append((child, process.create_time()))
+        try:
+            if boundary == "journal_exists_delayed":
+                # Real parent scheduling delay, without a fake worker or clock.
+                time.sleep(.35)
+            process = psutil.Process(child.pid)
+            assert child.pid != os.getpid() and process.cmdline() == expected
+            launches.append((child, process.create_time()))
+        finally:
+            # Always release the original owned input, even if identity capture
+            # fails, so the test cannot leave its child blocked on the FIFO.
+            if early_fault:
+                deadline = time.monotonic() + 10
+                descriptor = None
+                try:
+                    while descriptor is None:
+                        assert child.poll() is None, "Owned worker exited before its input-read gate"
+                        try:
+                            descriptor = os.open(request_path, os.O_WRONLY | os.O_NONBLOCK)
+                        except OSError as error:
+                            if error.errno != errno.ENXIO:
+                                raise
+                            assert time.monotonic() < deadline, "Owned worker did not open its input-read gate"
+                            time.sleep(.01)
+                    offset = 0
+                    while offset < len(request_bytes):
+                        assert time.monotonic() < deadline, "Owned input-read gate exceeded its deadline"
+                        try:
+                            offset += os.write(descriptor, request_bytes[offset:])
+                        except BlockingIOError:
+                            time.sleep(.005)
+                finally:
+                    if descriptor is not None:
+                        os.close(descriptor)
+                    held_request.replace(request_path)
+                assert request_path.read_bytes() == request_bytes
         return child
 
     payload = {"snapshotId": preflight["snapshotId"], "preflightId": preflight["preflightId"]}
@@ -117,8 +160,8 @@ def test_native_evidence_io_failure_preserves_known_lifecycle_and_cleanup(
     assert state["createTime"] == known["createTime"] == birth
     assert state["ownerDigest"] == known["ownerDigest"]
     assert state["cleanup"] == "complete"
-    if boundary in ("journal_open", "journal_exists"):
-        if boundary == "journal_exists":
+    if boundary in ("journal_open", "journal_exists", "journal_exists_delayed"):
+        if boundary.startswith("journal_exists"):
             assert journal.read_bytes() == b'{"retained":"owned prior bytes"}\n'
         assert state["state"] == "failed" and state["reason"] == "EVIDENCE_OPEN_FAILED"
         assert state["evidence"] == "unavailable" and "startedAt" not in state
@@ -149,6 +192,8 @@ def test_native_evidence_io_failure_preserves_known_lifecycle_and_cleanup(
         scope="Actual owned Linux worker; fixed private filesystem fault, no equipment",
         boundary=boundary, runId=rid, snapshotId=preflight["snapshotId"],
         originalArgvAndOwnerVerified=True, nativeWorkerAttempts=len(launches),
+        earlyFaultIdentityGate="owned-input-read FIFO" if boundary != "journal_finalize" else "not required",
+        identityObservationDelaySeconds=.35 if boundary == "journal_exists_delayed" else 0,
         originalCanonicalBytesRetained=boundary == "journal_finalize",
         lifecycle=observed["state"], cleanup=observed["cleanup"], evidence=observed["evidence"],
     )))

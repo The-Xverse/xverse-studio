@@ -19,7 +19,7 @@ from ruamel.yaml import YAML
 from xverse_studio.providers.registry import descriptors
 from xverse_studio.xdl import MAX_DOCUMENT_BYTES, MAX_DOCUMENTS, PLATFORM_REVISION, XDLAdapter
 from xverse_studio.xdl.examples import (
-    CONNECTIONS_NAMESPACE, DOMAIN_PROFILES, EVALUATION_NAMESPACE, PROFILE_NAMESPACE, reference_resources,
+    CONNECTIONS_NAMESPACE, DOMAIN_PROFILES, EVALUATION_NAMESPACE, LIVE_NAMESPACE, PROFILE_NAMESPACE, reference_resources,
 )
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -82,10 +82,11 @@ def observed_baseline():
     if any(selected_hashes[name] != "sha256:" + record["expected"] for name, record in recorded["installedFileChecks"].items()):
         raise BaselineDrift("SELECTED_XDL_FILE_DRIFT")
     profile_versions = {r["spec"]["extensionNamespace"]: r["metadata"]["version"]
-                        for r in reference_resources(feedback=True).values() if r["kind"] == "Profile"}
+                        for r in reference_resources(feedback=True, live_controls=True).values() if r["kind"] == "Profile"}
     profile_namespaces = [[{"namespace": name, "version": profile_versions[name]}]
                          for name in [PROFILE_NAMESPACE, EVALUATION_NAMESPACE, CONNECTIONS_NAMESPACE]] + [
-                          [{"namespace": p["namespace"], "version": p["version"]} for p in DOMAIN_PROFILES]]
+                          [{"namespace": p["namespace"], "version": p["version"]} for p in DOMAIN_PROFILES],
+                          [{"namespace": LIVE_NAMESPACE, "version": profile_versions[LIVE_NAMESPACE]}]]
     profiles = []
     for index, (path, namespaces) in enumerate(zip(adapter.profile_schema_paths, profile_namespaces, strict=True)):
         path = Path(path)

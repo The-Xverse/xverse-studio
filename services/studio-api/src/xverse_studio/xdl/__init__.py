@@ -20,7 +20,7 @@ from xverse_xdl import (
 )
 
 from .examples import (API_VERSION, CONNECTIONS_NAMESPACE, CONVERTER_BOUND, CONVERTER_TEMPLATE, EVALUATION_NAMESPACE, EVALUATION_SCHEMA_ID, PARAMETERS,
-                       PROFILE_NAMESPACE, examples, reference_resources)
+                       PROFILE_NAMESPACE, LIVE_NAMESPACE, LIVE_SCHEMA_ID, LIVE_INPUT, examples, reference_resources)
 
 PLATFORM_REVISION = "7fab6a290c3731533c2b88517158055c768b9d4e"
 MAX_DOCUMENTS = 128
@@ -57,7 +57,8 @@ class XDLAdapter:
         evaluation = Path(__file__).parent.parent / "assertions" / "evaluation-v1.schema.json"
         connections = Path(__file__).parent.parent / "connections" / "connections-v1.schema.json"
         domain = Path(__file__).parent.parent / "profiles" / "domain-presentation-v1.schema.json"
-        self.profile_schema_paths = (str(packaged), str(evaluation), str(connections), str(domain), *tuple(str(p) for p in profile_schema_paths))
+        live_controls = Path(__file__).parent / "reference-controls-v1.schema.json"
+        self.profile_schema_paths = (str(packaged), str(evaluation), str(connections), str(domain), str(live_controls), *tuple(str(p) for p in profile_schema_paths))
         self._validation_cache = OrderedDict()
         self._validation_cache_lock = threading.RLock()
         self._cache_result_bytes = self._cache_source_bytes = 0
@@ -276,7 +277,27 @@ def reference_configuration(documents: dict[str, str], compiled: dict | None = N
     # The feedback template (ADR-0016) is admitted only as a whole: its declared loop and converter
     # are what the worker executes.
     feedback = any(isinstance(f, dict) and f.get("id") == "feedback-flow" for f in systems[0].get("spec", {}).get("flows", []) or [])
-    expected = reference_resources(namespace, feedback)
+    live_profiles = [r for r in authored if r.get("kind") == "Profile" and r.get("spec", {}).get("extensionNamespace") == LIVE_NAMESPACE]
+    live_scenarios = [r for r in authored if LIVE_NAMESPACE in r.get("extensions", {})]
+    live_controls = bool(live_scenarios)
+    expected_profile = {"extensionNamespace": LIVE_NAMESPACE, "compatibleApiVersions": [API_VERSION],
+                        "schemaRef": LIVE_SCHEMA_ID, "documentationRef": "urn:xverse:studio:reference-controls:1.0", "conflictPolicy": "reject"}
+    if live_profiles and (len(live_profiles) != 1 or live_profiles[0].get("metadata", {}).get("version") != "1.0.0"
+                          or live_profiles[0].get("spec") != expected_profile):
+        raise XDLRejected("The owned live input profile identity is incompatible.", "PROFILE_UNRESOLVED")
+    if live_controls:
+        if (len(live_profiles) != 1 or len(live_scenarios) != 1 or live_scenarios[0].get("kind") != "Scenario"
+            or live_scenarios[0]["extensions"][LIVE_NAMESPACE] != {"version": "1.0", "inputs": [LIVE_INPUT]}):
+            raise XDLRejected("The owned live input needs its exact versioned profile and declaration.", "PROFILE_UNRESOLVED")
+        initial = next((p for p in live_scenarios[0].get("extensions", {}).get(PROFILE_NAMESPACE, {}).get("parameters", []) if p.get("id") == "target"), None)
+        if initial is None or initial.get("mutability") == "constant":
+            raise XDLRejected("A constant or missing parameter cannot initialize a mutable model input.", "PARAMETER_IMMUTABLE")
+    else:
+        # An installed schema alone declares no executable input. Keep its bytes
+        # in authoritative identities; omit only the admitted inert declaration
+        # from this provider's executable-template comparison.
+        authored = [r for r in authored if r not in live_profiles]
+    expected = reference_resources(namespace, feedback, live_controls)
     converter = None
     if feedback:
         flows = {f.get("id"): f for f in systems[0]["spec"].get("flows", []) if isinstance(f, dict)}
@@ -402,6 +423,8 @@ def reference_configuration(documents: dict[str, str], compiled: dict | None = N
         elif isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value) or not schema["minimum"] <= value <= schema["maximum"]:
             raise XDLRejected("A reference parameter exceeds its advertised finite bounds.", "LIMIT_EXCEEDED")
         config[schema["id"]] = value
+    if live_controls:
+        config["liveInputs"] = {"target": deepcopy(LIVE_INPUT)}
     if config["gain"] * config["timestep"] > 1 or config["duration"] < config["timestep"] or config["duration"] / config["timestep"] > 3000:
         raise XDLRejected("Require gain × timestep ≤ 1 and timestep ≤ duration ≤ 3,000 steps.", "LIMIT_EXCEEDED")
     ratio = config["duration"] / config["timestep"]

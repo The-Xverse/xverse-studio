@@ -113,7 +113,7 @@ def test_http_profile_locks_and_catalog_are_revisioned_and_inert(client):
     response = client.post(f"/api/v1/projects/{project['projectId']}/profile-bindings", headers={"If-Match": "1"}, json={"baseRevision": 1, "profiles": locks})
     assert response.status_code == 200, response.text
     assert response.headers["ETag"] == '"2"'
-    assert len(response.json()["manifest"]["profiles"]) == len(profiles) == 5
+    assert len(response.json()["manifest"]["profiles"]) == len(profiles) == 6
     catalog = client.get("/api/v1/catalog", params={"kind": "component", "role": "controller"}).json()["items"]
     assert len(catalog) == 1
     artifact = client.post("/api/v1/catalog/artifacts", headers={"Idempotency-Key": "http-inert-artifact"}, json={

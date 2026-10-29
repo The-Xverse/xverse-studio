@@ -37,10 +37,10 @@ def recorded():
 
 @pytest.mark.parametrize("version, admitted", [
     ("1.0.0", True), ("1.1.0", True), ("1.0.1", False),
-    ("1.1.1", False), ("1.2.0", False), ("9.0.0", False),
+    ("1.1.1", False), ("1.2.0", True), ("1.2.1", False), ("9.0.0", False),
     (None, False), ([], False), ({}, False),
 ])
-def test_reference_clock_codec_admits_only_the_two_known_provider_versions(version, admitted):
+def test_reference_clock_codec_admits_only_the_known_provider_versions(version, admitted):
     record = {
         "schemaVersion": "1.0", "recordedAt": 123.5,
         "source": {"providerId": "studio.reference", "version": version},

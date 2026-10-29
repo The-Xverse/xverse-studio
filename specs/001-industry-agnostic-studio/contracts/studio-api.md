@@ -217,6 +217,29 @@ of browser polling. HTTP/XDL/profile/evaluator versions are unchanged.
 
 Kinds are a closed registry: `stop` and `cancel`; conditionally `pause`, `resume`, `step`, `reset`, `set_parameter`, and `activate_fault`/`recover_fault`. Capability discovery declares exact scope and parameter schemas. Provider authorization and state are checked again even if the frontend previously enabled a button.
 
+ADR-0030: the owned reference 1.2.0 conditionally admits `set_parameter` for the
+explicit live-target model input. `parameters` contains exactly `inputId: "target"`,
+`expectedValue` and `value`; both values are finite numbers in [-100,100]. Commands
+retain the existing idempotency key and `expectedStateVersion`. Stale state or
+an unsettled command returns 409 `STATE_CONFLICT`; stale old value returns 409
+`LIVE_INPUT_CONFLICT`. Invalid values, unsupported input and exhausted 32-change
+budget return 422 `LIVE_INPUT_INVALID|LIVE_INPUT_UNSUPPORTED|LIVE_INPUT_LIMIT`.
+Unadmitted capability returns 422 `CAPABILITY_UNSUPPORTED` before delegation.
+
+Opt-in run metadata adds `liveInputs`, `liveValues: {target: number}`,
+`liveMutationCount` and `controlLimits.maxLiveMutations`. These observations do
+not replace the frozen `configuration`. Durable operations retain the original
+parameters and server-authenticated principal; a confirmed operation adds
+`result.mutation` as specified by the event contract. Lost acknowledgement
+retains the original request identity and exact payload in browser storage.
+Proposal review after an observed state/value change is explicit.
+
+Command parameters must be representable as finite UTF-8 JSON before runtime
+lookup and idempotency fingerprinting. Nonfinite numbers (including overflowed
+JSON exponents), nested nonfinite values and unencodable strings return422
+`REQUEST_INVALID`; no operation or live effect is created. Opaque valid JSON is
+preserved, and provider-specific admission still applies independently.
+
 `stop` requests the declared orderly shutdown policy; `cancel` requests the admitted cancellation policy. Neither means force-kill all similar processes. Emergency hardware controls require a separately declared provider capability and do not replace equipment-level safety mechanisms.
 
 | Code / HTTP | Meaning |

@@ -34,6 +34,18 @@ is `failed`; uncertain/replaced identity is `unknown` and grants no deletion
 authority. Neither outcome changes known model termination or manufactures an
 assertion verdict. Earlier records without this optional field remain readable.
 
+Owned-reference 1.2.0 live target completion (ADR-0030) adds `kind: set_parameter`
+and `mutation` to `command.completed`. The mutation contains `inputId`, `oldValue`,
+`newValue`, `recordedAt` (Unix seconds), `sourceTime` (decimal simulation tick,
+microsecond resolution and zero simulation-clock uncertainty), and
+`authority: {principal, scope: "native-backend-owned", physicalEffects: false}`.
+Its time is the application boundary, and its values are the actual old/new model
+input. The durable command result retains the same mutation. Failed refusal
+uses `command.failed` with the original operation ID and stable code; no mutation
+or application success is inferred. Clock encodings remain unchanged; their
+closed codecs additionally recognize owned reference 1.2.0. Historical records
+and frozen configuration remain immutable.
+
 ## Event kinds
 
 - `command.accepted`, `command.delegated`, `command.completed`, `command.rejected`, `command.failed`, `command.unknown`.

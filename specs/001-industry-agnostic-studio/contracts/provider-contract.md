@@ -49,6 +49,25 @@ does not admit a physical provider or establish actual hardware acceptance.
 
 Native X-COM integration requires its own adapter admission. Browser callers never connect directly to its protected gateway or bypass communication activation plans.
 
+### Owned live target input (ADR-0030 amendment)
+
+Owned reference 1.2.0 adds the conditional nonphysical `set_parameter` capability
+for the exact `io.xverse.studio.reference-controls` 1.0 Profile declaration and
+corresponding installed model artifact. Binding the schema alone admits no input.
+The input is initialized from the frozen configuration; the XDL parameter and
+snapshot are never rewritten. Constant initialization and other inputs reject.
+The native XDL mutability enum remains `constant|configuration|scenario`.
+
+The closed parameters object is `{inputId: "target", expectedValue, value}`.
+Both numbers must be finite, dimensionless and within [-100,100]. Current owned
+authority, running/paused state, expected state version, old-value CAS and one
+unsettled command are enforced before dispatch and independently by the signed
+worker mailbox. Its maximum is 32 applied changes per run. Application advances
+the worker state version at a model-step boundary without changing lifecycle.
+Old/new values, time, authority and outcome remain in the durable operation and
+canonical completion record. Same-key retry cannot reapply a mutation.
+Provider/schema discovery grants no physical effects or external runtime admission.
+
 ### Effective-input identity for the Lite candidate
 
 The inspected harness constructs XDL internally with `build_documents`. A fixed preset launch cannot claim to execute arbitrary GUI XDL or changed parameters. Before admission, the adapter must expose the effective generated inputs/compiled plan without launching the workload and prove equality with the requested snapshot's semantic and plan identities. After launch it records the actual effective identities and rejects/flags any disagreement; a post-run mismatch cannot retroactively validate the run.

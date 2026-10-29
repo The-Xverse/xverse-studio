@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { api, mutationKey } from "../../api/client";
 import type { Run } from "../../api/types";
 import { Badge, Icon, statusTone } from "../../app/ui";
+import { LiveTargetInput } from "./LiveTargetInput";
 import {
   clearPendingCommand,
   commandRequest,
@@ -145,12 +146,17 @@ export function RunControls({
       setSending(false);
     }
   }
-  function send(kind: string) {
+  function send(
+    kind: string,
+    parameters?: Record<string, unknown>,
+    version = run.stateVersion,
+  ) {
     const request: PendingCommand = {
       key: mutationKey(),
       runId: run.runId,
       kind,
-      expectedStateVersion: run.stateVersion,
+      expectedStateVersion: version,
+      ...(parameters ? { parameters } : {}),
       sentAt: Date.now(),
     };
     // Persist the request identity before sending so a lost response is retryable.
@@ -223,6 +229,21 @@ export function RunControls({
           </p>
         )}
       </div>
+      {capabilities.includes("set_parameter") &&
+        run.liveInputs?.target?.mutable === true && (
+          <LiveTargetInput
+            run={run}
+            pending={pending}
+            disabled={
+              !controlAvailability(run, "set_parameter", pending).available ||
+              sending
+            }
+            reason={controlAvailability(run, "set_parameter", pending).reason}
+            apply={(parameters, version) =>
+              send("set_parameter", parameters, version)
+            }
+          />
+        )}
       {capabilities.includes("pause") && (
         <p className="hint">
           Simulation pause preserves the current model step; it does not pause
@@ -241,8 +262,10 @@ export function RunControls({
         <div className="control-operation" data-control-operation={phase}>
           <div className="section-heading">
             <h3>
-              {CONTROLS.find((control) => control.kind === pending.kind)
-                ?.label || pending.kind}{" "}
+              {pending.kind === "set_parameter"
+                ? "Live target"
+                : CONTROLS.find((control) => control.kind === pending.kind)
+                    ?.label || pending.kind}{" "}
               request{" "}
               <Badge
                 tone={
@@ -255,6 +278,12 @@ export function RunControls({
             {pending.operationId && <code>{pending.operationId}</code>}
           </div>
           <p>{operationMeaning[phase] || operationMeaning.unknown}</p>
+          {pending.kind === "set_parameter" && pending.parameters && (
+            <p>
+              Requested target: {String(pending.parameters.expectedValue)} →{" "}
+              {String(pending.parameters.value)}.
+            </p>
+          )}
           {pending.code && (
             <p>
               Reported reason: <code>{pending.code}</code>

@@ -13,7 +13,7 @@ import traceback
 import psutil
 from xverse_studio.storage.core import atomic, canonical, digest
 from xverse_studio.providers.reference_control import (
-    CONTROL_STATES, MAX_PAUSED_WALL_SECONDS, REFERENCE_VERSION,
+    CONTROL_STATES, MAX_PAUSED_WALL_SECONDS, MAX_LIVE_MUTATIONS, REFERENCE_VERSION, live_change,
 )
 
 
@@ -73,6 +73,9 @@ def main():
         digest(actual) != digest(config)
         or compiled["planDigest"] != snapshot["planDigest"]
         or snapshot.get("providerIdentity", {}).get("limits", {}).get("maxPausedWallSeconds") != MAX_PAUSED_WALL_SECONDS
+        or (config.get("liveInputs") and (
+            snapshot.get("providerIdentity", {}).get("providerVersion") != REFERENCE_VERSION
+            or snapshot.get("providerIdentity", {}).get("limits", {}).get("maxLiveMutations") != MAX_LIVE_MUTATIONS))
     ):
         atomic(
             root / "state.json",
@@ -103,6 +106,8 @@ def main():
         "effectiveSemanticDigest": compiled.get("semanticDigest"),
         "commandResults": {},
     }
+    if config.get("liveInputs"):
+        state.update(liveValues={"target": config["target"]}, liveMutationCount=0)
     previous = "0" * 64
     count = 0
     runid = request["runId"]
@@ -229,6 +234,33 @@ def main():
                     ):
                         state["commandResults"][operation] = {"status": "failed", "code": "COMMAND_STATE_CONFLICT"}
                         emit("command.failed", {"operationId": operation, "code": "COMMAND_STATE_CONFLICT"}, tick)
+                    elif cmd["kind"] == "set_parameter":
+                        try:
+                            requested = live_change(cmd.get("parameters"), config.get("liveInputs"),
+                                                    state.get("liveValues"), state.get("liveMutationCount"))
+                            principal = cmd.get("principal")
+                            if not isinstance(principal, str) or not 0 < len(principal) <= 128:
+                                raise ValueError("LIVE_INPUT_AUTHORITY_INVALID")
+                        except ValueError as error:
+                            state["commandResults"][operation] = {"status": "failed", "code": str(error)}
+                            emit("command.failed", {"operationId": operation, "code": str(error)}, tick)
+                        else:
+                            mutation = {
+                                "inputId": "target", "oldValue": target, "newValue": requested,
+                                "recordedAt": time.time(),
+                                "sourceTime": {"tick": str(tick), "clockDomain": "simulation-time", "resolution": "microsecond", "uncertainty": 0},
+                                "authority": {"principal": principal, "scope": "native-backend-owned", "physicalEffects": False},
+                            }
+                            target = requested
+                            state["liveValues"]["target"] = target
+                            state["liveMutationCount"] += 1
+                            state["stateVersion"] += 1
+                            # Application is already known. A later evidence/storage
+                            # failure cannot reclassify this as an unapplied command.
+                            state["commandResults"][operation] = {"status": "completed", "result": {"mutation": mutation}}
+                            emit("command.completed", {"operationId": operation, "kind": cmd["kind"], "mutation": mutation}, tick)
+                            emit("run.state_changed", {"state": state["state"], "stateVersion": state["stateVersion"]}, tick)
+                            completed_controls.add(operation)
                     else:
                         now = time.monotonic()
                         if cmd["kind"] == "resume" and paused_total + now - paused_at >= MAX_PAUSED_WALL_SECONDS:

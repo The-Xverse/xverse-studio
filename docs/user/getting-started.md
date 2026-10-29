@@ -69,7 +69,15 @@ The owned reference model supports Pause/Resume at a model-step boundary. While 
 its process stays alive and simulation time stops advancing. Its cumulative pause budget
 is30 wall seconds per run; exhausting it stops the model with incomplete coverage.
 Stop/Cancel also work while paused. These controls do not pause physical equipment.
-Step, reset, rewind and live parameter mutation remain unsupported.
+The **Live target reference** example additionally admits bounded changes to its
+declared model target. In Results, enter **Proposed live target** (dimensionless,
+−100 to 100), then choose **Apply live target**. The current observed value and
+32-change budget stay visible. A changed observed state requires **Review latest
+target** before applying a retained proposal. A lost acknowledgement can be
+recovered with **Retry same request**, including after reload. The original
+configuration and later project drafts remain separate; each applied change
+records its old/new values, time, authority and outcome. Other examples have no
+live target control. Step, reset, rewind and other live changes remain unsupported.
 
 ## Stop and remove
 

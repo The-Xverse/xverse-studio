@@ -14,6 +14,10 @@ EVALUATION_NAMESPACE = "io.xverse.studio.experiments"
 EVALUATION_SCHEMA_ID = "https://schemas.xverse.io/studio/experiments/1.0/evaluation.schema.json"
 CONNECTIONS_NAMESPACE = "io.xverse.studio.connections"
 CONNECTIONS_SCHEMA_ID = "https://schemas.xverse.io/studio/connections/1.0/connection-contracts.schema.json"
+LIVE_NAMESPACE = "io.xverse.studio.reference-controls"
+LIVE_SCHEMA_ID = "https://schemas.xverse.io/studio/reference-controls/1.0/schema.json"
+LIVE_INPUT = {"id": "target", "initialParameterId": "target", "mutable": True,
+              "valueType": "number", "unit": "1", "minimum": -100, "maximum": 100}
 MODEL_CONTRACT = (
     "xverse.studio.reference.first-order.v1\n"
     "state[0]=initial; measured[n]=initial if stuck-sensor active else state[n];\n"
@@ -23,6 +27,9 @@ MODEL_CONTRACT = (
     "initialConditions.stateParameterRef=initial; no physical equipment or external simulator.\n"
 )
 MODEL_DIGEST = "sha256:" + hashlib.sha256(MODEL_CONTRACT.encode()).hexdigest()
+LIVE_MODEL_DIGEST = "sha256:" + hashlib.sha256((MODEL_CONTRACT +
+    "Optional owned reference-controls1.0 input target starts from frozen configuration;\n"
+    "owner-signed bounded CAS commands may replace that model input at a step boundary.\n").encode()).hexdigest()
 
 PARAMETERS = [
     {"id": "target", "label": "Target", "valueType": "number", "unit": "1", "default": 1.0,
@@ -99,7 +106,7 @@ CONVERTER_TEMPLATE = {"kind": "linear", "fromUnit": "1", "toUnit": "%", "scale":
 CONVERTER_BOUND = 1e6
 
 
-def reference_resources(namespace: str = "org.xverse.studio.reference", feedback: bool = False) -> dict[str, dict]:
+def reference_resources(namespace: str = "org.xverse.studio.reference", feedback: bool = False, live_controls: bool = False) -> dict[str, dict]:
     """Return a fresh valid XDL set for the admitted finite reference-model contract.
 
     With `feedback`, the System declares the model's existing unit-delay loop as an explicit
@@ -222,6 +229,22 @@ def reference_resources(namespace: str = "org.xverse.studio.reference", feedback
     })
     evaluation_profile["metadata"]["version"] = "1.0.0"
     extra = {}
+    if live_controls:
+        live_profile = _resource("Profile", "reference-controls", namespace, {
+            "extensionNamespace": LIVE_NAMESPACE, "compatibleApiVersions": [API_VERSION],
+            "schemaRef": LIVE_SCHEMA_ID, "documentationRef": "urn:xverse:studio:reference-controls:1.0",
+            "conflictPolicy": "reject",
+        })
+        extra["live-controls-profile.xdl.yaml"] = live_profile
+        scenario["extensions"][LIVE_NAMESPACE] = {"version": "1.0", "inputs": [deepcopy(LIVE_INPUT)]}
+        for parameter in scenario["extensions"][PROFILE_NAMESPACE]["parameters"]:
+            if parameter["id"] == "duration":
+                parameter["value"] = 15.0
+            if parameter["id"] == "initial":
+                parameter["mutability"] = "constant"
+        plant["spec"]["models"][0]["externalRef"] = "urn:xverse:studio:reference:first-order:live-target:v1"
+        deployment["spec"]["artifacts"][0].update(version="1.1.0", digest=LIVE_MODEL_DIGEST,
+            sourceRef="urn:xverse:studio:reference:first-order:live-target:v1")
     if feedback:
         connections_profile = _resource("Profile", "studio-connections", namespace, {
             "extensionNamespace": CONNECTIONS_NAMESPACE, "compatibleApiVersions": [API_VERSION],
@@ -245,18 +268,21 @@ def dump_yaml(value: dict) -> str:
 def examples() -> list[dict]:
     """Discover data bundles; selecting one never installs or invokes provider code."""
     result = []
-    for identifier, title, namespace, description, feedback, domain_profile in (
+    for identifier, title, namespace, description, feedback, domain_profile, live_controls in (
         ("reference-process-control", "Process control reference", "org.xverse.studio.process-control",
          "Explore a normalized process response, tune the setpoint and compare measured reference observations.", False,
-         "io.xverse.studio.domain.process-control"),
+         "io.xverse.studio.domain.process-control", False),
         ("reference-automotive", "Automotive reference", "org.xverse.studio.automotive",
          "Explore a normalized controller and plant response using the same reference model; no vehicle dynamics claim.", False,
-         "io.xverse.studio.domain.automotive"),
+         "io.xverse.studio.domain.automotive", False),
         ("reference-feedback", "Process control feedback reference", "org.xverse.studio.feedback",
          "Declare the reference loop's unit-delay feedback explicitly and observe the state through an explicit linear converter to percent.", True,
-         "io.xverse.studio.domain.process-control"),
+         "io.xverse.studio.domain.process-control", False),
+        ("reference-live-target", "Live target reference", "org.xverse.studio.live-target",
+         "Change the owned model target during a run and inspect its recorded old/new values while the initial configuration stays frozen.", False,
+         None, True),
     ):
-        resources = reference_resources(namespace, feedback)
+        resources = reference_resources(namespace, feedback, live_controls)
         resources["system.xdl.yaml"]["metadata"]["description"] = description
         result.append({"id": identifier, "entryId": identifier, "name": title, "description": description,
                        "version": "1.0.0", "scope": "owned_reference", "maturity": "fixture", "providerId": "studio.reference",
@@ -266,6 +292,7 @@ def examples() -> list[dict]:
                        + (["The same state converted by the declared linear converter (scale·x + offset) in percent."] if feedback else []),
                        "profileRefs": [{"namespace": PROFILE_NAMESPACE, "version": "0.1.0"}, {"namespace": EVALUATION_NAMESPACE, "version": "1.0.0"}]
                        + ([{"namespace": CONNECTIONS_NAMESPACE, "version": "1.0.0"}] if feedback else [])
+                       + ([{"namespace": LIVE_NAMESPACE, "version": "1.0.0"}] if live_controls else [])
                        # Owned presentation-only domain terminology (T062); it never changes semantics.
-                       + [{"namespace": domain_profile, "version": "1.0.0"}]})
+                       + ([{"namespace": domain_profile, "version": "1.0.0"}] if domain_profile else [])})
     return result

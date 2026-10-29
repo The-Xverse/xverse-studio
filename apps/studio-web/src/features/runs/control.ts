@@ -19,6 +19,7 @@ export interface PendingCommand {
   runId: string;
   kind: string;
   expectedStateVersion: number;
+  parameters?: Record<string, unknown>;
   sentAt: number;
   operationId?: string;
   status?: string;
@@ -81,7 +82,20 @@ export function readPendingCommand(runId: string): PendingCommand | null {
   return value &&
     typeof value.key === "string" &&
     value.runId === runId &&
-    ["stop", "cancel", "pause", "resume"].includes(value.kind) &&
+    ["stop", "cancel", "pause", "resume", "set_parameter"].includes(
+      value.kind,
+    ) &&
+    (value.kind !== "set_parameter" ||
+      (value.parameters &&
+        Object.keys(value.parameters).sort().join(",") ===
+          "expectedValue,inputId,value" &&
+        value.parameters.inputId === "target" &&
+        typeof value.parameters.value === "number" &&
+        Number.isFinite(value.parameters.value) &&
+        Math.abs(value.parameters.value) <= 100 &&
+        typeof value.parameters.expectedValue === "number" &&
+        Number.isFinite(value.parameters.expectedValue) &&
+        Math.abs(value.parameters.expectedValue) <= 100)) &&
     Number.isInteger(value.expectedStateVersion) &&
     Number.isFinite(value.sentAt) &&
     (value.operationId === undefined ||
@@ -135,7 +149,7 @@ export function commandRequest(pending: PendingCommand) {
       body: {
         kind: pending.kind as Command["kind"],
         expectedStateVersion: pending.expectedStateVersion,
-        parameters: {},
+        parameters: pending.parameters || {},
       } satisfies Command,
       key: pending.key,
     },
@@ -183,7 +197,9 @@ export function controlAvailability(
       ? ["running"]
       : kind === "resume"
         ? ["paused"]
-        : COMMAND_STATES;
+        : kind === "set_parameter"
+          ? ["running", "paused"]
+          : COMMAND_STATES;
   if (!states.includes(state))
     return {
       available: false,

@@ -1,5 +1,7 @@
 from typing import Any, Literal
-from pydantic import Field
+import json
+
+from pydantic import Field, field_validator
 
 from xverse_studio.security.models import Body  # The strict base lives below the API layer.
 
@@ -50,6 +52,18 @@ class Command(Body):
     ]
     expectedStateVersion: int = Field(ge=0)
     parameters: dict[str, Any] = Field(default_factory=dict, max_length=32)
+
+    @field_validator("parameters")
+    @classmethod
+    def canonical_parameters(cls, value):
+        # allow_inf_nan=False does not inspect Any-valued nested parameters.
+        # Validate before run lookup/idempotency hashing without normalizing
+        # opaque, otherwise valid JSON or accepting a nonfinite fingerprint.
+        try:
+            json.dumps(value, ensure_ascii=False, allow_nan=False).encode("utf-8")
+        except (TypeError, ValueError, RecursionError) as error:
+            raise ValueError("Command parameters require finite UTF-8 JSON values.") from error
+        return value
 
 
 class Import(Body):

@@ -1,0 +1,13 @@
+<testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="3" time="6.835" timestamp="2026-10-29T00:47:10.520360+00:00" hostname="&lt;native-linux-host&gt;"><testcase classname="tests.integration.test_reference_live_target" name="test_live_profile_has_authoritative_identity_and_closed_model_input_contract" time="1.057" /><testcase classname="tests.integration.test_reference_live_target" name="test_native_live_target_changes_actual_samples_with_provenance_and_immutable_inputs" time="2.851"><failure message="KeyError: 'createTime'">tests/integration/test_reference_live_target.py:68: in test_native_live_target_changes_actual_samples_with_provenance_and_immutable_inputs
+    project, run, directory, snapshot, child = live_run(client)
+                                               ^^^^^^^^^^^^^^^^
+tests/integration/test_reference_live_target.py:35: in live_run
+    assert process.create_time() == run['createTime'] and child.poll() is None
+                                    ^^^^^^^^^^^^^^^^^
+E   KeyError: 'createTime'</failure></testcase><testcase classname="tests.integration.test_reference_live_target" name="test_native_live_target_refuses_unsupported_bounds_old_value_and_stale_state_without_effects" time="2.784"><failure message="KeyError: 'createTime'">tests/integration/test_reference_live_target.py:118: in test_native_live_target_refuses_unsupported_bounds_old_value_and_stale_state_without_effects
+    _, run, directory, _, _ = live_run(client)
+                              ^^^^^^^^^^^^^^^^
+tests/integration/test_reference_live_target.py:35: in live_run
+    assert process.create_time() == run['createTime'] and child.poll() is None
+                                    ^^^^^^^^^^^^^^^^^
+E   KeyError: 'createTime'</failure></testcase></testsuite></testsuites>

@@ -25,7 +25,7 @@ from xverse_studio.evidence.reader import read_journal
 from xverse_studio.deployments import compile_selection
 from xverse_studio.profiles import ProfileRegistry
 from xverse_studio.preflight import reference_readiness
-from xverse_studio.providers.reference_control import CONTROL_STATES, MAX_PAUSED_WALL_SECONDS, admitted_controls
+from xverse_studio.providers.reference_control import CONTROL_STATES, MAX_PAUSED_WALL_SECONDS, MAX_LIVE_MUTATIONS, admitted_controls, live_change
 
 
 def _observation_version(run):
@@ -396,9 +396,12 @@ class Runs:
                 "createdAt": time.time(),
                 "planDigest": snap["planDigest"],
                 "semanticDigest": snap["semanticDigest"],
-                "capabilities": admitted_controls(snap["providerIdentity"]),
+                "capabilities": admitted_controls(snap["providerIdentity"], config),
                 "controlLimits": {"maxPausedWallSeconds": MAX_PAUSED_WALL_SECONDS},
             }
+            if "set_parameter" in run["capabilities"]:
+                run.update(liveInputs=config["liveInputs"], liveValues={"target": config["target"]}, liveMutationCount=0)
+                run["controlLimits"]["maxLiveMutations"] = MAX_LIVE_MUTATIONS
             operation = {
                 "operationId": oid,
                 "status": "accepted",
@@ -654,6 +657,8 @@ class Runs:
                             "stateVersion",
                             "cleanup",
                             "cleanupResources",
+                            "liveValues",
+                            "liveMutationCount",
                             "evidence",
                             "evidenceFailure",
                             "reason",
@@ -745,7 +750,7 @@ class Runs:
 
         def accepted(db):
             run = self.store.get("run", rid, db)
-            if payload.get("parameters"):
+            if payload["kind"] != "set_parameter" and payload.get("parameters"):
                 raise Problem(
                     "COMMAND_PARAMETERS_UNSUPPORTED",
                     "The admitted reference controls accept no additional parameters.",
@@ -767,6 +772,11 @@ class Runs:
                     "The current owned state does not permit this command.",
                     409,
                 )
+            if payload["kind"] == "set_parameter":
+                try:
+                    live_change(payload.get("parameters"), run.get("liveInputs"), run.get("liveValues"), run.get("liveMutationCount"))
+                except ValueError as error:
+                    raise Problem(str(error), "The live input declaration, value, observed old value or mutation budget does not permit this change.", 409 if str(error) == "LIVE_INPUT_CONFLICT" else 422) from None
             if any(
                 op.get("runId") == rid
                 and op.get("kind") != "start"
@@ -783,6 +793,9 @@ class Runs:
                 "kind": payload["kind"],
                 "status": "accepted",
             }
+            if payload["kind"] == "set_parameter":
+                op.update(parameters=payload["parameters"], principal=principal,
+                          expectedStateVersion=payload["expectedStateVersion"])
             self.store.put("operation", oid, op, db)
             run["pendingCommandId"] = oid
             self.store.put("run", rid, run, db)
@@ -795,8 +808,11 @@ class Runs:
             root = self.directory(rid)
             secret = (root / "owner.key").read_bytes()
             cmd = {"operationId": result["operationId"], "kind": payload["kind"]}
-            if payload["kind"] in ("pause", "resume"):
+            if payload["kind"] in ("pause", "resume", "set_parameter"):
                 cmd["expectedStateVersion"] = payload["expectedStateVersion"]
+            if payload["kind"] == "set_parameter":
+                operation = self.store.get("operation", result["operationId"])
+                cmd.update(parameters=operation["parameters"], principal=operation["principal"])
             cmd["signature"] = hmac.new(
                 secret, canonical(cmd).encode(), hashlib.sha256
             ).hexdigest()

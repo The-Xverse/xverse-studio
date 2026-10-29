@@ -1,0 +1,66 @@
+{
+  "observedAt": "2026-10-29T01:12:29.463946+00:00",
+  "checks": [
+    {
+      "name": "typecheck",
+      "command": [
+        "<tool-cache>/node-v24.22.1-linux-x64/bin/node",
+        "node_modules/typescript/bin/tsc",
+        "--noEmit",
+        "-p",
+        "apps/studio-web/tsconfig.json"
+      ],
+      "exitCode": 0
+    },
+    {
+      "name": "architecture",
+      "command": [
+        "<repo>/.venv/bin/python",
+        "-I",
+        "scripts/check_architecture.py"
+      ],
+      "exitCode": 0
+    },
+    {
+      "name": "platform",
+      "command": [
+        "<repo>/.venv/bin/python",
+        "-I",
+        "scripts/check_platform_compatibility.py"
+      ],
+      "exitCode": 0
+    },
+    {
+      "name": "spec",
+      "command": [
+        "<repo>/.venv/bin/python",
+        "-I",
+        "scripts/validate_spec_package.py"
+      ],
+      "exitCode": 0
+    },
+    {
+      "name": "static",
+      "command": [
+        "<repo>/.venv/bin/ruff",
+        "check",
+        "services/studio-api/src",
+        "scripts",
+        "tests",
+        "--select",
+        "F821"
+      ],
+      "exitCode": 0
+    },
+    {
+      "name": "diff",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exitCode": 0
+    }
+  ],
+  "scope": "Static/type/schema checks only; build succeeded before native/browser phases, full verification remains running."
+}

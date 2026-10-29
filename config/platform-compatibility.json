@@ -104,6 +104,19 @@
         "artifact": "services/studio-api/src/xverse_studio/profiles/domain-presentation-v1.schema.json",
         "origin": "studio_owned",
         "scope": "presentation_only"
+      },
+      {
+        "schemaId": "https://schemas.xverse.io/studio/reference-controls/1.0/schema.json",
+        "sha256": "sha256:78aff4d2f4d7eea621351a4eeb8819370cea7c7f683b40e788f3badf2c0344cd",
+        "profiles": [
+          {
+            "namespace": "io.xverse.studio.reference-controls",
+            "version": "1.0.0"
+          }
+        ],
+        "artifact": "services/studio-api/src/xverse_studio/xdl/reference-controls-v1.schema.json",
+        "origin": "studio_owned",
+        "scope": "offline_schema_admission; execution requires separate provider admission"
       }
     ],
     "studioAdapterLimits": {
@@ -163,9 +176,9 @@
   "providerDescriptorSnapshots": [
     {
       "providerId": "studio.reference",
-      "providerVersion": "1.1.0",
+      "providerVersion": "1.2.0",
       "contractVersion": "1.0",
-      "implementationDigest": "sha256:26ac1d1e10197e46ad48dda1888bb557224744e77e5231a2023fc0a008c00a3a",
+      "implementationDigest": "sha256:def89c93f01a3f46a4f2f0a140ee3e376582bd60677e33686233af6a8b710b10",
       "maturity": "fixture",
       "evidenceScope": "owned_reference",
       "supportedHostOS": [
@@ -181,7 +194,8 @@
         "stop",
         "cancel",
         "pause",
-        "resume"
+        "resume",
+        "set_parameter"
       ],
       "connectionContracts": {
         "causality": [
@@ -197,13 +211,14 @@
         "maxConcurrentRuns": 4,
         "maxElements": 200,
         "maxConnections": 400,
-        "maxPausedWallSeconds": 30
+        "maxPausedWallSeconds": 30,
+        "maxLiveMutations": 32
       },
       "available": true,
       "limitations": [
         "Scalar first-order reference model only; no external simulator, physical device, native X-COM, or industrial fidelity claim.",
         "Cooperative simulation pause has a cumulative 30-second wall-time budget; exhaustion stops the owned model with incomplete coverage.",
-        "Rewind, step, reset, live mutation and physical coupling are unsupported."
+        "Only the explicit owned live-target profile admits bounded target input changes; other live mutations, rewind, step, reset and physical coupling are unsupported."
       ]
     },
     {

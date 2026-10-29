@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.xverse.io/studio/reference-controls/1.0/schema.json",
+  "title": "Owned reference live model input contract 1.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "inputs"],
+  "properties": {
+    "version": {"const": "1.0"},
+    "inputs": {
+      "type": "array", "minItems": 1, "maxItems": 1,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["id", "initialParameterId", "mutable", "valueType", "unit", "minimum", "maximum"],
+        "properties": {
+          "id": {"const": "target"},
+          "initialParameterId": {"const": "target"},
+          "mutable": {"const": true},
+          "valueType": {"const": "number"},
+          "unit": {"const": "1"},
+          "minimum": {"const": -100},
+          "maximum": {"const": 100}
+        }
+      }
+    }
+  }
+}

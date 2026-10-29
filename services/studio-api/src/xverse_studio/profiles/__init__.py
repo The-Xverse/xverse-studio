@@ -13,7 +13,7 @@ from xverse_studio.security.files import safe_name
 
 from .presentation import DOMAIN_PROFILES, DOMAIN_SCHEMA_ID, sanitize_presentation
 from xverse_studio.xdl.examples import (API_VERSION, CONNECTIONS_NAMESPACE, CONNECTIONS_SCHEMA_ID, EVALUATION_NAMESPACE,
-                                        EVALUATION_SCHEMA_ID, PROFILE_NAMESPACE, dump_yaml)
+                                        EVALUATION_SCHEMA_ID, PROFILE_NAMESPACE, LIVE_NAMESPACE, LIVE_SCHEMA_ID, dump_yaml)
 
 
 class ProfileRegistry:
@@ -29,8 +29,10 @@ class ProfileRegistry:
              EVALUATION_SCHEMA_ID, "urn:xverse:studio:experiments:1.0"),
             (CONNECTIONS_NAMESPACE, "1.0.0", "Owned connection contracts", str(Path(__file__).parent.parent / "connections" / "connections-v1.schema.json"),
              CONNECTIONS_SCHEMA_ID, "urn:xverse:studio:connections:1.0"),
+            (LIVE_NAMESPACE, "1.0.0", "Owned reference live target", str(Path(__file__).parent.parent / "xdl" / "reference-controls-v1.schema.json"),
+             LIVE_SCHEMA_ID, "urn:xverse:studio:reference-controls:1.0"),
         ]
-        names = {PROFILE_NAMESPACE: "experiment-lite", EVALUATION_NAMESPACE: "studio-experiments", CONNECTIONS_NAMESPACE: "studio-connections"}
+        names = {PROFILE_NAMESPACE: "experiment-lite", EVALUATION_NAMESPACE: "studio-experiments", CONNECTIONS_NAMESPACE: "studio-connections", LIVE_NAMESPACE: "reference-controls"}
         domain_schema = str(Path(__file__).parent / "domain-presentation-v1.schema.json")
         domains = {item["namespace"]: item for item in DOMAIN_PROFILES}
         sources += [(item["namespace"], item["version"], item["presentation"]["name"], domain_schema, DOMAIN_SCHEMA_ID,
@@ -44,11 +46,12 @@ class ProfileRegistry:
             result.append({"profileId": namespace, "namespace": namespace, "version": version, "schemaRef": schema_ref,
                            "resourceName": domain["resourceName"] if domain else names[namespace],
                            **({"kind": "domain-presentation"} if domain else {}),
+                           **({"kind": "reference-controls"} if namespace == LIVE_NAMESPACE else {}),
                            "schemaDigest": digest(raw), "presentationDigest": digest(canonical(presentation).encode()),
                            "presentation": presentation, "schema": json.loads(raw), "schemaText": raw.decode(),
                            "documentationRef": documentation, "compatibleApiVersions": [API_VERSION], "conflictPolicy": "reject",
-                           "maturity": "fixture" if domain else "admitted_integration",
-                           "scope": "owned_presentation_only" if domain else "offline_schema_and_derived_assessment",
+                           "maturity": "fixture" if domain or namespace == LIVE_NAMESPACE else "admitted_integration",
+                           "scope": "owned_model_input_declaration" if namespace == LIVE_NAMESPACE else "owned_presentation_only" if domain else "offline_schema_and_derived_assessment",
                            "executionAllowed": False,
                            "limitations": ["Profile selection cannot install a provider or grant simulator/device authority."]
                            + (["Owned presentation only: terminology, icons and form groups for the owned reference blueprints; no domain fidelity."] if domain else [])})

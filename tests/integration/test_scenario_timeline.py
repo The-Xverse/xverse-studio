@@ -102,7 +102,7 @@ def test_actual_fault_timeline_uses_frozen_intent_and_preserves_inputs(client, r
     assert requested["position"]["tick"] == observed["position"]["tick"] == "100000"
     assert requested["position"]["tickUnit"] == "microsecond"
     assert requested["evidenceScope"] == observed["evidenceScope"] == "owned_reference"
-    assert requested["source"] == observed["source"] == {"providerId": "studio.reference", "version": "1.1.0"}
+    assert requested["source"] == observed["source"] == {"providerId": "studio.reference", "version": "1.2.0"}
     configured = next(row for row in rows if row["id"] == "intent:configuration:fault")
     assert configured["declaredValue"] == "stuck-sensor" and configured["layer"] == "intent"
     assert configured["logicalRef"] == snapshot["selection"]["scenarioRef"]
