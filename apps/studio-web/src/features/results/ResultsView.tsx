@@ -4,6 +4,7 @@ import type { Data, Run, RunEvent } from "../../api/types";
 import type { DoAction } from "../../app/App";
 import { Icon, Badge, Empty, Json, KeyValues, statusTone } from "../../app/ui";
 import { ComparisonWorkspace } from "../comparison/ComparisonWorkspace";
+import { PlatformViews, type PlatformView } from "./PlatformViews";
 import { EvidenceFilterControls } from "./EvidenceFilterControls";
 import {
   emptyFilters,
@@ -703,6 +704,8 @@ export function ResultsView({
       <div className="sub-tabs" role="tablist" aria-label="Result sections">
         {[
           "Observations",
+          "Orchestration",
+          "Communications",
           "Events & logs",
           "Diagnosis",
           "Evidence",
@@ -733,7 +736,15 @@ export function ResultsView({
           </button>
         ))}
       </div>
-      {tab === "Observations" ? (
+      <PlatformViews
+        key={`${run.runId}:${run.snapshotId}`}
+        runId={run.runId}
+        active={["Orchestration", "Communications", "Evidence"].includes(tab)}
+        view={(tab === "Orchestration" ? "orchestration" : tab === "Communications" ? "communications" : "evidence") as PlatformView}
+        onView={(view) => setTab(view[0].toUpperCase() + view.slice(1))}
+        onLogical={setSelected}
+      />
+      {tab === "Orchestration" || tab === "Communications" ? null : tab === "Observations" ? (
         <>
           <section className="panel">
             <div className="section-heading">

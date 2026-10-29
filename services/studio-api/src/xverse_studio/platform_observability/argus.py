@@ -93,13 +93,16 @@ class ArgusSources:
             max_manifest_bytes=1024*1024, max_causal_index_entries=4096,
             max_read_records=4096)
 
-    def read(self, source_id, *, limit=100, cursor=None):
+    def capture(self, source_id):
+        """Capture one bounded original reader result for trusted host projection.
+
+        A browser must never receive this raw result. A single capture avoids
+        mixing pages read before/after an append to a live Argus manifest.
+        """
         if not sys.platform.startswith("linux"):
             raise Problem("ARGUS_READER_OS_UNSUPPORTED", "This reader requires native Linux secure file access; use a supported host for this integration.", 422)
         if source_id not in self._sources:
             raise Problem("ARGUS_SOURCE_UNAVAILABLE", "Select a host-registered evidence source.", 404)
-        if type(limit) is not int or not 1 <= limit <= 200:
-            raise Problem("LIMIT_EXCEEDED", "Select an evidence page of1–200 records.")
         binding, identity = self._sources[source_id]
         try:
             if _identity(binding.root) != identity:
@@ -134,6 +137,20 @@ class ArgusSources:
         witness = digest({'source':binding.source_id, 'run':binding.run_id,
             'plan':binding.plan_digest, 'manifest':manifest, 'records':records,
             'statuses':statuses, 'diagnostics':diagnostics, 'manifestBytes':manifest_witness})
+        return {'projectionVersion':'1.0', 'sourceId':binding.source_id,
+            'reader':{'service':'argus','version':ARGUS_VERSION},
+            'expectedIdentity':{'runId':binding.run_id,'planDigest':binding.plan_digest},
+            'runId':binding.run_id if manifest else None, 'planDigest':binding.plan_digest if manifest else None,
+            'inputSemanticDigest':None,
+            'identityVerified':bool(manifest), 'sourceWitness':witness,
+            'evidence':deepcopy(statuses), 'diagnostics':diagnostics,
+            'items':deepcopy(records), 'retainedRecordCount':len(records)}
+
+    def read(self, source_id, *, limit=100, cursor=None):
+        if type(limit) is not int or not 1 <= limit <= 200:
+            raise Problem("LIMIT_EXCEEDED", "Select an evidence page of1–200 records.")
+        captured = self.capture(source_id)
+        records, witness = captured['items'], captured['sourceWitness']
         offset = 0
         if cursor is not None:
             if (type(cursor) is not dict or set(cursor) != {'witness','offset'}
@@ -142,12 +159,6 @@ class ArgusSources:
                 raise Problem("ARGUS_CURSOR_STALE", "The evidence or page identity changed; read the first page.", 409)
             offset = cursor['offset']
         following = offset + limit
-        return {'projectionVersion':'1.0', 'sourceId':binding.source_id,
-            'reader':{'service':'argus','version':ARGUS_VERSION},
-            'expectedIdentity':{'runId':binding.run_id,'planDigest':binding.plan_digest},
-            'runId':binding.run_id if manifest else None, 'planDigest':binding.plan_digest if manifest else None,
-            'inputSemanticDigest':None,
-            'identityVerified':bool(manifest), 'sourceWitness':witness,
-            'evidence':deepcopy(statuses), 'diagnostics':diagnostics,
+        return {**captured,
             'items':deepcopy(records[offset:following]), 'retainedRecordCount':len(records),
             'nextCursor': {'witness':witness,'offset':following} if following < len(records) else None}

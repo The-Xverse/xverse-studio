@@ -19,6 +19,45 @@ class PlatformProvider(AutoverseProvider):
     configuration = staticmethod(platform_configuration)
     shutdown_timeout_seconds = 75
 
+    def platform_evidence_binding(self, run, snapshot):
+        """Host-selected historical source; never re-enroll assets just to read.
+
+        The frozen descriptor records the run's installation/implementation, which
+        can legitimately differ from today's installed reader wrapper.
+        """
+        import re
+        from pathlib import Path
+        from ruamel.yaml import YAML
+        from xverse_xdl import ResourceIdentity
+        from xverse_studio.platform_observability.argus import ArgusBinding
+        from xverse_studio.platform_observability.views import PlatformEvidenceBinding
+        from xverse_studio.storage.core import Problem
+
+        rid = run["runId"]
+        frozen = snapshot["providerIdentity"]
+        if (not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._-]{0,127}", rid)
+                or run["providerId"] != PLATFORM_PROVIDER_ID or frozen["providerId"] != PLATFORM_PROVIDER_ID
+                or not frozen.get("platformIntegration")):
+            raise Problem("PLATFORM_SOURCE_UNAVAILABLE", "This run has no admitted platform evidence binding.", 404)
+        registered = Path(self.installation["nativeBridge"]["runtimeRoot"])
+        root = registered / (rid + ".argus")
+        if not root.exists():
+            raise Problem("PLATFORM_SOURCE_UNAVAILABLE", "Platform evidence is not available yet for this run. Refresh after Maestro opens its evidence writer.", 404)
+        if root.resolve() != root.absolute() or not root.resolve().is_relative_to(registered.resolve()):
+            raise Problem("PLATFORM_SOURCE_CHANGED", "The registered platform evidence root changed.", 409)
+        owners = []
+        for raw in snapshot["documents"].values():
+            document = YAML(typ="safe").load(raw)
+            if document.get("kind") == "System":
+                uri = ResourceIdentity.from_mapping(document).uri
+                owners.extend((uri + "#" + e["id"], uri + "#" + e["ownerId"])
+                              for e in document["spec"].get("endpoints", []))
+        return PlatformEvidenceBinding(ArgusBinding("argus-" + digest(rid)[7:39], root, rid, snapshot["planDigest"]),
+            snapshot["semanticDigest"], PLATFORM_PROVIDER_ID, frozen["installationDigest"],
+            frozen["implementationDigest"], tuple(owners),
+            (("urn:xverse:autoverse:wire-utf8-number:v1", "utf8-finite-number"),
+             ("urn:xverse:autoverse:wire-utf8-boolean:v1", "utf8-boolean")))
+
     def verify_installation(self):
         verify_platform(self.installation)
 

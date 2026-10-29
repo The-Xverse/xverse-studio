@@ -194,3 +194,49 @@ partial and reporting `evidenceFailure: EVIDENCE_FINALIZATION_FAILED`. These fac
 do not establish canonical source validity, complete coverage or a functional
 verdict. Existing termination reasons remain separate; no alternate retained file
 is implicitly admitted as the canonical journal.
+
+
+## Platform evidence views 1.0 — ADR-0034
+
+`GET /runs/{runId}/platform` reads only a host-installed provider's typed evidence
+binding. Historical classic/reference runs without that binding return
+`404 PLATFORM_SOURCE_UNAVAILABLE`; their Studio journals remain separate. Query
+selectors are `view=orchestration|communications|evidence`, `snapshot`, `cursor`,
+`eventId`, `correlationId`, `logicalId`, and `limit` (1–100, default50). Unknown or
+duplicate selectors reject. A request cannot select a host path, binary, writer,
+raw native records, payload codec or execution authority.
+
+The initial read captures one bounded original public Argus reader result, verifies
+run/compiled-plan identity, and checks every retained Maestro input identity against
+the immutable Studio snapshot. It returns an opaque `snapshotId`, original source
+witness, shared expected identities, separate verification dimensions, original
+recorded/assessed verdicts and diagnostic codes. Installation and implementation
+identities are frozen host binding metadata, not independent Argus attestation.
+A missing manifest cannot manufacture verified identities. Original reasons that
+are free text remain withheld, with counts; original diagnostic codes survive.
+
+All three views reuse that snapshot. Later appends never alter its pages. A page
+cursor binds snapshot, view, filters and limit. Captures expire after300 seconds;
+only two per binding and eight globally are retained, within4MiB per capture and
+16MiB total. Expired/evicted/mismatched snapshots return409 and require refreshing
+all views. Reader limits remain4096 records,64MiB declared source data and1MiB
+manifest. An in-flight manifest change rejects instead of joining two reads.
+
+Every row retains its original event, producer, ingestion ordinal, explicit
+correlation/causation, and `{sourceId,runId,eventId,ingestionOrdinal}` source reference.
+Maestro rows retain original phase/operation/logical/readiness/outcome facts;
+communications retain native ingress, observation and tap-snapshot facts separately.
+Logical endpoint ownership is derived from the frozen canonical System. Original
+clock domains/units/readings survive; integers outside JavaScript's safe range use
+exact decimal strings. No cross-clock mapping, latency, upstream cause or missing
+producer sequence is invented. Coalesced samples, dropped observations and external
+transport loss remain different facts. Native retention counters remain separate
+from cumulative tap snapshots and downstream application effects.
+
+Browser payload policy defaults to metadata only. Host-installed schema codecs may
+expose complete visible UTF-8 finite decimal scalars or booleans up to128 bytes;
+the decoded value is marked derived and numeric decimals retain their exact text.
+Raw bytes, unknown payloads, arbitrary extensions, private logs and filesystem
+messages never pass this projection. Snapshot capture and tab navigation neither
+start nor stop execution and do not change canonical evidence. The three browser
+views and complete live workflow require their own recorded verification.

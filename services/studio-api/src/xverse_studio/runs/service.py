@@ -59,6 +59,8 @@ class Runs:
         self.store, self.projects, self.adapter = store, projects, adapter
         self.children = {}
         self.installed_providers = dict(installed_providers or {})
+        from xverse_studio.platform_observability.views import PlatformViews
+        self.platform_views = PlatformViews()
         from xverse_studio.providers.registry import admit_descriptor
         builtins = {entry["providerId"] for entry in descriptors()}
         for provider_id, provider in self.installed_providers.items():
@@ -68,6 +70,16 @@ class Runs:
 
     def provider_descriptors(self):
         return [*descriptors(), *(provider.descriptor() for provider in self.installed_providers.values())]
+
+    def platform_view(self, rid, query):
+        run = self.store.get("run", rid)
+        snapshot = self.store.get("snapshot", run["snapshotId"])
+        self.verify_snapshot(snapshot)
+        provider = self.installed_providers.get(run["providerId"])
+        binding = getattr(provider, "platform_evidence_binding", None)
+        if binding is None:
+            raise Problem("PLATFORM_SOURCE_UNAVAILABLE", "This run has no installed Maestro/X-COM/Argus reader binding. Its Studio journal remains available separately.", 404)
+        return self.platform_views.read(binding(run, snapshot), query)
 
     def capability_digest(self):
         return digest(self.provider_descriptors()) if self.installed_providers else capability_digest()

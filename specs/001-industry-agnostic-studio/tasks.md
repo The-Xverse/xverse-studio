@@ -796,3 +796,18 @@ The new bridge remains unregistered pending source-mode/installation admission,
 full per-binding worker supervision and the three linked views. Task states and
 milestone gates remain unchanged. Evidence:
 `evidence/studio/platform-observability-foundation/native-bridge.json`.
+
+
+Complete platform backend experiment — 2026-10-29: candidate99669a8 ran the actual
+complete Autoverse simulation through public Maestro's22 phases and six logical
+bindings, native C++ FIFO bridge and actual Argus. The30-second manual window was
+idle. Worker exited0, all six original readiness facts were recorded, cleanup was
+released, and independent post-run inspection confirms19 original processes absent
+and three registered containers stopped. Argus retains237 original unique records,
+including39 native observations across13 batches. Both original verdicts remain
+incomplete due known native coalescing; no packet loss, driving/cruise or browser
+acceptance is inferred. Metadata successorf0561e5 repairs derived status and native
+input-surface display without rewriting that experiment. Linked HTTP/browser views
+are now being implemented and require live verification. Tasks and milestone states
+remain49completed/41in_progress/10blocked, zero accepted milestones. Evidence:
+`evidence/studio/platform-observability-foundation/complete-backend-experiment.json`.

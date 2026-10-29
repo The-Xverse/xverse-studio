@@ -1,0 +1,137 @@
+{
+  "recordedAt": "2026-10-29T19:12:55.461056+00:00",
+  "scope": "actual complete Linux backend platform simulation; idle 30-second manual-control window; no browser acceptance or driving/cruise claim",
+  "outcome": "passed-in-scope",
+  "candidate": "99669a880fb7da5be34f1375821dacb372f0909f",
+  "platformRevision": "ce2d5558cd36de5b29ab1e3c622303c7a77c61eb",
+  "runId": "run-platform-893fdb24-9a38-4612-b50d-5a5046af65b3",
+  "planDigest": "sha256:a06391fb6f58cafb319fb08ac273a3942fb8333270c5d7e049db6605dda6e560",
+  "inputSemanticDigest": "sha256:1520ad8d2e9a4995bd03a9cb877aeb3b9349cb825750877200f0d86afa490f29",
+  "workerExitStatus": 0,
+  "maestro": {
+    "operationId": "op-dd21415f0fb04c96b7d4c450e73bd9c7",
+    "correlationId": "corr-47a6bde82bc048188c69f16173a0247b",
+    "state": "stopped",
+    "stateVersion": 138,
+    "cleanup": "released",
+    "evidenceWriter": "closed",
+    "nativeSources": {
+      "autoverse.platform": {
+        "batchDigest": "sha256:a37dd970a04eb5c884675b630686e0ac06582d3497c9d9dfc492719ea60f10ff",
+        "batchSequence": 13,
+        "importedRecords": 39,
+        "lastArgusOrdinals": [
+          197,
+          198,
+          199
+        ],
+        "lastInputArgusOrdinals": [
+          194,
+          195,
+          196
+        ],
+        "lastSnapshotArgusOrdinals": [
+          200,
+          201,
+          202
+        ],
+        "missingSourceBatches": 0,
+        "state": "available"
+      }
+    }
+  },
+  "signedProjectionVerified": true,
+  "actualReadyFacts": [
+    {
+      "logicalId": "xdl://org.xverse.studio.autoverse/system/autoverse-demo#vcu",
+      "outcome": "ready",
+      "readinessKind": "liveness",
+      "eventId": "mpx-fc89b95820e24c8bba926e874e519caa",
+      "ingestionOrdinal": 13
+    },
+    {
+      "logicalId": "xdl://org.xverse.studio.autoverse/system/autoverse-demo#someip-bridge",
+      "outcome": "ready",
+      "readinessKind": "liveness",
+      "eventId": "mpx-aad5255494a6430f811341bb54be7425",
+      "ingestionOrdinal": 19
+    },
+    {
+      "logicalId": "xdl://org.xverse.studio.autoverse/system/autoverse-demo#score",
+      "outcome": "ready",
+      "readinessKind": "liveness",
+      "eventId": "mpx-b24c1e3a31c043d6a387ad70203981f2",
+      "ingestionOrdinal": 25
+    },
+    {
+      "logicalId": "xdl://org.xverse.studio.autoverse/system/autoverse-demo#carla",
+      "outcome": "ready",
+      "readinessKind": "interface",
+      "eventId": "mpx-dae8dcab0b1d41bba2952d2569e96627",
+      "ingestionOrdinal": 31
+    },
+    {
+      "logicalId": "xdl://org.xverse.studio.autoverse/system/autoverse-demo#android",
+      "outcome": "ready",
+      "readinessKind": "liveness",
+      "eventId": "mpx-55aec00bbf914880ac398da53101f82a",
+      "ingestionOrdinal": 41
+    },
+    {
+      "logicalId": "xdl://org.xverse.studio.autoverse/system/autoverse-demo#driver",
+      "outcome": "ready",
+      "readinessKind": "liveness",
+      "eventId": "mpx-2f96cd63b31c4ee897bbc46eff230592",
+      "ingestionOrdinal": 45
+    }
+  ],
+  "records": 237,
+  "recordKinds": {
+    "annotation": 159,
+    "observation": 39,
+    "snapshot": 39
+  },
+  "uniqueEventIds": true,
+  "evidence": {
+    "recorded": "incomplete",
+    "assessed": "incomplete",
+    "diagnostics": {
+      "ARGUS2-LOSS-KNOWN-DROP": 1,
+      "ARGUS2-LOSS-DEGRADED-INTERVAL": 39
+    }
+  },
+  "cleanupInspection": {
+    "processes": {
+      "adb-connect": "original-process-absent",
+      "android-boot": "original-process-absent",
+      "android-density": "original-process-absent",
+      "android-install": "original-process-absent",
+      "android-launch": "original-process-absent",
+      "android-open": "original-process-absent",
+      "carla": "original-process-absent",
+      "carla-prepare": "original-process-absent",
+      "carla-probe": "original-process-absent",
+      "driver": "original-process-absent",
+      "manual": "original-process-absent",
+      "native-bridge": "original-process-absent",
+      "router": "original-process-absent",
+      "start-android": "original-process-absent",
+      "start-score": "original-process-absent",
+      "start-someip-bridge": "original-process-absent",
+      "vcu": "original-process-absent",
+      "vcu-router": "original-process-absent",
+      "vehicle": "original-process-absent"
+    },
+    "containersRunning": {
+      "android": false,
+      "score": false,
+      "someip-bridge": false
+    }
+  },
+  "limitations": [
+    "Three native routes sampled with actual coalescing; no packet-loss count inferred.",
+    "No native/host clock synchronization or cross-clock latency claim.",
+    "Three linked browser views, GUI start/stop and driving/cruise remain unverified for this candidate.",
+    "Metadata successor f0561e5 repairs derived readiness, terminal phase/release display and descriptor input surface; this run remains bound to 99669a8."
+  ]
+}

@@ -36,6 +36,7 @@ from xverse_studio.evidence.query import (
     project_evidence,
 )
 from xverse_studio.timeline import TimelineQuery, project_timeline, MAX_EVALUATIONS
+from xverse_studio.platform_observability.views import PlatformQuery
 from xverse_studio.xdl import XDLAdapter, XDLRejected, examples
 from xverse_studio.lab.configuration import LabHostConfiguration
 from xverse_studio.lab.probe_configuration import LabProbeConfiguration
@@ -627,6 +628,12 @@ def create_app(
         snapshot = store.get("snapshot", run["snapshotId"])
         runs.verify_snapshot(snapshot)
         return {"snapshot": snapshot, "integrity": "valid", "readOnly": True}
+
+    @app.get("/api/v1/runs/{runId}/platform")
+    def platform_view(runId: str, query: Annotated[PlatformQuery, Query()], request: Request):
+        if len(request.query_params.multi_items()) != len(request.query_params):
+            raise Problem("PLATFORM_QUERY_INVALID", "Each platform selector may occur only once.")
+        return runs.platform_view(runId, query)
 
     @app.get("/api/v1/runs/{runId}/timeline")
     def timeline(runId: str, query: Annotated[TimelineQuery, Query()], request: Request):
