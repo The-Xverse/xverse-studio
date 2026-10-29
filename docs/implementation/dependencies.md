@@ -4,6 +4,13 @@ The immutable platform source pin is recorded in [baseline.md](baseline.md). Nat
 dependencies are locked in root `uv.lock` and `package-lock.json`; those files, rather than prose,
 are the complete transitive resolution authority. No companion repository mutation is required.
 
+The 2026-10-29 public Maestro successor was separately authorized, accepted and
+merged locally in the platform repository. Studio's new immutable pin is local
+and unpublished. Its Git dependency was provisioned through a temporary Git URL
+rewrite to that accepted checkout; the lock and installed `direct_url.json`
+preserve the canonical repository identity and exact commit. No publication or
+remote-only install success is claimed. See ADR-0034 and the SDK admission evidence.
+
 The installed backend environment was queried through `importlib.metadata.version`:
 
 | Distribution | Resolved version |

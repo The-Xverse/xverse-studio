@@ -1,19 +1,31 @@
 # Selected Studio integration baseline
 
-Inspected 2026-10-25. Repository contents and GitHub `commits/main` responses were read independently.
-Companion repositories were not modified and their live launchers were not executed.
+Initial inspection: 2026-10-25, using repository contents and GitHub `commits/main`
+responses independently. Updated 2026-10-29 after the separately authorized public
+Maestro capability was accepted and integrated into local platform `main`.
 
 | Input | Selected immutable revision | Admission scope |
 |---|---|---|
-| [xverse-platform](https://github.com/The-Xverse/xverse-platform/tree/7fab6a290c3731533c2b88517158055c768b9d4e) | `7fab6a290c3731533c2b88517158055c768b9d4e` | Installed `xverse-xdl` 0.4.0; public offline validation/compilation APIs exercised by Studio tests. |
+| [xverse-platform](https://github.com/The-Xverse/xverse-platform/tree/ce2d5558cd36de5b29ab1e3c622303c7a77c61eb) | `ce2d5558cd36de5b29ab1e3c622303c7a77c61eb` | Installed `xverse-xdl` 0.4.0 from accepted local main; offline XDL/Argus compatibility checked. Public Maestro boundary accepted upstream; concrete Studio runtime integration remains open. |
 | [xverse-compat](https://github.com/The-Xverse/xverse-compat/tree/f5b3957ca84cccfd98cddd9eb3ab95b0a4643eed) | `f5b3957ca84cccfd98cddd9eb3ab95b0a4643eed` | Source inspection only; no driver/simulator admission. |
 | [xverse-blueprints](https://github.com/The-Xverse/xverse-blueprints/tree/0741e01b9e86b9bb9360e2feb220807b36bcbdc4) | `0741e01b9e86b9bb9360e2feb220807b36bcbdc4` | Source inspection only; no live blueprint admission. |
 
-These main heads match the package's source register, but differ from the historical rc.1
-compatibility set. Matching current heads does not establish a mutually admitted live runtime set.
+The initial source register retains platform `7fab6a290c3731533c2b88517158055c768b9d4e`
+as its historical inspection identity. ADR-0034 records this successor admission.
+The new commit is local and has not been published; its GitHub link is an identity
+reference, not a claim of remote availability. Provisioning used a temporary Git
+URL rewrite to the accepted local repository, with the canonical source URL and
+commit retained in the lock and installed distribution metadata. No global Git
+configuration was changed. A remote-only installation cannot fetch this commit
+until publication is separately authorized.
+
+These revisions differ from the historical rc.1 compatibility set. Their selection
+does not establish a mutually admitted live runtime set. The selected XDL file
+hashes below are unchanged from the initial baseline; historical Linux and held
+Windows evidence retain their original candidates and outcomes.
 
 The dependency pin is an immutable Git revision, resolved in `uv.lock`. The Studio adapter imports
-only public exports from `xverse_xdl`: `validate_sources`, `canonical_json`,
+public exports from `xverse_xdl`: `validate_sources`, `canonical_json`,
 `compile_experiment_sources`, `plan_matches_digest`, public limits, API versions and package version.
 It passes explicitly supplied in-memory document bytes and explicit packaged schema paths. It does
 not discover dependencies recursively, fetch a schema URL, execute imported content, or infer readiness
@@ -57,8 +69,13 @@ Current live limitations are concrete:
   exact authored bytes, and returns an empty graph projection. This is not replacement validation or
   a claim that the platform produced semantic diagnostics. A corrected admitted public validator is
   needed to close DEP-XDL-DIAGNOSTIC; companion source is not patched by Studio.
-- Lite flow evidence is distinct from native C++ X-COM activation. Physical equipment, native X-COM
-  integration, general model coupling and simulator operation remain unavailable.
+- Lite flow evidence is distinct from native C++ X-COM activation. The accepted
+  public Maestro boundary supports scoped Linux lifecycle and native observation
+  collection with real Argus evidence. Studio's concrete Maestro/Autoverse integration
+  and three linked views remain unfinished. The existing separately admitted
+  Autoverse prototype operates its simulator through public component interfaces;
+  it does not establish Maestro, native X-COM or Argus integration. Physical equipment
+  and general model coupling remain unavailable.
 
 The executable `studio.reference` provider is Studio-owned and has its own finite model contract.
 Its evidence scope is `owned_reference` and maturity is `fixture`. It proves owned application
