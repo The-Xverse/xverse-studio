@@ -429,6 +429,9 @@ def main():
                     {
                         "severity": "error", "code": code,
                         "message": (
+                            "The owned model stopped, but release of its temporary directory was interrupted. Cleanup remains unknown; inspect the recorded resource identity before recovery."
+                            if phase == "cleanup"
+                            else
                             "The owned model stopped, but its evidence could not be finalized. Inspect the separate cleanup outcome."
                             if phase == "finalization"
                             else "Reference workload failed; inspect canonical evidence and ownership."
