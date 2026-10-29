@@ -1,5 +1,7 @@
 # Owned-fixture lifecycle verification
 
+The [failure-retention successor](failure-retention/README.md) records actual observed full1267 passes on392 inputs and14 focused passes after test-only capture changes on394 inputs. The earlier mismatch remains unestablished; no assertion is weakened. All116 product payloads remain identical.
+
 The [cleanup-interruption successor](cleanup-interruption/README.md), source`cb65206`, passes37 affected checks,98 unique browser cases and clean Linux package116. Its full1265 result is1264passed/1failed with an unresolved late-Stop operation/canonical code mismatch; original failures remain. Two additional native pre-launch crash cases pass independently. T033 stays open; earlier bindings retain their source scopes.
 
 [Additional native command-terminal checks](command-terminal/README.md) pass10 new actual native cases and8 related regressions on389 unchanged inputs. All prior388 inputs and116 package payloads remain identical; the application is unchanged. The prior1250/92/2/package116 retains its original scope. T033 remains open.

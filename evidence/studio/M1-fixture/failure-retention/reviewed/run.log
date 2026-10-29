@@ -1,0 +1,32 @@
+..............                                                           [100%]
+=============================== warnings summary ===============================
+.venv/lib/python3.13/site-packages/fastapi/testclient.py:1
+  <repo>/.venv/lib/python3.13/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+tests/integration/test_native_failure_capture.py::test_real_native_failure_is_retained_before_teardown_without_auth_files[directory]
+tests/integration/test_native_failure_capture.py::test_real_native_failure_is_retained_before_teardown_without_auth_files[unwritable_file]
+  tests/integration/test_native_failure_capture.py:18: PytestWarning: record_property is incompatible with junit_family 'xunit2' (use 'legacy' or 'xunit1')
+    @pytest.mark.skipif(sys.platform != 'linux', reason='Anchored Linux diagnostic acquisition; native Windows held')
+
+tests/integration/test_native_command_terminal_boundaries.py::test_native_pending_command_stays_unknown_without_owned_terminal_proof[worker_interrupted-stop]
+tests/integration/test_native_command_terminal_boundaries.py::test_native_pending_command_stays_unknown_without_owned_terminal_proof[worker_interrupted-cancel]
+tests/integration/test_native_command_terminal_boundaries.py::test_native_pending_command_stays_unknown_without_owned_terminal_proof[recorded_owner_lost-stop]
+tests/integration/test_native_command_terminal_boundaries.py::test_native_pending_command_stays_unknown_without_owned_terminal_proof[recorded_owner_lost-cancel]
+  tests/integration/test_native_command_terminal_boundaries.py:115: PytestWarning: record_property is incompatible with junit_family 'xunit2' (use 'legacy' or 'xunit1')
+    @pytest.mark.parametrize('kind', ['stop', 'cancel'])
+
+tests/integration/test_native_command_terminal_boundaries.py::test_native_reconciliation_before_delegation_does_not_reopen_settled_command[stop]
+tests/integration/test_native_command_terminal_boundaries.py::test_native_reconciliation_before_delegation_does_not_reopen_settled_command[cancel]
+  tests/integration/test_native_command_terminal_boundaries.py:198: PytestWarning: record_property is incompatible with junit_family 'xunit2' (use 'legacy' or 'xunit1')
+    @pytest.mark.parametrize('kind', ['stop', 'cancel'])
+
+tests/integration/test_native_command_terminal_boundaries.py::test_native_late_command_outcome_preserves_natural_completion_and_exact_retry[after_final_poll-stop]
+tests/integration/test_native_command_terminal_boundaries.py::test_native_late_command_outcome_preserves_natural_completion_and_exact_retry[after_final_poll-cancel]
+tests/integration/test_native_command_terminal_boundaries.py::test_native_late_command_outcome_preserves_natural_completion_and_exact_retry[after_exit-stop]
+tests/integration/test_native_command_terminal_boundaries.py::test_native_late_command_outcome_preserves_natural_completion_and_exact_retry[after_exit-cancel]
+  tests/integration/test_native_command_terminal_boundaries.py:256: PytestWarning: record_property is incompatible with junit_family 'xunit2' (use 'legacy' or 'xunit1')
+    @pytest.mark.parametrize('kind', ['stop', 'cancel'])
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+14 passed, 13 warnings in 77.33s (0:01:17)

@@ -13,6 +13,9 @@ from test_reference_pause import wait_state
 from xverse_studio.storage.core import canonical, digest
 
 
+pytestmark = pytest.mark.capture_owned_native_failure
+
+
 def journal(directory):
     # Active reads can end during an append; only complete original frames are
     # observations. Terminal validity is independently checked by the API.
