@@ -737,3 +737,13 @@ CLI identity; lifecycle execution, native X-COM integration and all three linked
 views remain unfinished. T001/T004/T010/T012/T020–T024/T027–T030/T034–T035 gain
 scoped work/evidence only; all existing statuses/dependencies and milestone gates
 are unchanged. Evidence: evidence/studio/platform-observability-foundation/.
+
+
+Public Maestro runtime checkpoint: upstream local candidatec58c889bf passes167
+checks (59new +108baseline). It verifies exact host/installation grants, real owned
+Linux children, two-element dependency/rollback, actual Argus lifecycle records and
+failure/ownership/cancellation handling. Two existing native C++ tests pass separately.
+Studio has not admitted or pinned this unaccepted candidate; native shared-run
+integration, actual Autoverse adapter, all three views and platform acceptance/main
+integration remain open. Existing task statuses/dependencies and milestones remain
+unchanged. Evidence: evidence/studio/platform-observability-foundation/maestro-runtime-checkpoint.json.
