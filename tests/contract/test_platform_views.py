@@ -316,9 +316,31 @@ def test_http_auth_strict_query_and_host_bound_source(client, source):
 
 def test_extensible_annotations_cannot_smuggle_nested_browser_metadata(source):
     from xverse_studio.platform_observability.argus import ArgusSources
+
     binding, _, _ = source
     captured = ArgusSources((binding.source,)).capture(binding.source.source_id)
-    captured['items'][0]['extensions']['io.xverse.maestro.execution']['operationId'] = {'privateLog': '/private/SECRET'}
+    captured["items"][0]["extensions"]["io.xverse.maestro.execution"]["operationId"] = {
+        "privateLog": "/private/SECRET"
+    }
     with pytest.raises(Problem) as caught:
         project_capture(captured, binding)
-    assert caught.value.code == 'PLATFORM_RECORD_UNSUPPORTED'
+    assert caught.value.code == "PLATFORM_RECORD_UNSUPPORTED"
+
+
+def test_native_input_extension_cannot_forward_arbitrary_nested_clock_metadata(source):
+    binding, _, _ = source
+    original = capture(binding)
+    original["items"][0]["extensions"] = {
+        "io.xverse.native.input": {
+            "eventId": "ingress",
+            "sourceClock": {
+                "domain": "native",
+                "unit": "ns",
+                "value": 1,
+                "privateLog": "/private/SECRET",
+            },
+        }
+    }
+    with pytest.raises(Problem) as caught:
+        project_capture(original, binding)
+    assert caught.value.code == "PLATFORM_RECORD_UNSUPPORTED"

@@ -225,7 +225,8 @@ def project_capture(captured, binding):
                 ),
             )
             if any(
-                type(r) is not str or len(r) > 512 for r in (maestro.get("resources") or [])
+                type(r) is not str or len(r) > 512
+                for r in (maestro.get("resources") or [])
             ) or any(
                 type(v) is not str or not re.fullmatch(r"sha256:[a-f0-9]{64}", v)
                 for v in (maestro.get("sourceDigests") or {}).values()
@@ -311,6 +312,24 @@ def project_capture(captured, binding):
                 ),
                 containers=(("sourceClock", dict),),
             )
+            clock = native_input.get("sourceClock")
+            size = native_input.get("sourcePayloadSize")
+            if (
+                clock is not None
+                and (
+                    set(clock) != {"domain", "unit", "value"}
+                    or type(clock["domain"]) is not str
+                    or len(clock["domain"]) > 128
+                    or type(clock["unit"]) is not str
+                    or len(clock["unit"]) > 32
+                    or type(clock["value"]) is not int
+                )
+            ) or (size is not None and (type(size) is not int or size < 0)):
+                raise Problem(
+                    "PLATFORM_RECORD_UNSUPPORTED",
+                    "A retained native input has unsupported clock or size metadata.",
+                    422,
+                )
             row["views"].append("communications")
             row["input"] = _fields(
                 native_input,
