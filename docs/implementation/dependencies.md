@@ -11,6 +11,13 @@ rewrite to that accepted checkout; the lock and installed `direct_url.json`
 preserve the canonical repository identity and exact commit. No publication or
 remote-only install success is claimed. See ADR-0034 and the SDK admission evidence.
 
+The separately accepted released-registration recovery successor is now admitted at
+platform12615d402. Its assembled verification covers236 source/46 installed recovery
+checks and3selected native CTests. All10 installed execution modules match that
+source. Studio's native bridge was rebuilt against the exact accepted revision.
+See ADR-0035 and the recovery integration evidence; full live browser acceptance is
+separate from dependency admission.
+
 The installed backend environment was queried through `importlib.metadata.version`:
 
 | Distribution | Resolved version |

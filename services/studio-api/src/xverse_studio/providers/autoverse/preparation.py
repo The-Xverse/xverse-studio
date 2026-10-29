@@ -105,6 +105,16 @@ class AutoverseInputs:
                      for identifier, role, operation, needs, timeout in definitions)
 
 
+def inspection_host(provider, host_id):
+    """Installed host bindings, shared by pure preparation and host maintenance."""
+    adapter = XDLAdapter()
+    return InspectionHost(host_id, tuple(
+        TargetBinding(role + "-target", provider.provider_id, provider.implementation_digest,
+                      (REALIZATIONS[role],), ("container" if role in {"someip-bridge", "score", "android"} else "process",))
+        for role in ROLES), tuple(SchemaPin(Path(path), digest(Path(path).read_bytes()))
+                                 for path in adapter.profile_schema_paths))
+
+
 def prepare_snapshot(run_id, snapshot, *, installation, host_id, runtime_adapter=None):
     """Called by trusted host code with a frozen Studio snapshot and enrollment.
 
@@ -112,7 +122,6 @@ def prepare_snapshot(run_id, snapshot, *, installation, host_id, runtime_adapter
     installed adapter. The snapshot supplies original XDL and expected compiler
     identities. No browser/project field supplies a runtime permit.
     """
-    adapter = XDLAdapter()
     provider = AutoverseInputs(installation, runtime_adapter=runtime_adapter)
     try:
         documents = snapshot["documents"]
@@ -122,11 +131,7 @@ def prepare_snapshot(run_id, snapshot, *, installation, host_id, runtime_adapter
             ExperimentSelection(*(selection[kind]["uri"] for kind in ("system", "deployment", "scenario"))))
     except (KeyError, TypeError, AttributeError, UnicodeError):
         raise ExecutionInputError("AUTOVERSE-SNAPSHOT-INVALID") from None
-    host = InspectionHost(host_id, tuple(
-        TargetBinding(role + "-target", provider.provider_id, provider.implementation_digest,
-                      (REALIZATIONS[role],), ("container" if role in {"someip-bridge", "score", "android"} else "process",))
-        for role in ROLES), tuple(SchemaPin(Path(path), digest(Path(path).read_bytes()))
-                                 for path in adapter.profile_schema_paths))
+    host = inspection_host(provider, host_id)
     prepared = prepare_execution(submission, host, (provider,))
     graph = plan_lifecycle(prepared, provider.lifecycle_phases(prepared.providers[0].configuration, prepared))
     return AutoversePreparation(host, prepared, graph)

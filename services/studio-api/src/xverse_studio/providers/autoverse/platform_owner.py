@@ -1,29 +1,32 @@
 """Backend-lifetime ownership of the original public Maestro service.
 
-No recovered claim creates an ownership handle. Lost-owner registrations remain
-fenced. Each callback selects its original run context, including reverse cleanup.
+No retired claim creates an ownership handle. Lost-owner registrations require
+verified public retirement receipts. Each callback selects its original context.
 """
 
 from pathlib import Path
 import json
+import os
 import threading
 import uuid
 
 import psutil
-from xverse.maestro.execution import ExecutionInputError, PublicExecutionService
+from xverse.maestro.execution import (
+    ExecutionInputError, PublicExecutionService, RecoveryProviderBinding,
+)
 from xverse_studio.providers.backend_task import BackendTask
-from xverse_studio.security.managed_io import open_read
-from xverse_studio.storage.core import atomic, canonical
+from xverse_studio.security.managed_io import open_directory, open_read, open_write
+from xverse_studio.storage.core import atomic, canonical, digest
 from .installation import InstallationError
-from .preparation import AutoverseInputs
+from .preparation import AutoverseInputs, inspection_host
 
 MARKER = ".studio-owner.json"
 
 
-def prior_owner(installation):
+def owner_record(installation):
     root = Path(installation["nativeBridge"]["runtimeRoot"])
     if not (root / MARKER).exists():
-        return False
+        return None
     # A marker from a preceding owner is a fence, never a recoverable PID handle.
     with open_read(root, root / MARKER) as stream:
         raw = stream.read(65537)
@@ -31,11 +34,19 @@ def prior_owner(installation):
         raise InstallationError("AUTOVERSE_PLATFORM_OWNER_METADATA_INVALID")
     try:
         value = json.loads(raw)
-        if value.get("version") != "1.0" or not isinstance(value.get("ownerId"), str):
+        ids = value.get("runIds")
+        if (value.get("version") != "1.0" or not isinstance(value.get("ownerId"), str)
+                or not value["ownerId"] or not isinstance(ids, list) or not 1 <= len(ids) <= 128
+                or any(not isinstance(rid, str) or not rid for rid in ids)
+                or len(set(ids)) != len(ids) or value.get("lastRunId") not in ids):
             raise ValueError()
     except (ValueError, TypeError, AttributeError):
         raise InstallationError("AUTOVERSE_PLATFORM_OWNER_METADATA_INVALID") from None
-    return True
+    return value, raw
+
+
+def prior_owner(installation):
+    return owner_record(installation) is not None
 
 
 class RuntimeRouter(AutoverseInputs):
@@ -98,6 +109,43 @@ class PlatformOwner:
         self.completed = set()
         self.attempted = set()
         self._lock = threading.RLock()
+        if self.fenced:
+            self._recognize_retirements()
+
+    def _new_service(self, host):
+        return PublicExecutionService(
+            self.root, host, (self.router,), max_runtime_seconds=2700,
+            cleanup_budget_seconds=60,
+            recovery_bindings=(RecoveryProviderBinding(
+                self.router.provider_id, self.installation["identityDigest"]),),
+        )
+
+    def _recognize_retirements(self):
+        """Receipts grant new activation; the old owner record stays historical."""
+        record, raw = owner_record(self.installation)
+        host = inspection_host(self.router, self.installation["nativeBridge"]["hostId"])
+        service = None
+        try:
+            service = self._new_service(host)
+            if any(service.recovery_status(rid)["retirement"] != "verified"
+                   for rid in record["runIds"]):
+                return
+            history = self.root / (".studio-owner-" + digest(raw)[7:] + ".json")
+            if history.exists():
+                with open_read(self.root, history) as stream:
+                    if stream.read(65537) != raw:
+                        raise InstallationError("AUTOVERSE_PLATFORM_OWNER_METADATA_INVALID")
+            else:
+                with open_write(self.root, history) as stream:
+                    stream.write(raw)
+            with open_directory(self.root, self.root) as directory:
+                os.fsync(directory)
+            self.service, self.host, self.fenced = service, host, False
+        except ExecutionInputError:
+            raise InstallationError("AUTOVERSE_PLATFORM_OWNER_RECOVERY_REQUIRED") from None
+        finally:
+            if service is not None and self.service is None:
+                service.close()
 
     def assert_available(self):
         if (
@@ -137,13 +185,7 @@ class PlatformOwner:
             self.router.contexts[run_id] = provider
             try:
                 if self.service is None:
-                    self.service = PublicExecutionService(
-                        self.root,
-                        preparation.host,
-                        (self.router,),
-                        max_runtime_seconds=2700,
-                        cleanup_budget_seconds=60,
-                    )
+                    self.service = self._new_service(preparation.host)
                     self.host = preparation.host
                 self.attempted.add(run_id)
                 self._record_owner(run_id)

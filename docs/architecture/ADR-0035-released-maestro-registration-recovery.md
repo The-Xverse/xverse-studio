@@ -1,7 +1,10 @@
 # ADR-0035: Recovery of a verifiably released Maestro registration
 
-Status: implementation/specification/tests/review authorized by the user’s “I approve”
-on2026-10-29. Candidate work is in progress; platform acceptance remains separate.
+Status: approved and implemented prototype. The user accepted reviewed platform
+candidate8c2307fa9 (runtime99dc5994c) on2026-10-29 for local main and Studio SDK admission.
+Assembled main12615d402 passes236 source checks,46 packaged checks and3selected
+native CTests. Studio host integration is verified in scope; complete live acceptance
+on the existing registration remains pending.
 
 ## Concrete prerequisite
 

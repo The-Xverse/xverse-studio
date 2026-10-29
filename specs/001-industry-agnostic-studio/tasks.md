@@ -844,3 +844,15 @@ public recovery is proposed in ADR-0035 and requires separately scoped companion
 authorization/admission. Full same-candidate browser Start/Stop and driving/cruise
 remain open. Task/milestone states unchanged:49completed/41in_progress/10blocked,
 zero accepted milestones. Evidence:`evidence/studio/platform-observability-foundation/persistent-owner.json`.
+
+### Accepted public recovery integration —2026-10-29
+
+ADR-0035's reviewed platform candidate was explicitly accepted and integrated on local
+main12615d402 after236/46/3 assembled checks. Studio now admits that exact SDK and
+verified native build. The host inspection/explicit retirement tool and public-receipt
+recognition preserve original claim/Argus bytes and owner-marker history. Verification
+covers15 owner checks plus2 targeted durability/fixture checks,64 affected adapters/views,
+152 other admission checks and12 actual native contracts. Reviews are retained before
+and after repair. Complete live use on the original registration and full browser
+Start/Stop/driving/cruise/linked views remain pending. Existing task/milestone states
+unchanged. See recovery-integration.json in the platform-observability evidence folder.

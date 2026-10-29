@@ -66,7 +66,7 @@ def request(tmp_path, native, run_id, duration=30):
         "providerIdentity": PlatformProvider(native).descriptor(),
     }
     root = tmp_path / run_id
-    root.mkdir()
+    root.mkdir(mode=0o700)
     atomic(root / "owner.key", b"x" * 32)
     atomic(
         root / "request.json",
@@ -374,10 +374,11 @@ def test_previous_owner_marker_blocks_before_installation_probe(tmp_path, monkey
 
     native = installation(tmp_path)
     root = Path(native["nativeBridge"]["runtimeRoot"])
-    root.mkdir()
+    root.mkdir(mode=0o700)
     atomic(
         root / ".studio-owner.json",
-        canonical({"version": "1.0", "ownerId": "a-prior-owner"}).encode(),
+        canonical({"version": "1.0", "ownerId": "a-prior-owner",
+                   "runIds": ["old-run"], "lastRunId": "old-run"}).encode(),
     )
     monkeypatch.setattr(
         adapter,
@@ -386,6 +387,129 @@ def test_previous_owner_marker_blocks_before_installation_probe(tmp_path, monkey
     )
     with pytest.raises(InstallationError, match="RECOVERY_REQUIRED"):
         PlatformProvider(native).verify_installation()
+
+
+def recovery_command():
+    # Fixed repository-owned host tool; never a path or command from a project.
+    import runpy
+    return runpy.run_path(str(Path(__file__).resolve().parents[2]
+                              / "scripts/recover_platform_registration.py"))["recover"]
+
+
+def released_predecessor(tmp_path, owned_actions):
+    entered, _ = owned_actions
+    native = installation(tmp_path)
+    owner = PlatformOwner(native, PlatformProvider(native))
+    root = request(tmp_path, native, "recovery-old")
+    task = owner.prepare_task(root)
+    task.start()
+    until(lambda: "recovery-old" in entered)
+    cancel(root)
+    assert task.wait(10) == 0
+    assert owner.service.read("recovery-old")["cleanup"] == "released"
+    assert owner.close()
+    return native
+
+
+def test_host_recovery_preserves_original_sources_and_owner_history_then_runs_again(
+    tmp_path, owned_actions
+):
+    native = released_predecessor(tmp_path, owned_actions)
+    registered = Path(native["nativeBridge"]["runtimeRoot"])
+    original = {p: p.read_bytes() for p in registered.rglob("*") if p.is_file()}
+    recover = recovery_command()
+    inspection = recover(native, ["recovery-old"])
+    assert inspection["inspections"][0]["eligible"] is True
+    assert inspection["retirements"][0]["retirement"] == "absent"
+    assert all(p.read_bytes() == value for p, value in original.items())
+    assert not list(registered.glob("*.retired.json"))
+    result = recover(native, ["recovery-old"], approval_reference="owned-host-recovery-test")
+    assert result["retirements"][0]["retirement"] == "verified"
+    assert all(p.read_bytes() == value for p, value in original.items())
+    receipt = next(registered.glob("*.retired.json")).read_bytes()
+    recover(native, ["recovery-old"], approval_reference="owned-host-recovery-retry")
+    assert next(registered.glob("*.retired.json")).read_bytes() == receipt
+    successor = PlatformOwner(native, PlatformProvider(native))
+    assert not successor.fenced
+    assert successor.service.read("recovery-old")["state"] == "unknown"
+    assert next(registered.glob(".studio-owner-*.json")).read_bytes() == original[registered / ".studio-owner.json"]
+    root = request(tmp_path, native, "recovery-new")
+    task = successor.prepare_task(root)
+    task.start()
+    entered, _ = owned_actions
+    until(lambda: "recovery-new" in entered)
+    cancel(root)
+    assert task.wait(10) == 0
+    assert successor.service.read("recovery-new")["cleanup"] == "released"
+    assert successor.close()
+    assert all(p.read_bytes() == value for p, value in original.items()
+               if p.name != ".studio-owner.json")
+
+
+@pytest.mark.parametrize("change", ["receipt", "source", "installation", "missing-owner-claim"])
+def test_stale_or_incomplete_retirement_keeps_studio_fenced(tmp_path, owned_actions, change):
+    native = released_predecessor(tmp_path, owned_actions)
+    registered = Path(native["nativeBridge"]["runtimeRoot"])
+    recovery_command()(native, ["recovery-old"], approval_reference="owned-host-negative-test")
+    if change == "receipt":
+        next(registered.glob("*.retired.json")).write_bytes(b"{}")
+    elif change == "source":
+        next(registered.glob("*.claim.json")).write_bytes(b"{}")
+    elif change == "installation":
+        native["identityDigest"] = "sha256:" + "2" * 64
+    else:
+        marker = registered / ".studio-owner.json"
+        body = json.loads(marker.read_bytes())
+        body["runIds"].append("unaccounted-run")
+        atomic(marker, canonical(body).encode())
+    successor = PlatformOwner(native, PlatformProvider(native))
+    assert successor.fenced and successor.service is None
+    with pytest.raises(InstallationError, match="RECOVERY_REQUIRED"):
+        successor.prepare_task(tmp_path / "never-started")
+
+
+def test_live_public_owner_rejects_host_recovery(tmp_path, owned_actions):
+    entered, _ = owned_actions
+    native = installation(tmp_path)
+    owner = PlatformOwner(native, PlatformProvider(native))
+    root = request(tmp_path, native, "recovery-live")
+    task = owner.prepare_task(root)
+    task.start()
+    until(lambda: "recovery-live" in entered)
+    with pytest.raises(ExecutionInputError, match="MPX-RUNTIME-ROOT-BUSY"):
+        recovery_command()(native, ["recovery-live"], approval_reference="cannot-replace-live-owner")
+    cancel(root)
+    assert task.wait(10) == 0
+    assert owner.close()
+
+
+def test_history_durability_failure_retains_marker_and_releases_public_lock(
+    tmp_path, owned_actions, monkeypatch
+):
+    import os
+    import stat
+
+    native = released_predecessor(tmp_path, owned_actions)
+    recovery_command()(native, ["recovery-old"], approval_reference="owned-history-failure-test")
+    registered = Path(native["nativeBridge"]["runtimeRoot"])
+    marker = registered / ".studio-owner.json"
+    original = marker.read_bytes()
+    original_fsync = os.fsync
+
+    def fail_directory(fd):
+        if stat.S_ISDIR(os.fstat(fd).st_mode):
+            raise OSError("owned directory durability injection")
+        return original_fsync(fd)
+
+    with monkeypatch.context() as patch:
+        patch.setattr(os, "fsync", fail_directory)
+        with pytest.raises(OSError, match="durability injection"):
+            PlatformOwner(native, PlatformProvider(native))
+    assert marker.read_bytes() == original
+    successor = PlatformOwner(native, PlatformProvider(native))
+    assert not successor.fenced
+    assert next(registered.glob(".studio-owner-*.json")).read_bytes() == original
+    assert successor.close()
 
 
 def test_dead_backend_task_is_unknown_even_when_backend_process_is_alive(

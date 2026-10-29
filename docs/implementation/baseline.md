@@ -6,7 +6,7 @@ Maestro capability was accepted and integrated into local platform `main`.
 
 | Input | Selected immutable revision | Admission scope |
 |---|---|---|
-| [xverse-platform](https://github.com/The-Xverse/xverse-platform/tree/ce2d5558cd36de5b29ab1e3c622303c7a77c61eb) | `ce2d5558cd36de5b29ab1e3c622303c7a77c61eb` | Installed `xverse-xdl` 0.4.0 from accepted local main; offline XDL/Argus compatibility checked. Public Maestro boundary accepted upstream; concrete Studio runtime integration remains open. |
+| [xverse-platform](https://github.com/The-Xverse/xverse-platform/tree/12615d402ba16cde3cd48c55b70aca464ea90261) | `12615d402ba16cde3cd48c55b70aca464ea90261` | Installed `xverse-xdl` 0.4.0 from accepted local main; offline XDL/Argus compatibility checked. Public Maestro boundary accepted upstream; concrete Studio runtime integration remains open. |
 | [xverse-compat](https://github.com/The-Xverse/xverse-compat/tree/f5b3957ca84cccfd98cddd9eb3ab95b0a4643eed) | `f5b3957ca84cccfd98cddd9eb3ab95b0a4643eed` | Source inspection only; no driver/simulator admission. |
 | [xverse-blueprints](https://github.com/The-Xverse/xverse-blueprints/tree/0741e01b9e86b9bb9360e2feb220807b36bcbdc4) | `0741e01b9e86b9bb9360e2feb220807b36bcbdc4` | Source inspection only; no live blueprint admission. |
 

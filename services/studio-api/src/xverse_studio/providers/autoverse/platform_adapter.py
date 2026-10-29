@@ -41,8 +41,8 @@ class PlatformProvider(AutoverseProvider):
         for error in errors:
             if error["code"] == "AUTOVERSE_PLATFORM_OWNER_RECOVERY_REQUIRED":
                 error["message"] = "The original Maestro owner is unavailable; this registration cannot execute again."
-                error["remediation"] = ("Retain its claims and evidence. Historical views remain readable. "
-                    "An admitted public recovery operation is required before this registration can start another run; restarting Studio does not restore original handles.")
+                error["remediation"] = ("Retain its claims and evidence. Stop this backend and use the host recovery command "
+                    "to inspect and explicitly retire released predecessor runs. Unknown cleanup remains blocked.")
         return checks, errors, config, limits
 
     def platform_evidence_binding(self, run, snapshot):
@@ -85,13 +85,13 @@ class PlatformProvider(AutoverseProvider):
              ("urn:xverse:autoverse:wire-utf8-boolean:v1", "utf8-boolean")))
 
     def verify_installation(self):
-        from .platform_owner import prior_owner
-        from .installation import InstallationError
+        from .platform_owner import PlatformOwner, prior_owner
         with self._owner_lock:
             if self._owner is not None:
                 self._owner.assert_available()
             elif prior_owner(self.installation):
-                raise InstallationError("AUTOVERSE_PLATFORM_OWNER_RECOVERY_REQUIRED")
+                self._owner = PlatformOwner(self.installation, self)
+                self._owner.assert_available()
         verify_platform(self.installation)
 
     def descriptor(self):
@@ -108,7 +108,7 @@ class PlatformProvider(AutoverseProvider):
                 "feedback": "externally-managed-asynchronous-communication"}},
             platformIntegration={"contractVersion": "1.0", "maestro": "public-execution", "xcom": "native-cpp-fifo",
                 "argus": "original-public-evidence", "platformRevision": PLATFORM_REVISION,
-                "ownerLifetime": "native-backend", "lostOwnerRecovery": "unavailable"},
+                "ownerLifetime": "native-backend", "lostOwnerRecovery": "explicit-host-released-retirement"},
             limitations=["Linux simulation only; native FIFO does not model network timing, reliability or physical coupling.",
                 "Three native routes sampled with coalescing counters; original evidence may be incomplete.",
                 "External publication, application consumption, vehicle effects and source simulator time remain distinct."])
