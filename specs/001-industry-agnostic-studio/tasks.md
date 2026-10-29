@@ -872,3 +872,12 @@ completion audit are in live-review-02.md; exact evidence is in
 evidence/studio/platform-observability-foundation/live-browser-experiment.json.
 This completes the scoped goal, not the broader product tasks or milestones.
 States remain49completed/41in_progress/10blocked and0accepted milestones.
+
+### Live-follow communication viewing —2026-10-29
+
+The user requested automatic live communication viewing. ADR-0034 adds bounded
+foreground polling, newest-first order, snapshot-pinned inspection, source retention
+on failures and final capture on termination.65 backend checks and5controlled
+browser cases pass before actual native verification. These are not a live acceptance
+claim. Existing task IDs/states remain unchanged; exact evidence will be recorded
+under evidence/studio/platform-observability-foundation/live-follow.json.

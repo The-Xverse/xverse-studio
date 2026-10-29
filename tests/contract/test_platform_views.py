@@ -99,6 +99,7 @@ def test_pages_bind_run_view_filters_limit_and_snapshot(source):
         {"view": "communications"},
         {"correlationId": "other"},
         {"limit": 2},
+        {"order": "newest"},
     ):
         args = {
             "view": "evidence",
@@ -129,13 +130,38 @@ def test_pages_bind_run_view_filters_limit_and_snapshot(source):
     assert len(correlated["items"]) == 1
     missing = views.read(
         binding,
-        PlatformQuery(
-            view="communications",
-            snapshot=first["snapshotId"],
-            correlationId="actual-correlation",
-        ),
+        PlatformQuery(view="communications", snapshot=first["snapshotId"],
+                      correlationId="actual-correlation"),
     )
     assert missing["matchedCount"] == 0
+
+
+def test_newest_order_uses_original_ordinals_and_pinned_pages(source):
+    binding, writer, _ = source
+    for i in range(70):
+        writer.append_event(event_id=f"new-{i}", producer_id="owned-ordered-source", event_kind="annotation")
+    views = PlatformViews()
+    newest = views.read(binding, PlatformQuery(view="evidence", order="newest", limit=50))
+    assert newest["order"] == "newest"
+    assert newest["items"][0]["eventId"] == "new-69"
+    ordinals = [r["ingestionOrdinal"] for r in newest["items"]]
+    assert ordinals == sorted(ordinals, reverse=True)
+    writer.append_event(event_id="after-capture", producer_id="owned-ordered-source", event_kind="annotation")
+    page = views.read(binding, PlatformQuery(view="evidence", order="newest", limit=50,
+                                             snapshot=newest["snapshotId"], cursor=newest["nextCursor"]))
+    assert page["snapshotId"] == newest["snapshotId"]
+    assert page["sourceWitness"] == newest["sourceWitness"]
+    assert not {r["eventId"] for r in page["items"]} & {r["eventId"] for r in newest["items"]}
+    assert page["items"][-1]["eventId"] == "start"
+    assert "after-capture" not in {r["eventId"] for r in page["items"] + newest["items"]}
+    with pytest.raises(Problem) as wrong_order:
+        views.read(binding, PlatformQuery(view="evidence", order="oldest", limit=50,
+                                          snapshot=newest["snapshotId"], cursor=newest["nextCursor"]))
+    assert wrong_order.value.code == "PLATFORM_CURSOR_INVALID"
+    oldest = views.read(binding, PlatformQuery(view="evidence", snapshot=newest["snapshotId"]))
+    assert oldest["order"] == "oldest" and oldest["items"][0]["eventId"] == "start"
+    refreshed = views.read(binding, PlatformQuery(view="evidence", order="newest"))
+    assert refreshed["items"][0]["eventId"] == "after-capture"
 
 
 def test_capture_limits_expiry_and_eviction_are_explicit(source, monkeypatch):

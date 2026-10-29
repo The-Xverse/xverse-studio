@@ -740,6 +740,7 @@ export function ResultsView({
         key={`${run.runId}:${run.snapshotId}`}
         runId={run.runId}
         active={["Orchestration", "Communications", "Evidence"].includes(tab)}
+        canFollow={active}
         view={(tab === "Orchestration" ? "orchestration" : tab === "Communications" ? "communications" : "evidence") as PlatformView}
         onView={(view) => setTab(view[0].toUpperCase() + view.slice(1))}
         onLogical={setSelected}

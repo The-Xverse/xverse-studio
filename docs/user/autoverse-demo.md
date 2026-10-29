@@ -99,6 +99,15 @@ shows their common binding. All three views use one immutable capture; **Refresh
 all platform views** obtains a new capture, including after Stop. Paging and
 selection refer to that capture rather than mixing changing live records.
 
+While a run is active, enable **Follow live** for automatic updates with newest
+records first. It reads a new shared capture2seconds after the previous read
+finishes, pauses off-tab or when the browser is hidden, and retains the last capture
+through read failures. The original capture time remains visible. Inspecting a record,
+paging or using a causal link pauses following and pins that displayed capture.
+After Stop it obtains the final capture and stops polling. Native evidence is
+batched independently (at least2.5seconds in this provider), so updates have delay
+and may coalesce samples; this is not a hard-real-time or every-message trace.
+
 Eleven VCU boundary routes use the native bridge; three routes are sampled for
 observability. Sample coalescing remains visible and can make Argus's verdict
 **incomplete** even after successful Stop and released cleanup. Native counters,

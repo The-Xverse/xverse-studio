@@ -53,6 +53,7 @@
 | `GET /runs/{runId}/events?after={cursor}` | SSE stream; see [run-events.md](run-events.md) | M1 |
 | `GET /runs/{runId}/evidence` | Cursor-paged evidence metadata, integrity/availability and authorized download handles | M1 |
 | `GET /runs/{runId}/observations` | Bounded observer/time range; explicit clock/mapping and reduction metadata | M1/M4 |
+| `GET /runs/{runId}/platform` | ADR-0034: bounded immutable shared Argus capture for orchestration/communications/evidence, with original identities, verdicts and clocks. Optional `order=oldest\|newest` defaults oldest; signed cursors bind snapshot/view/filter/order/limit. Live following obtains new read captures without execution authority. | M1 |
 | `GET /runs/{runId}/timeline` | Read-only scenario/evidence timeline 1.0 (ADR-0019): verified frozen selection, distinct intention/recorded/evaluation rows, explicit admitted clock placement or unplaced reasons, original gaps/integrity, bounded pages and input-bound cursors; no execution or evaluation authority | M4 |
 | `GET /runs/{runId}/diagnostics` | Read-only explanation 1.0: evidence-linked facts, consequences, unconfirmed hypotheses, unknowns and closed next actions; see ADR-0012 | M1 |
 | `GET /projects/{projectId}/preflights/{preflightId}/diagnostics` | Read-only explanation 1.0 of a frozen preflight's coded readiness findings and stale-plan assumptions | M1 |

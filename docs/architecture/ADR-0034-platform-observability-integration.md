@@ -194,3 +194,29 @@ and selects exact per-run callback contexts. Original task identity, shutdown,
 release uncertainty and restart fences require their own verification. This does
 not recover the predecessor registration. ADR-0035 records the narrow proposed
 public recovery scope; it is not an implemented or admitted recovery interface.
+
+## Live-follow presentation amendment —2026-10-29
+
+The linked Linux simulation goal was verified on candidatee1fb69f; the user then
+requested real-time communication viewing. Add opt-in foreground live following
+to the existing bounded Argus read captures. This is observation presentation,
+not a real-time control loop, new execution authority or complete message capture.
+
+Poll serially every2seconds after a read completes, pause while hidden/off-tab,
+bound request duration, retain the last successful capture on failures and expose
+its original capture time. Native batching is independent (at least2.5seconds for
+this provider); the browser must not promise instantaneous delivery. Stop following
+and pin the displayed capture when inspecting a record, paging or following a link.
+Capture final evidence once after a followed run becomes terminal.
+
+The public read query gains additive `order=oldest|newest`, defaultoldest. Sorting
+changes presentation only: original ordinals, IDs, payload policy, source witness
+and evidence verdicts remain unchanged. Bind order into signed pagination cursors.
+Follow mode shows newest records first, so later batches remain visible beyond the
+first page. All three tabs continue to share one immutable capture.
+
+Verify source-immutable ordered paging, cursor/order mismatch, serial polling,
+visibility, slow/failed/racing reads and pause-to-inspect behavior in controlled
+browser cases, then actual live native observations in the approved simulation.
+No platform SDK/provider semantics or ownership changes are authorized by this
+presentation amendment; retain the previously admitted baseline and live evidence.

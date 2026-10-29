@@ -32,6 +32,7 @@ _CODE = re.compile(r"^[A-Z][A-Z0-9_.:-]{0,127}$")
 class PlatformQuery(BaseModel):
     model_config = ConfigDict(extra="forbid", strict=False)
     view: Literal["orchestration", "communications", "evidence"] = "orchestration"
+    order: Literal["oldest", "newest"] = "oldest"
     snapshot: str | None = Field(default=None, min_length=1, max_length=128)
     cursor: str | None = Field(default=None, min_length=1, max_length=2048)
     eventId: str | None = Field(default=None, min_length=1, max_length=128)
@@ -521,6 +522,7 @@ class PlatformViews:
                 {
                     "snapshot": snapshot_id,
                     "view": query.view,
+                    "order": query.order,
                     "filters": filters,
                     "limit": query.limit,
                 }
@@ -556,6 +558,7 @@ class PlatformViews:
                 if query.view in r["views"]
                 and all(v is None or r.get(k) == v for k, v in filters.items())
             ]
+            selected.sort(key=lambda row: row["ingestionOrdinal"], reverse=query.order == "newest")
             if offset and offset >= len(selected):
                 raise Problem(
                     "PLATFORM_CURSOR_INVALID",
@@ -589,6 +592,7 @@ class PlatformViews:
                         0, int(300 - (self._clock() - entry["created"]))
                     ),
                     "view": query.view,
+                    "order": query.order,
                     "effectiveFilter": filters,
                     "matchedCount": len(selected),
                     "offset": offset,
