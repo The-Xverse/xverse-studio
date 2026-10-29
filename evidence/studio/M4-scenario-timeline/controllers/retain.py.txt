@@ -1,0 +1,172 @@
+"""Retain terminal timeline evidence only; never copy private launcher data."""
+from pathlib import Path
+import base64
+import hashlib
+import json
+import re
+import sys
+import xml.etree.ElementTree as ET
+
+root = Path.cwd().resolve()
+local = root / '.studio-local/scenario-timeline'
+out = root / 'evidence/studio/M4-scenario-timeline'
+plan = [('targeted', 'settled-targeted', 27), ('full', 'settled-full', 365), ('performance', 'settled-performance', 2)]
+def read(path):
+    return json.loads(path.read_text())
+
+def clean_text(value):
+    for original, replacement in [(str(root.parent / '.xverse-studio-cache'), '<loop-cache>'),
+                                  (str(root), '<repo>'), ('<repo>', '<repo>'),
+                                  (sys.base_prefix, '<python-install>')]:
+        value = value.replace(original, replacement)
+    return value
+
+def clean(value):
+    if isinstance(value, str): return clean_text(value)
+    if isinstance(value, list): return [clean(v) for v in value]
+    if isinstance(value, dict):
+        result = {k: clean(v) for k, v in value.items()}
+        if value.get('contentType', '').startswith(('text/', 'application/json')) and 'body' in value:
+            try:
+                result['body'] = base64.b64encode(clean_text(base64.b64decode(value['body']).decode()).encode()).decode()
+            except (ValueError, UnicodeError): pass
+        return result
+    return value
+
+def save(name, value):
+    path = out / name
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(clean(value), indent=2) + '\n')
+
+def copy_text(name, source):
+    path = out / name
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text('\n'.join(line.rstrip() for line in clean_text(source.read_text()).splitlines()).rstrip() + '\n')
+
+def results(report):
+    for suite in report.get('suites', []): yield from results(suite)
+    for spec in report.get('specs', []):
+        for test in spec['tests']:
+            for result in test['results']: yield spec['title'], result
+
+# Refuse to create a misleading partial final dossier.
+final = {}
+frozen = read(local / 'settled-targeted/source-before.json')
+assert len(frozen) == 270
+for label, directory, expected in plan:
+    path = local / directory
+    summary, report = read(path / 'summary.json'), read(path / 'browser-report.json')
+    assert summary['exitCode'] == 0 and summary['sourceUnchanged']
+    assert read(path / 'source-before.json') == read(path / 'source-after.json') == frozen
+    assert report['stats']['expected'] == expected and not any(report['stats'][k] for k in ['unexpected', 'skipped', 'flaky']), report['stats']
+    final[label] = {'directory': directory, 'summary': summary, 'report': report}
+assert all(hashlib.sha256((root / name).read_bytes()).hexdigest() == value for name, value in frozen.items())
+backend = read(local / 'settled-backend/summary.json')
+assert backend['exitCode'] == 0 and backend['sourceUnchanged']
+assert '878 passed' in (local / 'settled-backend/pytest.log').read_text()
+backend_map = read(local / 'settled-backend/source-before.json')
+assert backend_map == read(local / 'settled-backend/source-after.json')
+assert all(hashlib.sha256((root/p).read_bytes()).hexdigest() == value for p,value in backend_map.items())
+repair = read(local / 'readiness-fixture-repair/assertion-preservation.json')
+assert repair['allOriginalAssertionExpressionsUnchanged'] and repair['beforeAssertionCount'] == 37 and repair['afterAssertionCount'] == 39
+out.mkdir(exist_ok=False)
+
+history = ['initial-red', 'first-successor', 'metadata-red', 'metadata-successor', 'expanded-backend',
+           'status-expectation-successor', 'browser-baseline', 'first-ui-successor',
+           'authoring-completion-baseline', 'authoring-and-timeline-successor', 'expanded-ui',
+           'expanded-ui-successor', 'provenance-authoring-successor', 'full-backend', 'full-ui',
+           'definition-inspection-red', 'definition-ui-red', 'final-targeted',
+           'outcomes-probe/first', 'outcomes-probe/formatted', 'readiness-probe/actual',
+           'verified-targeted', 'verified-full', 'pending-evaluation-probe/first', 'pending-repair-successor']
+history_index = []
+for directory in history:
+    path = local / directory
+    entry = {'directory': directory}
+    for name in ['summary.json', 'source-before.json', 'source-after.json', 'observed-source-after.json',
+                 'browser-report.json', 'classification.json', 'interruption.json']:
+        if (path/name).is_file(): save('history/'+directory+'/'+name, read(path/name))
+    if (path/'summary.json').is_file(): entry['summary'] = read(path/'summary.json')
+    if (path/'browser-report.json').is_file(): entry['browserStats'] = read(path/'browser-report.json')['stats']
+    if (path/'junit.xml').is_file():
+        xml = ET.parse(path/'junit.xml').getroot()
+        suites = [xml] if xml.tag == 'testsuite' else list(xml.findall('testsuite'))
+        entry['pytest'] = {k: sum(int(s.get(k, '0')) for s in suites) for k in ['tests', 'failures', 'errors', 'skipped']}
+        copy_text('history/'+directory+'/junit.xml', path/'junit.xml')
+    for name in ['browser.log', 'pytest.log', 'exact-test.py.txt', 'exact-test.ts.txt', 'exact-test-outcomes.ts.txt',
+                 'module.py.txt', 'classification.md', 'exact-config.ts.txt', 'controller.py.txt']:
+        if (path/name).is_file(): copy_text('history/'+directory+'/'+name.replace('.log', '.txt'), path/name)
+    for path_context in (path/'browser-output').glob('**/error-context.md'):
+        copy_text('history/'+directory+'/contexts/'+path_context.parent.name+'/error-context.md', path_context)
+    history_index.append(entry)
+save('history/index.json', history_index)
+copy_text('history/readiness-probe-controller-setup.md', local/'readiness-probe/first/classification.md')
+for directory in ['before-definition-inspection', 'before-pending-repair', 'readiness-fixture-repair']:
+    for source in (local/directory).rglob('*'):
+        if source.is_file():
+            name='controls/'+directory+'/'+source.relative_to(local/directory).as_posix()
+            if source.suffix == '.json': save(name, read(source))
+            else: copy_text(name, source)
+
+for label, record in final.items():
+    path = local / record['directory']
+    save(label+'/verification.json', record['summary'])
+    save(label+'/browser-report.json', record['report'])
+    save(label+'/source-before.json', read(path/'source-before.json'))
+    save(label+'/source-after.json', read(path/'source-after.json'))
+    copy_text(label+'/browser.txt', path/'browser.log')
+    if label in ['targeted', 'performance']:
+        for title, result in results(record['report']):
+            key = re.sub(r'[^A-Za-z0-9_-]', '-', title)
+            for attachment in result.get('attachments', []):
+                if attachment.get('contentType') == 'application/json' and 'body' in attachment:
+                    value = json.loads(base64.b64decode(attachment['body']))
+                    save(label+'/journeys/'+key+'/'+attachment['name'], value)
+        for source in (path/'browser-output').glob('**/*.png'):
+            destination = out/label/'screenshots'/source.parent.name/source.name
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            destination.write_bytes(source.read_bytes())
+        if label == 'performance':
+            for source in (path/'browser-output').glob('**/*performance.json'):
+                value=read(source);viewport=value['viewport']
+                save(f'performance/{viewport["width"]}x{viewport["height"]}/{source.name}',value)
+
+save('application-and-input-hashes.json', frozen)
+save('backend/verification.json', backend)
+save('backend/source-before.json', backend_map)
+save('backend/source-after.json', read(local/'settled-backend/source-after.json'))
+copy_text('backend/pytest.txt', local/'settled-backend/pytest.log')
+save('backend/input-control.json', {'freshBackendTestsPassed':878,'backendSourceBeforeEqualsAfter':True,
+     'allCurrentBackendAndTestInputsUnchanged':True,'scope':'Fresh full878 executes on the exact current backend and test sources; no inherited backend results.'})
+for name in ['api/summary.json','api/junit.xml','api/pytest.log','actual-pending-row.json']:
+    source=local/'pending-evaluation-probe'/name
+    if source.suffix == '.json': save('pending-evaluation/'+name,read(source))
+    else: copy_text('pending-evaluation/'+name.replace('.log','.txt'),source)
+copy_text('pending-evaluation/test-api.py.txt',local/'pending-evaluation-probe/test_api_pending.py')
+for name in ['environment-final.json', 'browser-environment-final.json', 'schema-input-control.json']:
+    save(name, read(local/name))
+environment=read(local/'environment-final.json')
+assert all(frozen.get(name)==value for name,value in environment['sourceFiles'].items())
+save('environment-identity-scope.json', {'environmentHelperScope':'record_environment.py observes tracked source files; its sourceDigest omits newly untracked implementation/test files and compiled assets before the product commit.',
+     'trackedFilesObserved':len(environment['sourceFiles']),'allTrackedObservationBytesMatchFinalInputs':True,
+     'completeSelectedCandidateIdentity':'application-and-input-hashes.json','completeSelectedInputs':len(frozen)})
+save('schema-current-recheck.json', read(local/'schema-current-recheck/verification.json'))
+for name in ['format.log','typecheck.log','build.log','ruff.log']:
+    copy_text('build-and-checks/'+name.replace('.log','.txt'),local/'pending-repair-build'/name)
+for name in ['check-browser-reviewed.py','run-settled.py','check-settled-backend.py','retain.py']:
+    copy_text('controllers/'+name+'.txt',local/name)
+copy_text('implementation-review.md',local/'implementation-review.md')
+ui = {name:value for name,value in frozen.items() if name.startswith('apps/studio-web/dist/')}
+assert len(ui)==6
+save('verification.json', {'baseCandidate':backend['baseCandidate'],'scope':'Owned reference native Linux component evidence; no M0–M4 milestone accepted',
+     'backendTestsPassed':878,'backend':'backend/verification.json','backendInputControl':'backend/input-control.json',
+     **{label:record['report']['stats'] for label,record in final.items()},'frozenSelectedInputs':len(frozen),'compiledAssets':len(ui),
+     'allFinalBrowserStageInputsIdentical':True,'applicationAndInputDigest':'sha256:'+hashlib.sha256(json.dumps(frozen,sort_keys=True,separators=(',',':')).encode()).hexdigest(),
+     'componentTasksCompleted':47,'milestonesAccepted':[],'nativeWindows':'BLOCKED_USER_REQUEST',
+     'limitations':['Chromium/native Linux only; actual AT and human acceptance remain open',
+       'Actual owned reference fault records and bounded evaluator outcomes do not admit external or physical providers',
+       'Large ticks, malformed/unmapped/gapped metadata and resolver failures include labelled transport/reader fixtures',
+       'No live timeline 50000-record benchmark; native paging uses210 actual samples; backend processing-cap tests use labelled lowered caps',
+       'The30-second browser read deadline is source reviewed, not a timed native test',
+       'Earlier23/361 cohorts used1024x900; corrected final27/full365 use1024x768 and1440x900; historical failures stay failures',
+       'Current benchmark workload is the existing200-element/400-flow and50000-record history contract, not a timeline benchmark']})
+print(json.dumps({'dossier':str(out.relative_to(root)),'backend':878,'targeted':27,'full':365,'performance':2,'selectedInputs':len(frozen)}))

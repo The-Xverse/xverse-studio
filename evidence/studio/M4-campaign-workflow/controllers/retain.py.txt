@@ -1,0 +1,165 @@
+"""Retain only successful terminal final gates and described historical cohorts."""
+from pathlib import Path
+import base64
+import hashlib
+import json
+import re
+import sys
+
+root=Path.cwd().resolve();local=root/'.studio-local/campaign-workflow';out=root/'evidence/studio/M4-campaign-workflow'
+def read(path): return json.loads(path.read_text())
+def clean_text(value):
+    for original,replacement in [(str(root.parent/'.xverse-studio-cache'),'<loop-cache>'),(str(root),'<repo>'),('<repo>','<repo>'),(sys.base_prefix,'<python-install>')]: value=value.replace(original,replacement)
+    return value
+
+def clean(value):
+    if isinstance(value,str):return clean_text(value)
+    if isinstance(value,list):return [clean(v) for v in value]
+    if isinstance(value,dict):
+        result={k:clean(v) for k,v in value.items()}
+        if value.get('contentType','').startswith(('text/','application/json')) and 'body' in value:
+            try:result['body']=base64.b64encode(clean_text(base64.b64decode(value['body']).decode()).encode()).decode()
+            except (ValueError,UnicodeError):pass
+        return result
+    return value
+
+def save(name,value):
+    path=out/name;path.parent.mkdir(parents=True,exist_ok=True);path.write_text(json.dumps(clean(value),indent=2)+'\n')
+def copy_text(name,path):
+    target=out/name;target.parent.mkdir(parents=True,exist_ok=True)
+    target.write_text('\n'.join(line.rstrip() for line in clean_text(path.read_text()).splitlines()).rstrip()+'\n')
+def results(report):
+    for suite in report.get('suites',[]):yield from results(suite)
+    for spec in report.get('specs',[]):
+        for test in spec['tests']:
+            for result in test['results']:yield spec['title'],result
+
+frozen=read(local/'verified-targeted/source-before.json');assert len(frozen)==276
+old=read(local/'expanded-successor/source-before.json')
+assert old==read(local/'expanded-successor/source-after.json')
+changed={n for n in frozen if frozen[n]!=old.get(n)}
+assert changed=={'services/studio-api/src/xverse_studio/api/advanced.py','tests/integration/test_comparison.py','tests/e2e/studio.spec.ts'}
+assert set(old)==set(frozen)
+plan=[('targeted','verified-targeted',42),('full','verified-full',379),('performance','verified-performance',2)]
+final={}
+for label,directory,expected in plan:
+    d=local/directory;s=read(d/'summary.json');r=read(d/'browser-report.json')
+    assert s['exitCode']==0 and s['sourceUnchanged']
+    assert frozen==read(d/'source-before.json')==read(d/'source-after.json')
+    assert r['stats']['expected']==expected and not any(r['stats'][k] for k in ['unexpected','skipped','flaky'])
+    final[label]=(d,s,r)
+assert all(hashlib.sha256((root/n).read_bytes()).hexdigest()==h for n,h in frozen.items())
+backend=read(local/'verified-backend/summary.json');backend_map=read(local/'verified-backend/source-before.json')
+assert backend['exitCode']==0 and backend['sourceUnchanged'] and '881 passed' in (local/'verified-backend/pytest.log').read_text()
+assert backend_map==read(local/'verified-backend/source-after.json')
+assert all(hashlib.sha256((root/n).read_bytes()).hexdigest()==h for n,h in backend_map.items())
+environment=read(local/'environment.json')
+assert all(frozen.get(n)==h for n,h in environment['sourceFiles'].items())
+native=read(root/'.studio-local/campaign-restart-probe/second/receipt.json')
+assert native['outcome']=='passed' and native['noDuplicateRuns'] and native['workerIdentityUnchanged'] and native['mainFrozenInputsUnchanged']
+assert frozen==read(root/'.studio-local/campaign-restart-probe/second/source-before.json')==read(root/'.studio-local/campaign-restart-probe/second/source-after.json')
+dispatch=read(root/'.studio-local/campaign-restart-probe/dispatch-first/receipt.json')
+assert dispatch['outcome']=='passed' and dispatch['noUncertainReplay'] and dispatch['pendingSchedulingHeld']
+assert not dispatch['durableStartAcknowledgementPresent'] and not dispatch['allocatedRunIdsAtCrash']
+assert frozen==read(root/'.studio-local/campaign-restart-probe/dispatch-first/source-before.json')==read(root/'.studio-local/campaign-restart-probe/dispatch-first/source-after.json')
+out.mkdir(exist_ok=False)
+save('final-input-amendment.json',{'scope':'Earlier candidate cohorts precede the production comparison-integrity repair, its backend regression and a strengthened Stop fixture. All current final stages use the same276inputs; no old failed full run is relabelled.', 'changedInputs':{n:{'before':old[n],'after':frozen[n]} for n in sorted(changed)}})
+for label,(d,s,r) in final.items():
+    save(label+'/verification.json',s);save(label+'/browser-report.json',r)
+    for n in ['source-before.json','source-after.json']:save(label+'/'+n,read(d/n))
+    copy_text(label+'/browser.txt',d/'browser.log')
+    if label!='full':
+        for title,result in results(r):
+            title=re.sub(r'[^A-Za-z0-9_-]','-',title)
+            for attachment in result.get('attachments',[]):
+                if attachment.get('contentType')=='application/json' and 'body' in attachment:
+                    save(label+'/journeys/'+title+'/'+attachment['name'],json.loads(base64.b64decode(attachment['body'])))
+        for p in (d/'browser-output').rglob('*.png'):
+            dest=out/label/'screenshots'/p.relative_to(d/'browser-output');dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes(p.read_bytes())
+    if label=='performance':
+        for p in (d/'browser-output').rglob('*performance.json'):
+            value=read(p);v=value['viewport'];save(f'performance/{v["width"]}x{v["height"]}/{p.name}',value)
+
+histories=['api-red','browser-red','api-successor','first-successor','input-bounds-red','input-bounds-ready','expanded-successor','final-targeted','final-full','final-backend','stop-fixture-successor','stop-fixture-corrected','comparison-main-successor']
+index=[]
+for directory in histories:
+    d=local/directory;entry={'directory':directory}
+    for name in ['summary.json','source-before.json','source-after.json','classification.json','browser-report.json']:
+        if (d/name).is_file():save('history/'+directory+'/'+name,read(d/name))
+    if (d/'summary.json').exists():entry['summary']=read(d/'summary.json')
+    if (d/'browser-report.json').exists():entry['browserStats']=read(d/'browser-report.json')['stats']
+    for name in ['pytest.log','browser.log','junit.xml','exact-test.py.txt','exact-test.ts.txt','test-after-adding-bounds.ts.txt','exact-studio-test.ts.txt']:
+        if (d/name).is_file():copy_text('history/'+directory+'/'+name.replace('.log','.txt'),d/name)
+    for p in (d/'browser-output').rglob('error-context.md'):copy_text('history/'+directory+'/contexts/'+p.parent.name+'/error-context.md',p)
+    for p in (d/'browser-output').rglob('*.png'):
+        dest=out/'history'/directory/'screenshots'/p.relative_to(d/'browser-output')
+        dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes(p.read_bytes())
+    index.append(entry)
+save('history/index.json',index)
+for directory in ['first','second','dispatch-first']:
+    for name in ['receipt.json','source-before.json','source-after.json','classification.json','exact-controller.py.txt','controller-observed-after-run.py.txt','controller-observation.json']:
+        source=root/'.studio-local/campaign-restart-probe'/directory/name
+        if source.is_file():
+            target='native-campaign-restart/'+directory+'/'+name
+            if source.suffix=='.json':save(target,read(source))
+            else:copy_text(target,source)
+for name in ['run.log','second-run.log','dispatch-run.log']:
+    copy_text('native-campaign-restart/'+name.replace('.log','.txt'),root/'.studio-local/campaign-restart-probe'/name)
+
+for directory in ['before-input-bounds','before-stop-fixture','full-stop-investigation']:
+    for p in (local/directory).rglob('*'):
+        if p.is_file():
+            name='controls/'+directory+'/'+p.relative_to(local/directory).as_posix()
+            if p.suffix=='.json':save(name,read(p))
+            else:copy_text(name,p)
+copy_text('controllers/check-stop-assertions.cjs.txt',local/'check-stop-assertions.cjs')
+for directory in ['build','build-successor','bounds-repair-build','expanded-build','review-build','schema-and-static']:
+    for p in (local/directory).iterdir():
+        if p.is_file():
+            n='build-and-checks/'+directory+'/'+p.name.replace('.log','.txt')
+            if p.suffix=='.json':save(n,read(p))
+            else:copy_text(n,p)
+for name in ['check-browser.py','check-verified-backend.py','run-verified.py','environment.py','retain.py','privacy-check.py']:
+    copy_text('controllers/'+name+'.txt',local/name)
+copy_text('implementation-review.md',local/'implementation-review.md')
+# The independent follow-on comparison failure stays visible; no release gate is inferred.
+probe=root/'.studio-local/comparison-next'
+for directory in ['snapshot-integrity-red','isolated-successor','prepared-regression','window-proposal','window-proposal/public-red','window-proposal/isolated-successor','window-proposal/public-isolated-successor','window-proposal/v2/public-isolated-successor']:
+    for name in ['summary.json','source-before.json','source-after.json','main-source-before.json','main-source-after.json','actual-public-projection.json','pytest.log','junit.xml','exact-test.py.txt','invoke.py','classification.json','test_comparison_windows.py','exact-controller.py.txt','source-control.json','actual-window-projection.json','exact-comparison.py.txt']:
+        source=probe/directory/name
+        if source.is_file():
+            target='follow-on-comparison/'+directory+'/'+name.replace('.log','.txt')
+            if source.suffix=='.json':save(target,read(source))
+            else:copy_text(target,source)
+for name in ['isolated-source-control.json','isolated-setup-failure.json','prepare-isolated-first.py.txt','run_probe.py','run_isolated_probe.py','check_prepared_regression.py','comparison-integrity.patch','test-addition.py.txt']:
+    source=probe/name
+    if source.suffix=='.json':save('follow-on-comparison/'+name,read(source))
+    else:copy_text('follow-on-comparison/'+name,source)
+for name in ['test_public_comparison_windows.py','check_public.py','check_isolated.py','check_public_isolated.py','isolated/runs.py','v2/runs.py','v2/test_ticks.py','v2/check_public_isolated.py','v2/initial-proposal-review.json']:
+    copy_text('follow-on-comparison/window-proposal/'+name+'.txt',probe/'window-proposal'/name)
+copy_text('follow-on-comparison/isolated-advanced.py.txt',probe/'isolated-source/services/studio-api/src/xverse_studio/api/advanced.py')
+
+save('environment.json',environment)
+save('history/prior-environment.json',read(local/'prior-environment.json'))
+save('environment-identity-scope.json',{'scope':'record_environment.py observes tracked source only; its sourceDigest excludes untracked new implementation/tests and compiled assets before product commit.',
+    'trackedFilesObserved':len(environment['sourceFiles']),'allObservedBytesMatchSelectedCandidate':True,'completeSelectedCandidateMap':'application-and-input-hashes.json','selectedInputs':276})
+save('application-and-input-hashes.json',frozen)
+save('backend/verification.json',backend)
+save('backend/source-before.json',backend_map);save('backend/source-after.json',backend_map)
+copy_text('backend/pytest.txt',local/'verified-backend/pytest.log')
+ui={n:h for n,h in frozen.items() if n.startswith('apps/studio-web/dist/')};assert len(ui)==6
+save('verification.json',{'baseCandidate':backend['baseCandidate'],'scope':'Owned reference native Linux campaign component; no full milestone acceptance',
+    'backendTestsPassed':881,'backend':'backend/verification.json',**{label:r['stats'] for label,(_,s,r) in final.items()},
+    'frozenSelectedInputs':276,'compiledAssets':6,'allFinalBrowserStageInputsIdentical':True,'freshBackendInputsUnchanged':True,'nativeCampaignRestart':'native-campaign-restart/second/receipt.json','nativeUnacknowledgedDispatchRestart':'native-campaign-restart/dispatch-first/receipt.json',
+    'applicationAndInputDigest':'sha256:'+hashlib.sha256(json.dumps(frozen,sort_keys=True,separators=(',',':')).encode()).hexdigest(),
+    'componentTasksCompleted':47,'milestonesAccepted':[],'nativeWindows':'BLOCKED_USER_REQUEST',
+    'openFindings':[{'task':'T091','finding':'Comparison does not establish observation-window or missing observer identity compatibility','fixtureOnly':True,'regressions':'follow-on-comparison/window-proposal/summary.json','passed':1,'failed':7,'actualPublicApiRed':'follow-on-comparison/window-proposal/public-red/summary.json','proposedIsolatedSuccessor':'follow-on-comparison/window-proposal/v2/public-isolated-successor/summary.json','repairAppliedToMain':False}],
+    'resolvedFindings':[{'task':'T091','finding':'Comparison accepted unverified stored snapshot metadata','originalFailure':'follow-on-comparison/snapshot-integrity-red/summary.json','mainRepair':'backend/verification.json','appliedToMain':True}],
+    'limitations':['Actual assistive technology and human usability are not established',
+      'Actual owned reference campaign/admission/cancellation is not external, physical or seed-provider admission',
+      '21-row history pagination and wrong identity/version/unknown provenance include labelled transport fixtures',
+      'Read/acknowledgement deadlines are source reviewed, not timed native acceptance cases',
+      'Supplemental native probes cover a known active worker after rejected admission and a durable dispatch claim without Start receipt/run; a crash after delegation, failed worker, and native Windows are not established',
+      'Existing200-element/400-flow and50000-history-record benchmarks do not establish live campaign scalability',
+      'Idempotency retry key is retained while the form is mounted; after reopening inspect retained history before a new request']})
+print(json.dumps({'dossier':str(out.relative_to(root)),'backend':881,'targeted':42,'full':379,'performance':2,'selectedInputs':276}))

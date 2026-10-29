@@ -1,0 +1,81 @@
+{
+  "baseCandidate": "04293b8c603fe59e0a716fb3341714de695c0b87",
+  "command": [
+    ".venv/bin/python",
+    "-I",
+    "scripts/test_browser.py",
+    "--performance",
+    "--grep",
+    "operability:"
+  ],
+  "exitCode": 0,
+  "seconds": 172.989,
+  "sourceUnchanged": true,
+  "applicationAndTestSourceDigest": "sha256:a4d5c6fc273f06437e07c0256eb9e7e7ad074eb4dd719d9600ad4032410b65c7",
+  "inheritedCohort": {
+    "evidence": "../M3-physical-contracts/verification.json",
+    "backendPassed": 776,
+    "browserPassed": 75,
+    "allPreviouslyTestedSourceUnchanged": true,
+    "onlyAddedSource": "tests/e2e/accessibility.spec.ts"
+  },
+  "tasks": {
+    "T038": "in_progress",
+    "T067": "in_progress"
+  },
+  "windows": "BLOCKED_USER_REQUEST",
+  "scope": "Native Linux Chromium; scoped keyboard/focus/status and authored/recorded fixture workloads only",
+  "browser": {
+    "startTime": "2026-10-26T08:51:15.018Z",
+    "duration": 170619.413,
+    "expected": 2,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "workloads": [
+    {
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "measurement": "history-performance.json",
+      "evidence": "1024x768/history-performance.json"
+    },
+    {
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "measurement": "model-performance.json",
+      "evidence": "1024x768/model-performance.json"
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "measurement": "history-performance.json",
+      "evidence": "1440x900/history-performance.json"
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "measurement": "model-performance.json",
+      "evidence": "1440x900/model-performance.json"
+    }
+  ],
+  "initialFailures": [
+    "Anchored grep matched no full Playwright titles; corrected to operability:.",
+    "Early project ID read raced asynchronous example creation; read after validation and captured actual Start response identity."
+  ],
+  "limitations": [
+    "Native Windows testing is held at user request.",
+    "Chromium only; no screen-reader assessment or other browser-engine evidence.",
+    "Selected workflow coverage; full accessibility/diagnostic acceptance remains open.",
+    "Canvas timing uses programmatic local button selection and authoritative validation-result presentation; actual validation outcome is retained.",
+    "These fixtures establish neither live-provider throughput nor physical-device capability."
+  ]
+}

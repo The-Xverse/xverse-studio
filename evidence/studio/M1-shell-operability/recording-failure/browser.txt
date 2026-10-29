@@ -1,0 +1,67 @@
+
+> xverse-studio-workspace@0.1.0 test:e2e
+> playwright test -c tests/e2e/playwright.config.ts --grep shell accessibility:
+
+
+Running 4 tests using 1 worker
+
+(node:3431565) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 tests/e2e/shell-accessibility.spec.ts:37:7 › shell accessibility: login instructions and real rejected-token recovery at 1024x768 (15.3s)
+(node:3434248) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  2 tests/e2e/shell-accessibility.spec.ts:79:7 › shell accessibility: navigation state, form and real busy response at 1024x768 (1.2s)
+  ✘  3 tests/e2e/shell-accessibility.spec.ts:37:7 › shell accessibility: login instructions and real rejected-token recovery at 1440x900 (15.4s)
+(node:3436868) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  4 tests/e2e/shell-accessibility.spec.ts:79:7 › shell accessibility: navigation state, form and real busy response at 1440x900 (1.4s)
+
+
+  1) tests/e2e/shell-accessibility.spec.ts:37:7 › shell accessibility: login instructions and real rejected-token recovery at 1024x768
+
+    TimeoutError: locator.innerText: Timeout 15000ms exceeded.
+    Call log:
+      - waiting for locator('.login-panel').getByRole('alert')
+
+
+      72 |       rejectedHTTP: 401, submittedFixture: "invalid synthetic token", clearedPassword: true,
+      73 |       inputName: "Bootstrap token", description: await token.getAttribute("aria-describedby"),
+    > 74 |       invalid: await token.getAttribute("aria-invalid"), error: await error.innerText(),
+         |                                                                             ^
+      75 |       keyboardRecovery: true, staleErrorClearedOnEditing: true, measurements: pairs }), contentType: "application/json" });
+      76 |     checkPairs(pairs);
+      77 |   });
+        at <repo>/tests/e2e/shell-accessibility.spec.ts:74:77
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/shell-accessibility-shell--86c4f--token-recovery-at-1024x768/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/shell-accessibility-shell--86c4f--token-recovery-at-1024x768/error-context.md
+
+  2) tests/e2e/shell-accessibility.spec.ts:37:7 › shell accessibility: login instructions and real rejected-token recovery at 1440x900
+
+    TimeoutError: locator.innerText: Timeout 15000ms exceeded.
+    Call log:
+      - waiting for locator('.login-panel').getByRole('alert')
+
+
+      72 |       rejectedHTTP: 401, submittedFixture: "invalid synthetic token", clearedPassword: true,
+      73 |       inputName: "Bootstrap token", description: await token.getAttribute("aria-describedby"),
+    > 74 |       invalid: await token.getAttribute("aria-invalid"), error: await error.innerText(),
+         |                                                                             ^
+      75 |       keyboardRecovery: true, staleErrorClearedOnEditing: true, measurements: pairs }), contentType: "application/json" });
+      76 |     checkPairs(pairs);
+      77 |   });
+        at <repo>/tests/e2e/shell-accessibility.spec.ts:74:77
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/shell-accessibility-shell--10582--token-recovery-at-1440x900/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/shell-accessibility-shell--10582--token-recovery-at-1440x900/error-context.md
+
+  2 failed
+    tests/e2e/shell-accessibility.spec.ts:37:7 › shell accessibility: login instructions and real rejected-token recovery at 1024x768
+    tests/e2e/shell-accessibility.spec.ts:37:7 › shell accessibility: login instructions and real rejected-token recovery at 1440x900
+  2 passed (34.7s)

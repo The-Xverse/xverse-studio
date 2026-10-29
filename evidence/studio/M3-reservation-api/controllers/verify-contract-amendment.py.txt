@@ -1,0 +1,79 @@
+"""Run only after frozen backend/browser/performance verification is terminal."""
+from pathlib import Path
+import ast
+import hashlib
+import json
+import os
+import shutil
+import sqlite3
+import subprocess
+import sys
+import time
+import uuid
+
+root = Path.cwd().resolve()
+base = root / '.studio-local/lab-api-integration'
+verified = base / 'verified-final'
+cache = root.parent / '.xverse-studio-cache'
+read = lambda p: json.loads(p.read_text())
+rows = read(verified / 'verification.json')
+assert rows[-1]['name'] == 'performance-final' and all(row['exitCode'] == 0 and row['sourceUnchanged'] for row in rows)
+before = read(verified / 'source-before.json')
+assert before == read(verified / 'source-after.json') and len(before) == 316
+def hashes():
+    return {name: hashlib.sha256((root / name).read_bytes()).hexdigest() for name in before}
+assert hashes() == before
+out = base / 'contract-amendment'
+out.mkdir(exist_ok=False)
+for name in ['openapi.json', 'api.ts']:
+    shutil.copyfile(root / 'packages/contracts' / name, out / (name + '.before.txt'))
+shared = root / '.studio-local/contract-generation'
+assert not (shared / 'studio.lock').exists()
+if (shared / 'studio.sqlite').exists():
+    with sqlite3.connect('file:' + str(shared / 'studio.sqlite') + '?mode=ro', uri=True) as db:
+        assert db.execute("SELECT count(*) FROM records WHERE kind IN ('run','campaign','operation','lab_registry')").fetchone()[0] == 0
+env = dict(os.environ, PYTEST_DISABLE_PLUGIN_AUTOLOAD='1',
+    SPECIFY_FEATURE_DIRECTORY='specs/001-industry-agnostic-studio',
+    PATH=str(cache / 'node-v24.22.1-linux-x64/bin') + os.pathsep + os.environ['PATH'],
+    TMPDIR=str(cache / 'tmp'), TEMP=str(cache / 'tmp'), TMP=str(cache / 'tmp'))
+commands = []
+def run(label, command):
+    start = time.monotonic()
+    with (out / (label + '.log')).open('w') as log:
+        result = subprocess.run(command, cwd=root, env=env, stdout=log, stderr=subprocess.STDOUT)
+    commands.append({'name': label, 'command': command, 'exitCode': result.returncode, 'seconds': round(time.monotonic() - start, 3)})
+    (out / 'commands.json').write_text(json.dumps(commands, indent=2) + '\n')
+    print(json.dumps(commands[-1]), flush=True)
+    if result.returncode:
+        raise SystemExit(result.returncode)
+run('generate', [sys.executable, '-I', 'scripts/generate_contracts.py'])
+for name in ['openapi.json', 'api.ts']:
+    assert (root / 'packages/contracts' / name).read_bytes() == (base / 'generated-contracts' / name).read_bytes()
+changed = {name: {'before': before[name], 'after': value} for name, value in hashes().items() if value != before[name]}
+assert set(changed) == {'packages/contracts/openapi.json', 'packages/contracts/api.ts'}
+old = json.loads((out / 'openapi.json.before.txt').read_text())
+new = read(root / 'packages/contracts/openapi.json')
+assert set(new['paths']) - set(old['paths']) == {'/api/v1/reservations/{reservationId}/reconciliations'}
+assert {name for name, value in new['components']['schemas'].items() if old['components']['schemas'].get(name) != value} == {'Reservation', 'Renewal'}
+assert new['components']['schemas']['Reservation']['properties']['scope']['enum'] == ['observe', 'stimulate', 'destructive']
+assert new['components']['schemas']['Reservation']['additionalProperties'] is False
+assert new['components']['schemas']['Renewal']['properties']['fencingIdentity']['maxLength'] == 256
+for name in old['paths']:
+    assert old['paths'][name] == new['paths'][name], name
+run('build', [str(cache / 'node-v24.22.1-linux-x64/bin/node'),
+    str(cache / 'node-v24.22.1-linux-x64/lib/node_modules/npm/bin/npm-cli.js'), 'run', 'build'])
+final = hashes()
+assert {name for name in before if before[name] != final[name]} == set(changed)
+run('affected-api', [sys.executable, '-I', '-m', 'pytest', 'tests/integration/test_lab_http.py',
+    'tests/contract/test_api_versions.py', '-q', '--tb=short',
+    '--basetemp=' + str(base / ('owned-final-contract-api-' + uuid.uuid4().hex)),
+    '--junitxml=' + str(out / 'junit.xml')])
+assert hashes() == final
+(out / 'source-before.json').write_text(json.dumps(before, indent=2) + '\n')
+(out / 'source-after.json').write_text(json.dumps(final, indent=2) + '\n')
+(out / 'amendment.json').write_text(json.dumps({'scope': 'After complete frozen1055/83/performance2, regenerate only static OpenAPI and TypeScript request contracts. All Python/runtime/test inputs and six compiled UI assets remain byte-identical. Full TS build and affected API checks pass; the original complete stage remains bound to its original316 hashes.',
+    'changes': changed, 'allOther314InputsUnchanged': True, 'allCompiledUIAssetsUnchanged': True,
+    'onlyAddedRoute': '/api/v1/reservations/{reservationId}/reconciliations',
+    'changedSchemas': ['Renewal', 'Reservation'], 'commands': commands,
+    'limitations': ['This is a disclosed generated-contract amendment after the full frozen stage, not a new single-command full run on all final316 files. Actual backend/runtime/browser-test bytes are unchanged.']}, indent=2) + '\n')
+print('Generated contracts synchronized; all Python/tests/UI bytes unchanged; build and affected API passed.', flush=True)

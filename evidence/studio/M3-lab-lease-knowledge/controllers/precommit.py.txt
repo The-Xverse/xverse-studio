@@ -1,0 +1,47 @@
+from collections import Counter
+from pathlib import Path
+import ast
+import hashlib
+import json
+import subprocess
+
+root = Path.cwd().resolve()
+out = root / 'evidence/studio/M3-lab-lease-knowledge'
+local = root / '.studio-local/lab-api-foundation'
+for name, digest in json.loads((out / 'application-and-input-hashes.json').read_text()).items():
+    assert hashlib.sha256((root / name).read_bytes()).hexdigest() == digest, name
+old = ast.parse((local / 'main-tests.before.py.txt').read_text())
+new = ast.parse((root / 'tests/integration/test_lab_reservations.py').read_text())
+assert [ast.dump(n) for n in old.body] == [ast.dump(n) for n in new.body[:len(old.body)]]
+path = root / 'specs/001-industry-agnostic-studio/traceability.json'
+trace = json.loads(path.read_text())
+prior = json.loads(subprocess.check_output(['git', 'show', 'ad92d2b221e67a5867b246c3b765781435dcba6f:specs/001-industry-agnostic-studio/traceability.json']))
+assert len(trace['tasks']) == len(prior['tasks']) == 100
+assert Counter(t['status'] for t in trace['tasks']) == {'completed': 47, 'in_progress': 43, 'blocked': 10}
+for before, after in zip(prior['tasks'], trace['tasks']):
+    assert {k: v for k, v in before.items() if k not in ('implementation_note', 'implementation_evidence')} == {k: v for k, v in after.items() if k not in ('implementation_note', 'implementation_evidence')}
+assert trace['milestones'] == prior['milestones']
+observations = []
+for candidate, count in [('b2897ee', 934), ('ad92d2b', 938)]:
+    name = 'evidence/studio/native-ci/ubuntu-24.04-' + candidate + '-runs.json'
+    receipt = json.loads((root / name).read_text())
+    assert len(receipt['runs']) == 2
+    for run in receipt['runs']:
+        assert run['status'] == 'completed' and run['conclusion'] == 'success'
+        assert all(j['pytestPassCounts'] == [str(count)] and j['browserPassCounts'] == ['474'] for j in run['jobs'])
+        observations.append({'runId': run['id'], 'head': run['head'], 'event': run['event'],
+                             'conclusion': run['conclusion'], 'backendPassed': count,
+                             'browserPassed': 474, 'browserFailed': 0, 'packageSmokePassed': True,
+                             'evidence': name})
+v = trace['implementation_record']['verification']
+for observation in observations:
+    if not any(o['runId'] == observation['runId'] for o in v['prior_browser_ci_outcomes']):
+        v['prior_browser_ci_outcomes'].append(observation)
+path.write_text(json.dumps(trace, ensure_ascii=False, indent=2) + '\n')
+path = root / 'docs/implementation/STATUS.md'
+paragraph = ('Both earlier b2897ee Ubuntu24 push/PR CI runs passed934 backend/full474 browser/104-file package smoke. Both published ad92d2b runs passed fresh938 backend/full474 browser/104-file package smoke, resolving the earlier final-source CI observation. Exact receipts are under `evidence/studio/native-ci/`. These prior candidate outcomes do not verify the new local lease repair; current repair coverage is fresh944 backend/83 affected browser checks.\n\n')
+text = path.read_text()
+assert paragraph not in text
+path.write_text(text.replace('Lab lease-knowledge repair:', paragraph + 'Lab lease-knowledge repair:', 1))
+(out / 'controllers/precommit.py.txt').write_text(Path(__file__).read_text())
+print(json.dumps({'all300InputsUnchanged': True, 'allExistingTestASTNodesPreserved': True, 'all100TaskStatesAndMilestonesPreserved': True, 'priorTerminalCIRunsRetained': 4}))

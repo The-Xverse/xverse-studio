@@ -1,0 +1,22 @@
+apiVersion: xverse.io/xdl/v1alpha1
+kind: Profile
+metadata:
+  namespace: org.xverse.studio.process-control
+  name: studio-experiments
+  version: 1.0.0
+  description: Studio-owned reference fixture.
+  provenance:
+    source: urn:xverse:studio:reference
+    revision: 1.0.0
+    maturity: prototype
+    limitations:
+    - Owned executable reference only; no external simulator, device or
+      scientific fidelity claim.
+spec:
+  extensionNamespace: io.xverse.studio.experiments
+  compatibleApiVersions:
+  - xverse.io/xdl/v1alpha1
+  schemaRef:
+    https://schemas.xverse.io/studio/experiments/1.0/evaluation.schema.json
+  documentationRef: urn:xverse:studio:experiments:1.0
+  conflictPolicy: reject

@@ -1,0 +1,17 @@
+from pathlib import Path
+import hashlib,json,os,subprocess,sys,time
+root=Path.cwd();out=root/'.studio-local/comparison-next/window-proposal'
+frozen=json.loads((root/'.studio-local/campaign-workflow/verified-targeted/source-before.json').read_text())
+def current():return {n:hashlib.sha256((root/n).read_bytes()).hexdigest() for n in frozen}
+assert current()==frozen
+(out/'source-before.json').write_text(json.dumps(frozen,indent=2)+'\n')
+env=dict(os.environ,PYTEST_DISABLE_PLUGIN_AUTOLOAD='1');env.pop('PYTHONPATH',None)
+command=[sys.executable,'-I','-m','pytest','-c','/dev/null',str(out/'test_comparison_windows.py'),'-q','--junitxml='+str(out/'junit.xml')]
+started=time.monotonic()
+with (out/'pytest.log').open('w') as log:r=subprocess.run(command,env=env,stdout=log,stderr=subprocess.STDOUT)
+after=current();assert after==frozen
+(out/'source-after.json').write_text(json.dumps(after,indent=2)+'\n')
+summary={'scope':'Proposed T091 fixture-only comparison-window/observer contract regressions; no runtime changes or native execution acceptance. Exit1 is a red, not a passing gate.','command':command,'exitCode':r.returncode,'seconds':round(time.monotonic()-started,3),'mainFrozenInputsUnchanged':True}
+(out/'summary.json').write_text(json.dumps(summary,indent=2)+'\n')
+print(json.dumps(summary))
+print((out/'pytest.log').read_text()[-1800:])

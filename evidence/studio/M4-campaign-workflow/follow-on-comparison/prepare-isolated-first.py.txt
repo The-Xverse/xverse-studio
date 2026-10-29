@@ -1,0 +1,29 @@
+from pathlib import Path
+import hashlib,json,shutil,subprocess
+root=Path.cwd().resolve();base=root/'.studio-local/comparison-next';checkout=base/'isolated-source'
+assert not checkout.exists()
+candidate=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()
+subprocess.run(['git','worktree','add','--detach',str(checkout),candidate],check=True,stdout=subprocess.DEVNULL)
+relative='services/studio-api/src/xverse_studio/api/advanced.py'
+original=(root/relative).read_bytes();target=checkout/relative;target.write_bytes(original)
+s=target.read_text();needle='''    def comparable(run_id):
+        run = runs.read(run_id)
+        snapshot = store.get("snapshot", run["snapshotId"])
+'''
+assert s.count(needle)==1
+s=s.replace(needle,needle+'        runs.verify_snapshot(snapshot)\n');target.write_text(s)
+assert target.read_text().replace('        runs.verify_snapshot(snapshot)\n','',1)!=original.decode() # other routes already verify snapshots; compare exact replacement below
+assert target.read_text()==original.decode().replace(needle,needle+'        runs.verify_snapshot(snapshot)\n')
+controls={}
+for p in (root/'services/studio-api/src').rglob('*.py'):
+ n=p.relative_to(root).as_posix();q=checkout/n
+ if n!=relative:assert p.read_bytes()==q.read_bytes(),n
+ controls[n]=hashlib.sha256(p.read_bytes()).hexdigest()
+for p in (root/'config').rglob('*'):
+ if p.is_file():assert p.read_bytes()==(checkout/p.relative_to(root)).read_bytes()
+(checkout/'.studio-local/comparison-next').mkdir(parents=True)
+source=base/'actual-public-projection.json';shutil.copy2(source,base/'snapshot-integrity-red/actual-public-projection.json')
+proof={'baseCandidate':candidate,'scope':'Isolated owned Studio source copy; all backend Python/config files match the frozen campaign candidate except one snapshot-verification call in comparable(). No main worktree source changes.',
+ 'mainBackendHashes':controls,'changedFile':relative,'mainSha256':hashlib.sha256(original).hexdigest(),'isolatedSha256':hashlib.sha256(target.read_bytes()).hexdigest()}
+(base/'isolated-source-control.json').write_text(json.dumps(proof,indent=2)+'\n')
+print(json.dumps({'isolatedCandidate':candidate,'changedFile':relative,'mainSourceUntouched':True,'backendFilesCompared':len(controls)}))

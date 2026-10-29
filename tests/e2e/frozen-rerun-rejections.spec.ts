@@ -1,0 +1,352 @@
+import { test, expect } from "@playwright/test";
+import { readFileSync } from "node:fs";
+import { createHash } from "node:crypto";
+import path from "node:path";
+import { connectStudio } from "./connect-studio";
+import { traceApi } from "./trace-claims-flow";
+
+for (const mode of ["normal", "reopen", "newer key"])
+  for (const width of [1024, 1440])
+    test(`rejected rerun: ${mode} actual capacity release permits explicit new admission at ${width}`, async ({
+      page,
+    }, info) => {
+      test.setTimeout(90000);
+      await page.setViewportSize({ width, height: width === 1024 ? 768 : 900 });
+      await connectStudio(page, info);
+      let project = (
+        await traceApi(page, "/projects", "POST", {
+          name: "Native rejected rerun recovery " + width,
+        })
+      ).body;
+      async function prepared(duration: number) {
+        const edited = await traceApi(
+          page,
+          `/projects/${project.projectId}/edits`,
+          "POST",
+          {
+            baseRevision: project.revision,
+            edits: [
+              {
+                kind: "set_parameter",
+                parameterId: "duration",
+                value: duration,
+              },
+            ],
+          },
+          project.revision,
+        );
+        expect(edited.status).toBe(200);
+        project = edited.body;
+        const pf = await traceApi(
+          page,
+          `/projects/${project.projectId}/preflights`,
+          "POST",
+          { revision: project.revision },
+        );
+        expect(pf.status).toBe(200);
+        expect(pf.body.status).toBe("ready");
+        return pf.body;
+      }
+      const originalInput = await prepared(0.2);
+      const started = await traceApi(page, "/runs", "POST", {
+        snapshotId: originalInput.snapshotId,
+        preflightId: originalInput.preflightId,
+      });
+      expect(started.status).toBe(202);
+      const original = started.body.runId;
+      await expect
+        .poll(
+          async () => (await traceApi(page, "/runs/" + original)).body.state,
+          { timeout: 20000 },
+        )
+        .toBe("stopped");
+      const originalRun = (await traceApi(page, "/runs/" + original)).body;
+      const files = [
+        `runs/${original}/evidence.jsonl`,
+        `snapshots/${originalRun.snapshotId}/snapshot.json`,
+      ];
+      const hash = (name: string) =>
+        createHash("sha256")
+          .update(
+            readFileSync(path.join(process.env.STUDIO_BROWSER_DATA!, name)),
+          )
+          .digest("hex");
+      const before = Object.fromEntries(files.map((n) => [n, hash(n)]));
+      await page.evaluate(
+        ({ pid, rid }) => {
+          localStorage.setItem("studio.projectId", pid);
+          localStorage.setItem("studio.lastRun", rid);
+          localStorage.setItem("studio.lastRun." + pid, rid);
+        },
+        { pid: project.projectId, rid: original },
+      );
+      await page.reload();
+      await page.getByRole("tab", { name: "Results", exact: false }).click();
+      await expect(
+        page.getByLabel("Recorded run", { exact: true }),
+      ).toHaveValue(original);
+      const busyInput = await prepared(30);
+      const busy: string[] = [];
+      const attempts: { key: string; operationId?: string; status?: number }[] =
+        [];
+      page.on("request", (request) => {
+        if (
+          request.method() === "POST" &&
+          request.url().endsWith(`/runs/${original}/reruns`)
+        )
+          attempts.push({ key: request.headers()["idempotency-key"] || "" });
+      });
+      page.on("response", async (response) => {
+        if (
+          response.request().method() === "POST" &&
+          response.url().endsWith(`/runs/${original}/reruns`)
+        ) {
+          const body = await response.json();
+          const row = attempts.find(
+            (a) =>
+              a.key === response.request().headers()["idempotency-key"] &&
+              a.operationId === undefined,
+          );
+          if (row) {
+            row.operationId = body.operationId;
+            row.status = response.status();
+          }
+        }
+      });
+      let releaseHeld: () => void = () => {},
+        readyHeld: () => void = () => {},
+        deliveredHeld: () => void = () => {};
+      const held = new Promise<void>((resolve) => (releaseHeld = resolve)),
+        ready = new Promise<void>((resolve) => (readyHeld = resolve)),
+        delivered = new Promise<void>((resolve) => (deliveredHeld = resolve));
+      let newerReceipt:
+        { key: string; operationId: string; status: number } | undefined;
+      if (mode === "newer key")
+        await page.route(`**/api/v1/runs/${original}/reruns`, async (route) => {
+          const response = await route.fetch();
+          const body = await response.text();
+          const headers = { ...response.headers() };
+          delete headers["content-length"];
+          expect(response.status()).toBe(202);
+          readyHeld();
+          await held;
+          try {
+            await route.fulfill({ status: 202, headers, body });
+          } finally {
+            deliveredHeld();
+          }
+        });
+      async function stopBusy() {
+        for (const rid of busy) {
+          const run = (await traceApi(page, "/runs/" + rid)).body;
+          if (run.state === "running") {
+            const stop = await traceApi(page, `/runs/${rid}/commands`, "POST", {
+              kind: "stop",
+              expectedStateVersion: run.stateVersion,
+            });
+            expect(stop.status).toBe(202);
+            await expect
+              .poll(
+                async () =>
+                  (await traceApi(page, "/operations/" + stop.body.operationId))
+                    .body.status,
+                { timeout: 10000 },
+              )
+              .toBe("completed");
+          }
+          await expect
+            .poll(
+              async () => (await traceApi(page, "/runs/" + rid)).body.state,
+              { timeout: 20000 },
+            )
+            .toBe("stopped");
+        }
+      }
+      try {
+        for (let i = 0; i < 4; i++) {
+          const result = await traceApi(page, "/runs", "POST", {
+            snapshotId: busyInput.snapshotId,
+            preflightId: busyInput.preflightId,
+          });
+          expect(result.status).toBe(202);
+          busy.push(result.body.runId);
+        }
+        await expect
+          .poll(
+            async () =>
+              Promise.all(
+                busy.map(
+                  async (rid) =>
+                    (await traceApi(page, "/runs/" + rid)).body.state,
+                ),
+              ),
+            { timeout: 20000 },
+          )
+          .toEqual(["running", "running", "running", "running"]);
+        const button = page.getByRole("button", {
+          name: "Rerun frozen inputs",
+          exact: true,
+        });
+        await button.focus();
+        await page.keyboard.press("Enter");
+        if (mode === "newer key") {
+          await ready;
+          const tab = await page.context().newPage();
+          await tab.goto("/");
+          newerReceipt = await tab.evaluate(async (rid) => {
+            const session = await fetch("/api/v1/session").then((r) =>
+              r.json(),
+            );
+            const key = crypto.randomUUID();
+            const response = await fetch(`/api/v1/runs/${rid}/reruns`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-Token": session.csrfToken,
+                "Idempotency-Key": key,
+              },
+              body: "{}",
+            });
+            const body = await response.json();
+            localStorage.setItem("studio.pendingRerun." + rid, key);
+            return {
+              key,
+              operationId: body.operationId,
+              status: response.status,
+            };
+          }, original);
+          expect(newerReceipt.status).toBe(202);
+          const newerOperation = (
+            await traceApi(tab, "/operations/" + newerReceipt.operationId)
+          ).body;
+          expect(newerOperation.status).toBe("rejected");
+          expect(newerOperation.error.code).toBe("RESOURCE_BUSY");
+          await tab.close();
+          releaseHeld();
+          await delivered;
+          await page.unroute(`**/api/v1/runs/${original}/reruns`);
+        }
+        await expect.poll(() => attempts[0]?.operationId).toBeTruthy();
+        const first = (
+          await traceApi(page, "/operations/" + attempts[0].operationId)
+        ).body;
+        expect(first.status).toBe("rejected");
+        expect(first.error.code).toBe("RESOURCE_BUSY");
+        expect(first.sourceRunId).toBe(original);
+        expect(first.parentSnapshotId).toBe(originalRun.snapshotId);
+        expect(first.runId).toBeUndefined();
+        expect(first.result).toBeUndefined();
+        await expect(button).toBeEnabled();
+        await expect(page.getByRole("alert")).toContainText("RESOURCE_BUSY");
+        if (mode === "newer key") {
+          expect(
+            await page.evaluate(
+              (rid) => localStorage.getItem("studio.pendingRerun." + rid),
+              original,
+            ),
+          ).toBe(newerReceipt!.key);
+          await expect(page.getByRole("alert")).toContainText(
+            "A newer request is retained.",
+          );
+          await button.focus();
+          await page.keyboard.press("Enter");
+          await expect
+            .poll(() => attempts[1]?.operationId)
+            .toBe(newerReceipt!.operationId);
+          await expect(button).toBeEnabled();
+        }
+        expect(
+          await page.evaluate(
+            (rid) => localStorage.getItem("studio.pendingRerun." + rid),
+            original,
+          ),
+        ).toBeNull();
+        if (mode === "reopen") {
+          await page.reload();
+          await page
+            .getByRole("tab", { name: "Results", exact: false })
+            .click();
+          await expect(
+            page.getByLabel("Recorded run", { exact: true }),
+          ).toHaveValue(original);
+        }
+        const finalIndex = mode === "newer key" ? 2 : 1;
+        await stopBusy();
+        expect(attempts).toHaveLength(finalIndex);
+        expect(
+          (await traceApi(page, "/runs?projectId=" + project.projectId)).body
+            .items,
+        ).toHaveLength(5);
+        await button.focus();
+        await page.keyboard.press("Enter");
+        await expect.poll(() => attempts[finalIndex]?.operationId).toBeTruthy();
+        const second = (
+          await traceApi(
+            page,
+            "/operations/" + attempts[finalIndex].operationId,
+          )
+        ).body;
+        const unchanged = files.every((n) => hash(n) === before[n]);
+        await info.attach("native-rejected-rerun-recovery", {
+          contentType: "application/json",
+          body: JSON.stringify({
+            scope:
+              "Five actual owned runs; four reach running and are stopped through owned commands. No transport injection or canonical mutation.",
+            mode,
+            width,
+            original,
+            originalSnapshotId: originalRun.snapshotId,
+            busyRunIds: busy,
+            first,
+            second,
+            attempts,
+            canonicalOriginalBytesUnchanged: unchanged,
+          }),
+        });
+        expect(unchanged).toBe(true);
+        expect(
+          second.status,
+          "Explicit rerun after verified rejection and real capacity release should receive fresh admission.",
+        ).toBe("completed");
+        expect(second.operationId).not.toBe(first.operationId);
+        expect(attempts[finalIndex].key).not.toBe(attempts[finalIndex - 1].key);
+        expect(second.result.runId).not.toBe(original);
+        await expect
+          .poll(
+            async () =>
+              (await traceApi(page, "/runs/" + second.result.runId)).body.state,
+            { timeout: 20000 },
+          )
+          .toBe("stopped");
+        await expect(
+          page.getByLabel("Recorded run", { exact: true }),
+        ).toHaveValue(second.result.runId);
+        const child = (
+          await traceApi(page, `/runs/${second.result.runId}/snapshot`)
+        ).body;
+        expect(child.integrity).toBe("valid");
+        expect(child.snapshot.parentSnapshotId).toBe(originalRun.snapshotId);
+        expect(child.snapshot.configuration.duration).toBe(0.2);
+        const ids = (
+          await traceApi(page, "/runs?projectId=" + project.projectId)
+        ).body.items
+          .map((run: any) => run.runId)
+          .sort();
+        expect(ids).toEqual([original, ...busy, second.result.runId].sort());
+        expect(attempts).toHaveLength(finalIndex + 1);
+        await info.attach("native-rejection-recovery-control", {
+          contentType: "application/json",
+          body: JSON.stringify({
+            freshAdmissionRequiredExplicitSecondClick: true,
+            exactlyOneNewChild: true,
+            originalDuration: 0.2,
+            currentDraftDuration: 30,
+            originalBytesUnchanged: files.every((n) => hash(n) === before[n]),
+            runIds: ids,
+          }),
+        });
+      } finally {
+        releaseHeld();
+        await stopBusy();
+      }
+    });

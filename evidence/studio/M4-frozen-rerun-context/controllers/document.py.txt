@@ -1,0 +1,110 @@
+from pathlib import Path
+from collections import Counter
+import json
+
+root=Path.cwd();out=root/'evidence/studio/M4-frozen-rerun-context'
+v=json.loads((out/'verification.json').read_text());assert v['targeted']['expected']==37 and v['performance']['expected']==2 and v['allCurrentStageInputsIdentical']
+assert v['frozenInputs']==289 and v['currentFull413']=='NOT_RUN'
+text='''# Frozen rerun acknowledgement and presentation context
+
+An actual owned rerun's delayed HTTP acknowledgement previously selected its child
+and returned to Results after the user had deliberately selected Model. Both native
+desktop widths reproduced the defect. The source experiment completed normally;
+this was a browser presentation defect, separate from execution ownership.
+
+The browser now selects the verified child only while the originating Results
+instance, run/snapshot, result tab and focus remain current, with no newer dialog.
+Normal completion still selects the admitted child. A newer view, annotation draft,
+focus or selected run survives late completion. The backend continues to own runs.
+
+The existing fifteen-second acknowledgement budget now bounds the POST, operation
+reads and child read. Aborting a browser read does not cancel backend execution.
+Synchronous submission guards prevent repeated pending delivery. Explicit retry
+keeps the source run's stored idempotency key, and a completed receipt clears only
+its own key. Operation, source run, parent/new snapshot, child/start-operation,
+project and owned-reference scope must match before the child can be selected.
+Mismatched or uncertain responses keep their request identity for retry.
+
+Fresh main verification passes37 affected browser checks and separate performance2,
+with289 source/test/config/lock/ADR/guide/compiled inputs identical across/within both
+stages. The37 include16 new cases at1024x768/1440x900,18 comparison cases, the existing
+annotation and late evidence-filter workflows, and the entire original studio flow.
+No existing assertions were removed. Actual lost HTTP acknowledgements and labelled
+operation/child DTO faults retry the same key and retain exactly one admitted child.
+The DTO fixtures change transport fields only, not snapshots or canonical journals.
+
+The previous fresh932 backend result is inherited:217 of its218 selected inputs
+remain identical, and the sole difference is the non-executable ADR0021 amendment.
+Backend/runtime/Python-test sources are unchanged; fresh collection remains932.
+The two new browser files do not enter pytest. This is not a newly executed full
+backend suite. The previous full397 belongs to comparison candidate9a0f189. Current
+full browser collection is413; no413 pass is inferred from the focused37 proof.
+
+The original native red, isolated source proposal, TypeScript inference failure,
+invalid pre-build browser attempt, corrected2/16/37 isolated successors and exact
+sources remain at ../M4-recorded-comparison/follow-on-rerun/. The invalid attempt
+failed before the product workflow and was already terminal when inspected; no
+process was signalled. That historical proposal is now promoted to main, followed
+by fresh main37/performance2 verification. Backend authority and XDL semantics do
+not change. No new provider, physical operation or deterministic replay is admitted.
+
+The implementation agent's review is not independent milestone acceptance. The
+read deadline and protection of a different tab's newer stored key have source
+review, without separate timed/cross-tab acceptance cases. Native Windows, actual
+AT/human/novice work, broader providers and complete task dependencies remain open.
+T091 stays in progress; counts47 completed/43 in progress/10 blocked, zero milestones.
+
+Performance retains the existing200-element/400-flow and50000-record workloads,
+one warm-up and30 repetitions. It does not prove live rerun/campaign scalability.
+
+| Viewport | Selection p95 | Open/validation p95 | History p95 |
+| --- | --- | --- | --- |
+'''
+for size in ['1024x768','1440x900']:
+ m=json.loads((out/f'performance/{size}/model-performance.json').read_text());h=json.loads((out/f'performance/{size}/history-performance.json').read_text())
+ text+=f'| {size} | {m["selectionAndInspector"]["p95"]:.1f} ms | {m["openAndValidationPresentation"]["p95"]:.1f} ms | {h["p95"]:.1f} ms |\n'
+text+='\nSelected candidate digest: `'+v['applicationAndInputDigest']+'`. Environment sourceDigest is tracked-only before commit; the289-input map includes new files and compiled assets. Clean committed successor package verification is pending.\n'
+(out/'README.md').write_text(text)
+(out/'implementation-review.md').write_text('''# Root implementation review
+
+This is the implementation agent's review, not independent milestone acceptance.
+The complete M0–M4 plan and IDs remain unchanged. The actual main37/performance2
+receipts and289 input maps are authoritative for the UI successor. Backend932 is
+explicitly inherited through217 unchanged inputs and an ADR-only amendment; full397
+is historical9a0f189 coverage. Current413 browser collection is not an execution.
+
+Only ResultsView runtime code changes. Existing source/draft/command/comparison and
+backend capabilities retain authority. Rerun acknowledgement does not imply worker
+completion or a passing assertion. The new child may itself fail and must retain
+that lifecycle/cleanup/evidence outcome. Changed tab/run/snapshot/mount/focus guards
+affect presentation, never backend execution. Lost or invalid replies retain the
+same request key; completion cannot forget a different key. The existing fifteen-
+second budget now covers each awaited transport stage, with no timeout increase.
+
+Actual red and isolated source work precede main promotion. Native
+normal completion, newer Model/annotations/focus/run selection and same-key/no-
+duplicate retry after actual loss or labelled operation/child identity faults pass
+at both required widths. Existing annotation/evidence/comparison and whole studio
+workflows pass. Canonical evidence is not rewritten by the repair or DTO fixtures.
+Fresh build, architecture/spec and separate performance pass. Native Windows,
+AT/human, provider admission, broader receipt/recovery cases and milestone gates
+retain their actual open states. No full task or release acceptance is claimed.
+''')
+p=root/'specs/001-industry-agnostic-studio/traceability.json';trace=json.loads(p.read_text());counts=Counter(t['status'] for t in trace['tasks']);assert counts=={'completed':47,'in_progress':43,'blocked':10}
+note=(' Frozen rerun UI successor: actual delayed native acknowledgements no longer override newer Model/results-tab/focus/run selection or annotation intent. Existing15-second acknowledgement budget bounds POST/operation/child reads; exact source/operation/snapshot/child/project/scope checks and same-key retry preserve one owned child. Fresh37 affected browser and performance2 pass with289 identical inputs; backend932 inherited through217 unchanged inputs plus ADR-only amendment. Previous full397 is historical9a0f189; full413 is collected but NOT_RUN here. Original red, isolated proposal/errors and main proof remain retained in evidence/studio/M4-frozen-rerun-context/ and prior follow-on-rerun history. T091/native Windows/AT/human/provider/full milestone gates remain open; counts47/43/10 unchanged.')
+ids=['T038','T067','T091','T095','T096','T097','T098']
+for task in trace['tasks']:
+ if task['id'] in ids:
+  assert task['status']=='in_progress';task['implementation_note']+=note
+  for item in ['evidence/studio/M4-frozen-rerun-context/verification.json','evidence/studio/M4-frozen-rerun-context/implementation-review.md','docs/architecture/ADR-0021-recorded-comparison.md']:
+   if item not in task.setdefault('implementation_evidence',[]):task['implementation_evidence'].append(item)
+record=trace['implementation_record'];record['code_candidate']='Uncommitted frozen-rerun successor '+v['applicationAndInputDigest']+'; package binding pending'
+record['verification'].update(evidence='evidence/studio/M4-frozen-rerun-context/',backend_inheritance='evidence/studio/M4-frozen-rerun-context/backend-inheritance.json',affected_playwright_checks_passed=37,current_full_playwright_collection=413,current_full_playwright_execution='NOT_RUN',
+ playwright_scope='Previous full397 on9a0f189; successor37 affected and performance2 fresh on289 identical inputs. No413 pass claimed. Backend932 inherited through217 unchanged selected inputs plus ADR-only amendment.',
+ prior_package_evidence='evidence/studio/M4-recorded-comparison/package/receipt.json (clean9a0f189 historical source)',package_evidence='PENDING clean frozen-rerun UI successor package')
+assert Counter(t['status'] for t in trace['tasks'])==counts;p.write_text(json.dumps(trace,ensure_ascii=False,indent=2)+'\n')
+p=root/'specs/001-industry-agnostic-studio/tasks.md';p.write_text(p.read_text()+'\n'+note.strip()+'\n')
+p=root/'docs/implementation/STATUS.md';s=p.read_text();marker='The latest recorded comparison component';assert marker in s
+paragraph=('The latest frozen-rerun UI successor passes37 affected browser checks and separate performance2 with289 identical inputs. Actual late acknowledgement preserves newer views, annotation/focus/run intent; typed source/operation/child identities and same-key retry retain one owned child. Backend932 is inherited through217 unchanged inputs plus an ADR-only amendment; previous full397 belongs to9a0f189 and current413 is collected but not executed here. See `evidence/studio/M4-frozen-rerun-context/` and its original follow-on red/isolated history. T091 remains partial,47/100 completed, no milestones accepted. Windows/actual AT/human/provider gates remain open. Clean committed successor package verification is pending.\n\n')
+p.write_text(s.replace(marker,paragraph+marker,1))
+print('Documented37/performance2 successor with explicit inherited932 and unrun413; task/trace counts unchanged.')

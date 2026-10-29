@@ -1,0 +1,176 @@
+from pathlib import Path
+import base64
+import hashlib
+import json
+import re
+import sys
+
+root = Path.cwd()
+local = root/'.studio-local/lab-inventory'
+out = root/'evidence/studio/M3-inventory-observations'
+out.mkdir(exist_ok=True)
+
+def read(path):
+    return json.loads(path.read_text())
+
+def clean_text(value):
+    for original, replacement in [(str(root.parent/'.xverse-studio-cache'), '<loop-cache>'),
+            (str(root), '<repo>'), ('<repo>', '<repo>'),
+            (sys.base_prefix, '<python-install>'), ('<repo>', '<repo>')]:
+        value = value.replace(original, replacement)
+    return value
+
+def clean(value):
+    if isinstance(value, str):
+        return clean_text(value)
+    if isinstance(value, list):
+        return [clean(v) for v in value]
+    if isinstance(value, dict):
+        result = {k: clean(v) for k, v in value.items()}
+        if value.get('contentType', '').startswith(('application/json', 'text/')) and 'body' in value:
+            try:
+                result['body'] = base64.b64encode(clean_text(base64.b64decode(value['body']).decode()).encode()).decode()
+            except (ValueError, UnicodeError):
+                pass
+        return result
+    return value
+
+def save(name, value):
+    p = out/name
+    p.parent.mkdir(parents=True, exist_ok=True)
+    p.write_text(json.dumps(clean(value), indent=2)+'\n')
+
+def copy_text(name, source):
+    p = out/name
+    p.parent.mkdir(parents=True, exist_ok=True)
+    p.write_text('\n'.join(v.rstrip() for v in clean_text(source.read_text()).splitlines()).rstrip()+'\n')
+
+def results(report):
+    for suite in report.get('suites', []):
+        yield from results(suite)
+    for spec in report.get('specs', []):
+        for test in spec['tests']:
+            for result in test['results']:
+                yield spec['title'], result
+
+for stage in ['initial-red', 'first-four-successor', 'thirty-before-review', 'before-physical-review-targeted', 'review-interrupted-full', 'physical-declaration-red', 'before-unicode-targeted', 'before-unicode-full', 'before-unicode-performance', 'unicode-red']:
+    path = local/stage
+    for name in ['summary.json', 'source-before.json', 'source-after.json', 'browser-report.json']:
+        save(f'{stage}/{name}', read(path/name))
+    for name in ['classification.json']:
+        if (path/name).exists():
+            save(f'{stage}/{name}', read(path/name))
+    for name, dest in [('verify.py', 'controller.py.txt'), ('test.ts.txt', 'test.ts.txt'),
+            ('browser.log', 'browser.txt'), ('product.patch', 'product.patch')]:
+        if (path/name).exists():
+            copy_text(f'{stage}/{dest}', path/name)
+    for p in (path/'browser-output').glob('**/error-context.md'):
+        copy_text(f'{stage}/contexts/{p.parent.name}/{p.name}', p)
+    for title, result in results(read(path/'browser-report.json')):
+        for a in result.get('attachments', []):
+            if a.get('contentType') == 'application/json' and 'body' in a:
+                view = re.search(r'(\d+x\d+)', title)
+                viewport = view.group(1) if view else 'multiple-or-unspecified'
+                mode = title.split(': ', 1)[-1].rsplit(' at ', 1)[0].replace(' ', '-')
+                save(f'{stage}/journeys/{viewport}/{mode}/{a["name"]}', json.loads(base64.b64decode(a['body'])))
+
+assert read(out/'initial-red/browser-report.json')['stats']['unexpected'] == 4
+
+maps = read(root/'.studio-local/lab-inventory-final/source-before.json')
+assert len(maps) == 272
+assert all(hashlib.sha256((root/n).read_bytes()).hexdigest() == h for n, h in maps.items())
+reports = {}
+pairs = []
+for label, suffix, expected in [('targeted', 'final', 36), ('full', 'full', 293), ('performance', 'performance', 2)]:
+    path = root/f'.studio-local/lab-inventory-{suffix}'
+    summary = read(path/'summary.json')
+    assert summary['exitCode'] == 0 and summary['sourceUnchanged']
+    assert maps == read(path/'source-before.json') == read(path/'source-after.json')
+    report = read(path/'browser-report.json')
+    assert report['stats']['expected'] == expected
+    assert not any(report['stats'][k] for k in ['unexpected', 'skipped', 'flaky'])
+    reports[label] = report
+    save(f'{label}/verification.json', summary)
+    save(f'{label}/browser-report.json', report)
+    save(f'{label}/application-and-input-hashes.json', maps)
+    copy_text(f'{label}/browser.txt', path/'browser.log')
+    copy_text(f'controllers/{label}.py.txt', path/'verify.py')
+    if label != 'full':
+        for title, result in results(report):
+            viewport = re.search(r'(\d+x\d+)', title).group(1)
+            mode = title.split(': ', 1)[-1].rsplit(' at ', 1)[0].replace(' ', '-')
+            for a in result.get('attachments', []):
+                if a.get('contentType') == 'application/json' and 'body' in a:
+                    value = json.loads(base64.b64decode(a['body']))
+                    save(f'{label}/journeys/{viewport}/{mode}/{a["name"]}', value)
+                    if label == 'targeted' and isinstance(value, dict):
+                        pairs.extend(value.get('measurements', []))
+    for p in (path/'browser-output').glob('**/native-browser-environment.json'):
+        save(f'{label}/environment/{p.parent.parent.name}/{p.name}', read(p))
+    if label == 'performance':
+        for p in (path/'browser-output').glob('**/*performance.json'):
+            value = read(p)
+            vp = value['viewport']
+            save(f'performance/{vp["width"]}x{vp["height"]}/{p.name}', value)
+
+assert len(pairs) == 16 and all(p.get('supported') and p.get('passed') for p in pairs)
+save('contrast-summary.json', {'selectedPairs': len(pairs), 'minimumRatio': min(p['ratio'] for p in pairs),
+    'threshold': 4.5, 'measurements': pairs, 'scope': 'Selected inventory observations, firmware, scope and readiness text; no overall accessibility claim'})
+save('application-and-input-hashes.json', maps)
+ui = {n: h for n, h in maps.items() if n.startswith('apps/studio-web/dist/')}
+assert len(ui) == 6
+built = read(local/'build-observed.json')
+assert all(maps[n] == h for n, h in built['files'].items())
+save('built-ui-observation.json', built)
+assert read(out/'physical-declaration-red/browser-report.json')['stats']['unexpected'] == 2
+assert read(out/'unicode-red/browser-report.json')['stats']['unexpected'] == 2
+assert read(out/'review-interrupted-full/summary.json')['exitCode'] == 130
+copy_text('checks/before-physical-build.txt', local/'before-physical-build.log')
+copy_text('checks/before-unicode-build.txt', local/'before-unicode-build.log')
+copy_text('checks/before-unicode-LabView.tsx.txt', local/'before-unicode-LabView.tsx.txt')
+copy_text('fixtures/original-public-fixture.json', local/'original-public-fixture.json')
+copy_text('fixtures/current-public-fixture.json', root/'tests/fixtures/providers/lab-inventory-observation.json')
+fixture_name = 'tests/fixtures/providers/lab-inventory-observation.json'
+original_digest = hashlib.sha256((local/'original-public-fixture.json').read_bytes()).hexdigest()
+assert original_digest == read(local/'initial-red/source-before.json')[fixture_name]
+assert hashlib.sha256((root/fixture_name).read_bytes()).hexdigest() == maps[fixture_name]
+original_value = read(local/'original-public-fixture.json')
+current_value = read(root/fixture_name)
+assert original_value == {k: v for k, v in current_value.items() if k not in ['unclassified', 'unclassifiedSource', 'unicode', 'unicodeSource']}
+save('fixture-input-control.json', {'sourceFile': fixture_name, 'originalSha256': original_digest,
+    'currentSha256': maps[fixture_name], 'originalObservationPayloadsUnchanged': True,
+    'scope': 'Original fixture bytes reconstructed with equivalent formatting and verified against the actual original source-map SHA256; current fixture adds the omitted-physical-declaration and valid Unicode-boundary projection witnesses'})
+copy_text('build-and-checks.txt', local/'build.log')
+save('environment.json', read(local/'environment.json'))
+copy_text('controllers/retention.py.txt', local/'retain.py')
+copy_text('controllers/pipeline.py.txt', local/'pipeline.py')
+copy_text('implementation-review.md', local/'review.md')
+copy_text('controllers/fixture-generation.py.txt', local/'generate-fixture.py')
+copy_text('controllers/build.py.txt', local/'build.py')
+copy_text('controllers/environment.py.txt', local/'environment.py')
+copy_text('checks/build-wrapper-path-error.txt', local/'build-wrapper-path-error.log')
+copy_text('checks/typecheck-diagnostics-red.txt', local/'typecheck-diagnostics-red.log')
+copy_text('checks/fixture-consumption-review.txt', local/'fixture-consumption.log')
+save('checks/repair-classification.json', {
+    'buildWrapperPathError': 'Initial local wrapper resolved npm below bin instead of using the installed npm executable. It stopped before application checking; wrapper fixed and full type/build/architecture/compatibility sequence passed.',
+    'typecheckRefusal': 'Observation diagnostics initially used generic Data[] where the existing renderer requires Diagnostic code/message fields. Typed diagnostics and bounded provider-context messages repaired; subsequent typecheck/build passed.',
+    'scope': 'Pre-freeze helper/type repairs; neither is a live-provider failure or a passing test cohort',
+})
+
+proof = read(root/'evidence/studio/M2-keyboard-profile-bindings/backend-input-inheritance.json')
+checked = proof['checkedFiles']
+assert len(checked) == 163 and all(maps[n] == h for n, h in checked.items())
+assert proof['workflowSha256'] == maps['.github/workflows/ci.yml']
+save('backend-input-inheritance.json', {**proof,
+    'scope': '163 exact unchanged backend/Python/contributor/compatibility inputs and reviewed unchanged-command CI scheduling control; 851 inherited backend results, not a local backend rerun for this UI-only change'})
+save('verification.json', {'baseCandidate': read(root/'.studio-local/lab-inventory-full/summary.json')['baseCandidate'],
+    'applicationAndInputDigest': 'sha256:'+hashlib.sha256(json.dumps(maps, sort_keys=True, separators=(',', ':')).encode()).hexdigest(),
+    'frozenInputs': len(maps), 'compiledAssets': len(ui), 'allFinalStageInputsIdentical': True,
+    'targeted': reports['targeted']['stats'], 'full': reports['full']['stats'], 'performance': reports['performance']['stats'],
+    'backend': 'backend-input-inheritance.json', 'checks': 'build-and-checks.txt',
+    'completedTasks': 47, 'milestonesAccepted': [], 'windows': 'BLOCKED_USER_REQUEST',
+    'limitations': ['Native Linux Chromium only', 'No actual assistive-technology assessment',
+        'HTTP/shape/page/metadata responses are labelled transport fixtures; refresh reads the actual empty unadmitted registry',
+        'Synthetic public inventory observations establish no live device/provider support',
+        'Focused 36 performs zero mutative requests and no reservation/Start/device operation; native-platform/milestone acceptance remains open']})
+print(json.dumps({'targeted': 36, 'full': 293, 'performance': 2, 'inputs': len(maps), 'contrastPairs': len(pairs)}))

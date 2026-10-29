@@ -1,0 +1,7 @@
+<testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="2" time="0.463" timestamp="2026-10-28T11:42:11.984916+00:00" hostname="&lt;native-linux-host&gt;"><testcase classname="tests.integration.test_lab_probe_http" name="test_stock_probe_discovery_does_not_install_a_provider" time="0.296"><failure message="KeyError: 'labProbes'">tests/integration/test_lab_probe_http.py:5: in test_stock_probe_discovery_does_not_install_a_provider
+    discovery = client.get('/api/v1/capabilities').json()['labProbes']
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'labProbes'</failure></testcase><testcase classname="tests.integration.test_lab_probe_http" name="test_stock_explicit_probe_request_is_actionably_unavailable" time="0.127"><failure message="assert 405 == 503&#10; +  where 405 = &lt;Response [405 Method Not Allowed]&gt;.status_code">tests/integration/test_lab_probe_http.py:20: in test_stock_explicit_probe_request_is_actionably_unavailable
+    assert response.status_code == 503
+E   assert 405 == 503
+E    +  where 405 = &lt;Response [405 Method Not Allowed]&gt;.status_code</failure></testcase></testsuite></testsuites>

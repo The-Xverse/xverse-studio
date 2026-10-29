@@ -1,0 +1,18 @@
+[project]
+name = "xverse-studio-workspace"
+version = "0.1.0.dev0"
+requires-python = ">=3.13,<3.14"
+dependencies = ["xverse-studio"]
+
+[tool.uv.workspace]
+members = ["services/studio-api"]
+
+[tool.uv.sources]
+xverse-studio = { workspace = true }
+
+[dependency-groups]
+dev = ["pytest==9.0.2", "httpx==0.28.1", "ruff==0.15.4"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"

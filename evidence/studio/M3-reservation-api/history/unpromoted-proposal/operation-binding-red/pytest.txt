@@ -1,0 +1,26 @@
+...........FFF                                                           [100%]
+=================================== FAILURES ===================================
+_ test_replacement_asset_with_same_id_cannot_inherit_original_lease_authority __
+.studio-local/lab-api-foundation/proposal/test_operations.py:174: in test_replacement_asset_with_same_id_cannot_inherit_original_lease_authority
+    with pytest.raises(LabError, match='^ASSET_IDENTITY_CHANGED$'):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE <class 'xverse_studio.lab.reservations.LabError'>
+_ test_confirmed_terminal_release_does_not_require_old_provider_or_touch_new_owner _
+.studio-local/lab-api-foundation/proposal/test_operations.py:188: in test_confirmed_terminal_release_does_not_require_old_provider_or_touch_new_owner
+    terminal = restored.release(first['reservationId'], owner='fixture-owner', key='terminal-again')
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.studio-local/lab-api-foundation/proposal/operations.py:150: in release
+    self._bound(record)
+.studio-local/lab-api-foundation/proposal/operations.py:87: in _bound
+    raise LabError('PROVIDER_IDENTITY_CHANGED')
+E   xverse_studio.lab.reservations.LabError: PROVIDER_IDENTITY_CHANGED
+_ test_current_asset_identity_is_required_before_acquisition_and_no_intent_is_created _
+.studio-local/lab-api-foundation/proposal/test_operations.py:196: in test_current_asset_identity_is_required_before_acquisition_and_no_intent_is_created
+    with pytest.raises(LabError, match='^ASSET_IDENTITY_UNRESOLVED$'):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE <class 'xverse_studio.lab.reservations.LabError'>
+=========================== short test summary info ============================
+FAILED .studio-local/lab-api-foundation/proposal/test_operations.py::test_replacement_asset_with_same_id_cannot_inherit_original_lease_authority
+FAILED .studio-local/lab-api-foundation/proposal/test_operations.py::test_confirmed_terminal_release_does_not_require_old_provider_or_touch_new_owner
+FAILED .studio-local/lab-api-foundation/proposal/test_operations.py::test_current_asset_identity_is_required_before_acquisition_and_no_intent_is_created
+3 failed, 11 passed in 0.90s

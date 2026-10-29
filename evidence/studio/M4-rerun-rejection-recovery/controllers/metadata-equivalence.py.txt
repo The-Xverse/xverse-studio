@@ -1,0 +1,25 @@
+from pathlib import Path
+import hashlib
+import json
+import subprocess
+
+root = Path.cwd()
+out = root/'evidence/studio/M4-rerun-rejection-recovery'
+manifest = json.loads((out/'package/package-manifest.json').read_text())
+maps = json.loads((out/'application-and-input-hashes.json').read_text())
+for name, digest in manifest['files'].items():
+    assert 'sha256:'+hashlib.sha256((root/name).read_bytes()).hexdigest() == digest, name
+for name, digest in maps.items():
+    assert hashlib.sha256((root/name).read_bytes()).hexdigest() == digest, name
+assert len(manifest['files']) > 102 and len(maps) == 294
+candidate = manifest['candidate']
+assert subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip() == candidate
+for name, digest in maps.items():
+    if not name.startswith('apps/studio-web/dist/'):
+        assert hashlib.sha256(subprocess.check_output(['git', 'show', candidate+':'+name])).hexdigest() == digest
+value = {'productCandidate': candidate, 'allPackagedPayloadFilesUnchanged': True,
+    'all294FinalFrozenInputsUnchanged': True, 'payloadFiles': manifest['files'],
+    'scope': 'Follow-up package/evidence metadata worktree preserves every tested source/compiled/fixed input and all clean product-package payload bytes; the product candidate remains the package identity'}
+(out/'metadata-payload-equivalence.json').write_text(json.dumps(value, indent=2)+'\n')
+(out/'controllers/metadata-equivalence.py.txt').write_text(Path(__file__).read_text())
+print(json.dumps({'payloadFilesUnchanged': len(manifest['files']), 'frozenInputsUnchanged': 294, 'productCandidate': candidate}))

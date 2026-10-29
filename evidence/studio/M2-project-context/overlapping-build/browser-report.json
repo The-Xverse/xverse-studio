@@ -1,0 +1,2399 @@
+{
+  "config": {
+    "argv": [
+      "<loop-cache>/node-v24.22.1-linux-x64/bin/node",
+      "<repo>/node_modules/.bin/playwright",
+      "test",
+      "-c",
+      "tests/e2e/playwright.config.ts",
+      "--grep",
+      "project context:|recovery accessibility:"
+    ],
+    "configFile": "<repo>/tests/e2e/playwright.config.ts",
+    "rootDir": "<repo>/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "<repo>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "<repo>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "*.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "<repo>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "<repo>/tests/e2e",
+        "snapshotDir": "<repo>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": "*.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "baseURL": "http://127.0.0.1:39483",
+          "browserName": "chromium",
+          "actionTimeout": 15000,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "trace": "off",
+          "screenshot": "only-on-failure",
+          "video": "off"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "<repo>/test-results/browser-report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "project-context.spec.ts",
+      "file": "project-context.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "project context: foreign recovery preserves newer source draft at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4477,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T22:04:07.604Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "project-context-recovery.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJtb2RlIjoic291cmNlIGRyYWZ0IiwiYWN0aXZlUHJvamVjdElkIjoicHJqLTA0OWIwNDg4LTQyZDYtNGE4Ni04MjhjLWFiMTVhMjE5ODEwNSIsInJlY292ZXJlZFByb2plY3RJZCI6InByai1iZmQwZTlkYi03NWQ3LTQ1OTctOGRkZi00YWI0MWU0N2Q3OWEiLCJkaXN0aW5jdFByb2plY3RzIjp0cnVlLCJhY3RpdmVSZXZpc2lvbiI6MSwiaW5kZXBlbmRlbnRSZWNvdmVyeUNvbW1pdHRlZCI6dHJ1ZSwicHJlc2VydmVkIjp7InJlY292ZXJ5SWQiOiJyZWMtYzUyYzAzNWEtNjQxMy00OWM3LTg2MjEtODFlZWFiZDZlMzdkIiwiY29tbWl0dGVkRGlnZXN0Ijoic2hhMjU2OjM5YWUxNDNjZDdkODUxYmQ2ZDRmMThmN2E3MGIwZTBjNGQyZWJiMzdkZDg2ZjlhYThjMTdmNmQ4NjNmNDg5NzkiLCJvYnNlcnZlZERpZ2VzdCI6InNoYTI1Njo0OTVlZDU1MThjNTBiZGU0OTUyMjJlYmQ2MThhNjMzZTcxMmZkNDczM2M4NWY4MjA1NTY3Nzk0YTViNjI0OWZmIiwicHJlc2VydmVkRW5jb2RpbmciOiJiaW5hcnkiLCJleGFjdEJhY2t1cEJ5dGVzIjp0cnVlLCJvbGRSZXZpc2lvbkRpcmVjdG9yeVVuY2hhbmdlZCI6dHJ1ZX0sImNvbnRyYXN0Ijp7ImxhYmVsIjoiTmFtZWQgZm9yZWlnbiByZWNvdmVyeSB0YXJnZXQiLCJ0ZXh0IjoiUmVjb3ZlcnkgZmlyc3QgcHJlc2VydmVzIHRoZSBieXRlcyBub3cgb24gZGlzayBpbiBhIHJlY292ZXJ5IGJhY2t1cCBhbmQgdGhlbiBjb21taXRzIGEgbmV3IHJldmlzaW9uOyByZXZpc2lvbiAxIHN0YXlzIGluIGhpc3RvcnkuIFNpZGVjYXJzIGtlZXAgdGhlaXIgcmVjb3JkZWQgY29udGVudC4gUmVjb3ZlcnkgYXBwIiwiY29sb3IiOiJyZ2IoMTYxLCA4OSwgODEpIiwiZm9udFNpemUiOiIxMnB4IiwiZm9udFdlaWdodCI6IjQwMCIsInRocmVzaG9sZCI6NC41LCJzY29wZSI6IlNlbGVjdGVkIG5vcm1hbC1zaXplIHJlbmRlcmVkIHRleHQ7IG5vIG92ZXJhbGwgYWNjZXNzaWJpbGl0eSBjZXJ0aWZpY2F0aW9uIiwic3VwcG9ydGVkIjp0cnVlLCJsYXllcnMiOlsicmdiYSgwLCAwLCAwLCAwKSIsInJnYmEoMCwgMCwgMCwgMCkiLCJyZ2JhKDAsIDAsIDAsIDApIiwicmdiKDI1NSwgMjQzLCAyNDIpIl0sImJhY2tncm91bmQiOlsxLDAuOTUyOTQxMTc2NDcwNTg4MiwwLjk0OTAxOTYwNzg0MzEzNzIsMV0sImNvbXBvc2l0ZWRGb3JlZ3JvdW5kIjpbMC42MzEzNzI1NDkwMTk2MDc4LDAuMzQ5MDE5NjA3ODQzMTM3MjQsMC4zMTc2NDcwNTg4MjM1Mjk0LDFdLCJyYXRpbyI6NC43NjMzNjA5MTYxNTU3NzIsInBhc3NlZCI6dHJ1ZSwiYXNzdW1wdGlvbnMiOiJDU1Mgc1JHQiBjb2xvcnM7IGFscGhhIGNvbXBvc2l0ZWQgdGhyb3VnaCBleHBsaWNpdCBiYWNrZ3JvdW5kczsgbm8gYW50aS1hbGlhc2luZyBhcHByb3hpbWF0aW9uIn0sIm93blByb2plY3RSdW5TZXRzVW5jaGFuZ2VkIjp0cnVlLCJzY29wZSI6IlJlYWwgZm9yZWlnbiBvd25lZCByZWNvdmVyeSBoZWxkIGFmdGVyIGNvbW1pdDsgcHJlc2VydmUgbmV3ZXIgYXV0aG9yaW5nIGludGVudCBpbiBzdGlsbC1yZW5kZXJlZCBhY3RpdmUgcHJvamVjdDsgbm8gU3RhcnQifQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "520c74da435c110dc8a0-aafdb5b8158685e4b098",
+          "file": "project-context.spec.ts",
+          "line": 442,
+          "column": 9
+        },
+        {
+          "title": "project context: foreign recovery preserves newer source save at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3874,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T22:04:12.144Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "project-context-recovery.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJtb2RlIjoic291cmNlIHNhdmUiLCJhY3RpdmVQcm9qZWN0SWQiOiJwcmotYTZjZmYyNWQtNWM2Ny00ZDFlLWI2ZjItNWY0NmRmN2ExNTk3IiwicmVjb3ZlcmVkUHJvamVjdElkIjoicHJqLWRiZTM2OTQxLTczMDMtNDQ4Mi1iYjViLWUzZGYyNjgyNTg3ZiIsImRpc3RpbmN0UHJvamVjdHMiOnRydWUsImFjdGl2ZVJldmlzaW9uIjoyLCJpbmRlcGVuZGVudFJlY292ZXJ5Q29tbWl0dGVkIjp0cnVlLCJwcmVzZXJ2ZWQiOnsicmVjb3ZlcnlJZCI6InJlYy00OTg3NDg0Ny1lN2ZiLTQ4OGYtOWIyMi1jY2Y2MTc0ODJmYTciLCJjb21taXR0ZWREaWdlc3QiOiJzaGEyNTY6MzlhZTE0M2NkN2Q4NTFiZDZkNGYxOGY3YTcwYjBlMGM0ZDJlYmIzN2RkODZmOWFhOGMxN2Y2ZDg2M2Y0ODk3OSIsIm9ic2VydmVkRGlnZXN0Ijoic2hhMjU2OjQ5NWVkNTUxOGM1MGJkZTQ5NTIyMmViZDYxOGE2MzNlNzEyZmQ0NzMzYzg1ZjgyMDU1Njc3OTRhNWI2MjQ5ZmYiLCJwcmVzZXJ2ZWRFbmNvZGluZyI6ImJpbmFyeSIsImV4YWN0QmFja3VwQnl0ZXMiOnRydWUsIm9sZFJldmlzaW9uRGlyZWN0b3J5VW5jaGFuZ2VkIjp0cnVlfSwiY29udHJhc3QiOnsibGFiZWwiOiJOYW1lZCBmb3JlaWduIHJlY292ZXJ5IHRhcmdldCIsInRleHQiOiJSZWNvdmVyeSBmaXJzdCBwcmVzZXJ2ZXMgdGhlIGJ5dGVzIG5vdyBvbiBkaXNrIGluIGEgcmVjb3ZlcnkgYmFja3VwIGFuZCB0aGVuIGNvbW1pdHMgYSBuZXcgcmV2aXNpb247IHJldmlzaW9uIDEgc3RheXMgaW4gaGlzdG9yeS4gU2lkZWNhcnMga2VlcCB0aGVpciByZWNvcmRlZCBjb250ZW50LiBSZWNvdmVyeSBhcHAiLCJjb2xvciI6InJnYigxNjEsIDg5LCA4MSkiLCJmb250U2l6ZSI6IjEycHgiLCJmb250V2VpZ2h0IjoiNDAwIiwidGhyZXNob2xkIjo0LjUsInNjb3BlIjoiU2VsZWN0ZWQgbm9ybWFsLXNpemUgcmVuZGVyZWQgdGV4dDsgbm8gb3ZlcmFsbCBhY2Nlc3NpYmlsaXR5IGNlcnRpZmljYXRpb24iLCJzdXBwb3J0ZWQiOnRydWUsImxheWVycyI6WyJyZ2JhKDAsIDAsIDAsIDApIiwicmdiYSgwLCAwLCAwLCAwKSIsInJnYmEoMCwgMCwgMCwgMCkiLCJyZ2IoMjU1LCAyNDMsIDI0MikiXSwiYmFja2dyb3VuZCI6WzEsMC45NTI5NDExNzY0NzA1ODgyLDAuOTQ5MDE5NjA3ODQzMTM3MiwxXSwiY29tcG9zaXRlZEZvcmVncm91bmQiOlswLjYzMTM3MjU0OTAxOTYwNzgsMC4zNDkwMTk2MDc4NDMxMzcyNCwwLjMxNzY0NzA1ODgyMzUyOTQsMV0sInJhdGlvIjo0Ljc2MzM2MDkxNjE1NTc3MiwicGFzc2VkIjp0cnVlLCJhc3N1bXB0aW9ucyI6IkNTUyBzUkdCIGNvbG9yczsgYWxwaGEgY29tcG9zaXRlZCB0aHJvdWdoIGV4cGxpY2l0IGJhY2tncm91bmRzOyBubyBhbnRpLWFsaWFzaW5nIGFwcHJveGltYXRpb24ifSwib3duUHJvamVjdFJ1blNldHNVbmNoYW5nZWQiOnRydWUsInNjb3BlIjoiUmVhbCBmb3JlaWduIG93bmVkIHJlY292ZXJ5IGhlbGQgYWZ0ZXIgY29tbWl0OyBwcmVzZXJ2ZSBuZXdlciBhdXRob3JpbmcgaW50ZW50IGluIHN0aWxsLXJlbmRlcmVkIGFjdGl2ZSBwcm9qZWN0OyBubyBTdGFydCJ9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "520c74da435c110dc8a0-202cd6560500bfd69a92",
+          "file": "project-context.spec.ts",
+          "line": 442,
+          "column": 9
+        },
+        {
+          "title": "project context: foreign recovery preserves newer parameter draft at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3821,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T22:04:16.028Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "project-context-recovery.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJtb2RlIjoicGFyYW1ldGVyIGRyYWZ0IiwiYWN0aXZlUHJvamVjdElkIjoicHJqLWVjZjg1OTExLWRhYzgtNGUwNi1iZjQ1LTQ3OGUzYWJkYzFhMiIsInJlY292ZXJlZFByb2plY3RJZCI6InByai04MjExZmExMi1mMzRmLTQ1MzYtYmEwMi04ZWJmNzhlNGMxMzIiLCJkaXN0aW5jdFByb2plY3RzIjp0cnVlLCJhY3RpdmVSZXZpc2lvbiI6MSwiaW5kZXBlbmRlbnRSZWNvdmVyeUNvbW1pdHRlZCI6dHJ1ZSwicHJlc2VydmVkIjp7InJlY292ZXJ5SWQiOiJyZWMtOTE0MGExNzEtYjgwMy00YzI3LTliN2QtMTU0NzM2YmRlYzY1IiwiY29tbWl0dGVkRGlnZXN0Ijoic2hhMjU2OjM5YWUxNDNjZDdkODUxYmQ2ZDRmMThmN2E3MGIwZTBjNGQyZWJiMzdkZDg2ZjlhYThjMTdmNmQ4NjNmNDg5NzkiLCJvYnNlcnZlZERpZ2VzdCI6InNoYTI1Njo0OTVlZDU1MThjNTBiZGU0OTUyMjJlYmQ2MThhNjMzZTcxMmZkNDczM2M4NWY4MjA1NTY3Nzk0YTViNjI0OWZmIiwicHJlc2VydmVkRW5jb2RpbmciOiJiaW5hcnkiLCJleGFjdEJhY2t1cEJ5dGVzIjp0cnVlLCJvbGRSZXZpc2lvbkRpcmVjdG9yeVVuY2hhbmdlZCI6dHJ1ZX0sImNvbnRyYXN0Ijp7ImxhYmVsIjoiTmFtZWQgZm9yZWlnbiByZWNvdmVyeSB0YXJnZXQiLCJ0ZXh0IjoiUmVjb3ZlcnkgZmlyc3QgcHJlc2VydmVzIHRoZSBieXRlcyBub3cgb24gZGlzayBpbiBhIHJlY292ZXJ5IGJhY2t1cCBhbmQgdGhlbiBjb21taXRzIGEgbmV3IHJldmlzaW9uOyByZXZpc2lvbiAxIHN0YXlzIGluIGhpc3RvcnkuIFNpZGVjYXJzIGtlZXAgdGhlaXIgcmVjb3JkZWQgY29udGVudC4gUmVjb3ZlcnkgYXBwIiwiY29sb3IiOiJyZ2IoMTYxLCA4OSwgODEpIiwiZm9udFNpemUiOiIxMnB4IiwiZm9udFdlaWdodCI6IjQwMCIsInRocmVzaG9sZCI6NC41LCJzY29wZSI6IlNlbGVjdGVkIG5vcm1hbC1zaXplIHJlbmRlcmVkIHRleHQ7IG5vIG92ZXJhbGwgYWNjZXNzaWJpbGl0eSBjZXJ0aWZpY2F0aW9uIiwic3VwcG9ydGVkIjp0cnVlLCJsYXllcnMiOlsicmdiYSgwLCAwLCAwLCAwKSIsInJnYmEoMCwgMCwgMCwgMCkiLCJyZ2JhKDAsIDAsIDAsIDApIiwicmdiKDI1NSwgMjQzLCAyNDIpIl0sImJhY2tncm91bmQiOlsxLDAuOTUyOTQxMTc2NDcwNTg4MiwwLjk0OTAxOTYwNzg0MzEzNzIsMV0sImNvbXBvc2l0ZWRGb3JlZ3JvdW5kIjpbMC42MzEzNzI1NDkwMTk2MDc4LDAuMzQ5MDE5NjA3ODQzMTM3MjQsMC4zMTc2NDcwNTg4MjM1Mjk0LDFdLCJyYXRpbyI6NC43NjMzNjA5MTYxNTU3NzIsInBhc3NlZCI6dHJ1ZSwiYXNzdW1wdGlvbnMiOiJDU1Mgc1JHQiBjb2xvcnM7IGFscGhhIGNvbXBvc2l0ZWQgdGhyb3VnaCBleHBsaWNpdCBiYWNrZ3JvdW5kczsgbm8gYW50aS1hbGlhc2luZyBhcHByb3hpbWF0aW9uIn0sIm93blByb2plY3RSdW5TZXRzVW5jaGFuZ2VkIjp0cnVlLCJzY29wZSI6IlJlYWwgZm9yZWlnbiBvd25lZCByZWNvdmVyeSBoZWxkIGFmdGVyIGNvbW1pdDsgcHJlc2VydmUgbmV3ZXIgYXV0aG9yaW5nIGludGVudCBpbiBzdGlsbC1yZW5kZXJlZCBhY3RpdmUgcHJvamVjdDsgbm8gU3RhcnQifQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "520c74da435c110dc8a0-ac2a84281cc7c7c26bec",
+          "file": "project-context.spec.ts",
+          "line": 442,
+          "column": 9
+        },
+        {
+          "title": "project context: obsolete successful load preserves newer source save at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3429,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T22:04:19.859Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "project-context-load.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJicm9rZW4iOmZhbHNlLCJsb2FkU3RhdHVzIjoyMDAsImFjdGl2ZVByb2plY3RJZCI6InByai1mZjZiODdhMC1lY2FhLTRhYzMtOTYwZS04NWQ2ZGI4Y2MyYzUiLCJsb2FkVGFyZ2V0SWQiOiJwcmotNDg4MmQ0ZmItODc5Ni00MWYyLTgyNTMtM2EzODIxOGQ5ODgxIiwic291cmNlQ29tbWl0QWNrbm93bGVkZ2VkIjp0cnVlLCJuZXdlck1vZGFsUHJlc2VydmVkIjp0cnVlLCJvd25Qcm9qZWN0UnVuU2V0c1VuY2hhbmdlZCI6dHJ1ZSwic2NvcGUiOiJIZWxkIGFjdHVhbCBsb2FkIHJlc3BvbnNlIGFuZCBhY3R1YWwgc291cmNlIFBVVDsgb2Jzb2xldGUgY3JlYXRpb24gY29udGludWF0aW9uL2Vycm9yIG11c3Qgbm90IGNoYW5nZSBuZXdlciBhdXRob3JpbmcgY29udGV4dDsgbm8gU3RhcnQifQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "520c74da435c110dc8a0-aa3de00f61fdf11f7d19",
+          "file": "project-context.spec.ts",
+          "line": 595,
+          "column": 9
+        },
+        {
+          "title": "project context: obsolete failed load preserves newer source save at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3409,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T22:04:23.297Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "project-context-load.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJicm9rZW4iOnRydWUsImxvYWRTdGF0dXMiOjQwOSwiYWN0aXZlUHJvamVjdElkIjoicHJqLWNjOTk4N2Y5LTUxZDUtNDMwNi04YWQ5LTM3OTljYzdhMmNkMCIsImxvYWRUYXJnZXRJZCI6InByai1hMTFlNjUzNS03MzNiLTQxZmItOGQyZS0xNzQ0NzdhMjJmZmQiLCJzb3VyY2VDb21taXRBY2tub3dsZWRnZWQiOnRydWUsIm5ld2VyTW9kYWxQcmVzZXJ2ZWQiOnRydWUsIm93blByb2plY3RSdW5TZXRzVW5jaGFuZ2VkIjp0cnVlLCJzY29wZSI6IkhlbGQgYWN0dWFsIGxvYWQgcmVzcG9uc2UgYW5kIGFjdHVhbCBzb3VyY2UgUFVUOyBvYnNvbGV0ZSBjcmVhdGlvbiBjb250aW51YXRpb24vZXJyb3IgbXVzdCBub3QgY2hhbmdlIG5ld2VyIGF1dGhvcmluZyBjb250ZXh0OyBubyBTdGFydCJ9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "520c74da435c110dc8a0-2f38a9c898eebfab8b25",
+          "file": "project-context.spec.ts",
+          "line": 595,
+          "column": 9
+        },
+        {
+          "title": "project context: obsolete creation reply preserves newer source save at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3225,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T22:04:26.714Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "project-context-creation.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJhY3RpdmVQcm9qZWN0SWQiOiJwcmotZDNhN2E1ZTktNGJiOC00NTM5LTkxYzEtYzcxY2Y4YmE4ZGYxIiwiY3JlYXRlZFByb2plY3RJZCI6InByai0xMDM4MTg1Ny0zODZkLTQzMjktYjE4Ni0wMTVjMWU1OWRiNTkiLCJjcmVhdGVkUHJvamVjdFJldGFpbmVkIjp0cnVlLCJuZXdlclNvdXJjZVNhdmVBY2tub3dsZWRnZWQiOnRydWUsIm5ld2VyTW9kYWxBbmRGb2N1c1ByZXNlcnZlZCI6dHJ1ZSwibm9TdGFydCI6dHJ1ZX0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "520c74da435c110dc8a0-d0f85bbc2e9c5b043163",
+          "file": "project-context.spec.ts",
+          "line": 677,
+          "column": 7
+        },
+        {
+          "title": "project context: newest creation intent wins over earlier completion at 1024x768",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 2447,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"prj-\u001b[7m9d251219-eca8-4577-a22c-ecbb1482b710\u001b[27m\"\u001b[39m\nReceived: \u001b[31m\"prj-\u001b[7md7722cf5-f13d-4a06-9355-ec1fbb5e11d8\u001b[27m\"\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"prj-\u001b[7m9d251219-eca8-4577-a22c-ecbb1482b710\u001b[27m\"\u001b[39m\nReceived: \u001b[31m\"prj-\u001b[7md7722cf5-f13d-4a06-9355-ec1fbb5e11d8\u001b[27m\"\u001b[39m\n    at <repo>/tests/e2e/project-context.spec.ts:827:9",
+                    "location": {
+                      "file": "<repo>/tests/e2e/project-context.spec.ts",
+                      "column": 9,
+                      "line": 827
+                    },
+                    "snippet": "  825 |       expect(\n  826 |         await page.evaluate(() => localStorage.getItem(\"studio.projectId\")),\n> 827 |       ).toBe(accepted.projectId);\n      |         ^\n  828 |       expect(accepted.projectId).not.toBe(pending[0].project.projectId);\n  829 |       for (const held of pending) {\n  830 |         expect((await read(page, held.project.projectId)).documents).toEqual("
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/project-context.spec.ts",
+                        "column": 9,
+                        "line": 827
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"prj-\u001b[7m9d251219-eca8-4577-a22c-ecbb1482b710\u001b[27m\"\u001b[39m\nReceived: \u001b[31m\"prj-\u001b[7md7722cf5-f13d-4a06-9355-ec1fbb5e11d8\u001b[27m\"\u001b[39m\n\n  825 |       expect(\n  826 |         await page.evaluate(() => localStorage.getItem(\"studio.projectId\")),\n> 827 |       ).toBe(accepted.projectId);\n      |         ^\n  828 |       expect(accepted.projectId).not.toBe(pending[0].project.projectId);\n  829 |       for (const held of pending) {\n  830 |         expect((await read(page, held.project.projectId)).documents).toEqual(\n    at <repo>/tests/e2e/project-context.spec.ts:827:9"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T22:04:29.945Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/project-context-project-co-e3587-lier-completion-at-1024x768/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/project-context-project-co-e3587-lier-completion-at-1024x768/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/project-context.spec.ts",
+                    "column": 9,
+                    "line": 827
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "520c74da435c110dc8a0-1d67cc0d58aae66e5d96",
+          "file": "project-context.spec.ts",
+          "line": 747,
+          "column": 7
+        },
+        {
+          "title": "project context: obsolete startup success preserves Home at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1619,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T22:04:32.826Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "project-context-startup.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJmYWlsZWQiOmZhbHNlLCJvcmlnaW5hbFByb3ZpZGVyUmVhZFN0YXR1cyI6MjAwLCJyZWxlYXNlZFN0YXR1cyI6MjAwLCJuZXdlckhvbWVQcmVzZXJ2ZWQiOnRydWUsInByb2plY3RVbmNoYW5nZWQiOnRydWUsInNjb3BlIjoiSGVsZCBhY3R1YWwgc3VjY2Vzc2Z1bCBzdGFydHVwIG1ldGFkYXRhIGFmdGVyIGV4cGxpY2l0IEhvbWUiLCJub1N0YXJ0Ijp0cnVlfQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "520c74da435c110dc8a0-7cbf5d41e9d52fb619ae",
+          "file": "project-context.spec.ts",
+          "line": 859,
+          "column": 9
+        },
+        {
+          "title": "project context: obsolete startup failure preserves Home at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1651,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T22:04:34.510Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "project-context-startup.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJmYWlsZWQiOnRydWUsIm9yaWdpbmFsUHJvdmlkZXJSZWFkU3RhdHVzIjoyMDAsInJlbGVhc2VkU3RhdHVzIjo1MDMsIm5ld2VySG9tZVByZXNlcnZlZCI6dHJ1ZSwicHJvamVjdFVuY2hhbmdlZCI6dHJ1ZSwic2NvcGUiOiJDb250cm9sbGVkIEhUVFAgZmFpbHVyZSBvZiBzdGFydHVwIG1ldGFkYXRhIGFmdGVyIGV4cGxpY2l0IEhvbWUiLCJub1N0YXJ0Ijp0cnVlfQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "520c74da435c110dc8a0-603a7366fe090c161db8",
+          "file": "project-context.spec.ts",
+          "line": 859,
+          "column": 9
+        },
+        {
+          "title": "project context: foreign recovery preserves newer source draft at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4153,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T22:04:36.171Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "project-context-recovery.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJtb2RlIjoic291cmNlIGRyYWZ0IiwiYWN0aXZlUHJvamVjdElkIjoicHJqLWI3MmFkODIyLTk2OGUtNDNiYS1iOTNiLTQxNDFjMjBlNjJlMCIsInJlY292ZXJlZFByb2plY3RJZCI6InByai0yM2Q3NGQxNy0zNmEwLTQ4MWQtODAyOS0xNzg5MWYyOTlkNjUiLCJkaXN0aW5jdFByb2plY3RzIjp0cnVlLCJhY3RpdmVSZXZpc2lvbiI6MSwiaW5kZXBlbmRlbnRSZWNvdmVyeUNvbW1pdHRlZCI6dHJ1ZSwicHJlc2VydmVkIjp7InJlY292ZXJ5SWQiOiJyZWMtYmZiOWY2NTQtOWVjMi00NDNkLWI1YjUtOTBlODg4YTE0ZDBkIiwiY29tbWl0dGVkRGlnZXN0Ijoic2hhMjU2OjM5YWUxNDNjZDdkODUxYmQ2ZDRmMThmN2E3MGIwZTBjNGQyZWJiMzdkZDg2ZjlhYThjMTdmNmQ4NjNmNDg5NzkiLCJvYnNlcnZlZERpZ2VzdCI6InNoYTI1Njo0OTVlZDU1MThjNTBiZGU0OTUyMjJlYmQ2MThhNjMzZTcxMmZkNDczM2M4NWY4MjA1NTY3Nzk0YTViNjI0OWZmIiwicHJlc2VydmVkRW5jb2RpbmciOiJiaW5hcnkiLCJleGFjdEJhY2t1cEJ5dGVzIjp0cnVlLCJvbGRSZXZpc2lvbkRpcmVjdG9yeVVuY2hhbmdlZCI6dHJ1ZX0sImNvbnRyYXN0Ijp7ImxhYmVsIjoiTmFtZWQgZm9yZWlnbiByZWNvdmVyeSB0YXJnZXQiLCJ0ZXh0IjoiUmVjb3ZlcnkgZmlyc3QgcHJlc2VydmVzIHRoZSBieXRlcyBub3cgb24gZGlzayBpbiBhIHJlY292ZXJ5IGJhY2t1cCBhbmQgdGhlbiBjb21taXRzIGEgbmV3IHJldmlzaW9uOyByZXZpc2lvbiAxIHN0YXlzIGluIGhpc3RvcnkuIFNpZGVjYXJzIGtlZXAgdGhlaXIgcmVjb3JkZWQgY29udGVudC4gUmVjb3ZlcnkgYXBwIiwiY29sb3IiOiJyZ2IoMTYxLCA4OSwgODEpIiwiZm9udFNpemUiOiIxMnB4IiwiZm9udFdlaWdodCI6IjQwMCIsInRocmVzaG9sZCI6NC41LCJzY29wZSI6IlNlbGVjdGVkIG5vcm1hbC1zaXplIHJlbmRlcmVkIHRleHQ7IG5vIG92ZXJhbGwgYWNjZXNzaWJpbGl0eSBjZXJ0aWZpY2F0aW9uIiwic3VwcG9ydGVkIjp0cnVlLCJsYXllcnMiOlsicmdiYSgwLCAwLCAwLCAwKSIsInJnYmEoMCwgMCwgMCwgMCkiLCJyZ2JhKDAsIDAsIDAsIDApIiwicmdiKDI1NSwgMjQzLCAyNDIpIl0sImJhY2tncm91bmQiOlsxLDAuOTUyOTQxMTc2NDcwNTg4MiwwLjk0OTAxOTYwNzg0MzEzNzIsMV0sImNvbXBvc2l0ZWRGb3JlZ3JvdW5kIjpbMC42MzEzNzI1NDkwMTk2MDc4LDAuMzQ5MDE5NjA3ODQzMTM3MjQsMC4zMTc2NDcwNTg4MjM1Mjk0LDFdLCJyYXRpbyI6NC43NjMzNjA5MTYxNTU3NzIsInBhc3NlZCI6dHJ1ZSwiYXNzdW1wdGlvbnMiOiJDU1Mgc1JHQiBjb2xvcnM7IGFscGhhIGNvbXBvc2l0ZWQgdGhyb3VnaCBleHBsaWNpdCBiYWNrZ3JvdW5kczsgbm8gYW50aS1hbGlhc2luZyBhcHByb3hpbWF0aW9uIn0sIm93blByb2plY3RSdW5TZXRzVW5jaGFuZ2VkIjp0cnVlLCJzY29wZSI6IlJlYWwgZm9yZWlnbiBvd25lZCByZWNvdmVyeSBoZWxkIGFmdGVyIGNvbW1pdDsgcHJlc2VydmUgbmV3ZXIgYXV0aG9yaW5nIGludGVudCBpbiBzdGlsbC1yZW5kZXJlZCBhY3RpdmUgcHJvamVjdDsgbm8gU3RhcnQifQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "520c74da435c110dc8a0-2a438333b792123e3146",
+          "file": "project-context.spec.ts",
+          "line": 442,
+          "column": 9
+        },
+        {
+          "title": "project context: foreign recovery preserves newer source save at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4266,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T22:04:40.335Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "project-context-recovery.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJtb2RlIjoic291cmNlIHNhdmUiLCJhY3RpdmVQcm9qZWN0SWQiOiJwcmotODJkYWI1OTYtMDcxNS00ZGRhLWJjMTgtZDU2NTkyYTA5MjZlIiwicmVjb3ZlcmVkUHJvamVjdElkIjoicHJqLTZlYTRiNDBkLTlmM2UtNDlmMi04MjdlLWVkNDcxZWVmMjg1ZCIsImRpc3RpbmN0UHJvamVjdHMiOnRydWUsImFjdGl2ZVJldmlzaW9uIjoyLCJpbmRlcGVuZGVudFJlY292ZXJ5Q29tbWl0dGVkIjp0cnVlLCJwcmVzZXJ2ZWQiOnsicmVjb3ZlcnlJZCI6InJlYy1jZTlmMzc2Yi1jN2Y2LTQ3MDUtYWE3Mi1hYjE2MzEyNGFjMzMiLCJjb21taXR0ZWREaWdlc3QiOiJzaGEyNTY6MzlhZTE0M2NkN2Q4NTFiZDZkNGYxOGY3YTcwYjBlMGM0ZDJlYmIzN2RkODZmOWFhOGMxN2Y2ZDg2M2Y0ODk3OSIsIm9ic2VydmVkRGlnZXN0Ijoic2hhMjU2OjQ5NWVkNTUxOGM1MGJkZTQ5NTIyMmViZDYxOGE2MzNlNzEyZmQ0NzMzYzg1ZjgyMDU1Njc3OTRhNWI2MjQ5ZmYiLCJwcmVzZXJ2ZWRFbmNvZGluZyI6ImJpbmFyeSIsImV4YWN0QmFja3VwQnl0ZXMiOnRydWUsIm9sZFJldmlzaW9uRGlyZWN0b3J5VW5jaGFuZ2VkIjp0cnVlfSwiY29udHJhc3QiOnsibGFiZWwiOiJOYW1lZCBmb3JlaWduIHJlY292ZXJ5IHRhcmdldCIsInRleHQiOiJSZWNvdmVyeSBmaXJzdCBwcmVzZXJ2ZXMgdGhlIGJ5dGVzIG5vdyBvbiBkaXNrIGluIGEgcmVjb3ZlcnkgYmFja3VwIGFuZCB0aGVuIGNvbW1pdHMgYSBuZXcgcmV2aXNpb247IHJldmlzaW9uIDEgc3RheXMgaW4gaGlzdG9yeS4gU2lkZWNhcnMga2VlcCB0aGVpciByZWNvcmRlZCBjb250ZW50LiBSZWNvdmVyeSBhcHAiLCJjb2xvciI6InJnYigxNjEsIDg5LCA4MSkiLCJmb250U2l6ZSI6IjEycHgiLCJmb250V2VpZ2h0IjoiNDAwIiwidGhyZXNob2xkIjo0LjUsInNjb3BlIjoiU2VsZWN0ZWQgbm9ybWFsLXNpemUgcmVuZGVyZWQgdGV4dDsgbm8gb3ZlcmFsbCBhY2Nlc3NpYmlsaXR5IGNlcnRpZmljYXRpb24iLCJzdXBwb3J0ZWQiOnRydWUsImxheWVycyI6WyJyZ2JhKDAsIDAsIDAsIDApIiwicmdiYSgwLCAwLCAwLCAwKSIsInJnYmEoMCwgMCwgMCwgMCkiLCJyZ2IoMjU1LCAyNDMsIDI0MikiXSwiYmFja2dyb3VuZCI6WzEsMC45NTI5NDExNzY0NzA1ODgyLDAuOTQ5MDE5NjA3ODQzMTM3MiwxXSwiY29tcG9zaXRlZEZvcmVncm91bmQiOlswLjYzMTM3MjU0OTAxOTYwNzgsMC4zNDkwMTk2MDc4NDMxMzcyNCwwLjMxNzY0NzA1ODgyMzUyOTQsMV0sInJhdGlvIjo0Ljc2MzM2MDkxNjE1NTc3MiwicGFzc2VkIjp0cnVlLCJhc3N1bXB0aW9ucyI6IkNTUyBzUkdCIGNvbG9yczsgYWxwaGEgY29tcG9zaXRlZCB0aHJvdWdoIGV4cGxpY2l0IGJhY2tncm91bmRzOyBubyBhbnRpLWFsaWFzaW5nIGFwcHJveGltYXRpb24ifSwib3duUHJvamVjdFJ1blNldHNVbmNoYW5nZWQiOnRydWUsInNjb3BlIjoiUmVhbCBmb3JlaWduIG93bmVkIHJlY292ZXJ5IGhlbGQgYWZ0ZXIgY29tbWl0OyBwcmVzZXJ2ZSBuZXdlciBhdXRob3JpbmcgaW50ZW50IGluIHN0aWxsLXJlbmRlcmVkIGFjdGl2ZSBwcm9qZWN0OyBubyBTdGFydCJ9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "520c74da435c110dc8a0-86902159905a4ff14e24",
+          "file": "project-context.spec.ts",
+          "line": 442,
+          "column": 9
+        },
+        {
+          "title": "project context: foreign recovery preserves newer parameter draft at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2951,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T22:04:44.611Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "project-context-recovery.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJtb2RlIjoicGFyYW1ldGVyIGRyYWZ0IiwiYWN0aXZlUHJvamVjdElkIjoicHJqLTk5NzBiNzY0LTllZWQtNDJkNi04YWZlLTRhZjYxODdiNjRlOCIsInJlY292ZXJlZFByb2plY3RJZCI6InByai01ZGVmZTViZC1hNWJjLTRlODctYTI4ZS1iYmZjYjQ2ZDE3OWQiLCJkaXN0aW5jdFByb2plY3RzIjp0cnVlLCJhY3RpdmVSZXZpc2lvbiI6MSwiaW5kZXBlbmRlbnRSZWNvdmVyeUNvbW1pdHRlZCI6dHJ1ZSwicHJlc2VydmVkIjp7InJlY292ZXJ5SWQiOiJyZWMtMWQ4ZGIzNmItN2M0MC00OTk0LTgwNDYtN2ZjODk2YzI4ZDdjIiwiY29tbWl0dGVkRGlnZXN0Ijoic2hhMjU2OjM5YWUxNDNjZDdkODUxYmQ2ZDRmMThmN2E3MGIwZTBjNGQyZWJiMzdkZDg2ZjlhYThjMTdmNmQ4NjNmNDg5NzkiLCJvYnNlcnZlZERpZ2VzdCI6InNoYTI1Njo0OTVlZDU1MThjNTBiZGU0OTUyMjJlYmQ2MThhNjMzZTcxMmZkNDczM2M4NWY4MjA1NTY3Nzk0YTViNjI0OWZmIiwicHJlc2VydmVkRW5jb2RpbmciOiJiaW5hcnkiLCJleGFjdEJhY2t1cEJ5dGVzIjp0cnVlLCJvbGRSZXZpc2lvbkRpcmVjdG9yeVVuY2hhbmdlZCI6dHJ1ZX0sImNvbnRyYXN0Ijp7ImxhYmVsIjoiTmFtZWQgZm9yZWlnbiByZWNvdmVyeSB0YXJnZXQiLCJ0ZXh0IjoiUmVjb3ZlcnkgZmlyc3QgcHJlc2VydmVzIHRoZSBieXRlcyBub3cgb24gZGlzayBpbiBhIHJlY292ZXJ5IGJhY2t1cCBhbmQgdGhlbiBjb21taXRzIGEgbmV3IHJldmlzaW9uOyByZXZpc2lvbiAxIHN0YXlzIGluIGhpc3RvcnkuIFNpZGVjYXJzIGtlZXAgdGhlaXIgcmVjb3JkZWQgY29udGVudC4gUmVjb3ZlcnkgYXBwIiwiY29sb3IiOiJyZ2IoMTYxLCA4OSwgODEpIiwiZm9udFNpemUiOiIxMnB4IiwiZm9udFdlaWdodCI6IjQwMCIsInRocmVzaG9sZCI6NC41LCJzY29wZSI6IlNlbGVjdGVkIG5vcm1hbC1zaXplIHJlbmRlcmVkIHRleHQ7IG5vIG92ZXJhbGwgYWNjZXNzaWJpbGl0eSBjZXJ0aWZpY2F0aW9uIiwic3VwcG9ydGVkIjp0cnVlLCJsYXllcnMiOlsicmdiYSgwLCAwLCAwLCAwKSIsInJnYmEoMCwgMCwgMCwgMCkiLCJyZ2JhKDAsIDAsIDAsIDApIiwicmdiKDI1NSwgMjQzLCAyNDIpIl0sImJhY2tncm91bmQiOlsxLDAuOTUyOTQxMTc2NDcwNTg4MiwwLjk0OTAxOTYwNzg0MzEzNzIsMV0sImNvbXBvc2l0ZWRGb3JlZ3JvdW5kIjpbMC42MzEzNzI1NDkwMTk2MDc4LDAuMzQ5MDE5NjA3ODQzMTM3MjQsMC4zMTc2NDcwNTg4MjM1Mjk0LDFdLCJyYXRpbyI6NC43NjMzNjA5MTYxNTU3NzIsInBhc3NlZCI6dHJ1ZSwiYXNzdW1wdGlvbnMiOiJDU1Mgc1JHQiBjb2xvcnM7IGFscGhhIGNvbXBvc2l0ZWQgdGhyb3VnaCBleHBsaWNpdCBiYWNrZ3JvdW5kczsgbm8gYW50aS1hbGlhc2luZyBhcHByb3hpbWF0aW9uIn0sIm93blByb2plY3RSdW5TZXRzVW5jaGFuZ2VkIjp0cnVlLCJzY29wZSI6IlJlYWwgZm9yZWlnbiBvd25lZCByZWNvdmVyeSBoZWxkIGFmdGVyIGNvbW1pdDsgcHJlc2VydmUgbmV3ZXIgYXV0aG9yaW5nIGludGVudCBpbiBzdGlsbC1yZW5kZXJlZCBhY3RpdmUgcHJvamVjdDsgbm8gU3RhcnQifQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "520c74da435c110dc8a0-c902043bbe1a07715561",
+          "file": "project-context.spec.ts",
+          "line": 442,
+          "column": 9
+        },
+        {
+          "title": "project context: obsolete successful load preserves newer source save at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2814,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T22:04:47.570Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "project-context-load.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJicm9rZW4iOmZhbHNlLCJsb2FkU3RhdHVzIjoyMDAsImFjdGl2ZVByb2plY3RJZCI6InByai05MDU3NDU2OS04NmY3LTRmZGMtOWI2Yi0zN2Y3N2MwOGI0MzUiLCJsb2FkVGFyZ2V0SWQiOiJwcmotZGNlN2NlNzktMjNlZC00NTJkLTliYTEtYWYxYWY4MDE5NTQ3Iiwic291cmNlQ29tbWl0QWNrbm93bGVkZ2VkIjp0cnVlLCJuZXdlck1vZGFsUHJlc2VydmVkIjp0cnVlLCJvd25Qcm9qZWN0UnVuU2V0c1VuY2hhbmdlZCI6dHJ1ZSwic2NvcGUiOiJIZWxkIGFjdHVhbCBsb2FkIHJlc3BvbnNlIGFuZCBhY3R1YWwgc291cmNlIFBVVDsgb2Jzb2xldGUgY3JlYXRpb24gY29udGludWF0aW9uL2Vycm9yIG11c3Qgbm90IGNoYW5nZSBuZXdlciBhdXRob3JpbmcgY29udGV4dDsgbm8gU3RhcnQifQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "520c74da435c110dc8a0-43d1169b28235d588558",
+          "file": "project-context.spec.ts",
+          "line": 595,
+          "column": 9
+        },
+        {
+          "title": "project context: obsolete failed load preserves newer source save at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2791,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T22:04:50.394Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "project-context-load.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJicm9rZW4iOnRydWUsImxvYWRTdGF0dXMiOjQwOSwiYWN0aXZlUHJvamVjdElkIjoicHJqLTllNmRkN2EzLWMxZjktNDMyNi1hNjc5LTk4ZDRhMDJmMGZiNiIsImxvYWRUYXJnZXRJZCI6InByai1mM2E5OTg5YS0wMWEzLTQzMjctYTk1Yy1hOWY3NDdiYjA3NGEiLCJzb3VyY2VDb21taXRBY2tub3dsZWRnZWQiOnRydWUsIm5ld2VyTW9kYWxQcmVzZXJ2ZWQiOnRydWUsIm93blByb2plY3RSdW5TZXRzVW5jaGFuZ2VkIjp0cnVlLCJzY29wZSI6IkhlbGQgYWN0dWFsIGxvYWQgcmVzcG9uc2UgYW5kIGFjdHVhbCBzb3VyY2UgUFVUOyBvYnNvbGV0ZSBjcmVhdGlvbiBjb250aW51YXRpb24vZXJyb3IgbXVzdCBub3QgY2hhbmdlIG5ld2VyIGF1dGhvcmluZyBjb250ZXh0OyBubyBTdGFydCJ9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "520c74da435c110dc8a0-d2d4a2d5c3fba1fa6b3a",
+          "file": "project-context.spec.ts",
+          "line": 595,
+          "column": 9
+        },
+        {
+          "title": "project context: obsolete creation reply preserves newer source save at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3602,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T22:04:53.193Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "project-context-creation.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJhY3RpdmVQcm9qZWN0SWQiOiJwcmotMTY0NTJlOTUtMjk0Ny00Y2IyLThlNDQtYjcwZDQzNDRhMzZhIiwiY3JlYXRlZFByb2plY3RJZCI6InByai05MGFkMWY0MC0wNDUzLTQ0NDktYmVmMC1mN2I0NTNkNWZhNDkiLCJjcmVhdGVkUHJvamVjdFJldGFpbmVkIjp0cnVlLCJuZXdlclNvdXJjZVNhdmVBY2tub3dsZWRnZWQiOnRydWUsIm5ld2VyTW9kYWxBbmRGb2N1c1ByZXNlcnZlZCI6dHJ1ZSwibm9TdGFydCI6dHJ1ZX0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "520c74da435c110dc8a0-51a440cad7d4c4ad26ee",
+          "file": "project-context.spec.ts",
+          "line": 677,
+          "column": 7
+        },
+        {
+          "title": "project context: newest creation intent wins over earlier completion at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2804,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T22:04:56.803Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "project-context-newest-creation.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJvcmlnaW5hbFByb2plY3RJZCI6InByai1jZjliMzQyNi1iMWRlLTRhMzAtOGRkNi1mYThlMjljMWU5NDEiLCJjcmVhdGlvbk9yZGVyIjpbInByai1iYzU4MDI0MC1iMWRiLTQyNDctODY4NC04MTU5ZTE2NDM0MWUiLCJwcmotMWZjY2JlNjYtNTViZS00MjZmLTllNDQtYjIwNzIzMWY0Y2EzIl0sImFjY2VwdGVkUHJvamVjdElkIjoicHJqLTFmY2NiZTY2LTU1YmUtNDI2Zi05ZTQ0LWIyMDcyMzFmNGNhMyIsImNvbXBsZXRpb25PcmRlciI6IkVhcmxpZXIgcmVzcG9uc2UgcmVsZWFzZWQgd2hpbGUgbmV3ZXIgcmVzcG9uc2UgcmVtYWlucyBoZWxkIiwiYm90aFByb2plY3RzUHJlc2VydmVkIjp0cnVlLCJub1N0YXJ0Ijp0cnVlfQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "520c74da435c110dc8a0-b250ec0838e88b36cf6d",
+          "file": "project-context.spec.ts",
+          "line": 747,
+          "column": 7
+        },
+        {
+          "title": "project context: obsolete startup success preserves Home at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1620,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T22:04:59.620Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "project-context-startup.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJmYWlsZWQiOmZhbHNlLCJvcmlnaW5hbFByb3ZpZGVyUmVhZFN0YXR1cyI6MjAwLCJyZWxlYXNlZFN0YXR1cyI6MjAwLCJuZXdlckhvbWVQcmVzZXJ2ZWQiOnRydWUsInByb2plY3RVbmNoYW5nZWQiOnRydWUsInNjb3BlIjoiSGVsZCBhY3R1YWwgc3VjY2Vzc2Z1bCBzdGFydHVwIG1ldGFkYXRhIGFmdGVyIGV4cGxpY2l0IEhvbWUiLCJub1N0YXJ0Ijp0cnVlfQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "520c74da435c110dc8a0-ed699a9a2c399bc2bc5b",
+          "file": "project-context.spec.ts",
+          "line": 859,
+          "column": 9
+        },
+        {
+          "title": "project context: obsolete startup failure preserves Home at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1563,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T22:05:01.250Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "project-context-startup.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJmYWlsZWQiOnRydWUsIm9yaWdpbmFsUHJvdmlkZXJSZWFkU3RhdHVzIjoyMDAsInJlbGVhc2VkU3RhdHVzIjo1MDMsIm5ld2VySG9tZVByZXNlcnZlZCI6dHJ1ZSwicHJvamVjdFVuY2hhbmdlZCI6dHJ1ZSwic2NvcGUiOiJDb250cm9sbGVkIEhUVFAgZmFpbHVyZSBvZiBzdGFydHVwIG1ldGFkYXRhIGFmdGVyIGV4cGxpY2l0IEhvbWUiLCJub1N0YXJ0Ijp0cnVlfQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "520c74da435c110dc8a0-3e0588b8bb5596ab89e9",
+          "file": "project-context.spec.ts",
+          "line": 859,
+          "column": 9
+        }
+      ]
+    },
+    {
+      "title": "source-recovery-accessibility.spec.ts",
+      "file": "source-recovery-accessibility.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "recovery accessibility: native adopt at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2641,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T22:05:02.840Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "recovery-keyboard.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJtb2RlIjoiYWRvcHQiLCJhY3Rpb24iOiJhZG9wdF9leHRlcm5hbCIsInJldmlzaW9uQmVmb3JlIjoxLCJyZXZpc2lvbkFmdGVyIjoyLCJ3cml0ZXMiOlt7ImJvZHkiOnsiZXhwZWN0ZWRSZXZpc2lvbiI6MSwiYWN0aW9uIjoiYWRvcHRfZXh0ZXJuYWwifSwiaWZNYXRjaCI6IlwiMVwiIn1dLCJwcmVzZXJ2ZWQiOnsicmVjb3ZlcnlJZCI6InJlYy01MzFlODZjNS00ZjJiLTQ0YTYtOTI1Yi0yNWZkZmU5Yjc1MjAiLCJjb21taXR0ZWREaWdlc3QiOiJzaGEyNTY6MzlhZTE0M2NkN2Q4NTFiZDZkNGYxOGY3YTcwYjBlMGM0ZDJlYmIzN2RkODZmOWFhOGMxN2Y2ZDg2M2Y0ODk3OSIsIm9ic2VydmVkRGlnZXN0Ijoic2hhMjU2OjhiNjRjOWYwZWFmNzc4NWNlNjg3OGE0Zjk5OWVjNjlmZGQ4NWM3M2UyZTk2OTA0OGI0YzVmMzQ1YTFkNTVlMGIiLCJwcmVzZXJ2ZWRFbmNvZGluZyI6InV0Zi04IiwiZXhhY3RCYWNrdXBCeXRlcyI6dHJ1ZSwib2xkUmV2aXNpb25EaXJlY3RvcnlVbmNoYW5nZWQiOnRydWV9LCJjYW5vbmljYWxCeXRlc0FuZE90aGVySWRlbnRpdGllcyI6dHJ1ZSwiZm9jdXMiOnsiZm9jdXNlZCI6dHJ1ZSwiYm94Ijp7IngiOjkyOC4xMjUsInkiOjI4NS41LCJ3aWR0aCI6NzUuODc1LCJoZWlnaHQiOjQ3LCJ0b3AiOjI4NS41LCJyaWdodCI6MTAwNCwiYm90dG9tIjozMzIuNSwibGVmdCI6OTI4LjEyNX0sIm91dGxpbmUiOiJzb2xpZCIsIm91dGxpbmVXaWR0aCI6Mywidmlld3BvcnQiOnsid2lkdGgiOjEwMjQsImhlaWdodCI6NzY4fX0sImF1dGhvcml0YXRpdmVWYWxpZGF0aW9uIjp0cnVlLCJvd25Qcm9qZWN0UnVuU2V0VW5jaGFuZ2VkIjp0cnVlLCJtZWFzdXJlbWVudHMiOlt7ImxhYmVsIjoiU291cmNlIHJlY292ZXJ5IHByZXNlcnZhdGlvbiBndWlkYW5jZSIsInRleHQiOiJSZWNvdmVyeSBmaXJzdCBwcmVzZXJ2ZXMgdGhlIGJ5dGVzIG5vdyBvbiBkaXNrIGluIGEgcmVjb3ZlcnkgYmFja3VwIGFuZCB0aGVuIGNvbW1pdHMgYSBuZXcgcmV2aXNpb247IHJldmlzaW9uIDEgc3RheXMgaW4gaGlzdG9yeS4gU2lkZWNhcnMga2VlcCB0aGVpciByZWNvcmRlZCBjb250ZW50LiBSZWNvdmVyeSBhcHAiLCJjb2xvciI6InJnYigxNjEsIDg5LCA4MSkiLCJmb250U2l6ZSI6IjEycHgiLCJmb250V2VpZ2h0IjoiNDAwIiwidGhyZXNob2xkIjo0LjUsInNjb3BlIjoiU2VsZWN0ZWQgbm9ybWFsLXNpemUgcmVuZGVyZWQgdGV4dDsgbm8gb3ZlcmFsbCBhY2Nlc3NpYmlsaXR5IGNlcnRpZmljYXRpb24iLCJzdXBwb3J0ZWQiOnRydWUsImxheWVycyI6WyJyZ2JhKDAsIDAsIDAsIDApIiwicmdiYSgwLCAwLCAwLCAwKSIsInJnYmEoMCwgMCwgMCwgMCkiLCJyZ2IoMjU1LCAyNDMsIDI0MikiXSwiYmFja2dyb3VuZCI6WzEsMC45NTI5NDExNzY0NzA1ODgyLDAuOTQ5MDE5NjA3ODQzMTM3MiwxXSwiY29tcG9zaXRlZEZvcmVncm91bmQiOlswLjYzMTM3MjU0OTAxOTYwNzgsMC4zNDkwMTk2MDc4NDMxMzcyNCwwLjMxNzY0NzA1ODgyMzUyOTQsMV0sInJhdGlvIjo0Ljc2MzM2MDkxNjE1NTc3MiwicGFzc2VkIjp0cnVlLCJhc3N1bXB0aW9ucyI6IkNTUyBzUkdCIGNvbG9yczsgYWxwaGEgY29tcG9zaXRlZCB0aHJvdWdoIGV4cGxpY2l0IGJhY2tncm91bmRzOyBubyBhbnRpLWFsaWFzaW5nIGFwcHJveGltYXRpb24ifV0sInNjb3BlIjoiQWN0dWFsIG93bmVkIGZpbGUgbW9kaWZpY2F0aW9uIGFuZCBleHBsaWNpdCByZWNvdmVyeTsgbmF0aXZlIGtleXM7IG5vIFN0YXJ0IG9yIGRldmljZSBhY2Nlc3MifQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "62943bf3acd23bb0ef02-c8d8b42db27d3f553e50",
+          "file": "source-recovery-accessibility.spec.ts",
+          "line": 241,
+          "column": 9
+        },
+        {
+          "title": "recovery accessibility: native restore at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2334,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T22:05:05.490Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "recovery-keyboard.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJtb2RlIjoicmVzdG9yZSIsImFjdGlvbiI6InJlc3RvcmVfcmV2aXNpb24iLCJyZXZpc2lvbkJlZm9yZSI6MSwicmV2aXNpb25BZnRlciI6Miwid3JpdGVzIjpbeyJib2R5Ijp7ImV4cGVjdGVkUmV2aXNpb24iOjEsImFjdGlvbiI6InJlc3RvcmVfcmV2aXNpb24iLCJyZXZpc2lvbiI6MX0sImlmTWF0Y2giOiJcIjFcIiJ9XSwicHJlc2VydmVkIjp7InJlY292ZXJ5SWQiOiJyZWMtMDVhY2NkZDktMmJlMC00ZjNmLTgxYjMtYzQ3MDIyMWQzYzgyIiwiY29tbWl0dGVkRGlnZXN0Ijoic2hhMjU2OjM5YWUxNDNjZDdkODUxYmQ2ZDRmMThmN2E3MGIwZTBjNGQyZWJiMzdkZDg2ZjlhYThjMTdmNmQ4NjNmNDg5NzkiLCJvYnNlcnZlZERpZ2VzdCI6InNoYTI1Njo4YjY0YzlmMGVhZjc3ODVjZTY4NzhhNGY5OTllYzY5ZmRkODVjNzNlMmU5NjkwNDhiNGM1ZjM0NWExZDU1ZTBiIiwicHJlc2VydmVkRW5jb2RpbmciOiJ1dGYtOCIsImV4YWN0QmFja3VwQnl0ZXMiOnRydWUsIm9sZFJldmlzaW9uRGlyZWN0b3J5VW5jaGFuZ2VkIjp0cnVlfSwiY2Fub25pY2FsQnl0ZXNBbmRPdGhlcklkZW50aXRpZXMiOnRydWUsImZvY3VzIjp7ImZvY3VzZWQiOnRydWUsImJveCI6eyJ4Ijo5MjguMTI1LCJ5IjoyMzgsIndpZHRoIjo3NS44NzUsImhlaWdodCI6NDcsInRvcCI6MjM4LCJyaWdodCI6MTAwNCwiYm90dG9tIjoyODUsImxlZnQiOjkyOC4xMjV9LCJvdXRsaW5lIjoic29saWQiLCJvdXRsaW5lV2lkdGgiOjMsInZpZXdwb3J0Ijp7IndpZHRoIjoxMDI0LCJoZWlnaHQiOjc2OH19LCJhdXRob3JpdGF0aXZlVmFsaWRhdGlvbiI6dHJ1ZSwib3duUHJvamVjdFJ1blNldFVuY2hhbmdlZCI6dHJ1ZSwibWVhc3VyZW1lbnRzIjpbeyJsYWJlbCI6IlNvdXJjZSByZWNvdmVyeSBwcmVzZXJ2YXRpb24gZ3VpZGFuY2UiLCJ0ZXh0IjoiUmVjb3ZlcnkgZmlyc3QgcHJlc2VydmVzIHRoZSBieXRlcyBub3cgb24gZGlzayBpbiBhIHJlY292ZXJ5IGJhY2t1cCBhbmQgdGhlbiBjb21taXRzIGEgbmV3IHJldmlzaW9uOyByZXZpc2lvbiAxIHN0YXlzIGluIGhpc3RvcnkuIFNpZGVjYXJzIGtlZXAgdGhlaXIgcmVjb3JkZWQgY29udGVudC4gUmVjb3ZlcnkgYXBwIiwiY29sb3IiOiJyZ2IoMTYxLCA4OSwgODEpIiwiZm9udFNpemUiOiIxMnB4IiwiZm9udFdlaWdodCI6IjQwMCIsInRocmVzaG9sZCI6NC41LCJzY29wZSI6IlNlbGVjdGVkIG5vcm1hbC1zaXplIHJlbmRlcmVkIHRleHQ7IG5vIG92ZXJhbGwgYWNjZXNzaWJpbGl0eSBjZXJ0aWZpY2F0aW9uIiwic3VwcG9ydGVkIjp0cnVlLCJsYXllcnMiOlsicmdiYSgwLCAwLCAwLCAwKSIsInJnYmEoMCwgMCwgMCwgMCkiLCJyZ2JhKDAsIDAsIDAsIDApIiwicmdiKDI1NSwgMjQzLCAyNDIpIl0sImJhY2tncm91bmQiOlsxLDAuOTUyOTQxMTc2NDcwNTg4MiwwLjk0OTAxOTYwNzg0MzEzNzIsMV0sImNvbXBvc2l0ZWRGb3JlZ3JvdW5kIjpbMC42MzEzNzI1NDkwMTk2MDc4LDAuMzQ5MDE5NjA3ODQzMTM3MjQsMC4zMTc2NDcwNTg4MjM1Mjk0LDFdLCJyYXRpbyI6NC43NjMzNjA5MTYxNTU3NzIsInBhc3NlZCI6dHJ1ZSwiYXNzdW1wdGlvbnMiOiJDU1Mgc1JHQiBjb2xvcnM7IGFscGhhIGNvbXBvc2l0ZWQgdGhyb3VnaCBleHBsaWNpdCBiYWNrZ3JvdW5kczsgbm8gYW50aS1hbGlhc2luZyBhcHByb3hpbWF0aW9uIn1dLCJzY29wZSI6IkFjdHVhbCBvd25lZCBmaWxlIG1vZGlmaWNhdGlvbiBhbmQgZXhwbGljaXQgcmVjb3Zlcnk7IG5hdGl2ZSBrZXlzOyBubyBTdGFydCBvciBkZXZpY2UgYWNjZXNzIn0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "62943bf3acd23bb0ef02-19a022c8fc2a1cd4a784",
+          "file": "source-recovery-accessibility.spec.ts",
+          "line": 241,
+          "column": 9
+        },
+        {
+          "title": "recovery accessibility: native unreadable restore at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1894,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T22:05:07.837Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "recovery-keyboard.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJtb2RlIjoidW5yZWFkYWJsZSByZXN0b3JlIiwiYWN0aW9uIjoicmVzdG9yZV9yZXZpc2lvbiIsInJldmlzaW9uQmVmb3JlIjoxLCJyZXZpc2lvbkFmdGVyIjoyLCJ3cml0ZXMiOlt7ImJvZHkiOnsiZXhwZWN0ZWRSZXZpc2lvbiI6MSwiYWN0aW9uIjoicmVzdG9yZV9yZXZpc2lvbiIsInJldmlzaW9uIjoxfSwiaWZNYXRjaCI6IlwiMVwiIn1dLCJwcmVzZXJ2ZWQiOnsicmVjb3ZlcnlJZCI6InJlYy04NDBjYWEyYS0zMmIzLTRjZDktYjc1NS0yMjhhZWJkNzdlNjgiLCJjb21taXR0ZWREaWdlc3QiOiJzaGEyNTY6MzlhZTE0M2NkN2Q4NTFiZDZkNGYxOGY3YTcwYjBlMGM0ZDJlYmIzN2RkODZmOWFhOGMxN2Y2ZDg2M2Y0ODk3OSIsIm9ic2VydmVkRGlnZXN0Ijoic2hhMjU2OjVmMjEwZDVlNDU0NzM5OWM1OTRhNGExZmNhNzdiYTM1OGZiOTA1N2FiNmI0ZjQyMWJmNTI5Mjk0ZGM3ZDk1YzYiLCJwcmVzZXJ2ZWRFbmNvZGluZyI6ImJpbmFyeSIsImV4YWN0QmFja3VwQnl0ZXMiOnRydWUsIm9sZFJldmlzaW9uRGlyZWN0b3J5VW5jaGFuZ2VkIjp0cnVlfSwiY2Fub25pY2FsQnl0ZXNBbmRPdGhlcklkZW50aXRpZXMiOnRydWUsImZvY3VzIjp7ImZvY3VzZWQiOnRydWUsImJveCI6eyJ4Ijo5MjguMTI1LCJ5IjoyNTcsIndpZHRoIjo3NS44NzUsImhlaWdodCI6NDcsInRvcCI6MjU3LCJyaWdodCI6MTAwNCwiYm90dG9tIjozMDQsImxlZnQiOjkyOC4xMjV9LCJvdXRsaW5lIjoic29saWQiLCJvdXRsaW5lV2lkdGgiOjMsInZpZXdwb3J0Ijp7IndpZHRoIjoxMDI0LCJoZWlnaHQiOjc2OH19LCJhdXRob3JpdGF0aXZlVmFsaWRhdGlvbiI6dHJ1ZSwib3duUHJvamVjdFJ1blNldFVuY2hhbmdlZCI6dHJ1ZSwibWVhc3VyZW1lbnRzIjpbeyJsYWJlbCI6IlNvdXJjZSByZWNvdmVyeSBwcmVzZXJ2YXRpb24gZ3VpZGFuY2UiLCJ0ZXh0IjoiUmVjb3ZlcnkgZmlyc3QgcHJlc2VydmVzIHRoZSBieXRlcyBub3cgb24gZGlzayBpbiBhIHJlY292ZXJ5IGJhY2t1cCBhbmQgdGhlbiBjb21taXRzIGEgbmV3IHJldmlzaW9uOyByZXZpc2lvbiAxIHN0YXlzIGluIGhpc3RvcnkuIFNpZGVjYXJzIGtlZXAgdGhlaXIgcmVjb3JkZWQgY29udGVudC4gUmVjb3ZlcnkgYXBwIiwiY29sb3IiOiJyZ2IoMTYxLCA4OSwgODEpIiwiZm9udFNpemUiOiIxMnB4IiwiZm9udFdlaWdodCI6IjQwMCIsInRocmVzaG9sZCI6NC41LCJzY29wZSI6IlNlbGVjdGVkIG5vcm1hbC1zaXplIHJlbmRlcmVkIHRleHQ7IG5vIG92ZXJhbGwgYWNjZXNzaWJpbGl0eSBjZXJ0aWZpY2F0aW9uIiwic3VwcG9ydGVkIjp0cnVlLCJsYXllcnMiOlsicmdiYSgwLCAwLCAwLCAwKSIsInJnYmEoMCwgMCwgMCwgMCkiLCJyZ2JhKDAsIDAsIDAsIDApIiwicmdiKDI1NSwgMjQzLCAyNDIpIl0sImJhY2tncm91bmQiOlsxLDAuOTUyOTQxMTc2NDcwNTg4MiwwLjk0OTAxOTYwNzg0MzEzNzIsMV0sImNvbXBvc2l0ZWRGb3JlZ3JvdW5kIjpbMC42MzEzNzI1NDkwMTk2MDc4LDAuMzQ5MDE5NjA3ODQzMTM3MjQsMC4zMTc2NDcwNTg4MjM1Mjk0LDFdLCJyYXRpbyI6NC43NjMzNjA5MTYxNTU3NzIsInBhc3NlZCI6dHJ1ZSwiYXNzdW1wdGlvbnMiOiJDU1Mgc1JHQiBjb2xvcnM7IGFscGhhIGNvbXBvc2l0ZWQgdGhyb3VnaCBleHBsaWNpdCBiYWNrZ3JvdW5kczsgbm8gYW50aS1hbGlhc2luZyBhcHByb3hpbWF0aW9uIn1dLCJzY29wZSI6IkFjdHVhbCBvd25lZCBmaWxlIG1vZGlmaWNhdGlvbiBhbmQgZXhwbGljaXQgcmVjb3Zlcnk7IG5hdGl2ZSBrZXlzOyBubyBTdGFydCBvciBkZXZpY2UgYWNjZXNzIn0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "62943bf3acd23bb0ef02-8919a8d648d2fd218676",
+          "file": "source-recovery-accessibility.spec.ts",
+          "line": 241,
+          "column": 9
+        },
+        {
+          "title": "recovery accessibility: history failed lookup at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2962,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T22:05:09.740Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "recovery-history.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJtb2RlIjoiZmFpbGVkIGxvb2t1cCIsImZpeHR1cmUiOiJGaXJzdCBoaXN0b3J5IEhUVFA1MDMsIHRoZW4gYWN0dWFsIGJhY2tlbmQgaGlzdG9yeSBvbiByZXRyeSIsImhpc3RvcnlSZXF1ZXN0cyI6MiwibWVhc3VyZW1lbnRzIjpbeyJsYWJlbCI6IlVuYXZhaWxhYmxlIHJlY292ZXJ5IGhpc3RvcnkgZ3VpZGFuY2UiLCJ0ZXh0IjoiQ291bGQgbm90IGNoZWNrIHJldmlzaW9uIGhpc3RvcnkuIFJlc3RvcmF0aW9uIGF2YWlsYWJpbGl0eSBpcyB1bmtub3duLiBISVNUT1JZX1RFTVBPUkFSSUxZX1VOQVZBSUxBQkxFOiBDb250cm9sbGVkIGhpc3RvcnkgbG9va3VwIGZhaWx1cmUgUmV0cnkgdGhlIGhpc3RvcnkgbG9va3VwLiIsImNvbG9yIjoicmdiKDE2MSwgODksIDgxKSIsImZvbnRTaXplIjoiMTJweCIsImZvbnRXZWlnaHQiOiI0MDAiLCJ0aHJlc2hvbGQiOjQuNSwic2NvcGUiOiJTZWxlY3RlZCBub3JtYWwtc2l6ZSByZW5kZXJlZCB0ZXh0OyBubyBvdmVyYWxsIGFjY2Vzc2liaWxpdHkgY2VydGlmaWNhdGlvbiIsInN1cHBvcnRlZCI6dHJ1ZSwibGF5ZXJzIjpbInJnYmEoMCwgMCwgMCwgMCkiLCJyZ2JhKDAsIDAsIDAsIDApIiwicmdiYSgwLCAwLCAwLCAwKSIsInJnYigyNTUsIDI0MywgMjQyKSJdLCJiYWNrZ3JvdW5kIjpbMSwwLjk1Mjk0MTE3NjQ3MDU4ODIsMC45NDkwMTk2MDc4NDMxMzcyLDFdLCJjb21wb3NpdGVkRm9yZWdyb3VuZCI6WzAuNjMxMzcyNTQ5MDE5NjA3OCwwLjM0OTAxOTYwNzg0MzEzNzI0LDAuMzE3NjQ3MDU4ODIzNTI5NCwxXSwicmF0aW8iOjQuNzYzMzYwOTE2MTU1NzcyLCJwYXNzZWQiOnRydWUsImFzc3VtcHRpb25zIjoiQ1NTIHNSR0IgY29sb3JzOyBhbHBoYSBjb21wb3NpdGVkIHRocm91Z2ggZXhwbGljaXQgYmFja2dyb3VuZHM7IG5vIGFudGktYWxpYXNpbmcgYXBwcm94aW1hdGlvbiJ9XSwicmVjb3ZlcnlXcml0ZXMiOjAsImNhbm9uaWNhbFJldmlzaW9uVW5jaGFuZ2VkIjp0cnVlLCJzY29wZSI6Ikhpc3Rvcnkgb2JzZXJ2YXRpb24gZGlzdGluY3Rpb24gYW5kIG5hdGl2ZSByZXRyeSBvbmx5In0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "62943bf3acd23bb0ef02-3c00f78e58e11166039e",
+          "file": "source-recovery-accessibility.spec.ts",
+          "line": 365,
+          "column": 9
+        },
+        {
+          "title": "recovery accessibility: history malformed response at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3042,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T22:05:12.710Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "recovery-history.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJtb2RlIjoibWFsZm9ybWVkIHJlc3BvbnNlIiwiZml4dHVyZSI6Ik1hbGZvcm1lZEhUVFAyMDAgaGlzdG9yeSByZXNwb25zZSBmaXh0dXJlLCB0aGVuIGFjdHVhbCBiYWNrZW5kIGhpc3Rvcnkgb24gcmV0cnkiLCJoaXN0b3J5UmVxdWVzdHMiOjIsIm1lYXN1cmVtZW50cyI6W3sibGFiZWwiOiJVbmF2YWlsYWJsZSByZWNvdmVyeSBoaXN0b3J5IGd1aWRhbmNlIiwidGV4dCI6IkNvdWxkIG5vdCBjaGVjayByZXZpc2lvbiBoaXN0b3J5LiBSZXN0b3JhdGlvbiBhdmFpbGFiaWxpdHkgaXMgdW5rbm93bi4gVGhlIGhpc3RvcnkgcmVzcG9uc2UgZGlkIG5vdCBjb250YWluIGEgdmFsaWQgcmV2aXNpb24gbGlzdC4gUmV0cnkgdGhlIGhpc3RvcnkgbG9va3VwLiIsImNvbG9yIjoicmdiKDE2MSwgODksIDgxKSIsImZvbnRTaXplIjoiMTJweCIsImZvbnRXZWlnaHQiOiI0MDAiLCJ0aHJlc2hvbGQiOjQuNSwic2NvcGUiOiJTZWxlY3RlZCBub3JtYWwtc2l6ZSByZW5kZXJlZCB0ZXh0OyBubyBvdmVyYWxsIGFjY2Vzc2liaWxpdHkgY2VydGlmaWNhdGlvbiIsInN1cHBvcnRlZCI6dHJ1ZSwibGF5ZXJzIjpbInJnYmEoMCwgMCwgMCwgMCkiLCJyZ2JhKDAsIDAsIDAsIDApIiwicmdiYSgwLCAwLCAwLCAwKSIsInJnYigyNTUsIDI0MywgMjQyKSJdLCJiYWNrZ3JvdW5kIjpbMSwwLjk1Mjk0MTE3NjQ3MDU4ODIsMC45NDkwMTk2MDc4NDMxMzcyLDFdLCJjb21wb3NpdGVkRm9yZWdyb3VuZCI6WzAuNjMxMzcyNTQ5MDE5NjA3OCwwLjM0OTAxOTYwNzg0MzEzNzI0LDAuMzE3NjQ3MDU4ODIzNTI5NCwxXSwicmF0aW8iOjQuNzYzMzYwOTE2MTU1NzcyLCJwYXNzZWQiOnRydWUsImFzc3VtcHRpb25zIjoiQ1NTIHNSR0IgY29sb3JzOyBhbHBoYSBjb21wb3NpdGVkIHRocm91Z2ggZXhwbGljaXQgYmFja2dyb3VuZHM7IG5vIGFudGktYWxpYXNpbmcgYXBwcm94aW1hdGlvbiJ9XSwicmVjb3ZlcnlXcml0ZXMiOjAsImNhbm9uaWNhbFJldmlzaW9uVW5jaGFuZ2VkIjp0cnVlLCJzY29wZSI6Ikhpc3Rvcnkgb2JzZXJ2YXRpb24gZGlzdGluY3Rpb24gYW5kIG5hdGl2ZSByZXRyeSBvbmx5In0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "62943bf3acd23bb0ef02-95705cdefb430fbe180f",
+          "file": "source-recovery-accessibility.spec.ts",
+          "line": 365,
+          "column": 9
+        },
+        {
+          "title": "recovery accessibility: history out-of-window response at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2910,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T22:05:15.763Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "recovery-history.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJtb2RlIjoib3V0LW9mLXdpbmRvdyByZXNwb25zZSIsImZpeHR1cmUiOiJPdXQtb2Ytd2luZG93SFRUUDIwMCBoaXN0b3J5IHJlc3BvbnNlIGZpeHR1cmUsIHRoZW4gYWN0dWFsIGJhY2tlbmQgaGlzdG9yeSBvbiByZXRyeSIsImhpc3RvcnlSZXF1ZXN0cyI6MiwibWVhc3VyZW1lbnRzIjpbeyJsYWJlbCI6IlVuYXZhaWxhYmxlIHJlY292ZXJ5IGhpc3RvcnkgZ3VpZGFuY2UiLCJ0ZXh0IjoiQ291bGQgbm90IGNoZWNrIHJldmlzaW9uIGhpc3RvcnkuIFJlc3RvcmF0aW9uIGF2YWlsYWJpbGl0eSBpcyB1bmtub3duLiBUaGUgaGlzdG9yeSByZXNwb25zZSBkaWQgbm90IGNvbnRhaW4gYSB2YWxpZCByZXZpc2lvbiBsaXN0LiBSZXRyeSB0aGUgaGlzdG9yeSBsb29rdXAuIiwiY29sb3IiOiJyZ2IoMTYxLCA4OSwgODEpIiwiZm9udFNpemUiOiIxMnB4IiwiZm9udFdlaWdodCI6IjQwMCIsInRocmVzaG9sZCI6NC41LCJzY29wZSI6IlNlbGVjdGVkIG5vcm1hbC1zaXplIHJlbmRlcmVkIHRleHQ7IG5vIG92ZXJhbGwgYWNjZXNzaWJpbGl0eSBjZXJ0aWZpY2F0aW9uIiwic3VwcG9ydGVkIjp0cnVlLCJsYXllcnMiOlsicmdiYSgwLCAwLCAwLCAwKSIsInJnYmEoMCwgMCwgMCwgMCkiLCJyZ2JhKDAsIDAsIDAsIDApIiwicmdiKDI1NSwgMjQzLCAyNDIpIl0sImJhY2tncm91bmQiOlsxLDAuOTUyOTQxMTc2NDcwNTg4MiwwLjk0OTAxOTYwNzg0MzEzNzIsMV0sImNvbXBvc2l0ZWRGb3JlZ3JvdW5kIjpbMC42MzEzNzI1NDkwMTk2MDc4LDAuMzQ5MDE5NjA3ODQzMTM3MjQsMC4zMTc2NDcwNTg4MjM1Mjk0LDFdLCJyYXRpbyI6NC43NjMzNjA5MTYxNTU3NzIsInBhc3NlZCI6dHJ1ZSwiYXNzdW1wdGlvbnMiOiJDU1Mgc1JHQiBjb2xvcnM7IGFscGhhIGNvbXBvc2l0ZWQgdGhyb3VnaCBleHBsaWNpdCBiYWNrZ3JvdW5kczsgbm8gYW50aS1hbGlhc2luZyBhcHByb3hpbWF0aW9uIn1dLCJyZWNvdmVyeVdyaXRlcyI6MCwiY2Fub25pY2FsUmV2aXNpb25VbmNoYW5nZWQiOnRydWUsInNjb3BlIjoiSGlzdG9yeSBvYnNlcnZhdGlvbiBkaXN0aW5jdGlvbiBhbmQgbmF0aXZlIHJldHJ5IG9ubHkifQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "62943bf3acd23bb0ef02-db5ec09285058d902082",
+          "file": "source-recovery-accessibility.spec.ts",
+          "line": 365,
+          "column": 9
+        },
+        {
+          "title": "recovery accessibility: history absent response at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2070,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T22:05:18.684Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "recovery-history.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJtb2RlIjoiYWJzZW50IHJlc3BvbnNlIiwiZml4dHVyZSI6IlN1Y2Nlc3NmdWwyMDAgYWJzZW50LWhpc3RvcnkgcmVzcG9uc2UgZml4dHVyZSwgbm90IGFjdHVhbCBsZWdhY3ktcHJvamVjdCBhY2NlcHRhbmNlIiwiaGlzdG9yeVJlcXVlc3RzIjoxLCJtZWFzdXJlbWVudHMiOlt7ImxhYmVsIjoiQWJzZW50IHJlY292ZXJ5IGhpc3RvcnkgZ3VpZGFuY2UiLCJ0ZXh0IjoiTm8gcmVjb3JkZWQgY29weSBpcyBhdmFpbGFibGUgZm9yIHJldmlzaW9uIDEsIHNvIGl0IGNhbm5vdCBiZSByZXN0b3JlZCBoZXJlLiBBZG9wdGluZyB0aGUgZXh0ZXJuYWwgY2hhbmdlcyByZW1haW5zIGF2YWlsYWJsZS4iLCJjb2xvciI6InJnYigxNjEsIDg5LCA4MSkiLCJmb250U2l6ZSI6IjExcHgiLCJmb250V2VpZ2h0IjoiNDAwIiwidGhyZXNob2xkIjo0LjUsInNjb3BlIjoiU2VsZWN0ZWQgbm9ybWFsLXNpemUgcmVuZGVyZWQgdGV4dDsgbm8gb3ZlcmFsbCBhY2Nlc3NpYmlsaXR5IGNlcnRpZmljYXRpb24iLCJzdXBwb3J0ZWQiOnRydWUsImxheWVycyI6WyJyZ2JhKDAsIDAsIDAsIDApIiwicmdiYSgwLCAwLCAwLCAwKSIsInJnYmEoMCwgMCwgMCwgMCkiLCJyZ2IoMjU1LCAyNDMsIDI0MikiXSwiYmFja2dyb3VuZCI6WzEsMC45NTI5NDExNzY0NzA1ODgyLDAuOTQ5MDE5NjA3ODQzMTM3MiwxXSwiY29tcG9zaXRlZEZvcmVncm91bmQiOlswLjYzMTM3MjU0OTAxOTYwNzgsMC4zNDkwMTk2MDc4NDMxMzcyNCwwLjMxNzY0NzA1ODgyMzUyOTQsMV0sInJhdGlvIjo0Ljc2MzM2MDkxNjE1NTc3MiwicGFzc2VkIjp0cnVlLCJhc3N1bXB0aW9ucyI6IkNTUyBzUkdCIGNvbG9yczsgYWxwaGEgY29tcG9zaXRlZCB0aHJvdWdoIGV4cGxpY2l0IGJhY2tncm91bmRzOyBubyBhbnRpLWFsaWFzaW5nIGFwcHJveGltYXRpb24ifV0sInJlY292ZXJ5V3JpdGVzIjowLCJjYW5vbmljYWxSZXZpc2lvblVuY2hhbmdlZCI6dHJ1ZSwic2NvcGUiOiJIaXN0b3J5IG9ic2VydmF0aW9uIGRpc3RpbmN0aW9uIGFuZCBuYXRpdmUgcmV0cnkgb25seSJ9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "62943bf3acd23bb0ef02-c90a858123aebf1c5a59",
+          "file": "source-recovery-accessibility.spec.ts",
+          "line": 365,
+          "column": 9
+        },
+        {
+          "title": "recovery accessibility: late modified recovery preserves Home at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2704,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T22:05:20.764Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "recovery-completion.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJicm9rZW4iOmZhbHNlLCJtb2RlIjoiSG9tZSIsIndyaXRlcyI6W3siYm9keSI6eyJleHBlY3RlZFJldmlzaW9uIjoxLCJhY3Rpb24iOiJyZXN0b3JlX3JldmlzaW9uIiwicmV2aXNpb24iOjF9LCJpZk1hdGNoIjoiXCIxXCIifV0sImNvbW1pdHRlZFJldmlzaW9uIjoyLCJsYXRlc3RSZXZpc2lvbiI6MiwibmV3ZXJIaXN0b3J5IjpudWxsLCJyZWFkeUlkIjpudWxsLCJvd25Qcm9qZWN0UnVuU2V0VW5jaGFuZ2VkIjp0cnVlLCJzY29wZSI6IkhlbGQgYWN0dWFsIGNvbW1pdHRlZCByZWNvdmVyeSByZXNwb25zZTsgcHJlc2VydmUgY3VycmVudCBjb250ZXh0OyBubyBTdGFydCJ9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "62943bf3acd23bb0ef02-d81fda28de05322c8be1",
+          "file": "source-recovery-accessibility.spec.ts",
+          "line": 507,
+          "column": 11
+        },
+        {
+          "title": "recovery accessibility: late modified recovery preserves newer head at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4799,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T22:05:23.479Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "recovery-completion.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJicm9rZW4iOmZhbHNlLCJtb2RlIjoibmV3ZXIgaGVhZCIsIndyaXRlcyI6W3siYm9keSI6eyJleHBlY3RlZFJldmlzaW9uIjoxLCJhY3Rpb24iOiJyZXN0b3JlX3JldmlzaW9uIiwicmV2aXNpb24iOjF9LCJpZk1hdGNoIjoiXCIxXCIifV0sImNvbW1pdHRlZFJldmlzaW9uIjoyLCJsYXRlc3RSZXZpc2lvbiI6MywibmV3ZXJIaXN0b3J5Ijoie1widW5kb1wiOlt7XCJ0YXJnZXRcIjoyLFwiYXRcIjozLFwibGFiZWxcIjpcInNldCBwYXJhbWV0ZXJcIn1dLFwicmVkb1wiOltdfSIsInJlYWR5SWQiOm51bGwsIm93blByb2plY3RSdW5TZXRVbmNoYW5nZWQiOnRydWUsInNjb3BlIjoiSGVsZCBhY3R1YWwgY29tbWl0dGVkIHJlY292ZXJ5IHJlc3BvbnNlOyBwcmVzZXJ2ZSBjdXJyZW50IGNvbnRleHQ7IG5vIFN0YXJ0In0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "62943bf3acd23bb0ef02-c5b9fc314032900fca60",
+          "file": "source-recovery-accessibility.spec.ts",
+          "line": 507,
+          "column": 11
+        },
+        {
+          "title": "recovery accessibility: late modified recovery preserves newer readiness at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3938,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T22:05:28.287Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "recovery-completion.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJicm9rZW4iOmZhbHNlLCJtb2RlIjoibmV3ZXIgcmVhZGluZXNzIiwid3JpdGVzIjpbeyJib2R5Ijp7ImV4cGVjdGVkUmV2aXNpb24iOjEsImFjdGlvbiI6InJlc3RvcmVfcmV2aXNpb24iLCJyZXZpc2lvbiI6MX0sImlmTWF0Y2giOiJcIjFcIiJ9XSwiY29tbWl0dGVkUmV2aXNpb24iOjIsImxhdGVzdFJldmlzaW9uIjoyLCJuZXdlckhpc3RvcnkiOm51bGwsInJlYWR5SWQiOiJwZi02YjY5YmUxNi00ZDNhLTQ0ZjYtYmI3NS1hM2FkYjkwZjhjODciLCJvd25Qcm9qZWN0UnVuU2V0VW5jaGFuZ2VkIjp0cnVlLCJzY29wZSI6IkhlbGQgYWN0dWFsIGNvbW1pdHRlZCByZWNvdmVyeSByZXNwb25zZTsgcHJlc2VydmUgY3VycmVudCBjb250ZXh0OyBubyBTdGFydCJ9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "62943bf3acd23bb0ef02-86b7aafeab74a940cf99",
+          "file": "source-recovery-accessibility.spec.ts",
+          "line": 507,
+          "column": 11
+        },
+        {
+          "title": "recovery accessibility: late modified recovery preserves deliberate focus at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2654,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T22:05:32.236Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "recovery-completion.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJicm9rZW4iOmZhbHNlLCJtb2RlIjoiZGVsaWJlcmF0ZSBmb2N1cyIsIndyaXRlcyI6W3siYm9keSI6eyJleHBlY3RlZFJldmlzaW9uIjoxLCJhY3Rpb24iOiJyZXN0b3JlX3JldmlzaW9uIiwicmV2aXNpb24iOjF9LCJpZk1hdGNoIjoiXCIxXCIifV0sImNvbW1pdHRlZFJldmlzaW9uIjoyLCJsYXRlc3RSZXZpc2lvbiI6MiwibmV3ZXJIaXN0b3J5IjpudWxsLCJyZWFkeUlkIjpudWxsLCJvd25Qcm9qZWN0UnVuU2V0VW5jaGFuZ2VkIjp0cnVlLCJzY29wZSI6IkhlbGQgYWN0dWFsIGNvbW1pdHRlZCByZWNvdmVyeSByZXNwb25zZTsgcHJlc2VydmUgY3VycmVudCBjb250ZXh0OyBubyBTdGFydCJ9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "62943bf3acd23bb0ef02-597a1ab8c3fe4d7c2d20",
+          "file": "source-recovery-accessibility.spec.ts",
+          "line": 507,
+          "column": 11
+        },
+        {
+          "title": "recovery accessibility: late modified recovery preserves repeat submit at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2464,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T22:05:34.899Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "recovery-completion.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJicm9rZW4iOmZhbHNlLCJtb2RlIjoicmVwZWF0IHN1Ym1pdCIsIndyaXRlcyI6W3siYm9keSI6eyJleHBlY3RlZFJldmlzaW9uIjoxLCJhY3Rpb24iOiJyZXN0b3JlX3JldmlzaW9uIiwicmV2aXNpb24iOjF9LCJpZk1hdGNoIjoiXCIxXCIifV0sImNvbW1pdHRlZFJldmlzaW9uIjoyLCJsYXRlc3RSZXZpc2lvbiI6MiwibmV3ZXJIaXN0b3J5IjpudWxsLCJyZWFkeUlkIjpudWxsLCJvd25Qcm9qZWN0UnVuU2V0VW5jaGFuZ2VkIjp0cnVlLCJzY29wZSI6IkhlbGQgYWN0dWFsIGNvbW1pdHRlZCByZWNvdmVyeSByZXNwb25zZTsgcHJlc2VydmUgY3VycmVudCBjb250ZXh0OyBubyBTdGFydCJ9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "62943bf3acd23bb0ef02-430fc42707ed08e4f62c",
+          "file": "source-recovery-accessibility.spec.ts",
+          "line": 507,
+          "column": 11
+        },
+        {
+          "title": "recovery accessibility: late unreadable recovery preserves Home at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1782,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T22:05:37.377Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "recovery-completion.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJicm9rZW4iOnRydWUsIm1vZGUiOiJIb21lIiwid3JpdGVzIjpbeyJib2R5Ijp7ImV4cGVjdGVkUmV2aXNpb24iOjEsImFjdGlvbiI6InJlc3RvcmVfcmV2aXNpb24iLCJyZXZpc2lvbiI6MX0sImlmTWF0Y2giOiJcIjFcIiJ9XSwiY29tbWl0dGVkUmV2aXNpb24iOjIsImxhdGVzdFJldmlzaW9uIjoyLCJuZXdlckhpc3RvcnkiOm51bGwsInJlYWR5SWQiOm51bGwsIm93blByb2plY3RSdW5TZXRVbmNoYW5nZWQiOnRydWUsInNjb3BlIjoiSGVsZCBhY3R1YWwgY29tbWl0dGVkIHJlY292ZXJ5IHJlc3BvbnNlOyBwcmVzZXJ2ZSBjdXJyZW50IGNvbnRleHQ7IG5vIFN0YXJ0In0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "62943bf3acd23bb0ef02-c027342bf5ecd752ef53",
+          "file": "source-recovery-accessibility.spec.ts",
+          "line": 507,
+          "column": 11
+        },
+        {
+          "title": "recovery accessibility: late unreadable recovery preserves newer head at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5028,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T22:05:39.171Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "recovery-completion.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJicm9rZW4iOnRydWUsIm1vZGUiOiJuZXdlciBoZWFkIiwid3JpdGVzIjpbeyJib2R5Ijp7ImV4cGVjdGVkUmV2aXNpb24iOjEsImFjdGlvbiI6InJlc3RvcmVfcmV2aXNpb24iLCJyZXZpc2lvbiI6MX0sImlmTWF0Y2giOiJcIjFcIiJ9XSwiY29tbWl0dGVkUmV2aXNpb24iOjIsImxhdGVzdFJldmlzaW9uIjozLCJuZXdlckhpc3RvcnkiOiJ7XCJ1bmRvXCI6W3tcInRhcmdldFwiOjIsXCJhdFwiOjMsXCJsYWJlbFwiOlwic2V0IHBhcmFtZXRlclwifV0sXCJyZWRvXCI6W119IiwicmVhZHlJZCI6bnVsbCwib3duUHJvamVjdFJ1blNldFVuY2hhbmdlZCI6dHJ1ZSwic2NvcGUiOiJIZWxkIGFjdHVhbCBjb21taXR0ZWQgcmVjb3ZlcnkgcmVzcG9uc2U7IHByZXNlcnZlIGN1cnJlbnQgY29udGV4dDsgbm8gU3RhcnQifQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "62943bf3acd23bb0ef02-d80ebcae0e93e48d814a",
+          "file": "source-recovery-accessibility.spec.ts",
+          "line": 507,
+          "column": 11
+        },
+        {
+          "title": "recovery accessibility: late unreadable recovery preserves newer readiness at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4616,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T22:05:44.211Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "recovery-completion.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJicm9rZW4iOnRydWUsIm1vZGUiOiJuZXdlciByZWFkaW5lc3MiLCJ3cml0ZXMiOlt7ImJvZHkiOnsiZXhwZWN0ZWRSZXZpc2lvbiI6MSwiYWN0aW9uIjoicmVzdG9yZV9yZXZpc2lvbiIsInJldmlzaW9uIjoxfSwiaWZNYXRjaCI6IlwiMVwiIn1dLCJjb21taXR0ZWRSZXZpc2lvbiI6MiwibGF0ZXN0UmV2aXNpb24iOjIsIm5ld2VySGlzdG9yeSI6bnVsbCwicmVhZHlJZCI6InBmLWQ5NDJmZTcxLTFiZWQtNDIzMS04MDZkLTc2N2U3YTU0OGNmMCIsIm93blByb2plY3RSdW5TZXRVbmNoYW5nZWQiOnRydWUsInNjb3BlIjoiSGVsZCBhY3R1YWwgY29tbWl0dGVkIHJlY292ZXJ5IHJlc3BvbnNlOyBwcmVzZXJ2ZSBjdXJyZW50IGNvbnRleHQ7IG5vIFN0YXJ0In0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "62943bf3acd23bb0ef02-2e34a1ac5adf1ea1ca8b",
+          "file": "source-recovery-accessibility.spec.ts",
+          "line": 507,
+          "column": 11
+        },
+        {
+          "title": "recovery accessibility: late unreadable recovery preserves deliberate focus at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2130,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T22:05:48.838Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "recovery-completion.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJicm9rZW4iOnRydWUsIm1vZGUiOiJkZWxpYmVyYXRlIGZvY3VzIiwid3JpdGVzIjpbeyJib2R5Ijp7ImV4cGVjdGVkUmV2aXNpb24iOjEsImFjdGlvbiI6InJlc3RvcmVfcmV2aXNpb24iLCJyZXZpc2lvbiI6MX0sImlmTWF0Y2giOiJcIjFcIiJ9XSwiY29tbWl0dGVkUmV2aXNpb24iOjIsImxhdGVzdFJldmlzaW9uIjoyLCJuZXdlckhpc3RvcnkiOm51bGwsInJlYWR5SWQiOm51bGwsIm93blByb2plY3RSdW5TZXRVbmNoYW5nZWQiOnRydWUsInNjb3BlIjoiSGVsZCBhY3R1YWwgY29tbWl0dGVkIHJlY292ZXJ5IHJlc3BvbnNlOyBwcmVzZXJ2ZSBjdXJyZW50IGNvbnRleHQ7IG5vIFN0YXJ0In0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "62943bf3acd23bb0ef02-885bad2e51adfbd83078",
+          "file": "source-recovery-accessibility.spec.ts",
+          "line": 507,
+          "column": 11
+        },
+        {
+          "title": "recovery accessibility: real stale refusal current at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3437,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T22:05:50.978Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "recovery-refusal.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJkZXBhcnRlZCI6ZmFsc2UsInN0YXR1cyI6NDEyLCJhZHZhbmNlZFJldmlzaW9uIjoyLCJyZWZ1c2VkUmVxdWVzdERpZE5vdE11dGF0ZSI6dHJ1ZSwic2NvcGUiOiJBY3R1YWwgc2Vjb25kLXNlc3Npb24gcmVjb3ZlcnkgZm9sbG93ZWQgYnkgc3RhbGUgVUkgcmVmdXNhbDsgbm8gU3RhcnQifQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "62943bf3acd23bb0ef02-4a2831d9c40de3cd543b",
+          "file": "source-recovery-accessibility.spec.ts",
+          "line": 665,
+          "column": 9
+        },
+        {
+          "title": "recovery accessibility: real stale refusal after departure at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2367,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T22:05:54.427Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "recovery-refusal.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJkZXBhcnRlZCI6dHJ1ZSwic3RhdHVzIjo0MTIsImFkdmFuY2VkUmV2aXNpb24iOjIsInJlZnVzZWRSZXF1ZXN0RGlkTm90TXV0YXRlIjp0cnVlLCJzY29wZSI6IkFjdHVhbCBzZWNvbmQtc2Vzc2lvbiByZWNvdmVyeSBmb2xsb3dlZCBieSBzdGFsZSBVSSByZWZ1c2FsOyBubyBTdGFydCJ9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "62943bf3acd23bb0ef02-b6d36d11e99ec71f5546",
+          "file": "source-recovery-accessibility.spec.ts",
+          "line": 665,
+          "column": 9
+        },
+        {
+          "title": "recovery accessibility: native adopt at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2270,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T22:05:56.806Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "recovery-keyboard.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJtb2RlIjoiYWRvcHQiLCJhY3Rpb24iOiJhZG9wdF9leHRlcm5hbCIsInJldmlzaW9uQmVmb3JlIjoxLCJyZXZpc2lvbkFmdGVyIjoyLCJ3cml0ZXMiOlt7ImJvZHkiOnsiZXhwZWN0ZWRSZXZpc2lvbiI6MSwiYWN0aW9uIjoiYWRvcHRfZXh0ZXJuYWwifSwiaWZNYXRjaCI6IlwiMVwiIn1dLCJwcmVzZXJ2ZWQiOnsicmVjb3ZlcnlJZCI6InJlYy1iMTJhYzFmYy02MzkzLTQwNDktYjg1MC0zMjQwMmUxZjJkZmEiLCJjb21taXR0ZWREaWdlc3QiOiJzaGEyNTY6MzlhZTE0M2NkN2Q4NTFiZDZkNGYxOGY3YTcwYjBlMGM0ZDJlYmIzN2RkODZmOWFhOGMxN2Y2ZDg2M2Y0ODk3OSIsIm9ic2VydmVkRGlnZXN0Ijoic2hhMjU2OjhiNjRjOWYwZWFmNzc4NWNlNjg3OGE0Zjk5OWVjNjlmZGQ4NWM3M2UyZTk2OTA0OGI0YzVmMzQ1YTFkNTVlMGIiLCJwcmVzZXJ2ZWRFbmNvZGluZyI6InV0Zi04IiwiZXhhY3RCYWNrdXBCeXRlcyI6dHJ1ZSwib2xkUmV2aXNpb25EaXJlY3RvcnlVbmNoYW5nZWQiOnRydWV9LCJjYW5vbmljYWxCeXRlc0FuZE90aGVySWRlbnRpdGllcyI6dHJ1ZSwiZm9jdXMiOnsiZm9jdXNlZCI6dHJ1ZSwiYm94Ijp7IngiOjEzMzYuMTI1LCJ5IjoyNDEsIndpZHRoIjo3NS44NzUsImhlaWdodCI6NDcsInRvcCI6MjQxLCJyaWdodCI6MTQxMiwiYm90dG9tIjoyODgsImxlZnQiOjEzMzYuMTI1fSwib3V0bGluZSI6InNvbGlkIiwib3V0bGluZVdpZHRoIjozLCJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9fSwiYXV0aG9yaXRhdGl2ZVZhbGlkYXRpb24iOnRydWUsIm93blByb2plY3RSdW5TZXRVbmNoYW5nZWQiOnRydWUsIm1lYXN1cmVtZW50cyI6W3sibGFiZWwiOiJTb3VyY2UgcmVjb3ZlcnkgcHJlc2VydmF0aW9uIGd1aWRhbmNlIiwidGV4dCI6IlJlY292ZXJ5IGZpcnN0IHByZXNlcnZlcyB0aGUgYnl0ZXMgbm93IG9uIGRpc2sgaW4gYSByZWNvdmVyeSBiYWNrdXAgYW5kIHRoZW4gY29tbWl0cyBhIG5ldyByZXZpc2lvbjsgcmV2aXNpb24gMSBzdGF5cyBpbiBoaXN0b3J5LiBTaWRlY2FycyBrZWVwIHRoZWlyIHJlY29yZGVkIGNvbnRlbnQuIFJlY292ZXJ5IGFwcCIsImNvbG9yIjoicmdiKDE2MSwgODksIDgxKSIsImZvbnRTaXplIjoiMTJweCIsImZvbnRXZWlnaHQiOiI0MDAiLCJ0aHJlc2hvbGQiOjQuNSwic2NvcGUiOiJTZWxlY3RlZCBub3JtYWwtc2l6ZSByZW5kZXJlZCB0ZXh0OyBubyBvdmVyYWxsIGFjY2Vzc2liaWxpdHkgY2VydGlmaWNhdGlvbiIsInN1cHBvcnRlZCI6dHJ1ZSwibGF5ZXJzIjpbInJnYmEoMCwgMCwgMCwgMCkiLCJyZ2JhKDAsIDAsIDAsIDApIiwicmdiYSgwLCAwLCAwLCAwKSIsInJnYigyNTUsIDI0MywgMjQyKSJdLCJiYWNrZ3JvdW5kIjpbMSwwLjk1Mjk0MTE3NjQ3MDU4ODIsMC45NDkwMTk2MDc4NDMxMzcyLDFdLCJjb21wb3NpdGVkRm9yZWdyb3VuZCI6WzAuNjMxMzcyNTQ5MDE5NjA3OCwwLjM0OTAxOTYwNzg0MzEzNzI0LDAuMzE3NjQ3MDU4ODIzNTI5NCwxXSwicmF0aW8iOjQuNzYzMzYwOTE2MTU1NzcyLCJwYXNzZWQiOnRydWUsImFzc3VtcHRpb25zIjoiQ1NTIHNSR0IgY29sb3JzOyBhbHBoYSBjb21wb3NpdGVkIHRocm91Z2ggZXhwbGljaXQgYmFja2dyb3VuZHM7IG5vIGFudGktYWxpYXNpbmcgYXBwcm94aW1hdGlvbiJ9XSwic2NvcGUiOiJBY3R1YWwgb3duZWQgZmlsZSBtb2RpZmljYXRpb24gYW5kIGV4cGxpY2l0IHJlY292ZXJ5OyBuYXRpdmUga2V5czsgbm8gU3RhcnQgb3IgZGV2aWNlIGFjY2VzcyJ9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "62943bf3acd23bb0ef02-a3ce4a1bdf45b03f7115",
+          "file": "source-recovery-accessibility.spec.ts",
+          "line": 241,
+          "column": 9
+        },
+        {
+          "title": "recovery accessibility: native restore at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2233,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T22:05:59.087Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "recovery-keyboard.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJtb2RlIjoicmVzdG9yZSIsImFjdGlvbiI6InJlc3RvcmVfcmV2aXNpb24iLCJyZXZpc2lvbkJlZm9yZSI6MSwicmV2aXNpb25BZnRlciI6Miwid3JpdGVzIjpbeyJib2R5Ijp7ImV4cGVjdGVkUmV2aXNpb24iOjEsImFjdGlvbiI6InJlc3RvcmVfcmV2aXNpb24iLCJyZXZpc2lvbiI6MX0sImlmTWF0Y2giOiJcIjFcIiJ9XSwicHJlc2VydmVkIjp7InJlY292ZXJ5SWQiOiJyZWMtYjkwNzY0NjQtNmM2ZS00OTk3LWFiYmItOGYzNGI1ZjUyYTY1IiwiY29tbWl0dGVkRGlnZXN0Ijoic2hhMjU2OjM5YWUxNDNjZDdkODUxYmQ2ZDRmMThmN2E3MGIwZTBjNGQyZWJiMzdkZDg2ZjlhYThjMTdmNmQ4NjNmNDg5NzkiLCJvYnNlcnZlZERpZ2VzdCI6InNoYTI1Njo4YjY0YzlmMGVhZjc3ODVjZTY4NzhhNGY5OTllYzY5ZmRkODVjNzNlMmU5NjkwNDhiNGM1ZjM0NWExZDU1ZTBiIiwicHJlc2VydmVkRW5jb2RpbmciOiJ1dGYtOCIsImV4YWN0QmFja3VwQnl0ZXMiOnRydWUsIm9sZFJldmlzaW9uRGlyZWN0b3J5VW5jaGFuZ2VkIjp0cnVlfSwiY2Fub25pY2FsQnl0ZXNBbmRPdGhlcklkZW50aXRpZXMiOnRydWUsImZvY3VzIjp7ImZvY3VzZWQiOnRydWUsImJveCI6eyJ4IjoxMzM2LjEyNSwieSI6MjQxLCJ3aWR0aCI6NzUuODc1LCJoZWlnaHQiOjQ3LCJ0b3AiOjI0MSwicmlnaHQiOjE0MTIsImJvdHRvbSI6Mjg4LCJsZWZ0IjoxMzM2LjEyNX0sIm91dGxpbmUiOiJzb2xpZCIsIm91dGxpbmVXaWR0aCI6Mywidmlld3BvcnQiOnsid2lkdGgiOjE0NDAsImhlaWdodCI6OTAwfX0sImF1dGhvcml0YXRpdmVWYWxpZGF0aW9uIjp0cnVlLCJvd25Qcm9qZWN0UnVuU2V0VW5jaGFuZ2VkIjp0cnVlLCJtZWFzdXJlbWVudHMiOlt7ImxhYmVsIjoiU291cmNlIHJlY292ZXJ5IHByZXNlcnZhdGlvbiBndWlkYW5jZSIsInRleHQiOiJSZWNvdmVyeSBmaXJzdCBwcmVzZXJ2ZXMgdGhlIGJ5dGVzIG5vdyBvbiBkaXNrIGluIGEgcmVjb3ZlcnkgYmFja3VwIGFuZCB0aGVuIGNvbW1pdHMgYSBuZXcgcmV2aXNpb247IHJldmlzaW9uIDEgc3RheXMgaW4gaGlzdG9yeS4gU2lkZWNhcnMga2VlcCB0aGVpciByZWNvcmRlZCBjb250ZW50LiBSZWNvdmVyeSBhcHAiLCJjb2xvciI6InJnYigxNjEsIDg5LCA4MSkiLCJmb250U2l6ZSI6IjEycHgiLCJmb250V2VpZ2h0IjoiNDAwIiwidGhyZXNob2xkIjo0LjUsInNjb3BlIjoiU2VsZWN0ZWQgbm9ybWFsLXNpemUgcmVuZGVyZWQgdGV4dDsgbm8gb3ZlcmFsbCBhY2Nlc3NpYmlsaXR5IGNlcnRpZmljYXRpb24iLCJzdXBwb3J0ZWQiOnRydWUsImxheWVycyI6WyJyZ2JhKDAsIDAsIDAsIDApIiwicmdiYSgwLCAwLCAwLCAwKSIsInJnYmEoMCwgMCwgMCwgMCkiLCJyZ2IoMjU1LCAyNDMsIDI0MikiXSwiYmFja2dyb3VuZCI6WzEsMC45NTI5NDExNzY0NzA1ODgyLDAuOTQ5MDE5NjA3ODQzMTM3MiwxXSwiY29tcG9zaXRlZEZvcmVncm91bmQiOlswLjYzMTM3MjU0OTAxOTYwNzgsMC4zNDkwMTk2MDc4NDMxMzcyNCwwLjMxNzY0NzA1ODgyMzUyOTQsMV0sInJhdGlvIjo0Ljc2MzM2MDkxNjE1NTc3MiwicGFzc2VkIjp0cnVlLCJhc3N1bXB0aW9ucyI6IkNTUyBzUkdCIGNvbG9yczsgYWxwaGEgY29tcG9zaXRlZCB0aHJvdWdoIGV4cGxpY2l0IGJhY2tncm91bmRzOyBubyBhbnRpLWFsaWFzaW5nIGFwcHJveGltYXRpb24ifV0sInNjb3BlIjoiQWN0dWFsIG93bmVkIGZpbGUgbW9kaWZpY2F0aW9uIGFuZCBleHBsaWNpdCByZWNvdmVyeTsgbmF0aXZlIGtleXM7IG5vIFN0YXJ0IG9yIGRldmljZSBhY2Nlc3MifQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "62943bf3acd23bb0ef02-c3a7fd30e76b90c29368",
+          "file": "source-recovery-accessibility.spec.ts",
+          "line": 241,
+          "column": 9
+        },
+        {
+          "title": "recovery accessibility: native unreadable restore at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2015,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T22:06:01.331Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "recovery-keyboard.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJtb2RlIjoidW5yZWFkYWJsZSByZXN0b3JlIiwiYWN0aW9uIjoicmVzdG9yZV9yZXZpc2lvbiIsInJldmlzaW9uQmVmb3JlIjoxLCJyZXZpc2lvbkFmdGVyIjoyLCJ3cml0ZXMiOlt7ImJvZHkiOnsiZXhwZWN0ZWRSZXZpc2lvbiI6MSwiYWN0aW9uIjoicmVzdG9yZV9yZXZpc2lvbiIsInJldmlzaW9uIjoxfSwiaWZNYXRjaCI6IlwiMVwiIn1dLCJwcmVzZXJ2ZWQiOnsicmVjb3ZlcnlJZCI6InJlYy0yZTM5MTI5Yi0zYTk3LTQ4N2MtOWU0Yi01NmM4ZDBmODhlYjkiLCJjb21taXR0ZWREaWdlc3QiOiJzaGEyNTY6MzlhZTE0M2NkN2Q4NTFiZDZkNGYxOGY3YTcwYjBlMGM0ZDJlYmIzN2RkODZmOWFhOGMxN2Y2ZDg2M2Y0ODk3OSIsIm9ic2VydmVkRGlnZXN0Ijoic2hhMjU2OjVmMjEwZDVlNDU0NzM5OWM1OTRhNGExZmNhNzdiYTM1OGZiOTA1N2FiNmI0ZjQyMWJmNTI5Mjk0ZGM3ZDk1YzYiLCJwcmVzZXJ2ZWRFbmNvZGluZyI6ImJpbmFyeSIsImV4YWN0QmFja3VwQnl0ZXMiOnRydWUsIm9sZFJldmlzaW9uRGlyZWN0b3J5VW5jaGFuZ2VkIjp0cnVlfSwiY2Fub25pY2FsQnl0ZXNBbmRPdGhlcklkZW50aXRpZXMiOnRydWUsImZvY3VzIjp7ImZvY3VzZWQiOnRydWUsImJveCI6eyJ4IjoxMzM2LjEyNSwieSI6MjQxLCJ3aWR0aCI6NzUuODc1LCJoZWlnaHQiOjQ3LCJ0b3AiOjI0MSwicmlnaHQiOjE0MTIsImJvdHRvbSI6Mjg4LCJsZWZ0IjoxMzM2LjEyNX0sIm91dGxpbmUiOiJzb2xpZCIsIm91dGxpbmVXaWR0aCI6Mywidmlld3BvcnQiOnsid2lkdGgiOjE0NDAsImhlaWdodCI6OTAwfX0sImF1dGhvcml0YXRpdmVWYWxpZGF0aW9uIjp0cnVlLCJvd25Qcm9qZWN0UnVuU2V0VW5jaGFuZ2VkIjp0cnVlLCJtZWFzdXJlbWVudHMiOlt7ImxhYmVsIjoiU291cmNlIHJlY292ZXJ5IHByZXNlcnZhdGlvbiBndWlkYW5jZSIsInRleHQiOiJSZWNvdmVyeSBmaXJzdCBwcmVzZXJ2ZXMgdGhlIGJ5dGVzIG5vdyBvbiBkaXNrIGluIGEgcmVjb3ZlcnkgYmFja3VwIGFuZCB0aGVuIGNvbW1pdHMgYSBuZXcgcmV2aXNpb247IHJldmlzaW9uIDEgc3RheXMgaW4gaGlzdG9yeS4gU2lkZWNhcnMga2VlcCB0aGVpciByZWNvcmRlZCBjb250ZW50LiBSZWNvdmVyeSBhcHAiLCJjb2xvciI6InJnYigxNjEsIDg5LCA4MSkiLCJmb250U2l6ZSI6IjEycHgiLCJmb250V2VpZ2h0IjoiNDAwIiwidGhyZXNob2xkIjo0LjUsInNjb3BlIjoiU2VsZWN0ZWQgbm9ybWFsLXNpemUgcmVuZGVyZWQgdGV4dDsgbm8gb3ZlcmFsbCBhY2Nlc3NpYmlsaXR5IGNlcnRpZmljYXRpb24iLCJzdXBwb3J0ZWQiOnRydWUsImxheWVycyI6WyJyZ2JhKDAsIDAsIDAsIDApIiwicmdiYSgwLCAwLCAwLCAwKSIsInJnYmEoMCwgMCwgMCwgMCkiLCJyZ2IoMjU1LCAyNDMsIDI0MikiXSwiYmFja2dyb3VuZCI6WzEsMC45NTI5NDExNzY0NzA1ODgyLDAuOTQ5MDE5NjA3ODQzMTM3MiwxXSwiY29tcG9zaXRlZEZvcmVncm91bmQiOlswLjYzMTM3MjU0OTAxOTYwNzgsMC4zNDkwMTk2MDc4NDMxMzcyNCwwLjMxNzY0NzA1ODgyMzUyOTQsMV0sInJhdGlvIjo0Ljc2MzM2MDkxNjE1NTc3MiwicGFzc2VkIjp0cnVlLCJhc3N1bXB0aW9ucyI6IkNTUyBzUkdCIGNvbG9yczsgYWxwaGEgY29tcG9zaXRlZCB0aHJvdWdoIGV4cGxpY2l0IGJhY2tncm91bmRzOyBubyBhbnRpLWFsaWFzaW5nIGFwcHJveGltYXRpb24ifV0sInNjb3BlIjoiQWN0dWFsIG93bmVkIGZpbGUgbW9kaWZpY2F0aW9uIGFuZCBleHBsaWNpdCByZWNvdmVyeTsgbmF0aXZlIGtleXM7IG5vIFN0YXJ0IG9yIGRldmljZSBhY2Nlc3MifQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "62943bf3acd23bb0ef02-eb6fab9a33bf707584bb",
+          "file": "source-recovery-accessibility.spec.ts",
+          "line": 241,
+          "column": 9
+        },
+        {
+          "title": "recovery accessibility: history failed lookup at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2924,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T22:06:03.359Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "recovery-history.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJtb2RlIjoiZmFpbGVkIGxvb2t1cCIsImZpeHR1cmUiOiJGaXJzdCBoaXN0b3J5IEhUVFA1MDMsIHRoZW4gYWN0dWFsIGJhY2tlbmQgaGlzdG9yeSBvbiByZXRyeSIsImhpc3RvcnlSZXF1ZXN0cyI6MiwibWVhc3VyZW1lbnRzIjpbeyJsYWJlbCI6IlVuYXZhaWxhYmxlIHJlY292ZXJ5IGhpc3RvcnkgZ3VpZGFuY2UiLCJ0ZXh0IjoiQ291bGQgbm90IGNoZWNrIHJldmlzaW9uIGhpc3RvcnkuIFJlc3RvcmF0aW9uIGF2YWlsYWJpbGl0eSBpcyB1bmtub3duLiBISVNUT1JZX1RFTVBPUkFSSUxZX1VOQVZBSUxBQkxFOiBDb250cm9sbGVkIGhpc3RvcnkgbG9va3VwIGZhaWx1cmUgUmV0cnkgdGhlIGhpc3RvcnkgbG9va3VwLiIsImNvbG9yIjoicmdiKDE2MSwgODksIDgxKSIsImZvbnRTaXplIjoiMTJweCIsImZvbnRXZWlnaHQiOiI0MDAiLCJ0aHJlc2hvbGQiOjQuNSwic2NvcGUiOiJTZWxlY3RlZCBub3JtYWwtc2l6ZSByZW5kZXJlZCB0ZXh0OyBubyBvdmVyYWxsIGFjY2Vzc2liaWxpdHkgY2VydGlmaWNhdGlvbiIsInN1cHBvcnRlZCI6dHJ1ZSwibGF5ZXJzIjpbInJnYmEoMCwgMCwgMCwgMCkiLCJyZ2JhKDAsIDAsIDAsIDApIiwicmdiYSgwLCAwLCAwLCAwKSIsInJnYigyNTUsIDI0MywgMjQyKSJdLCJiYWNrZ3JvdW5kIjpbMSwwLjk1Mjk0MTE3NjQ3MDU4ODIsMC45NDkwMTk2MDc4NDMxMzcyLDFdLCJjb21wb3NpdGVkRm9yZWdyb3VuZCI6WzAuNjMxMzcyNTQ5MDE5NjA3OCwwLjM0OTAxOTYwNzg0MzEzNzI0LDAuMzE3NjQ3MDU4ODIzNTI5NCwxXSwicmF0aW8iOjQuNzYzMzYwOTE2MTU1NzcyLCJwYXNzZWQiOnRydWUsImFzc3VtcHRpb25zIjoiQ1NTIHNSR0IgY29sb3JzOyBhbHBoYSBjb21wb3NpdGVkIHRocm91Z2ggZXhwbGljaXQgYmFja2dyb3VuZHM7IG5vIGFudGktYWxpYXNpbmcgYXBwcm94aW1hdGlvbiJ9XSwicmVjb3ZlcnlXcml0ZXMiOjAsImNhbm9uaWNhbFJldmlzaW9uVW5jaGFuZ2VkIjp0cnVlLCJzY29wZSI6Ikhpc3Rvcnkgb2JzZXJ2YXRpb24gZGlzdGluY3Rpb24gYW5kIG5hdGl2ZSByZXRyeSBvbmx5In0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "62943bf3acd23bb0ef02-e32727d4bcb9ab80da84",
+          "file": "source-recovery-accessibility.spec.ts",
+          "line": 365,
+          "column": 9
+        },
+        {
+          "title": "recovery accessibility: history malformed response at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2408,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T22:06:06.294Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "recovery-history.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJtb2RlIjoibWFsZm9ybWVkIHJlc3BvbnNlIiwiZml4dHVyZSI6Ik1hbGZvcm1lZEhUVFAyMDAgaGlzdG9yeSByZXNwb25zZSBmaXh0dXJlLCB0aGVuIGFjdHVhbCBiYWNrZW5kIGhpc3Rvcnkgb24gcmV0cnkiLCJoaXN0b3J5UmVxdWVzdHMiOjIsIm1lYXN1cmVtZW50cyI6W3sibGFiZWwiOiJVbmF2YWlsYWJsZSByZWNvdmVyeSBoaXN0b3J5IGd1aWRhbmNlIiwidGV4dCI6IkNvdWxkIG5vdCBjaGVjayByZXZpc2lvbiBoaXN0b3J5LiBSZXN0b3JhdGlvbiBhdmFpbGFiaWxpdHkgaXMgdW5rbm93bi4gVGhlIGhpc3RvcnkgcmVzcG9uc2UgZGlkIG5vdCBjb250YWluIGEgdmFsaWQgcmV2aXNpb24gbGlzdC4gUmV0cnkgdGhlIGhpc3RvcnkgbG9va3VwLiIsImNvbG9yIjoicmdiKDE2MSwgODksIDgxKSIsImZvbnRTaXplIjoiMTJweCIsImZvbnRXZWlnaHQiOiI0MDAiLCJ0aHJlc2hvbGQiOjQuNSwic2NvcGUiOiJTZWxlY3RlZCBub3JtYWwtc2l6ZSByZW5kZXJlZCB0ZXh0OyBubyBvdmVyYWxsIGFjY2Vzc2liaWxpdHkgY2VydGlmaWNhdGlvbiIsInN1cHBvcnRlZCI6dHJ1ZSwibGF5ZXJzIjpbInJnYmEoMCwgMCwgMCwgMCkiLCJyZ2JhKDAsIDAsIDAsIDApIiwicmdiYSgwLCAwLCAwLCAwKSIsInJnYigyNTUsIDI0MywgMjQyKSJdLCJiYWNrZ3JvdW5kIjpbMSwwLjk1Mjk0MTE3NjQ3MDU4ODIsMC45NDkwMTk2MDc4NDMxMzcyLDFdLCJjb21wb3NpdGVkRm9yZWdyb3VuZCI6WzAuNjMxMzcyNTQ5MDE5NjA3OCwwLjM0OTAxOTYwNzg0MzEzNzI0LDAuMzE3NjQ3MDU4ODIzNTI5NCwxXSwicmF0aW8iOjQuNzYzMzYwOTE2MTU1NzcyLCJwYXNzZWQiOnRydWUsImFzc3VtcHRpb25zIjoiQ1NTIHNSR0IgY29sb3JzOyBhbHBoYSBjb21wb3NpdGVkIHRocm91Z2ggZXhwbGljaXQgYmFja2dyb3VuZHM7IG5vIGFudGktYWxpYXNpbmcgYXBwcm94aW1hdGlvbiJ9XSwicmVjb3ZlcnlXcml0ZXMiOjAsImNhbm9uaWNhbFJldmlzaW9uVW5jaGFuZ2VkIjp0cnVlLCJzY29wZSI6Ikhpc3Rvcnkgb2JzZXJ2YXRpb24gZGlzdGluY3Rpb24gYW5kIG5hdGl2ZSByZXRyeSBvbmx5In0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "62943bf3acd23bb0ef02-f89639e186744875b416",
+          "file": "source-recovery-accessibility.spec.ts",
+          "line": 365,
+          "column": 9
+        },
+        {
+          "title": "recovery accessibility: history out-of-window response at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2975,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T22:06:08.710Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "recovery-history.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJtb2RlIjoib3V0LW9mLXdpbmRvdyByZXNwb25zZSIsImZpeHR1cmUiOiJPdXQtb2Ytd2luZG93SFRUUDIwMCBoaXN0b3J5IHJlc3BvbnNlIGZpeHR1cmUsIHRoZW4gYWN0dWFsIGJhY2tlbmQgaGlzdG9yeSBvbiByZXRyeSIsImhpc3RvcnlSZXF1ZXN0cyI6MiwibWVhc3VyZW1lbnRzIjpbeyJsYWJlbCI6IlVuYXZhaWxhYmxlIHJlY292ZXJ5IGhpc3RvcnkgZ3VpZGFuY2UiLCJ0ZXh0IjoiQ291bGQgbm90IGNoZWNrIHJldmlzaW9uIGhpc3RvcnkuIFJlc3RvcmF0aW9uIGF2YWlsYWJpbGl0eSBpcyB1bmtub3duLiBUaGUgaGlzdG9yeSByZXNwb25zZSBkaWQgbm90IGNvbnRhaW4gYSB2YWxpZCByZXZpc2lvbiBsaXN0LiBSZXRyeSB0aGUgaGlzdG9yeSBsb29rdXAuIiwiY29sb3IiOiJyZ2IoMTYxLCA4OSwgODEpIiwiZm9udFNpemUiOiIxMnB4IiwiZm9udFdlaWdodCI6IjQwMCIsInRocmVzaG9sZCI6NC41LCJzY29wZSI6IlNlbGVjdGVkIG5vcm1hbC1zaXplIHJlbmRlcmVkIHRleHQ7IG5vIG92ZXJhbGwgYWNjZXNzaWJpbGl0eSBjZXJ0aWZpY2F0aW9uIiwic3VwcG9ydGVkIjp0cnVlLCJsYXllcnMiOlsicmdiYSgwLCAwLCAwLCAwKSIsInJnYmEoMCwgMCwgMCwgMCkiLCJyZ2JhKDAsIDAsIDAsIDApIiwicmdiKDI1NSwgMjQzLCAyNDIpIl0sImJhY2tncm91bmQiOlsxLDAuOTUyOTQxMTc2NDcwNTg4MiwwLjk0OTAxOTYwNzg0MzEzNzIsMV0sImNvbXBvc2l0ZWRGb3JlZ3JvdW5kIjpbMC42MzEzNzI1NDkwMTk2MDc4LDAuMzQ5MDE5NjA3ODQzMTM3MjQsMC4zMTc2NDcwNTg4MjM1Mjk0LDFdLCJyYXRpbyI6NC43NjMzNjA5MTYxNTU3NzIsInBhc3NlZCI6dHJ1ZSwiYXNzdW1wdGlvbnMiOiJDU1Mgc1JHQiBjb2xvcnM7IGFscGhhIGNvbXBvc2l0ZWQgdGhyb3VnaCBleHBsaWNpdCBiYWNrZ3JvdW5kczsgbm8gYW50aS1hbGlhc2luZyBhcHByb3hpbWF0aW9uIn1dLCJyZWNvdmVyeVdyaXRlcyI6MCwiY2Fub25pY2FsUmV2aXNpb25VbmNoYW5nZWQiOnRydWUsInNjb3BlIjoiSGlzdG9yeSBvYnNlcnZhdGlvbiBkaXN0aW5jdGlvbiBhbmQgbmF0aXZlIHJldHJ5IG9ubHkifQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "62943bf3acd23bb0ef02-9072834cde9420ab9017",
+          "file": "source-recovery-accessibility.spec.ts",
+          "line": 365,
+          "column": 9
+        },
+        {
+          "title": "recovery accessibility: history absent response at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2101,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T22:06:11.692Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "recovery-history.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJtb2RlIjoiYWJzZW50IHJlc3BvbnNlIiwiZml4dHVyZSI6IlN1Y2Nlc3NmdWwyMDAgYWJzZW50LWhpc3RvcnkgcmVzcG9uc2UgZml4dHVyZSwgbm90IGFjdHVhbCBsZWdhY3ktcHJvamVjdCBhY2NlcHRhbmNlIiwiaGlzdG9yeVJlcXVlc3RzIjoxLCJtZWFzdXJlbWVudHMiOlt7ImxhYmVsIjoiQWJzZW50IHJlY292ZXJ5IGhpc3RvcnkgZ3VpZGFuY2UiLCJ0ZXh0IjoiTm8gcmVjb3JkZWQgY29weSBpcyBhdmFpbGFibGUgZm9yIHJldmlzaW9uIDEsIHNvIGl0IGNhbm5vdCBiZSByZXN0b3JlZCBoZXJlLiBBZG9wdGluZyB0aGUgZXh0ZXJuYWwgY2hhbmdlcyByZW1haW5zIGF2YWlsYWJsZS4iLCJjb2xvciI6InJnYigxNjEsIDg5LCA4MSkiLCJmb250U2l6ZSI6IjExcHgiLCJmb250V2VpZ2h0IjoiNDAwIiwidGhyZXNob2xkIjo0LjUsInNjb3BlIjoiU2VsZWN0ZWQgbm9ybWFsLXNpemUgcmVuZGVyZWQgdGV4dDsgbm8gb3ZlcmFsbCBhY2Nlc3NpYmlsaXR5IGNlcnRpZmljYXRpb24iLCJzdXBwb3J0ZWQiOnRydWUsImxheWVycyI6WyJyZ2JhKDAsIDAsIDAsIDApIiwicmdiYSgwLCAwLCAwLCAwKSIsInJnYmEoMCwgMCwgMCwgMCkiLCJyZ2IoMjU1LCAyNDMsIDI0MikiXSwiYmFja2dyb3VuZCI6WzEsMC45NTI5NDExNzY0NzA1ODgyLDAuOTQ5MDE5NjA3ODQzMTM3MiwxXSwiY29tcG9zaXRlZEZvcmVncm91bmQiOlswLjYzMTM3MjU0OTAxOTYwNzgsMC4zNDkwMTk2MDc4NDMxMzcyNCwwLjMxNzY0NzA1ODgyMzUyOTQsMV0sInJhdGlvIjo0Ljc2MzM2MDkxNjE1NTc3MiwicGFzc2VkIjp0cnVlLCJhc3N1bXB0aW9ucyI6IkNTUyBzUkdCIGNvbG9yczsgYWxwaGEgY29tcG9zaXRlZCB0aHJvdWdoIGV4cGxpY2l0IGJhY2tncm91bmRzOyBubyBhbnRpLWFsaWFzaW5nIGFwcHJveGltYXRpb24ifV0sInJlY292ZXJ5V3JpdGVzIjowLCJjYW5vbmljYWxSZXZpc2lvblVuY2hhbmdlZCI6dHJ1ZSwic2NvcGUiOiJIaXN0b3J5IG9ic2VydmF0aW9uIGRpc3RpbmN0aW9uIGFuZCBuYXRpdmUgcmV0cnkgb25seSJ9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "62943bf3acd23bb0ef02-c3f3dd4aa01bd6a83549",
+          "file": "source-recovery-accessibility.spec.ts",
+          "line": 365,
+          "column": 9
+        },
+        {
+          "title": "recovery accessibility: late modified recovery preserves Home at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2358,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T22:06:13.799Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "recovery-completion.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJicm9rZW4iOmZhbHNlLCJtb2RlIjoiSG9tZSIsIndyaXRlcyI6W3siYm9keSI6eyJleHBlY3RlZFJldmlzaW9uIjoxLCJhY3Rpb24iOiJyZXN0b3JlX3JldmlzaW9uIiwicmV2aXNpb24iOjF9LCJpZk1hdGNoIjoiXCIxXCIifV0sImNvbW1pdHRlZFJldmlzaW9uIjoyLCJsYXRlc3RSZXZpc2lvbiI6MiwibmV3ZXJIaXN0b3J5IjpudWxsLCJyZWFkeUlkIjpudWxsLCJvd25Qcm9qZWN0UnVuU2V0VW5jaGFuZ2VkIjp0cnVlLCJzY29wZSI6IkhlbGQgYWN0dWFsIGNvbW1pdHRlZCByZWNvdmVyeSByZXNwb25zZTsgcHJlc2VydmUgY3VycmVudCBjb250ZXh0OyBubyBTdGFydCJ9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "62943bf3acd23bb0ef02-30268977762d334f901a",
+          "file": "source-recovery-accessibility.spec.ts",
+          "line": 507,
+          "column": 11
+        },
+        {
+          "title": "recovery accessibility: late modified recovery preserves newer head at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4675,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T22:06:16.163Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "recovery-completion.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJicm9rZW4iOmZhbHNlLCJtb2RlIjoibmV3ZXIgaGVhZCIsIndyaXRlcyI6W3siYm9keSI6eyJleHBlY3RlZFJldmlzaW9uIjoxLCJhY3Rpb24iOiJyZXN0b3JlX3JldmlzaW9uIiwicmV2aXNpb24iOjF9LCJpZk1hdGNoIjoiXCIxXCIifV0sImNvbW1pdHRlZFJldmlzaW9uIjoyLCJsYXRlc3RSZXZpc2lvbiI6MywibmV3ZXJIaXN0b3J5Ijoie1widW5kb1wiOlt7XCJ0YXJnZXRcIjoyLFwiYXRcIjozLFwibGFiZWxcIjpcInNldCBwYXJhbWV0ZXJcIn1dLFwicmVkb1wiOltdfSIsInJlYWR5SWQiOm51bGwsIm93blByb2plY3RSdW5TZXRVbmNoYW5nZWQiOnRydWUsInNjb3BlIjoiSGVsZCBhY3R1YWwgY29tbWl0dGVkIHJlY292ZXJ5IHJlc3BvbnNlOyBwcmVzZXJ2ZSBjdXJyZW50IGNvbnRleHQ7IG5vIFN0YXJ0In0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "62943bf3acd23bb0ef02-ad490c8169216f5a1dd5",
+          "file": "source-recovery-accessibility.spec.ts",
+          "line": 507,
+          "column": 11
+        },
+        {
+          "title": "recovery accessibility: late modified recovery preserves newer readiness at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4344,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T22:06:20.844Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "recovery-completion.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJicm9rZW4iOmZhbHNlLCJtb2RlIjoibmV3ZXIgcmVhZGluZXNzIiwid3JpdGVzIjpbeyJib2R5Ijp7ImV4cGVjdGVkUmV2aXNpb24iOjEsImFjdGlvbiI6InJlc3RvcmVfcmV2aXNpb24iLCJyZXZpc2lvbiI6MX0sImlmTWF0Y2giOiJcIjFcIiJ9XSwiY29tbWl0dGVkUmV2aXNpb24iOjIsImxhdGVzdFJldmlzaW9uIjoyLCJuZXdlckhpc3RvcnkiOm51bGwsInJlYWR5SWQiOiJwZi0yNGJjNjQyMi0wNGJjLTQwZjktOTZhOC0zOTRlZjhkMzExMWUiLCJvd25Qcm9qZWN0UnVuU2V0VW5jaGFuZ2VkIjp0cnVlLCJzY29wZSI6IkhlbGQgYWN0dWFsIGNvbW1pdHRlZCByZWNvdmVyeSByZXNwb25zZTsgcHJlc2VydmUgY3VycmVudCBjb250ZXh0OyBubyBTdGFydCJ9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "62943bf3acd23bb0ef02-1204b8b5bf46482871c0",
+          "file": "source-recovery-accessibility.spec.ts",
+          "line": 507,
+          "column": 11
+        },
+        {
+          "title": "recovery accessibility: late modified recovery preserves deliberate focus at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2479,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T22:06:25.197Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "recovery-completion.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJicm9rZW4iOmZhbHNlLCJtb2RlIjoiZGVsaWJlcmF0ZSBmb2N1cyIsIndyaXRlcyI6W3siYm9keSI6eyJleHBlY3RlZFJldmlzaW9uIjoxLCJhY3Rpb24iOiJyZXN0b3JlX3JldmlzaW9uIiwicmV2aXNpb24iOjF9LCJpZk1hdGNoIjoiXCIxXCIifV0sImNvbW1pdHRlZFJldmlzaW9uIjoyLCJsYXRlc3RSZXZpc2lvbiI6MiwibmV3ZXJIaXN0b3J5IjpudWxsLCJyZWFkeUlkIjpudWxsLCJvd25Qcm9qZWN0UnVuU2V0VW5jaGFuZ2VkIjp0cnVlLCJzY29wZSI6IkhlbGQgYWN0dWFsIGNvbW1pdHRlZCByZWNvdmVyeSByZXNwb25zZTsgcHJlc2VydmUgY3VycmVudCBjb250ZXh0OyBubyBTdGFydCJ9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "62943bf3acd23bb0ef02-41b516d4e4b07d13f9f3",
+          "file": "source-recovery-accessibility.spec.ts",
+          "line": 507,
+          "column": 11
+        },
+        {
+          "title": "recovery accessibility: late modified recovery preserves repeat submit at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2171,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T22:06:27.682Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "recovery-completion.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJicm9rZW4iOmZhbHNlLCJtb2RlIjoicmVwZWF0IHN1Ym1pdCIsIndyaXRlcyI6W3siYm9keSI6eyJleHBlY3RlZFJldmlzaW9uIjoxLCJhY3Rpb24iOiJyZXN0b3JlX3JldmlzaW9uIiwicmV2aXNpb24iOjF9LCJpZk1hdGNoIjoiXCIxXCIifV0sImNvbW1pdHRlZFJldmlzaW9uIjoyLCJsYXRlc3RSZXZpc2lvbiI6MiwibmV3ZXJIaXN0b3J5IjpudWxsLCJyZWFkeUlkIjpudWxsLCJvd25Qcm9qZWN0UnVuU2V0VW5jaGFuZ2VkIjp0cnVlLCJzY29wZSI6IkhlbGQgYWN0dWFsIGNvbW1pdHRlZCByZWNvdmVyeSByZXNwb25zZTsgcHJlc2VydmUgY3VycmVudCBjb250ZXh0OyBubyBTdGFydCJ9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "62943bf3acd23bb0ef02-1a2fb92ea2c5dca54ff6",
+          "file": "source-recovery-accessibility.spec.ts",
+          "line": 507,
+          "column": 11
+        },
+        {
+          "title": "recovery accessibility: late unreadable recovery preserves Home at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2410,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T22:06:29.863Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "recovery-completion.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJicm9rZW4iOnRydWUsIm1vZGUiOiJIb21lIiwid3JpdGVzIjpbeyJib2R5Ijp7ImV4cGVjdGVkUmV2aXNpb24iOjEsImFjdGlvbiI6InJlc3RvcmVfcmV2aXNpb24iLCJyZXZpc2lvbiI6MX0sImlmTWF0Y2giOiJcIjFcIiJ9XSwiY29tbWl0dGVkUmV2aXNpb24iOjIsImxhdGVzdFJldmlzaW9uIjoyLCJuZXdlckhpc3RvcnkiOm51bGwsInJlYWR5SWQiOm51bGwsIm93blByb2plY3RSdW5TZXRVbmNoYW5nZWQiOnRydWUsInNjb3BlIjoiSGVsZCBhY3R1YWwgY29tbWl0dGVkIHJlY292ZXJ5IHJlc3BvbnNlOyBwcmVzZXJ2ZSBjdXJyZW50IGNvbnRleHQ7IG5vIFN0YXJ0In0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "62943bf3acd23bb0ef02-8070e88dc7756a960f11",
+          "file": "source-recovery-accessibility.spec.ts",
+          "line": 507,
+          "column": 11
+        },
+        {
+          "title": "recovery accessibility: late unreadable recovery preserves newer head at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4507,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T22:06:32.285Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "recovery-completion.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJicm9rZW4iOnRydWUsIm1vZGUiOiJuZXdlciBoZWFkIiwid3JpdGVzIjpbeyJib2R5Ijp7ImV4cGVjdGVkUmV2aXNpb24iOjEsImFjdGlvbiI6InJlc3RvcmVfcmV2aXNpb24iLCJyZXZpc2lvbiI6MX0sImlmTWF0Y2giOiJcIjFcIiJ9XSwiY29tbWl0dGVkUmV2aXNpb24iOjIsImxhdGVzdFJldmlzaW9uIjozLCJuZXdlckhpc3RvcnkiOiJ7XCJ1bmRvXCI6W3tcInRhcmdldFwiOjIsXCJhdFwiOjMsXCJsYWJlbFwiOlwic2V0IHBhcmFtZXRlclwifV0sXCJyZWRvXCI6W119IiwicmVhZHlJZCI6bnVsbCwib3duUHJvamVjdFJ1blNldFVuY2hhbmdlZCI6dHJ1ZSwic2NvcGUiOiJIZWxkIGFjdHVhbCBjb21taXR0ZWQgcmVjb3ZlcnkgcmVzcG9uc2U7IHByZXNlcnZlIGN1cnJlbnQgY29udGV4dDsgbm8gU3RhcnQifQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "62943bf3acd23bb0ef02-102e9f99874d5b64b74b",
+          "file": "source-recovery-accessibility.spec.ts",
+          "line": 507,
+          "column": 11
+        },
+        {
+          "title": "recovery accessibility: late unreadable recovery preserves newer readiness at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4457,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T22:06:36.800Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "recovery-completion.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJicm9rZW4iOnRydWUsIm1vZGUiOiJuZXdlciByZWFkaW5lc3MiLCJ3cml0ZXMiOlt7ImJvZHkiOnsiZXhwZWN0ZWRSZXZpc2lvbiI6MSwiYWN0aW9uIjoicmVzdG9yZV9yZXZpc2lvbiIsInJldmlzaW9uIjoxfSwiaWZNYXRjaCI6IlwiMVwiIn1dLCJjb21taXR0ZWRSZXZpc2lvbiI6MiwibGF0ZXN0UmV2aXNpb24iOjIsIm5ld2VySGlzdG9yeSI6bnVsbCwicmVhZHlJZCI6InBmLTllMjc4NWRmLTllYmUtNDBkOS04N2NlLTE0ZDVlMjlmOGYzNyIsIm93blByb2plY3RSdW5TZXRVbmNoYW5nZWQiOnRydWUsInNjb3BlIjoiSGVsZCBhY3R1YWwgY29tbWl0dGVkIHJlY292ZXJ5IHJlc3BvbnNlOyBwcmVzZXJ2ZSBjdXJyZW50IGNvbnRleHQ7IG5vIFN0YXJ0In0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "62943bf3acd23bb0ef02-77171a4487a054ff4211",
+          "file": "source-recovery-accessibility.spec.ts",
+          "line": 507,
+          "column": 11
+        },
+        {
+          "title": "recovery accessibility: late unreadable recovery preserves deliberate focus at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1954,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T22:06:41.265Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "recovery-completion.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJicm9rZW4iOnRydWUsIm1vZGUiOiJkZWxpYmVyYXRlIGZvY3VzIiwid3JpdGVzIjpbeyJib2R5Ijp7ImV4cGVjdGVkUmV2aXNpb24iOjEsImFjdGlvbiI6InJlc3RvcmVfcmV2aXNpb24iLCJyZXZpc2lvbiI6MX0sImlmTWF0Y2giOiJcIjFcIiJ9XSwiY29tbWl0dGVkUmV2aXNpb24iOjIsImxhdGVzdFJldmlzaW9uIjoyLCJuZXdlckhpc3RvcnkiOm51bGwsInJlYWR5SWQiOm51bGwsIm93blByb2plY3RSdW5TZXRVbmNoYW5nZWQiOnRydWUsInNjb3BlIjoiSGVsZCBhY3R1YWwgY29tbWl0dGVkIHJlY292ZXJ5IHJlc3BvbnNlOyBwcmVzZXJ2ZSBjdXJyZW50IGNvbnRleHQ7IG5vIFN0YXJ0In0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "62943bf3acd23bb0ef02-39ec6636e05da596c6d6",
+          "file": "source-recovery-accessibility.spec.ts",
+          "line": 507,
+          "column": 11
+        },
+        {
+          "title": "recovery accessibility: real stale refusal current at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3075,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T22:06:43.225Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "recovery-refusal.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJkZXBhcnRlZCI6ZmFsc2UsInN0YXR1cyI6NDEyLCJhZHZhbmNlZFJldmlzaW9uIjoyLCJyZWZ1c2VkUmVxdWVzdERpZE5vdE11dGF0ZSI6dHJ1ZSwic2NvcGUiOiJBY3R1YWwgc2Vjb25kLXNlc3Npb24gcmVjb3ZlcnkgZm9sbG93ZWQgYnkgc3RhbGUgVUkgcmVmdXNhbDsgbm8gU3RhcnQifQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "62943bf3acd23bb0ef02-e123705451315e3434d9",
+          "file": "source-recovery-accessibility.spec.ts",
+          "line": 665,
+          "column": 9
+        },
+        {
+          "title": "recovery accessibility: real stale refusal after departure at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1895,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T22:06:46.307Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "recovery-refusal.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJkZXBhcnRlZCI6dHJ1ZSwic3RhdHVzIjo0MTIsImFkdmFuY2VkUmV2aXNpb24iOjIsInJlZnVzZWRSZXF1ZXN0RGlkTm90TXV0YXRlIjp0cnVlLCJzY29wZSI6IkFjdHVhbCBzZWNvbmQtc2Vzc2lvbiByZWNvdmVyeSBmb2xsb3dlZCBieSBzdGFsZSBVSSByZWZ1c2FsOyBubyBTdGFydCJ9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "62943bf3acd23bb0ef02-bf596f29bfba9d1d73dc",
+          "file": "source-recovery-accessibility.spec.ts",
+          "line": 665,
+          "column": 9
+        },
+        {
+          "title": "recovery accessibility: unreadable target replaces previous project context at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2446,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T22:06:48.208Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "recovery-previous-project.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJwcmV2aW91c1Byb2plY3RJZCI6InByai0zMmQwMDgxNS02ZjVhLTRjZTUtYTE0NS04OThhYThlZWNhODAiLCJyZWNvdmVyZWRQcm9qZWN0SWQiOiJwcmotMjEwYTUwNTktNWYwMC00ODA0LWI5MzItMjA1YjBkMDJkMjQyIiwiZGlzdGluY3RJZGVudGl0aWVzIjp0cnVlLCJwcmV2aW91c0Nhbm9uaWNhbERvY3VtZW50c1VuY2hhbmdlZCI6dHJ1ZSwicmVjb3ZlcmVkSW5pdGlhbFZpZXciOiJNb2RlbCIsImFjdHVhbENyZWF0aW9uVGhlblVucmVhZGFibGVMb2FkIjp0cnVlLCJzY29wZSI6Ik93bmVkIGZpeHR1cmUgYnJlYWtzIG9ubHkgdGhlIG5ld2x5IGNyZWF0ZWQgcHJvamVjdCdzIHNvdXJjZSBiZWZvcmUgaXRzIGZpcnN0IFVJIHJlYWQ7IHByZXZpb3VzIHdvcmtzcGFjZSByZW1haW5zIHJlbmRlcmVkOyBubyBTdGFydCJ9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "62943bf3acd23bb0ef02-6af0bfd130534b334522",
+          "file": "source-recovery-accessibility.spec.ts",
+          "line": 770,
+          "column": 7
+        },
+        {
+          "title": "recovery accessibility: unreadable target replaces previous project context at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2409,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T22:06:50.660Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "recovery-previous-project.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJwcmV2aW91c1Byb2plY3RJZCI6InByai01NGQwMTgxOC0yYjE1LTQ5ZjAtOWYzZS05ODg4YzA1YjM1YWEiLCJyZWNvdmVyZWRQcm9qZWN0SWQiOiJwcmotMzdlZmI1YzQtN2RhYi00MGIwLWE5ODItYjBiNWQyYTM2MmVjIiwiZGlzdGluY3RJZGVudGl0aWVzIjp0cnVlLCJwcmV2aW91c0Nhbm9uaWNhbERvY3VtZW50c1VuY2hhbmdlZCI6dHJ1ZSwicmVjb3ZlcmVkSW5pdGlhbFZpZXciOiJNb2RlbCIsImFjdHVhbENyZWF0aW9uVGhlblVucmVhZGFibGVMb2FkIjp0cnVlLCJzY29wZSI6Ik93bmVkIGZpeHR1cmUgYnJlYWtzIG9ubHkgdGhlIG5ld2x5IGNyZWF0ZWQgcHJvamVjdCdzIHNvdXJjZSBiZWZvcmUgaXRzIGZpcnN0IFVJIHJlYWQ7IHByZXZpb3VzIHdvcmtzcGFjZSByZW1haW5zIHJlbmRlcmVkOyBubyBTdGFydCJ9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "62943bf3acd23bb0ef02-fe5bd1e6d86130f46690",
+          "file": "source-recovery-accessibility.spec.ts",
+          "line": 770,
+          "column": 7
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-26T22:04:07.063Z",
+    "duration": 166054.245,
+    "expected": 55,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

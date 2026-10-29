@@ -1,0 +1,204 @@
+..................E............                                          [100%]
+==================================== ERRORS ====================================
+_ ERROR at teardown of test_start_rechecks_admission_before_any_dispatch[resources-RESOURCE_BUSY-409] _
+
+tmp_path = PosixPath('<workspace>/.studio-local/preflight-admission-successor/test_start_rechecks_admission_2')
+
+    @pytest.fixture
+    def client(tmp_path):
+        from xverse_studio.api.app import create_app
+
+        app = create_app(
+            tmp_path, allowed_hosts=["testserver"], bootstrap_token="test-bootstrap"
+        )
+>       with TestClient(app, base_url="http://testserver") as c:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/conftest.py:15:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv/lib/python3.13/site-packages/starlette/testclient.py:584: in __exit__
+    self.exit_stack.close()
+<python-toolchain>/lib/python3.13/contextlib.py:627: in close
+    self.__exit__(None, None, None)
+<python-toolchain>/lib/python3.13/contextlib.py:619: in __exit__
+    raise exc
+<python-toolchain>/lib/python3.13/contextlib.py:604: in __exit__
+    if cb(*exc_details):
+       ^^^^^^^^^^^^^^^^
+<python-toolchain>/lib/python3.13/contextlib.py:482: in _exit_wrapper
+    callback(*args, **kwds)
+.venv/lib/python3.13/site-packages/starlette/testclient.py:576: in wait_shutdown
+    portal.call(self.wait_shutdown)
+.venv/lib/python3.13/site-packages/anyio/from_thread.py:340: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<python-toolchain>/lib/python3.13/concurrent/futures/_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+<python-toolchain>/lib/python3.13/concurrent/futures/_base.py:401: in __get_result
+    raise self._exception
+.venv/lib/python3.13/site-packages/anyio/from_thread.py:265: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/starlette/testclient.py:624: in wait_shutdown
+    await receive()
+.venv/lib/python3.13/site-packages/starlette/testclient.py:614: in receive
+    self.task.result()
+<python-toolchain>/lib/python3.13/concurrent/futures/_base.py:449: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+<python-toolchain>/lib/python3.13/concurrent/futures/_base.py:401: in __get_result
+    raise self._exception
+.venv/lib/python3.13/site-packages/anyio/from_thread.py:265: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/starlette/testclient.py:589: in lifespan
+    await self.app(scope, self.stream_receive.receive, self.stream_send.send)
+.venv/lib/python3.13/site-packages/fastapi/applications.py:1160: in __call__
+    await super().__call__(scope, receive, send)
+.venv/lib/python3.13/site-packages/starlette/applications.py:96: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv/lib/python3.13/site-packages/starlette/middleware/errors.py:151: in __call__
+    await self.app(scope, receive, send)
+.venv/lib/python3.13/site-packages/starlette/middleware/base.py:103: in __call__
+    await self.app(scope, receive, send)
+.venv/lib/python3.13/site-packages/starlette/middleware/exceptions.py:49: in __call__
+    await self.app(scope, receive, send)
+.venv/lib/python3.13/site-packages/fastapi/middleware/asyncexitstack.py:18: in __call__
+    await self.app(scope, receive, send)
+.venv/lib/python3.13/site-packages/starlette/routing.py:683: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv/lib/python3.13/site-packages/starlette/routing.py:692: in app
+    await self.lifespan(scope, receive, send)
+.venv/lib/python3.13/site-packages/starlette/routing.py:661: in lifespan
+    async with self.lifespan_context(app) as maybe_state:
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+<python-toolchain>/lib/python3.13/contextlib.py:221: in __aexit__
+    await anext(self.gen)
+services/studio-api/src/xverse_studio/api/app.py:114: in lifespan
+    await asyncio.to_thread(runs.shutdown)
+<python-toolchain>/lib/python3.13/asyncio/threads.py:25: in to_thread
+    return await loop.run_in_executor(None, func_call)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<python-toolchain>/lib/python3.13/concurrent/futures/thread.py:59: in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+services/studio-api/src/xverse_studio/runs/service.py:651: in shutdown
+    run = self.read(r["runId"])
+          ^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <xverse_studio.runs.service.Runs object at 0x752fcb087a10>
+rid = 'occupied-3'
+
+    def read(self, rid):
+        with self.store.lock:
+            run = self.store.get("run", rid)
+            root = self.directory(rid)
+            statepath = root / "state.json"
+            observed = None
+            try:
+                if statepath.exists():
+                    observed = json.loads(statepath.read_text())
+                if observed and observed.get("ownerDigest") != run.get("ownerDigest"):
+                    observed = None
+                if observed:
+                    if (
+                        run.get("pid") is None
+                        and observed.get("pid")
+                        and observed.get("createTime")
+                    ):
+                        candidate = psutil.Process(observed["pid"])
+                        argv = candidate.cmdline()
+                        if abs(
+                            candidate.create_time() - observed["createTime"]
+                        ) <= 0.001 and digest(argv) == run.get(
+                            "launchArgvDigest",
+                            digest(
+                                [
+                                    sys.executable,
+                                    "-I",
+                                    "-m",
+                                    "xverse_studio.providers.worker",
+                                    str(root),
+                                ]
+                            ),
+                        ):
+                            run.update(
+                                pid=observed["pid"], createTime=observed["createTime"]
+                            )
+                        else:
+                            observed = None
+                    elif run.get("pid") != observed.get("pid") or run.get(
+                        "createTime"
+                    ) != observed.get("createTime"):
+                        observed = None
+                if observed and observed["state"] not in ("stopped", "failed"):
+                    process = psutil.Process(observed["pid"])
+                    if (
+                        abs(process.create_time() - observed["createTime"]) > 0.001
+                        or not process.is_running()
+                        or process.status() == psutil.STATUS_ZOMBIE
+                    ):
+                        observed = None
+            except (OSError, ValueError, psutil.Error):
+                observed = None
+            if observed:
+                run.update(
+                    {
+                        k: observed[k]
+                        for k in (
+                            "state",
+                            "stateVersion",
+                            "cleanup",
+                            "evidence",
+                            "reason",
+                            "effectivePlanDigest",
+                            "effectiveSemanticDigest",
+                            "startedAt",
+                            "endedAt",
+                            "journalDigest",
+                            "eventCount",
+                        )
+                        if k in observed
+                    }
+                )
+                op = self.store.get("operation", run["operationId"])
+                op["status"] = "completed"
+                op["result"] = {
+                    "effectivePlanDigest": observed.get("effectivePlanDigest")
+                }
+                self.store.put("operation", op["operationId"], op)
+                for oid, result in observed.get("commandResults", {}).items():
+                    try:
+                        op = self.store.get("operation", oid)
+                        op.update(result)
+                        self.store.put("operation", oid, op)
+                    except Problem:
+                        pass
+            elif run["state"] in ACTIVE:
+                if (
+                    run.get("state") == "preparing"
+                    and time.time() - run["createdAt"] < 5
+                ):
+                    return run
+                run.update(
+                    state="unknown",
+                    cleanup="unknown",
+                    evidence="partial",
+                    reason="OWNERSHIP_UNKNOWN",
+                )
+>               op = self.store.get("operation", run["operationId"])
+                                                 ^^^^^^^^^^^^^^^^^^
+E               KeyError: 'operationId'
+
+services/studio-api/src/xverse_studio/runs/service.py:564: KeyError
+=============================== warnings summary ===============================
+.venv/lib/python3.13/site-packages/fastapi/testclient.py:1
+  <workspace>/.venv/lib/python3.13/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+ERROR tests/integration/test_preflight.py::test_start_rechecks_admission_before_any_dispatch[resources-RESOURCE_BUSY-409]
+30 passed, 1 warning, 1 error in 50.30s

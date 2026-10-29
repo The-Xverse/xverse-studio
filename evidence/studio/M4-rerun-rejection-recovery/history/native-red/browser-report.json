@@ -1,0 +1,264 @@
+{
+  "config": {
+    "argv": [
+      "<loop-cache>/node-v24.22.1-linux-x64/bin/node",
+      "<repo>/node_modules/@playwright/test/cli.js",
+      "test",
+      "-c",
+      "<repo>/.studio-local/rejected-rerun-context/playwright.config.ts"
+    ],
+    "configFile": "<repo>/.studio-local/rejected-rerun-context/playwright.config.ts",
+    "rootDir": "<repo>/.studio-local/rejected-rerun-context",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "<repo>/.studio-local/rejected-rerun-context/native-red/browser-output",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "<repo>/.studio-local/rejected-rerun-context",
+        "testIgnore": [],
+        "testMatch": [
+          "probe.spec.ts"
+        ],
+        "timeout": 90000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "<repo>/.studio-local/rejected-rerun-context/native-red/browser-output",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "<repo>/.studio-local/rejected-rerun-context",
+        "snapshotDir": "<repo>/.studio-local/rejected-rerun-context",
+        "testIgnore": [],
+        "testMatch": "probe.spec.ts",
+        "timeout": 90000,
+        "use": {
+          "baseURL": "http://127.0.0.1:46859",
+          "browserName": "chromium",
+          "actionTimeout": 15000,
+          "screenshot": "only-on-failure",
+          "trace": "off",
+          "video": "off"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "<repo>/.studio-local/rejected-rerun-context/native-red/browser-report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "probe.spec.ts",
+      "file": "probe.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "rejected rerun: actual capacity release permits explicit new admission at 1024",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 13290,
+                  "error": {
+                    "message": "Error: Explicit rerun after verified rejection and real capacity release should receive fresh admission.\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"\u001b[7mcomple\u001b[27mted\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mrejec\u001b[27mted\"\u001b[39m",
+                    "stack": "Error: Explicit rerun after verified rejection and real capacity release should receive fresh admission.\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"\u001b[7mcomple\u001b[27mted\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mrejec\u001b[27mted\"\u001b[39m\n    at <repo>/.studio-local/rejected-rerun-context/probe.spec.ts:41:125",
+                    "location": {
+                      "file": "<repo>/.studio-local/rejected-rerun-context/probe.spec.ts",
+                      "column": 125,
+                      "line": 41
+                    },
+                    "snippet": "  39 |   await info.attach('native-rejected-rerun-recovery',{contentType:'application/json',body:JSON.stringify({scope:'Five actual owned runs; four reach running and are stopped through owned commands. No transport injection or canonical mutation.',width,original,originalSnapshotId:originalRun.snapshotId,busyRunIds:busy,first,second,attempts,canonicalOriginalBytesUnchanged:unchanged})});\n  40 |   expect(unchanged).toBe(true);\n> 41 |   expect(second.status,'Explicit rerun after verified rejection and real capacity release should receive fresh admission.').toBe('completed');\n     |                                                                                                                             ^\n  42 |   expect(second.operationId).not.toBe(first.operationId);expect(attempts[1].key).not.toBe(attempts[0].key);\n  43 |   expect(second.result.runId).not.toBe(original);\n  44 |   await expect.poll(async()=>(await traceApi(page,'/runs/'+second.result.runId)).body.state,{timeout:20000}).toBe('stopped');"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/.studio-local/rejected-rerun-context/probe.spec.ts",
+                        "column": 125,
+                        "line": 41
+                      },
+                      "message": "Error: Explicit rerun after verified rejection and real capacity release should receive fresh admission.\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"\u001b[7mcomple\u001b[27mted\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mrejec\u001b[27mted\"\u001b[39m\n\n  39 |   await info.attach('native-rejected-rerun-recovery',{contentType:'application/json',body:JSON.stringify({scope:'Five actual owned runs; four reach running and are stopped through owned commands. No transport injection or canonical mutation.',width,original,originalSnapshotId:originalRun.snapshotId,busyRunIds:busy,first,second,attempts,canonicalOriginalBytesUnchanged:unchanged})});\n  40 |   expect(unchanged).toBe(true);\n> 41 |   expect(second.status,'Explicit rerun after verified rejection and real capacity release should receive fresh admission.').toBe('completed');\n     |                                                                                                                             ^\n  42 |   expect(second.operationId).not.toBe(first.operationId);expect(attempts[1].key).not.toBe(attempts[0].key);\n  43 |   expect(second.result.runId).not.toBe(original);\n  44 |   await expect.poll(async()=>(await traceApi(page,'/runs/'+second.result.runId)).body.state,{timeout:20000}).toBe('stopped');\n    at <repo>/.studio-local/rejected-rerun-context/probe.spec.ts:41:125"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T13:36:32.113Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "native-rejected-rerun-recovery",
+                      "contentType": "application/json",
+                      "body": "eyJzY29wZSI6IkZpdmUgYWN0dWFsIG93bmVkIHJ1bnM7IGZvdXIgcmVhY2ggcnVubmluZyBhbmQgYXJlIHN0b3BwZWQgdGhyb3VnaCBvd25lZCBjb21tYW5kcy4gTm8gdHJhbnNwb3J0IGluamVjdGlvbiBvciBjYW5vbmljYWwgbXV0YXRpb24uIiwid2lkdGgiOjEwMjQsIm9yaWdpbmFsIjoicnVuLWJhNTI5Yzk1LThkYzAtNDQxMy1iNGVmLTA0MzY3N2E5ZDI3ZiIsIm9yaWdpbmFsU25hcHNob3RJZCI6InNuYXAtMjJiZmJkOTQtOTA1YS00MTRkLTlhNzEtZDU5NDM2NzQ0ZTY5IiwiYnVzeVJ1bklkcyI6WyJydW4tYzkwNGMzNTktZjUyMC00YjU5LWE0OGYtYTU5MzVjNTM3ODg3IiwicnVuLWY2NmJmZjNmLTRhYjktNDMxNi04ODk5LTE3NTc5NTYxZTA5MyIsInJ1bi04NDc5OWMwNi1lYTRiLTRjYWMtYTM5ZC0yOWJkYzdmM2VkNjYiLCJydW4tM2Y1OTMzYjQtMjRkNS00NDU5LWI5M2QtOTcyNGE3ZmFlMjE3Il0sImZpcnN0Ijp7ImNyZWF0ZWRBdCI6MTc5MzEwODIwMy4zMjAxNDIzLCJkZWxlZ2F0ZWRBdCI6MTc5MzEwODIwMy4zMjk1MiwiZXJyb3IiOnsiY29kZSI6IlJFU09VUkNFX0JVU1kiLCJtZXNzYWdlIjoiQ3VycmVudCByZWFkLW9ubHkgYWRtaXNzaW9uIGZhY3RzIG5vIGxvbmdlciBhbGxvdyB0aGlzIGV4ZWN1dGlvbi4gUmVjaGVjayB0aGUgaW5kZXBlbmRlbnQgcmVhZGluZXNzIGRpbWVuc2lvbnMuIiwicmV0cnlhYmxlIjpmYWxzZX0sImV2aWRlbmNlU2NvcGUiOiJvd25lZF9yZWZlcmVuY2UiLCJraW5kIjoicmVydW4iLCJtZXNzYWdlIjoiVGhpcyBvcGVyYXRpb24gY3JlYXRlcyBhIG5ldyBydW47IGl0cyBjb21wbGV0aW9uIGRvZXMgbm90IGltcGx5IGV4cGVyaW1lbnQgY29tcGxldGlvbiBvciBhIHBhc3NpbmcgYXNzZXJ0aW9uLiIsIm9wZXJhdGlvbklkIjoib3AtMDczMmYzZWQtZTUzOS00MjYyLWFhMTctMTM4ZGEyNWVkY2Q5IiwicGFyZW50U25hcHNob3RJZCI6InNuYXAtMjJiZmJkOTQtOTA1YS00MTRkLTlhNzEtZDU5NDM2NzQ0ZTY5Iiwic25hcHNob3RJZCI6InNuYXAtMzMxMGMzY2YtODc0My00ZWZmLWE3NTktNWZhMzljMTg3NDkzIiwic291cmNlUnVuSWQiOiJydW4tYmE1MjljOTUtOGRjMC00NDEzLWI0ZWYtMDQzNjc3YTlkMjdmIiwic3RhdHVzIjoicmVqZWN0ZWQifSwic2Vjb25kIjp7ImNyZWF0ZWRBdCI6MTc5MzEwODIwMy4zMjAxNDIzLCJkZWxlZ2F0ZWRBdCI6MTc5MzEwODIwMy4zMjk1MiwiZXJyb3IiOnsiY29kZSI6IlJFU09VUkNFX0JVU1kiLCJtZXNzYWdlIjoiQ3VycmVudCByZWFkLW9ubHkgYWRtaXNzaW9uIGZhY3RzIG5vIGxvbmdlciBhbGxvdyB0aGlzIGV4ZWN1dGlvbi4gUmVjaGVjayB0aGUgaW5kZXBlbmRlbnQgcmVhZGluZXNzIGRpbWVuc2lvbnMuIiwicmV0cnlhYmxlIjpmYWxzZX0sImV2aWRlbmNlU2NvcGUiOiJvd25lZF9yZWZlcmVuY2UiLCJraW5kIjoicmVydW4iLCJtZXNzYWdlIjoiVGhpcyBvcGVyYXRpb24gY3JlYXRlcyBhIG5ldyBydW47IGl0cyBjb21wbGV0aW9uIGRvZXMgbm90IGltcGx5IGV4cGVyaW1lbnQgY29tcGxldGlvbiBvciBhIHBhc3NpbmcgYXNzZXJ0aW9uLiIsIm9wZXJhdGlvbklkIjoib3AtMDczMmYzZWQtZTUzOS00MjYyLWFhMTctMTM4ZGEyNWVkY2Q5IiwicGFyZW50U25hcHNob3RJZCI6InNuYXAtMjJiZmJkOTQtOTA1YS00MTRkLTlhNzEtZDU5NDM2NzQ0ZTY5Iiwic25hcHNob3RJZCI6InNuYXAtMzMxMGMzY2YtODc0My00ZWZmLWE3NTktNWZhMzljMTg3NDkzIiwic291cmNlUnVuSWQiOiJydW4tYmE1MjljOTUtOGRjMC00NDEzLWI0ZWYtMDQzNjc3YTlkMjdmIiwic3RhdHVzIjoicmVqZWN0ZWQifSwiYXR0ZW1wdHMiOlt7ImtleSI6ImRhOWU3ZmIxLTZmZTAtNGMyMS1iOTlhLThhYjYxNjBjYzJjNSIsIm9wZXJhdGlvbklkIjoib3AtMDczMmYzZWQtZTUzOS00MjYyLWFhMTctMTM4ZGEyNWVkY2Q5Iiwic3RhdHVzIjoyMDJ9LHsia2V5IjoiZGE5ZTdmYjEtNmZlMC00YzIxLWI5OWEtOGFiNjE2MGNjMmM1Iiwib3BlcmF0aW9uSWQiOiJvcC0wNzMyZjNlZC1lNTM5LTQyNjItYWExNy0xMzhkYTI1ZWRjZDkiLCJzdGF0dXMiOjIwMn1dLCJjYW5vbmljYWxPcmlnaW5hbEJ5dGVzVW5jaGFuZ2VkIjp0cnVlfQ=="
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/.studio-local/rejected-rerun-context/native-red/browser-output/probe-rejected-rerun-actua-d40f4-licit-new-admission-at-1024/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/.studio-local/rejected-rerun-context/native-red/browser-output/probe-rejected-rerun-actua-d40f4-licit-new-admission-at-1024/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/.studio-local/rejected-rerun-context/probe.spec.ts",
+                    "column": 125,
+                    "line": 41
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "9223f0ac28d4fb57516f-41c37816760211b1d035",
+          "file": "probe.spec.ts",
+          "line": 8,
+          "column": 37
+        },
+        {
+          "title": "rejected rerun: actual capacity release permits explicit new admission at 1440",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 10971,
+                  "error": {
+                    "message": "Error: Explicit rerun after verified rejection and real capacity release should receive fresh admission.\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"\u001b[7mcomple\u001b[27mted\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mrejec\u001b[27mted\"\u001b[39m",
+                    "stack": "Error: Explicit rerun after verified rejection and real capacity release should receive fresh admission.\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"\u001b[7mcomple\u001b[27mted\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mrejec\u001b[27mted\"\u001b[39m\n    at <repo>/.studio-local/rejected-rerun-context/probe.spec.ts:41:125",
+                    "location": {
+                      "file": "<repo>/.studio-local/rejected-rerun-context/probe.spec.ts",
+                      "column": 125,
+                      "line": 41
+                    },
+                    "snippet": "  39 |   await info.attach('native-rejected-rerun-recovery',{contentType:'application/json',body:JSON.stringify({scope:'Five actual owned runs; four reach running and are stopped through owned commands. No transport injection or canonical mutation.',width,original,originalSnapshotId:originalRun.snapshotId,busyRunIds:busy,first,second,attempts,canonicalOriginalBytesUnchanged:unchanged})});\n  40 |   expect(unchanged).toBe(true);\n> 41 |   expect(second.status,'Explicit rerun after verified rejection and real capacity release should receive fresh admission.').toBe('completed');\n     |                                                                                                                             ^\n  42 |   expect(second.operationId).not.toBe(first.operationId);expect(attempts[1].key).not.toBe(attempts[0].key);\n  43 |   expect(second.result.runId).not.toBe(original);\n  44 |   await expect.poll(async()=>(await traceApi(page,'/runs/'+second.result.runId)).body.state,{timeout:20000}).toBe('stopped');"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/.studio-local/rejected-rerun-context/probe.spec.ts",
+                        "column": 125,
+                        "line": 41
+                      },
+                      "message": "Error: Explicit rerun after verified rejection and real capacity release should receive fresh admission.\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"\u001b[7mcomple\u001b[27mted\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mrejec\u001b[27mted\"\u001b[39m\n\n  39 |   await info.attach('native-rejected-rerun-recovery',{contentType:'application/json',body:JSON.stringify({scope:'Five actual owned runs; four reach running and are stopped through owned commands. No transport injection or canonical mutation.',width,original,originalSnapshotId:originalRun.snapshotId,busyRunIds:busy,first,second,attempts,canonicalOriginalBytesUnchanged:unchanged})});\n  40 |   expect(unchanged).toBe(true);\n> 41 |   expect(second.status,'Explicit rerun after verified rejection and real capacity release should receive fresh admission.').toBe('completed');\n     |                                                                                                                             ^\n  42 |   expect(second.operationId).not.toBe(first.operationId);expect(attempts[1].key).not.toBe(attempts[0].key);\n  43 |   expect(second.result.runId).not.toBe(original);\n  44 |   await expect.poll(async()=>(await traceApi(page,'/runs/'+second.result.runId)).body.state,{timeout:20000}).toBe('stopped');\n    at <repo>/.studio-local/rejected-rerun-context/probe.spec.ts:41:125"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T13:36:45.793Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "native-rejected-rerun-recovery",
+                      "contentType": "application/json",
+                      "body": "eyJzY29wZSI6IkZpdmUgYWN0dWFsIG93bmVkIHJ1bnM7IGZvdXIgcmVhY2ggcnVubmluZyBhbmQgYXJlIHN0b3BwZWQgdGhyb3VnaCBvd25lZCBjb21tYW5kcy4gTm8gdHJhbnNwb3J0IGluamVjdGlvbiBvciBjYW5vbmljYWwgbXV0YXRpb24uIiwid2lkdGgiOjE0NDAsIm9yaWdpbmFsIjoicnVuLWRmNTE4N2Y3LWFhYjQtNDBkMC1hMDhmLTZlODQzMmI2YTQ5NSIsIm9yaWdpbmFsU25hcHNob3RJZCI6InNuYXAtOWRjZmMyOTItNTQwMC00ZTNkLWJkMTgtYzNlNzY3YmE1NGYxIiwiYnVzeVJ1bklkcyI6WyJydW4tZGYwMjMyMTgtMmZmOC00Yjg3LWFlNzYtNDg4MzJjZDcxZTgyIiwicnVuLTBhNDhlOGNkLWIyNjEtNDU1My04OWEyLTY4NzRjZGExZDcxMyIsInJ1bi0wZjgwMDYxYy0yZDVmLTQyNDEtOWY2Mi1hODIzZmQ5NmExZTUiLCJydW4tZTkzYTdlMjMtNmUzNi00MzBlLThlNjItZTkyYmMwMWIzYzI4Il0sImZpcnN0Ijp7ImNyZWF0ZWRBdCI6MTc5MzEwODIxNC41NDA0NDkxLCJkZWxlZ2F0ZWRBdCI6MTc5MzEwODIxNC41NTEwNDU0LCJlcnJvciI6eyJjb2RlIjoiUkVTT1VSQ0VfQlVTWSIsIm1lc3NhZ2UiOiJDdXJyZW50IHJlYWQtb25seSBhZG1pc3Npb24gZmFjdHMgbm8gbG9uZ2VyIGFsbG93IHRoaXMgZXhlY3V0aW9uLiBSZWNoZWNrIHRoZSBpbmRlcGVuZGVudCByZWFkaW5lc3MgZGltZW5zaW9ucy4iLCJyZXRyeWFibGUiOmZhbHNlfSwiZXZpZGVuY2VTY29wZSI6Im93bmVkX3JlZmVyZW5jZSIsImtpbmQiOiJyZXJ1biIsIm1lc3NhZ2UiOiJUaGlzIG9wZXJhdGlvbiBjcmVhdGVzIGEgbmV3IHJ1bjsgaXRzIGNvbXBsZXRpb24gZG9lcyBub3QgaW1wbHkgZXhwZXJpbWVudCBjb21wbGV0aW9uIG9yIGEgcGFzc2luZyBhc3NlcnRpb24uIiwib3BlcmF0aW9uSWQiOiJvcC0zZTNkMzI1Yy00YTg5LTQ4OWYtOTdiYi01ZWY0YTI1ZmU2YWEiLCJwYXJlbnRTbmFwc2hvdElkIjoic25hcC05ZGNmYzI5Mi01NDAwLTRlM2QtYmQxOC1jM2U3NjdiYTU0ZjEiLCJzbmFwc2hvdElkIjoic25hcC04NmE2NDU5OC03YTlmLTQzMmMtYTU3Ny1mY2ZmZTNmZWYyY2IiLCJzb3VyY2VSdW5JZCI6InJ1bi1kZjUxODdmNy1hYWI0LTQwZDAtYTA4Zi02ZTg0MzJiNmE0OTUiLCJzdGF0dXMiOiJyZWplY3RlZCJ9LCJzZWNvbmQiOnsiY3JlYXRlZEF0IjoxNzkzMTA4MjE0LjU0MDQ0OTEsImRlbGVnYXRlZEF0IjoxNzkzMTA4MjE0LjU1MTA0NTQsImVycm9yIjp7ImNvZGUiOiJSRVNPVVJDRV9CVVNZIiwibWVzc2FnZSI6IkN1cnJlbnQgcmVhZC1vbmx5IGFkbWlzc2lvbiBmYWN0cyBubyBsb25nZXIgYWxsb3cgdGhpcyBleGVjdXRpb24uIFJlY2hlY2sgdGhlIGluZGVwZW5kZW50IHJlYWRpbmVzcyBkaW1lbnNpb25zLiIsInJldHJ5YWJsZSI6ZmFsc2V9LCJldmlkZW5jZVNjb3BlIjoib3duZWRfcmVmZXJlbmNlIiwia2luZCI6InJlcnVuIiwibWVzc2FnZSI6IlRoaXMgb3BlcmF0aW9uIGNyZWF0ZXMgYSBuZXcgcnVuOyBpdHMgY29tcGxldGlvbiBkb2VzIG5vdCBpbXBseSBleHBlcmltZW50IGNvbXBsZXRpb24gb3IgYSBwYXNzaW5nIGFzc2VydGlvbi4iLCJvcGVyYXRpb25JZCI6Im9wLTNlM2QzMjVjLTRhODktNDg5Zi05N2JiLTVlZjRhMjVmZTZhYSIsInBhcmVudFNuYXBzaG90SWQiOiJzbmFwLTlkY2ZjMjkyLTU0MDAtNGUzZC1iZDE4LWMzZTc2N2JhNTRmMSIsInNuYXBzaG90SWQiOiJzbmFwLTg2YTY0NTk4LTdhOWYtNDMyYy1hNTc3LWZjZmZlM2ZlZjJjYiIsInNvdXJjZVJ1bklkIjoicnVuLWRmNTE4N2Y3LWFhYjQtNDBkMC1hMDhmLTZlODQzMmI2YTQ5NSIsInN0YXR1cyI6InJlamVjdGVkIn0sImF0dGVtcHRzIjpbeyJrZXkiOiI0MmE1OWEzNy02MTU1LTRjOGQtYTJhOC05OTlkZTNjYzFlOTYiLCJvcGVyYXRpb25JZCI6Im9wLTNlM2QzMjVjLTRhODktNDg5Zi05N2JiLTVlZjRhMjVmZTZhYSIsInN0YXR1cyI6MjAyfSx7ImtleSI6IjQyYTU5YTM3LTYxNTUtNGM4ZC1hMmE4LTk5OWRlM2NjMWU5NiIsIm9wZXJhdGlvbklkIjoib3AtM2UzZDMyNWMtNGE4OS00ODlmLTk3YmItNWVmNGEyNWZlNmFhIiwic3RhdHVzIjoyMDJ9XSwiY2Fub25pY2FsT3JpZ2luYWxCeXRlc1VuY2hhbmdlZCI6dHJ1ZX0="
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/.studio-local/rejected-rerun-context/native-red/browser-output/probe-rejected-rerun-actua-aa5ba-licit-new-admission-at-1440/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/.studio-local/rejected-rerun-context/native-red/browser-output/probe-rejected-rerun-actua-aa5ba-licit-new-admission-at-1440/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/.studio-local/rejected-rerun-context/probe.spec.ts",
+                    "column": 125,
+                    "line": 41
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "9223f0ac28d4fb57516f-09f9459eda0c2663b639",
+          "file": "probe.spec.ts",
+          "line": 8,
+          "column": 37
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-27T13:36:31.673Z",
+    "duration": 25185.701999999997,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  }
+}

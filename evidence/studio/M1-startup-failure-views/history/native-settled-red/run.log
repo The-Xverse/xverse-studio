@@ -1,0 +1,164 @@
+FF                                                                       [100%]
+=================================== FAILURES ===================================
+_ test_native_startup_rejection_preserves_identity_without_start_or_evidence[configuration] _
+
+client = <starlette.testclient.TestClient object at 0x7bd5e7dfcec0>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7bd5e7e7de00>
+fault = 'configuration'
+
+    @pytest.mark.parametrize("fault", ["configuration", "plan_digest"])
+    def test_native_startup_rejection_preserves_identity_without_start_or_evidence(
+        client, monkeypatch, fault
+    ):
+        from xverse_studio.runs import service as run_module
+
+        created = client.post("/api/v1/projects", json={"name": "Owned startup rejection"})
+        assert created.status_code == 201
+        project = created.json()
+        studio = client.app.state.studio
+        preflight = client.post(
+            f"/api/v1/projects/{project['projectId']}/preflights",
+            json={"revision": project["revision"]},
+        ).json()
+        assert preflight["status"] == "ready"
+        snapshot_id = preflight["snapshotId"]
+        snapshot_file = studio.store.root / "snapshots" / snapshot_id / "snapshot.json"
+        immutable_bytes = snapshot_file.read_bytes()
+        immutable_record = canonical(studio.store.get("snapshot", snapshot_id))
+        write = run_module.atomic
+        injected = []
+
+        def corrupt_delegated_copy(path, body):
+            target = Path(path)
+            if target.name == "request.json" and target.parent.parent == studio.store.root / "runs":
+                request = json.loads(body)
+                assert request["snapshot"]["snapshotId"] == snapshot_id
+                assert request["snapshot"]["providerId"] == "studio.reference"
+                if fault == "configuration":
+                    request["configuration"]["gain"] += 0.125
+                else:
+                    request["snapshot"]["planDigest"] = "sha256:" + "f" * 64
+                injected.append(request["runId"])
+                return write(path, canonical(request).encode())
+            return write(path, body)
+
+        monkeypatch.setattr(run_module, "atomic", corrupt_delegated_copy)
+        payload = {"snapshotId": snapshot_id, "preflightId": preflight["preflightId"]}
+        accepted = client.post(
+            "/api/v1/runs",
+            headers={"Idempotency-Key": "owned-startup-rejection-" + fault},
+            json=payload,
+        )
+        assert accepted.status_code == 202
+        result = accepted.json()
+        run_id = result["runId"]
+        worker = studio.runs.children[run_id]
+        assert worker.wait(timeout=20) == 2
+        assert injected == [run_id]
+        directory = studio.runs.directory(run_id)
+        state = json.loads((directory / "state.json").read_text())
+        known = studio.store.get("run", run_id)
+        assert known["launchArgvDigest"] == digest(
+            [sys.executable, "-I", "-m", "xverse_studio.providers.worker", str(directory)]
+        )
+        response = client.get("/api/v1/runs/" + run_id)
+        assert response.status_code == 200
+        observed = response.json()
+        deadline = time.monotonic() + 8
+        while observed["state"] == "preparing" and time.monotonic() < deadline:
+            time.sleep(0.05)
+            observed = client.get("/api/v1/runs/" + run_id).json()
+>       assert observed["state"] == "failed", observed
+E       AssertionError: {'capabilities': ['stop', 'cancel'], 'cleanup': 'unknown', 'createdAt': 1793211173.9149003, 'evaluation': 'not_started', ...}
+E       assert 'unknown' == 'failed'
+E
+E         - failed
+E         + unknown
+
+tests/integration/test_worker_startup_failure.py:81: AssertionError
+_ test_native_startup_rejection_preserves_identity_without_start_or_evidence[plan_digest] _
+
+client = <starlette.testclient.TestClient object at 0x7bd5e63591d0>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7bd5e7e7e520>
+fault = 'plan_digest'
+
+    @pytest.mark.parametrize("fault", ["configuration", "plan_digest"])
+    def test_native_startup_rejection_preserves_identity_without_start_or_evidence(
+        client, monkeypatch, fault
+    ):
+        from xverse_studio.runs import service as run_module
+
+        created = client.post("/api/v1/projects", json={"name": "Owned startup rejection"})
+        assert created.status_code == 201
+        project = created.json()
+        studio = client.app.state.studio
+        preflight = client.post(
+            f"/api/v1/projects/{project['projectId']}/preflights",
+            json={"revision": project["revision"]},
+        ).json()
+        assert preflight["status"] == "ready"
+        snapshot_id = preflight["snapshotId"]
+        snapshot_file = studio.store.root / "snapshots" / snapshot_id / "snapshot.json"
+        immutable_bytes = snapshot_file.read_bytes()
+        immutable_record = canonical(studio.store.get("snapshot", snapshot_id))
+        write = run_module.atomic
+        injected = []
+
+        def corrupt_delegated_copy(path, body):
+            target = Path(path)
+            if target.name == "request.json" and target.parent.parent == studio.store.root / "runs":
+                request = json.loads(body)
+                assert request["snapshot"]["snapshotId"] == snapshot_id
+                assert request["snapshot"]["providerId"] == "studio.reference"
+                if fault == "configuration":
+                    request["configuration"]["gain"] += 0.125
+                else:
+                    request["snapshot"]["planDigest"] = "sha256:" + "f" * 64
+                injected.append(request["runId"])
+                return write(path, canonical(request).encode())
+            return write(path, body)
+
+        monkeypatch.setattr(run_module, "atomic", corrupt_delegated_copy)
+        payload = {"snapshotId": snapshot_id, "preflightId": preflight["preflightId"]}
+        accepted = client.post(
+            "/api/v1/runs",
+            headers={"Idempotency-Key": "owned-startup-rejection-" + fault},
+            json=payload,
+        )
+        assert accepted.status_code == 202
+        result = accepted.json()
+        run_id = result["runId"]
+        worker = studio.runs.children[run_id]
+        assert worker.wait(timeout=20) == 2
+        assert injected == [run_id]
+        directory = studio.runs.directory(run_id)
+        state = json.loads((directory / "state.json").read_text())
+        known = studio.store.get("run", run_id)
+        assert known["launchArgvDigest"] == digest(
+            [sys.executable, "-I", "-m", "xverse_studio.providers.worker", str(directory)]
+        )
+        response = client.get("/api/v1/runs/" + run_id)
+        assert response.status_code == 200
+        observed = response.json()
+        deadline = time.monotonic() + 8
+        while observed["state"] == "preparing" and time.monotonic() < deadline:
+            time.sleep(0.05)
+            observed = client.get("/api/v1/runs/" + run_id).json()
+>       assert observed["state"] == "failed", observed
+E       AssertionError: {'capabilities': ['stop', 'cancel'], 'cleanup': 'unknown', 'createdAt': 1793211180.816937, 'evaluation': 'not_started', ...}
+E       assert 'unknown' == 'failed'
+E
+E         - failed
+E         + unknown
+
+tests/integration/test_worker_startup_failure.py:81: AssertionError
+=============================== warnings summary ===============================
+.venv/lib/python3.13/site-packages/fastapi/testclient.py:1
+  <repo>/.venv/lib/python3.13/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/integration/test_worker_startup_failure.py::test_native_startup_rejection_preserves_identity_without_start_or_evidence[configuration]
+FAILED tests/integration/test_worker_startup_failure.py::test_native_startup_rejection_preserves_identity_without_start_or_evidence[plan_digest]
+2 failed, 1 warning in 14.00s

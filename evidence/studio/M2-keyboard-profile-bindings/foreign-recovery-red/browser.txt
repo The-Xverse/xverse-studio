@@ -1,0 +1,94 @@
+
+> xverse-studio-workspace@0.1.0 test:e2e
+> playwright test -c tests/e2e/playwright.config.ts --grep profile bindings: foreign recovery
+
+
+Running 2 tests using 1 worker
+
+(node:2074915) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 tests/e2e/profile-bindings-accessibility.spec.ts:100:7 › profile bindings: foreign recovery preserves newer profile draft at 1024x768 (12.3s)
+(node:2075111) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 tests/e2e/profile-bindings-accessibility.spec.ts:100:7 › profile bindings: foreign recovery preserves newer profile draft at 1440x900 (12.3s)
+
+
+  1) tests/e2e/profile-bindings-accessibility.spec.ts:100:7 › profile bindings: foreign recovery preserves newer profile draft at 1024x768
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 5
+    + Received  + 5
+
+      Object {
+    -   "checked": true,
+    -   "focused": true,
+    -   "panelCount": 1,
+    -   "selectionLabel": 1,
+    -   "storedProject": "prj-0e03367e-c3e0-4c73-9365-db99e4fd40b6",
+    +   "checked": null,
+    +   "focused": false,
+    +   "panelCount": 0,
+    +   "selectionLabel": 0,
+    +   "storedProject": "prj-ceec3bdd-c548-41f4-8094-56cdd7d8998b",
+      }
+
+    Call Log:
+    - Timeout 10000ms exceeded while waiting on the predicate
+
+      233 |       await expect.soft
+      234 |         .poll(current)
+    > 235 |         .toEqual({
+          |          ^
+      236 |           panelCount: 1,
+      237 |           checked: true,
+      238 |           focused: true,
+        at <repo>/tests/e2e/profile-bindings-accessibility.spec.ts:235:10
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/profile-bindings-accessibi-e330d-r-profile-draft-at-1024x768/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/profile-bindings-accessibi-e330d-r-profile-draft-at-1024x768/error-context.md
+
+  2) tests/e2e/profile-bindings-accessibility.spec.ts:100:7 › profile bindings: foreign recovery preserves newer profile draft at 1440x900
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 5
+    + Received  + 5
+
+      Object {
+    -   "checked": true,
+    -   "focused": true,
+    -   "panelCount": 1,
+    -   "selectionLabel": 1,
+    -   "storedProject": "prj-17e74bfe-c756-43eb-b10a-637577e6ccff",
+    +   "checked": null,
+    +   "focused": false,
+    +   "panelCount": 0,
+    +   "selectionLabel": 0,
+    +   "storedProject": "prj-e6c97ed1-b416-46ea-bf7e-436773422f96",
+      }
+
+    Call Log:
+    - Timeout 10000ms exceeded while waiting on the predicate
+
+      233 |       await expect.soft
+      234 |         .poll(current)
+    > 235 |         .toEqual({
+          |          ^
+      236 |           panelCount: 1,
+      237 |           checked: true,
+      238 |           focused: true,
+        at <repo>/tests/e2e/profile-bindings-accessibility.spec.ts:235:10
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/profile-bindings-accessibi-56d44-r-profile-draft-at-1440x900/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/profile-bindings-accessibi-56d44-r-profile-draft-at-1440x900/error-context.md
+
+  2 failed
+    tests/e2e/profile-bindings-accessibility.spec.ts:100:7 › profile bindings: foreign recovery preserves newer profile draft at 1024x768
+    tests/e2e/profile-bindings-accessibility.spec.ts:100:7 › profile bindings: foreign recovery preserves newer profile draft at 1440x900

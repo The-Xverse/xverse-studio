@@ -1,0 +1,36 @@
+
+> xverse-studio-workspace@0.1.0 test:e2e
+> playwright test -c tests/e2e/playwright.config.ts --grep reported external claims
+
+
+Running 1 test using 1 worker
+
+(node:2603128) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 tests/e2e/trace-claims.spec.ts:5:5 › reported external claims: frozen subjects, revision history, neutral PASS label and immutable exchange (20.8s)
+
+
+  1) tests/e2e/trace-claims.spec.ts:5:5 › reported external claims: frozen subjects, revision history, neutral PASS label and immutable exchange
+
+    TimeoutError: locator.fill: Timeout 15000ms exceeded.
+    Call log:
+      - waiting for getByLabel('Reported claim status', { exact: true })
+
+
+      101 |   await page
+      102 |     .getByLabel("Reported claim status", { exact: true })
+    > 103 |     .fill("  PASS reported externally  ");
+          |      ^
+      104 |   const subjects = page.getByRole("group", {
+      105 |     name: "Frozen model and Scenario references",
+      106 |     exact: true,
+        at <workspace>/tests/e2e/trace-claims.spec.ts:103:6
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/trace-claims-reported-exte-6d91d-abel-and-immutable-exchange/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/trace-claims-reported-exte-6d91d-abel-and-immutable-exchange/error-context.md
+
+  1 failed
+    tests/e2e/trace-claims.spec.ts:5:5 › reported external claims: frozen subjects, revision history, neutral PASS label and immutable exchange

@@ -1,0 +1,74 @@
+import { test, expect, type Page } from "@playwright/test";
+import { parse, stringify } from "yaml";
+import { connectStudio } from "./connect-studio";
+
+async function readOrWrite(page: Page, path: string, method = "GET", body?: unknown, revision?: number) {
+  return page.evaluate(async ({path, method, body, revision}) => {
+    const {csrfToken} = await fetch("/api/v1/session").then(r => r.json());
+    const response = await fetch("/api/v1" + path, {method, headers:{"Content-Type":"application/json","X-CSRF-Token":csrfToken,
+      ...(revision === undefined ? {} : {"If-Match":String(revision)}), ...(method === "POST" ? {"Idempotency-Key":crypto.randomUUID()} : {})},
+      ...(body === undefined ? {} : {body:JSON.stringify(body)})});
+    const value=await response.json();
+    if (!response.ok) throw new Error(`Owned outcome setup ${response.status} ${value.code || path}`);
+    return value;
+  },{path,method,body,revision});
+}
+
+for (const width of [1024,1440]) {
+  test(`scenario timeline outcomes: actual pass, fail, indeterminate and metric provenance at ${width}`, async ({page}, info) => {
+    await page.setViewportSize({width,height:900});await connectStudio(page,info);
+    let project=await readOrWrite(page,"/projects","POST",{name:`Timeline outcome coverage ${width}`});
+    const [docId, doc]:any=Object.entries(project.documents).find(([,d]:any) => parse(d.content).kind === "Scenario")!;
+    const source=parse(doc.content), parameters=source.extensions["io.xverse.experiment"].parameters;
+    parameters.find((p:any) => p.id === "duration").value=0.2;
+    parameters.find((p:any) => p.id === "fault").value="stuck-sensor";
+    const pass=structuredClone(source.extensions["io.xverse.studio.experiments"].definitions[0]);
+    pass.window.endTick="200000";
+    const fail=structuredClone(pass);fail.evaluationId="timeline-fail";fail.name="Actual failed bound";fail.expression.right.value=-1;
+    const incomplete=structuredClone(pass);incomplete.evaluationId="timeline-incomplete";incomplete.name="Missing window coverage";incomplete.window.endTick="400000";
+    const metric={...structuredClone(pass),evaluationId:"timeline-outcome-peak",name:"Actual numeric metric",kind:"metric",resultUnit:"1",expression:structuredClone(pass.expression.left)};
+    source.extensions["io.xverse.studio.experiments"].definitions=[pass,fail,incomplete,metric];
+    project=await readOrWrite(page,`/projects/${project.projectId}/documents/${docId}`,"PUT",{content:stringify(source),format:"yaml"},project.revision);
+    const pf=await readOrWrite(page,`/projects/${project.projectId}/preflights`,"POST",{revision:project.revision});
+    expect(pf.status,JSON.stringify(pf)).toBe("ready");
+    const started=await readOrWrite(page,"/runs","POST",{snapshotId:pf.snapshotId,preflightId:pf.preflightId});
+    await expect.poll(async () => (await readOrWrite(page,`/runs/${started.runId}`)).state,{timeout:20000}).toBe("stopped");
+    const run=await readOrWrite(page,`/runs/${started.runId}`), snapshot=(await readOrWrite(page,`/runs/${run.runId}/snapshot`)).snapshot;
+    const definitions=(await readOrWrite(page,`/runs/${run.runId}/definitions`)).items, jobs:any[]=[];
+    for (const d of definitions) {
+      const accepted=await readOrWrite(page,`/runs/${run.runId}/evaluations`,"POST",{snapshotId:run.snapshotId,definitionRef:d.definitionRef,definitionDigest:d.definitionDigest,evidenceRefs:[run.runId+":reference-journal"]});
+      await expect.poll(async () => (await readOrWrite(page,`/evaluations/${accepted.evaluationId}`)).status).toBe("complete");
+      jobs.push(await readOrWrite(page,`/evaluations/${accepted.evaluationId}`));
+    }
+    const failed=jobs.find(j => j.definition.evaluationId === "timeline-fail"), unknown=jobs.find(j => j.definition.evaluationId === "timeline-incomplete"), numeric=jobs.find(j => j.definition.kind === "metric");
+    expect(failed.verdict).toBe("fail");expect(failed.coverage).toBe("complete");expect(unknown.verdict).toBe("indeterminate");expect(unknown.coverage).toBe("incomplete");expect(unknown.reasons).toContain("COVERAGE_INCOMPLETE");expect(numeric.verdict).toBeNull();expect(Number.isFinite(numeric.value)).toBe(true);
+    await page.evaluate(({project,run}) => {localStorage.setItem("studio.projectId",project.projectId);localStorage.setItem("studio.lastRun."+project.projectId,run.runId);localStorage.setItem("studio.lastRun",run.runId);},{project,run});
+    await page.reload();await page.getByRole("tab",{name:"Experiments",exact:true}).focus();await page.keyboard.press("Enter");
+    await page.getByRole("tab",{name:"Timeline",exact:true}).focus();await page.keyboard.press("Enter");
+    const panel=page.getByRole("region",{name:"Selected run timeline",exact:true}), writes:string[]=[], errors:string[]=[];
+    page.on("request",r => {if (!["GET","HEAD","OPTIONS"].includes(r.method())) writes.push(r.method()+" "+new URL(r.url()).pathname);});page.on("pageerror",e => errors.push(e.message));
+    await panel.getByRole("button",{name:"Inspect selected run timeline",exact:true}).focus();await page.keyboard.press("Enter");
+    await expect(panel.getByRole("heading",{name:"Selected run timeline",exact:true})).toBeFocused();
+    for (const job of jobs) {
+      const row=panel.locator(`[data-timeline-id="evaluation:${job.evaluationId}"]`);
+      await expect(row.getByText("Execution: complete",{exact:true})).toBeVisible();
+      await expect(row.getByText(job.verdict === null ? "No verdict" : `Assertion verdict: ${job.verdict}`,{exact:true})).toBeVisible();
+      await expect(row).toContainText(`[${job.definition.window.startTick}, ${job.definition.window.endTick})`);
+      await expect(row.getByText(`Reasons: ${job.reasons.join(", ") || "None reported"}`,{exact:true})).toBeVisible();
+      await row.getByText("Inspect exact data",{exact:true}).focus();await page.keyboard.press("Enter");
+      const shown=JSON.parse(await row.locator("pre").innerText());
+      expect(shown.definitionDigest).toBe(job.definitionDigest);expect(shown.evidenceDigests).toEqual(job.evidenceDigests);expect(shown.inputEvidenceDigests).toEqual(job.inputEvidenceDigests);
+      expect(shown.evaluatorIdentity).toEqual(job.evaluatorIdentity);expect(shown.window).toEqual(job.definition.window);expect(shown.matchesCurrentEvidence).toBe(true);
+      await expect(row.getByText("Inspect exact data",{exact:true})).toBeFocused();
+    }
+    const unknownRow=panel.locator(`[data-timeline-id="evaluation:${unknown.evaluationId}"]`);
+    await expect(unknownRow.getByText("Assertion verdict: pass",{exact:true})).toHaveCount(0);
+    expect(await readOrWrite(page,`/projects/${project.projectId}`)).toEqual(project);
+    expect((await readOrWrite(page,`/runs/${run.runId}/snapshot`)).snapshot).toEqual(snapshot);
+    expect((await readOrWrite(page,`/runs/${run.runId}`)).journalDigest).toBe(run.journalDigest);
+    for (const job of jobs) expect(await readOrWrite(page,`/evaluations/${job.evaluationId}`)).toEqual(job);
+    expect(writes).toEqual([]);expect(errors).toEqual([]);expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth+1)).toBe(false);
+    await info.attach("actual-outcome-provenance",{body:JSON.stringify({runId:run.runId,snapshotId:run.snapshotId,scope:run.evidenceScope,journalDigest:run.journalDigest,results:jobs.map(j => ({evaluationId:j.evaluationId,definitionRef:j.definitionRef,definitionDigest:j.definitionDigest,verdict:j.verdict,value:j.value,coverage:j.coverage,reasons:j.reasons,evaluatorIdentity:j.evaluatorIdentity,evidenceDigests:j.evidenceDigests}))},null,2),contentType:"application/json"});
+    await page.screenshot({path:info.outputPath(`actual-outcomes-${width}.png`),fullPage:true});
+  });
+}

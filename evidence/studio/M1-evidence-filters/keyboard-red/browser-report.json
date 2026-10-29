@@ -1,0 +1,196 @@
+{
+  "config": {
+    "argv": [
+      "<loop10-cache>/node-v24.22.1-linux-x64/bin/node",
+      "<workspace>/node_modules/.bin/playwright",
+      "test",
+      "-c",
+      "tests/e2e/playwright.config.ts",
+      "--grep",
+      "evidence filters: sealed"
+    ],
+    "configFile": "<workspace>/tests/e2e/playwright.config.ts",
+    "rootDir": "<workspace>/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "<workspace>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "<workspace>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "*.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "<workspace>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "<workspace>/tests/e2e",
+        "snapshotDir": "<workspace>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": "*.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "baseURL": "http://127.0.0.1:57469",
+          "browserName": "chromium",
+          "actionTimeout": 15000,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "trace": "off",
+          "screenshot": "only-on-failure",
+          "video": "off"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "<workspace>/test-results/browser-report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "evidence-filters.spec.ts",
+      "file": "evidence-filters.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "evidence filters: sealed recorded fixture exact clocks, whole-run facets and bounded read-only pages at both viewports",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 19181,
+                  "error": {
+                    "message": "TimeoutError: locator.focus: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('region', { name: 'Exact observation table scroll region', exact: true })\u001b[22m\n",
+                    "stack": "TimeoutError: locator.focus: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('region', { name: 'Exact observation table scroll region', exact: true })\u001b[22m\n\n    at <workspace>/tests/e2e/evidence-filters.spec.ts:503:23",
+                    "location": {
+                      "file": "<workspace>/tests/e2e/evidence-filters.spec.ts",
+                      "column": 23,
+                      "line": 503
+                    },
+                    "snippet": "  501 |     ).toBeVisible();\n  502 |     const tableRegion=page.getByRole(\"region\",{name:\"Exact observation table scroll region\",exact:true});\n> 503 |     await tableRegion.focus();await expect(tableRegion).toBeFocused();\n      |                       ^\n  504 |     const scrollSize=await tableRegion.evaluate(el=>({width:el.clientWidth,content:el.scrollWidth}));\n  505 |     if(scrollSize.content>scrollSize.width){await page.keyboard.press(\"ArrowRight\");await expect.poll(()=>tableRegion.evaluate(el=>el.scrollLeft)).toBeGreaterThan(0);}\n  506 |     await testInfo.attach(`table-keyboard-${width}`,{body:JSON.stringify({viewport:width,...scrollSize,focused:true,scrollLeft:await tableRegion.evaluate(el=>el.scrollLeft)}),contentType:\"application/json\"});"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<workspace>/tests/e2e/evidence-filters.spec.ts",
+                        "column": 23,
+                        "line": 503
+                      },
+                      "message": "TimeoutError: locator.focus: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('region', { name: 'Exact observation table scroll region', exact: true })\u001b[22m\n\n\n  501 |     ).toBeVisible();\n  502 |     const tableRegion=page.getByRole(\"region\",{name:\"Exact observation table scroll region\",exact:true});\n> 503 |     await tableRegion.focus();await expect(tableRegion).toBeFocused();\n      |                       ^\n  504 |     const scrollSize=await tableRegion.evaluate(el=>({width:el.clientWidth,content:el.scrollWidth}));\n  505 |     if(scrollSize.content>scrollSize.width){await page.keyboard.press(\"ArrowRight\");await expect.poll(()=>tableRegion.evaluate(el=>el.scrollLeft)).toBeGreaterThan(0);}\n  506 |     await testInfo.attach(`table-keyboard-${width}`,{body:JSON.stringify({viewport:width,...scrollSize,focused:true,scrollLeft:await tableRegion.evaluate(el=>el.scrollLeft)}),contentType:\"application/json\"});\n    at <workspace>/tests/e2e/evidence-filters.spec.ts:503:23"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-25T14:00:48.707Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "fixture-scope",
+                      "contentType": "application/json",
+                      "body": "eyJwcm9qZWN0SWQiOiJwcmotNWQ1ODBhMDUtNGFhYi00Mzc5LWExODctZWZjMTI1NzBmM2E5IiwicnVuSWQiOiJydW4tcmVhZGVyLWZpeHR1cmUtYmZkMmE2ZjMtZGE4OS00OTZhLWE0ZTYtMGQwMmM4ZjkwZWQzIiwic25hcHNob3RJZCI6InNuYXAtODMxODBmM2MtMDdhNS00YTc0LTkwYjEtMTM2OTA2N2RkZGNmIiwicmVjb3JkQ291bnQiOjIyMCwiam91cm5hbERpZ2VzdCI6InNoYTI1NjpmYjU0MDI3NGUwZGRkOWVkZDI5OGMzOGJkYmVjZDRmY2U5M2RjMjlmMmUxNjY3MmQyOTNmZWFlNGIyYjIxZWQ2IiwiZXZlbnRzIjp7Imh1Z2VCZWZvcmUiOiJydW4tcmVhZGVyLWZpeHR1cmUtYmZkMmE2ZjMtZGE4OS00OTZhLWE0ZTYtMGQwMmM4ZjkwZWQzOmh1Z2VCZWZvcmUiLCJodWdlSW5zaWRlIjoicnVuLXJlYWRlci1maXh0dXJlLWJmZDJhNmYzLWRhODktNDk2YS1hNGU2LTBkMDJjOGY5MGVkMzpodWdlSW5zaWRlIiwiaHVnZUVuZCI6InJ1bi1yZWFkZXItZml4dHVyZS1iZmQyYTZmMy1kYTg5LTQ5NmEtYTRlNi0wZDAyYzhmOTBlZDM6aHVnZUVuZCIsIm5lZ2F0aXZlIjoicnVuLXJlYWRlci1maXh0dXJlLWJmZDJhNmYzLWRhODktNDk2YS1hNGU2LTBkMDJjOGY5MGVkMzpuZWdhdGl2ZSIsInplcm8iOiJydW4tcmVhZGVyLWZpeHR1cmUtYmZkMmE2ZjMtZGE4OS00OTZhLWE0ZTYtMGQwMmM4ZjkwZWQzOnplcm8iLCJtaXNzaW5nVGltZSI6InJ1bi1yZWFkZXItZml4dHVyZS1iZmQyYTZmMy1kYTg5LTQ5NmEtYTRlNi0wZDAyYzhmOTBlZDM6bWlzc2luZ1RpbWUiLCJtYWxmb3JtZWRUaW1lIjoicnVuLXJlYWRlci1maXh0dXJlLWJmZDJhNmYzLWRhODktNDk2YS1hNGU2LTBkMDJjOGY5MGVkMzptYWxmb3JtZWRUaW1lIiwib3RoZXJDbG9jayI6InJ1bi1yZWFkZXItZml4dHVyZS1iZmQyYTZmMy1kYTg5LTQ5NmEtYTRlNi0wZDAyYzhmOTBlZDM6b3RoZXJDbG9jayIsInVua25vd25SZWNlaXB0IjoicnVuLXJlYWRlci1maXh0dXJlLWJmZDJhNmYzLWRhODktNDk2YS1hNGU2LTBkMDJjOGY5MGVkMzp1bmtub3duUmVjZWlwdCIsIm1pc3NpbmdSZWNlaXB0IjoicnVuLXJlYWRlci1maXh0dXJlLWJmZDJhNmYzLWRhODktNDk2YS1hNGU2LTBkMDJjOGY5MGVkMzptaXNzaW5nUmVjZWlwdCIsImdhcCI6InJ1bi1yZWFkZXItZml4dHVyZS1iZmQyYTZmMy1kYTg5LTQ5NmEtYTRlNi0wZDAyYzhmOTBlZDM6Z2FwIiwibG9nQWxwaGEiOiJydW4tcmVhZGVyLWZpeHR1cmUtYmZkMmE2ZjMtZGE4OS00OTZhLWE0ZTYtMGQwMmM4ZjkwZWQzOmxvZ0FscGhhIiwibG9nQmV0YSI6InJ1bi1yZWFkZXItZml4dHVyZS1iZmQyYTZmMy1kYTg5LTQ5NmEtYTRlNi0wZDAyYzhmOTBlZDM6bG9nQmV0YSIsImxhdGUiOiJydW4tcmVhZGVyLWZpeHR1cmUtYmZkMmE2ZjMtZGE4OS00OTZhLWE0ZTYtMGQwMmM4ZjkwZWQzOmxhdGUiLCJsYXRlTG9nIjoicnVuLXJlYWRlci1maXh0dXJlLWJmZDJhNmYzLWRhODktNDk2YS1hNGU2LTBkMDJjOGY5MGVkMzpsYXRlTG9nIn0sInRpY2tzIjp7InN0YXJ0IjoiOTAwNzE5OTI1NDc0MDk5MyIsImVuZCI6IjkwMDcxOTkyNTQ3NDA5OTQifSwiY2xvY2tEb21haW5zIjpbImNsb2NrLWFscGhhIiwiY2xvY2stYmV0YSJdLCJvYnNlcnZlclJlZnMiOlsic3RhdGUtb2JzZXJ2ZXIiLCJleHRlcm5hbC1vYnNlcnZlciIsIm5vaXNlLW9ic2VydmVyIl0sInNvdXJjZVByb3ZpZGVySWRzIjpbInN0dWRpby5yZWZlcmVuY2UiLCJmaXh0dXJlLmFscGhhIiwiZml4dHVyZS5iZXRhIiwiZml4dHVyZS51bmtub3duIiwiZml4dHVyZS5ub2lzZSIsImZpeHR1cmUubGF0ZSJdLCJldmlkZW5jZVNjb3BlIjoicmVjb3JkZWRfZml4dHVyZSIsImdhcFJlYXNvbiI6IlN5bnRoZXRpYyBkZWNsYXJlZCBjb2xsZWN0aW9uIGdhcCJ9"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<workspace>/test-results/browser/evidence-filters-evidence--3c676-nly-pages-at-both-viewports/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<workspace>/test-results/browser/evidence-filters-evidence--3c676-nly-pages-at-both-viewports/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<workspace>/tests/e2e/evidence-filters.spec.ts",
+                    "column": 23,
+                    "line": 503
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "5b4b93849f30d092e1b8-522e92cd4afb5f17142c",
+          "file": "evidence-filters.spec.ts",
+          "line": 308,
+          "column": 5
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-25T14:00:48.183Z",
+    "duration": 20017.406,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

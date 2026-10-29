@@ -1,0 +1,91 @@
+import { test, expect, type Page } from "@playwright/test";
+import { readFileSync } from "node:fs";
+import path from "node:path";
+import { connectStudio } from "./connect-studio";
+
+async function request(page: Page, endpoint: string, method = "GET", body?: any, revision?: number) {
+  return page.evaluate(async ({ endpoint, method, body, revision }) => {
+    const { csrfToken } = await fetch('/api/v1/session').then(r => r.json());
+    const response = await fetch('/api/v1' + endpoint, { method, headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': csrfToken,
+      ...(revision === undefined ? {} : { 'If-Match': String(revision) }), ...(method === 'POST' ? { 'Idempotency-Key': crypto.randomUUID() } : {}) },
+      ...(body === undefined ? {} : { body: JSON.stringify(body) }) });
+    const value = await response.json();
+    if (!response.ok) throw new Error(`Owned comparison setup ${response.status} ${value.code}`);
+    return value;
+  }, { endpoint, method, body, revision });
+}
+async function setup(page: Page, width: number) {
+  let project = await request(page, '/projects', 'POST', { name: `Recorded comparison ${width}`, blueprintRef: 'reference-process-control' });
+  const runs: any[] = [];
+  for (const [gain, duration] of [[.5, .6], [.8, .6], [.8, .9]]) {
+    project = await request(page, `/projects/${project.projectId}/edits`, 'POST', { baseRevision: project.revision, edits: [
+      { kind: 'set_parameter', parameterId: 'gain', value: gain }, { kind: 'set_parameter', parameterId: 'duration', value: duration }] }, project.revision);
+    const pf = await request(page, `/projects/${project.projectId}/preflights`, 'POST', { revision: project.revision });
+    expect(pf.status).toBe('ready');
+    const accepted = await request(page, '/runs', 'POST', { snapshotId: pf.snapshotId, preflightId: pf.preflightId });
+    await expect.poll(async () => (await request(page, '/runs/' + accepted.runId)).state, { timeout: 20000 }).toBe('stopped');
+    const run = await request(page, '/runs/' + accepted.runId);
+    expect(run.evidence).toBe('complete'); expect(run.cleanup).toBe('complete'); runs.push(run);
+  }
+  await page.evaluate(({ project, run }) => {
+    localStorage.setItem('studio.projectId', project.projectId);
+    localStorage.setItem('studio.lastRun', run.runId);
+    localStorage.setItem('studio.lastRun.' + project.projectId, run.runId);
+  }, { project, run: runs[1] });
+  await page.reload();
+  await page.getByRole('tab', { name: 'Results', exact: false }).click();
+  await expect(page.getByLabel('Recorded run', { exact: true })).toHaveValue(runs[1].runId);
+  await page.getByRole('tab', { name: 'Compare', exact: true }).click();
+  return { project, runs };
+}
+const report = (page: Page) => page.getByRole('region', { name: 'Recorded comparison report', exact: true });
+for (const width of [1024, 1440]) {
+  test(`recorded comparison: immutable provenance, unequal windows and playback admission at ${width}`, async ({ page }, info) => {
+    await page.setViewportSize({ width, height: width === 1024 ? 768 : 900 });
+    await connectStudio(page, info);
+    const { project, runs } = await setup(page, width);
+    const baseline = page.getByLabel('Baseline run', { exact: true });
+    await baseline.selectOption(runs[0].runId);
+    const writes: string[] = [];
+    page.on('request', r => { if (r.method() !== 'GET' && r.url().includes('/api/v1/')) writes.push(new URL(r.url()).pathname); });
+    await page.getByRole('button', { name: 'Inspect compatibility', exact: true }).click();
+    await expect(page.getByRole('heading', { name: 'Comparison report', exact: true })).toBeVisible();
+    await expect(report(page)).toContainText('Compatible recorded windows');
+    await expect(report(page)).toContainText(runs[0].snapshotId);
+    await expect(report(page)).toContainText(runs[1].snapshotId);
+    const parameters = report(page).getByRole('table', { name: 'Frozen configuration differences' }).getByRole('row', { name: /^Parameters/ });
+    await expect(parameters).toContainText('different');
+    await expect(parameters).toContainText('0.5'); await expect(parameters).toContainText('0.8');
+    await expect(report(page).getByRole('table', { name: 'Recorded field results' })).toContainText('600000');
+    await baseline.selectOption(runs[2].runId);
+    await expect(report(page)).toHaveCount(0);
+    await page.getByRole('button', { name: 'Inspect compatibility', exact: true }).click();
+    await expect(report(page)).toContainText('Pairing blocked');
+    await expect(report(page)).toContainText('OBSERVATION_WINDOW_INCOMPATIBLE');
+    await expect(report(page)).toContainText('900000');
+    expect(writes).toEqual(['/api/v1/comparisons', '/api/v1/comparisons']);
+    await page.screenshot({ path: info.outputPath('recorded-comparison.png'), fullPage: true });
+    expect(await request(page, '/projects/' + project.projectId)).toEqual(project);
+    await page.getByRole('button', { name: 'Open recorded playback', exact: true }).click();
+    await expect(page.getByRole('tab', { name: 'Observations', exact: true })).toHaveAttribute('aria-selected', 'true');
+    const playback = page.getByRole('button', { name: 'Replay observations', exact: true });
+    await expect(playback).toBeEnabled(); await playback.click();
+    expect(writes).toEqual(['/api/v1/comparisons', '/api/v1/comparisons']);
+    await expect(page.getByLabel('Recorded run', { exact: true })).toHaveValue(runs[1].runId);
+    await page.getByRole('tab', { name: 'Compare', exact: true }).click();
+    const pfResponse = page.waitForResponse(r => r.request().method() === 'POST' && r.url().endsWith(`/projects/${project.projectId}/preflights`));
+    await page.getByRole('button', { name: 'Preflight a new run', exact: true }).click();
+    const pf = await (await pfResponse).json(); expect(pf.status).toBe('ready');
+    expect(pf.snapshotId).not.toBe(runs[1].snapshotId);
+    await expect(page.getByRole('button', { name: 'Start frozen snapshot', exact: true })).toBeEnabled();
+    const root = process.env.STUDIO_BROWSER_DATA!;
+    const frozen = JSON.parse(readFileSync(path.join(root, 'snapshots', pf.snapshotId, 'snapshot.json'), 'utf8'));
+    expect(frozen.configuration.duration).toBe(.9);
+    const old = JSON.parse(readFileSync(path.join(root, 'snapshots', runs[1].snapshotId, 'snapshot.json'), 'utf8'));
+    expect(old.configuration.duration).toBe(.6);
+    expect((await request(page, '/runs')).items.filter((r: any) => r.projectId === project.projectId)).toHaveLength(3);
+    expect(writes).toEqual(['/api/v1/comparisons', '/api/v1/comparisons', `/api/v1/projects/${project.projectId}/preflights`]);
+    await page.getByRole('button', { name: 'Back to draft', exact: true }).click();
+    await info.attach('recorded-comparison-boundaries.json', { contentType: 'application/json', body: JSON.stringify({ viewport: width, runIds: runs.map(r => r.runId), snapshotIds: runs.map(r => r.snapshotId), actualNativeRuns: 3, comparisonAndPlaybackCreatedNoRuns: true, freshDraftPreflightOnly: pf.snapshotId, explicitStartStillRequired: true, canonicalProjectUnchanged: true }) });
+  });
+}

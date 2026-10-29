@@ -1,0 +1,172 @@
+
+> xverse-studio-workspace@0.1.0 test:e2e
+> playwright test -c tests/e2e/playwright.config.ts --grep recovery accessibility: history malformed
+
+
+Running 2 tests using 1 worker
+
+(node:1935013) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 tests/e2e/source-recovery-accessibility.spec.ts:336:9 › recovery accessibility: history malformed response at 1024x768 (32.3s)
+(node:1935411) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 tests/e2e/source-recovery-accessibility.spec.ts:336:9 › recovery accessibility: history malformed response at 1440x900 (32.1s)
+
+
+  1) tests/e2e/source-recovery-accessibility.spec.ts:336:9 › recovery accessibility: history malformed response at 1024x768
+
+    Error: expect(locator).not.toContainText(expected) failed
+
+    Locator: getByRole('group', { name: 'Source recovery', exact: true })
+    Expected substring: not "predates recorded history"
+    Received string: "Recovery first preserves the bytes now on disk in a recovery backup and then commits a new revision; revision 1 stays in history. Sidecars keep their recorded content.Adopt external changes as a new revisionRevision 1 predates recorded history, so it cannot be restored here. Adopting the external changes remains available."
+    Timeout: 10000ms
+
+    Call log:
+      - Expect "soft not toContainText" getByRole('group', { name: 'Source recovery', exact: true }) with timeout 10000ms
+      - waiting for getByRole('group', { name: 'Source recovery', exact: true })
+        24 × locator resolved to <div role="group" class="recovery-panel" aria-label="Source recovery">…</div>
+           - unexpected value "Recovery first preserves the bytes now on disk in a recovery backup and then commits a new revision; revision 1 stays in history. Sidecars keep their recorded content.Adopt external changes as a new revisionRevision 1 predates recorded history, so it cannot be restored here. Adopting the external changes remains available."
+
+
+      385 |           await expect
+      386 |             .soft(group(page))
+    > 387 |             .not.toContainText("predates recorded history");
+          |                  ^
+      388 |           await expect
+      389 |             .soft(group(page))
+      390 |             .toContainText("Could not check revision history");
+        at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:387:18
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByRole('group', { name: 'Source recovery', exact: true })
+    Expected substring: "Could not check revision history"
+    Received string:    "Recovery first preserves the bytes now on disk in a recovery backup and then commits a new revision; revision 1 stays in history. Sidecars keep their recorded content.Adopt external changes as a new revisionRevision 1 predates recorded history, so it cannot be restored here. Adopting the external changes remains available."
+    Timeout: 10000ms
+
+    Call log:
+      - Expect "soft toContainText" getByRole('group', { name: 'Source recovery', exact: true }) with timeout 10000ms
+      - waiting for getByRole('group', { name: 'Source recovery', exact: true })
+        24 × locator resolved to <div role="group" class="recovery-panel" aria-label="Source recovery">…</div>
+           - unexpected value "Recovery first preserves the bytes now on disk in a recovery backup and then commits a new revision; revision 1 stays in history. Sidecars keep their recorded content.Adopt external changes as a new revisionRevision 1 predates recorded history, so it cannot be restored here. Adopting the external changes remains available."
+
+
+      388 |           await expect
+      389 |             .soft(group(page))
+    > 390 |             .toContainText("Could not check revision history");
+          |              ^
+      391 |           await expect(
+      392 |             recoverButton(page, project.revision, "restore_revision"),
+      393 |           ).toHaveCount(0);
+        at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:390:14
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('group', { name: 'Source recovery', exact: true }).getByRole('button', { name: 'Retry revision history', exact: true })
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('group', { name: 'Source recovery', exact: true }).getByRole('button', { name: 'Retry revision history', exact: true }) with timeout 10000ms
+      - waiting for getByRole('group', { name: 'Source recovery', exact: true }).getByRole('button', { name: 'Retry revision history', exact: true })
+
+
+       7 |
+       8 | async function tabTo(page: Page, target: Locator) {
+    >  9 |   await expect(target).toBeVisible();
+         |                        ^
+      10 |   for (let i = 0; i < 220; i++) {
+      11 |     if (await target.evaluate((n) => document.activeElement === n)) return;
+      12 |     await page.keyboard.press("Tab");
+        at tabTo (<repo>/tests/e2e/source-recovery-accessibility.spec.ts:9:24)
+        at activate (<repo>/tests/e2e/source-recovery-accessibility.spec.ts:17:9)
+        at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:394:17
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/source-recovery-accessibil-c9433-formed-response-at-1024x768/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/source-recovery-accessibil-c9433-formed-response-at-1024x768/error-context.md
+
+  2) tests/e2e/source-recovery-accessibility.spec.ts:336:9 › recovery accessibility: history malformed response at 1440x900
+
+    Error: expect(locator).not.toContainText(expected) failed
+
+    Locator: getByRole('group', { name: 'Source recovery', exact: true })
+    Expected substring: not "predates recorded history"
+    Received string: "Recovery first preserves the bytes now on disk in a recovery backup and then commits a new revision; revision 1 stays in history. Sidecars keep their recorded content.Adopt external changes as a new revisionRevision 1 predates recorded history, so it cannot be restored here. Adopting the external changes remains available."
+    Timeout: 10000ms
+
+    Call log:
+      - Expect "soft not toContainText" getByRole('group', { name: 'Source recovery', exact: true }) with timeout 10000ms
+      - waiting for getByRole('group', { name: 'Source recovery', exact: true })
+        24 × locator resolved to <div role="group" class="recovery-panel" aria-label="Source recovery">…</div>
+           - unexpected value "Recovery first preserves the bytes now on disk in a recovery backup and then commits a new revision; revision 1 stays in history. Sidecars keep their recorded content.Adopt external changes as a new revisionRevision 1 predates recorded history, so it cannot be restored here. Adopting the external changes remains available."
+
+
+      385 |           await expect
+      386 |             .soft(group(page))
+    > 387 |             .not.toContainText("predates recorded history");
+          |                  ^
+      388 |           await expect
+      389 |             .soft(group(page))
+      390 |             .toContainText("Could not check revision history");
+        at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:387:18
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByRole('group', { name: 'Source recovery', exact: true })
+    Expected substring: "Could not check revision history"
+    Received string:    "Recovery first preserves the bytes now on disk in a recovery backup and then commits a new revision; revision 1 stays in history. Sidecars keep their recorded content.Adopt external changes as a new revisionRevision 1 predates recorded history, so it cannot be restored here. Adopting the external changes remains available."
+    Timeout: 10000ms
+
+    Call log:
+      - Expect "soft toContainText" getByRole('group', { name: 'Source recovery', exact: true }) with timeout 10000ms
+      - waiting for getByRole('group', { name: 'Source recovery', exact: true })
+        24 × locator resolved to <div role="group" class="recovery-panel" aria-label="Source recovery">…</div>
+           - unexpected value "Recovery first preserves the bytes now on disk in a recovery backup and then commits a new revision; revision 1 stays in history. Sidecars keep their recorded content.Adopt external changes as a new revisionRevision 1 predates recorded history, so it cannot be restored here. Adopting the external changes remains available."
+
+
+      388 |           await expect
+      389 |             .soft(group(page))
+    > 390 |             .toContainText("Could not check revision history");
+          |              ^
+      391 |           await expect(
+      392 |             recoverButton(page, project.revision, "restore_revision"),
+      393 |           ).toHaveCount(0);
+        at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:390:14
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('group', { name: 'Source recovery', exact: true }).getByRole('button', { name: 'Retry revision history', exact: true })
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('group', { name: 'Source recovery', exact: true }).getByRole('button', { name: 'Retry revision history', exact: true }) with timeout 10000ms
+      - waiting for getByRole('group', { name: 'Source recovery', exact: true }).getByRole('button', { name: 'Retry revision history', exact: true })
+
+
+       7 |
+       8 | async function tabTo(page: Page, target: Locator) {
+    >  9 |   await expect(target).toBeVisible();
+         |                        ^
+      10 |   for (let i = 0; i < 220; i++) {
+      11 |     if (await target.evaluate((n) => document.activeElement === n)) return;
+      12 |     await page.keyboard.press("Tab");
+        at tabTo (<repo>/tests/e2e/source-recovery-accessibility.spec.ts:9:24)
+        at activate (<repo>/tests/e2e/source-recovery-accessibility.spec.ts:17:9)
+        at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:394:17
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/source-recovery-accessibil-6ca79-formed-response-at-1440x900/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/source-recovery-accessibil-6ca79-formed-response-at-1440x900/error-context.md
+
+  2 failed
+    tests/e2e/source-recovery-accessibility.spec.ts:336:9 › recovery accessibility: history malformed response at 1024x768
+    tests/e2e/source-recovery-accessibility.spec.ts:336:9 › recovery accessibility: history malformed response at 1440x900

@@ -1,0 +1,20 @@
+..F                                                                      [100%]
+=================================== FAILURES ===================================
+______ test_capture_marks_truncation_and_enforces_session_and_case_limits ______
+tests/integration/test_native_failure_capture.py:129: in test_capture_marks_truncation_and_enforces_session_and_case_limits
+    assert any(row.get('code') == 'CAPTURE_BYTE_BUDGET' for row in later['files'])
+E   assert False
+E    +  where False = any(<generator object test_capture_marks_truncation_and_enforces_session_and_case_limits.<locals>.<genexpr> at 0x7abfe3be8930>)
+=============================== warnings summary ===============================
+.venv/lib/python3.13/site-packages/fastapi/testclient.py:1
+  <repo>/.venv/lib/python3.13/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+tests/integration/test_native_failure_capture.py::test_real_native_failure_is_retained_before_teardown_without_auth_files
+  tests/integration/test_native_failure_capture.py:17: PytestWarning: record_property is incompatible with junit_family 'xunit2' (use 'legacy' or 'xunit1')
+    @pytest.mark.skipif(sys.platform != 'linux', reason='Anchored Linux diagnostic acquisition; native Windows held')
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/integration/test_native_failure_capture.py::test_capture_marks_truncation_and_enforces_session_and_case_limits
+1 failed, 2 passed, 2 warnings in 32.08s

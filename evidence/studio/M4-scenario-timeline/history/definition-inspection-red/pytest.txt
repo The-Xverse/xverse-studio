@@ -1,0 +1,57 @@
+FF                                                                       [100%]
+=================================== FAILURES ===================================
+_ test_frozen_assessment_definitions_are_inspectable_without_evaluation_or_current_draft_fallback _
+
+client = <starlette.testclient.TestClient object at 0x7af05f4042f0>
+recorded_fault = ({'createdAt': 1793078513.424567, 'documents': {'doc-0': {'content': 'apiVersion: xverse.io/xdl/v1alpha1\nkind: Compon...tion-inspection-red/tmp/test_frozen_assessment_definit0/runs/run-5e44512a-88da-4fa0-8f41-8000fcd89606/evidence.jsonl'))
+
+    def test_frozen_assessment_definitions_are_inspectable_without_evaluation_or_current_draft_fallback(client, recorded_fault):
+        project, document_id, scenario, run, snapshot, journal = recorded_fault
+        expected = client.get(f"/api/v1/runs/{run['runId']}/definitions").json()["items"]
+        later = deepcopy(scenario)
+        later["extensions"]["io.xverse.studio.experiments"]["definitions"][0]["name"] = "Later draft definition"
+        stream = StringIO()
+        YAML().dump(later, stream)
+        saved = client.put(f"/api/v1/projects/{project['projectId']}/documents/{document_id}",
+                           headers={"If-Match": str(project["revision"])}, json={"content": stream.getvalue(), "format": "yaml"})
+        assert saved.status_code == 200, saved.text
+        current = saved.json()
+        original = journal.read_bytes()
+        response = client.get(f"/api/v1/runs/{run['runId']}/timeline")
+        assert response.status_code == 200, response.text
+        report = response.json()
+>       assert report["assessmentDefinitions"] == {"status": "available", "complete": True, "items": expected}
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'assessmentDefinitions'
+
+tests/integration/test_scenario_timeline.py:355: KeyError
+__ test_labelled_definition_resolver_unavailability_never_becomes_known_empty __
+
+client = <starlette.testclient.TestClient object at 0x7af05d951a90>
+recorded_fault = ({'createdAt': 1793078516.7013226, 'documents': {'doc-0': {'content': 'apiVersion: xverse.io/xdl/v1alpha1\nkind: Compo...tion-inspection-red/tmp/test_labelled_definition_resol0/runs/run-0f83a96c-3936-4624-a3ac-f1d5c0e4ec19/evidence.jsonl'))
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7af05f445810>
+
+    def test_labelled_definition_resolver_unavailability_never_becomes_known_empty(client, recorded_fault, monkeypatch):
+        from xverse_studio.assertions import EvaluationError
+        run = recorded_fault[3]
+        def unavailable(*args):
+            raise EvaluationError("PROFILE_NOT_ADMITTED")
+        monkeypatch.setattr("xverse_studio.timeline.snapshot_definitions", unavailable)
+        response = client.get(f"/api/v1/runs/{run['runId']}/timeline")
+        assert response.status_code == 200, response.text
+        report = response.json()
+>       assert report["assessmentDefinitions"] == {"status": "unavailable", "complete": False, "items": []}
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'assessmentDefinitions'
+
+tests/integration/test_scenario_timeline.py:372: KeyError
+=============================== warnings summary ===============================
+.venv/lib/python3.13/site-packages/fastapi/testclient.py:1
+  <repo>/.venv/lib/python3.13/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/integration/test_scenario_timeline.py::test_frozen_assessment_definitions_are_inspectable_without_evaluation_or_current_draft_fallback
+FAILED tests/integration/test_scenario_timeline.py::test_labelled_definition_resolver_unavailability_never_becomes_known_empty
+2 failed, 23 deselected, 1 warning in 6.53s

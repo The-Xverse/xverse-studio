@@ -1,0 +1,330 @@
+{
+  "config": {
+    "argv": [
+      "<tool-cache>/node-v24.22.1-linux-x64/bin/node",
+      "<repo>/node_modules/.bin/playwright",
+      "test",
+      "-c",
+      "tests/e2e/playwright.config.ts",
+      "--grep",
+      "owned live target:"
+    ],
+    "configFile": "<repo>/tests/e2e/playwright.config.ts",
+    "rootDir": "<repo>/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "<repo>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "<repo>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "*.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "<repo>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "<repo>/tests/e2e",
+        "snapshotDir": "<repo>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": "*.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "baseURL": "http://127.0.0.1:57489",
+          "browserName": "chromium",
+          "actionTimeout": 15000,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "trace": "off",
+          "screenshot": "only-on-failure",
+          "video": "off"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "<repo>/test-results/browser-report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "reference-live-target.spec.ts",
+      "file": "reference-live-target.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "owned live target: lost acknowledgement and reload keep one mutation and frozen inputs at 1024",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 9340,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T01:00:07.138Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "native-live-target-receipt",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJydW5JZCI6InJ1bi03MmQ5ZTNlZi01MGE2LTQzNTYtYTkzNi0yNTBlZjdiYTM2OTQiLCJvcGVyYXRpb25JZCI6Im9wLTljMDcxM2NkLTkyZTgtNDVjYy05ZmQ0LTczYTBjMTExZDliMCIsIm9uZU11dGF0aW9uIjoxLCJleGFjdFJldHJ5Ijp0cnVlLCJzbmFwc2hvdFVuY2hhbmdlZCI6dHJ1ZSwic2NvcGUiOiJPd25lZCBuYXRpdmUgcmVmZXJlbmNlIG9ubHk7IG5vIGV4dGVybmFsIHJ1bnRpbWUgb3IgZXF1aXBtZW50In0K"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6e264bcb9ad08acd3a00-ba7c057fb53c3dd29abe",
+          "file": "reference-live-target.spec.ts",
+          "line": 66,
+          "column": 7
+        },
+        {
+          "title": "owned live target: a newer observed value preserves the proposal and requires review at 1024",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 5317,
+                  "error": {
+                    "message": "Error: expect(received).toBe(expected) // Object.is equality\n\nExpected: 202\nReceived: 403",
+                    "stack": "Error: expect(received).toBe(expected) // Object.is equality\n\nExpected: 202\nReceived: 403\n    at <repo>/tests/e2e/reference-live-target.spec.ts:205:31",
+                    "location": {
+                      "file": "<repo>/tests/e2e/reference-live-target.spec.ts",
+                      "column": 31,
+                      "line": 205
+                    },
+                    "snippet": "  203 |       \"second-operator-live\",\n  204 |     );\n> 205 |     expect(response.status()).toBe(202);\n      |                               ^\n  206 |     await expect(target).toContainText(\"Observed target: 2\");\n  207 |     await expect(input).toHaveValue(\"4\");\n  208 |     const apply = target.getByRole(\"button\", {"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/reference-live-target.spec.ts",
+                        "column": 31,
+                        "line": 205
+                      },
+                      "message": "Error: expect(received).toBe(expected) // Object.is equality\n\nExpected: 202\nReceived: 403\n\n  203 |       \"second-operator-live\",\n  204 |     );\n> 205 |     expect(response.status()).toBe(202);\n      |                               ^\n  206 |     await expect(target).toContainText(\"Observed target: 2\");\n  207 |     await expect(input).toHaveValue(\"4\");\n  208 |     const apply = target.getByRole(\"button\", {\n    at <repo>/tests/e2e/reference-live-target.spec.ts:205:31"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T01:00:16.552Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/reference-live-target-owne-378ed-and-requires-review-at-1024/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/reference-live-target.spec.ts",
+                    "column": 31,
+                    "line": 205
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "6e264bcb9ad08acd3a00-b614c8d1d6b1cc482aaa",
+          "file": "reference-live-target.spec.ts",
+          "line": 184,
+          "column": 7
+        },
+        {
+          "title": "owned live target: lost acknowledgement and reload keep one mutation and frozen inputs at 1440",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 8566,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T01:00:22.181Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "native-live-target-receipt",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJydW5JZCI6InJ1bi0wMmJhYzM5OS1lNDU1LTQ5YzItOTJlZS0zNTkxMDY0MmFkMzYiLCJvcGVyYXRpb25JZCI6Im9wLTI2MmVlNmYzLTJiMjAtNDJkZC05NTA2LWJkNDE5Y2UwNGM5OCIsIm9uZU11dGF0aW9uIjoxLCJleGFjdFJldHJ5Ijp0cnVlLCJzbmFwc2hvdFVuY2hhbmdlZCI6dHJ1ZSwic2NvcGUiOiJPd25lZCBuYXRpdmUgcmVmZXJlbmNlIG9ubHk7IG5vIGV4dGVybmFsIHJ1bnRpbWUgb3IgZXF1aXBtZW50In0K"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6e264bcb9ad08acd3a00-199c2bd528d6990873c0",
+          "file": "reference-live-target.spec.ts",
+          "line": 66,
+          "column": 7
+        },
+        {
+          "title": "owned live target: a newer observed value preserves the proposal and requires review at 1440",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 5293,
+                  "error": {
+                    "message": "Error: expect(received).toBe(expected) // Object.is equality\n\nExpected: 202\nReceived: 403",
+                    "stack": "Error: expect(received).toBe(expected) // Object.is equality\n\nExpected: 202\nReceived: 403\n    at <repo>/tests/e2e/reference-live-target.spec.ts:205:31",
+                    "location": {
+                      "file": "<repo>/tests/e2e/reference-live-target.spec.ts",
+                      "column": 31,
+                      "line": 205
+                    },
+                    "snippet": "  203 |       \"second-operator-live\",\n  204 |     );\n> 205 |     expect(response.status()).toBe(202);\n      |                               ^\n  206 |     await expect(target).toContainText(\"Observed target: 2\");\n  207 |     await expect(input).toHaveValue(\"4\");\n  208 |     const apply = target.getByRole(\"button\", {"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/reference-live-target.spec.ts",
+                        "column": 31,
+                        "line": 205
+                      },
+                      "message": "Error: expect(received).toBe(expected) // Object.is equality\n\nExpected: 202\nReceived: 403\n\n  203 |       \"second-operator-live\",\n  204 |     );\n> 205 |     expect(response.status()).toBe(202);\n      |                               ^\n  206 |     await expect(target).toContainText(\"Observed target: 2\");\n  207 |     await expect(input).toHaveValue(\"4\");\n  208 |     const apply = target.getByRole(\"button\", {\n    at <repo>/tests/e2e/reference-live-target.spec.ts:205:31"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T01:00:30.803Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/reference-live-target-owne-fca9f-and-requires-review-at-1440/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/reference-live-target.spec.ts",
+                    "column": 31,
+                    "line": 205
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "6e264bcb9ad08acd3a00-68540ab44f6cfc097b9a",
+          "file": "reference-live-target.spec.ts",
+          "line": 184,
+          "column": 7
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-29T01:00:06.515Z",
+    "duration": 29638.468999999997,
+    "expected": 2,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  }
+}

@@ -1,0 +1,76 @@
+
+> xverse-studio-workspace@0.1.0 test:e2e
+> playwright test -c tests/e2e/playwright.config.ts --grep campaign input bounds:
+
+
+Running 2 tests using 1 worker
+
+(node:2766892) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 tests/e2e/campaign-workflow.spec.ts:77:7 › campaign input bounds: deep imported matrix keeps authoring available at 1024 (13.8s)
+(node:2769715) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 tests/e2e/campaign-workflow.spec.ts:77:7 › campaign input bounds: deep imported matrix keeps authoring available at 1440 (13.1s)
+
+
+  1) tests/e2e/campaign-workflow.spec.ts:77:7 › campaign input bounds: deep imported matrix keeps authoring available at 1024
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByLabel('Parameter matrix (JSON)')
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByLabel('Parameter matrix (JSON)') with timeout 10000ms
+      - waiting for getByLabel('Parameter matrix (JSON)')
+
+
+      89 |     expect(deep.length).toBeLessThan(32768);
+      90 |     await field.fill(deep);
+    > 91 |     await expect(field).toBeVisible();
+         |                         ^
+      92 |     await expect(page.getByRole("button", { name: "Create campaign", exact: true })).toBeDisabled();
+      93 |     await expect(page.getByRole("button", { name: "Preview campaign", exact: true })).toBeDisabled();
+      94 |     expect(errors).toEqual([]);
+        at <repo>/tests/e2e/campaign-workflow.spec.ts:91:25
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/campaign-workflow-campaign-a6ff9-authoring-available-at-1024/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/campaign-workflow-campaign-a6ff9-authoring-available-at-1024/error-context.md
+
+  2) tests/e2e/campaign-workflow.spec.ts:77:7 › campaign input bounds: deep imported matrix keeps authoring available at 1440
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByLabel('Parameter matrix (JSON)')
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByLabel('Parameter matrix (JSON)') with timeout 10000ms
+      - waiting for getByLabel('Parameter matrix (JSON)')
+
+
+      89 |     expect(deep.length).toBeLessThan(32768);
+      90 |     await field.fill(deep);
+    > 91 |     await expect(field).toBeVisible();
+         |                         ^
+      92 |     await expect(page.getByRole("button", { name: "Create campaign", exact: true })).toBeDisabled();
+      93 |     await expect(page.getByRole("button", { name: "Preview campaign", exact: true })).toBeDisabled();
+      94 |     expect(errors).toEqual([]);
+        at <repo>/tests/e2e/campaign-workflow.spec.ts:91:25
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/campaign-workflow-campaign-fada4-authoring-available-at-1440/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/campaign-workflow-campaign-fada4-authoring-available-at-1440/error-context.md
+
+  2 failed
+    tests/e2e/campaign-workflow.spec.ts:77:7 › campaign input bounds: deep imported matrix keeps authoring available at 1024
+    tests/e2e/campaign-workflow.spec.ts:77:7 › campaign input bounds: deep imported matrix keeps authoring available at 1440

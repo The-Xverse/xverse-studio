@@ -1,0 +1,76 @@
+
+> xverse-studio-workspace@0.1.0 test:e2e
+> playwright test -c tests/e2e/playwright.config.ts --grep scenario timeline outcomes:
+
+
+Running 2 tests using 1 worker
+
+(node:2367163) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 tests/e2e/scenario-timeline-outcomes.spec.ts:18:7 › scenario timeline outcomes: actual pass, fail, indeterminate and metric provenance at 1024 (14.3s)
+(node:2367398) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 tests/e2e/scenario-timeline-outcomes.spec.ts:18:7 › scenario timeline outcomes: actual pass, fail, indeterminate and metric provenance at 1440 (14.1s)
+
+
+  1) tests/e2e/scenario-timeline-outcomes.spec.ts:18:7 › scenario timeline outcomes: actual pass, fail, indeterminate and metric provenance at 1024
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByRole('region', { name: 'Selected run timeline', exact: true }).getByRole('region', { name: 'Frozen assessment definitions', exact: true })
+    Expected substring: "Inspection does not evaluate these definitions"
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toContainText" getByRole('region', { name: 'Selected run timeline', exact: true }).getByRole('region', { name: 'Frozen assessment definitions', exact: true }) with timeout 10000ms
+      - waiting for getByRole('region', { name: 'Selected run timeline', exact: true }).getByRole('region', { name: 'Frozen assessment definitions', exact: true })
+
+
+      44 |     await expect(before.getByRole("heading",{name:"Selected run timeline",exact:true})).toBeFocused();
+      45 |     const declared=before.getByRole("region",{name:"Frozen assessment definitions",exact:true});
+    > 46 |     await expect(declared).toContainText("Inspection does not evaluate these definitions");
+         |                            ^
+      47 |     for (const d of definitions) {
+      48 |       const row=declared.locator(`[data-definition-ref="${d.definitionRef}"]`);
+      49 |       await expect(row).toContainText(d.definition.name);
+        at <repo>/tests/e2e/scenario-timeline-outcomes.spec.ts:46:28
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/scenario-timeline-outcomes-e792c-d-metric-provenance-at-1024/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/scenario-timeline-outcomes-e792c-d-metric-provenance-at-1024/error-context.md
+
+  2) tests/e2e/scenario-timeline-outcomes.spec.ts:18:7 › scenario timeline outcomes: actual pass, fail, indeterminate and metric provenance at 1440
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByRole('region', { name: 'Selected run timeline', exact: true }).getByRole('region', { name: 'Frozen assessment definitions', exact: true })
+    Expected substring: "Inspection does not evaluate these definitions"
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toContainText" getByRole('region', { name: 'Selected run timeline', exact: true }).getByRole('region', { name: 'Frozen assessment definitions', exact: true }) with timeout 10000ms
+      - waiting for getByRole('region', { name: 'Selected run timeline', exact: true }).getByRole('region', { name: 'Frozen assessment definitions', exact: true })
+
+
+      44 |     await expect(before.getByRole("heading",{name:"Selected run timeline",exact:true})).toBeFocused();
+      45 |     const declared=before.getByRole("region",{name:"Frozen assessment definitions",exact:true});
+    > 46 |     await expect(declared).toContainText("Inspection does not evaluate these definitions");
+         |                            ^
+      47 |     for (const d of definitions) {
+      48 |       const row=declared.locator(`[data-definition-ref="${d.definitionRef}"]`);
+      49 |       await expect(row).toContainText(d.definition.name);
+        at <repo>/tests/e2e/scenario-timeline-outcomes.spec.ts:46:28
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/scenario-timeline-outcomes-c9ecf-d-metric-provenance-at-1440/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/scenario-timeline-outcomes-c9ecf-d-metric-provenance-at-1440/error-context.md
+
+  2 failed
+    tests/e2e/scenario-timeline-outcomes.spec.ts:18:7 › scenario timeline outcomes: actual pass, fail, indeterminate and metric provenance at 1024
+    tests/e2e/scenario-timeline-outcomes.spec.ts:18:7 › scenario timeline outcomes: actual pass, fail, indeterminate and metric provenance at 1440

@@ -1,0 +1,7 @@
+<testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="8.600" timestamp="2026-10-28T22:25:38.556432+00:00" hostname="&lt;native-linux-host&gt;"><testcase classname="tests.integration.test_reference_pause" name="test_pause_requires_the_frozen_scoped_nonphysical_capability[operation]" time="8.544"><failure message="AssertionError: {&quot;code&quot;:&quot;STATE_CONFLICT&quot;,&quot;message&quot;:&quot;Run state changed; refresh before controlling it.&quot;,&quot;requestId&quot;:&quot;req-86c8def5-8bc8-4b1f-962c-0f9962715855&quot;,&quot;retryable&quot;:false}&#10;assert 409 == 202&#10; +  where 409 = &lt;Response [409 Conflict]&gt;.status_code">tests/integration/test_reference_pause.py:219: in test_pause_requires_the_frozen_scoped_nonphysical_capability
+    command(client, run, 'cancel')
+tests/integration/test_reference_pause.py:56: in command
+    assert response.status_code == 202, response.text
+E   AssertionError: {"code":"STATE_CONFLICT","message":"Run state changed; refresh before controlling it.","requestId":"req-86c8def5-8bc8-4b1f-962c-0f9962715855","retryable":false}
+E   assert 409 == 202
+E    +  where 409 = &lt;Response [409 Conflict]&gt;.status_code</failure></testcase></testsuite></testsuites>

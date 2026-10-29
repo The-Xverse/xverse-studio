@@ -1,0 +1,58 @@
+"""Owned reference launch/exit handoff; timing/source-read injections are explicit fixtures."""
+import json
+import time
+
+from test_advanced_api import prepared, start, wait_run
+
+
+def test_preparation_time_does_not_consume_the_worker_launch_observation_window(client, monkeypatch):
+    _, pf = prepared(client)
+    manager = client.app.state.studio.runs
+    original = manager._dispatch
+    def delayed_preparation(*args, **kwargs):
+        # Fixed contributor fault injection before the actual admitted native launch.
+        time.sleep(5.1)
+        return original(*args, **kwargs)
+    monkeypatch.setattr(manager, '_dispatch', delayed_preparation)
+    rid = start(client, pf, key='delayed-preparation')
+    observed = client.get('/api/v1/runs/'+rid).json()
+    assert observed['state'] != 'unknown', observed
+    assert observed['launchStartedAt'] > observed['createdAt']+5
+    assert wait_run(client, rid)['state'] == 'stopped'
+
+
+def test_stale_running_read_after_owned_exit_uses_a_bounded_matching_terminal_observation(client, monkeypatch):
+    from pathlib import Path
+    project, _ = prepared(client)
+    saved = client.post(f"/api/v1/projects/{project['projectId']}/edits", headers={'If-Match': str(project['revision'])},
+                        json={'baseRevision': project['revision'], 'edits': [{'kind': 'set_parameter', 'parameterId': 'duration', 'value': 3.0}]}).json()
+    pf = client.post(f"/api/v1/projects/{project['projectId']}/preflights", json={'revision': saved['revision']}).json()
+    assert pf['status']=='ready'
+    rid = start(client, pf, key='owned-terminal-handoff')
+    manager = client.app.state.studio.runs; store = client.app.state.studio.store
+    state_path = store.root/'runs'/rid/'state.json'
+    deadline=time.monotonic()+20
+    while time.monotonic()<deadline:
+        current=client.get('/api/v1/runs/'+rid).json()
+        if current['state']=='running': break
+        time.sleep(.05)
+    assert current['state']=='running'
+    running_bytes = state_path.read_text()
+    assert json.loads(running_bytes)['state']=='running'
+    child = manager.children[rid]
+    assert child.wait(timeout=15)==0  # Only the exact Popen child this test launched.
+    terminal = json.loads(state_path.read_text()); assert terminal['state']=='stopped'
+    persisted=store.get('run',rid); assert persisted['state']=='running'
+    assert persisted['pid']==terminal['pid'] and persisted['createTime']==terminal['createTime']
+    original = Path.read_text; calls=[]
+    def stale_once(path, *args, **kwargs):
+        if path==state_path:
+            calls.append('state')
+            if len(calls)==1: return running_bytes
+        return original(path,*args,**kwargs)
+    monkeypatch.setattr(Path,'read_text',stale_once)
+    observed=client.get('/api/v1/runs/'+rid).json()
+    assert observed['state']=='stopped',observed
+    assert observed['cleanup']=='complete' and observed['evidence']=='complete'
+    assert len(calls)==2, 'Terminal handoff re-acquisition must stay bounded.'
+    assert not (store.root/'runs'/rid/'command.json').exists()

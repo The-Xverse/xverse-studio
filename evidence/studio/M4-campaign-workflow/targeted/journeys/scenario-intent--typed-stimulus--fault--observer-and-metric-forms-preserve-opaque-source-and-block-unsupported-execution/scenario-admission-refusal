@@ -1,0 +1,349 @@
+{
+  "preflightId": "pf-75f4444f-5e3f-44aa-9a60-345aa325e2ed",
+  "snapshotId": "snap-f5ab9948-6a03-4328-ab98-147ca379d4f9",
+  "snapshotDigest": "sha256:c8b71bfebf865437fbf11b282ee43fa4c54fb4e6d3a185da6f284ea84ecdc9f9",
+  "revision": 7,
+  "providerId": "studio.reference",
+  "providerIdentity": {
+    "providerId": "studio.reference",
+    "providerVersion": "1.0.0",
+    "contractVersion": "1.0",
+    "name": "Studio executable reference",
+    "maturity": "fixture",
+    "evidenceScope": "owned_reference",
+    "supportedHostOS": [
+      "Linux",
+      "Windows"
+    ],
+    "architectures": [
+      "x86_64",
+      "AMD64"
+    ],
+    "realizationClasses": [
+      "simulated"
+    ],
+    "targetClasses": [
+      "model-unit"
+    ],
+    "hostExecutionClass": "native-process",
+    "operations": [
+      "start",
+      "stop",
+      "cancel"
+    ],
+    "clockDomains": [
+      "simulation-time"
+    ],
+    "connectionContracts": {
+      "causality": [
+        "unit-delay"
+      ],
+      "converters": [
+        "linear"
+      ]
+    },
+    "limits": {
+      "maxDurationSeconds": 30,
+      "maxSamples": 3000,
+      "maxConcurrentRuns": 4,
+      "maxElements": 200,
+      "maxConnections": 400
+    },
+    "limitations": [
+      "Scalar first-order reference model only; no external simulator, physical device, native X-COM, or industrial fidelity claim.",
+      "Pause, rewind, step, live mutation and physical coupling are unsupported."
+    ],
+    "supportedXdlVersions": [
+      "xverse.io/xdl/v1alpha1"
+    ],
+    "capabilityRecords": [
+      {
+        "kind": "start",
+        "targetClass": "model-unit",
+        "legalStates": [
+          "ready"
+        ],
+        "parametersSchema": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "authorityRequirements": [
+          "native-backend-owned"
+        ],
+        "physicalEffects": false,
+        "maxDurationSeconds": 30,
+        "completion": "observed_worker_state"
+      },
+      {
+        "kind": "stop",
+        "targetClass": "model-unit",
+        "legalStates": [
+          "running",
+          "preparing",
+          "ready"
+        ],
+        "parametersSchema": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "authorityRequirements": [
+          "native-backend-owned"
+        ],
+        "physicalEffects": false,
+        "maxDurationSeconds": 30,
+        "completion": "observed_worker_state"
+      },
+      {
+        "kind": "cancel",
+        "targetClass": "model-unit",
+        "legalStates": [
+          "running",
+          "preparing",
+          "ready"
+        ],
+        "parametersSchema": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "authorityRequirements": [
+          "native-backend-owned"
+        ],
+        "physicalEffects": false,
+        "maxDurationSeconds": 30,
+        "completion": "observed_worker_state"
+      }
+    ],
+    "available": true,
+    "hostCompatible": true,
+    "implementationDigest": "sha256:d544ae4d0fe1609fc5482d91334b211f96e75165e7bbaf5c62c72b7b2690631a"
+  },
+  "readinessVersion": "1.0",
+  "readiness": {
+    "backend": {
+      "status": "available",
+      "message": "The authenticated native Studio backend is responding; no runtime liveness is inferred.",
+      "elementRefs": [
+        "xdl://org.xverse.studio.process-control/system/reference-loop"
+      ],
+      "diagnosticCodes": [],
+      "remediation": "",
+      "facts": {
+        "probe": "local_control_service",
+        "hostOS": "Linux",
+        "hostArchitecture": "x86_64"
+      }
+    },
+    "model": {
+      "status": "invalid",
+      "message": "The public XDL validator/compiler rejected these inputs.",
+      "elementRefs": [
+        "xdl://org.xverse.studio.process-control/system/reference-loop"
+      ],
+      "diagnosticCodes": [],
+      "remediation": "Correct the reported source diagnostics before execution."
+    },
+    "provider": {
+      "status": "available",
+      "message": "The installed owned reference provider declares compatibility with this native OS/architecture.",
+      "elementRefs": [
+        "xdl://org.xverse.studio.process-control/system/reference-loop"
+      ],
+      "diagnosticCodes": [],
+      "remediation": "",
+      "facts": {
+        "providerId": "studio.reference",
+        "hostCompatible": true,
+        "supportedHostOS": [
+          "Linux",
+          "Windows"
+        ],
+        "architectures": [
+          "x86_64",
+          "AMD64"
+        ],
+        "evidenceScope": "owned_reference"
+      }
+    },
+    "authority": {
+      "status": "available",
+      "message": "Backend-owned reference execution is admitted; no physical permit is acquired.",
+      "elementRefs": [
+        "xdl://org.xverse.studio.process-control/system/reference-loop"
+      ],
+      "diagnosticCodes": [],
+      "remediation": "",
+      "facts": {
+        "physicalEffects": false
+      }
+    },
+    "capabilities": {
+      "status": "unsupported",
+      "message": "The descriptor does not admit this model/control contract.",
+      "elementRefs": [
+        "xdl://org.xverse.studio.process-control/system/reference-loop"
+      ],
+      "diagnosticCodes": [
+        "CAPABILITY_UNSUPPORTED"
+      ],
+      "remediation": "Select the owned reference template or another independently admitted compatible provider."
+    },
+    "artifacts": {
+      "status": "unknown",
+      "message": "Artifact availability/integrity cannot be established for all selected references.",
+      "elementRefs": [
+        "xdl://org.xverse.studio.process-control/system/reference-loop"
+      ],
+      "diagnosticCodes": [
+        "ARTIFACT_UNAVAILABLE"
+      ],
+      "remediation": "Supply admitted exact artifact identities; registration metadata alone is not availability.",
+      "facts": {
+        "artifacts": []
+      }
+    },
+    "clocks": {
+      "status": "unknown",
+      "message": "An admitted clock or mapping is missing for this provider.",
+      "elementRefs": [
+        "xdl://org.xverse.studio.process-control/system/reference-loop"
+      ],
+      "diagnosticCodes": [
+        "CLOCK_MAPPING_UNAVAILABLE"
+      ],
+      "remediation": "Declare an admitted clock/mapping before execution.",
+      "facts": {
+        "domains": []
+      }
+    },
+    "resources": {
+      "status": "unknown",
+      "message": "Workload requirements cannot be established for the unadmitted configuration.",
+      "elementRefs": [
+        "xdl://org.xverse.studio.process-control/system/reference-loop"
+      ],
+      "diagnosticCodes": [],
+      "remediation": "Wait for owned runs to finish or reduce the authored workload within advertised limits.",
+      "facts": {
+        "activeOwnedRuns": 0,
+        "reserved": false
+      }
+    },
+    "ownership": {
+      "status": "available",
+      "message": "A new reference run will be owned by the native backend; browser disconnection does not own its lifetime.",
+      "elementRefs": [
+        "xdl://org.xverse.studio.process-control/system/reference-loop"
+      ],
+      "diagnosticCodes": [],
+      "remediation": "",
+      "facts": {
+        "owner": "native_backend",
+        "reservationAcquired": false
+      }
+    },
+    "target": {
+      "status": "blocked",
+      "message": "This target cannot accept execution under the current source/provider/resource facts.",
+      "elementRefs": [
+        "xdl://org.xverse.studio.process-control/system/reference-loop"
+      ],
+      "diagnosticCodes": [],
+      "remediation": "Resolve the independent blocked/unknown dimensions, then recheck."
+    }
+  },
+  "status": "blocked",
+  "planDigest": null,
+  "semanticDigest": null,
+  "capabilityDigest": "sha256:c16a8f54e1b9276ab1a78399b4948d64ce6e58f7ce1d50b8c56720d389ec952e",
+  "expiresAt": 1793088006.2449203,
+  "diagnostics": [
+    {
+      "code": "XDL1-PLAN-FAULT-DURATION-INVALID",
+      "severity": "error",
+      "gate": 4,
+      "message": "fault 'browser-fault' declares no duration",
+      "correction": "Declare an explicit non-negative duration.",
+      "pointer": "",
+      "elementRef": "xdl://org.xverse.studio.process-control/scenario/reference-response",
+      "location": null
+    },
+    {
+      "code": "XDL1-PLAN-FAULT-TRIGGER-MISSING",
+      "severity": "error",
+      "gate": 4,
+      "message": "fault 'browser-fault' carries no resolvable trigger",
+      "correction": "Declare exactly one time or declared-order trigger.",
+      "pointer": "",
+      "elementRef": "xdl://org.xverse.studio.process-control/scenario/reference-response",
+      "location": null
+    },
+    {
+      "code": "CAPABILITY_UNSUPPORTED",
+      "severity": "error",
+      "message": "The descriptor does not admit this model/control contract.",
+      "elementRef": "xdl://org.xverse.studio.process-control/system/reference-loop",
+      "elementRefs": [
+        "xdl://org.xverse.studio.process-control/system/reference-loop"
+      ],
+      "remediation": "Select the owned reference template or another independently admitted compatible provider."
+    },
+    {
+      "code": "ARTIFACT_UNAVAILABLE",
+      "severity": "error",
+      "message": "Artifact availability/integrity cannot be established for all selected references.",
+      "elementRef": "xdl://org.xverse.studio.process-control/system/reference-loop",
+      "elementRefs": [
+        "xdl://org.xverse.studio.process-control/system/reference-loop"
+      ],
+      "remediation": "Supply admitted exact artifact identities; registration metadata alone is not availability."
+    },
+    {
+      "code": "CLOCK_MAPPING_UNAVAILABLE",
+      "severity": "error",
+      "message": "An admitted clock or mapping is missing for this provider.",
+      "elementRef": "xdl://org.xverse.studio.process-control/system/reference-loop",
+      "elementRefs": [
+        "xdl://org.xverse.studio.process-control/system/reference-loop"
+      ],
+      "remediation": "Declare an admitted clock/mapping before execution."
+    }
+  ],
+  "dimensions": {
+    "backend": "available",
+    "model": "invalid",
+    "provider": "available",
+    "authority": "available",
+    "capabilities": "unsupported",
+    "artifacts": "unknown",
+    "clocks": "unknown",
+    "resources": "unknown",
+    "ownership": "available",
+    "target": "blocked",
+    "evidenceScope": "owned_reference"
+  },
+  "limits": {
+    "maxDurationSeconds": 30,
+    "maxSamples": 3000,
+    "maxConcurrentRuns": 4,
+    "maxElements": 200,
+    "maxConnections": 400
+  },
+  "selection": {
+    "systemRef": "xdl://org.xverse.studio.process-control/system/reference-loop",
+    "deploymentRef": "xdl://org.xverse.studio.process-control/deployment/local-reference",
+    "scenarioRef": "xdl://org.xverse.studio.process-control/scenario/reference-response"
+  },
+  "contributingDocuments": [
+    "xdl/controller.xdl.yaml",
+    "xdl/plant.xdl.yaml",
+    "xdl/system.xdl.yaml",
+    "xdl/deployment.xdl.yaml",
+    "xdl/scenario.xdl.yaml",
+    "xdl/profile.xdl.yaml",
+    "xdl/evaluation-profile.xdl.yaml"
+  ],
+  "planPreview": null
+}

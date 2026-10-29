@@ -1,0 +1,14 @@
+from pathlib import Path
+import json,subprocess,sys,hashlib
+root=Path.cwd().resolve();base=root/'.studio-local/campaign-workflow';frozen=None
+for name,pattern,expected in [('verified-targeted','campaign workflow:|campaign input bounds:|campaign control:|campaign completion:|campaign response guards:|scenario timeline:|scenario timeline outcomes:|scenario authoring completion:|scenario intent:|scenario timeline pending:|owned reference browser workflow:',42),('verified-full','ALL',379),('verified-performance','PERFORMANCE',2)]:
+ print('START '+name,flush=True)
+ r=subprocess.run([sys.executable,'-I',str(base/'check-browser.py'),name,pattern],cwd=root)
+ if r.returncode:raise SystemExit(r.returncode)
+ out=base/name;summary=json.loads((out/'summary.json').read_text());report=json.loads((out/'browser-report.json').read_text());before=json.loads((out/'source-before.json').read_text());after=json.loads((out/'source-after.json').read_text())
+ assert summary['exitCode']==0 and summary['sourceUnchanged'] and before==after
+ if frozen is None:frozen=before
+ assert before==frozen
+ assert report['stats']['expected']==expected and not any(report['stats'][k] for k in ['unexpected','skipped','flaky']),report['stats']
+ print('PASS '+name+': '+str(expected)+'; '+str(len(before))+' identical selected inputs',flush=True)
+print('Final selected-input browser pipeline passed',flush=True)

@@ -1,0 +1,290 @@
+
+> xverse-studio-workspace@0.1.0 test:e2e
+> playwright test -c tests/e2e/playwright.config.ts --grep lab inventory: missing physical declaration
+
+
+Running 2 tests using 1 worker
+
+(node:2126247) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 tests/e2e/lab-inventory-accessibility.spec.ts:24:7 › lab inventory: missing physical declaration stays unknown at 1024x768 (10.7s)
+(node:2126441) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 tests/e2e/lab-inventory-accessibility.spec.ts:24:7 › lab inventory: missing physical declaration stays unknown at 1440x900 (10.5s)
+
+
+  1) tests/e2e/lab-inventory-accessibility.spec.ts:24:7 › lab inventory: missing physical declaration stays unknown at 1024x768
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: locator('.lab-page').locator('section.panel').filter({ has: getByRole('heading', { name: 'urn:fixture:inventory-presentation', exact: true }) })
+    Timeout: 10000ms
+    - Expected substring  -  1
+    + Received string     + 52
+
+    - Not confirmed physical
+    + urn:fixture:inventory-presentationfixtureIdentityurn:fixture:inventory-presentationProviderfixtureProvider versionfixture-provider-1.0RealizationNon-physical asset observationIdentity observationobservedObserved identity{"serial":"SYNTHETIC-UI-001","model":"Inventory contract fixture"}FirmwareObserved · fixture-1.2.3Artifact revisionUnknownMetadata coveragepartialInterfacescommandProvider OS declarationLinuxDeclared capabilitiesobserve, stimulatePermission scopeunknownAvailabilityObserved availablePhysical stateUnknownProvider admissionunavailableActive-operation readinessBlockedPHYSICAL_PROVIDER_NOT_ADMITTEDAsset observation diagnosticReserve observe-onlyInspect exact data{
+    +   "assetId": "urn:fixture:inventory-presentation",
+    +   "providerId": "fixture",
+    +   "providerVersion": "fixture-provider-1.0",
+    +   "physical": false,
+    +   "identity": {
+    +     "serial": "SYNTHETIC-UI-001",
+    +     "model": "Inventory contract fixture"
+    +   },
+    +   "identityStatus": "observed",
+    +   "firmware": {
+    +     "status": "observed",
+    +     "version": "fixture-1.2.3"
+    +   },
+    +   "artifactRevision": {
+    +     "status": "unknown"
+    +   },
+    +   "metadata": {
+    +     "status": "partial",
+    +     "limitations": [
+    +       "Only allowlisted identity and revision observations are exposed."
+    +     ]
+    +   },
+    +   "interfaces": {
+    +     "command": {
+    +       "id": "command",
+    +       "direction": "input",
+    +       "payloadSchema": "urn:fixture:command"
+    +     }
+    +   },
+    +   "interfacesStatus": "declared",
+    +   "supportedOS": [
+    +     "Linux"
+    +   ],
+    +   "observationTruncated": false,
+    +   "capabilities": [
+    +     "observe",
+    +     "stimulate"
+    +   ],
+    +   "permissionScope": "unknown",
+    +   "available": true,
+    +   "evidenceScope": "fixture",
+    +   "providerAdmission": "unavailable",
+    +   "activeReady": false,
+    +   "reservable": false,
+    +   "diagnostics": [
+    +     {
+    +       "code": "PHYSICAL_PROVIDER_NOT_ADMITTED",
+    +       "message": "Asset observation diagnostic"
+    +     }
+    +   ]
+    + }
+
+    Call log:
+      - Expect "soft toContainText" locator('.lab-page').locator('section.panel').filter({ has: getByRole('heading', { name: 'urn:fixture:inventory-presentation', exact: true }) }) with timeout 10000ms
+      - waiting for locator('.lab-page').locator('section.panel').filter({ has: getByRole('heading', { name: 'urn:fixture:inventory-presentation', exact: true }) })
+        24 × locator resolved to <section class="panel">…</section>
+           - unexpected value "urn:fixture:inventory-presentationfixtureIdentityurn:fixture:inventory-presentationProviderfixtureProvider versionfixture-provider-1.0RealizationNon-physical asset observationIdentity observationobservedObserved identity{"serial":"SYNTHETIC-UI-001","model":"Inventory contract fixture"}FirmwareObserved · fixture-1.2.3Artifact revisionUnknownMetadata coveragepartialInterfacescommandProvider OS declarationLinuxDeclared capabilitiesobserve, stimulatePermission scopeunknownAvailabilityObserved availablePhysical stateUnknownProvider admissionunavailableActive-operation readinessBlockedPHYSICAL_PROVIDER_NOT_ADMITTEDAsset observation diagnosticReserve observe-onlyInspect exact data{
+      "assetId": "urn:fixture:inventory-presentation",
+      "providerId": "fixture",
+      "providerVersion": "fixture-provider-1.0",
+      "physical": false,
+      "identity": {
+        "serial": "SYNTHETIC-UI-001",
+        "model": "Inventory contract fixture"
+      },
+      "identityStatus": "observed",
+      "firmware": {
+        "status": "observed",
+        "version": "fixture-1.2.3"
+      },
+      "artifactRevision": {
+        "status": "unknown"
+      },
+      "metadata": {
+        "status": "partial",
+        "limitations": [
+          "Only allowlisted identity and revision observations are exposed."
+        ]
+      },
+      "interfaces": {
+        "command": {
+          "id": "command",
+          "direction": "input",
+          "payloadSchema": "urn:fixture:command"
+        }
+      },
+      "interfacesStatus": "declared",
+      "supportedOS": [
+        "Linux"
+      ],
+      "observationTruncated": false,
+      "capabilities": [
+        "observe",
+        "stimulate"
+      ],
+      "permissionScope": "unknown",
+      "available": true,
+      "evidenceScope": "fixture",
+      "providerAdmission": "unavailable",
+      "activeReady": false,
+      "reservable": false,
+      "diagnostics": [
+        {
+          "code": "PHYSICAL_PROVIDER_NOT_ADMITTED",
+          "message": "Asset observation diagnostic"
+        }
+      ]
+    }"
+
+
+      38 |     const card = assetCard(page);
+      39 |     await expect(card).toBeVisible();
+    > 40 |     await expect.soft(card).toContainText("Not confirmed physical");
+         |                             ^
+      41 |     await expect(
+      42 |       card.getByRole("button", { name: "Reserve observe-only", exact: true }),
+      43 |     ).toBeDisabled();
+        at <repo>/tests/e2e/lab-inventory-accessibility.spec.ts:40:29
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/lab-inventory-accessibilit-d811e-n-stays-unknown-at-1024x768/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/lab-inventory-accessibilit-d811e-n-stays-unknown-at-1024x768/error-context.md
+
+  2) tests/e2e/lab-inventory-accessibility.spec.ts:24:7 › lab inventory: missing physical declaration stays unknown at 1440x900
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: locator('.lab-page').locator('section.panel').filter({ has: getByRole('heading', { name: 'urn:fixture:inventory-presentation', exact: true }) })
+    Timeout: 10000ms
+    - Expected substring  -  1
+    + Received string     + 52
+
+    - Not confirmed physical
+    + urn:fixture:inventory-presentationfixtureIdentityurn:fixture:inventory-presentationProviderfixtureProvider versionfixture-provider-1.0RealizationNon-physical asset observationIdentity observationobservedObserved identity{"serial":"SYNTHETIC-UI-001","model":"Inventory contract fixture"}FirmwareObserved · fixture-1.2.3Artifact revisionUnknownMetadata coveragepartialInterfacescommandProvider OS declarationLinuxDeclared capabilitiesobserve, stimulatePermission scopeunknownAvailabilityObserved availablePhysical stateUnknownProvider admissionunavailableActive-operation readinessBlockedPHYSICAL_PROVIDER_NOT_ADMITTEDAsset observation diagnosticReserve observe-onlyInspect exact data{
+    +   "assetId": "urn:fixture:inventory-presentation",
+    +   "providerId": "fixture",
+    +   "providerVersion": "fixture-provider-1.0",
+    +   "physical": false,
+    +   "identity": {
+    +     "serial": "SYNTHETIC-UI-001",
+    +     "model": "Inventory contract fixture"
+    +   },
+    +   "identityStatus": "observed",
+    +   "firmware": {
+    +     "status": "observed",
+    +     "version": "fixture-1.2.3"
+    +   },
+    +   "artifactRevision": {
+    +     "status": "unknown"
+    +   },
+    +   "metadata": {
+    +     "status": "partial",
+    +     "limitations": [
+    +       "Only allowlisted identity and revision observations are exposed."
+    +     ]
+    +   },
+    +   "interfaces": {
+    +     "command": {
+    +       "id": "command",
+    +       "direction": "input",
+    +       "payloadSchema": "urn:fixture:command"
+    +     }
+    +   },
+    +   "interfacesStatus": "declared",
+    +   "supportedOS": [
+    +     "Linux"
+    +   ],
+    +   "observationTruncated": false,
+    +   "capabilities": [
+    +     "observe",
+    +     "stimulate"
+    +   ],
+    +   "permissionScope": "unknown",
+    +   "available": true,
+    +   "evidenceScope": "fixture",
+    +   "providerAdmission": "unavailable",
+    +   "activeReady": false,
+    +   "reservable": false,
+    +   "diagnostics": [
+    +     {
+    +       "code": "PHYSICAL_PROVIDER_NOT_ADMITTED",
+    +       "message": "Asset observation diagnostic"
+    +     }
+    +   ]
+    + }
+
+    Call log:
+      - Expect "soft toContainText" locator('.lab-page').locator('section.panel').filter({ has: getByRole('heading', { name: 'urn:fixture:inventory-presentation', exact: true }) }) with timeout 10000ms
+      - waiting for locator('.lab-page').locator('section.panel').filter({ has: getByRole('heading', { name: 'urn:fixture:inventory-presentation', exact: true }) })
+        24 × locator resolved to <section class="panel">…</section>
+           - unexpected value "urn:fixture:inventory-presentationfixtureIdentityurn:fixture:inventory-presentationProviderfixtureProvider versionfixture-provider-1.0RealizationNon-physical asset observationIdentity observationobservedObserved identity{"serial":"SYNTHETIC-UI-001","model":"Inventory contract fixture"}FirmwareObserved · fixture-1.2.3Artifact revisionUnknownMetadata coveragepartialInterfacescommandProvider OS declarationLinuxDeclared capabilitiesobserve, stimulatePermission scopeunknownAvailabilityObserved availablePhysical stateUnknownProvider admissionunavailableActive-operation readinessBlockedPHYSICAL_PROVIDER_NOT_ADMITTEDAsset observation diagnosticReserve observe-onlyInspect exact data{
+      "assetId": "urn:fixture:inventory-presentation",
+      "providerId": "fixture",
+      "providerVersion": "fixture-provider-1.0",
+      "physical": false,
+      "identity": {
+        "serial": "SYNTHETIC-UI-001",
+        "model": "Inventory contract fixture"
+      },
+      "identityStatus": "observed",
+      "firmware": {
+        "status": "observed",
+        "version": "fixture-1.2.3"
+      },
+      "artifactRevision": {
+        "status": "unknown"
+      },
+      "metadata": {
+        "status": "partial",
+        "limitations": [
+          "Only allowlisted identity and revision observations are exposed."
+        ]
+      },
+      "interfaces": {
+        "command": {
+          "id": "command",
+          "direction": "input",
+          "payloadSchema": "urn:fixture:command"
+        }
+      },
+      "interfacesStatus": "declared",
+      "supportedOS": [
+        "Linux"
+      ],
+      "observationTruncated": false,
+      "capabilities": [
+        "observe",
+        "stimulate"
+      ],
+      "permissionScope": "unknown",
+      "available": true,
+      "evidenceScope": "fixture",
+      "providerAdmission": "unavailable",
+      "activeReady": false,
+      "reservable": false,
+      "diagnostics": [
+        {
+          "code": "PHYSICAL_PROVIDER_NOT_ADMITTED",
+          "message": "Asset observation diagnostic"
+        }
+      ]
+    }"
+
+
+      38 |     const card = assetCard(page);
+      39 |     await expect(card).toBeVisible();
+    > 40 |     await expect.soft(card).toContainText("Not confirmed physical");
+         |                             ^
+      41 |     await expect(
+      42 |       card.getByRole("button", { name: "Reserve observe-only", exact: true }),
+      43 |     ).toBeDisabled();
+        at <repo>/tests/e2e/lab-inventory-accessibility.spec.ts:40:29
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/lab-inventory-accessibilit-1f6cd-n-stays-unknown-at-1440x900/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/lab-inventory-accessibilit-1f6cd-n-stays-unknown-at-1440x900/error-context.md
+
+  2 failed
+    tests/e2e/lab-inventory-accessibility.spec.ts:24:7 › lab inventory: missing physical declaration stays unknown at 1024x768
+    tests/e2e/lab-inventory-accessibility.spec.ts:24:7 › lab inventory: missing physical declaration stays unknown at 1440x900

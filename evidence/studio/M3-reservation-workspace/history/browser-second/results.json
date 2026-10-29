@@ -1,0 +1,26 @@
+[
+  {
+    "stage": "build",
+    "command": [
+      "<tool-cache>/node-v24.22.1-linux-x64/bin/node",
+      "<tool-cache>/node-v24.22.1-linux-x64/lib/node_modules/npm/bin/npm-cli.js",
+      "run",
+      "build"
+    ],
+    "exitCode": 0,
+    "seconds": 4.673928499221802
+  },
+  {
+    "stage": "browser",
+    "command": [
+      "<tool-cache>/node-v24.22.1-linux-x64/bin/node",
+      "node_modules/@playwright/test/cli.js",
+      "test",
+      "-c",
+      "tests/e2e/playwright.config.ts",
+      "lab-reservations.spec.ts"
+    ],
+    "exitCode": 130,
+    "seconds": 110.00459337234497
+  }
+]

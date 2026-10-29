@@ -1,0 +1,202 @@
+{
+  "config": {
+    "argv": [
+      "<loop-cache>/node-v24.22.1-linux-x64/bin/node",
+      "<repo>/node_modules/.bin/playwright",
+      "test",
+      "-c",
+      "tests/e2e/playwright.config.ts",
+      "--grep",
+      "connection accessibility:"
+    ],
+    "configFile": "<repo>/tests/e2e/playwright.config.ts",
+    "rootDir": "<repo>/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "<repo>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "<repo>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "*.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "<repo>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "<repo>/tests/e2e",
+        "snapshotDir": "<repo>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": "*.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "baseURL": "http://127.0.0.1:35597",
+          "browserName": "chromium",
+          "actionTimeout": 15000,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "trace": "off",
+          "screenshot": "only-on-failure",
+          "video": "off"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "<repo>/test-results/browser-report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "connection-accessibility.spec.ts",
+      "file": "connection-accessibility.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "connection accessibility: native typed flow and rejected identifier recovery at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4442,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T17:25:19.040Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "connection-keyboard.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJwbGF0Zm9ybSI6ImxpbnV4IiwiYnJvd3NlciI6IjE1Ni4wLjgwNzguNCIsIm5hdGl2ZVZhbGlkQmVmb3JlIjpmYWxzZSwiYnJvd3NlclJlZnVzYWwiOm51bGwsImRpcmVjdCI6eyJzdGF0dXMiOjQyMiwiYm9keSI6eyJjb2RlIjoiSU5WQUxJRF9FRElUIiwibWVzc2FnZSI6IkNob29zZSBhIHZhbGlkIHN0YWJsZSBmbG93IElELiIsInJlcXVlc3RJZCI6InJlcS1kYTM1YTIzMi03N2NkLTRkMjgtYjYxOC0wMzUzYmI4NDY1NDUiLCJyZXRyeWFibGUiOmZhbHNlfX0sImluaXRpYWxSZXZpc2lvbiI6Miwic2F2ZWRSZXZpc2lvbiI6MywiZmxvdyI6eyJpZCI6ImNvbW1hbmQtZmxvdyIsInNvdXJjZUVuZHBvaW50SWQiOiJjb250cm9sbGVyLW91dCIsImRlc3RpbmF0aW9uRW5kcG9pbnRJZHMiOlsicGxhbnQtaW4iXSwiaW50ZXJmYWNlSWQiOiJjb21tYW5kIiwiZGVsaXZlcnlJbnRlbnQiOiJvcmRlcmVkIiwidGltZURvbWFpbklkIjoic2ltdWxhdGlvbi10aW1lIn0sImNvbXBsZXRlRmxvd0NvbGxlY3Rpb25QcmVzZXJ2ZWQiOnRydWUsImlkZW50aXRpZXNQcmVzZXJ2ZWQiOnRydWUsImRlZmluaXRpb25zQW5kT3RoZXJEb2N1bWVudHNVbmNoYW5nZWQiOnRydWUsImF1dGhvcml0YXRpdmVWYWxpZGF0aW9uIjp0cnVlLCJwcm9qZWN0UnVuU2V0VW5jaGFuZ2VkIjp0cnVlLCJtZWFzdXJlbWVudHMiOlt7ImxhYmVsIjoiQ29ubmVjdGlvbiB0YXJnZXQgZ3VpZGFuY2UiLCJ0ZXh0IjoiMSBjb21wYXRpYmxlIGRlc3RpbmF0aW9uKHMpOyBpbmNvbXBhdGlibGUgb25lcyBhcmUgbGlzdGVkIHdpdGggdGhlaXIgcmVhc29uLiIsImNvbG9yIjoicmdiKDEwMSwgMTE3LCAxNDEpIiwiZm9udFNpemUiOiIxMXB4IiwiZm9udFdlaWdodCI6IjQwMCIsInRocmVzaG9sZCI6NC41LCJzY29wZSI6IlNlbGVjdGVkIG5vcm1hbC1zaXplIHJlbmRlcmVkIHRleHQ7IG5vIG92ZXJhbGwgYWNjZXNzaWJpbGl0eSBjZXJ0aWZpY2F0aW9uIiwic3VwcG9ydGVkIjp0cnVlLCJsYXllcnMiOlsicmdiYSgwLCAwLCAwLCAwKSIsInJnYmEoMCwgMCwgMCwgMCkiLCJyZ2IoMjU1LCAyNTUsIDI1NSkiXSwiYmFja2dyb3VuZCI6WzEsMSwxLDFdLCJjb21wb3NpdGVkRm9yZWdyb3VuZCI6WzAuMzk2MDc4NDMxMzcyNTQ5LDAuNDU4ODIzNTI5NDExNzY0NywwLjU1Mjk0MTE3NjQ3MDU4ODMsMV0sInJhdGlvIjo0LjY4NDkxMzE1OTg4OTYyMDUsInBhc3NlZCI6dHJ1ZSwiYXNzdW1wdGlvbnMiOiJDU1Mgc1JHQiBjb2xvcnM7IGFscGhhIGNvbXBvc2l0ZWQgdGhyb3VnaCBleHBsaWNpdCBiYWNrZ3JvdW5kczsgbm8gYW50aS1hbGlhc2luZyBhcHByb3hpbWF0aW9uIn0seyJsYWJlbCI6IkNvbm5lY3Rpb24gaWRlbnRpZmllciBndWlkYW5jZSIsInRleHQiOiJTdGFydCB3aXRoIGEgbG93ZXJjYXNlIGxldHRlcjsgdXNlIGxvd2VyY2FzZSBsZXR0ZXJzIGFuZCBkaWdpdHMgc2VwYXJhdGVkIGJ5IHNpbmdsZSBoeXBoZW5zLiIsImNvbG9yIjoicmdiKDEwMSwgMTE3LCAxNDEpIiwiZm9udFNpemUiOiIxMXB4IiwiZm9udFdlaWdodCI6IjQwMCIsInRocmVzaG9sZCI6NC41LCJzY29wZSI6IlNlbGVjdGVkIG5vcm1hbC1zaXplIHJlbmRlcmVkIHRleHQ7IG5vIG92ZXJhbGwgYWNjZXNzaWJpbGl0eSBjZXJ0aWZpY2F0aW9uIiwic3VwcG9ydGVkIjp0cnVlLCJsYXllcnMiOlsicmdiYSgwLCAwLCAwLCAwKSIsInJnYmEoMCwgMCwgMCwgMCkiLCJyZ2IoMjU1LCAyNTUsIDI1NSkiXSwiYmFja2dyb3VuZCI6WzEsMSwxLDFdLCJjb21wb3NpdGVkRm9yZWdyb3VuZCI6WzAuMzk2MDc4NDMxMzcyNTQ5LDAuNDU4ODIzNTI5NDExNzY0NywwLjU1Mjk0MTE3NjQ3MDU4ODMsMV0sInJhdGlvIjo0LjY4NDkxMzE1OTg4OTYyMDUsInBhc3NlZCI6dHJ1ZSwiYXNzdW1wdGlvbnMiOiJDU1Mgc1JHQiBjb2xvcnM7IGFscGhhIGNvbXBvc2l0ZWQgdGhyb3VnaCBleHBsaWNpdCBiYWNrZ3JvdW5kczsgbm8gYW50aS1hbGlhc2luZyBhcHByb3hpbWF0aW9uIn1dLCJ3cml0ZXMiOlt7InBhdGgiOiIvYXBpL3YxL3Byb2plY3RzL3Byai03OWRkZTQwNy0zY2IwLTRjNTYtODM4Mi1kNzQ5YTc4NzEwMTQvZWRpdHMiLCJib2R5Ijp7ImJhc2VSZXZpc2lvbiI6MiwiZWRpdHMiOlt7ImtpbmQiOiJjb25uZWN0X2VuZHBvaW50cyIsImZsb3dJZCI6IkJhZF9JRCIsInNvdXJjZUVuZHBvaW50SWQiOiJjb250cm9sbGVyLW91dCIsImRlc3RpbmF0aW9uRW5kcG9pbnRJZHMiOlsicGxhbnQtaW4iXSwiaW50ZXJmYWNlSWQiOiJjb21tYW5kIiwidGltZURvbWFpbklkIjoic2ltdWxhdGlvbi10aW1lIn1dfX0seyJwYXRoIjoiL2FwaS92MS9wcm9qZWN0cy9wcmotNzlkZGU0MDctM2NiMC00YzU2LTgzODItZDc0OWE3ODcxMDE0L2VkaXRzIiwiYm9keSI6eyJiYXNlUmV2aXNpb24iOjIsImVkaXRzIjpbeyJraW5kIjoiY29ubmVjdF9lbmRwb2ludHMiLCJmbG93SWQiOiJjb21tYW5kLWZsb3ciLCJzb3VyY2VFbmRwb2ludElkIjoiY29udHJvbGxlci1vdXQiLCJkZXN0aW5hdGlvbkVuZHBvaW50SWRzIjpbInBsYW50LWluIl0sImludGVyZmFjZUlkIjoiY29tbWFuZCIsInRpbWVEb21haW5JZCI6InNpbXVsYXRpb24tdGltZSJ9XX19LHsicGF0aCI6Ii9hcGkvdjEvcHJvamVjdHMvcHJqLTc5ZGRlNDA3LTNjYjAtNGM1Ni04MzgyLWQ3NDlhNzg3MTAxNC92YWxpZGF0aW9ucyIsImJvZHkiOnsicmV2aXNpb24iOjN9fV0sInNjb3BlIjoiTmF0aXZlIGtleWJvYXJkIGF1dGhvcmVkIGNvbm5lY3Rpb247IGV4cGxpY2l0IGRpcmVjdCBBUEkgcmVqZWN0aW9uOyBubyByb3V0aW5nL3RyYWZmaWMvbmF0aXZlIFhDT00gb3IgcHJvdmlkZXIgZXhlY3V0aW9uIGNsYWltIn0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "5e60a09bed9141bc10a4-a21b1ed9cb97954a95e2",
+          "file": "connection-accessibility.spec.ts",
+          "line": 50,
+          "column": 7
+        },
+        {
+          "title": "connection accessibility: native typed flow and rejected identifier recovery at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3219,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T17:25:23.547Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "connection-keyboard.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJwbGF0Zm9ybSI6ImxpbnV4IiwiYnJvd3NlciI6IjE1Ni4wLjgwNzguNCIsIm5hdGl2ZVZhbGlkQmVmb3JlIjpmYWxzZSwiYnJvd3NlclJlZnVzYWwiOm51bGwsImRpcmVjdCI6eyJzdGF0dXMiOjQyMiwiYm9keSI6eyJjb2RlIjoiSU5WQUxJRF9FRElUIiwibWVzc2FnZSI6IkNob29zZSBhIHZhbGlkIHN0YWJsZSBmbG93IElELiIsInJlcXVlc3RJZCI6InJlcS0wY2Y0ODg5NS1mNDE1LTQ5ODctYWIyYy1iMjJhOGExMmRhMGUiLCJyZXRyeWFibGUiOmZhbHNlfX0sImluaXRpYWxSZXZpc2lvbiI6Miwic2F2ZWRSZXZpc2lvbiI6MywiZmxvdyI6eyJpZCI6ImNvbW1hbmQtZmxvdyIsInNvdXJjZUVuZHBvaW50SWQiOiJjb250cm9sbGVyLW91dCIsImRlc3RpbmF0aW9uRW5kcG9pbnRJZHMiOlsicGxhbnQtaW4iXSwiaW50ZXJmYWNlSWQiOiJjb21tYW5kIiwiZGVsaXZlcnlJbnRlbnQiOiJvcmRlcmVkIiwidGltZURvbWFpbklkIjoic2ltdWxhdGlvbi10aW1lIn0sImNvbXBsZXRlRmxvd0NvbGxlY3Rpb25QcmVzZXJ2ZWQiOnRydWUsImlkZW50aXRpZXNQcmVzZXJ2ZWQiOnRydWUsImRlZmluaXRpb25zQW5kT3RoZXJEb2N1bWVudHNVbmNoYW5nZWQiOnRydWUsImF1dGhvcml0YXRpdmVWYWxpZGF0aW9uIjp0cnVlLCJwcm9qZWN0UnVuU2V0VW5jaGFuZ2VkIjp0cnVlLCJtZWFzdXJlbWVudHMiOlt7ImxhYmVsIjoiQ29ubmVjdGlvbiB0YXJnZXQgZ3VpZGFuY2UiLCJ0ZXh0IjoiMSBjb21wYXRpYmxlIGRlc3RpbmF0aW9uKHMpOyBpbmNvbXBhdGlibGUgb25lcyBhcmUgbGlzdGVkIHdpdGggdGhlaXIgcmVhc29uLiIsImNvbG9yIjoicmdiKDEwMSwgMTE3LCAxNDEpIiwiZm9udFNpemUiOiIxMXB4IiwiZm9udFdlaWdodCI6IjQwMCIsInRocmVzaG9sZCI6NC41LCJzY29wZSI6IlNlbGVjdGVkIG5vcm1hbC1zaXplIHJlbmRlcmVkIHRleHQ7IG5vIG92ZXJhbGwgYWNjZXNzaWJpbGl0eSBjZXJ0aWZpY2F0aW9uIiwic3VwcG9ydGVkIjp0cnVlLCJsYXllcnMiOlsicmdiYSgwLCAwLCAwLCAwKSIsInJnYmEoMCwgMCwgMCwgMCkiLCJyZ2IoMjU1LCAyNTUsIDI1NSkiXSwiYmFja2dyb3VuZCI6WzEsMSwxLDFdLCJjb21wb3NpdGVkRm9yZWdyb3VuZCI6WzAuMzk2MDc4NDMxMzcyNTQ5LDAuNDU4ODIzNTI5NDExNzY0NywwLjU1Mjk0MTE3NjQ3MDU4ODMsMV0sInJhdGlvIjo0LjY4NDkxMzE1OTg4OTYyMDUsInBhc3NlZCI6dHJ1ZSwiYXNzdW1wdGlvbnMiOiJDU1Mgc1JHQiBjb2xvcnM7IGFscGhhIGNvbXBvc2l0ZWQgdGhyb3VnaCBleHBsaWNpdCBiYWNrZ3JvdW5kczsgbm8gYW50aS1hbGlhc2luZyBhcHByb3hpbWF0aW9uIn0seyJsYWJlbCI6IkNvbm5lY3Rpb24gaWRlbnRpZmllciBndWlkYW5jZSIsInRleHQiOiJTdGFydCB3aXRoIGEgbG93ZXJjYXNlIGxldHRlcjsgdXNlIGxvd2VyY2FzZSBsZXR0ZXJzIGFuZCBkaWdpdHMgc2VwYXJhdGVkIGJ5IHNpbmdsZSBoeXBoZW5zLiIsImNvbG9yIjoicmdiKDEwMSwgMTE3LCAxNDEpIiwiZm9udFNpemUiOiIxMXB4IiwiZm9udFdlaWdodCI6IjQwMCIsInRocmVzaG9sZCI6NC41LCJzY29wZSI6IlNlbGVjdGVkIG5vcm1hbC1zaXplIHJlbmRlcmVkIHRleHQ7IG5vIG92ZXJhbGwgYWNjZXNzaWJpbGl0eSBjZXJ0aWZpY2F0aW9uIiwic3VwcG9ydGVkIjp0cnVlLCJsYXllcnMiOlsicmdiYSgwLCAwLCAwLCAwKSIsInJnYmEoMCwgMCwgMCwgMCkiLCJyZ2IoMjU1LCAyNTUsIDI1NSkiXSwiYmFja2dyb3VuZCI6WzEsMSwxLDFdLCJjb21wb3NpdGVkRm9yZWdyb3VuZCI6WzAuMzk2MDc4NDMxMzcyNTQ5LDAuNDU4ODIzNTI5NDExNzY0NywwLjU1Mjk0MTE3NjQ3MDU4ODMsMV0sInJhdGlvIjo0LjY4NDkxMzE1OTg4OTYyMDUsInBhc3NlZCI6dHJ1ZSwiYXNzdW1wdGlvbnMiOiJDU1Mgc1JHQiBjb2xvcnM7IGFscGhhIGNvbXBvc2l0ZWQgdGhyb3VnaCBleHBsaWNpdCBiYWNrZ3JvdW5kczsgbm8gYW50aS1hbGlhc2luZyBhcHByb3hpbWF0aW9uIn1dLCJ3cml0ZXMiOlt7InBhdGgiOiIvYXBpL3YxL3Byb2plY3RzL3Byai05NmM2YmE1Yy01NGFjLTQ5NGMtOWNjMS00ZWY5NjgyMjYyZjcvZWRpdHMiLCJib2R5Ijp7ImJhc2VSZXZpc2lvbiI6MiwiZWRpdHMiOlt7ImtpbmQiOiJjb25uZWN0X2VuZHBvaW50cyIsImZsb3dJZCI6IkJhZF9JRCIsInNvdXJjZUVuZHBvaW50SWQiOiJjb250cm9sbGVyLW91dCIsImRlc3RpbmF0aW9uRW5kcG9pbnRJZHMiOlsicGxhbnQtaW4iXSwiaW50ZXJmYWNlSWQiOiJjb21tYW5kIiwidGltZURvbWFpbklkIjoic2ltdWxhdGlvbi10aW1lIn1dfX0seyJwYXRoIjoiL2FwaS92MS9wcm9qZWN0cy9wcmotOTZjNmJhNWMtNTRhYy00OTRjLTljYzEtNGVmOTY4MjI2MmY3L2VkaXRzIiwiYm9keSI6eyJiYXNlUmV2aXNpb24iOjIsImVkaXRzIjpbeyJraW5kIjoiY29ubmVjdF9lbmRwb2ludHMiLCJmbG93SWQiOiJjb21tYW5kLWZsb3ciLCJzb3VyY2VFbmRwb2ludElkIjoiY29udHJvbGxlci1vdXQiLCJkZXN0aW5hdGlvbkVuZHBvaW50SWRzIjpbInBsYW50LWluIl0sImludGVyZmFjZUlkIjoiY29tbWFuZCIsInRpbWVEb21haW5JZCI6InNpbXVsYXRpb24tdGltZSJ9XX19LHsicGF0aCI6Ii9hcGkvdjEvcHJvamVjdHMvcHJqLTk2YzZiYTVjLTU0YWMtNDk0Yy05Y2MxLTRlZjk2ODIyNjJmNy92YWxpZGF0aW9ucyIsImJvZHkiOnsicmV2aXNpb24iOjN9fV0sInNjb3BlIjoiTmF0aXZlIGtleWJvYXJkIGF1dGhvcmVkIGNvbm5lY3Rpb247IGV4cGxpY2l0IGRpcmVjdCBBUEkgcmVqZWN0aW9uOyBubyByb3V0aW5nL3RyYWZmaWMvbmF0aXZlIFhDT00gb3IgcHJvdmlkZXIgZXhlY3V0aW9uIGNsYWltIn0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "5e60a09bed9141bc10a4-7080b7d470dca716e452",
+          "file": "connection-accessibility.spec.ts",
+          "line": 50,
+          "column": 7
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-26T17:25:18.526Z",
+    "duration": 8276.306,
+    "expected": 2,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

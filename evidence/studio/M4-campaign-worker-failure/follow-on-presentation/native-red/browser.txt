@@ -1,0 +1,76 @@
+
+Running 2 tests using 1 worker
+
+(node:963968) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 .studio-local/parameter-presentation-focus/probe.spec.ts:6:37 › parameter presentation: real regrouping preserves Apply focus at 1024 (11.7s)
+(node:964725) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 .studio-local/parameter-presentation-focus/probe.spec.ts:6:37 › parameter presentation: real regrouping preserves Apply focus at 1440 (11.1s)
+
+
+  1) .studio-local/parameter-presentation-focus/probe.spec.ts:6:37 › parameter presentation: real regrouping preserves Apply focus at 1024
+
+    Error: expect(locator).toBeFocused() failed
+
+    Locator:  getByLabel('Duration').locator('xpath=ancestor::form').getByRole('button', { name: 'Apply', exact: true })
+    Expected: focused
+    Received: inactive
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toBeFocused" getByLabel('Duration').locator('xpath=ancestor::form').getByRole('button', { name: 'Apply', exact: true }) with timeout 10000ms
+      - waiting for getByLabel('Duration').locator('xpath=ancestor::form').getByRole('button', { name: 'Apply', exact: true })
+        24 × locator resolved to <button class="small-button">Apply</button>
+           - unexpected value "inactive"
+
+
+      19 |   const beforeEnter=await button.evaluate(node=>({focused:document.activeElement===node,activeTag:document.activeElement?.tagName,value:(node.closest('form')?.querySelector('input') as HTMLInputElement)?.value}));
+      20 |   await info.attach('native-presentation-focus',{contentType:'application/json',body:JSON.stringify({scope:'Actual owned presentation HTTP200 held; no DTO mutation. Native Tab reached Apply before actual metadata regrouped its form.',width,projectId:project.projectId,beforeEnter,edits})});
+    > 21 |   await expect(button).toBeFocused();await page.keyboard.press('Enter');await expect(page.locator('.alerts')).toContainText('Draft saved');
+         |                        ^
+      22 |   expect(edits).toHaveLength(1);expect(edits[0].edits).toContainEqual(expect.objectContaining({kind:'set_parameter',parameterId:'duration',value:7}));
+      23 |   const saved=(await traceApi(page,'/projects/'+project.projectId)).body;expect(saved.revision).toBe(project.revision+1);await expect(field).toHaveValue('7');
+      24 |  }finally{release();await page.unroute(pattern);}
+        at <repo>/.studio-local/parameter-presentation-focus/probe.spec.ts:21:24
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    .studio-local/parameter-presentation-focus/native-red/browser-output/probe-parameter-presentati-9f6c9-eserves-Apply-focus-at-1024/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: .studio-local/parameter-presentation-focus/native-red/browser-output/probe-parameter-presentati-9f6c9-eserves-Apply-focus-at-1024/error-context.md
+
+  2) .studio-local/parameter-presentation-focus/probe.spec.ts:6:37 › parameter presentation: real regrouping preserves Apply focus at 1440
+
+    Error: expect(locator).toBeFocused() failed
+
+    Locator:  getByLabel('Duration').locator('xpath=ancestor::form').getByRole('button', { name: 'Apply', exact: true })
+    Expected: focused
+    Received: inactive
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toBeFocused" getByLabel('Duration').locator('xpath=ancestor::form').getByRole('button', { name: 'Apply', exact: true }) with timeout 10000ms
+      - waiting for getByLabel('Duration').locator('xpath=ancestor::form').getByRole('button', { name: 'Apply', exact: true })
+        24 × locator resolved to <button class="small-button">Apply</button>
+           - unexpected value "inactive"
+
+
+      19 |   const beforeEnter=await button.evaluate(node=>({focused:document.activeElement===node,activeTag:document.activeElement?.tagName,value:(node.closest('form')?.querySelector('input') as HTMLInputElement)?.value}));
+      20 |   await info.attach('native-presentation-focus',{contentType:'application/json',body:JSON.stringify({scope:'Actual owned presentation HTTP200 held; no DTO mutation. Native Tab reached Apply before actual metadata regrouped its form.',width,projectId:project.projectId,beforeEnter,edits})});
+    > 21 |   await expect(button).toBeFocused();await page.keyboard.press('Enter');await expect(page.locator('.alerts')).toContainText('Draft saved');
+         |                        ^
+      22 |   expect(edits).toHaveLength(1);expect(edits[0].edits).toContainEqual(expect.objectContaining({kind:'set_parameter',parameterId:'duration',value:7}));
+      23 |   const saved=(await traceApi(page,'/projects/'+project.projectId)).body;expect(saved.revision).toBe(project.revision+1);await expect(field).toHaveValue('7');
+      24 |  }finally{release();await page.unroute(pattern);}
+        at <repo>/.studio-local/parameter-presentation-focus/probe.spec.ts:21:24
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    .studio-local/parameter-presentation-focus/native-red/browser-output/probe-parameter-presentati-ac7f8-eserves-Apply-focus-at-1440/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: .studio-local/parameter-presentation-focus/native-red/browser-output/probe-parameter-presentati-ac7f8-eserves-Apply-focus-at-1440/error-context.md
+
+  2 failed
+    .studio-local/parameter-presentation-focus/probe.spec.ts:6:37 › parameter presentation: real regrouping preserves Apply focus at 1024
+    .studio-local/parameter-presentation-focus/probe.spec.ts:6:37 › parameter presentation: real regrouping preserves Apply focus at 1440

@@ -1,0 +1,49 @@
+"""Own real-response body-lifetime countercheck; product source stays unchanged."""
+from pathlib import Path
+import hashlib
+import json
+import subprocess
+
+root = Path.cwd().resolve()
+base = Path(__file__).resolve().parent
+source = root / 'tests/e2e/parameter-presentation-focus.spec.ts'
+original = source.read_text()
+previous = subprocess.check_output(['git', 'show', 'f985eb3ba02a23a48a64f013d269797236eefe2a:tests/e2e/parameter-presentation-focus.spec.ts'], text=True)
+assert original == previous
+(base / 'original.spec.ts.txt').write_text(original)
+probe = original.replace('parameter presentation: ${mode}', 'owned response lifetime probe: ${mode}')
+needle = '      let presentation: any;'
+assert probe.count(needle) == 1
+probe = probe.replace(needle, '''      let releaseBody!: () => void;
+      const bodyGate = new Promise<void>((resolve) => (releaseBody = resolve));
+      let fetched = 0;
+''' + needle)
+needle = '        const text = await response.text();'
+assert probe.count(needle) == 1
+probe = probe.replace(needle, '''        fetched++;
+        if (fetched > 1) {
+          await bodyGate;
+          await new Promise((resolve) => setTimeout(resolve, 100));
+        }
+''' + needle)
+needle = '      } finally {\n        release();\n        await page.unroute(pattern);\n      }'
+assert probe.count(needle) == 1
+probe = probe.replace(needle, '''        await expect.poll(() => fetched).toBeGreaterThan(1);
+      } finally {
+        release();
+        releaseBody();
+        await page.unroute(pattern);
+        await page.context().close();
+        await new Promise((resolve) => setTimeout(resolve, 250));
+      }''')
+target = root / 'tests/e2e/presentation-route-lifetime.probe.spec.ts'
+assert not target.exists()
+target.write_text(probe)
+(base / 'old-cleanup-probe.spec.ts.txt').write_text(probe)
+(base / 'probe-control.json').write_text(json.dumps({'scope': 'Owned native countercheck copies original test assertions and actual unmodified HTTP200 responses. Secondary body reads are gated until finally, then delayed100ms. Old unroute is followed by controlled context closure and250ms observation. This forces the pending-handler teardown boundary; exact original CI callback timing was not captured.',
+    'originalSha256': hashlib.sha256(original.encode()).hexdigest(),
+    'oldCleanupProbeSha256': hashlib.sha256(probe.encode()).hexdigest(),
+    'actualResponseDTOUnmodified': True, 'productSourceUnchanged': True,
+    'temporaryOwnedProbe': str(target.relative_to(root)),
+    'caseSelection': 'owned response lifetime probe: (apply.*1024|enum.*1440)'}, indent=2) + '\n')
+print('Owned native old-cleanup probe prepared; original product/test source unchanged.')

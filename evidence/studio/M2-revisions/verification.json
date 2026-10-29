@@ -1,0 +1,55 @@
+{
+  "candidateBase": "b61c7ec",
+  "applicationSourceDigest": "sha256:1a89feae632a9738b8b6968e138ae5e26be942a2e274e901938ebc7bc424ef1d",
+  "digestDefinition": "Canonical sorted backend/frontend source hash map; excludes tests/docs",
+  "testHashes": {
+    "tests/integration/test_edit_conflicts.py": "7d63d85209ca425a938ef09a7534f598bdbf63c21abc7ef1cfacf2321715fc72",
+    "tests/e2e/draft-run-isolation.spec.ts": "53d591f9de0843ca9611634449d0374752d1366b6d48bc0649c80ea2cd55570b",
+    "tests/integration/test_exchange_and_retention.py": "2cc0dbdbb852aecb36caa8eacea50118df42bcdddb6b388fbb3288a3abaa2b3e"
+  },
+  "backend": {
+    "passed": 547,
+    "failed": 0
+  },
+  "frontend": {
+    "typecheck": "passed",
+    "build": "passed"
+  },
+  "browser": {
+    "passed": 51,
+    "failed": 0,
+    "mode": "--performance",
+    "candidateUnchangedDuringRun": true,
+    "measurements": {
+      "history-performance": {
+        "repetitions": 30,
+        "medianMs": 429.2,
+        "p95Ms": 430.4
+      },
+      "model-performance.openAndValidationPresentation": {
+        "repetitions": 30,
+        "medianMs": 476.4,
+        "p95Ms": 517
+      },
+      "model-performance.selectionAndInspector": {
+        "repetitions": 30,
+        "medianMs": 17.7,
+        "p95Ms": 24.1
+      }
+    }
+  },
+  "preReviewCandidate": {
+    "backend": 540,
+    "browser": 49,
+    "note": "superseded by review repairs"
+  },
+  "independentReview": "independent-review.md (six confirmed findings repaired)",
+  "tasksCompleted": [
+    "T045",
+    "T046"
+  ],
+  "componentCompleted": 26,
+  "scope": "Owned Linux persistence and browser behavior. Native Windows file-locking, atomic replacement and case-collision behavior (AC-014 per-platform clauses) remain T048 obligations; Windows held.",
+  "milestonesAccepted": [],
+  "windows": "BLOCKED_USER_REQUEST"
+}

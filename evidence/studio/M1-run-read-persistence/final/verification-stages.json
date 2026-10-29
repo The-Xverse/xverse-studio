@@ -1,0 +1,119 @@
+[
+  {
+    "stage": "lint",
+    "command": [
+      "<repo>/.venv/bin/python",
+      "-I",
+      "-m",
+      "ruff",
+      "check",
+      "--select",
+      "F821",
+      "services/studio-api/src",
+      "scripts",
+      "tests"
+    ],
+    "startedAt": "2026-10-28T10:29:06.474879+00:00",
+    "seconds": 0.09154643898364156,
+    "exitCode": 0,
+    "inputsIdentical": true
+  },
+  {
+    "stage": "collection",
+    "command": [
+      "<tool-cache>/node-v24.22.1-linux-x64/bin/node",
+      "node_modules/@playwright/test/cli.js",
+      "test",
+      "-c",
+      "tests/e2e/playwright.config.ts",
+      "--list"
+    ],
+    "startedAt": "2026-10-28T10:29:06.566594+00:00",
+    "seconds": 1.273608838004293,
+    "exitCode": 0,
+    "inputsIdentical": true
+  },
+  {
+    "stage": "backend-full",
+    "command": [
+      "<repo>/.venv/bin/python",
+      "-I",
+      "scripts/run_checks.py"
+    ],
+    "startedAt": "2026-10-28T10:29:07.840515+00:00",
+    "seconds": 837.5403776369931,
+    "exitCode": 0,
+    "inputsIdentical": true,
+    "stats": {
+      "tests": 1078,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  {
+    "stage": "targeted",
+    "command": [
+      "<repo>/.venv/bin/python",
+      "-I",
+      "scripts/test_browser.py",
+      "--grep",
+      "recovery default initialization:|recovery accessibility:|project context:|reported external claims:|annotation run context:|owned reference browser workflow:"
+    ],
+    "startedAt": "2026-10-28T10:43:05.382912+00:00",
+    "seconds": 276.75768489501206,
+    "exitCode": 0,
+    "inputsIdentical": true,
+    "stats": {
+      "startTime": "2026-10-28T10:43:06.577Z",
+      "duration": 275246.618,
+      "expected": 73,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  },
+  {
+    "stage": "full-browser",
+    "command": [
+      "<repo>/.venv/bin/python",
+      "-I",
+      "scripts/test_browser.py"
+    ],
+    "startedAt": "2026-10-28T10:47:42.146028+00:00",
+    "seconds": 2445.4295324749837,
+    "exitCode": 0,
+    "inputsIdentical": true,
+    "stats": {
+      "startTime": "2026-10-28T10:47:43.262Z",
+      "duration": 2443035.311,
+      "expected": 516,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  },
+  {
+    "stage": "performance",
+    "command": [
+      "<repo>/.venv/bin/python",
+      "-I",
+      "scripts/test_browser.py",
+      "--performance",
+      "--grep",
+      "operability: keyboard, focus, textual status and reference workloads"
+    ],
+    "startedAt": "2026-10-28T11:28:27.605217+00:00",
+    "seconds": 174.84213290800108,
+    "exitCode": 0,
+    "inputsIdentical": true,
+    "stats": {
+      "startTime": "2026-10-28T11:28:28.697Z",
+      "duration": 172477.342,
+      "expected": 2,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  }
+]

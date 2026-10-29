@@ -1,0 +1,48 @@
+from pathlib import Path
+import hashlib
+import json
+import subprocess
+import sys
+
+root = Path.cwd(); out = root/'evidence/studio/M4-campaign-worker-failure'; raw = root/'.studio-local/campaign-worker-failure-package/artifacts'
+candidate = subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()
+def clean(value):
+    if isinstance(value,str):
+        for original,replacement in [(str(root.parent/'.xverse-studio-cache'),'<loop-cache>'),(str(root),'<repo>'),(str(Path.home()/'xverse-studio'),'<repo>'),(sys.base_prefix,'<python-install>'),(str(Path.home()),'<user-home>'),(str(root.parent),'<workspace-volume>')]:value=value.replace(original,replacement)
+        return value
+    if isinstance(value,list):return [clean(v) for v in value]
+    if isinstance(value,dict):return {k:clean(v) for k,v in value.items()}
+    return value
+def save(name,value):
+    p=out/name;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(clean(value),indent=2)+'\n')
+receipt=json.loads((raw/'receipt.json').read_text());proof=json.loads((raw/'verification.json').read_text());manifest=json.loads((raw/'package-manifest.json').read_text())
+assert receipt['outcome']=='passed' and receipt['package']['candidate']==candidate==proof['candidate']==manifest['candidate']
+assert proof['allArchiveAndFileHashesVerified'] and proof['testedUIBytesIdentical'] and not proof['workingTreeDirty']
+assert proof['files'] == len(manifest['files']) and proof['files'] > 102
+hashes=json.loads((out/'application-and-input-hashes.json').read_text());tracked={};compiled={}
+for name,digest in hashes.items():
+    if name.startswith('apps/studio-web/dist/'):
+        assert hashlib.sha256((root/name).read_bytes()).hexdigest()==digest
+        assert manifest['files'][name]=='sha256:'+digest
+        compiled[name]=digest
+    else:
+        data=subprocess.check_output(['git','show',candidate+':'+name]);assert hashlib.sha256(data).hexdigest()==digest;tracked[name]=digest
+assert len(compiled)==6
+for name in ['receipt.json','verification.json','package-manifest.json']:save('package/'+name,json.loads((raw/name).read_text()))
+for name,path in [('package/smoke.txt',raw/'smoke.log'),('package/controller.py.txt',root/'.studio-local/campaign-worker-failure-package/run.py'),('controllers/package-retention.py.txt',root/'.studio-local/campaign-worker-failure/retain-package.py')]:
+    p=out/name;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(clean(path.read_text()))
+save('candidate-binding.json',{'candidate':candidate,'allTrackedSourceAndFixedInputsMatch':True,'allCompiledUIAssetsMatchCleanPackage':True,'trackedInputs':tracked,'compiledAssets':compiled,'allFinalBackendInputsUnchanged':True,'scope':'All 296 final backend/native source/test/build/lock/config/ADR and compiled UI inputs bound to the exact committed clean package candidate'})
+readme=out/'README.md';readme.write_text(readme.read_text().replace('Clean committed successor package verification is pending.', 'Clean committed successor package verification is retained below.'))
+with (out/'README.md').open('a') as f:f.write(f'\nClean candidate `{candidate}` passed offline native Linux package provisioning from the prepared cache, startup/UI, Unicode persistence, public compilation and owned shutdown. All {proof["files"]} manifest/archive/file hashes and six tested UI assets are verified; candidate-binding.json checks {len(tracked)} committed source/fixed inputs plus six compiled assets. Native Windows remains held.\n')
+path=root/'specs/001-industry-agnostic-studio/traceability.json';trace=json.loads(path.read_text());trace['implementation_record']['code_candidate']=candidate+'; exact frozen input/package binding in evidence/studio/M4-campaign-worker-failure/candidate-binding.json';trace['implementation_record']['verification']['package_evidence']='evidence/studio/M4-campaign-worker-failure/package/receipt.json (clean '+candidate[:7]+' native Linux source)'
+note=f' Clean {candidate[:7]} native Linux offline prepared-cache package smoke passed; all {proof["files"]} file/archive/manifest hashes and tested UI bytes verified with exact committed input binding. No Windows or milestone acceptance claim.'
+for task in trace['tasks']:
+    if task['id'] in ['T011','T021','T023','T089','T090','T095','T098']:
+        task['implementation_note']+=note
+        task['implementation_evidence'].append('evidence/studio/M4-campaign-worker-failure/package/receipt.json')
+path.write_text(json.dumps(trace,ensure_ascii=False,indent=2)+'\n')
+path=root/'specs/001-industry-agnostic-studio/tasks.md';path.write_text(path.read_text()+'\n'+note.strip()+'\n')
+path=root/'docs/implementation/STATUS.md';text=path.read_text();marker='Native campaign worker-failure successor:';position=text.index(marker);end=text.index('\n\n',position)
+text=text.replace('Clean committed successor package verification is pending.', 'Clean committed successor package verification is retained below.');end=text.index('\n\n',position)
+text=text[:end]+'\n\nClean '+candidate[:7]+' native Linux package smoke also passed offline prepared-cache extraction/provisioning, startup/UI, Unicode persistence, public compilation and owned shutdown. All '+str(proof['files'])+' manifest/archive/file hashes and six tested UI assets match. Exact committed source/input binding is retained in `M4-campaign-worker-failure/candidate-binding.json`; no native Windows acceptance is implied.'+text[end:];path.write_text(text)
+print(json.dumps({'candidate':candidate,'files':proof['files'],'trackedInputs':len(tracked),'compiledAssets':len(compiled)}))

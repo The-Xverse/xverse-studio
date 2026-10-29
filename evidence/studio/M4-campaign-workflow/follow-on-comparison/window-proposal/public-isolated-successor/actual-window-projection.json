@@ -1,0 +1,176 @@
+{
+  "scope": "Three actual native owned reference runs, no journal/snapshot mutation; two equal complete windows and one different complete window.",
+  "runIds": [
+    "run-b89a9883-7c8e-4af9-9e9d-5d67ca421cae",
+    "run-6d067363-86d3-453f-8fa7-bdee3d39feac",
+    "run-65f3ed3c-358e-4b30-964c-b0db2bd3944c"
+  ],
+  "snapshotIds": [
+    "snap-7f44b5ef-8579-4968-9e46-c371e0540da3",
+    "snap-ede16c90-7cfb-4276-ae59-fe0a461ab3d4",
+    "snap-e5b1792b-13a0-4408-a792-1e88cb584d92"
+  ],
+  "canonicalCoverage": [
+    {
+      "clockDomain": "simulation-time",
+      "complete": true,
+      "endTick": "200000",
+      "samplingPeriodTick": "100000",
+      "startTick": "0"
+    },
+    {
+      "clockDomain": "simulation-time",
+      "complete": true,
+      "endTick": "200000",
+      "samplingPeriodTick": "100000",
+      "startTick": "0"
+    },
+    {
+      "clockDomain": "simulation-time",
+      "complete": true,
+      "endTick": "300000",
+      "samplingPeriodTick": "100000",
+      "startTick": "0"
+    }
+  ],
+  "equal": {
+    "leftRunId": "run-b89a9883-7c8e-4af9-9e9d-5d67ca421cae",
+    "rightRunId": "run-6d067363-86d3-453f-8fa7-bdee3d39feac",
+    "mode": "recorded_observation_comparison",
+    "rerunRequiresFreshAdmission": true,
+    "differences": [],
+    "compatible": true,
+    "diagnostics": [],
+    "fields": [
+      {
+        "observerRef": "state-observer",
+        "field": "control",
+        "compatible": true,
+        "reasons": []
+      },
+      {
+        "observerRef": "state-observer",
+        "field": "measured",
+        "compatible": true,
+        "reasons": []
+      },
+      {
+        "observerRef": "state-observer",
+        "field": "target",
+        "compatible": true,
+        "reasons": []
+      },
+      {
+        "observerRef": "state-observer",
+        "field": "value",
+        "compatible": true,
+        "reasons": []
+      }
+    ]
+  },
+  "different": {
+    "leftRunId": "run-b89a9883-7c8e-4af9-9e9d-5d67ca421cae",
+    "rightRunId": "run-65f3ed3c-358e-4b30-964c-b0db2bd3944c",
+    "mode": "recorded_observation_comparison",
+    "rerunRequiresFreshAdmission": true,
+    "differences": [
+      {
+        "field": "semanticDigest",
+        "left": "sha256:9bb8ac6a3ec47689b9ae8a5d248a902b2c0586edb24a1353a46c962f782115e3",
+        "right": "sha256:dc1f6e9ad6fcc66462816f1081545806f06b941414327bda64a3138f046ad2e5"
+      },
+      {
+        "field": "planDigest",
+        "left": "sha256:156f451a517a97b80580e49dcaa072278b8b523e4fffc294c1ea7507aab61467",
+        "right": "sha256:699aaf139d90e0b8e212e62615b7e099400052e8957b5c83491980aa79f094f9"
+      },
+      {
+        "field": "parameters",
+        "left": {
+          "clockDomain": "simulation-time",
+          "duration": 0.2,
+          "elementRefs": [
+            "xdl://org.xverse.studio.process-control/system/reference-loop#controller",
+            "xdl://org.xverse.studio.process-control/system/reference-loop#plant",
+            "xdl://org.xverse.studio.process-control/system/reference-loop#state-flow"
+          ],
+          "fault": "none",
+          "gain": 0.8,
+          "initial": 0.0,
+          "observerRef": "state-observer",
+          "planDigest": "sha256:156f451a517a97b80580e49dcaa072278b8b523e4fffc294c1ea7507aab61467",
+          "resolvedFlows": [
+            "xdl://org.xverse.studio.process-control/system/reference-loop#command-flow",
+            "xdl://org.xverse.studio.process-control/system/reference-loop#state-flow"
+          ],
+          "seed": 7,
+          "semanticDigest": "sha256:9bb8ac6a3ec47689b9ae8a5d248a902b2c0586edb24a1353a46c962f782115e3",
+          "target": 1.0,
+          "timestep": 0.1
+        },
+        "right": {
+          "clockDomain": "simulation-time",
+          "duration": 0.3,
+          "elementRefs": [
+            "xdl://org.xverse.studio.process-control/system/reference-loop#controller",
+            "xdl://org.xverse.studio.process-control/system/reference-loop#plant",
+            "xdl://org.xverse.studio.process-control/system/reference-loop#state-flow"
+          ],
+          "fault": "none",
+          "gain": 0.8,
+          "initial": 0.0,
+          "observerRef": "state-observer",
+          "planDigest": "sha256:699aaf139d90e0b8e212e62615b7e099400052e8957b5c83491980aa79f094f9",
+          "resolvedFlows": [
+            "xdl://org.xverse.studio.process-control/system/reference-loop#command-flow",
+            "xdl://org.xverse.studio.process-control/system/reference-loop#state-flow"
+          ],
+          "seed": 7,
+          "semanticDigest": "sha256:dc1f6e9ad6fcc66462816f1081545806f06b941414327bda64a3138f046ad2e5",
+          "target": 1.0,
+          "timestep": 0.1
+        }
+      }
+    ],
+    "compatible": false,
+    "diagnostics": [
+      "OBSERVATION_WINDOW_INCOMPATIBLE"
+    ],
+    "fields": [
+      {
+        "observerRef": "state-observer",
+        "field": "control",
+        "compatible": false,
+        "reasons": [
+          "OBSERVATION_WINDOW_INCOMPATIBLE"
+        ]
+      },
+      {
+        "observerRef": "state-observer",
+        "field": "measured",
+        "compatible": false,
+        "reasons": [
+          "OBSERVATION_WINDOW_INCOMPATIBLE"
+        ]
+      },
+      {
+        "observerRef": "state-observer",
+        "field": "target",
+        "compatible": false,
+        "reasons": [
+          "OBSERVATION_WINDOW_INCOMPATIBLE"
+        ]
+      },
+      {
+        "observerRef": "state-observer",
+        "field": "value",
+        "compatible": false,
+        "reasons": [
+          "OBSERVATION_WINDOW_INCOMPATIBLE"
+        ]
+      }
+    ]
+  },
+  "protectedBytesUnchanged": true,
+  "authoredProjectUnchangedByComparison": true
+}

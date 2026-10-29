@@ -1,0 +1,97 @@
+[
+  {
+    "stage": "lint",
+    "command": [
+      "<repo>/.venv/bin/python",
+      "-I",
+      "-m",
+      "ruff",
+      "check",
+      "--select",
+      "F821",
+      "services/studio-api/src",
+      "scripts",
+      "tests"
+    ],
+    "startedAt": "2026-10-28T13:16:37.304477+00:00",
+    "seconds": 0.03707004198804498,
+    "exitCode": 0,
+    "inputsIdentical": true
+  },
+  {
+    "stage": "collection",
+    "command": [
+      "<tool-cache>/node-v24.22.1-linux-x64/bin/node",
+      "node_modules/@playwright/test/cli.js",
+      "test",
+      "-c",
+      "tests/e2e/playwright.config.ts",
+      "--list"
+    ],
+    "startedAt": "2026-10-28T13:16:37.341665+00:00",
+    "seconds": 0.6447495140018873,
+    "exitCode": 0,
+    "inputsIdentical": true
+  },
+  {
+    "stage": "backend-full",
+    "command": [
+      "<repo>/.venv/bin/python",
+      "-I",
+      "scripts/run_checks.py"
+    ],
+    "startedAt": "2026-10-28T13:16:37.986671+00:00",
+    "seconds": 869.056804066,
+    "exitCode": 0,
+    "inputsIdentical": true,
+    "stats": {
+      "tests": 1146,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  {
+    "stage": "browser-full",
+    "command": [
+      "<repo>/.venv/bin/python",
+      "-I",
+      "scripts/test_browser.py"
+    ],
+    "startedAt": "2026-10-28T13:31:07.045470+00:00",
+    "seconds": 2541.4090637670015,
+    "exitCode": 0,
+    "inputsIdentical": true,
+    "stats": {
+      "startTime": "2026-10-28T13:31:08.139Z",
+      "duration": 2539077.4729999998,
+      "expected": 562,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  },
+  {
+    "stage": "performance",
+    "command": [
+      "<repo>/.venv/bin/python",
+      "-I",
+      "scripts/test_browser.py",
+      "--performance",
+      "--grep",
+      "operability: keyboard, focus, textual status and reference workloads"
+    ],
+    "startedAt": "2026-10-28T14:13:28.650888+00:00",
+    "seconds": 172.79109618702205,
+    "exitCode": 0,
+    "inputsIdentical": true,
+    "stats": {
+      "startTime": "2026-10-28T14:13:29.919Z",
+      "duration": 170286.963,
+      "expected": 2,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  }
+]

@@ -1,0 +1,53 @@
+{
+  "sourceBefore": {
+    "apps/studio-web/src/features/runs/sessionProtocol.ts": "52c3e21890865d67805203d77ab0a35b7c70e1c980387c304fa4d3f774619247"
+  },
+  "sourceAfter": {
+    "apps/studio-web/src/features/runs/sessionProtocol.ts": "52c3e21890865d67805203d77ab0a35b7c70e1c980387c304fa4d3f774619247"
+  },
+  "cases": [
+    {
+      "name": "control_then_200_data",
+      "inputBytes": 82331,
+      "accepted": true,
+      "frames": 201,
+      "error": null
+    },
+    {
+      "name": "200_data_then_control",
+      "inputBytes": 82331,
+      "accepted": true,
+      "frames": 201,
+      "error": null
+    },
+    {
+      "name": "200_data_only",
+      "inputBytes": 82076,
+      "accepted": true,
+      "frames": 200,
+      "error": null
+    },
+    {
+      "name": "201_data",
+      "inputBytes": 82488,
+      "accepted": false,
+      "frames": 0,
+      "error": "Presentation read queue limit exceeded"
+    },
+    {
+      "name": "two_control_slots",
+      "inputBytes": 510,
+      "accepted": false,
+      "frames": 0,
+      "error": "Presentation read queue limit exceeded"
+    },
+    {
+      "name": "200_data_two_controls",
+      "inputBytes": 82586,
+      "accepted": false,
+      "frames": 0,
+      "error": "Presentation read queue limit exceeded"
+    }
+  ],
+  "scope": "Production SseParser transformed in memory; six finite synthetic framing/count cases only, no browser/server/native runtime launched."
+}

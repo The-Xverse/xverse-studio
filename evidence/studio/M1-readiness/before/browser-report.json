@@ -1,0 +1,260 @@
+{
+  "config": {
+    "argv": [
+      "<loop10-cache>/node-v24.22.1-linux-x64/bin/node",
+      "<workspace>/node_modules/.bin/playwright",
+      "test",
+      "-c",
+      "tests/e2e/playwright.config.ts",
+      "--grep",
+      "readiness review"
+    ],
+    "configFile": "<workspace>/tests/e2e/playwright.config.ts",
+    "rootDir": "<workspace>/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "<workspace>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "<workspace>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "*.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "<workspace>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "<workspace>/tests/e2e",
+        "snapshotDir": "<workspace>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": "*.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "baseURL": "http://127.0.0.1:53823",
+          "browserName": "chromium",
+          "actionTimeout": 15000,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "trace": "off",
+          "screenshot": "only-on-failure",
+          "video": "off"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "<workspace>/test-results/browser-report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "readiness.spec.ts",
+      "file": "readiness.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "readiness review: independent backend facts, exact limits and frozen compiled plan with keyboard and both viewports",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 12033,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Readiness checks', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('heading', { name: 'Readiness checks', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Readiness checks', exact: true })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Readiness checks', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('heading', { name: 'Readiness checks', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Readiness checks', exact: true })\u001b[22m\n\n    at <workspace>/tests/e2e/readiness.spec.ts:10:79",
+                    "location": {
+                      "file": "<workspace>/tests/e2e/readiness.spec.ts",
+                      "column": 79,
+                      "line": 10
+                    },
+                    "snippet": "   8 |  const before=await page.evaluate(async()=>(await fetch(\"/api/v1/runs\").then(r=>r.json())).items.length);\n   9 |  const report=await preflight(page);expect(report.status).toBe(\"ready\");\n> 10 |  await expect(page.getByRole(\"heading\",{name:\"Readiness checks\",exact:true})).toBeVisible();\n     |                                                                               ^\n  11 |  const table=page.getByRole(\"table\",{name:\"Independent readiness dimensions\",exact:true});for(const name of dimensions)await expect(table.getByRole(\"row\").filter({hasText:name})).toBeVisible();\n  12 |  const limits=page.getByRole(\"table\",{name:\"Advertised execution limits\",exact:true});for(const [key,value] of Object.entries(report.limits)){const row=limits.getByRole(\"row\").filter({has:page.getByRole(\"cell\",{name:key,exact:true})});await expect(row).toContainText(String(value));}\n  13 |  await page.getByRole(\"button\",{name:\"Inspect compiled plan\",exact:true}).focus();await page.keyboard.press(\"Enter\");await expect(page.getByText(\"Frozen plan identities match\",{exact:true})).toBeVisible();"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<workspace>/tests/e2e/readiness.spec.ts",
+                        "column": 79,
+                        "line": 10
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Readiness checks', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('heading', { name: 'Readiness checks', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Readiness checks', exact: true })\u001b[22m\n\n\n   8 |  const before=await page.evaluate(async()=>(await fetch(\"/api/v1/runs\").then(r=>r.json())).items.length);\n   9 |  const report=await preflight(page);expect(report.status).toBe(\"ready\");\n> 10 |  await expect(page.getByRole(\"heading\",{name:\"Readiness checks\",exact:true})).toBeVisible();\n     |                                                                               ^\n  11 |  const table=page.getByRole(\"table\",{name:\"Independent readiness dimensions\",exact:true});for(const name of dimensions)await expect(table.getByRole(\"row\").filter({hasText:name})).toBeVisible();\n  12 |  const limits=page.getByRole(\"table\",{name:\"Advertised execution limits\",exact:true});for(const [key,value] of Object.entries(report.limits)){const row=limits.getByRole(\"row\").filter({has:page.getByRole(\"cell\",{name:key,exact:true})});await expect(row).toContainText(String(value));}\n  13 |  await page.getByRole(\"button\",{name:\"Inspect compiled plan\",exact:true}).focus();await page.keyboard.press(\"Enter\");await expect(page.getByText(\"Frozen plan identities match\",{exact:true})).toBeVisible();\n    at <workspace>/tests/e2e/readiness.spec.ts:10:79"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-25T12:17:31.072Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<workspace>/test-results/browser/readiness-readiness-review-26f9f-keyboard-and-both-viewports/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<workspace>/test-results/browser/readiness-readiness-review-26f9f-keyboard-and-both-viewports/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<workspace>/tests/e2e/readiness.spec.ts",
+                    "column": 79,
+                    "line": 10
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "ed8fb6c90a074cb4e48e-1e111a7b8d6691707db6",
+          "file": "readiness.spec.ts",
+          "line": 6,
+          "column": 5
+        },
+        {
+          "title": "readiness review: unsupported topology and unavailable provider remain separate from model and backend availability",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 12305,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('table', { name: 'Independent readiness dimensions', exact: true }).getByRole('row').filter({ hasText: 'Model validity' })\nExpected pattern: \u001b[32m/valid|ready/\u001b[39m\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" getByRole('table', { name: 'Independent readiness dimensions', exact: true }).getByRole('row').filter({ hasText: 'Model validity' }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('table', { name: 'Independent readiness dimensions', exact: true }).getByRole('row').filter({ hasText: 'Model validity' })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('table', { name: 'Independent readiness dimensions', exact: true }).getByRole('row').filter({ hasText: 'Model validity' })\nExpected pattern: \u001b[32m/valid|ready/\u001b[39m\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" getByRole('table', { name: 'Independent readiness dimensions', exact: true }).getByRole('row').filter({ hasText: 'Model validity' }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('table', { name: 'Independent readiness dimensions', exact: true }).getByRole('row').filter({ hasText: 'Model validity' })\u001b[22m\n\n    at <workspace>/tests/e2e/readiness.spec.ts:23:238",
+                    "location": {
+                      "file": "<workspace>/tests/e2e/readiness.spec.ts",
+                      "column": 238,
+                      "line": 23
+                    },
+                    "snippet": "  21 |  test.setTimeout(90000);await connectStudio(page,testInfo);await create(page,\"Readiness blocked reference\");\n  22 |  const authored=await page.evaluate(async()=>{const project=await fetch(\"/api/v1/projects/\"+localStorage.getItem(\"studio.projectId\")).then(r=>r.json()),session=await fetch(\"/api/v1/session\").then(r=>r.json());const docId=Object.entries(project.documents).find(([,doc]:any)=>doc.content.includes(\"kind: System\"))![0];const response=await fetch(`/api/v1/projects/${project.projectId}/edits`,{method:\"POST\",headers:{\"Content-Type\":\"application/json\",\"X-CSRF-Token\":session.csrfToken,\"If-Match\":String(project.revision)},body:JSON.stringify({baseRevision:project.revision,edits:[{kind:\"add_logical_asset\",documentId:docId,assetKind:\"device\",elementId:\"readiness-device\",properties:{capabilities:[\"measurement\"],supportedRealizationClasses:[\"simulated\"]}}]})});return {status:response.status,project:await response.json()};});expect(authored.status).toBe(200);await page.reload();\n> 23 |  const blocked=await preflight(page);expect(blocked.status).toBe(\"blocked\");const table=page.getByRole(\"table\",{name:\"Independent readiness dimensions\",exact:true});await expect(table.getByRole(\"row\").filter({hasText:\"Model validity\"})).toContainText(/valid|ready/);await expect(table.getByRole(\"row\").filter({hasText:\"Capability compatibility\"})).toContainText(/unsupported|blocked/);await expect(page.getByRole(\"button\",{name:\"Start frozen snapshot\",exact:true})).toBeDisabled();await expect(page.getByRole(\"region\",{name:\"Readiness diagnostics\",exact:true})).toContainText(\"CAPABILITY_UNSUPPORTED\");await expect(page.getByRole(\"region\",{name:\"Readiness diagnostics\",exact:true})).toContainText(\"readiness-device\");\n     |                                                                                                                                                                                                                                              ^\n  24 |  await page.screenshot({path:testInfo.outputPath(\"readiness-unsupported-topology.png\"),fullPage:true});\n  25 |  await page.getByLabel(\"Execution provider\",{exact:true}).selectOption(\"xverse.lite\");await expect(page.getByRole(\"button\",{name:\"Start frozen snapshot\",exact:true})).toBeDisabled();const response=page.waitForResponse(r=>r.url().endsWith(\"/preflights\")&&r.request().method()===\"POST\");await page.getByRole(\"button\",{name:\"Recheck readiness\",exact:true}).focus();await page.keyboard.press(\"Enter\");const unavailable=await(await response).json();expect(unavailable.providerId).toBe(\"xverse.lite\");await expect(table.getByRole(\"row\").filter({hasText:\"Studio backend\"})).toContainText(/available|ready/);await expect(table.getByRole(\"row\").filter({hasText:\"Provider / host compatibility\"})).toContainText(/unavailable|unsupported|blocked/);await expect(page.getByRole(\"region\",{name:\"Readiness diagnostics\",exact:true})).toContainText(/PROVIDER_UNAVAILABLE|DEP-RUN-CONFIG/);await expect(page.getByText(\"No execution limits reported for this provider.\",{exact:true})).toBeVisible();await expect(page.getByRole(\"button\",{name:\"Start frozen snapshot\",exact:true})).toBeDisabled();await page.screenshot({path:testInfo.outputPath(\"readiness-unavailable-provider.png\"),fullPage:true});await page.keyboard.press(\"Escape\");await expect(page.getByRole(\"button\",{name:\"Preflight & run\",exact:true})).toBeFocused();\n  26 |  expect(await page.evaluate(async()=>(await fetch(\"/api/v1/runs\").then(r=>r.json())).items.length)).toBe(0);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<workspace>/tests/e2e/readiness.spec.ts",
+                        "column": 238,
+                        "line": 23
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('table', { name: 'Independent readiness dimensions', exact: true }).getByRole('row').filter({ hasText: 'Model validity' })\nExpected pattern: \u001b[32m/valid|ready/\u001b[39m\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" getByRole('table', { name: 'Independent readiness dimensions', exact: true }).getByRole('row').filter({ hasText: 'Model validity' }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('table', { name: 'Independent readiness dimensions', exact: true }).getByRole('row').filter({ hasText: 'Model validity' })\u001b[22m\n\n\n  21 |  test.setTimeout(90000);await connectStudio(page,testInfo);await create(page,\"Readiness blocked reference\");\n  22 |  const authored=await page.evaluate(async()=>{const project=await fetch(\"/api/v1/projects/\"+localStorage.getItem(\"studio.projectId\")).then(r=>r.json()),session=await fetch(\"/api/v1/session\").then(r=>r.json());const docId=Object.entries(project.documents).find(([,doc]:any)=>doc.content.includes(\"kind: System\"))![0];const response=await fetch(`/api/v1/projects/${project.projectId}/edits`,{method:\"POST\",headers:{\"Content-Type\":\"application/json\",\"X-CSRF-Token\":session.csrfToken,\"If-Match\":String(project.revision)},body:JSON.stringify({baseRevision:project.revision,edits:[{kind:\"add_logical_asset\",documentId:docId,assetKind:\"device\",elementId:\"readiness-device\",properties:{capabilities:[\"measurement\"],supportedRealizationClasses:[\"simulated\"]}}]})});return {status:response.status,project:await response.json()};});expect(authored.status).toBe(200);await page.reload();\n> 23 |  const blocked=await preflight(page);expect(blocked.status).toBe(\"blocked\");const table=page.getByRole(\"table\",{name:\"Independent readiness dimensions\",exact:true});await expect(table.getByRole(\"row\").filter({hasText:\"Model validity\"})).toContainText(/valid|ready/);await expect(table.getByRole(\"row\").filter({hasText:\"Capability compatibility\"})).toContainText(/unsupported|blocked/);await expect(page.getByRole(\"button\",{name:\"Start frozen snapshot\",exact:true})).toBeDisabled();await expect(page.getByRole(\"region\",{name:\"Readiness diagnostics\",exact:true})).toContainText(\"CAPABILITY_UNSUPPORTED\");await expect(page.getByRole(\"region\",{name:\"Readiness diagnostics\",exact:true})).toContainText(\"readiness-device\");\n     |                                                                                                                                                                                                                                              ^\n  24 |  await page.screenshot({path:testInfo.outputPath(\"readiness-unsupported-topology.png\"),fullPage:true});\n  25 |  await page.getByLabel(\"Execution provider\",{exact:true}).selectOption(\"xverse.lite\");await expect(page.getByRole(\"button\",{name:\"Start frozen snapshot\",exact:true})).toBeDisabled();const response=page.waitForResponse(r=>r.url().endsWith(\"/preflights\")&&r.request().method()===\"POST\");await page.getByRole(\"button\",{name:\"Recheck readiness\",exact:true}).focus();await page.keyboard.press(\"Enter\");const unavailable=await(await response).json();expect(unavailable.providerId).toBe(\"xverse.lite\");await expect(table.getByRole(\"row\").filter({hasText:\"Studio backend\"})).toContainText(/available|ready/);await expect(table.getByRole(\"row\").filter({hasText:\"Provider / host compatibility\"})).toContainText(/unavailable|unsupported|blocked/);await expect(page.getByRole(\"region\",{name:\"Readiness diagnostics\",exact:true})).toContainText(/PROVIDER_UNAVAILABLE|DEP-RUN-CONFIG/);await expect(page.getByText(\"No execution limits reported for this provider.\",{exact:true})).toBeVisible();await expect(page.getByRole(\"button\",{name:\"Start frozen snapshot\",exact:true})).toBeDisabled();await page.screenshot({path:testInfo.outputPath(\"readiness-unavailable-provider.png\"),fullPage:true});await page.keyboard.press(\"Escape\");await expect(page.getByRole(\"button\",{name:\"Preflight & run\",exact:true})).toBeFocused();\n  26 |  expect(await page.evaluate(async()=>(await fetch(\"/api/v1/runs\").then(r=>r.json())).items.length)).toBe(0);\n    at <workspace>/tests/e2e/readiness.spec.ts:23:238"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-25T12:17:43.967Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<workspace>/test-results/browser/readiness-readiness-review-99b73-el-and-backend-availability/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<workspace>/test-results/browser/readiness-readiness-review-99b73-el-and-backend-availability/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<workspace>/tests/e2e/readiness.spec.ts",
+                    "column": 238,
+                    "line": 23
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "ed8fb6c90a074cb4e48e-3a215560f3ba66e08527",
+          "file": "readiness.spec.ts",
+          "line": 20,
+          "column": 5
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-25T12:17:30.460Z",
+    "duration": 25939.728,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  }
+}

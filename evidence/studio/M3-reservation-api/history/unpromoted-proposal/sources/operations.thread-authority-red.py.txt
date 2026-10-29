@@ -1,0 +1,204 @@
+"""Unpromoted durable lease-operation service. No HTTP/device installation.
+
+Trusted host code supplies already-installed providers, pinned binding identities
+and server-owned policy. Browser/project data cannot create these objects.
+"""
+from copy import deepcopy
+import re
+import threading
+import time
+
+from xverse_studio.lab import LabError
+from xverse_studio.lab.assets import opaque_id
+from xverse_studio.storage.core import Problem, digest, uid
+from .authority import LabAuthority
+from .bounded import BoundedLeaseProvider
+from .persistence import LabLeaseBacking
+from .reservations import LabRegistry
+
+
+class LabOperations:
+    def __init__(self, store, providers, identities, policy, *, clock=time.time, timeout=1.0, max_operations=1000):
+        if not isinstance(policy, LabAuthority) or type(providers) is not dict or not 1 <= len(providers) <= 32:
+            raise LabError('PROVIDER_CONFIG_INVALID')
+        if type(identities) is not dict or set(identities) != set(providers):
+            raise LabError('PROVIDER_CONFIG_INVALID')
+        if any(not opaque_id(key) or type(value) is not str or not re.fullmatch(r'sha256:[a-f0-9]{64}', value) for key, value in identities.items()):
+            raise LabError('PROVIDER_CONFIG_INVALID')
+        if type(max_operations) is not int or not 0 < max_operations <= 1000:
+            raise LabError('PROVIDER_CONFIG_INVALID')
+        self.store, self.policy = store, policy
+        self.identities = deepcopy(identities)
+        self._max_operations = max_operations
+        self._lock = threading.RLock()
+        self.backing = LabLeaseBacking(store)
+        wrapped = {key: BoundedLeaseProvider(value, timeout=timeout) for key, value in providers.items()}
+        self.registry = LabRegistry(wrapped, clock=clock, records=self.backing.load(), persist=self.backing.save)
+        # Recovered accepted/delegated work is inspected, never reissued.
+        with store.tx() as db:
+            for operation in store.all('operation', db):
+                if operation.get('kind') in {'lab_reserve', 'lab_renew', 'lab_release', 'lab_reconcile'} and operation.get('status') in {'accepted', 'delegated'}:
+                    operation.update(status='unknown', code='LAB_OPERATION_INTERRUPTED')
+                    store.put('operation', operation['operationId'], operation, db)
+
+    def _prior(self, owner, route, key, payload):
+        if type(key) is not str or not 0 < len(key) <= 128:
+            raise Problem('IDEMPOTENCY_REQUIRED', 'Supply an Idempotency-Key of at most 128 characters.', 428)
+        with self.store.tx() as db:
+            row = db.execute('SELECT fingerprint,result FROM idempotency WHERE scope=? AND key=?', (owner + ':' + route, key)).fetchone()
+            if row:
+                if row[0] != digest(payload):
+                    raise Problem('IDEMPOTENCY_CONFLICT', 'This key already identifies a different request.', 409)
+                import json
+                receipt = json.loads(row[1])
+                operation = self.store.get('operation', receipt['operationId'], db)
+                if operation.get('principal') != owner or operation.get('route') != route:
+                    raise LabError('LAB_STATE_UNAVAILABLE')
+                return operation
+
+    def _accept(self, owner, route, key, payload, kind, reservation_id):
+        def accept(db):
+            count = db.execute("SELECT count(*) FROM records WHERE kind='operation' AND json_extract(body,'$.kind') IN ('lab_reserve','lab_renew','lab_release','lab_reconcile')").fetchone()[0]
+            if count >= self._max_operations:
+                raise LabError('LIMIT_EXCEEDED')
+            operation = {'operationId': uid('op-'), 'kind': kind, 'principal': owner, 'route': route,
+                         'status': 'accepted', 'reservationId': reservation_id, 'createdAt': time.time(),
+                         'result': {'reservationId': reservation_id}}
+            self.store.put('operation', operation['operationId'], operation, db)
+            return {'operationId': operation['operationId'], 'reservationId': reservation_id}
+        receipt, is_new = self.store.idempotent(owner, route, key, payload, accept)
+        return self.store.get('operation', receipt['operationId']), is_new
+
+    def _perform(self, operation, callback):
+        operation.update(status='delegated')
+        self.store.put('operation', operation['operationId'], operation)
+        try:
+            result = callback()
+        except Exception as error:
+            code = error.code if isinstance(error, LabError) else 'LAB_OPERATION_UNCERTAIN'
+            operation.update(status='rejected' if code == 'RESOURCE_BUSY' else 'unknown', code=code)
+        else:
+            operation.update(status='completed' if result['status'] in {'owned', 'released', 'expired'} else 'unknown', result={'reservationId': result['reservationId'], 'status': result['status']})
+        self.store.put('operation', operation['operationId'], operation)
+        return deepcopy(operation)
+
+    def _bound(self, record):
+        if record.get('providerIdentity') != self.identities.get(record['providerId']):
+            raise LabError('PROVIDER_IDENTITY_CHANGED')
+        asset = self.registry._asset(record['assetId'])
+        if record.get('assetIdentity') != self._asset_identity(asset):
+            raise LabError('ASSET_IDENTITY_CHANGED')
+
+    @staticmethod
+    def _asset_identity(asset):
+        identity = asset.get('identity')
+        if type(identity) is not dict or not any(identity.get(key) for key in ('serial', 'deviceId', 'digest')):
+            raise LabError('ASSET_IDENTITY_UNRESOLVED')
+        return digest(identity)
+
+    def get(self, reservation_id, *, owner):
+        with self._lock:
+            self.backing.assert_current()
+            return self.registry.get(reservation_id, owner=owner)
+
+    def reserve(self, asset_id, *, owner, key, scope='observe', duration=30):
+        route, payload = 'POST /assets/' + asset_id + '/reservations', {'scope': scope, 'durationSeconds': duration}
+        with self._lock:
+            previous = self._prior(owner, route, key, payload)
+            if previous is not None:
+                return previous
+            self.backing.assert_current()
+            self.policy.require(owner, asset_id, scope)
+            self.registry._duration(duration)
+            asset = self.registry._asset(asset_id)
+            asset_identity = self._asset_identity(asset)
+            if scope not in asset.get('capabilities', []):
+                raise LabError('CAPABILITY_UNSUPPORTED')
+            identity = self.identities[asset['providerId']]
+            operation, is_new = self._accept(owner, route, key, payload, 'lab_reserve', uid())
+            if not is_new:
+                return operation
+            def delegate():
+                self.backing.assert_current()
+                current = self.policy.require(owner, asset_id, scope)
+                return self.registry.reserve(asset_id, owner=owner, duration=duration, scope=scope,
+                    granted_scopes=current, reservation_id=operation['reservationId'], provider_identity=identity,
+                    asset_identity=asset_identity)
+            return self._perform(operation, delegate)
+
+    def renew(self, reservation_id, *, owner, key, fence, duration=30):
+        route = 'POST /reservations/' + reservation_id + '/renewals'
+        payload = {'fencingIdentity': fence, 'durationSeconds': duration}
+        with self._lock:
+            previous = self._prior(owner, route, key, payload)
+            if previous is not None:
+                return previous
+            record = self.get(reservation_id, owner=owner)
+            self.policy.require(owner, record['assetId'], record['scope'])
+            self._bound(record)
+            if record['status'] != 'owned':
+                raise LabError('OWNERSHIP_UNCERTAIN')
+            if fence != record['fencingIdentity']:
+                raise LabError('STALE_FENCING_IDENTITY')
+            if self.registry._duration(duration) <= record['expiry']:
+                raise LabError('LEASE_NOT_EXTENSION')
+            operation, is_new = self._accept(owner, route, key, payload, 'lab_renew', reservation_id)
+            if not is_new:
+                return operation
+            def delegate():
+                self.backing.assert_current()
+                scopes = self.policy.require(owner, record['assetId'], record['scope'])
+                self._bound(record)
+                return self.registry.renew(reservation_id, owner=owner, expected_fencing_identity=fence,
+                                           duration=duration, granted_scopes=scopes)
+            return self._perform(operation, delegate)
+
+    def release(self, reservation_id, *, owner, key):
+        route = 'DELETE /reservations/' + reservation_id
+        with self._lock:
+            previous = self._prior(owner, route, key, {})
+            if previous is not None:
+                return previous
+            record = self.get(reservation_id, owner=owner)
+            if record['status'] not in {'released', 'expired'}:
+                self._bound(record)
+            if record['status'] not in {'owned', 'released', 'expired'}:
+                raise LabError('OWNERSHIP_UNCERTAIN')
+            operation, is_new = self._accept(owner, route, key, {}, 'lab_release', reservation_id)
+            if not is_new:
+                return operation
+            def delegate():
+                self.backing.assert_current()
+                if record['status'] not in {'released', 'expired'}:
+                    self._bound(record)
+                return self.registry.release(reservation_id, owner=owner)
+            return self._perform(operation, delegate)
+
+    def reconcile(self, reservation_id, *, owner, key):
+        route = 'POST /reservations/' + reservation_id + '/reconciliations'
+        with self._lock:
+            previous = self._prior(owner, route, key, {})
+            if previous is not None:
+                return previous
+            record = self.get(reservation_id, owner=owner)
+            if record['status'] not in {'released', 'expired'}:
+                self._bound(record)
+            operation, is_new = self._accept(owner, route, key, {}, 'lab_reconcile', reservation_id)
+            if not is_new:
+                return operation
+            def delegate():
+                self.backing.assert_current()
+                if record['status'] not in {'released', 'expired'}:
+                    self._bound(record)
+                return self.registry.reconcile(reservation_id, owner=owner)
+            return self._perform(operation, delegate)
+
+    def require_authority(self, reservation_id, *, owner, action):
+        with self._lock:
+            record = self.get(reservation_id, owner=owner)
+            if record['status'] != 'owned':
+                raise LabError('OWNERSHIP_UNCERTAIN')
+            scopes = self.policy.require(owner, record['assetId'], action)
+            observed = self.registry.require_authority(reservation_id, owner=owner, action=action, granted_scopes=scopes)
+            self._bound(record)
+            return observed

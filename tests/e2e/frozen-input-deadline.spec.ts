@@ -1,0 +1,153 @@
+import { test, expect } from "@playwright/test";
+import { readFileSync } from "node:fs";
+import path from "node:path";
+import { createHash } from "node:crypto";
+import { connectStudio } from "./connect-studio";
+import { traceApi } from "./trace-claims-flow";
+
+test("frozen input inspection: actual thirty-second deadline permits a fresh read", async ({
+  page,
+}, info) => {
+  test.setTimeout(90000);
+  const width = 1024;
+  await page.setViewportSize({ width, height: width === 1024 ? 768 : 900 });
+  await connectStudio(page, info);
+  let project = (
+    await traceApi(page, "/projects", "POST", {
+      name: "Frozen inspection context " + width,
+    })
+  ).body;
+  const runs: any[] = [];
+  for (const gain of [0.8, 1.2]) {
+    const saved = await traceApi(
+      page,
+      `/projects/${project.projectId}/edits`,
+      "POST",
+      {
+        baseRevision: project.revision,
+        edits: [
+          { kind: "set_parameter", parameterId: "duration", value: 0.2 },
+          { kind: "set_parameter", parameterId: "gain", value: gain },
+        ],
+      },
+      project.revision,
+    );
+    expect(saved.status).toBe(200);
+    project = saved.body;
+    const pf = (
+      await traceApi(
+        page,
+        `/projects/${project.projectId}/preflights`,
+        "POST",
+        { revision: project.revision },
+      )
+    ).body;
+    expect(pf.status).toBe("ready");
+    const started = await traceApi(page, "/runs", "POST", {
+      snapshotId: pf.snapshotId,
+      preflightId: pf.preflightId,
+    });
+    expect(started.status).toBe(202);
+    await expect
+      .poll(
+        async () =>
+          (await traceApi(page, "/runs/" + started.body.runId)).body.state,
+        { timeout: 20000 },
+      )
+      .toBe("stopped");
+    runs.push((await traceApi(page, "/runs/" + started.body.runId)).body);
+  }
+
+  const original = runs[0];
+  await page.evaluate(
+    ({ pid, rid }) => {
+      localStorage.setItem("studio.projectId", pid);
+      localStorage.setItem("studio.lastRun", rid);
+      localStorage.setItem("studio.lastRun." + pid, rid);
+    },
+    { pid: project.projectId, rid: original.runId },
+  );
+  await page.reload();
+  await page.getByRole("tab", { name: "Results", exact: false }).click();
+  await expect(page.getByLabel("Recorded run", { exact: true })).toHaveValue(
+    original.runId,
+  );
+  const names = runs.flatMap((run) => [
+    `runs/${run.runId}/evidence.jsonl`,
+    `snapshots/${run.snapshotId}/snapshot.json`,
+  ]);
+  const hash = (name: string) =>
+    createHash("sha256")
+      .update(readFileSync(path.join(process.env.STUDIO_BROWSER_DATA!, name)))
+      .digest("hex");
+  const before = Object.fromEntries(names.map((name) => [name, hash(name)]));
+  let release!: () => void, ready!: () => void, finish!: () => void;
+  const held = new Promise<void>((r) => (release = r)),
+    actual = new Promise<void>((r) => (ready = r)),
+    delivered = new Promise<void>((r) => (finish = r));
+  await page.route(
+    `**/api/v1/runs/${original.runId}/snapshot`,
+    async (route) => {
+      const response = await route.fetch();
+      expect(response.status()).toBe(200);
+      const bodyText = await response.text();
+      const headers = { ...response.headers() };
+      delete headers["content-length"];
+      ready();
+      await held;
+      try {
+        await route.fulfill({ status: 200, headers, body: bodyText });
+      } catch (error) {
+        if (!route.request().failure()) throw error;
+      } finally {
+        finish();
+      }
+    },
+  );
+  const mutations: string[] = [];
+  page.on("request", (request) => {
+    const p = new URL(request.url()).pathname;
+    if (
+      request.method() === "POST" &&
+      (/\/api\/v1\/(runs|campaigns)$/.test(p) ||
+        /\/(reruns|commands|evaluations)$/.test(p))
+    )
+      mutations.push(p);
+  });
+  const button = page.getByRole("button", {
+    name: "Frozen inputs",
+    exact: true,
+  });
+  const start = Date.now();
+  await button.click();
+  await actual;
+  await expect(
+    page
+      .getByRole("alert")
+      .filter({ hasText: "Reading frozen inputs timed out." }),
+  ).toBeVisible({ timeout: 40000 });
+  const elapsed = Date.now() - start;
+  expect(elapsed).toBeGreaterThanOrEqual(28000);
+  expect(elapsed).toBeLessThan(40000);
+  await expect(button).toBeEnabled();
+  await expect(page.getByRole("dialog")).toHaveCount(0);
+  release();
+  await delivered;
+  await page.unroute(`**/api/v1/runs/${original.runId}/snapshot`);
+  await button.click();
+  await expect(page.getByRole("dialog")).toContainText(original.snapshotId);
+  await page.keyboard.press("Escape");
+  await expect(button).toBeFocused();
+  expect(mutations).toEqual([]);
+  expect(names.every((name) => hash(name) === before[name])).toBe(true);
+  await info.attach("native-frozen-read-deadline", {
+    contentType: "application/json",
+    body: JSON.stringify({
+      scope:
+        "Actual owned HTTP200 was held until browser deadline; retry is a fresh read, not a workload.",
+      elapsedMilliseconds: elapsed,
+      canonicalBytesUnchanged: true,
+      workloads: mutations,
+    }),
+  });
+});

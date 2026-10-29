@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='utf-8'?>
+<testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="4" skipped="0" tests="4" time="0.088" timestamp="2026-10-27T17:10:03.249920+00:00"><testcase classname=".studio-local.lab-api-foundation.test_terminal_leases" name="test_confirmed_terminal_lease_survives_restore_without_provider_contact[released]" time="0.002"><failure message="AssertionError: assert 'unknown' == 'released'&#10;  &#10;  - released&#10;  + unknown">.studio-local/lab-api-foundation/test_terminal_leases.py:25: in test_confirmed_terminal_lease_survives_restore_without_provider_contact
+    assert restored.get(lease['reservationId'],owner='original-owner')['status']==terminal
+E   AssertionError: assert 'unknown' == 'released'
+E
+E     - released
+E     + unknown</failure></testcase><testcase classname=".studio-local.lab-api-foundation.test_terminal_leases" name="test_confirmed_terminal_lease_survives_restore_without_provider_contact[expired]" time="0.002"><failure message="AssertionError: assert 'unknown' == 'expired'&#10;  &#10;  - expired&#10;  + unknown">.studio-local/lab-api-foundation/test_terminal_leases.py:25: in test_confirmed_terminal_lease_survives_restore_without_provider_contact
+    assert restored.get(lease['reservationId'],owner='original-owner')['status']==terminal
+E   AssertionError: assert 'unknown' == 'expired'
+E
+E     - expired
+E     + unknown</failure></testcase><testcase classname=".studio-local.lab-api-foundation.test_terminal_leases" name="test_typed_uncertain_reserve_retains_durable_intent_and_never_reacquires[OWNERSHIP_UNCERTAIN]" time="0.001"><failure message="assert (0 == 1)&#10; +  where 0 = len([])">.studio-local/lab-api-foundation/test_terminal_leases.py:47: in test_typed_uncertain_reserve_retains_durable_intent_and_never_reacquires
+    assert len(saved)==1 and saved[0]['status']=='unknown' and saved[0]['fencingIdentity'] is None
+E   assert (0 == 1)
+E    +  where 0 = len([])</failure></testcase><testcase classname=".studio-local.lab-api-foundation.test_terminal_leases" name="test_typed_uncertain_reserve_retains_durable_intent_and_never_reacquires[PROVIDER_OPERATION_UNKNOWN]" time="0.001"><failure message="AssertionError: &#10;- PROVIDER_OPERATION_UNKNOWN&#10;+ OWNERSHIP_UNCERTAIN">.studio-local/lab-api-foundation/test_terminal_leases.py:45: in test_typed_uncertain_reserve_retains_durable_intent_and_never_reacquires
+    bench.registry.reserve(bench.provider.asset_id,owner='original-owner',duration=10)
+services/studio-api/src/xverse_studio/lab/reservations.py:101: in reserve
+    observed = provider.reserve({**asset, "reservationId": reservation_id}, scope, owner, expiry)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.studio-local/lab-api-foundation/test_terminal_leases.py:42: in lose_typed_ack
+    raise LabError(code)
+E   xverse_studio.lab.reservations.LabError: PROVIDER_OPERATION_UNKNOWN
+
+During handling of the above exception, another exception occurred:
+.studio-local/lab-api-foundation/test_terminal_leases.py:44: in test_typed_uncertain_reserve_retains_durable_intent_and_never_reacquires
+    with pytest.raises(LabError,match='^OWNERSHIP_UNCERTAIN$'):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError:
+E   - PROVIDER_OPERATION_UNKNOWN
+E   + OWNERSHIP_UNCERTAIN</failure></testcase></testsuite></testsuites>

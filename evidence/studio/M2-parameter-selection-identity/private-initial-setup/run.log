@@ -1,0 +1,72 @@
+
+Running 2 tests using 1 worker
+
+(node:2539008) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 .studio-local/hybrid-comparison/parameter-group-control/group.spec.ts:11:7 › labelled held actual presentation at 1024 › metadata arrival preserves native select-all and unsaved value (12.3s)
+(node:2539208) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 .studio-local/hybrid-comparison/parameter-group-control/group.spec.ts:11:7 › labelled held actual presentation at 1440 › metadata arrival preserves native select-all and unsaved value (12.5s)
+
+
+  1) .studio-local/hybrid-comparison/parameter-group-control/group.spec.ts:11:7 › labelled held actual presentation at 1024 › metadata arrival preserves native select-all and unsaved value
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('heading', { name: 'Owned held presentation selection', exact: true })
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('heading', { name: 'Owned held presentation selection', exact: true }) with timeout 10000ms
+      - waiting for getByRole('heading', { name: 'Owned held presentation selection', exact: true })
+
+
+      32 |     await page.reload();
+      33 |     await page.getByRole("navigation",{name:"Main navigation"}).getByRole("button",{name:"Workspace",exact:true}).click();
+    > 34 |     await expect(page.getByRole("heading",{name:project.name,exact:true})).toBeVisible();
+         |                                                                            ^
+      35 |     const parameters=page.getByRole("button",{name:"Parameters",exact:true});await tabTo(page,parameters);await page.keyboard.press("Enter");await ready;
+      36 |     const duration=page.getByLabel("Duration");await expect(duration).toHaveValue("6");await tabTo(page,duration);await page.keyboard.press("ControlOrMeta+A");
+      37 |     const original=await duration.elementHandle();release();await done;
+        at <repo>/.studio-local/hybrid-comparison/parameter-group-control/group.spec.ts:34:76
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    .studio-local/hybrid-comparison/parameter-group-control/before/browser/group-labelled-held-actual-35b9e-elect-all-and-unsaved-value/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: .studio-local/hybrid-comparison/parameter-group-control/before/browser/group-labelled-held-actual-35b9e-elect-all-and-unsaved-value/error-context.md
+
+  2) .studio-local/hybrid-comparison/parameter-group-control/group.spec.ts:11:7 › labelled held actual presentation at 1440 › metadata arrival preserves native select-all and unsaved value
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('heading', { name: 'Owned held presentation selection', exact: true })
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('heading', { name: 'Owned held presentation selection', exact: true }) with timeout 10000ms
+      - waiting for getByRole('heading', { name: 'Owned held presentation selection', exact: true })
+
+
+      32 |     await page.reload();
+      33 |     await page.getByRole("navigation",{name:"Main navigation"}).getByRole("button",{name:"Workspace",exact:true}).click();
+    > 34 |     await expect(page.getByRole("heading",{name:project.name,exact:true})).toBeVisible();
+         |                                                                            ^
+      35 |     const parameters=page.getByRole("button",{name:"Parameters",exact:true});await tabTo(page,parameters);await page.keyboard.press("Enter");await ready;
+      36 |     const duration=page.getByLabel("Duration");await expect(duration).toHaveValue("6");await tabTo(page,duration);await page.keyboard.press("ControlOrMeta+A");
+      37 |     const original=await duration.elementHandle();release();await done;
+        at <repo>/.studio-local/hybrid-comparison/parameter-group-control/group.spec.ts:34:76
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    .studio-local/hybrid-comparison/parameter-group-control/before/browser/group-labelled-held-actual-e6249-elect-all-and-unsaved-value/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: .studio-local/hybrid-comparison/parameter-group-control/before/browser/group-labelled-held-actual-e6249-elect-all-and-unsaved-value/error-context.md
+
+  2 failed
+    .studio-local/hybrid-comparison/parameter-group-control/group.spec.ts:11:7 › labelled held actual presentation at 1024 › metadata arrival preserves native select-all and unsaved value
+    .studio-local/hybrid-comparison/parameter-group-control/group.spec.ts:11:7 › labelled held actual presentation at 1440 › metadata arrival preserves native select-all and unsaved value

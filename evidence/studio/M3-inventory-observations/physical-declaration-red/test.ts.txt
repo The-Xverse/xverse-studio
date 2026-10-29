@@ -1,0 +1,817 @@
+import {
+  test,
+  expect,
+  type Page,
+  type Locator,
+  type TestInfo,
+} from "@playwright/test";
+import { readFileSync } from "node:fs";
+import path from "node:path";
+import { connectStudio } from "./connect-studio";
+import { renderedContrast } from "./contrast";
+
+const observations = JSON.parse(
+  readFileSync(
+    path.resolve("tests/fixtures/providers/lab-inventory-observation.json"),
+    "utf8",
+  ),
+);
+
+for (const viewport of [
+  { width: 1024, height: 768 },
+  { width: 1440, height: 900 },
+]) {
+  test(`lab inventory: missing physical declaration stays unknown at ${viewport.width}x${viewport.height}`, async ({
+    page,
+  }, info) => {
+    const finish = await begin(page, info, viewport);
+    expect(observations.unclassifiedSource.physicalPropertyPresent).toBe(false);
+    expect(observations.unclassified.items[0].physical).toBe(false);
+    await page.route(assetPattern, (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify(observations.unclassified),
+      }),
+    );
+    await openLab(page);
+    const card = assetCard(page);
+    await expect(card).toBeVisible();
+    await expect.soft(card).toContainText("Not confirmed physical");
+    await expect(
+      card.getByRole("button", { name: "Reserve observe-only", exact: true }),
+    ).toBeDisabled();
+    await finish({
+      omittedPhysicalSource: true,
+      normalizedPhysicalFlag: false,
+      labelledBackendProjectionFixture: true,
+    });
+  });
+}
+
+async function tabTo(page: Page, target: Locator) {
+  await expect(target).toBeVisible();
+  for (const [key, limit] of [
+    ["Shift+Tab", 40],
+    ["Tab", 220],
+  ] as const) {
+    for (let i = 0; i < limit; i++) {
+      if (await target.evaluate((n) => document.activeElement === n)) return;
+      await page.keyboard.press(key);
+    }
+  }
+  await expect(target).toBeFocused();
+}
+
+const lab = (page: Page) => page.locator(".lab-page");
+const refresh = (page: Page) =>
+  lab(page).getByRole("button", { name: "Refresh inventory", exact: true });
+const observationHeading = (page: Page) =>
+  lab(page).getByRole("heading", {
+    name: "Inventory observation",
+    exact: true,
+  });
+const nextPage = (page: Page) =>
+  lab(page).getByRole("button", { name: "Next inventory page", exact: true });
+const previousPage = (page: Page) =>
+  lab(page).getByRole("button", {
+    name: "Previous inventory page",
+    exact: true,
+  });
+const assetCard = (page: Page, id = "urn:fixture:inventory-presentation") =>
+  lab(page)
+    .locator("section.panel")
+    .filter({ has: page.getByRole("heading", { name: id, exact: true }) });
+const field = (card: Locator, name: string) =>
+  card
+    .locator(".key-values > div")
+    .filter({ has: card.page().getByText(name, { exact: true }) })
+    .locator("dd");
+const assetPattern = "**/api/v1/assets*";
+
+async function begin(
+  page: Page,
+  info: TestInfo,
+  viewport: { width: number; height: number },
+) {
+  await page.setViewportSize(viewport);
+  await connectStudio(page, info);
+  const before = {
+    assets: await get(page, "/assets"),
+    projects: await get(page, "/projects"),
+    runs: await get(page, "/runs"),
+  };
+  let writes = 0;
+  page.on("request", (r) => {
+    if (!["GET", "HEAD"].includes(r.method())) writes++;
+  });
+  return async (details: Record<string, unknown>) => {
+    await page.unroute(assetPattern);
+    await page.waitForLoadState("networkidle");
+    expect({
+      assets: await get(page, "/assets"),
+      projects: await get(page, "/projects"),
+      runs: await get(page, "/runs"),
+    }).toEqual(before);
+    expect(writes).toBe(0);
+    await info.attach("lab-inventory-journey.json", {
+      body: JSON.stringify({
+        viewport,
+        ...details,
+        mutativeRequests: writes,
+        canonicalListsUnchanged: true,
+        noStartOrDeviceOperation: true,
+        scope:
+          "Native browser UI over actual empty/unadmitted inventory and explicitly labelled controlled public observations; no physical integration claim",
+      }),
+      contentType: "application/json",
+    });
+  };
+}
+async function openLab(page: Page) {
+  await activate(
+    page,
+    page.getByRole("button", { name: "Laboratory", exact: true }),
+  );
+  await expect(
+    lab(page).getByRole("heading", { name: "Physical assets", exact: true }),
+  ).toBeVisible();
+}
+async function controlBounds(
+  target: Locator,
+  viewport: { width: number; height: number },
+) {
+  await expect(target).toBeFocused();
+  const value = await target.evaluate((n) => {
+    const box = n.getBoundingClientRect(),
+      style = getComputedStyle(n);
+    return {
+      box: box.toJSON(),
+      outline: style.outlineStyle,
+      outlineWidth: parseFloat(style.outlineWidth),
+    };
+  });
+  expect(value.box.left).toBeGreaterThanOrEqual(0);
+  expect(value.box.top).toBeGreaterThanOrEqual(0);
+  expect(value.box.right).toBeLessThanOrEqual(viewport.width);
+  expect(value.box.bottom).toBeLessThanOrEqual(viewport.height);
+  expect(value.outline).not.toBe("none");
+  expect(value.outlineWidth).toBeGreaterThan(0);
+  return value;
+}
+async function paint(target: Locator, label: string) {
+  const result = await renderedContrast(target, label);
+  expect.soft(result.supported).toBe(true);
+  if (result.supported) expect.soft(result.ratio).toBeGreaterThanOrEqual(4.5);
+  return result;
+}
+
+for (const viewport of [
+  { width: 1024, height: 768 },
+  { width: 1440, height: 900 },
+]) {
+  test(`lab inventory: actual empty observation and native refresh at ${viewport.width}x${viewport.height}`, async ({
+    page,
+  }, info) => {
+    const finish = await begin(page, info, viewport);
+    let reads = 0;
+    page.on("request", (r) => {
+      if (new URL(r.url()).pathname === "/api/v1/assets") reads++;
+    });
+    await openLab(page);
+    await expect(
+      lab(page).getByRole("heading", {
+        name: "No physical provider admitted",
+        exact: true,
+      }),
+    ).toBeVisible();
+    await expect(lab(page).getByRole("status")).toHaveText(
+      "Provider inventory observation is complete.",
+    );
+    await expect(
+      lab(page).getByText("No assets were returned on this page.", {
+        exact: true,
+      }),
+    ).toBeVisible();
+    await expect(refresh(page)).toHaveAccessibleDescription(
+      /new observation at the first page/,
+    );
+    await tabTo(page, refresh(page));
+    const buttonFocus = await controlBounds(refresh(page), viewport);
+    await page.keyboard.press("Enter");
+    await expect(observationHeading(page)).toBeFocused();
+    const completionFocus = await controlBounds(
+      observationHeading(page),
+      viewport,
+    );
+    await expect(nextPage(page)).toBeDisabled();
+    await expect(previousPage(page)).toBeDisabled();
+    expect(reads).toBe(2);
+    const measurements = [
+      await paint(
+        lab(page).getByRole("status"),
+        "Complete actual inventory observation",
+      ),
+      await paint(
+        lab(page).getByText("No assets were returned on this page.", {
+          exact: true,
+        }),
+        "Observed empty inventory page",
+      ),
+    ];
+    await finish({
+      actualRegistry: true,
+      reads,
+      buttonFocus,
+      completionFocus,
+      measurements,
+    });
+  });
+
+  test(`lab inventory: HTTP503 retry reads actual inventory at ${viewport.width}x${viewport.height}`, async ({
+    page,
+  }, info) => {
+    const finish = await begin(page, info, viewport);
+    let reads = 0;
+    await page.route(assetPattern, async (route) => {
+      reads++;
+      if (reads === 1)
+        await route.fulfill({
+          status: 503,
+          contentType: "application/json",
+          body: JSON.stringify({
+            code: "INVENTORY_UNAVAILABLE",
+            message: "Synthetic inventory transport failure",
+          }),
+        });
+      else {
+        const actual = await route.fetch();
+        expect(actual.status()).toBe(200);
+        await route.fulfill({ response: actual });
+      }
+    });
+    await openLab(page);
+    const error = lab(page).getByRole("alert");
+    await expect(error).toContainText("Inventory availability is unknown");
+    await expect(page.locator(".alerts [role=alert]")).toHaveCount(0);
+    const measurements = [
+      await paint(error, "Unknown inventory transport observation"),
+    ];
+    await activate(page, refresh(page));
+    await expect(observationHeading(page)).toBeFocused();
+    await expect(error).toHaveCount(0);
+    await expect(
+      lab(page).getByText("No assets were returned on this page.", {
+        exact: true,
+      }),
+    ).toBeVisible();
+    expect(reads).toBe(2);
+    await finish({
+      controlledInitialStatus: 503,
+      retryActualStatus: 200,
+      reads,
+      measurements,
+    });
+  });
+
+  for (const mode of [
+    "missing completeness",
+    "duplicate identity",
+    "unsupported authority",
+    "non-progressing cursor",
+  ] as const) {
+    test(`lab inventory: ${mode} remains unknown at ${viewport.width}x${viewport.height}`, async ({
+      page,
+    }, info) => {
+      const finish = await begin(page, info, viewport),
+        value = structuredClone(observations.observed);
+      if (mode === "missing completeness") delete value.complete;
+      if (mode === "duplicate identity")
+        value.items.push(structuredClone(value.items[0]));
+      if (mode === "unsupported authority") {
+        value.activeReady = true;
+        value.items[0].reservable = true;
+      }
+      if (mode === "non-progressing cursor") value.nextCursor = "0";
+      await page.route(assetPattern, (route) =>
+        route.fulfill({
+          status: 200,
+          contentType: "application/json",
+          body: JSON.stringify(value),
+        }),
+      );
+      await openLab(page);
+      const error = lab(page).getByRole("alert");
+      await expect(error).toContainText("Inventory availability is unknown");
+      await expect(error).toContainText(/malformed or unsupported/);
+      await expect(assetCard(page)).toHaveCount(0);
+      await expect(
+        lab(page).getByRole("button", {
+          name: "Reserve observe-only",
+          exact: true,
+        }),
+      ).toHaveCount(0);
+      await page.unroute(assetPattern);
+      await activate(page, refresh(page));
+      await expect(observationHeading(page)).toBeFocused();
+      await expect(error).toHaveCount(0);
+      await finish({
+        mode,
+        labelledMalformedTransportObservation: true,
+        retryActualInventory: true,
+      });
+    });
+  }
+
+  for (const mode of [
+    "unknown metadata",
+    "truncated observation",
+    "inert metadata",
+  ] as const) {
+    test(`lab inventory: ${mode} has explicit limits at ${viewport.width}x${viewport.height}`, async ({
+      page,
+    }, info) => {
+      const finish = await begin(page, info, viewport),
+        value = structuredClone(observations.observed),
+        asset = value.items[0];
+      if (mode === "unknown metadata") {
+        asset.identity = null;
+        asset.identityStatus = "unknown";
+        asset.metadata.status = "unknown";
+        asset.firmware = {
+          status: "unknown",
+          version: "UNOBSERVED-DECLARATION",
+        };
+        asset.physical = false;
+        asset.available = false;
+        asset.supportedOS = [];
+      } else if (mode === "truncated observation") {
+        value.complete = false;
+        value.truncated = true;
+        asset.observationTruncated = true;
+        value.diagnostics.push({
+          code: "INVENTORY_LIMIT_EXCEEDED",
+          providerId: "fixture",
+        });
+      } else {
+        asset.identity.model = "<script>alert(1)</script>";
+        asset.unapprovedExtra = "SYNTHETIC-PRIVATE-EXTRA";
+        asset.metadata.unapprovedExtra = "SYNTHETIC-NESTED-PRIVATE-EXTRA";
+      }
+      let dialogs = 0;
+      page.on("dialog", async (dialog) => {
+        dialogs++;
+        await dialog.dismiss();
+      });
+      await page.route(assetPattern, (route) =>
+        route.fulfill({
+          status: 200,
+          contentType: "application/json",
+          body: JSON.stringify(value),
+        }),
+      );
+      await openLab(page);
+      const card = assetCard(page),
+        measurements = [];
+      await expect(card).toBeVisible();
+      await expect(
+        card.getByRole("button", { name: "Reserve observe-only", exact: true }),
+      ).toBeDisabled();
+      await expect(
+        card.getByRole("button", { name: "Reserve observe-only", exact: true }),
+      ).toHaveAccessibleDescription(/durable ownership and permitted actions/);
+      await expect(field(card, "Permission scope")).toHaveText("unknown");
+      await expect(field(card, "Active-operation readiness")).toHaveText(
+        "Blocked",
+      );
+      await expect(card.locator(".badge").first()).toHaveText("fixture");
+      if (mode === "unknown metadata") {
+        await expect(field(card, "Firmware")).toHaveText("Unknown");
+        await expect(field(card, "Observed identity")).toHaveText("Unknown");
+        await expect(field(card, "Provider OS declaration")).toHaveText(
+          "Unknown",
+        );
+        await expect(field(card, "Realization")).toHaveText(
+          "Non-physical asset observation",
+        );
+        await expect(field(card, "Availability")).toHaveText(
+          "Not confirmed available",
+        );
+        measurements.push(
+          await paint(field(card, "Firmware"), "Unknown firmware observation"),
+        );
+      } else if (mode === "truncated observation") {
+        await expect(
+          lab(page)
+            .getByRole("status")
+            .filter({ hasText: /Inventory observation is incomplete/ }),
+        ).toContainText("truncated");
+        await expect(card.getByRole("status")).toContainText(
+          "omitted metadata remains unknown",
+        );
+        await expect(
+          lab(page).getByText("INVENTORY_LIMIT_EXCEEDED", { exact: true }),
+        ).toBeVisible();
+        measurements.push(
+          await paint(card.getByRole("status"), "Truncated asset observation"),
+        );
+      } else {
+        await expect(field(card, "Observed identity")).toContainText(
+          "<script>alert(1)</script>",
+        );
+        await activate(
+          page,
+          card.getByText("Inspect exact data", { exact: true }),
+        );
+        await expect(card.locator("pre")).toContainText(
+          "<script>alert(1)</script>",
+        );
+        await expect(card.locator("pre")).not.toContainText(
+          "SYNTHETIC-PRIVATE-EXTRA",
+        );
+        await expect(card.locator("pre")).not.toContainText(
+          "SYNTHETIC-NESTED-PRIVATE-EXTRA",
+        );
+        await expect(card.locator("script")).toHaveCount(0);
+        expect(dialogs).toBe(0);
+      }
+      await finish({
+        mode,
+        labelledTransportFixture: true,
+        measurements,
+        dialogs,
+      });
+    });
+  }
+
+  for (const pageFailure of [false, true]) {
+    test(`lab inventory: native pages ${pageFailure ? "recover actual first page after failure" : "preserve bounded page observations"} at ${viewport.width}x${viewport.height}`, async ({
+      page,
+    }, info) => {
+      test.setTimeout(60000);
+      const finish = await begin(page, info, viewport),
+        calls: string[] = [],
+        first = structuredClone(observations.observed),
+        second = structuredClone(observations.observed);
+      first.items = Array.from({ length: 100 }, (_, i) => ({
+        ...structuredClone(first.items[0]),
+        assetId: `urn:fixture:paged-${i}`,
+        identity: { serial: `SYNTHETIC-PAGE-${i}` },
+      }));
+      first.nextCursor = "100";
+      second.items[0].assetId = "urn:fixture:paged-100";
+      await page.route(assetPattern, async (route) => {
+        const url = new URL(route.request().url());
+        calls.push(url.pathname + url.search);
+        if (pageFailure && calls.length > 2) {
+          const response = await route.fetch();
+          expect(response.status()).toBe(200);
+          await route.fulfill({ response });
+        } else if (url.searchParams.get("cursor") === "100" && pageFailure)
+          await route.fulfill({
+            status: 503,
+            contentType: "application/json",
+            body: JSON.stringify({
+              code: "INVENTORY_UNAVAILABLE",
+              message: "Synthetic next-page failure",
+            }),
+          });
+        else
+          await route.fulfill({
+            status: 200,
+            contentType: "application/json",
+            body: JSON.stringify(
+              url.searchParams.has("cursor") ? second : first,
+            ),
+          });
+      });
+      await openLab(page);
+      await expect(lab(page).getByRole("status")).toContainText(
+        "More assets are available on another page",
+      );
+      await expect(
+        lab(page).getByText("Page 1 · 100 observed records", { exact: true }),
+      ).toBeVisible();
+      await activate(page, nextPage(page));
+      if (pageFailure) {
+        await expect(lab(page).getByRole("alert")).toBeFocused();
+        await expect(lab(page).getByRole("alert")).toContainText(
+          "Inventory availability is unknown",
+        );
+        await expect(assetCard(page, "urn:fixture:paged-0")).toHaveCount(0);
+        await activate(page, refresh(page));
+        await expect(observationHeading(page)).toBeFocused();
+        await expect(
+          lab(page).getByText("No assets were returned on this page.", {
+            exact: true,
+          }),
+        ).toBeVisible();
+        expect(calls).toEqual([
+          "/api/v1/assets",
+          "/api/v1/assets?cursor=100",
+          "/api/v1/assets",
+        ]);
+      } else {
+        await expect(observationHeading(page)).toBeFocused();
+        await expect(
+          lab(page).getByText("Page 2 · 1 observed records", { exact: true }),
+        ).toBeVisible();
+        await expect(assetCard(page, "urn:fixture:paged-0")).toHaveCount(0);
+        await expect(assetCard(page, "urn:fixture:paged-100")).toBeVisible();
+        await expect(nextPage(page)).toBeDisabled();
+        await activate(page, previousPage(page));
+        await expect(observationHeading(page)).toBeFocused();
+        await expect(
+          lab(page).getByText("Page 1 · 100 observed records", { exact: true }),
+        ).toBeVisible();
+        await expect(previousPage(page)).toBeDisabled();
+        expect(calls).toEqual([
+          "/api/v1/assets",
+          "/api/v1/assets?cursor=100",
+          "/api/v1/assets",
+        ]);
+        await expect(refresh(page)).toHaveAccessibleDescription(
+          /inventory may change between requests/,
+        );
+      }
+      await finish({
+        pageFailure,
+        calls,
+        recordsOnFirstPage: 100,
+        labelledTransportPages: true,
+      });
+    });
+  }
+
+  for (const status of [200, 503]) {
+    test(`lab inventory: departed context ignores held HTTP${status} at ${viewport.width}x${viewport.height}`, async ({
+      page,
+    }, info) => {
+      const finish = await begin(page, info, viewport);
+      let release!: () => void,
+        finished!: () => void,
+        ready = false,
+        departed = false;
+      const gate = new Promise<void>((r) => (release = r)),
+        done = new Promise<void>((r) => (finished = r));
+      await page.route(assetPattern, async (route) => {
+        try {
+          const actual = status === 200 ? await route.fetch() : undefined;
+          if (actual) expect(actual.status()).toBe(200);
+          ready = true;
+          await gate;
+          if (actual) await route.fulfill({ response: actual });
+          else
+            await route.fulfill({
+              status: 503,
+              contentType: "application/json",
+              body: JSON.stringify({
+                code: "INVENTORY_UNAVAILABLE",
+                message: "Synthetic departed inventory failure",
+              }),
+            });
+        } catch (error) {
+          if (!departed) throw error;
+        } finally {
+          finished();
+        }
+      });
+      try {
+        await openLab(page);
+        await expect.poll(() => ready).toBe(true);
+        await expect(refresh(page)).toBeDisabled();
+        await expect(lab(page).getByRole("status")).toHaveText(
+          "Reading inventory observations…",
+        );
+        const home = page.getByRole("button", {
+          name: "X-Verse Studio home",
+          exact: true,
+        });
+        await activate(page, home);
+        departed = true;
+        await expect(lab(page)).toHaveCount(0);
+        release();
+        await done;
+        await page.waitForLoadState("networkidle");
+        await expect(home).toBeFocused();
+        await expect(lab(page)).toHaveCount(0);
+        await expect(page.locator(".alerts [role=alert]")).toHaveCount(0);
+        await finish({
+          status,
+          departed: true,
+          actualResponseHeld: status === 200,
+          labelledTransportFailure: status === 503,
+        });
+      } finally {
+        departed = true;
+        release();
+        await done;
+        await page.unroute(assetPattern);
+      }
+    });
+  }
+
+  test(`lab inventory: pending repeat and moved focus retain one observation at ${viewport.width}x${viewport.height}`, async ({
+    page,
+  }, info) => {
+    const finish = await begin(page, info, viewport);
+    let reads = 0,
+      release!: () => void,
+      finished!: () => void,
+      ready = false;
+    const gate = new Promise<void>((r) => (release = r)),
+      done = new Promise<void>((r) => (finished = r));
+    await page.route(assetPattern, async (route) => {
+      reads++;
+      try {
+        const actual = await route.fetch();
+        expect(actual.status()).toBe(200);
+        if (reads > 1) {
+          ready = true;
+          await gate;
+        }
+        await route.fulfill({ response: actual });
+      } finally {
+        if (reads > 1) finished();
+      }
+    });
+    try {
+      await openLab(page);
+      await expect(lab(page).getByRole("status")).toContainText(
+        "observation is complete",
+      );
+      await activate(page, refresh(page));
+      await expect.poll(() => ready).toBe(true);
+      await expect(refresh(page)).toBeDisabled();
+      await page.keyboard.press("Enter");
+      await page.keyboard.press("Enter");
+      expect(reads).toBe(2);
+      const home = page.getByRole("button", {
+        name: "X-Verse Studio home",
+        exact: true,
+      });
+      await tabTo(page, home);
+      release();
+      await done;
+      await expect(lab(page).getByRole("status")).toContainText(
+        "observation is complete",
+      );
+      await expect(home).toBeFocused();
+      expect(reads).toBe(2);
+      await finish({
+        reads,
+        pendingRepeatCreatedNoExtraRead: true,
+        deliberatelyMovedFocusPreserved: true,
+      });
+    } finally {
+      release();
+      if (reads > 1) await done;
+      await page.unroute(assetPattern);
+    }
+  });
+}
+async function activate(page: Page, target: Locator) {
+  await tabTo(page, target);
+  await page.keyboard.press("Enter");
+}
+async function get(page: Page, route: string) {
+  return page.evaluate(async (route) => {
+    const response = await fetch("/api/v1" + route);
+    if (!response.ok) throw new Error(`Owned read failed: ${response.status}`);
+    return response.json();
+  }, route);
+}
+
+for (const viewport of [
+  { width: 1024, height: 768 },
+  { width: 1440, height: 900 },
+]) {
+  for (const mode of ["incomplete", "observed"] as const) {
+    test(`lab inventory: ${mode} public observation at ${viewport.width}x${viewport.height}`, async ({
+      page,
+    }, info) => {
+      await page.setViewportSize(viewport);
+      await connectStudio(page, info);
+      const before = {
+        assets: await get(page, "/assets"),
+        runs: await get(page, "/runs"),
+        projects: await get(page, "/projects"),
+      };
+      expect(before.assets).toMatchObject({
+        items: [],
+        complete: true,
+        truncated: false,
+        activeReady: false,
+        physicalProviderStatus: "unavailable",
+      });
+      let writes = 0,
+        reads = 0;
+      page.on("request", (r) => {
+        if (!["GET", "HEAD"].includes(r.method())) writes++;
+      });
+      const pattern = "**/api/v1/assets";
+      await page.route(pattern, async (route) => {
+        reads++;
+        expect(route.request().method()).toBe("GET");
+        await route.fulfill({
+          status: 200,
+          contentType: "application/json",
+          body: JSON.stringify(observations[mode]),
+        });
+      });
+      try {
+        await activate(
+          page,
+          page.getByRole("button", { name: "Laboratory", exact: true }),
+        );
+        await expect(
+          page.getByRole("heading", { name: "Physical assets", exact: true }),
+        ).toBeVisible();
+        await expect.poll(() => reads).toBe(1);
+        const measurements = [];
+        if (mode === "incomplete") {
+          await expect
+            .soft(
+              page
+                .locator(".diagnostic-list strong")
+                .filter({ hasText: /^PROVIDER_INVENTORY_UNAVAILABLE$/ }),
+            )
+            .toBeVisible();
+        } else {
+          const card = page.locator("section.panel").filter({
+            has: page.getByRole("heading", {
+              name: "urn:fixture:inventory-presentation",
+              exact: true,
+            }),
+          });
+          const firmware = card
+            .locator(".key-values > div")
+            .filter({ has: page.getByText("Firmware", { exact: true }) })
+            .locator("dd");
+          await expect.soft(firmware).toContainText("fixture-1.2.3");
+          await expect(field(card, "Observed identity")).toContainText(
+            "SYNTHETIC-UI-001",
+          );
+          await expect(field(card, "Provider version")).toHaveText(
+            "fixture-provider-1.0",
+          );
+          await expect(field(card, "Provider OS declaration")).toHaveText(
+            "Linux",
+          );
+          await expect(field(card, "Artifact revision")).toHaveText("Unknown");
+          await expect(field(card, "Availability")).toHaveText(
+            "Observed available",
+          );
+          await expect(field(card, "Metadata coverage")).toHaveText("partial");
+          await expect(field(card, "Active-operation readiness")).toHaveText(
+            "Blocked",
+          );
+          measurements.push(
+            await paint(firmware, "Observed firmware revision"),
+            await paint(
+              card.locator(".badge").first(),
+              "Fixture evidence scope",
+            ),
+            await paint(
+              field(card, "Active-operation readiness"),
+              "Blocked physical-operation readiness",
+            ),
+          );
+          await expect(
+            card.getByRole("button", {
+              name: "Reserve observe-only",
+              exact: true,
+            }),
+          ).toBeDisabled();
+        }
+        await page.unroute(pattern);
+        const after = {
+          assets: await get(page, "/assets"),
+          runs: await get(page, "/runs"),
+          projects: await get(page, "/projects"),
+        };
+        expect(after).toEqual(before);
+        expect(writes).toBe(0);
+        await info.attach("lab-inventory-observation.json", {
+          body: JSON.stringify({
+            viewport,
+            mode,
+            labelledTransportFixture: true,
+            fixtureGeneratedByBackendProjection: true,
+            actualInventoryEmptyAndUnadmitted: true,
+            canonicalListsUnchanged: true,
+            mutativeRequests: writes,
+            physicalActions: 0,
+            measurements,
+            reads,
+            scope:
+              "UI projection observation only; synthetic owned provider used by offline generator, no runtime admission, device access or Start",
+          }),
+          contentType: "application/json",
+        });
+      } finally {
+        await page.unroute(pattern);
+      }
+    });
+  }
+}

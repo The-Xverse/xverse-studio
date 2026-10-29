@@ -1,0 +1,170 @@
+"""Retain only successful terminal final gates and described historical cohorts."""
+from pathlib import Path
+import base64
+import hashlib
+import json
+import re
+import sys
+
+root=Path.cwd().resolve();local=root/'.studio-local/comparison-workflow';out=root/'evidence/studio/M4-recorded-comparison'
+def read(path): return json.loads(path.read_text())
+def clean_text(value):
+    for original,replacement in [(str(root.parent/'.xverse-studio-cache'),'<loop-cache>'),(str(root),'<repo>'),('<repo>','<repo>'),(sys.base_prefix,'<python-install>')]: value=value.replace(original,replacement)
+    value=re.sub(r'(?i)(\bstudio_session=)[A-Za-z0-9_-]{16,}', r'\1<redacted>', value)
+    value=re.sub(r'''(?i)(x-csrf-token["']?\s*[:=]\s*["']?)[A-Za-z0-9._-]{16,}''', r'\1<redacted>', value)
+    value=re.sub(r'(?i)(bearer\s+)[A-Za-z0-9._-]{16,}', r'\1<redacted>', value)
+    return value
+
+def clean(value):
+    if isinstance(value,str):return clean_text(value)
+    if isinstance(value,list):return [clean(v) for v in value]
+    if isinstance(value,dict):
+        result={k:('<redacted>' if k.lower() in {'studio_session','csrftoken','x-csrf-token','bootstraptoken','x-studio-bootstrap','sessiontoken','ownerkey','authorization','cookie','set-cookie'} else clean(v)) for k,v in value.items()}
+        if value.get('contentType','').startswith(('text/','application/json')) and 'body' in value:
+            try:result['body']=base64.b64encode(clean_text(base64.b64decode(value['body']).decode()).encode()).decode()
+            except (ValueError,UnicodeError):pass
+        return result
+    return value
+
+def save(name,value):
+    path=out/name;path.parent.mkdir(parents=True,exist_ok=True);path.write_text(json.dumps(clean(value),indent=2)+'\n')
+def copy_text(name,path):
+    target=out/name;target.parent.mkdir(parents=True,exist_ok=True)
+    target.write_text('\n'.join(line.rstrip() for line in clean_text(path.read_text()).splitlines()).rstrip()+'\n')
+def results(report):
+    for suite in report.get('suites',[]):yield from results(suite)
+    for spec in report.get('specs',[]):
+        for test in spec['tests']:
+            for result in test['results']:yield spec['title'],result
+
+frozen=read(local/'verified-targeted/source-before.json');assert len(frozen)==286
+old=read(local/'browser-expanded-successor/source-before.json');assert old==read(local/'browser-expanded-successor/source-after.json')
+changed={n for n in set(old)|set(frozen) if old.get(n)!=frozen.get(n)}
+expected={'apps/studio-web/src/features/comparison/ComparisonWorkspace.tsx','docs/architecture/ADR-0021-recorded-comparison.md','services/studio-api/src/xverse_studio/comparison/observations.py','services/studio-api/src/xverse_studio/comparison/runs.py','tests/integration/test_comparison_report.py','docs/architecture/ADR-0022-owned-worker-state-handoff.md','services/studio-api/src/xverse_studio/api/advanced.py','services/studio-api/src/xverse_studio/api/app.py','services/studio-api/src/xverse_studio/assertions/snapshot.py','services/studio-api/src/xverse_studio/runs/service.py','tests/integration/test_owned_state_handoff.py','tests/integration/test_run_history_projection.py','tests/platform/test_reconciliation_identity.py'}
+assert {n for n in changed if not n.startswith('apps/studio-web/dist/')}==expected
+assert len(changed)==16 and 'apps/studio-web/dist/index.html' in changed
+final={}
+for label,directory,count in [('targeted','verified-targeted',48),('full','verified-full',397),('performance','verified-performance',2)]:
+ d=local/directory;s=read(d/'summary.json');r=read(d/'browser-report.json')
+ assert s['exitCode']==0 and s['sourceUnchanged']
+ assert frozen==read(d/'source-before.json')==read(d/'source-after.json')
+ assert r['stats']['expected']==count and not any(r['stats'][k] for k in ['unexpected','skipped','flaky'])
+ final[label]=(d,s,r)
+assert all(hashlib.sha256((root/n).read_bytes()).hexdigest()==h for n,h in frozen.items())
+backend=read(local/'verified-backend/summary.json');backend_map=read(local/'verified-backend/source-before.json')
+assert backend['exitCode']==0 and backend['sourceUnchanged'] and '932 passed' in (local/'verified-backend/pytest.log').read_text()
+assert len(backend_map)==218 and backend_map==read(local/'verified-backend/source-after.json')
+assert all(hashlib.sha256((root/n).read_bytes()).hexdigest()==h for n,h in backend_map.items())
+environment=read(local/'verified-environment.json');assert all(frozen.get(n)==h for n,h in environment['sourceFiles'].items())
+assert read(local/'schema-and-static/openapi-control.json')['equal']
+ci=read(local/'ci-budget-amendment/control.json')
+assert ci['onlyParsedWorkflowDifference']=='jobs.native.timeout-minutes' and ci['allOtherWorkflowSemanticsIdentical']
+assert hashlib.sha256((root/'.github/workflows/ci.yml').read_bytes()).hexdigest()==ci['afterSha256']
+out.mkdir(exist_ok=False)
+save('final-input-amendment.json',{'scope':'The expanded18-browser cohort precedes final compiled-observer/source-quality and original gap-count repairs, run-history paging/admission caching, owned-worker launch/exit handoff repairs, their regressions and precise ADR bounds. Current repaired48/397/2 all use identical286 selected inputs.','changedInputs':{n:{'before':old.get(n),'after':frozen.get(n)} for n in sorted(changed)}})
+for label,(d,s,r) in final.items():
+ save(label+'/verification.json',s);save(label+'/browser-report.json',r)
+ for name in ['source-before.json','source-after.json']:save(label+'/'+name,read(d/name))
+ copy_text(label+'/browser.txt',d/'browser.log')
+ if (d/'scheduling.json').is_file():save(label+'/scheduling.json',read(d/'scheduling.json'))
+ if label!='full':
+  for title,result in results(r):
+   title=re.sub(r'[^A-Za-z0-9_-]','-',title)
+   for a in result.get('attachments',[]):
+    if a.get('contentType')=='application/json' and 'body' in a:
+     save(label+'/journeys/'+title+'/'+a['name'],json.loads(base64.b64decode(a['body'])))
+  for p in (d/'browser-output').rglob('*.png'):
+   dest=out/label/'screenshots'/p.relative_to(d/'browser-output');dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes(p.read_bytes())
+ if label=='performance':
+  for p in (d/'browser-output').rglob('*performance.json'):
+   value=read(p);v=value['viewport'];save(f'performance/{v["width"]}x{v["height"]}/{p.name}',value)
+histories=['api-red','api-first-successor','api-expanded-successor','report-shape-red','report-quality-successor','browser-red','browser-ready-red','browser-first-successor','browser-expanded-successor','observer-contract-red','observer-contract-ready-red','observer-and-api-quality-successor','gap-count-red','gap-count-successor','final-backend','final-targeted','final-full','run-history-red','run-history-successor','state-handoff-red','state-handoff-ready-red','state-handoff-first-successor','state-history-quality-successor','history-ready-successor']
+index=[]
+for directory in histories:
+ d=local/directory;entry={'directory':directory}
+ for name in ['summary.json','source-before.json','source-after.json','classification.json','browser-report.json']:
+  if (d/name).is_file():save('history/'+directory+'/'+name,read(d/name))
+ if (d/'summary.json').is_file():entry['summary']=read(d/'summary.json')
+ if (d/'browser-report.json').is_file():entry['browserStats']=read(d/'browser-report.json')['stats']
+ for p in d.iterdir():
+  if p.is_file() and p.suffix in ['.log','.txt','.xml']:copy_text('history/'+directory+'/'+p.name.replace('.log','.txt'),p)
+ for p in (d/'exact-source').rglob('*'):
+  if p.is_file():copy_text('history/'+directory+'/exact-source/'+p.relative_to(d/'exact-source').as_posix(),p)
+ for p in (d/'browser-output').rglob('error-context.md'):copy_text('history/'+directory+'/contexts/'+p.parent.name+'/error-context.md',p)
+ for p in (d/'browser-output').rglob('*.png'):
+  dest=out/'history'/directory/'screenshots'/p.relative_to(d/'browser-output');dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes(p.read_bytes())
+ index.append(entry)
+save('history/index.json',index)
+
+# The first full browser cohort was unsuccessful and deliberately interrupted.
+# These observations and pre-repair sources are historical, never passing gates.
+for p in (local/'full-failure-investigation').rglob('*'):
+ if p.is_file() and p.suffix in ('.json','.txt'):
+  name='history/full-failure-investigation/'+p.relative_to(local/'full-failure-investigation').as_posix()
+  if p.suffix=='.json':save(name,read(p))
+  else:copy_text(name,p)
+for p in (local/'controllers-before-repair').iterdir():
+ if p.is_file():copy_text('controllers/before-repair/'+p.name+'.txt',p)
+for name in ['verified-backend-collection.json','verified-browser-collection.json']:
+ save('collection/'+name,read(local/name))
+previous=read(local/'final-targeted/source-before.json')
+repair_changes={n:{'before':previous.get(n),'after':frozen.get(n)} for n in sorted(set(previous)|set(frozen)) if previous.get(n)!=frozen.get(n)}
+assert len(repair_changes)==10
+save('repair-input-amendment.json',{'scope':'Original19 targeted and916 backend passed before the failed/interrupted full browser cohort. The current repaired48/397/2 and932 backend must pass afresh. Original283 browser/215 backend source maps are historical; current maps contain286/218 inputs. No application deadline or performance threshold increased.','changedInputs':repair_changes})
+
+
+# Separate follow-on rerun audit: main product bytes stay unchanged; isolated
+# proposals are explicitly not reported as current implementation acceptance.
+follow=root/'.studio-local/frozen-rerun-review'
+for directory in ['native-red','isolated-build','isolated-first-successor','isolated-build-successor','isolated-ready-successor','isolated-expanded-successor','isolated-affected-successor']:
+ d=follow/directory
+ if not d.is_dir():continue
+ for p in d.rglob('*'):
+  if p.is_file() and p.suffix in ('.json','.txt','.log','.xml','.md'):
+   name='follow-on-rerun/'+directory+'/'+p.relative_to(d).as_posix().replace('.log','.txt')
+   if p.suffix=='.json':save(name,read(p))
+   else:copy_text(name,p)
+for name in ['isolated-source-control.json','isolated-source.json']:
+ if (follow/name).is_file():save('follow-on-rerun/'+name,read(follow/name))
+prototype=root/'.studio-local/frozen-rerun-repair-source/current/apps/studio-web/src/features/results/ResultsView.tsx'
+if prototype.is_file():copy_text('follow-on-rerun/isolated-proposal/ResultsView.tsx.txt',prototype)
+
+for directory in ['build-first','build','expanded-build','guard-build','final-build','schema-and-static','verified-build']:
+ for p in (local/directory).iterdir():
+  if p.is_file():
+   n='build-and-checks/'+directory+'/'+p.name.replace('.log','.txt')
+   if p.suffix=='.json':save(n,read(p))
+   else:copy_text(n,p)
+for name in ['check-api.py','check-browser.py','check-final-backend.py','run-final.py','environment.py','retain.py','privacy-check.py']:
+ copy_text('controllers/'+name+'.txt',local/name)
+copy_text('implementation-review.md',local/'implementation-review.md')
+for name in ['before.yml.txt','after.yml.txt','control.json','prior-job-checks.json','compatibility.log','partial-browser-observations.json','initial-60-control.json','intermediate-60.yml.txt','compatibility-60.log']:
+ p=local/'ci-budget-amendment'/name
+ if p.is_file():
+  if p.suffix=='.json':save('ci-budget-amendment/'+p.name,read(p))
+  else:copy_text('ci-budget-amendment/'+p.name.replace('.log','.txt'),p)
+save('benchmark-scheduling-control.json',read(local/'benchmark-scheduling-control.json'))
+save('sanitizer-control.json',read(local/'sanitizer-control.json'))
+save('environment.json',environment)
+save('environment-identity-scope.json',{'scope':'record_environment.py observes tracked source only; before product commit its sourceDigest excludes newly untracked files and compiled assets.','trackedFilesObserved':len(environment['sourceFiles']),'allObservedBytesMatchSelectedCandidate':True,'completeSelectedCandidateMap':'application-and-input-hashes.json','selectedInputs':286})
+save('application-and-input-hashes.json',frozen)
+save('backend/verification.json',backend)
+save('backend/source-before.json',backend_map);save('backend/source-after.json',backend_map)
+copy_text('backend/pytest.txt',local/'verified-backend/pytest.log')
+assert len({n:h for n,h in frozen.items() if n.startswith('apps/studio-web/dist/')})==6
+save('verification.json',{'baseCandidate':backend['baseCandidate'],'scope':'Recorded comparison component on owned native Linux; no full task/milestone or new provider acceptance',
+ 'backendTestsPassed':932,'backend':'backend/verification.json',**{label:r['stats'] for label,(_,s,r) in final.items()},
+ 'frozenSelectedInputs':286,'compiledAssets':6,'allFinalBrowserStageInputsIdentical':True,'freshBackendInputsUnchanged':True,
+ 'applicationAndInputDigest':'sha256:'+hashlib.sha256(json.dumps(frozen,sort_keys=True,separators=(',',':')).encode()).hexdigest(),
+ 'ciSchedulingAmendment':'ci-budget-amendment/control.json','componentTasksCompleted':47,'milestonesAccepted':[],'nativeWindows':'BLOCKED_USER_REQUEST',
+ 'limitations':['Post-reader unit/clock/gap/missing-coverage fixtures prove API handoff validation, not native admission of those providers or canonical tampering.',
+  'The selected native reference quantity registry admits dimensionless unit1; no new unit family, external or physical provider is admitted.',
+  '21-row paging, empty/HTTP503 and malformed identity/version/deep/contradictory reports are explicitly labelled transport fixtures derived from real runs.',
+  'Read deadlines are source reviewed, not timed native acceptance cases.',
+  'Recorded summaries are independent reads with no interpolation, arithmeticdelta, atomic live capture or assertion verdict.',
+  'Original full browser cohort failed and was interrupted after failures; actual statuses and interruption controls are retained in history/full-failure-investigation.',
+  'Original state-handoff preparation probe failed before product assertions because of a method-name fixture error; corrected two-case red reproduced both observation defects.',
+  'History changed-document fixture initially wrote the unchanged default gain; the repaired fixture explicitly verifies different frozen documents before cache invalidation.',
+  'Actual AT/human, native Windows, complete task dependencies and M0–M4 milestone acceptance remain open.',
+  'Existing200-element/400-flow and50000-record benchmarks are not proof of live comparison/campaign scalability.']})
+print(json.dumps({'dossier':str(out.relative_to(root)),'backend':932,'targeted':48,'full':397,'performance':2,'selectedInputs':286}))

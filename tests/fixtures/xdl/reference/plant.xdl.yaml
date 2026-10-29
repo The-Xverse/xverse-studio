@@ -1,0 +1,35 @@
+apiVersion: xverse.io/xdl/v1alpha1
+kind: Component
+metadata:
+  namespace: org.xverse.studio.process-control
+  name: reference-plant
+  version: 1.0.0
+  description: Studio-owned reference fixture.
+  provenance:
+    source: urn:xverse:studio:reference
+    revision: 1.0.0
+    maturity: prototype
+    limitations:
+    - Owned executable reference only; no external simulator, device or
+      scientific fidelity claim.
+spec:
+  capabilities:
+  - reference-response
+  interfaces:
+  - id: state
+    direction: bidirectional
+    payloadSchema: urn:xverse:studio:normalized-scalar:v1
+    unitSemantics: '1'
+    compatibility: exact
+  endpoints:
+  - id: state-out
+    ownerId: reference-plant
+    interfaceId: state
+    direction: output
+  models:
+  - id: first-order
+    modelKind: behavioral
+    externalRef: urn:xverse:studio:reference:first-order:v1
+    inputs: []
+    outputs: []
+    maturity: prototype

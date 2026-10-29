@@ -1,0 +1,58 @@
+"""Retain only terminal, exact-input browser evidence; authentication roots stay private."""
+from pathlib import Path
+import base64,hashlib,json,re,sys
+
+root=Path.cwd().resolve();local=root/'.studio-local/campaign-delegation-recovery';out=root/'evidence/studio/M4-campaign-delegation-recovery'
+def read(path):return json.loads(path.read_text())
+def clean_text(value):
+    for original,replacement in [(str(root.parent/'.xverse-studio-cache'),'<loop-cache>'),(str(root),'<repo>'),(str(Path.home()/'xverse-studio'),'<repo>'),(sys.base_prefix,'<python-install>'),(str(Path.home()),'<user-home>'),(str(root.parent),'<workspace-volume>')]:value=value.replace(original,replacement)
+    value=re.sub(r'(?i)(\bstudio_session=)[A-Za-z0-9_-]{16,}',r'\1<redacted>',value)
+    value=re.sub(r'''(?i)(x-csrf-token["']?\s*[:=]\s*["']?)[A-Za-z0-9._-]{16,}''',r'\1<redacted>',value)
+    value=re.sub(r'(?i)(bearer\s+)[A-Za-z0-9._-]{16,}',r'\1<redacted>',value)
+    return value
+def clean(value):
+    if isinstance(value,str):return clean_text(value)
+    if isinstance(value,list):return [clean(v) for v in value]
+    if isinstance(value,dict):
+        result={k:('<redacted>' if k.lower() in {'studio_session','csrftoken','x-csrf-token','bootstraptoken','x-studio-bootstrap','sessiontoken','ownerkey','authorization','cookie','set-cookie'} else clean(v)) for k,v in value.items()}
+        if value.get('contentType','').startswith(('text/','application/json')) and 'body' in value:
+            try:result['body']=base64.b64encode(clean_text(base64.b64decode(value['body']).decode()).encode()).decode()
+            except (ValueError,UnicodeError):pass
+        return result
+    return value
+def save(name,value):
+    path=out/name;path.parent.mkdir(parents=True,exist_ok=True);path.write_text(json.dumps(clean(value),indent=2)+'\n')
+def copy(name,path):
+    target=out/name;target.parent.mkdir(parents=True,exist_ok=True)
+    if path.suffix=='.png':target.write_bytes(path.read_bytes())
+    elif path.suffix=='.json':save(name,read(path))
+    else:target.write_text('\n'.join(line.rstrip() for line in clean_text(path.read_text()).splitlines()).rstrip()+'\n')
+def results(report):
+    for suite in report.get('suites',[]):yield from results(suite)
+    for spec in report.get('specs',[]):
+        for test in spec['tests']:
+            for result in test['results']:yield spec['title'],result
+
+
+assert (out/'verification.json').is_file()
+frozen=read(out/'application-and-input-hashes.json')
+for name,h in frozen.items():assert hashlib.sha256((root/name).read_bytes()).hexdigest()==h,name
+lanes=['failed-continue-reader-successor','failed-stop']
+for name in lanes:
+    d=local/name;v=read(d/'receipt.json');assert v['outcome']=='passed' and v['noDuplicateRuns'] and v['canonicalProjectUnchanged'] and v['activeSnapshotUnchanged'] and v['terminalWorkerFilesUnchanged']
+    assert read(d/'source-before.json')==read(d/'source-after.json')==frozen
+    assert v['workerFault']['kernelChannel']=='hrtimer_nanosleep'
+    assert v['failedEvidence']=={'readerIntegrity':'verified_prefix','journalRecords':v['failedEvidence']['journalRecords'],'hashChainVerified':True,'errorEventPresent':True,'terminalJournalUnchanged':True,'originalWorkerIdentityRetained':True}
+    assert v['final']['children'][0]['runId']==v['durableStartReceipt']['runId']
+    expected=['failed','cancelled' if name=='failed-stop' else 'stopped'];assert [c['state'] for c in v['final']['children']]==expected
+    if name=='failed-stop':assert v['final']['children'][1]['runId'] is None
+    for leaf in ['receipt.json','source-before.json','source-after.json','run.py.source.txt','backend_gate.py.source.txt']:copy(name+'/'+leaf,d/leaf)
+historical=local/'failed-continue';h=read(historical/'receipt.json');assert h['outcome']=='passed' and 'failedEvidence' not in h
+for leaf in ['receipt.json','source-before.json','source-after.json','run.py.source.txt','backend_gate.py.source.txt']:copy('history/failed-continue-before-reader/'+leaf,historical/leaf)
+previous=read(out/'verification.json');save('first-two-verification.json',previous)
+previous.update(passedLanes=4,stages=previous['stages']+lanes,seconds=previous['seconds']+[read(local/name/'receipt.json')['seconds'] for name in lanes])
+previous['additionalFailureLanes']={'scope':'After the fixture-paused initial backend is killed, an exact PID/birth/argv/owner-verified native worker receives SIGINT at a Linux kernel sleep point. Its own failed/unknown-cleanup/partial-evidence state is complete before normal native launcher restart.','continue':'Same failed child retained; exactly one pending successor starts and stops normally.','stop_on_failure':'Same failed child retained; pending child cancelled with no run allocation.','evidence':'Reader reports verified_prefix; independently verified journal hash chain contains actual error event. Terminal files including canonical journal stay unchanged across restart. Verdict remains null.','history':'Earlier failed-continue pass before extra reader/hash-chain assertions is retained separately; final lanes above execute those assertions.'}
+previous['limitations']=['Initial native backend is explicitly instrumented with a test-only campaign acknowledgement pause. Actual worker code, argv, provider descriptors and stored records are not replaced or rewritten. Restart uses the ordinary unmodified launcher.','Two successful-worker lanes and two failed-worker policy lanes cover these specific Linux boundaries. Arbitrary timing, mid-journal writes, other provider failures, native Windows and complete campaign matrix acceptance remain open.']
+for name in lanes:previous['commands'].append(['.venv/bin/python','-I','.studio-local/campaign-delegation-recovery/run.py',read(local/name/'receipt.json')['mode'],name])
+save('verification.json',previous);copy('controllers/retain-failures.py.txt',local/'retain-failures.py')
+print(json.dumps({'passedLanes':4,'additionalFailureLanes':2,'historicalContinueBeforeReaderAssertions':True,'inputs':298,'allSelectedInputsUnchanged':True}))

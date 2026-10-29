@@ -1,0 +1,686 @@
+
+> xverse-studio-workspace@0.1.0 test:e2e
+> playwright test -c tests/e2e/playwright.config.ts --grep shell accessibility:
+
+
+Running 4 tests using 1 worker
+
+(node:3401879) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 tests/e2e/shell-accessibility.spec.ts:37:7 › shell accessibility: login instructions and real rejected-token recovery at 1024x768 (30.3s)
+(node:3406278) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 tests/e2e/shell-accessibility.spec.ts:73:7 › shell accessibility: navigation state, form and real busy response at 1024x768 (41.2s)
+(node:3412640) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  3 tests/e2e/shell-accessibility.spec.ts:37:7 › shell accessibility: login instructions and real rejected-token recovery at 1440x900 (30.4s)
+(node:3417731) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  4 tests/e2e/shell-accessibility.spec.ts:73:7 › shell accessibility: navigation state, form and real busy response at 1440x900 (41.1s)
+
+
+  1) tests/e2e/shell-accessibility.spec.ts:37:7 › shell accessibility: login instructions and real rejected-token recovery at 1024x768
+
+    Error: expect(locator).toHaveAccessibleDescription(expected) failed
+
+    Locator: getByLabel('Bootstrap token', { exact: true })
+    Expected pattern: /one-use bootstrap token/
+    Received string:  ""
+    Timeout: 10000ms
+
+    Call log:
+      - Expect "soft toHaveAccessibleDescription" getByLabel('Bootstrap token', { exact: true }) with timeout 10000ms
+      - waiting for getByLabel('Bootstrap token', { exact: true })
+        24 × locator resolved to <input value="" required="" type="password" autocomplete="off" spellcheck="false"/>
+           - unexpected value ""
+
+
+      47 |       await renderedContrast(panel.getByRole("button", { name: "Open workspace", exact: true }), "Open workspace button"),
+      48 |     ];
+    > 49 |     await expect.soft(token).toHaveAccessibleDescription(/one-use bootstrap token/);
+         |                              ^
+      50 |     await tabTo(page, token);
+      51 |     await page.keyboard.insertText("owned-invalid-token-fixture");
+      52 |     const rejected = page.waitForResponse((response) => new URL(response.url()).pathname === "/api/v1/session" && response.request().method() === "POST");
+        at <repo>/tests/e2e/shell-accessibility.spec.ts:49:30
+
+    Error: expect(locator).toHaveAttribute(expected) failed
+
+    Locator:  getByLabel('Bootstrap token', { exact: true })
+    Expected: "true"
+    Received: ""
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "soft toHaveAttribute" getByLabel('Bootstrap token', { exact: true }) with timeout 10000ms
+      - waiting for getByLabel('Bootstrap token', { exact: true })
+        24 × locator resolved to <input value="" required="" type="password" autocomplete="off" spellcheck="false"/>
+           - unexpected value "null"
+
+
+      56 |     await expect(error).toBeVisible();
+      57 |     await expect(token).toHaveValue("");
+    > 58 |     await expect.soft(token).toHaveAttribute("aria-invalid", "true");
+         |                              ^
+      59 |     await expect.soft(token).toHaveAccessibleDescription(/bootstrap token.*invalid|invalid.*bootstrap token/i);
+      60 |     pairs.push(await renderedContrast(error, "Rejected-token error text"));
+      61 |     await tabTo(page, token);
+        at <repo>/tests/e2e/shell-accessibility.spec.ts:58:30
+
+    Error: expect(locator).toHaveAccessibleDescription(expected) failed
+
+    Locator: getByLabel('Bootstrap token', { exact: true })
+    Expected pattern: /bootstrap token.*invalid|invalid.*bootstrap token/i
+    Received string:  ""
+    Timeout: 10000ms
+
+    Call log:
+      - Expect "soft toHaveAccessibleDescription" getByLabel('Bootstrap token', { exact: true }) with timeout 10000ms
+      - waiting for getByLabel('Bootstrap token', { exact: true })
+        24 × locator resolved to <input value="" required="" type="password" autocomplete="off" spellcheck="false"/>
+           - unexpected value ""
+
+
+      57 |     await expect(token).toHaveValue("");
+      58 |     await expect.soft(token).toHaveAttribute("aria-invalid", "true");
+    > 59 |     await expect.soft(token).toHaveAccessibleDescription(/bootstrap token.*invalid|invalid.*bootstrap token/i);
+         |                              ^
+      60 |     pairs.push(await renderedContrast(error, "Rejected-token error text"));
+      61 |     await tabTo(page, token);
+      62 |     await expect(token).toBeFocused();
+        at <repo>/tests/e2e/shell-accessibility.spec.ts:59:30
+
+    Error: Login instructions
+
+    expect(received).toBeGreaterThanOrEqual(expected)
+
+    Expected: >= 4.5
+    Received:    2.7920292248309275
+
+      21 |   for (const pair of pairs) {
+      22 |     expect.soft(pair.supported, pair.label).toBe(true);
+    > 23 |     if (pair.supported) expect.soft(pair.ratio, pair.label).toBeGreaterThanOrEqual(4.5);
+         |                                                             ^
+      24 |   }
+      25 | }
+      26 |
+        at checkPairs (<repo>/tests/e2e/shell-accessibility.spec.ts:23:61)
+        at <repo>/tests/e2e/shell-accessibility.spec.ts:70:5
+
+    Error: Bootstrap token label
+
+    expect(received).toBeGreaterThanOrEqual(expected)
+
+    Expected: >= 4.5
+    Received:    3.129499205311039
+
+      21 |   for (const pair of pairs) {
+      22 |     expect.soft(pair.supported, pair.label).toBe(true);
+    > 23 |     if (pair.supported) expect.soft(pair.ratio, pair.label).toBeGreaterThanOrEqual(4.5);
+         |                                                             ^
+      24 |   }
+      25 | }
+      26 |
+        at checkPairs (<repo>/tests/e2e/shell-accessibility.spec.ts:23:61)
+        at <repo>/tests/e2e/shell-accessibility.spec.ts:70:5
+
+    Error: Local token handling help
+
+    expect(received).toBeGreaterThanOrEqual(expected)
+
+    Expected: >= 4.5
+    Received:    2.3635209239123482
+
+      21 |   for (const pair of pairs) {
+      22 |     expect.soft(pair.supported, pair.label).toBe(true);
+    > 23 |     if (pair.supported) expect.soft(pair.ratio, pair.label).toBeGreaterThanOrEqual(4.5);
+         |                                                             ^
+      24 |   }
+      25 | }
+      26 |
+        at checkPairs (<repo>/tests/e2e/shell-accessibility.spec.ts:23:61)
+        at <repo>/tests/e2e/shell-accessibility.spec.ts:70:5
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/shell-accessibility-shell--86c4f--token-recovery-at-1024x768/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/shell-accessibility-shell--86c4f--token-recovery-at-1024x768/error-context.md
+
+  2) tests/e2e/shell-accessibility.spec.ts:73:7 › shell accessibility: navigation state, form and real busy response at 1024x768
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  getByRole('navigation', { name: 'Main navigation', exact: true })
+    Expected: 1
+    Received: 0
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "soft toHaveCount" getByRole('navigation', { name: 'Main navigation', exact: true }) with timeout 10000ms
+      - waiting for getByRole('navigation', { name: 'Main navigation', exact: true })
+        24 × locator resolved to 0 elements
+           - unexpected value "0"
+
+
+      77 |     await activate(page, page.getByRole("button", { name: "X-Verse Studio home", exact: true }));
+      78 |     const rail = page.locator(".rail"), pairs: Pair[] = [];
+    > 79 |     await expect.soft(page.getByRole("navigation", { name: "Main navigation", exact: true })).toHaveCount(1);
+         |                                                                                               ^
+      80 |     for (const name of ["Workspace", "Catalog", "Laboratory", "Compatibility and environment"]) {
+      81 |       const button = rail.getByRole("button", { name, exact: true });
+      82 |       pairs.push(await renderedContrast(button.locator("span"), `Navigation ${name}`));
+        at <repo>/tests/e2e/shell-accessibility.spec.ts:79:95
+
+    Error: expect(locator).toHaveAttribute(expected) failed
+
+    Locator:  locator('.rail').getByRole('button', { name: 'Workspace', exact: true })
+    Expected: "page"
+    Received: ""
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "soft toHaveAttribute" locator('.rail').getByRole('button', { name: 'Workspace', exact: true }) with timeout 10000ms
+      - waiting for locator('.rail').getByRole('button', { name: 'Workspace', exact: true })
+        24 × locator resolved to <button class="active" title="Workspace" aria-label="Workspace">…</button>
+           - unexpected value "null"
+
+
+      82 |       pairs.push(await renderedContrast(button.locator("span"), `Navigation ${name}`));
+      83 |     }
+    > 84 |     await expect.soft(rail.getByRole("button", { name: "Workspace", exact: true })).toHaveAttribute("aria-current", "page");
+         |                                                                                     ^
+      85 |     await activate(page, rail.getByRole("button", { name: "Catalog", exact: true }));
+      86 |     await expect.soft(rail.getByRole("button", { name: "Catalog", exact: true })).toHaveAttribute("aria-current", "page");
+      87 |     await expect.soft(rail.locator('[aria-current="page"]')).toHaveCount(1);
+        at <repo>/tests/e2e/shell-accessibility.spec.ts:84:85
+
+    Error: expect(locator).toHaveAttribute(expected) failed
+
+    Locator:  locator('.rail').getByRole('button', { name: 'Catalog', exact: true })
+    Expected: "page"
+    Received: ""
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "soft toHaveAttribute" locator('.rail').getByRole('button', { name: 'Catalog', exact: true }) with timeout 10000ms
+      - waiting for locator('.rail').getByRole('button', { name: 'Catalog', exact: true })
+        24 × locator resolved to <button class="active" title="Catalog" aria-label="Catalog">…</button>
+           - unexpected value "null"
+
+
+      84 |     await expect.soft(rail.getByRole("button", { name: "Workspace", exact: true })).toHaveAttribute("aria-current", "page");
+      85 |     await activate(page, rail.getByRole("button", { name: "Catalog", exact: true }));
+    > 86 |     await expect.soft(rail.getByRole("button", { name: "Catalog", exact: true })).toHaveAttribute("aria-current", "page");
+         |                                                                                   ^
+      87 |     await expect.soft(rail.locator('[aria-current="page"]')).toHaveCount(1);
+      88 |     pairs.push(await renderedContrast(rail.getByRole("button", { name: "Catalog", exact: true }).locator("span"), "Selected Catalog navigation"));
+      89 |     await activate(page, rail.getByRole("button", { name: "Workspace", exact: true }));
+        at <repo>/tests/e2e/shell-accessibility.spec.ts:86:83
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('.rail').locator('[aria-current="page"]')
+    Expected: 1
+    Received: 0
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "soft toHaveCount" locator('.rail').locator('[aria-current="page"]') with timeout 10000ms
+      - waiting for locator('.rail').locator('[aria-current="page"]')
+        24 × locator resolved to 0 elements
+           - unexpected value "0"
+
+
+      85 |     await activate(page, rail.getByRole("button", { name: "Catalog", exact: true }));
+      86 |     await expect.soft(rail.getByRole("button", { name: "Catalog", exact: true })).toHaveAttribute("aria-current", "page");
+    > 87 |     await expect.soft(rail.locator('[aria-current="page"]')).toHaveCount(1);
+         |                                                              ^
+      88 |     pairs.push(await renderedContrast(rail.getByRole("button", { name: "Catalog", exact: true }).locator("span"), "Selected Catalog navigation"));
+      89 |     await activate(page, rail.getByRole("button", { name: "Workspace", exact: true }));
+      90 |     const newProject = page.getByRole("button", { name: "New project", exact: true });
+        at <repo>/tests/e2e/shell-accessibility.spec.ts:87:62
+
+    Error: Navigation Workspace
+
+    expect(received).toBeGreaterThanOrEqual(expected)
+
+    Expected: >= 4.5
+    Received:    4.174368702922285
+
+      21 |   for (const pair of pairs) {
+      22 |     expect.soft(pair.supported, pair.label).toBe(true);
+    > 23 |     if (pair.supported) expect.soft(pair.ratio, pair.label).toBeGreaterThanOrEqual(4.5);
+         |                                                             ^
+      24 |   }
+      25 | }
+      26 |
+        at checkPairs (<repo>/tests/e2e/shell-accessibility.spec.ts:23:61)
+        at <repo>/tests/e2e/shell-accessibility.spec.ts:138:5
+
+    Error: Navigation Catalog
+
+    expect(received).toBeGreaterThanOrEqual(expected)
+
+    Expected: >= 4.5
+    Received:    2.8872664020168153
+
+      21 |   for (const pair of pairs) {
+      22 |     expect.soft(pair.supported, pair.label).toBe(true);
+    > 23 |     if (pair.supported) expect.soft(pair.ratio, pair.label).toBeGreaterThanOrEqual(4.5);
+         |                                                             ^
+      24 |   }
+      25 | }
+      26 |
+        at checkPairs (<repo>/tests/e2e/shell-accessibility.spec.ts:23:61)
+        at <repo>/tests/e2e/shell-accessibility.spec.ts:138:5
+
+    Error: Navigation Laboratory
+
+    expect(received).toBeGreaterThanOrEqual(expected)
+
+    Expected: >= 4.5
+    Received:    2.8872664020168153
+
+      21 |   for (const pair of pairs) {
+      22 |     expect.soft(pair.supported, pair.label).toBe(true);
+    > 23 |     if (pair.supported) expect.soft(pair.ratio, pair.label).toBeGreaterThanOrEqual(4.5);
+         |                                                             ^
+      24 |   }
+      25 | }
+      26 |
+        at checkPairs (<repo>/tests/e2e/shell-accessibility.spec.ts:23:61)
+        at <repo>/tests/e2e/shell-accessibility.spec.ts:138:5
+
+    Error: Navigation Compatibility and environment
+
+    expect(received).toBeGreaterThanOrEqual(expected)
+
+    Expected: >= 4.5
+    Received:    2.8872664020168153
+
+      21 |   for (const pair of pairs) {
+      22 |     expect.soft(pair.supported, pair.label).toBe(true);
+    > 23 |     if (pair.supported) expect.soft(pair.ratio, pair.label).toBeGreaterThanOrEqual(4.5);
+         |                                                             ^
+      24 |   }
+      25 | }
+      26 |
+        at checkPairs (<repo>/tests/e2e/shell-accessibility.spec.ts:23:61)
+        at <repo>/tests/e2e/shell-accessibility.spec.ts:138:5
+
+    Error: Selected Catalog navigation
+
+    expect(received).toBeGreaterThanOrEqual(expected)
+
+    Expected: >= 4.5
+    Received:    4.174368702922285
+
+      21 |   for (const pair of pairs) {
+      22 |     expect.soft(pair.supported, pair.label).toBe(true);
+    > 23 |     if (pair.supported) expect.soft(pair.ratio, pair.label).toBeGreaterThanOrEqual(4.5);
+         |                                                             ^
+      24 |   }
+      25 | }
+      26 |
+        at checkPairs (<repo>/tests/e2e/shell-accessibility.spec.ts:23:61)
+        at <repo>/tests/e2e/shell-accessibility.spec.ts:138:5
+
+    Error: Creating project busy notice
+
+    expect(received).toBeGreaterThanOrEqual(expected)
+
+    Expected: >= 4.5
+    Received:    3.9902380501421124
+
+      21 |   for (const pair of pairs) {
+      22 |     expect.soft(pair.supported, pair.label).toBe(true);
+    > 23 |     if (pair.supported) expect.soft(pair.ratio, pair.label).toBeGreaterThanOrEqual(4.5);
+         |                                                             ^
+      24 |   }
+      25 | }
+      26 |
+        at checkPairs (<repo>/tests/e2e/shell-accessibility.spec.ts:23:61)
+        at <repo>/tests/e2e/shell-accessibility.spec.ts:138:5
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/shell-accessibility-shell--c5784-l-busy-response-at-1024x768/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/shell-accessibility-shell--c5784-l-busy-response-at-1024x768/error-context.md
+
+  3) tests/e2e/shell-accessibility.spec.ts:37:7 › shell accessibility: login instructions and real rejected-token recovery at 1440x900
+
+    Error: expect(locator).toHaveAccessibleDescription(expected) failed
+
+    Locator: getByLabel('Bootstrap token', { exact: true })
+    Expected pattern: /one-use bootstrap token/
+    Received string:  ""
+    Timeout: 10000ms
+
+    Call log:
+      - Expect "soft toHaveAccessibleDescription" getByLabel('Bootstrap token', { exact: true }) with timeout 10000ms
+      - waiting for getByLabel('Bootstrap token', { exact: true })
+        24 × locator resolved to <input value="" required="" type="password" autocomplete="off" spellcheck="false"/>
+           - unexpected value ""
+
+
+      47 |       await renderedContrast(panel.getByRole("button", { name: "Open workspace", exact: true }), "Open workspace button"),
+      48 |     ];
+    > 49 |     await expect.soft(token).toHaveAccessibleDescription(/one-use bootstrap token/);
+         |                              ^
+      50 |     await tabTo(page, token);
+      51 |     await page.keyboard.insertText("owned-invalid-token-fixture");
+      52 |     const rejected = page.waitForResponse((response) => new URL(response.url()).pathname === "/api/v1/session" && response.request().method() === "POST");
+        at <repo>/tests/e2e/shell-accessibility.spec.ts:49:30
+
+    Error: expect(locator).toHaveAttribute(expected) failed
+
+    Locator:  getByLabel('Bootstrap token', { exact: true })
+    Expected: "true"
+    Received: ""
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "soft toHaveAttribute" getByLabel('Bootstrap token', { exact: true }) with timeout 10000ms
+      - waiting for getByLabel('Bootstrap token', { exact: true })
+        24 × locator resolved to <input value="" required="" type="password" autocomplete="off" spellcheck="false"/>
+           - unexpected value "null"
+
+
+      56 |     await expect(error).toBeVisible();
+      57 |     await expect(token).toHaveValue("");
+    > 58 |     await expect.soft(token).toHaveAttribute("aria-invalid", "true");
+         |                              ^
+      59 |     await expect.soft(token).toHaveAccessibleDescription(/bootstrap token.*invalid|invalid.*bootstrap token/i);
+      60 |     pairs.push(await renderedContrast(error, "Rejected-token error text"));
+      61 |     await tabTo(page, token);
+        at <repo>/tests/e2e/shell-accessibility.spec.ts:58:30
+
+    Error: expect(locator).toHaveAccessibleDescription(expected) failed
+
+    Locator: getByLabel('Bootstrap token', { exact: true })
+    Expected pattern: /bootstrap token.*invalid|invalid.*bootstrap token/i
+    Received string:  ""
+    Timeout: 10000ms
+
+    Call log:
+      - Expect "soft toHaveAccessibleDescription" getByLabel('Bootstrap token', { exact: true }) with timeout 10000ms
+      - waiting for getByLabel('Bootstrap token', { exact: true })
+        24 × locator resolved to <input value="" required="" type="password" autocomplete="off" spellcheck="false"/>
+           - unexpected value ""
+
+
+      57 |     await expect(token).toHaveValue("");
+      58 |     await expect.soft(token).toHaveAttribute("aria-invalid", "true");
+    > 59 |     await expect.soft(token).toHaveAccessibleDescription(/bootstrap token.*invalid|invalid.*bootstrap token/i);
+         |                              ^
+      60 |     pairs.push(await renderedContrast(error, "Rejected-token error text"));
+      61 |     await tabTo(page, token);
+      62 |     await expect(token).toBeFocused();
+        at <repo>/tests/e2e/shell-accessibility.spec.ts:59:30
+
+    Error: Login instructions
+
+    expect(received).toBeGreaterThanOrEqual(expected)
+
+    Expected: >= 4.5
+    Received:    2.7920292248309275
+
+      21 |   for (const pair of pairs) {
+      22 |     expect.soft(pair.supported, pair.label).toBe(true);
+    > 23 |     if (pair.supported) expect.soft(pair.ratio, pair.label).toBeGreaterThanOrEqual(4.5);
+         |                                                             ^
+      24 |   }
+      25 | }
+      26 |
+        at checkPairs (<repo>/tests/e2e/shell-accessibility.spec.ts:23:61)
+        at <repo>/tests/e2e/shell-accessibility.spec.ts:70:5
+
+    Error: Bootstrap token label
+
+    expect(received).toBeGreaterThanOrEqual(expected)
+
+    Expected: >= 4.5
+    Received:    3.129499205311039
+
+      21 |   for (const pair of pairs) {
+      22 |     expect.soft(pair.supported, pair.label).toBe(true);
+    > 23 |     if (pair.supported) expect.soft(pair.ratio, pair.label).toBeGreaterThanOrEqual(4.5);
+         |                                                             ^
+      24 |   }
+      25 | }
+      26 |
+        at checkPairs (<repo>/tests/e2e/shell-accessibility.spec.ts:23:61)
+        at <repo>/tests/e2e/shell-accessibility.spec.ts:70:5
+
+    Error: Local token handling help
+
+    expect(received).toBeGreaterThanOrEqual(expected)
+
+    Expected: >= 4.5
+    Received:    2.3635209239123482
+
+      21 |   for (const pair of pairs) {
+      22 |     expect.soft(pair.supported, pair.label).toBe(true);
+    > 23 |     if (pair.supported) expect.soft(pair.ratio, pair.label).toBeGreaterThanOrEqual(4.5);
+         |                                                             ^
+      24 |   }
+      25 | }
+      26 |
+        at checkPairs (<repo>/tests/e2e/shell-accessibility.spec.ts:23:61)
+        at <repo>/tests/e2e/shell-accessibility.spec.ts:70:5
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/shell-accessibility-shell--10582--token-recovery-at-1440x900/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/shell-accessibility-shell--10582--token-recovery-at-1440x900/error-context.md
+
+  4) tests/e2e/shell-accessibility.spec.ts:73:7 › shell accessibility: navigation state, form and real busy response at 1440x900
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  getByRole('navigation', { name: 'Main navigation', exact: true })
+    Expected: 1
+    Received: 0
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "soft toHaveCount" getByRole('navigation', { name: 'Main navigation', exact: true }) with timeout 10000ms
+      - waiting for getByRole('navigation', { name: 'Main navigation', exact: true })
+        24 × locator resolved to 0 elements
+           - unexpected value "0"
+
+
+      77 |     await activate(page, page.getByRole("button", { name: "X-Verse Studio home", exact: true }));
+      78 |     const rail = page.locator(".rail"), pairs: Pair[] = [];
+    > 79 |     await expect.soft(page.getByRole("navigation", { name: "Main navigation", exact: true })).toHaveCount(1);
+         |                                                                                               ^
+      80 |     for (const name of ["Workspace", "Catalog", "Laboratory", "Compatibility and environment"]) {
+      81 |       const button = rail.getByRole("button", { name, exact: true });
+      82 |       pairs.push(await renderedContrast(button.locator("span"), `Navigation ${name}`));
+        at <repo>/tests/e2e/shell-accessibility.spec.ts:79:95
+
+    Error: expect(locator).toHaveAttribute(expected) failed
+
+    Locator:  locator('.rail').getByRole('button', { name: 'Workspace', exact: true })
+    Expected: "page"
+    Received: ""
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "soft toHaveAttribute" locator('.rail').getByRole('button', { name: 'Workspace', exact: true }) with timeout 10000ms
+      - waiting for locator('.rail').getByRole('button', { name: 'Workspace', exact: true })
+        24 × locator resolved to <button class="active" title="Workspace" aria-label="Workspace">…</button>
+           - unexpected value "null"
+
+
+      82 |       pairs.push(await renderedContrast(button.locator("span"), `Navigation ${name}`));
+      83 |     }
+    > 84 |     await expect.soft(rail.getByRole("button", { name: "Workspace", exact: true })).toHaveAttribute("aria-current", "page");
+         |                                                                                     ^
+      85 |     await activate(page, rail.getByRole("button", { name: "Catalog", exact: true }));
+      86 |     await expect.soft(rail.getByRole("button", { name: "Catalog", exact: true })).toHaveAttribute("aria-current", "page");
+      87 |     await expect.soft(rail.locator('[aria-current="page"]')).toHaveCount(1);
+        at <repo>/tests/e2e/shell-accessibility.spec.ts:84:85
+
+    Error: expect(locator).toHaveAttribute(expected) failed
+
+    Locator:  locator('.rail').getByRole('button', { name: 'Catalog', exact: true })
+    Expected: "page"
+    Received: ""
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "soft toHaveAttribute" locator('.rail').getByRole('button', { name: 'Catalog', exact: true }) with timeout 10000ms
+      - waiting for locator('.rail').getByRole('button', { name: 'Catalog', exact: true })
+        24 × locator resolved to <button class="active" title="Catalog" aria-label="Catalog">…</button>
+           - unexpected value "null"
+
+
+      84 |     await expect.soft(rail.getByRole("button", { name: "Workspace", exact: true })).toHaveAttribute("aria-current", "page");
+      85 |     await activate(page, rail.getByRole("button", { name: "Catalog", exact: true }));
+    > 86 |     await expect.soft(rail.getByRole("button", { name: "Catalog", exact: true })).toHaveAttribute("aria-current", "page");
+         |                                                                                   ^
+      87 |     await expect.soft(rail.locator('[aria-current="page"]')).toHaveCount(1);
+      88 |     pairs.push(await renderedContrast(rail.getByRole("button", { name: "Catalog", exact: true }).locator("span"), "Selected Catalog navigation"));
+      89 |     await activate(page, rail.getByRole("button", { name: "Workspace", exact: true }));
+        at <repo>/tests/e2e/shell-accessibility.spec.ts:86:83
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  locator('.rail').locator('[aria-current="page"]')
+    Expected: 1
+    Received: 0
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "soft toHaveCount" locator('.rail').locator('[aria-current="page"]') with timeout 10000ms
+      - waiting for locator('.rail').locator('[aria-current="page"]')
+        24 × locator resolved to 0 elements
+           - unexpected value "0"
+
+
+      85 |     await activate(page, rail.getByRole("button", { name: "Catalog", exact: true }));
+      86 |     await expect.soft(rail.getByRole("button", { name: "Catalog", exact: true })).toHaveAttribute("aria-current", "page");
+    > 87 |     await expect.soft(rail.locator('[aria-current="page"]')).toHaveCount(1);
+         |                                                              ^
+      88 |     pairs.push(await renderedContrast(rail.getByRole("button", { name: "Catalog", exact: true }).locator("span"), "Selected Catalog navigation"));
+      89 |     await activate(page, rail.getByRole("button", { name: "Workspace", exact: true }));
+      90 |     const newProject = page.getByRole("button", { name: "New project", exact: true });
+        at <repo>/tests/e2e/shell-accessibility.spec.ts:87:62
+
+    Error: Navigation Workspace
+
+    expect(received).toBeGreaterThanOrEqual(expected)
+
+    Expected: >= 4.5
+    Received:    4.174368702922285
+
+      21 |   for (const pair of pairs) {
+      22 |     expect.soft(pair.supported, pair.label).toBe(true);
+    > 23 |     if (pair.supported) expect.soft(pair.ratio, pair.label).toBeGreaterThanOrEqual(4.5);
+         |                                                             ^
+      24 |   }
+      25 | }
+      26 |
+        at checkPairs (<repo>/tests/e2e/shell-accessibility.spec.ts:23:61)
+        at <repo>/tests/e2e/shell-accessibility.spec.ts:138:5
+
+    Error: Navigation Catalog
+
+    expect(received).toBeGreaterThanOrEqual(expected)
+
+    Expected: >= 4.5
+    Received:    2.8872664020168153
+
+      21 |   for (const pair of pairs) {
+      22 |     expect.soft(pair.supported, pair.label).toBe(true);
+    > 23 |     if (pair.supported) expect.soft(pair.ratio, pair.label).toBeGreaterThanOrEqual(4.5);
+         |                                                             ^
+      24 |   }
+      25 | }
+      26 |
+        at checkPairs (<repo>/tests/e2e/shell-accessibility.spec.ts:23:61)
+        at <repo>/tests/e2e/shell-accessibility.spec.ts:138:5
+
+    Error: Navigation Laboratory
+
+    expect(received).toBeGreaterThanOrEqual(expected)
+
+    Expected: >= 4.5
+    Received:    2.8872664020168153
+
+      21 |   for (const pair of pairs) {
+      22 |     expect.soft(pair.supported, pair.label).toBe(true);
+    > 23 |     if (pair.supported) expect.soft(pair.ratio, pair.label).toBeGreaterThanOrEqual(4.5);
+         |                                                             ^
+      24 |   }
+      25 | }
+      26 |
+        at checkPairs (<repo>/tests/e2e/shell-accessibility.spec.ts:23:61)
+        at <repo>/tests/e2e/shell-accessibility.spec.ts:138:5
+
+    Error: Navigation Compatibility and environment
+
+    expect(received).toBeGreaterThanOrEqual(expected)
+
+    Expected: >= 4.5
+    Received:    2.8872664020168153
+
+      21 |   for (const pair of pairs) {
+      22 |     expect.soft(pair.supported, pair.label).toBe(true);
+    > 23 |     if (pair.supported) expect.soft(pair.ratio, pair.label).toBeGreaterThanOrEqual(4.5);
+         |                                                             ^
+      24 |   }
+      25 | }
+      26 |
+        at checkPairs (<repo>/tests/e2e/shell-accessibility.spec.ts:23:61)
+        at <repo>/tests/e2e/shell-accessibility.spec.ts:138:5
+
+    Error: Selected Catalog navigation
+
+    expect(received).toBeGreaterThanOrEqual(expected)
+
+    Expected: >= 4.5
+    Received:    4.174368702922285
+
+      21 |   for (const pair of pairs) {
+      22 |     expect.soft(pair.supported, pair.label).toBe(true);
+    > 23 |     if (pair.supported) expect.soft(pair.ratio, pair.label).toBeGreaterThanOrEqual(4.5);
+         |                                                             ^
+      24 |   }
+      25 | }
+      26 |
+        at checkPairs (<repo>/tests/e2e/shell-accessibility.spec.ts:23:61)
+        at <repo>/tests/e2e/shell-accessibility.spec.ts:138:5
+
+    Error: Creating project busy notice
+
+    expect(received).toBeGreaterThanOrEqual(expected)
+
+    Expected: >= 4.5
+    Received:    3.9902380501421124
+
+      21 |   for (const pair of pairs) {
+      22 |     expect.soft(pair.supported, pair.label).toBe(true);
+    > 23 |     if (pair.supported) expect.soft(pair.ratio, pair.label).toBeGreaterThanOrEqual(4.5);
+         |                                                             ^
+      24 |   }
+      25 | }
+      26 |
+        at checkPairs (<repo>/tests/e2e/shell-accessibility.spec.ts:23:61)
+        at <repo>/tests/e2e/shell-accessibility.spec.ts:138:5
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/shell-accessibility-shell--09d5f-l-busy-response-at-1440x900/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/shell-accessibility-shell--09d5f-l-busy-response-at-1440x900/error-context.md
+
+  4 failed
+    tests/e2e/shell-accessibility.spec.ts:37:7 › shell accessibility: login instructions and real rejected-token recovery at 1024x768
+    tests/e2e/shell-accessibility.spec.ts:73:7 › shell accessibility: navigation state, form and real busy response at 1024x768
+    tests/e2e/shell-accessibility.spec.ts:37:7 › shell accessibility: login instructions and real rejected-token recovery at 1440x900
+    tests/e2e/shell-accessibility.spec.ts:73:7 › shell accessibility: navigation state, form and real busy response at 1440x900

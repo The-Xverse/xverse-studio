@@ -1,0 +1,264 @@
+{
+  "config": {
+    "argv": [
+      "<loop-cache>/node-v24.22.1-linux-x64/bin/node",
+      "<repo>/node_modules/@playwright/test/cli.js",
+      "test",
+      "-c",
+      "<repo>/.studio-local/parameter-presentation-focus/playwright.config.ts"
+    ],
+    "configFile": "<repo>/.studio-local/parameter-presentation-focus/playwright.config.ts",
+    "rootDir": "<repo>/.studio-local/parameter-presentation-focus",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "<repo>/.studio-local/parameter-presentation-focus/native-red/browser-output",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "<repo>/.studio-local/parameter-presentation-focus",
+        "testIgnore": [],
+        "testMatch": [
+          "probe.spec.ts"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "<repo>/.studio-local/parameter-presentation-focus/native-red/browser-output",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "<repo>/.studio-local/parameter-presentation-focus",
+        "snapshotDir": "<repo>/.studio-local/parameter-presentation-focus",
+        "testIgnore": [],
+        "testMatch": "probe.spec.ts",
+        "timeout": 60000,
+        "use": {
+          "baseURL": "http://127.0.0.1:60129",
+          "browserName": "chromium",
+          "actionTimeout": 15000,
+          "screenshot": "only-on-failure",
+          "trace": "off",
+          "video": "off"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "<repo>/.studio-local/parameter-presentation-focus/native-red/browser-report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "probe.spec.ts",
+      "file": "probe.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "parameter presentation: real regrouping preserves Apply focus at 1024",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 11680,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByLabel('Duration').locator('xpath=ancestor::form').getByRole('button', { name: 'Apply', exact: true })\nExpected: focused\nReceived: inactive\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeFocused\" getByLabel('Duration').locator('xpath=ancestor::form').getByRole('button', { name: 'Apply', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Duration').locator('xpath=ancestor::form').getByRole('button', { name: 'Apply', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <button class=\"small-button\">Apply</button>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByLabel('Duration').locator('xpath=ancestor::form').getByRole('button', { name: 'Apply', exact: true })\nExpected: focused\nReceived: inactive\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeFocused\" getByLabel('Duration').locator('xpath=ancestor::form').getByRole('button', { name: 'Apply', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Duration').locator('xpath=ancestor::form').getByRole('button', { name: 'Apply', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <button class=\"small-button\">Apply</button>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n\n    at <repo>/.studio-local/parameter-presentation-focus/probe.spec.ts:21:24",
+                    "location": {
+                      "file": "<repo>/.studio-local/parameter-presentation-focus/probe.spec.ts",
+                      "column": 24,
+                      "line": 21
+                    },
+                    "snippet": "  19 |   const beforeEnter=await button.evaluate(node=>({focused:document.activeElement===node,activeTag:document.activeElement?.tagName,value:(node.closest('form')?.querySelector('input') as HTMLInputElement)?.value}));\n  20 |   await info.attach('native-presentation-focus',{contentType:'application/json',body:JSON.stringify({scope:'Actual owned presentation HTTP200 held; no DTO mutation. Native Tab reached Apply before actual metadata regrouped its form.',width,projectId:project.projectId,beforeEnter,edits})});\n> 21 |   await expect(button).toBeFocused();await page.keyboard.press('Enter');await expect(page.locator('.alerts')).toContainText('Draft saved');\n     |                        ^\n  22 |   expect(edits).toHaveLength(1);expect(edits[0].edits).toContainEqual(expect.objectContaining({kind:'set_parameter',parameterId:'duration',value:7}));\n  23 |   const saved=(await traceApi(page,'/projects/'+project.projectId)).body;expect(saved.revision).toBe(project.revision+1);await expect(field).toHaveValue('7');\n  24 |  }finally{release();await page.unroute(pattern);}"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/.studio-local/parameter-presentation-focus/probe.spec.ts",
+                        "column": 24,
+                        "line": 21
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByLabel('Duration').locator('xpath=ancestor::form').getByRole('button', { name: 'Apply', exact: true })\nExpected: focused\nReceived: inactive\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeFocused\" getByLabel('Duration').locator('xpath=ancestor::form').getByRole('button', { name: 'Apply', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Duration').locator('xpath=ancestor::form').getByRole('button', { name: 'Apply', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <button class=\"small-button\">Apply</button>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n\n\n  19 |   const beforeEnter=await button.evaluate(node=>({focused:document.activeElement===node,activeTag:document.activeElement?.tagName,value:(node.closest('form')?.querySelector('input') as HTMLInputElement)?.value}));\n  20 |   await info.attach('native-presentation-focus',{contentType:'application/json',body:JSON.stringify({scope:'Actual owned presentation HTTP200 held; no DTO mutation. Native Tab reached Apply before actual metadata regrouped its form.',width,projectId:project.projectId,beforeEnter,edits})});\n> 21 |   await expect(button).toBeFocused();await page.keyboard.press('Enter');await expect(page.locator('.alerts')).toContainText('Draft saved');\n     |                        ^\n  22 |   expect(edits).toHaveLength(1);expect(edits[0].edits).toContainEqual(expect.objectContaining({kind:'set_parameter',parameterId:'duration',value:7}));\n  23 |   const saved=(await traceApi(page,'/projects/'+project.projectId)).body;expect(saved.revision).toBe(project.revision+1);await expect(field).toHaveValue('7');\n  24 |  }finally{release();await page.unroute(pattern);}\n    at <repo>/.studio-local/parameter-presentation-focus/probe.spec.ts:21:24"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T14:54:25.151Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "native-presentation-focus",
+                      "contentType": "application/json",
+                      "body": "eyJzY29wZSI6IkFjdHVhbCBvd25lZCBwcmVzZW50YXRpb24gSFRUUDIwMCBoZWxkOyBubyBEVE8gbXV0YXRpb24uIE5hdGl2ZSBUYWIgcmVhY2hlZCBBcHBseSBiZWZvcmUgYWN0dWFsIG1ldGFkYXRhIHJlZ3JvdXBlZCBpdHMgZm9ybS4iLCJ3aWR0aCI6MTAyNCwicHJvamVjdElkIjoicHJqLWVhM2VjYmJhLTEyYWYtNDM5ZS1iZGNmLWMwZWZkZmM5NDlkZCIsImJlZm9yZUVudGVyIjp7ImZvY3VzZWQiOmZhbHNlLCJhY3RpdmVUYWciOiJCT0RZIiwidmFsdWUiOiI3In0sImVkaXRzIjpbXX0="
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/.studio-local/parameter-presentation-focus/native-red/browser-output/probe-parameter-presentati-9f6c9-eserves-Apply-focus-at-1024/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/.studio-local/parameter-presentation-focus/native-red/browser-output/probe-parameter-presentati-9f6c9-eserves-Apply-focus-at-1024/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/.studio-local/parameter-presentation-focus/probe.spec.ts",
+                    "column": 24,
+                    "line": 21
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "9223f0ac28d4fb57516f-5fdf127dfd4b1b6d8015",
+          "file": "probe.spec.ts",
+          "line": 6,
+          "column": 37
+        },
+        {
+          "title": "parameter presentation: real regrouping preserves Apply focus at 1440",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 11142,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByLabel('Duration').locator('xpath=ancestor::form').getByRole('button', { name: 'Apply', exact: true })\nExpected: focused\nReceived: inactive\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeFocused\" getByLabel('Duration').locator('xpath=ancestor::form').getByRole('button', { name: 'Apply', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Duration').locator('xpath=ancestor::form').getByRole('button', { name: 'Apply', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <button class=\"small-button\">Apply</button>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByLabel('Duration').locator('xpath=ancestor::form').getByRole('button', { name: 'Apply', exact: true })\nExpected: focused\nReceived: inactive\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeFocused\" getByLabel('Duration').locator('xpath=ancestor::form').getByRole('button', { name: 'Apply', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Duration').locator('xpath=ancestor::form').getByRole('button', { name: 'Apply', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <button class=\"small-button\">Apply</button>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n\n    at <repo>/.studio-local/parameter-presentation-focus/probe.spec.ts:21:24",
+                    "location": {
+                      "file": "<repo>/.studio-local/parameter-presentation-focus/probe.spec.ts",
+                      "column": 24,
+                      "line": 21
+                    },
+                    "snippet": "  19 |   const beforeEnter=await button.evaluate(node=>({focused:document.activeElement===node,activeTag:document.activeElement?.tagName,value:(node.closest('form')?.querySelector('input') as HTMLInputElement)?.value}));\n  20 |   await info.attach('native-presentation-focus',{contentType:'application/json',body:JSON.stringify({scope:'Actual owned presentation HTTP200 held; no DTO mutation. Native Tab reached Apply before actual metadata regrouped its form.',width,projectId:project.projectId,beforeEnter,edits})});\n> 21 |   await expect(button).toBeFocused();await page.keyboard.press('Enter');await expect(page.locator('.alerts')).toContainText('Draft saved');\n     |                        ^\n  22 |   expect(edits).toHaveLength(1);expect(edits[0].edits).toContainEqual(expect.objectContaining({kind:'set_parameter',parameterId:'duration',value:7}));\n  23 |   const saved=(await traceApi(page,'/projects/'+project.projectId)).body;expect(saved.revision).toBe(project.revision+1);await expect(field).toHaveValue('7');\n  24 |  }finally{release();await page.unroute(pattern);}"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/.studio-local/parameter-presentation-focus/probe.spec.ts",
+                        "column": 24,
+                        "line": 21
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByLabel('Duration').locator('xpath=ancestor::form').getByRole('button', { name: 'Apply', exact: true })\nExpected: focused\nReceived: inactive\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeFocused\" getByLabel('Duration').locator('xpath=ancestor::form').getByRole('button', { name: 'Apply', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Duration').locator('xpath=ancestor::form').getByRole('button', { name: 'Apply', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <button class=\"small-button\">Apply</button>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n\n\n  19 |   const beforeEnter=await button.evaluate(node=>({focused:document.activeElement===node,activeTag:document.activeElement?.tagName,value:(node.closest('form')?.querySelector('input') as HTMLInputElement)?.value}));\n  20 |   await info.attach('native-presentation-focus',{contentType:'application/json',body:JSON.stringify({scope:'Actual owned presentation HTTP200 held; no DTO mutation. Native Tab reached Apply before actual metadata regrouped its form.',width,projectId:project.projectId,beforeEnter,edits})});\n> 21 |   await expect(button).toBeFocused();await page.keyboard.press('Enter');await expect(page.locator('.alerts')).toContainText('Draft saved');\n     |                        ^\n  22 |   expect(edits).toHaveLength(1);expect(edits[0].edits).toContainEqual(expect.objectContaining({kind:'set_parameter',parameterId:'duration',value:7}));\n  23 |   const saved=(await traceApi(page,'/projects/'+project.projectId)).body;expect(saved.revision).toBe(project.revision+1);await expect(field).toHaveValue('7');\n  24 |  }finally{release();await page.unroute(pattern);}\n    at <repo>/.studio-local/parameter-presentation-focus/probe.spec.ts:21:24"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T14:54:37.232Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "native-presentation-focus",
+                      "contentType": "application/json",
+                      "body": "eyJzY29wZSI6IkFjdHVhbCBvd25lZCBwcmVzZW50YXRpb24gSFRUUDIwMCBoZWxkOyBubyBEVE8gbXV0YXRpb24uIE5hdGl2ZSBUYWIgcmVhY2hlZCBBcHBseSBiZWZvcmUgYWN0dWFsIG1ldGFkYXRhIHJlZ3JvdXBlZCBpdHMgZm9ybS4iLCJ3aWR0aCI6MTQ0MCwicHJvamVjdElkIjoicHJqLThjYmJiMjZlLTFkN2ItNDA4Ni1hNmE3LTEyNzQ1NjgwMmNiOCIsImJlZm9yZUVudGVyIjp7ImZvY3VzZWQiOmZhbHNlLCJhY3RpdmVUYWciOiJCT0RZIiwidmFsdWUiOiI3In0sImVkaXRzIjpbXX0="
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/.studio-local/parameter-presentation-focus/native-red/browser-output/probe-parameter-presentati-ac7f8-eserves-Apply-focus-at-1440/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/.studio-local/parameter-presentation-focus/native-red/browser-output/probe-parameter-presentati-ac7f8-eserves-Apply-focus-at-1440/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/.studio-local/parameter-presentation-focus/probe.spec.ts",
+                    "column": 24,
+                    "line": 21
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "9223f0ac28d4fb57516f-511e531582e3f0a532fd",
+          "file": "probe.spec.ts",
+          "line": 6,
+          "column": 37
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-27T14:54:24.845Z",
+    "duration": 23635.168999999998,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  }
+}

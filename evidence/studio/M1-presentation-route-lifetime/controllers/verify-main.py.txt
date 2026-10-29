@@ -1,0 +1,62 @@
+"""Verify the unchanged parameter/wizard assertions with drained test callbacks."""
+from pathlib import Path
+import hashlib
+import json
+import os
+import platform
+import shutil
+import subprocess
+import sys
+import time
+
+root = Path.cwd().resolve()
+base = Path(__file__).resolve().parent
+out = base / 'main'
+out.mkdir(exist_ok=False)
+read = lambda p: json.loads(p.read_text())
+previous = read(root / 'evidence/studio/M3-reservation-api/application-and-input-hashes.json')
+def inputs():
+    return {name: hashlib.sha256((root / name).read_bytes()).hexdigest() for name in previous}
+frozen = inputs()
+changed = {name: {'previous': value, 'current': frozen[name]} for name, value in previous.items() if value != frozen[name]}
+assert set(changed) == {'tests/e2e/parameter-presentation-focus.spec.ts'}
+original = (base / 'original.spec.ts.txt').read_text()
+current = (root / 'tests/e2e/parameter-presentation-focus.spec.ts').read_text()
+assert current.replace('await page.unrouteAll({ behavior: "wait" });', 'await page.unroute(pattern);') == original
+assert not (root / 'tests/e2e/presentation-route-lifetime.probe.spec.ts').exists()
+manifest = read(root / 'evidence/studio/M3-reservation-api/package/package-manifest.json')
+for name, value in manifest['files'].items():
+    assert 'sha256:' + hashlib.sha256((root / name).read_bytes()).hexdigest() == value, name
+assert len(manifest['files']) == 110
+(out / 'source-before.json').write_text(json.dumps(frozen, indent=2) + '\n')
+(out / 'amendment.json').write_text(json.dumps({'changes': changed,
+    'allOriginalAssertionsAndThresholdsPreserved': True, 'onlyTestCleanupChanges': True,
+    'allOther315InputsUnchanged': True, 'all110ProductPayloadsUnchanged': True,
+    'priorBackend1055Browser83Performance2AndPackage': '../M3-reservation-api/',
+    'scope': 'Native browser fixture cleanup only; no production/UI/runtime/lock/dependency/canonical document change. Prior API1055/83/performance2 and clean110-file package remain independently scoped; fresh48 below verifies affected assertions.'}, indent=2) + '\n')
+cache = root.parent / '.xverse-studio-cache'
+env = dict(os.environ, PATH=str(cache / 'node-v24.22.1-linux-x64/bin') + os.pathsep + os.environ['PATH'],
+    PLAYWRIGHT_BROWSERS_PATH=str(cache / 'playwright'), PYTEST_DISABLE_PLUGIN_AUTOLOAD='1',
+    TMPDIR=str(cache / 'tmp'), TEMP=str(cache / 'tmp'), TMP=str(cache / 'tmp'))
+node = str(cache / 'node-v24.22.1-linux-x64/bin/node')
+script = "const {chromium}=require('@playwright/test'); const {execFileSync}=require('node:child_process'); console.log(JSON.stringify({node:process.version,playwright:require('playwright-core/package.json').version,executable:chromium.executablePath(),chromium:execFileSync(chromium.executablePath(),['--version'],{encoding:'utf8'}).trim()}));"
+versions = json.loads(subprocess.check_output([node, '-e', script], cwd=root, env=env))
+versions.update(os=platform.system(), architecture=platform.machine(), python=platform.python_version())
+(out / 'versions.json').write_text(json.dumps(versions, indent=2) + '\n')
+command = [sys.executable, '-I', 'scripts/test_browser.py', '--grep',
+    'parameter presentation:|parameter accessibility:|wizard accessibility:']
+start = time.monotonic()
+with (out / 'browser.log').open('w') as log:
+    result = subprocess.run(command, cwd=root, env=env, stdout=log, stderr=subprocess.STDOUT)
+assert inputs() == frozen
+shutil.copyfile(root / 'test-results/browser-report.json', out / 'browser-report.json')
+shutil.copytree(root / 'test-results/browser', out / 'browser-output')
+report = read(out / 'browser-report.json')
+receipt = {'command': command, 'exitCode': result.returncode, 'seconds': round(time.monotonic() - start, 3),
+    'stats': report['stats'], 'selectedInputs': len(frozen), 'sourceUnchanged': True,
+    'all110ProductPayloadsUnchanged': True, 'originalAssertionsAndThresholdsPreserved': True}
+(out / 'verification.json').write_text(json.dumps(receipt, indent=2) + '\n')
+(out / 'source-after.json').write_text(json.dumps(inputs(), indent=2) + '\n')
+print(json.dumps(receipt), flush=True)
+assert result.returncode == 0 and report['stats']['expected'] == 48
+assert not any(report['stats'][key] for key in ('unexpected', 'skipped', 'flaky')) and not report.get('errors')

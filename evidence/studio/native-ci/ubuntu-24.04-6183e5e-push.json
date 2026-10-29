@@ -1,0 +1,166 @@
+{
+  "runId": 40681027149,
+  "jobId": 122791452486,
+  "event": "push",
+  "head": "6183e5e48584f12fddd91b222ca04efa23b2d56c",
+  "status": "completed",
+  "conclusion": "success",
+  "url": "https://github.com/The-Xverse/xverse-studio/actions/runs/40681027149",
+  "startedAt": "2026-10-28T11:34:39Z",
+  "completedAt": "2026-10-28T12:19:51Z",
+  "steps": [
+    {
+      "name": "Set up job",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-10-28T11:34:40Z",
+      "completed_at": "2026-10-28T11:34:41Z"
+    },
+    {
+      "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-10-28T11:34:41Z",
+      "completed_at": "2026-10-28T11:34:48Z"
+    },
+    {
+      "name": "Run actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-10-28T11:34:48Z",
+      "completed_at": "2026-10-28T11:34:54Z"
+    },
+    {
+      "name": "Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-10-28T11:34:54Z",
+      "completed_at": "2026-10-28T11:34:55Z"
+    },
+    {
+      "name": "Run python -m pip install uv==0.12.17",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-10-28T11:34:55Z",
+      "completed_at": "2026-10-28T11:34:56Z"
+    },
+    {
+      "name": "Run uv sync --frozen",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-10-28T11:34:56Z",
+      "completed_at": "2026-10-28T11:35:20Z"
+    },
+    {
+      "name": "Run npm ci",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-10-28T11:35:20Z",
+      "completed_at": "2026-10-28T11:35:22Z"
+    },
+    {
+      "name": "Run npm run build",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-10-28T11:35:22Z",
+      "completed_at": "2026-10-28T11:35:27Z"
+    },
+    {
+      "name": "Run uv run python scripts/record_environment.py --output evidence/studio/native-ci/environment.json",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-10-28T11:35:27Z",
+      "completed_at": "2026-10-28T11:35:27Z"
+    },
+    {
+      "name": "Run uv run ruff check --select F821 services/studio-api/src scripts tests",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-10-28T11:35:27Z",
+      "completed_at": "2026-10-28T11:35:27Z"
+    },
+    {
+      "name": "Run uv run python scripts/run_checks.py",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-10-28T11:35:27Z",
+      "completed_at": "2026-10-28T11:45:02Z"
+    },
+    {
+      "name": "Run npx playwright install chromium",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-10-28T11:45:02Z",
+      "completed_at": "2026-10-28T11:45:08Z"
+    },
+    {
+      "name": "Run uv run python scripts/test_browser.py",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-10-28T11:45:08Z",
+      "completed_at": "2026-10-28T12:19:36Z"
+    },
+    {
+      "name": "Run uv run python scripts/package_studio.py",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-10-28T12:19:36Z",
+      "completed_at": "2026-10-28T12:19:36Z"
+    },
+    {
+      "name": "Run uv run python scripts/smoke_package.py --output evidence/studio/native-ci/package.json",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-10-28T12:19:36Z",
+      "completed_at": "2026-10-28T12:19:39Z"
+    },
+    {
+      "name": "Run actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-10-28T12:19:39Z",
+      "completed_at": "2026-10-28T12:19:47Z"
+    },
+    {
+      "name": "Post Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-10-28T12:19:47Z",
+      "completed_at": "2026-10-28T12:19:47Z"
+    },
+    {
+      "name": "Post Run actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-10-28T12:19:47Z",
+      "completed_at": "2026-10-28T12:19:47Z"
+    },
+    {
+      "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-10-28T12:19:47Z",
+      "completed_at": "2026-10-28T12:19:47Z"
+    },
+    {
+      "name": "Complete job",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-10-28T12:19:47Z",
+      "completed_at": "2026-10-28T12:19:47Z"
+    }
+  ],
+  "observedLogSummaryLines": [
+    "2026-10-28T11:45:02.2832923Z 1078 passed, 1 warning in 572.17s (0:09:32)",
+    "2026-10-28T12:19:34.8588157Z   516 passed (34.4m)",
+    "2026-10-28T12:19:36.6346506Z {\"package\": \"xverse-studio-reference.zip\", \"sha256\": \"f2a62b6529ce11805dd78cab47fce8ed4e76a33d0c63a6bbf2692db1d907e081\", \"files\": 110, \"candidate\": \"6183e5e48584f12fddd91b222ca04efa23b2d56c\"}",
+    "2026-10-28T12:19:39.0630752Z {\"scope\": \"fresh_local_package_extraction_offline_with_prepared_dependency_cache\", \"package\": {\"package\": \"studio.zip\", \"sha256\": \"f2a62b6529ce11805dd78cab47fce8ed4e76a33d0c63a6bbf2692db1d907e081\", \"files\": 110, \"candidate\": \"6183e5e48584f12fddd91b222ca04efa23b2d56c\"}, \"provisionExit\": 0, \"os\": \"linux\", \"python\": \"3.13.13\", \"usedPreparedCache\": true, \"browserWorkflow\": \"covered separately by native browser tests\", \"windows\": \"NOT_RUN on this host\", \"outcome\": \"passed\", \"staticIndexHTTP\": 200, \"projectPersisted\": true, \"authoritativeCompilation\": true, \"planDigest\": \"sha256:b85a788103a4275fe84b626c4e063ab55d2bb81d7c364ddee4a0601f4d74e71a\"}"
+  ],
+  "rawPrivateLogSha256": "bcf8176550cbde6813f325eecd88e5e966c95b6a0642ab65093d9733d55676b7",
+  "backendPassed": 1078,
+  "browserPassed": 516,
+  "packageFiles": 110,
+  "packageOutcome": "passed",
+  "scope": "Published6183e5e source only, before observation API work. Native Ubuntu24 CI, no Windows or hardware acceptance.120-minute whole-job budget executed; individual thresholds unchanged.",
+  "prRun40681035414": "Last observed in_progress, not yet a pass"
+}

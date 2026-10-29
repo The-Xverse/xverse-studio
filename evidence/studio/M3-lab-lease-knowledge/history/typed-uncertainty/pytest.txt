@@ -1,0 +1,44 @@
+FFFF                                                                     [100%]
+=================================== FAILURES ===================================
+_ test_confirmed_terminal_lease_survives_restore_without_provider_contact[released] _
+.studio-local/lab-api-foundation/test_terminal_leases.py:25: in test_confirmed_terminal_lease_survives_restore_without_provider_contact
+    assert restored.get(lease['reservationId'],owner='original-owner')['status']==terminal
+E   AssertionError: assert 'unknown' == 'released'
+E
+E     - released
+E     + unknown
+_ test_confirmed_terminal_lease_survives_restore_without_provider_contact[expired] _
+.studio-local/lab-api-foundation/test_terminal_leases.py:25: in test_confirmed_terminal_lease_survives_restore_without_provider_contact
+    assert restored.get(lease['reservationId'],owner='original-owner')['status']==terminal
+E   AssertionError: assert 'unknown' == 'expired'
+E
+E     - expired
+E     + unknown
+_ test_typed_uncertain_reserve_retains_durable_intent_and_never_reacquires[OWNERSHIP_UNCERTAIN] _
+.studio-local/lab-api-foundation/test_terminal_leases.py:47: in test_typed_uncertain_reserve_retains_durable_intent_and_never_reacquires
+    assert len(saved)==1 and saved[0]['status']=='unknown' and saved[0]['fencingIdentity'] is None
+E   assert (0 == 1)
+E    +  where 0 = len([])
+_ test_typed_uncertain_reserve_retains_durable_intent_and_never_reacquires[PROVIDER_OPERATION_UNKNOWN] _
+.studio-local/lab-api-foundation/test_terminal_leases.py:45: in test_typed_uncertain_reserve_retains_durable_intent_and_never_reacquires
+    bench.registry.reserve(bench.provider.asset_id,owner='original-owner',duration=10)
+services/studio-api/src/xverse_studio/lab/reservations.py:101: in reserve
+    observed = provider.reserve({**asset, "reservationId": reservation_id}, scope, owner, expiry)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.studio-local/lab-api-foundation/test_terminal_leases.py:42: in lose_typed_ack
+    raise LabError(code)
+E   xverse_studio.lab.reservations.LabError: PROVIDER_OPERATION_UNKNOWN
+
+During handling of the above exception, another exception occurred:
+.studio-local/lab-api-foundation/test_terminal_leases.py:44: in test_typed_uncertain_reserve_retains_durable_intent_and_never_reacquires
+    with pytest.raises(LabError,match='^OWNERSHIP_UNCERTAIN$'):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError:
+E   - PROVIDER_OPERATION_UNKNOWN
+E   + OWNERSHIP_UNCERTAIN
+=========================== short test summary info ============================
+FAILED .studio-local/lab-api-foundation/test_terminal_leases.py::test_confirmed_terminal_lease_survives_restore_without_provider_contact[released]
+FAILED .studio-local/lab-api-foundation/test_terminal_leases.py::test_confirmed_terminal_lease_survives_restore_without_provider_contact[expired]
+FAILED .studio-local/lab-api-foundation/test_terminal_leases.py::test_typed_uncertain_reserve_retains_durable_intent_and_never_reacquires[OWNERSHIP_UNCERTAIN]
+FAILED .studio-local/lab-api-foundation/test_terminal_leases.py::test_typed_uncertain_reserve_retains_durable_intent_and_never_reacquires[PROVIDER_OPERATION_UNKNOWN]
+4 failed in 0.09s

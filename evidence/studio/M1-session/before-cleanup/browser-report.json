@@ -1,0 +1,250 @@
+{
+  "config": {
+    "argv": [
+      "<loop10-cache>/node-v24.22.1-linux-x64/bin/node",
+      "<workspace>/node_modules/@playwright/test/cli.js",
+      "test",
+      "-c",
+      "tests/e2e/playwright.config.ts",
+      "--grep",
+      "session contract: (retry timers|disposal)"
+    ],
+    "configFile": "<workspace>/tests/e2e/playwright.config.ts",
+    "rootDir": "<workspace>/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "<workspace>/tests/e2e/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "<workspace>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "*.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "<workspace>/tests/e2e/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "<workspace>/tests/e2e",
+        "snapshotDir": "<workspace>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": "*.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "baseURL": "http://127.0.0.1:8876",
+          "browserName": "chromium",
+          "actionTimeout": 15000,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "trace": "off",
+          "screenshot": "only-on-failure",
+          "video": "off"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results/browser-report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "session-contract.spec.ts",
+      "file": "session-contract.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "session contract: retry timers remove completed abort listeners",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 1860,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: <= \u001b[32m1\u001b[39m\nReceived:    \u001b[31m3\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: <= \u001b[32m1\u001b[39m\nReceived:    \u001b[31m3\u001b[39m\n    at <workspace>/tests/e2e/session-contract.spec.ts:47:99",
+                    "location": {
+                      "file": "<workspace>/tests/e2e/session-contract.spec.ts",
+                      "column": 99,
+                      "line": 47
+                    },
+                    "snippet": "  45 |  globalThis.fetch=async()=>{requests++;return Response.json({code:'STREAM_SOURCE_UNAVAILABLE'},{status:503});};\n  46 |  const stop=subscribe(runId,()=>{},()=>{},async()=>{},{snapshotId});\n> 47 |  try{await expect.poll(()=>requests,{timeout:3000}).toBeGreaterThanOrEqual(3);expect(active.size).toBeLessThanOrEqual(1);}finally{stop();globalThis.fetch=originalFetch;globalThis.AbortController=OriginalController;proto.addEventListener=add;proto.removeEventListener=remove;}\n     |                                                                                                   ^\n  48 | });\n  49 |\n  50 | test('session contract: disposal cancels an idle reader without another request',async()=>{"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<workspace>/tests/e2e/session-contract.spec.ts",
+                        "column": 99,
+                        "line": 47
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: <= \u001b[32m1\u001b[39m\nReceived:    \u001b[31m3\u001b[39m\n\n  45 |  globalThis.fetch=async()=>{requests++;return Response.json({code:'STREAM_SOURCE_UNAVAILABLE'},{status:503});};\n  46 |  const stop=subscribe(runId,()=>{},()=>{},async()=>{},{snapshotId});\n> 47 |  try{await expect.poll(()=>requests,{timeout:3000}).toBeGreaterThanOrEqual(3);expect(active.size).toBeLessThanOrEqual(1);}finally{stop();globalThis.fetch=originalFetch;globalThis.AbortController=OriginalController;proto.addEventListener=add;proto.removeEventListener=remove;}\n     |                                                                                                   ^\n  48 | });\n  49 |\n  50 | test('session contract: disposal cancels an idle reader without another request',async()=>{\n    at <workspace>/tests/e2e/session-contract.spec.ts:47:99"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-25T14:48:22.140Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<workspace>/tests/e2e/test-results/browser/session-contract-session-c-6bfe4-e-completed-abort-listeners/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<workspace>/tests/e2e/session-contract.spec.ts",
+                    "column": 99,
+                    "line": 47
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "867a6ceef9ff0fe48626-6ffd5e8d6ced62320410",
+          "file": "session-contract.spec.ts",
+          "line": 38,
+          "column": 5
+        },
+        {
+          "title": "session contract: disposal cancels an idle reader without another request",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 860,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\nCall Log:\n- Timeout 1000ms exceeded while waiting on the predicate",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\nCall Log:\n- Timeout 1000ms exceeded while waiting on the predicate\n    at <workspace>/tests/e2e/session-contract.spec.ts:54:101",
+                    "location": {
+                      "file": "<workspace>/tests/e2e/session-contract.spec.ts",
+                      "column": 101,
+                      "line": 54
+                    },
+                    "snippet": "  52 |  globalThis.fetch=async()=>{requests++;return new Response(new ReadableStream({cancel(){cancelled=true;}}),{headers:{'Content-Type':'text/event-stream'}});};\n  53 |  const stop=subscribe(runId,()=>{},()=>{},async()=>{},{snapshotId});\n> 54 |  try{await expect.poll(()=>requests).toBe(1);stop();await expect.poll(()=>cancelled,{timeout:1000}).toBe(true);expect(requests).toBe(1);}finally{stop();globalThis.fetch=original;}\n     |                                                                                                     ^\n  55 | });\n  56 |"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<workspace>/tests/e2e/session-contract.spec.ts",
+                        "column": 101,
+                        "line": 54
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\nCall Log:\n- Timeout 1000ms exceeded while waiting on the predicate\n\n  52 |  globalThis.fetch=async()=>{requests++;return new Response(new ReadableStream({cancel(){cancelled=true;}}),{headers:{'Content-Type':'text/event-stream'}});};\n  53 |  const stop=subscribe(runId,()=>{},()=>{},async()=>{},{snapshotId});\n> 54 |  try{await expect.poll(()=>requests).toBe(1);stop();await expect.poll(()=>cancelled,{timeout:1000}).toBe(true);expect(requests).toBe(1);}finally{stop();globalThis.fetch=original;}\n     |                                                                                                     ^\n  55 | });\n  56 |\n    at <workspace>/tests/e2e/session-contract.spec.ts:54:101"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-25T14:48:24.312Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<workspace>/tests/e2e/test-results/browser/session-contract-session-c-1e72f-der-without-another-request/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<workspace>/tests/e2e/session-contract.spec.ts",
+                    "column": 101,
+                    "line": 54
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "867a6ceef9ff0fe48626-3e28e2b2b52a3387afff",
+          "file": "session-contract.spec.ts",
+          "line": 50,
+          "column": 5
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-25T14:48:21.728Z",
+    "duration": 3475.578,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  }
+}

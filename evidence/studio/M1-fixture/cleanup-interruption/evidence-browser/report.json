@@ -1,0 +1,464 @@
+{
+  "config": {
+    "argv": [
+      "<tool-cache>/node-v24.22.1-linux-x64/bin/node",
+      "<repo>/node_modules/.bin/playwright",
+      "test",
+      "-c",
+      "tests/e2e/playwright.config.ts",
+      "--grep",
+      "evidence filters:|diagnosis:"
+    ],
+    "configFile": "<repo>/tests/e2e/playwright.config.ts",
+    "rootDir": "<repo>/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "<repo>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "<repo>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "*.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "<repo>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "<repo>/tests/e2e",
+        "snapshotDir": "<repo>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": "*.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "baseURL": "http://127.0.0.1:56687",
+          "browserName": "chromium",
+          "actionTimeout": 15000,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "trace": "off",
+          "screenshot": "only-on-failure",
+          "video": "off"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "<repo>/test-results/browser-report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "diagnostics.spec.ts",
+      "file": "diagnostics.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "diagnosis: recorded evidence separates facts, consequences and unknowns without inferring a cause",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2842,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T03:52:43.494Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "80bb835772e7bc2f1ed9-c9ffc67d5a78d9e71225",
+          "file": "diagnostics.spec.ts",
+          "line": 65,
+          "column": 5
+        },
+        {
+          "title": "diagnosis: a completed owned run reports no findings and claims no functional health",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5395,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T03:52:46.414Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "80bb835772e7bc2f1ed9-05b132b01450370c7aab",
+          "file": "diagnostics.spec.ts",
+          "line": 139,
+          "column": 5
+        },
+        {
+          "title": "diagnosis: an unavailable provider explains the blocked snapshot without misattributing unestablished facts",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2712,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T03:52:51.818Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "80bb835772e7bc2f1ed9-8b9e6ea451bb89dfee96",
+          "file": "diagnostics.spec.ts",
+          "line": 167,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "evidence-filters.spec.ts",
+      "file": "evidence-filters.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "evidence filters: native receipt UTC, explicit source window and read-only emitter filtering",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4153,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T03:52:54.547Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "5b4b93849f30d092e1b8-1e728275a14c358e7c94",
+          "file": "evidence-filters.spec.ts",
+          "line": 69,
+          "column": 5
+        },
+        {
+          "title": "evidence filters: display fixture never plots missing source time as zero or array index",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3745,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T03:52:58.711Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "5b4b93849f30d092e1b8-df0810c8dfb0996e028a",
+          "file": "evidence-filters.spec.ts",
+          "line": 141,
+          "column": 5
+        },
+        {
+          "title": "evidence filters: late original-run observations cannot overwrite an explicitly selected rerun",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 6682,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T03:53:02.469Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "obsolete-observation-read",
+                      "contentType": "application/json",
+                      "body": "eyJvbGRSdW5JZCI6InJ1bi1jNGYzN2JlZS0wY2Q5LTQ4OTEtYjhkMC1iMjBhNzM0YmRkMWQiLCJuZXdSdW5JZCI6InJ1bi00NmNmZjAzMC04OGY5LTQzZDAtYWFiZi00ODU1Y2U0NjlkOTAiLCJ0cmFuc2l0aW9uIjoiZXhwbGljaXQgb3duZWQgcmVydW47IG5vIGZpbHRlciB0cmlnZ2VycyBsaWZlY3ljbGUgbXV0YXRpb24ifQo="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "5b4b93849f30d092e1b8-73083be58cfc29f94e82",
+          "file": "evidence-filters.spec.ts",
+          "line": 237,
+          "column": 5
+        },
+        {
+          "title": "evidence filters: sealed recorded fixture exact clocks, whole-run facets and bounded read-only pages at both viewports",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 6165,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T03:53:09.157Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "fixture-scope",
+                      "contentType": "application/json",
+                      "body": "eyJwcm9qZWN0SWQiOiJwcmotN2ZiZGJjM2EtOWViYS00NjQ0LTg3NDMtNTQxMjE5NGMxYWI0IiwicnVuSWQiOiJydW4tcmVhZGVyLWZpeHR1cmUtZjViZDgyNzEtMDY2OS00ODhiLWFiYWYtOTA4YTZjZmUwMzEyIiwic25hcHNob3RJZCI6InNuYXAtMDA2NmZiZmYtY2M3Ni00NTlhLTgzYzktNDc3OGI4NmU0ZjdmIiwicmVjb3JkQ291bnQiOjIyMCwiam91cm5hbERpZ2VzdCI6InNoYTI1NjpjMzFlN2Q5ZDcwNTE5NTJmODE5OWEzMWVhMzlkNDllZmIzYWQ3Njg4NGEwMWYxYmYwMWVhMDQ5NTIyOTFhYzgyIiwiZXZlbnRzIjp7Imh1Z2VCZWZvcmUiOiJydW4tcmVhZGVyLWZpeHR1cmUtZjViZDgyNzEtMDY2OS00ODhiLWFiYWYtOTA4YTZjZmUwMzEyOmh1Z2VCZWZvcmUiLCJodWdlSW5zaWRlIjoicnVuLXJlYWRlci1maXh0dXJlLWY1YmQ4MjcxLTA2NjktNDg4Yi1hYmFmLTkwOGE2Y2ZlMDMxMjpodWdlSW5zaWRlIiwiaHVnZUVuZCI6InJ1bi1yZWFkZXItZml4dHVyZS1mNWJkODI3MS0wNjY5LTQ4OGItYWJhZi05MDhhNmNmZTAzMTI6aHVnZUVuZCIsIm5lZ2F0aXZlIjoicnVuLXJlYWRlci1maXh0dXJlLWY1YmQ4MjcxLTA2NjktNDg4Yi1hYmFmLTkwOGE2Y2ZlMDMxMjpuZWdhdGl2ZSIsInplcm8iOiJydW4tcmVhZGVyLWZpeHR1cmUtZjViZDgyNzEtMDY2OS00ODhiLWFiYWYtOTA4YTZjZmUwMzEyOnplcm8iLCJtaXNzaW5nVGltZSI6InJ1bi1yZWFkZXItZml4dHVyZS1mNWJkODI3MS0wNjY5LTQ4OGItYWJhZi05MDhhNmNmZTAzMTI6bWlzc2luZ1RpbWUiLCJtYWxmb3JtZWRUaW1lIjoicnVuLXJlYWRlci1maXh0dXJlLWY1YmQ4MjcxLTA2NjktNDg4Yi1hYmFmLTkwOGE2Y2ZlMDMxMjptYWxmb3JtZWRUaW1lIiwib3RoZXJDbG9jayI6InJ1bi1yZWFkZXItZml4dHVyZS1mNWJkODI3MS0wNjY5LTQ4OGItYWJhZi05MDhhNmNmZTAzMTI6b3RoZXJDbG9jayIsInVua25vd25SZWNlaXB0IjoicnVuLXJlYWRlci1maXh0dXJlLWY1YmQ4MjcxLTA2NjktNDg4Yi1hYmFmLTkwOGE2Y2ZlMDMxMjp1bmtub3duUmVjZWlwdCIsIm1pc3NpbmdSZWNlaXB0IjoicnVuLXJlYWRlci1maXh0dXJlLWY1YmQ4MjcxLTA2NjktNDg4Yi1hYmFmLTkwOGE2Y2ZlMDMxMjptaXNzaW5nUmVjZWlwdCIsImdhcCI6InJ1bi1yZWFkZXItZml4dHVyZS1mNWJkODI3MS0wNjY5LTQ4OGItYWJhZi05MDhhNmNmZTAzMTI6Z2FwIiwibG9nQWxwaGEiOiJydW4tcmVhZGVyLWZpeHR1cmUtZjViZDgyNzEtMDY2OS00ODhiLWFiYWYtOTA4YTZjZmUwMzEyOmxvZ0FscGhhIiwibG9nQmV0YSI6InJ1bi1yZWFkZXItZml4dHVyZS1mNWJkODI3MS0wNjY5LTQ4OGItYWJhZi05MDhhNmNmZTAzMTI6bG9nQmV0YSIsImxhdGUiOiJydW4tcmVhZGVyLWZpeHR1cmUtZjViZDgyNzEtMDY2OS00ODhiLWFiYWYtOTA4YTZjZmUwMzEyOmxhdGUiLCJsYXRlTG9nIjoicnVuLXJlYWRlci1maXh0dXJlLWY1YmQ4MjcxLTA2NjktNDg4Yi1hYmFmLTkwOGE2Y2ZlMDMxMjpsYXRlTG9nIn0sInRpY2tzIjp7InN0YXJ0IjoiOTAwNzE5OTI1NDc0MDk5MyIsImVuZCI6IjkwMDcxOTkyNTQ3NDA5OTQifSwiY2xvY2tEb21haW5zIjpbImNsb2NrLWFscGhhIiwiY2xvY2stYmV0YSJdLCJvYnNlcnZlclJlZnMiOlsic3RhdGUtb2JzZXJ2ZXIiLCJleHRlcm5hbC1vYnNlcnZlciIsIm5vaXNlLW9ic2VydmVyIl0sInNvdXJjZVByb3ZpZGVySWRzIjpbInN0dWRpby5yZWZlcmVuY2UiLCJmaXh0dXJlLmFscGhhIiwiZml4dHVyZS5iZXRhIiwiZml4dHVyZS51bmtub3duIiwiZml4dHVyZS5ub2lzZSIsImZpeHR1cmUubGF0ZSJdLCJldmlkZW5jZVNjb3BlIjoicmVjb3JkZWRfZml4dHVyZSIsImdhcFJlYXNvbiI6IlN5bnRoZXRpYyBkZWNsYXJlZCBjb2xsZWN0aW9uIGdhcCJ9Cg=="
+                    },
+                    {
+                      "name": "table-keyboard-1440",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6MTQ0MCwid2lkdGgiOjEyNjAsImNvbnRlbnQiOjEyNjAsImZvY3VzZWQiOnRydWUsInNjcm9sbExlZnQiOjB9Cg=="
+                    },
+                    {
+                      "name": "table-keyboard-1024",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6MTAyNCwid2lkdGgiOjg2OCwiY29udGVudCI6MTE1MSwiZm9jdXNlZCI6dHJ1ZSwic2Nyb2xsTGVmdCI6MjgzfQo="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "5b4b93849f30d092e1b8-522e92cd4afb5f17142c",
+          "file": "evidence-filters.spec.ts",
+          "line": 308,
+          "column": 5
+        },
+        {
+          "title": "evidence filters: incompatible time resolution and numeric units remain table-only",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3700,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T03:53:15.328Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "owned-reference-settlement.json",
+                      "contentType": "application/json",
+                      "body": "eyJydW5JZCI6InJ1bi0xMWY1MjRjOS1iMGYxLTQ5MGItOGNiYi1jM2YyNDYzZDMxZGYiLCJvYnNlcnZhdGlvbkRlYWRsaW5lTWlsbGlzZWNvbmRzIjozMDAwMCwib2JzZXJ2YXRpb25zIjpbeyJyZXF1ZXN0TWlsbGlzZWNvbmRzIjozLjY5OTk5OTk4ODA3OTA3MSwiaHR0cFN0YXR1cyI6MjAwLCJzdGF0ZSI6InByZXBhcmluZyIsInN0YXRlVmVyc2lvbiI6MCwiZWxhcHNlZE1pbGxpc2Vjb25kcyI6NS4yMzMzNTQ5OTk5OTY2NjM1fSx7InJlcXVlc3RNaWxsaXNlY29uZHMiOjQsImh0dHBTdGF0dXMiOjIwMCwic3RhdGUiOiJwcmVwYXJpbmciLCJzdGF0ZVZlcnNpb24iOjAsImVsYXBzZWRNaWxsaXNlY29uZHMiOjExMS43MzcxODg5OTk5OTk0OX0seyJyZXF1ZXN0TWlsbGlzZWNvbmRzIjo0LjMwMDAwMDAxMTkyMDkyOSwiaHR0cFN0YXR1cyI6MjAwLCJzdGF0ZSI6InByZXBhcmluZyIsInN0YXRlVmVyc2lvbiI6MCwiZWxhcHNlZE1pbGxpc2Vjb25kcyI6MzY4LjE0MDUwODk5OTk5NzF9LHsicmVxdWVzdE1pbGxpc2Vjb25kcyI6MTguMzAwMDAwMDExOTIwOTMsImh0dHBTdGF0dXMiOjIwMCwic3RhdGUiOiJzdG9wcGVkIiwic3RhdGVWZXJzaW9uIjoyLCJlbGFwc2VkTWlsbGlzZWNvbmRzIjo4ODguMTczNzk4OTk5OTk2NX1dLCJzY29wZSI6IkFjdHVhbCBvd25lZCAwLjItc2Vjb25kIHJlZmVyZW5jZSBwcmVyZXF1aXNpdGUgZm9yIGRpc3BsYXkgYXNzZXJ0aW9uczsgbm90IGEgY29tcGxldGlvbi1sYXRlbmN5IGJlbmNobWFyay4gRmFpbGVkL3Vua25vd24vSFRUUC1lcnJvciBvYnNlcnZhdGlvbnMgZmFpbCBleHBsaWNpdGx5LiJ9Cg=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "5b4b93849f30d092e1b8-e7afb1b78b22fdd0b3b9",
+          "file": "evidence-filters.spec.ts",
+          "line": 580,
+          "column": 5
+        },
+        {
+          "title": "evidence filters: live buffer remains filterable after an aborted retained read",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3579,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-29T03:53:19.033Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "5b4b93849f30d092e1b8-bbe5ddcfb7bec85b0a8b",
+          "file": "evidence-filters.spec.ts",
+          "line": 708,
+          "column": 5
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-29T03:52:42.942Z",
+    "duration": 39705.240999999995,
+    "expected": 9,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

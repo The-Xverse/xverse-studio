@@ -1,0 +1,51 @@
+{
+  "scope": "owned native Linux + Chromium reference journeys and synthetic retained-history rendering",
+  "command": "python scripts/test_browser.py --performance",
+  "nodeVersion": "24.22.1",
+  "browserVersion": "156.0.8078.4",
+  "tests": [
+    {
+      "name": "malformed imported source stays inspectable without becoming a graph or changing bytes",
+      "status": "passed",
+      "durationMs": 11
+    },
+    {
+      "name": "unknown extension payload is retained while the presentation uses stable instance references",
+      "status": "passed",
+      "durationMs": 3
+    },
+    {
+      "name": "owned reference browser workflow: author, preflight, execute, reconnect, inspect and annotate",
+      "status": "passed",
+      "durationMs": 119533
+    }
+  ],
+  "stats": {
+    "expected": 3,
+    "unexpected": 0,
+    "flaky": 0,
+    "skipped": 0,
+    "duration": 120843.91100000001
+  },
+  "sourceDigests": {
+    "apps/studio-web/src/api/client.ts": "304fcda1c4b99368f3c112335da79cd502f93ac31b2500682731793ff113490f",
+    "apps/studio-web/src/api/types.ts": "0dab215f293f9d1a353a3b678e1550a2e7ca71c4c3de30dee4b1fa214505aa73",
+    "apps/studio-web/src/app/App.tsx": "fbdde41a06dec4e7d57f4f69beb4b6e6b1ff3836be077620dc1709cfe573fcf6",
+    "apps/studio-web/src/app/OperationsViews.tsx": "7b7a9e6773ead47d922fe87c6293e90fa543a8880f7a5cc71ad7b556bb0c6d66",
+    "apps/studio-web/src/app/style.css": "785c505e970a537cb35f98f8133dfc6d3f5aa4b28baea957ae963b387f65cb85",
+    "apps/studio-web/src/app/ui.tsx": "b12343ddbc2dda41e15fa6d9b1f82193c4a47440e816bbf0efd75e555dd1323b",
+    "apps/studio-web/src/features/model/Views.tsx": "febf7bf8951cc4ecbf093362004b8dd17ccb35d9864971aa8cf2bc0c8bb28752",
+    "apps/studio-web/src/features/model/projection.ts": "539fd8256945d1722e12ba335cfe49a3d3d8f3ca1b0bdb00e3bb080a2489bdf9",
+    "apps/studio-web/src/features/results/ResultsView.tsx": "016bcb18780be4e7a3f01c7aca35bcd03df0a99ba1552f59286db3889632584b",
+    "apps/studio-web/src/main.tsx": "c7e6eb14da81a3cc9c845c6d46d8cead52a6a60ac2731554e55d634da9a3d3e2",
+    "tests/e2e/studio.spec.ts": "914ac445baa41c7dff268b49965129aa4f673f4da8a938ac13bdf0685005ca57",
+    "tests/fixtures/performance/create_recorded_history.py": "3140dd1b59cfbe5d7383e6430e3537c1d070be8b576994d6827690a06b7adb3f",
+    "tests/performance/browser-history.ts": "827cdceae8d39aa1fc35380cb82b0052a77443f62ab2fed9ef1654351a83f839",
+    "tests/performance/browser-model.ts": "b50d07671466b11c68464e7051eb91b60f7db0077b9836d80ef3f6a2120203f8"
+  },
+  "limitations": [
+    "Native Windows and other browser engines/assistive-technology matrix NOT_RUN.",
+    "The 50,000 registered log records are a trusted synthetic recorded_fixture; they establish no runtime, simulator or physical-device observation.",
+    "History provisioning/cold verification are separate from the specified warmed 30-repetition UI profile."
+  ]
+}

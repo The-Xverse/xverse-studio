@@ -1,0 +1,251 @@
+{
+  "recordedAt": "2026-10-26 20:36:01 UTC",
+  "candidate": "7ec222b5137833c8cef99913c33293fc45144bfc",
+  "scope": "Native Ubuntu24 source-editor checkpoint; cancelled at25-minute job limit during browser checks, package stages skipped; no completed browser/CI pass",
+  "runs": [
+    {
+      "id": 40391585885,
+      "event": "push",
+      "head_sha": "7ec222b5137833c8cef99913c33293fc45144bfc",
+      "status": "completed",
+      "conclusion": "cancelled",
+      "url": "https://github.com/The-Xverse/xverse-studio/actions/runs/40391585885",
+      "created_at": "2026-10-26T19:59:06Z",
+      "updated_at": "2026-10-26T20:24:33Z",
+      "jobs": [
+        {
+          "id": 121813657442,
+          "name": "native (ubuntu-24.04)",
+          "status": "completed",
+          "conclusion": "cancelled",
+          "started_at": "2026-10-26T19:59:09Z",
+          "completed_at": "2026-10-26T20:24:32Z",
+          "steps": [
+            {
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run python -m pip install uv==0.12.17",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run uv sync --frozen",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run npm ci",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run npm run build",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run uv run python scripts/record_environment.py --output evidence/studio/native-ci/environment.json",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run uv run ruff check --select F821 services/studio-api/src scripts tests",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run uv run python scripts/run_checks.py",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run npx playwright install chromium",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run uv run python scripts/test_browser.py",
+              "status": "completed",
+              "conclusion": "cancelled"
+            },
+            {
+              "name": "Run uv run python scripts/package_studio.py",
+              "status": "completed",
+              "conclusion": "skipped"
+            },
+            {
+              "name": "Run uv run python scripts/smoke_package.py --output evidence/studio/native-ci/package.json",
+              "status": "completed",
+              "conclusion": "skipped"
+            },
+            {
+              "name": "Run actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+              "status": "completed",
+              "conclusion": "skipped"
+            },
+            {
+              "name": "Post Run actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065",
+              "status": "completed",
+              "conclusion": "skipped"
+            },
+            {
+              "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 40391595827,
+      "event": "pull_request",
+      "head_sha": "7ec222b5137833c8cef99913c33293fc45144bfc",
+      "status": "completed",
+      "conclusion": "cancelled",
+      "url": "https://github.com/The-Xverse/xverse-studio/actions/runs/40391595827",
+      "created_at": "2026-10-26T19:59:10Z",
+      "updated_at": "2026-10-26T20:24:33Z",
+      "jobs": [
+        {
+          "id": 121813694827,
+          "name": "native (ubuntu-24.04)",
+          "status": "completed",
+          "conclusion": "cancelled",
+          "started_at": "2026-10-26T19:59:13Z",
+          "completed_at": "2026-10-26T20:24:32Z",
+          "steps": [
+            {
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run python -m pip install uv==0.12.17",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run uv sync --frozen",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run npm ci",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run npm run build",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run uv run python scripts/record_environment.py --output evidence/studio/native-ci/environment.json",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run uv run ruff check --select F821 services/studio-api/src scripts tests",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run uv run python scripts/run_checks.py",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run npx playwright install chromium",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run uv run python scripts/test_browser.py",
+              "status": "completed",
+              "conclusion": "cancelled"
+            },
+            {
+              "name": "Run uv run python scripts/package_studio.py",
+              "status": "completed",
+              "conclusion": "skipped"
+            },
+            {
+              "name": "Run uv run python scripts/smoke_package.py --output evidence/studio/native-ci/package.json",
+              "status": "completed",
+              "conclusion": "skipped"
+            },
+            {
+              "name": "Run actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+              "status": "completed",
+              "conclusion": "skipped"
+            },
+            {
+              "name": "Post Run actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065",
+              "status": "completed",
+              "conclusion": "skipped"
+            },
+            {
+              "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

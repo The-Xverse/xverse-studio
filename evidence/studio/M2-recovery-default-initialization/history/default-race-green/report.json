@@ -1,0 +1,212 @@
+{
+  "config": {
+    "argv": [
+      "<tool-cache>/node-v24.22.1-linux-x64/bin/node",
+      "<repo>/node_modules/.bin/playwright",
+      "test",
+      "-c",
+      "tests/e2e/playwright.config.ts",
+      "--grep",
+      "recovery controlled default: unreadable target replaces previous project context"
+    ],
+    "configFile": "<repo>/tests/e2e/playwright.config.ts",
+    "rootDir": "<repo>/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "<repo>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "<repo>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "*.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "<repo>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "<repo>/tests/e2e",
+        "snapshotDir": "<repo>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": "*.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "baseURL": "http://127.0.0.1:60979",
+          "browserName": "chromium",
+          "actionTimeout": 15000,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "trace": "off",
+          "screenshot": "only-on-failure",
+          "video": "off"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "<repo>/test-results/browser-report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "source-recovery-default.probe.spec.ts",
+      "file": "source-recovery-default.probe.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "recovery controlled default: unreadable target replaces previous project context at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3810,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T08:32:10.125Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "recovery-previous-project.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJwcmV2aW91c1Byb2plY3RJZCI6InByai05MTc1ZjEyZi1iMWZmLTQwZDQtYTMwOC0yNTVkZTEwZGM2OTkiLCJyZWNvdmVyZWRQcm9qZWN0SWQiOiJwcmotNmEwNDBlMDUtZDU2ZC00Yjc0LWEyNDYtMTQ3MDg1ODVlZDVkIiwiZGlzdGluY3RJZGVudGl0aWVzIjp0cnVlLCJwcmV2aW91c0Nhbm9uaWNhbERvY3VtZW50c1VuY2hhbmdlZCI6dHJ1ZSwicmVjb3ZlcmVkSW5pdGlhbFZpZXciOiJNb2RlbCIsImFjdHVhbENyZWF0aW9uVGhlblVucmVhZGFibGVMb2FkIjp0cnVlLCJzY29wZSI6Ik93bmVkIGZpeHR1cmUgYnJlYWtzIG9ubHkgdGhlIG5ld2x5IGNyZWF0ZWQgcHJvamVjdCdzIHNvdXJjZSBiZWZvcmUgaXRzIGZpcnN0IFVJIHJlYWQ7IHByZXZpb3VzIHdvcmtzcGFjZSByZW1haW5zIHJlbmRlcmVkOyBubyBTdGFydCJ9Cg=="
+                    },
+                    {
+                      "name": "controlled-default-recovery-order",
+                      "contentType": "application/json",
+                      "body": "eyJldmVudHMiOlt7InBoYXNlIjoiZmlyc3QtZGVmYXVsdC1kZWxpdmVyZWQtYWZ0ZXItY2F0YWxvZy11bm1vdW50IiwiaWQiOiJwcmotOTE3NWYxMmYtYjFmZi00MGQ0LWEzMDgtMjU1ZGUxMGRjNjk5In0seyJwaGFzZSI6InNlY29uZC1kZWZhdWx0LWhlbGQiLCJpZCI6InByai05MTc1ZjEyZi1iMWZmLTQwZDQtYTMwOC0yNTVkZTEwZGM2OTkiLCJ2YXJpYW50UmVmIjoieGRsOi8vb3JnLnh2ZXJzZS5zdHVkaW8ucHJvY2Vzcy1jb250cm9sL2RlcGxveW1lbnQvbG9jYWwtcmVmZXJlbmNlIn0seyJwaGFzZSI6ImFjdHVhbC1yZWNvdmVyeS1jb21taXR0ZWQtcmVzcG9uc2UtaGVsZCIsInByb2plY3RJZCI6InByai02YTA0MGUwNS1kNTZkLTRiNzQtYTI0Ni0xNDcwODU4NWVkNWQiLCJyZXZpc2lvbiI6Mn0seyJwaGFzZSI6InNlY29uZC1kZWZhdWx0LWRlbGl2ZXJlZC1kdXJpbmctcmVjb3ZlcnkiLCJpZCI6InByai05MTc1ZjEyZi1iMWZmLTQwZDQtYTMwOC0yNTVkZTEwZGM2OTkifSx7InBoYXNlIjoicHJpb3ItZGVmYXVsdC1hcHBsaWVkLWJlZm9yZS1yZWNvdmVyeS1kZWxpdmVyeSIsInByaW9ySWQiOiJwcmotOTE3NWYxMmYtYjFmZi00MGQ0LWEzMDgtMjU1ZGUxMGRjNjk5IiwiY3VycmVudFRpdGxlIjoiUHJpb3IgcmVjb3Zlcnkgd29ya3NwYWNlIDEwMjQifV0sInRpdGxlQXRFbmQiOiJQcm9jZXNzIGNvbnRyb2wgcmVmZXJlbmNlIiwic2NvcGUiOiJSZWFsIEhUVFAgYm9kaWVzIHdpdGggZGVsaWJlcmF0ZWx5IG9yZGVyZWQgZGVmYXVsdC9yZWFkIGFuZCBjb21taXR0ZWQgcmVjb3Zlcnk7IGZpeHR1cmUgb25seSwgbm8gU3RhcnQifQo="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1c77e921dab9feb39356-2cf1bc5eb5ae2c96a861",
+          "file": "source-recovery-default.probe.spec.ts",
+          "line": 770,
+          "column": 7
+        },
+        {
+          "title": "recovery controlled default: unreadable target replaces previous project context at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3002,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T08:32:14.006Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "recovery-previous-project.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJwcmV2aW91c1Byb2plY3RJZCI6InByai00ZmQ5NWZkNS02ZjkxLTRjMjYtYWIwNi1jN2I4MDMwNDRhMTMiLCJyZWNvdmVyZWRQcm9qZWN0SWQiOiJwcmotYTAxZWI0ZWYtYjFmOS00ZDg1LTk1YWUtZTJlNGQ1OTU3OGE4IiwiZGlzdGluY3RJZGVudGl0aWVzIjp0cnVlLCJwcmV2aW91c0Nhbm9uaWNhbERvY3VtZW50c1VuY2hhbmdlZCI6dHJ1ZSwicmVjb3ZlcmVkSW5pdGlhbFZpZXciOiJNb2RlbCIsImFjdHVhbENyZWF0aW9uVGhlblVucmVhZGFibGVMb2FkIjp0cnVlLCJzY29wZSI6Ik93bmVkIGZpeHR1cmUgYnJlYWtzIG9ubHkgdGhlIG5ld2x5IGNyZWF0ZWQgcHJvamVjdCdzIHNvdXJjZSBiZWZvcmUgaXRzIGZpcnN0IFVJIHJlYWQ7IHByZXZpb3VzIHdvcmtzcGFjZSByZW1haW5zIHJlbmRlcmVkOyBubyBTdGFydCJ9Cg=="
+                    },
+                    {
+                      "name": "controlled-default-recovery-order",
+                      "contentType": "application/json",
+                      "body": "eyJldmVudHMiOlt7InBoYXNlIjoiZmlyc3QtZGVmYXVsdC1kZWxpdmVyZWQtYWZ0ZXItY2F0YWxvZy11bm1vdW50IiwiaWQiOiJwcmotNGZkOTVmZDUtNmY5MS00YzI2LWFiMDYtYzdiODAzMDQ0YTEzIn0seyJwaGFzZSI6InNlY29uZC1kZWZhdWx0LWhlbGQiLCJpZCI6InByai00ZmQ5NWZkNS02ZjkxLTRjMjYtYWIwNi1jN2I4MDMwNDRhMTMiLCJ2YXJpYW50UmVmIjoieGRsOi8vb3JnLnh2ZXJzZS5zdHVkaW8ucHJvY2Vzcy1jb250cm9sL2RlcGxveW1lbnQvbG9jYWwtcmVmZXJlbmNlIn0seyJwaGFzZSI6ImFjdHVhbC1yZWNvdmVyeS1jb21taXR0ZWQtcmVzcG9uc2UtaGVsZCIsInByb2plY3RJZCI6InByai1hMDFlYjRlZi1iMWY5LTRkODUtOTVhZS1lMmU0ZDU5NTc4YTgiLCJyZXZpc2lvbiI6Mn0seyJwaGFzZSI6InNlY29uZC1kZWZhdWx0LWRlbGl2ZXJlZC1kdXJpbmctcmVjb3ZlcnkiLCJpZCI6InByai00ZmQ5NWZkNS02ZjkxLTRjMjYtYWIwNi1jN2I4MDMwNDRhMTMifSx7InBoYXNlIjoicHJpb3ItZGVmYXVsdC1hcHBsaWVkLWJlZm9yZS1yZWNvdmVyeS1kZWxpdmVyeSIsInByaW9ySWQiOiJwcmotNGZkOTVmZDUtNmY5MS00YzI2LWFiMDYtYzdiODAzMDQ0YTEzIiwiY3VycmVudFRpdGxlIjoiUHJpb3IgcmVjb3Zlcnkgd29ya3NwYWNlIDE0NDAifV0sInRpdGxlQXRFbmQiOiJQcm9jZXNzIGNvbnRyb2wgcmVmZXJlbmNlIiwic2NvcGUiOiJSZWFsIEhUVFAgYm9kaWVzIHdpdGggZGVsaWJlcmF0ZWx5IG9yZGVyZWQgZGVmYXVsdC9yZWFkIGFuZCBjb21taXR0ZWQgcmVjb3Zlcnk7IGZpeHR1cmUgb25seSwgbm8gU3RhcnQifQo="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1c77e921dab9feb39356-3ea76bea85fd8f1d8d0e",
+          "file": "source-recovery-default.probe.spec.ts",
+          "line": 770,
+          "column": 7
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-28T08:32:09.603Z",
+    "duration": 7460.779,
+    "expected": 2,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

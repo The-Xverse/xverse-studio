@@ -1,0 +1,284 @@
+{
+  "observedAt": "2026-10-27T17:51:48.958138+00:00",
+  "scope": "Both terminal Ubuntu24 ad92 push/PR jobs passed938 backend/full474 browser/104-file package smoke. PR checkout/package uses a synthetic merge; push uses branch head. These prior results do not execute current local lease repairs and are fresh final native-regression coverage. Raw job logs remain private.",
+  "runs": [
+    {
+      "id": 40543653808,
+      "head": "ad92d2b221e67a5867b246c3b765781435dcba6f",
+      "event": "pull_request",
+      "url": "https://github.com/The-Xverse/xverse-studio/actions/runs/40543653808",
+      "status": "completed",
+      "conclusion": "success",
+      "jobs": [
+        {
+          "id": 122328361330,
+          "name": "native (ubuntu-24.04)",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-10-27T16:43:09Z",
+          "completedAt": "2026-10-27T17:36:10Z",
+          "steps": [
+            {
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run python -m pip install uv==0.12.17",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run uv sync --frozen",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run npm ci",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run npm run build",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run uv run python scripts/record_environment.py --output evidence/studio/native-ci/environment.json",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run uv run ruff check --select F821 services/studio-api/src scripts tests",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run uv run python scripts/run_checks.py",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run npx playwright install chromium",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run uv run python scripts/test_browser.py",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run uv run python scripts/package_studio.py",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run uv run python scripts/smoke_package.py --output evidence/studio/native-ci/package.json",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success"
+            }
+          ],
+          "logSha256": "4588ed07036b2cd0106bb89d1f2a0b6ed036cc912d58cedf7d30f85e499918d0",
+          "logBytes": 139417,
+          "pytestPassCounts": [
+            "938"
+          ],
+          "browserPassCounts": [
+            "474"
+          ],
+          "packageSmokePassed": true
+        }
+      ],
+      "packageObservations": [
+        {
+          "candidate": "0023c34e4aa908444d786ad3c196c39c23bc6b8a",
+          "files": 104,
+          "archiveSha256": "d09ca6f9d9d209d1cbf6646fa8424d53c2070404c2f300863eb75cdfc8726f10",
+          "outcome": "passed",
+          "scope": "fresh_local_package_extraction_offline_with_prepared_dependency_cache",
+          "provisionExit": 0
+        }
+      ]
+    },
+    {
+      "id": 40543643188,
+      "head": "ad92d2b221e67a5867b246c3b765781435dcba6f",
+      "event": "push",
+      "url": "https://github.com/The-Xverse/xverse-studio/actions/runs/40543643188",
+      "status": "completed",
+      "conclusion": "success",
+      "jobs": [
+        {
+          "id": 122328325111,
+          "name": "native (ubuntu-24.04)",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-10-27T16:43:05Z",
+          "completedAt": "2026-10-27T17:34:44Z",
+          "steps": [
+            {
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run python -m pip install uv==0.12.17",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run uv sync --frozen",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run npm ci",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run npm run build",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run uv run python scripts/record_environment.py --output evidence/studio/native-ci/environment.json",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run uv run ruff check --select F821 services/studio-api/src scripts tests",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run uv run python scripts/run_checks.py",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run npx playwright install chromium",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run uv run python scripts/test_browser.py",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run uv run python scripts/package_studio.py",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run uv run python scripts/smoke_package.py --output evidence/studio/native-ci/package.json",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success"
+            }
+          ],
+          "logSha256": "e5d9d15d34237bbf48bc2640d6733d945a5f2b597be1864e99c64816598a0dbc",
+          "logBytes": 138475,
+          "pytestPassCounts": [
+            "938"
+          ],
+          "browserPassCounts": [
+            "474"
+          ],
+          "packageSmokePassed": true
+        }
+      ],
+      "packageObservations": [
+        {
+          "candidate": "ad92d2b221e67a5867b246c3b765781435dcba6f",
+          "files": 104,
+          "archiveSha256": "ff799b70ad48f10e08a463a3a7429d62fa3ffa200c1ac516415e657182701b16",
+          "outcome": "passed",
+          "scope": "fresh_local_package_extraction_offline_with_prepared_dependency_cache",
+          "provisionExit": 0
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+
+Running 1 test using 1 worker
+
+(node:3805506) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 tests/e2e/session-contract.spec.ts:57:5 › session contract: reserved control slot coalesces with 200 data frames while canonical and control queues stay bounded (5ms)
+
+
+  1) tests/e2e/session-contract.spec.ts:57:5 › session contract: reserved control slot coalesces with 200 data frames while canonical and control queues stay bounded
+
+    Error: Presentation read queue limit exceeded
+
+       at ../../apps/studio-web/src/features/runs/sessionProtocol.ts:253
+
+      251 |           frames.push(frame);
+      252 |           if (frames.length > 200 || total > MAX_RECOVERY)
+    > 253 |             throw Error("Presentation read queue limit exceeded");
+          |                   ^
+      254 |         }
+      255 |         this.id = "";
+      256 |         this.event = "message";
+        at SseParser.feed (<workspace>/apps/studio-web/src/features/runs/sessionProtocol.ts:253:19)
+        at <workspace>/tests/e2e/session-contract.spec.ts:61:36
+
+    Error Context: ../../../..<workspace>/.studio-local/reserved-slot-red-output/session-contract-session-c-13b59-control-queues-stay-bounded/error-context.md
+
+  1 failed
+    tests/e2e/session-contract.spec.ts:57:5 › session contract: reserved control slot coalesces with 200 data frames while canonical and control queues stay bounded

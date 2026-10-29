@@ -1,0 +1,547 @@
+{
+  "config": {
+    "argv": [
+      "<tool-cache>/node-v24.22.1-linux-x64/bin/node",
+      "<repo>/node_modules/.bin/playwright",
+      "test",
+      "-c",
+      "tests/e2e/playwright.config.ts",
+      "--grep",
+      "run startup"
+    ],
+    "configFile": "<repo>/tests/e2e/playwright.config.ts",
+    "rootDir": "<repo>/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "<repo>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "<repo>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "*.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "<repo>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "<repo>/tests/e2e",
+        "snapshotDir": "<repo>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": "*.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "baseURL": "http://127.0.0.1:48199",
+          "browserName": "chromium",
+          "actionTimeout": 15000,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "trace": "off",
+          "screenshot": "only-on-failure",
+          "video": "off"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "<repo>/test-results/browser-report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "run-startup-outcomes.spec.ts",
+      "file": "run-startup-outcomes.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "run startup mismatch at 1024",
+          "file": "run-startup-outcomes.spec.ts",
+          "line": 13,
+          "column": 10,
+          "specs": [
+            {
+              "title": "actual startup and cleanup facts preserve immutable inputs",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 6844,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-28T18:23:33.001Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "owned-startup-outcome",
+                          "contentType": "application/json",
+                          "body": "eyJzY29wZSI6Ik93bmVkIG5hdGl2ZSBmaXh0dXJlOyBubyBlcXVpcG1lbnQiLCJzY2VuYXJpbyI6Im1pc21hdGNoIiwic3RhdGUiOiJmYWlsZWQiLCJjbGVhbnVwIjoiY29tcGxldGUiLCJldmlkZW5jZSI6InVuYXZhaWxhYmxlIiwicmVhc29uIjoiRUZGRUNUSVZFX0lOUFVUX01JU01BVENIIiwic3RhcnRSZWNvcmRlZCI6ZmFsc2UsInNuYXBzaG90SWQiOiJzbmFwLTEwNmE0ODlmLWRhZDUtNDJmZi05NmExLWFmNGUzMmRmOTQyMyIsInByb2plY3RVbmNoYW5nZWQiOnRydWV9Cg=="
+                        },
+                        {
+                          "name": "owned-native-fault-observation",
+                          "contentType": "application/json",
+                          "body": "eyJzY29wZSI6Im93bmVkIG5hdGl2ZSBmYXVsdCBmaXh0dXJlOyBubyBlcXVpcG1lbnQiLCJzY2VuYXJpbyI6Im1pc21hdGNoIiwid29ya2VyQXR0ZW1wdHMiOjEsImNvcnJ1cHRpb25zIjoxLCJsYXVuY2hSZWZ1c2FscyI6MCwiaW50ZXJydXB0aW9ucyI6MCwiZXJyb3JzIjpbXX0K"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "4958c1dc3ba90309abf0-96cf723b4d48237dd531",
+              "file": "run-startup-outcomes.spec.ts",
+              "line": 15,
+              "column": 11
+            }
+          ]
+        },
+        {
+          "title": "run startup launch_denied at 1024",
+          "file": "run-startup-outcomes.spec.ts",
+          "line": 13,
+          "column": 10,
+          "specs": [
+            {
+              "title": "actual startup and cleanup facts preserve immutable inputs",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4816,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-28T18:23:39.916Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "owned-startup-outcome",
+                          "contentType": "application/json",
+                          "body": "eyJzY29wZSI6Ik93bmVkIG5hdGl2ZSBmaXh0dXJlOyBubyBlcXVpcG1lbnQiLCJzY2VuYXJpbyI6ImxhdW5jaF9kZW5pZWQiLCJzdGF0ZSI6ImZhaWxlZCIsImNsZWFudXAiOiJ1bmtub3duIiwiZXZpZGVuY2UiOiJ1bmF2YWlsYWJsZSIsInJlYXNvbiI6IkxBVU5DSF9GQUlMRUQiLCJzdGFydFJlY29yZGVkIjpmYWxzZSwic25hcHNob3RJZCI6InNuYXAtYmY0MGY1MDYtODU0YS00ODMwLWFiNWMtMmZiMjQ4OTZmMTJiIiwicHJvamVjdFVuY2hhbmdlZCI6dHJ1ZX0K"
+                        },
+                        {
+                          "name": "owned-native-fault-observation",
+                          "contentType": "application/json",
+                          "body": "eyJzY29wZSI6Im93bmVkIG5hdGl2ZSBmYXVsdCBmaXh0dXJlOyBubyBlcXVpcG1lbnQiLCJzY2VuYXJpbyI6ImxhdW5jaF9kZW5pZWQiLCJ3b3JrZXJBdHRlbXB0cyI6MSwiY29ycnVwdGlvbnMiOjAsImxhdW5jaFJlZnVzYWxzIjoxLCJpbnRlcnJ1cHRpb25zIjowLCJlcnJvcnMiOltdfQo="
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "4958c1dc3ba90309abf0-2f3520fa68c138a6c5c4",
+              "file": "run-startup-outcomes.spec.ts",
+              "line": 15,
+              "column": 11
+            }
+          ]
+        },
+        {
+          "title": "run startup active_failure at 1024",
+          "file": "run-startup-outcomes.spec.ts",
+          "line": 13,
+          "column": 10,
+          "specs": [
+            {
+              "title": "actual startup and cleanup facts preserve immutable inputs",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 6505,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-28T18:23:44.744Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "owned-startup-outcome",
+                          "contentType": "application/json",
+                          "body": "eyJzY29wZSI6Ik93bmVkIG5hdGl2ZSBmaXh0dXJlOyBubyBlcXVpcG1lbnQiLCJzY2VuYXJpbyI6ImFjdGl2ZV9mYWlsdXJlIiwic3RhdGUiOiJmYWlsZWQiLCJjbGVhbnVwIjoidW5rbm93biIsImV2aWRlbmNlIjoicGFydGlhbCIsInJlYXNvbiI6IlJFRkVSRU5DRV9XT1JLRVJfRVJST1IiLCJzdGFydFJlY29yZGVkIjp0cnVlLCJzbmFwc2hvdElkIjoic25hcC0yMDQ3MmJkYS00MWM5LTRmZWQtYmMzZC03YTM2MDc0NzM5MzciLCJwcm9qZWN0VW5jaGFuZ2VkIjp0cnVlfQo="
+                        },
+                        {
+                          "name": "owned-native-fault-observation",
+                          "contentType": "application/json",
+                          "body": "eyJzY29wZSI6Im93bmVkIG5hdGl2ZSBmYXVsdCBmaXh0dXJlOyBubyBlcXVpcG1lbnQiLCJzY2VuYXJpbyI6ImFjdGl2ZV9mYWlsdXJlIiwid29ya2VyQXR0ZW1wdHMiOjEsImNvcnJ1cHRpb25zIjowLCJsYXVuY2hSZWZ1c2FscyI6MCwiaW50ZXJydXB0aW9ucyI6MSwiZXJyb3JzIjpbXX0K"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "4958c1dc3ba90309abf0-b1e0a8bf7775dcc41a44",
+              "file": "run-startup-outcomes.spec.ts",
+              "line": 15,
+              "column": 11
+            }
+          ]
+        },
+        {
+          "title": "run startup normal at 1024",
+          "file": "run-startup-outcomes.spec.ts",
+          "line": 13,
+          "column": 10,
+          "specs": [
+            {
+              "title": "actual startup and cleanup facts preserve immutable inputs",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 7047,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-28T18:23:51.263Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "owned-startup-outcome",
+                          "contentType": "application/json",
+                          "body": "eyJzY29wZSI6Ik93bmVkIG5hdGl2ZSBmaXh0dXJlOyBubyBlcXVpcG1lbnQiLCJzY2VuYXJpbyI6Im5vcm1hbCIsInN0YXRlIjoic3RvcHBlZCIsImNsZWFudXAiOiJjb21wbGV0ZSIsImV2aWRlbmNlIjoiY29tcGxldGUiLCJyZWFzb24iOm51bGwsInN0YXJ0UmVjb3JkZWQiOnRydWUsInNuYXBzaG90SWQiOiJzbmFwLTcxMTc4M2ZlLTI5NDUtNDBjZS1hZTc4LTIxOTA0ZGMzMmIzNCIsInByb2plY3RVbmNoYW5nZWQiOnRydWV9Cg=="
+                        },
+                        {
+                          "name": "owned-native-fault-observation",
+                          "contentType": "application/json",
+                          "body": "eyJzY29wZSI6Im93bmVkIG5hdGl2ZSBmYXVsdCBmaXh0dXJlOyBubyBlcXVpcG1lbnQiLCJzY2VuYXJpbyI6Im5vcm1hbCIsIndvcmtlckF0dGVtcHRzIjoxLCJjb3JydXB0aW9ucyI6MCwibGF1bmNoUmVmdXNhbHMiOjAsImludGVycnVwdGlvbnMiOjAsImVycm9ycyI6W119Cg=="
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "4958c1dc3ba90309abf0-7601be42cacbcd5a3b9b",
+              "file": "run-startup-outcomes.spec.ts",
+              "line": 15,
+              "column": 11
+            }
+          ]
+        },
+        {
+          "title": "run startup mismatch at 1440",
+          "file": "run-startup-outcomes.spec.ts",
+          "line": 13,
+          "column": 10,
+          "specs": [
+            {
+              "title": "actual startup and cleanup facts preserve immutable inputs",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 6534,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-28T18:23:58.323Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "owned-startup-outcome",
+                          "contentType": "application/json",
+                          "body": "eyJzY29wZSI6Ik93bmVkIG5hdGl2ZSBmaXh0dXJlOyBubyBlcXVpcG1lbnQiLCJzY2VuYXJpbyI6Im1pc21hdGNoIiwic3RhdGUiOiJmYWlsZWQiLCJjbGVhbnVwIjoiY29tcGxldGUiLCJldmlkZW5jZSI6InVuYXZhaWxhYmxlIiwicmVhc29uIjoiRUZGRUNUSVZFX0lOUFVUX01JU01BVENIIiwic3RhcnRSZWNvcmRlZCI6ZmFsc2UsInNuYXBzaG90SWQiOiJzbmFwLWM1ZDNiMzQ1LTBjNDEtNDI0ZS05NTM0LThlZmJlYTY5YzE4OSIsInByb2plY3RVbmNoYW5nZWQiOnRydWV9Cg=="
+                        },
+                        {
+                          "name": "owned-native-fault-observation",
+                          "contentType": "application/json",
+                          "body": "eyJzY29wZSI6Im93bmVkIG5hdGl2ZSBmYXVsdCBmaXh0dXJlOyBubyBlcXVpcG1lbnQiLCJzY2VuYXJpbyI6Im1pc21hdGNoIiwid29ya2VyQXR0ZW1wdHMiOjEsImNvcnJ1cHRpb25zIjoxLCJsYXVuY2hSZWZ1c2FscyI6MCwiaW50ZXJydXB0aW9ucyI6MCwiZXJyb3JzIjpbXX0K"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "4958c1dc3ba90309abf0-246954797316d6d7e800",
+              "file": "run-startup-outcomes.spec.ts",
+              "line": 15,
+              "column": 11
+            }
+          ]
+        },
+        {
+          "title": "run startup launch_denied at 1440",
+          "file": "run-startup-outcomes.spec.ts",
+          "line": 13,
+          "column": 10,
+          "specs": [
+            {
+              "title": "actual startup and cleanup facts preserve immutable inputs",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4856,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-28T18:24:04.870Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "owned-startup-outcome",
+                          "contentType": "application/json",
+                          "body": "eyJzY29wZSI6Ik93bmVkIG5hdGl2ZSBmaXh0dXJlOyBubyBlcXVpcG1lbnQiLCJzY2VuYXJpbyI6ImxhdW5jaF9kZW5pZWQiLCJzdGF0ZSI6ImZhaWxlZCIsImNsZWFudXAiOiJ1bmtub3duIiwiZXZpZGVuY2UiOiJ1bmF2YWlsYWJsZSIsInJlYXNvbiI6IkxBVU5DSF9GQUlMRUQiLCJzdGFydFJlY29yZGVkIjpmYWxzZSwic25hcHNob3RJZCI6InNuYXAtNmFmZmI0MGUtM2Y3ZC00Y2RjLWIzMzAtN2U3Y2MzZjk3ZTU0IiwicHJvamVjdFVuY2hhbmdlZCI6dHJ1ZX0K"
+                        },
+                        {
+                          "name": "owned-native-fault-observation",
+                          "contentType": "application/json",
+                          "body": "eyJzY29wZSI6Im93bmVkIG5hdGl2ZSBmYXVsdCBmaXh0dXJlOyBubyBlcXVpcG1lbnQiLCJzY2VuYXJpbyI6ImxhdW5jaF9kZW5pZWQiLCJ3b3JrZXJBdHRlbXB0cyI6MSwiY29ycnVwdGlvbnMiOjAsImxhdW5jaFJlZnVzYWxzIjoxLCJpbnRlcnJ1cHRpb25zIjowLCJlcnJvcnMiOltdfQo="
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "4958c1dc3ba90309abf0-9f981df0280b5435fc3f",
+              "file": "run-startup-outcomes.spec.ts",
+              "line": 15,
+              "column": 11
+            }
+          ]
+        },
+        {
+          "title": "run startup active_failure at 1440",
+          "file": "run-startup-outcomes.spec.ts",
+          "line": 13,
+          "column": 10,
+          "specs": [
+            {
+              "title": "actual startup and cleanup facts preserve immutable inputs",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 6404,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-28T18:24:09.734Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "owned-startup-outcome",
+                          "contentType": "application/json",
+                          "body": "eyJzY29wZSI6Ik93bmVkIG5hdGl2ZSBmaXh0dXJlOyBubyBlcXVpcG1lbnQiLCJzY2VuYXJpbyI6ImFjdGl2ZV9mYWlsdXJlIiwic3RhdGUiOiJmYWlsZWQiLCJjbGVhbnVwIjoidW5rbm93biIsImV2aWRlbmNlIjoicGFydGlhbCIsInJlYXNvbiI6IlJFRkVSRU5DRV9XT1JLRVJfRVJST1IiLCJzdGFydFJlY29yZGVkIjp0cnVlLCJzbmFwc2hvdElkIjoic25hcC0wODAyMzRjMS02MGU0LTQ4MzktYjNmNS0wZDE1OGMzYjk4MWIiLCJwcm9qZWN0VW5jaGFuZ2VkIjp0cnVlfQo="
+                        },
+                        {
+                          "name": "owned-native-fault-observation",
+                          "contentType": "application/json",
+                          "body": "eyJzY29wZSI6Im93bmVkIG5hdGl2ZSBmYXVsdCBmaXh0dXJlOyBubyBlcXVpcG1lbnQiLCJzY2VuYXJpbyI6ImFjdGl2ZV9mYWlsdXJlIiwid29ya2VyQXR0ZW1wdHMiOjEsImNvcnJ1cHRpb25zIjowLCJsYXVuY2hSZWZ1c2FscyI6MCwiaW50ZXJydXB0aW9ucyI6MSwiZXJyb3JzIjpbXX0K"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "4958c1dc3ba90309abf0-d0468b59972410384e57",
+              "file": "run-startup-outcomes.spec.ts",
+              "line": 15,
+              "column": 11
+            }
+          ]
+        },
+        {
+          "title": "run startup normal at 1440",
+          "file": "run-startup-outcomes.spec.ts",
+          "line": 13,
+          "column": 10,
+          "specs": [
+            {
+              "title": "actual startup and cleanup facts preserve immutable inputs",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 7679,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-28T18:24:16.144Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "owned-startup-outcome",
+                          "contentType": "application/json",
+                          "body": "eyJzY29wZSI6Ik93bmVkIG5hdGl2ZSBmaXh0dXJlOyBubyBlcXVpcG1lbnQiLCJzY2VuYXJpbyI6Im5vcm1hbCIsInN0YXRlIjoic3RvcHBlZCIsImNsZWFudXAiOiJjb21wbGV0ZSIsImV2aWRlbmNlIjoiY29tcGxldGUiLCJyZWFzb24iOm51bGwsInN0YXJ0UmVjb3JkZWQiOnRydWUsInNuYXBzaG90SWQiOiJzbmFwLWU3MDlkN2M0LTg3M2UtNDZmZC1hY2IyLWFhOGZhNmUxYTE3YyIsInByb2plY3RVbmNoYW5nZWQiOnRydWV9Cg=="
+                        },
+                        {
+                          "name": "owned-native-fault-observation",
+                          "contentType": "application/json",
+                          "body": "eyJzY29wZSI6Im93bmVkIG5hdGl2ZSBmYXVsdCBmaXh0dXJlOyBubyBlcXVpcG1lbnQiLCJzY2VuYXJpbyI6Im5vcm1hbCIsIndvcmtlckF0dGVtcHRzIjoxLCJjb3JydXB0aW9ucyI6MCwibGF1bmNoUmVmdXNhbHMiOjAsImludGVycnVwdGlvbnMiOjAsImVycm9ycyI6W119Cg=="
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "4958c1dc3ba90309abf0-0574bb7eadeb7c6d987a",
+              "file": "run-startup-outcomes.spec.ts",
+              "line": 15,
+              "column": 11
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-28T18:23:32.360Z",
+    "duration": 51521.644,
+    "expected": 8,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

@@ -1,0 +1,20 @@
+<testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="6.301" timestamp="2026-10-29T04:41:30.342765+00:00" hostname="&lt;native-linux-host&gt;"><testcase classname="tests.integration.test_native_command_terminal_boundaries" name="test_native_late_command_outcome_preserves_natural_completion_and_exact_retry[after_final_poll-stop]" time="6.215"><properties><property name="native_late_command" value="{&quot;kind&quot;: &quot;stop&quot;, &quot;boundary&quot;: &quot;after_final_poll&quot;, &quot;scope&quot;: &quot;Actual owned native process and source ticks; signed mailbox delivery fault only; no equipment&quot;, &quot;originalPidBirthArgvOwnerVerified&quot;: true, &quot;finalSampleTick&quot;: &quot;2000000&quot;, &quot;operation&quot;: &quot;RUN_COMPLETED_BEFORE_COMMAND&quot;, &quot;naturalCompletion&quot;: true, &quot;originalJournalUnchangedAfterRetry&quot;: true, &quot;immutableInputs&quot;: true}" /></properties><failure message="AssertionError: HARNESS_CAPTURE_SELF_CHECK: original native workflow assertions passed; deliberate failure verifies capture before teardown">.venv/lib/python3.13/site-packages/_pytest/runner.py:353: in from_call
+    result: TResult | None = func()
+                             ^^^^^^
+.venv/lib/python3.13/site-packages/_pytest/runner.py:245: in &lt;lambda&gt;
+    lambda: runtest_hook(item=item, **kwds),
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/pluggy/_caller.py:197: in __call__
+    return self._hookexec(
+.venv/lib/python3.13/site-packages/pluggy/_manager.py:183: in _hookexec
+    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/_pytest/logging.py:850: in pytest_runtest_call
+    yield
+.venv/lib/python3.13/site-packages/_pytest/capture.py:900: in pytest_runtest_call
+    return (yield)
+            ^^^^^
+.venv/lib/python3.13/site-packages/pluggy/_execution.py:64: in run_old_style_hookwrapper
+    return result.get_result()
+           ^^^^^^^^^^^^^^^^^^^
+E   AssertionError: HARNESS_CAPTURE_SELF_CHECK: original native workflow assertions passed; deliberate failure verifies capture before teardown</failure></testcase></testsuite></testsuites>

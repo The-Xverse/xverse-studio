@@ -1,0 +1,87 @@
+"""Retain only terminal, exact-input browser evidence; authentication roots stay private."""
+from pathlib import Path
+import base64,hashlib,json,re,sys
+
+root=Path.cwd().resolve();local=root/'.studio-local/campaign-delegation-main';out=root/'evidence/studio/M4-campaign-delegation-conformance'
+def read(path):return json.loads(path.read_text())
+def clean_text(value):
+    for original,replacement in [(str(root.parent/'.xverse-studio-cache'),'<loop-cache>'),(str(root),'<repo>'),(str(Path.home()/'xverse-studio'),'<repo>'),(sys.base_prefix,'<python-install>'),(str(Path.home()),'<user-home>'),(str(root.parent),'<workspace-volume>')]:value=value.replace(original,replacement)
+    value=re.sub(r'(?i)(\bstudio_session=)[A-Za-z0-9_-]{16,}',r'\1<redacted>',value)
+    value=re.sub(r'''(?i)(x-csrf-token["']?\s*[:=]\s*["']?)[A-Za-z0-9._-]{16,}''',r'\1<redacted>',value)
+    value=re.sub(r'(?i)(bearer\s+)[A-Za-z0-9._-]{16,}',r'\1<redacted>',value)
+    return value
+def clean(value):
+    if isinstance(value,str):return clean_text(value)
+    if isinstance(value,list):return [clean(v) for v in value]
+    if isinstance(value,dict):
+        result={k:('<redacted>' if k.lower() in {'studio_session','csrftoken','x-csrf-token','bootstraptoken','x-studio-bootstrap','sessiontoken','ownerkey','authorization','cookie','set-cookie'} else clean(v)) for k,v in value.items()}
+        if value.get('contentType','').startswith(('text/','application/json')) and 'body' in value:
+            try:result['body']=base64.b64encode(clean_text(base64.b64decode(value['body']).decode()).encode()).decode()
+            except (ValueError,UnicodeError):pass
+        return result
+    return value
+def save(name,value):
+    path=out/name;path.parent.mkdir(parents=True,exist_ok=True);path.write_text(json.dumps(clean(value),indent=2)+'\n')
+def copy(name,path):
+    target=out/name;target.parent.mkdir(parents=True,exist_ok=True)
+    if path.suffix=='.png':target.write_bytes(path.read_bytes())
+    elif path.suffix=='.json':save(name,read(path))
+    else:target.write_text('\n'.join(line.rstrip() for line in clean_text(path.read_text()).splitlines()).rstrip()+'\n')
+def results(report):
+    for suite in report.get('suites',[]):yield from results(suite)
+    for spec in report.get('specs',[]):
+        for test in spec['tests']:
+            for result in test['results']:yield spec['title'],result
+
+import xml.etree.ElementTree as ET
+from xverse_studio.storage.core import canonical
+baseline=local/'verified-backend';final=local/'final-identity'
+coverage=read(final/'coverage.json');assert coverage['baselineFullTests']==938 and coverage['finalAffectedTests']==4 and coverage['unchangedRemainingTests']==934 and not coverage['finalSingleCommandFull938']
+frozen=read(final/'source-before.json');assert len(frozen)==299 and frozen==read(final/'source-after.json')
+for name,h in frozen.items():assert hashlib.sha256((root/name).read_bytes()).hexdigest()==h,name
+prior=read(baseline/'source-before.json');assert prior==read(baseline/'source-after.json')
+assert {name for name in prior if prior[name]!=frozen[name]}=={'tests/platform/test_campaign_delegation_recovery.py'}
+previous=read(root/'evidence/studio/M1-parameter-presentation-focus/application-and-input-hashes.json')
+assert {name for name in previous if previous[name]!=frozen.get(name)}=={'docs/architecture/ADR-0020-campaign-workflow.md'}
+assert sorted(set(frozen)-set(previous))==['tests/platform/test_campaign_delegation_recovery.py']
+for directory,count in [(baseline,938),(final,4)]:
+    rows=read(directory/'verification.json');assert rows[-1]['name']=='pytest' and all(v['exitCode']==0 and v['sourceUnchanged'] for v in rows)
+    suites=ET.parse(directory/'junit.xml').getroot().findall('testsuite')
+    assert {k:sum(int(s.get(k,0)) for s in suites) for k in ['tests','failures','errors','skipped']}=={'tests':count,'failures':0,'errors':0,'skipped':0}
+facts=read(final/'native-recovery-observations.json');assert {v['mode'] for v in facts}=={'while-running','after-terminal','failed-continue','failed-stop'}
+assert all(v['outcome']=='passed' and v['originalWorkerIdentityRetained'] and v['noDuplicateRuns'] and v['canonicalProjectUnchanged'] and v['activeSnapshotUnchanged'] for v in facts)
+out.mkdir(exist_ok=False)
+save('application-and-input-hashes.json',frozen);save('backend-coverage.json',coverage);save('browser-inheritance.json',read(baseline/'browser-inheritance.json'));save('environment.json',read(final/'environment.json'))
+xml_records=[]
+for label,directory in [('baseline-full',baseline),('final-identity',final)]:
+    for path in directory.iterdir():
+        if not path.is_file() or path.suffix=='.xml':continue
+        copy(label+'/'+path.name.replace('.log','.txt'),path)
+    tree=ET.parse(directory/'junit.xml');before=[dict(e.attrib) for e in tree.getroot().iter('testcase')];removed=0
+    for element in tree.getroot().iter():
+        if 'hostname' in element.attrib:del element.attrib['hostname'];removed+=1
+    assert before==[dict(e.attrib) for e in tree.getroot().iter('testcase')]
+    target=out/label/'junit.xml';tree.write(target,encoding='utf-8',xml_declaration=True)
+    # No test outcomes or testcase attributes are altered. Raw originals stay private.
+    xml_records.append({'stage':label,'hostnameAttributesRemoved':removed,'allTestcaseAttributesPreserved':True,'privateRawSha256':hashlib.sha256((directory/'junit.xml').read_bytes()).hexdigest(),'retainedSha256':hashlib.sha256(target.read_bytes()).hexdigest()})
+save('junit-sanitization.json',xml_records)
+for name in ['promotion.json','identity-review.json']:save(name,read(local/name))
+for name in ['verify.py','final.py','retain.py','document.py','privacy-check.py']:copy('controllers/'+name+'.txt',local/name)
+command=read(final/'verification.json')[-1]['command'];data=Path(next(value.split('=',1)[1] for value in command if value.startswith('--basetemp=')))
+journals=[]
+for path in data.rglob('receipt.json'):
+    if path.parent.name!='observations':continue
+    receipt=read(path);mode=receipt['mode'];assert mode in {'while-running','after-terminal','failed-continue','failed-stop'}
+    rid=receipt['durableStartReceipt']['runId'];assert re.fullmatch(r'run-[a-f0-9-]{36}',rid)
+    raw=(path.parent/'private Native delegation Ω data'/'runs'/rid/'evidence.jsonl').read_bytes();text=raw.decode()
+    assert str(root) not in text and str(Path.home())+'/' not in text and not re.search(r'(?i)studio_session=|x-csrf-token|authorization|bootstrapToken|owner.key',text)
+    previous_digest='0'*64;events=[]
+    for index,line in enumerate(raw.splitlines(),1):
+        event=json.loads(line);assert event['runId']==rid and event['snapshotId']==receipt['snapshotId'] and event['sequence']==str(index) and event['previousDigest']==previous_digest
+        assert hashlib.sha256(canonical({k:v for k,v in event.items() if k!='digest'}).encode()).hexdigest()==event['digest'];previous_digest=event['digest'];events.append(event)
+    assert any(e['type']=='log.appended' and e['payload'].get('severity')=='error' for e in events)==mode.startswith('failed-')
+    target=out/'original-worker-journals'/(mode+'.jsonl');target.parent.mkdir(exist_ok=True);target.write_bytes(raw);assert target.read_bytes()==raw
+    journals.append({'mode':mode,'runId':rid,'snapshotId':receipt['snapshotId'],'records':len(events),'sha256':hashlib.sha256(raw).hexdigest(),'byteIdenticalCanonicalCopy':True,'hashChainVerified':True})
+assert len(journals)==4;save('original-worker-journals/verification.json',{'scope':'Allowlisted actual final-test original worker journals only, copied byte-identically without canonical sanitization or rewrite; raw auth/data roots and owner keys excluded.','journals':journals})
+save('verification.json',{'scope':'Permanent Linux native campaign delegation/recovery conformance. Initial backend pause is a labelled fixture; workers and normal native restart remain product code. No new product API/provider operation or runtime change.','backendCoverage':coverage,'frozenInputs':299,'allFinalInputsUnchanged':True,'finalIdentityVerifiedForAllFourModes':True,'inheritedBrowser':{'affected':48,'full':474,'performance':2,'candidate':'573627647ad3fc853caf18f7fc6e6c412fe3fa18','metadata':'b2897ee2c71ead56de1d97f6ff9bb68b52bc1238','evidence':'../M1-parameter-presentation-focus/verification.json'},'completedTasks':47,'acceptedMilestones':[],'limitations':['The full938 baseline precedes a test-only strengthening of final identity verification. All other934 tests/runtime inputs remain byte-identical, and final affected4 pass. No final single-command full938 rerun is claimed.','Old48/full474/performance2 are inherited via297 unchanged of298 prior inputs plus non-executable ADR20 amendment and one added backend-only test. No new browser/performance execution is claimed.','Initial backend contains an explicit bounded acknowledgement pause. Native Linux sleep-point/process faults do not verify arbitrary interruption points, mid-journal writes, native Windows or external/physical providers.','Root review is by the implementation agent, not independent milestone acceptance. Full M0–M4, actual AT/human/SADS/provider and native Windows gates remain open.']})
+print(json.dumps({'dossier':str(out.relative_to(root)),'baselineFull':938,'finalAffected':4,'unchangedRemaining':934,'inputs':299,'journals':4,'browser':'inherited48/full474/performance2'}))

@@ -1,0 +1,101 @@
+[
+  {
+    "name": "spec",
+    "command": [
+      "<repo>/.venv/bin/python",
+      "-I",
+      "scripts/validate_spec_package.py"
+    ],
+    "exitCode": 0,
+    "seconds": 0.139,
+    "selectedInputs": 299,
+    "sourceUnchanged": true
+  },
+  {
+    "name": "architecture",
+    "command": [
+      "<repo>/.venv/bin/python",
+      "-I",
+      "scripts/check_architecture.py"
+    ],
+    "exitCode": 0,
+    "seconds": 0.762,
+    "selectedInputs": 299,
+    "sourceUnchanged": true
+  },
+  {
+    "name": "compatibility",
+    "command": [
+      "<repo>/.venv/bin/python",
+      "-I",
+      "scripts/check_platform_compatibility.py"
+    ],
+    "exitCode": 0,
+    "seconds": 0.275,
+    "selectedInputs": 299,
+    "sourceUnchanged": true
+  },
+  {
+    "name": "ruff",
+    "command": [
+      "<repo>/.venv/bin/ruff",
+      "check",
+      "--select",
+      "F821",
+      "services/studio-api/src",
+      "scripts",
+      "tests"
+    ],
+    "exitCode": 0,
+    "seconds": 0.147,
+    "selectedInputs": 299,
+    "sourceUnchanged": true
+  },
+  {
+    "name": "environment",
+    "command": [
+      "<repo>/.venv/bin/python",
+      "-I",
+      "scripts/record_environment.py",
+      "--output",
+      "<repo>/.studio-local/campaign-delegation-main/verified-backend/environment.json"
+    ],
+    "exitCode": 0,
+    "seconds": 0.188,
+    "selectedInputs": 299,
+    "sourceUnchanged": true
+  },
+  {
+    "name": "collection",
+    "command": [
+      "<repo>/.venv/bin/python",
+      "-I",
+      "-m",
+      "pytest",
+      "--collect-only",
+      "-q"
+    ],
+    "exitCode": 0,
+    "seconds": 1.084,
+    "selectedInputs": 299,
+    "sourceUnchanged": true
+  },
+  {
+    "name": "pytest",
+    "command": [
+      "<repo>/.venv/bin/python",
+      "-I",
+      "-m",
+      "pytest",
+      "tests",
+      "-q",
+      "--tb=short",
+      "--basetemp=<repo>/.studio-local/campaign-delegation-main/owned-full-test-data-4bfb5504bfc34a688a8c112a699b0b1a",
+      "--junitxml=<repo>/.studio-local/campaign-delegation-main/verified-backend/junit.xml"
+    ],
+    "exitCode": 0,
+    "seconds": 781.204,
+    "selectedInputs": 299,
+    "sourceUnchanged": true
+  }
+]

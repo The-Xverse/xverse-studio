@@ -1,0 +1,29 @@
+import { test, expect, openLab, keyboard } from "../../../tests/e2e/probe-fixture";
+import { readFileSync } from "node:fs";
+import { createHash } from "node:crypto";
+import path from "node:path";
+for (const viewport of [{width:1024,height:768},{width:1440,height:900}]) {
+ test.describe(`supplemental immutable probe context at ${viewport.width}`,()=>{
+  test.use({viewport});
+  test("explicit observation preserves an existing project and frozen requested inputs",async({page,probeHost},info)=>{
+   await openLab(page,probeHost);
+   const session=await(await page.request.get(probeHost.origin+"/api/v1/session")).json();
+   const headers={Origin:probeHost.origin,"X-CSRF-Token":session.csrfToken};
+   const created=await page.request.post(probeHost.origin+"/api/v1/projects",{headers,data:{name:"Owned observation immutable context",blueprintRef:"reference-process-control"}});
+   expect(created.status()).toBe(201); const project=await created.json();
+   const before=await(await page.request.get(probeHost.origin+"/api/v1/projects/"+project.projectId)).json();
+   const pre=await page.request.post(probeHost.origin+`/api/v1/projects/${project.projectId}/preflights`,{headers,data:{revision:project.revision}});
+   expect(pre.status()).toBe(200);const frozen=await pre.json();expect(frozen.status).toBe("ready");
+   const file=path.join(probeHost.data,"snapshots",frozen.snapshotId,"snapshot.json"), bytes=readFileSync(file), hash=createHash("sha256").update(bytes).digest("hex");
+   const card=page.locator("section.panel").filter({has:page.getByRole("heading",{name:"fixture:bench-sensor",exact:true})});
+   await keyboard(page,card.getByRole("button",{name:"Check connection options",exact:true}));
+   await expect(card).toContainText("Observation permission: allowed");
+   await keyboard(page,card.getByRole("button",{name:"Observe connection",exact:true}));
+   await expect(page.getByRole("region",{name:"Connection observation result",exact:true})).toContainText("completed");
+   expect(await(await page.request.get(probeHost.origin+"/api/v1/projects/"+project.projectId)).json()).toEqual(before);
+   expect(readFileSync(file)).toEqual(bytes);expect(probeHost.count()).toBe(1);
+   expect((await(await page.request.get(probeHost.origin+"/api/v1/runs")).json()).items).toEqual([]);
+   await info.attach("existing-project-frozen-input-preservation",{body:JSON.stringify({scope:"Owned native fixture observation; no Start or equipment",projectId:project.projectId,revision:project.revision,snapshotId:frozen.snapshotId,frozenBytesSha256:hash,projectResponseUnchanged:true,snapshotBytesUnchanged:true,probeCallbacks:1,viewport}),contentType:"application/json"});
+  });
+ });
+}

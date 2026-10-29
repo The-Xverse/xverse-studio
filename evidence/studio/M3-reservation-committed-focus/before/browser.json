@@ -1,0 +1,280 @@
+{
+  "config": {
+    "argv": [
+      "<tool-cache>/node-v24.22.1-linux-x64/bin/node",
+      "<repo>/node_modules/@playwright/test/cli.js",
+      "test",
+      "-c",
+      "<repo>/.studio-local/hybrid-comparison/focus-control/playwright.config.ts"
+    ],
+    "configFile": "<repo>/.studio-local/hybrid-comparison/focus-control/playwright.config.ts",
+    "rootDir": "<repo>/.studio-local/hybrid-comparison/focus-control",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "<repo>/.studio-local/hybrid-comparison/focus-control/before/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "<repo>/.studio-local/hybrid-comparison/focus-control",
+        "testIgnore": [],
+        "testMatch": [
+          "focus.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "<repo>/.studio-local/hybrid-comparison/focus-control/before/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "<repo>/.studio-local/hybrid-comparison/focus-control",
+        "snapshotDir": "<repo>/.studio-local/hybrid-comparison/focus-control",
+        "testIgnore": [],
+        "testMatch": "focus.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "browserName": "chromium",
+          "actionTimeout": 15000,
+          "screenshot": "only-on-failure",
+          "trace": "off",
+          "video": "off"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "<repo>/.studio-local/hybrid-comparison/focus-control/before/report.private.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "focus.spec.ts",
+      "file": "focus.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "labelled delayed React commit at 1024",
+          "file": "focus.spec.ts",
+          "line": 20,
+          "column": 8,
+          "specs": [
+            {
+              "title": "ungranted scope is explicit and invalid option authority never enables reservation",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 12347,
+                      "error": {
+                        "message": "Error: expect(locator).toBeFocused() failed\n\nLocator:  locator('section.panel').filter({ has: getByRole('heading', { name: 'fixture:bench-sensor', exact: true }) }).getByRole('alert')\nExpected: focused\nReceived: inactive\nTimeout:  10000ms\n\nCall log:\n  - Expect \"toBeFocused\" locator('section.panel').filter({ has: getByRole('heading', { name: 'fixture:bench-sensor', exact: true }) }).getByRole('alert') with timeout 10000ms\n  - waiting for locator('section.panel').filter({ has: getByRole('heading', { name: 'fixture:bench-sensor', exact: true }) }).getByRole('alert')\n    24 × locator resolved to <p role=\"alert\" tabindex=\"-1\">Reservation eligibility is unknown. Reservation o…</p>\n       - unexpected value \"inactive\"",
+                        "stack": "Error: expect(locator).toBeFocused() failed\n\nLocator:  locator('section.panel').filter({ has: getByRole('heading', { name: 'fixture:bench-sensor', exact: true }) }).getByRole('alert')\nExpected: focused\nReceived: inactive\nTimeout:  10000ms\n\nCall log:\n  - Expect \"toBeFocused\" locator('section.panel').filter({ has: getByRole('heading', { name: 'fixture:bench-sensor', exact: true }) }).getByRole('alert') with timeout 10000ms\n  - waiting for locator('section.panel').filter({ has: getByRole('heading', { name: 'fixture:bench-sensor', exact: true }) }).getByRole('alert')\n    24 × locator resolved to <p role=\"alert\" tabindex=\"-1\">Reservation eligibility is unknown. Reservation o…</p>\n       - unexpected value \"inactive\"\n\n    at <repo>/.studio-local/hybrid-comparison/focus-control/focus.spec.ts:62:53",
+                        "location": {
+                          "file": "<repo>/.studio-local/hybrid-comparison/focus-control/focus.spec.ts",
+                          "column": 53,
+                          "line": 62
+                        },
+                        "snippet": "  60 |         await keyboard(page, card(page).getByRole(\"button\", { name: \"Check reservation options\", exact: true }));\n  61 |         await expect(card(page).getByRole(\"alert\")).toContainText(\"Reservation eligibility is unknown\");\n> 62 |         await expect(card(page).getByRole(\"alert\")).toBeFocused();\n     |                                                     ^\n  63 |         await expect(card(page).getByRole(\"button\", { name: \"Reserve stimulate scope\", exact: true })).toBeDisabled();\n  64 |         expect((await (await page.request.get(labHost.origin + \"/api/v1/reservations\")).json()).items).toHaveLength(0);\n  65 |       } finally {"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "<repo>/.studio-local/hybrid-comparison/focus-control/focus.spec.ts",
+                            "column": 53,
+                            "line": 62
+                          },
+                          "message": "Error: expect(locator).toBeFocused() failed\n\nLocator:  locator('section.panel').filter({ has: getByRole('heading', { name: 'fixture:bench-sensor', exact: true }) }).getByRole('alert')\nExpected: focused\nReceived: inactive\nTimeout:  10000ms\n\nCall log:\n  - Expect \"toBeFocused\" locator('section.panel').filter({ has: getByRole('heading', { name: 'fixture:bench-sensor', exact: true }) }).getByRole('alert') with timeout 10000ms\n  - waiting for locator('section.panel').filter({ has: getByRole('heading', { name: 'fixture:bench-sensor', exact: true }) }).getByRole('alert')\n    24 × locator resolved to <p role=\"alert\" tabindex=\"-1\">Reservation eligibility is unknown. Reservation o…</p>\n       - unexpected value \"inactive\"\n\n\n  60 |         await keyboard(page, card(page).getByRole(\"button\", { name: \"Check reservation options\", exact: true }));\n  61 |         await expect(card(page).getByRole(\"alert\")).toContainText(\"Reservation eligibility is unknown\");\n> 62 |         await expect(card(page).getByRole(\"alert\")).toBeFocused();\n     |                                                     ^\n  63 |         await expect(card(page).getByRole(\"button\", { name: \"Reserve stimulate scope\", exact: true })).toBeDisabled();\n  64 |         expect((await (await page.request.get(labHost.origin + \"/api/v1/reservations\")).json()).items).toHaveLength(0);\n  65 |       } finally {\n    at <repo>/.studio-local/hybrid-comparison/focus-control/focus.spec.ts:62:53"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-28T16:31:30.567Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "labelled-frame-observations",
+                          "contentType": "application/json",
+                          "body": "W3siYXQiOjkwOC4yOTk5OTk5ODIxMTg2LCJhbGVydFByZXNlbnQiOmZhbHNlLCJhY3RpdmVUYWciOiJCVVRUT04iLCJhY3RpdmVUZXh0IjoiTGFiIn0seyJhdCI6MTE3OS40MDAwMDAwMDU5NjA1LCJhbGVydFByZXNlbnQiOmZhbHNlLCJhY3RpdmVUYWciOiJCT0RZIiwiYWN0aXZlVGV4dCI6IlNraXAgdG8gd29ya3NwYWNlWFgtVkVSU0UgU1RVRElPTG9jYWwgd29ya3NwYWNlUkVGRVJFTkNFIFBSRVZJRVdFbnZpcm9ubWVudExPV29yIn0seyJhdCI6MTI5MS41LCJhbGVydFByZXNlbnQiOmZhbHNlLCJhY3RpdmVUYWciOiJCT0RZIiwiYWN0aXZlVGV4dCI6IlNraXAgdG8gd29ya3NwYWNlWFgtVkVSU0UgU1RVRElPTG9jYWwgd29ya3NwYWNlUkVGRVJFTkNFIFBSRVZJRVdFbnZpcm9ubWVudExPV29yIn1dCg=="
+                        },
+                        {
+                          "name": "owned-provider-observation",
+                          "contentType": "application/json",
+                          "body": "eyJzY29wZSI6ICJvd25lZCBpbi1tZW1vcnkgZml4dHVyZTsgbm8gZXF1aXBtZW50IiwgInNjZW5hcmlvIjogIm9ic2VydmUiLCAiY2FsbHMiOiBbImludmVudG9yeSIsICJpbnZlbnRvcnkiLCAiaW52ZW50b3J5Il0sICJyZXNlcnZhdGlvbkNvdW50IjogMCwgInJlbWFpbmluZ1Byb3ZpZGVyTGVhc2VzIjogMCwgInByZXBhcmF0aW9uU2Vjb25kcyI6IDAuMDk0NDY4MTg0MDE5MjA2MDl9Cg=="
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "<repo>/.studio-local/hybrid-comparison/focus-control/before/browser/focus-labelled-delayed-Rea-0c9a9-y-never-enables-reservation/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "<repo>/.studio-local/hybrid-comparison/focus-control/focus.spec.ts",
+                        "column": 53,
+                        "line": 62
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "d21847c9dcced81f7ac2-63dc639a683d8af556af",
+              "file": "focus.spec.ts",
+              "line": 22,
+              "column": 9
+            }
+          ]
+        },
+        {
+          "title": "labelled delayed React commit at 1440",
+          "file": "focus.spec.ts",
+          "line": 20,
+          "column": 8,
+          "specs": [
+            {
+              "title": "ungranted scope is explicit and invalid option authority never enables reservation",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 12445,
+                      "error": {
+                        "message": "Error: expect(locator).toBeFocused() failed\n\nLocator:  locator('section.panel').filter({ has: getByRole('heading', { name: 'fixture:bench-sensor', exact: true }) }).getByRole('alert')\nExpected: focused\nReceived: inactive\nTimeout:  10000ms\n\nCall log:\n  - Expect \"toBeFocused\" locator('section.panel').filter({ has: getByRole('heading', { name: 'fixture:bench-sensor', exact: true }) }).getByRole('alert') with timeout 10000ms\n  - waiting for locator('section.panel').filter({ has: getByRole('heading', { name: 'fixture:bench-sensor', exact: true }) }).getByRole('alert')\n    24 × locator resolved to <p role=\"alert\" tabindex=\"-1\">Reservation eligibility is unknown. Reservation o…</p>\n       - unexpected value \"inactive\"",
+                        "stack": "Error: expect(locator).toBeFocused() failed\n\nLocator:  locator('section.panel').filter({ has: getByRole('heading', { name: 'fixture:bench-sensor', exact: true }) }).getByRole('alert')\nExpected: focused\nReceived: inactive\nTimeout:  10000ms\n\nCall log:\n  - Expect \"toBeFocused\" locator('section.panel').filter({ has: getByRole('heading', { name: 'fixture:bench-sensor', exact: true }) }).getByRole('alert') with timeout 10000ms\n  - waiting for locator('section.panel').filter({ has: getByRole('heading', { name: 'fixture:bench-sensor', exact: true }) }).getByRole('alert')\n    24 × locator resolved to <p role=\"alert\" tabindex=\"-1\">Reservation eligibility is unknown. Reservation o…</p>\n       - unexpected value \"inactive\"\n\n    at <repo>/.studio-local/hybrid-comparison/focus-control/focus.spec.ts:62:53",
+                        "location": {
+                          "file": "<repo>/.studio-local/hybrid-comparison/focus-control/focus.spec.ts",
+                          "column": 53,
+                          "line": 62
+                        },
+                        "snippet": "  60 |         await keyboard(page, card(page).getByRole(\"button\", { name: \"Check reservation options\", exact: true }));\n  61 |         await expect(card(page).getByRole(\"alert\")).toContainText(\"Reservation eligibility is unknown\");\n> 62 |         await expect(card(page).getByRole(\"alert\")).toBeFocused();\n     |                                                     ^\n  63 |         await expect(card(page).getByRole(\"button\", { name: \"Reserve stimulate scope\", exact: true })).toBeDisabled();\n  64 |         expect((await (await page.request.get(labHost.origin + \"/api/v1/reservations\")).json()).items).toHaveLength(0);\n  65 |       } finally {"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "<repo>/.studio-local/hybrid-comparison/focus-control/focus.spec.ts",
+                            "column": 53,
+                            "line": 62
+                          },
+                          "message": "Error: expect(locator).toBeFocused() failed\n\nLocator:  locator('section.panel').filter({ has: getByRole('heading', { name: 'fixture:bench-sensor', exact: true }) }).getByRole('alert')\nExpected: focused\nReceived: inactive\nTimeout:  10000ms\n\nCall log:\n  - Expect \"toBeFocused\" locator('section.panel').filter({ has: getByRole('heading', { name: 'fixture:bench-sensor', exact: true }) }).getByRole('alert') with timeout 10000ms\n  - waiting for locator('section.panel').filter({ has: getByRole('heading', { name: 'fixture:bench-sensor', exact: true }) }).getByRole('alert')\n    24 × locator resolved to <p role=\"alert\" tabindex=\"-1\">Reservation eligibility is unknown. Reservation o…</p>\n       - unexpected value \"inactive\"\n\n\n  60 |         await keyboard(page, card(page).getByRole(\"button\", { name: \"Check reservation options\", exact: true }));\n  61 |         await expect(card(page).getByRole(\"alert\")).toContainText(\"Reservation eligibility is unknown\");\n> 62 |         await expect(card(page).getByRole(\"alert\")).toBeFocused();\n     |                                                     ^\n  63 |         await expect(card(page).getByRole(\"button\", { name: \"Reserve stimulate scope\", exact: true })).toBeDisabled();\n  64 |         expect((await (await page.request.get(labHost.origin + \"/api/v1/reservations\")).json()).items).toHaveLength(0);\n  65 |       } finally {\n    at <repo>/.studio-local/hybrid-comparison/focus-control/focus.spec.ts:62:53"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-28T16:31:43.285Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "labelled-frame-observations",
+                          "contentType": "application/json",
+                          "body": "W3siYXQiOjk0Ny4xOTk5OTk5ODgwNzkxLCJhbGVydFByZXNlbnQiOmZhbHNlLCJhY3RpdmVUYWciOiJCVVRUT04iLCJhY3RpdmVUZXh0IjoiTGFiIn0seyJhdCI6MTIxNCwiYWxlcnRQcmVzZW50IjpmYWxzZSwiYWN0aXZlVGFnIjoiQk9EWSIsImFjdGl2ZVRleHQiOiJTa2lwIHRvIHdvcmtzcGFjZVhYLVZFUlNFIFNUVURJT0xvY2FsIHdvcmtzcGFjZVJFRkVSRU5DRSBQUkVWSUVXRW52aXJvbm1lbnRMT1dvciJ9LHsiYXQiOjEzODAuNTk5OTk5OTk0MDM5NSwiYWxlcnRQcmVzZW50IjpmYWxzZSwiYWN0aXZlVGFnIjoiQk9EWSIsImFjdGl2ZVRleHQiOiJTa2lwIHRvIHdvcmtzcGFjZVhYLVZFUlNFIFNUVURJT0xvY2FsIHdvcmtzcGFjZVJFRkVSRU5DRSBQUkVWSUVXRW52aXJvbm1lbnRMT1dvciJ9XQo="
+                        },
+                        {
+                          "name": "owned-provider-observation",
+                          "contentType": "application/json",
+                          "body": "eyJzY29wZSI6ICJvd25lZCBpbi1tZW1vcnkgZml4dHVyZTsgbm8gZXF1aXBtZW50IiwgInNjZW5hcmlvIjogIm9ic2VydmUiLCAiY2FsbHMiOiBbImludmVudG9yeSIsICJpbnZlbnRvcnkiLCAiaW52ZW50b3J5Il0sICJyZXNlcnZhdGlvbkNvdW50IjogMCwgInJlbWFpbmluZ1Byb3ZpZGVyTGVhc2VzIjogMCwgInByZXBhcmF0aW9uU2Vjb25kcyI6IDAuMDk1MTI3OTcxOTg4NDA0MTd9Cg=="
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "<repo>/.studio-local/hybrid-comparison/focus-control/before/browser/focus-labelled-delayed-Rea-de7e1-y-never-enables-reservation/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "<repo>/.studio-local/hybrid-comparison/focus-control/focus.spec.ts",
+                        "column": 53,
+                        "line": 62
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "d21847c9dcced81f7ac2-c4208528e5e9712d14f5",
+              "file": "focus.spec.ts",
+              "line": 22,
+              "column": 9
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-28T16:31:30.245Z",
+    "duration": 25582.358,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  }
+}

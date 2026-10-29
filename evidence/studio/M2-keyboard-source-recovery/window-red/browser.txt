@@ -1,0 +1,114 @@
+
+> xverse-studio-workspace@0.1.0 test:e2e
+> playwright test -c tests/e2e/playwright.config.ts --grep recovery accessibility: history out-of-window
+
+
+Running 2 tests using 1 worker
+
+(node:1939276) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 tests/e2e/source-recovery-accessibility.spec.ts:360:9 › recovery accessibility: history out-of-window response at 1024x768 (27.3s)
+(node:1939578) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 tests/e2e/source-recovery-accessibility.spec.ts:360:9 › recovery accessibility: history out-of-window response at 1440x900 (27.1s)
+
+
+  1) tests/e2e/source-recovery-accessibility.spec.ts:360:9 › recovery accessibility: history out-of-window response at 1024x768
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByRole('group', { name: 'Source recovery', exact: true })
+    Expected substring: "Could not check revision history"
+    Received string:    "Recovery first preserves the bytes now on disk in a recovery backup and then commits a new revision; revision 1 stays in history. Sidecars keep their recorded content.Adopt external changes as a new revisionNo recorded copy is available for revision 1, so it cannot be restored here. Adopting the external changes remains available."
+    Timeout: 10000ms
+
+    Call log:
+      - Expect "soft toContainText" getByRole('group', { name: 'Source recovery', exact: true }) with timeout 10000ms
+      - waiting for getByRole('group', { name: 'Source recovery', exact: true })
+        24 × locator resolved to <div role="group" aria-busy="false" class="recovery-panel" aria-describedby="_r_0_" aria-label="Source recovery">…</div>
+           - unexpected value "Recovery first preserves the bytes now on disk in a recovery backup and then commits a new revision; revision 1 stays in history. Sidecars keep their recorded content.Adopt external changes as a new revisionNo recorded copy is available for revision 1, so it cannot be restored here. Adopting the external changes remains available."
+
+
+      416 |           await expect
+      417 |             .soft(group(page))
+    > 418 |             .toContainText("Could not check revision history");
+          |              ^
+      419 |           measurements.push(
+      420 |             await renderedContrast(
+      421 |               group(page).getByRole("alert"),
+        at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:418:14
+
+    TimeoutError: locator.evaluate: Timeout 15000ms exceeded.
+    Call log:
+      - waiting for getByRole('group', { name: 'Source recovery', exact: true }).getByRole('alert')
+
+
+       at contrast.ts:9
+
+       7 |  */
+       8 | export async function renderedContrast(target: Locator, label: string) {
+    >  9 |   return target.evaluate((element, label) => {
+         |                 ^
+      10 |     type Color = [number, number, number, number];
+      11 |     const parse = (text: string): Color | null => {
+      12 |       const match = text.match(/^rgba?\(([^)]+)\)$/);
+        at renderedContrast (<repo>/tests/e2e/contrast.ts:9:17)
+        at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:420:35
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/source-recovery-accessibil-48da5-window-response-at-1024x768/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/source-recovery-accessibil-48da5-window-response-at-1024x768/error-context.md
+
+  2) tests/e2e/source-recovery-accessibility.spec.ts:360:9 › recovery accessibility: history out-of-window response at 1440x900
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByRole('group', { name: 'Source recovery', exact: true })
+    Expected substring: "Could not check revision history"
+    Received string:    "Recovery first preserves the bytes now on disk in a recovery backup and then commits a new revision; revision 1 stays in history. Sidecars keep their recorded content.Adopt external changes as a new revisionNo recorded copy is available for revision 1, so it cannot be restored here. Adopting the external changes remains available."
+    Timeout: 10000ms
+
+    Call log:
+      - Expect "soft toContainText" getByRole('group', { name: 'Source recovery', exact: true }) with timeout 10000ms
+      - waiting for getByRole('group', { name: 'Source recovery', exact: true })
+        24 × locator resolved to <div role="group" aria-busy="false" class="recovery-panel" aria-describedby="_r_0_" aria-label="Source recovery">…</div>
+           - unexpected value "Recovery first preserves the bytes now on disk in a recovery backup and then commits a new revision; revision 1 stays in history. Sidecars keep their recorded content.Adopt external changes as a new revisionNo recorded copy is available for revision 1, so it cannot be restored here. Adopting the external changes remains available."
+
+
+      416 |           await expect
+      417 |             .soft(group(page))
+    > 418 |             .toContainText("Could not check revision history");
+          |              ^
+      419 |           measurements.push(
+      420 |             await renderedContrast(
+      421 |               group(page).getByRole("alert"),
+        at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:418:14
+
+    TimeoutError: locator.evaluate: Timeout 15000ms exceeded.
+    Call log:
+      - waiting for getByRole('group', { name: 'Source recovery', exact: true }).getByRole('alert')
+
+
+       at contrast.ts:9
+
+       7 |  */
+       8 | export async function renderedContrast(target: Locator, label: string) {
+    >  9 |   return target.evaluate((element, label) => {
+         |                 ^
+      10 |     type Color = [number, number, number, number];
+      11 |     const parse = (text: string): Color | null => {
+      12 |       const match = text.match(/^rgba?\(([^)]+)\)$/);
+        at renderedContrast (<repo>/tests/e2e/contrast.ts:9:17)
+        at <repo>/tests/e2e/source-recovery-accessibility.spec.ts:420:35
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/source-recovery-accessibil-2aeba-window-response-at-1440x900/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/source-recovery-accessibil-2aeba-window-response-at-1440x900/error-context.md
+
+  2 failed
+    tests/e2e/source-recovery-accessibility.spec.ts:360:9 › recovery accessibility: history out-of-window response at 1024x768
+    tests/e2e/source-recovery-accessibility.spec.ts:360:9 › recovery accessibility: history out-of-window response at 1440x900

@@ -1,0 +1,76 @@
+
+> xverse-studio-workspace@0.1.0 test:e2e
+> playwright test -c tests/e2e/playwright.config.ts --grep late preflight cannot
+
+
+Running 2 tests using 1 worker
+
+(node:3244785) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 tests/e2e/diagnostic-accessibility.spec.ts:165:7 › diagnostic accessibility: late preflight cannot reopen a departed workspace at 1024x768 (13.8s)
+(node:3245546) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 tests/e2e/diagnostic-accessibility.spec.ts:165:7 › diagnostic accessibility: late preflight cannot reopen a departed workspace at 1440x900 (17.3s)
+
+
+  1) tests/e2e/diagnostic-accessibility.spec.ts:165:7 › diagnostic accessibility: late preflight cannot reopen a departed workspace at 1024x768
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('heading', { name: 'Recent projects', exact: true })
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('heading', { name: 'Recent projects', exact: true }) with timeout 10000ms
+      - waiting for getByRole('heading', { name: 'Recent projects', exact: true })
+
+
+      193 |         await completed;
+      194 |         await expect(page.locator(".notice.busy")).toHaveCount(0);
+    > 195 |         await expect(page.getByRole("heading", { name: "Recent projects", exact: true })).toBeVisible();
+          |                                                                                           ^
+      196 |         await expect(page.getByRole("dialog", { name: "Execution preflight", exact: true })).toHaveCount(0);
+      197 |       } finally { release(); await page.unroute(pattern); }
+      198 |     }
+        at <repo>/tests/e2e/diagnostic-accessibility.spec.ts:195:91
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/diagnostic-accessibility-d-a8c5d-arted-workspace-at-1024x768/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/diagnostic-accessibility-d-a8c5d-arted-workspace-at-1024x768/error-context.md
+
+  2) tests/e2e/diagnostic-accessibility.spec.ts:165:7 › diagnostic accessibility: late preflight cannot reopen a departed workspace at 1440x900
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('heading', { name: 'Recent projects', exact: true })
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('heading', { name: 'Recent projects', exact: true }) with timeout 10000ms
+      - waiting for getByRole('heading', { name: 'Recent projects', exact: true })
+
+
+      193 |         await completed;
+      194 |         await expect(page.locator(".notice.busy")).toHaveCount(0);
+    > 195 |         await expect(page.getByRole("heading", { name: "Recent projects", exact: true })).toBeVisible();
+          |                                                                                           ^
+      196 |         await expect(page.getByRole("dialog", { name: "Execution preflight", exact: true })).toHaveCount(0);
+      197 |       } finally { release(); await page.unroute(pattern); }
+      198 |     }
+        at <repo>/tests/e2e/diagnostic-accessibility.spec.ts:195:91
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/diagnostic-accessibility-d-8df2a-arted-workspace-at-1440x900/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/diagnostic-accessibility-d-8df2a-arted-workspace-at-1440x900/error-context.md
+
+  2 failed
+    tests/e2e/diagnostic-accessibility.spec.ts:165:7 › diagnostic accessibility: late preflight cannot reopen a departed workspace at 1024x768
+    tests/e2e/diagnostic-accessibility.spec.ts:165:7 › diagnostic accessibility: late preflight cannot reopen a departed workspace at 1440x900

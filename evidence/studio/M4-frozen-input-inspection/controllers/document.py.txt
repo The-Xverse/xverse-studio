@@ -1,0 +1,124 @@
+from pathlib import Path
+from collections import Counter
+import json
+root=Path.cwd().resolve();out=root/'evidence/studio/M4-frozen-input-inspection'
+v=json.loads((out/'verification.json').read_text());assert v['targeted']['expected']==69 and v['performance']['expected']==2 and v['allCurrentStageInputsIdentical'] and v['frozenInputs']==292
+(out/'README.md').write_text('''# Frozen-input inspection context
+
+An actual owned run's held HTTP200 snapshot reply previously opened its old
+sources after the user selected a newer recorded run. Both required desktop
+widths reproduced the defect without modifying protected snapshots or journals.
+This was an inspection/presentation defect; workload ownership was unchanged.
+
+The Results inspection control is now bound to immutable run/project/snapshot,
+known revision/digests and selected results tab. Leaving that context aborts its
+read. Returning to the original selection cannot revive an old request. A newer
+inspection, dialog or deliberate focus is preserved. Pending delivery is guarded
+synchronously. The actual thirty-second deadline enables a fresh read retry,
+without creating a workload. Invalid provenance or malformed source maps stay
+unconfirmed. Run/project/snapshot identities accompany read-only sources.
+
+Compiled contributing inputs and the complete authored revision remain distinct.
+An absent complete revision is explicitly unavailable, rather than silently
+substituted. The shared Model divergence inspector keeps its optional-run interface;
+the Results dialog uses a document portal to avoid section-heading style leakage.
+
+Fresh main verification passes69 affected native browser checks, including31 new
+inspection cases, the previous37 comparison/rerun/annotation/evidence/whole-studio
+cases and the existing draft/run-divergence inspector. Separate two-viewport
+performance2 passes. All292 source/test/lock/config/ADR/guide/compiled inputs match
+across and within those stages. Typecheck/build/architecture/spec/compatibility pass.
+The new31 cases also passed as a separate native probe before repository promotion.
+
+The31 cover1024x768/1440x900 normal/duplicate reads, newer run/Model/Home/tab/focus,
+run-selection round trips, a newer open inspection, labelledHTTP503 and wrong
+snapshot/plan/source/integrity responses, absent complete authored inputs, and an
+actual thirty-second held-read timeout at1024 with a fresh successful retry. Actual
+owned runs, exact protected file hashes and no inspection workload requests are
+asserted. Transport faults are labelled fixtures; they do not admit a provider.
+
+History retains the original2 failures, initial TypeScript narrowing failure,
+22-pass/8-failure expanded cohort,6-pass/2-failure interaction cohort and29-pass/
+2-failure expanded cohort. Some cases failed before the intended action because
+history options were not yet loaded or a native option name was wrong. A later
+ABA callback also used a disposed APIResponse after teardown. Corrected fixtures
+wait for the exact history option and retain the original HTTP body before holding
+delivery. No production threshold or final focus/source/workload assertion was
+weakened. Corrected2,8 and31-case successors remain separate records.
+
+Backend/runtime/Python-test inputs remain unchanged. The local comparison932 is
+inherited through217 unchanged of218 inputs and one non-executable ADR amendment.
+Both completed7dd8 Ubuntu24 push/PR CI jobs also freshly passed932 backend tests,
+full413 browser checks and104-file package smoke. The PR package candidate is its
+synthetic merge commit; push package candidate is7dd8. See the native-ci receipts.
+These precede this UI successor. Current full444 is collected, NOT_RUN locally;
+the affected69 result is not a full444 pass. No fresh local backend run is claimed.
+
+The implementation agent's review is not independent milestone acceptance.
+Native Windows remains held; actual assistive technology/human/novice work,
+external/physical providers and complete task dependencies retain their gates.
+Counts remain47 completed/43 in progress/10 blocked; no milestone is accepted.
+Clean committed successor package verification is pending.
+
+Performance retains the existing200-element/400-flow and50000-record workloads,
+one warm-up and30 repetitions; this is not live provider/campaign scalability.
+
+| Viewport | Selection p95 | Open/validation p95 | History p95 |
+| --- | --- | --- | --- |
+''')
+p=out/'README.md';text=p.read_text()
+for size in ['1024x768','1440x900']:
+ m=json.loads((out/f'performance/{size}/model-performance.json').read_text());h=json.loads((out/f'performance/{size}/history-performance.json').read_text())
+ text+=f'| {size} | {m["selectionAndInspector"]["p95"]:.1f} ms | {m["openAndValidationPresentation"]["p95"]:.1f} ms | {h["p95"]:.1f} ms |\n'
+p.write_text(text+'\nSelected candidate digest: `'+v['applicationAndInputDigest']+'`. Environment sourceDigest is tracked-only before commit; the292-input map includes new files and compiled assets.\n')
+(out/'implementation-review.md').write_text('''# Root implementation review
+
+This is the implementation agent's review, not independent milestone acceptance.
+The original M0–M4 plan, task IDs, authority boundaries and acceptance targets remain.
+The actual69/performance2 receipts and292-input maps bind this UI successor.
+Prior7dd8 full413/932 CI is historical; current444 collection is not execution.
+
+Only Results inspection presentation and its shared source dialog change runtime
+behavior. The control never invokes Start/rerun/evaluation/campaign APIs. It consumes
+the existing verified snapshot DTO without inventing platform/compiler/provider
+contracts. Keyed unmount and controller identity protect ABA/newer selection; the
+same control cannot dispatch a second pending read. Every settled path releases
+its timer/own pending reference, and unmount aborts. Timeout is browser-read scope.
+
+The selected snapshot/project identity, digest syntax, source-map shape, existing
+backend verification and known run revision/plan/semantic digests are required.
+Missing optional complete authored sources remain unavailable; contributing sources
+are never relabelled. The Results dialog is portalled to preserve ordinary modal
+styles and existing keyboard focus restoration. The other optional-run caller's
+draft/run divergence workflow passes unchanged assertions.
+
+Actual native original red, failed/precondition cohorts and exact sources remain
+retained. The corrected31 and promoted69 include real timeout/retry, late-read
+guards, labelled transport failures and canonical byte/workload controls. Full
+current444, native Windows, actual AT/human, broader providers and complete task
+and milestone gates remain open. No task or release acceptance is claimed.
+''')
+note=(' Frozen-input inspection successor: actual delayed native snapshot replies preserve newer run/view/tab/focus/dialog and run-selection round trips. Exact selected snapshot/project and known revision/digests, verified source maps, bounded30-second read and explicit unavailable complete authored inputs keep inspection read-only. Fresh69 affected browser and performance2 pass with292 identical inputs; backend932 is inherited via217 unchanged inputs plus ADR-only amendment. Prior7dd8 push/PR CI freshly passed932 backend/full413 browser/package smoke; current444 is collected NOT_RUN locally. Original red, failed/precondition cohorts and corrected31 probe retained at evidence/studio/M4-frozen-input-inspection/. T091/Windows/AT/human/provider/full milestone gates remain open; counts47/43/10 unchanged.')
+p=root/'specs/001-industry-agnostic-studio/traceability.json';trace=json.loads(p.read_text());counts=Counter(t['status'] for t in trace['tasks']);assert counts=={'completed':47,'in_progress':43,'blocked':10}
+for t in trace['tasks']:
+ if t['id'] in ['T038','T067','T091','T095','T096','T097','T098']:
+  assert t['status']=='in_progress';t['implementation_note']+=note
+  for n in ['evidence/studio/M4-frozen-input-inspection/verification.json','evidence/studio/M4-frozen-input-inspection/implementation-review.md','docs/architecture/ADR-0021-recorded-comparison.md','evidence/studio/native-ci/ubuntu-24.04-7dd8e0b-runs.json']:
+   if n not in t.setdefault('implementation_evidence',[]):t['implementation_evidence'].append(n)
+record=trace['implementation_record'];record['code_candidate']='Uncommitted snapshot-inspection successor; exact292-input map in evidence/studio/M4-frozen-input-inspection/application-and-input-hashes.json; clean committed package binding pending'
+vrec=record['verification'];vrec.update({'backend_tests_passed':932,'playwright_checks_passed':413,'playwright_checks_failed':0,
+ 'playwright_scope':'Prior7dd8 completed Ubuntu24 push/PR CI passed full413/932/package smoke. Current inspection successor69 affected and performance2 fresh on292 identical inputs; current444 is collected NOT_RUN locally. Backend/Python unchanged with explicit217-input plus ADR inheritance.',
+ 'evidence':'evidence/studio/M4-frozen-input-inspection/','backend_evidence':'evidence/studio/native-ci/ubuntu-24.04-7dd8e0b-runs.json',
+ 'prior_package_evidence':'evidence/studio/M4-frozen-rerun-context/package/receipt.json (clean2405087 historical source)',
+ 'backend_inheritance':'evidence/studio/M4-frozen-input-inspection/backend-inheritance.json','affected_playwright_checks_passed':69,
+ 'current_full_playwright_collection':444,'current_full_playwright_execution':'NOT_RUN'})
+for t in trace['tasks']:
+ if t['id']=='T002':
+  assert t['status']=='in_progress';t['implementation_note']+=' Both4a7f3ea Ubuntu24 push/PR CI jobs completed successfully with932 backend/full397 browser/package smoke; both7dd8e0b jobs passed932/full413/package smoke. PR package checkouts are synthetic merge candidates; push checkouts match branch heads. Native Windows remains held; no task or milestone closure.'
+  for n in ['evidence/studio/native-ci/ubuntu-24.04-4a7f3ea-runs.json','evidence/studio/native-ci/ubuntu-24.04-7dd8e0b-runs.json']:
+   if n not in t.setdefault('implementation_evidence',[]):t['implementation_evidence'].append(n)
+p.write_text(json.dumps(trace,ensure_ascii=False,indent=2)+'\n')
+p=root/'specs/001-industry-agnostic-studio/tasks.md';p.write_text(p.read_text()+'\n'+note.strip()+'\n')
+p=root/'docs/implementation/STATUS.md';text=p.read_text();marker='The latest frozen-rerun UI successor'
+assert marker in text;text=text.replace(marker,note.strip()+'\n\nBoth completed Ubuntu24 push/PR CI jobs for4a7f3ea passed932 backend/full397 browser/package smoke; both for7dd8e0b passed932/full413/package smoke. Exact receipts are under `evidence/studio/native-ci/`. These are earlier committed candidates, separate from current UI verification.\n\n'+marker,1);p.write_text(text)
+print(json.dumps({'counts':dict(counts),'acceptedMilestones':0,'tasksAndTraceUpdatedTogether':True}))

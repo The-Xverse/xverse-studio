@@ -1,0 +1,43 @@
+
+> xverse-studio-workspace@0.1.0 test:e2e
+> playwright test -c tests/e2e/playwright.config.ts --grep annotation run context
+
+
+Running 1 test using 1 worker
+
+(node:2717394) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 tests/e2e/annotation-context.spec.ts:5:5 › annotation run context: rerun resets prior edits and ignores a delayed prior save refresh (17.3s)
+
+
+  1) tests/e2e/annotation-context.spec.ts:5:5 › annotation run context: rerun resets prior edits and ignores a delayed prior save refresh
+
+    Error: expect(locator).toHaveValue(expected) failed
+
+    Locator: getByLabel('Comment', { exact: true })
+    Expected: ""
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toHaveValue" getByLabel('Comment', { exact: true }) with timeout 10000ms
+      - waiting for getByLabel('Comment', { exact: true })
+
+
+      39 |   }
+      40 |   const secondRun = await rerun(firstRun);
+    > 41 |   await expect(page.getByLabel("Comment", { exact: true })).toHaveValue("");
+         |                                                             ^
+      42 |   await expect(page.getByRole("heading", { name: "Add a review note", exact: true })).toBeVisible();
+      43 |   await expect(page.getByRole("button", { name: "Save annotation revision", exact: true })).toHaveCount(0);
+      44 |   await expect(page.getByLabel("Requirement or test URI", { exact: true })).toHaveCount(0);
+        at <workspace>/tests/e2e/annotation-context.spec.ts:41:61
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/annotation-context-annotat-97c0b--delayed-prior-save-refresh/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/annotation-context-annotat-97c0b--delayed-prior-save-refresh/error-context.md
+
+  1 failed
+    tests/e2e/annotation-context.spec.ts:5:5 › annotation run context: rerun resets prior edits and ignores a delayed prior save refresh

@@ -1,0 +1,17 @@
+from pathlib import Path
+import hashlib,importlib.util,json,os,subprocess,sys,time
+root=Path.cwd();base=root/'.studio-local/comparison-next/window-proposal';out=base/'isolated-successor';out.mkdir(exist_ok=False)
+frozen=json.loads((root/'.studio-local/campaign-workflow/verified-targeted/source-before.json').read_text())
+assert all(hashlib.sha256((root/n).read_bytes()).hexdigest()==h for n,h in frozen.items())
+source=base/'isolated/runs.py';before=hashlib.sha256(source.read_bytes()).hexdigest()
+invoke=out/'invoke.py';invoke.write_text('''import importlib.util,sys\nfrom pathlib import Path\np=Path(sys.argv[1]);spec=importlib.util.spec_from_file_location("comparison_window_proposal",p);m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)\nimport xverse_studio.comparison\nxverse_studio.comparison.compare_runs=m.compare_runs\nassert Path(m.__file__).resolve()==p.resolve()\nimport pytest\nraise SystemExit(pytest.main(sys.argv[2:]))\n''')
+command=[sys.executable,'-I',str(invoke),str(source),'-c','/dev/null',str(base/'test_comparison_windows.py'),'-q','-p','no:cacheprovider','--junitxml='+str(out/'junit.xml')]
+env=dict(os.environ,PYTEST_DISABLE_PLUGIN_AUTOLOAD='1');env.pop('PYTHONPATH',None)
+started=time.monotonic()
+with (out/'pytest.log').open('w') as log:r=subprocess.run(command,env=env,stdout=log,stderr=subprocess.STDOUT)
+assert hashlib.sha256(source.read_bytes()).hexdigest()==before
+assert all(hashlib.sha256((root/n).read_bytes()).hexdigest()==h for n,h in frozen.items())
+summary={'scope':'Isolated proposed comparison-window core only; not applied to main, not full T091, no public/native/browser proof.','command':command,'exitCode':r.returncode,'seconds':round(time.monotonic()-started,3),'mainFrozenInputsUnchanged':True,'isolatedSourceHash':before,'isolatedSourceUnchanged':True}
+(out/'summary.json').write_text(json.dumps(summary,indent=2)+'\n')
+print(json.dumps(summary));print((out/'pytest.log').read_text()[-500:])
+raise SystemExit(r.returncode)

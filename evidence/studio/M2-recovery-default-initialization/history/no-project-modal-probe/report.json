@@ -1,0 +1,178 @@
+{
+  "config": {
+    "argv": [
+      "<tool-cache>/node-v24.22.1-linux-x64/bin/node",
+      "<repo>/node_modules/@playwright/test/cli.js",
+      "test",
+      "-c",
+      "<repo>/.studio-local/source-recovery-ci-review/no-project-modal-probe/playwright.config.ts"
+    ],
+    "configFile": "<repo>/.studio-local/source-recovery-ci-review/no-project-modal-probe/playwright.config.ts",
+    "rootDir": "<repo>/.studio-local/source-recovery-ci-review/no-project-modal-probe",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "<repo>/.studio-local/source-recovery-ci-review/no-project-modal-probe/output",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "<repo>/.studio-local/source-recovery-ci-review/no-project-modal-probe",
+        "testIgnore": [],
+        "testMatch": [
+          "*.spec.ts"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "<repo>/.studio-local/source-recovery-ci-review/no-project-modal-probe/output",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "<repo>/.studio-local/source-recovery-ci-review/no-project-modal-probe",
+        "snapshotDir": "<repo>/.studio-local/source-recovery-ci-review/no-project-modal-probe",
+        "testIgnore": [],
+        "testMatch": "*.spec.ts",
+        "timeout": 60000,
+        "use": {
+          "baseURL": "http://127.0.0.1:55199",
+          "browserName": "chromium",
+          "screenshot": "only-on-failure",
+          "trace": "off"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "<repo>/.studio-local/source-recovery-ci-review/no-project-modal-probe/report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "modal.spec.ts",
+      "file": "modal.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "newer modal supersedes recovery with no rendered project",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 6643,
+                  "error": {
+                    "message": "Error: expect(locator).toBeVisible() failed\n\nLocator: getByRole('heading', { name: 'Start with an example', exact: true })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"toBeVisible\" getByRole('heading', { name: 'Start with an example', exact: true }) with timeout 5000ms\n  - waiting for getByRole('heading', { name: 'Start with an example', exact: true })",
+                    "stack": "Error: expect(locator).toBeVisible() failed\n\nLocator: getByRole('heading', { name: 'Start with an example', exact: true })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"toBeVisible\" getByRole('heading', { name: 'Start with an example', exact: true }) with timeout 5000ms\n  - waiting for getByRole('heading', { name: 'Start with an example', exact: true })\n\n    at <repo>/.studio-local/source-recovery-ci-review/no-project-modal-probe/modal.spec.ts:40:93",
+                    "location": {
+                      "file": "<repo>/.studio-local/source-recovery-ci-review/no-project-modal-probe/modal.spec.ts",
+                      "column": 93,
+                      "line": 40
+                    },
+                    "snippet": "  38 |     const reply = page.waitForResponse(r => r.url().endsWith(`/projects/${project.projectId}/recoveries`) && r.request().method() === \"POST\");\n  39 |     release(); expect((await reply).status()).toBe(200); await page.waitForLoadState(\"networkidle\");\n> 40 |     await expect(page.getByRole(\"heading\", { name: \"Start with an example\", exact: true })).toBeVisible();\n     |                                                                                             ^\n  41 |     await expect(page.getByRole(\"heading\", { name: project.name, exact: true })).toHaveCount(0);\n  42 |     expect((await (await page.request.get(`/api/v1/projects/${project.projectId}`)).json()).revision).toBe(project.revision + 1);\n  43 |   } finally { release(); await page.unrouteAll({ behavior: \"wait\" }); writeFileSync(file, original); }"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/.studio-local/source-recovery-ci-review/no-project-modal-probe/modal.spec.ts",
+                        "column": 93,
+                        "line": 40
+                      },
+                      "message": "Error: expect(locator).toBeVisible() failed\n\nLocator: getByRole('heading', { name: 'Start with an example', exact: true })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"toBeVisible\" getByRole('heading', { name: 'Start with an example', exact: true }) with timeout 5000ms\n  - waiting for getByRole('heading', { name: 'Start with an example', exact: true })\n\n\n  38 |     const reply = page.waitForResponse(r => r.url().endsWith(`/projects/${project.projectId}/recoveries`) && r.request().method() === \"POST\");\n  39 |     release(); expect((await reply).status()).toBe(200); await page.waitForLoadState(\"networkidle\");\n> 40 |     await expect(page.getByRole(\"heading\", { name: \"Start with an example\", exact: true })).toBeVisible();\n     |                                                                                             ^\n  41 |     await expect(page.getByRole(\"heading\", { name: project.name, exact: true })).toHaveCount(0);\n  42 |     expect((await (await page.request.get(`/api/v1/projects/${project.projectId}`)).json()).revision).toBe(project.revision + 1);\n  43 |   } finally { release(); await page.unrouteAll({ behavior: \"wait\" }); writeFileSync(file, original); }\n    at <repo>/.studio-local/source-recovery-ci-review/no-project-modal-probe/modal.spec.ts:40:93"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T08:58:24.508Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/.studio-local/source-recovery-ci-review/no-project-modal-probe/output/modal-newer-modal-supersed-1ffba-ry-with-no-rendered-project/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/.studio-local/source-recovery-ci-review/no-project-modal-probe/modal.spec.ts",
+                    "column": 93,
+                    "line": 40
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "30bed3729243e8d6a82a-29298428cf57c66e74b8",
+          "file": "modal.spec.ts",
+          "line": 6,
+          "column": 5
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-28T08:58:24.220Z",
+    "duration": 7060.666,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

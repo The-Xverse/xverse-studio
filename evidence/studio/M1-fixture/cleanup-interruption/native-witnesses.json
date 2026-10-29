@@ -1,0 +1,127 @@
+[
+  {
+    "case": "test_native_interrupt_at_owned_directory_release_preserves_known_stop_and_unknown_cleanup[duration]",
+    "property": "native_cleanup_interruption",
+    "witness": {
+      "kind": "duration",
+      "witness": {
+        "syscall": "rmdir",
+        "syscallNumber": 84,
+        "exactOwnedPathAndDirectoryIdentityVerified": true,
+        "originalPidBirthArgvOwnerVerified": true,
+        "realSignal": "SIGINT",
+        "signalDeliveryStopObserved": true,
+        "syscallStopsObserved": 17
+      },
+      "lifecycle": "stopped",
+      "cleanup": "unknown",
+      "evidence": "partial",
+      "originalWorkerExit": 1,
+      "immutableInputs": true,
+      "noReplayOrRespawn": true,
+      "scope": "Actual Linux x86-64 owned child interrupted at original rmdir; parent-only ptrace; no equipment"
+    }
+  },
+  {
+    "case": "test_native_interrupt_at_owned_directory_release_preserves_known_stop_and_unknown_cleanup[stop]",
+    "property": "native_cleanup_interruption",
+    "witness": {
+      "kind": "stop",
+      "witness": {
+        "syscall": "rmdir",
+        "syscallNumber": 84,
+        "exactOwnedPathAndDirectoryIdentityVerified": true,
+        "originalPidBirthArgvOwnerVerified": true,
+        "realSignal": "SIGINT",
+        "signalDeliveryStopObserved": true,
+        "syscallStopsObserved": 51
+      },
+      "lifecycle": "stopped",
+      "cleanup": "unknown",
+      "evidence": "partial",
+      "originalWorkerExit": 1,
+      "immutableInputs": true,
+      "noReplayOrRespawn": true,
+      "scope": "Actual Linux x86-64 owned child interrupted at original rmdir; parent-only ptrace; no equipment"
+    }
+  },
+  {
+    "case": "test_native_interrupt_at_owned_directory_release_preserves_known_stop_and_unknown_cleanup[cancel]",
+    "property": "native_cleanup_interruption",
+    "witness": {
+      "kind": "cancel",
+      "witness": {
+        "syscall": "rmdir",
+        "syscallNumber": 84,
+        "exactOwnedPathAndDirectoryIdentityVerified": true,
+        "originalPidBirthArgvOwnerVerified": true,
+        "realSignal": "SIGINT",
+        "signalDeliveryStopObserved": true,
+        "syscallStopsObserved": 51
+      },
+      "lifecycle": "stopped",
+      "cleanup": "unknown",
+      "evidence": "partial",
+      "originalWorkerExit": 1,
+      "immutableInputs": true,
+      "noReplayOrRespawn": true,
+      "scope": "Actual Linux x86-64 owned child interrupted at original rmdir; parent-only ptrace; no equipment"
+    }
+  },
+  {
+    "case": "test_native_workload_failure_settles_unapplied_command_without_inventing_stop[stop]",
+    "property": "native_command_workload_failure",
+    "witness": {
+      "kind": "stop",
+      "fault": {
+        "operationId": "op-d3964079-0075-4188-acff-5bab74803bb0",
+        "nativeInterruption": {
+          "kind": "SIGINT",
+          "pid": 2888825,
+          "createTime": 1793244985.45,
+          "unmodifiedWorkerArgvVerified": true,
+          "persistedOwnerVerified": true,
+          "afterActualSample": true,
+          "sleepWaitChannel": "hrtimer_nanosleep",
+          "sleepPhaseSeconds": 0.21
+        }
+      },
+      "scope": "Actual owned Linux worker after real sample; signed delivery and original-child SIGINT; no equipment",
+      "runOutcome": "failed",
+      "commandOutcome": "failed",
+      "code": "REFERENCE_WORKER_ERROR",
+      "cleanup": "unknown",
+      "evidence": "partial",
+      "originalInputsPreserved": true,
+      "noReplayOrRespawn": true
+    }
+  },
+  {
+    "case": "test_native_workload_failure_settles_unapplied_command_without_inventing_stop[cancel]",
+    "property": "native_command_workload_failure",
+    "witness": {
+      "kind": "cancel",
+      "fault": {
+        "operationId": "op-cf7a4617-4754-4342-af49-56bdf66c5129",
+        "nativeInterruption": {
+          "kind": "SIGINT",
+          "pid": 2888874,
+          "createTime": 1793244988.86,
+          "unmodifiedWorkerArgvVerified": true,
+          "persistedOwnerVerified": true,
+          "afterActualSample": true,
+          "sleepWaitChannel": "hrtimer_nanosleep",
+          "sleepPhaseSeconds": 0.208
+        }
+      },
+      "scope": "Actual owned Linux worker after real sample; signed delivery and original-child SIGINT; no equipment",
+      "runOutcome": "failed",
+      "commandOutcome": "failed",
+      "code": "REFERENCE_WORKER_ERROR",
+      "cleanup": "unknown",
+      "evidence": "partial",
+      "originalInputsPreserved": true,
+      "noReplayOrRespawn": true
+    }
+  }
+]

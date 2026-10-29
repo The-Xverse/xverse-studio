@@ -1,0 +1,264 @@
+{
+  "config": {
+    "argv": [
+      "<loop-cache>/node-v24.22.1-linux-x64/bin/node",
+      "<repo>/node_modules/@playwright/test/cli.js",
+      "test",
+      "-c",
+      "<repo>/.studio-local/frozen-input-read-context/playwright.config.ts"
+    ],
+    "configFile": "<repo>/.studio-local/frozen-input-read-context/playwright.config.ts",
+    "rootDir": "<repo>/.studio-local/frozen-input-read-context",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "<repo>/.studio-local/frozen-input-read-context/native-red/browser-output",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "<repo>/.studio-local/frozen-input-read-context",
+        "testIgnore": [],
+        "testMatch": [
+          "probe.spec.ts"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "<repo>/.studio-local/frozen-input-read-context/native-red/browser-output",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "<repo>/.studio-local/frozen-input-read-context",
+        "snapshotDir": "<repo>/.studio-local/frozen-input-read-context",
+        "testIgnore": [],
+        "testMatch": "probe.spec.ts",
+        "timeout": 60000,
+        "use": {
+          "baseURL": "http://127.0.0.1:33567",
+          "browserName": "chromium",
+          "actionTimeout": 15000,
+          "screenshot": "only-on-failure",
+          "trace": "off",
+          "video": "off"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "<repo>/.studio-local/frozen-input-read-context/native-red/browser-report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "probe.spec.ts",
+      "file": "probe.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "actual frozen-input reply preserves a newer recorded run at 1024",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 17397,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('dialog')\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveCount\" getByRole('dialog') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog')\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to 1 element\u001b[22m\n\u001b[2m       - unexpected value \"1\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('dialog')\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveCount\" getByRole('dialog') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog')\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to 1 element\u001b[22m\n\u001b[2m       - unexpected value \"1\"\u001b[22m\n\n    at <repo>/.studio-local/frozen-input-read-context/probe.spec.ts:64:24",
+                    "location": {
+                      "file": "<repo>/.studio-local/frozen-input-read-context/probe.spec.ts",
+                      "column": 24,
+                      "line": 64
+                    },
+                    "snippet": "  62 |   await info.attach('frozen-input-context-control',{contentType:'application/json',body:JSON.stringify(facts)});\n  63 |   expect(facts.canonicalBytesUnchanged).toBe(true);expect(workloads).toEqual([]);expect(facts.currentRunId).toBe(newer.runId);\n> 64 |   await expect(dialog).toHaveCount(0);\n     |                        ^\n  65 |  });\n  66 | }\n  67 |"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/.studio-local/frozen-input-read-context/probe.spec.ts",
+                        "column": 24,
+                        "line": 64
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('dialog')\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveCount\" getByRole('dialog') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog')\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to 1 element\u001b[22m\n\u001b[2m       - unexpected value \"1\"\u001b[22m\n\n\n  62 |   await info.attach('frozen-input-context-control',{contentType:'application/json',body:JSON.stringify(facts)});\n  63 |   expect(facts.canonicalBytesUnchanged).toBe(true);expect(workloads).toEqual([]);expect(facts.currentRunId).toBe(newer.runId);\n> 64 |   await expect(dialog).toHaveCount(0);\n     |                        ^\n  65 |  });\n  66 | }\n  67 |\n    at <repo>/.studio-local/frozen-input-read-context/probe.spec.ts:64:24"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T12:12:31.104Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "frozen-input-context-control",
+                      "contentType": "application/json",
+                      "body": "eyJzY29wZSI6IlR3byBhY3R1YWwgbmF0aXZlIG93bmVkIHJ1bnM7IG9ubHkgZGVsaXZlcnkgb2YgdGhlIG9yaWdpbmFsIG1hbmFnZWQgSFRUUDIwMCBzbmFwc2hvdCByZXBseSB3YXMgaGVsZC4iLCJ3aWR0aCI6MTAyNCwib3JpZ2luYWxSdW5JZCI6InJ1bi1iM2Y4NDA0Yy0zOTY4LTRmMDEtOTM4YS1mYmYyOWQ5MTU3MDEiLCJvcmlnaW5hbFNuYXBzaG90SWQiOiJzbmFwLWFkOGRlN2U4LTYzN2QtNDIzOS04NTRkLWY2NWM5MmJlNWNmMSIsIm5ld2VyUnVuSWQiOiJydW4tNWEwYzU0MDktZTNmNC00ZmNlLWFmYTktZGFiYTgyY2EwN2JmIiwibmV3ZXJTbmFwc2hvdElkIjoic25hcC01ZTUzNTllNy03YjYyLTQ0OTQtOTM3ZS03MThkNmE1N2M2MDEiLCJjdXJyZW50UnVuSWQiOiJydW4tNWEwYzU0MDktZTNmNC00ZmNlLWFmYTktZGFiYTgyY2EwN2JmIiwicmV0dXJuZWRTbmFwc2hvdElkIjoic25hcC1hZDhkZTdlOC02MzdkLTQyMzktODU0ZC1mNjVjOTJiZTVjZjEiLCJkZWxpdmVyeSI6ImZ1bGZpbGxlZCIsImRpYWxvZ0NvdW50IjoxLCJkaWFsb2dDb250YWluc09yaWdpbmFsU25hcHNob3QiOnRydWUsImNhbm9uaWNhbEJ5dGVzVW5jaGFuZ2VkIjp0cnVlLCJ3b3JrbG9hZHMiOltdfQ=="
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/.studio-local/frozen-input-read-context/native-red/browser-output/probe-actual-frozen-input--f8e67--newer-recorded-run-at-1024/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/.studio-local/frozen-input-read-context/native-red/browser-output/probe-actual-frozen-input--f8e67--newer-recorded-run-at-1024/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/.studio-local/frozen-input-read-context/probe.spec.ts",
+                    "column": 24,
+                    "line": 64
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "9223f0ac28d4fb57516f-c3b2afa173158e704927",
+          "file": "probe.spec.ts",
+          "line": 9,
+          "column": 6
+        },
+        {
+          "title": "actual frozen-input reply preserves a newer recorded run at 1440",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 16582,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('dialog')\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveCount\" getByRole('dialog') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog')\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to 1 element\u001b[22m\n\u001b[2m       - unexpected value \"1\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('dialog')\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveCount\" getByRole('dialog') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog')\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to 1 element\u001b[22m\n\u001b[2m       - unexpected value \"1\"\u001b[22m\n\n    at <repo>/.studio-local/frozen-input-read-context/probe.spec.ts:64:24",
+                    "location": {
+                      "file": "<repo>/.studio-local/frozen-input-read-context/probe.spec.ts",
+                      "column": 24,
+                      "line": 64
+                    },
+                    "snippet": "  62 |   await info.attach('frozen-input-context-control',{contentType:'application/json',body:JSON.stringify(facts)});\n  63 |   expect(facts.canonicalBytesUnchanged).toBe(true);expect(workloads).toEqual([]);expect(facts.currentRunId).toBe(newer.runId);\n> 64 |   await expect(dialog).toHaveCount(0);\n     |                        ^\n  65 |  });\n  66 | }\n  67 |"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/.studio-local/frozen-input-read-context/probe.spec.ts",
+                        "column": 24,
+                        "line": 64
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('dialog')\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m1\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveCount\" getByRole('dialog') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('dialog')\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to 1 element\u001b[22m\n\u001b[2m       - unexpected value \"1\"\u001b[22m\n\n\n  62 |   await info.attach('frozen-input-context-control',{contentType:'application/json',body:JSON.stringify(facts)});\n  63 |   expect(facts.canonicalBytesUnchanged).toBe(true);expect(workloads).toEqual([]);expect(facts.currentRunId).toBe(newer.runId);\n> 64 |   await expect(dialog).toHaveCount(0);\n     |                        ^\n  65 |  });\n  66 | }\n  67 |\n    at <repo>/.studio-local/frozen-input-read-context/probe.spec.ts:64:24"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T12:12:48.898Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "frozen-input-context-control",
+                      "contentType": "application/json",
+                      "body": "eyJzY29wZSI6IlR3byBhY3R1YWwgbmF0aXZlIG93bmVkIHJ1bnM7IG9ubHkgZGVsaXZlcnkgb2YgdGhlIG9yaWdpbmFsIG1hbmFnZWQgSFRUUDIwMCBzbmFwc2hvdCByZXBseSB3YXMgaGVsZC4iLCJ3aWR0aCI6MTQ0MCwib3JpZ2luYWxSdW5JZCI6InJ1bi1kNDY5ZWJiMy1iZjk5LTRjNTgtYjc2NC0wNjUxYTM4OWM4YWMiLCJvcmlnaW5hbFNuYXBzaG90SWQiOiJzbmFwLWQ0ZmIyOTIzLTA4Y2UtNGZiYi1hNjk0LWI3NWY4NjFhZDlkYSIsIm5ld2VyUnVuSWQiOiJydW4tYzdmNjZhNjUtMjVjMi00Mzk0LWE3NzctMmM3MDc4Mzk0Nzg5IiwibmV3ZXJTbmFwc2hvdElkIjoic25hcC04YWE1ODQwYi0zMzMxLTQ0MzctODk4Ni1lMzAzY2QzYzY4NDQiLCJjdXJyZW50UnVuSWQiOiJydW4tYzdmNjZhNjUtMjVjMi00Mzk0LWE3NzctMmM3MDc4Mzk0Nzg5IiwicmV0dXJuZWRTbmFwc2hvdElkIjoic25hcC1kNGZiMjkyMy0wOGNlLTRmYmItYTY5NC1iNzVmODYxYWQ5ZGEiLCJkZWxpdmVyeSI6ImZ1bGZpbGxlZCIsImRpYWxvZ0NvdW50IjoxLCJkaWFsb2dDb250YWluc09yaWdpbmFsU25hcHNob3QiOnRydWUsImNhbm9uaWNhbEJ5dGVzVW5jaGFuZ2VkIjp0cnVlLCJ3b3JrbG9hZHMiOltdfQ=="
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/.studio-local/frozen-input-read-context/native-red/browser-output/probe-actual-frozen-input--1ca72--newer-recorded-run-at-1440/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/.studio-local/frozen-input-read-context/native-red/browser-output/probe-actual-frozen-input--1ca72--newer-recorded-run-at-1440/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/.studio-local/frozen-input-read-context/probe.spec.ts",
+                    "column": 24,
+                    "line": 64
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "9223f0ac28d4fb57516f-abb946c3cee39ef9a39c",
+          "file": "probe.spec.ts",
+          "line": 9,
+          "column": 6
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-27T12:12:30.775Z",
+    "duration": 34807.924,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  }
+}

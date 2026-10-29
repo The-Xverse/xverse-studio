@@ -1,0 +1,155 @@
+{
+  "boundary": "after-provider-effect",
+  "outcome": "passed",
+  "processes": [
+    {
+      "pid": 2212088,
+      "parent": 2211540,
+      "birthTicks": "23301792",
+      "argv": [
+        "<repo>/.venv/bin/python",
+        "-I",
+        "<repo>/tests/fixtures/providers/physical/interruption_host.py",
+        "--data",
+        "<repo>/.studio-local/lab-conformance-final-data/test_native_interruption_never1/owned interrupted backend Ω",
+        "--boundary",
+        "after-provider-effect",
+        "--phase",
+        "initial"
+      ]
+    },
+    {
+      "pid": 2212095,
+      "parent": 2211540,
+      "birthTicks": "23301860",
+      "argv": [
+        "<repo>/.venv/bin/python",
+        "-I",
+        "<repo>/tests/fixtures/providers/physical/interruption_host.py",
+        "--data",
+        "<repo>/.studio-local/lab-conformance-final-data/test_native_interruption_never1/owned interrupted backend Ω",
+        "--boundary",
+        "after-provider-effect",
+        "--phase",
+        "restart"
+      ]
+    }
+  ],
+  "durableBefore": {
+    "operation": [
+      {
+        "createdAt": 1793180358.9127672,
+        "kind": "lab_reserve",
+        "operationId": "op-6bbaabdc-ad56-44fd-81b1-d7dde0e433e4",
+        "principal": "local-operator",
+        "reservationId": "56961c27-2b89-40be-af7f-5a418f4f02a8",
+        "result": {
+          "reservationId": "56961c27-2b89-40be-af7f-5a418f4f02a8"
+        },
+        "route": "POST /assets/fixture:bench-sensor/reservations",
+        "status": "delegated"
+      }
+    ],
+    "lab_registry": [
+      {
+        "contractVersion": "1.0",
+        "records": [
+          {
+            "assetId": "fixture:bench-sensor",
+            "assetIdentity": "sha256:594760b683fc55202fe2ba041d05759adef164234df1d81cfa829a5f9d9aab0d",
+            "evidenceScope": "fixture",
+            "expiry": 1793180658.9682617,
+            "fencingIdentity": null,
+            "lastRenewal": null,
+            "owner": "local-operator",
+            "providerId": "physical-contract-fixture",
+            "providerIdentity": "sha256:7b83c4547bf3a94998d437d5c7a44d77d5562034636b524ad1a2a4c4bb2dc854",
+            "reservationId": "56961c27-2b89-40be-af7f-5a418f4f02a8",
+            "scope": "observe",
+            "status": "unknown"
+          }
+        ],
+        "revision": 1
+      }
+    ]
+  },
+  "durableAfter": {
+    "operation": [
+      {
+        "createdAt": 1793180359.8102043,
+        "kind": "lab_reconcile",
+        "operationId": "op-43076eee-4975-4f29-b192-b684e8a9ea8f",
+        "principal": "local-operator",
+        "reservationId": "56961c27-2b89-40be-af7f-5a418f4f02a8",
+        "result": {
+          "reservationId": "56961c27-2b89-40be-af7f-5a418f4f02a8",
+          "status": "unknown"
+        },
+        "route": "POST /reservations/56961c27-2b89-40be-af7f-5a418f4f02a8/reconciliations",
+        "status": "unknown"
+      },
+      {
+        "code": "LAB_OPERATION_INTERRUPTED",
+        "createdAt": 1793180358.9127672,
+        "kind": "lab_reserve",
+        "operationId": "op-6bbaabdc-ad56-44fd-81b1-d7dde0e433e4",
+        "principal": "local-operator",
+        "reservationId": "56961c27-2b89-40be-af7f-5a418f4f02a8",
+        "result": {
+          "reservationId": "56961c27-2b89-40be-af7f-5a418f4f02a8"
+        },
+        "route": "POST /assets/fixture:bench-sensor/reservations",
+        "status": "unknown"
+      }
+    ],
+    "lab_registry": [
+      {
+        "contractVersion": "1.0",
+        "records": [
+          {
+            "assetId": "fixture:bench-sensor",
+            "assetIdentity": "sha256:594760b683fc55202fe2ba041d05759adef164234df1d81cfa829a5f9d9aab0d",
+            "evidenceScope": "fixture",
+            "expiry": 1793180658.9682617,
+            "fencingIdentity": null,
+            "lastRenewal": null,
+            "owner": "local-operator",
+            "providerId": "physical-contract-fixture",
+            "providerIdentity": "sha256:7b83c4547bf3a94998d437d5c7a44d77d5562034636b524ad1a2a4c4bb2dc854",
+            "reservationId": "56961c27-2b89-40be-af7f-5a418f4f02a8",
+            "scope": "observe",
+            "status": "unknown"
+          }
+        ],
+        "revision": 2
+      }
+    ]
+  },
+  "pauseObservation": {
+    "boundary": "after-provider-effect",
+    "phase": "initial",
+    "scope": "timing-only owned fixture pause",
+    "calls": [
+      "inventory",
+      "inventory",
+      "reserve"
+    ],
+    "reservationEffects": 1,
+    "operation": null
+  },
+  "restartObservation": {
+    "scope": "owned durable fixture effect; no equipment",
+    "phase": "restart",
+    "boundary": "after-provider-effect",
+    "calls": [
+      "inventory",
+      "inventory",
+      "inventory",
+      "inspect"
+    ],
+    "reservationEffects": 1,
+    "heldLeases": 1
+  },
+  "effectSha256": "6797e5c8b21b7696f434a9283e1684aea637c7992a99a403dcfcadd14cd297c8",
+  "scope": "Actual Linux backend crash at timing-only fixture boundary; provider continuity is a durable JSON fixture, not an actual external provider/device."
+}

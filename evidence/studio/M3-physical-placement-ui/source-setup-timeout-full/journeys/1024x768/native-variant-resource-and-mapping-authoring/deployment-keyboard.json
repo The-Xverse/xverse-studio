@@ -1,0 +1,167 @@
+{
+  "viewport": {
+    "width": 1024,
+    "height": 768
+  },
+  "platform": "linux",
+  "browser": "156.0.8078.4",
+  "focus": {
+    "focused": true,
+    "activeTag": "INPUT",
+    "rect": {
+      "x": 117,
+      "y": 365.109375,
+      "width": 208,
+      "height": 38,
+      "top": 365.109375,
+      "right": 325,
+      "bottom": 403.109375,
+      "left": 117
+    },
+    "viewport": {
+      "width": 1024,
+      "height": 768
+    },
+    "outline": "solid",
+    "outlineWidth": 3
+  },
+  "revisions": [
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "mapping": {
+    "id": "wall-to-sim",
+    "sourceTimeDomainRef": {
+      "apiVersion": "xverse.io/xdl/v1alpha1",
+      "kind": "System",
+      "namespace": "org.xverse.studio.process-control",
+      "name": "reference-loop",
+      "element": "wall-time"
+    },
+    "targetTimeDomainRef": {
+      "apiVersion": "xverse.io/xdl/v1alpha1",
+      "kind": "System",
+      "namespace": "org.xverse.studio.process-control",
+      "name": "reference-loop",
+      "element": "simulation-time"
+    },
+    "mapping": "offset-at-start",
+    "tolerance": {
+      "value": 0.01,
+      "unit": "s"
+    }
+  },
+  "selected": {
+    "deploymentRef": "xdl://org.xverse.studio.process-control/deployment/keyboard-bench-1024",
+    "scenarioRef": "xdl://org.xverse.studio.process-control/scenario/keyboard-bench-1024-scenario"
+  },
+  "writes": [
+    {
+      "path": "/api/v1/projects/prj-9b2e511b-9687-4428-9ad0-edb77eb228fd/deployment-variants",
+      "method": "POST",
+      "body": {
+        "baseRevision": 3,
+        "name": "Keyboard bench 1024",
+        "sourceDeploymentId": "doc-3",
+        "sourceScenarioId": "doc-4"
+      }
+    },
+    {
+      "path": "/api/v1/projects/prj-9b2e511b-9687-4428-9ad0-edb77eb228fd/deployment-variants/doc-855fe485-a82d-422a-9c2c-ffe4406c5c23",
+      "method": "PATCH",
+      "body": {
+        "baseRevision": 4,
+        "bindingId": "plant-binding",
+        "resourceIds": [
+          "bench-cpu"
+        ]
+      }
+    },
+    {
+      "path": "/api/v1/projects/prj-9b2e511b-9687-4428-9ad0-edb77eb228fd/edits",
+      "method": "POST",
+      "body": {
+        "baseRevision": 5,
+        "edits": [
+          {
+            "kind": "set_time_mapping",
+            "documentId": "xdl/deployment-keyboard-bench-1024.xdl.yaml",
+            "mappingId": "wall-to-sim",
+            "sourceTimeDomainId": "wall-time",
+            "targetTimeDomainId": "simulation-time",
+            "mapping": "offset-at-start",
+            "tolerance": {
+              "value": 0.01,
+              "unit": "s"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "path": "/api/v1/projects/prj-9b2e511b-9687-4428-9ad0-edb77eb228fd/edits",
+      "method": "POST",
+      "body": {
+        "baseRevision": 6,
+        "edits": [
+          {
+            "kind": "set_time_mapping",
+            "documentId": "xdl/deployment-keyboard-bench-1024.xdl.yaml",
+            "mappingId": "wall-to-sim",
+            "remove": true
+          }
+        ]
+      }
+    },
+    {
+      "path": "/api/v1/projects/prj-9b2e511b-9687-4428-9ad0-edb77eb228fd/validations",
+      "method": "POST",
+      "body": {
+        "revision": 7
+      }
+    }
+  ],
+  "measurements": [
+    {
+      "label": "Time mapping declaration scope",
+      "text": "A mapping with an existing identifier replaces it. Studio records the declared relation; its accuracy is never evaluated.",
+      "color": "rgb(101, 117, 141)",
+      "fontSize": "10px",
+      "fontWeight": "400",
+      "threshold": 4.5,
+      "scope": "Selected normal-size rendered text; no overall accessibility certification",
+      "supported": true,
+      "layers": [
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(255, 255, 255)"
+      ],
+      "background": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "compositedForeground": [
+        0.396078431372549,
+        0.4588235294117647,
+        0.5529411764705883,
+        1
+      ],
+      "ratio": 4.6849131598896205,
+      "passed": true,
+      "assumptions": "CSS sRGB colors; alpha composited through explicit backgrounds; no anti-aliasing approximation"
+    }
+  ],
+  "originalsAndSystemBytesUnchanged": true,
+  "clonedResourceBinding": [
+    "bench-cpu"
+  ],
+  "finalMappingAbsent": true,
+  "authoritativeValidation": true,
+  "ownProjectRunSetUnchanged": true,
+  "scope": "Native keyboard declarations only; no clock accuracy or actual resource reservation/execution established"
+}

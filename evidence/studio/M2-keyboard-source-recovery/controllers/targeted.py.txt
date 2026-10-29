@@ -1,0 +1,27 @@
+from pathlib import Path
+import hashlib
+import json
+import os
+import subprocess
+import sys
+import time
+
+root=Path.cwd()
+out=root/'.studio-local/recovery-accessibility'
+cache=root.parent/'.xverse-studio-cache'
+env=dict(os.environ,PATH=str(cache/'node-v24.22.1-linux-x64/bin')+os.pathsep+os.environ['PATH'],TMPDIR=str(cache/'tmp'),TEMP=str(cache/'tmp'),TMP=str(cache/'tmp'),UV_CACHE_DIR=str(cache/'uv'),npm_config_cache=str(cache/'npm'),PLAYWRIGHT_BROWSERS_PATH=str(cache/'playwright'),PYTEST_DISABLE_PLUGIN_AUTOLOAD='1')
+def hashes():
+    names=subprocess.check_output(['git','ls-files','-z','--','apps','services','scripts','tests','config','pyproject.toml','uv.lock','package.json','package-lock.json'],text=True).split('\0')
+    names+=subprocess.check_output(['git','ls-files','--others','--exclude-standard','-z','--','apps','services','scripts','tests','config'],text=True).split('\0')
+    return {name:hashlib.sha256((root/name).read_bytes()).hexdigest() for name in sorted(set(names)) if name and (root/name).is_file()}
+before=hashes()
+(out/'source-before.json').write_text(json.dumps(before,indent=2)+'\n')
+command=[sys.executable,'-I','scripts/test_browser.py','--grep','recovery accessibility:']
+start=time.monotonic()
+with (out/'successor.log').open('w') as log:
+    result=subprocess.run(command,env=env,stdout=log,stderr=subprocess.STDOUT)
+after=hashes()
+(out/'source-after.json').write_text(json.dumps(after,indent=2)+'\n')
+summary={'baseCandidate':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),'command':['.venv/bin/python']+command[1:],'exitCode':result.returncode,'seconds':round(time.monotonic()-start,3),'sourceUnchanged':before==after}
+(out/'summary.json').write_text(json.dumps(summary,indent=2)+'\n')
+print(json.dumps(summary),flush=True)

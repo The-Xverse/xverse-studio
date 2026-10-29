@@ -1,0 +1,126 @@
+
+> xverse-studio-workspace@0.1.0 test:e2e
+> playwright test -c tests/e2e/playwright.config.ts --grep project context:|recovery accessibility:
+
+
+Running 62 tests using 1 worker
+
+(node:2018619) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 tests/e2e/project-context.spec.ts:439:9 › project context: cached run metadata respects Results at 1024x768 (6.8s)
+  ✘   2 tests/e2e/project-context.spec.ts:439:9 › project context: cached run metadata respects Source at 1024x768 (18.4s)
+(node:2018918) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   3 tests/e2e/project-context.spec.ts:439:9 › project context: cached run metadata respects Home at 1024x768 (12.0s)
+  ✓   4 tests/e2e/project-context.spec.ts:573:9 › project context: foreign recovery preserves newer source draft at 1024x768 (12.4s)
+  ✓   5 tests/e2e/project-context.spec.ts:573:9 › project context: foreign recovery preserves newer source save at 1024x768 (12.7s)
+  ✓   6 tests/e2e/project-context.spec.ts:573:9 › project context: foreign recovery preserves newer parameter draft at 1024x768 (12.3s)
+  ✓   7 tests/e2e/project-context.spec.ts:726:9 › project context: obsolete successful load preserves newer source save at 1024x768 (12.1s)
+  ✓   8 tests/e2e/project-context.spec.ts:726:9 › project context: obsolete failed load preserves newer source save at 1024x768 (11.6s)
+  ✓   9 tests/e2e/project-context.spec.ts:808:7 › project context: obsolete creation reply preserves newer source save at 1024x768 (11.5s)
+  ✓  10 tests/e2e/project-context.spec.ts:878:7 › project context: newest creation intent wins over earlier completion at 1024x768 (14.0s)
+  ✓  11 tests/e2e/project-context.spec.ts:990:9 › project context: obsolete startup success preserves Home at 1024x768 (7.1s)
+  ✓  12 tests/e2e/project-context.spec.ts:990:9 › project context: obsolete startup failure preserves Home at 1024x768 (7.3s)
+  ✓  13 tests/e2e/project-context.spec.ts:439:9 › project context: cached run metadata respects Results at 1440x900 (20.6s)
+  ✘  14 tests/e2e/project-context.spec.ts:439:9 › project context: cached run metadata respects Source at 1440x900 (21.5s)
+(node:2020474) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  15 tests/e2e/project-context.spec.ts:439:9 › project context: cached run metadata respects Home at 1440x900 (5.4s)
+
+
+  1) tests/e2e/project-context.spec.ts:439:9 › project context: cached run metadata respects Source at 1024x768
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('tab', { name: 'Results', exact: true })
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('tab', { name: 'Results', exact: true }) with timeout 10000ms
+      - waiting for getByRole('tab', { name: 'Results', exact: true })
+
+
+       8 |
+       9 | async function tabTo(page: Page, target: Locator) {
+    > 10 |   await expect(target).toBeVisible();
+         |                        ^
+      11 |   // A removed error control can leave traversal after the persistent header.
+      12 |   // Native reverse traversal reaches it without walking every recent-project row.
+      13 |   for (const [key, limit] of [
+        at tabTo (<repo>/tests/e2e/project-context.spec.ts:10:24)
+        at activate (<repo>/tests/e2e/project-context.spec.ts:25:9)
+        at <repo>/tests/e2e/project-context.spec.ts:522:19
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/project-context-project-co-8119a-respects-Source-at-1024x768/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/project-context-project-co-8119a-respects-Source-at-1024x768/error-context.md
+
+  2) tests/e2e/project-context.spec.ts:439:9 › project context: cached run metadata respects Source at 1440x900
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('tab', { name: 'Results', exact: true })
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('tab', { name: 'Results', exact: true }) with timeout 10000ms
+      - waiting for getByRole('tab', { name: 'Results', exact: true })
+
+
+       8 |
+       9 | async function tabTo(page: Page, target: Locator) {
+    > 10 |   await expect(target).toBeVisible();
+         |                        ^
+      11 |   // A removed error control can leave traversal after the persistent header.
+      12 |   // Native reverse traversal reaches it without walking every recent-project row.
+      13 |   for (const [key, limit] of [
+        at tabTo (<repo>/tests/e2e/project-context.spec.ts:10:24)
+        at activate (<repo>/tests/e2e/project-context.spec.ts:25:9)
+        at <repo>/tests/e2e/project-context.spec.ts:522:19
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/project-context-project-co-50074-respects-Source-at-1440x900/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/project-context-project-co-50074-respects-Source-at-1440x900/error-context.md
+
+  3) tests/e2e/project-context.spec.ts:439:9 › project context: cached run metadata respects Home at 1440x900
+
+    Test was interrupted.
+
+    Error: apiRequestContext.get: Test ended.
+    Call log:
+      - → GET http://127.0.0.1:37871/api/v1/runs
+        - user-agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.8078.4 Safari/537.36
+        - accept: */*
+        - accept-encoding: gzip,deflate,br
+        - cookie: studio_session=3Oor2j_pUUSLvl8V67SW7A6Qw314zzla3jROY_vHp5Q
+
+
+      38 |   page.request.get(`/api/v1/projects/${pid}`).then((r) => r.json());
+      39 | async function runs(page: Page, pid: string) {
+    > 40 |   return (await page.request.get("/api/v1/runs").then((r) => r.json())).items
+         |                              ^
+      41 |     .filter((r: any) => r.projectId === pid)
+      42 |     .map((r: any) => r.runId)
+      43 |     .sort();
+        at runs (<repo>/tests/e2e/project-context.spec.ts:40:30)
+        at <repo>/tests/e2e/project-context.spec.ts:472:28
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/project-context-project-co-f5d23-a-respects-Home-at-1440x900/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    tests/e2e/project-context.spec.ts:439:9 › project context: cached run metadata respects Source at 1024x768
+    tests/e2e/project-context.spec.ts:439:9 › project context: cached run metadata respects Source at 1440x900
+  1 interrupted
+    tests/e2e/project-context.spec.ts:439:9 › project context: cached run metadata respects Home at 1440x900
+  47 did not run
+  12 passed (3.1m)

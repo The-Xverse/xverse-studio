@@ -1,0 +1,204 @@
+
+> xverse-studio-workspace@0.1.0 test:e2e
+> playwright test -c tests/e2e/playwright.config.ts --grep deployment accessibility: (explicit clone loading|newer readiness)
+
+
+Running 4 tests using 1 worker
+
+(node:1831787) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 tests/e2e/deployment-accessibility.spec.ts:842:9 › deployment accessibility: explicit clone loading at 1024x768 (22.9s)
+(node:1832298) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 tests/e2e/deployment-accessibility.spec.ts:842:9 › deployment accessibility: newer readiness at 1024x768 (4.3s)
+(node:1832432) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  3 tests/e2e/deployment-accessibility.spec.ts:842:9 › deployment accessibility: explicit clone loading at 1440x900 (22.5s)
+(node:1832860) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  4 tests/e2e/deployment-accessibility.spec.ts:842:9 › deployment accessibility: newer readiness at 1440x900 (4.3s)
+
+
+  1) tests/e2e/deployment-accessibility.spec.ts:842:9 › deployment accessibility: explicit clone loading at 1024x768
+
+    Error: expect(received).not.toBe(expected) // Object.is equality
+
+    Expected: not "xdl://org.xverse.studio.process-control/deployment/local-reference"
+
+      856 |           expect(stored.deploymentRef).toBe(clone.variant.ref);
+      857 |           const presented = await page.getByLabel("Deployment variant", { exact: true }).inputValue();
+    > 858 |           expect.soft(presented).not.toBe(oldRef);
+          |                                      ^
+      859 |           await expect.soft(page.getByRole("region", { name: "Bound resources", exact: true })).toHaveCount(0);
+      860 |           await expect.soft(page.getByRole("region", { name: "Time mappings", exact: true })).toHaveCount(0);
+      861 |           await pending.release();
+        at <repo>/tests/e2e/deployment-accessibility.spec.ts:858:38
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  getByRole('region', { name: 'Bound resources', exact: true })
+    Expected: 0
+    Received: 1
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "soft toHaveCount" getByRole('region', { name: 'Bound resources', exact: true }) with timeout 10000ms
+      - waiting for getByRole('region', { name: 'Bound resources', exact: true })
+        24 × locator resolved to 1 element
+           - unexpected value "1"
+
+
+      857 |           const presented = await page.getByLabel("Deployment variant", { exact: true }).inputValue();
+      858 |           expect.soft(presented).not.toBe(oldRef);
+    > 859 |           await expect.soft(page.getByRole("region", { name: "Bound resources", exact: true })).toHaveCount(0);
+          |                                                                                                 ^
+      860 |           await expect.soft(page.getByRole("region", { name: "Time mappings", exact: true })).toHaveCount(0);
+      861 |           await pending.release();
+      862 |           await expect(page.getByLabel("Deployment variant", { exact: true })).toHaveValue(clone.variant.ref);
+        at <repo>/tests/e2e/deployment-accessibility.spec.ts:859:97
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  getByRole('region', { name: 'Time mappings', exact: true })
+    Expected: 0
+    Received: 1
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "soft toHaveCount" getByRole('region', { name: 'Time mappings', exact: true }) with timeout 10000ms
+      - waiting for getByRole('region', { name: 'Time mappings', exact: true })
+        24 × locator resolved to 1 element
+           - unexpected value "1"
+
+
+      858 |           expect.soft(presented).not.toBe(oldRef);
+      859 |           await expect.soft(page.getByRole("region", { name: "Bound resources", exact: true })).toHaveCount(0);
+    > 860 |           await expect.soft(page.getByRole("region", { name: "Time mappings", exact: true })).toHaveCount(0);
+          |                                                                                               ^
+      861 |           await pending.release();
+      862 |           await expect(page.getByLabel("Deployment variant", { exact: true })).toHaveValue(clone.variant.ref);
+      863 |           await testInfo.attach("deployment-review-countercheck.json", { body: JSON.stringify({ mode, viewport, stored, presentedWhileLoading: presented, original: oldRef, expected: clone.variant.ref, scope: "Held real variant-list GET; explicit selection must not expose the previous variant's authoring forms" }), contentType: "application/json" });
+        at <repo>/tests/e2e/deployment-accessibility.spec.ts:860:95
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/deployment-accessibility-d-910c5-t-clone-loading-at-1024x768/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/deployment-accessibility-d-910c5-t-clone-loading-at-1024x768/error-context.md
+
+  2) tests/e2e/deployment-accessibility.spec.ts:842:9 › deployment accessibility: newer readiness at 1024x768
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: "ready"
+    Received: "blocked"
+
+      875 |           const readiness = page.waitForResponse((r) => new URL(r.url()).pathname === `/api/v1/projects/${id}/preflights` && r.request().method() === "POST");
+      876 |           await activate(page, page.getByRole("button", { name: "Preflight & run", exact: true }));
+    > 877 |           const report = await (await readiness).json(); expect(report.status).toBe("ready");
+          |                                                                                ^
+      878 |           const dialog = page.getByRole("dialog"); await expect(dialog).toBeVisible();
+      879 |           await pending.release(); await expect(page.locator(".notice.busy")).toHaveCount(0);
+      880 |           await expect.soft(dialog).toBeVisible();
+        at <repo>/tests/e2e/deployment-accessibility.spec.ts:877:80
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/deployment-accessibility-d-9d91d-newer-readiness-at-1024x768/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/deployment-accessibility-d-9d91d-newer-readiness-at-1024x768/error-context.md
+
+  3) tests/e2e/deployment-accessibility.spec.ts:842:9 › deployment accessibility: explicit clone loading at 1440x900
+
+    Error: expect(received).not.toBe(expected) // Object.is equality
+
+    Expected: not "xdl://org.xverse.studio.process-control/deployment/local-reference"
+
+      856 |           expect(stored.deploymentRef).toBe(clone.variant.ref);
+      857 |           const presented = await page.getByLabel("Deployment variant", { exact: true }).inputValue();
+    > 858 |           expect.soft(presented).not.toBe(oldRef);
+          |                                      ^
+      859 |           await expect.soft(page.getByRole("region", { name: "Bound resources", exact: true })).toHaveCount(0);
+      860 |           await expect.soft(page.getByRole("region", { name: "Time mappings", exact: true })).toHaveCount(0);
+      861 |           await pending.release();
+        at <repo>/tests/e2e/deployment-accessibility.spec.ts:858:38
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  getByRole('region', { name: 'Bound resources', exact: true })
+    Expected: 0
+    Received: 1
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "soft toHaveCount" getByRole('region', { name: 'Bound resources', exact: true }) with timeout 10000ms
+      - waiting for getByRole('region', { name: 'Bound resources', exact: true })
+        24 × locator resolved to 1 element
+           - unexpected value "1"
+
+
+      857 |           const presented = await page.getByLabel("Deployment variant", { exact: true }).inputValue();
+      858 |           expect.soft(presented).not.toBe(oldRef);
+    > 859 |           await expect.soft(page.getByRole("region", { name: "Bound resources", exact: true })).toHaveCount(0);
+          |                                                                                                 ^
+      860 |           await expect.soft(page.getByRole("region", { name: "Time mappings", exact: true })).toHaveCount(0);
+      861 |           await pending.release();
+      862 |           await expect(page.getByLabel("Deployment variant", { exact: true })).toHaveValue(clone.variant.ref);
+        at <repo>/tests/e2e/deployment-accessibility.spec.ts:859:97
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  getByRole('region', { name: 'Time mappings', exact: true })
+    Expected: 0
+    Received: 1
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "soft toHaveCount" getByRole('region', { name: 'Time mappings', exact: true }) with timeout 10000ms
+      - waiting for getByRole('region', { name: 'Time mappings', exact: true })
+        24 × locator resolved to 1 element
+           - unexpected value "1"
+
+
+      858 |           expect.soft(presented).not.toBe(oldRef);
+      859 |           await expect.soft(page.getByRole("region", { name: "Bound resources", exact: true })).toHaveCount(0);
+    > 860 |           await expect.soft(page.getByRole("region", { name: "Time mappings", exact: true })).toHaveCount(0);
+          |                                                                                               ^
+      861 |           await pending.release();
+      862 |           await expect(page.getByLabel("Deployment variant", { exact: true })).toHaveValue(clone.variant.ref);
+      863 |           await testInfo.attach("deployment-review-countercheck.json", { body: JSON.stringify({ mode, viewport, stored, presentedWhileLoading: presented, original: oldRef, expected: clone.variant.ref, scope: "Held real variant-list GET; explicit selection must not expose the previous variant's authoring forms" }), contentType: "application/json" });
+        at <repo>/tests/e2e/deployment-accessibility.spec.ts:860:95
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/deployment-accessibility-d-05636-t-clone-loading-at-1440x900/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/deployment-accessibility-d-05636-t-clone-loading-at-1440x900/error-context.md
+
+  4) tests/e2e/deployment-accessibility.spec.ts:842:9 › deployment accessibility: newer readiness at 1440x900
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: "ready"
+    Received: "blocked"
+
+      875 |           const readiness = page.waitForResponse((r) => new URL(r.url()).pathname === `/api/v1/projects/${id}/preflights` && r.request().method() === "POST");
+      876 |           await activate(page, page.getByRole("button", { name: "Preflight & run", exact: true }));
+    > 877 |           const report = await (await readiness).json(); expect(report.status).toBe("ready");
+          |                                                                                ^
+      878 |           const dialog = page.getByRole("dialog"); await expect(dialog).toBeVisible();
+      879 |           await pending.release(); await expect(page.locator(".notice.busy")).toHaveCount(0);
+      880 |           await expect.soft(dialog).toBeVisible();
+        at <repo>/tests/e2e/deployment-accessibility.spec.ts:877:80
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/deployment-accessibility-d-d5004-newer-readiness-at-1440x900/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/deployment-accessibility-d-d5004-newer-readiness-at-1440x900/error-context.md
+
+  4 failed
+    tests/e2e/deployment-accessibility.spec.ts:842:9 › deployment accessibility: explicit clone loading at 1024x768
+    tests/e2e/deployment-accessibility.spec.ts:842:9 › deployment accessibility: newer readiness at 1024x768
+    tests/e2e/deployment-accessibility.spec.ts:842:9 › deployment accessibility: explicit clone loading at 1440x900
+    tests/e2e/deployment-accessibility.spec.ts:842:9 › deployment accessibility: newer readiness at 1440x900

@@ -1,0 +1,29 @@
+from pathlib import Path
+import json
+import shutil
+import subprocess
+import sys
+
+root = Path.cwd()
+frozen = None
+for name, expected in [('targeted', 102), ('full', 339), ('performance', 2)]:
+    out = root / f'.studio-local/physical-placements/final/{name}'
+    print(f'START {name}', flush=True)
+    result = subprocess.run([sys.executable, '-I', str(out/'verify.py')], cwd=root)
+    shutil.copy2(root/'test-results/browser-report.json', out/'browser-report.json')
+    shutil.copytree(root/'test-results/browser', out/'browser-output', dirs_exist_ok=True)
+    summary = json.loads((out/'summary.json').read_text())
+    report = json.loads((out/'browser-report.json').read_text())
+    before = json.loads((out/'source-before.json').read_text())
+    after = json.loads((out/'source-after.json').read_text())
+    if result.returncode:
+        raise SystemExit(result.returncode)
+    assert summary['exitCode'] == 0 and summary['sourceUnchanged']
+    assert before == after
+    if frozen is None:
+        frozen = before
+    assert frozen == before, f'Input drift before {name}'
+    assert report['stats']['expected'] == expected, report['stats']
+    assert not any(report['stats'][k] for k in ['unexpected', 'skipped', 'flaky'])
+    print(f'PASS {name}: {expected}, {len(before)} frozen inputs', flush=True)
+print('All final physical-placement browser gates passed', flush=True)

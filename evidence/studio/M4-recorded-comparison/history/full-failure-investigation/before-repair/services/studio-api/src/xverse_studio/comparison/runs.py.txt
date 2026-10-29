@@ -1,0 +1,240 @@
+"""Frozen configuration and recorded evidence comparison; never executes a workload."""
+from copy import deepcopy
+import json
+
+from .observations import ComparisonError, MAX_FIELDS, number, text, window
+
+CONFIGURATION_FIELDS = ('semanticDigest', 'planDigest', 'model', 'deployment', 'scenario', 'parameters',
+                        'artifactIdentities', 'profileIdentities', 'providerIdentity', 'capabilityDigest',
+                        'clockDefinitions', 'compiler')
+MAX_VALUE_BYTES = 65536
+
+
+def _bounded(value):
+    if value is None:
+        return None
+    pending = [(value, 0)]
+    nodes = 0
+    while pending:
+        item, depth = pending.pop()
+        nodes += 1
+        if nodes > 8192 or depth > 20:
+            return None
+        if item is None or isinstance(item, bool):
+            continue
+        if isinstance(item, (int, float)):
+            if not number(item): return None
+        elif isinstance(item, str):
+            if len(item) > MAX_VALUE_BYTES: return None
+        elif isinstance(item, (list, dict)):
+            if len(item) > 2048: return None
+            if isinstance(item, dict):
+                if any(not isinstance(k, str) or len(k) > 4096 for k in item): return None
+                pending.extend((v, depth + 1) for v in item.values())
+            else:
+                pending.extend((v, depth + 1) for v in item)
+        else:
+            return None
+    try:
+        if len(json.dumps(value, allow_nan=False).encode()) <= MAX_VALUE_BYTES:
+            return deepcopy(value)
+    except (TypeError, ValueError, RecursionError):
+        pass
+    return None
+
+
+def _same(left, right):
+    # JSON booleans are distinct from numbers; integral numeric encodings agree.
+    if isinstance(left, bool) or isinstance(right, bool):
+        return type(left) is type(right) and left == right
+    if isinstance(left, dict) and isinstance(right, dict):
+        return left.keys() == right.keys() and all(_same(left[k], right[k]) for k in left)
+    if isinstance(left, list) and isinstance(right, list):
+        return len(left) == len(right) and all(_same(x, y) for x, y in zip(left, right))
+    return left == right
+
+
+def _configuration(snapshot):
+    plan = snapshot.get('plan')
+    plan = plan if isinstance(plan, dict) else {}
+    provenance = plan.get('provenance')
+    resources = provenance.get('resources') if isinstance(provenance, dict) else None
+    resources = resources if isinstance(resources, list) and len(resources) <= 256 and all(isinstance(r, dict) for r in resources) else None
+    selection = snapshot.get('selection')
+    selection = selection if isinstance(selection, dict) else {}
+    bindings = plan.get('bindings')
+    bindings = bindings if isinstance(bindings, list) and len(bindings) <= 256 and all(isinstance(b, dict) for b in bindings) else None
+    def selected(kind, ref):
+        chosen = [r for r in resources or [] if r.get('kind') == kind]
+        if not text(selection.get(ref)) or not chosen or any(not r.get('semanticDigest') for r in chosen):
+            return None
+        return {'ref': selection[ref], 'resources': chosen}
+    model = selected('System', 'systemRef')
+    if model is not None:
+        model['resources'] += [r for r in resources if r.get('kind') == 'Component']
+    deployment = selected('Deployment', 'deploymentRef')
+    if deployment is not None:
+        deployment = {**deployment, 'bindings': bindings} if bindings is not None else None
+    artifacts = None
+    if bindings is not None and all(isinstance(b.get('artifactRefs'), list) and all(
+        isinstance(a, dict) and text(a.get('id')) and text(a.get('version')) and text(a.get('digest')) for a in b['artifactRefs']) for b in bindings):
+        artifacts = [{'bindingId': b.get('id'), 'artifactRefs': b['artifactRefs']} for b in bindings]
+    profiles = None
+    if resources is not None and isinstance(snapshot.get('profileLocks'), list) and 'profile' in plan:
+        profiles = {'locks': snapshot['profileLocks'], 'resources': [r for r in resources if r.get('kind') == 'Profile'], 'compiledProfile': plan['profile']}
+    provider = snapshot.get('providerIdentity')
+    if not isinstance(provider, dict) or not all(text(provider.get(k)) for k in ('providerId', 'providerVersion', 'contractVersion', 'implementationDigest')):
+        provider = None
+    clocks = None
+    if isinstance(plan.get('timeDomains'), list) and 0 < len(plan['timeDomains']) <= 32 and isinstance(plan.get('timeMappings'), list) and len(plan['timeMappings']) <= 64 and all(isinstance(d, dict) and _clock(snapshot, d.get('id')) is not None for d in plan['timeDomains']):
+        clocks = {'domains': plan['timeDomains'], 'mappings': plan['timeMappings']}
+    values = {
+        'semanticDigest': snapshot.get('semanticDigest'), 'planDigest': snapshot.get('planDigest'),
+        'model': model, 'deployment': deployment, 'scenario': selected('Scenario', 'scenarioRef'),
+        'parameters': snapshot.get('configuration'), 'artifactIdentities': artifacts, 'profileIdentities': profiles,
+        'providerIdentity': provider, 'capabilityDigest': snapshot.get('capabilityDigest'), 'clockDefinitions': clocks,
+        'compiler': snapshot.get('compiler'),
+    }
+    for key in ('semanticDigest', 'planDigest', 'capabilityDigest'):
+        if not text(values[key]): values[key] = None
+    if not isinstance(values['parameters'], dict): values['parameters'] = None
+    if not isinstance(values['compiler'], dict) or not values['compiler']: values['compiler'] = None
+    return {key: _bounded(values[key]) for key in CONFIGURATION_FIELDS}
+
+
+def _identity(run):
+    snapshot = run.get('snapshot', {})
+    evidence = run.get('evidence', {})
+    return {
+        'runId': run.get('runId'), 'snapshotId': snapshot.get('snapshotId'),
+        'snapshotDigest': snapshot.get('snapshotDigest'), 'projectId': snapshot.get('projectId'), 'revision': snapshot.get('revision'),
+        'state': run.get('state'), 'cleanup': run.get('cleanup'), 'snapshotIntegrity': run.get('snapshotIntegrity', 'unknown'),
+        'evidenceIntegrity': evidence.get('integrity', 'unknown'), 'evidenceStatus': evidence.get('status', 'unknown'),
+        'effectiveInputsMatch': run.get('effectiveInputsMatch') is True,
+    }
+
+
+def _clock(snapshot, ref):
+    plan = snapshot.get('plan')
+    domains = plan.get('timeDomains') if isinstance(plan, dict) else None
+    if not isinstance(domains, list): return None
+    matching = [d for d in domains if isinstance(d, dict) and d.get('id') == ref]
+    required = ('id', 'clockClass', 'canonicalUnit', 'epoch', 'rate', 'monotonic')
+    if (len(matching) != 1 or any(not text(matching[0].get(k)) for k in required[:-1])
+            or not isinstance(matching[0].get('monotonic'), bool)): return None
+    return {k: matching[0][k] for k in required}
+
+
+def _observation(value):
+    if value is None: return {'available': False}
+    coverage = value.get('coverage')
+    coverage = coverage if isinstance(coverage, dict) else {}
+    known_window = window(coverage)
+    summary = value.get('summary')
+    summary = _bounded(summary) if isinstance(summary, dict) else None
+    gap_count = coverage.get('gapCount')
+    if not isinstance(gap_count, int) or isinstance(gap_count, bool) or gap_count < 0:
+        gap_count = len(coverage['gaps']) if isinstance(coverage.get('gaps'), list) else None
+    return {'available': True, 'unit': value.get('unit'), 'quantity': value.get('quantity'),
+            'unitDefinitionDigest': value.get('unitDefinitionDigest'), 'clockDomainRef': value.get('clockDomainRef'),
+            'sourceTime': _bounded(value.get('sourceTime')),
+            'coverage': {'verified': coverage.get('verified') is True, 'complete': coverage.get('complete') is True,
+                         'startTick': str(known_window[0]) if known_window else None, 'endTick': str(known_window[1]) if known_window else None,
+                         'gapCount': gap_count},
+            'summary': summary or {'status': 'unavailable'}}
+
+
+def compare_runs(left: dict, right: dict) -> dict:
+    """Compare known frozen facts and original windows without interpolation or verdict."""
+    for run in (left, right):
+        if not isinstance(run, dict) or not isinstance(run.get('snapshot', {}), dict) or not isinstance(run.get('evidence', {}), dict):
+            raise ComparisonError('INVALID_COMPARISON')
+    result = {'comparisonVersion': '1.0', 'leftRunId': left.get('runId'), 'rightRunId': right.get('runId'),
+              'left': _identity(left), 'right': _identity(right), 'mode': 'recorded_observation_comparison',
+              'rerunRequiresFreshAdmission': True, 'configuration': [], 'differences': [], 'compatible': True, 'diagnostics': [], 'fields': [],
+              'limitations': ['Recorded summaries use original source clocks and complete windows; no interpolation or cross-clock mapping is applied.',
+                              'Configuration differences remain visible; compatibility is not a pass verdict or a claim of deterministic replay.',
+                              'Fresh execution requires backend admission. Provider, hardware and reproducibility limits remain separate.',
+                              'Each side is an independently verified recorded read; no atomic live observation is claimed.']}
+    def block(code):
+        result['compatible'] = False
+        if code not in result['diagnostics']: result['diagnostics'].append(code)
+    a, b = left.get('snapshot', {}), right.get('snapshot', {})
+    ca, cb = _configuration(a), _configuration(b)
+    for key in CONFIGURATION_FIELDS:
+        x, y = ca[key], cb[key]
+        status = 'unavailable' if x is None or y is None else 'same' if _same(x, y) else 'different'
+        result['configuration'].append({'field': key, 'status': status, 'leftAvailable': x is not None, 'rightAvailable': y is not None, 'left': x, 'right': y})
+        if status == 'unavailable': block('CONFIGURATION_PROVENANCE_UNAVAILABLE')
+        elif status == 'different': result['differences'].append({'field': key, 'left': deepcopy(x), 'right': deepcopy(y)})
+    for run in (left, right):
+        evidence = run.get('evidence', {})
+        if run.get('snapshotIntegrity') != 'valid': block('SNAPSHOT_INTEGRITY_UNPROVEN')
+        if run.get('effectiveInputsMatch') is not True: block('EFFECTIVE_INPUTS_UNVERIFIED')
+        if evidence.get('integrity') != 'valid': block('EVIDENCE_INTEGRITY_UNPROVEN')
+        if evidence.get('status') != 'complete': block('EVIDENCE_INCOMPLETE')
+        for code in run.get('projectionDiagnostics', []): block(code)
+    observations = []
+    for run in (left, right):
+        values = run.get('observations', [])
+        if not isinstance(values, list) or len(values) > MAX_FIELDS: raise ComparisonError('COMPARISON_LIMIT')
+        if any(not isinstance(v, dict) for v in values): raise ComparisonError('INVALID_COMPARISON')
+        by_key = {}
+        for value in values:
+            key = tuple(value.get(k) if text(value.get(k)) else None for k in ('observerRef', 'field'))
+            if not all(key): block('OBSERVER_IDENTITY_UNAVAILABLE')
+            if key in by_key: block('AMBIGUOUS_OBSERVER')
+            by_key[key] = value
+        observations.append(by_key)
+    by_a, by_b = observations
+    if not by_a or by_a.keys() != by_b.keys(): block('OBSERVATIONS_UNAVAILABLE')
+    global_reasons = list(result['diagnostics'])
+    for key in sorted(by_a.keys() | by_b.keys(), key=lambda pair: tuple(str(v) for v in pair)):
+        x, y = by_a.get(key), by_b.get(key); reasons = list(global_reasons)
+        if x is None or y is None:
+            reasons.append('OBSERVATIONS_UNAVAILABLE')
+        else:
+            if not all(key): reasons.append('OBSERVER_IDENTITY_UNAVAILABLE')
+            if any(not text(x.get(k)) or x.get(k) != y.get(k) for k in ('unit', 'quantity', 'unitDefinitionDigest')):
+                reasons.append('QUANTITY_INCOMPATIBLE')
+            clock_x, clock_y = _clock(a, x.get('clockDomainRef')), _clock(b, y.get('clockDomainRef'))
+            if not text(x.get('clockDomainRef')) or x.get('clockDomainRef') != y.get('clockDomainRef'):
+                reasons.append('CLOCK_INCOMPATIBLE')
+            if clock_x is None or clock_y is None:
+                reasons.append('CLOCK_DEFINITION_UNAVAILABLE')
+            elif clock_x != clock_y:
+                reasons.append('CLOCK_DEFINITION_INCOMPATIBLE')
+            elif clock_x['clockClass'] != 'simulation' or clock_x['monotonic'] is not True:
+                reasons.append('CLOCK_ALIGNMENT_UNPROVEN')
+            if (isinstance(x.get('sourceTime'), dict) and isinstance(y.get('sourceTime'), dict)
+                    and x['sourceTime'].get('resolution') != y['sourceTime'].get('resolution')):
+                reasons.append('CLOCK_RESOLUTION_INCOMPATIBLE')
+            for value in (x, y):
+                timing = value.get('sourceTime')
+                if (not isinstance(timing, dict) or not text(timing.get('resolution'))
+                        or not number(timing.get('uncertainty')) or timing['uncertainty'] != 0):
+                    reasons.append('CLOCK_ALIGNMENT_UNPROVEN')
+                if value.get('identityVerified') is not True: reasons.append('OBSERVATION_IDENTITY_UNVERIFIED')
+                if value.get('metadataConsistent') is not True: reasons.append('OBSERVATION_METADATA_INCONSISTENT')
+                coverage = value.get('coverage')
+                if (not isinstance(coverage, dict) or coverage.get('verified') is not True
+                        or coverage.get('complete') is not True or coverage.get('gaps') != []):
+                    reasons.append('OBSERVATION_COVERAGE_INCOMPLETE')
+                summary = value.get('summary')
+                if (not isinstance(summary, dict) or summary.get('status') != 'available'
+                        or not isinstance(summary.get('sampleCount'), int) or isinstance(summary.get('sampleCount'), bool)
+                        or not 0 < summary['sampleCount'] <= 100000
+                        or not all(number(summary.get(k)) for k in ('minimum', 'maximum', 'lastValue'))):
+                    reasons.append('OBSERVATION_VALUES_UNAVAILABLE')
+                elif (window(coverage) is None or window({'startTick': summary.get('firstTick'), 'endTick': summary.get('lastTick')}) is None
+                      or not window(coverage)[0] <= window({'startTick': summary['firstTick'], 'endTick': summary['lastTick']})[0]
+                      <= window({'startTick': summary['firstTick'], 'endTick': summary['lastTick']})[1] <= window(coverage)[1]):
+                    reasons.append('OBSERVATION_WINDOW_MISMATCH')
+            windows = [window(v.get('coverage')) for v in (x, y)]
+            if any(w is None for w in windows): reasons.append('OBSERVATION_WINDOW_UNAVAILABLE')
+            elif windows[0] != windows[1]: reasons.append('OBSERVATION_WINDOW_INCOMPATIBLE')
+        reasons = list(dict.fromkeys(reasons))
+        for code in reasons: block(code)
+        result['fields'].append({'observerRef': key[0], 'field': key[1], 'compatible': not reasons,
+                                 'reasons': reasons, 'left': _observation(x), 'right': _observation(y)})
+    return result

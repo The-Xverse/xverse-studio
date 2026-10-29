@@ -1,0 +1,72 @@
+{
+  "scope": "Declarative test fragments inserted into the complete owned XDL source set; not a standalone executable project.",
+  "profile": {
+    "apiVersion": "xverse.io/xdl/v1alpha1",
+    "kind": "Profile",
+    "metadata": {
+      "namespace": "org.xverse.studio.reference",
+      "name": "reference-faults",
+      "version": "1.0.0",
+      "description": "Studio-owned reference fixture.",
+      "provenance": {
+        "source": "urn:xverse:studio:reference",
+        "revision": "1.0.0",
+        "maturity": "prototype",
+        "limitations": [
+          "Owned executable reference only; no external simulator, device or scientific fidelity claim."
+        ]
+      }
+    },
+    "spec": {
+      "extensionNamespace": "io.xverse.studio.reference-faults",
+      "compatibleApiVersions": [
+        "xverse.io/xdl/v1alpha1"
+      ],
+      "schemaRef": "https://schemas.xverse.io/studio/reference-faults/1.0/schema.json",
+      "documentationRef": "urn:xverse:studio:reference-faults:1.0",
+      "conflictPolicy": "reject"
+    }
+  },
+  "fault": {
+    "id": "hold-one",
+    "targetRef": {
+      "apiVersion": "xverse.io/xdl/v1alpha1",
+      "kind": "System",
+      "namespace": "org.xverse.studio.reference",
+      "name": "reference-loop",
+      "element": "state-flow"
+    },
+    "faultKind": "measurement-hold",
+    "activation": "urn:xverse:studio:reference-faults:1.0:activation",
+    "recovery": "urn:xverse:studio:reference-faults:1.0:recovery",
+    "maturity": "prototype",
+    "extensions": {
+      "io.xverse.studio.reference-faults": {
+        "version": "1.0",
+        "observerRef": "state-observer",
+        "field": "measured"
+      },
+      "io.xverse.experiment": {
+        "schemaVersion": "0.1",
+        "kind": "fault-intent",
+        "target": {
+          "apiVersion": "xverse.io/xdl/v1alpha1",
+          "kind": "Scenario",
+          "namespace": "org.xverse.studio.reference",
+          "name": "reference-response",
+          "element": "hold-one"
+        },
+        "trigger": {
+          "kind": "time",
+          "at": 1000000,
+          "unit": "us"
+        },
+        "duration": {
+          "value": 1000000,
+          "unit": "us"
+        },
+        "timeDomainId": "simulation-time"
+      }
+    }
+  }
+}

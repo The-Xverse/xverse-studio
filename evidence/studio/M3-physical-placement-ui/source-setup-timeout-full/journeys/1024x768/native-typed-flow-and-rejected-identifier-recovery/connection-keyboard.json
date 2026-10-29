@@ -1,0 +1,143 @@
+{
+  "viewport": {
+    "width": 1024,
+    "height": 768
+  },
+  "platform": "linux",
+  "browser": "156.0.8078.4",
+  "nativeValidBefore": false,
+  "browserRefusal": null,
+  "direct": {
+    "status": 422,
+    "body": {
+      "code": "INVALID_EDIT",
+      "message": "Choose a valid stable flow ID.",
+      "requestId": "req-8036a39b-5982-4f19-aeea-dd0bab677514",
+      "retryable": false
+    }
+  },
+  "initialRevision": 2,
+  "savedRevision": 3,
+  "flow": {
+    "id": "command-flow",
+    "sourceEndpointId": "controller-out",
+    "destinationEndpointIds": [
+      "plant-in"
+    ],
+    "interfaceId": "command",
+    "deliveryIntent": "ordered",
+    "timeDomainId": "simulation-time"
+  },
+  "completeFlowCollectionPreserved": true,
+  "identitiesPreserved": true,
+  "definitionsAndOtherDocumentsUnchanged": true,
+  "authoritativeValidation": true,
+  "projectRunSetUnchanged": true,
+  "measurements": [
+    {
+      "label": "Connection target guidance",
+      "text": "1 compatible destination(s); incompatible ones are listed with their reason.",
+      "color": "rgb(101, 117, 141)",
+      "fontSize": "11px",
+      "fontWeight": "400",
+      "threshold": 4.5,
+      "scope": "Selected normal-size rendered text; no overall accessibility certification",
+      "supported": true,
+      "layers": [
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(255, 255, 255)"
+      ],
+      "background": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "compositedForeground": [
+        0.396078431372549,
+        0.4588235294117647,
+        0.5529411764705883,
+        1
+      ],
+      "ratio": 4.6849131598896205,
+      "passed": true,
+      "assumptions": "CSS sRGB colors; alpha composited through explicit backgrounds; no anti-aliasing approximation"
+    },
+    {
+      "label": "Connection identifier guidance",
+      "text": "Start with a lowercase letter; use lowercase letters and digits separated by single hyphens.",
+      "color": "rgb(101, 117, 141)",
+      "fontSize": "11px",
+      "fontWeight": "400",
+      "threshold": 4.5,
+      "scope": "Selected normal-size rendered text; no overall accessibility certification",
+      "supported": true,
+      "layers": [
+        "rgba(0, 0, 0, 0)",
+        "rgba(0, 0, 0, 0)",
+        "rgb(255, 255, 255)"
+      ],
+      "background": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "compositedForeground": [
+        0.396078431372549,
+        0.4588235294117647,
+        0.5529411764705883,
+        1
+      ],
+      "ratio": 4.6849131598896205,
+      "passed": true,
+      "assumptions": "CSS sRGB colors; alpha composited through explicit backgrounds; no anti-aliasing approximation"
+    }
+  ],
+  "writes": [
+    {
+      "path": "/api/v1/projects/prj-be38af14-486b-4641-99f6-568ff6d928a5/edits",
+      "body": {
+        "baseRevision": 2,
+        "edits": [
+          {
+            "kind": "connect_endpoints",
+            "flowId": "Bad_ID",
+            "sourceEndpointId": "controller-out",
+            "destinationEndpointIds": [
+              "plant-in"
+            ],
+            "interfaceId": "command",
+            "timeDomainId": "simulation-time"
+          }
+        ]
+      }
+    },
+    {
+      "path": "/api/v1/projects/prj-be38af14-486b-4641-99f6-568ff6d928a5/edits",
+      "body": {
+        "baseRevision": 2,
+        "edits": [
+          {
+            "kind": "connect_endpoints",
+            "flowId": "command-flow",
+            "sourceEndpointId": "controller-out",
+            "destinationEndpointIds": [
+              "plant-in"
+            ],
+            "interfaceId": "command",
+            "timeDomainId": "simulation-time"
+          }
+        ]
+      }
+    },
+    {
+      "path": "/api/v1/projects/prj-be38af14-486b-4641-99f6-568ff6d928a5/validations",
+      "body": {
+        "revision": 3
+      }
+    }
+  ],
+  "scope": "Native keyboard authored connection; explicit direct API rejection; no routing/traffic/native XCOM or provider execution claim"
+}

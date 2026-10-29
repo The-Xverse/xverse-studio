@@ -1,0 +1,15 @@
+from pathlib import Path
+import hashlib,json,os,subprocess,sys,time
+root=Path.cwd();base=root/'.studio-local/comparison-workflow';out=base/sys.argv[1];out.mkdir(exist_ok=False)
+paths=subprocess.check_output(['git','ls-files','--cached','--others','--exclude-standard'],text=True).splitlines()
+def inputs():return {n:hashlib.sha256((root/n).read_bytes()).hexdigest() for n in sorted(paths) if (root/n).is_file() and (n.startswith(('services/','apps/','tests/','scripts/','packages/','config/')) or n in ['pyproject.toml','uv.lock','package.json','package-lock.json','docs/architecture/ADR-0021-recorded-comparison.md'])}
+before=inputs();(out/'source-before.json').write_text(json.dumps(before,indent=2)+'\n')
+command=[sys.executable,'-I','-m','pytest',*sys.argv[2:],'-q','--tb=short','--junitxml='+str(out/'junit.xml')]
+env=dict(os.environ,PYTEST_DISABLE_PLUGIN_AUTOLOAD='1',TMPDIR=str(root.parent/'.xverse-studio-cache/tmp'));env.pop('PYTHONPATH',None)
+t=time.monotonic()
+with (out/'pytest.log').open('w') as log:r=subprocess.run(command,env=env,stdout=log,stderr=subprocess.STDOUT)
+after=inputs();(out/'source-after.json').write_text(json.dumps(after,indent=2)+'\n')
+s={'command':command,'exitCode':r.returncode,'seconds':round(time.monotonic()-t,3),'sourceUnchanged':before==after,'baseCandidate':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()}
+(out/'summary.json').write_text(json.dumps(s,indent=2)+'\n');print(json.dumps(s),flush=True)
+print((out/'pytest.log').read_text()[-1800:],flush=True)
+raise SystemExit(r.returncode or int(before!=after))

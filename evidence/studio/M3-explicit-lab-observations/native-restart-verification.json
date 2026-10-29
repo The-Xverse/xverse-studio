@@ -1,0 +1,142 @@
+{
+  "observedAt": "2026-10-28T12:03:04.061992+00:00",
+  "outcome": "passed",
+  "events": [
+    {
+      "kind": "owned-sigkill-after-fixture-contact-before-ack",
+      "process": {
+        "pid": 2302664,
+        "parent": 2302663,
+        "birthTicks": "24164114",
+        "argv": [
+          "<repo>/.venv/bin/python",
+          "-I",
+          "<repo>/.studio-local/lab-probe-foundation/native-host.py",
+          "--data",
+          "<repo>/.studio-local/lab-probe-foundation/native-restart/Owned observation Ω",
+          "--mode",
+          "blocked"
+        ]
+      },
+      "committedOperation": {
+        "assetId": "native-observation",
+        "bindingDigest": "sha256:85f5da174d7ea2c9c61d3d02f99d9f82d4c623771eef4b51949c09f32300c50f",
+        "contactedResources": [
+          "owned-json-fixture"
+        ],
+        "createdAt": 1793188982.1490593,
+        "deadline": 1793188987.1490593,
+        "evidenceScope": "fixture",
+        "identityDigest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "kind": "lab_probe",
+        "operationId": "op-edd87885-25e0-4c49-a013-31849490a5ab",
+        "principal": "local-operator",
+        "providerId": "native-fixture",
+        "result": null,
+        "route": "POST /assets/native-observation/probes",
+        "scope": "observe",
+        "status": "delegated"
+      },
+      "committedKeyMapping": {
+        "operationId": "op-edd87885-25e0-4c49-a013-31849490a5ab"
+      },
+      "response": {
+        "transportFailure": "RemoteProtocolError"
+      },
+      "exitCode": -9
+    },
+    {
+      "kind": "restart-never-replays-original-new-explicit-request-is-distinct",
+      "original": {
+        "operationId": "op-edd87885-25e0-4c49-a013-31849490a5ab",
+        "kind": "lab_probe",
+        "principal": "local-operator",
+        "assetId": "native-observation",
+        "providerId": "native-fixture",
+        "scope": "observe",
+        "bindingDigest": "sha256:85f5da174d7ea2c9c61d3d02f99d9f82d4c623771eef4b51949c09f32300c50f",
+        "identityDigest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "evidenceScope": "fixture",
+        "createdAt": 1793188982.1490593,
+        "deadline": 1793188987.1490593,
+        "status": "unknown",
+        "result": null,
+        "code": "PROBE_INTERRUPTED",
+        "runtimeAdmission": "unavailable",
+        "physicalCommands": []
+      },
+      "new": {
+        "operationId": "op-97990fc1-33a3-40fb-83d3-246d3e11738a",
+        "kind": "lab_probe",
+        "principal": "local-operator",
+        "assetId": "native-observation",
+        "providerId": "native-fixture",
+        "scope": "observe",
+        "bindingDigest": "sha256:85f5da174d7ea2c9c61d3d02f99d9f82d4c623771eef4b51949c09f32300c50f",
+        "identityDigest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "evidenceScope": "fixture",
+        "createdAt": 1793188982.8603964,
+        "deadline": 1793188987.8603964,
+        "status": "completed",
+        "result": {
+          "status": "observed",
+          "identityDigest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "contactedResources": [
+            "owned-json-fixture"
+          ],
+          "sourceTime": null,
+          "metadata": {
+            "firmwareVersion": null,
+            "artifactRevision": null
+          },
+          "diagnostics": [],
+          "receivedAt": 1793188982.9483185
+        },
+        "runtimeAdmission": "unavailable",
+        "physicalCommands": []
+      },
+      "fixtureContacts": 2
+    },
+    {
+      "kind": "owned-normal-stop",
+      "process": {
+        "pid": 2302675,
+        "parent": 2302663,
+        "birthTicks": "24164177",
+        "argv": [
+          "<repo>/.venv/bin/python",
+          "-I",
+          "<repo>/.studio-local/lab-probe-foundation/native-host.py",
+          "--data",
+          "<repo>/.studio-local/lab-probe-foundation/native-restart/Owned observation Ω",
+          "--mode",
+          "normal"
+        ]
+      },
+      "exitCode": -15
+    },
+    {
+      "kind": "owned-normal-stop",
+      "process": {
+        "pid": 2302681,
+        "parent": 2302663,
+        "birthTicks": "24164279",
+        "argv": [
+          "<repo>/.venv/bin/python",
+          "-I",
+          "<repo>/.studio-local/lab-probe-foundation/native-host.py",
+          "--data",
+          "<repo>/.studio-local/lab-probe-foundation/native-restart/Owned observation Ω",
+          "--mode",
+          "uninstalled"
+        ]
+      },
+      "exitCode": -15
+    }
+  ],
+  "faultPoint": "After an owned fixture JSON contact counter increment, before observation acknowledgement; real exact-owner Linux SIGKILL/restart.",
+  "fixtureScope": "Durable JSON counter is a fixture witness, not a surviving external provider or physical-device action.",
+  "allChildrenTerminal": true,
+  "hostSourceSha256": "d081d85cc22d5aa1a262cdc0c0c2e8399e244b4e37ca84549bf2b959a3e9a0c8",
+  "controllerSourceSha256": "08f46f687fbca39c24619cecc3926d7f182d4b0e7fd6ba3d0ef654d75661527b"
+}

@@ -1,0 +1,41 @@
+
+> xverse-studio-workspace@0.1.0 test:e2e
+> playwright test -c tests/e2e/playwright.config.ts --grep run startup |run session:|run controls:|diagnostic|owned reference browser workflow|draft/run isolation
+
+
+Running 30 tests using 1 worker
+
+(node:2576286) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 tests/e2e/diagnostic-accessibility.spec.ts:53:7 › diagnostic accessibility: real invalid-source keyboard recovery at 1024x768 (2.8s)
+  ✓   2 tests/e2e/diagnostic-accessibility.spec.ts:108:7 › diagnostic accessibility: recorded and labeled transport outcomes at 1024x768 (2.6s)
+  ✓   3 tests/e2e/diagnostic-accessibility.spec.ts:174:7 › diagnostic accessibility: late preflight cannot reopen a departed workspace at 1024x768 (5.7s)
+  ✓   4 tests/e2e/diagnostic-accessibility.spec.ts:219:7 › diagnostic accessibility: real stale plan and labeled artifact recovery at 1024x768 (4.9s)
+  ✓   5 tests/e2e/diagnostic-accessibility.spec.ts:53:7 › diagnostic accessibility: real invalid-source keyboard recovery at 1440x900 (1.8s)
+  ✓   6 tests/e2e/diagnostic-accessibility.spec.ts:108:7 › diagnostic accessibility: recorded and labeled transport outcomes at 1440x900 (2.7s)
+  ✓   7 tests/e2e/diagnostic-accessibility.spec.ts:174:7 › diagnostic accessibility: late preflight cannot reopen a departed workspace at 1440x900 (4.6s)
+  ✓   8 tests/e2e/diagnostic-accessibility.spec.ts:219:7 › diagnostic accessibility: real stale plan and labeled artifact recovery at 1440x900 (4.8s)
+  ✓   9 tests/e2e/diagnostics.spec.ts:65:5 › diagnosis: recorded evidence separates facts, consequences and unknowns without inferring a cause (2.1s)
+  ✓  10 tests/e2e/diagnostics.spec.ts:139:5 › diagnosis: a completed owned run reports no findings and claims no functional health (5.4s)
+  ✓  11 tests/e2e/diagnostics.spec.ts:167:5 › diagnosis: an unavailable provider explains the blocked snapshot without misattributing unestablished facts (2.6s)
+  ✓  12 tests/e2e/draft-run-isolation.spec.ts:71:5 › draft/run isolation: graph undo and redo are new revisions that never change the running snapshot (8.7s)
+  ✓  13 tests/e2e/draft-run-isolation.spec.ts:186:5 › draft/run isolation: externally modified sources are preserved before an explicit recovery (1.6s)
+  ✓  14 tests/e2e/draft-run-isolation.spec.ts:238:5 › draft/run isolation: undo never crosses a change it did not record (3.6s)
+  ✓  15 tests/e2e/draft-run-isolation.spec.ts:295:5 › draft/run isolation: an unreadable committed source is restored from recorded history (1.4s)
+  ✓  16 tests/e2e/run-reconnect.spec.ts:109:5 › run session: unknown recorded state awaits actual bounded resync and reconnects read-only (2.9s)
+  ✓  17 tests/e2e/run-reconnect.spec.ts:246:5 › run session: native owned execution survives real replay-window expiry while running without duplicate Start (34.2s)
+  ✓  18 tests/e2e/run-reconnect.spec.ts:606:5 › run session: UI metadata fixture updates evidence at the same lifecycle version without altering evidence (7.2s)
+  ✓  19 tests/e2e/run-reconnect.spec.ts:749:5 › run session: lost Start acknowledgement survives refresh and resolves one run from two tabs (6.1s)
+  ✓  20 tests/e2e/run-reconnect.spec.ts:827:5 › run session: double Start, page close/reopen and a lost Stop acknowledgement keep one run and one command (6.7s)
+  ✓  21 tests/e2e/run-reconnect.spec.ts:942:5 › run controls: UI fixture renders failed and unknown command outcomes and unresolved ownership without sending controls (3.4s)
+  ✓  22 tests/e2e/run-startup-outcomes.spec.ts:15:11 › run startup mismatch at 1024 › actual startup and cleanup facts preserve immutable inputs (6.7s)
+  ✓  23 tests/e2e/run-startup-outcomes.spec.ts:15:11 › run startup launch_denied at 1024 › actual startup and cleanup facts preserve immutable inputs (4.8s)
+  ✓  24 tests/e2e/run-startup-outcomes.spec.ts:15:11 › run startup active_failure at 1024 › actual startup and cleanup facts preserve immutable inputs (6.4s)
+  ✓  25 tests/e2e/run-startup-outcomes.spec.ts:15:11 › run startup normal at 1024 › actual startup and cleanup facts preserve immutable inputs (7.1s)
+  ✓  26 tests/e2e/run-startup-outcomes.spec.ts:15:11 › run startup mismatch at 1440 › actual startup and cleanup facts preserve immutable inputs (6.5s)
+  ✓  27 tests/e2e/run-startup-outcomes.spec.ts:15:11 › run startup launch_denied at 1440 › actual startup and cleanup facts preserve immutable inputs (4.8s)
+  ✓  28 tests/e2e/run-startup-outcomes.spec.ts:15:11 › run startup active_failure at 1440 › actual startup and cleanup facts preserve immutable inputs (6.6s)
+  ✓  29 tests/e2e/run-startup-outcomes.spec.ts:15:11 › run startup normal at 1440 › actual startup and cleanup facts preserve immutable inputs (7.2s)
+  ✓  30 tests/e2e/studio.spec.ts:7:5 › owned reference browser workflow: author, preflight, execute, reconnect, inspect and annotate (37.1s)
+
+  30 passed (3.4m)

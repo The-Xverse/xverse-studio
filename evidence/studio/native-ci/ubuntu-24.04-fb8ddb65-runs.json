@@ -1,0 +1,31 @@
+{
+  "headSha": "fb8ddb652caf1ba36f2c1ee7cd437a487aa39978",
+  "observedAt": "2026-10-25",
+  "runs": [
+    {
+      "event": "push",
+      "runId": 40212363840,
+      "jobId": 121226139496,
+      "job": "native (ubuntu-24.04)",
+      "conclusion": "failure",
+      "backend": "493 passed",
+      "browser": "40 passed, 1 failed",
+      "failedCheck": "run-reconnect.spec.ts: native owned execution survives real replay-window expiry while running without duplicate Start",
+      "failure": "during.counts.totalRecords - before.counts.totalRecords was -126; expected > 1000"
+    },
+    {
+      "event": "pull_request",
+      "runId": 40212367818,
+      "jobId": 121226153393,
+      "job": "native (ubuntu-24.04)",
+      "conclusion": "success",
+      "candidate": "b0555324cf052798fab6910e7ad8078fc9bb88fc (PR merge commit)",
+      "backend": "493 passed",
+      "browser": "41 passed",
+      "offlinePackageSmoke": "passed; studio.zip sha256 311f461f0c693b619cb890be77aa960d08edf13d1d28e0a200b6d0eb82081889"
+    }
+  ],
+  "diagnosis": "History reads during an actively appended journal could raise SOURCE_CHANGED on secure acquisition and return an empty 'unavailable' projection; the test counted it as zero records. Successor: bounded reader re-acquisition and a test that counts only verified_prefix projections. See ../M1-control-receipts/.",
+  "windows": "NOT_RUN; held at user request",
+  "rawLogs": "Private copies on loop10 under .studio-local/ci-logs/"
+}

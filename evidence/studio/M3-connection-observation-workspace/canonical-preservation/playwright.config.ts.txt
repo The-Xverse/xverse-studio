@@ -1,0 +1,2 @@
+import { defineConfig } from "@playwright/test";
+export default defineConfig({testDir:".",testMatch:"canonical.spec.ts",workers:1,retries:0,timeout:120000,expect:{timeout:10000},reporter:[["list"],["json",{outputFile:process.env.STUDIO_CANONICAL_REPORT}]],outputDir:process.env.STUDIO_CANONICAL_OUTPUT,use:{browserName:"chromium",actionTimeout:15000,trace:"off",screenshot:"only-on-failure",video:"off"}});

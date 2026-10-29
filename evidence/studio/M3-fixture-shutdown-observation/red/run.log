@@ -1,0 +1,66 @@
+
+Running 2 tests using 1 worker
+
+(node:2116335) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 tests/e2e/lab-reservations.spec.ts:184:9 › lab reservations at 1024 › native keyboard reserve renew release preserves identity and runtime boundary (2.7s)
+(node:2116470) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 tests/e2e/lab-reservations.spec.ts:184:9 › lab reservations at 1440 › native keyboard reserve renew release preserves identity and runtime boundary (2.3s)
+
+
+  1) tests/e2e/lab-reservations.spec.ts:184:9 › lab reservations at 1024 › native keyboard reserve renew release preserves identity and runtime boundary
+
+    Error: Owned fixture shutdown observation was not retained
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+       at lab-fixture.ts:48
+
+      46 |       const observation = path.join(data, "fixture-observation.json");
+      47 |       if (!started) return;
+    > 48 |       expect(existsSync(observation), "Owned fixture shutdown observation was not retained").toBe(true);
+         |                                                                                              ^
+      49 |       const value = JSON.parse(readFileSync(observation, "utf8"));
+      50 |       expect(Object.keys(value).sort()).toEqual(["scope", "scenario", "calls", "reservationCount", "remainingProviderLeases", "preparationSeconds"].sort());
+      51 |       expect(value.scope).toBe("owned in-memory fixture; no equipment");
+        at Object.labHost (<repo>/tests/e2e/lab-fixture.ts:48:94)
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    .studio-local/lab-fixture-shutdown/red/journeys/lab-reservations-lab-reser-3d7f7-entity-and-runtime-boundary/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: .studio-local/lab-fixture-shutdown/red/journeys/lab-reservations-lab-reser-3d7f7-entity-and-runtime-boundary/error-context.md
+
+  2) tests/e2e/lab-reservations.spec.ts:184:9 › lab reservations at 1440 › native keyboard reserve renew release preserves identity and runtime boundary
+
+    Error: Owned fixture shutdown observation was not retained
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+       at lab-fixture.ts:48
+
+      46 |       const observation = path.join(data, "fixture-observation.json");
+      47 |       if (!started) return;
+    > 48 |       expect(existsSync(observation), "Owned fixture shutdown observation was not retained").toBe(true);
+         |                                                                                              ^
+      49 |       const value = JSON.parse(readFileSync(observation, "utf8"));
+      50 |       expect(Object.keys(value).sort()).toEqual(["scope", "scenario", "calls", "reservationCount", "remainingProviderLeases", "preparationSeconds"].sort());
+      51 |       expect(value.scope).toBe("owned in-memory fixture; no equipment");
+        at Object.labHost (<repo>/tests/e2e/lab-fixture.ts:48:94)
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    .studio-local/lab-fixture-shutdown/red/journeys/lab-reservations-lab-reser-92fbe-entity-and-runtime-boundary/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: .studio-local/lab-fixture-shutdown/red/journeys/lab-reservations-lab-reser-92fbe-entity-and-runtime-boundary/error-context.md
+
+  2 failed
+    tests/e2e/lab-reservations.spec.ts:184:9 › lab reservations at 1024 › native keyboard reserve renew release preserves identity and runtime boundary
+    tests/e2e/lab-reservations.spec.ts:184:9 › lab reservations at 1440 › native keyboard reserve renew release preserves identity and runtime boundary

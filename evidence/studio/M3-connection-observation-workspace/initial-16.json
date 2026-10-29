@@ -1,0 +1,933 @@
+{
+  "config": {
+    "argv": [
+      "<tool-cache>/node-v24.22.1-linux-x64/bin/node",
+      "<repo>/node_modules/@playwright/test/cli.js",
+      "test",
+      "-c",
+      "tests/e2e/playwright.config.ts",
+      "tests/e2e/lab-probes.spec.ts",
+      "tests/e2e/lab-probes-configured.spec.ts"
+    ],
+    "configFile": "<repo>/tests/e2e/playwright.config.ts",
+    "rootDir": "<repo>/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "<repo>/.studio-local/lab-probe-ui/initial-browser/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "<repo>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "*.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "<repo>/.studio-local/lab-probe-ui/initial-browser/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "<repo>/tests/e2e",
+        "snapshotDir": "<repo>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": "*.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "baseURL": "http://127.0.0.1:8876",
+          "browserName": "chromium",
+          "actionTimeout": 15000,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "trace": "off",
+          "screenshot": "only-on-failure",
+          "video": "off"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "<repo>/.studio-local/lab-probe-ui/initial-browser/report.private.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "lab-probes-configured.spec.ts",
+      "file": "lab-probes-configured.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "configured lab probes at 1024",
+          "file": "lab-probes-configured.spec.ts",
+          "line": 26,
+          "column": 8,
+          "specs": [
+            {
+              "title": "explicit observation preserves clocks, private boundaries and canonical run state",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 11501,
+                      "error": {
+                        "message": "Error: expect(locator).toBeFocused() failed\n\nLocator:  getByRole('region', { name: 'Connection observation result', exact: true }).getByRole('heading', { name: 'Connection observation result', exact: true })\nExpected: focused\nReceived: inactive\nTimeout:  10000ms\n\nCall log:\n  - Expect \"toBeFocused\" getByRole('region', { name: 'Connection observation result', exact: true }).getByRole('heading', { name: 'Connection observation result', exact: true }) with timeout 10000ms\n  - waiting for getByRole('region', { name: 'Connection observation result', exact: true }).getByRole('heading', { name: 'Connection observation result', exact: true })\n    24 × locator resolved to <h3 tabindex=\"-1\">Connection observation result</h3>\n       - unexpected value \"inactive\"",
+                        "stack": "Error: expect(locator).toBeFocused() failed\n\nLocator:  getByRole('region', { name: 'Connection observation result', exact: true }).getByRole('heading', { name: 'Connection observation result', exact: true })\nExpected: focused\nReceived: inactive\nTimeout:  10000ms\n\nCall log:\n  - Expect \"toBeFocused\" getByRole('region', { name: 'Connection observation result', exact: true }).getByRole('heading', { name: 'Connection observation result', exact: true }) with timeout 10000ms\n  - waiting for getByRole('region', { name: 'Connection observation result', exact: true }).getByRole('heading', { name: 'Connection observation result', exact: true })\n    24 × locator resolved to <h3 tabindex=\"-1\">Connection observation result</h3>\n       - unexpected value \"inactive\"\n\n    at <repo>/tests/e2e/lab-probes-configured.spec.ts:37:111",
+                        "location": {
+                          "file": "<repo>/tests/e2e/lab-probes-configured.spec.ts",
+                          "column": 111,
+                          "line": 37
+                        },
+                        "snippet": "  35 |       const op = await observe(page);\n  36 |       expect(op.status).toBe(\"completed\"); expect(op.result.status).toBe(\"observed\");\n> 37 |       await expect(result(page).getByRole(\"heading\", { name: \"Connection observation result\", exact: true })).toBeFocused();\n     |                                                                                                               ^\n  38 |       await expect(result(page)).toContainText(\"-9007199254740993 ns\");\n  39 |       await expect(result(page)).toContainText(\"fixture-probe-clock\");\n  40 |       await expect(result(page)).toContainText(\"fixture-observation-r3\");"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "<repo>/tests/e2e/lab-probes-configured.spec.ts",
+                            "column": 111,
+                            "line": 37
+                          },
+                          "message": "Error: expect(locator).toBeFocused() failed\n\nLocator:  getByRole('region', { name: 'Connection observation result', exact: true }).getByRole('heading', { name: 'Connection observation result', exact: true })\nExpected: focused\nReceived: inactive\nTimeout:  10000ms\n\nCall log:\n  - Expect \"toBeFocused\" getByRole('region', { name: 'Connection observation result', exact: true }).getByRole('heading', { name: 'Connection observation result', exact: true }) with timeout 10000ms\n  - waiting for getByRole('region', { name: 'Connection observation result', exact: true }).getByRole('heading', { name: 'Connection observation result', exact: true })\n    24 × locator resolved to <h3 tabindex=\"-1\">Connection observation result</h3>\n       - unexpected value \"inactive\"\n\n\n  35 |       const op = await observe(page);\n  36 |       expect(op.status).toBe(\"completed\"); expect(op.result.status).toBe(\"observed\");\n> 37 |       await expect(result(page).getByRole(\"heading\", { name: \"Connection observation result\", exact: true })).toBeFocused();\n     |                                                                                                               ^\n  38 |       await expect(result(page)).toContainText(\"-9007199254740993 ns\");\n  39 |       await expect(result(page)).toContainText(\"fixture-probe-clock\");\n  40 |       await expect(result(page)).toContainText(\"fixture-observation-r3\");\n    at <repo>/tests/e2e/lab-probes-configured.spec.ts:37:111"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-28T12:45:21.831Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "owned-observation-provider-witness",
+                          "contentType": "application/json",
+                          "body": "eyJsZWFzZUNhbGxzIjpbImludmVudG9yeSJdLCJvcGVyYXRpb25zIjpbeyJhc3NldElkIjoiZml4dHVyZTpiZW5jaC1zZW5zb3IiLCJiaW5kaW5nRGlnZXN0Ijoic2hhMjU2OjNhZjlkMWZjNDNlYjUxMzM0NmU0MjIwODBkMGM2YzA3OGQ5ZWM3YmI3OGM5YmIwNTVkMGIwNjMxOTk0ODk0YzAiLCJvcGVyYXRpb25JZCI6Im9wLWZmM2I1YWM1LWJhZTktNGQxYS1hYzI0LTEzNmIzYzRlNzlhNSIsInByaW5jaXBhbCI6ImxvY2FsLW9wZXJhdG9yIiwic3RhdHVzIjoiY29tcGxldGVkIn1dLCJwcm9iZUNhbGxzIjpbIm9wLWZmM2I1YWM1LWJhZTktNGQxYS1hYzI0LTEzNmIzYzRlNzlhNSJdLCJyZW1haW5pbmdQcm92aWRlckxlYXNlcyI6MCwicmVzZXJ2YXRpb25Db3VudCI6MCwic2NlbmFyaW8iOiJvYnNlcnZlIiwic2NvcGUiOiJvd25lZCBuYXRpdmUgb2JzZXJ2YXRpb24gZml4dHVyZTsgbm8gZXF1aXBtZW50In0K"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "<repo>/.studio-local/lab-probe-ui/initial-browser/browser/lab-probes-configured-conf-f5126-ies-and-canonical-run-state/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "<repo>/tests/e2e/lab-probes-configured.spec.ts",
+                        "column": 111,
+                        "line": 37
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "42e547a3c41e82425ecc-aa925101de828bc92603",
+              "file": "lab-probes-configured.spec.ts",
+              "line": 28,
+              "column": 9
+            }
+          ],
+          "suites": [
+            {
+              "title": "observation grant is independent",
+              "file": "lab-probes-configured.spec.ts",
+              "line": 58,
+              "column": 10,
+              "specs": [
+                {
+                  "title": "lease observe permission cannot enable a probe or bypass backend authority",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 120000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "",
+                      "projectName": "",
+                      "results": [
+                        {
+                          "workerIndex": 1,
+                          "parallelIndex": 0,
+                          "status": "passed",
+                          "duration": 1581,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2026-10-28T12:45:33.715Z",
+                          "annotations": [],
+                          "attachments": [
+                            {
+                              "name": "owned-observation-provider-witness",
+                              "contentType": "application/json",
+                              "body": "eyJsZWFzZUNhbGxzIjpbImludmVudG9yeSIsImludmVudG9yeSJdLCJvcGVyYXRpb25zIjpbXSwicHJvYmVDYWxscyI6W10sInJlbWFpbmluZ1Byb3ZpZGVyTGVhc2VzIjowLCJyZXNlcnZhdGlvbkNvdW50IjowLCJzY2VuYXJpbyI6ImZvcmJpZGRlbiIsInNjb3BlIjoib3duZWQgbmF0aXZlIG9ic2VydmF0aW9uIGZpeHR1cmU7IG5vIGVxdWlwbWVudCJ9Cg=="
+                            }
+                          ]
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "42e547a3c41e82425ecc-ef848717834ec3f83de6",
+                  "file": "lab-probes-configured.spec.ts",
+                  "line": 60,
+                  "column": 11
+                }
+              ]
+            },
+            {
+              "title": "unavailable",
+              "file": "lab-probes-configured.spec.ts",
+              "line": 78,
+              "column": 12,
+              "specs": [
+                {
+                  "title": "negative or uncertain observation remains separate from readiness and is never repeated by inspection",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 120000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "",
+                      "projectName": "",
+                      "results": [
+                        {
+                          "workerIndex": 1,
+                          "parallelIndex": 0,
+                          "status": "passed",
+                          "duration": 1397,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2026-10-28T12:45:35.362Z",
+                          "annotations": [],
+                          "attachments": [
+                            {
+                              "name": "owned-observation-provider-witness",
+                              "contentType": "application/json",
+                              "body": "eyJsZWFzZUNhbGxzIjpbImludmVudG9yeSJdLCJvcGVyYXRpb25zIjpbeyJhc3NldElkIjoiZml4dHVyZTpiZW5jaC1zZW5zb3IiLCJiaW5kaW5nRGlnZXN0Ijoic2hhMjU2OjNhZjlkMWZjNDNlYjUxMzM0NmU0MjIwODBkMGM2YzA3OGQ5ZWM3YmI3OGM5YmIwNTVkMGIwNjMxOTk0ODk0YzAiLCJvcGVyYXRpb25JZCI6Im9wLTYxM2VhZmZiLTA5MGItNDg0MC1hY2Q0LTAyMTZhMGI4MmUxZiIsInByaW5jaXBhbCI6ImxvY2FsLW9wZXJhdG9yIiwic3RhdHVzIjoiY29tcGxldGVkIn1dLCJwcm9iZUNhbGxzIjpbIm9wLTYxM2VhZmZiLTA5MGItNDg0MC1hY2Q0LTAyMTZhMGI4MmUxZiJdLCJyZW1haW5pbmdQcm92aWRlckxlYXNlcyI6MCwicmVzZXJ2YXRpb25Db3VudCI6MCwic2NlbmFyaW8iOiJ1bmF2YWlsYWJsZSIsInNjb3BlIjoib3duZWQgbmF0aXZlIG9ic2VydmF0aW9uIGZpeHR1cmU7IG5vIGVxdWlwbWVudCJ9Cg=="
+                            }
+                          ]
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "42e547a3c41e82425ecc-c831e2c1943f4ae4acee",
+                  "file": "lab-probes-configured.spec.ts",
+                  "line": 80,
+                  "column": 13
+                }
+              ]
+            },
+            {
+              "title": "unknown",
+              "file": "lab-probes-configured.spec.ts",
+              "line": 78,
+              "column": 12,
+              "specs": [
+                {
+                  "title": "negative or uncertain observation remains separate from readiness and is never repeated by inspection",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 120000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "",
+                      "projectName": "",
+                      "results": [
+                        {
+                          "workerIndex": 1,
+                          "parallelIndex": 0,
+                          "status": "passed",
+                          "duration": 1393,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2026-10-28T12:45:36.771Z",
+                          "annotations": [],
+                          "attachments": [
+                            {
+                              "name": "owned-observation-provider-witness",
+                              "contentType": "application/json",
+                              "body": "eyJsZWFzZUNhbGxzIjpbImludmVudG9yeSJdLCJvcGVyYXRpb25zIjpbeyJhc3NldElkIjoiZml4dHVyZTpiZW5jaC1zZW5zb3IiLCJiaW5kaW5nRGlnZXN0Ijoic2hhMjU2OjNhZjlkMWZjNDNlYjUxMzM0NmU0MjIwODBkMGM2YzA3OGQ5ZWM3YmI3OGM5YmIwNTVkMGIwNjMxOTk0ODk0YzAiLCJvcGVyYXRpb25JZCI6Im9wLWEwZWI3YjJlLTgyOTctNDI0Ny04OWU4LTQxNjhhZTYwODkxMyIsInByaW5jaXBhbCI6ImxvY2FsLW9wZXJhdG9yIiwic3RhdHVzIjoidW5rbm93biJ9XSwicHJvYmVDYWxscyI6WyJvcC1hMGViN2IyZS04Mjk3LTQyNDctODllOC00MTY4YWU2MDg5MTMiXSwicmVtYWluaW5nUHJvdmlkZXJMZWFzZXMiOjAsInJlc2VydmF0aW9uQ291bnQiOjAsInNjZW5hcmlvIjoidW5rbm93biIsInNjb3BlIjoib3duZWQgbmF0aXZlIG9ic2VydmF0aW9uIGZpeHR1cmU7IG5vIGVxdWlwbWVudCJ9Cg=="
+                            }
+                          ]
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "42e547a3c41e82425ecc-9584fcacf428e0cf07e4",
+                  "file": "lab-probes-configured.spec.ts",
+                  "line": 80,
+                  "column": 13
+                }
+              ]
+            },
+            {
+              "title": "revoked",
+              "file": "lab-probes-configured.spec.ts",
+              "line": 78,
+              "column": 12,
+              "specs": [
+                {
+                  "title": "negative or uncertain observation remains separate from readiness and is never repeated by inspection",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 120000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "",
+                      "projectName": "",
+                      "results": [
+                        {
+                          "workerIndex": 1,
+                          "parallelIndex": 0,
+                          "status": "passed",
+                          "duration": 1598,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2026-10-28T12:45:38.179Z",
+                          "annotations": [],
+                          "attachments": [
+                            {
+                              "name": "owned-observation-provider-witness",
+                              "contentType": "application/json",
+                              "body": "eyJsZWFzZUNhbGxzIjpbImludmVudG9yeSJdLCJvcGVyYXRpb25zIjpbeyJhc3NldElkIjoiZml4dHVyZTpiZW5jaC1zZW5zb3IiLCJiaW5kaW5nRGlnZXN0Ijoic2hhMjU2OjNhZjlkMWZjNDNlYjUxMzM0NmU0MjIwODBkMGM2YzA3OGQ5ZWM3YmI3OGM5YmIwNTVkMGIwNjMxOTk0ODk0YzAiLCJvcGVyYXRpb25JZCI6Im9wLWQxOGYzYjEwLWQ4OGEtNDJiYi05NjQ2LTE0NmI4ZTQ0ZjQ4NCIsInByaW5jaXBhbCI6ImxvY2FsLW9wZXJhdG9yIiwic3RhdHVzIjoidW5rbm93biJ9XSwicHJvYmVDYWxscyI6WyJvcC1kMThmM2IxMC1kODhhLTQyYmItOTY0Ni0xNDZiOGU0NGY0ODQiXSwicmVtYWluaW5nUHJvdmlkZXJMZWFzZXMiOjAsInJlc2VydmF0aW9uQ291bnQiOjAsInNjZW5hcmlvIjoicmV2b2tlZCIsInNjb3BlIjoib3duZWQgbmF0aXZlIG9ic2VydmF0aW9uIGZpeHR1cmU7IG5vIGVxdWlwbWVudCJ9Cg=="
+                            }
+                          ]
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "42e547a3c41e82425ecc-7f73970cced915c24d4c",
+                  "file": "lab-probes-configured.spec.ts",
+                  "line": 80,
+                  "column": 13
+                }
+              ]
+            },
+            {
+              "title": "timeout",
+              "file": "lab-probes-configured.spec.ts",
+              "line": 78,
+              "column": 12,
+              "specs": [
+                {
+                  "title": "negative or uncertain observation remains separate from readiness and is never repeated by inspection",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 120000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "",
+                      "projectName": "",
+                      "results": [
+                        {
+                          "workerIndex": 1,
+                          "parallelIndex": 0,
+                          "status": "passed",
+                          "duration": 1588,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2026-10-28T12:45:39.790Z",
+                          "annotations": [],
+                          "attachments": [
+                            {
+                              "name": "owned-observation-provider-witness",
+                              "contentType": "application/json",
+                              "body": "eyJsZWFzZUNhbGxzIjpbImludmVudG9yeSJdLCJvcGVyYXRpb25zIjpbeyJhc3NldElkIjoiZml4dHVyZTpiZW5jaC1zZW5zb3IiLCJiaW5kaW5nRGlnZXN0Ijoic2hhMjU2OjNhZjlkMWZjNDNlYjUxMzM0NmU0MjIwODBkMGM2YzA3OGQ5ZWM3YmI3OGM5YmIwNTVkMGIwNjMxOTk0ODk0YzAiLCJvcGVyYXRpb25JZCI6Im9wLTA3ZjE3MzI4LTBkNjQtNDc3My1iNTJiLWMwNmY0NmFmZDhmZiIsInByaW5jaXBhbCI6ImxvY2FsLW9wZXJhdG9yIiwic3RhdHVzIjoidW5rbm93biJ9XSwicHJvYmVDYWxscyI6WyJvcC0wN2YxNzMyOC0wZDY0LTQ3NzMtYjUyYi1jMDZmNDZhZmQ4ZmYiXSwicmVtYWluaW5nUHJvdmlkZXJMZWFzZXMiOjAsInJlc2VydmF0aW9uQ291bnQiOjAsInNjZW5hcmlvIjoidGltZW91dCIsInNjb3BlIjoib3duZWQgbmF0aXZlIG9ic2VydmF0aW9uIGZpeHR1cmU7IG5vIGVxdWlwbWVudCJ9Cg=="
+                            }
+                          ]
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "42e547a3c41e82425ecc-ef23cd036a59ddd3db0e",
+                  "file": "lab-probes-configured.spec.ts",
+                  "line": 80,
+                  "column": 13
+                }
+              ]
+            },
+            {
+              "title": "changed host binding",
+              "file": "lab-probes-configured.spec.ts",
+              "line": 98,
+              "column": 10,
+              "specs": [
+                {
+                  "title": "typed predelegation refusal settles the first request without a provider call",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 120000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "",
+                      "projectName": "",
+                      "results": [
+                        {
+                          "workerIndex": 1,
+                          "parallelIndex": 0,
+                          "status": "passed",
+                          "duration": 1398,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2026-10-28T12:45:41.391Z",
+                          "annotations": [],
+                          "attachments": [
+                            {
+                              "name": "owned-observation-provider-witness",
+                              "contentType": "application/json",
+                              "body": "eyJsZWFzZUNhbGxzIjpbImludmVudG9yeSJdLCJvcGVyYXRpb25zIjpbXSwicHJvYmVDYWxscyI6W10sInJlbWFpbmluZ1Byb3ZpZGVyTGVhc2VzIjowLCJyZXNlcnZhdGlvbkNvdW50IjowLCJzY2VuYXJpbyI6InN0YWxlLWJpbmRpbmciLCJzY29wZSI6Im93bmVkIG5hdGl2ZSBvYnNlcnZhdGlvbiBmaXh0dXJlOyBubyBlcXVpcG1lbnQifQo="
+                            }
+                          ]
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "42e547a3c41e82425ecc-1300e9a3641c4234b7d9",
+                  "file": "lab-probes-configured.spec.ts",
+                  "line": 100,
+                  "column": 11
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "title": "configured lab probes at 1440",
+          "file": "lab-probes-configured.spec.ts",
+          "line": 26,
+          "column": 8,
+          "specs": [
+            {
+              "title": "explicit observation preserves clocks, private boundaries and canonical run state",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1602,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-28T12:45:42.800Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "owned-observation-provider-witness",
+                          "contentType": "application/json",
+                          "body": "eyJsZWFzZUNhbGxzIjpbImludmVudG9yeSJdLCJvcGVyYXRpb25zIjpbeyJhc3NldElkIjoiZml4dHVyZTpiZW5jaC1zZW5zb3IiLCJiaW5kaW5nRGlnZXN0Ijoic2hhMjU2OjNhZjlkMWZjNDNlYjUxMzM0NmU0MjIwODBkMGM2YzA3OGQ5ZWM3YmI3OGM5YmIwNTVkMGIwNjMxOTk0ODk0YzAiLCJvcGVyYXRpb25JZCI6Im9wLWFlOTBjOTZiLWJhNjQtNDA2OC04OTcwLWNiZmFhYzg5Zjk2MSIsInByaW5jaXBhbCI6ImxvY2FsLW9wZXJhdG9yIiwic3RhdHVzIjoiY29tcGxldGVkIn1dLCJwcm9iZUNhbGxzIjpbIm9wLWFlOTBjOTZiLWJhNjQtNDA2OC04OTcwLWNiZmFhYzg5Zjk2MSJdLCJyZW1haW5pbmdQcm92aWRlckxlYXNlcyI6MCwicmVzZXJ2YXRpb25Db3VudCI6MCwic2NlbmFyaW8iOiJvYnNlcnZlIiwic2NvcGUiOiJvd25lZCBuYXRpdmUgb2JzZXJ2YXRpb24gZml4dHVyZTsgbm8gZXF1aXBtZW50In0K"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "42e547a3c41e82425ecc-db7dcf567a0c108691c6",
+              "file": "lab-probes-configured.spec.ts",
+              "line": 28,
+              "column": 9
+            }
+          ],
+          "suites": [
+            {
+              "title": "observation grant is independent",
+              "file": "lab-probes-configured.spec.ts",
+              "line": 58,
+              "column": 10,
+              "specs": [
+                {
+                  "title": "lease observe permission cannot enable a probe or bypass backend authority",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 120000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "",
+                      "projectName": "",
+                      "results": [
+                        {
+                          "workerIndex": 1,
+                          "parallelIndex": 0,
+                          "status": "passed",
+                          "duration": 1410,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2026-10-28T12:45:44.412Z",
+                          "annotations": [],
+                          "attachments": [
+                            {
+                              "name": "owned-observation-provider-witness",
+                              "contentType": "application/json",
+                              "body": "eyJsZWFzZUNhbGxzIjpbImludmVudG9yeSIsImludmVudG9yeSJdLCJvcGVyYXRpb25zIjpbXSwicHJvYmVDYWxscyI6W10sInJlbWFpbmluZ1Byb3ZpZGVyTGVhc2VzIjowLCJyZXNlcnZhdGlvbkNvdW50IjowLCJzY2VuYXJpbyI6ImZvcmJpZGRlbiIsInNjb3BlIjoib3duZWQgbmF0aXZlIG9ic2VydmF0aW9uIGZpeHR1cmU7IG5vIGVxdWlwbWVudCJ9Cg=="
+                            }
+                          ]
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "42e547a3c41e82425ecc-344d9014275a690707f1",
+                  "file": "lab-probes-configured.spec.ts",
+                  "line": 60,
+                  "column": 11
+                }
+              ]
+            },
+            {
+              "title": "unavailable",
+              "file": "lab-probes-configured.spec.ts",
+              "line": 78,
+              "column": 12,
+              "specs": [
+                {
+                  "title": "negative or uncertain observation remains separate from readiness and is never repeated by inspection",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 120000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "",
+                      "projectName": "",
+                      "results": [
+                        {
+                          "workerIndex": 1,
+                          "parallelIndex": 0,
+                          "status": "passed",
+                          "duration": 1377,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2026-10-28T12:45:45.833Z",
+                          "annotations": [],
+                          "attachments": [
+                            {
+                              "name": "owned-observation-provider-witness",
+                              "contentType": "application/json",
+                              "body": "eyJsZWFzZUNhbGxzIjpbImludmVudG9yeSJdLCJvcGVyYXRpb25zIjpbeyJhc3NldElkIjoiZml4dHVyZTpiZW5jaC1zZW5zb3IiLCJiaW5kaW5nRGlnZXN0Ijoic2hhMjU2OjNhZjlkMWZjNDNlYjUxMzM0NmU0MjIwODBkMGM2YzA3OGQ5ZWM3YmI3OGM5YmIwNTVkMGIwNjMxOTk0ODk0YzAiLCJvcGVyYXRpb25JZCI6Im9wLTE0MWI2YTE4LTA1MWEtNDA2ZS04MzkzLWRhMWY1YjJmYzc5ZSIsInByaW5jaXBhbCI6ImxvY2FsLW9wZXJhdG9yIiwic3RhdHVzIjoiY29tcGxldGVkIn1dLCJwcm9iZUNhbGxzIjpbIm9wLTE0MWI2YTE4LTA1MWEtNDA2ZS04MzkzLWRhMWY1YjJmYzc5ZSJdLCJyZW1haW5pbmdQcm92aWRlckxlYXNlcyI6MCwicmVzZXJ2YXRpb25Db3VudCI6MCwic2NlbmFyaW8iOiJ1bmF2YWlsYWJsZSIsInNjb3BlIjoib3duZWQgbmF0aXZlIG9ic2VydmF0aW9uIGZpeHR1cmU7IG5vIGVxdWlwbWVudCJ9Cg=="
+                            }
+                          ]
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "42e547a3c41e82425ecc-08ec4e21703973f55b03",
+                  "file": "lab-probes-configured.spec.ts",
+                  "line": 80,
+                  "column": 13
+                }
+              ]
+            },
+            {
+              "title": "unknown",
+              "file": "lab-probes-configured.spec.ts",
+              "line": 78,
+              "column": 12,
+              "specs": [
+                {
+                  "title": "negative or uncertain observation remains separate from readiness and is never repeated by inspection",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 120000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "",
+                      "projectName": "",
+                      "results": [
+                        {
+                          "workerIndex": 1,
+                          "parallelIndex": 0,
+                          "status": "passed",
+                          "duration": 1467,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2026-10-28T12:45:47.221Z",
+                          "annotations": [],
+                          "attachments": [
+                            {
+                              "name": "owned-observation-provider-witness",
+                              "contentType": "application/json",
+                              "body": "eyJsZWFzZUNhbGxzIjpbImludmVudG9yeSJdLCJvcGVyYXRpb25zIjpbeyJhc3NldElkIjoiZml4dHVyZTpiZW5jaC1zZW5zb3IiLCJiaW5kaW5nRGlnZXN0Ijoic2hhMjU2OjNhZjlkMWZjNDNlYjUxMzM0NmU0MjIwODBkMGM2YzA3OGQ5ZWM3YmI3OGM5YmIwNTVkMGIwNjMxOTk0ODk0YzAiLCJvcGVyYXRpb25JZCI6Im9wLWE3ZDc3OWMzLTk2ZjYtNDdiMS04MmRiLWYyZTZiM2I1NzVhNCIsInByaW5jaXBhbCI6ImxvY2FsLW9wZXJhdG9yIiwic3RhdHVzIjoidW5rbm93biJ9XSwicHJvYmVDYWxscyI6WyJvcC1hN2Q3NzljMy05NmY2LTQ3YjEtODJkYi1mMmU2YjNiNTc1YTQiXSwicmVtYWluaW5nUHJvdmlkZXJMZWFzZXMiOjAsInJlc2VydmF0aW9uQ291bnQiOjAsInNjZW5hcmlvIjoidW5rbm93biIsInNjb3BlIjoib3duZWQgbmF0aXZlIG9ic2VydmF0aW9uIGZpeHR1cmU7IG5vIGVxdWlwbWVudCJ9Cg=="
+                            }
+                          ]
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "42e547a3c41e82425ecc-050fe5581c63c69492ca",
+                  "file": "lab-probes-configured.spec.ts",
+                  "line": 80,
+                  "column": 13
+                }
+              ]
+            },
+            {
+              "title": "revoked",
+              "file": "lab-probes-configured.spec.ts",
+              "line": 78,
+              "column": 12,
+              "specs": [
+                {
+                  "title": "negative or uncertain observation remains separate from readiness and is never repeated by inspection",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 120000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "",
+                      "projectName": "",
+                      "results": [
+                        {
+                          "workerIndex": 1,
+                          "parallelIndex": 0,
+                          "status": "passed",
+                          "duration": 1509,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2026-10-28T12:45:48.697Z",
+                          "annotations": [],
+                          "attachments": [
+                            {
+                              "name": "owned-observation-provider-witness",
+                              "contentType": "application/json",
+                              "body": "eyJsZWFzZUNhbGxzIjpbImludmVudG9yeSJdLCJvcGVyYXRpb25zIjpbeyJhc3NldElkIjoiZml4dHVyZTpiZW5jaC1zZW5zb3IiLCJiaW5kaW5nRGlnZXN0Ijoic2hhMjU2OjNhZjlkMWZjNDNlYjUxMzM0NmU0MjIwODBkMGM2YzA3OGQ5ZWM3YmI3OGM5YmIwNTVkMGIwNjMxOTk0ODk0YzAiLCJvcGVyYXRpb25JZCI6Im9wLWY3OGQzMzlhLWJhZGQtNDUyZi04N2ZlLTM5NmY3Y2YyM2Q0ZiIsInByaW5jaXBhbCI6ImxvY2FsLW9wZXJhdG9yIiwic3RhdHVzIjoidW5rbm93biJ9XSwicHJvYmVDYWxscyI6WyJvcC1mNzhkMzM5YS1iYWRkLTQ1MmYtODdmZS0zOTZmN2NmMjNkNGYiXSwicmVtYWluaW5nUHJvdmlkZXJMZWFzZXMiOjAsInJlc2VydmF0aW9uQ291bnQiOjAsInNjZW5hcmlvIjoicmV2b2tlZCIsInNjb3BlIjoib3duZWQgbmF0aXZlIG9ic2VydmF0aW9uIGZpeHR1cmU7IG5vIGVxdWlwbWVudCJ9Cg=="
+                            }
+                          ]
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "42e547a3c41e82425ecc-31e837e012a4452265d0",
+                  "file": "lab-probes-configured.spec.ts",
+                  "line": 80,
+                  "column": 13
+                }
+              ]
+            },
+            {
+              "title": "timeout",
+              "file": "lab-probes-configured.spec.ts",
+              "line": 78,
+              "column": 12,
+              "specs": [
+                {
+                  "title": "negative or uncertain observation remains separate from readiness and is never repeated by inspection",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 120000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "",
+                      "projectName": "",
+                      "results": [
+                        {
+                          "workerIndex": 1,
+                          "parallelIndex": 0,
+                          "status": "passed",
+                          "duration": 1513,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2026-10-28T12:45:50.214Z",
+                          "annotations": [],
+                          "attachments": [
+                            {
+                              "name": "owned-observation-provider-witness",
+                              "contentType": "application/json",
+                              "body": "eyJsZWFzZUNhbGxzIjpbImludmVudG9yeSJdLCJvcGVyYXRpb25zIjpbeyJhc3NldElkIjoiZml4dHVyZTpiZW5jaC1zZW5zb3IiLCJiaW5kaW5nRGlnZXN0Ijoic2hhMjU2OjNhZjlkMWZjNDNlYjUxMzM0NmU0MjIwODBkMGM2YzA3OGQ5ZWM3YmI3OGM5YmIwNTVkMGIwNjMxOTk0ODk0YzAiLCJvcGVyYXRpb25JZCI6Im9wLTFkNTMzNGY4LThmODYtNGI3MS1iYTU0LTM3MTFmY2Y0M2I2YiIsInByaW5jaXBhbCI6ImxvY2FsLW9wZXJhdG9yIiwic3RhdHVzIjoidW5rbm93biJ9XSwicHJvYmVDYWxscyI6WyJvcC0xZDUzMzRmOC04Zjg2LTRiNzEtYmE1NC0zNzExZmNmNDNiNmIiXSwicmVtYWluaW5nUHJvdmlkZXJMZWFzZXMiOjAsInJlc2VydmF0aW9uQ291bnQiOjAsInNjZW5hcmlvIjoidGltZW91dCIsInNjb3BlIjoib3duZWQgbmF0aXZlIG9ic2VydmF0aW9uIGZpeHR1cmU7IG5vIGVxdWlwbWVudCJ9Cg=="
+                            }
+                          ]
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "42e547a3c41e82425ecc-ace040c80f364e826664",
+                  "file": "lab-probes-configured.spec.ts",
+                  "line": 80,
+                  "column": 13
+                }
+              ]
+            },
+            {
+              "title": "changed host binding",
+              "file": "lab-probes-configured.spec.ts",
+              "line": 98,
+              "column": 10,
+              "specs": [
+                {
+                  "title": "typed predelegation refusal settles the first request without a provider call",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 120000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "",
+                      "projectName": "",
+                      "results": [
+                        {
+                          "workerIndex": 1,
+                          "parallelIndex": 0,
+                          "status": "passed",
+                          "duration": 1385,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2026-10-28T12:45:51.739Z",
+                          "annotations": [],
+                          "attachments": [
+                            {
+                              "name": "owned-observation-provider-witness",
+                              "contentType": "application/json",
+                              "body": "eyJsZWFzZUNhbGxzIjpbImludmVudG9yeSJdLCJvcGVyYXRpb25zIjpbXSwicHJvYmVDYWxscyI6W10sInJlbWFpbmluZ1Byb3ZpZGVyTGVhc2VzIjowLCJyZXNlcnZhdGlvbkNvdW50IjowLCJzY2VuYXJpbyI6InN0YWxlLWJpbmRpbmciLCJzY29wZSI6Im93bmVkIG5hdGl2ZSBvYnNlcnZhdGlvbiBmaXh0dXJlOyBubyBlcXVpcG1lbnQifQo="
+                            }
+                          ]
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "42e547a3c41e82425ecc-1dc8e08974ec368a542b",
+                  "file": "lab-probes-configured.spec.ts",
+                  "line": 100,
+                  "column": 11
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "lab-probes.spec.ts",
+      "file": "lab-probes.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "lab probes at 1024",
+          "file": "lab-probes.spec.ts",
+          "line": 4,
+          "column": 8,
+          "specs": [
+            {
+              "title": "lease installation alone shows explicit observation unavailable without contact",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1462,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-28T12:45:53.138Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "owned-provider-observation",
+                          "contentType": "application/json",
+                          "body": "eyJzY29wZSI6ICJvd25lZCBpbi1tZW1vcnkgZml4dHVyZTsgbm8gZXF1aXBtZW50IiwgInNjZW5hcmlvIjogIm9ic2VydmUiLCAiY2FsbHMiOiBbImludmVudG9yeSJdLCAicmVzZXJ2YXRpb25Db3VudCI6IDAsICJyZW1haW5pbmdQcm92aWRlckxlYXNlcyI6IDAsICJwcmVwYXJhdGlvblNlY29uZHMiOiAwLjA5MzUxNzM2Nzk4OTk4OX0K"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "46ee6fc984d2c34f10ba-5dc440898dbf44ec8b5d",
+              "file": "lab-probes.spec.ts",
+              "line": 6,
+              "column": 9
+            }
+          ]
+        },
+        {
+          "title": "lab probes at 1440",
+          "file": "lab-probes.spec.ts",
+          "line": 4,
+          "column": 8,
+          "specs": [
+            {
+              "title": "lease installation alone shows explicit observation unavailable without contact",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1378,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-28T12:45:54.611Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "owned-provider-observation",
+                          "contentType": "application/json",
+                          "body": "eyJzY29wZSI6ICJvd25lZCBpbi1tZW1vcnkgZml4dHVyZTsgbm8gZXF1aXBtZW50IiwgInNjZW5hcmlvIjogIm9ic2VydmUiLCAiY2FsbHMiOiBbImludmVudG9yeSJdLCAicmVzZXJ2YXRpb25Db3VudCI6IDAsICJyZW1haW5pbmdQcm92aWRlckxlYXNlcyI6IDAsICJwcmVwYXJhdGlvblNlY29uZHMiOiAwLjA5NzI0Nzg4Nzk4NDg0OTUxfQo="
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "46ee6fc984d2c34f10ba-3405d5ad211f84ae5e7d",
+              "file": "lab-probes.spec.ts",
+              "line": 6,
+              "column": 9
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-28T12:45:21.405Z",
+    "duration": 34641.458,
+    "expected": 15,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

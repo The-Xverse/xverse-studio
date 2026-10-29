@@ -1,0 +1,47 @@
+
+> xverse-studio-workspace@0.1.0 test:e2e
+> playwright test -c tests/e2e/playwright.config.ts --grep modal early keyboard:
+
+
+Running 2 tests using 1 worker
+
+(node:3819359) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/e2e/modal-keyboard.spec.ts:74:5 › modal early keyboard: New dialog handles Escape immediately after mount (773ms)
+  ✘  2 tests/e2e/modal-keyboard.spec.ts:93:5 › modal early keyboard: async Preflight dialog handles Escape immediately after mount (17.1s)
+
+
+  1) tests/e2e/modal-keyboard.spec.ts:93:5 › modal early keyboard: async Preflight dialog handles Escape immediately after mount
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  getByRole('dialog', { name: 'Execution preflight' })
+    Expected: 0
+    Received: 1
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toHaveCount" getByRole('dialog', { name: 'Execution preflight' }) with timeout 10000ms
+      - waiting for getByRole('dialog', { name: 'Execution preflight' })
+        21 × locator resolved to 1 element
+           - unexpected value "1"
+
+
+      123 |   await expect(
+      124 |     page.getByRole("dialog", { name: "Execution preflight" }),
+    > 125 |   ).toHaveCount(0);
+          |     ^
+      126 |   expect(observation.prevented).toBe(true);
+      127 |   await expect(trigger).toBeFocused();
+      128 |   expect(starts).toEqual([]);
+        at <workspace>/tests/e2e/modal-keyboard.spec.ts:125:5
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/modal-keyboard-modal-early-ed2c1-ape-immediately-after-mount/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/modal-keyboard-modal-early-ed2c1-ape-immediately-after-mount/error-context.md
+
+  1 failed
+    tests/e2e/modal-keyboard.spec.ts:93:5 › modal early keyboard: async Preflight dialog handles Escape immediately after mount
+  1 passed (20.2s)

@@ -1,0 +1,78 @@
+
+Running 2 tests using 1 worker
+
+(node:2309710) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 tests/e2e/lab-probes.spec.ts:6:9 › lab probes at 1024 › lease installation alone shows explicit observation unavailable without contact (11.1s)
+(node:2309959) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 tests/e2e/lab-probes.spec.ts:6:9 › lab probes at 1440 › lease installation alone shows explicit observation unavailable without contact (11.2s)
+
+
+  1) tests/e2e/lab-probes.spec.ts:6:9 › lab probes at 1024 › lease installation alone shows explicit observation unavailable without contact
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('section.panel').filter({ has: getByRole('heading', { name: 'fixture:bench-sensor', exact: true }) }).getByRole('button', { name: 'Check connection options', exact: true })
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" locator('section.panel').filter({ has: getByRole('heading', { name: 'fixture:bench-sensor', exact: true }) }).getByRole('button', { name: 'Check connection options', exact: true }) with timeout 10000ms
+      - waiting for locator('section.panel').filter({ has: getByRole('heading', { name: 'fixture:bench-sensor', exact: true }) }).getByRole('button', { name: 'Check connection options', exact: true })
+
+
+       at lab-fixture.ts:80
+
+      78 |
+      79 | export async function keyboard(page: Page, target: Locator) {
+    > 80 |   await expect(target).toBeVisible();
+         |                        ^
+      81 |   for (let i = 0; i < 200; i++) {
+      82 |     if (await target.evaluate((n) => document.activeElement === n)) break;
+      83 |     await page.keyboard.press("Tab");
+        at keyboard (<repo>/tests/e2e/lab-fixture.ts:80:24)
+        at <repo>/tests/e2e/lab-probes.spec.ts:13:21
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    .studio-local/lab-probe-foundation/browser-ui-red/browser/lab-probes-lab-probes-at-1-bd356-unavailable-without-contact/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: .studio-local/lab-probe-foundation/browser-ui-red/browser/lab-probes-lab-probes-at-1-bd356-unavailable-without-contact/error-context.md
+
+  2) tests/e2e/lab-probes.spec.ts:6:9 › lab probes at 1440 › lease installation alone shows explicit observation unavailable without contact
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('section.panel').filter({ has: getByRole('heading', { name: 'fixture:bench-sensor', exact: true }) }).getByRole('button', { name: 'Check connection options', exact: true })
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" locator('section.panel').filter({ has: getByRole('heading', { name: 'fixture:bench-sensor', exact: true }) }).getByRole('button', { name: 'Check connection options', exact: true }) with timeout 10000ms
+      - waiting for locator('section.panel').filter({ has: getByRole('heading', { name: 'fixture:bench-sensor', exact: true }) }).getByRole('button', { name: 'Check connection options', exact: true })
+
+
+       at lab-fixture.ts:80
+
+      78 |
+      79 | export async function keyboard(page: Page, target: Locator) {
+    > 80 |   await expect(target).toBeVisible();
+         |                        ^
+      81 |   for (let i = 0; i < 200; i++) {
+      82 |     if (await target.evaluate((n) => document.activeElement === n)) break;
+      83 |     await page.keyboard.press("Tab");
+        at keyboard (<repo>/tests/e2e/lab-fixture.ts:80:24)
+        at <repo>/tests/e2e/lab-probes.spec.ts:13:21
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    .studio-local/lab-probe-foundation/browser-ui-red/browser/lab-probes-lab-probes-at-1-e9158-unavailable-without-contact/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: .studio-local/lab-probe-foundation/browser-ui-red/browser/lab-probes-lab-probes-at-1-e9158-unavailable-without-contact/error-context.md
+
+  2 failed
+    tests/e2e/lab-probes.spec.ts:6:9 › lab probes at 1024 › lease installation alone shows explicit observation unavailable without contact
+    tests/e2e/lab-probes.spec.ts:6:9 › lab probes at 1440 › lease installation alone shows explicit observation unavailable without contact

@@ -1,0 +1,65 @@
+
+> xverse-studio-workspace@0.1.0 test:e2e
+> playwright test -c tests/e2e/playwright.config.ts --grep shell accessibility:
+
+
+Running 4 tests using 1 worker
+
+(node:3459731) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/e2e/shell-accessibility.spec.ts:37:7 › shell accessibility: login instructions and real rejected-token recovery at 1024x768 (426ms)
+  ✘  2 tests/e2e/shell-accessibility.spec.ts:81:7 › shell accessibility: navigation state, form and real busy response at 1024x768 (485ms)
+(node:3460096) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  3 tests/e2e/shell-accessibility.spec.ts:37:7 › shell accessibility: login instructions and real rejected-token recovery at 1440x900 (370ms)
+  ✘  4 tests/e2e/shell-accessibility.spec.ts:81:7 › shell accessibility: navigation state, form and real busy response at 1440x900 (414ms)
+
+
+  1) tests/e2e/shell-accessibility.spec.ts:81:7 › shell accessibility: navigation state, form and real busy response at 1024x768
+
+    Error: expect(received).toBeLessThanOrEqual(expected)
+
+    Expected: <= 768
+    Received:    2970
+
+      112 |       expect(focus.rect.top).toBeGreaterThanOrEqual(0);
+      113 |       expect(focus.rect.right).toBeLessThanOrEqual(viewport.width);
+    > 114 |       expect(focus.rect.bottom).toBeLessThanOrEqual(viewport.height);
+          |                                 ^
+      115 |     }
+      116 |     await activate(page, rail.getByRole("button", { name: "Workspace", exact: true }));
+      117 |     const newProject = page.getByRole("button", { name: "New project", exact: true });
+        at <repo>/tests/e2e/shell-accessibility.spec.ts:114:33
+
+    attachment #3: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/shell-accessibility-shell--c5784-l-busy-response-at-1024x768/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/shell-accessibility-shell--c5784-l-busy-response-at-1024x768/error-context.md
+
+  2) tests/e2e/shell-accessibility.spec.ts:81:7 › shell accessibility: navigation state, form and real busy response at 1440x900
+
+    Error: expect(received).toBeLessThanOrEqual(expected)
+
+    Expected: <= 900
+    Received:    2720.71875
+
+      112 |       expect(focus.rect.top).toBeGreaterThanOrEqual(0);
+      113 |       expect(focus.rect.right).toBeLessThanOrEqual(viewport.width);
+    > 114 |       expect(focus.rect.bottom).toBeLessThanOrEqual(viewport.height);
+          |                                 ^
+      115 |     }
+      116 |     await activate(page, rail.getByRole("button", { name: "Workspace", exact: true }));
+      117 |     const newProject = page.getByRole("button", { name: "New project", exact: true });
+        at <repo>/tests/e2e/shell-accessibility.spec.ts:114:33
+
+    attachment #3: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/shell-accessibility-shell--09d5f-l-busy-response-at-1440x900/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/shell-accessibility-shell--09d5f-l-busy-response-at-1440x900/error-context.md
+
+  2 failed
+    tests/e2e/shell-accessibility.spec.ts:81:7 › shell accessibility: navigation state, form and real busy response at 1024x768
+    tests/e2e/shell-accessibility.spec.ts:81:7 › shell accessibility: navigation state, form and real busy response at 1440x900
+  2 passed (3.0s)

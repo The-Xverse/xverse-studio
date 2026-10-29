@@ -1,0 +1,282 @@
+import { test, expect, type Page, type Locator, type TestInfo } from "@playwright/test";
+import { readFileSync, writeFileSync, realpathSync } from "node:fs";
+import path from "node:path";
+import { parse, stringify } from "yaml";
+import { connectStudio } from "./connect-studio";
+import { renderedContrast } from "./contrast";
+
+async function tabTo(page: Page, target: Locator) {
+  await expect(target).toBeVisible();
+  for (const [key, limit] of [
+    ["Shift+Tab", 40],
+    ["Tab", 220],
+  ] as const) {
+    for (let i = 0; i < limit; i++) {
+      if (await target.evaluate((n) => document.activeElement === n)) return;
+      await page.keyboard.press(key);
+    }
+  }
+  await expect(target).toBeFocused();
+}
+async function activate(page: Page, target: Locator) {
+  await tabTo(page, target);
+  await page.keyboard.press("Enter");
+}
+async function request(
+  page: Page,
+  route: string,
+  method = "GET",
+  body?: unknown,
+  revision?: number,
+) {
+  return page.evaluate(
+    async ({ route, method, body, revision }) => {
+      const { csrfToken } = await fetch("/api/v1/session").then((r) =>
+        r.json(),
+      );
+      const response = await fetch("/api/v1" + route, {
+        method,
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRF-Token": csrfToken,
+          ...(revision === undefined ? {} : { "If-Match": `"${revision}"` }),
+        },
+        body: body === undefined ? undefined : JSON.stringify(body),
+      });
+      const value = await response.json();
+      if (!response.ok)
+        throw new Error(
+          `Owned placement fixture request failed: ${response.status} ${value.code}`,
+        );
+      return value;
+    },
+    { route, method, body, revision },
+  );
+}
+async function setup(page: Page, width: number) {
+  const initial = await request(page, "/projects", "POST", {
+    name: `Placement observation ${width}`,
+  });
+  const [documentId, document] = Object.entries<any>(initial.documents).find(
+    ([, d]) => parse(d.content).kind === "Deployment",
+  )!;
+  const deployment = parse(document.content);
+  deployment.spec.targets[0].externalAssetRef = "urn:fixture:unresolved-bench";
+  deployment.spec.bindings[1].realizationClass = "physical";
+  const project = await request(
+    page,
+    `/projects/${initial.projectId}/documents/${documentId}`,
+    "PUT",
+    { content: stringify(deployment), format: "yaml" },
+    initial.revision,
+  );
+  const url = `/projects/${project.projectId}/deployment-variants/${documentId}/physical-bindings`,
+    report = await request(page, `${url}?revision=${project.revision}`);
+  expect(report).toMatchObject({
+    bindingObservationVersion: "1.0",
+    projectId: project.projectId,
+    documentId,
+    revision: project.revision,
+    sourceValid: true,
+    scope: "read_only_placement_observation",
+    activeReady: false,
+    runtimeAdmission: "unavailable",
+    inventoryComplete: true,
+  });
+  expect(report.bindings).toHaveLength(1);
+  expect(report.bindings[0]).toMatchObject({
+    bindingId: "plant-binding",
+    realizationClass: "physical",
+    assetId: "urn:fixture:unresolved-bench",
+    asset: null,
+    ready: false,
+    activeReady: false,
+    readiness: {
+      identity: "unknown",
+      interfaces: "unknown",
+      providerAdmission: "unavailable",
+      permission: "unknown",
+      activeOperation: "blocked",
+    },
+  });
+  expect(Object.keys(report.bindings[0].requiredInterfaces).sort()).toEqual([
+    "command",
+    "state",
+  ]);
+  expect(report.bindings[0].diagnostics).toContain("ASSET_UNAVAILABLE");
+  await page.evaluate(
+    (id) => localStorage.setItem("studio.projectId", id),
+    project.projectId,
+  );
+  await page.reload();
+  await expect(
+    page.getByRole("heading", { name: project.name, exact: true }),
+  ).toBeVisible();
+  await activate(page, page.getByRole("tab", { name: /^Deployment/ }));
+  await expect(
+    page.getByRole("combobox", { name: "Deployment variant", exact: true }),
+  ).not.toHaveValue("");
+  await page.waitForLoadState("networkidle");
+  return {
+    project: await request(page, `/projects/${project.projectId}`),
+    documentId,
+    url,
+    report,
+  };
+}
+
+const panel = (page: Page) => page.getByRole("region", { name: "Physical placement observation", exact: true });
+const inspect = (page: Page) => panel(page).getByRole("button", { name: "Inspect physical placements", exact: true });
+const heading = (page: Page) => panel(page).getByRole("heading", { name: "Physical placement observation", exact: true });
+const home = (page: Page) => page.getByRole("button", { name: "X-Verse Studio home", exact: true });
+const pattern = "**/api/v1/projects/*/deployment-variants/*/physical-bindings?*";
+const field = (scope: Locator, name: string) => scope.locator(".key-values > div").filter({ has: scope.page().getByText(name, { exact: true }) }).locator("dd");
+
+async function reopen(page: Page, project: any) {
+  await page.reload();
+  await expect(page.getByRole("heading", { name: project.name, exact: true })).toBeVisible();
+  await activate(page, page.getByRole("tab", { name: /^Deployment/ }));
+  await page.waitForLoadState("networkidle");
+}
+
+async function observeWrites(page: Page, project: any, info: TestInfo) {
+  const beforeRuns = await request(page, "/runs"), reads: string[] = [];
+  let writes = 0;
+  const listener = (r: import("@playwright/test").Request) => {
+    if (!["GET", "HEAD"].includes(r.method())) writes++;
+    if (new URL(r.url()).pathname.endsWith("/physical-bindings")) reads.push(new URL(r.url()).pathname + new URL(r.url()).search);
+  };
+  page.on("request", listener);
+  return async (details: Record<string, unknown>) => {
+    await page.unroute(pattern);
+    await page.waitForLoadState("networkidle");
+    expect(await request(page, `/projects/${project.projectId}`)).toEqual(project);
+    expect(await request(page, "/runs")).toEqual(beforeRuns);
+    expect(writes).toBe(0);
+    page.off("request", listener);
+    await info.attach("placement-journey.json", {
+      body: JSON.stringify({ projectId: project.projectId, revision: project.revision, reads, mutativeRequestsAfterSetup: writes,
+        canonicalProjectAndRunsUnchanged: true, ...details,
+        scope: "Read-only native browser inspection; actual API results and labelled transport fixtures are distinguished. No physical provider installed, reservation, device operation or Start." }),
+      contentType: "application/json",
+    });
+  };
+}
+
+async function bounds(target: Locator, viewport: {width:number;height:number}) {
+  await expect(target).toBeFocused();
+  const geometry = await target.evaluate(n => {const box=n.getBoundingClientRect(), style=getComputedStyle(n);return {box:box.toJSON(),outline:style.outlineStyle,outlineWidth:parseFloat(style.outlineWidth)};});
+  expect(geometry.box.left).toBeGreaterThanOrEqual(0);
+  expect(geometry.box.top).toBeGreaterThanOrEqual(0);
+  expect(geometry.box.right).toBeLessThanOrEqual(viewport.width);
+  expect(geometry.box.bottom).toBeLessThanOrEqual(viewport.height);
+  expect(geometry.outline).not.toBe("none");
+  expect(geometry.outlineWidth).toBeGreaterThan(0);
+  return geometry;
+}
+
+async function paint(target: Locator, label: string) {
+  const observed = await renderedContrast(target, label);
+  expect(observed.supported).toBe(true);
+  if (observed.supported) expect(observed.ratio).toBeGreaterThanOrEqual(4.5);
+  return observed;
+}
+
+for (const viewport of [
+  { width: 1024, height: 768 },
+  { width: 1440, height: 900 },
+]) {
+  test(`physical placements: actual invalid source is not an empty observation at ${viewport.width}x${viewport.height}`, async ({page}, info) => {
+    await page.setViewportSize(viewport);
+    await connectStudio(page, info);
+    const prepared = await setup(page, viewport.width);
+    const [id, source] = Object.entries<any>(prepared.project.documents).find(([,d])=>parse(d.content).kind==="Scenario")!;
+    const project = await request(page, `/projects/${prepared.project.projectId}/documents/${id}`, "PUT", {content: source.content + "\ninvalid: [\n", format:"yaml"}, prepared.project.revision);
+    const report = await request(page, `${prepared.url}?revision=${project.revision}`);
+    expect(report.sourceValid).toBe(false);
+    expect(report.bindings).toEqual([]);
+    expect(report.diagnostics.length).toBeGreaterThan(0);
+    expect(report.inventoryComplete).toBeUndefined();
+    await reopen(page, project);
+    const finish = await observeWrites(page, project, info);
+    await expect(inspect(page)).toBeEnabled();
+    await activate(page, inspect(page));
+    await expect(panel(page).getByRole("alert")).toContainText("source set is invalid");
+    await expect(panel(page).getByRole("alert")).toBeFocused();
+    await expect(panel(page).getByText(/No physical or hybrid bindings/)).toHaveCount(0);
+    await finish({actualInvalidResolverReport:report});
+  });
+
+  test(`physical placements: actual unresolved authored binding is read-only at ${viewport.width}x${viewport.height}`, async ({
+    page,
+  }, info) => {
+    await page.setViewportSize(viewport);
+    await connectStudio(page, info);
+    const { project, documentId, url, report } = await setup(
+        page,
+        viewport.width,
+      ),
+      beforeRuns = await request(page, "/runs");
+    let writes = 0;
+    const reads: string[] = [];
+    page.on("request", (r) => {
+      if (!["GET", "HEAD"].includes(r.method())) writes++;
+      if (new URL(r.url()).pathname === "/api/v1" + url)
+        reads.push(new URL(r.url()).search);
+    });
+    const inspect = page.getByRole("button", {
+      name: "Inspect physical placements",
+      exact: true,
+    });
+    await expect.soft(inspect).toBeVisible();
+    if (await inspect.count()) {
+      await activate(page, inspect);
+      const panel = page.getByRole("region", {
+        name: "Physical placement observation",
+        exact: true,
+      });
+      await expect(
+        panel.getByText(report.systemRef, { exact: true }),
+      ).toBeVisible();
+      await expect(
+        field(panel, "Deployment"),
+      ).toHaveText(report.deploymentRef);
+      await expect(
+        panel.getByText(report.bindings[0].logicalRef, { exact: true }),
+      ).toBeVisible();
+      await expect(
+        panel.getByText("urn:fixture:unresolved-bench", { exact: true }),
+      ).toBeVisible();
+      await expect(
+        panel.getByText("ASSET_UNAVAILABLE", { exact: true }),
+      ).toBeVisible();
+      await expect(
+        panel.getByRole("heading", {
+          name: "Physical placement observation",
+          exact: true,
+        }),
+      ).toBeFocused();
+      expect(reads).toEqual([`?revision=${project.revision}`]);
+    }
+    const saved = await request(page, `/projects/${project.projectId}`);
+    expect(saved).toEqual(project);
+    expect(saved.documents[documentId]).toEqual(project.documents[documentId]);
+    expect(await request(page, "/runs")).toEqual(beforeRuns);
+    expect(writes).toBe(0);
+    await info.attach("physical-placement-observation.json", {
+      body: JSON.stringify({
+        viewport,
+        projectId: project.projectId,
+        documentId,
+        revision: project.revision,
+        actualResolverReport: report,
+        actualCanonicalUnchanged: true,
+        mutativeRequestsAfterSetup: writes,
+        observedUIReads: reads,
+        scope:
+          "Actual public source declaration and authoritative read-only resolver with empty/unadmitted inventory; no fixture provider installed, device operation, reservation or Start",
+      }),
+      contentType: "application/json",
+    });
+  });
+}

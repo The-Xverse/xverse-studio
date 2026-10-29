@@ -1,0 +1,42 @@
+
+> xverse-studio-workspace@0.1.0 typecheck
+> npm run typecheck --workspace @xverse/studio-web
+
+
+> @xverse/studio-web@0.1.0 typecheck
+> tsc --noEmit
+
+
+> xverse-studio-workspace@0.1.0 build
+> npm run build --workspace @xverse/studio-web
+
+
+> @xverse/studio-web@0.1.0 build
+> tsc --noEmit && vite build
+
+vite v7.3.7 building client environment for production...
+transforming...
+../../node_modules/@xyflow/react/dist/esm/index.js (1:0): Module level directives cause errors when bundled, "use client" in "../../node_modules/@xyflow/react/dist/esm/index.js" was ignored.
+✓ 302 modules transformed.
+Generated an empty chunk: "react".
+rendering chunks...
+computing gzip size...
+dist/index.html                   0.55 kB │ gzip:   0.32 kB
+dist/assets/index-BIwV-qw2.css   67.22 kB │ gzip:  14.13 kB
+dist/assets/react-l0sNRNKZ.js     0.00 kB │ gzip:   0.02 kB
+dist/assets/yaml-q0AlIuTs.js     97.10 kB │ gzip:  30.34 kB
+dist/assets/graph-UkwgzQRo.js   192.74 kB │ gzip:  63.25 kB
+dist/assets/index-CeSLsaqi.js   517.10 kB │ gzip: 153.69 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 1.30s
+Architecture boundaries: passed (imports, dependency direction, industry dispatch, private runtime, executable input and browser executable hooks).
+{
+  "valid": true,
+  "scope": "descriptive_platform_baseline_only",
+  "runtimeAdmission": false,
+  "errors": []
+}

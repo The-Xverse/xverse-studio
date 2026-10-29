@@ -1,0 +1,42 @@
+"""After baseline terminal success, strengthen final identity and verify affected cases."""
+from pathlib import Path
+from collections import Counter
+import ast,hashlib,json,os,re,subprocess,sys,time,uuid
+import xml.etree.ElementTree as ET
+
+root=Path.cwd().resolve();base=root/'.studio-local/campaign-delegation-main';baseline=base/'verified-backend';out=base/'final-identity'
+read=lambda path:json.loads(path.read_text())
+records=read(baseline/'verification.json');assert records[-1]['name']=='pytest' and records[-1]['exitCode']==0
+old=read(baseline/'source-before.json');assert old==read(baseline/'source-after.json') and len(old)==299
+suites=ET.parse(baseline/'junit.xml').getroot().findall('testsuite');assert {k:sum(int(s.get(k,0)) for s in suites) for k in ['tests','failures','errors','skipped']}=={'tests':938,'failures':0,'errors':0,'skipped':0}
+out.mkdir(exist_ok=False)
+name='tests/platform/test_campaign_delegation_recovery.py';review=read(base/'identity-review.json');target=root/name;proposal=(base/'identity-successor.py').read_text()
+assert hashlib.sha256(target.read_bytes()).hexdigest()==review['baselineSourceSha256']==old[name]
+assert hashlib.sha256(proposal.encode()).hexdigest()==review['formattedProposalSourceSha256']
+assert all(hashlib.sha256((root/n).read_bytes()).hexdigest()==h for n,h in old.items())
+assert Counter(ast.dump(n) for n in ast.walk(ast.parse(target.read_text())) if isinstance(n,ast.Assert))==Counter(ast.dump(n) for n in ast.walk(ast.parse(proposal)) if isinstance(n,ast.Assert))
+target.write_text(proposal)
+frozen={n:hashlib.sha256((root/n).read_bytes()).hexdigest() for n in old};assert {n for n in old if frozen[n]!=old[n]}=={name}
+def inputs():return {n:hashlib.sha256((root/n).read_bytes()).hexdigest() for n in frozen}
+def save(path,value):path.write_text(json.dumps(value,indent=2)+'\n')
+save(out/'source-before.json',frozen);save(out/'amendment.json',{'scope':'Only the native regression source changes after the full938 baseline. Existing PID/birth assertion moves out of failed-only handling to the successful common path after retries, covering all four modes. All original assertion nodes and the exact embedded harness string remain; no runtime or other test byte changes.','review':review,'changedInputs':{name:{'baseline':old[name],'final':frozen[name]}},'remaining934Tests':'Unchanged source and runtime inputs, executed by the baseline full938. Affected final4 are freshly executed below. No final single-command full938 rerun is claimed.'})
+cache=root.parent/'.xverse-studio-cache';env=dict(os.environ,SPECIFY_FEATURE_DIRECTORY='specs/001-industry-agnostic-studio',PYTEST_DISABLE_PLUGIN_AUTOLOAD='1',PATH=str(cache/'node-v24.22.1-linux-x64/bin')+os.pathsep+os.environ['PATH'],TMPDIR=str(cache/'tmp'),TEMP=str(cache/'tmp'),TMP=str(cache/'tmp'))
+commands=[('format',[str(root/'.venv/bin/ruff'),'format','--check',name]),('ruff',[str(root/'.venv/bin/ruff'),'check','--select','F821','services/studio-api/src','scripts','tests']),('spec',[sys.executable,'-I','scripts/validate_spec_package.py']),('architecture',[sys.executable,'-I','scripts/check_architecture.py']),('compatibility',[sys.executable,'-I','scripts/check_platform_compatibility.py']),('environment',[sys.executable,'-I','scripts/record_environment.py','--output',str(out/'environment.json')]),('pytest',[sys.executable,'-I','-m','pytest',name,'-q','--tb=short','--basetemp='+str(base/('owned-final-test-data-'+uuid.uuid4().hex)),'--junitxml='+str(out/'junit.xml')])]
+rows=[]
+try:
+    for label,command in commands:
+        start=time.monotonic()
+        with (out/(label+'.log')).open('w') as log:r=subprocess.run(command,cwd=root,env=env,stdout=log,stderr=subprocess.STDOUT)
+        assert inputs()==frozen
+        row={'name':label,'command':command,'exitCode':r.returncode,'seconds':round(time.monotonic()-start,3),'selectedInputs':299,'sourceUnchanged':True};rows.append(row);save(out/'verification.json',rows);print(json.dumps(row),flush=True)
+        if r.returncode:raise SystemExit(r.returncode)
+    cases=ET.parse(out/'junit.xml').getroot().findall('.//testcase');assert len(cases)==4
+    baseline_cases=ET.parse(baseline/'junit.xml').getroot().findall('.//testcase')
+    identity=lambda case:(case.attrib['classname'],case.attrib['name'])
+    final_ids={identity(c) for c in cases};prior_ids={identity(c) for c in baseline_cases};assert final_ids<=prior_ids and len(prior_ids-final_ids)==934
+    pytest_command=commands[-1][1];data=Path(next(v.split('=',1)[1] for v in pytest_command if v.startswith('--basetemp=')))
+    facts=[read(p) for p in data.rglob('receipt.json') if p.parent.name=='observations'];assert len(facts)==4 and all(v['outcome']=='passed' and v['originalWorkerIdentityRetained'] for v in facts)
+    save(out/'native-recovery-observations.json',facts)
+    save(out/'coverage.json',{'scope':'Baseline full938 passed before strengthening final native identity assertions. All other934 test cases and runtime inputs remain byte-identical; final affected4 pass after the assertion-only amendment. This is not a single-command full938 execution on the final test source.','baselineFullTests':938,'baselineFullFailed':0,'finalAffectedTests':4,'unchangedRemainingTests':934,'allRuntimeInputsUnchanged':True,'allOriginalAssertionNodesPreserved':True,'finalIdentityVerifiedForAllFourModes':True,'finalSingleCommandFull938':False})
+    print('Final4 identity cases passed; remaining934 exact unchanged baseline coverage retained',flush=True)
+finally:save(out/'source-after.json',inputs());assert inputs()==frozen

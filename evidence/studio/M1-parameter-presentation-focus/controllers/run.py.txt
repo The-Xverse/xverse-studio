@@ -1,0 +1,33 @@
+"""Freeze final inputs for affected, complete browser and separate performance gates."""
+from pathlib import Path
+import hashlib,json,os,shutil,subprocess,sys,time
+
+root=Path.cwd().resolve();base=root/'.studio-local/parameter-presentation-workflow';cache=root.parent/'.xverse-studio-cache'
+env=dict(os.environ,SPECIFY_FEATURE_DIRECTORY='specs/001-industry-agnostic-studio',PATH=str(cache/'node-v24.22.1-linux-x64/bin')+os.pathsep+os.environ['PATH'],PLAYWRIGHT_BROWSERS_PATH=str(cache/'playwright'),TMPDIR=str(cache/'tmp'),TEMP=str(cache/'tmp'),TMP=str(cache/'tmp'),PYTEST_DISABLE_PLUGIN_AUTOLOAD='1')
+fixed=['pyproject.toml','uv.lock','package.json','package-lock.json','docs/user/run-comparison.md','docs/user/campaigns.md','docs/architecture/ADR-0013-revision-history-and-recovery.md','docs/architecture/ADR-0019-scenario-evidence-timeline.md','docs/architecture/ADR-0020-campaign-workflow.md','docs/architecture/ADR-0021-recorded-comparison.md','docs/architecture/ADR-0022-owned-worker-state-handoff.md']
+def inputs():
+    paths=subprocess.check_output(['git','ls-files','--cached','--others','--exclude-standard'],text=True).splitlines()
+    paths += [str(p.relative_to(root)) for p in (root/'apps/studio-web/dist').rglob('*') if p.is_file()]
+    return {n:hashlib.sha256((root/n).read_bytes()).hexdigest() for n in sorted(set(paths)) if (root/n).is_file() and (n.startswith(('apps/','services/','scripts/','tests/','packages/','config/')) or n in fixed)}
+def write(path,value):path.write_text(json.dumps(value,indent=2)+'\n')
+frozen=inputs();assert len(frozen)==298,len(frozen);write(base/'frozen-inputs.json',frozen)
+prior=json.loads((root/'evidence/studio/M4-campaign-worker-failure/application-and-input-hashes.json').read_text())
+changes={n:{'previous':h,'current':frozen.get(n)} for n,h in prior.items() if frozen.get(n)!=h}
+assert all(n=='apps/studio-web/src/features/model/Views.tsx' or n.startswith('apps/studio-web/dist/') for n in changes),changes
+added=sorted(set(frozen)-set(prior));assert [n for n in added if not n.startswith('apps/studio-web/dist/')]==['docs/architecture/ADR-0013-revision-history-and-recovery.md','tests/e2e/parameter-presentation-focus.spec.ts'],added
+assert all(n.startswith('apps/studio-web/dist/') for n in set(prior)-set(frozen))
+write(base/'backend-inheritance.json',{'scope':'Fresh934 backend results are inherited from b355c4c through exact unchanged backend/Python/test/lock inputs. The only prior input changes are Views.tsx and compiled UI; additions are the browser regression and non-executable ADR13. No fresh full backend execution is claimed.','priorCandidate':'b355c4cdb5e1621566db0239bf0083bc1c8b526a','priorEvidence':'evidence/studio/M4-campaign-worker-failure/','unchangedPreviousInputs':len(prior)-len(changes),'changes':changes,'added':added})
+for name,args,count in [('targeted',['--grep','parameter presentation:|parameter accessibility:|wizard accessibility:'],48),('full',[],474),('performance',['--performance','--grep','operability:'],2)]:
+    print('START '+name,flush=True);out=base/name;out.mkdir(exist_ok=False)
+    before=inputs();assert before==frozen;write(out/'source-before.json',before)
+    command=[sys.executable,'-I','scripts/test_browser.py',*args];start=time.monotonic()
+    with (out/'browser.log').open('w') as log:r=subprocess.run(command,cwd=root,env=env,stdout=log,stderr=subprocess.STDOUT)
+    after=inputs();write(out/'source-after.json',after)
+    shutil.copyfile(root/'test-results/browser-report.json',out/'browser-report.json');shutil.copytree(root/'test-results/browser',out/'browser-output')
+    summary={'command':command,'exitCode':r.returncode,'seconds':round(time.monotonic()-start,3),'sourceUnchanged':before==after,'inputs':len(before),'baseCandidate':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),'scope':'Promoted parameter presentation focus repair against actual owned native Linux launcher; separate affected/full/performance stages.'}
+    write(out/'summary.json',summary);print(json.dumps(summary),flush=True)
+    if r.returncode:raise SystemExit(r.returncode)
+    assert before==after==frozen
+    report=json.loads((out/'browser-report.json').read_text());assert report['stats']['expected']==count and not any(report['stats'][k] for k in ['skipped','flaky','unexpected']),report['stats']
+    print('PASS '+name+': '+str(count),flush=True)
+print('Affected, full browser and performance gates passed',flush=True)

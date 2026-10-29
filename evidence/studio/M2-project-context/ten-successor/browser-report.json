@@ -1,0 +1,522 @@
+{
+  "config": {
+    "argv": [
+      "<loop-cache>/node-v24.22.1-linux-x64/bin/node",
+      "<repo>/node_modules/.bin/playwright",
+      "test",
+      "-c",
+      "tests/e2e/playwright.config.ts",
+      "--grep",
+      "project context:"
+    ],
+    "configFile": "<repo>/tests/e2e/playwright.config.ts",
+    "rootDir": "<repo>/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "<repo>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "<repo>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "*.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "<repo>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "<repo>/tests/e2e",
+        "snapshotDir": "<repo>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": "*.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "baseURL": "http://127.0.0.1:45933",
+          "browserName": "chromium",
+          "actionTimeout": 15000,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "trace": "off",
+          "screenshot": "only-on-failure",
+          "video": "off"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "<repo>/test-results/browser-report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "project-context.spec.ts",
+      "file": "project-context.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "project context: foreign recovery preserves newer source draft at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4217,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T22:01:14.360Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "project-context-recovery.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJtb2RlIjoic291cmNlIGRyYWZ0IiwiYWN0aXZlUHJvamVjdElkIjoicHJqLWYzMWUzZmZhLTJhMzUtNDQ3NS05M2JlLTRkOTIzOWEzMjY3ZiIsInJlY292ZXJlZFByb2plY3RJZCI6InByai00NmE0YTQ0Mi00NDY5LTQxNGQtODI0Mi1lNTdjZWFiODc4YjUiLCJkaXN0aW5jdFByb2plY3RzIjp0cnVlLCJhY3RpdmVSZXZpc2lvbiI6MSwiaW5kZXBlbmRlbnRSZWNvdmVyeUNvbW1pdHRlZCI6dHJ1ZSwicHJlc2VydmVkIjp7InJlY292ZXJ5SWQiOiJyZWMtMTMxODBjMGMtODVkNi00N2EyLWI4ZjMtODc1MTg1NGFlMTliIiwiY29tbWl0dGVkRGlnZXN0Ijoic2hhMjU2OjM5YWUxNDNjZDdkODUxYmQ2ZDRmMThmN2E3MGIwZTBjNGQyZWJiMzdkZDg2ZjlhYThjMTdmNmQ4NjNmNDg5NzkiLCJvYnNlcnZlZERpZ2VzdCI6InNoYTI1Njo0OTVlZDU1MThjNTBiZGU0OTUyMjJlYmQ2MThhNjMzZTcxMmZkNDczM2M4NWY4MjA1NTY3Nzk0YTViNjI0OWZmIiwicHJlc2VydmVkRW5jb2RpbmciOiJiaW5hcnkiLCJleGFjdEJhY2t1cEJ5dGVzIjp0cnVlLCJvbGRSZXZpc2lvbkRpcmVjdG9yeVVuY2hhbmdlZCI6dHJ1ZX0sIm93blByb2plY3RSdW5TZXRzVW5jaGFuZ2VkIjp0cnVlLCJzY29wZSI6IlJlYWwgZm9yZWlnbiBvd25lZCByZWNvdmVyeSBoZWxkIGFmdGVyIGNvbW1pdDsgcHJlc2VydmUgbmV3ZXIgYXV0aG9yaW5nIGludGVudCBpbiBzdGlsbC1yZW5kZXJlZCBhY3RpdmUgcHJvamVjdDsgbm8gU3RhcnQifQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "520c74da435c110dc8a0-aafdb5b8158685e4b098",
+          "file": "project-context.spec.ts",
+          "line": 439,
+          "column": 9
+        },
+        {
+          "title": "project context: foreign recovery preserves newer source save at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3533,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T22:01:18.643Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "project-context-recovery.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJtb2RlIjoic291cmNlIHNhdmUiLCJhY3RpdmVQcm9qZWN0SWQiOiJwcmotNGZhMWIxYjQtOGI4ZC00NDcxLTg5YzUtMTg4MDBmNzMwMWE0IiwicmVjb3ZlcmVkUHJvamVjdElkIjoicHJqLTVkNWJmNTM0LWFhM2UtNGEyMi1hMDQ1LTI4MmY5ZWU3OGY0MyIsImRpc3RpbmN0UHJvamVjdHMiOnRydWUsImFjdGl2ZVJldmlzaW9uIjoyLCJpbmRlcGVuZGVudFJlY292ZXJ5Q29tbWl0dGVkIjp0cnVlLCJwcmVzZXJ2ZWQiOnsicmVjb3ZlcnlJZCI6InJlYy0zMzVjZmEyZC1jYWY2LTQ2NTktYjY1NC1iODdkMDQyZjNiZDYiLCJjb21taXR0ZWREaWdlc3QiOiJzaGEyNTY6MzlhZTE0M2NkN2Q4NTFiZDZkNGYxOGY3YTcwYjBlMGM0ZDJlYmIzN2RkODZmOWFhOGMxN2Y2ZDg2M2Y0ODk3OSIsIm9ic2VydmVkRGlnZXN0Ijoic2hhMjU2OjQ5NWVkNTUxOGM1MGJkZTQ5NTIyMmViZDYxOGE2MzNlNzEyZmQ0NzMzYzg1ZjgyMDU1Njc3OTRhNWI2MjQ5ZmYiLCJwcmVzZXJ2ZWRFbmNvZGluZyI6ImJpbmFyeSIsImV4YWN0QmFja3VwQnl0ZXMiOnRydWUsIm9sZFJldmlzaW9uRGlyZWN0b3J5VW5jaGFuZ2VkIjp0cnVlfSwib3duUHJvamVjdFJ1blNldHNVbmNoYW5nZWQiOnRydWUsInNjb3BlIjoiUmVhbCBmb3JlaWduIG93bmVkIHJlY292ZXJ5IGhlbGQgYWZ0ZXIgY29tbWl0OyBwcmVzZXJ2ZSBuZXdlciBhdXRob3JpbmcgaW50ZW50IGluIHN0aWxsLXJlbmRlcmVkIGFjdGl2ZSBwcm9qZWN0OyBubyBTdGFydCJ9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "520c74da435c110dc8a0-202cd6560500bfd69a92",
+          "file": "project-context.spec.ts",
+          "line": 439,
+          "column": 9
+        },
+        {
+          "title": "project context: foreign recovery preserves newer parameter draft at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2825,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T22:01:22.190Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "project-context-recovery.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJtb2RlIjoicGFyYW1ldGVyIGRyYWZ0IiwiYWN0aXZlUHJvamVjdElkIjoicHJqLTE3MzAyNTg1LWJjN2EtNDYwZi1hMWM1LTQ1NjU2ZTg1NDZkOCIsInJlY292ZXJlZFByb2plY3RJZCI6InByai1jYjNlNzZhNy00ZmI2LTQ2NGUtOGEwZC1mZTNmYzgyMGE4MjgiLCJkaXN0aW5jdFByb2plY3RzIjp0cnVlLCJhY3RpdmVSZXZpc2lvbiI6MSwiaW5kZXBlbmRlbnRSZWNvdmVyeUNvbW1pdHRlZCI6dHJ1ZSwicHJlc2VydmVkIjp7InJlY292ZXJ5SWQiOiJyZWMtNGI5MmJmNGUtMzQwZS00ZWY3LTg1Y2UtYjgzMWU3ODdhZWEyIiwiY29tbWl0dGVkRGlnZXN0Ijoic2hhMjU2OjM5YWUxNDNjZDdkODUxYmQ2ZDRmMThmN2E3MGIwZTBjNGQyZWJiMzdkZDg2ZjlhYThjMTdmNmQ4NjNmNDg5NzkiLCJvYnNlcnZlZERpZ2VzdCI6InNoYTI1Njo0OTVlZDU1MThjNTBiZGU0OTUyMjJlYmQ2MThhNjMzZTcxMmZkNDczM2M4NWY4MjA1NTY3Nzk0YTViNjI0OWZmIiwicHJlc2VydmVkRW5jb2RpbmciOiJiaW5hcnkiLCJleGFjdEJhY2t1cEJ5dGVzIjp0cnVlLCJvbGRSZXZpc2lvbkRpcmVjdG9yeVVuY2hhbmdlZCI6dHJ1ZX0sIm93blByb2plY3RSdW5TZXRzVW5jaGFuZ2VkIjp0cnVlLCJzY29wZSI6IlJlYWwgZm9yZWlnbiBvd25lZCByZWNvdmVyeSBoZWxkIGFmdGVyIGNvbW1pdDsgcHJlc2VydmUgbmV3ZXIgYXV0aG9yaW5nIGludGVudCBpbiBzdGlsbC1yZW5kZXJlZCBhY3RpdmUgcHJvamVjdDsgbm8gU3RhcnQifQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "520c74da435c110dc8a0-ac2a84281cc7c7c26bec",
+          "file": "project-context.spec.ts",
+          "line": 439,
+          "column": 9
+        },
+        {
+          "title": "project context: obsolete successful load preserves newer source save at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3508,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T22:01:25.023Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "project-context-load.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJicm9rZW4iOmZhbHNlLCJsb2FkU3RhdHVzIjoyMDAsImFjdGl2ZVByb2plY3RJZCI6InByai04Y2ZkMjBkYS04MGZmLTQ2NmMtODM2Ni0wZjQ3MWFlNmU5MjYiLCJsb2FkVGFyZ2V0SWQiOiJwcmotYzI3OTIzYTktZDZiNi00NzJlLThmNmEtMTljYzQ2NDIwNjE2Iiwic291cmNlQ29tbWl0QWNrbm93bGVkZ2VkIjp0cnVlLCJuZXdlck1vZGFsUHJlc2VydmVkIjp0cnVlLCJvd25Qcm9qZWN0UnVuU2V0c1VuY2hhbmdlZCI6dHJ1ZSwic2NvcGUiOiJIZWxkIGFjdHVhbCBsb2FkIHJlc3BvbnNlIGFuZCBhY3R1YWwgc291cmNlIFBVVDsgb2Jzb2xldGUgY3JlYXRpb24gY29udGludWF0aW9uL2Vycm9yIG11c3Qgbm90IGNoYW5nZSBuZXdlciBhdXRob3JpbmcgY29udGV4dDsgbm8gU3RhcnQifQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "520c74da435c110dc8a0-aa3de00f61fdf11f7d19",
+          "file": "project-context.spec.ts",
+          "line": 578,
+          "column": 9
+        },
+        {
+          "title": "project context: obsolete failed load preserves newer source save at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3655,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T22:01:28.539Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "project-context-load.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJicm9rZW4iOnRydWUsImxvYWRTdGF0dXMiOjQwOSwiYWN0aXZlUHJvamVjdElkIjoicHJqLWEwODJiODQ1LTI4NzYtNDkwYy05YmVlLWY1MTIzYmZkMGYzMiIsImxvYWRUYXJnZXRJZCI6InByai1hY2UyYWVlOS02YzdlLTRkYTAtOGJjMy1mMjdjYzFlMDUwMDYiLCJzb3VyY2VDb21taXRBY2tub3dsZWRnZWQiOnRydWUsIm5ld2VyTW9kYWxQcmVzZXJ2ZWQiOnRydWUsIm93blByb2plY3RSdW5TZXRzVW5jaGFuZ2VkIjp0cnVlLCJzY29wZSI6IkhlbGQgYWN0dWFsIGxvYWQgcmVzcG9uc2UgYW5kIGFjdHVhbCBzb3VyY2UgUFVUOyBvYnNvbGV0ZSBjcmVhdGlvbiBjb250aW51YXRpb24vZXJyb3IgbXVzdCBub3QgY2hhbmdlIG5ld2VyIGF1dGhvcmluZyBjb250ZXh0OyBubyBTdGFydCJ9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "520c74da435c110dc8a0-2f38a9c898eebfab8b25",
+          "file": "project-context.spec.ts",
+          "line": 578,
+          "column": 9
+        },
+        {
+          "title": "project context: foreign recovery preserves newer source draft at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3933,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T22:01:32.202Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "project-context-recovery.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJtb2RlIjoic291cmNlIGRyYWZ0IiwiYWN0aXZlUHJvamVjdElkIjoicHJqLTE2OTRiYjdkLTY0ZmEtNGFjMC1hN2Y2LTdkZjM4Y2QwMmQzMiIsInJlY292ZXJlZFByb2plY3RJZCI6InByai1lMDQ4MTA5YS0yYmYwLTRjZWMtYWMwMS04ZmU2OWM5OGExYjgiLCJkaXN0aW5jdFByb2plY3RzIjp0cnVlLCJhY3RpdmVSZXZpc2lvbiI6MSwiaW5kZXBlbmRlbnRSZWNvdmVyeUNvbW1pdHRlZCI6dHJ1ZSwicHJlc2VydmVkIjp7InJlY292ZXJ5SWQiOiJyZWMtZGM5YjU2OGMtM2FmZS00ZWI1LWI2NTctYzQ3N2EzM2NhMTg2IiwiY29tbWl0dGVkRGlnZXN0Ijoic2hhMjU2OjM5YWUxNDNjZDdkODUxYmQ2ZDRmMThmN2E3MGIwZTBjNGQyZWJiMzdkZDg2ZjlhYThjMTdmNmQ4NjNmNDg5NzkiLCJvYnNlcnZlZERpZ2VzdCI6InNoYTI1Njo0OTVlZDU1MThjNTBiZGU0OTUyMjJlYmQ2MThhNjMzZTcxMmZkNDczM2M4NWY4MjA1NTY3Nzk0YTViNjI0OWZmIiwicHJlc2VydmVkRW5jb2RpbmciOiJiaW5hcnkiLCJleGFjdEJhY2t1cEJ5dGVzIjp0cnVlLCJvbGRSZXZpc2lvbkRpcmVjdG9yeVVuY2hhbmdlZCI6dHJ1ZX0sIm93blByb2plY3RSdW5TZXRzVW5jaGFuZ2VkIjp0cnVlLCJzY29wZSI6IlJlYWwgZm9yZWlnbiBvd25lZCByZWNvdmVyeSBoZWxkIGFmdGVyIGNvbW1pdDsgcHJlc2VydmUgbmV3ZXIgYXV0aG9yaW5nIGludGVudCBpbiBzdGlsbC1yZW5kZXJlZCBhY3RpdmUgcHJvamVjdDsgbm8gU3RhcnQifQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "520c74da435c110dc8a0-2a438333b792123e3146",
+          "file": "project-context.spec.ts",
+          "line": 439,
+          "column": 9
+        },
+        {
+          "title": "project context: foreign recovery preserves newer source save at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3406,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T22:01:36.144Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "project-context-recovery.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJtb2RlIjoic291cmNlIHNhdmUiLCJhY3RpdmVQcm9qZWN0SWQiOiJwcmotZTM3NjZjZTQtM2UwOC00ODEyLWI4ZTgtMGYyOWJkYTM0MDRiIiwicmVjb3ZlcmVkUHJvamVjdElkIjoicHJqLTJhYTgzZGRiLTEyNDAtNDlkMS05NWY3LTE0M2UwMWNjZGVmYyIsImRpc3RpbmN0UHJvamVjdHMiOnRydWUsImFjdGl2ZVJldmlzaW9uIjoyLCJpbmRlcGVuZGVudFJlY292ZXJ5Q29tbWl0dGVkIjp0cnVlLCJwcmVzZXJ2ZWQiOnsicmVjb3ZlcnlJZCI6InJlYy1kY2U2YzgwNi1kZjdmLTRmMmEtOTViYy01ZjBjMDQ3YjZkODYiLCJjb21taXR0ZWREaWdlc3QiOiJzaGEyNTY6MzlhZTE0M2NkN2Q4NTFiZDZkNGYxOGY3YTcwYjBlMGM0ZDJlYmIzN2RkODZmOWFhOGMxN2Y2ZDg2M2Y0ODk3OSIsIm9ic2VydmVkRGlnZXN0Ijoic2hhMjU2OjQ5NWVkNTUxOGM1MGJkZTQ5NTIyMmViZDYxOGE2MzNlNzEyZmQ0NzMzYzg1ZjgyMDU1Njc3OTRhNWI2MjQ5ZmYiLCJwcmVzZXJ2ZWRFbmNvZGluZyI6ImJpbmFyeSIsImV4YWN0QmFja3VwQnl0ZXMiOnRydWUsIm9sZFJldmlzaW9uRGlyZWN0b3J5VW5jaGFuZ2VkIjp0cnVlfSwib3duUHJvamVjdFJ1blNldHNVbmNoYW5nZWQiOnRydWUsInNjb3BlIjoiUmVhbCBmb3JlaWduIG93bmVkIHJlY292ZXJ5IGhlbGQgYWZ0ZXIgY29tbWl0OyBwcmVzZXJ2ZSBuZXdlciBhdXRob3JpbmcgaW50ZW50IGluIHN0aWxsLXJlbmRlcmVkIGFjdGl2ZSBwcm9qZWN0OyBubyBTdGFydCJ9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "520c74da435c110dc8a0-86902159905a4ff14e24",
+          "file": "project-context.spec.ts",
+          "line": 439,
+          "column": 9
+        },
+        {
+          "title": "project context: foreign recovery preserves newer parameter draft at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3665,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T22:01:39.558Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "project-context-recovery.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJtb2RlIjoicGFyYW1ldGVyIGRyYWZ0IiwiYWN0aXZlUHJvamVjdElkIjoicHJqLTJiZWYwYzVlLTdmZWYtNDQzYi1hYjY5LTg4ZGJjYTAzMWQ0YiIsInJlY292ZXJlZFByb2plY3RJZCI6InByai02ZGIxNDE4MC05NThmLTQ0MzEtYWUwNC00Y2E4YWMyNWI3Y2MiLCJkaXN0aW5jdFByb2plY3RzIjp0cnVlLCJhY3RpdmVSZXZpc2lvbiI6MSwiaW5kZXBlbmRlbnRSZWNvdmVyeUNvbW1pdHRlZCI6dHJ1ZSwicHJlc2VydmVkIjp7InJlY292ZXJ5SWQiOiJyZWMtZmY3ZTFhZDEtNmJmMy00ODM5LTlkNDMtNjk2Y2MxODBiMTViIiwiY29tbWl0dGVkRGlnZXN0Ijoic2hhMjU2OjM5YWUxNDNjZDdkODUxYmQ2ZDRmMThmN2E3MGIwZTBjNGQyZWJiMzdkZDg2ZjlhYThjMTdmNmQ4NjNmNDg5NzkiLCJvYnNlcnZlZERpZ2VzdCI6InNoYTI1Njo0OTVlZDU1MThjNTBiZGU0OTUyMjJlYmQ2MThhNjMzZTcxMmZkNDczM2M4NWY4MjA1NTY3Nzk0YTViNjI0OWZmIiwicHJlc2VydmVkRW5jb2RpbmciOiJiaW5hcnkiLCJleGFjdEJhY2t1cEJ5dGVzIjp0cnVlLCJvbGRSZXZpc2lvbkRpcmVjdG9yeVVuY2hhbmdlZCI6dHJ1ZX0sIm93blByb2plY3RSdW5TZXRzVW5jaGFuZ2VkIjp0cnVlLCJzY29wZSI6IlJlYWwgZm9yZWlnbiBvd25lZCByZWNvdmVyeSBoZWxkIGFmdGVyIGNvbW1pdDsgcHJlc2VydmUgbmV3ZXIgYXV0aG9yaW5nIGludGVudCBpbiBzdGlsbC1yZW5kZXJlZCBhY3RpdmUgcHJvamVjdDsgbm8gU3RhcnQifQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "520c74da435c110dc8a0-c902043bbe1a07715561",
+          "file": "project-context.spec.ts",
+          "line": 439,
+          "column": 9
+        },
+        {
+          "title": "project context: obsolete successful load preserves newer source save at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3368,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T22:01:43.233Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "project-context-load.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJicm9rZW4iOmZhbHNlLCJsb2FkU3RhdHVzIjoyMDAsImFjdGl2ZVByb2plY3RJZCI6InByai05Y2JiMmIyYi03N2QxLTQ1ZWEtYTM3Zi1kZGRhNjcyZWY3N2UiLCJsb2FkVGFyZ2V0SWQiOiJwcmotNjI4ZWMwZmUtYzM1ZS00YjAyLTg1MDQtY2JiNDA5OWVkMzE1Iiwic291cmNlQ29tbWl0QWNrbm93bGVkZ2VkIjp0cnVlLCJuZXdlck1vZGFsUHJlc2VydmVkIjp0cnVlLCJvd25Qcm9qZWN0UnVuU2V0c1VuY2hhbmdlZCI6dHJ1ZSwic2NvcGUiOiJIZWxkIGFjdHVhbCBsb2FkIHJlc3BvbnNlIGFuZCBhY3R1YWwgc291cmNlIFBVVDsgb2Jzb2xldGUgY3JlYXRpb24gY29udGludWF0aW9uL2Vycm9yIG11c3Qgbm90IGNoYW5nZSBuZXdlciBhdXRob3JpbmcgY29udGV4dDsgbm8gU3RhcnQifQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "520c74da435c110dc8a0-43d1169b28235d588558",
+          "file": "project-context.spec.ts",
+          "line": 578,
+          "column": 9
+        },
+        {
+          "title": "project context: obsolete failed load preserves newer source save at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3283,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T22:01:46.611Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "project-context-load.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJicm9rZW4iOnRydWUsImxvYWRTdGF0dXMiOjQwOSwiYWN0aXZlUHJvamVjdElkIjoicHJqLWMxNGIxMjRlLWNjZDEtNDI4Yi05MjY4LTkxMWFkM2M1MWNhMCIsImxvYWRUYXJnZXRJZCI6InByai0xOWUwZDlmZi1iMDZjLTQxNTctYTI2NC04ZjVhZjBkNzM2NzIiLCJzb3VyY2VDb21taXRBY2tub3dsZWRnZWQiOnRydWUsIm5ld2VyTW9kYWxQcmVzZXJ2ZWQiOnRydWUsIm93blByb2plY3RSdW5TZXRzVW5jaGFuZ2VkIjp0cnVlLCJzY29wZSI6IkhlbGQgYWN0dWFsIGxvYWQgcmVzcG9uc2UgYW5kIGFjdHVhbCBzb3VyY2UgUFVUOyBvYnNvbGV0ZSBjcmVhdGlvbiBjb250aW51YXRpb24vZXJyb3IgbXVzdCBub3QgY2hhbmdlIG5ld2VyIGF1dGhvcmluZyBjb250ZXh0OyBubyBTdGFydCJ9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "520c74da435c110dc8a0-d2d4a2d5c3fba1fa6b3a",
+          "file": "project-context.spec.ts",
+          "line": 578,
+          "column": 9
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-26T22:01:13.827Z",
+    "duration": 36120.16499999999,
+    "expected": 10,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

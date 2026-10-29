@@ -1,0 +1,39 @@
+
+Running 1 test using 1 worker
+
+(node:2164292) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 .studio-local/source-recovery-ci-review/no-project-modal-probe/modal.spec.ts:6:5 › newer modal supersedes recovery with no rendered project (6.6s)
+
+
+  1) .studio-local/source-recovery-ci-review/no-project-modal-probe/modal.spec.ts:6:5 › newer modal supersedes recovery with no rendered project
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('heading', { name: 'Start with an example', exact: true })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('heading', { name: 'Start with an example', exact: true }) with timeout 5000ms
+      - waiting for getByRole('heading', { name: 'Start with an example', exact: true })
+
+
+      38 |     const reply = page.waitForResponse(r => r.url().endsWith(`/projects/${project.projectId}/recoveries`) && r.request().method() === "POST");
+      39 |     release(); expect((await reply).status()).toBe(200); await page.waitForLoadState("networkidle");
+    > 40 |     await expect(page.getByRole("heading", { name: "Start with an example", exact: true })).toBeVisible();
+         |                                                                                             ^
+      41 |     await expect(page.getByRole("heading", { name: project.name, exact: true })).toHaveCount(0);
+      42 |     expect((await (await page.request.get(`/api/v1/projects/${project.projectId}`)).json()).revision).toBe(project.revision + 1);
+      43 |   } finally { release(); await page.unrouteAll({ behavior: "wait" }); writeFileSync(file, original); }
+        at <repo>/.studio-local/source-recovery-ci-review/no-project-modal-probe/modal.spec.ts:40:93
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    .studio-local/source-recovery-ci-review/no-project-modal-probe/output/modal-newer-modal-supersed-1ffba-ry-with-no-rendered-project/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: .studio-local/source-recovery-ci-review/no-project-modal-probe/output/modal-newer-modal-supersed-1ffba-ry-with-no-rendered-project/error-context.md
+
+  1 failed
+    .studio-local/source-recovery-ci-review/no-project-modal-probe/modal.spec.ts:6:5 › newer modal supersedes recovery with no rendered project

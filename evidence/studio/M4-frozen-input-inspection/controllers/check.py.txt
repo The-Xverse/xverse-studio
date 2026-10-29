@@ -1,0 +1,28 @@
+"""Capture static gates and actual collections before freezing browser stages."""
+from pathlib import Path
+import json, os, re, subprocess, sys, time
+root=Path.cwd().resolve();base=root/'.studio-local/frozen-input-inspection-workflow';out=base/'checks';out.mkdir(exist_ok=False)
+cache=root.parent/'.xverse-studio-cache'
+env=dict(os.environ,PATH=str(cache/'node-v24.22.1-linux-x64/bin')+os.pathsep+os.environ['PATH'],
+ TMPDIR=str(cache/'tmp'),TEMP=str(cache/'tmp'),TMP=str(cache/'tmp'),PYTEST_DISABLE_PLUGIN_AUTOLOAD='1',PLAYWRIGHT_BROWSERS_PATH=str(cache/'playwright'))
+records=[]
+def run(name,cmd):
+ start=time.monotonic(); r=subprocess.run(cmd,cwd=root,env=env,text=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
+ (out/(name+'.log')).write_text(r.stdout)
+ row={'name':name,'command':cmd,'exitCode':r.returncode,'seconds':round(time.monotonic()-start,3)};records.append(row)
+ (out/'summary.json').write_text(json.dumps(records,indent=2)+'\n'); print(json.dumps(row),flush=True)
+ if r.returncode:raise SystemExit(r.returncode)
+ return r.stdout
+node=str(cache/'node-v24.22.1-linux-x64/bin/node');npm=str(cache/'node-v24.22.1-linux-x64/lib/node_modules/npm/bin/npm-cli.js')
+assert Path(npm).is_file()
+for name,cmd in [('typecheck',[node,npm,'run','typecheck']),('build',[node,npm,'run','build']),
+ ('architecture',[sys.executable,'-I','scripts/check_architecture.py']),('spec',[sys.executable,'-I','scripts/validate_spec_package.py']),
+ ('compatibility',[sys.executable,'-I','scripts/check_platform_compatibility.py']),
+ ('environment',[sys.executable,'-I','scripts/record_environment.py','--output',str(base/'environment.json')])]:run(name,cmd)
+text=run('full-browser-collection',[node,'node_modules/@playwright/test/cli.js','test','-c','tests/e2e/playwright.config.ts','--list','--reporter=list','--output',str(base/'collection-output')])
+m=re.search(r'Total: (\d+) tests? in (\d+) files?',text);assert m
+assert int(m[1])==444
+(base/'full-browser-collection.json').write_text(json.dumps({'tests':int(m[1]),'files':int(m[2]),'execution':'NOT_RUN','command':records[-1]['command'],'exitCode':0},indent=2)+'\n')
+text=run('backend-collection',[sys.executable,'-I','-m','pytest','--collect-only','-q'])
+m=re.search(r'(\d+) tests collected',text);assert m and int(m[1])==932
+(base/'backend-collection.json').write_text(json.dumps({'tests':int(m[1]),'execution':'INHERITED','command':records[-1]['command'],'exitCode':0},indent=2)+'\n')

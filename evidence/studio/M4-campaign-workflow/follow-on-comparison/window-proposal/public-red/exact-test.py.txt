@@ -1,0 +1,52 @@
+"""Actual owned reference runs with distinct declared durations; no injected evidence."""
+import hashlib,json,time
+from pathlib import Path
+from fastapi.testclient import TestClient
+from xverse_studio.api.app import create_app
+
+
+def test_actual_complete_different_windows_are_not_like_for_like(tmp_path):
+    app=create_app(tmp_path,allowed_hosts=['testserver'],bootstrap_token='owned-window-test')
+    with TestClient(app,base_url='http://testserver') as client:
+        client.headers['Origin']='http://testserver'
+        auth=client.post('/api/v1/session',json={'bootstrapToken':'owned-window-test'});assert auth.status_code==200
+        client.headers['X-CSRF-Token']=auth.json()['csrfToken']
+        created=client.post('/api/v1/projects',json={'name':'Owned recorded-window probe','blueprintRef':'reference-process-control'})
+        assert created.status_code==201,created.text
+        project=created.json();runs=[];coverage=[];protected={}
+        def api(path,body):
+            response=client.post('/api/v1'+path,json=body)
+            assert response.is_success,response.text
+            return response.json()
+        for index,duration in enumerate([.2,.2,.3]):
+            edited=client.post('/api/v1/projects/'+project['projectId']+'/edits',headers={'If-Match':str(project['revision'])},json={'baseRevision':project['revision'],'edits':[{'kind':'set_parameter','parameterId':'duration','value':duration}]})
+            assert edited.status_code==200,edited.text
+            project=edited.json()
+            pf=api('/projects/'+project['projectId']+'/preflights',{'revision':project['revision']});assert pf['status']=='ready',pf
+            started=client.post('/api/v1/runs',headers={'Idempotency-Key':'window-'+str(index)},json={'snapshotId':pf['snapshotId'],'preflightId':pf['preflightId']})
+            assert started.status_code==202,started.text
+            rid=started.json()['runId'];deadline=time.monotonic()+20
+            while time.monotonic()<deadline:
+                run=client.get('/api/v1/runs/'+rid).json()
+                if run['state'] in {'stopped','failed','unknown'}:break
+                time.sleep(.1)
+            assert run['state']=='stopped' and run['evidence']=='complete' and run['cleanup']=='complete',run
+            journal=tmp_path/'runs'/rid/'evidence.jsonl'
+            snapshot=tmp_path/'snapshots'/pf['snapshotId']/'snapshot.json'
+            for path in [journal,snapshot]:protected[str(path.relative_to(tmp_path))]=hashlib.sha256(path.read_bytes()).hexdigest()
+            records=[json.loads(line) for line in journal.read_text().splitlines()]
+            coverage.append(next(r['payload']['coverage'] for r in records if r['type']=='evidence.updated' and 'coverage' in r['payload']))
+            runs.append(run)
+        equal=api('/comparisons',{'leftRunId':runs[0]['runId'],'rightRunId':runs[1]['runId']})
+        assert equal['compatible'] is True,equal
+        different=api('/comparisons',{'leftRunId':runs[0]['runId'],'rightRunId':runs[2]['runId']})
+        assert coverage[0]['endTick']==coverage[1]['endTick']=='200000'
+        assert coverage[2]['endTick']=='300000'
+        assert all(c['complete'] is True for c in coverage)
+        assert client.get('/api/v1/projects/'+project['projectId']).json()==project
+        assert len(client.get('/api/v1/runs').json()['items'])==3
+        assert all(hashlib.sha256((tmp_path/n).read_bytes()).hexdigest()==h for n,h in protected.items())
+        output=Path.cwd()/'.studio-local/comparison-next/window-proposal/actual-window-projection.json'
+        output.parent.mkdir(parents=True,exist_ok=True)
+        output.write_text(json.dumps({'scope':'Three actual native owned reference runs, no journal/snapshot mutation; two equal complete windows and one different complete window.','runIds':[r['runId'] for r in runs],'snapshotIds':[r['snapshotId'] for r in runs],'canonicalCoverage':coverage,'equal':equal,'different':different,'protectedBytesUnchanged':True,'authoredProjectUnchangedByComparison':True},indent=2)+'\n')
+        assert different['compatible'] is False, 'Distinct complete source windows must not be presented as like-for-like.'

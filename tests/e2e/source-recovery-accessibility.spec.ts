@@ -1,0 +1,908 @@
+import { test, expect, type Page, type Locator } from "@playwright/test";
+import { createHash } from "node:crypto";
+import { readFileSync, writeFileSync, realpathSync } from "node:fs";
+import path from "node:path";
+import { connectStudio } from "./connect-studio";
+import { renderedContrast } from "./contrast";
+
+async function tabTo(page: Page, target: Locator) {
+  await expect(target).toBeVisible();
+  // A removed error control can leave traversal after the persistent header.
+  // Native reverse traversal reaches it without walking every recent-project row.
+  for (const [key, limit] of [["Shift+Tab", 40], ["Tab", 220]] as const) {
+    for (let i = 0; i < limit; i++) {
+      if (await target.evaluate((n) => document.activeElement === n)) return;
+      await page.keyboard.press(key);
+    }
+  }
+  await expect(target).toBeFocused();
+}
+async function activate(page: Page, target: Locator) {
+  await tabTo(page, target);
+  await expect(target).toBeFocused();
+  await page.keyboard.press("Enter");
+}
+const group = (page: Page) =>
+  page.getByRole("group", { name: "Source recovery", exact: true });
+const home = (page: Page) =>
+  page.getByRole("button", { name: "X-Verse Studio home", exact: true });
+const source = (page: Page) =>
+  page.getByRole("button", { name: "XDL source", exact: true });
+async function geometry(target: Locator) {
+  return target.evaluate((n) => {
+    const box = n.getBoundingClientRect(),
+      style = getComputedStyle(n);
+    return {
+      focused: document.activeElement === n,
+      box: box.toJSON(),
+      outline: style.outlineStyle,
+      outlineWidth: parseFloat(style.outlineWidth),
+      viewport: { width: innerWidth, height: innerHeight },
+    };
+  });
+}
+const digest = (value: string | Buffer) =>
+  "sha256:" + createHash("sha256").update(value).digest("hex");
+const read = (page: Page, pid: string) =>
+  page.request.get(`/api/v1/projects/${pid}`).then((r) => r.json());
+async function runs(page: Page, pid: string) {
+  return (await page.request.get("/api/v1/runs").then((r) => r.json())).items
+    .filter((r: any) => r.projectId === pid)
+    .map((r: any) => r.runId)
+    .sort();
+}
+async function create(page: Page, name: string) {
+  const project = await page.evaluate(async (name) => {
+    const { csrfToken } = await fetch("/api/v1/session").then((r) => r.json());
+    const r = await fetch("/api/v1/projects", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRF-Token": csrfToken,
+      },
+      body: JSON.stringify({ name }),
+    });
+    if (!r.ok) throw Error("Owned recovery project creation failed");
+    const p = await r.json();
+    localStorage.setItem("studio.projectId", p.projectId);
+    return p;
+  }, name);
+  await page.reload();
+  await expect(page.getByRole("heading", { name, exact: true })).toBeVisible();
+  return project;
+}
+function ownedPath(...parts: string[]) {
+  const data = process.env.STUDIO_BROWSER_DATA;
+  expect(data).toBeTruthy();
+  const root = realpathSync(data!);
+  const file = path.resolve(root, ...parts);
+  expect(file.startsWith(root + path.sep)).toBe(true);
+  return file;
+}
+async function prepare(page: Page, name: string, broken = false) {
+  const project = await create(page, name),
+    pid = project.projectId,
+    id = Object.keys(project.documents).find((id) =>
+      project.documents[id].path.endsWith("/system.xdl.yaml"),
+    )!,
+    document = project.documents[id];
+  const file = ownedPath(
+    "projects",
+    pid,
+    "revisions",
+    String(project.revision),
+    document.path,
+  );
+  expect(realpathSync(file)).toBe(file);
+  expect(readFileSync(file, "utf8")).toBe(document.content);
+  const observed = broken
+    ? Buffer.from([0xff, 0xfe, 0x00, 0x61])
+    : Buffer.from(
+        document.content + "\n# isolated owned external recovery fixture\n",
+      );
+  writeFileSync(file, observed);
+  try {
+    await page.reload();
+    await expect(group(page)).toBeVisible();
+  } catch (error) {
+    writeFileSync(file, document.content);
+    throw error;
+  }
+  return {
+    project,
+    pid,
+    id,
+    file,
+    observed,
+    restore() {
+      writeFileSync(file, document.content);
+    },
+  };
+}
+const recoverButton = (page: Page, revision: number, action: string) =>
+  group(page).getByRole("button", {
+    name:
+      action === "adopt_external"
+        ? "Adopt external changes as a new revision"
+        : `Restore committed revision ${revision}`,
+    exact: true,
+  });
+async function backup(
+  page: Page,
+  fixture: Awaited<ReturnType<typeof prepare>>,
+  result: any,
+) {
+  const { pid, id, observed, project, file } = fixture,
+    rid = result.recovery.recoveryId,
+    key = "document:" + id;
+  const listed = (
+    await page.request
+      .get(`/api/v1/projects/${pid}/recoveries`)
+      .then((r) => r.json())
+  ).items;
+  expect(listed).toHaveLength(1);
+  expect(listed[0].recoveryId).toBe(rid);
+  const entry = result.recovery.preserved[key];
+  expect(entry.observedDigest).toBe(digest(observed));
+  expect(entry.committedDigest).toBe(digest(project.documents[id].content));
+  const preserved = await page.request
+    .get(
+      `/api/v1/projects/${pid}/recoveries/${rid}/preserved?key=${encodeURIComponent(key)}`,
+    )
+    .then((r) => r.json());
+  expect(preserved.observedDigest).toBe(digest(observed));
+  if (preserved.encoding === "utf-8")
+    expect(preserved.content).toBe(observed.toString("utf8"));
+  else {
+    expect(preserved.encoding).toBe("binary");
+    expect(preserved.content).toBe(null);
+  }
+  const kept = ownedPath("projects", pid, "recoveries", rid, entry.backupFile);
+  expect(readFileSync(kept)).toEqual(observed);
+  expect(readFileSync(file)).toEqual(observed);
+  return {
+    recoveryId: rid,
+    committedDigest: entry.committedDigest,
+    observedDigest: entry.observedDigest,
+    preservedEncoding: preserved.encoding,
+    exactBackupBytes: true,
+    oldRevisionDirectoryUnchanged: true,
+  };
+}
+async function hold(page: Page, pid: string) {
+  const pattern = `**/api/v1/projects/${pid}/recoveries`;
+  let seen = false,
+    ready = false,
+    result: any,
+    release!: () => void,
+    finished: Promise<void> | undefined;
+  const gate = new Promise<void>((r) => (release = r));
+  let writes: any[] = [];
+  await page.route(pattern, async (route) => {
+    if (route.request().method() !== "POST") {
+      await route.continue();
+      return;
+    }
+    writes.push({
+      body: route.request().postDataJSON(),
+      ifMatch: route.request().headers()["if-match"],
+    });
+    if (seen) {
+      await route.continue();
+      return;
+    }
+    seen = true;
+    let finish!: () => void;
+    finished = new Promise((r) => (finish = r));
+    try {
+      const response = await route.fetch();
+      result = { status: response.status(), body: await response.json() };
+      ready = true;
+      await gate;
+      await route.fulfill({ response });
+    } finally {
+      finish();
+    }
+  });
+  return {
+    writes,
+    async ready() {
+      await expect.poll(() => ready).toBe(true);
+      return result;
+    },
+    async release() {
+      release();
+      await finished;
+    },
+    async close() {
+      release();
+      await finished;
+      await page.unroute(pattern);
+    },
+  };
+}
+async function openCurrent(page: Page, pid: string, name: string) {
+  await activate(page, home(page));
+  await expect(
+    page.getByRole("heading", { name: "Recent projects", exact: true }),
+  ).toBeVisible();
+  await activate(
+    page,
+    page.locator(`.project-list-row[data-project-id="${pid}"] .project-open`),
+  );
+  await expect(page.getByRole("heading", { name, exact: true })).toBeVisible();
+}
+
+for (const viewport of [
+  { width: 1024, height: 768 },
+  { width: 1440, height: 900 },
+]) {
+  for (const mode of ["adopt", "restore", "unreadable restore"] as const) {
+    test(`recovery accessibility: native ${mode} at ${viewport.width}x${viewport.height}`, async ({
+      page,
+    }, info) => {
+      test.setTimeout(90000);
+      await page.setViewportSize(viewport);
+      await connectStudio(page, info);
+      const fixture = await prepare(
+          page,
+          `Keyboard recovery ${mode} ${viewport.width}`,
+          mode === "unreadable restore",
+        ),
+        { project, pid, id } = fixture,
+        runIds = await runs(page, pid),
+        action = mode === "adopt" ? "adopt_external" : "restore_revision";
+      try {
+        await expect
+          .soft(group(page))
+          .toHaveAccessibleDescription(/Recovery first preserves/);
+        const contrast = await renderedContrast(
+          group(page).locator(":scope > p").first(),
+          "Source recovery preservation guidance",
+        );
+        const writes: any[] = [];
+        page.on("request", (r) => {
+          if (
+            r.method() === "POST" &&
+            new URL(r.url()).pathname === `/api/v1/projects/${pid}/recoveries`
+          )
+            writes.push({
+              body: r.postDataJSON(),
+              ifMatch: r.headers()["if-match"],
+            });
+        });
+        const reply = page.waitForResponse(
+          (r) =>
+            new URL(r.url()).pathname ===
+              `/api/v1/projects/${pid}/recoveries` &&
+            r.request().method() === "POST",
+        );
+        await activate(page, recoverButton(page, project.revision, action));
+        const response = await reply;
+        expect(response.status()).toBe(200);
+        const result = await response.json();
+        await page.waitForLoadState("networkidle");
+        await expect(page.locator(".alerts")).toContainText(
+          `Recovered as revision ${project.revision + 1}`,
+        );
+        await expect(group(page)).toHaveCount(0);
+        await expect.soft(source(page)).toBeFocused();
+        const focus = await geometry(source(page));
+        expect.soft(focus.outline).not.toBe("none");
+        expect.soft(focus.outlineWidth).toBeGreaterThan(0);
+        expect.soft(focus.box.top).toBeGreaterThanOrEqual(0);
+        expect.soft(focus.box.bottom).toBeLessThanOrEqual(viewport.height);
+        const current = await read(page, pid);
+        expect(current.revision).toBe(project.revision + 1);
+        expect(current.sourceIntegrity).toBe("intact");
+        expect(Object.keys(current.documents).sort()).toEqual(
+          Object.keys(project.documents).sort(),
+        );
+        for (const key of Object.keys(project.documents))
+          expect(current.documents[key].content).toBe(
+            key === id && mode === "adopt"
+              ? fixture.observed.toString("utf8")
+              : project.documents[key].content,
+          );
+        expect(writes).toEqual([
+          {
+            body: {
+              expectedRevision: project.revision,
+              action,
+              ...(action === "restore_revision"
+                ? { revision: project.revision }
+                : {}),
+            },
+            ifMatch: `"${project.revision}"`,
+          },
+        ]);
+        const preserved = await backup(page, fixture, result);
+        const validation = page.waitForResponse(
+          (r) =>
+            new URL(r.url()).pathname ===
+              `/api/v1/projects/${pid}/validations` &&
+            r.request().method() === "POST",
+        );
+        await activate(
+          page,
+          page.getByRole("button", { name: "Validate", exact: true }),
+        );
+        expect((await (await validation).json()).valid).toBe(true);
+        expect(await runs(page, pid)).toEqual(runIds);
+        await info.attach("recovery-keyboard.json", {
+          body: JSON.stringify({
+            viewport,
+            mode,
+            action,
+            revisionBefore: project.revision,
+            revisionAfter: current.revision,
+            writes,
+            preserved,
+            canonicalBytesAndOtherIdentities: true,
+            focus,
+            authoritativeValidation: true,
+            ownProjectRunSetUnchanged: true,
+            measurements: [contrast],
+            scope:
+              "Actual owned file modification and explicit recovery; native keys; no Start or device access",
+          }),
+          contentType: "application/json",
+        });
+        expect(contrast.supported).toBe(true);
+        if (contrast.supported)
+          expect(contrast.ratio).toBeGreaterThanOrEqual(4.5);
+      } finally {
+        fixture.restore();
+      }
+    });
+  }
+  for (const mode of [
+    "failed lookup",
+    "malformed response",
+    "out-of-window response",
+    "absent response",
+  ] as const) {
+    test(`recovery accessibility: history ${mode} at ${viewport.width}x${viewport.height}`, async ({
+      page,
+    }, info) => {
+      test.setTimeout(90000);
+      await page.setViewportSize(viewport);
+      await connectStudio(page, info);
+      const fixture = await prepare(
+          page,
+          `Recovery history ${mode} ${viewport.width}`,
+        ),
+        { pid, project } = fixture;
+      const pattern = `**/api/v1/projects/${pid}/revisions?*`;
+      let requests = 0,
+        writes = 0;
+      const measurements: Awaited<ReturnType<typeof renderedContrast>>[] = [];
+      page.on("request", (r) => {
+        if (
+          r.method() === "POST" &&
+          new URL(r.url()).pathname === `/api/v1/projects/${pid}/recoveries`
+        )
+          writes++;
+      });
+      await page.route(pattern, async (route) => {
+        requests++;
+        if (requests === 1)
+          await route.fulfill({
+            status: mode === "failed lookup" ? 503 : 200,
+            contentType: "application/json",
+            body: JSON.stringify(
+              mode === "failed lookup"
+                ? {
+                    code: "HISTORY_TEMPORARILY_UNAVAILABLE",
+                    message: "Controlled history lookup failure",
+                    requestId: "owned-history-fixture",
+                    retryable: true,
+                  }
+                : mode === "malformed response"
+                  ? {}
+                  : mode === "out-of-window response"
+                    ? {
+                        items: [{ revision: project.revision + 1 }],
+                        nextBefore: null,
+                        unrecordedBefore: null,
+                      }
+                    : { items: [], nextBefore: null, unrecordedBefore: null },
+            ),
+          });
+        else await route.continue();
+      });
+      try {
+        await page.reload();
+        await expect(group(page)).toBeVisible();
+        await expect.poll(() => requests).toBe(1);
+        await page.waitForLoadState("networkidle");
+        await expect(
+          recoverButton(page, project.revision, "adopt_external"),
+        ).toBeEnabled();
+        if (mode !== "absent response") {
+          await expect
+            .soft(group(page))
+            .not.toContainText("predates recorded history");
+          await expect
+            .soft(group(page))
+            .toContainText("Could not check revision history");
+          measurements.push(
+            await renderedContrast(
+              group(page).getByRole("alert"),
+              "Unavailable recovery history guidance",
+            ),
+          );
+          await expect(
+            recoverButton(page, project.revision, "restore_revision"),
+          ).toHaveCount(0);
+          await activate(
+            page,
+            group(page).getByRole("button", {
+              name: "Retry revision history",
+              exact: true,
+            }),
+          );
+          await expect(
+            recoverButton(page, project.revision, "restore_revision"),
+          ).toBeEnabled();
+          await expect
+            .soft(recoverButton(page, project.revision, "restore_revision"))
+            .toBeFocused();
+          expect(requests).toBe(2);
+        } else {
+          await expect(group(page)).toContainText(
+            "No recorded copy is available",
+          );
+          measurements.push(
+            await renderedContrast(
+              group(page).locator(".hint"),
+              "Absent recovery history guidance",
+            ),
+          );
+          await expect(
+            recoverButton(page, project.revision, "restore_revision"),
+          ).toHaveCount(0);
+        }
+        expect(writes).toBe(0);
+        expect((await read(page, pid)).revision).toBe(project.revision);
+        await info.attach("recovery-history.json", {
+          body: JSON.stringify({
+            viewport,
+            mode,
+            fixture:
+              mode === "failed lookup"
+                ? "First history HTTP503, then actual backend history on retry"
+                : mode === "malformed response"
+                  ? "MalformedHTTP200 history response fixture, then actual backend history on retry"
+                  : mode === "out-of-window response"
+                    ? "Out-of-windowHTTP200 history response fixture, then actual backend history on retry"
+                    : "Successful200 absent-history response fixture, not actual legacy-project acceptance",
+            historyRequests: requests,
+            measurements,
+            recoveryWrites: writes,
+            canonicalRevisionUnchanged: true,
+            scope: "History observation distinction and native retry only",
+          }),
+          contentType: "application/json",
+        });
+        for (const pair of measurements) {
+          expect(pair.supported).toBe(true);
+          if (pair.supported) expect(pair.ratio).toBeGreaterThanOrEqual(4.5);
+        }
+      } finally {
+        await page.unroute(pattern);
+        fixture.restore();
+      }
+    });
+  }
+  for (const broken of [false, true])
+    for (const mode of [
+      "Home",
+      "newer head",
+      "newer readiness",
+      "deliberate focus",
+      "repeat submit",
+    ] as const) {
+      if (broken && mode === "repeat submit") continue;
+      test(`recovery accessibility: late ${broken ? "unreadable" : "modified"} recovery preserves ${mode} at ${viewport.width}x${viewport.height}`, async ({
+        page,
+      }, info) => {
+        test.setTimeout(90000);
+        await page.setViewportSize(viewport);
+        await connectStudio(page, info);
+        const fixture = await prepare(
+            page,
+            `Late recovery ${broken} ${mode} ${viewport.width}`,
+            broken,
+          ),
+          { project, pid } = fixture,
+          runIds = await runs(page, pid),
+          pending = await hold(page, pid);
+        let history: string | null = null,
+          readyId: string | null = null;
+        try {
+          const button = recoverButton(
+            page,
+            project.revision,
+            "restore_revision",
+          );
+          await activate(page, button);
+          const actual = await pending.ready();
+          expect(actual.status).toBe(200);
+          if (mode === "Home") await activate(page, home(page));
+          if (mode === "newer head" || (broken && mode === "newer readiness"))
+            await openCurrent(page, pid, project.name);
+          if (mode === "newer head") {
+            await activate(
+              page,
+              page.getByRole("button", { name: "Parameters", exact: true }),
+            );
+            const duration = page.getByLabel("Duration");
+            await tabTo(page, duration);
+            await page.keyboard.press("ControlOrMeta+A");
+            await page.keyboard.insertText("6");
+            await activate(
+              page,
+              duration
+                .locator("xpath=ancestor::form")
+                .getByRole("button", { name: "Apply", exact: true }),
+            );
+            await expect(page.locator(".alerts")).toContainText("Draft saved");
+            history = await page.evaluate(
+              (pid) => sessionStorage.getItem("studio.graphHistory." + pid),
+              pid,
+            );
+          }
+          if (mode === "newer readiness") {
+            if (!broken) {
+              const validation = page.waitForResponse(
+                (r) =>
+                  new URL(r.url()).pathname ===
+                    `/api/v1/projects/${pid}/validations` &&
+                  r.request().method() === "POST",
+              );
+              await activate(
+                page,
+                page.getByRole("button", { name: "Validate", exact: true }),
+              );
+              expect((await validation).status()).toBe(412);
+              await expect(page.locator(".notice.busy")).toHaveCount(0);
+            }
+            const response = page.waitForResponse(
+              (r) =>
+                new URL(r.url()).pathname ===
+                  `/api/v1/projects/${pid}/preflights` &&
+                r.request().method() === "POST",
+            );
+            await activate(
+              page,
+              page.getByRole("button", {
+                name: "Preflight & run",
+                exact: true,
+              }),
+            );
+            const report = await (await response).json();
+            expect(report.status).toBe("ready");
+            readyId = report.preflightId;
+            await activate(
+              page,
+              page.getByText("Frozen request identities", { exact: true }),
+            );
+            await expect(
+              page.getByRole("dialog").getByText(readyId!, { exact: true }),
+            ).toBeVisible();
+          }
+          if (mode === "deliberate focus") await tabTo(page, home(page));
+          if (mode === "repeat submit") {
+            await expect.soft(button).toBeDisabled();
+            await page.keyboard.press("Enter");
+          }
+          await pending.release();
+          await page.waitForLoadState("networkidle");
+          if (mode === "Home")
+            await expect
+              .soft(
+                page.getByRole("heading", {
+                  name: "Recent projects",
+                  exact: true,
+                }),
+              )
+              .toBeVisible();
+          if (mode === "newer head") {
+            await expect(page.locator(".workspace-context")).toContainText(
+              `Draft revision ${project.revision + 2}`,
+            );
+            expect(
+              await page.evaluate(
+                (pid) => sessionStorage.getItem("studio.graphHistory." + pid),
+                pid,
+              ),
+            ).toBe(history);
+          }
+          if (mode === "newer readiness")
+            await expect
+              .soft(
+                page.getByRole("dialog").getByText(readyId!, { exact: true }),
+              )
+              .toBeVisible();
+          if (mode === "deliberate focus")
+            await expect(home(page)).toBeFocused();
+          if (mode === "repeat submit") {
+            expect(pending.writes).toHaveLength(1);
+            await expect(page.locator(".alerts")).not.toContainText(
+              "REVISION_CONFLICT",
+            );
+          }
+          const current = await read(page, pid);
+          expect(current.revision).toBe(
+            project.revision + (mode === "newer head" ? 2 : 1),
+          );
+          await backup(page, fixture, actual.body);
+          expect(await runs(page, pid)).toEqual(runIds);
+          await info.attach("recovery-completion.json", {
+            body: JSON.stringify({
+              viewport,
+              broken,
+              mode,
+              writes: pending.writes,
+              committedRevision: actual.body.project.revision,
+              latestRevision: current.revision,
+              newerHistory: history,
+              readyId,
+              ownProjectRunSetUnchanged: true,
+              scope:
+                "Held actual committed recovery response; preserve current context; no Start",
+            }),
+            contentType: "application/json",
+          });
+        } finally {
+          await pending.close();
+          fixture.restore();
+        }
+      });
+    }
+  for (const departed of [false, true]) {
+    test(`recovery accessibility: real stale refusal ${departed ? "after departure" : "current"} at ${viewport.width}x${viewport.height}`, async ({
+      page,
+    }, info) => {
+      test.setTimeout(90000);
+      await page.setViewportSize(viewport);
+      await connectStudio(page, info);
+      const fixture = await prepare(
+          page,
+          `Recovery refusal ${departed} ${viewport.width}`,
+        ),
+        { pid, project } = fixture;
+      const advanced = await page.evaluate(
+        async ({ pid, revision }) => {
+          const { csrfToken } = await fetch("/api/v1/session").then((r) =>
+            r.json(),
+          );
+          const r = await fetch(`/api/v1/projects/${pid}/recoveries`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-CSRF-Token": csrfToken,
+              "If-Match": String(revision),
+            },
+            body: JSON.stringify({
+              expectedRevision: revision,
+              action: "adopt_external",
+            }),
+          });
+          if (!r.ok) throw Error("Owned second-session recovery failed");
+          return r.json();
+        },
+        { pid, revision: project.revision },
+      );
+      const pending = await hold(page, pid);
+      try {
+        await activate(
+          page,
+          recoverButton(page, project.revision, "restore_revision"),
+        );
+        expect((await pending.ready()).status).toBe(412);
+        if (departed) await activate(page, home(page));
+        await pending.release();
+        await page.waitForLoadState("networkidle");
+        expect((await read(page, pid)).documents).toEqual(
+          advanced.project.documents,
+        );
+        expect((await read(page, pid)).revision).toBe(
+          advanced.project.revision,
+        );
+        if (departed) {
+          await expect(
+            page.getByRole("heading", { name: "Recent projects", exact: true }),
+          ).toBeVisible();
+          await expect
+            .soft(page.locator(".alerts").getByRole("alert"))
+            .toHaveCount(0);
+        } else {
+          await expect(page.locator(".alerts")).toContainText(
+            "REVISION_CONFLICT",
+          );
+          await expect
+            .soft(
+              page.getByRole("alert", { name: "Operation error", exact: true }),
+            )
+            .toBeFocused();
+          await expect(page.locator(".alerts")).not.toContainText(
+            "Recovered as revision",
+          );
+          await activate(
+            page,
+            page.getByRole("button", {
+              name: "Load current revision",
+              exact: true,
+            }),
+          );
+          await expect(group(page)).toHaveCount(0);
+          await expect(page.locator(".workspace-context")).toContainText(
+            `Draft revision ${advanced.project.revision}`,
+          );
+        }
+        await backup(page, fixture, advanced);
+        await info.attach("recovery-refusal.json", {
+          body: JSON.stringify({
+            viewport,
+            departed,
+            status: 412,
+            advancedRevision: advanced.project.revision,
+            refusedRequestDidNotMutate: true,
+            scope:
+              "Actual second-session recovery followed by stale UI refusal; no Start",
+          }),
+          contentType: "application/json",
+        });
+      } finally {
+        await pending.close();
+        fixture.restore();
+      }
+    });
+  }
+}
+
+for (const viewport of [
+  { width: 1024, height: 768 },
+  { width: 1440, height: 900 },
+]) {
+  test(`recovery accessibility: unreadable target replaces previous project context at ${viewport.width}x${viewport.height}`, async ({
+    page,
+  }, info) => {
+    test.setTimeout(90000);
+    await page.setViewportSize(viewport);
+    await connectStudio(page, info);
+    const previous = await create(
+        page,
+        `Prior recovery workspace ${viewport.width}`,
+      ),
+      previousRuns = await runs(page, previous.projectId);
+    await activate(
+      page,
+      page.getByRole("tab", { name: "Deployment", exact: true }),
+    );
+    const entry = (
+      await page.request.get("/api/v1/catalog").then((r) => r.json())
+    ).items.find(
+      (e: any) =>
+        e.kind === "blueprint" && e.providerIds?.includes("studio.reference"),
+    );
+    expect(entry).toBeTruthy();
+    await activate(
+      page,
+      page.getByRole("button", { name: "Catalog", exact: true }),
+    );
+    let fixture: Awaited<ReturnType<typeof prepare>> | undefined;
+    const pattern = "**/api/v1/projects";
+    await page.route(pattern, async (route) => {
+      if (route.request().method() !== "POST") {
+        await route.continue();
+        return;
+      }
+      const response = await route.fetch();
+      expect(response.status()).toBe(201);
+      const project = await response.json(),
+        pid = project.projectId,
+        id = Object.keys(project.documents).find((id) =>
+          project.documents[id].path.endsWith("/system.xdl.yaml"),
+        )!,
+        document = project.documents[id];
+      const file = ownedPath(
+        "projects",
+        pid,
+        "revisions",
+        String(project.revision),
+        document.path,
+      );
+      expect(realpathSync(file)).toBe(file);
+      expect(readFileSync(file, "utf8")).toBe(document.content);
+      const observed = Buffer.from([0xff, 0xfe, 0x00, 0x62]);
+      writeFileSync(file, observed);
+      fixture = {
+        project,
+        pid,
+        id,
+        file,
+        observed,
+        restore() {
+          writeFileSync(file, document.content);
+        },
+      };
+      await route.fulfill({ response });
+    });
+    try {
+      await activate(
+        page,
+        page
+          .getByRole("article")
+          .filter({
+            has: page.getByRole("heading", { name: entry.name, exact: true }),
+          })
+          .getByRole("button", { name: "Open as project", exact: true }),
+      );
+      await expect(group(page)).toBeVisible();
+      expect(fixture).toBeDefined();
+      const owned = fixture!;
+      // Returning from Catalog does not load another project; the failed target is still selected.
+      await activate(
+        page,
+        page.getByRole("button", { name: "Back to workspace", exact: true }),
+      );
+      await expect(
+        page.getByRole("heading", { name: previous.name, exact: true }),
+      ).toBeVisible();
+      await expect(
+        page.getByRole("tab", { name: "Deployment", exact: true }),
+      ).toHaveAttribute("aria-selected", "true");
+      const reply = page.waitForResponse(
+        (r) =>
+          new URL(r.url()).pathname ===
+            `/api/v1/projects/${owned.pid}/recoveries` &&
+          r.request().method() === "POST",
+      );
+      await activate(
+        page,
+        recoverButton(page, owned.project.revision, "restore_revision"),
+      );
+      const result = await (await reply).json();
+      await page.waitForLoadState("networkidle");
+      await expect(
+        page.getByRole("heading", { name: owned.project.name, exact: true }),
+      ).toBeVisible();
+      await expect
+        .soft(page.getByRole("tab", { name: "Model", exact: true }))
+        .toHaveAttribute("aria-selected", "true");
+      await expect.soft(source(page)).toBeFocused();
+      const current = await read(page, owned.pid);
+      expect(current.revision).toBe(owned.project.revision + 1);
+      for (const id of Object.keys(owned.project.documents))
+        expect(current.documents[id].content).toBe(
+          owned.project.documents[id].content,
+        );
+      expect((await read(page, previous.projectId)).documents).toEqual(
+        previous.documents,
+      );
+      expect(await runs(page, previous.projectId)).toEqual(previousRuns);
+      expect(await runs(page, owned.pid)).toEqual([]);
+      await backup(page, owned, result);
+      await info.attach("recovery-previous-project.json", {
+        body: JSON.stringify({
+          viewport,
+          previousProjectId: previous.projectId,
+          recoveredProjectId: owned.pid,
+          distinctIdentities: previous.projectId !== owned.pid,
+          previousCanonicalDocumentsUnchanged: true,
+          recoveredInitialView: "Model",
+          actualCreationThenUnreadableLoad: true,
+          scope:
+            "Owned fixture breaks only the newly created project's source before its first UI read; previous workspace remains rendered; no Start",
+        }),
+        contentType: "application/json",
+      });
+    } finally {
+      await page.unroute(pattern);
+      fixture?.restore();
+    }
+  });
+}

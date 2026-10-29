@@ -1,0 +1,105 @@
+"""Record scoped repair evidence without modifying acceptance or task states."""
+from collections import Counter
+from pathlib import Path
+import json
+import subprocess
+
+root = Path.cwd().resolve()
+out = root / 'evidence/studio/M3-lab-lease-knowledge'
+note = ('Lab lease-knowledge repair: confirmed released/expired records survive restoration; typed uncertain reservation acknowledgements retain durable unknown intent; unknown/terminal authority refuses before provider inventory contact. Six added registry-only cases preserve all existing test AST nodes. Original six-case red is five failures plus one definite-busy control; final fresh944 backend and83 affected browser checks pass with300 identical selected inputs. Older full474/performance2 results are historical, not new full GUI/performance coverage for changed backend source. Production provider inventory remains empty and physical mutations unadmitted; positive HTTP reservation authorization and durable production backing remain unfinished. Evidence: evidence/studio/M3-lab-lease-knowledge/. Counts47/43/10 and zero accepted milestones unchanged; Windows/AT/human/live-provider gates remain open.')
+(out / 'README.md').write_text('''# Lab lease history and uncertainty repair
+
+Three registry defects were reproduced before adding the planned durable HTTP
+reservation foundation. Confirmed released/expired history became unknown after
+restore; typed uncertain acknowledgements discarded already-persisted intent even
+after fixture acquisition; uncertain authority contacted inventory before denial.
+The repair preserves terminal history, retains unknown intent for every reservation
+exception except definite pre-allocation RESOURCE_BUSY, and checks known ownership
+status before contacting inventory. Confirmed terminal release/reconciliation cannot
+touch a newer owner's lease. Unknown records never invent a fence or reacquire.
+
+The original two-case red fails2; the expanded four-case red fails4; the complete
+six-case red fails5 and passes the definite-busy control. All original failures are
+retained. The private and promoted registry/physical-contract successors each pass66.
+All existing main test AST nodes remain; six cases were appended. Final fresh944
+backend tests and83 affected native browser checks pass with no failures/errors/skips
+or flaky browser outcomes. The existing Starlette/httpx warning remains. All300
+selected inputs match before/after every final stage. Commands, environment, exact
+hashes, XML outcomes and structured browser report are retained. Hostname attributes
+and machine paths/credential-shaped literals are sanitized before XML serialization;
+testcase identities and outcomes are preserved. Screenshots and raw test roots stay
+private; they do not supply missing live acceptance evidence.
+
+The browser run covers inventory36, placement46 and the complete owned reference
+workflow1. It is affected83 coverage, not a fresh full474 or performance2 execution.
+Earlier full browser/performance outcomes remain historical because backend source
+changed. UI/browser-test/compiled/query/runtime-worker inputs are unchanged. The
+ordinary app still constructs an empty LabRegistry and refuses unadmitted physical
+mutation routes. No provider installation, permission grant, device contact, physical
+stimulation, positive HTTP reservation authority or production durable backing is
+added. Private authority/persistence prototypes remain unpromoted and outside944/83.
+
+The implementation agent reviewed the affected semantics and denial paths. This is
+not independent milestone acceptance. Native Windows remains held; actual providers,
+AT/human/SADS and complete M0–M4 acceptance remain open. Counts47 completed/43 in
+progress/10 blocked and zero accepted milestones are unchanged. M5 is deferred.
+
+Clean committed successor package verification is pending.
+''')
+(out / 'implementation-review.md').write_text('''# Affected implementation review
+
+Finding1: confirmed terminal records were overwritten as unknown on restore.
+Finding2: all typed provider errors were treated as definite refusal, discarding
+intent after an uncertain acquired lease. Finding3: known uncertain authority still
+contacted provider inventory. Original5 failures and the passing busy control are
+retained. The repair keeps terminal facts, preserves unknown intent with no fence
+invention/reacquisition, and denies uncertain/terminal authority before provider IO.
+RESOURCE_BUSY remains the existing definite typed-conflict contract. Other failures
+retain uncertainty. Owned-path capability, principal, scope, fence and expiry checks
+remain. Existing main test AST nodes are unchanged; six regression cases are added.
+
+The final full944 backend suite and83 affected browser checks pass against identical
+300 selected inputs. No default admitted provider, physical authority or positive
+HTTP route is introduced. The tested physical provider is explicitly a fixture
+without equipment IO. Existing unadmitted HTTP refusal remains. Root review cannot
+establish live-provider, actual AT/human, Windows or full milestone acceptance.
+''')
+path = root / 'specs/001-industry-agnostic-studio/traceability.json'
+trace = json.loads(path.read_text())
+prior = json.loads(subprocess.check_output(['git', 'show', 'HEAD:specs/001-industry-agnostic-studio/traceability.json']))
+assert Counter(t['status'] for t in trace['tasks']) == {'completed': 47, 'in_progress': 43, 'blocked': 10}
+for task in trace['tasks']:
+    if task['id'] in ['T073', 'T074', 'T079', 'T098']:
+        assert task['status'] == 'in_progress' and note not in task['implementation_note']
+        task['implementation_note'] += ' ' + note
+        for name in ['evidence/studio/M3-lab-lease-knowledge/verification.json',
+                     'evidence/studio/M3-lab-lease-knowledge/implementation-review.md',
+                     'docs/architecture/ADR-0023-lab-lease-knowledge.md']:
+            if name not in task.setdefault('implementation_evidence', []):
+                task['implementation_evidence'].append(name)
+record = trace['implementation_record']
+record['code_candidate'] = 'Uncommitted lab lease-knowledge repair;300 input binding in evidence/studio/M3-lab-lease-knowledge/application-and-input-hashes.json; clean committed package pending'
+v = record['verification']
+v['prior_package_evidence'] = v['package_evidence']
+v.update({'backend_tests_passed': 944, 'backend_scope': 'Fresh full944 on the registry repair; zero failures/errors/skips.',
+          'backend_evidence': 'evidence/studio/M3-lab-lease-knowledge/history/final-full/junit.xml',
+          'backend_inheritance': 'NONE: fresh full944 executed.',
+          'playwright_checks_passed': 83, 'playwright_checks_failed': 0,
+          'affected_playwright_checks_passed': 83,
+          'playwright_scope': 'Fresh affected83: inventory36, placements46 and owned reference workflow1. Older full474/performance2 are historical, not current changed-backend full/performance coverage.',
+          'current_full_playwright_execution': 'NOT_RUN_FOR_LAB_REPAIR',
+          'browser_inheritance': 'NONE claimed for full/current performance; prior evidence remains historical.',
+          'evidence': 'evidence/studio/M3-lab-lease-knowledge/',
+          'package_evidence': 'PENDING clean committed300-input lab repair package.'})
+for before, after in zip(prior['tasks'], trace['tasks']):
+    assert {k: val for k, val in before.items() if k not in ('implementation_note', 'implementation_evidence')} == {k: val for k, val in after.items() if k not in ('implementation_note', 'implementation_evidence')}
+assert prior['milestones'] == trace['milestones']
+path.write_text(json.dumps(trace, ensure_ascii=False, indent=2) + '\n')
+path = root / 'specs/001-industry-agnostic-studio/tasks.md'
+path.write_text(path.read_text() + '\n' + note + '\n')
+path = root / 'docs/implementation/STATUS.md'
+text = path.read_text()
+marker = 'Permanent native delegation-recovery regression:'
+assert marker in text
+path.write_text(text.replace(marker, note + '\n\n' + marker, 1))
+print(json.dumps({'taskStatesUnchanged': True, 'milestoneStatesUnchanged': True, 'backend': 944, 'affectedBrowser': 83}))

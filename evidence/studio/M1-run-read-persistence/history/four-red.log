@@ -1,0 +1,157 @@
+============================= test session starts ==============================
+platform linux -- Python 3.13.13, pytest-9.0.2, pluggy-1.7.0
+rootdir: <repo>
+configfile: pyproject.toml
+collected 4 items
+
+tests/integration/test_run_read_persistence.py FFFF                      [100%]
+
+=================================== FAILURES ===================================
+_ test_repeated_terminal_reads_do_not_rewrite_unchanged_run_or_operations[False] _
+
+client = <starlette.testclient.TestClient object at 0x70bb373c0d70>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x70bb372756e0>
+cancel = False
+
+    @pytest.mark.parametrize("cancel", [False, True])
+    def test_repeated_terminal_reads_do_not_rewrite_unchanged_run_or_operations(
+        client, monkeypatch, cancel
+    ):
+        rid, baseline = terminal_run(client, cancel=cancel)
+        root = client.app.state.studio.runs.directory(rid)
+        hashes = {
+            p: hashlib.sha256(p.read_bytes()).hexdigest()
+            for p in root.rglob("*")
+            if p.is_file()
+        }
+        writes = sql_writes(client, monkeypatch)
+        for _ in range(3):
+            response = client.get("/api/v1/runs/" + rid)
+            assert response.status_code == 200 and response.json() == baseline
+            response = client.get("/api/v1/runs", params={"limit": 1})
+            assert response.status_code == 200 and response.json()["items"] == [baseline]
+>       assert writes == [], (
+            "An unchanged observation must not rewrite run/start/command records."
+        )
+E       AssertionError: An unchanged observation must not rewrite run/start/command records.
+E       assert [('operation'...7, ...}), ...] == []
+E
+E         Left contains 12 more items, first extra item: ('operation', 'op-22e2c38b-08e8-462d-9b51-b630777eacf6', {'kind': 'start', 'operationId': 'op-22e2c38b-08e8-462d-9b51-...809b2a39edf3e0ba506d6f5feb4849e4515c2daa5430833bb91cfbaf0'}, 'runId': 'run-84acc4cf-0a97-4248-812c-dec13c8f8b96', ...})
+E         Use -v to get more diff
+
+tests/integration/test_run_read_persistence.py:95: AssertionError
+_ test_repeated_terminal_reads_do_not_rewrite_unchanged_run_or_operations[True] _
+
+client = <starlette.testclient.TestClient object at 0x70bb35727390>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x70bb37276ea0>
+cancel = True
+
+    @pytest.mark.parametrize("cancel", [False, True])
+    def test_repeated_terminal_reads_do_not_rewrite_unchanged_run_or_operations(
+        client, monkeypatch, cancel
+    ):
+        rid, baseline = terminal_run(client, cancel=cancel)
+        root = client.app.state.studio.runs.directory(rid)
+        hashes = {
+            p: hashlib.sha256(p.read_bytes()).hexdigest()
+            for p in root.rglob("*")
+            if p.is_file()
+        }
+        writes = sql_writes(client, monkeypatch)
+        for _ in range(3):
+            response = client.get("/api/v1/runs/" + rid)
+            assert response.status_code == 200 and response.json() == baseline
+            response = client.get("/api/v1/runs", params={"limit": 1})
+            assert response.status_code == 200 and response.json()["items"] == [baseline]
+>       assert writes == [], (
+            "An unchanged observation must not rewrite run/start/command records."
+        )
+E       AssertionError: An unchanged observation must not rewrite run/start/command records.
+E       assert [('operation'...4, ...}), ...] == []
+E
+E         Left contains 18 more items, first extra item: ('operation', 'op-7db3c239-6328-4dc4-9415-37b6c25a4585', {'kind': 'start', 'operationId': 'op-7db3c239-6328-4dc4-9415-...97bdd4119835d5e4ca6cf203bdfe1c87e0e186d6bcbf512584e335b19'}, 'runId': 'run-5d094e2f-ed2b-4c80-a2d0-f03dee1383d6', ...})
+E         Use -v to get more diff
+
+tests/integration/test_run_read_persistence.py:95: AssertionError
+__________ test_new_terminal_cleanup_observation_still_persists_once ___________
+
+client = <starlette.testclient.TestClient object at 0x70bb371e0b90>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x70bb374ee690>
+
+    def test_new_terminal_cleanup_observation_still_persists_once(client, monkeypatch):
+        rid, baseline = terminal_run(client)
+        studio = client.app.state.studio
+        state = studio.runs.directory(rid) / "state.json"
+        original = state.read_bytes()
+        observed = json.loads(original)
+        # Controlled late worker observation on an owned, already exited fixture.
+        observed.update(
+            cleanup="unknown",
+            reason="owned_late_cleanup_observation",
+            stateVersion=baseline["stateVersion"] + 1,
+        )
+        writes = sql_writes(client, monkeypatch)
+        try:
+            state.write_text(json.dumps(observed))
+            response = client.get("/api/v1/runs/" + rid)
+            assert response.status_code == 200
+            current = response.json()
+            assert current["state"] == "stopped" and current["cleanup"] == "unknown"
+            assert current["stateVersion"] == observed["stateVersion"]
+            assert current["reason"] == "owned_late_cleanup_observation"
+            saved = studio.store.get("run", rid)
+            assert (
+                saved["cleanup"] == "unknown"
+                and saved["stateVersion"] == observed["stateVersion"]
+            )
+>           assert [(kind, identity) for kind, identity, _ in writes] == [("run", rid)]
+E           AssertionError: assert [('operation'...0783b438618')] == [('run', 'run...0783b438618')]
+E
+E             At index 0 diff: ('operation', 'op-6d4e339f-bac9-4d4b-906d-8728850fd444') != ('run', 'run-11598a43-5ddd-4fb9-be61-60783b438618')
+E             Left contains one more item: ('run', 'run-11598a43-5ddd-4fb9-be61-60783b438618')
+E             Use -v to get more diff
+
+tests/integration/test_run_read_persistence.py:130: AssertionError
+_______ test_unchanged_worker_state_does_not_hide_new_journal_corruption _______
+
+client = <starlette.testclient.TestClient object at 0x70bb37276b10>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x70bb34ec6250>
+
+    def test_unchanged_worker_state_does_not_hide_new_journal_corruption(
+        client, monkeypatch
+    ):
+        rid, baseline = terminal_run(client)
+        studio = client.app.state.studio
+        journal = studio.runs.directory(rid) / "evidence.jsonl"
+        original = journal.read_bytes()
+        writes = sql_writes(client, monkeypatch)
+        try:
+            journal.write_bytes(original + b'{"owned_invalid_journal_fixture":true}\n')
+            response = client.get("/api/v1/runs/" + rid)
+            assert response.status_code == 200
+            current = response.json()
+            assert (
+                current["state"] == baseline["state"] and current["evidence"] == "invalid"
+            )
+            assert studio.store.get("run", rid)["evidence"] == "invalid"
+>           assert [(kind, identity) for kind, identity, _ in writes] == [("run", rid)]
+E           AssertionError: assert [('operation'...e7ab94857c7')] == [('run', 'run...e7ab94857c7')]
+E
+E             At index 0 diff: ('operation', 'op-4c680892-17c5-42d7-a42f-ec665d62f975') != ('run', 'run-be883dac-6218-4b61-aef2-4e7ab94857c7')
+E             Left contains one more item: ('run', 'run-be883dac-6218-4b61-aef2-4e7ab94857c7')
+E             Use -v to get more diff
+
+tests/integration/test_run_read_persistence.py:155: AssertionError
+=============================== warnings summary ===============================
+.venv/lib/python3.13/site-packages/fastapi/testclient.py:1
+  <repo>/.venv/lib/python3.13/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+- generated xml file: <repo>/.studio-local/source-recovery-ci-review/run-read-red.junit.private.xml -
+=========================== short test summary info ============================
+FAILED tests/integration/test_run_read_persistence.py::test_repeated_terminal_reads_do_not_rewrite_unchanged_run_or_operations[False]
+FAILED tests/integration/test_run_read_persistence.py::test_repeated_terminal_reads_do_not_rewrite_unchanged_run_or_operations[True]
+FAILED tests/integration/test_run_read_persistence.py::test_new_terminal_cleanup_observation_still_persists_once
+FAILED tests/integration/test_run_read_persistence.py::test_unchanged_worker_state_does_not_hide_new_journal_corruption
+======================== 4 failed, 1 warning in 11.98s =========================

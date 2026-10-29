@@ -1,0 +1,193 @@
+import { test, expect, type Locator, type Page } from "@playwright/test";
+import { parse } from "yaml";
+import { connectStudio } from "./connect-studio";
+import { renderedContrast } from "./contrast";
+
+async function tabTo(page: Page, target: Locator) {
+  await expect(target).toBeVisible();
+  for (let i = 0; i < 220; i++) {
+    if (await target.evaluate((node) => document.activeElement === node)) return;
+    await page.keyboard.press("Tab");
+  }
+  throw Error("Deployment control is unreachable through native Tab order");
+}
+async function activate(page: Page, target: Locator) {
+  await tabTo(page, target); await page.keyboard.press("Enter");
+}
+async function type(page: Page, target: Locator, value: string) {
+  await tabTo(page, target); await page.keyboard.press("ControlOrMeta+A"); await page.keyboard.insertText(value);
+}
+async function choose(page: Page, target: Locator, value: string) {
+  const enabled = await target.locator("option").evaluateAll((nodes) => nodes.filter((n) => !(n as HTMLOptionElement).disabled).map((n) => (n as HTMLOptionElement).value));
+  const index = enabled.indexOf(value); expect(index).toBeGreaterThanOrEqual(0);
+  await tabTo(page, target); await page.keyboard.press("Home");
+  for (let i = 0; i < index; i++) await page.keyboard.press("ArrowDown");
+  await expect(target).toHaveValue(value);
+}
+function document(project: any, suffix: string): any {
+  return Object.values(project.documents).find((d: any) => d.path.endsWith("/" + suffix));
+}
+async function project(page: Page, name: string) {
+  let result = await page.evaluate(async (name) => {
+    const { csrfToken } = await fetch("/api/v1/session").then((r) => r.json());
+    const r = await fetch("/api/v1/projects", { method: "POST", headers: { "Content-Type": "application/json", "X-CSRF-Token": csrfToken }, body: JSON.stringify({ name }) });
+    if (!r.ok) throw Error("Owned deployment fixture creation failed");
+    return r.json();
+  }, name);
+  const replacements = [
+    ["system.xdl.yaml", "  defaultTimeDomainId: simulation-time\n", "  - id: wall-time\n    clockClass: wall\n    epoch: unix\n    rate: '1'\n    monotonic: false\n  defaultTimeDomainId: simulation-time\n"],
+    ["deployment.xdl.yaml", "  targets:\n  - id: reference-target\n", "  resources:\n  - id: bench-cpu\n    resourceClass: cpu\n    capacity:\n      value: 2\n      unit: core\n    allocationPolicy: exclusive\n  targets:\n  - id: reference-target\n    offeredResourceIds:\n    - bench-cpu\n"],
+  ];
+  for (const [suffix, from, to] of replacements) {
+    const [id, d]: any = Object.entries(result.documents).find(([, d]: any) => d.path.endsWith("/" + suffix));
+    expect(d.content).toContain(from);
+    result = await page.evaluate(async ({ projectId, revision, id, content }) => {
+      const { csrfToken } = await fetch("/api/v1/session").then((r) => r.json());
+      const r = await fetch(`/api/v1/projects/${projectId}/documents/${id}`, { method: "PUT", headers: { "Content-Type": "application/json", "X-CSRF-Token": csrfToken, "If-Match": String(revision) }, body: JSON.stringify({ content }) });
+      if (!r.ok) throw Error("Owned deployment fixture preparation failed");
+      return r.json();
+    }, { projectId: result.projectId, revision: result.revision, id, content: d.content.replace(from, to) });
+  }
+  await page.evaluate((id) => localStorage.setItem("studio.projectId", id), result.projectId);
+  await page.reload();
+  await expect(page.getByRole("heading", { name, exact: true })).toBeVisible();
+  await activate(page, page.getByRole("tab", { name: /Deployment/ }));
+  await expect(page.getByLabel("Deployment variant", { exact: true })).not.toHaveValue("");
+  await expect(page.getByLabel("Associated Scenario", { exact: true })).not.toHaveValue("");
+  return result;
+}
+async function read(page: Page, id: string) {
+  return page.request.get(`/api/v1/projects/${id}`).then((r) => r.json());
+}
+async function runIds(page: Page, id: string) {
+  return (await page.request.get("/api/v1/runs").then((r) => r.json())).items.filter((r: any) => r.projectId === id).map((r: any) => r.runId).sort();
+}
+async function mapping(page: Page) {
+  const time = page.getByRole("region", { name: "Time mappings", exact: true });
+  await type(page, time.getByLabel("Mapping identifier"), "wall-to-sim");
+  await choose(page, time.getByLabel("Source clock"), "wall-time");
+  await choose(page, time.getByLabel("Target clock"), "simulation-time");
+  await type(page, time.getByLabel("Mapping description"), "offset-at-start");
+  await type(page, time.getByLabel("Tolerance", { exact: true }), "0.01");
+  await type(page, time.getByLabel("Tolerance unit"), "s");
+  return time;
+}
+async function resources(page: Page) {
+  await choose(page, page.getByLabel("Binding for resources"), "plant-binding");
+  const checkbox = page.getByRole("checkbox", { name: /^bench-cpu/ });
+  await tabTo(page, checkbox); await page.keyboard.press("Space");
+  await expect(checkbox).toBeChecked();
+}
+async function focusGeometry(target: Locator) {
+  return target.evaluate((node) => {
+    const rect = node.getBoundingClientRect(), style = getComputedStyle(node);
+    return { focused: document.activeElement === node, activeTag: document.activeElement?.tagName, rect: rect.toJSON(),
+      viewport: { width: innerWidth, height: innerHeight }, outline: style.outlineStyle, outlineWidth: parseFloat(style.outlineWidth) };
+  });
+}
+
+for (const viewport of [{ width: 1024, height: 768 }, { width: 1440, height: 900 }]) {
+  test(`deployment accessibility: native variant resource and mapping authoring at ${viewport.width}x${viewport.height}`, async ({ page }, testInfo) => {
+    test.setTimeout(90000); await page.setViewportSize(viewport); await connectStudio(page, testInfo);
+    const prepared = await project(page, `Keyboard deployment ${viewport.width}`), id = prepared.projectId;
+    const beforeRuns = await runIds(page, id);
+    const writes: { path: string; method: string; body: any }[] = [];
+    page.on("request", (r) => { if (["POST", "PUT", "PATCH", "DELETE"].includes(r.method())) writes.push({ path: new URL(r.url()).pathname, method: r.method(), body: r.postDataJSON() }); });
+    const variantName = `Keyboard bench ${viewport.width}`, slug = `keyboard-bench-${viewport.width}`;
+    const originalDeploymentId = Object.keys(prepared.documents).find((key) => prepared.documents[key].path.endsWith("/deployment.xdl.yaml"));
+    const originalScenarioId = Object.keys(prepared.documents).find((key) => prepared.documents[key].path.endsWith("/scenario.xdl.yaml"));
+    await type(page, page.getByLabel("New variant name"), variantName);
+    const cloning = page.waitForResponse((r) => new URL(r.url()).pathname === `/api/v1/projects/${id}/deployment-variants` && r.request().method() === "POST");
+    await activate(page, page.getByRole("button", { name: "Create deployment variant", exact: true }));
+    const clonedResponse = await cloning; expect(clonedResponse.status()).toBe(201); const cloned = await clonedResponse.json();
+    await expect(page.getByLabel("Deployment variant", { exact: true })).toHaveValue(cloned.variant.ref);
+    await expect(page.getByLabel("Associated Scenario", { exact: true })).toHaveValue(cloned.variant.scenarioRefs[0]);
+    await expect(page.locator(".notice.busy")).toHaveCount(0);
+    const deploymentPath = document(cloned.project, `deployment-${slug}.xdl.yaml`).path;
+    await resources(page);
+    const patching = page.waitForResponse((r) => new URL(r.url()).pathname === `/api/v1/projects/${id}/deployment-variants/${cloned.variant.documentId}` && r.request().method() === "PATCH");
+    await activate(page, page.getByRole("button", { name: "Save bound resources", exact: true }));
+    const patchedResponse = await patching; expect(patchedResponse.status()).toBe(200); const patched = await patchedResponse.json();
+    const resolution = page.getByRole("region", { name: "Resolution and effective configuration" });
+    await expect(resolution.getByRole("row", { name: /plant via plant-binding/ })).toContainText("Target reference-target offers resource bench-cpu.");
+    const time = await mapping(page);
+    const saving = page.waitForResponse((r) => new URL(r.url()).pathname === `/api/v1/projects/${id}/edits` && r.request().method() === "POST");
+    await activate(page, time.getByRole("button", { name: "Save time mapping", exact: true }));
+    const savedResponse = await saving; expect(savedResponse.status()).toBe(200); const saved = await savedResponse.json();
+    await expect(time).toContainText("wall-to-sim: wall-time → simulation-time (offset-at-start, ±0.01 s)");
+    await expect(resolution).toContainText("Time mapping wall-to-sim (offset-at-start) is recorded; its accuracy is not evaluated.");
+    const removing = page.waitForResponse((r) => new URL(r.url()).pathname === `/api/v1/projects/${id}/edits` && r.request().method() === "POST");
+    await activate(page, time.getByRole("button", { name: "Remove time mapping wall-to-sim", exact: true }));
+    const removedResponse = await removing; expect(removedResponse.status()).toBe(200); const removed = await removedResponse.json();
+    await expect(time).toContainText("No time mappings."); await expect(page.locator(".notice.busy")).toHaveCount(0);
+    const focus = await focusGeometry(time.getByLabel("Mapping identifier"));
+    await expect.soft(time.getByLabel("Mapping identifier")).toBeFocused();
+    expect.soft(focus.rect.top).toBeGreaterThanOrEqual(0); expect.soft(focus.rect.bottom).toBeLessThanOrEqual(viewport.height);
+    expect.soft(focus.outline).not.toBe("none"); expect.soft(focus.outlineWidth).toBeGreaterThan(0);
+    await expect.soft(page.getByRole("region", { name: "Bound resources", exact: true })).not.toContainText("Time mappings are edited in XDL source.");
+    expect([cloned.project.revision, patched.project.revision, saved.revision, removed.revision]).toEqual([1, 2, 3, 4].map((n) => prepared.revision + n));
+    expect(writes).toEqual([
+      { path: `/api/v1/projects/${id}/deployment-variants`, method: "POST", body: { baseRevision: prepared.revision, name: variantName, sourceDeploymentId: originalDeploymentId, sourceScenarioId: originalScenarioId } },
+      { path: `/api/v1/projects/${id}/deployment-variants/${cloned.variant.documentId}`, method: "PATCH", body: { baseRevision: cloned.project.revision, bindingId: "plant-binding", resourceIds: ["bench-cpu"] } },
+      { path: `/api/v1/projects/${id}/edits`, method: "POST", body: { baseRevision: patched.project.revision, edits: [{ kind: "set_time_mapping", documentId: deploymentPath, mappingId: "wall-to-sim", sourceTimeDomainId: "wall-time", targetTimeDomainId: "simulation-time", mapping: "offset-at-start", tolerance: { value: 0.01, unit: "s" } }] } },
+      { path: `/api/v1/projects/${id}/edits`, method: "POST", body: { baseRevision: saved.revision, edits: [{ kind: "set_time_mapping", documentId: deploymentPath, mappingId: "wall-to-sim", remove: true }] } },
+    ]);
+    const persisted = await read(page, id), deployed = parse(document(persisted, `deployment-${slug}.xdl.yaml`).content);
+    for (const [key, before] of Object.entries(prepared.documents) as [string, any][]) expect(persisted.documents[key].content).toBe(before.content);
+    expect(Object.keys(persisted.documents)).toHaveLength(Object.keys(prepared.documents).length + 2);
+    expect(deployed.spec.bindings.find((b: any) => b.id === "plant-binding").resourceIds).toEqual(["bench-cpu"]);
+    expect(deployed.spec.timeMappings).toBeUndefined();
+    const mappingValue = parse(document(saved, `deployment-${slug}.xdl.yaml`).content).spec.timeMappings[0];
+    expect(mappingValue).toMatchObject({ id: "wall-to-sim", sourceTimeDomainRef: { element: "wall-time" }, targetTimeDomainRef: { element: "simulation-time" }, mapping: "offset-at-start", tolerance: { value: 0.01, unit: "s" } });
+    const validation = page.waitForResponse((r) => new URL(r.url()).pathname === `/api/v1/projects/${id}/validations` && r.request().method() === "POST");
+    await activate(page, page.getByRole("button", { name: "Validate", exact: true })); expect((await (await validation).json()).valid).toBe(true);
+    await activate(page, page.getByRole("button", { name: "X-Verse Studio home", exact: true }));
+    await activate(page, page.locator(`.project-list-row[data-project-id="${id}"] .project-open`));
+    await activate(page, page.getByRole("tab", { name: /Deployment/ }));
+    await expect(page.getByLabel("Deployment variant", { exact: true })).toHaveValue(cloned.variant.ref);
+    await expect(page.getByLabel("Associated Scenario", { exact: true })).toHaveValue(cloned.variant.scenarioRefs[0]);
+    expect(await runIds(page, id)).toEqual(beforeRuns);
+    const hints = page.getByRole("region", { name: "Time mappings", exact: true }).locator(".field-hint");
+    const pair = await renderedContrast(hints.last(), "Time mapping declaration scope");
+    await testInfo.attach("deployment-keyboard.json", { body: JSON.stringify({ viewport, platform: process.platform, browser: await page.context().browser()?.version(), focus, revisions: [prepared.revision, cloned.project.revision, patched.project.revision, saved.revision, removed.revision], mapping: mappingValue, selected: { deploymentRef: cloned.variant.ref, scenarioRef: cloned.variant.scenarioRefs[0] }, writes, measurements: [pair], originalsAndSystemBytesUnchanged: true, clonedResourceBinding: ["bench-cpu"], finalMappingAbsent: true, authoritativeValidation: true, ownProjectRunSetUnchanged: true, scope: "Native keyboard declarations only; no clock accuracy or actual resource reservation/execution established" }), contentType: "application/json" });
+    expect(pair.supported).toBe(true); if (pair.supported) expect(pair.ratio).toBeGreaterThanOrEqual(4.5);
+  });
+
+  for (const action of ["clone", "resource", "mapping"] as const) {
+    test(`deployment accessibility: late ${action} preserves Home at ${viewport.width}x${viewport.height}`, async ({ page }, testInfo) => {
+      test.setTimeout(90000); await page.setViewportSize(viewport); await connectStudio(page, testInfo);
+      const prepared = await project(page, `Late deployment ${action} ${viewport.width}`), id = prepared.projectId;
+      const runs = await runIds(page, id), selectionBefore = await page.evaluate((id) => localStorage.getItem("studio.selection." + id), id);
+      if (action === "clone") await type(page, page.getByLabel("New variant name"), `Late bench ${viewport.width}`);
+      if (action === "resource") await resources(page);
+      if (action === "mapping") await mapping(page);
+      const suffix = action === "clone" ? "/deployment-variants" : action === "resource" ? "/deployment-variants/*" : "/edits";
+      const method = action === "resource" ? "PATCH" : "POST";
+      const pattern = `**/api/v1/projects/${id}${suffix}*`;
+      let release!: () => void, responseReady = false, actual: any = null, routeFinished: Promise<void> | undefined;
+      const held = new Promise<void>((resolve) => { release = resolve; });
+      await page.route(pattern, async (route) => {
+        if (route.request().method() !== method) { await route.continue(); return; }
+        let finish!: () => void; routeFinished = new Promise<void>((resolve) => { finish = resolve; });
+        try { const response = await route.fetch(); actual = { status: response.status(), body: await response.json() }; responseReady = true; await held; await route.fulfill({ response }); }
+        finally { finish(); }
+      });
+      try {
+        const label = action === "clone" ? "Create deployment variant" : action === "resource" ? "Save bound resources" : "Save time mapping";
+        await activate(page, page.getByRole("button", { name: label, exact: true }));
+        await expect.poll(() => responseReady).toBe(true);
+        expect(actual.status).toBe(action === "clone" ? 201 : 200);
+        await activate(page, page.getByRole("button", { name: "X-Verse Studio home", exact: true }));
+        await expect(page.getByRole("heading", { name: "Recent projects", exact: true })).toBeVisible();
+        release(); await routeFinished; await expect(page.locator(".notice.busy")).toHaveCount(0);
+        await expect.soft(page.getByRole("heading", { name: "Recent projects", exact: true })).toBeVisible();
+        await expect.soft(page.getByRole("button", { name: "X-Verse Studio home", exact: true })).toBeFocused();
+        const selectionAfter = await page.evaluate((id) => localStorage.getItem("studio.selection." + id), id);
+        expect.soft(selectionAfter).toBe(selectionBefore);
+        const saved = await read(page, id); expect(saved.revision).toBe(prepared.revision + 1);
+        expect(await runIds(page, id)).toEqual(runs);
+        await testInfo.attach("late-deployment.json", { body: JSON.stringify({ viewport, action, actualStatus: actual.status, beforeRevision: prepared.revision, savedRevision: saved.revision, selectionBefore, selectionAfter, activeTag: await page.evaluate(() => document.activeElement?.tagName), ownProjectRunSetUnchanged: true, scope: "Real server commit held at browser response; deliberate native Home departure remains authoritative" }), contentType: "application/json" });
+      } finally { release(); await routeFinished; await page.unroute(pattern); }
+    });
+  }
+}

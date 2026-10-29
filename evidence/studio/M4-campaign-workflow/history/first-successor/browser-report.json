@@ -1,0 +1,340 @@
+{
+  "config": {
+    "argv": [
+      "<loop-cache>/node-v24.22.1-linux-x64/bin/node",
+      "<repo>/node_modules/.bin/playwright",
+      "test",
+      "-c",
+      "tests/e2e/playwright.config.ts",
+      "--grep",
+      "campaign workflow:"
+    ],
+    "configFile": "<repo>/tests/e2e/playwright.config.ts",
+    "rootDir": "<repo>/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "<repo>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "<repo>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "*.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "<repo>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "<repo>/tests/e2e",
+        "snapshotDir": "<repo>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": "*.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "baseURL": "http://127.0.0.1:42807",
+          "browserName": "chromium",
+          "actionTimeout": 15000,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "trace": "off",
+          "screenshot": "only-on-failure",
+          "video": "off"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "<repo>/test-results/browser-report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "campaign-workflow.spec.ts",
+      "file": "campaign-workflow.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "campaign workflow: authoritative budgets, scheduling and immutable child inputs at 1024",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 18776,
+                  "error": {
+                    "message": "TimeoutError: locator.selectOption: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByLabel('Stop policy', { exact: true })\u001b[22m\n",
+                    "stack": "TimeoutError: locator.selectOption: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByLabel('Stop policy', { exact: true })\u001b[22m\n\n    at <repo>/tests/e2e/campaign-workflow.spec.ts:99:8",
+                    "location": {
+                      "file": "<repo>/tests/e2e/campaign-workflow.spec.ts",
+                      "column": 8,
+                      "line": 99
+                    },
+                    "snippet": "   97 |     await page\n   98 |       .getByLabel(\"Stop policy\", { exact: true })\n>  99 |       .selectOption(\"stop_on_failure\");\n      |        ^\n  100 |     const before = (await request(page, \"/campaigns\")).items.map(\n  101 |       (c: any) => c.campaignId,\n  102 |     );"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/campaign-workflow.spec.ts",
+                        "column": 8,
+                        "line": 99
+                      },
+                      "message": "TimeoutError: locator.selectOption: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByLabel('Stop policy', { exact: true })\u001b[22m\n\n\n   97 |     await page\n   98 |       .getByLabel(\"Stop policy\", { exact: true })\n>  99 |       .selectOption(\"stop_on_failure\");\n      |        ^\n  100 |     const before = (await request(page, \"/campaigns\")).items.map(\n  101 |       (c: any) => c.campaignId,\n  102 |     );\n    at <repo>/tests/e2e/campaign-workflow.spec.ts:99:8"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T06:47:37.331Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/campaign-workflow-campaign-859ba-utable-child-inputs-at-1024/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/campaign-workflow-campaign-859ba-utable-child-inputs-at-1024/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/campaign-workflow.spec.ts",
+                    "column": 8,
+                    "line": 99
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "2dd8405f5a6d7f59b227-1738223140092e75b3c6",
+          "file": "campaign-workflow.spec.ts",
+          "line": 77,
+          "column": 7
+        },
+        {
+          "title": "campaign workflow: retained native children reopen without scheduling at 1024",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 9971,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T06:47:56.570Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "retained-campaign",
+                      "contentType": "application/json",
+                      "body": "eyJwcm9qZWN0SWQiOiJwcmotNTdjZWJiOWEtOGFmNC00MTdkLTkxZDktOTdkMWYwOWFiZDUwIiwiY2FtcGFpZ25JZCI6ImNhbXBhaWduLTUzZTM4MDdiLThiNzUtNGU1OS05ZmFjLThjMDBjMmQ4MWMwZCIsInNuYXBzaG90SWQiOiJzbmFwLTQxMzE0NmM3LTIzOTgtNDI1ZC05ZjBlLTJlMTUyOWEwOTNmMyIsImNoaWxkcmVuIjpbeyJjaGlsZEtleSI6InNoYTI1Njo1Yjg1ODUxNWFkMzU3NmFmMjI5ZDQ4YTM0NGI5MjkxZDk3MGMxMjQ5NTcyMTg5YjQ5ODg0MDUxOWE3ZWNlNDI3IiwiaW5kZXgiOjAsIm9wZXJhdGlvbktleSI6ImNhbXBhaWduLTUzZTM4MDdiLThiNzUtNGU1OS05ZmFjLThjMDBjMmQ4MWMwZDpzaGEyNTY6NWI4NTg1MTVhZDM1NzZhZjIyOWQ0OGEzNDRiOTI5MWQ5NzBjMTI0OTU3MjE4OWI0OTg4NDA1MTlhN2VjZTQyNyIsInBhcmFtZXRlcnMiOnsiZ2FpbiI6MC41fSwicnVuSWQiOiJydW4tNjdmNDVlYmUtNjE5YS00ZGY2LWE1YjItNmU0MmUxZjhjMmQwIiwic3RhdGUiOiJzdG9wcGVkIn0seyJjaGlsZEtleSI6InNoYTI1Njo1M2UwODZmNmNkMzVhMjJiMmQ4YmRjMzdkZjhmMmMwZDFmZjJkZTE0ODNmMzU2Zjg3NzcwYTdmYWY3ZDBmMjhmIiwiaW5kZXgiOjEsIm9wZXJhdGlvbktleSI6ImNhbXBhaWduLTUzZTM4MDdiLThiNzUtNGU1OS05ZmFjLThjMDBjMmQ4MWMwZDpzaGEyNTY6NTNlMDg2ZjZjZDM1YTIyYjJkOGJkYzM3ZGY4ZjJjMGQxZmYyZGUxNDgzZjM1NmY4Nzc3MGE3ZmFmN2QwZjI4ZiIsInBhcmFtZXRlcnMiOnsiZ2FpbiI6MC44fSwicnVuSWQiOiJydW4tZjZjMmJmZjktOWRmZC00NDE3LWIzMjctYWUxNjM1MTM5ODEwIiwic3RhdGUiOiJzdG9wcGVkIn1dLCJub0luc3BlY3Rpb25Xcml0ZXMiOnRydWV9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "2dd8405f5a6d7f59b227-c9a51e0ea28f2a8aed46",
+          "file": "campaign-workflow.spec.ts",
+          "line": 202,
+          "column": 7
+        },
+        {
+          "title": "campaign workflow: authoritative budgets, scheduling and immutable child inputs at 1440",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 18025,
+                  "error": {
+                    "message": "TimeoutError: locator.selectOption: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByLabel('Stop policy', { exact: true })\u001b[22m\n",
+                    "stack": "TimeoutError: locator.selectOption: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByLabel('Stop policy', { exact: true })\u001b[22m\n\n    at <repo>/tests/e2e/campaign-workflow.spec.ts:99:8",
+                    "location": {
+                      "file": "<repo>/tests/e2e/campaign-workflow.spec.ts",
+                      "column": 8,
+                      "line": 99
+                    },
+                    "snippet": "   97 |     await page\n   98 |       .getByLabel(\"Stop policy\", { exact: true })\n>  99 |       .selectOption(\"stop_on_failure\");\n      |        ^\n  100 |     const before = (await request(page, \"/campaigns\")).items.map(\n  101 |       (c: any) => c.campaignId,\n  102 |     );"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/campaign-workflow.spec.ts",
+                        "column": 8,
+                        "line": 99
+                      },
+                      "message": "TimeoutError: locator.selectOption: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByLabel('Stop policy', { exact: true })\u001b[22m\n\n\n   97 |     await page\n   98 |       .getByLabel(\"Stop policy\", { exact: true })\n>  99 |       .selectOption(\"stop_on_failure\");\n      |        ^\n  100 |     const before = (await request(page, \"/campaigns\")).items.map(\n  101 |       (c: any) => c.campaignId,\n  102 |     );\n    at <repo>/tests/e2e/campaign-workflow.spec.ts:99:8"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T06:48:06.611Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/campaign-workflow-campaign-a07f5-utable-child-inputs-at-1440/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/campaign-workflow-campaign-a07f5-utable-child-inputs-at-1440/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/campaign-workflow.spec.ts",
+                    "column": 8,
+                    "line": 99
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "2dd8405f5a6d7f59b227-978ae73078d8bf30e462",
+          "file": "campaign-workflow.spec.ts",
+          "line": 77,
+          "column": 7
+        },
+        {
+          "title": "campaign workflow: retained native children reopen without scheduling at 1440",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 8383,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T06:48:24.989Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "retained-campaign",
+                      "contentType": "application/json",
+                      "body": "eyJwcm9qZWN0SWQiOiJwcmotZmRjN2M3N2EtZDNiMy00YzdmLTkxODEtNGM0YTdmNTU1YTlhIiwiY2FtcGFpZ25JZCI6ImNhbXBhaWduLWNjYWVlOTQ5LTlhOWYtNGQxOS1hYmFjLTdlMTc3ZmIxNmM0YSIsInNuYXBzaG90SWQiOiJzbmFwLThmMzJlZTEwLTg2YTYtNGFmNC1hNjE4LWI0MjVjZTlkYjVkOSIsImNoaWxkcmVuIjpbeyJjaGlsZEtleSI6InNoYTI1NjowNmEwNWVkNjI3Mzg0MGE5OTkzYzQ1ODdhNmM2MGFkMzU1YWMwODVjNTYzOTliNWQ3NmY3OTYwNWY0OTRkYmY0IiwiaW5kZXgiOjAsIm9wZXJhdGlvbktleSI6ImNhbXBhaWduLWNjYWVlOTQ5LTlhOWYtNGQxOS1hYmFjLTdlMTc3ZmIxNmM0YTpzaGEyNTY6MDZhMDVlZDYyNzM4NDBhOTk5M2M0NTg3YTZjNjBhZDM1NWFjMDg1YzU2Mzk5YjVkNzZmNzk2MDVmNDk0ZGJmNCIsInBhcmFtZXRlcnMiOnsiZ2FpbiI6MC41fSwicnVuSWQiOiJydW4tZmYzMTlkZjctNTU2OS00ZGE4LTlkMDQtNjVmNzNlZmU5MmUyIiwic3RhdGUiOiJzdG9wcGVkIn0seyJjaGlsZEtleSI6InNoYTI1NjpiMzQ5YTJiNThiYWJhNzczOTU1ZDVjYWUzYjE0ODZkMWIxOTgzNGMyMmU2ZDU4ZGVjNzE3ZTNhYzUzZWNjZTJhIiwiaW5kZXgiOjEsIm9wZXJhdGlvbktleSI6ImNhbXBhaWduLWNjYWVlOTQ5LTlhOWYtNGQxOS1hYmFjLTdlMTc3ZmIxNmM0YTpzaGEyNTY6YjM0OWEyYjU4YmFiYTc3Mzk1NWQ1Y2FlM2IxNDg2ZDFiMTk4MzRjMjJlNmQ1OGRlYzcxN2UzYWM1M2VjY2UyYSIsInBhcmFtZXRlcnMiOnsiZ2FpbiI6MC44fSwicnVuSWQiOiJydW4tOTZlZTU0OTEtYWY5Yy00M2RjLTk5YWUtNDNmN2YyODIyNzcyIiwic3RhdGUiOiJzdG9wcGVkIn1dLCJub0luc3BlY3Rpb25Xcml0ZXMiOnRydWV9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "2dd8405f5a6d7f59b227-1718d7c60d8119d02493",
+          "file": "campaign-workflow.spec.ts",
+          "line": 202,
+          "column": 7
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-27T06:47:36.594Z",
+    "duration": 56870.679000000004,
+    "expected": 2,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  }
+}

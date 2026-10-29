@@ -1,0 +1,24 @@
+"""Test-only backend pause after actual Start returns, before campaign acknowledgement.
+
+This fixture changes only the campaign acknowledgement boundary in this process.
+It does not wrap the worker, replace argv or rewrite persisted campaign/run records.
+The successor starts through the ordinary unmodified native launcher.
+"""
+from pathlib import Path
+import json,os,sys,time
+from xverse_studio.campaigns import CampaignState
+from xverse_studio.host.launcher import main
+
+arguments=sys.argv[1:];root=Path(arguments[arguments.index('--data-dir')+1]);marker=root/'delegated-start-gate.fixture.json'
+original=CampaignState.mark_started
+def paused(self,key,run_id):
+    if not marker.exists():
+        with marker.open('x') as f:
+            json.dump({'scope':'Test-only pause after real runs.start returned; no campaign mark_started executed.','backendPid':os.getpid(),'campaignId':self.record['campaignId'],'childKey':key,'runId':run_id},f)
+            f.flush();os.fsync(f.fileno())
+        deadline=time.monotonic()+30
+        while time.monotonic()<deadline:time.sleep(.05)
+        raise RuntimeError('Owned crash fixture deadline expired before delivery')
+    return original(self,key,run_id)
+CampaignState.mark_started=paused
+main()

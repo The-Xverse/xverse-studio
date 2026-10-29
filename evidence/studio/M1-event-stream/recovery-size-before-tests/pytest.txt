@@ -1,0 +1,93 @@
+FFF                                                                      [100%]
+=================================== FAILURES ===================================
+__ test_whole_resync_response_including_run_metadata_obeys_utf8_budget[16384] __
+
+tmp_path = PosixPath('<cache>/pytest/stream-size-before/test_whole_resync_response_inc0')
+budget = 16384
+
+    @pytest.mark.parametrize("budget", [16 * 1024, 1024 * 1024])
+    def test_whole_resync_response_including_run_metadata_obeys_utf8_budget(
+        tmp_path, budget
+    ):
+        from xverse_studio.events import EventStreams
+
+        source = _stream.AdvancingJournal(tmp_path / "new-whole-recovery-journal")
+        source.append(200, message="x" * 5000)
+        source.state = "stopped"
+        original = source.path.read_bytes()
+        manager = EventStreams(
+            Store(tmp_path / "new-whole-recovery-store"),
+            summary_runs(source),
+            pending_bytes=budget,
+        )
+        response = manager.resync(source.run_id)
+>       assert len(canonical(response).encode("utf-8")) <= budget
+E       assert 26834 <= 16384
+E        +  where 26834 = len(b'{"evidenceUrl":"/api/v1/runs/fixture-stream/evidence","history":{"integrity":"valid","items":[{"digest":"f2ae1952ad5...ion":"1.1","watermark":{"digest":"967a99f2db365ff892960fdc4129f8fe7680e0ccc748cc7c1448376005e2357c","sequence":"200"}}')
+E        +    where b'{"evidenceUrl":"/api/v1/runs/fixture-stream/evidence","history":{"integrity":"valid","items":[{"digest":"f2ae1952ad5...ion":"1.1","watermark":{"digest":"967a99f2db365ff892960fdc4129f8fe7680e0ccc748cc7c1448376005e2357c","sequence":"200"}}' = <built-in method encode of str object at 0x64d003299930>('utf-8')
+E        +      where <built-in method encode of str object at 0x64d003299930> = '{"evidenceUrl":"/api/v1/runs/fixture-stream/evidence","history":{"integrity":"valid","items":[{"digest":"f2ae1952ad51...ion":"1.1","watermark":{"digest":"967a99f2db365ff892960fdc4129f8fe7680e0ccc748cc7c1448376005e2357c","sequence":"200"}}'.encode
+E        +        where '{"evidenceUrl":"/api/v1/runs/fixture-stream/evidence","history":{"integrity":"valid","items":[{"digest":"f2ae1952ad51...ion":"1.1","watermark":{"digest":"967a99f2db365ff892960fdc4129f8fe7680e0ccc748cc7c1448376005e2357c","sequence":"200"}}' = canonical({'evidenceUrl': '/api/v1/runs/fixture-stream/evidence', 'history': {'integrity': 'valid', 'items': [{'digest': 'f2ae19...ZTBjY2M3NDhjYzdjMTQ0ODM3NjAwNWUyMzU3YyIsInEiOiIyMDAiLCJyIjoiZml4dHVyZS1zdHJlYW0iLCJzIjoiZml4dHVyZS1zbmFwc2hvdCJ9', ...})
+
+tests/integration/test_stream_recovery.py:828: AssertionError
+_ test_whole_resync_response_including_run_metadata_obeys_utf8_budget[1048576] _
+
+tmp_path = PosixPath('<cache>/pytest/stream-size-before/test_whole_resync_response_inc1')
+budget = 1048576
+
+    @pytest.mark.parametrize("budget", [16 * 1024, 1024 * 1024])
+    def test_whole_resync_response_including_run_metadata_obeys_utf8_budget(
+        tmp_path, budget
+    ):
+        from xverse_studio.events import EventStreams
+
+        source = _stream.AdvancingJournal(tmp_path / "new-whole-recovery-journal")
+        source.append(200, message="x" * 5000)
+        source.state = "stopped"
+        original = source.path.read_bytes()
+        manager = EventStreams(
+            Store(tmp_path / "new-whole-recovery-store"),
+            summary_runs(source),
+            pending_bytes=budget,
+        )
+        response = manager.resync(source.run_id)
+>       assert len(canonical(response).encode("utf-8")) <= budget
+E       assert 1059614 <= 1048576
+E        +  where 1059614 = len(b'{"evidenceUrl":"/api/v1/runs/fixture-stream/evidence","history":{"integrity":"valid","items":[{"digest":"31a2637bb04...ion":"1.1","watermark":{"digest":"967a99f2db365ff892960fdc4129f8fe7680e0ccc748cc7c1448376005e2357c","sequence":"200"}}')
+E        +    where b'{"evidenceUrl":"/api/v1/runs/fixture-stream/evidence","history":{"integrity":"valid","items":[{"digest":"31a2637bb04...ion":"1.1","watermark":{"digest":"967a99f2db365ff892960fdc4129f8fe7680e0ccc748cc7c1448376005e2357c","sequence":"200"}}' = <built-in method encode of str object at 0x703488ba1010>('utf-8')
+E        +      where <built-in method encode of str object at 0x703488ba1010> = '{"evidenceUrl":"/api/v1/runs/fixture-stream/evidence","history":{"integrity":"valid","items":[{"digest":"31a2637bb048...ion":"1.1","watermark":{"digest":"967a99f2db365ff892960fdc4129f8fe7680e0ccc748cc7c1448376005e2357c","sequence":"200"}}'.encode
+E        +        where '{"evidenceUrl":"/api/v1/runs/fixture-stream/evidence","history":{"integrity":"valid","items":[{"digest":"31a2637bb048...ion":"1.1","watermark":{"digest":"967a99f2db365ff892960fdc4129f8fe7680e0ccc748cc7c1448376005e2357c","sequence":"200"}}' = canonical({'evidenceUrl': '/api/v1/runs/fixture-stream/evidence', 'history': {'integrity': 'valid', 'items': [{'digest': '31a263...ZTBjY2M3NDhjYzdjMTQ0ODM3NjAwNWUyMzU3YyIsInEiOiIyMDAiLCJyIjoiZml4dHVyZS1zdHJlYW0iLCJzIjoiZml4dHVyZS1zbmFwc2hvdCJ9', ...})
+
+tests/integration/test_stream_recovery.py:828: AssertionError
+_________ test_resync_metadata_alone_over_budget_refuses_with_typed413 _________
+
+tmp_path = PosixPath('<cache>/pytest/stream-size-before/test_resync_metadata_alone_ove0')
+
+    def test_resync_metadata_alone_over_budget_refuses_with_typed413(tmp_path):
+        from xverse_studio.events import EventStreams
+        from xverse_studio.storage.core import Problem
+
+        source = _stream.AdvancingJournal(tmp_path / "new-metadata-recovery-journal")
+        source.append()
+        source.state = "stopped"
+        original = source.path.read_bytes()
+        manager = EventStreams(
+            Store(tmp_path / "new-metadata-recovery-store"),
+            summary_runs(source),
+            pending_bytes=8192,
+        )
+>       with pytest.raises(Problem) as error:
+             ^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'xverse_studio.storage.core.Problem'>
+
+tests/integration/test_stream_recovery.py:860: Failed
+=============================== warnings summary ===============================
+.venv/lib/python3.13/site-packages/fastapi/testclient.py:1
+  <workspace>/.venv/lib/python3.13/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/integration/test_stream_recovery.py::test_whole_resync_response_including_run_metadata_obeys_utf8_budget[16384]
+FAILED tests/integration/test_stream_recovery.py::test_whole_resync_response_including_run_metadata_obeys_utf8_budget[1048576]
+FAILED tests/integration/test_stream_recovery.py::test_resync_metadata_alone_over_budget_refuses_with_typed413
+3 failed, 22 deselected, 1 warning in 0.43s

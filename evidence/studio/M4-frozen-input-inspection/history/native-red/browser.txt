@@ -1,0 +1,76 @@
+
+Running 2 tests using 1 worker
+
+(node:59552) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 .studio-local/frozen-input-read-context/probe.spec.ts:9:6 › actual frozen-input reply preserves a newer recorded run at 1024 (17.4s)
+(node:59786) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 .studio-local/frozen-input-read-context/probe.spec.ts:9:6 › actual frozen-input reply preserves a newer recorded run at 1440 (16.6s)
+
+
+  1) .studio-local/frozen-input-read-context/probe.spec.ts:9:6 › actual frozen-input reply preserves a newer recorded run at 1024
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  getByRole('dialog')
+    Expected: 0
+    Received: 1
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toHaveCount" getByRole('dialog') with timeout 10000ms
+      - waiting for getByRole('dialog')
+        24 × locator resolved to 1 element
+           - unexpected value "1"
+
+
+      62 |   await info.attach('frozen-input-context-control',{contentType:'application/json',body:JSON.stringify(facts)});
+      63 |   expect(facts.canonicalBytesUnchanged).toBe(true);expect(workloads).toEqual([]);expect(facts.currentRunId).toBe(newer.runId);
+    > 64 |   await expect(dialog).toHaveCount(0);
+         |                        ^
+      65 |  });
+      66 | }
+      67 |
+        at <repo>/.studio-local/frozen-input-read-context/probe.spec.ts:64:24
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    .studio-local/frozen-input-read-context/native-red/browser-output/probe-actual-frozen-input--f8e67--newer-recorded-run-at-1024/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: .studio-local/frozen-input-read-context/native-red/browser-output/probe-actual-frozen-input--f8e67--newer-recorded-run-at-1024/error-context.md
+
+  2) .studio-local/frozen-input-read-context/probe.spec.ts:9:6 › actual frozen-input reply preserves a newer recorded run at 1440
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  getByRole('dialog')
+    Expected: 0
+    Received: 1
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toHaveCount" getByRole('dialog') with timeout 10000ms
+      - waiting for getByRole('dialog')
+        24 × locator resolved to 1 element
+           - unexpected value "1"
+
+
+      62 |   await info.attach('frozen-input-context-control',{contentType:'application/json',body:JSON.stringify(facts)});
+      63 |   expect(facts.canonicalBytesUnchanged).toBe(true);expect(workloads).toEqual([]);expect(facts.currentRunId).toBe(newer.runId);
+    > 64 |   await expect(dialog).toHaveCount(0);
+         |                        ^
+      65 |  });
+      66 | }
+      67 |
+        at <repo>/.studio-local/frozen-input-read-context/probe.spec.ts:64:24
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    .studio-local/frozen-input-read-context/native-red/browser-output/probe-actual-frozen-input--1ca72--newer-recorded-run-at-1440/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: .studio-local/frozen-input-read-context/native-red/browser-output/probe-actual-frozen-input--1ca72--newer-recorded-run-at-1440/error-context.md
+
+  2 failed
+    .studio-local/frozen-input-read-context/probe.spec.ts:9:6 › actual frozen-input reply preserves a newer recorded run at 1024
+    .studio-local/frozen-input-read-context/probe.spec.ts:9:6 › actual frozen-input reply preserves a newer recorded run at 1440

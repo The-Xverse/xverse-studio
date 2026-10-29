@@ -1,0 +1,71 @@
+[
+  {
+    "stage": "architecture",
+    "command": [
+      "<repo>/.venv/bin/python",
+      "-I",
+      "scripts/check_architecture.py"
+    ],
+    "startedAt": "2026-10-28T09:01:49.691204+00:00",
+    "seconds": 0.7165943400177639,
+    "exitCode": 0,
+    "inputsIdentical": true
+  },
+  {
+    "stage": "collection",
+    "command": [
+      "<tool-cache>/node-v24.22.1-linux-x64/bin/node",
+      "node_modules/@playwright/test/cli.js",
+      "test",
+      "-c",
+      "tests/e2e/playwright.config.ts",
+      "--list"
+    ],
+    "startedAt": "2026-10-28T09:01:50.422335+00:00",
+    "seconds": 0.6089914839831181,
+    "exitCode": 0,
+    "inputsIdentical": true
+  },
+  {
+    "stage": "targeted",
+    "command": [
+      "<repo>/.venv/bin/python",
+      "-I",
+      "scripts/test_browser.py",
+      "--grep",
+      "recovery default initialization:|recovery accessibility:|project context:"
+    ],
+    "startedAt": "2026-10-28T09:01:51.047194+00:00",
+    "seconds": 209.22894284201902,
+    "exitCode": 0,
+    "inputsIdentical": true,
+    "stats": {
+      "startTime": "2026-10-28T09:01:52.129Z",
+      "duration": 207890.077,
+      "expected": 70,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  },
+  {
+    "stage": "full-browser",
+    "command": [
+      "<repo>/.venv/bin/python",
+      "-I",
+      "scripts/test_browser.py"
+    ],
+    "startedAt": "2026-10-28T09:05:20.293727+00:00",
+    "seconds": 2551.729784508003,
+    "exitCode": 1,
+    "inputsIdentical": true,
+    "stats": {
+      "startTime": "2026-10-28T09:05:21.390Z",
+      "duration": 2549273.9699999997,
+      "expected": 515,
+      "skipped": 0,
+      "unexpected": 1,
+      "flaky": 0
+    }
+  }
+]

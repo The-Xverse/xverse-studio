@@ -1,0 +1,71 @@
+
+> xverse-studio-workspace@0.1.0 test:e2e
+> playwright test -c tests/e2e/playwright.config.ts --grep wizard accessibility:
+
+
+Running 8 tests using 1 worker
+
+(node:141740) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/e2e/wizard-accessibility.spec.ts:69:5 › wizard accessibility: late history depart at 1024x768 (2.9s)
+  ✓  2 tests/e2e/wizard-accessibility.spec.ts:69:5 › wizard accessibility: late history focus elsewhere at 1024x768 (2.2s)
+  ✓  3 tests/e2e/wizard-accessibility.spec.ts:69:5 › wizard accessibility: late history newer head at 1024x768 (3.5s)
+  ✓  4 tests/e2e/wizard-accessibility.spec.ts:69:5 › wizard accessibility: late history depart at 1440x900 (2.5s)
+  ✓  5 tests/e2e/wizard-accessibility.spec.ts:69:5 › wizard accessibility: late history focus elsewhere at 1440x900 (2.6s)
+  ✓  6 tests/e2e/wizard-accessibility.spec.ts:69:5 › wizard accessibility: late history newer head at 1440x900 (4.0s)
+  ✘  7 tests/e2e/wizard-accessibility.spec.ts:154:7 › wizard accessibility: native keyboard instance, placement and binding at 1024x768 (4.2s)
+(node:143498) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  8 tests/e2e/wizard-accessibility.spec.ts:154:7 › wizard accessibility: native keyboard instance, placement and binding at 1440x900 (4.6s)
+
+
+  1) tests/e2e/wizard-accessibility.spec.ts:154:7 › wizard accessibility: native keyboard instance, placement and binding at 1024x768
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+      136 | }
+      137 | function checkFocus(value: Awaited<ReturnType<typeof focusGeometry>>) {
+    > 138 |   expect(value.focused).toBe(true);
+          |                         ^
+      139 |   expect(value.outline).not.toBe("none");
+      140 |   expect(value.outlineWidth).toBeGreaterThanOrEqual(2);
+      141 |   for (const clip of [{ left: 0, top: 0, right: value.viewport.width, bottom: value.viewport.height }, ...value.clips]) {
+        at checkFocus (<repo>/tests/e2e/wizard-accessibility.spec.ts:138:25)
+        at <repo>/tests/e2e/wizard-accessibility.spec.ts:271:34
+
+    attachment #3: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/wizard-accessibility-wizar-dadc5-ent-and-binding-at-1024x768/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/wizard-accessibility-wizar-dadc5-ent-and-binding-at-1024x768/error-context.md
+
+  2) tests/e2e/wizard-accessibility.spec.ts:154:7 › wizard accessibility: native keyboard instance, placement and binding at 1440x900
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+      136 | }
+      137 | function checkFocus(value: Awaited<ReturnType<typeof focusGeometry>>) {
+    > 138 |   expect(value.focused).toBe(true);
+          |                         ^
+      139 |   expect(value.outline).not.toBe("none");
+      140 |   expect(value.outlineWidth).toBeGreaterThanOrEqual(2);
+      141 |   for (const clip of [{ left: 0, top: 0, right: value.viewport.width, bottom: value.viewport.height }, ...value.clips]) {
+        at checkFocus (<repo>/tests/e2e/wizard-accessibility.spec.ts:138:25)
+        at <repo>/tests/e2e/wizard-accessibility.spec.ts:271:34
+
+    attachment #3: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/wizard-accessibility-wizar-c7363-ent-and-binding-at-1440x900/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/wizard-accessibility-wizar-c7363-ent-and-binding-at-1440x900/error-context.md
+
+  2 failed
+    tests/e2e/wizard-accessibility.spec.ts:154:7 › wizard accessibility: native keyboard instance, placement and binding at 1024x768
+    tests/e2e/wizard-accessibility.spec.ts:154:7 › wizard accessibility: native keyboard instance, placement and binding at 1440x900
+  6 passed (27.6s)

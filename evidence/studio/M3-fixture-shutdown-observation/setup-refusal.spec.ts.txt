@@ -1,0 +1,5 @@
+import { test } from "../../tests/e2e/lab-fixture";
+test.use({ scenario: "owned-invalid-scenario-control" });
+test("labelled setup failure propagates instead of requiring a shutdown record", async ({ labHost }) => {
+  throw new Error("Unreachable fixture body: " + labHost.origin);
+});

@@ -1,0 +1,22 @@
+from pathlib import Path
+import json,sys,threading
+from xverse_studio.providers import worker
+root=Path(sys.argv[1]).resolve()
+original=worker.atomic
+failed_saves=0
+def paused_atomic(path, content):
+    global failed_saves
+    original(path, content)
+    if path.name == 'state.json' and json.loads(content).get('state') == 'failed':
+        failed_saves += 1
+        if failed_saves == 1:
+            (root/'first-failed-state-visible').write_text('test-only pause after original atomic write')
+            for _ in range(1000):
+                if (root/'release-test-pause').exists():break
+                threading.Event().wait(.01)
+            else:raise RuntimeError('Owned test pause deadline')
+worker.atomic=paused_atomic
+def failed_sleep(seconds):
+    raise KeyboardInterrupt('Owned controlled sleep failure; no external signal or device')
+worker.time.sleep=failed_sleep
+raise SystemExit(worker.main())

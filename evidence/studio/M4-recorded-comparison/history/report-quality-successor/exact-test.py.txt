@@ -1,0 +1,224 @@
+"""Comparison provenance, exact time and source-quality contracts; fixtures labelled below."""
+from copy import deepcopy
+import hashlib
+import json
+
+import pytest
+
+from xverse_studio.comparison import compare_runs
+
+
+def fixture_run():
+    """A complete labelled record fixture, not evidence of an admitted live provider."""
+    resources = [
+        {"kind": kind, "uri": "xdl://fixture/" + kind.lower() + "/example", "version": "1.0", "semanticDigest": {"algorithm": "sha256", "value": "1" * 64}}
+        for kind in ["System", "Deployment", "Scenario", "Profile", "Component"]
+    ]
+    snapshot = {
+        "snapshotId": "fixture-snapshot", "snapshotDigest": "sha256:" + "2" * 64,
+        "projectId": "fixture-project", "revision": 1,
+        "semanticDigest": "sha256:" + "3" * 64, "planDigest": "sha256:" + "4" * 64,
+        "configuration": {"gain": 1},
+        "selection": {"systemRef": resources[0]["uri"], "deploymentRef": resources[1]["uri"], "scenarioRef": resources[2]["uri"]},
+        "providerId": "fixture-provider", "providerIdentity": {"providerId": "fixture-provider", "providerVersion": "1.0", "contractVersion": "1.0", "implementationDigest": "sha256:" + "5" * 64},
+        "capabilityDigest": "sha256:" + "6" * 64, "compiler": {"id": "fixture-compiler", "version": "1.0"}, "profileLocks": [],
+        "plan": {"provenance": {"resources": resources}, "profile": {"id": "fixture"}, "seed": None,
+                 "bindings": [{"id": "fixture-binding", "artifactRefs": [{"id": "fixture-model", "version": "1.0", "digest": "sha256:" + "7" * 64}]}],
+                 "timeDomains": [{"id": "simulation-time", "clockClass": "simulation", "epoch": "0", "rate": "1", "monotonic": True, "canonicalUnit": "tick"}], "timeMappings": []},
+    }
+    return {"runId": "fixture-run", "snapshot": snapshot, "snapshotIntegrity": "valid", "state": "stopped", "cleanup": "complete", "effectiveInputsMatch": True,
+            "evidence": {"integrity": "valid", "status": "complete"},
+            "observations": [{"observerRef": "fixture-observer", "field": "state", "unit": "1", "quantity": "dimensionless", "unitDefinitionDigest": "sha256:" + "8" * 64,
+                              "clockDomainRef": "simulation-time", "sourceTime": {"resolution": "microsecond", "uncertainty": 0}, "metadataConsistent": True,
+                              "coverage": {"verified": True, "complete": True, "startTick": "0", "endTick": "10", "gaps": []},
+                              "summary": {"status": "available", "sampleCount": 2, "firstTick": "0", "lastTick": "5", "minimum": 0.0, "maximum": 1.0, "lastValue": 1.0}}]}
+
+
+def test_report_preserves_frozen_provenance_and_distinct_result_dimensions():
+    left = fixture_run(); right = deepcopy(left); right['runId'] = 'other'
+    right['snapshot']['configuration']['gain'] = 2
+    before = deepcopy((left, right)); report = compare_runs(left, right)
+    assert report['comparisonVersion'] == '1.0'
+    assert report['compatible'] is True
+    assert report['left']['snapshotId'] == 'fixture-snapshot'
+    assert report['left']['cleanup'] == 'complete'
+    assert report['left']['evidenceIntegrity'] == 'valid'
+    rows = {r['field']: r for r in report['configuration']}
+    assert rows['parameters']['status'] == 'different'
+    assert rows['providerIdentity']['left']['providerVersion'] == '1.0'
+    assert rows['artifactIdentities']['left'][0]['artifactRefs'][0]['digest'] == 'sha256:' + '7' * 64
+    assert rows['clockDefinitions']['left']['domains'][0]['epoch'] == '0'
+    assert report['fields'][0]['left']['summary']['lastValue'] == 1.0
+    assert report['rerunRequiresFreshAdmission'] is True
+    assert report['mode'] == 'recorded_observation_comparison'
+    assert 'verdict' not in report and 'verdict' not in report['left']
+    assert (left, right) == before
+
+
+@pytest.mark.parametrize('missing', ['providerIdentity', 'capabilityDigest', 'selection', 'compiler'])
+def test_missing_frozen_facts_are_unavailable_not_equal(missing):
+    left = fixture_run(); del left['snapshot'][missing]
+    right = deepcopy(left)
+    report = compare_runs(left, right)
+    assert report['compatible'] is False
+    assert 'CONFIGURATION_PROVENANCE_UNAVAILABLE' in report['diagnostics']
+    assert any(r['status'] == 'unavailable' for r in report['configuration'])
+
+
+@pytest.mark.parametrize('start,end', [(None, None), ('11', '10'), (float('nan'), '10'), ('0', float('inf')), (False, '10'), (0, '10'), ('0', '10.0')])
+def test_missing_or_invalid_window_is_not_like_for_like(start, end):
+    left = fixture_run(); right = deepcopy(left)
+    right['observations'][0]['coverage'].update(startTick=start, endTick=end)
+    out = compare_runs(left, right)
+    assert out['compatible'] is False
+    assert 'OBSERVATION_WINDOW_UNAVAILABLE' in out['diagnostics']
+
+
+def test_different_complete_windows_are_not_like_for_like():
+    left = fixture_run(); right = deepcopy(left)
+    right['observations'][0]['coverage']['endTick'] = '20'
+    out = compare_runs(left, right)
+    assert out['compatible'] is False
+    assert 'OBSERVATION_WINDOW_INCOMPATIBLE' in out['diagnostics']
+
+
+def test_signed_ticks_and_large_integer_precision_are_preserved():
+    left = fixture_run(); right = deepcopy(left)
+    for side in (left, right):
+        side['observations'][0]['coverage'].update(startTick='-20', endTick='-10')
+        side['observations'][0]['summary'].update(firstTick='-20', lastTick='-15')
+    assert compare_runs(left, right)['compatible'] is True
+    for side in (left, right): side['observations'][0]['summary'].update(firstTick='0', lastTick='5')
+    left['observations'][0]['coverage'].update(startTick='0', endTick='9007199254740993')
+    right['observations'][0]['coverage'].update(startTick='0', endTick='9007199254740994')
+    assert compare_runs(left, right)['compatible'] is False
+
+
+@pytest.mark.parametrize('change', ['observer', 'clock-definition', 'uncertainty', 'metadata', 'coverage', 'effective-inputs'])
+def test_unproven_observer_time_or_source_quality_blocks_pairing(change):
+    left = fixture_run(); right = deepcopy(left)
+    if change == 'observer':
+        del right['observations'][0]['observerRef']
+    elif change == 'clock-definition':
+        right['snapshot']['plan']['timeDomains'][0]['rate'] = '2'
+    elif change == 'uncertainty':
+        right['observations'][0]['sourceTime']['uncertainty'] = .1
+    elif change == 'metadata':
+        right['observations'][0]['metadataConsistent'] = False
+    elif change == 'coverage':
+        right['observations'][0]['coverage']['gaps'] = [{'reason': 'labelled missing sample'}]
+    else:
+        right['effectiveInputsMatch'] = False
+    assert compare_runs(left, right)['compatible'] is False
+
+
+def test_fields_present_on_only_one_side_remain_visible_and_incompatible():
+    left = fixture_run(); right = deepcopy(left); right['observations'] = []
+    out = compare_runs(left, right)
+    assert out['compatible'] is False
+    assert len(out['fields']) == 1
+    assert out['fields'][0]['left']['available'] is True
+    assert out['fields'][0]['right']['available'] is False
+
+
+def test_public_report_uses_frozen_provider_artifacts_clocks_and_real_summaries(client):
+    from test_advanced_api import prepared, start, wait_run
+    _, pf = prepared(client); rid = start(client, pf, key='recorded-report')
+    assert wait_run(client, rid)['state'] == 'stopped'
+    store = client.app.state.studio.store
+    snapshot = store.get('snapshot', pf['snapshotId'])
+    protected = {p: hashlib.sha256(p.read_bytes()).hexdigest() for p in [store.root/'runs'/rid/'evidence.jsonl', store.root/'snapshots'/pf['snapshotId']/'snapshot.json']}
+    report = client.post('/api/v1/comparisons', json={'leftRunId': rid, 'rightRunId': rid})
+    assert report.status_code == 200, report.text
+    out = report.json(); assert out['comparisonVersion'] == '1.0'
+    assert out['compatible'] is True, out['diagnostics']
+    rows = {r['field']: r for r in out['configuration']}
+    assert rows['providerIdentity']['left'] == snapshot['providerIdentity']
+    assert rows['clockDefinitions']['left']['domains'] == snapshot['plan']['timeDomains']
+    assert rows['artifactIdentities']['left'] == [{'bindingId': b['id'], 'artifactRefs': b['artifactRefs']} for b in snapshot['plan']['bindings']]
+    assert rows['profileIdentities']['left']['resources'] == [r for r in snapshot['plan']['provenance']['resources'] if r['kind'] == 'Profile']
+    assert all(f['left']['summary']['sampleCount'] > 0 and f['left']['summary']['status'] == 'available' for f in out['fields'])
+    assert client.get(f'/api/v1/runs/{rid}/comparison', params={'baselineRunId': rid}).json() == out
+    assert all(hashlib.sha256(p.read_bytes()).hexdigest() == h for p,h in protected.items())
+
+
+def test_global_unverified_evidence_cannot_leave_a_positive_field_claim():
+    left = fixture_run(); right = deepcopy(left); right['evidence']['integrity'] = 'invalid'
+    out = compare_runs(left, right)
+    assert out['compatible'] is False
+    assert all(f['compatible'] is False and 'EVIDENCE_INTEGRITY_UNPROVEN' in f['reasons'] for f in out['fields'])
+
+
+def test_samples_outside_declared_coverage_do_not_gain_a_like_for_like_claim():
+    left = fixture_run(); right = deepcopy(left)
+    right['observations'][0]['summary']['lastTick'] = '11'
+    out = compare_runs(left, right)
+    assert out['compatible'] is False and 'OBSERVATION_WINDOW_MISMATCH' in out['diagnostics']
+
+
+def test_reference_projection_rejects_mixed_metadata_and_preserves_explicit_gaps():
+    from xverse_studio.comparison import recorded_input
+    snapshot = fixture_run()['snapshot']
+    run = {'runId': 'fixture-run', 'providerId': snapshot['providerId'], 'state': 'stopped', 'cleanup': 'complete', 'evidence': 'complete',
+           'effectivePlanDigest': snapshot['planDigest'], 'effectiveSemanticDigest': snapshot['semanticDigest']}
+    def observation(tick, unit='1', clock='simulation-time'):
+        return {'type': 'observation.available', 'payload': {'observerRef': 'fixture-observer', 'values': {'state': 1.0}, 'units': {'state': unit}},
+                'sourceTime': {'tick': tick, 'clockDomain': clock, 'resolution': 'microsecond', 'uncertainty': 0}}
+    records = [observation('0'), observation('5'), {'type': 'evidence.updated', 'payload': {'coverage': {'clockDomain': 'simulation-time', 'startTick': '0', 'endTick': '10', 'complete': True}}}]
+    healthy = recorded_input(run, snapshot, records, 'valid', snapshot_integrity='valid')
+    assert compare_runs(healthy, healthy)['compatible'] is True
+    mixed = deepcopy(records); mixed[1]['sourceTime']['clockDomain'] = 'other-clock'
+    out = recorded_input(run, snapshot, mixed, 'valid', snapshot_integrity='valid')
+    assert out['observations'][0]['metadataConsistent'] is False
+    assert compare_runs(healthy, out)['compatible'] is False
+    gapped = [*records, {'type': 'observation.gap', 'payload': {'reason': 'labelled fixture gap'}}]
+    out = recorded_input(run, snapshot, gapped, 'valid', snapshot_integrity='valid')
+    assert out['observations'][0]['coverage']['gapCount'] == 1
+    assert compare_runs(healthy, out)['compatible'] is False
+
+
+def test_report_bound_is_typed_and_never_silently_drops_fields():
+    from xverse_studio.comparison import ComparisonError
+    left = fixture_run(); right = deepcopy(left)
+    left['observations'] = [deepcopy(left['observations'][0]) for _ in range(33)]
+    with pytest.raises(ComparisonError, match='COMPARISON_LIMIT'):
+        compare_runs(left, right)
+
+
+def test_public_different_complete_windows_keep_configuration_and_each_recorded_result(client):
+    from test_advanced_api import prepared, start, wait_run
+    project, pf = prepared(client)
+    left = start(client, pf, key='window-left'); assert wait_run(client, left)['state'] == 'stopped'
+    edited = client.post(f"/api/v1/projects/{project['projectId']}/edits", headers={'If-Match': str(project['revision'])},
+                         json={'baseRevision': project['revision'], 'edits': [{'kind': 'set_parameter', 'parameterId': 'duration', 'value': .3}]})
+    assert edited.status_code == 200, edited.text
+    project = edited.json(); pf = client.post(f"/api/v1/projects/{project['projectId']}/preflights", json={'revision': project['revision']}).json()
+    assert pf['status'] == 'ready'
+    right = start(client, pf, key='window-right'); assert wait_run(client, right)['state'] == 'stopped'
+    response = client.post('/api/v1/comparisons', json={'leftRunId': left, 'rightRunId': right})
+    assert response.status_code == 200, response.text
+    out = response.json(); assert out['compatible'] is False
+    assert 'OBSERVATION_WINDOW_INCOMPATIBLE' in out['diagnostics']
+    assert any(d['field'] == 'parameters' for d in out['differences'])
+    assert all(f['left']['coverage']['endTick'] == '200000' and f['right']['coverage']['endTick'] == '300000' for f in out['fields'])
+    assert all(f['left']['summary']['status'] == f['right']['summary']['status'] == 'available' for f in out['fields'])
+    assert len(client.get('/api/v1/runs').json()['items']) == 2
+    assert client.get('/api/v1/projects/'+project['projectId']).json() == project
+
+
+def test_configuration_does_not_coerce_boolean_and_numeric_identities():
+    left = fixture_run(); right = deepcopy(left)
+    left['snapshot']['configuration']['enabled'] = True
+    right['snapshot']['configuration']['enabled'] = 1
+    row = next(r for r in compare_runs(left, right)['configuration'] if r['field'] == 'parameters')
+    assert row['status'] == 'different'
+
+
+def test_configuration_beyond_the_declared_display_depth_is_unavailable():
+    left = fixture_run(); right = deepcopy(left)
+    nested = 1
+    for _ in range(100): nested = {'value': nested}
+    right['snapshot']['providerIdentity']['unknownMetadata'] = nested
+    out = compare_runs(left, right)
+    assert out['compatible'] is False
+    assert next(r for r in out['configuration'] if r['field'] == 'providerIdentity')['status'] == 'unavailable'

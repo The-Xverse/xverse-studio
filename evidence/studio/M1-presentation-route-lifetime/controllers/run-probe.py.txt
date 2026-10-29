@@ -1,0 +1,52 @@
+"""Execute one owned native countercheck and retain its exact failure/success."""
+from pathlib import Path
+import hashlib
+import json
+import os
+import shutil
+import subprocess
+import sys
+import time
+
+root = Path.cwd().resolve()
+base = Path(__file__).resolve().parent
+phase = sys.argv[1]
+assert phase in ('old', 'wait')
+out = base / phase
+out.mkdir(exist_ok=False)
+probe = root / 'tests/e2e/presentation-route-lifetime.probe.spec.ts'
+frozen_paths = json.loads((root / 'evidence/studio/M3-reservation-api/application-and-input-hashes.json').read_text())
+def inputs():
+    return {name: hashlib.sha256((root / name).read_bytes()).hexdigest() for name in frozen_paths}
+before = inputs()
+assert before == frozen_paths
+source = probe.read_bytes()
+(out / 'probe.spec.ts.txt').write_bytes(source)
+(out / 'source-before.json').write_text(json.dumps(before, indent=2) + '\n')
+cache = root.parent / '.xverse-studio-cache'
+env = dict(os.environ, PATH=str(cache / 'node-v24.22.1-linux-x64/bin') + os.pathsep + os.environ['PATH'],
+    PLAYWRIGHT_BROWSERS_PATH=str(cache / 'playwright'), PYTEST_DISABLE_PLUGIN_AUTOLOAD='1',
+    TMPDIR=str(cache / 'tmp'), TEMP=str(cache / 'tmp'), TMP=str(cache / 'tmp'))
+command = [sys.executable, '-I', 'scripts/test_browser.py', '--grep',
+    'owned response lifetime probe: (apply.*1024|enum.*1440)']
+start = time.monotonic()
+with (out / 'browser.log').open('w') as log:
+    result = subprocess.run(command, cwd=root, env=env, stdout=log, stderr=subprocess.STDOUT)
+assert inputs() == before and probe.read_bytes() == source
+shutil.copyfile(root / 'test-results/browser-report.json', out / 'browser-report.json')
+shutil.copytree(root / 'test-results/browser', out / 'browser-output')
+report = json.loads((out / 'browser-report.json').read_text())
+receipt = {'phase': phase, 'command': command, 'exitCode': result.returncode,
+    'seconds': round(time.monotonic() - start, 3), 'original316InputsUnchanged': True,
+    'probeSha256': hashlib.sha256(source).hexdigest(), 'stats': report['stats'],
+    'scope': 'Actual native HTTP200 body held only in test callback. Controlled context closure after original unroute reproduces pending-body disposal; exact original CI timing not captured. No DTO/product/runtime change.'}
+(out / 'receipt.json').write_text(json.dumps(receipt, indent=2) + '\n')
+(out / 'source-after.json').write_text(json.dumps(inputs(), indent=2) + '\n')
+if phase == 'old':
+    assert result.returncode != 0
+    assert 'Response has been disposed' in json.dumps(report)
+else:
+    assert result.returncode == 0 and report['stats']['expected'] == 2
+    assert not any(report['stats'][key] for key in ('unexpected', 'skipped', 'flaky')) and not report.get('errors')
+print(json.dumps(receipt), flush=True)
+raise SystemExit(result.returncode)

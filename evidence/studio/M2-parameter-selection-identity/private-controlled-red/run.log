@@ -1,0 +1,76 @@
+
+Running 2 tests using 1 worker
+
+(node:2539679) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 .studio-local/hybrid-comparison/parameter-group-control/group.spec.ts:11:7 › labelled held actual presentation at 1024 › metadata arrival preserves native select-all and unsaved value (12.7s)
+(node:2539961) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 .studio-local/hybrid-comparison/parameter-group-control/group.spec.ts:11:7 › labelled held actual presentation at 1440 › metadata arrival preserves native select-all and unsaved value (12.7s)
+
+
+  1) .studio-local/hybrid-comparison/parameter-group-control/group.spec.ts:11:7 › labelled held actual presentation at 1024 › metadata arrival preserves native select-all and unsaved value
+
+    Error: expect(locator).toHaveValue(expected) failed
+
+    Locator:  getByLabel('Duration')
+    Expected: "7"
+    Received: "67"
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toHaveValue" getByLabel('Duration') with timeout 10000ms
+      - waiting for getByLabel('Duration')
+        24 × locator resolved to <input max="30" min="0.1" step="any" value="67" required="" type="number" aria-describedby="_r_1_-duration _r_1_-duration-draft"/>
+           - unexpected value "67"
+
+
+      40 |     const facts={sameNativeControl:await original!.evaluate(n=>n.isConnected),value:await duration.inputValue(),active:await duration.evaluate(n=>n===document.activeElement),revision:project.revision};
+      41 |     await info.attach("actual-held-presentation-selection",{body:JSON.stringify(facts),contentType:"application/json"});
+    > 42 |     await expect(duration).toHaveValue("7");expect(facts.sameNativeControl).toBe(true);expect(facts.active).toBe(true);
+         |                            ^
+      43 |     expect((await (await page.request.get(`/api/v1/projects/${project.projectId}`)).json()).revision).toBe(project.revision);
+      44 |    } finally {release();await page.unrouteAll({behavior:"wait"});}
+      45 |   });
+        at <repo>/.studio-local/hybrid-comparison/parameter-group-control/group.spec.ts:42:28
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    .studio-local/hybrid-comparison/parameter-group-control/corrected-before/browser/group-labelled-held-actual-35b9e-elect-all-and-unsaved-value/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: .studio-local/hybrid-comparison/parameter-group-control/corrected-before/browser/group-labelled-held-actual-35b9e-elect-all-and-unsaved-value/error-context.md
+
+  2) .studio-local/hybrid-comparison/parameter-group-control/group.spec.ts:11:7 › labelled held actual presentation at 1440 › metadata arrival preserves native select-all and unsaved value
+
+    Error: expect(locator).toHaveValue(expected) failed
+
+    Locator:  getByLabel('Duration')
+    Expected: "7"
+    Received: "67"
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toHaveValue" getByLabel('Duration') with timeout 10000ms
+      - waiting for getByLabel('Duration')
+        24 × locator resolved to <input max="30" min="0.1" step="any" value="67" required="" type="number" aria-describedby="_r_1_-duration _r_1_-duration-draft"/>
+           - unexpected value "67"
+
+
+      40 |     const facts={sameNativeControl:await original!.evaluate(n=>n.isConnected),value:await duration.inputValue(),active:await duration.evaluate(n=>n===document.activeElement),revision:project.revision};
+      41 |     await info.attach("actual-held-presentation-selection",{body:JSON.stringify(facts),contentType:"application/json"});
+    > 42 |     await expect(duration).toHaveValue("7");expect(facts.sameNativeControl).toBe(true);expect(facts.active).toBe(true);
+         |                            ^
+      43 |     expect((await (await page.request.get(`/api/v1/projects/${project.projectId}`)).json()).revision).toBe(project.revision);
+      44 |    } finally {release();await page.unrouteAll({behavior:"wait"});}
+      45 |   });
+        at <repo>/.studio-local/hybrid-comparison/parameter-group-control/group.spec.ts:42:28
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    .studio-local/hybrid-comparison/parameter-group-control/corrected-before/browser/group-labelled-held-actual-e6249-elect-all-and-unsaved-value/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: .studio-local/hybrid-comparison/parameter-group-control/corrected-before/browser/group-labelled-held-actual-e6249-elect-all-and-unsaved-value/error-context.md
+
+  2 failed
+    .studio-local/hybrid-comparison/parameter-group-control/group.spec.ts:11:7 › labelled held actual presentation at 1024 › metadata arrival preserves native select-all and unsaved value
+    .studio-local/hybrid-comparison/parameter-group-control/group.spec.ts:11:7 › labelled held actual presentation at 1440 › metadata arrival preserves native select-all and unsaved value

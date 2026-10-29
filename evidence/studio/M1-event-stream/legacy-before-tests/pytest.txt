@@ -1,0 +1,84 @@
+FF.                                                                      [100%]
+=================================== FAILURES ===================================
+_ test_legacy_byte_budget_delivers_every_consecutive_record_without_silent_drop _
+
+tmp_path = PosixPath('<cache>/pytest/stream-legacy-before/test_legacy_byte_budget_delive0')
+
+    def test_legacy_byte_budget_delivers_every_consecutive_record_without_silent_drop(
+        tmp_path,
+    ):
+        from xverse_studio.events import EventStreams
+
+        source = _stream.AdvancingJournal(tmp_path / "new-legacy-byte-journal")
+        source.append(5, message="x" * 800)
+        source.state = "stopped"
+        original = source.path.read_bytes()
+        manager = EventStreams(
+            Store(tmp_path / "new-legacy-byte-store"),
+            source,
+            pending_events=10,
+            pending_bytes=8192,
+            max_frame_bytes=2048,
+            poll_interval=0,
+        )
+        prepared = manager.prepare(source.run_id, version="1.0")
+        lease = manager.reserve(source.run_id)
+
+        async def consume():
+            return [
+                frame async for frame in manager.iterate(source.run_id, prepared, lease)
+            ]
+
+        chunks = run_async(consume())
+        delivered = [frame for chunk in chunks for frame in frames(chunk)]
+        assert all(frame.get("event") != "studio.stream_control" for frame in delivered)
+>       assert [frame["data"] for frame in delivered] == source.records
+E       AssertionError: assert [{'digest': '...'info'}, ...}] == [{'digest': '...'info'}, ...}]
+E
+E         At index 0 diff: {'digest': '42a20a9acf4abe4306241f7cb7d15f0b086c25e51d953703eb46b09ef9ca8e08', 'elementRefs': ['xdl://org.example/system/fixture#controller'], 'eventId': 'fixture-stream-event-4', 'payload': {'message': 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx...
+E
+E         ...Full output truncated (3 lines hidden), use '-vv' to show
+
+tests/integration/test_stream_recovery.py:695: AssertionError
+__________ test_legacy_oversized_first_record_refuses_before_headers ___________
+
+client = <starlette.testclient.TestClient object at 0x7da05bf8c830>
+recorded = {'clockDomains': ['clock-alpha', 'clock-beta'], 'events': {'gap': 'run-reader-fixture-d1c6aa7b-515e-4cdb-a89d-364b0092...00926f18:hugeInside', ...}, 'evidenceScope': 'recorded_fixture', 'gapReason': 'Synthetic declared collection gap', ...}
+
+    def test_legacy_oversized_first_record_refuses_before_headers(client, recorded):
+        studio = client.app.state.studio
+        rid = recorded["runId"]
+        path = studio.runs.directory(rid) / "evidence.jsonl"
+        rows = [json.loads(line) for line in path.read_bytes().splitlines()]
+        rows[0]["payload"]["largePublicFixture"] = "x" * (300 * 1024)
+        previous, encoded = "0" * 64, []
+        for row in rows:
+            row.pop("digest")
+            row["previousDigest"] = previous
+            previous = hashlib.sha256(canonical(row).encode()).hexdigest()
+            row["digest"] = previous
+            encoded.append((canonical(row) + "\n").encode())
+        original = b"".join(encoded)
+        path.write_bytes(original)
+        with studio.store.tx() as db:
+            run = studio.store.get("run", rid, db)
+            run["journalDigest"] = digest(original)
+            studio.store.put("run", rid, run, db)
+        assert read_journal(path.parent, studio.runs.read(rid)) == (rows, "valid")
+        response = client.get(f"/api/v1/runs/{rid}/events", params={"streamVersion": "1.0"})
+>       assert response.status_code == 413, response.text
+E       AssertionError:
+E       assert 200 == 413
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests/integration/test_stream_recovery.py:732: AssertionError
+=============================== warnings summary ===============================
+.venv/lib/python3.13/site-packages/fastapi/testclient.py:1
+  <workspace>/.venv/lib/python3.13/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/integration/test_stream_recovery.py::test_legacy_byte_budget_delivers_every_consecutive_record_without_silent_drop
+FAILED tests/integration/test_stream_recovery.py::test_legacy_oversized_first_record_refuses_before_headers
+2 failed, 1 passed, 19 deselected, 1 warning in 1.96s

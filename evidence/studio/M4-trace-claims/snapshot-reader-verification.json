@@ -1,0 +1,21 @@
+{
+  "scope": "Post-full-suite bounded snapshot display route repair, Linux only. Does not add these overlapping results to the 388-test predecessor cohort.",
+  "command": "PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 .venv/bin/python -I -m pytest tests/integration/test_snapshot_reader.py tests/integration/test_recorded_replay_and_rerun.py --basetemp=.studio-local/snapshot-read-clean -q",
+  "passed": 13,
+  "failed": 0,
+  "errors": 0,
+  "seconds": 42.31,
+  "sourceDigestsAfterRun": {
+    "services/studio-api/src/xverse_studio/api/app.py": "c5b75e6d2c0b4f3c0f09980a7128e1f19cdebce14a1b4cee31b46f977b703201",
+    "services/studio-api/src/xverse_studio/runs/service.py": "ead5c3b2f96edecfbd69f3d819b5ad35280b9832b1980fa4c9fb51576e3dca8e",
+    "tests/integration/test_snapshot_reader.py": "3cd08cfa68c12ba03772a4f9a3215f2d85e53ef325f50c41d444aa9dfabfdcd2",
+    "tests/integration/test_recorded_replay_and_rerun.py": "13c2b4d3575165a8253626e5b6adff69b89b61e2efce641b1b6ed797cf404141"
+  },
+  "independentSuccessor": "independent-review/snapshot-io-successor.json",
+  "initialFixtureFailure": "snapshot-reader-fixture-before.txt: reader assertions passed but five synthetic-record teardown errors; synthetic rows now retired in finally before real shutdown reconciliation",
+  "limitations": [
+    "No Windows installation or tests",
+    "No external simulator/physical equipment claim",
+    "Full exact-head CI remains pending publication"
+  ]
+}

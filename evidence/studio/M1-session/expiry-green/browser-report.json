@@ -1,0 +1,702 @@
+{
+  "config": {
+    "argv": [
+      "<loop10-cache>/node-v24.22.1-linux-x64/bin/node",
+      "<workspace>/node_modules/.bin/playwright",
+      "test",
+      "-c",
+      "tests/e2e/playwright.config.ts",
+      "--grep",
+      "session contract:|run session:"
+    ],
+    "configFile": "<workspace>/tests/e2e/playwright.config.ts",
+    "rootDir": "<workspace>/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "<workspace>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "<workspace>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "*.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "<workspace>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "<workspace>/tests/e2e",
+        "snapshotDir": "<workspace>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": "*.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "baseURL": "http://127.0.0.1:43913",
+          "browserName": "chromium",
+          "actionTimeout": 15000,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "trace": "off",
+          "screenshot": "only-on-failure",
+          "video": "off"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "<workspace>/test-results/browser-report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "run-reconnect.spec.ts",
+      "file": "run-reconnect.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "run session: unknown recorded state awaits actual bounded resync and reconnects read-only",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3703,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-25T15:28:25.543Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "recorded-fixture-scope",
+                      "contentType": "application/json",
+                      "body": "eyJwcm9qZWN0SWQiOiJwcmotM2M0MGM1Y2EtYjFjYy00ZGVhLWFhMmEtZjQ4ZjU1MjI1NmUxIiwicnVuSWQiOiJydW4tcmVhZGVyLWZpeHR1cmUtODJmYmE0MmYtZmFlYy00YTllLTg5NDItZWFiNzgzYmIxYzBiIiwic25hcHNob3RJZCI6InNuYXAtNmY4YWZkZWYtMWYwOC00OGE5LTg5OTctYTdkZTRhZWI1YTM0IiwicmVjb3JkQ291bnQiOjEyMTUsImpvdXJuYWxEaWdlc3QiOiJzaGEyNTY6NWZjNGUzZGY5OTRmOTIyNjU0ZjI1YWY3NThiZjM4N2VkMDU5OWYwMmUxMzAyNTAyZDQ5MWJiNzcwYWJkY2NhMyIsImV2ZW50cyI6eyJodWdlQmVmb3JlIjoicnVuLXJlYWRlci1maXh0dXJlLTgyZmJhNDJmLWZhZWMtNGE5ZS04OTQyLWVhYjc4M2JiMWMwYjpodWdlQmVmb3JlIiwiaHVnZUluc2lkZSI6InJ1bi1yZWFkZXItZml4dHVyZS04MmZiYTQyZi1mYWVjLTRhOWUtODk0Mi1lYWI3ODNiYjFjMGI6aHVnZUluc2lkZSIsImh1Z2VFbmQiOiJydW4tcmVhZGVyLWZpeHR1cmUtODJmYmE0MmYtZmFlYy00YTllLTg5NDItZWFiNzgzYmIxYzBiOmh1Z2VFbmQiLCJuZWdhdGl2ZSI6InJ1bi1yZWFkZXItZml4dHVyZS04MmZiYTQyZi1mYWVjLTRhOWUtODk0Mi1lYWI3ODNiYjFjMGI6bmVnYXRpdmUiLCJ6ZXJvIjoicnVuLXJlYWRlci1maXh0dXJlLTgyZmJhNDJmLWZhZWMtNGE5ZS04OTQyLWVhYjc4M2JiMWMwYjp6ZXJvIiwibWlzc2luZ1RpbWUiOiJydW4tcmVhZGVyLWZpeHR1cmUtODJmYmE0MmYtZmFlYy00YTllLTg5NDItZWFiNzgzYmIxYzBiOm1pc3NpbmdUaW1lIiwibWFsZm9ybWVkVGltZSI6InJ1bi1yZWFkZXItZml4dHVyZS04MmZiYTQyZi1mYWVjLTRhOWUtODk0Mi1lYWI3ODNiYjFjMGI6bWFsZm9ybWVkVGltZSIsIm90aGVyQ2xvY2siOiJydW4tcmVhZGVyLWZpeHR1cmUtODJmYmE0MmYtZmFlYy00YTllLTg5NDItZWFiNzgzYmIxYzBiOm90aGVyQ2xvY2siLCJ1bmtub3duUmVjZWlwdCI6InJ1bi1yZWFkZXItZml4dHVyZS04MmZiYTQyZi1mYWVjLTRhOWUtODk0Mi1lYWI3ODNiYjFjMGI6dW5rbm93blJlY2VpcHQiLCJtaXNzaW5nUmVjZWlwdCI6InJ1bi1yZWFkZXItZml4dHVyZS04MmZiYTQyZi1mYWVjLTRhOWUtODk0Mi1lYWI3ODNiYjFjMGI6bWlzc2luZ1JlY2VpcHQiLCJnYXAiOiJydW4tcmVhZGVyLWZpeHR1cmUtODJmYmE0MmYtZmFlYy00YTllLTg5NDItZWFiNzgzYmIxYzBiOmdhcCIsImxvZ0FscGhhIjoicnVuLXJlYWRlci1maXh0dXJlLTgyZmJhNDJmLWZhZWMtNGE5ZS04OTQyLWVhYjc4M2JiMWMwYjpsb2dBbHBoYSIsImxvZ0JldGEiOiJydW4tcmVhZGVyLWZpeHR1cmUtODJmYmE0MmYtZmFlYy00YTllLTg5NDItZWFiNzgzYmIxYzBiOmxvZ0JldGEiLCJsYXRlIjoicnVuLXJlYWRlci1maXh0dXJlLTgyZmJhNDJmLWZhZWMtNGE5ZS04OTQyLWVhYjc4M2JiMWMwYjpsYXRlIiwibGF0ZUxvZyI6InJ1bi1yZWFkZXItZml4dHVyZS04MmZiYTQyZi1mYWVjLTRhOWUtODk0Mi1lYWI3ODNiYjFjMGI6bGF0ZUxvZyJ9LCJ0aWNrcyI6eyJzdGFydCI6IjkwMDcxOTkyNTQ3NDA5OTMiLCJlbmQiOiI5MDA3MTk5MjU0NzQwOTk0In0sImNsb2NrRG9tYWlucyI6WyJjbG9jay1hbHBoYSIsImNsb2NrLWJldGEiXSwib2JzZXJ2ZXJSZWZzIjpbInN0YXRlLW9ic2VydmVyIiwiZXh0ZXJuYWwtb2JzZXJ2ZXIiLCJub2lzZS1vYnNlcnZlciJdLCJzb3VyY2VQcm92aWRlcklkcyI6WyJzdHVkaW8ucmVmZXJlbmNlIiwiZml4dHVyZS5hbHBoYSIsImZpeHR1cmUuYmV0YSIsImZpeHR1cmUudW5rbm93biIsImZpeHR1cmUubm9pc2UiLCJmaXh0dXJlLmxhdGUiXSwiZXZpZGVuY2VTY29wZSI6InJlY29yZGVkX2ZpeHR1cmUiLCJnYXBSZWFzb24iOiJTeW50aGV0aWMgZGVjbGFyZWQgY29sbGVjdGlvbiBnYXAiLCJzdGF0ZSI6InVua25vd24iLCJzdHJlYW1WZXJzaW9uIjoiMS4xIiwicnVudGltZUF1dGhvcml0eSI6ZmFsc2V9"
+                    },
+                    {
+                      "name": "read-only-stream-requests",
+                      "contentType": "application/json",
+                      "body": "eyJzdHJlYW1zIjpbImh0dHA6Ly8xMjcuMC4wLjE6NDM5MTMvYXBpL3YxL3J1bnMvcnVuLXJlYWRlci1maXh0dXJlLTgyZmJhNDJmLWZhZWMtNGE5ZS04OTQyLWVhYjc4M2JiMWMwYi9ldmVudHM/c3RyZWFtVmVyc2lvbj0xLjEiLCJodHRwOi8vMTI3LjAuMC4xOjQzOTEzL2FwaS92MS9ydW5zL3J1bi1yZWFkZXItZml4dHVyZS04MmZiYTQyZi1mYWVjLTRhOWUtODk0Mi1lYWI3ODNiYjFjMGIvZXZlbnRzP3N0cmVhbVZlcnNpb249MS4xJmFmdGVyPXN0MS5leUprSWpvaVpqWm1PRGsyWkRRNU5ESXhZalF6WXpnNU1UUXdPVGc1TmpObU5EWXlZekV5Wm1VNFlUYzFZVGs1TkdRM01tTXhPR1F3WlRNeVpEQTVZVGswTXpsbFpTSXNJbkVpT2lJeE1qRTFJaXdpY2lJNkluSjFiaTF5WldGa1pYSXRabWw0ZEhWeVpTMDRNbVppWVRReVppMW1ZV1ZqTFRSaE9XVXRPRGswTWkxbFlXSTNPRE5pWWpGak1HSWlMQ0p6SWpvaWMyNWhjQzAyWmpoaFptUmxaaTB4WmpBNExUUTRZVGt0T0RrNU55MWhOMlJsTkdGbFlqVmhNelFpZlEiLCJodHRwOi8vMTI3LjAuMC4xOjQzOTEzL2FwaS92MS9ydW5zL3J1bi1yZWFkZXItZml4dHVyZS04MmZiYTQyZi1mYWVjLTRhOWUtODk0Mi1lYWI3ODNiYjFjMGIvZXZlbnRzP3N0cmVhbVZlcnNpb249MS4xJmFmdGVyPXN0MS5leUprSWpvaVpqWm1PRGsyWkRRNU5ESXhZalF6WXpnNU1UUXdPVGc1TmpObU5EWXlZekV5Wm1VNFlUYzFZVGs1TkdRM01tTXhPR1F3WlRNeVpEQTVZVGswTXpsbFpTSXNJbkVpT2lJeE1qRTFJaXdpY2lJNkluSjFiaTF5WldGa1pYSXRabWw0ZEhWeVpTMDRNbVppWVRReVppMW1ZV1ZqTFRSaE9XVXRPRGswTWkxbFlXSTNPRE5pWWpGak1HSWlMQ0p6SWpvaWMyNWhjQzAyWmpoaFptUmxaaTB4WmpBNExUUTRZVGt0T0RrNU55MWhOMlJsTkdGbFlqVmhNelFpZlEiXSwid3JpdGVzIjpbXSwiZmF1bHQiOiJFeHBsaWNpdCBicm93c2VyIGZldGNoIGNhbmNlbGxhdGlvbjsgYWxsIHNlcnZlciBmcmFtZXMgYW5kIHJlc3luYyBkYXRhIHJlbWFpbiBhY3R1YWwgbmF0aXZlIEFQSSByZXNwb25zZXMuIn0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "46919d8b7dee4b05863c-9efca6a6eaccf8e5cb9b",
+          "file": "run-reconnect.spec.ts",
+          "line": 109,
+          "column": 5
+        },
+        {
+          "title": "run session: native owned execution survives real replay-window expiry while running without duplicate Start",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 20419,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-25T15:28:29.751Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "actual-window-expiry",
+                      "contentType": "application/json",
+                      "body": "eyJleHBpcmVkUmVzcG9uc2VzIjpbeyJ1cmwiOiJodHRwOi8vMTI3LjAuMC4xOjQzOTEzL2FwaS92MS9ydW5zL3J1bi04MzRiMGEyMS0yZWE4LTQ0NDYtYTFmZS1iNDUxZTkyNmVkOTgvZXZlbnRzP3N0cmVhbVZlcnNpb249MS4xJmFmdGVyPXN0MS5leUprSWpvaU0yRTNNVEUzWVdWa05XRmlPR1JsT1RJNFptRTFPVEpsTlRRMFpHUXpPRE15TnpRMU5XWTBOelZsTW1RM1l6TXlaak00Wm1Kak5EZ3pOR1V4Tm1ZMk1DSXNJbkVpT2lJeE5EVWlMQ0p5SWpvaWNuVnVMVGd6TkdJd1lUSXhMVEpsWVRndE5EUTBOaTFoTVdabExXSTBOVEZsT1RJMlpXUTVPQ0lzSW5NaU9pSnpibUZ3TFRFeVltRTVZekJrTFRaaU5qZ3ROREZpWVMwNVltWmhMVGN5TmprellUaGtNalEyWlNKOSIsInN0YXR1cyI6NDEwLCJjb2RlIjoiQ1VSU09SX0VYUElSRUQifV0sInNvdXJjZVJlY29yZHNCZWZvcmUiOjEzOCwic291cmNlUmVjb3Jkc0R1cmluZ1BhdXNlIjoxMzg1LCJwYXVzZU1pbGxpc2Vjb25kcyI6MTIwMDAsInJlcXVlc3RlZER1cmF0aW9uU2Vjb25kcyI6MTYsInRpbWVzdGVwU2Vjb25kcyI6MC4wMSwicHJlZml4Qnl0ZUxlbmd0aCI6MTcwNzYzLCJwcmVmaXhTaGEyNTYiOiJmMTU0NTk1NjFhMmQ2N2Y5MTMzZjNmZjNiMTIwMzM1MTBiMmY1Y2JlZDhhZWUwZDhhODE5MTg5YTc1ZDRjYzJhIiwic25hcHNob3RTaGEyNTYiOiJkNzJmMzc4ZmY0YjQzZmVhZjI1NTg1NmYzYzQ2Y2UzZGRkYjk3MWI1NWI1N2M5NzkzNzRkNmI2OTJmYmFiZGVlIiwiZmluYWxKb3VybmFsU2hhMjU2IjoiYjFhYWRmZTdjYjRjY2U0OGJlODQxYTQ5MzU4NjdjMTMzOTg1YmMxZTRiMWU5OGRiMDNhMGM0ZDQwMzI2NWI4OSIsInJlYWRPbmx5Ijp0cnVlfQ=="
+                    },
+                    {
+                      "name": "active-prefix-recovery",
+                      "contentType": "application/json",
+                      "body": "W3siaW50ZWdyaXR5IjoidmVyaWZpZWRfcHJlZml4Iiwic3RhdGUiOiJydW5uaW5nIiwicmVzdW1lQ3Vyc29yIjoic3QxLmV5SmtJam9pTTJFM01URTNZV1ZrTldGaU9HUmxPVEk0Wm1FMU9USmxOVFEwWkdRek9ETXlOelExTldZME56VmxNbVEzWXpNeVpqTTRabUpqTkRnek5HVXhObVkyTUNJc0luRWlPaUl4TkRVaUxDSnlJam9pY25WdUxUZ3pOR0l3WVRJeExUSmxZVGd0TkRRME5pMWhNV1psTFdJME5URmxPVEkyWldRNU9DSXNJbk1pT2lKemJtRndMVEV5WW1FNVl6QmtMVFppTmpndE5ERmlZUzA1WW1aaExUY3lOamt6WVRoa01qUTJaU0o5IiwiYWZ0ZXJFeHBpcnkiOjB9LHsiaW50ZWdyaXR5IjoidmVyaWZpZWRfcHJlZml4Iiwic3RhdGUiOiJydW5uaW5nIiwicmVzdW1lQ3Vyc29yIjoic3QxLmV5SmtJam9pTldJMVlURXdNVGN6WkRkaFpUUXlORE0yT1dZeU1HUTBOR1F3TjJNMk1UTTJZakl5T1RrNU1tVTNOREUxWkdRNVpHUm1aVFF3WWpZd01URTBNMlEwWVNJc0luRWlPaUl4TXprNElpd2ljaUk2SW5KMWJpMDRNelJpTUdFeU1TMHlaV0U0TFRRME5EWXRZVEZtWlMxaU5EVXhaVGt5Tm1Wa09UZ2lMQ0p6SWpvaWMyNWhjQzB4TW1KaE9XTXdaQzAyWWpZNExUUXhZbUV0T1dKbVlTMDNNalk1TTJFNFpESTBObVVpZlEiLCJhZnRlckV4cGlyeSI6MX1d"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "46919d8b7dee4b05863c-29a825d2fbae1e074500",
+          "file": "run-reconnect.spec.ts",
+          "line": 243,
+          "column": 5
+        },
+        {
+          "title": "run session: UI metadata fixture updates evidence at the same lifecycle version without altering evidence",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 7320,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-25T15:28:50.179Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "same-version-ui-negative-scope",
+                      "contentType": "application/json",
+                      "body": "eyJzY29wZSI6ImNvbnRyb2xsZWQgSFRUUCBtZXRhZGF0YSBVSSBuZWdhdGl2ZSBvbmx5OyBzb3VyY2Ugam91cm5hbCBhbmQgc25hcHNob3QgdW5jaGFuZ2VkIiwiZXZpZGVuY2VTY29wZSI6InJlY29yZGVkX2ZpeHR1cmUiLCJyZXF1ZXN0ZWRTdGF0ZXMiOlsicGFydGlhbCIsImludmFsaWQiLCJ1bmF2YWlsYWJsZSJdLCJzdGF0ZVZlcnNpb25zIjpbMSwxLDFdLCJqb3VybmFsU2hhMjU2IjoiYWQ0OGIxZDRiOTdmNjUzNzM4NDA0YWE3NzNmMTY1YmRjZmE3ZTMzNzI2YWQ0N2M0MmM4NjE5OGJlNmVmODRiMSIsInNuYXBzaG90U2hhMjU2IjoiMzM2ZGU1YWM4ODYyYTU5ZWUyNmExNWUyMjlkMDE0OTU1OGM4YzhiODNhMTQ0MDA5OTQyMjExZDk0MWIxNTRiNiIsImJhY2tlbmRFdmlkZW5jZSI6InBhcnRpYWwiLCJtdXRhdGlvbnMiOltdfQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "46919d8b7dee4b05863c-463182eb88dd6ad8b890",
+          "file": "run-reconnect.spec.ts",
+          "line": 474,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "session-contract.spec.ts",
+      "file": "session-contract.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "session contract: callback acceptance precedes acknowledged reconnect cursor",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1638,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-25T15:28:57.581Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "867a6ceef9ff0fe48626-4aec27e276939246f457",
+          "file": "session-contract.spec.ts",
+          "line": 56,
+          "column": 5
+        },
+        {
+          "title": "session contract: expiry awaits full state and history resynchronization before reconnect",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 856,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-25T15:28:59.225Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "867a6ceef9ff0fe48626-e3555cc3def078e57e97",
+          "file": "session-contract.spec.ts",
+          "line": 90,
+          "column": 5
+        },
+        {
+          "title": "session contract: SSE CRLF split across chunks preserves one canonical frame",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 203,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-25T15:29:00.086Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "867a6ceef9ff0fe48626-3d47ee258a052ebc81d3",
+          "file": "session-contract.spec.ts",
+          "line": 136,
+          "column": 5
+        },
+        {
+          "title": "session contract: unknown presentation loss stays unknown and outside canonical records",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 103,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-25T15:29:00.295Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "867a6ceef9ff0fe48626-ee36a51cf2800a701ac7",
+          "file": "session-contract.spec.ts",
+          "line": 173,
+          "column": 5
+        },
+        {
+          "title": "session contract: retry timers remove completed abort listeners",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1854,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-25T15:29:00.404Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "867a6ceef9ff0fe48626-6ffd5e8d6ced62320410",
+          "file": "session-contract.spec.ts",
+          "line": 227,
+          "column": 5
+        },
+        {
+          "title": "session contract: disposal cancels an idle reader without another request",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-25T15:29:02.264Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "867a6ceef9ff0fe48626-3e28e2b2b52a3387afff",
+          "file": "session-contract.spec.ts",
+          "line": 282,
+          "column": 5
+        },
+        {
+          "title": "session contract: equal lifecycle version keeps state while fresh cleanup and evidence advance",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-25T15:29:02.272Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "867a6ceef9ff0fe48626-1c8664d59d41da4bf6c9",
+          "file": "session-contract.spec.ts",
+          "line": 315,
+          "column": 5
+        },
+        {
+          "title": "session contract: invalid recovery cannot acknowledge a replacement watermark",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 854,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-25T15:29:02.279Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "867a6ceef9ff0fe48626-cc888b0895177856bd5b",
+          "file": "session-contract.spec.ts",
+          "line": 353,
+          "column": 5
+        },
+        {
+          "title": "session contract: duplicate delivery deduplicates before consumer acceptance",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 153,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-25T15:29:03.145Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "867a6ceef9ff0fe48626-7d399eb10ccb428c6d83",
+          "file": "session-contract.spec.ts",
+          "line": 391,
+          "column": 5
+        },
+        {
+          "title": "session contract: mismatched cursor proof rejects frame before consumer acceptance",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 102,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-25T15:29:03.308Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "867a6ceef9ff0fe48626-2d0e83814b95ee3401de",
+          "file": "session-contract.spec.ts",
+          "line": 414,
+          "column": 5
+        },
+        {
+          "title": "session contract: incompatible schema and oversized frames require verified recovery",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 102,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-25T15:29:03.417Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "867a6ceef9ff0fe48626-810bde9f5d799fa07b4c",
+          "file": "session-contract.spec.ts",
+          "line": 451,
+          "column": 5
+        },
+        {
+          "title": "session contract: running verified-prefix recovery preserves limited integrity and resumes",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 104,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-25T15:29:03.525Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "867a6ceef9ff0fe48626-23b48bc591fefd5938f7",
+          "file": "session-contract.spec.ts",
+          "line": 488,
+          "column": 5
+        },
+        {
+          "title": "session contract: invalid and unavailable recovery bodies remain unaccepted",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1706,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-25T15:29:03.636Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "867a6ceef9ff0fe48626-b419b2092f4e2024f483",
+          "file": "session-contract.spec.ts",
+          "line": 524,
+          "column": 5
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-25T15:28:24.982Z",
+    "duration": 40474.169,
+    "expected": 16,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

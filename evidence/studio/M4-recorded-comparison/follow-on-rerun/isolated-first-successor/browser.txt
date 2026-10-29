@@ -1,0 +1,78 @@
+
+Running 2 tests using 1 worker
+
+(node:4145099) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 .studio-local/frozen-rerun-review/probe.spec.ts:6:7 › actual rerun acknowledgement preserves a newer Model view at 1024 (10.1s)
+(node:4145429) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 .studio-local/frozen-rerun-review/probe.spec.ts:6:7 › actual rerun acknowledgement preserves a newer Model view at 1440 (10.1s)
+
+
+  1) .studio-local/frozen-rerun-review/probe.spec.ts:6:7 › actual rerun acknowledgement preserves a newer Model view at 1024
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('heading', { name: 'Connect to Studio', exact: true })
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('heading', { name: 'Connect to Studio', exact: true }) with timeout 10000ms
+      - waiting for getByRole('heading', { name: 'Connect to Studio', exact: true })
+
+
+       at ../../tests/e2e/connect-studio.ts:17
+
+      15 |     await expect(
+      16 |       page.getByRole("heading", { name: "Connect to Studio", exact: true }),
+    > 17 |     ).toBeVisible();
+         |       ^
+      18 |     await page.screenshot({
+      19 |       path: testInfo.outputPath("login.png"),
+      20 |       fullPage: true,
+        at connectStudio (<repo>/tests/e2e/connect-studio.ts:17:7)
+        at <repo>/.studio-local/frozen-rerun-review/probe.spec.ts:8:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    .studio-local/frozen-rerun-review/isolated-first-successor/browser-output/probe-actual-rerun-acknowl-045f7--a-newer-Model-view-at-1024/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: .studio-local/frozen-rerun-review/isolated-first-successor/browser-output/probe-actual-rerun-acknowl-045f7--a-newer-Model-view-at-1024/error-context.md
+
+  2) .studio-local/frozen-rerun-review/probe.spec.ts:6:7 › actual rerun acknowledgement preserves a newer Model view at 1440
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('heading', { name: 'Connect to Studio', exact: true })
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('heading', { name: 'Connect to Studio', exact: true }) with timeout 10000ms
+      - waiting for getByRole('heading', { name: 'Connect to Studio', exact: true })
+
+
+       at ../../tests/e2e/connect-studio.ts:17
+
+      15 |     await expect(
+      16 |       page.getByRole("heading", { name: "Connect to Studio", exact: true }),
+    > 17 |     ).toBeVisible();
+         |       ^
+      18 |     await page.screenshot({
+      19 |       path: testInfo.outputPath("login.png"),
+      20 |       fullPage: true,
+        at connectStudio (<repo>/tests/e2e/connect-studio.ts:17:7)
+        at <repo>/.studio-local/frozen-rerun-review/probe.spec.ts:8:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    .studio-local/frozen-rerun-review/isolated-first-successor/browser-output/probe-actual-rerun-acknowl-67c4c--a-newer-Model-view-at-1440/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: .studio-local/frozen-rerun-review/isolated-first-successor/browser-output/probe-actual-rerun-acknowl-67c4c--a-newer-Model-view-at-1440/error-context.md
+
+  2 failed
+    .studio-local/frozen-rerun-review/probe.spec.ts:6:7 › actual rerun acknowledgement preserves a newer Model view at 1024
+    .studio-local/frozen-rerun-review/probe.spec.ts:6:7 › actual rerun acknowledgement preserves a newer Model view at 1440

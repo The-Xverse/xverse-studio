@@ -1,0 +1,140 @@
+"""Comparison provenance, exact time and source-quality contracts; fixtures labelled below."""
+from copy import deepcopy
+import hashlib
+import json
+
+import pytest
+
+from xverse_studio.comparison import compare_runs
+
+
+def fixture_run():
+    """A complete labelled record fixture, not evidence of an admitted live provider."""
+    resources = [
+        {"kind": kind, "uri": "xdl://fixture/" + kind.lower() + "/example", "version": "1.0", "semanticDigest": {"algorithm": "sha256", "value": "1" * 64}}
+        for kind in ["System", "Deployment", "Scenario", "Profile", "Component"]
+    ]
+    snapshot = {
+        "snapshotId": "fixture-snapshot", "snapshotDigest": "sha256:" + "2" * 64,
+        "projectId": "fixture-project", "revision": 1,
+        "semanticDigest": "sha256:" + "3" * 64, "planDigest": "sha256:" + "4" * 64,
+        "configuration": {"gain": 1},
+        "selection": {"systemRef": resources[0]["uri"], "deploymentRef": resources[1]["uri"], "scenarioRef": resources[2]["uri"]},
+        "providerId": "fixture-provider", "providerIdentity": {"providerId": "fixture-provider", "providerVersion": "1.0", "contractVersion": "1.0", "implementationDigest": "sha256:" + "5" * 64},
+        "capabilityDigest": "sha256:" + "6" * 64, "compiler": {"id": "fixture-compiler", "version": "1.0"}, "profileLocks": [],
+        "plan": {"provenance": {"resources": resources}, "profile": {"id": "fixture"}, "seed": None,
+                 "bindings": [{"id": "fixture-binding", "artifactRefs": [{"id": "fixture-model", "version": "1.0", "digest": "sha256:" + "7" * 64}]}],
+                 "timeDomains": [{"id": "simulation-time", "clockClass": "simulation", "epoch": "0", "rate": "1", "monotonic": True, "canonicalUnit": "tick"}], "timeMappings": []},
+    }
+    return {"runId": "fixture-run", "snapshot": snapshot, "snapshotIntegrity": "valid", "state": "stopped", "cleanup": "complete", "effectiveInputsMatch": True,
+            "evidence": {"integrity": "valid", "status": "complete"},
+            "observations": [{"observerRef": "fixture-observer", "field": "state", "unit": "1", "quantity": "dimensionless", "unitDefinitionDigest": "sha256:" + "8" * 64,
+                              "clockDomainRef": "simulation-time", "sourceTime": {"resolution": "microsecond", "uncertainty": 0}, "metadataConsistent": True,
+                              "coverage": {"verified": True, "complete": True, "startTick": "0", "endTick": "10", "gaps": []},
+                              "summary": {"status": "available", "sampleCount": 2, "firstTick": "0", "lastTick": "5", "minimum": 0.0, "maximum": 1.0, "lastValue": 1.0}}]}
+
+
+def test_report_preserves_frozen_provenance_and_distinct_result_dimensions():
+    left = fixture_run(); right = deepcopy(left); right['runId'] = 'other'
+    right['snapshot']['configuration']['gain'] = 2
+    before = deepcopy((left, right)); report = compare_runs(left, right)
+    assert report['comparisonVersion'] == '1.0'
+    assert report['compatible'] is True
+    assert report['left']['snapshotId'] == 'fixture-snapshot'
+    assert report['left']['cleanup'] == 'complete'
+    assert report['left']['evidenceIntegrity'] == 'valid'
+    rows = {r['field']: r for r in report['configuration']}
+    assert rows['parameters']['status'] == 'different'
+    assert rows['providerIdentity']['left']['providerVersion'] == '1.0'
+    assert rows['artifactIdentities']['left'][0]['artifactRefs'][0]['digest'] == 'sha256:' + '7' * 64
+    assert rows['clockDefinitions']['left']['domains'][0]['epoch'] == '0'
+    assert report['fields'][0]['left']['summary']['lastValue'] == 1.0
+    assert report['rerunRequiresFreshAdmission'] is True
+    assert report['mode'] == 'recorded_observation_comparison'
+    assert 'verdict' not in report and 'verdict' not in report['left']
+    assert (left, right) == before
+
+
+@pytest.mark.parametrize('missing', ['providerIdentity', 'capabilityDigest', 'selection', 'compiler'])
+def test_missing_frozen_facts_are_unavailable_not_equal(missing):
+    left = fixture_run(); del left['snapshot'][missing]
+    right = deepcopy(left)
+    report = compare_runs(left, right)
+    assert report['compatible'] is False
+    assert 'CONFIGURATION_PROVENANCE_UNAVAILABLE' in report['diagnostics']
+    assert any(r['status'] == 'unavailable' for r in report['configuration'])
+
+
+@pytest.mark.parametrize('start,end', [(None, None), ('11', '10'), (float('nan'), '10'), ('0', float('inf')), (False, '10'), ('0', '10.0')])
+def test_missing_or_invalid_window_is_not_like_for_like(start, end):
+    left = fixture_run(); right = deepcopy(left)
+    right['observations'][0]['coverage'].update(startTick=start, endTick=end)
+    out = compare_runs(left, right)
+    assert out['compatible'] is False
+    assert 'OBSERVATION_WINDOW_UNAVAILABLE' in out['diagnostics']
+
+
+def test_different_complete_windows_are_not_like_for_like():
+    left = fixture_run(); right = deepcopy(left)
+    right['observations'][0]['coverage']['endTick'] = '20'
+    out = compare_runs(left, right)
+    assert out['compatible'] is False
+    assert 'OBSERVATION_WINDOW_INCOMPATIBLE' in out['diagnostics']
+
+
+def test_signed_ticks_and_large_integer_precision_are_preserved():
+    left = fixture_run(); right = deepcopy(left)
+    for side in (left, right):
+        side['observations'][0]['coverage'].update(startTick='-20', endTick='-10')
+    assert compare_runs(left, right)['compatible'] is True
+    left['observations'][0]['coverage'].update(startTick='0', endTick='9007199254740993')
+    right['observations'][0]['coverage'].update(startTick='0', endTick='9007199254740994')
+    assert compare_runs(left, right)['compatible'] is False
+
+
+@pytest.mark.parametrize('change', ['observer', 'clock-definition', 'uncertainty', 'metadata', 'coverage', 'effective-inputs'])
+def test_unproven_observer_time_or_source_quality_blocks_pairing(change):
+    left = fixture_run(); right = deepcopy(left)
+    if change == 'observer':
+        del right['observations'][0]['observerRef']
+    elif change == 'clock-definition':
+        right['snapshot']['plan']['timeDomains'][0]['rate'] = '2'
+    elif change == 'uncertainty':
+        right['observations'][0]['sourceTime']['uncertainty'] = .1
+    elif change == 'metadata':
+        right['observations'][0]['metadataConsistent'] = False
+    elif change == 'coverage':
+        right['observations'][0]['coverage']['gaps'] = [{'reason': 'labelled missing sample'}]
+    else:
+        right['effectiveInputsMatch'] = False
+    assert compare_runs(left, right)['compatible'] is False
+
+
+def test_fields_present_on_only_one_side_remain_visible_and_incompatible():
+    left = fixture_run(); right = deepcopy(left); right['observations'] = []
+    out = compare_runs(left, right)
+    assert out['compatible'] is False
+    assert len(out['fields']) == 1
+    assert out['fields'][0]['left']['available'] is True
+    assert out['fields'][0]['right']['available'] is False
+
+
+def test_public_report_uses_frozen_provider_artifacts_clocks_and_real_summaries(client):
+    from test_advanced_api import prepared, start, wait_run
+    _, pf = prepared(client); rid = start(client, pf, key='recorded-report')
+    assert wait_run(client, rid)['state'] == 'stopped'
+    store = client.app.state.studio.store
+    snapshot = store.get('snapshot', pf['snapshotId'])
+    protected = {p: hashlib.sha256(p.read_bytes()).hexdigest() for p in [store.root/'runs'/rid/'evidence.jsonl', store.root/'snapshots'/pf['snapshotId']/'snapshot.json']}
+    report = client.post('/api/v1/comparisons', json={'leftRunId': rid, 'rightRunId': rid})
+    assert report.status_code == 200, report.text
+    out = report.json(); assert out['comparisonVersion'] == '1.0'
+    assert out['compatible'] is True, out['diagnostics']
+    rows = {r['field']: r for r in out['configuration']}
+    assert rows['providerIdentity']['left'] == snapshot['providerIdentity']
+    assert rows['clockDefinitions']['left']['domains'] == snapshot['plan']['timeDomains']
+    assert rows['artifactIdentities']['left'] == [{'bindingId': b['id'], 'artifactRefs': b['artifactRefs']} for b in snapshot['plan']['bindings']]
+    assert rows['profileIdentities']['left']['resources'] == [r for r in snapshot['plan']['provenance']['resources'] if r['kind'] == 'Profile']
+    assert all(f['left']['summary']['sampleCount'] > 0 and f['left']['summary']['status'] == 'available' for f in out['fields'])
+    assert client.get(f'/api/v1/runs/{rid}/comparison', params={'baselineRunId': rid}).json() == out
+    assert all(hashlib.sha256(p.read_bytes()).hexdigest() == h for p,h in protected.items())

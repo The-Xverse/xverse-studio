@@ -1,0 +1,22 @@
+from pathlib import Path
+import os,sys,json,subprocess,time,hashlib
+root=Path.cwd().resolve()
+cache=root.parent/'.xverse-studio-cache'
+out=root/'.studio-local/scenario-timeline/settled-backend'
+out.mkdir(exist_ok=False)
+env=os.environ.copy()
+env.update(PYTEST_DISABLE_PLUGIN_AUTOLOAD='1', TMPDIR=str(cache/'tmp'), TEMP=str(cache/'tmp'), TMP=str(cache/'tmp'), UV_CACHE_DIR=str(cache/'uv'))
+def inputs():
+    paths=subprocess.check_output(['git','ls-files','--cached','--others','--exclude-standard'],text=True).splitlines()
+    return {p:hashlib.sha256((root/p).read_bytes()).hexdigest() for p in paths if (root/p).is_file() and (p.startswith(('services/','scripts/','tests/','packages/','config/')) or p in ['pyproject.toml','uv.lock'] or p=='docs/architecture/ADR-0019-scenario-evidence-timeline.md')}
+before=inputs()
+(out/'source-before.json').write_text(json.dumps(before,indent=2))
+args=[str(root/'.venv/bin/python'),'-I','scripts/run_checks.py']
+start=time.monotonic()
+with (out/'pytest.log').open('w') as log: result=subprocess.run(args,env=env,stdout=log,stderr=subprocess.STDOUT)
+after=inputs()
+(out/'source-after.json').write_text(json.dumps(after,indent=2))
+summary={'baseCandidate':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),'command':args,'exitCode':result.returncode,'seconds':round(time.monotonic()-start,3),'sourceUnchanged':before==after}
+(out/'summary.json').write_text(json.dumps(summary,indent=2))
+print(json.dumps(summary),flush=True)
+sys.exit(result.returncode or int(before!=after))

@@ -1,0 +1,158 @@
+"""Retain terminal installed API evidence, all actual reds and interrupted history."""
+from pathlib import Path
+import base64
+import hashlib
+import json
+import re
+import sys
+import xml.etree.ElementTree as ET
+
+root = Path.cwd().resolve()
+base = root / '.studio-local/lab-api-integration'
+prior = root / '.studio-local/lab-api-foundation'
+out = root / 'evidence/studio/M3-reservation-api'
+read = lambda p: json.loads(p.read_text())
+
+def clean_text(value):
+    for original, replacement in [(str(root.parent / '.xverse-studio-cache'), '<loop-cache>'),
+        (str(root), '<repo>'), (str(Path.home() / 'xverse-studio'), '<repo>'),
+        (sys.base_prefix, '<python-install>'), (str(Path.home()), '<user-home>'),
+        (str(root.parent), '<workspace-volume>')]:
+        value = value.replace(original, replacement)
+    value = re.sub(r'(?i)(\bstudio_session=)[A-Za-z0-9_-]{16,}', r'\1<redacted>', value)
+    value = re.sub(r'''(?i)(x-csrf-token["']?\s*[:=]\s*["']?)[A-Za-z0-9._-]{16,}''', r'\1<redacted>', value)
+    return re.sub(r'(?i)(bearer\s+)[A-Za-z0-9._-]{16,}', r'\1<redacted>', value)
+
+def clean(value):
+    if isinstance(value, str):
+        return clean_text(value)
+    if isinstance(value, list):
+        return [clean(v) for v in value]
+    if isinstance(value, dict):
+        result = {key: '<redacted>' if key.lower() in {'studio_session', 'csrftoken', 'x-csrf-token',
+            'bootstraptoken', 'x-studio-bootstrap', 'sessiontoken', 'ownerkey', 'authorization', 'cookie', 'set-cookie'} else clean(v) for key, v in value.items()}
+        if value.get('contentType', '').startswith(('text/', 'application/json')) and 'body' in value:
+            try:
+                result['body'] = base64.b64encode(clean_text(base64.b64decode(value['body']).decode()).encode()).decode()
+            except (ValueError, UnicodeError):
+                pass
+        return result
+    return value
+
+def save(name, value):
+    path = out / name
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(clean(value), indent=2) + '\n')
+
+def copy(name, path):
+    if path.suffix == '.json':
+        return save(name, read(path))
+    target = out / name
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_text('\n'.join(line.rstrip() for line in clean_text(path.read_text()).splitlines()).rstrip() + '\n')
+
+def totals(tree):
+    return {key: sum(int(e.get(key, 0)) for e in tree.getroot().iter('testsuite')) for key in ('tests', 'failures', 'errors', 'skipped')}
+
+xml_records = []
+def xml(name, source, expected=None):
+    tree = ET.parse(source)
+    values = totals(tree)
+    if expected is not None:
+        assert values == expected, (name, values)
+    identities = [(e.get('classname'), e.get('name')) for e in tree.getroot().iter('testcase')]
+    removed = 0
+    for element in tree.getroot().iter():
+        if 'hostname' in element.attrib:
+            del element.attrib['hostname']
+            removed += 1
+        element.attrib.update({key: clean_text(value) for key, value in element.attrib.items()})
+        if element.text:
+            element.text = '\n'.join(line.rstrip() for line in clean_text(element.text).split('\n'))
+        if element.tail:
+            element.tail = clean_text(element.tail)
+    target = out / name
+    target.parent.mkdir(parents=True, exist_ok=True)
+    tree.write(target, encoding='utf-8', xml_declaration=True)
+    assert totals(ET.parse(target)) == values
+    assert identities == [(e.get('classname'), e.get('name')) for e in tree.getroot().iter('testcase')]
+    xml_records.append({'path': name, **values, 'hostnameAttributesRemoved': removed,
+        'pathsAndCredentialLiteralsSanitizedBeforeSerialization': True, 'failureTextTrailingWhitespaceRemoved': True,
+        'testcaseIdentitiesAndOutcomesPreserved': True,
+        'privateRawSha256': hashlib.sha256(source.read_bytes()).hexdigest(),
+        'retainedSha256': hashlib.sha256(target.read_bytes()).hexdigest()})
+
+verified = base / 'verified-final'
+rows = read(verified / 'verification.json')
+assert rows[-1]['name'] == 'performance-final' and all(v['exitCode'] == 0 and v['sourceUnchanged'] for v in rows)
+frozen = read(verified / 'source-before.json')
+assert len(frozen) == 316 and frozen == read(verified / 'source-after.json')
+amendment = read(base / 'contract-amendment/amendment.json')
+final = read(base / 'contract-amendment/source-after.json')
+assert set(amendment['changes']) == {'packages/contracts/api.ts', 'packages/contracts/openapi.json'}
+assert all(hashlib.sha256((root / name).read_bytes()).hexdigest() == digest for name, digest in final.items())
+assert {name for name in final if final[name] != frozen[name]} == set(amendment['changes'])
+assert all(row['exitCode'] == 0 for row in amendment['commands'])
+for name, count in [('targeted-browser-final', 83), ('performance-final', 2)]:
+    report = read(base / name / 'browser-report.json')
+    assert report['stats']['expected'] == count and not any(report['stats'][key] for key in ('skipped', 'unexpected', 'flaky'))
+    assert read(base / name / 'source-before.json') == read(base / name / 'source-after.json') == frozen
+out.mkdir(exist_ok=False)
+save('application-and-input-hashes.json', final)
+save('baseline316-inputs.json', frozen)
+save('contract-amendment.json', amendment)
+for path in verified.iterdir():
+    if path.is_file() and path.suffix != '.xml':
+        copy('final-baseline/' + path.name.replace('.log', '.txt'), path)
+xml('final-baseline/junit.xml', verified / 'junit.xml', {'tests': 1055, 'failures': 0, 'errors': 0, 'skipped': 0})
+for path in (base / 'contract-amendment').iterdir():
+    if path.is_file() and path.suffix != '.xml':
+        copy('generated-contracts/' + path.name.replace('.log', '.txt'), path)
+xml('generated-contracts/junit.xml', base / 'contract-amendment/junit.xml')
+for label in ['targeted-browser-final', 'performance-final']:
+    for name in ['browser-report.json', 'source-before.json', 'source-after.json']:
+        copy(label + '/' + name, base / label / name)
+    artifacts = [{'path': str(p.relative_to(base / label)), 'sha256': hashlib.sha256(p.read_bytes()).hexdigest()} for p in sorted((base / label / 'browser-output').rglob('*')) if p.is_file()]
+    save(label + '/omitted-artifacts.json', {'scope': 'Structured actual runner report and log retained; screenshots/raw output remain private and do not supply absent live acceptance.', 'artifacts': artifacts})
+history = [('backup-red', 11, 9), ('backup-successor', 33, 0),
+    ('promoted-foundation', 166, 0), ('ack-commit-red', 15, 2), ('ack-commit-successor', 79, 0),
+    ('concurrent-restart', 94, 0), ('descriptor-binding-red', 20, 1),
+    ('ledger-identity-red', 24, 2), ('installed-successor', 55, 0),
+    ('final-http', 23, 1), ('corrected-final-http', 23, 0)]
+for label, count, failed in history:
+    copy('history/' + label + '/pytest.txt', base / (label + '.log'))
+    xml('history/' + label + '/junit.xml', base / (label + '.xml'), {'tests': count, 'failures': failed, 'errors': 0, 'skipped': 0})
+for label in ['bounded-projection-red', 'operation-binding-red', 'http-prototype', 'http-named-successor',
+              'thread-authority-red', 'operation-projection-red', 'public-projection-successor']:
+    copy('history/unpromoted-proposal/' + label + '/pytest.txt', prior / (label + '.log'))
+    xml('history/unpromoted-proposal/' + label + '/junit.xml', prior / (label + '.xml'))
+for path in prior.glob('*.py.txt'):
+    copy('history/unpromoted-proposal/sources/' + path.name, path)
+copy('history/unpromoted-proposal/post-run-observation.json', prior / 'proposal-observation.json')
+for name in ['promotion.json', 'test-promotion.json', 'postcommit-fixture-amendment.json', 'verification-abort.json']:
+    copy('history/' + name, base / name)
+for path in base.glob('*.py.txt'):
+    copy('history/sources/' + path.name, path)
+for path in (base / 'verified').iterdir():
+    if path.is_file() and path.suffix != '.xml':
+        copy('history/interrupted-full/' + path.name.replace('.log', '.txt'), path)
+if (base / 'verified/junit.xml').exists():
+    xml('history/interrupted-full/junit.xml', base / 'verified/junit.xml')
+for name in ['verify.py', 'verify-final.py', 'verify-contract-amendment.py', 'retain.py', 'document.py', 'privacy-check.py']:
+    copy('controllers/' + name + '.txt', base / name)
+save('junit-sanitization.json', xml_records)
+save('verification.json', {'scope': 'Configured native-host reservation facade with owned fixtures and real SQLite; no physical command/device admission. Stock launcher remains unconfigured; physical runtime/active-run renewal/reservation UI remain unfinished.',
+    'backendTestsPassed': 1055, 'backendFailures': 0, 'backendErrors': 0, 'backendSkipped': 0,
+    'affectedBrowserPassed': 83, 'performancePassed': 2,
+    'browserSkipped': 0, 'browserUnexpected': 0, 'browserFlaky': 0,
+    'baselineFrozenInputs': 316, 'allBaselineInputsUnchangedDuringStages': True,
+    'finalInputs': 316, 'generatedContractAmendment': 'contract-amendment.json',
+    'allBackendRuntimeTestsAndCompiledUIBytesUnchangedAfterFullRun': True,
+    'positiveConfiguredHTTPFixtureRoutesVerified': True, 'routeReplacementUsedInFinalTests': False,
+    'liveHardwareAcceptance': False, 'completedTasks': 47, 'inProgressTasks': 43, 'blockedTasks': 10, 'acceptedMilestones': [],
+    'limitations': ['1055 backend/83 affected browser/performance2 were executed on the exact frozen baseline316. Then only generated static OpenAPI/TypeScript contracts changed; full build and affected API pass, with all other314/Python/test/compiled bytes unchanged. No new single-command full run on all final316 files is claimed.',
+        'Full474 browser execution for this changed backend candidate is NOT_RUN; prior candidate CI is separate historical evidence.',
+        'Actual API uses typed host configuration and real session/Origin/CSRF; underlying providers are owned in-memory fixtures, and cross-app restart is not a new native process-crash proof.',
+        'An initial broader run was interrupted after its failed precondition was noticed; pytest interruption/teardown failure and original post-commit fixture error remain retained, never passed.',
+        'Actual provider/device/driver/permission/clock/stop environment, native Windows, active commands/automatic run renewal/reservation UI, actual AT/human/SADS and independent milestone acceptance remain unfinished or blocked.']})
+print(json.dumps({'backend': 1055, 'affectedBrowser': 83, 'performance': 2, 'finalInputs': 316, 'contractAmendmentDisclosed': True, 'taskStatesUnchanged': True}))

@@ -1,0 +1,71 @@
+"""Retain actual mixed old-candidate CI; do not reinterpret a failed full browser run."""
+from datetime import datetime, timezone
+from pathlib import Path
+import hashlib
+import json
+import os
+import re
+import subprocess
+
+root = Path.cwd().resolve()
+base = root / '.studio-local/lab-api-integration/ci-f985-failure'
+base.mkdir(exist_ok=True)
+cache = root.parent / '.xverse-studio-cache'
+env = dict(os.environ, TMPDIR=str(cache / 'tmp'), TEMP=str(cache / 'tmp'), TMP=str(cache / 'tmp'), XDG_CACHE_HOME=str(cache / 'gh-cache'))
+def api(path):
+    return subprocess.check_output(['gh', 'api', 'repos/The-Xverse/xverse-studio/' + path], env=env)
+runs = []
+for identity, event, conclusion, passed, failed in [(40554884645, 'pull_request', 'success', 474, 0),
+                                                   (40554871308, 'push', 'failure', 472, 2)]:
+    run = json.loads(api('actions/runs/' + str(identity)))
+    assert run['head_sha'] == 'f985eb3ba02a23a48a64f013d269797236eefe2a' and run['status'] == 'completed' and run['event'] == event and run['conclusion'] == conclusion
+    jobs = json.loads(api('actions/runs/' + str(identity) + '/jobs'))['jobs']
+    assert len(jobs) == 1
+    job = jobs[0]
+    assert job['conclusion'] == conclusion
+    raw = api('actions/jobs/' + str(job['id']) + '/logs')
+    (base / (str(job['id']) + '.private-raw.log')).write_bytes(raw)
+    log = raw.decode()
+    assert re.findall(r'(\d+) passed[^\n]*warning', log) == ['944']
+    assert re.findall(r'(\d+) passed \([\d.]+[ms]', log) == [str(passed)]
+    if failed:
+        assert re.findall(r'\b(\d+) failed\s*$', log, re.M) == ['2']
+        assert 'apiResponse.text: Response has been disposed' in log
+    packages = []
+    for line in log.splitlines():
+        marker = line.find('{')
+        if marker < 0:
+            continue
+        try:
+            value = json.loads(line[marker:])
+        except ValueError:
+            continue
+        if value.get('outcome') == 'passed' and isinstance(value.get('package'), dict):
+            package = value['package']
+            assert package['files'] == 104 and value['provisionExit'] == 0
+            packages.append({'candidate': package['candidate'], 'files': package['files'],
+                'archiveSha256': package['sha256'], 'scope': value['scope'], 'outcome': 'passed'})
+    assert len(packages) == (0 if failed else 1)
+    failures = [] if not failed else [
+        {'file': 'tests/e2e/parameter-presentation-focus.spec.ts', 'line': 16,
+         'title': 'parameter presentation: apply real regrouping preserves intent at 1024',
+         'error': 'apiResponse.text: Response has been disposed', 'bodyReadLine': 39},
+        {'file': 'tests/e2e/parameter-presentation-focus.spec.ts', 'line': 16,
+         'title': 'parameter presentation: enum real regrouping preserves intent at 1440',
+         'error': 'apiResponse.text: Response has been disposed', 'bodyReadLine': 39,
+         'additionalCleanupError': 'browserContext.close: Protocol error (Target.disposeBrowserContext): Failed to find context'},
+    ]
+    runs.append({'id': identity, 'head': run['head_sha'], 'event': event, 'url': run['html_url'],
+        'status': run['status'], 'conclusion': conclusion, 'jobId': job['id'],
+        'backendPassed': 944, 'browserPassed': passed, 'browserFailed': failed,
+        'packageObservations': packages, 'packageExecution': 'NOT_RUN' if failed else 'passed',
+        'failures': failures, 'rawLogSha256': hashlib.sha256(raw).hexdigest(), 'rawLogBytes': len(raw),
+        'steps': [{'name': step['name'], 'status': step['status'], 'conclusion': step['conclusion']} for step in job['steps']]})
+value = {'observedAt': datetime.now(timezone.utc).isoformat(),
+    'scope': 'Prior f985 lease-repair candidate: PR passed944 backend/full474 browser/package104; push passed944 backend but full browser failed472/2 and package was not run. Both failures are disposed-response reads in the presentation test handler. Exact CI callback/context event timing was not captured. Current configured reservation API has separate1055/83/performance2/package110 local evidence; these old CI outcomes do not verify it.',
+    'runs': runs}
+target = root / 'evidence/studio/native-ci/ubuntu-24.04-f985eb3-mixed-runs.json'
+assert not target.exists()
+target.write_text(json.dumps(value, indent=2) + '\n')
+(base / 'mixed-receipt.json').write_text(json.dumps(value, indent=2) + '\n')
+print(json.dumps({'priorPR': '944/full474/package104 passed', 'priorPush': '944 passed/browser472+2 failed/package NOT_RUN', 'currentAPIValidation': 'separate1055/83/performance2/package110'}))

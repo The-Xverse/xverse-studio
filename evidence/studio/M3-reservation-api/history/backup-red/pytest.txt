@@ -1,0 +1,58 @@
+FF..FFFFFFF                                                              [100%]
+=================================== FAILURES ===================================
+____ test_backup_refuses_unsettled_leases_even_when_deadline_is_past[owned] ____
+.studio-local/lab-api-integration/test_lab_backup.py:26: in test_backup_refuses_unsettled_leases_even_when_deadline_is_past
+    with pytest.raises(RecoveryError, match='^RECOVERY_EXECUTION_UNSETTLED$'):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE <class 'xverse_studio.host.recovery.RecoveryError'>
+___ test_backup_refuses_unsettled_leases_even_when_deadline_is_past[unknown] ___
+.studio-local/lab-api-integration/test_lab_backup.py:26: in test_backup_refuses_unsettled_leases_even_when_deadline_is_past
+    with pytest.raises(RecoveryError, match='^RECOVERY_EXECUTION_UNSETTLED$'):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE <class 'xverse_studio.host.recovery.RecoveryError'>
+_ test_corrupt_or_unbounded_lease_snapshots_refuse_copy_without_rewrite[version] _
+.studio-local/lab-api-integration/test_lab_backup.py:62: in test_corrupt_or_unbounded_lease_snapshots_refuse_copy_without_rewrite
+    with pytest.raises(RecoveryError, match='^RECOVERY_DATABASE_INVALID$'):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE <class 'xverse_studio.host.recovery.RecoveryError'>
+_ test_corrupt_or_unbounded_lease_snapshots_refuse_copy_without_rewrite[shape] _
+.studio-local/lab-api-integration/test_lab_backup.py:62: in test_corrupt_or_unbounded_lease_snapshots_refuse_copy_without_rewrite
+    with pytest.raises(RecoveryError, match='^RECOVERY_DATABASE_INVALID$'):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE <class 'xverse_studio.host.recovery.RecoveryError'>
+_ test_corrupt_or_unbounded_lease_snapshots_refuse_copy_without_rewrite[revision] _
+.studio-local/lab-api-integration/test_lab_backup.py:62: in test_corrupt_or_unbounded_lease_snapshots_refuse_copy_without_rewrite
+    with pytest.raises(RecoveryError, match='^RECOVERY_DATABASE_INVALID$'):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE <class 'xverse_studio.host.recovery.RecoveryError'>
+_ test_corrupt_or_unbounded_lease_snapshots_refuse_copy_without_rewrite[duplicate] _
+.studio-local/lab-api-integration/test_lab_backup.py:62: in test_corrupt_or_unbounded_lease_snapshots_refuse_copy_without_rewrite
+    with pytest.raises(RecoveryError, match='^RECOVERY_DATABASE_INVALID$'):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE <class 'xverse_studio.host.recovery.RecoveryError'>
+_ test_corrupt_or_unbounded_lease_snapshots_refuse_copy_without_rewrite[oversized] _
+.studio-local/lab-api-integration/test_lab_backup.py:62: in test_corrupt_or_unbounded_lease_snapshots_refuse_copy_without_rewrite
+    with pytest.raises(RecoveryError, match='^RECOVERY_DATABASE_INVALID$'):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE <class 'xverse_studio.host.recovery.RecoveryError'>
+_ test_corrupt_or_unbounded_lease_snapshots_refuse_copy_without_rewrite[extra-ledger] _
+.studio-local/lab-api-integration/test_lab_backup.py:62: in test_corrupt_or_unbounded_lease_snapshots_refuse_copy_without_rewrite
+    with pytest.raises(RecoveryError, match='^RECOVERY_DATABASE_INVALID$'):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE <class 'xverse_studio.host.recovery.RecoveryError'>
+___ test_hash_valid_foreign_backup_cannot_restore_unsettled_lease_authority ____
+.studio-local/lab-api-integration/test_lab_backup.py:83: in test_hash_valid_foreign_backup_cannot_restore_unsettled_lease_authority
+    with pytest.raises(RecoveryError, match='^RECOVERY_EXECUTION_UNSETTLED$'):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE <class 'xverse_studio.host.recovery.RecoveryError'>
+=========================== short test summary info ============================
+FAILED .studio-local/lab-api-integration/test_lab_backup.py::test_backup_refuses_unsettled_leases_even_when_deadline_is_past[owned]
+FAILED .studio-local/lab-api-integration/test_lab_backup.py::test_backup_refuses_unsettled_leases_even_when_deadline_is_past[unknown]
+FAILED .studio-local/lab-api-integration/test_lab_backup.py::test_corrupt_or_unbounded_lease_snapshots_refuse_copy_without_rewrite[version]
+FAILED .studio-local/lab-api-integration/test_lab_backup.py::test_corrupt_or_unbounded_lease_snapshots_refuse_copy_without_rewrite[shape]
+FAILED .studio-local/lab-api-integration/test_lab_backup.py::test_corrupt_or_unbounded_lease_snapshots_refuse_copy_without_rewrite[revision]
+FAILED .studio-local/lab-api-integration/test_lab_backup.py::test_corrupt_or_unbounded_lease_snapshots_refuse_copy_without_rewrite[duplicate]
+FAILED .studio-local/lab-api-integration/test_lab_backup.py::test_corrupt_or_unbounded_lease_snapshots_refuse_copy_without_rewrite[oversized]
+FAILED .studio-local/lab-api-integration/test_lab_backup.py::test_corrupt_or_unbounded_lease_snapshots_refuse_copy_without_rewrite[extra-ledger]
+FAILED .studio-local/lab-api-integration/test_lab_backup.py::test_hash_valid_foreign_backup_cannot_restore_unsettled_lease_authority
+9 failed, 2 passed in 1.38s

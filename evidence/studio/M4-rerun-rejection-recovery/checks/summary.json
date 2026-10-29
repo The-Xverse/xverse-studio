@@ -1,0 +1,95 @@
+[
+  {
+    "name": "typecheck",
+    "command": [
+      "<loop-cache>/node-v24.22.1-linux-x64/bin/node",
+      "<loop-cache>/node-v24.22.1-linux-x64/lib/node_modules/npm/bin/npm-cli.js",
+      "run",
+      "typecheck"
+    ],
+    "exitCode": 0,
+    "seconds": 3.422
+  },
+  {
+    "name": "build",
+    "command": [
+      "<loop-cache>/node-v24.22.1-linux-x64/bin/node",
+      "<loop-cache>/node-v24.22.1-linux-x64/lib/node_modules/npm/bin/npm-cli.js",
+      "run",
+      "build"
+    ],
+    "exitCode": 0,
+    "seconds": 5.412
+  },
+  {
+    "name": "architecture",
+    "command": [
+      "<repo>/.venv/bin/python",
+      "-I",
+      "scripts/check_architecture.py"
+    ],
+    "exitCode": 0,
+    "seconds": 0.681
+  },
+  {
+    "name": "spec",
+    "command": [
+      "<repo>/.venv/bin/python",
+      "-I",
+      "scripts/validate_spec_package.py"
+    ],
+    "exitCode": 0,
+    "seconds": 0.048
+  },
+  {
+    "name": "compatibility",
+    "command": [
+      "<repo>/.venv/bin/python",
+      "-I",
+      "scripts/check_platform_compatibility.py"
+    ],
+    "exitCode": 0,
+    "seconds": 0.175
+  },
+  {
+    "name": "environment",
+    "command": [
+      "<repo>/.venv/bin/python",
+      "-I",
+      "scripts/record_environment.py",
+      "--output",
+      "<repo>/.studio-local/rejected-rerun-workflow/environment.json"
+    ],
+    "exitCode": 0,
+    "seconds": 0.091
+  },
+  {
+    "name": "full-browser-collection",
+    "command": [
+      "<loop-cache>/node-v24.22.1-linux-x64/bin/node",
+      "node_modules/@playwright/test/cli.js",
+      "test",
+      "-c",
+      "tests/e2e/playwright.config.ts",
+      "--list",
+      "--reporter=list",
+      "--output",
+      "<repo>/.studio-local/rejected-rerun-workflow/collection-output"
+    ],
+    "exitCode": 0,
+    "seconds": 0.722
+  },
+  {
+    "name": "backend-collection",
+    "command": [
+      "<repo>/.venv/bin/python",
+      "-I",
+      "-m",
+      "pytest",
+      "--collect-only",
+      "-q"
+    ],
+    "exitCode": 0,
+    "seconds": 1.052
+  }
+]

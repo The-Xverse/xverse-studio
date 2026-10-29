@@ -1,0 +1,268 @@
+{
+  "config": {
+    "argv": [
+      "<tool-cache>/node-v24.22.1-linux-x64/bin/node",
+      "<repo>/node_modules/@playwright/test/cli.js",
+      "test",
+      "-c",
+      "tests/e2e/playwright.config.ts",
+      "lab-reservations.spec.ts",
+      "--grep",
+      "native keyboard reserve renew release preserves identity and runtime boundary"
+    ],
+    "configFile": "<repo>/tests/e2e/playwright.config.ts",
+    "rootDir": "<repo>/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "<repo>/.studio-local/lab-fixture-shutdown/red/journeys",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "<repo>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "*.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "<repo>/.studio-local/lab-fixture-shutdown/red/journeys",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "<repo>/tests/e2e",
+        "snapshotDir": "<repo>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": "*.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "baseURL": "http://127.0.0.1:8876",
+          "browserName": "chromium",
+          "actionTimeout": 15000,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "trace": "off",
+          "screenshot": "only-on-failure",
+          "video": "off"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "<repo>/.studio-local/lab-fixture-shutdown/red/report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "lab-reservations.spec.ts",
+      "file": "lab-reservations.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "lab reservations at 1024",
+          "file": "lab-reservations.spec.ts",
+          "line": 19,
+          "column": 8,
+          "specs": [
+            {
+              "title": "native keyboard reserve renew release preserves identity and runtime boundary",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 2656,
+                      "error": {
+                        "message": "Error: Owned fixture shutdown observation was not retained\n\nexpect(received).toBe(expected) // Object.is equality\n\nExpected: true\nReceived: false",
+                        "stack": "Error: Owned fixture shutdown observation was not retained\n\nexpect(received).toBe(expected) // Object.is equality\n\nExpected: true\nReceived: false\n    at Object.labHost (<repo>/tests/e2e/lab-fixture.ts:48:94)",
+                        "location": {
+                          "file": "<repo>/tests/e2e/lab-fixture.ts",
+                          "column": 94,
+                          "line": 48
+                        },
+                        "snippet": "   at lab-fixture.ts:48\n\n  46 |       const observation = path.join(data, \"fixture-observation.json\");\n  47 |       if (!started) return;\n> 48 |       expect(existsSync(observation), \"Owned fixture shutdown observation was not retained\").toBe(true);\n     |                                                                                              ^\n  49 |       const value = JSON.parse(readFileSync(observation, \"utf8\"));\n  50 |       expect(Object.keys(value).sort()).toEqual([\"scope\", \"scenario\", \"calls\", \"reservationCount\", \"remainingProviderLeases\", \"preparationSeconds\"].sort());\n  51 |       expect(value.scope).toBe(\"owned in-memory fixture; no equipment\");"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "<repo>/tests/e2e/lab-fixture.ts",
+                            "column": 94,
+                            "line": 48
+                          },
+                          "message": "Error: Owned fixture shutdown observation was not retained\n\nexpect(received).toBe(expected) // Object.is equality\n\nExpected: true\nReceived: false\n\n   at lab-fixture.ts:48\n\n  46 |       const observation = path.join(data, \"fixture-observation.json\");\n  47 |       if (!started) return;\n> 48 |       expect(existsSync(observation), \"Owned fixture shutdown observation was not retained\").toBe(true);\n     |                                                                                              ^\n  49 |       const value = JSON.parse(readFileSync(observation, \"utf8\"));\n  50 |       expect(Object.keys(value).sort()).toEqual([\"scope\", \"scenario\", \"calls\", \"reservationCount\", \"remainingProviderLeases\", \"preparationSeconds\"].sort());\n  51 |       expect(value.scope).toBe(\"owned in-memory fixture; no equipment\");\n    at Object.labHost (<repo>/tests/e2e/lab-fixture.ts:48:94)"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-28T08:04:08.904Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "<repo>/.studio-local/lab-fixture-shutdown/red/journeys/lab-reservations-lab-reser-3d7f7-entity-and-runtime-boundary/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "<repo>/tests/e2e/lab-fixture.ts",
+                        "column": 94,
+                        "line": 48
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "b7e87db6c2fd6458f111-079718f1f0526cfd8d3b",
+              "file": "lab-reservations.spec.ts",
+              "line": 184,
+              "column": 9
+            }
+          ]
+        },
+        {
+          "title": "lab reservations at 1440",
+          "file": "lab-reservations.spec.ts",
+          "line": 19,
+          "column": 8,
+          "specs": [
+            {
+              "title": "native keyboard reserve renew release preserves identity and runtime boundary",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 2287,
+                      "error": {
+                        "message": "Error: Owned fixture shutdown observation was not retained\n\nexpect(received).toBe(expected) // Object.is equality\n\nExpected: true\nReceived: false",
+                        "stack": "Error: Owned fixture shutdown observation was not retained\n\nexpect(received).toBe(expected) // Object.is equality\n\nExpected: true\nReceived: false\n    at Object.labHost (<repo>/tests/e2e/lab-fixture.ts:48:94)",
+                        "location": {
+                          "file": "<repo>/tests/e2e/lab-fixture.ts",
+                          "column": 94,
+                          "line": 48
+                        },
+                        "snippet": "   at lab-fixture.ts:48\n\n  46 |       const observation = path.join(data, \"fixture-observation.json\");\n  47 |       if (!started) return;\n> 48 |       expect(existsSync(observation), \"Owned fixture shutdown observation was not retained\").toBe(true);\n     |                                                                                              ^\n  49 |       const value = JSON.parse(readFileSync(observation, \"utf8\"));\n  50 |       expect(Object.keys(value).sort()).toEqual([\"scope\", \"scenario\", \"calls\", \"reservationCount\", \"remainingProviderLeases\", \"preparationSeconds\"].sort());\n  51 |       expect(value.scope).toBe(\"owned in-memory fixture; no equipment\");"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "<repo>/tests/e2e/lab-fixture.ts",
+                            "column": 94,
+                            "line": 48
+                          },
+                          "message": "Error: Owned fixture shutdown observation was not retained\n\nexpect(received).toBe(expected) // Object.is equality\n\nExpected: true\nReceived: false\n\n   at lab-fixture.ts:48\n\n  46 |       const observation = path.join(data, \"fixture-observation.json\");\n  47 |       if (!started) return;\n> 48 |       expect(existsSync(observation), \"Owned fixture shutdown observation was not retained\").toBe(true);\n     |                                                                                              ^\n  49 |       const value = JSON.parse(readFileSync(observation, \"utf8\"));\n  50 |       expect(Object.keys(value).sort()).toEqual([\"scope\", \"scenario\", \"calls\", \"reservationCount\", \"remainingProviderLeases\", \"preparationSeconds\"].sort());\n  51 |       expect(value.scope).toBe(\"owned in-memory fixture; no equipment\");\n    at Object.labHost (<repo>/tests/e2e/lab-fixture.ts:48:94)"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-28T08:04:12.340Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "<repo>/.studio-local/lab-fixture-shutdown/red/journeys/lab-reservations-lab-reser-92fbe-entity-and-runtime-boundary/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "<repo>/tests/e2e/lab-fixture.ts",
+                        "column": 94,
+                        "line": 48
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "b7e87db6c2fd6458f111-8fe79e7d9cde94d7baeb",
+              "file": "lab-reservations.spec.ts",
+              "line": 184,
+              "column": 9
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-28T08:04:08.499Z",
+    "duration": 6241.006,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  }
+}

@@ -1,0 +1,167 @@
+{
+  "boundary": "before-final-receipt",
+  "outcome": "passed",
+  "processes": [
+    {
+      "pid": 2212104,
+      "parent": 2211540,
+      "birthTicks": "23301980",
+      "argv": [
+        "<repo>/.venv/bin/python",
+        "-I",
+        "<repo>/tests/fixtures/providers/physical/interruption_host.py",
+        "--data",
+        "<repo>/.studio-local/lab-conformance-final-data/test_native_interruption_never2/owned interrupted backend Ω",
+        "--boundary",
+        "before-final-receipt",
+        "--phase",
+        "initial"
+      ]
+    },
+    {
+      "pid": 2212115,
+      "parent": 2211540,
+      "birthTicks": "23302050",
+      "argv": [
+        "<repo>/.venv/bin/python",
+        "-I",
+        "<repo>/tests/fixtures/providers/physical/interruption_host.py",
+        "--data",
+        "<repo>/.studio-local/lab-conformance-final-data/test_native_interruption_never2/owned interrupted backend Ω",
+        "--boundary",
+        "before-final-receipt",
+        "--phase",
+        "restart"
+      ]
+    }
+  ],
+  "durableBefore": {
+    "operation": [
+      {
+        "createdAt": 1793180360.8166685,
+        "kind": "lab_reserve",
+        "operationId": "op-576a2823-efe4-43c2-bc49-b8e66f0aa173",
+        "principal": "local-operator",
+        "reservationId": "15824110-576c-47d3-941e-064c344352cf",
+        "result": {
+          "reservationId": "15824110-576c-47d3-941e-064c344352cf"
+        },
+        "route": "POST /assets/fixture:bench-sensor/reservations",
+        "status": "delegated"
+      }
+    ],
+    "lab_registry": [
+      {
+        "contractVersion": "1.0",
+        "records": [
+          {
+            "assetId": "fixture:bench-sensor",
+            "assetIdentity": "sha256:594760b683fc55202fe2ba041d05759adef164234df1d81cfa829a5f9d9aab0d",
+            "evidenceScope": "fixture",
+            "expiry": 1793180660.8553817,
+            "fencingIdentity": "fixture-fence-1",
+            "lastRenewal": null,
+            "owner": "local-operator",
+            "providerId": "physical-contract-fixture",
+            "providerIdentity": "sha256:7b83c4547bf3a94998d437d5c7a44d77d5562034636b524ad1a2a4c4bb2dc854",
+            "reservationId": "15824110-576c-47d3-941e-064c344352cf",
+            "scope": "observe",
+            "status": "owned"
+          }
+        ],
+        "revision": 2
+      }
+    ]
+  },
+  "durableAfter": {
+    "operation": [
+      {
+        "createdAt": 1793180361.7075138,
+        "kind": "lab_reconcile",
+        "operationId": "op-12a5b1f1-6992-49d8-979f-25e7a78b3e1e",
+        "principal": "local-operator",
+        "reservationId": "15824110-576c-47d3-941e-064c344352cf",
+        "result": {
+          "reservationId": "15824110-576c-47d3-941e-064c344352cf",
+          "status": "owned"
+        },
+        "route": "POST /reservations/15824110-576c-47d3-941e-064c344352cf/reconciliations",
+        "status": "completed"
+      },
+      {
+        "code": "LAB_OPERATION_INTERRUPTED",
+        "createdAt": 1793180360.8166685,
+        "kind": "lab_reserve",
+        "operationId": "op-576a2823-efe4-43c2-bc49-b8e66f0aa173",
+        "principal": "local-operator",
+        "reservationId": "15824110-576c-47d3-941e-064c344352cf",
+        "result": {
+          "reservationId": "15824110-576c-47d3-941e-064c344352cf"
+        },
+        "route": "POST /assets/fixture:bench-sensor/reservations",
+        "status": "unknown"
+      }
+    ],
+    "lab_registry": [
+      {
+        "contractVersion": "1.0",
+        "records": [
+          {
+            "assetId": "fixture:bench-sensor",
+            "assetIdentity": "sha256:594760b683fc55202fe2ba041d05759adef164234df1d81cfa829a5f9d9aab0d",
+            "evidenceScope": "fixture",
+            "expiry": 1793180660.8553817,
+            "fencingIdentity": "fixture-fence-1",
+            "lastRenewal": null,
+            "owner": "local-operator",
+            "providerId": "physical-contract-fixture",
+            "providerIdentity": "sha256:7b83c4547bf3a94998d437d5c7a44d77d5562034636b524ad1a2a4c4bb2dc854",
+            "reservationId": "15824110-576c-47d3-941e-064c344352cf",
+            "scope": "observe",
+            "status": "owned"
+          }
+        ],
+        "revision": 3
+      }
+    ]
+  },
+  "pauseObservation": {
+    "boundary": "before-final-receipt",
+    "phase": "initial",
+    "scope": "timing-only owned fixture pause",
+    "calls": [
+      "inventory",
+      "inventory",
+      "reserve"
+    ],
+    "reservationEffects": 1,
+    "operation": {
+      "createdAt": 1793180360.8166685,
+      "kind": "lab_reserve",
+      "operationId": "op-576a2823-efe4-43c2-bc49-b8e66f0aa173",
+      "principal": "local-operator",
+      "reservationId": "15824110-576c-47d3-941e-064c344352cf",
+      "result": {
+        "reservationId": "15824110-576c-47d3-941e-064c344352cf",
+        "status": "owned"
+      },
+      "route": "POST /assets/fixture:bench-sensor/reservations",
+      "status": "completed"
+    }
+  },
+  "restartObservation": {
+    "scope": "owned durable fixture effect; no equipment",
+    "phase": "restart",
+    "boundary": "before-final-receipt",
+    "calls": [
+      "inventory",
+      "inventory",
+      "inventory",
+      "inspect"
+    ],
+    "reservationEffects": 1,
+    "heldLeases": 1
+  },
+  "effectSha256": "af4e539347d67257d4e896d3fc438fcdc9e78b9a1aa6aeb27590bde95e80ae44",
+  "scope": "Actual Linux backend crash at timing-only fixture boundary; provider continuity is a durable JSON fixture, not an actual external provider/device."
+}

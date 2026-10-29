@@ -1,0 +1,21 @@
+from xverse_studio.comparison import compare_runs
+from copy import deepcopy
+
+
+def value(start,end):
+    return {'runId':'fixture','snapshot':{},'evidence':{'integrity':'valid','status':'complete'},'observations':[{'observerRef':'observer','field':'state','unit':'1','quantity':'dimensionless','unitDefinitionDigest':'one','clockDomainRef':'declared-clock','coverage':{'complete':True,'gaps':[],'startTick':start,'endTick':end}}]}
+
+
+def test_signed_canonical_ticks_remain_exact():
+    left=value('-20','-10');right=deepcopy(left)
+    assert compare_runs(left,right)['compatible'] is True
+
+
+def test_integer_ticks_do_not_round_at_browser_number_boundary():
+    left=value('9007199254740992','9007199254740993');right=value('9007199254740992','9007199254740994')
+    assert compare_runs(left,right)['compatible'] is False
+
+
+def test_malformed_decimal_tick_strings_are_unavailable():
+    left=value('0','10.0');right=deepcopy(left)
+    assert compare_runs(left,right)['compatible'] is False

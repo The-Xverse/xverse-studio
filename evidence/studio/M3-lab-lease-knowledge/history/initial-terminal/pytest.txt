@@ -1,0 +1,20 @@
+FF                                                                       [100%]
+=================================== FAILURES ===================================
+_ test_confirmed_terminal_lease_survives_restore_without_provider_contact[released] _
+.studio-local/lab-api-foundation/test_terminal_leases.py:25: in test_confirmed_terminal_lease_survives_restore_without_provider_contact
+    assert restored.get(lease['reservationId'],owner='original-owner')['status']==terminal
+E   AssertionError: assert 'unknown' == 'released'
+E
+E     - released
+E     + unknown
+_ test_confirmed_terminal_lease_survives_restore_without_provider_contact[expired] _
+.studio-local/lab-api-foundation/test_terminal_leases.py:25: in test_confirmed_terminal_lease_survives_restore_without_provider_contact
+    assert restored.get(lease['reservationId'],owner='original-owner')['status']==terminal
+E   AssertionError: assert 'unknown' == 'expired'
+E
+E     - expired
+E     + unknown
+=========================== short test summary info ============================
+FAILED .studio-local/lab-api-foundation/test_terminal_leases.py::test_confirmed_terminal_lease_survives_restore_without_provider_contact[released]
+FAILED .studio-local/lab-api-foundation/test_terminal_leases.py::test_confirmed_terminal_lease_survives_restore_without_provider_contact[expired]
+2 failed in 0.46s

@@ -1,0 +1,2776 @@
+# Instructions
+
+- Following Playwright test failed.
+- Explain why, be concise, respect Playwright best practices.
+- Provide a snippet of code with the fix, if possible.
+
+# Test info
+
+- Name: run-reconnect.spec.ts >> run session: unknown recorded state awaits actual bounded resync and reconnects read-only
+- Location: tests/e2e/run-reconnect.spec.ts:109:5
+
+# Error details
+
+```
+Error: expect(locator).toBeVisible() failed
+
+Locator: getByText(/The presentation loss count is unknown/)
+Expected: visible
+Timeout: 10000ms
+Error: element(s) not found
+
+Call log:
+  - Expect "toBeVisible" getByText(/The presentation loss count is unknown/) with timeout 10000ms
+  - waiting for getByText(/The presentation loss count is unknown/)
+
+```
+
+```yaml
+- link "Skip to workspace":
+  - /url: "#main-content"
+- banner:
+  - button "X-Verse Studio home": X X-VERSE STUDIO
+  - text: Local workspace REFERENCE PREVIEW
+  - button "Environment"
+  - text: LO
+- complementary "Main navigation":
+  - button "Workspace"
+  - button "Catalog"
+  - button "Laboratory": Lab
+  - button "Compatibility and environment": Settings
+  - text: v0.1
+- main:
+  - text: "1015 presentation record(s) are unavailable in this delivery interval. Current run state and a bounded history tail were resynchronized. Reader integrity: valid. Display omissions remain inspectable through retained history; this does not restore missing canonical evidence."
+  - button "Dismiss notice"
+  - button "Workspace"
+  - text: System
+  - heading "Unknown-state stream recovery fixture" [level=1]
+  - text: Draft rev 1
+  - button "Export"
+  - button "Validate"
+  - button "Preflight & run"
+  - tablist "System workflows":
+    - tab "Model"
+    - tab "Connections"
+    - tab "Deployment"
+    - tab "Experiments"
+    - tab "Results 1" [selected]
+    - button "XDL source"
+  - text: Draft revision
+  - code: "1"
+  - text: 3 elements · 2 connections Run snapshot
+  - code: snap-cb9227a
+  - text: unknown
+  - heading "Run results unknown" [level=2]
+  - paragraph:
+    - code: run-reader-fixture-6a471b86-2fc0-48a7-909f-583d10d1d771
+    - text: Snapshot
+    - code: snap-cb9227ac-a2e0
+  - text: Recorded run
+  - combobox "Recorded run":
+    - option "run-reader-fixture-6a471b86-2fc0-48a7-909f-583d10d1d771 · unknown" [selected]
+  - button "Frozen inputs"
+  - button "Refresh"
+  - text: Execution
+  - strong: unknown
+  - text: Lifecycle outcome Assertion verdict
+  - strong: Not evaluated
+  - text: Separate assessment result Cleanup
+  - strong: unknown
+  - text: Owned-resource release Evidence
+  - strong: partial
+  - text: Integrity and completeness Recorded fixture scope recorded_fixture · Source clocks retained · Browser presentation is bounded Connected
+  - tablist "Result sections":
+    - tab "Observations" [selected]
+    - tab "Events & logs 200"
+    - tab "Evidence"
+    - tab "Compare"
+    - tab "Annotations"
+  - heading "Recorded observations" [level=3]
+  - paragraph: Original source time and quantity semantics are preserved.
+  - button "Table view"
+  - button "Replay observations"
+  - text: Element reference
+  - combobox "Element reference":
+    - option "All elements" [selected]
+    - option "xdl://org.xverse.studio.process-control/system/reference-loop#controller"
+    - option "xdl://org.xverse.studio.process-control/system/reference-loop#plant"
+  - text: Emitter provider
+  - combobox "Emitter provider":
+    - option "All reported identities" [selected]
+    - option "fixture.alpha"
+    - option "fixture.beta"
+    - option "fixture.late"
+    - option "fixture.noise"
+    - option "fixture.unknown"
+    - option "studio.reference"
+  - text: Observer
+  - combobox "Observer":
+    - option "All reported identities" [selected]
+    - option "external-observer"
+    - option "noise-observer"
+    - option "state-observer"
+  - text: Observation field
+  - combobox "Observation field":
+    - option "All reported fields" [selected]
+    - option "flag"
+    - option "noise"
+    - option "selected"
+    - option "value"
+  - text: Time basis
+  - combobox "Time basis":
+    - option "No time window" [selected]
+    - option "Original source clock"
+    - option "Recorded receipt UTC"
+  - paragraph: The field predicate selects records and the returned value field. Original immutable payloads remain inspectable in Events.
+  - button "Apply evidence filters"
+  - button "Reset evidence filters"
+  - status "Evidence read quality": "Matched: 1211 · Returned: 200 · Omitted from page: 1011 missingSourceTime: 1 malformedSourceTime: 1 otherClock: 0 missingReceiptTime: 1 unsupportedReceiptEncoding: 1 Reader integrity: valid"
+  - text: The reader reports collection gaps. Filtering does not restore canonical coverage.
+  - group: Inspect exact data
+  - heading "Select one original source clock to plot" [level=3]
+  - text: Missing or incompatible clock times remain inspectable in the table. Array position and receipt time are never substituted.
+  - region "Exact observation table scroll region":
+    - table "Exact recorded observations":
+      - rowgroup:
+        - row "Emitter / observer Source clock Source tick flag (declared unit per row) value (declared unit per row) noise (declared unit per row) Original time metadata Receipt UTC":
+          - columnheader "Emitter / observer"
+          - columnheader "Source clock"
+          - columnheader "Source tick"
+          - columnheader "flag (declared unit per row)"
+          - columnheader "value (declared unit per row)"
+          - columnheader "noise (declared unit per row)"
+          - columnheader "Original time metadata"
+          - columnheader "Receipt UTC"
+      - rowgroup:
+        - 'row "studio.reference state-observer clock-alpha 9007199254740992 false (1) 0 (1) Missing {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"9007199254740992\",\"uncertainty\":0} 2026-01-01T00:00:00.250000Z"':
+          - cell "studio.reference state-observer"
+          - cell "clock-alpha"
+          - cell "9007199254740992"
+          - cell "false (1)"
+          - cell "0 (1)"
+          - cell "Missing"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"9007199254740992\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"9007199254740992\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:00:00.250000Z":
+            - text: 2026-01-01T00:00:00.250000Z
+            - group: Original receipt
+        - 'row "fixture.alpha state-observer clock-alpha 9007199254740993 false (1) 0.25 (1) Missing {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"9007199254740993\",\"uncertainty\":0} 2026-01-01T00:00:01.000000Z"':
+          - cell "fixture.alpha state-observer"
+          - cell "clock-alpha"
+          - cell "9007199254740993"
+          - cell "false (1)"
+          - cell "0.25 (1)"
+          - cell "Missing"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"9007199254740993\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"9007199254740993\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:00:01.000000Z":
+            - text: 2026-01-01T00:00:01.000000Z
+            - group: Original receipt
+        - 'row "fixture.alpha state-observer clock-alpha 9007199254740994 Missing (1) 3 (1) Missing {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"9007199254740994\",\"uncertainty\":0} 2026-01-01T00:00:02.000000Z"':
+          - cell "fixture.alpha state-observer"
+          - cell "clock-alpha"
+          - cell "9007199254740994"
+          - cell "Missing (1)"
+          - cell "3 (1)"
+          - cell "Missing"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"9007199254740994\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"9007199254740994\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:00:02.000000Z":
+            - text: 2026-01-01T00:00:02.000000Z
+            - group: Original receipt
+        - 'row "fixture.alpha state-observer clock-alpha -2 Missing (1) -2 (1) Missing {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"-2\",\"uncertainty\":0} 2026-01-01T00:00:03.000000Z"':
+          - cell "fixture.alpha state-observer"
+          - cell "clock-alpha"
+          - cell "-2"
+          - cell "Missing (1)"
+          - cell "-2 (1)"
+          - cell "Missing"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"-2\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"-2\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:00:03.000000Z":
+            - text: 2026-01-01T00:00:03.000000Z
+            - group: Original receipt
+        - 'row "fixture.alpha state-observer clock-alpha 0 false (1) 0 (1) Missing {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"0\",\"uncertainty\":0} 2026-01-01T00:00:04.000000Z"':
+          - cell "fixture.alpha state-observer"
+          - cell "clock-alpha"
+          - cell "0"
+          - cell "false (1)"
+          - cell "0 (1)"
+          - cell "Missing"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"0\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"0\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:00:04.000000Z":
+            - text: 2026-01-01T00:00:04.000000Z
+            - group: Original receipt
+        - row "fixture.alpha state-observer Unavailable Unavailable Missing (1) 7 (1) Missing Unavailable 2026-01-01T00:00:05.000000Z":
+          - cell "fixture.alpha state-observer"
+          - cell "Unavailable"
+          - cell "Unavailable"
+          - cell "Missing (1)"
+          - cell "7 (1)"
+          - cell "Missing"
+          - cell "Unavailable":
+            - code: Unavailable
+          - cell "2026-01-01T00:00:05.000000Z":
+            - text: 2026-01-01T00:00:05.000000Z
+            - group: Original receipt
+        - 'row "fixture.alpha state-observer Unavailable Unavailable Missing (1) 8 (1) Missing {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"not-a-tick\",\"uncertainty\":0} 2026-01-01T00:00:06.000000Z"':
+          - cell "fixture.alpha state-observer"
+          - cell "Unavailable"
+          - cell "Unavailable"
+          - cell "Missing (1)"
+          - cell "8 (1)"
+          - cell "Missing"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"not-a-tick\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"not-a-tick\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:00:06.000000Z":
+            - text: 2026-01-01T00:00:06.000000Z
+            - group: Original receipt
+        - 'row "fixture.beta external-observer clock-beta 9007199254740993 Missing (1) 11 (1) Missing {\"clockDomain\":\"clock-beta\",\"resolution\":\"microsecond\",\"tick\":\"9007199254740993\",\"uncertainty\":0} 2026-01-01T00:00:07.000000Z"':
+          - cell "fixture.beta external-observer"
+          - cell "clock-beta"
+          - cell "9007199254740993"
+          - cell "Missing (1)"
+          - cell "11 (1)"
+          - cell "Missing"
+          - 'cell "{\"clockDomain\":\"clock-beta\",\"resolution\":\"microsecond\",\"tick\":\"9007199254740993\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-beta\",\"resolution\":\"microsecond\",\"tick\":\"9007199254740993\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:00:07.000000Z":
+            - text: 2026-01-01T00:00:07.000000Z
+            - group: Original receipt
+        - 'row "fixture.unknown state-observer clock-alpha 4 Missing (1) 1 (1) Missing {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"4\",\"uncertainty\":0} Receipt time unavailable"':
+          - cell "fixture.unknown state-observer"
+          - cell "clock-alpha"
+          - cell "4"
+          - cell "Missing (1)"
+          - cell "1 (1)"
+          - cell "Missing"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"4\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"4\",\"uncertainty\":0}"
+          - cell "Receipt time unavailable":
+            - text: Receipt time unavailable
+            - group: Original receipt
+        - 'row "fixture.alpha state-observer clock-alpha 5 Missing (1) 1 (1) Missing {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"5\",\"uncertainty\":0} Receipt time unavailable"':
+          - cell "fixture.alpha state-observer"
+          - cell "clock-alpha"
+          - cell "5"
+          - cell "Missing (1)"
+          - cell "1 (1)"
+          - cell "Missing"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"5\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"5\",\"uncertainty\":0}"
+          - cell "Receipt time unavailable":
+            - text: Receipt time unavailable
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 100 Missing (1) Missing (1) 0 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"100\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "100"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "0"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"100\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"100\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 101 Missing (1) Missing (1) 1 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"101\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "101"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "1"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"101\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"101\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 102 Missing (1) Missing (1) 2 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"102\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "102"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "2"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"102\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"102\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 103 Missing (1) Missing (1) 3 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"103\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "103"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "3"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"103\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"103\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 104 Missing (1) Missing (1) 4 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"104\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "104"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "4"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"104\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"104\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 105 Missing (1) Missing (1) 5 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"105\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "105"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "5"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"105\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"105\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 106 Missing (1) Missing (1) 6 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"106\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "106"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "6"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"106\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"106\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 107 Missing (1) Missing (1) 7 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"107\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "107"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "7"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"107\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"107\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 108 Missing (1) Missing (1) 8 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"108\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "108"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "8"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"108\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"108\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 109 Missing (1) Missing (1) 9 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"109\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "109"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "9"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"109\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"109\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 110 Missing (1) Missing (1) 10 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"110\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "110"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "10"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"110\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"110\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 111 Missing (1) Missing (1) 11 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"111\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "111"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "11"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"111\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"111\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 112 Missing (1) Missing (1) 12 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"112\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "112"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "12"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"112\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"112\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 113 Missing (1) Missing (1) 13 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"113\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "113"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "13"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"113\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"113\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 114 Missing (1) Missing (1) 14 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"114\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "114"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "14"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"114\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"114\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 115 Missing (1) Missing (1) 15 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"115\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "115"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "15"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"115\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"115\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 116 Missing (1) Missing (1) 16 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"116\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "116"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "16"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"116\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"116\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 117 Missing (1) Missing (1) 17 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"117\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "117"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "17"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"117\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"117\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 118 Missing (1) Missing (1) 18 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"118\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "118"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "18"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"118\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"118\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 119 Missing (1) Missing (1) 19 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"119\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "119"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "19"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"119\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"119\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 120 Missing (1) Missing (1) 20 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"120\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "120"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "20"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"120\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"120\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 121 Missing (1) Missing (1) 21 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"121\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "121"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "21"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"121\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"121\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 122 Missing (1) Missing (1) 22 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"122\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "122"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "22"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"122\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"122\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 123 Missing (1) Missing (1) 23 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"123\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "123"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "23"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"123\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"123\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 124 Missing (1) Missing (1) 24 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"124\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "124"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "24"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"124\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"124\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 125 Missing (1) Missing (1) 25 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"125\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "125"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "25"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"125\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"125\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 126 Missing (1) Missing (1) 26 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"126\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "126"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "26"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"126\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"126\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 127 Missing (1) Missing (1) 27 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"127\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "127"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "27"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"127\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"127\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 128 Missing (1) Missing (1) 28 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"128\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "128"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "28"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"128\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"128\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 129 Missing (1) Missing (1) 29 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"129\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "129"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "29"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"129\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"129\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 130 Missing (1) Missing (1) 30 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"130\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "130"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "30"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"130\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"130\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 131 Missing (1) Missing (1) 31 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"131\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "131"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "31"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"131\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"131\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 132 Missing (1) Missing (1) 32 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"132\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "132"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "32"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"132\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"132\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 133 Missing (1) Missing (1) 33 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"133\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "133"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "33"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"133\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"133\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 134 Missing (1) Missing (1) 34 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"134\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "134"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "34"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"134\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"134\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 135 Missing (1) Missing (1) 35 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"135\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "135"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "35"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"135\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"135\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 136 Missing (1) Missing (1) 36 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"136\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "136"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "36"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"136\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"136\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 137 Missing (1) Missing (1) 37 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"137\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "137"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "37"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"137\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"137\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 138 Missing (1) Missing (1) 38 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"138\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "138"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "38"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"138\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"138\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 139 Missing (1) Missing (1) 39 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"139\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "139"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "39"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"139\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"139\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 140 Missing (1) Missing (1) 40 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"140\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "140"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "40"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"140\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"140\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 141 Missing (1) Missing (1) 41 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"141\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "141"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "41"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"141\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"141\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 142 Missing (1) Missing (1) 42 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"142\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "142"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "42"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"142\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"142\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 143 Missing (1) Missing (1) 43 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"143\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "143"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "43"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"143\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"143\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 144 Missing (1) Missing (1) 44 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"144\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "144"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "44"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"144\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"144\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 145 Missing (1) Missing (1) 45 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"145\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "145"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "45"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"145\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"145\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 146 Missing (1) Missing (1) 46 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"146\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "146"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "46"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"146\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"146\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 147 Missing (1) Missing (1) 47 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"147\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "147"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "47"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"147\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"147\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 148 Missing (1) Missing (1) 48 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"148\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "148"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "48"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"148\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"148\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 149 Missing (1) Missing (1) 49 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"149\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "149"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "49"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"149\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"149\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 150 Missing (1) Missing (1) 50 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"150\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "150"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "50"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"150\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"150\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 151 Missing (1) Missing (1) 51 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"151\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "151"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "51"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"151\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"151\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 152 Missing (1) Missing (1) 52 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"152\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "152"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "52"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"152\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"152\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 153 Missing (1) Missing (1) 53 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"153\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "153"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "53"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"153\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"153\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 154 Missing (1) Missing (1) 54 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"154\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "154"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "54"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"154\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"154\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 155 Missing (1) Missing (1) 55 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"155\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "155"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "55"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"155\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"155\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 156 Missing (1) Missing (1) 56 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"156\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "156"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "56"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"156\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"156\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 157 Missing (1) Missing (1) 57 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"157\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "157"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "57"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"157\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"157\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 158 Missing (1) Missing (1) 58 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"158\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "158"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "58"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"158\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"158\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 159 Missing (1) Missing (1) 59 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"159\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "159"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "59"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"159\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"159\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 160 Missing (1) Missing (1) 60 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"160\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "160"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "60"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"160\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"160\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 161 Missing (1) Missing (1) 61 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"161\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "161"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "61"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"161\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"161\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 162 Missing (1) Missing (1) 62 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"162\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "162"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "62"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"162\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"162\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 163 Missing (1) Missing (1) 63 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"163\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "163"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "63"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"163\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"163\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 164 Missing (1) Missing (1) 64 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"164\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "164"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "64"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"164\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"164\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 165 Missing (1) Missing (1) 65 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"165\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "165"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "65"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"165\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"165\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 166 Missing (1) Missing (1) 66 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"166\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "166"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "66"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"166\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"166\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 167 Missing (1) Missing (1) 67 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"167\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "167"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "67"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"167\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"167\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 168 Missing (1) Missing (1) 68 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"168\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "168"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "68"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"168\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"168\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 169 Missing (1) Missing (1) 69 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"169\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "169"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "69"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"169\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"169\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 170 Missing (1) Missing (1) 70 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"170\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "170"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "70"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"170\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"170\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 171 Missing (1) Missing (1) 71 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"171\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "171"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "71"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"171\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"171\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 172 Missing (1) Missing (1) 72 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"172\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "172"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "72"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"172\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"172\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 173 Missing (1) Missing (1) 73 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"173\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "173"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "73"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"173\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"173\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 174 Missing (1) Missing (1) 74 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"174\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "174"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "74"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"174\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"174\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 175 Missing (1) Missing (1) 75 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"175\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "175"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "75"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"175\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"175\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 176 Missing (1) Missing (1) 76 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"176\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "176"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "76"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"176\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"176\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 177 Missing (1) Missing (1) 77 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"177\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "177"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "77"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"177\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"177\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 178 Missing (1) Missing (1) 78 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"178\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "178"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "78"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"178\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"178\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 179 Missing (1) Missing (1) 79 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"179\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "179"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "79"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"179\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"179\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 180 Missing (1) Missing (1) 80 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"180\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "180"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "80"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"180\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"180\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 181 Missing (1) Missing (1) 81 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"181\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "181"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "81"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"181\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"181\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 182 Missing (1) Missing (1) 82 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"182\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "182"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "82"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"182\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"182\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 183 Missing (1) Missing (1) 83 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"183\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "183"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "83"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"183\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"183\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 184 Missing (1) Missing (1) 84 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"184\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "184"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "84"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"184\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"184\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 185 Missing (1) Missing (1) 85 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"185\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "185"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "85"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"185\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"185\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 186 Missing (1) Missing (1) 86 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"186\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "186"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "86"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"186\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"186\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 187 Missing (1) Missing (1) 87 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"187\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "187"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "87"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"187\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"187\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 188 Missing (1) Missing (1) 88 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"188\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "188"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "88"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"188\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"188\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 189 Missing (1) Missing (1) 89 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"189\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "189"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "89"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"189\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"189\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 190 Missing (1) Missing (1) 90 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"190\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "190"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "90"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"190\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"190\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 191 Missing (1) Missing (1) 91 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"191\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "191"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "91"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"191\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"191\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 192 Missing (1) Missing (1) 92 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"192\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "192"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "92"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"192\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"192\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 193 Missing (1) Missing (1) 93 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"193\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "193"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "93"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"193\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"193\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 194 Missing (1) Missing (1) 94 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"194\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "194"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "94"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"194\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"194\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 195 Missing (1) Missing (1) 95 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"195\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "195"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "95"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"195\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"195\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 196 Missing (1) Missing (1) 96 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"196\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "196"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "96"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"196\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"196\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 197 Missing (1) Missing (1) 97 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"197\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "197"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "97"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"197\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"197\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 198 Missing (1) Missing (1) 98 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"198\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "198"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "98"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"198\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"198\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 199 Missing (1) Missing (1) 99 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"199\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "199"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "99"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"199\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"199\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 200 Missing (1) Missing (1) 100 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"200\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "200"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "100"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"200\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"200\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 201 Missing (1) Missing (1) 101 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"201\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "201"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "101"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"201\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"201\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 202 Missing (1) Missing (1) 102 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"202\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "202"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "102"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"202\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"202\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 203 Missing (1) Missing (1) 103 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"203\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "203"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "103"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"203\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"203\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 204 Missing (1) Missing (1) 104 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"204\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "204"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "104"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"204\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"204\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 205 Missing (1) Missing (1) 105 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"205\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "205"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "105"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"205\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"205\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 206 Missing (1) Missing (1) 106 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"206\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "206"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "106"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"206\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"206\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 207 Missing (1) Missing (1) 107 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"207\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "207"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "107"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"207\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"207\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 208 Missing (1) Missing (1) 108 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"208\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "208"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "108"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"208\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"208\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 209 Missing (1) Missing (1) 109 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"209\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "209"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "109"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"209\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"209\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 210 Missing (1) Missing (1) 110 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"210\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "210"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "110"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"210\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"210\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 211 Missing (1) Missing (1) 111 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"211\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "211"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "111"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"211\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"211\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 212 Missing (1) Missing (1) 112 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"212\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "212"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "112"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"212\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"212\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 213 Missing (1) Missing (1) 113 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"213\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "213"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "113"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"213\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"213\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 214 Missing (1) Missing (1) 114 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"214\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "214"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "114"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"214\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"214\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 215 Missing (1) Missing (1) 115 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"215\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "215"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "115"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"215\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"215\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 216 Missing (1) Missing (1) 116 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"216\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "216"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "116"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"216\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"216\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 217 Missing (1) Missing (1) 117 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"217\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "217"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "117"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"217\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"217\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 218 Missing (1) Missing (1) 118 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"218\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "218"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "118"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"218\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"218\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 219 Missing (1) Missing (1) 119 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"219\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "219"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "119"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"219\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"219\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 220 Missing (1) Missing (1) 120 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"220\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "220"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "120"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"220\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"220\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 221 Missing (1) Missing (1) 121 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"221\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "221"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "121"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"221\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"221\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 222 Missing (1) Missing (1) 122 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"222\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "222"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "122"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"222\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"222\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 223 Missing (1) Missing (1) 123 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"223\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "223"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "123"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"223\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"223\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 224 Missing (1) Missing (1) 124 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"224\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "224"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "124"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"224\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"224\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 225 Missing (1) Missing (1) 125 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"225\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "225"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "125"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"225\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"225\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 226 Missing (1) Missing (1) 126 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"226\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "226"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "126"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"226\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"226\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 227 Missing (1) Missing (1) 127 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"227\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "227"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "127"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"227\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"227\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 228 Missing (1) Missing (1) 128 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"228\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "228"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "128"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"228\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"228\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 229 Missing (1) Missing (1) 129 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"229\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "229"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "129"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"229\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"229\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 230 Missing (1) Missing (1) 130 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"230\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "230"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "130"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"230\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"230\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 231 Missing (1) Missing (1) 131 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"231\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "231"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "131"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"231\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"231\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 232 Missing (1) Missing (1) 132 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"232\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "232"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "132"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"232\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"232\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 233 Missing (1) Missing (1) 133 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"233\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "233"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "133"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"233\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"233\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 234 Missing (1) Missing (1) 134 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"234\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "234"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "134"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"234\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"234\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 235 Missing (1) Missing (1) 135 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"235\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "235"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "135"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"235\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"235\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 236 Missing (1) Missing (1) 136 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"236\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "236"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "136"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"236\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"236\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 237 Missing (1) Missing (1) 137 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"237\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "237"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "137"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"237\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"237\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 238 Missing (1) Missing (1) 138 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"238\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "238"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "138"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"238\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"238\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 239 Missing (1) Missing (1) 139 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"239\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "239"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "139"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"239\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"239\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 240 Missing (1) Missing (1) 140 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"240\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "240"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "140"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"240\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"240\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 241 Missing (1) Missing (1) 141 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"241\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "241"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "141"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"241\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"241\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 242 Missing (1) Missing (1) 142 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"242\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "242"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "142"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"242\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"242\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 243 Missing (1) Missing (1) 143 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"243\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "243"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "143"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"243\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"243\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 244 Missing (1) Missing (1) 144 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"244\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "244"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "144"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"244\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"244\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 245 Missing (1) Missing (1) 145 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"245\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "245"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "145"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"245\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"245\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 246 Missing (1) Missing (1) 146 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"246\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "246"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "146"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"246\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"246\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 247 Missing (1) Missing (1) 147 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"247\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "247"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "147"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"247\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"247\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 248 Missing (1) Missing (1) 148 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"248\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "248"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "148"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"248\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"248\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 249 Missing (1) Missing (1) 149 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"249\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "249"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "149"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"249\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"249\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 250 Missing (1) Missing (1) 150 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"250\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "250"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "150"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"250\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"250\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 251 Missing (1) Missing (1) 151 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"251\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "251"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "151"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"251\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"251\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 252 Missing (1) Missing (1) 152 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"252\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "252"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "152"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"252\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"252\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 253 Missing (1) Missing (1) 153 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"253\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "253"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "153"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"253\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"253\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 254 Missing (1) Missing (1) 154 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"254\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "254"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "154"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"254\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"254\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 255 Missing (1) Missing (1) 155 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"255\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "255"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "155"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"255\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"255\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 256 Missing (1) Missing (1) 156 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"256\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "256"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "156"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"256\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"256\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 257 Missing (1) Missing (1) 157 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"257\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "257"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "157"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"257\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"257\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 258 Missing (1) Missing (1) 158 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"258\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "258"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "158"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"258\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"258\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 259 Missing (1) Missing (1) 159 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"259\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "259"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "159"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"259\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"259\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 260 Missing (1) Missing (1) 160 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"260\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "260"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "160"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"260\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"260\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 261 Missing (1) Missing (1) 161 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"261\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "261"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "161"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"261\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"261\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 262 Missing (1) Missing (1) 162 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"262\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "262"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "162"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"262\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"262\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 263 Missing (1) Missing (1) 163 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"263\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "263"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "163"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"263\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"263\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 264 Missing (1) Missing (1) 164 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"264\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "264"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "164"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"264\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"264\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 265 Missing (1) Missing (1) 165 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"265\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "265"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "165"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"265\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"265\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 266 Missing (1) Missing (1) 166 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"266\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "266"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "166"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"266\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"266\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 267 Missing (1) Missing (1) 167 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"267\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "267"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "167"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"267\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"267\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 268 Missing (1) Missing (1) 168 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"268\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "268"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "168"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"268\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"268\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 269 Missing (1) Missing (1) 169 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"269\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "269"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "169"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"269\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"269\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 270 Missing (1) Missing (1) 170 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"270\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "270"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "170"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"270\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"270\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 271 Missing (1) Missing (1) 171 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"271\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "271"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "171"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"271\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"271\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 272 Missing (1) Missing (1) 172 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"272\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "272"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "172"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"272\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"272\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 273 Missing (1) Missing (1) 173 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"273\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "273"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "173"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"273\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"273\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 274 Missing (1) Missing (1) 174 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"274\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "274"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "174"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"274\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"274\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 275 Missing (1) Missing (1) 175 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"275\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "275"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "175"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"275\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"275\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 276 Missing (1) Missing (1) 176 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"276\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "276"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "176"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"276\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"276\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 277 Missing (1) Missing (1) 177 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"277\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "277"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "177"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"277\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"277\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 278 Missing (1) Missing (1) 178 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"278\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "278"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "178"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"278\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"278\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 279 Missing (1) Missing (1) 179 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"279\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "279"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "179"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"279\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"279\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 280 Missing (1) Missing (1) 180 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"280\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "280"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "180"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"280\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"280\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 281 Missing (1) Missing (1) 181 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"281\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "281"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "181"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"281\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"281\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 282 Missing (1) Missing (1) 182 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"282\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "282"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "182"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"282\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"282\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 283 Missing (1) Missing (1) 183 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"283\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "283"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "183"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"283\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"283\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 284 Missing (1) Missing (1) 184 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"284\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "284"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "184"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"284\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"284\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 285 Missing (1) Missing (1) 185 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"285\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "285"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "185"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"285\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"285\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 286 Missing (1) Missing (1) 186 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"286\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "286"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "186"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"286\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"286\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 287 Missing (1) Missing (1) 187 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"287\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "287"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "187"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"287\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"287\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 288 Missing (1) Missing (1) 188 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"288\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "288"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "188"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"288\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"288\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+        - 'row "fixture.noise noise-observer clock-alpha 289 Missing (1) Missing (1) 189 {\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"289\",\"uncertainty\":0} 2026-01-01T00:01:00.000000Z"':
+          - cell "fixture.noise noise-observer"
+          - cell "clock-alpha"
+          - cell "289"
+          - cell "Missing (1)"
+          - cell "Missing (1)"
+          - cell "189"
+          - 'cell "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"289\",\"uncertainty\":0}"':
+            - code: "{\"clockDomain\":\"clock-alpha\",\"resolution\":\"nanosecond\",\"tick\":\"289\",\"uncertainty\":0}"
+          - cell "2026-01-01T00:01:00.000000Z":
+            - text: 2026-01-01T00:01:00.000000Z
+            - group: Original receipt
+  - button "Previous observation page" [disabled]
+  - button "Next observation page"
+  - text: "Clock:"
+  - strong: Multiple original clocks; not aligned
+  - text: "Unit:"
+  - strong: 1, 1
+  - text: "Reduction:"
+  - strong: page
+  - text: Observation gaps are present. Continuous coverage cannot be inferred.
+  - group: Inspect exact data
+  - heading "Input and evidence provenance" [level=3]
+  - term: Snapshot
+  - definition: snap-cb9227ac-a2e0-4ff6-b68b-124af5b6f9b4
+  - term: Plan digest
+  - definition: sha256:b85a788103a4275fe84b626c4e063ab55d2bb81d7c364ddee4a0601f4d74e71a
+  - term: Provider
+  - definition: owned.recorded-fixture
+  - term: Clock uncertainty
+  - definition: Not declared
+  - term: Coverage
+  - definition: Unknown
+  - group: Inspect exact data
+  - text: Local project · Saved on backend Authoritative XDL · Layout stored separately 1 provider(s) available
+```
+
+# Test source
+
+```ts
+  84  |       headers: {
+  85  |         "Content-Type": "application/json",
+  86  |         "X-CSRF-Token": session.csrfToken,
+  87  |       },
+  88  |       body: JSON.stringify({ name }),
+  89  |     });
+  90  |     if (!r.ok) throw Error(await r.text());
+  91  |     return r.json();
+  92  |   }, name);
+  93  | }
+  94  | async function showRun(page: Page, projectId: string, runId: string) {
+  95  |   await page.evaluate(
+  96  |     ({ projectId, runId }) => {
+  97  |       localStorage.setItem("studio.projectId", projectId);
+  98  |       localStorage.setItem("studio.lastRun." + projectId, runId);
+  99  |       localStorage.setItem("studio.lastRun", runId);
+  100 |     },
+  101 |     { projectId, runId },
+  102 |   );
+  103 |   await page.reload();
+  104 |   await page.getByRole("tab", { name: "Results", exact: false }).click();
+  105 |   await expect(
+  106 |     page.getByRole("heading", { name: /Run results/ }),
+  107 |   ).toBeVisible();
+  108 | }
+  109 | test("run session: unknown recorded state awaits actual bounded resync and reconnects read-only", async ({
+  110 |   page,
+  111 | }, testInfo) => {
+  112 |   test.setTimeout(90000);
+  113 |   await installReadDisconnect(page);
+  114 |   await connectStudio(page, testInfo);
+  115 |   const project = await makeProject(
+  116 |     page,
+  117 |     "Unknown-state stream recovery fixture",
+  118 |   );
+  119 |   const fixture = JSON.parse(
+  120 |     execFileSync(
+  121 |       path.resolve(".venv/bin/python"),
+  122 |       [
+  123 |         "tests/fixtures/evidence/create_stream_recovery_fixture.py",
+  124 |         "--data-dir",
+  125 |         process.env.STUDIO_BROWSER_DATA!,
+  126 |         "--project-id",
+  127 |         project.projectId,
+  128 |       ],
+  129 |       { encoding: "utf8" },
+  130 |     ),
+  131 |   );
+  132 |   await testInfo.attach("recorded-fixture-scope", {
+  133 |     body: JSON.stringify(fixture),
+  134 |     contentType: "application/json",
+  135 |   });
+  136 |   const writes: string[] = [],
+  137 |     streams: string[] = [];
+  138 |   page.on("request", (r) => {
+  139 |     if (["POST", "PUT", "PATCH", "DELETE"].includes(r.method()))
+  140 |       writes.push(r.method() + " " + r.url());
+  141 |     if (r.url().includes(`/runs/${fixture.runId}/events`))
+  142 |       streams.push(r.url());
+  143 |   });
+  144 |   let release!: () => void,
+  145 |     entered = false;
+  146 |   let recovery: any;
+  147 |   const gate = new Promise<void>((resolve) => (release = resolve));
+  148 |   await page.route(`**/api/v1/runs/${fixture.runId}/resync`, async (route) => {
+  149 |     const response = await route.fetch();
+  150 |     recovery = await response.json();
+  151 |     entered = true;
+  152 |     await gate;
+  153 |     try {
+  154 |       await route.fulfill({ response });
+  155 |     } catch {
+  156 |       /* disposed obsolete read */
+  157 |     }
+  158 |   });
+  159 |   try {
+  160 |     await showRun(page, project.projectId, fixture.runId);
+  161 |     await expect.poll(() => entered, { timeout: 8000 }).toBe(true);
+  162 |     await expect(page.locator(".stream-indicator")).toContainText(
+  163 |       "Resynchronizing",
+  164 |     );
+  165 |     await expect(
+  166 |       page.getByText(/State and retained history resynchronization is pending/),
+  167 |     ).toBeVisible();
+  168 |     await expect(
+  169 |       page.getByText(
+  170 |         /Current run state and a bounded history tail were resynchronized/,
+  171 |       ),
+  172 |     ).toHaveCount(0);
+  173 |     expect(recovery.history.items.length).toBe(200);
+  174 |     expect(recovery.history.omittedRecords).toBe(fixture.recordCount - 200);
+  175 |     expect(recovery.run.state).toBe("unknown");
+  176 |     release();
+  177 |     await expect(
+  178 |       page.getByText(
+  179 |         /Current run state and a bounded history tail were resynchronized/,
+  180 |       ),
+  181 |     ).toBeVisible();
+  182 |     await expect(
+  183 |       page.getByText(/The presentation loss count is unknown/),
+> 184 |     ).toBeVisible();
+      |       ^ Error: expect(locator).toBeVisible() failed
+  185 |     await expect(page.locator(".stream-indicator")).toHaveText("Connected");
+  186 |     await page
+  187 |       .getByRole("tab", { name: "Events & logs", exact: false })
+  188 |       .click();
+  189 |     await page
+  190 |       .getByRole("button", { name: "Live buffer · at most 200", exact: true })
+  191 |       .click();
+  192 |     await expect(page.locator(".event-row")).toHaveCount(200);
+  193 |     await expect(
+  194 |       page.getByText(
+  195 |         `${fixture.recordCount - 200} earlier display event(s) omitted or unavailable.`,
+  196 |         { exact: false },
+  197 |       ),
+  198 |     ).toBeVisible();
+  199 |     const ids = await page
+  200 |       .locator(".event-row")
+  201 |       .evaluateAll((els) => els.map((e) => e.getAttribute("data-event-id")));
+  202 |     expect(new Set(ids).size).toBe(200);
+  203 |     const before = streams.length;
+  204 |     await delivery(page, true);
+  205 |     await expect(page.locator(".stream-indicator")).not.toHaveText("Connected");
+  206 |     await delivery(page, false);
+  207 |     await expect.poll(() => streams.length).toBeGreaterThan(before);
+  208 |     await expect(page.locator(".stream-indicator")).toHaveText("Connected");
+  209 |     expect(
+  210 |       streams
+  211 |         .slice(1)
+  212 |         .some(
+  213 |           (url) =>
+  214 |             new URL(url).searchParams.get("after") === recovery.resumeCursor,
+  215 |         ),
+  216 |     ).toBe(true);
+  217 |     const detail = await page.request
+  218 |       .get(`/api/v1/runs/${fixture.runId}`)
+  219 |       .then((r) => r.json());
+  220 |     expect(detail.state).toBe("unknown");
+  221 |     expect(detail.capabilities).toEqual([]);
+  222 |     expect(detail.evidenceScope).toBe("recorded_fixture");
+  223 |     await testInfo.attach("read-only-stream-requests", {
+  224 |       body: JSON.stringify({
+  225 |         streams,
+  226 |         writes,
+  227 |         fault:
+  228 |           "Explicit browser fetch cancellation; all server frames and resync data remain actual native API responses.",
+  229 |       }),
+  230 |       contentType: "application/json",
+  231 |     });
+  232 |     expect(writes).toEqual([]);
+  233 |     await page.screenshot({
+  234 |       path: testInfo.outputPath("unknown-read-only-recovery.png"),
+  235 |       fullPage: true,
+  236 |     });
+  237 |   } finally {
+  238 |     release();
+  239 |     await delivery(page, false);
+  240 |   }
+  241 | });
+  242 |
+  243 | test("run session: native owned execution survives real replay-window expiry while running without duplicate Start", async ({
+  244 |   page,
+  245 | }, testInfo) => {
+  246 |   test.setTimeout(90000);
+  247 |   await installReadDisconnect(page);
+  248 |   await connectStudio(page, testInfo);
+  249 |   const project = await makeProject(page, "Owned read-only reconnect");
+  250 |   const made = await page.evaluate(async (project) => {
+  251 |     const { csrfToken } = await fetch("/api/v1/session").then((r) => r.json());
+  252 |     const post = async (
+  253 |       path: string,
+  254 |       body: any,
+  255 |       revision?: number,
+  256 |       key?: string,
+  257 |     ) => {
+  258 |       const r = await fetch("/api/v1" + path, {
+  259 |         method: "POST",
+  260 |         headers: {
+  261 |           "Content-Type": "application/json",
+  262 |           "X-CSRF-Token": csrfToken,
+  263 |           ...(revision ? { "If-Match": String(revision) } : {}),
+  264 |           ...(key ? { "Idempotency-Key": key } : {}),
+  265 |         },
+  266 |         body: JSON.stringify(body),
+  267 |       });
+  268 |       if (!r.ok) throw Error(await r.text());
+  269 |       return r.json();
+  270 |     };
+  271 |     const changed = await post(
+  272 |       `/projects/${project.projectId}/edits`,
+  273 |       {
+  274 |         baseRevision: project.revision,
+  275 |         edits: [
+  276 |           { kind: "set_parameter", parameterId: "duration", value: 16 },
+  277 |           { kind: "set_parameter", parameterId: "timestep", value: 0.01 },
+  278 |         ],
+  279 |       },
+  280 |       project.revision,
+  281 |     );
+  282 |     const pf = await post(`/projects/${project.projectId}/preflights`, {
+  283 |       revision: changed.revision,
+  284 |     });
+```

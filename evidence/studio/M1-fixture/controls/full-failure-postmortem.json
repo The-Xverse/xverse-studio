@@ -1,0 +1,78 @@
+{
+  "observations": [
+    {
+      "case": "test_pause_requires_the_frozen0",
+      "state": {
+        "state": "stopped",
+        "stateVersion": 2,
+        "reason": null,
+        "cleanup": "complete",
+        "evidence": "complete",
+        "startedAt": 1793225642.113015,
+        "endedAt": 1793225648.069185
+      },
+      "lifecycleAndControlEvents": [
+        {
+          "type": "run.state_changed",
+          "payload": {
+            "evidenceScope": "owned_reference",
+            "state": "running",
+            "stateVersion": 1
+          }
+        },
+        {
+          "type": "run.state_changed",
+          "payload": {
+            "reason": "duration_complete",
+            "state": "stopped",
+            "stateVersion": 2
+          }
+        }
+      ]
+    },
+    {
+      "case": "test_native_evidence_io_failur2",
+      "state": {
+        "state": "stopped",
+        "stateVersion": 3,
+        "reason": null,
+        "cleanup": "complete",
+        "evidence": "complete",
+        "startedAt": 1793225907.1784523,
+        "endedAt": 1793225908.1846807
+      },
+      "lifecycleAndControlEvents": [
+        {
+          "type": "run.state_changed",
+          "payload": {
+            "evidenceScope": "owned_reference",
+            "state": "running",
+            "stateVersion": 1
+          }
+        },
+        {
+          "type": "command.delegated",
+          "payload": {
+            "kind": "cancel",
+            "operationId": "op-9f72bbb1-c960-4aa3-9892-49756d6660ff"
+          }
+        },
+        {
+          "type": "run.state_changed",
+          "payload": {
+            "reason": "cancelled",
+            "state": "stopped",
+            "stateVersion": 3
+          }
+        },
+        {
+          "type": "command.completed",
+          "payload": {
+            "operationId": "op-9f72bbb1-c960-4aa3-9892-49756d6660ff"
+          }
+        }
+      ]
+    }
+  ],
+  "qualification": "Capability-case retained journal ends by duration_complete with no command events. The journal-fault case snapshot includes ordinary fixture teardown Cancel after its precondition assertion failed; the finalization fault was never delivered. These retained files do not recover exact old request/delivery timing."
+}

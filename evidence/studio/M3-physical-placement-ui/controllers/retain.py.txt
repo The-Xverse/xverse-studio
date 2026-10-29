@@ -1,0 +1,170 @@
+from pathlib import Path
+import base64
+import hashlib
+import json
+import re
+import sys
+
+root = Path.cwd()
+local = root / '.studio-local/physical-placements'
+out = root / 'evidence/studio/M3-physical-placement-ui'
+out.mkdir(exist_ok=True)
+
+def read(p):
+    return json.loads(p.read_text())
+
+def clean_text(v):
+    for a, b in [(str(root.parent / '.xverse-studio-cache'), '<loop-cache>'),
+                 (str(root), '<repo>'), ('<repo>', '<repo>'),
+                 (sys.base_prefix, '<python-install>')]:
+        v = v.replace(a, b)
+    return v
+
+def clean(v):
+    if isinstance(v, str):
+        return clean_text(v)
+    if isinstance(v, list):
+        return [clean(x) for x in v]
+    if isinstance(v, dict):
+        result = {k: clean(x) for k, x in v.items()}
+        if v.get('contentType', '').startswith(('application/json', 'text/')) and 'body' in v:
+            try:
+                result['body'] = base64.b64encode(clean_text(base64.b64decode(v['body']).decode()).encode()).decode()
+            except (ValueError, UnicodeError):
+                pass
+        return result
+    return v
+
+def save(n, v):
+    p = out / n
+    p.parent.mkdir(parents=True, exist_ok=True)
+    p.write_text(json.dumps(clean(v), indent=2) + '\n')
+
+def copy_text(n, source):
+    p = out / n
+    p.parent.mkdir(parents=True, exist_ok=True)
+    p.write_text('\n'.join(x.rstrip() for x in clean_text(source.read_text()).splitlines()).rstrip() + '\n')
+
+def results(report):
+    for suite in report.get('suites', []):
+        yield from results(suite)
+    for spec in report.get('specs', []):
+        for test in spec['tests']:
+            for result in test['results']:
+                yield spec['title'], result
+
+def attachments(stage, report):
+    pairs = []
+    for title, result in results(report):
+        vp = re.search(r'(\d+x\d+)', title)
+        viewport = vp.group(1) if vp else 'unspecified'
+        mode = re.sub(r'[^A-Za-z0-9_-]', '-', title.split(': ', 1)[-1].rsplit(' at ', 1)[0])
+        for a in result.get('attachments', []):
+            if a.get('contentType') == 'application/json' and 'body' in a:
+                value = json.loads(base64.b64decode(a['body']))
+                save(f'{stage}/journeys/{viewport}/{mode}/{a["name"]}', value)
+                if isinstance(value, dict):
+                    pairs.extend(value.get('measurements', []))
+                    selected = value.get('selectedContrast')
+                    pairs.extend(selected if isinstance(selected, list) else [selected] if isinstance(selected, dict) else [])
+    return pairs
+
+history = ['initial-red', 'first-successor', 'invalid-source-red',
+           'invalid-source-successor', 'expanded-first', 'overflow-diagnostic',
+           'expanded-successor', 'before-source-setup-targeted', 'source-setup-timeout-full']
+history_controllers = {'first-successor': 'verify-first.py',
+    'invalid-source-red': 'verify-invalid-red.py',
+    'invalid-source-successor': 'verify-invalid-successor.py',
+    'expanded-first': 'verify-expanded.py',
+    'overflow-diagnostic': 'verify-overflow.py',
+    'expanded-successor': 'verify-expanded-successor.py'}
+for stage in history:
+    path = local / stage
+    for n in ['summary.json', 'source-before.json', 'source-after.json', 'browser-report.json', 'classification.json']:
+        if (path / n).exists():
+            save(f'{stage}/{n}', read(path / n))
+    for n in ['browser.log', 'verify.py', 'exact-test.ts.txt', 'test.ts.txt', 'exact-style.css.txt', 'exact-source-accessibility.spec.ts.txt', 'environment.json']:
+        if (path / n).exists():
+            copy_text(f'{stage}/{n if n != "browser.log" else "browser.txt"}', path / n)
+    for p in (path / 'browser-output').glob('**/error-context.md'):
+        copy_text(f'{stage}/contexts/{p.parent.name}/{p.name}', p)
+    if stage in history_controllers:
+        copy_text(f'{stage}/controller.py.txt', local / history_controllers[stage])
+    exact = next((path / n for n in ['exact-test.ts.txt', 'test.ts.txt'] if (path / n).exists()), None)
+    if exact:
+        assert hashlib.sha256(exact.read_bytes()).hexdigest() == read(path / 'source-before.json')['tests/e2e/physical-placements-accessibility.spec.ts']
+    attachments(stage, read(path / 'browser-report.json'))
+
+maps = read(local / 'final-after-source-setup/targeted/source-before.json')
+assert len(maps) == 276
+assert all(hashlib.sha256((root / n).read_bytes()).hexdigest() == h for n, h in maps.items())
+reports = {}
+pairs = []
+for stage, expected in [('targeted', 118), ('full', 339), ('performance', 2)]:
+    path = local / 'final-after-source-setup' / stage
+    summary, report = read(path / 'summary.json'), read(path / 'browser-report.json')
+    assert summary['exitCode'] == 0 and summary['sourceUnchanged']
+    assert maps == read(path / 'source-before.json') == read(path / 'source-after.json')
+    assert report['stats']['expected'] == expected, report['stats']
+    assert not any(report['stats'][k] for k in ['unexpected', 'skipped', 'flaky'])
+    reports[stage] = report
+    save(f'{stage}/verification.json', summary)
+    save(f'{stage}/browser-report.json', report)
+    save(f'{stage}/application-and-input-hashes.json', maps)
+    copy_text(f'{stage}/browser.txt', path / 'browser.log')
+    copy_text(f'controllers/{stage}.py.txt', path / 'verify.py')
+    if stage != 'full':
+        observed = attachments(stage, report)
+        if stage == 'targeted':
+            pairs.extend(observed)
+    if stage == 'performance':
+        for p in (path / 'browser-output').glob('**/*performance.json'):
+            value = read(p); vp = value['viewport']
+            save(f'performance/{vp["width"]}x{vp["height"]}/{p.name}', value)
+
+assert pairs and all(p.get('supported') and p.get('passed') and p['ratio'] >= 4.5 for p in pairs)
+save('contrast-summary.json', {'selectedPairs': len(pairs), 'minimumRatio': min(p['ratio'] for p in pairs),
+    'threshold': 4.5, 'measurements': pairs, 'scope': 'Selected rendered placement, inventory, deployment and source text; no overall accessibility/AT claim'})
+save('application-and-input-hashes.json', maps)
+ui = {n: h for n, h in maps.items() if n.startswith('apps/studio-web/dist/')}
+assert len(ui) == 6
+built = read(local / 'build-observed.json')
+assert all(maps[n] == h for n, h in built['files'].items())
+save('built-ui-observation.json', built)
+save('environment.json', read(local / 'environment.json'))
+copy_text('build-and-checks.txt', local / 'build.log')
+copy_text('implementation-review.md', local / 'implementation-review.md')
+save('invalid-source-validator.json', read(local / 'invalid-source-validator.json'))
+control = read(local / 'source-setup-input-control.json')
+old = read(local / 'source-setup-timeout-full/source-before.json')
+changed = {n for n in maps if maps[n] != old[n]}
+assert changed == {control['file']}
+assert old[control['file']] == control['beforeSha256']
+assert maps[control['file']] == control['afterSha256']
+assert control['allBytesOutsideHoldPutUnchanged']
+assert hashlib.sha256((local / 'source-setup-timeout-full/exact-source-accessibility.spec.ts.txt').read_bytes()).hexdigest() == control['beforeSha256']
+save('source-setup-input-control.json', {**control, 'unchangedOtherInputs': len(maps) - 1,
+    'applicationCompiledAndRuntimeBytesUnchanged': True})
+save('source-setup-timeout-full/canonical-observation.json', read(local / 'source-setup-timeout-full/canonical-observation.json'))
+copy_text('source-setup-change.diff', local / 'source-setup-change.diff')
+for n in ['retain.py', 'run-final.py', 'run-after-source-setup.py', 'build.py', 'environment.py']:
+    copy_text(f'controllers/{n}.txt', local / n)
+
+proof = read(root / 'evidence/studio/M3-inventory-observations/backend-input-inheritance.json')
+assert len(proof['checkedFiles']) == 163
+assert all(maps[n] == h for n, h in proof['checkedFiles'].items())
+assert maps['.github/workflows/ci.yml'] == proof['workflowSha256']
+save('backend-input-inheritance.json', {**proof,
+    'scope': '851 inherited backend results via 163 exact unchanged backend/Python/contributor/compatibility inputs plus unchanged-command CI scheduling control; no local backend rerun for this UI-only change'})
+save('verification.json', {'baseCandidate': read(local / 'final-after-source-setup/full/summary.json')['baseCandidate'],
+    'applicationAndInputDigest': 'sha256:' + hashlib.sha256(json.dumps(maps, sort_keys=True, separators=(',', ':')).encode()).hexdigest(),
+    'frozenInputs': len(maps), 'compiledAssets': len(ui), 'allFinalStageInputsIdentical': True,
+    **{stage: report['stats'] for stage, report in reports.items()},
+    'backend': 'backend-input-inheritance.json', 'completedTasks': 47,
+    'milestonesAccepted': [], 'windows': 'BLOCKED_USER_REQUEST',
+    'limitations': ['Native Linux Chromium only; actual AT acceptance remains open',
+        'Metadata, authority/shape and maximum reports use labelled transport fixtures, never live physical-provider evidence',
+        'The newer-revision placement journey performs one expected source save before monitoring the late read; other placement inspection phases perform no mutative requests. The 16 source authoring regressions retain their expected writes.',
+        'Physical reservation, connection tests and actual-device admission remain unavailable. Placement journeys perform no Start or physical operation; the full suite retains owned reference execution.',
+        'The placement read 30-second deadline is source reviewed, not directly timed in a browser test']})
+print(json.dumps({'targeted': 118, 'full': 339, 'performance': 2, 'inputs': len(maps), 'contrastPairs': len(pairs)}))

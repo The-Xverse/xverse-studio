@@ -1,0 +1,304 @@
+FFFFFF                                                                   [100%]
+=================================== FAILURES ===================================
+_ test_unknown_or_incompatible_provider_facts_never_admit_execution[start_target] _
+
+client = <starlette.testclient.TestClient object at 0x7f4d4c13a900>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f4d4bfce650>
+case = 'start_target'
+
+    @pytest.mark.parametrize(
+        "case",
+        ["start_target", "xdl_version", "availability", "host_fact", "host_os", "host_arch"],
+    )
+    def test_unknown_or_incompatible_provider_facts_never_admit_execution(
+        client, monkeypatch, case
+    ):
+        from xverse_studio.runs import service
+
+        descriptors = service.descriptors
+        rows = deepcopy(descriptors())
+        provider = next(row for row in rows if row["providerId"] == "studio.reference")
+        if case == "start_target":
+            next(c for c in provider["capabilityRecords"] if c["kind"] == "start")[
+                "targetClass"
+            ] = "unadmitted-target"
+        elif case == "xdl_version":
+            provider["supportedXdlVersions"] = ["xverse.io/xdl/unsupported"]
+        elif case == "availability":
+            provider["available"] = "unknown"
+        elif case == "host_fact":
+            provider["hostCompatible"] = "unknown"
+        elif case == "host_os":
+            provider["supportedHostOS"] = ["unavailable-os"]
+        else:
+            provider["architectures"] = ["unavailable-architecture"]
+        monkeypatch.setattr(service, "descriptors", lambda: rows)
+        monkeypatch.setattr(
+            subprocess, "Popen", lambda *a, **k: pytest.fail("No process may dispatch")
+        )
+        project = new_project(client)
+        result = client.post(
+            f"/api/v1/projects/{project['projectId']}/preflights", json={"revision": 1}
+        ).json()
+>       assert result["status"] == "blocked", result
+E       AssertionError: {'capabilityDigest': 'sha256:bce965062c6d3655583597c1e3e79ad2c9d3ef28384ee3c7e354be8930c76d29', 'contributingDocuments...: {'artifacts': 'available', 'authority': 'available', 'backend': 'available', 'capabilities': 'compatible', ...}, ...}
+E       assert 'ready' == 'blocked'
+E
+E         - blocked
+E         + ready
+
+tests/integration/test_preflight.py:287: AssertionError
+_ test_unknown_or_incompatible_provider_facts_never_admit_execution[xdl_version] _
+
+client = <starlette.testclient.TestClient object at 0x7f4d4a4d8410>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f4d4bfcfbb0>
+case = 'xdl_version'
+
+    @pytest.mark.parametrize(
+        "case",
+        ["start_target", "xdl_version", "availability", "host_fact", "host_os", "host_arch"],
+    )
+    def test_unknown_or_incompatible_provider_facts_never_admit_execution(
+        client, monkeypatch, case
+    ):
+        from xverse_studio.runs import service
+
+        descriptors = service.descriptors
+        rows = deepcopy(descriptors())
+        provider = next(row for row in rows if row["providerId"] == "studio.reference")
+        if case == "start_target":
+            next(c for c in provider["capabilityRecords"] if c["kind"] == "start")[
+                "targetClass"
+            ] = "unadmitted-target"
+        elif case == "xdl_version":
+            provider["supportedXdlVersions"] = ["xverse.io/xdl/unsupported"]
+        elif case == "availability":
+            provider["available"] = "unknown"
+        elif case == "host_fact":
+            provider["hostCompatible"] = "unknown"
+        elif case == "host_os":
+            provider["supportedHostOS"] = ["unavailable-os"]
+        else:
+            provider["architectures"] = ["unavailable-architecture"]
+        monkeypatch.setattr(service, "descriptors", lambda: rows)
+        monkeypatch.setattr(
+            subprocess, "Popen", lambda *a, **k: pytest.fail("No process may dispatch")
+        )
+        project = new_project(client)
+        result = client.post(
+            f"/api/v1/projects/{project['projectId']}/preflights", json={"revision": 1}
+        ).json()
+>       assert result["status"] == "blocked", result
+E       AssertionError: {'capabilityDigest': 'sha256:bce965062c6d3655583597c1e3e79ad2c9d3ef28384ee3c7e354be8930c76d29', 'contributingDocuments...: {'artifacts': 'available', 'authority': 'available', 'backend': 'available', 'capabilities': 'compatible', ...}, ...}
+E       assert 'ready' == 'blocked'
+E
+E         - blocked
+E         + ready
+
+tests/integration/test_preflight.py:287: AssertionError
+_ test_unknown_or_incompatible_provider_facts_never_admit_execution[availability] _
+
+client = <starlette.testclient.TestClient object at 0x7f4d49c0e0d0>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f4d49c0ad50>
+case = 'availability'
+
+    @pytest.mark.parametrize(
+        "case",
+        ["start_target", "xdl_version", "availability", "host_fact", "host_os", "host_arch"],
+    )
+    def test_unknown_or_incompatible_provider_facts_never_admit_execution(
+        client, monkeypatch, case
+    ):
+        from xverse_studio.runs import service
+
+        descriptors = service.descriptors
+        rows = deepcopy(descriptors())
+        provider = next(row for row in rows if row["providerId"] == "studio.reference")
+        if case == "start_target":
+            next(c for c in provider["capabilityRecords"] if c["kind"] == "start")[
+                "targetClass"
+            ] = "unadmitted-target"
+        elif case == "xdl_version":
+            provider["supportedXdlVersions"] = ["xverse.io/xdl/unsupported"]
+        elif case == "availability":
+            provider["available"] = "unknown"
+        elif case == "host_fact":
+            provider["hostCompatible"] = "unknown"
+        elif case == "host_os":
+            provider["supportedHostOS"] = ["unavailable-os"]
+        else:
+            provider["architectures"] = ["unavailable-architecture"]
+        monkeypatch.setattr(service, "descriptors", lambda: rows)
+        monkeypatch.setattr(
+            subprocess, "Popen", lambda *a, **k: pytest.fail("No process may dispatch")
+        )
+        project = new_project(client)
+        result = client.post(
+            f"/api/v1/projects/{project['projectId']}/preflights", json={"revision": 1}
+        ).json()
+>       assert result["status"] == "blocked", result
+E       AssertionError: {'capabilityDigest': 'sha256:bce965062c6d3655583597c1e3e79ad2c9d3ef28384ee3c7e354be8930c76d29', 'contributingDocuments...: {'artifacts': 'available', 'authority': 'available', 'backend': 'available', 'capabilities': 'compatible', ...}, ...}
+E       assert 'ready' == 'blocked'
+E
+E         - blocked
+E         + ready
+
+tests/integration/test_preflight.py:287: AssertionError
+_ test_unknown_or_incompatible_provider_facts_never_admit_execution[host_fact] _
+
+client = <starlette.testclient.TestClient object at 0x7f4d4b70cd60>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f4d49ab6e00>
+case = 'host_fact'
+
+    @pytest.mark.parametrize(
+        "case",
+        ["start_target", "xdl_version", "availability", "host_fact", "host_os", "host_arch"],
+    )
+    def test_unknown_or_incompatible_provider_facts_never_admit_execution(
+        client, monkeypatch, case
+    ):
+        from xverse_studio.runs import service
+
+        descriptors = service.descriptors
+        rows = deepcopy(descriptors())
+        provider = next(row for row in rows if row["providerId"] == "studio.reference")
+        if case == "start_target":
+            next(c for c in provider["capabilityRecords"] if c["kind"] == "start")[
+                "targetClass"
+            ] = "unadmitted-target"
+        elif case == "xdl_version":
+            provider["supportedXdlVersions"] = ["xverse.io/xdl/unsupported"]
+        elif case == "availability":
+            provider["available"] = "unknown"
+        elif case == "host_fact":
+            provider["hostCompatible"] = "unknown"
+        elif case == "host_os":
+            provider["supportedHostOS"] = ["unavailable-os"]
+        else:
+            provider["architectures"] = ["unavailable-architecture"]
+        monkeypatch.setattr(service, "descriptors", lambda: rows)
+        monkeypatch.setattr(
+            subprocess, "Popen", lambda *a, **k: pytest.fail("No process may dispatch")
+        )
+        project = new_project(client)
+        result = client.post(
+            f"/api/v1/projects/{project['projectId']}/preflights", json={"revision": 1}
+        ).json()
+>       assert result["status"] == "blocked", result
+E       AssertionError: {'capabilityDigest': 'sha256:bce965062c6d3655583597c1e3e79ad2c9d3ef28384ee3c7e354be8930c76d29', 'contributingDocuments...: {'artifacts': 'available', 'authority': 'available', 'backend': 'available', 'capabilities': 'compatible', ...}, ...}
+E       assert 'ready' == 'blocked'
+E
+E         - blocked
+E         + ready
+
+tests/integration/test_preflight.py:287: AssertionError
+__ test_unknown_or_incompatible_provider_facts_never_admit_execution[host_os] __
+
+client = <starlette.testclient.TestClient object at 0x7f4d4bfce650>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f4d4c1ad480>
+case = 'host_os'
+
+    @pytest.mark.parametrize(
+        "case",
+        ["start_target", "xdl_version", "availability", "host_fact", "host_os", "host_arch"],
+    )
+    def test_unknown_or_incompatible_provider_facts_never_admit_execution(
+        client, monkeypatch, case
+    ):
+        from xverse_studio.runs import service
+
+        descriptors = service.descriptors
+        rows = deepcopy(descriptors())
+        provider = next(row for row in rows if row["providerId"] == "studio.reference")
+        if case == "start_target":
+            next(c for c in provider["capabilityRecords"] if c["kind"] == "start")[
+                "targetClass"
+            ] = "unadmitted-target"
+        elif case == "xdl_version":
+            provider["supportedXdlVersions"] = ["xverse.io/xdl/unsupported"]
+        elif case == "availability":
+            provider["available"] = "unknown"
+        elif case == "host_fact":
+            provider["hostCompatible"] = "unknown"
+        elif case == "host_os":
+            provider["supportedHostOS"] = ["unavailable-os"]
+        else:
+            provider["architectures"] = ["unavailable-architecture"]
+        monkeypatch.setattr(service, "descriptors", lambda: rows)
+        monkeypatch.setattr(
+            subprocess, "Popen", lambda *a, **k: pytest.fail("No process may dispatch")
+        )
+        project = new_project(client)
+        result = client.post(
+            f"/api/v1/projects/{project['projectId']}/preflights", json={"revision": 1}
+        ).json()
+>       assert result["status"] == "blocked", result
+E       AssertionError: {'capabilityDigest': 'sha256:bce965062c6d3655583597c1e3e79ad2c9d3ef28384ee3c7e354be8930c76d29', 'contributingDocuments...: {'artifacts': 'available', 'authority': 'available', 'backend': 'available', 'capabilities': 'compatible', ...}, ...}
+E       assert 'ready' == 'blocked'
+E
+E         - blocked
+E         + ready
+
+tests/integration/test_preflight.py:287: AssertionError
+_ test_unknown_or_incompatible_provider_facts_never_admit_execution[host_arch] _
+
+client = <starlette.testclient.TestClient object at 0x7f4d4b7768d0>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f4d4c082f50>
+case = 'host_arch'
+
+    @pytest.mark.parametrize(
+        "case",
+        ["start_target", "xdl_version", "availability", "host_fact", "host_os", "host_arch"],
+    )
+    def test_unknown_or_incompatible_provider_facts_never_admit_execution(
+        client, monkeypatch, case
+    ):
+        from xverse_studio.runs import service
+
+        descriptors = service.descriptors
+        rows = deepcopy(descriptors())
+        provider = next(row for row in rows if row["providerId"] == "studio.reference")
+        if case == "start_target":
+            next(c for c in provider["capabilityRecords"] if c["kind"] == "start")[
+                "targetClass"
+            ] = "unadmitted-target"
+        elif case == "xdl_version":
+            provider["supportedXdlVersions"] = ["xverse.io/xdl/unsupported"]
+        elif case == "availability":
+            provider["available"] = "unknown"
+        elif case == "host_fact":
+            provider["hostCompatible"] = "unknown"
+        elif case == "host_os":
+            provider["supportedHostOS"] = ["unavailable-os"]
+        else:
+            provider["architectures"] = ["unavailable-architecture"]
+        monkeypatch.setattr(service, "descriptors", lambda: rows)
+        monkeypatch.setattr(
+            subprocess, "Popen", lambda *a, **k: pytest.fail("No process may dispatch")
+        )
+        project = new_project(client)
+        result = client.post(
+            f"/api/v1/projects/{project['projectId']}/preflights", json={"revision": 1}
+        ).json()
+>       assert result["status"] == "blocked", result
+E       AssertionError: {'capabilityDigest': 'sha256:bce965062c6d3655583597c1e3e79ad2c9d3ef28384ee3c7e354be8930c76d29', 'contributingDocuments...: {'artifacts': 'available', 'authority': 'available', 'backend': 'available', 'capabilities': 'compatible', ...}, ...}
+E       assert 'ready' == 'blocked'
+E
+E         - blocked
+E         + ready
+
+tests/integration/test_preflight.py:287: AssertionError
+=============================== warnings summary ===============================
+.venv/lib/python3.13/site-packages/fastapi/testclient.py:1
+  <workspace>/.venv/lib/python3.13/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/integration/test_preflight.py::test_unknown_or_incompatible_provider_facts_never_admit_execution[start_target]
+FAILED tests/integration/test_preflight.py::test_unknown_or_incompatible_provider_facts_never_admit_execution[xdl_version]
+FAILED tests/integration/test_preflight.py::test_unknown_or_incompatible_provider_facts_never_admit_execution[availability]
+FAILED tests/integration/test_preflight.py::test_unknown_or_incompatible_provider_facts_never_admit_execution[host_fact]
+FAILED tests/integration/test_preflight.py::test_unknown_or_incompatible_provider_facts_never_admit_execution[host_os]
+FAILED tests/integration/test_preflight.py::test_unknown_or_incompatible_provider_facts_never_admit_execution[host_arch]
+6 failed, 9 deselected, 1 warning in 6.95s

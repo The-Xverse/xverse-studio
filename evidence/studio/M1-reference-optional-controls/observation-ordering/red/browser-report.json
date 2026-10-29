@@ -1,0 +1,349 @@
+{
+  "config": {
+    "argv": [
+      "<tool-cache>/node-v24.22.1-linux-x64/bin/node",
+      "<repo>/node_modules/.bin/playwright",
+      "test",
+      "-c",
+      "tests/e2e/playwright.config.ts",
+      "--grep",
+      "ordered ownership observations|owned observation recovery"
+    ],
+    "configFile": "<repo>/tests/e2e/playwright.config.ts",
+    "rootDir": "<repo>/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "<repo>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "<repo>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "*.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "<repo>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "<repo>/tests/e2e",
+        "snapshotDir": "<repo>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": "*.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "baseURL": "http://127.0.0.1:36419",
+          "browserName": "chromium",
+          "actionTimeout": 15000,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "trace": "off",
+          "screenshot": "only-on-failure",
+          "video": "off"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "<repo>/test-results/browser-report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "reference-recovery.spec.ts",
+      "file": "reference-recovery.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "owned observation recovery at 1024",
+          "file": "reference-recovery.spec.ts",
+          "line": 6,
+          "column": 8,
+          "specs": [
+            {
+              "title": "same worker version updates unknown and recovered ownership without restarting",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 20248,
+                      "error": {
+                        "message": "Error: expect(locator).toContainText(expected) failed\n\nLocator: getByRole('region', { name: 'Reported startup', exact: true })\nExpected substring: \"Startup or ownership unresolved\"\nReceived string:    \"Reported startupWorkload start recordedThe recorded start is separate from the execution outcome, cleanup, evidence integrity and assertion verdict.Reported reason: OWNERSHIP_UNKNOWN\"\nTimeout: 10000ms\n\nCall log:\n  - Expect \"toContainText\" getByRole('region', { name: 'Reported startup', exact: true }) with timeout 10000ms\n  - waiting for getByRole('region', { name: 'Reported startup', exact: true })\n    3 × locator resolved to <section class=\"panel\" aria-label=\"Reported startup\">…</section>\n      - unexpected value \"Reported startupWorkload start recordedThe recorded start is separate from the execution outcome, cleanup, evidence integrity and assertion verdict.\"\n    21 × locator resolved to <section class=\"panel\" aria-label=\"Reported startup\">…</section>\n       - unexpected value \"Reported startupWorkload start recordedThe recorded start is separate from the execution outcome, cleanup, evidence integrity and assertion verdict.Reported reason: OWNERSHIP_UNKNOWN\"",
+                        "stack": "Error: expect(locator).toContainText(expected) failed\n\nLocator: getByRole('region', { name: 'Reported startup', exact: true })\nExpected substring: \"Startup or ownership unresolved\"\nReceived string:    \"Reported startupWorkload start recordedThe recorded start is separate from the execution outcome, cleanup, evidence integrity and assertion verdict.Reported reason: OWNERSHIP_UNKNOWN\"\nTimeout: 10000ms\n\nCall log:\n  - Expect \"toContainText\" getByRole('region', { name: 'Reported startup', exact: true }) with timeout 10000ms\n  - waiting for getByRole('region', { name: 'Reported startup', exact: true })\n    3 × locator resolved to <section class=\"panel\" aria-label=\"Reported startup\">…</section>\n      - unexpected value \"Reported startupWorkload start recordedThe recorded start is separate from the execution outcome, cleanup, evidence integrity and assertion verdict.\"\n    21 × locator resolved to <section class=\"panel\" aria-label=\"Reported startup\">…</section>\n       - unexpected value \"Reported startupWorkload start recordedThe recorded start is separate from the execution outcome, cleanup, evidence integrity and assertion verdict.Reported reason: OWNERSHIP_UNKNOWN\"\n\n    at <repo>/tests/e2e/reference-recovery.spec.ts:39:31",
+                        "location": {
+                          "file": "<repo>/tests/e2e/reference-recovery.spec.ts",
+                          "column": 31,
+                          "line": 39
+                        },
+                        "snippet": "  37 |       try {\n  38 |         writeFileSync(marker, 'Owned fixture observation denial only');\n> 39 |         await expect(startup).toContainText('Startup or ownership unresolved');\n     |                               ^\n  40 |         await expect(controls.getByRole('button', { name: 'Pause', exact: true })).toBeDisabled();\n  41 |         unknown = await readRun();\n  42 |         expect(unknown.state).toBe('unknown');"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "<repo>/tests/e2e/reference-recovery.spec.ts",
+                            "column": 31,
+                            "line": 39
+                          },
+                          "message": "Error: expect(locator).toContainText(expected) failed\n\nLocator: getByRole('region', { name: 'Reported startup', exact: true })\nExpected substring: \"Startup or ownership unresolved\"\nReceived string:    \"Reported startupWorkload start recordedThe recorded start is separate from the execution outcome, cleanup, evidence integrity and assertion verdict.Reported reason: OWNERSHIP_UNKNOWN\"\nTimeout: 10000ms\n\nCall log:\n  - Expect \"toContainText\" getByRole('region', { name: 'Reported startup', exact: true }) with timeout 10000ms\n  - waiting for getByRole('region', { name: 'Reported startup', exact: true })\n    3 × locator resolved to <section class=\"panel\" aria-label=\"Reported startup\">…</section>\n      - unexpected value \"Reported startupWorkload start recordedThe recorded start is separate from the execution outcome, cleanup, evidence integrity and assertion verdict.\"\n    21 × locator resolved to <section class=\"panel\" aria-label=\"Reported startup\">…</section>\n       - unexpected value \"Reported startupWorkload start recordedThe recorded start is separate from the execution outcome, cleanup, evidence integrity and assertion verdict.Reported reason: OWNERSHIP_UNKNOWN\"\n\n\n  37 |       try {\n  38 |         writeFileSync(marker, 'Owned fixture observation denial only');\n> 39 |         await expect(startup).toContainText('Startup or ownership unresolved');\n     |                               ^\n  40 |         await expect(controls.getByRole('button', { name: 'Pause', exact: true })).toBeDisabled();\n  41 |         unknown = await readRun();\n  42 |         expect(unknown.state).toBe('unknown');\n    at <repo>/tests/e2e/reference-recovery.spec.ts:39:31"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-28T20:44:56.641Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "owned-native-fault-observation",
+                          "contentType": "application/json",
+                          "body": "eyJzY29wZSI6Im93bmVkIG5hdGl2ZSBmYXVsdCBmaXh0dXJlOyBubyBlcXVpcG1lbnQiLCJzY2VuYXJpbyI6Im93bmVyc2hpcF9yZWNvdmVyeSIsIndvcmtlckF0dGVtcHRzIjoxLCJjb3JydXB0aW9ucyI6MCwibGF1bmNoUmVmdXNhbHMiOjAsImludGVycnVwdGlvbnMiOjAsIm93bmVyc2hpcERlbmlhbHMiOjU0LCJlcnJvcnMiOltdfQo="
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "<repo>/test-results/browser/reference-recovery-owned-o-4ceeb-wnership-without-restarting/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "<repo>/tests/e2e/reference-recovery.spec.ts",
+                        "column": 31,
+                        "line": 39
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "53f3a68fba730c3de205-706344554071beb1e318",
+              "file": "reference-recovery.spec.ts",
+              "line": 8,
+              "column": 9
+            }
+          ]
+        },
+        {
+          "title": "owned observation recovery at 1440",
+          "file": "reference-recovery.spec.ts",
+          "line": 6,
+          "column": 8,
+          "specs": [
+            {
+              "title": "same worker version updates unknown and recovered ownership without restarting",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 20355,
+                      "error": {
+                        "message": "Error: expect(locator).toContainText(expected) failed\n\nLocator: getByRole('region', { name: 'Reported startup', exact: true })\nExpected substring: \"Startup or ownership unresolved\"\nReceived string:    \"Reported startupWorkload start recordedThe recorded start is separate from the execution outcome, cleanup, evidence integrity and assertion verdict.Reported reason: OWNERSHIP_UNKNOWN\"\nTimeout: 10000ms\n\nCall log:\n  - Expect \"toContainText\" getByRole('region', { name: 'Reported startup', exact: true }) with timeout 10000ms\n  - waiting for getByRole('region', { name: 'Reported startup', exact: true })\n    4 × locator resolved to <section class=\"panel\" aria-label=\"Reported startup\">…</section>\n      - unexpected value \"Reported startupWorkload start recordedThe recorded start is separate from the execution outcome, cleanup, evidence integrity and assertion verdict.\"\n    20 × locator resolved to <section class=\"panel\" aria-label=\"Reported startup\">…</section>\n       - unexpected value \"Reported startupWorkload start recordedThe recorded start is separate from the execution outcome, cleanup, evidence integrity and assertion verdict.Reported reason: OWNERSHIP_UNKNOWN\"",
+                        "stack": "Error: expect(locator).toContainText(expected) failed\n\nLocator: getByRole('region', { name: 'Reported startup', exact: true })\nExpected substring: \"Startup or ownership unresolved\"\nReceived string:    \"Reported startupWorkload start recordedThe recorded start is separate from the execution outcome, cleanup, evidence integrity and assertion verdict.Reported reason: OWNERSHIP_UNKNOWN\"\nTimeout: 10000ms\n\nCall log:\n  - Expect \"toContainText\" getByRole('region', { name: 'Reported startup', exact: true }) with timeout 10000ms\n  - waiting for getByRole('region', { name: 'Reported startup', exact: true })\n    4 × locator resolved to <section class=\"panel\" aria-label=\"Reported startup\">…</section>\n      - unexpected value \"Reported startupWorkload start recordedThe recorded start is separate from the execution outcome, cleanup, evidence integrity and assertion verdict.\"\n    20 × locator resolved to <section class=\"panel\" aria-label=\"Reported startup\">…</section>\n       - unexpected value \"Reported startupWorkload start recordedThe recorded start is separate from the execution outcome, cleanup, evidence integrity and assertion verdict.Reported reason: OWNERSHIP_UNKNOWN\"\n\n    at <repo>/tests/e2e/reference-recovery.spec.ts:39:31",
+                        "location": {
+                          "file": "<repo>/tests/e2e/reference-recovery.spec.ts",
+                          "column": 31,
+                          "line": 39
+                        },
+                        "snippet": "  37 |       try {\n  38 |         writeFileSync(marker, 'Owned fixture observation denial only');\n> 39 |         await expect(startup).toContainText('Startup or ownership unresolved');\n     |                               ^\n  40 |         await expect(controls.getByRole('button', { name: 'Pause', exact: true })).toBeDisabled();\n  41 |         unknown = await readRun();\n  42 |         expect(unknown.state).toBe('unknown');"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "<repo>/tests/e2e/reference-recovery.spec.ts",
+                            "column": 31,
+                            "line": 39
+                          },
+                          "message": "Error: expect(locator).toContainText(expected) failed\n\nLocator: getByRole('region', { name: 'Reported startup', exact: true })\nExpected substring: \"Startup or ownership unresolved\"\nReceived string:    \"Reported startupWorkload start recordedThe recorded start is separate from the execution outcome, cleanup, evidence integrity and assertion verdict.Reported reason: OWNERSHIP_UNKNOWN\"\nTimeout: 10000ms\n\nCall log:\n  - Expect \"toContainText\" getByRole('region', { name: 'Reported startup', exact: true }) with timeout 10000ms\n  - waiting for getByRole('region', { name: 'Reported startup', exact: true })\n    4 × locator resolved to <section class=\"panel\" aria-label=\"Reported startup\">…</section>\n      - unexpected value \"Reported startupWorkload start recordedThe recorded start is separate from the execution outcome, cleanup, evidence integrity and assertion verdict.\"\n    20 × locator resolved to <section class=\"panel\" aria-label=\"Reported startup\">…</section>\n       - unexpected value \"Reported startupWorkload start recordedThe recorded start is separate from the execution outcome, cleanup, evidence integrity and assertion verdict.Reported reason: OWNERSHIP_UNKNOWN\"\n\n\n  37 |       try {\n  38 |         writeFileSync(marker, 'Owned fixture observation denial only');\n> 39 |         await expect(startup).toContainText('Startup or ownership unresolved');\n     |                               ^\n  40 |         await expect(controls.getByRole('button', { name: 'Pause', exact: true })).toBeDisabled();\n  41 |         unknown = await readRun();\n  42 |         expect(unknown.state).toBe('unknown');\n    at <repo>/tests/e2e/reference-recovery.spec.ts:39:31"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-28T20:45:17.260Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "owned-native-fault-observation",
+                          "contentType": "application/json",
+                          "body": "eyJzY29wZSI6Im93bmVkIG5hdGl2ZSBmYXVsdCBmaXh0dXJlOyBubyBlcXVpcG1lbnQiLCJzY2VuYXJpbyI6Im93bmVyc2hpcF9yZWNvdmVyeSIsIndvcmtlckF0dGVtcHRzIjoxLCJjb3JydXB0aW9ucyI6MCwibGF1bmNoUmVmdXNhbHMiOjAsImludGVycnVwdGlvbnMiOjAsIm93bmVyc2hpcERlbmlhbHMiOjU1LCJlcnJvcnMiOltdfQo="
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "<repo>/test-results/browser/reference-recovery-owned-o-531c7-wnership-without-restarting/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "<repo>/tests/e2e/reference-recovery.spec.ts",
+                        "column": 31,
+                        "line": 39
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "53f3a68fba730c3de205-4bbc3bf6180f25979a42",
+              "file": "reference-recovery.spec.ts",
+              "line": 8,
+              "column": 9
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "session-contract.spec.ts",
+      "file": "session-contract.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "session contract: ordered ownership observations advance at an unchanged worker version",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 6,
+                  "error": {
+                    "message": "Error: expect(received).toEqual(expected) // deep equality\n\n- Expected  - 1\n+ Received  + 2\n\n@@ -2,8 +2,9 @@\n    \"cleanup\": \"unknown\",\n    \"observationVersion\": 5,\n    \"reason\": \"OWNERSHIP_UNKNOWN\",\n    \"runId\": \"run-session-fixture\",\n    \"snapshotId\": \"snapshot-session-fixture\",\n-   \"state\": \"unknown\",\n+   \"state\": \"running\",\n    \"stateVersion\": 1,\n+   \"status\": undefined,\n  }",
+                    "stack": "Error: expect(received).toEqual(expected) // deep equality\n\n- Expected  - 1\n+ Received  + 2\n\n@@ -2,8 +2,9 @@\n    \"cleanup\": \"unknown\",\n    \"observationVersion\": 5,\n    \"reason\": \"OWNERSHIP_UNKNOWN\",\n    \"runId\": \"run-session-fixture\",\n    \"snapshotId\": \"snapshot-session-fixture\",\n-   \"state\": \"unknown\",\n+   \"state\": \"running\",\n    \"stateVersion\": 1,\n+   \"status\": undefined,\n  }\n    at <repo>/tests/e2e/session-contract.spec.ts:60:38",
+                    "location": {
+                      "file": "<repo>/tests/e2e/session-contract.spec.ts",
+                      "column": 38,
+                      "line": 60
+                    },
+                    "snippet": "  58 |   const running = { runId, snapshotId, state: \"running\", stateVersion: 1, observationVersion: 4, cleanup: \"not_started\" };\n  59 |   const unknown = { ...running, state: \"unknown\", observationVersion: 5, cleanup: \"unknown\", reason: \"OWNERSHIP_UNKNOWN\" };\n> 60 |   expect(mergeRun(running, unknown)).toEqual(unknown);\n     |                                      ^\n  61 |   const recovered = { ...running, observationVersion: 6 };\n  62 |   const next = mergeRun(unknown, recovered);\n  63 |   expect(next).toEqual(recovered);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/session-contract.spec.ts",
+                        "column": 38,
+                        "line": 60
+                      },
+                      "message": "Error: expect(received).toEqual(expected) // deep equality\n\n- Expected  - 1\n+ Received  + 2\n\n@@ -2,8 +2,9 @@\n    \"cleanup\": \"unknown\",\n    \"observationVersion\": 5,\n    \"reason\": \"OWNERSHIP_UNKNOWN\",\n    \"runId\": \"run-session-fixture\",\n    \"snapshotId\": \"snapshot-session-fixture\",\n-   \"state\": \"unknown\",\n+   \"state\": \"running\",\n    \"stateVersion\": 1,\n+   \"status\": undefined,\n  }\n\n  58 |   const running = { runId, snapshotId, state: \"running\", stateVersion: 1, observationVersion: 4, cleanup: \"not_started\" };\n  59 |   const unknown = { ...running, state: \"unknown\", observationVersion: 5, cleanup: \"unknown\", reason: \"OWNERSHIP_UNKNOWN\" };\n> 60 |   expect(mergeRun(running, unknown)).toEqual(unknown);\n     |                                      ^\n  61 |   const recovered = { ...running, observationVersion: 6 };\n  62 |   const next = mergeRun(unknown, recovered);\n  63 |   expect(next).toEqual(recovered);\n    at <repo>/tests/e2e/session-contract.spec.ts:60:38"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-28T20:45:38.003Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/session-contract-session-c-e6dd4-an-unchanged-worker-version/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/session-contract.spec.ts",
+                    "column": 38,
+                    "line": 60
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "867a6ceef9ff0fe48626-130d75bd26245306756a",
+          "file": "session-contract.spec.ts",
+          "line": 57,
+          "column": 5
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-28T20:44:55.948Z",
+    "duration": 42094.191,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 3,
+    "flaky": 0
+  }
+}

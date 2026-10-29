@@ -1,0 +1,155 @@
+from pathlib import Path
+import base64
+import hashlib
+import json
+import re
+import sys
+
+root = Path.cwd()
+local = root/'.studio-local/profile-bindings'
+out = root/'evidence/studio/M2-keyboard-profile-bindings'
+out.mkdir(exist_ok=True)
+
+def read(path):
+    return json.loads(path.read_text())
+
+def clean_text(value):
+    for original, replacement in [(str(root.parent/'.xverse-studio-cache'), '<loop-cache>'),
+            (str(root), '<repo>'), ('<repo>', '<repo>'),
+            (sys.base_prefix, '<python-install>')]:
+        value = value.replace(original, replacement)
+    return value
+
+def clean(value):
+    if isinstance(value, str):
+        return clean_text(value)
+    if isinstance(value, list):
+        return [clean(v) for v in value]
+    if isinstance(value, dict):
+        result = {k: clean(v) for k, v in value.items()}
+        if value.get('contentType', '').startswith(('application/json', 'text/')) and 'body' in value:
+            try:
+                result['body'] = base64.b64encode(clean_text(base64.b64decode(value['body']).decode()).encode()).decode()
+            except (ValueError, UnicodeError):
+                pass
+        return result
+    return value
+
+def save(name, value):
+    p = out/name
+    p.parent.mkdir(parents=True, exist_ok=True)
+    p.write_text(json.dumps(clean(value), indent=2)+'\n')
+
+def copy_text(name, source):
+    p = out/name
+    p.parent.mkdir(parents=True, exist_ok=True)
+    p.write_text('\n'.join(v.rstrip() for v in clean_text(source.read_text()).splitlines()).rstrip()+'\n')
+
+def results(report):
+    for suite in report.get('suites', []):
+        yield from results(suite)
+    for spec in report.get('specs', []):
+        for test in spec['tests']:
+            for result in test['results']:
+                yield spec['title'], result
+
+for stage, path in [(n, local/n) for n in ['initial-red', 'corrected-red', 'first-four-successor',
+        'six-successor', 'twenty-four-selectors', 'twenty-four-before-doc']] + [
+        ('foreign-recovery-red', root/'.studio-local/profile-foreign-recovery-red')]:
+    for name in ['summary.json', 'source-before.json', 'source-after.json', 'browser-report.json']:
+        save(f'{stage}/{name}', read(path/name))
+    for name in ['classification.json']:
+        if (path/name).exists():
+            save(f'{stage}/{name}', read(path/name))
+    for name, dest in [('verify.py', 'controller.py.txt'), ('profile-test.ts.txt', 'test.ts.txt'),
+            ('browser.log', 'browser.txt'), ('product.patch', 'product.patch')]:
+        if (path/name).exists():
+            copy_text(f'{stage}/{dest}', path/name)
+    for p in (path/'browser-output').glob('**/error-context.md'):
+        copy_text(f'{stage}/contexts/{p.parent.name}/{p.name}', p)
+    for title, result in results(read(path/'browser-report.json')):
+        for a in result.get('attachments', []):
+            if a.get('contentType') == 'application/json' and 'body' in a:
+                viewport = re.search(r'(\d+x\d+)', title).group(1)
+                mode = title.split(': ', 1)[-1].rsplit(' at ', 1)[0].replace(' ', '-')
+                save(f'{stage}/journeys/{viewport}/{mode}/{a["name"]}', json.loads(base64.b64decode(a['body'])))
+
+for name, expected, unexpected in [('initial-red', 0, 4), ('corrected-red', 0, 4),
+        ('foreign-recovery-red', 0, 2), ('twenty-four-selectors', 20, 4)]:
+    stats = read(out/f'{name}/browser-report.json')['stats']
+    assert stats['expected'] == expected and stats['unexpected'] == unexpected, (name, stats)
+
+maps = read(root/'.studio-local/profile-bindings-final/source-before.json')
+assert len(maps) == 268
+assert all(hashlib.sha256((root/n).read_bytes()).hexdigest() == h for n, h in maps.items())
+reports = {}
+pairs = []
+for label, suffix, expected in [('targeted', 'final', 24), ('full', 'full', 257), ('performance', 'performance', 2)]:
+    path = root/f'.studio-local/profile-bindings-{suffix}'
+    summary = read(path/'summary.json')
+    assert summary['exitCode'] == 0 and summary['sourceUnchanged']
+    assert maps == read(path/'source-before.json') == read(path/'source-after.json')
+    report = read(path/'browser-report.json')
+    assert report['stats']['expected'] == expected
+    assert not any(report['stats'][k] for k in ['unexpected', 'skipped', 'flaky'])
+    reports[label] = report
+    save(f'{label}/verification.json', summary)
+    save(f'{label}/browser-report.json', report)
+    save(f'{label}/application-and-input-hashes.json', maps)
+    copy_text(f'{label}/browser.txt', path/'browser.log')
+    copy_text(f'controllers/{label}.py.txt', path/'verify.py')
+    if label != 'full':
+        for title, result in results(report):
+            viewport = re.search(r'(\d+x\d+)', title).group(1)
+            mode = title.split(': ', 1)[-1].rsplit(' at ', 1)[0].replace(' ', '-')
+            for a in result.get('attachments', []):
+                if a.get('contentType') == 'application/json' and 'body' in a:
+                    value = json.loads(base64.b64decode(a['body']))
+                    save(f'{label}/journeys/{viewport}/{mode}/{a["name"]}', value)
+                    if label == 'targeted' and isinstance(value, dict):
+                        pairs.extend(value.get('measurements', []))
+    for p in (path/'browser-output').glob('**/native-browser-environment.json'):
+        save(f'{label}/environment/{p.parent.parent.name}/{p.name}', read(p))
+    if label == 'performance':
+        for p in (path/'browser-output').glob('**/*performance.json'):
+            value = read(p)
+            vp = value['viewport']
+            save(f'performance/{vp["width"]}x{vp["height"]}/{p.name}', value)
+
+assert len(pairs) == 14 and all(p.get('supported') and p.get('passed') for p in pairs)
+save('contrast-summary.json', {'selectedPairs': len(pairs), 'minimumRatio': min(p['ratio'] for p in pairs),
+    'threshold': 4.5, 'measurements': pairs, 'scope': 'Selected profile discovery/guidance/receipt text; no overall accessibility claim'})
+save('application-and-input-hashes.json', maps)
+ui = {n: h for n, h in maps.items() if n.startswith('apps/studio-web/dist/')}
+assert len(ui) == 6
+earlier = read(local/'twenty-four-before-doc/source-before.json')
+assert earlier == read(local/'twenty-four-before-doc/source-after.json')
+changed = {n for n in maps if maps[n] != earlier.get(n)}
+assert changed == {'docs/architecture/ADR-0013-revision-history-and-recovery.md', 'docs/architecture/ADR-0017-owned-domain-presentation.md'}
+save('built-ui-observation.json', {'files': ui,
+    'sourceInputs': {n: maps[n] for n in ['apps/studio-web/src/app/App.tsx', 'apps/studio-web/src/features/profiles/ProfileBindingsPanel.tsx']},
+    'scope': 'Build completed before earlier24 and final focused/full/performance runs; both application inputs and all six compiled assets are identical. Only the two ADR amendments differ from earlier24; all268 inputs are identical across final gates.',
+    'earlier24DocumentationDifferences': sorted(changed)})
+copy_text('build-and-checks.txt', local/'build.log')
+save('environment.json', read(local/'environment.json'))
+copy_text('controllers/retention.py.txt', local/'retain.py')
+copy_text('controllers/pipeline.py.txt', local/'pipeline.py')
+copy_text('independent-review.md', local/'review.md')
+
+proof = read(root/'evidence/studio/M2-project-context/backend-input-inheritance.json')
+checked = proof['checkedFiles']
+assert len(checked) == 163 and all(maps[n] == h for n, h in checked.items())
+assert proof['workflowSha256'] == maps['.github/workflows/ci.yml']
+save('backend-input-inheritance.json', {**proof,
+    'scope': '163 exact unchanged backend/Python/contributor/compatibility inputs and reviewed unchanged-command CI scheduling control; 851 inherited backend results, not a local backend rerun for this UI-only change'})
+save('verification.json', {'baseCandidate': read(root/'.studio-local/profile-bindings-full/summary.json')['baseCandidate'],
+    'applicationAndInputDigest': 'sha256:'+hashlib.sha256(json.dumps(maps, sort_keys=True, separators=(',', ':')).encode()).hexdigest(),
+    'frozenInputs': len(maps), 'compiledAssets': len(ui), 'allFinalStageInputsIdentical': True,
+    'targeted': reports['targeted']['stats'], 'full': reports['full']['stats'], 'performance': reports['performance']['stats'],
+    'backend': 'backend-input-inheritance.json', 'checks': 'build-and-checks.txt',
+    'completedTasks': 47, 'milestonesAccepted': [], 'windows': 'BLOCKED_USER_REQUEST',
+    'limitations': ['Native Linux Chromium only', 'No actual assistive-technology assessment',
+        'Discovery HTTP/shape/empty responses are explicitly controlled transport fixtures; retries read the actual registry',
+        'Owned presentation profiles have no admitted live industry fidelity',
+        'No Start/live provider/device action in focused24; no full native-platform or milestone acceptance']})
+print(json.dumps({'targeted': 24, 'full': 257, 'performance': 2, 'inputs': len(maps), 'contrastPairs': len(pairs)}))

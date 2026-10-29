@@ -1,0 +1,249 @@
+import { test, expect } from "@playwright/test";
+import { connectStudio } from "./connect-studio";
+import { traceApi } from "./trace-claims-flow";
+
+for (const mode of [
+  "normal",
+  "annotations",
+  "focus",
+  "newer run",
+  "operation identity",
+  "child identity",
+  "lost acknowledgement",
+])
+  for (const width of [1024, 1440]) {
+    test(`owned rerun acknowledgement: ${mode} at ${width}`, async ({
+      page,
+    }, info) => {
+      await page.setViewportSize({ width, height: width === 1024 ? 768 : 900 });
+      await connectStudio(page, info);
+      let project = (
+        await traceApi(page, "/projects", "POST", {
+          name: "Owned rerun view probe " + width,
+        })
+      ).body;
+      const edited = await traceApi(
+        page,
+        `/projects/${project.projectId}/edits`,
+        "POST",
+        {
+          baseRevision: project.revision,
+          edits: [
+            { kind: "set_parameter", parameterId: "duration", value: 0.2 },
+          ],
+        },
+        project.revision,
+      );
+      expect(edited.status).toBe(200);
+      project = edited.body;
+      const pf = (
+        await traceApi(
+          page,
+          `/projects/${project.projectId}/preflights`,
+          "POST",
+          { revision: project.revision },
+        )
+      ).body;
+      expect(pf.status).toBe("ready");
+      const accepted = await traceApi(page, "/runs", "POST", {
+        snapshotId: pf.snapshotId,
+        preflightId: pf.preflightId,
+      });
+      expect(accepted.status).toBe(202);
+      const original = accepted.body.runId;
+      await expect
+        .poll(
+          async () => (await traceApi(page, "/runs/" + original)).body.state,
+          { timeout: 20000 },
+        )
+        .toBe("stopped");
+      let newer: string | undefined;
+      if (mode === "newer run") {
+        newer = (
+          await traceApi(page, "/runs", "POST", {
+            snapshotId: pf.snapshotId,
+            preflightId: pf.preflightId,
+          })
+        ).body.runId;
+        await expect
+          .poll(
+            async () => (await traceApi(page, "/runs/" + newer)).body.state,
+            { timeout: 20000 },
+          )
+          .toBe("stopped");
+      }
+      const keys: string[] = [];
+      page.on("request", (request) => {
+        if (request.method() === "POST" && request.url().endsWith("/reruns"))
+          keys.push(request.headers()["idempotency-key"] || "");
+      });
+      await page.evaluate(
+        ({ pid, rid }) => {
+          localStorage.setItem("studio.projectId", pid);
+          localStorage.setItem("studio.lastRun", rid);
+          localStorage.setItem("studio.lastRun." + pid, rid);
+        },
+        { pid: project.projectId, rid: original },
+      );
+      await page.reload();
+      await page.getByRole("tab", { name: "Results", exact: false }).click();
+      await expect(
+        page.getByLabel("Recorded run", { exact: true }),
+      ).toHaveValue(original);
+      let release!: () => void, ready!: () => void, completed!: () => void;
+      const held = new Promise<void>((resolve) => (release = resolve));
+      const actual = new Promise<void>((resolve) => (ready = resolve));
+      const delivered = new Promise<void>((resolve) => (completed = resolve));
+      let acknowledged: any;
+      await page.route(`**/api/v1/runs/${original}/reruns`, async (route) => {
+        const response = await route.fetch();
+        acknowledged = await response.json();
+        expect(response.status()).toBe(202);
+        ready();
+        await held;
+        if (mode === "lost acknowledgement") await route.abort("failed");
+        else await route.fulfill({ response });
+        completed();
+      });
+      const rerun = page.getByRole("button", {
+        name: "Rerun frozen inputs",
+        exact: true,
+      });
+      await rerun.focus();
+      await page.keyboard.press("Enter");
+      await actual;
+      const operation = (
+        await traceApi(page, "/operations/" + acknowledged.operationId)
+      ).body;
+      expect(operation.status).toBe("completed");
+      const child = operation.result.runId;
+      expect(child).not.toBe(original);
+      await expect
+        .poll(async () => (await traceApi(page, "/runs/" + child)).body.state, {
+          timeout: 20000,
+        })
+        .toBe("stopped");
+      let focus = page.getByRole("button", {
+        name: "Frozen inputs",
+        exact: true,
+      });
+      if (mode === "annotations") {
+        await page
+          .getByRole("tab", { name: "Annotations", exact: true })
+          .click();
+        focus = page.getByRole("textbox", { name: "Comment", exact: true });
+        await focus.fill("Keep this newer note");
+        await focus.focus();
+      } else if (mode === "focus") await focus.focus();
+      else if (mode === "newer run") {
+        await page
+          .getByLabel("Recorded run", { exact: true })
+          .selectOption(newer!);
+        await expect(
+          page.getByLabel("Recorded run", { exact: true }),
+        ).toHaveValue(newer!);
+      } else if (mode === "operation identity") {
+        await page.route(
+          `**/api/v1/operations/${acknowledged.operationId}`,
+          async (route) => {
+            const response = await route.fetch(),
+              body = await response.json();
+            await route.fulfill({
+              response,
+              json: { ...body, sourceRunId: "labelled-wrong-source-fixture" },
+            });
+          },
+        );
+      } else if (mode === "child identity") {
+        await page.route(`**/api/v1/runs/${child}`, async (route) => {
+          const response = await route.fetch(),
+            body = await response.json();
+          await route.fulfill({
+            response,
+            json: { ...body, snapshotId: pf.snapshotId },
+          });
+        });
+      }
+      release();
+      await delivered;
+      if (
+        [
+          "operation identity",
+          "child identity",
+          "lost acknowledgement",
+        ].includes(mode)
+      ) {
+        await expect(
+          page.getByRole("alert").filter({ hasText: /rerun|Failed to fetch/ }),
+        ).toBeVisible();
+        expect(
+          await page.evaluate(() => localStorage.getItem("studio.lastRun")),
+        ).toBe(original);
+        const key = await page.evaluate(
+          (id) => localStorage.getItem("studio.pendingRerun." + id),
+          original,
+        );
+        expect(key).toBeTruthy();
+        await page.unroute(`**/api/v1/operations/${acknowledged.operationId}`);
+        await page.unroute(`**/api/v1/runs/${child}`);
+        await page.unroute(`**/api/v1/runs/${original}/reruns`);
+        await page
+          .getByRole("button", { name: "Rerun frozen inputs", exact: true })
+          .click();
+        await expect
+          .poll(async () =>
+            page.evaluate(() => localStorage.getItem("studio.lastRun")),
+          )
+          .toBe(child);
+        expect(keys).toHaveLength(2);
+        expect(keys[0]).toBe(keys[1]);
+      } else {
+        await expect
+          .poll(async () =>
+            page.evaluate(
+              (id) => localStorage.getItem("studio.pendingRerun." + id),
+              original,
+            ),
+          )
+          .toBeNull();
+        if (mode === "normal")
+          await expect
+            .poll(async () =>
+              page.evaluate(() => localStorage.getItem("studio.lastRun")),
+            )
+            .toBe(child);
+        else {
+          expect(
+            await page.evaluate(() => localStorage.getItem("studio.lastRun")),
+          ).toBe(newer || original);
+          await expect(
+            page.getByLabel("Recorded run", { exact: true }),
+          ).toHaveValue(newer || original);
+          if (mode === "annotations")
+            await expect(focus).toHaveValue("Keep this newer note");
+          if (mode === "annotations" || mode === "focus")
+            await expect(focus).toBeFocused();
+        }
+        expect(keys).toHaveLength(1);
+      }
+      const actualRuns = (
+        await traceApi(page, "/runs?projectId=" + project.projectId)
+      ).body.items;
+      expect(actualRuns).toHaveLength(newer ? 3 : 2);
+      expect(actualRuns.some((value: any) => value.runId === child)).toBe(true);
+      await info.attach("owned-rerun-completion-control", {
+        contentType: "application/json",
+        body: JSON.stringify({
+          scope:
+            "Actual native owned rerun. Identity-negative modes substitute labelled transport DTO fields only; canonical inputs/evidence remain unmodified.",
+          mode,
+          originalRunId: original,
+          childRunId: child,
+          newerRunId: newer,
+          actualRuns: actualRuns.length,
+          deliveries: keys.length,
+          distinctKeys: new Set(keys).size,
+        }),
+      });
+    });
+  }

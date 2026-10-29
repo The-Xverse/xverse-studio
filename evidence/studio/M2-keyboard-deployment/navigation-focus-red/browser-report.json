@@ -1,0 +1,770 @@
+{
+  "config": {
+    "argv": [
+      "<loop-cache>/node-v24.22.1-linux-x64/bin/node",
+      "<repo>/node_modules/.bin/playwright",
+      "test",
+      "-c",
+      "tests/e2e/playwright.config.ts",
+      "--grep",
+      "deployment accessibility:"
+    ],
+    "configFile": "<repo>/tests/e2e/playwright.config.ts",
+    "rootDir": "<repo>/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "<repo>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "<repo>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "*.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "<repo>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "<repo>/tests/e2e",
+        "snapshotDir": "<repo>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": "*.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "baseURL": "http://127.0.0.1:37991",
+          "browserName": "chromium",
+          "actionTimeout": 15000,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "trace": "off",
+          "screenshot": "only-on-failure",
+          "video": "off"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "<repo>/test-results/browser-report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "deployment-accessibility.spec.ts",
+      "file": "deployment-accessibility.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "deployment accessibility: native variant resource and mapping authoring at 1024x768",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 29673,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('region', { name: 'Time mappings', exact: true }).getByLabel('Mapping identifier')\nExpected: focused\nReceived: inactive\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toBeFocused\" getByRole('region', { name: 'Time mappings', exact: true }).getByLabel('Mapping identifier') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('region', { name: 'Time mappings', exact: true }).getByLabel('Mapping identifier')\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <input value=\"\" required=\"\" maxlength=\"63\" pattern=\"[a-z][a-z0-9]*(-[a-z0-9]+)*\"/>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('region', { name: 'Time mappings', exact: true }).getByLabel('Mapping identifier')\nExpected: focused\nReceived: inactive\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toBeFocused\" getByRole('region', { name: 'Time mappings', exact: true }).getByLabel('Mapping identifier') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('region', { name: 'Time mappings', exact: true }).getByLabel('Mapping identifier')\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <input value=\"\" required=\"\" maxlength=\"63\" pattern=\"[a-z][a-z0-9]*(-[a-z0-9]+)*\"/>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n\n    at <repo>/tests/e2e/deployment-accessibility.spec.ts:124:62",
+                    "location": {
+                      "file": "<repo>/tests/e2e/deployment-accessibility.spec.ts",
+                      "column": 62,
+                      "line": 124
+                    },
+                    "snippet": "  122 |     await expect(time).toContainText(\"No time mappings.\"); await expect(page.locator(\".notice.busy\")).toHaveCount(0);\n  123 |     const focus = await focusGeometry(time.getByLabel(\"Mapping identifier\"));\n> 124 |     await expect.soft(time.getByLabel(\"Mapping identifier\")).toBeFocused();\n      |                                                              ^\n  125 |     expect.soft(focus.rect.top).toBeGreaterThanOrEqual(0); expect.soft(focus.rect.bottom).toBeLessThanOrEqual(viewport.height);\n  126 |     expect.soft(focus.outline).not.toBe(\"none\"); expect.soft(focus.outlineWidth).toBeGreaterThan(0);\n  127 |     await expect.soft(page.getByRole(\"region\", { name: \"Bound resources\", exact: true })).not.toContainText(\"Time mappings are edited in XDL source.\");"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/deployment-accessibility.spec.ts",
+                        "column": 62,
+                        "line": 124
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('region', { name: 'Time mappings', exact: true }).getByLabel('Mapping identifier')\nExpected: focused\nReceived: inactive\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toBeFocused\" getByRole('region', { name: 'Time mappings', exact: true }).getByLabel('Mapping identifier') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('region', { name: 'Time mappings', exact: true }).getByLabel('Mapping identifier')\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <input value=\"\" required=\"\" maxlength=\"63\" pattern=\"[a-z][a-z0-9]*(-[a-z0-9]+)*\"/>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n\n\n  122 |     await expect(time).toContainText(\"No time mappings.\"); await expect(page.locator(\".notice.busy\")).toHaveCount(0);\n  123 |     const focus = await focusGeometry(time.getByLabel(\"Mapping identifier\"));\n> 124 |     await expect.soft(time.getByLabel(\"Mapping identifier\")).toBeFocused();\n      |                                                              ^\n  125 |     expect.soft(focus.rect.top).toBeGreaterThanOrEqual(0); expect.soft(focus.rect.bottom).toBeLessThanOrEqual(viewport.height);\n  126 |     expect.soft(focus.outline).not.toBe(\"none\"); expect.soft(focus.outlineWidth).toBeGreaterThan(0);\n  127 |     await expect.soft(page.getByRole(\"region\", { name: \"Bound resources\", exact: true })).not.toContainText(\"Time mappings are edited in XDL source.\");\n    at <repo>/tests/e2e/deployment-accessibility.spec.ts:124:62"
+                    },
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/deployment-accessibility.spec.ts",
+                        "column": 36,
+                        "line": 126
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: not \u001b[32m\"none\"\u001b[39m\n\n  124 |     await expect.soft(time.getByLabel(\"Mapping identifier\")).toBeFocused();\n  125 |     expect.soft(focus.rect.top).toBeGreaterThanOrEqual(0); expect.soft(focus.rect.bottom).toBeLessThanOrEqual(viewport.height);\n> 126 |     expect.soft(focus.outline).not.toBe(\"none\"); expect.soft(focus.outlineWidth).toBeGreaterThan(0);\n      |                                    ^\n  127 |     await expect.soft(page.getByRole(\"region\", { name: \"Bound resources\", exact: true })).not.toContainText(\"Time mappings are edited in XDL source.\");\n  128 |     expect([cloned.project.revision, patched.project.revision, saved.revision, removed.revision]).toEqual([1, 2, 3, 4].map((n) => prepared.revision + n));\n  129 |     expect(writes).toEqual([\n    at <repo>/tests/e2e/deployment-accessibility.spec.ts:126:36"
+                    },
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/deployment-accessibility.spec.ts",
+                        "column": 95,
+                        "line": 127
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).not.\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('region', { name: 'Bound resources', exact: true })\nExpected substring: not \u001b[32m\"Time mappings are edited in XDL source.\"\u001b[39m\nReceived string: \u001b[31m\"Bound resourcesBindingChoose a bindingcontroller-binding (controller)plant-binding (plant)Resources declared by this deploymentbench-cpu \u2014 cpu, 2 core, exclusiveStudio records the binding exactly; placement and requirement checks are shown in the resolution above. \u001b[7mTime mappings are edited in XDL source.\u001b[27mSave bound resources\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft not toContainText\" getByRole('region', { name: 'Bound resources', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('region', { name: 'Bound resources', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <section class=\"panel\" aria-labelledby=\"resource-heading\">\u2026</section>\u001b[22m\n\u001b[2m       - unexpected value \"Bound resourcesBindingChoose a bindingcontroller-binding (controller)plant-binding (plant)Resources declared by this deploymentbench-cpu \u2014 cpu, 2 core, exclusiveStudio records the binding exactly; placement and requirement checks are shown in the resolution above. Time mappings are edited in XDL source.Save bound resources\"\u001b[22m\n\n\n  125 |     expect.soft(focus.rect.top).toBeGreaterThanOrEqual(0); expect.soft(focus.rect.bottom).toBeLessThanOrEqual(viewport.height);\n  126 |     expect.soft(focus.outline).not.toBe(\"none\"); expect.soft(focus.outlineWidth).toBeGreaterThan(0);\n> 127 |     await expect.soft(page.getByRole(\"region\", { name: \"Bound resources\", exact: true })).not.toContainText(\"Time mappings are edited in XDL source.\");\n      |                                                                                               ^\n  128 |     expect([cloned.project.revision, patched.project.revision, saved.revision, removed.revision]).toEqual([1, 2, 3, 4].map((n) => prepared.revision + n));\n  129 |     expect(writes).toEqual([\n  130 |       { path: `/api/v1/projects/${id}/deployment-variants`, method: \"POST\", body: { baseRevision: prepared.revision, name: variantName, sourceDeploymentId: originalDeploymentId, sourceScenarioId: originalScenarioId } },\n    at <repo>/tests/e2e/deployment-accessibility.spec.ts:127:95"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T17:37:44.599Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "deployment-keyboard.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJwbGF0Zm9ybSI6ImxpbnV4IiwiYnJvd3NlciI6IjE1Ni4wLjgwNzguNCIsImZvY3VzIjp7ImZvY3VzZWQiOmZhbHNlLCJhY3RpdmVUYWciOiJCT0RZIiwicmVjdCI6eyJ4IjoxMTcsInkiOjcxNy43NSwid2lkdGgiOjIwOCwiaGVpZ2h0IjozOCwidG9wIjo3MTcuNzUsInJpZ2h0IjozMjUsImJvdHRvbSI6NzU1Ljc1LCJsZWZ0IjoxMTd9LCJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJvdXRsaW5lIjoibm9uZSIsIm91dGxpbmVXaWR0aCI6M30sInJldmlzaW9ucyI6WzMsNCw1LDYsN10sIm1hcHBpbmciOnsiaWQiOiJ3YWxsLXRvLXNpbSIsInNvdXJjZVRpbWVEb21haW5SZWYiOnsiYXBpVmVyc2lvbiI6Inh2ZXJzZS5pby94ZGwvdjFhbHBoYTEiLCJraW5kIjoiU3lzdGVtIiwibmFtZXNwYWNlIjoib3JnLnh2ZXJzZS5zdHVkaW8ucHJvY2Vzcy1jb250cm9sIiwibmFtZSI6InJlZmVyZW5jZS1sb29wIiwiZWxlbWVudCI6IndhbGwtdGltZSJ9LCJ0YXJnZXRUaW1lRG9tYWluUmVmIjp7ImFwaVZlcnNpb24iOiJ4dmVyc2UuaW8veGRsL3YxYWxwaGExIiwia2luZCI6IlN5c3RlbSIsIm5hbWVzcGFjZSI6Im9yZy54dmVyc2Uuc3R1ZGlvLnByb2Nlc3MtY29udHJvbCIsIm5hbWUiOiJyZWZlcmVuY2UtbG9vcCIsImVsZW1lbnQiOiJzaW11bGF0aW9uLXRpbWUifSwibWFwcGluZyI6Im9mZnNldC1hdC1zdGFydCIsInRvbGVyYW5jZSI6eyJ2YWx1ZSI6MC4wMSwidW5pdCI6InMifX0sInNlbGVjdGVkIjp7ImRlcGxveW1lbnRSZWYiOiJ4ZGw6Ly9vcmcueHZlcnNlLnN0dWRpby5wcm9jZXNzLWNvbnRyb2wvZGVwbG95bWVudC9rZXlib2FyZC1iZW5jaC0xMDI0Iiwic2NlbmFyaW9SZWYiOiJ4ZGw6Ly9vcmcueHZlcnNlLnN0dWRpby5wcm9jZXNzLWNvbnRyb2wvc2NlbmFyaW8va2V5Ym9hcmQtYmVuY2gtMTAyNC1zY2VuYXJpbyJ9LCJ3cml0ZXMiOlt7InBhdGgiOiIvYXBpL3YxL3Byb2plY3RzL3Byai00ODI2ZGE1MC1lMTM2LTQ5MzktODM5Mi1iOWYyMmQzNWVhYzkvZGVwbG95bWVudC12YXJpYW50cyIsIm1ldGhvZCI6IlBPU1QiLCJib2R5Ijp7ImJhc2VSZXZpc2lvbiI6MywibmFtZSI6IktleWJvYXJkIGJlbmNoIDEwMjQiLCJzb3VyY2VEZXBsb3ltZW50SWQiOiJkb2MtMyIsInNvdXJjZVNjZW5hcmlvSWQiOiJkb2MtNCJ9fSx7InBhdGgiOiIvYXBpL3YxL3Byb2plY3RzL3Byai00ODI2ZGE1MC1lMTM2LTQ5MzktODM5Mi1iOWYyMmQzNWVhYzkvZGVwbG95bWVudC12YXJpYW50cy9kb2MtNzY0ZTA3MTctYmI5OC00OTUyLWE1YzYtMWNmMWI1NDc3YWFhIiwibWV0aG9kIjoiUEFUQ0giLCJib2R5Ijp7ImJhc2VSZXZpc2lvbiI6NCwiYmluZGluZ0lkIjoicGxhbnQtYmluZGluZyIsInJlc291cmNlSWRzIjpbImJlbmNoLWNwdSJdfX0seyJwYXRoIjoiL2FwaS92MS9wcm9qZWN0cy9wcmotNDgyNmRhNTAtZTEzNi00OTM5LTgzOTItYjlmMjJkMzVlYWM5L2VkaXRzIiwibWV0aG9kIjoiUE9TVCIsImJvZHkiOnsiYmFzZVJldmlzaW9uIjo1LCJlZGl0cyI6W3sia2luZCI6InNldF90aW1lX21hcHBpbmciLCJkb2N1bWVudElkIjoieGRsL2RlcGxveW1lbnQta2V5Ym9hcmQtYmVuY2gtMTAyNC54ZGwueWFtbCIsIm1hcHBpbmdJZCI6IndhbGwtdG8tc2ltIiwic291cmNlVGltZURvbWFpbklkIjoid2FsbC10aW1lIiwidGFyZ2V0VGltZURvbWFpbklkIjoic2ltdWxhdGlvbi10aW1lIiwibWFwcGluZyI6Im9mZnNldC1hdC1zdGFydCIsInRvbGVyYW5jZSI6eyJ2YWx1ZSI6MC4wMSwidW5pdCI6InMifX1dfX0seyJwYXRoIjoiL2FwaS92MS9wcm9qZWN0cy9wcmotNDgyNmRhNTAtZTEzNi00OTM5LTgzOTItYjlmMjJkMzVlYWM5L2VkaXRzIiwibWV0aG9kIjoiUE9TVCIsImJvZHkiOnsiYmFzZVJldmlzaW9uIjo2LCJlZGl0cyI6W3sia2luZCI6InNldF90aW1lX21hcHBpbmciLCJkb2N1bWVudElkIjoieGRsL2RlcGxveW1lbnQta2V5Ym9hcmQtYmVuY2gtMTAyNC54ZGwueWFtbCIsIm1hcHBpbmdJZCI6IndhbGwtdG8tc2ltIiwicmVtb3ZlIjp0cnVlfV19fSx7InBhdGgiOiIvYXBpL3YxL3Byb2plY3RzL3Byai00ODI2ZGE1MC1lMTM2LTQ5MzktODM5Mi1iOWYyMmQzNWVhYzkvdmFsaWRhdGlvbnMiLCJtZXRob2QiOiJQT1NUIiwiYm9keSI6eyJyZXZpc2lvbiI6N319XSwibWVhc3VyZW1lbnRzIjpbeyJsYWJlbCI6IlRpbWUgbWFwcGluZyBkZWNsYXJhdGlvbiBzY29wZSIsInRleHQiOiJBIG1hcHBpbmcgd2l0aCBhbiBleGlzdGluZyBpZGVudGlmaWVyIHJlcGxhY2VzIGl0LiBTdHVkaW8gcmVjb3JkcyB0aGUgZGVjbGFyZWQgcmVsYXRpb247IGl0cyBhY2N1cmFjeSBpcyBuZXZlciBldmFsdWF0ZWQuIiwiY29sb3IiOiJyZ2IoMTAxLCAxMTcsIDE0MSkiLCJmb250U2l6ZSI6IjEwcHgiLCJmb250V2VpZ2h0IjoiNDAwIiwidGhyZXNob2xkIjo0LjUsInNjb3BlIjoiU2VsZWN0ZWQgbm9ybWFsLXNpemUgcmVuZGVyZWQgdGV4dDsgbm8gb3ZlcmFsbCBhY2Nlc3NpYmlsaXR5IGNlcnRpZmljYXRpb24iLCJzdXBwb3J0ZWQiOnRydWUsImxheWVycyI6WyJyZ2JhKDAsIDAsIDAsIDApIiwicmdiYSgwLCAwLCAwLCAwKSIsInJnYigyNTUsIDI1NSwgMjU1KSJdLCJiYWNrZ3JvdW5kIjpbMSwxLDEsMV0sImNvbXBvc2l0ZWRGb3JlZ3JvdW5kIjpbMC4zOTYwNzg0MzEzNzI1NDksMC40NTg4MjM1Mjk0MTE3NjQ3LDAuNTUyOTQxMTc2NDcwNTg4MywxXSwicmF0aW8iOjQuNjg0OTEzMTU5ODg5NjIwNSwicGFzc2VkIjp0cnVlLCJhc3N1bXB0aW9ucyI6IkNTUyBzUkdCIGNvbG9yczsgYWxwaGEgY29tcG9zaXRlZCB0aHJvdWdoIGV4cGxpY2l0IGJhY2tncm91bmRzOyBubyBhbnRpLWFsaWFzaW5nIGFwcHJveGltYXRpb24ifV0sIm9yaWdpbmFsc0FuZFN5c3RlbUJ5dGVzVW5jaGFuZ2VkIjp0cnVlLCJjbG9uZWRSZXNvdXJjZUJpbmRpbmciOlsiYmVuY2gtY3B1Il0sImZpbmFsTWFwcGluZ0Fic2VudCI6dHJ1ZSwiYXV0aG9yaXRhdGl2ZVZhbGlkYXRpb24iOnRydWUsIm93blByb2plY3RSdW5TZXRVbmNoYW5nZWQiOnRydWUsInNjb3BlIjoiTmF0aXZlIGtleWJvYXJkIGRlY2xhcmF0aW9ucyBvbmx5OyBubyBjbG9jayBhY2N1cmFjeSBvciBhY3R1YWwgcmVzb3VyY2UgcmVzZXJ2YXRpb24vZXhlY3V0aW9uIGVzdGFibGlzaGVkIn0="
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/deployment-accessibility-d-40db6-pping-authoring-at-1024x768/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/deployment-accessibility-d-40db6-pping-authoring-at-1024x768/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/deployment-accessibility.spec.ts",
+                    "column": 62,
+                    "line": 124
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "677a7f32e59440006319-74e31c6e6a37445cfa72",
+          "file": "deployment-accessibility.spec.ts",
+          "line": 90,
+          "column": 7
+        },
+        {
+          "title": "deployment accessibility: late clone preserves Home at 1024x768",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 12105,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Recent projects', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toBeVisible\" getByRole('heading', { name: 'Recent projects', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Recent projects', exact: true })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Recent projects', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toBeVisible\" getByRole('heading', { name: 'Recent projects', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Recent projects', exact: true })\u001b[22m\n\n    at <repo>/tests/e2e/deployment-accessibility.spec.ts:183:96",
+                    "location": {
+                      "file": "<repo>/tests/e2e/deployment-accessibility.spec.ts",
+                      "column": 96,
+                      "line": 183
+                    },
+                    "snippet": "  181 |         await expect(page.getByRole(\"heading\", { name: \"Recent projects\", exact: true })).toBeVisible();\n  182 |         release(); await routeFinished; await expect(page.locator(\".notice.busy\")).toHaveCount(0);\n> 183 |         await expect.soft(page.getByRole(\"heading\", { name: \"Recent projects\", exact: true })).toBeVisible();\n      |                                                                                                ^\n  184 |         await expect.soft(page.getByRole(\"button\", { name: \"X-Verse Studio home\", exact: true })).toBeFocused();\n  185 |         const selectionAfter = await page.evaluate((id) => localStorage.getItem(\"studio.selection.\" + id), id);\n  186 |         expect.soft(selectionAfter).toBe(selectionBefore);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/deployment-accessibility.spec.ts",
+                        "column": 96,
+                        "line": 183
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Recent projects', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toBeVisible\" getByRole('heading', { name: 'Recent projects', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Recent projects', exact: true })\u001b[22m\n\n\n  181 |         await expect(page.getByRole(\"heading\", { name: \"Recent projects\", exact: true })).toBeVisible();\n  182 |         release(); await routeFinished; await expect(page.locator(\".notice.busy\")).toHaveCount(0);\n> 183 |         await expect.soft(page.getByRole(\"heading\", { name: \"Recent projects\", exact: true })).toBeVisible();\n      |                                                                                                ^\n  184 |         await expect.soft(page.getByRole(\"button\", { name: \"X-Verse Studio home\", exact: true })).toBeFocused();\n  185 |         const selectionAfter = await page.evaluate((id) => localStorage.getItem(\"studio.selection.\" + id), id);\n  186 |         expect.soft(selectionAfter).toBe(selectionBefore);\n    at <repo>/tests/e2e/deployment-accessibility.spec.ts:183:96"
+                    },
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/deployment-accessibility.spec.ts",
+                        "column": 37,
+                        "line": 186
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"{\\\"deploymentRef\\\":\\\"xdl://org.xverse.studio.process-control/deployment/l\u001b[7mocal-reference\u001b[27m\\\",\\\"scenarioRef\\\":\\\"xdl://org.xverse.studio.process-control/scenario/\u001b[7mreference-response\u001b[27m\\\"}\"\u001b[39m\nReceived: \u001b[31m\"{\\\"deploymentRef\\\":\\\"xdl://org.xverse.studio.process-control/deployment/l\u001b[7mate-bench-1024\u001b[27m\\\",\\\"scenarioRef\\\":\\\"xdl://org.xverse.studio.process-control/scenario/\u001b[7mlate-bench-1024-scenario\u001b[27m\\\"}\"\u001b[39m\n\n  184 |         await expect.soft(page.getByRole(\"button\", { name: \"X-Verse Studio home\", exact: true })).toBeFocused();\n  185 |         const selectionAfter = await page.evaluate((id) => localStorage.getItem(\"studio.selection.\" + id), id);\n> 186 |         expect.soft(selectionAfter).toBe(selectionBefore);\n      |                                     ^\n  187 |         const saved = await read(page, id); expect(saved.revision).toBe(prepared.revision + 1);\n  188 |         expect(await runIds(page, id)).toEqual(runs);\n  189 |         await testInfo.attach(\"late-deployment.json\", { body: JSON.stringify({ viewport, action, actualStatus: actual.status, beforeRevision: prepared.revision, savedRevision: saved.revision, selectionBefore, selectionAfter, activeTag: await page.evaluate(() => document.activeElement?.tagName), ownProjectRunSetUnchanged: true, scope: \"Real server commit held at browser response; deliberate native Home departure remains authoritative\" }), contentType: \"application/json\" });\n    at <repo>/tests/e2e/deployment-accessibility.spec.ts:186:37"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T17:38:14.674Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "late-deployment.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJhY3Rpb24iOiJjbG9uZSIsImFjdHVhbFN0YXR1cyI6MjAxLCJiZWZvcmVSZXZpc2lvbiI6Mywic2F2ZWRSZXZpc2lvbiI6NCwic2VsZWN0aW9uQmVmb3JlIjoie1wiZGVwbG95bWVudFJlZlwiOlwieGRsOi8vb3JnLnh2ZXJzZS5zdHVkaW8ucHJvY2Vzcy1jb250cm9sL2RlcGxveW1lbnQvbG9jYWwtcmVmZXJlbmNlXCIsXCJzY2VuYXJpb1JlZlwiOlwieGRsOi8vb3JnLnh2ZXJzZS5zdHVkaW8ucHJvY2Vzcy1jb250cm9sL3NjZW5hcmlvL3JlZmVyZW5jZS1yZXNwb25zZVwifSIsInNlbGVjdGlvbkFmdGVyIjoie1wiZGVwbG95bWVudFJlZlwiOlwieGRsOi8vb3JnLnh2ZXJzZS5zdHVkaW8ucHJvY2Vzcy1jb250cm9sL2RlcGxveW1lbnQvbGF0ZS1iZW5jaC0xMDI0XCIsXCJzY2VuYXJpb1JlZlwiOlwieGRsOi8vb3JnLnh2ZXJzZS5zdHVkaW8ucHJvY2Vzcy1jb250cm9sL3NjZW5hcmlvL2xhdGUtYmVuY2gtMTAyNC1zY2VuYXJpb1wifSIsImFjdGl2ZVRhZyI6IkJVVFRPTiIsIm93blByb2plY3RSdW5TZXRVbmNoYW5nZWQiOnRydWUsInNjb3BlIjoiUmVhbCBzZXJ2ZXIgY29tbWl0IGhlbGQgYXQgYnJvd3NlciByZXNwb25zZTsgZGVsaWJlcmF0ZSBuYXRpdmUgSG9tZSBkZXBhcnR1cmUgcmVtYWlucyBhdXRob3JpdGF0aXZlIn0="
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/deployment-accessibility-d-7b561--preserves-Home-at-1024x768/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/deployment-accessibility-d-7b561--preserves-Home-at-1024x768/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/deployment-accessibility.spec.ts",
+                    "column": 96,
+                    "line": 183
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "677a7f32e59440006319-1bed17174b882463e1ba",
+          "file": "deployment-accessibility.spec.ts",
+          "line": 157,
+          "column": 9
+        },
+        {
+          "title": "deployment accessibility: late resource preserves Home at 1024x768",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 13171,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Recent projects', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toBeVisible\" getByRole('heading', { name: 'Recent projects', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Recent projects', exact: true })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Recent projects', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toBeVisible\" getByRole('heading', { name: 'Recent projects', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Recent projects', exact: true })\u001b[22m\n\n    at <repo>/tests/e2e/deployment-accessibility.spec.ts:183:96",
+                    "location": {
+                      "file": "<repo>/tests/e2e/deployment-accessibility.spec.ts",
+                      "column": 96,
+                      "line": 183
+                    },
+                    "snippet": "  181 |         await expect(page.getByRole(\"heading\", { name: \"Recent projects\", exact: true })).toBeVisible();\n  182 |         release(); await routeFinished; await expect(page.locator(\".notice.busy\")).toHaveCount(0);\n> 183 |         await expect.soft(page.getByRole(\"heading\", { name: \"Recent projects\", exact: true })).toBeVisible();\n      |                                                                                                ^\n  184 |         await expect.soft(page.getByRole(\"button\", { name: \"X-Verse Studio home\", exact: true })).toBeFocused();\n  185 |         const selectionAfter = await page.evaluate((id) => localStorage.getItem(\"studio.selection.\" + id), id);\n  186 |         expect.soft(selectionAfter).toBe(selectionBefore);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/deployment-accessibility.spec.ts",
+                        "column": 96,
+                        "line": 183
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Recent projects', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toBeVisible\" getByRole('heading', { name: 'Recent projects', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Recent projects', exact: true })\u001b[22m\n\n\n  181 |         await expect(page.getByRole(\"heading\", { name: \"Recent projects\", exact: true })).toBeVisible();\n  182 |         release(); await routeFinished; await expect(page.locator(\".notice.busy\")).toHaveCount(0);\n> 183 |         await expect.soft(page.getByRole(\"heading\", { name: \"Recent projects\", exact: true })).toBeVisible();\n      |                                                                                                ^\n  184 |         await expect.soft(page.getByRole(\"button\", { name: \"X-Verse Studio home\", exact: true })).toBeFocused();\n  185 |         const selectionAfter = await page.evaluate((id) => localStorage.getItem(\"studio.selection.\" + id), id);\n  186 |         expect.soft(selectionAfter).toBe(selectionBefore);\n    at <repo>/tests/e2e/deployment-accessibility.spec.ts:183:96"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T17:38:27.313Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "late-deployment.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJhY3Rpb24iOiJyZXNvdXJjZSIsImFjdHVhbFN0YXR1cyI6MjAwLCJiZWZvcmVSZXZpc2lvbiI6Mywic2F2ZWRSZXZpc2lvbiI6NCwic2VsZWN0aW9uQmVmb3JlIjoie1wiZGVwbG95bWVudFJlZlwiOlwieGRsOi8vb3JnLnh2ZXJzZS5zdHVkaW8ucHJvY2Vzcy1jb250cm9sL2RlcGxveW1lbnQvbG9jYWwtcmVmZXJlbmNlXCIsXCJzY2VuYXJpb1JlZlwiOlwieGRsOi8vb3JnLnh2ZXJzZS5zdHVkaW8ucHJvY2Vzcy1jb250cm9sL3NjZW5hcmlvL3JlZmVyZW5jZS1yZXNwb25zZVwifSIsInNlbGVjdGlvbkFmdGVyIjoie1wiZGVwbG95bWVudFJlZlwiOlwieGRsOi8vb3JnLnh2ZXJzZS5zdHVkaW8ucHJvY2Vzcy1jb250cm9sL2RlcGxveW1lbnQvbG9jYWwtcmVmZXJlbmNlXCIsXCJzY2VuYXJpb1JlZlwiOlwieGRsOi8vb3JnLnh2ZXJzZS5zdHVkaW8ucHJvY2Vzcy1jb250cm9sL3NjZW5hcmlvL3JlZmVyZW5jZS1yZXNwb25zZVwifSIsImFjdGl2ZVRhZyI6IkJVVFRPTiIsIm93blByb2plY3RSdW5TZXRVbmNoYW5nZWQiOnRydWUsInNjb3BlIjoiUmVhbCBzZXJ2ZXIgY29tbWl0IGhlbGQgYXQgYnJvd3NlciByZXNwb25zZTsgZGVsaWJlcmF0ZSBuYXRpdmUgSG9tZSBkZXBhcnR1cmUgcmVtYWlucyBhdXRob3JpdGF0aXZlIn0="
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/deployment-accessibility-d-ca3f8--preserves-Home-at-1024x768/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/deployment-accessibility-d-ca3f8--preserves-Home-at-1024x768/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/deployment-accessibility.spec.ts",
+                    "column": 96,
+                    "line": 183
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "677a7f32e59440006319-dd1d4e48726fb4c01b9a",
+          "file": "deployment-accessibility.spec.ts",
+          "line": 157,
+          "column": 9
+        },
+        {
+          "title": "deployment accessibility: late mapping preserves Home at 1024x768",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 12364,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Recent projects', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toBeVisible\" getByRole('heading', { name: 'Recent projects', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Recent projects', exact: true })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Recent projects', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toBeVisible\" getByRole('heading', { name: 'Recent projects', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Recent projects', exact: true })\u001b[22m\n\n    at <repo>/tests/e2e/deployment-accessibility.spec.ts:183:96",
+                    "location": {
+                      "file": "<repo>/tests/e2e/deployment-accessibility.spec.ts",
+                      "column": 96,
+                      "line": 183
+                    },
+                    "snippet": "  181 |         await expect(page.getByRole(\"heading\", { name: \"Recent projects\", exact: true })).toBeVisible();\n  182 |         release(); await routeFinished; await expect(page.locator(\".notice.busy\")).toHaveCount(0);\n> 183 |         await expect.soft(page.getByRole(\"heading\", { name: \"Recent projects\", exact: true })).toBeVisible();\n      |                                                                                                ^\n  184 |         await expect.soft(page.getByRole(\"button\", { name: \"X-Verse Studio home\", exact: true })).toBeFocused();\n  185 |         const selectionAfter = await page.evaluate((id) => localStorage.getItem(\"studio.selection.\" + id), id);\n  186 |         expect.soft(selectionAfter).toBe(selectionBefore);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/deployment-accessibility.spec.ts",
+                        "column": 96,
+                        "line": 183
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Recent projects', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toBeVisible\" getByRole('heading', { name: 'Recent projects', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Recent projects', exact: true })\u001b[22m\n\n\n  181 |         await expect(page.getByRole(\"heading\", { name: \"Recent projects\", exact: true })).toBeVisible();\n  182 |         release(); await routeFinished; await expect(page.locator(\".notice.busy\")).toHaveCount(0);\n> 183 |         await expect.soft(page.getByRole(\"heading\", { name: \"Recent projects\", exact: true })).toBeVisible();\n      |                                                                                                ^\n  184 |         await expect.soft(page.getByRole(\"button\", { name: \"X-Verse Studio home\", exact: true })).toBeFocused();\n  185 |         const selectionAfter = await page.evaluate((id) => localStorage.getItem(\"studio.selection.\" + id), id);\n  186 |         expect.soft(selectionAfter).toBe(selectionBefore);\n    at <repo>/tests/e2e/deployment-accessibility.spec.ts:183:96"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T17:38:40.865Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "late-deployment.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJhY3Rpb24iOiJtYXBwaW5nIiwiYWN0dWFsU3RhdHVzIjoyMDAsImJlZm9yZVJldmlzaW9uIjozLCJzYXZlZFJldmlzaW9uIjo0LCJzZWxlY3Rpb25CZWZvcmUiOiJ7XCJkZXBsb3ltZW50UmVmXCI6XCJ4ZGw6Ly9vcmcueHZlcnNlLnN0dWRpby5wcm9jZXNzLWNvbnRyb2wvZGVwbG95bWVudC9sb2NhbC1yZWZlcmVuY2VcIixcInNjZW5hcmlvUmVmXCI6XCJ4ZGw6Ly9vcmcueHZlcnNlLnN0dWRpby5wcm9jZXNzLWNvbnRyb2wvc2NlbmFyaW8vcmVmZXJlbmNlLXJlc3BvbnNlXCJ9Iiwic2VsZWN0aW9uQWZ0ZXIiOiJ7XCJkZXBsb3ltZW50UmVmXCI6XCJ4ZGw6Ly9vcmcueHZlcnNlLnN0dWRpby5wcm9jZXNzLWNvbnRyb2wvZGVwbG95bWVudC9sb2NhbC1yZWZlcmVuY2VcIixcInNjZW5hcmlvUmVmXCI6XCJ4ZGw6Ly9vcmcueHZlcnNlLnN0dWRpby5wcm9jZXNzLWNvbnRyb2wvc2NlbmFyaW8vcmVmZXJlbmNlLXJlc3BvbnNlXCJ9IiwiYWN0aXZlVGFnIjoiQlVUVE9OIiwib3duUHJvamVjdFJ1blNldFVuY2hhbmdlZCI6dHJ1ZSwic2NvcGUiOiJSZWFsIHNlcnZlciBjb21taXQgaGVsZCBhdCBicm93c2VyIHJlc3BvbnNlOyBkZWxpYmVyYXRlIG5hdGl2ZSBIb21lIGRlcGFydHVyZSByZW1haW5zIGF1dGhvcml0YXRpdmUifQ=="
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/deployment-accessibility-d-d241f--preserves-Home-at-1024x768/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/deployment-accessibility-d-d241f--preserves-Home-at-1024x768/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/deployment-accessibility.spec.ts",
+                    "column": 96,
+                    "line": 183
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "677a7f32e59440006319-47bd16fa9a3aa0b768db",
+          "file": "deployment-accessibility.spec.ts",
+          "line": 157,
+          "column": 9
+        },
+        {
+          "title": "deployment accessibility: native variant resource and mapping authoring at 1440x900",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 29739,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('region', { name: 'Time mappings', exact: true }).getByLabel('Mapping identifier')\nExpected: focused\nReceived: inactive\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toBeFocused\" getByRole('region', { name: 'Time mappings', exact: true }).getByLabel('Mapping identifier') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('region', { name: 'Time mappings', exact: true }).getByLabel('Mapping identifier')\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <input value=\"\" required=\"\" maxlength=\"63\" pattern=\"[a-z][a-z0-9]*(-[a-z0-9]+)*\"/>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('region', { name: 'Time mappings', exact: true }).getByLabel('Mapping identifier')\nExpected: focused\nReceived: inactive\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toBeFocused\" getByRole('region', { name: 'Time mappings', exact: true }).getByLabel('Mapping identifier') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('region', { name: 'Time mappings', exact: true }).getByLabel('Mapping identifier')\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <input value=\"\" required=\"\" maxlength=\"63\" pattern=\"[a-z][a-z0-9]*(-[a-z0-9]+)*\"/>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n\n    at <repo>/tests/e2e/deployment-accessibility.spec.ts:124:62",
+                    "location": {
+                      "file": "<repo>/tests/e2e/deployment-accessibility.spec.ts",
+                      "column": 62,
+                      "line": 124
+                    },
+                    "snippet": "  122 |     await expect(time).toContainText(\"No time mappings.\"); await expect(page.locator(\".notice.busy\")).toHaveCount(0);\n  123 |     const focus = await focusGeometry(time.getByLabel(\"Mapping identifier\"));\n> 124 |     await expect.soft(time.getByLabel(\"Mapping identifier\")).toBeFocused();\n      |                                                              ^\n  125 |     expect.soft(focus.rect.top).toBeGreaterThanOrEqual(0); expect.soft(focus.rect.bottom).toBeLessThanOrEqual(viewport.height);\n  126 |     expect.soft(focus.outline).not.toBe(\"none\"); expect.soft(focus.outlineWidth).toBeGreaterThan(0);\n  127 |     await expect.soft(page.getByRole(\"region\", { name: \"Bound resources\", exact: true })).not.toContainText(\"Time mappings are edited in XDL source.\");"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/deployment-accessibility.spec.ts",
+                        "column": 62,
+                        "line": 124
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('region', { name: 'Time mappings', exact: true }).getByLabel('Mapping identifier')\nExpected: focused\nReceived: inactive\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toBeFocused\" getByRole('region', { name: 'Time mappings', exact: true }).getByLabel('Mapping identifier') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('region', { name: 'Time mappings', exact: true }).getByLabel('Mapping identifier')\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <input value=\"\" required=\"\" maxlength=\"63\" pattern=\"[a-z][a-z0-9]*(-[a-z0-9]+)*\"/>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n\n\n  122 |     await expect(time).toContainText(\"No time mappings.\"); await expect(page.locator(\".notice.busy\")).toHaveCount(0);\n  123 |     const focus = await focusGeometry(time.getByLabel(\"Mapping identifier\"));\n> 124 |     await expect.soft(time.getByLabel(\"Mapping identifier\")).toBeFocused();\n      |                                                              ^\n  125 |     expect.soft(focus.rect.top).toBeGreaterThanOrEqual(0); expect.soft(focus.rect.bottom).toBeLessThanOrEqual(viewport.height);\n  126 |     expect.soft(focus.outline).not.toBe(\"none\"); expect.soft(focus.outlineWidth).toBeGreaterThan(0);\n  127 |     await expect.soft(page.getByRole(\"region\", { name: \"Bound resources\", exact: true })).not.toContainText(\"Time mappings are edited in XDL source.\");\n    at <repo>/tests/e2e/deployment-accessibility.spec.ts:124:62"
+                    },
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/deployment-accessibility.spec.ts",
+                        "column": 33,
+                        "line": 125
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: >= \u001b[32m0\u001b[39m\nReceived:    \u001b[31m-1058.75\u001b[39m\n\n  123 |     const focus = await focusGeometry(time.getByLabel(\"Mapping identifier\"));\n  124 |     await expect.soft(time.getByLabel(\"Mapping identifier\")).toBeFocused();\n> 125 |     expect.soft(focus.rect.top).toBeGreaterThanOrEqual(0); expect.soft(focus.rect.bottom).toBeLessThanOrEqual(viewport.height);\n      |                                 ^\n  126 |     expect.soft(focus.outline).not.toBe(\"none\"); expect.soft(focus.outlineWidth).toBeGreaterThan(0);\n  127 |     await expect.soft(page.getByRole(\"region\", { name: \"Bound resources\", exact: true })).not.toContainText(\"Time mappings are edited in XDL source.\");\n  128 |     expect([cloned.project.revision, patched.project.revision, saved.revision, removed.revision]).toEqual([1, 2, 3, 4].map((n) => prepared.revision + n));\n    at <repo>/tests/e2e/deployment-accessibility.spec.ts:125:33"
+                    },
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/deployment-accessibility.spec.ts",
+                        "column": 36,
+                        "line": 126
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: not \u001b[32m\"none\"\u001b[39m\n\n  124 |     await expect.soft(time.getByLabel(\"Mapping identifier\")).toBeFocused();\n  125 |     expect.soft(focus.rect.top).toBeGreaterThanOrEqual(0); expect.soft(focus.rect.bottom).toBeLessThanOrEqual(viewport.height);\n> 126 |     expect.soft(focus.outline).not.toBe(\"none\"); expect.soft(focus.outlineWidth).toBeGreaterThan(0);\n      |                                    ^\n  127 |     await expect.soft(page.getByRole(\"region\", { name: \"Bound resources\", exact: true })).not.toContainText(\"Time mappings are edited in XDL source.\");\n  128 |     expect([cloned.project.revision, patched.project.revision, saved.revision, removed.revision]).toEqual([1, 2, 3, 4].map((n) => prepared.revision + n));\n  129 |     expect(writes).toEqual([\n    at <repo>/tests/e2e/deployment-accessibility.spec.ts:126:36"
+                    },
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/deployment-accessibility.spec.ts",
+                        "column": 95,
+                        "line": 127
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).not.\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('region', { name: 'Bound resources', exact: true })\nExpected substring: not \u001b[32m\"Time mappings are edited in XDL source.\"\u001b[39m\nReceived string: \u001b[31m\"Bound resourcesBindingChoose a bindingcontroller-binding (controller)plant-binding (plant)Resources declared by this deploymentbench-cpu \u2014 cpu, 2 core, exclusiveStudio records the binding exactly; placement and requirement checks are shown in the resolution above. \u001b[7mTime mappings are edited in XDL source.\u001b[27mSave bound resources\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft not toContainText\" getByRole('region', { name: 'Bound resources', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('region', { name: 'Bound resources', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <section class=\"panel\" aria-labelledby=\"resource-heading\">\u2026</section>\u001b[22m\n\u001b[2m       - unexpected value \"Bound resourcesBindingChoose a bindingcontroller-binding (controller)plant-binding (plant)Resources declared by this deploymentbench-cpu \u2014 cpu, 2 core, exclusiveStudio records the binding exactly; placement and requirement checks are shown in the resolution above. Time mappings are edited in XDL source.Save bound resources\"\u001b[22m\n\n\n  125 |     expect.soft(focus.rect.top).toBeGreaterThanOrEqual(0); expect.soft(focus.rect.bottom).toBeLessThanOrEqual(viewport.height);\n  126 |     expect.soft(focus.outline).not.toBe(\"none\"); expect.soft(focus.outlineWidth).toBeGreaterThan(0);\n> 127 |     await expect.soft(page.getByRole(\"region\", { name: \"Bound resources\", exact: true })).not.toContainText(\"Time mappings are edited in XDL source.\");\n      |                                                                                               ^\n  128 |     expect([cloned.project.revision, patched.project.revision, saved.revision, removed.revision]).toEqual([1, 2, 3, 4].map((n) => prepared.revision + n));\n  129 |     expect(writes).toEqual([\n  130 |       { path: `/api/v1/projects/${id}/deployment-variants`, method: \"POST\", body: { baseRevision: prepared.revision, name: variantName, sourceDeploymentId: originalDeploymentId, sourceScenarioId: originalScenarioId } },\n    at <repo>/tests/e2e/deployment-accessibility.spec.ts:127:95"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T17:38:53.696Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "deployment-keyboard.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJwbGF0Zm9ybSI6ImxpbnV4IiwiYnJvd3NlciI6IjE1Ni4wLjgwNzguNCIsImZvY3VzIjp7ImZvY3VzZWQiOmZhbHNlLCJhY3RpdmVUYWciOiJCT0RZIiwicmVjdCI6eyJ4IjoxMjksInkiOi0xMDU4Ljc1LCJ3aWR0aCI6MjAwLCJoZWlnaHQiOjM4LCJ0b3AiOi0xMDU4Ljc1LCJyaWdodCI6MzI5LCJib3R0b20iOi0xMDIwLjc1LCJsZWZ0IjoxMjl9LCJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJvdXRsaW5lIjoibm9uZSIsIm91dGxpbmVXaWR0aCI6M30sInJldmlzaW9ucyI6WzMsNCw1LDYsN10sIm1hcHBpbmciOnsiaWQiOiJ3YWxsLXRvLXNpbSIsInNvdXJjZVRpbWVEb21haW5SZWYiOnsiYXBpVmVyc2lvbiI6Inh2ZXJzZS5pby94ZGwvdjFhbHBoYTEiLCJraW5kIjoiU3lzdGVtIiwibmFtZXNwYWNlIjoib3JnLnh2ZXJzZS5zdHVkaW8ucHJvY2Vzcy1jb250cm9sIiwibmFtZSI6InJlZmVyZW5jZS1sb29wIiwiZWxlbWVudCI6IndhbGwtdGltZSJ9LCJ0YXJnZXRUaW1lRG9tYWluUmVmIjp7ImFwaVZlcnNpb24iOiJ4dmVyc2UuaW8veGRsL3YxYWxwaGExIiwia2luZCI6IlN5c3RlbSIsIm5hbWVzcGFjZSI6Im9yZy54dmVyc2Uuc3R1ZGlvLnByb2Nlc3MtY29udHJvbCIsIm5hbWUiOiJyZWZlcmVuY2UtbG9vcCIsImVsZW1lbnQiOiJzaW11bGF0aW9uLXRpbWUifSwibWFwcGluZyI6Im9mZnNldC1hdC1zdGFydCIsInRvbGVyYW5jZSI6eyJ2YWx1ZSI6MC4wMSwidW5pdCI6InMifX0sInNlbGVjdGVkIjp7ImRlcGxveW1lbnRSZWYiOiJ4ZGw6Ly9vcmcueHZlcnNlLnN0dWRpby5wcm9jZXNzLWNvbnRyb2wvZGVwbG95bWVudC9rZXlib2FyZC1iZW5jaC0xNDQwIiwic2NlbmFyaW9SZWYiOiJ4ZGw6Ly9vcmcueHZlcnNlLnN0dWRpby5wcm9jZXNzLWNvbnRyb2wvc2NlbmFyaW8va2V5Ym9hcmQtYmVuY2gtMTQ0MC1zY2VuYXJpbyJ9LCJ3cml0ZXMiOlt7InBhdGgiOiIvYXBpL3YxL3Byb2plY3RzL3Byai04ZmQ1NWVjMC1jMjViLTQ1MjUtODUwZS1hOTgzZGNiMGM1NGYvZGVwbG95bWVudC12YXJpYW50cyIsIm1ldGhvZCI6IlBPU1QiLCJib2R5Ijp7ImJhc2VSZXZpc2lvbiI6MywibmFtZSI6IktleWJvYXJkIGJlbmNoIDE0NDAiLCJzb3VyY2VEZXBsb3ltZW50SWQiOiJkb2MtMyIsInNvdXJjZVNjZW5hcmlvSWQiOiJkb2MtNCJ9fSx7InBhdGgiOiIvYXBpL3YxL3Byb2plY3RzL3Byai04ZmQ1NWVjMC1jMjViLTQ1MjUtODUwZS1hOTgzZGNiMGM1NGYvZGVwbG95bWVudC12YXJpYW50cy9kb2MtYWE2Nzg4M2QtNzQ2NC00YjU0LTkzNmMtZWNlYTNkYmU4YWEzIiwibWV0aG9kIjoiUEFUQ0giLCJib2R5Ijp7ImJhc2VSZXZpc2lvbiI6NCwiYmluZGluZ0lkIjoicGxhbnQtYmluZGluZyIsInJlc291cmNlSWRzIjpbImJlbmNoLWNwdSJdfX0seyJwYXRoIjoiL2FwaS92MS9wcm9qZWN0cy9wcmotOGZkNTVlYzAtYzI1Yi00NTI1LTg1MGUtYTk4M2RjYjBjNTRmL2VkaXRzIiwibWV0aG9kIjoiUE9TVCIsImJvZHkiOnsiYmFzZVJldmlzaW9uIjo1LCJlZGl0cyI6W3sia2luZCI6InNldF90aW1lX21hcHBpbmciLCJkb2N1bWVudElkIjoieGRsL2RlcGxveW1lbnQta2V5Ym9hcmQtYmVuY2gtMTQ0MC54ZGwueWFtbCIsIm1hcHBpbmdJZCI6IndhbGwtdG8tc2ltIiwic291cmNlVGltZURvbWFpbklkIjoid2FsbC10aW1lIiwidGFyZ2V0VGltZURvbWFpbklkIjoic2ltdWxhdGlvbi10aW1lIiwibWFwcGluZyI6Im9mZnNldC1hdC1zdGFydCIsInRvbGVyYW5jZSI6eyJ2YWx1ZSI6MC4wMSwidW5pdCI6InMifX1dfX0seyJwYXRoIjoiL2FwaS92MS9wcm9qZWN0cy9wcmotOGZkNTVlYzAtYzI1Yi00NTI1LTg1MGUtYTk4M2RjYjBjNTRmL2VkaXRzIiwibWV0aG9kIjoiUE9TVCIsImJvZHkiOnsiYmFzZVJldmlzaW9uIjo2LCJlZGl0cyI6W3sia2luZCI6InNldF90aW1lX21hcHBpbmciLCJkb2N1bWVudElkIjoieGRsL2RlcGxveW1lbnQta2V5Ym9hcmQtYmVuY2gtMTQ0MC54ZGwueWFtbCIsIm1hcHBpbmdJZCI6IndhbGwtdG8tc2ltIiwicmVtb3ZlIjp0cnVlfV19fSx7InBhdGgiOiIvYXBpL3YxL3Byb2plY3RzL3Byai04ZmQ1NWVjMC1jMjViLTQ1MjUtODUwZS1hOTgzZGNiMGM1NGYvdmFsaWRhdGlvbnMiLCJtZXRob2QiOiJQT1NUIiwiYm9keSI6eyJyZXZpc2lvbiI6N319XSwibWVhc3VyZW1lbnRzIjpbeyJsYWJlbCI6IlRpbWUgbWFwcGluZyBkZWNsYXJhdGlvbiBzY29wZSIsInRleHQiOiJBIG1hcHBpbmcgd2l0aCBhbiBleGlzdGluZyBpZGVudGlmaWVyIHJlcGxhY2VzIGl0LiBTdHVkaW8gcmVjb3JkcyB0aGUgZGVjbGFyZWQgcmVsYXRpb247IGl0cyBhY2N1cmFjeSBpcyBuZXZlciBldmFsdWF0ZWQuIiwiY29sb3IiOiJyZ2IoMTAxLCAxMTcsIDE0MSkiLCJmb250U2l6ZSI6IjEwcHgiLCJmb250V2VpZ2h0IjoiNDAwIiwidGhyZXNob2xkIjo0LjUsInNjb3BlIjoiU2VsZWN0ZWQgbm9ybWFsLXNpemUgcmVuZGVyZWQgdGV4dDsgbm8gb3ZlcmFsbCBhY2Nlc3NpYmlsaXR5IGNlcnRpZmljYXRpb24iLCJzdXBwb3J0ZWQiOnRydWUsImxheWVycyI6WyJyZ2JhKDAsIDAsIDAsIDApIiwicmdiYSgwLCAwLCAwLCAwKSIsInJnYigyNTUsIDI1NSwgMjU1KSJdLCJiYWNrZ3JvdW5kIjpbMSwxLDEsMV0sImNvbXBvc2l0ZWRGb3JlZ3JvdW5kIjpbMC4zOTYwNzg0MzEzNzI1NDksMC40NTg4MjM1Mjk0MTE3NjQ3LDAuNTUyOTQxMTc2NDcwNTg4MywxXSwicmF0aW8iOjQuNjg0OTEzMTU5ODg5NjIwNSwicGFzc2VkIjp0cnVlLCJhc3N1bXB0aW9ucyI6IkNTUyBzUkdCIGNvbG9yczsgYWxwaGEgY29tcG9zaXRlZCB0aHJvdWdoIGV4cGxpY2l0IGJhY2tncm91bmRzOyBubyBhbnRpLWFsaWFzaW5nIGFwcHJveGltYXRpb24ifV0sIm9yaWdpbmFsc0FuZFN5c3RlbUJ5dGVzVW5jaGFuZ2VkIjp0cnVlLCJjbG9uZWRSZXNvdXJjZUJpbmRpbmciOlsiYmVuY2gtY3B1Il0sImZpbmFsTWFwcGluZ0Fic2VudCI6dHJ1ZSwiYXV0aG9yaXRhdGl2ZVZhbGlkYXRpb24iOnRydWUsIm93blByb2plY3RSdW5TZXRVbmNoYW5nZWQiOnRydWUsInNjb3BlIjoiTmF0aXZlIGtleWJvYXJkIGRlY2xhcmF0aW9ucyBvbmx5OyBubyBjbG9jayBhY2N1cmFjeSBvciBhY3R1YWwgcmVzb3VyY2UgcmVzZXJ2YXRpb24vZXhlY3V0aW9uIGVzdGFibGlzaGVkIn0="
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/deployment-accessibility-d-e12b3-pping-authoring-at-1440x900/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/deployment-accessibility-d-e12b3-pping-authoring-at-1440x900/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/deployment-accessibility.spec.ts",
+                    "column": 62,
+                    "line": 124
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "677a7f32e59440006319-a9c395de63578b933ebf",
+          "file": "deployment-accessibility.spec.ts",
+          "line": 90,
+          "column": 7
+        },
+        {
+          "title": "deployment accessibility: late clone preserves Home at 1440x900",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 12424,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Recent projects', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toBeVisible\" getByRole('heading', { name: 'Recent projects', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Recent projects', exact: true })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Recent projects', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toBeVisible\" getByRole('heading', { name: 'Recent projects', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Recent projects', exact: true })\u001b[22m\n\n    at <repo>/tests/e2e/deployment-accessibility.spec.ts:183:96",
+                    "location": {
+                      "file": "<repo>/tests/e2e/deployment-accessibility.spec.ts",
+                      "column": 96,
+                      "line": 183
+                    },
+                    "snippet": "  181 |         await expect(page.getByRole(\"heading\", { name: \"Recent projects\", exact: true })).toBeVisible();\n  182 |         release(); await routeFinished; await expect(page.locator(\".notice.busy\")).toHaveCount(0);\n> 183 |         await expect.soft(page.getByRole(\"heading\", { name: \"Recent projects\", exact: true })).toBeVisible();\n      |                                                                                                ^\n  184 |         await expect.soft(page.getByRole(\"button\", { name: \"X-Verse Studio home\", exact: true })).toBeFocused();\n  185 |         const selectionAfter = await page.evaluate((id) => localStorage.getItem(\"studio.selection.\" + id), id);\n  186 |         expect.soft(selectionAfter).toBe(selectionBefore);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/deployment-accessibility.spec.ts",
+                        "column": 96,
+                        "line": 183
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Recent projects', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toBeVisible\" getByRole('heading', { name: 'Recent projects', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Recent projects', exact: true })\u001b[22m\n\n\n  181 |         await expect(page.getByRole(\"heading\", { name: \"Recent projects\", exact: true })).toBeVisible();\n  182 |         release(); await routeFinished; await expect(page.locator(\".notice.busy\")).toHaveCount(0);\n> 183 |         await expect.soft(page.getByRole(\"heading\", { name: \"Recent projects\", exact: true })).toBeVisible();\n      |                                                                                                ^\n  184 |         await expect.soft(page.getByRole(\"button\", { name: \"X-Verse Studio home\", exact: true })).toBeFocused();\n  185 |         const selectionAfter = await page.evaluate((id) => localStorage.getItem(\"studio.selection.\" + id), id);\n  186 |         expect.soft(selectionAfter).toBe(selectionBefore);\n    at <repo>/tests/e2e/deployment-accessibility.spec.ts:183:96"
+                    },
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/deployment-accessibility.spec.ts",
+                        "column": 37,
+                        "line": 186
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"{\\\"deploymentRef\\\":\\\"xdl://org.xverse.studio.process-control/deployment/l\u001b[7mocal-reference\u001b[27m\\\",\\\"scenarioRef\\\":\\\"xdl://org.xverse.studio.process-control/scenario/\u001b[7mreference-response\u001b[27m\\\"}\"\u001b[39m\nReceived: \u001b[31m\"{\\\"deploymentRef\\\":\\\"xdl://org.xverse.studio.process-control/deployment/l\u001b[7mate-bench-1440\u001b[27m\\\",\\\"scenarioRef\\\":\\\"xdl://org.xverse.studio.process-control/scenario/\u001b[7mlate-bench-1440-scenario\u001b[27m\\\"}\"\u001b[39m\n\n  184 |         await expect.soft(page.getByRole(\"button\", { name: \"X-Verse Studio home\", exact: true })).toBeFocused();\n  185 |         const selectionAfter = await page.evaluate((id) => localStorage.getItem(\"studio.selection.\" + id), id);\n> 186 |         expect.soft(selectionAfter).toBe(selectionBefore);\n      |                                     ^\n  187 |         const saved = await read(page, id); expect(saved.revision).toBe(prepared.revision + 1);\n  188 |         expect(await runIds(page, id)).toEqual(runs);\n  189 |         await testInfo.attach(\"late-deployment.json\", { body: JSON.stringify({ viewport, action, actualStatus: actual.status, beforeRevision: prepared.revision, savedRevision: saved.revision, selectionBefore, selectionAfter, activeTag: await page.evaluate(() => document.activeElement?.tagName), ownProjectRunSetUnchanged: true, scope: \"Real server commit held at browser response; deliberate native Home departure remains authoritative\" }), contentType: \"application/json\" });\n    at <repo>/tests/e2e/deployment-accessibility.spec.ts:186:37"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T17:39:23.925Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "late-deployment.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJhY3Rpb24iOiJjbG9uZSIsImFjdHVhbFN0YXR1cyI6MjAxLCJiZWZvcmVSZXZpc2lvbiI6Mywic2F2ZWRSZXZpc2lvbiI6NCwic2VsZWN0aW9uQmVmb3JlIjoie1wiZGVwbG95bWVudFJlZlwiOlwieGRsOi8vb3JnLnh2ZXJzZS5zdHVkaW8ucHJvY2Vzcy1jb250cm9sL2RlcGxveW1lbnQvbG9jYWwtcmVmZXJlbmNlXCIsXCJzY2VuYXJpb1JlZlwiOlwieGRsOi8vb3JnLnh2ZXJzZS5zdHVkaW8ucHJvY2Vzcy1jb250cm9sL3NjZW5hcmlvL3JlZmVyZW5jZS1yZXNwb25zZVwifSIsInNlbGVjdGlvbkFmdGVyIjoie1wiZGVwbG95bWVudFJlZlwiOlwieGRsOi8vb3JnLnh2ZXJzZS5zdHVkaW8ucHJvY2Vzcy1jb250cm9sL2RlcGxveW1lbnQvbGF0ZS1iZW5jaC0xNDQwXCIsXCJzY2VuYXJpb1JlZlwiOlwieGRsOi8vb3JnLnh2ZXJzZS5zdHVkaW8ucHJvY2Vzcy1jb250cm9sL3NjZW5hcmlvL2xhdGUtYmVuY2gtMTQ0MC1zY2VuYXJpb1wifSIsImFjdGl2ZVRhZyI6IkJVVFRPTiIsIm93blByb2plY3RSdW5TZXRVbmNoYW5nZWQiOnRydWUsInNjb3BlIjoiUmVhbCBzZXJ2ZXIgY29tbWl0IGhlbGQgYXQgYnJvd3NlciByZXNwb25zZTsgZGVsaWJlcmF0ZSBuYXRpdmUgSG9tZSBkZXBhcnR1cmUgcmVtYWlucyBhdXRob3JpdGF0aXZlIn0="
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/deployment-accessibility-d-91925--preserves-Home-at-1440x900/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/deployment-accessibility-d-91925--preserves-Home-at-1440x900/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/deployment-accessibility.spec.ts",
+                    "column": 96,
+                    "line": 183
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "677a7f32e59440006319-8cd261dc33f9e5f8cb4c",
+          "file": "deployment-accessibility.spec.ts",
+          "line": 157,
+          "column": 9
+        },
+        {
+          "title": "deployment accessibility: late resource preserves Home at 1440x900",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 6,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 13295,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Recent projects', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toBeVisible\" getByRole('heading', { name: 'Recent projects', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Recent projects', exact: true })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Recent projects', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toBeVisible\" getByRole('heading', { name: 'Recent projects', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Recent projects', exact: true })\u001b[22m\n\n    at <repo>/tests/e2e/deployment-accessibility.spec.ts:183:96",
+                    "location": {
+                      "file": "<repo>/tests/e2e/deployment-accessibility.spec.ts",
+                      "column": 96,
+                      "line": 183
+                    },
+                    "snippet": "  181 |         await expect(page.getByRole(\"heading\", { name: \"Recent projects\", exact: true })).toBeVisible();\n  182 |         release(); await routeFinished; await expect(page.locator(\".notice.busy\")).toHaveCount(0);\n> 183 |         await expect.soft(page.getByRole(\"heading\", { name: \"Recent projects\", exact: true })).toBeVisible();\n      |                                                                                                ^\n  184 |         await expect.soft(page.getByRole(\"button\", { name: \"X-Verse Studio home\", exact: true })).toBeFocused();\n  185 |         const selectionAfter = await page.evaluate((id) => localStorage.getItem(\"studio.selection.\" + id), id);\n  186 |         expect.soft(selectionAfter).toBe(selectionBefore);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/deployment-accessibility.spec.ts",
+                        "column": 96,
+                        "line": 183
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Recent projects', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toBeVisible\" getByRole('heading', { name: 'Recent projects', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Recent projects', exact: true })\u001b[22m\n\n\n  181 |         await expect(page.getByRole(\"heading\", { name: \"Recent projects\", exact: true })).toBeVisible();\n  182 |         release(); await routeFinished; await expect(page.locator(\".notice.busy\")).toHaveCount(0);\n> 183 |         await expect.soft(page.getByRole(\"heading\", { name: \"Recent projects\", exact: true })).toBeVisible();\n      |                                                                                                ^\n  184 |         await expect.soft(page.getByRole(\"button\", { name: \"X-Verse Studio home\", exact: true })).toBeFocused();\n  185 |         const selectionAfter = await page.evaluate((id) => localStorage.getItem(\"studio.selection.\" + id), id);\n  186 |         expect.soft(selectionAfter).toBe(selectionBefore);\n    at <repo>/tests/e2e/deployment-accessibility.spec.ts:183:96"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T17:39:36.738Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "late-deployment.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJhY3Rpb24iOiJyZXNvdXJjZSIsImFjdHVhbFN0YXR1cyI6MjAwLCJiZWZvcmVSZXZpc2lvbiI6Mywic2F2ZWRSZXZpc2lvbiI6NCwic2VsZWN0aW9uQmVmb3JlIjoie1wiZGVwbG95bWVudFJlZlwiOlwieGRsOi8vb3JnLnh2ZXJzZS5zdHVkaW8ucHJvY2Vzcy1jb250cm9sL2RlcGxveW1lbnQvbG9jYWwtcmVmZXJlbmNlXCIsXCJzY2VuYXJpb1JlZlwiOlwieGRsOi8vb3JnLnh2ZXJzZS5zdHVkaW8ucHJvY2Vzcy1jb250cm9sL3NjZW5hcmlvL3JlZmVyZW5jZS1yZXNwb25zZVwifSIsInNlbGVjdGlvbkFmdGVyIjoie1wiZGVwbG95bWVudFJlZlwiOlwieGRsOi8vb3JnLnh2ZXJzZS5zdHVkaW8ucHJvY2Vzcy1jb250cm9sL2RlcGxveW1lbnQvbG9jYWwtcmVmZXJlbmNlXCIsXCJzY2VuYXJpb1JlZlwiOlwieGRsOi8vb3JnLnh2ZXJzZS5zdHVkaW8ucHJvY2Vzcy1jb250cm9sL3NjZW5hcmlvL3JlZmVyZW5jZS1yZXNwb25zZVwifSIsImFjdGl2ZVRhZyI6IkJVVFRPTiIsIm93blByb2plY3RSdW5TZXRVbmNoYW5nZWQiOnRydWUsInNjb3BlIjoiUmVhbCBzZXJ2ZXIgY29tbWl0IGhlbGQgYXQgYnJvd3NlciByZXNwb25zZTsgZGVsaWJlcmF0ZSBuYXRpdmUgSG9tZSBkZXBhcnR1cmUgcmVtYWlucyBhdXRob3JpdGF0aXZlIn0="
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/deployment-accessibility-d-172da--preserves-Home-at-1440x900/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/deployment-accessibility-d-172da--preserves-Home-at-1440x900/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/deployment-accessibility.spec.ts",
+                    "column": 96,
+                    "line": 183
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "677a7f32e59440006319-1e3ed88a218425ba36e0",
+          "file": "deployment-accessibility.spec.ts",
+          "line": 157,
+          "column": 9
+        },
+        {
+          "title": "deployment accessibility: late mapping preserves Home at 1440x900",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 7,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 12426,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Recent projects', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toBeVisible\" getByRole('heading', { name: 'Recent projects', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Recent projects', exact: true })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Recent projects', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toBeVisible\" getByRole('heading', { name: 'Recent projects', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Recent projects', exact: true })\u001b[22m\n\n    at <repo>/tests/e2e/deployment-accessibility.spec.ts:183:96",
+                    "location": {
+                      "file": "<repo>/tests/e2e/deployment-accessibility.spec.ts",
+                      "column": 96,
+                      "line": 183
+                    },
+                    "snippet": "  181 |         await expect(page.getByRole(\"heading\", { name: \"Recent projects\", exact: true })).toBeVisible();\n  182 |         release(); await routeFinished; await expect(page.locator(\".notice.busy\")).toHaveCount(0);\n> 183 |         await expect.soft(page.getByRole(\"heading\", { name: \"Recent projects\", exact: true })).toBeVisible();\n      |                                                                                                ^\n  184 |         await expect.soft(page.getByRole(\"button\", { name: \"X-Verse Studio home\", exact: true })).toBeFocused();\n  185 |         const selectionAfter = await page.evaluate((id) => localStorage.getItem(\"studio.selection.\" + id), id);\n  186 |         expect.soft(selectionAfter).toBe(selectionBefore);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/deployment-accessibility.spec.ts",
+                        "column": 96,
+                        "line": 183
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Recent projects', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toBeVisible\" getByRole('heading', { name: 'Recent projects', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Recent projects', exact: true })\u001b[22m\n\n\n  181 |         await expect(page.getByRole(\"heading\", { name: \"Recent projects\", exact: true })).toBeVisible();\n  182 |         release(); await routeFinished; await expect(page.locator(\".notice.busy\")).toHaveCount(0);\n> 183 |         await expect.soft(page.getByRole(\"heading\", { name: \"Recent projects\", exact: true })).toBeVisible();\n      |                                                                                                ^\n  184 |         await expect.soft(page.getByRole(\"button\", { name: \"X-Verse Studio home\", exact: true })).toBeFocused();\n  185 |         const selectionAfter = await page.evaluate((id) => localStorage.getItem(\"studio.selection.\" + id), id);\n  186 |         expect.soft(selectionAfter).toBe(selectionBefore);\n    at <repo>/tests/e2e/deployment-accessibility.spec.ts:183:96"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T17:39:50.411Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "late-deployment.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJhY3Rpb24iOiJtYXBwaW5nIiwiYWN0dWFsU3RhdHVzIjoyMDAsImJlZm9yZVJldmlzaW9uIjozLCJzYXZlZFJldmlzaW9uIjo0LCJzZWxlY3Rpb25CZWZvcmUiOiJ7XCJkZXBsb3ltZW50UmVmXCI6XCJ4ZGw6Ly9vcmcueHZlcnNlLnN0dWRpby5wcm9jZXNzLWNvbnRyb2wvZGVwbG95bWVudC9sb2NhbC1yZWZlcmVuY2VcIixcInNjZW5hcmlvUmVmXCI6XCJ4ZGw6Ly9vcmcueHZlcnNlLnN0dWRpby5wcm9jZXNzLWNvbnRyb2wvc2NlbmFyaW8vcmVmZXJlbmNlLXJlc3BvbnNlXCJ9Iiwic2VsZWN0aW9uQWZ0ZXIiOiJ7XCJkZXBsb3ltZW50UmVmXCI6XCJ4ZGw6Ly9vcmcueHZlcnNlLnN0dWRpby5wcm9jZXNzLWNvbnRyb2wvZGVwbG95bWVudC9sb2NhbC1yZWZlcmVuY2VcIixcInNjZW5hcmlvUmVmXCI6XCJ4ZGw6Ly9vcmcueHZlcnNlLnN0dWRpby5wcm9jZXNzLWNvbnRyb2wvc2NlbmFyaW8vcmVmZXJlbmNlLXJlc3BvbnNlXCJ9IiwiYWN0aXZlVGFnIjoiQlVUVE9OIiwib3duUHJvamVjdFJ1blNldFVuY2hhbmdlZCI6dHJ1ZSwic2NvcGUiOiJSZWFsIHNlcnZlciBjb21taXQgaGVsZCBhdCBicm93c2VyIHJlc3BvbnNlOyBkZWxpYmVyYXRlIG5hdGl2ZSBIb21lIGRlcGFydHVyZSByZW1haW5zIGF1dGhvcml0YXRpdmUifQ=="
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/deployment-accessibility-d-77eaa--preserves-Home-at-1440x900/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/deployment-accessibility-d-77eaa--preserves-Home-at-1440x900/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/deployment-accessibility.spec.ts",
+                    "column": 96,
+                    "line": 183
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "677a7f32e59440006319-85f0c5ff95dd3347211f",
+          "file": "deployment-accessibility.spec.ts",
+          "line": 157,
+          "column": 9
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-26T17:37:44.078Z",
+    "duration": 138873.501,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 8,
+    "flaky": 0
+  }
+}

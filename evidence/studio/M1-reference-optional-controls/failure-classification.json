@@ -1,0 +1,117 @@
+{
+  "nativeExpanded": {
+    "tests": 14,
+    "passed": 11,
+    "failed": 3,
+    "sourceInputs": 376,
+    "inputsIdentical": true
+  },
+  "facts": [
+    {
+      "case": "test_native_stop_and_cancel_se1",
+      "pid": 2606205,
+      "processBirth": 1793214799.18,
+      "firstRecordedStart": 1793214812.876776,
+      "startAfterBirthSeconds": 13.696775913238525,
+      "stateEvents": [
+        {
+          "recordedAt": 1793214812.876776,
+          "payload": {
+            "evidenceScope": "owned_reference",
+            "state": "running",
+            "stateVersion": 1
+          }
+        },
+        {
+          "recordedAt": 1793214813.2869046,
+          "payload": {
+            "reason": "cancelled",
+            "state": "stopped",
+            "stateVersion": 3
+          }
+        }
+      ]
+    },
+    {
+      "case": "test_native_stop_and_cancel_se0",
+      "pid": 2606028,
+      "processBirth": 1793214777.25,
+      "firstRecordedStart": 1793214783.0239925,
+      "startAfterBirthSeconds": 5.773992538452148,
+      "stateEvents": [
+        {
+          "recordedAt": 1793214783.0239925,
+          "payload": {
+            "evidenceScope": "owned_reference",
+            "state": "running",
+            "stateVersion": 1
+          }
+        },
+        {
+          "recordedAt": 1793214783.435215,
+          "payload": {
+            "reason": "cancelled",
+            "state": "stopped",
+            "stateVersion": 3
+          }
+        }
+      ]
+    },
+    {
+      "case": "test_native_pause_has_a_declar0",
+      "pid": 2606431,
+      "processBirth": 1793214818.02,
+      "firstRecordedStart": 1793214819.1039178,
+      "startAfterBirthSeconds": 1.0839178562164307,
+      "stateEvents": [
+        {
+          "recordedAt": 1793214819.1039178,
+          "payload": {
+            "evidenceScope": "owned_reference",
+            "state": "running",
+            "stateVersion": 1
+          }
+        },
+        {
+          "recordedAt": 1793214819.4045317,
+          "payload": {
+            "state": "paused",
+            "stateVersion": 2
+          }
+        },
+        {
+          "recordedAt": 1793214821.2290878,
+          "payload": {
+            "state": "running",
+            "stateVersion": 3
+          }
+        },
+        {
+          "recordedAt": 1793214821.4292448,
+          "payload": {
+            "state": "paused",
+            "stateVersion": 4
+          }
+        },
+        {
+          "recordedAt": 1793214849.6052954,
+          "payload": {
+            "reason": "PAUSE_BUDGET_EXHAUSTED",
+            "state": "stopped",
+            "stateVersion": 5
+          }
+        }
+      ],
+      "secondPauseUntilProviderStopSeconds": 28.176050662994385,
+      "priorPausedSeconds": 1.8245561122894287
+    }
+  ],
+  "classification": "Two failures occur in initial running wait after unknown ownership, before any Pause; matching native startup observations are later recorded beyond unchanged5s grace. Scheduling/resource cause unmeasured. Budget failure timed terminal API publication; canonical provider stop occurs28.176s after second Pause plus1.825s prior pause, proving cumulative30s. Successor measures retained provider state timestamps and retains35s terminal timeout. No product/timeout/ownership-guard changes between expanded and serial14pass.",
+  "browserFirst": {
+    "passed": 0,
+    "failed": 2,
+    "inputs": 376,
+    "initial1024": "Initial Pause remains disabled within10s expectation; exact scheduling/cause not captured.",
+    "reload1440": "Pause/native stasis/frozen input/saved completed receipt assertions pass, then reload defaults Model and Results locator is absent. Successor explicitly navigates Results by keyboard; all old assertions/timeouts retained."
+  }
+}

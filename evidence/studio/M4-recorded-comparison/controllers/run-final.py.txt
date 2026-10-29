@@ -1,0 +1,14 @@
+from pathlib import Path
+import hashlib,json,subprocess,sys
+root=Path.cwd().resolve();base=root/'.studio-local/comparison-workflow';frozen=None
+for name,pattern,expected in [('verified-targeted','recorded comparison:|comparison completion:|comparison response guards:|comparison history:|owned reference browser workflow:|run session: lost Start acknowledgement|run session: double Start|scenario timeline:|scenario timeline pending:|scenario authoring completion:|scenario intent:|scenario timeline outcomes:',48),('verified-full','ALL',397),('verified-performance','PERFORMANCE',2)]:
+ print('START '+name,flush=True)
+ r=subprocess.run([sys.executable,'-I',str(base/'check-browser.py'),name,pattern],cwd=root)
+ if r.returncode:raise SystemExit(r.returncode)
+ out=base/name;s=json.loads((out/'summary.json').read_text());report=json.loads((out/'browser-report.json').read_text());before=json.loads((out/'source-before.json').read_text());after=json.loads((out/'source-after.json').read_text())
+ assert s['exitCode']==0 and s['sourceUnchanged'] and before==after
+ if frozen is None:frozen=before
+ assert before==frozen
+ assert report['stats']['expected']==expected and not any(report['stats'][k] for k in ['unexpected','skipped','flaky']),report['stats']
+ print('PASS '+name+': '+str(expected)+'; '+str(len(before))+' identical selected inputs',flush=True)
+print('Final comparison browser pipeline passed',flush=True)

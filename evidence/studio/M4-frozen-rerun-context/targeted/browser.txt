@@ -1,0 +1,48 @@
+
+> xverse-studio-workspace@0.1.0 test:e2e
+> playwright test -c tests/e2e/playwright.config.ts --grep frozen rerun context:|owned rerun acknowledgement:|recorded comparison:|comparison completion:|comparison response guards:|comparison history:|owned reference browser workflow:|annotation run context:|evidence filters: late original-run
+
+
+Running 37 tests using 1 worker
+
+(node:4192126) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 tests/e2e/annotation-context.spec.ts:5:5 › annotation run context: rerun resets prior edits and ignores a delayed prior save refresh (9.6s)
+  ✓   2 tests/e2e/evidence-filters.spec.ts:237:5 › evidence filters: late original-run observations cannot overwrite an explicitly selected rerun (7.0s)
+  ✓   3 tests/e2e/frozen-rerun-acknowledgements.spec.ts:15:9 › owned rerun acknowledgement: normal at 1024 (5.8s)
+  ✓   4 tests/e2e/frozen-rerun-acknowledgements.spec.ts:15:9 › owned rerun acknowledgement: normal at 1440 (5.5s)
+  ✓   5 tests/e2e/frozen-rerun-acknowledgements.spec.ts:15:9 › owned rerun acknowledgement: annotations at 1024 (5.6s)
+  ✓   6 tests/e2e/frozen-rerun-acknowledgements.spec.ts:15:9 › owned rerun acknowledgement: annotations at 1440 (5.7s)
+  ✓   7 tests/e2e/frozen-rerun-acknowledgements.spec.ts:15:9 › owned rerun acknowledgement: focus at 1024 (5.6s)
+  ✓   8 tests/e2e/frozen-rerun-acknowledgements.spec.ts:15:9 › owned rerun acknowledgement: focus at 1440 (5.6s)
+  ✓   9 tests/e2e/frozen-rerun-acknowledgements.spec.ts:15:9 › owned rerun acknowledgement: newer run at 1024 (9.4s)
+  ✓  10 tests/e2e/frozen-rerun-acknowledgements.spec.ts:15:9 › owned rerun acknowledgement: newer run at 1440 (11.6s)
+  ✓  11 tests/e2e/frozen-rerun-acknowledgements.spec.ts:15:9 › owned rerun acknowledgement: operation identity at 1024 (7.4s)
+  ✓  12 tests/e2e/frozen-rerun-acknowledgements.spec.ts:15:9 › owned rerun acknowledgement: operation identity at 1440 (8.5s)
+  ✓  13 tests/e2e/frozen-rerun-acknowledgements.spec.ts:15:9 › owned rerun acknowledgement: child identity at 1024 (8.5s)
+  ✓  14 tests/e2e/frozen-rerun-acknowledgements.spec.ts:15:9 › owned rerun acknowledgement: child identity at 1440 (8.4s)
+  ✓  15 tests/e2e/frozen-rerun-acknowledgements.spec.ts:15:9 › owned rerun acknowledgement: lost acknowledgement at 1024 (7.7s)
+  ✓  16 tests/e2e/frozen-rerun-acknowledgements.spec.ts:15:9 › owned rerun acknowledgement: lost acknowledgement at 1440 (5.9s)
+  ✓  17 tests/e2e/frozen-rerun-completion.spec.ts:6:7 › frozen rerun context: actual acknowledgement preserves a newer Model view at 1024 (5.6s)
+  ✓  18 tests/e2e/frozen-rerun-completion.spec.ts:6:7 › frozen rerun context: actual acknowledgement preserves a newer Model view at 1440 (5.7s)
+  ✓  19 tests/e2e/recorded-comparison.spec.ts:105:7 › recorded comparison: immutable provenance, unequal windows and playback admission at 1024 (15.3s)
+  ✓  20 tests/e2e/recorded-comparison.spec.ts:105:7 › recorded comparison: immutable provenance, unequal windows and playback admission at 1440 (14.8s)
+  ✓  21 tests/e2e/recorded-comparison.spec.ts:229:9 › comparison completion: held real report preserves newer baseline at 1024 (12.8s)
+  ✓  22 tests/e2e/recorded-comparison.spec.ts:229:9 › comparison completion: held real report preserves Home at 1024 (13.2s)
+  ✓  23 tests/e2e/recorded-comparison.spec.ts:229:9 › comparison completion: held real report preserves deliberate focus at 1024 (12.8s)
+  ✓  24 tests/e2e/recorded-comparison.spec.ts:336:9 › comparison response guards: wrong identity fixture is rejected and actual retry succeeds at 1024 (12.5s)
+  ✓  25 tests/e2e/recorded-comparison.spec.ts:336:9 › comparison response guards: unknown version fixture is rejected and actual retry succeeds at 1024 (12.5s)
+  ✓  26 tests/e2e/recorded-comparison.spec.ts:336:9 › comparison response guards: deep metadata fixture is rejected and actual retry succeeds at 1024 (12.5s)
+  ✓  27 tests/e2e/recorded-comparison.spec.ts:336:9 › comparison response guards: contradictory summary fixture is rejected and actual retry succeeds at 1024 (12.6s)
+  ✓  28 tests/e2e/recorded-comparison.spec.ts:229:9 › comparison completion: held real report preserves newer baseline at 1440 (12.4s)
+  ✓  29 tests/e2e/recorded-comparison.spec.ts:229:9 › comparison completion: held real report preserves Home at 1440 (12.9s)
+  ✓  30 tests/e2e/recorded-comparison.spec.ts:229:9 › comparison completion: held real report preserves deliberate focus at 1440 (12.9s)
+  ✓  31 tests/e2e/recorded-comparison.spec.ts:336:9 › comparison response guards: wrong identity fixture is rejected and actual retry succeeds at 1440 (12.7s)
+  ✓  32 tests/e2e/recorded-comparison.spec.ts:336:9 › comparison response guards: unknown version fixture is rejected and actual retry succeeds at 1440 (12.3s)
+  ✓  33 tests/e2e/recorded-comparison.spec.ts:336:9 › comparison response guards: deep metadata fixture is rejected and actual retry succeeds at 1440 (12.6s)
+  ✓  34 tests/e2e/recorded-comparison.spec.ts:336:9 › comparison response guards: contradictory summary fixture is rejected and actual retry succeeds at 1440 (12.7s)
+  ✓  35 tests/e2e/recorded-comparison.spec.ts:404:7 › comparison history: bounded paging, empty and unavailable transport fixtures at 1024 (12.7s)
+  ✓  36 tests/e2e/recorded-comparison.spec.ts:404:7 › comparison history: bounded paging, empty and unavailable transport fixtures at 1440 (12.6s)
+  ✓  37 tests/e2e/studio.spec.ts:7:5 › owned reference browser workflow: author, preflight, execute, reconnect, inspect and annotate (38.4s)
+
+  37 passed (6.7m)

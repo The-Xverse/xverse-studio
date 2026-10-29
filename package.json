@@ -1,0 +1,20 @@
+{
+  "name": "xverse-studio-workspace",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": [
+    "apps/studio-web"
+  ],
+  "engines": {
+    "node": ">=24.22.1 <25"
+  },
+  "scripts": {
+    "dev": "npm run dev --workspace @xverse/studio-web",
+    "build": "npm run build --workspace @xverse/studio-web",
+    "typecheck": "npm run typecheck --workspace @xverse/studio-web",
+    "test:e2e": "playwright test -c tests/e2e/playwright.config.ts"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.64.1"
+  }
+}

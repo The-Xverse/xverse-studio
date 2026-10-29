@@ -1,0 +1,51 @@
+{
+  "schemaVersion": "1.0",
+  "scope": "owned native reference evaluation with immutable named metric dependencies",
+  "command": [
+    ".venv/bin/python",
+    "-m",
+    "pytest",
+    "-o",
+    "cache_dir=<loop10-cache>/pytest",
+    "tests/integration/test_metric_evaluation_api.py",
+    "tests/contract/test_assertions.py",
+    "tests/integration/test_advanced_api.py",
+    "-q"
+  ],
+  "environment": {
+    "os": "Linux",
+    "release": "6.8.0-138-generic",
+    "python": "3.13.13",
+    "filesystem": "loop10",
+    "pytestPluginAutoload": false
+  },
+  "exitCode": 0,
+  "pytestSummary": "46 passed, 1 warning in 58.20s",
+  "candidate": {
+    "gitHead": "bbcabee746916b676b44c2400b72bd7da6ef419c",
+    "workingTree": true,
+    "fileDigests": {
+      "services/studio-api/src/xverse_studio/api/advanced.py": "sha256:1074ea4a94e19e06319404f503d8b2a4deae547f69bdef46748ae2e3b8ebf5e7",
+      "services/studio-api/src/xverse_studio/assertions/evaluator.py": "sha256:7e468f9ac9d5065eec77f1cf44b9a7397296e11cafd2ec76dcc59060259f7120",
+      "services/studio-api/src/xverse_studio/assertions/snapshot.py": "sha256:f7fdbc481be667cbccd531ebb0af95cc7d187aa8e6a5990fea55e664555fb080",
+      "services/studio-api/src/xverse_studio/assertions/dependencies.py": "sha256:cb5751fd895dabbc8d48430a7ee2f3b1c96a165dcb7c9c971445a2d63c0ec60e",
+      "tests/integration/test_metric_evaluation_api.py": "sha256:43a107761224c0b3eb0563806c44cfe322efa359f4d67b01d2227b3bac9ea606"
+    },
+    "sourceDigestTiming": "Recorded after the successful run; ownership-coordinated source freeze was announced before running. Final root candidate verification remains separate."
+  },
+  "checks": [
+    "Actual metric then assertion pass using one frozen snapshot and canonical journal.",
+    "Durable input/evaluator identity observed before invoking the actual evaluator.",
+    "Immutable dependency result IDs/digests and transitive topological evaluation.",
+    "Exact parent retry deduplication and changed-payload idempotency conflict.",
+    "Missing references, changed definition/version pins and cyclic graphs reject before evaluation jobs.",
+    "Missing/corrupted canonical input propagates indeterminate without a synthetic pass.",
+    "Retained evaluator and advanced API regression."
+  ],
+  "limitations": [
+    "Native Windows NOT_RUN.",
+    "Only admitted dimensionless reference unit1; no conversion tables admitted.",
+    "Pure conversion support is never inferred from arbitrary profile names or expression strings.",
+    "No physical/simulator or M4 milestone completion claim."
+  ]
+}

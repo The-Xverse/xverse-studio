@@ -1,0 +1,71 @@
+FFFFF..............................F.......F                             [100%]
+=================================== FAILURES ===================================
+______ test_explicit_profile_compiles_exact_full_sources_and_stays_inert _______
+tests/contract/test_reference_fault_intent.py:49: in test_explicit_profile_compiles_exact_full_sources_and_stays_inert
+    assert compiled["valid"], compiled["diagnostics"]
+E   AssertionError: [{'code': 'XDL-SCHEMA-REQUIRED', 'correction': 'Correct the value to match the XDL v1alpha1 kind schema.', 'elementRef': 'xdl://org.xverse.studio.reference/profile/reference-faults', 'gate': 2, ...}]
+E   assert False
+______ test_profile_cli_and_library_compile_identical_authoritative_plans ______
+tests/contract/test_reference_fault_intent.py:75: in test_profile_cli_and_library_compile_identical_authoritative_plans
+    assert result.returncode == 0, result.stderr
+E   AssertionError:
+E   assert 1 == 0
+E    +  where 1 = CompletedProcess(args=['<repo>/.venv/bin/python', '-I', '...8bdb070652174987aaa04626c1a86f6fb59af9a3ff22"},"status":"rejected"},"toolVersion":"0.1.0","valid":false}\n', stderr='').returncode
+________ test_adjacent_intervals_sorted_without_mutating_authored_order ________
+tests/contract/test_reference_fault_intent.py:83: in test_adjacent_intervals_sorted_without_mutating_authored_order
+    assert [item["faultId"] for item in compile_reference_fault_intent(documents(source))["schedules"]] == ["hold-one", "hold-next"]
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+services/studio-api/src/xverse_studio/experiments/reference_faults.py:56: in compile_reference_fault_intent
+    _reject("Authoritative XDL/profile compilation rejected the fault inputs.", "MODEL_INVALID")
+services/studio-api/src/xverse_studio/experiments/reference_faults.py:29: in _reject
+    raise XDLRejected(message, code)
+E   xverse_studio.xdl.XDLRejected: Authoritative XDL/profile compilation rejected the fault inputs.
+______ test_first_and_last_observable_boundaries_are_supported[0-100000] _______
+tests/contract/test_reference_fault_intent.py:92: in test_first_and_last_observable_boundaries_are_supported
+    intent = compile_reference_fault_intent(documents(source))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+services/studio-api/src/xverse_studio/experiments/reference_faults.py:56: in compile_reference_fault_intent
+    _reject("Authoritative XDL/profile compilation rejected the fault inputs.", "MODEL_INVALID")
+services/studio-api/src/xverse_studio/experiments/reference_faults.py:29: in _reject
+    raise XDLRejected(message, code)
+E   xverse_studio.xdl.XDLRejected: Authoritative XDL/profile compilation rejected the fault inputs.
+___ test_first_and_last_observable_boundaries_are_supported[4800000-4900000] ___
+tests/contract/test_reference_fault_intent.py:92: in test_first_and_last_observable_boundaries_are_supported
+    intent = compile_reference_fault_intent(documents(source))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+services/studio-api/src/xverse_studio/experiments/reference_faults.py:56: in compile_reference_fault_intent
+    _reject("Authoritative XDL/profile compilation rejected the fault inputs.", "MODEL_INVALID")
+services/studio-api/src/xverse_studio/experiments/reference_faults.py:29: in _reject
+    raise XDLRejected(message, code)
+E   xverse_studio.xdl.XDLRejected: Authoritative XDL/profile compilation rejected the fault inputs.
+____________________ test_overlap_has_no_implicit_priority _____________________
+tests/contract/test_reference_fault_intent.py:163: in test_overlap_has_no_implicit_priority
+    assert rejected.value.code == "FAULT_SCHEDULE_CONFLICT"
+E   AssertionError: assert 'MODEL_INVALID' == 'FAULT_SCHEDULE_CONFLICT'
+E
+E     - FAULT_SCHEDULE_CONFLICT
+E     + MODEL_INVALID
+_ test_changed_schedule_changes_authoritative_identity_and_preserves_unknown_payload _
+tests/contract/test_reference_fault_intent.py:187: in test_changed_schedule_changes_authoritative_identity_and_preserves_unknown_payload
+    before = compile_reference_fault_intent(documents(source))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+services/studio-api/src/xverse_studio/experiments/reference_faults.py:56: in compile_reference_fault_intent
+    _reject("Authoritative XDL/profile compilation rejected the fault inputs.", "MODEL_INVALID")
+services/studio-api/src/xverse_studio/experiments/reference_faults.py:29: in _reject
+    raise XDLRejected(message, code)
+E   xverse_studio.xdl.XDLRejected: Authoritative XDL/profile compilation rejected the fault inputs.
+=============================== warnings summary ===============================
+.venv/lib/python3.13/site-packages/fastapi/testclient.py:1
+  <repo>/.venv/lib/python3.13/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/contract/test_reference_fault_intent.py::test_explicit_profile_compiles_exact_full_sources_and_stays_inert
+FAILED tests/contract/test_reference_fault_intent.py::test_profile_cli_and_library_compile_identical_authoritative_plans
+FAILED tests/contract/test_reference_fault_intent.py::test_adjacent_intervals_sorted_without_mutating_authored_order
+FAILED tests/contract/test_reference_fault_intent.py::test_first_and_last_observable_boundaries_are_supported[0-100000]
+FAILED tests/contract/test_reference_fault_intent.py::test_first_and_last_observable_boundaries_are_supported[4800000-4900000]
+FAILED tests/contract/test_reference_fault_intent.py::test_overlap_has_no_implicit_priority
+FAILED tests/contract/test_reference_fault_intent.py::test_changed_schedule_changes_authoritative_identity_and_preserves_unknown_payload
+7 failed, 37 passed, 1 warning in 9.12s

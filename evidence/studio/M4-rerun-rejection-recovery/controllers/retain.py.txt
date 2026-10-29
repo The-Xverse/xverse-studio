@@ -1,0 +1,88 @@
+"""Retain successful current gates and all historical failed/precondition cohorts."""
+from pathlib import Path
+import base64, hashlib, json, re, sys
+root=Path.cwd().resolve(); local=root/'.studio-local/rejected-rerun-workflow'
+history=root/'.studio-local/rejected-rerun-context'; out=root/'evidence/studio/M4-rerun-rejection-recovery'
+def read(p):return json.loads(p.read_text())
+def clean_text(value):
+ for original,replacement in [(str(root.parent/'.xverse-studio-cache'),'<loop-cache>'),(str(root),'<repo>'),(str(Path.home()/'xverse-studio'),'<repo>'),(sys.base_prefix,'<python-install>'),(str(Path.home()),'<user-home>'),(str(root.parent),'<workspace-volume>')]:value=value.replace(original,replacement)
+ value=re.sub(r'(?i)(\bstudio_session=)[A-Za-z0-9_-]{16,}',r'\1<redacted>',value)
+ value=re.sub(r'''(?i)(x-csrf-token["']?\s*[:=]\s*["']?)[A-Za-z0-9._-]{16,}''',r'\1<redacted>',value)
+ value=re.sub(r'(?i)(bearer\s+)[A-Za-z0-9._-]{16,}',r'\1<redacted>',value)
+ return value
+def clean(value):
+ if isinstance(value,str):return clean_text(value)
+ if isinstance(value,list):return [clean(v) for v in value]
+ if isinstance(value,dict):
+  result={k:('<redacted>' if k.lower() in {'studio_session','csrftoken','x-csrf-token','bootstraptoken','x-studio-bootstrap','sessiontoken','ownerkey','authorization','cookie','set-cookie'} else clean(v)) for k,v in value.items()}
+  if value.get('contentType','').startswith(('text/','application/json')) and 'body' in value:
+   try:result['body']=base64.b64encode(clean_text(base64.b64decode(value['body']).decode()).encode()).decode()
+   except (ValueError,UnicodeError):pass
+  return result
+ return value
+def save(name,value):
+ p=out/name;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(clean(value),indent=2)+'\n')
+def copy(name,source):
+ p=out/name;p.parent.mkdir(parents=True,exist_ok=True)
+ if source.suffix=='.png':p.write_bytes(source.read_bytes())
+ elif source.suffix=='.json':save(name,read(source))
+ else:p.write_text('\n'.join(line.rstrip() for line in clean_text(source.read_text()).splitlines()).rstrip()+'\n')
+def results(report):
+ for suite in report.get('suites',[]):yield from results(suite)
+ for spec in report.get('specs',[]):
+  for test in spec['tests']:
+   for result in test['results']:yield spec['title'],result
+frozen=read(local/'frozen-inputs.json');assert len(frozen)==294
+for n,h in frozen.items():assert hashlib.sha256((root/n).read_bytes()).hexdigest()==h,n
+stages={}
+for label,count in [('targeted',69),('performance',2)]:
+ d=local/label;s=read(d/'summary.json');r=read(d/'browser-report.json')
+ assert s['exitCode']==0 and s['sourceUnchanged'] and s['inputs']==len(frozen)
+ assert frozen==read(d/'source-before.json')==read(d/'source-after.json')
+ assert r['stats']['expected']==count and not any(r['stats'][k] for k in ['skipped','flaky','unexpected'])
+ stages[label]=(d,s,r)
+assert read(history/'native-expanded-successor/browser-report.json')['stats']['expected']==18
+assert all(x['exitCode']==0 for x in read(local/'checks/summary.json'))
+inherit=read(local/'backend-inheritance.json');assert inherit['unchangedPreviousInputs']==217 and set(inherit['documentChanges'])=={'docs/architecture/ADR-0021-recorded-comparison.md'}
+previous=read(root/'evidence/studio/M4-frozen-input-inspection/application-and-input-hashes.json')
+changed={n:{'previous':previous.get(n),'current':frozen.get(n)} for n in sorted(set(previous)|set(frozen)) if previous.get(n)!=frozen.get(n)}
+assert {n for n in changed if not n.startswith('apps/studio-web/dist/')}=={'apps/studio-web/src/features/results/ResultsView.tsx','docs/architecture/ADR-0021-recorded-comparison.md','docs/user/run-comparison.md','tests/e2e/frozen-rerun-rejections.spec.ts','tests/e2e/frozen-rerun-receipt-guards.spec.ts'}
+out.mkdir(exist_ok=False)
+save('application-and-input-hashes.json',frozen)
+save('environment.json',read(local/'environment.json'))
+save('browser-environment.json',read(history/'native-expanded-successor/browser-environment.json'))
+save('input-amendment.json',{'scope':'The previous snapshot-inspection69/performance2/104-file package belong to b38a5a6 plus equivalent metadata4c37433. This successor adds terminal-rejection handling,18 browser cases and ADR/guide amendments. Current69 has18 rejection,31 inspection,16 prior rerun and4 shared context/whole-workflow cases. The previous18 comparison cases are historical, not freshly executed here. Current full462 is collected, not executed. Latest known full413/932 CI belongs to7dd8.', 'changedInputs':changed})
+save('backend-inheritance.json',inherit)
+for label,(d,s,r) in stages.items():
+ save(label+'/verification.json',s);save(label+'/browser-report.json',r)
+ for n in ['source-before.json','source-after.json']:save(label+'/'+n,read(d/n))
+ copy(label+'/browser.txt',d/'browser.log')
+ for title,result in results(r):
+  title=re.sub(r'[^A-Za-z0-9_-]','-',title)
+  for a in result.get('attachments',[]):
+   if a.get('contentType')=='application/json' and 'body' in a:save(label+'/journeys/'+title+'/'+a['name'],json.loads(base64.b64decode(a['body'])))
+ for p in (d/'browser-output').rglob('*.png'):copy(label+'/screenshots/'+str(p.relative_to(d/'browser-output')),p)
+ if label=='performance':
+  for p in (d/'browser-output').rglob('*performance.json'):
+   v=read(p);w=v['viewport'];save(f'performance/{w["width"]}x{w["height"]}/{p.name}',v)
+for p in (local/'checks').iterdir():
+ if p.is_file():copy('checks/'+p.name.replace('.log','.txt'),p)
+for n in ['promotion.json','backend-collection.json','full-browser-collection.json']:save('checks/'+n,read(local/n))
+historical={}
+for name in ['native-red','build-successor','native-first-successor','build-context-successor','native-expanded-successor']:
+ d=history/name;assert d.is_dir(),name
+ for p in d.rglob('*'):
+  if p.is_file() and p.suffix in {'.json','.txt','.log','.md','.xml','.png'}:copy('history/'+name+'/'+str(p.relative_to(d)).replace('.log','.txt'),p)
+ if (d/'summary.json').exists():historical[name]=read(d/'summary.json')
+save('history/index.json',historical)
+for n in ['run.py','check.py','retain.py','document.py','privacy-check.py']:copy('controllers/'+n+'.txt',local/n)
+save('verification.json',{'baseCandidate':stages['targeted'][1]['baseCandidate'],'scope':'Owned native Linux terminal-rejection rerun recovery; partial T091 and related verification, no milestone acceptance.',
+ 'targeted':stages['targeted'][2]['stats'],'performance':stages['performance'][2]['stats'],'frozenInputs':len(frozen),'compiledAssets':6,'allCurrentStageInputsIdentical':True,
+ 'inheritedBackendTestsPassed':932,'backendInheritance':'backend-inheritance.json','previousFullBrowserPassed':413,'previousFullBrowserCandidate':'7dd8e0bd7a9f2878f7d6c54bf9f5c5bdf039ff35',
+ 'previousFullBrowserEvidence':'../native-ci/ubuntu-24.04-7dd8e0b-runs.json','currentFull462':'NOT_RUN',
+ 'applicationAndInputDigest':'sha256:'+hashlib.sha256(json.dumps(frozen,sort_keys=True,separators=(',',':')).encode()).hexdigest(),'completedTasks':47,'acceptedMilestones':[],
+ 'limitations':['Six native cases use four actual owned active workloads, verified rejection and accepted owned Stop; twelve labelled status/receipt transport faults follow one actual child and preserve canonical bytes.',
+ 'Only verified rejected receipts settle their own key. Failed/unknown/malformed/contradictory/foreign-scope receipts retain the original key; no automatic Start occurs.',
+ 'Native Windows is held; actual AT/human, external/physical providers and full task/milestone gates remain open.',
+ 'Prior full413 browser/932 backend CI belongs to7dd8. No full462 or fresh local backend932 execution is inferred; prior snapshot-inspection69 has a different explicitly recorded cohort.']})
+print(json.dumps({'dossier':str(out.relative_to(root)),'targeted':69,'performance':2,'inputs':len(frozen),'currentFull462':'NOT_RUN'}))

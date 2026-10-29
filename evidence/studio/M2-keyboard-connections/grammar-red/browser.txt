@@ -1,0 +1,108 @@
+
+> xverse-studio-workspace@0.1.0 test:e2e
+> playwright test -c tests/e2e/playwright.config.ts --grep connection accessibility:
+
+
+Running 2 tests using 1 worker
+
+(node:1634729) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 tests/e2e/connection-accessibility.spec.ts:33:7 › connection accessibility: native typed flow and rejected identifier recovery at 1024x768 (15.3s)
+(node:1635912) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 tests/e2e/connection-accessibility.spec.ts:33:7 › connection accessibility: native typed flow and rejected identifier recovery at 1440x900 (14.9s)
+
+
+  1) tests/e2e/connection-accessibility.spec.ts:33:7 › connection accessibility: native typed flow and rejected identifier recovery at 1024x768
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: false
+    Received: true
+
+      60 |     await choose(page, to, "plant-in");
+      61 |     const nativeValidBefore = await identifier.evaluate((n) => (n as HTMLInputElement).validity.valid);
+    > 62 |     expect.soft(nativeValidBefore).toBe(false);
+         |                                    ^
+      63 |     await expect.soft(identifier).toHaveAccessibleDescription(/lowercase/);
+      64 |     let browserRefusal: any = null;
+      65 |     if (nativeValidBefore) {
+        at <repo>/tests/e2e/connection-accessibility.spec.ts:62:36
+
+    Error: expect(locator).toHaveAccessibleDescription(expected) failed
+
+    Locator: getByLabel('Flow identifier', { exact: true })
+    Expected pattern: /lowercase/
+    Received string:  ""
+    Timeout: 10000ms
+
+    Call log:
+      - Expect "soft toHaveAccessibleDescription" getByLabel('Flow identifier', { exact: true }) with timeout 10000ms
+      - waiting for getByLabel('Flow identifier', { exact: true })
+        24 × locator resolved to <input required="" value="Bad_ID" pattern="[a-zA-Z0-9_\-]+"/>
+           - unexpected value ""
+
+
+      61 |     const nativeValidBefore = await identifier.evaluate((n) => (n as HTMLInputElement).validity.valid);
+      62 |     expect.soft(nativeValidBefore).toBe(false);
+    > 63 |     await expect.soft(identifier).toHaveAccessibleDescription(/lowercase/);
+         |                                   ^
+      64 |     let browserRefusal: any = null;
+      65 |     if (nativeValidBefore) {
+      66 |       // Pre-repair evidence: the browser accepted a format the backend rejects.
+        at <repo>/tests/e2e/connection-accessibility.spec.ts:63:35
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/connection-accessibility-c-de262-tifier-recovery-at-1024x768/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/connection-accessibility-c-de262-tifier-recovery-at-1024x768/error-context.md
+
+  2) tests/e2e/connection-accessibility.spec.ts:33:7 › connection accessibility: native typed flow and rejected identifier recovery at 1440x900
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: false
+    Received: true
+
+      60 |     await choose(page, to, "plant-in");
+      61 |     const nativeValidBefore = await identifier.evaluate((n) => (n as HTMLInputElement).validity.valid);
+    > 62 |     expect.soft(nativeValidBefore).toBe(false);
+         |                                    ^
+      63 |     await expect.soft(identifier).toHaveAccessibleDescription(/lowercase/);
+      64 |     let browserRefusal: any = null;
+      65 |     if (nativeValidBefore) {
+        at <repo>/tests/e2e/connection-accessibility.spec.ts:62:36
+
+    Error: expect(locator).toHaveAccessibleDescription(expected) failed
+
+    Locator: getByLabel('Flow identifier', { exact: true })
+    Expected pattern: /lowercase/
+    Received string:  ""
+    Timeout: 10000ms
+
+    Call log:
+      - Expect "soft toHaveAccessibleDescription" getByLabel('Flow identifier', { exact: true }) with timeout 10000ms
+      - waiting for getByLabel('Flow identifier', { exact: true })
+        24 × locator resolved to <input required="" value="Bad_ID" pattern="[a-zA-Z0-9_\-]+"/>
+           - unexpected value ""
+
+
+      61 |     const nativeValidBefore = await identifier.evaluate((n) => (n as HTMLInputElement).validity.valid);
+      62 |     expect.soft(nativeValidBefore).toBe(false);
+    > 63 |     await expect.soft(identifier).toHaveAccessibleDescription(/lowercase/);
+         |                                   ^
+      64 |     let browserRefusal: any = null;
+      65 |     if (nativeValidBefore) {
+      66 |       // Pre-repair evidence: the browser accepted a format the backend rejects.
+        at <repo>/tests/e2e/connection-accessibility.spec.ts:63:35
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/connection-accessibility-c-f8888-tifier-recovery-at-1440x900/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/connection-accessibility-c-f8888-tifier-recovery-at-1440x900/error-context.md
+
+  2 failed
+    tests/e2e/connection-accessibility.spec.ts:33:7 › connection accessibility: native typed flow and rejected identifier recovery at 1024x768
+    tests/e2e/connection-accessibility.spec.ts:33:7 › connection accessibility: native typed flow and rejected identifier recovery at 1440x900

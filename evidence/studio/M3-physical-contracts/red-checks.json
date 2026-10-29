@@ -1,0 +1,74 @@
+[
+  {
+    "mutation": "fixture-admission",
+    "module": "bindings",
+    "replacement": {
+      "before": "if asset.get(\"evidenceScope\") != \"admitted_integration\":",
+      "after": "if False:"
+    },
+    "selector": "identity_firmware",
+    "controlExitCode": 0,
+    "exitCode": 1,
+    "detected": true
+  },
+  {
+    "mutation": "exclusivity-delegation",
+    "module": "reservations",
+    "replacement": {
+      "before": "raise LabError(\"RESOURCE_BUSY\")",
+      "after": "pass"
+    },
+    "selector": "exclusive_lease_conflict",
+    "controlExitCode": 0,
+    "exitCode": 1,
+    "detected": true
+  },
+  {
+    "mutation": "observe-widening",
+    "module": "reservations",
+    "replacement": {
+      "before": "if action != \"observe\" and (rec[\"scope\"] != action or action not in granted_scopes):",
+      "after": "if False:"
+    },
+    "selector": "observe_only_cannot",
+    "controlExitCode": 0,
+    "exitCode": 1,
+    "detected": true
+  },
+  {
+    "mutation": "lease-expiry",
+    "module": "reservations",
+    "replacement": {
+      "before": "if rec[\"status\"] == \"owned\" and self.clock() >= rec[\"expiry\"]:",
+      "after": "if False:"
+    },
+    "selector": "expiry_blocks_authority",
+    "controlExitCode": 0,
+    "exitCode": 1,
+    "detected": true
+  },
+  {
+    "mutation": "release-certainty",
+    "module": "reservations",
+    "replacement": {
+      "before": "rec[\"status\"] = \"released\" if isinstance(observed, dict) and observed.get(\"status\") == \"released\" else \"unknown\"",
+      "after": "rec[\"status\"] = \"released\""
+    },
+    "selector": "unconfirmed_release",
+    "controlExitCode": 0,
+    "exitCode": 1,
+    "detected": true
+  },
+  {
+    "mutation": "stop-ack-as-state",
+    "module": "recovery",
+    "replacement": {
+      "before": "if observed.get(\"stoppedObserved\") is True:",
+      "after": "if observed.get(\"acknowledged\") is True or observed.get(\"stoppedObserved\") is True:"
+    },
+    "selector": "stop_ack_is_separate",
+    "controlExitCode": 0,
+    "exitCode": 1,
+    "detected": true
+  }
+]

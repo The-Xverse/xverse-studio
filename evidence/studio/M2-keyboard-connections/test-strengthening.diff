@@ -1,0 +1,22 @@
+--- full99/connection-accessibility.spec.ts
++++ final-focused2/connection-accessibility.spec.ts
+@@ -242,6 +242,11 @@
+     expect(system.spec.flows.find((f: any) => f.id === "state-flow")).toEqual(
+       before.spec.flows.find((f: any) => f.id === "state-flow"),
+     );
++    // Restoration may append the flow; compare all flow content independent of order.
++    const byId = (a: any, b: any) => a.id.localeCompare(b.id);
++    expect([...system.spec.flows].sort(byId)).toEqual(
++      [...before.spec.flows].sort(byId),
++    );
+     for (const d of Object.values(saved.documents) as any[])
+       if (!d.path.endsWith("/system.xdl.yaml"))
+         expect(d.content).toBe(
+@@ -292,6 +297,7 @@
+         initialRevision: prepared.revision,
+         savedRevision: saved.revision,
+         flow,
++        completeFlowCollectionPreserved: true,
+         identitiesPreserved: true,
+         definitionsAndOtherDocumentsUnchanged: true,
+         authoritativeValidation: true,

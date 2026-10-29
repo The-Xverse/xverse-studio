@@ -1,0 +1,26 @@
+..................................F                                      [100%]
+=================================== FAILURES ===================================
+__________________ test_gap_and_facet_reports_remain_bounded ___________________
+
+recorded = ([{'elementRefs': ['xdl://org.example/system/reader-fixture#plant'], 'eventId': 'recorded-reader-fixture:hugeBefore', ...re:hugeBefore', 'hugeEnd': 'recorded-reader-fixture:hugeEnd', 'hugeInside': 'recorded-reader-fixture:hugeInside', ...})
+
+    def test_gap_and_facet_reports_remain_bounded(recorded):
+        records, ids = recorded
+        gap = next(row for row in records if row["eventId"] == ids["gap"])
+        gaps = [{**deepcopy(gap), "eventId": f"gap-{index}"} for index in range(130)]
+        result = project(gaps, ObservationQuery(), integrity="invalid")
+        assert result["gapCount"] == 130 and result["gapsComplete"] is False
+>       assert len(result["gaps"]) <= 128
+E       AssertionError: assert 129 <= 128
+E        +  where 129 = len([{'elementRefs': ['xdl://org.example/system/reader-fixture#plant'], 'eventId': 'gap-0', 'payload': {'clockDomain': 'cl...ock-alpha', 'endTick': '2', 'reason': 'Synthetic declared collection gap', 'startTick': '1'}, 'sourceTime': None}, ...])
+
+tests/contract/test_evidence_filters.py:284: AssertionError
+=============================== warnings summary ===============================
+.venv/lib/python3.13/site-packages/fastapi/testclient.py:1
+  <workspace>/.venv/lib/python3.13/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/contract/test_evidence_filters.py::test_gap_and_facet_reports_remain_bounded
+1 failed, 34 passed, 1 warning in 0.28s

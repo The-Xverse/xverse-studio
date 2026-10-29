@@ -1,0 +1,32 @@
+"""Freeze registry lease repairs; verify backend and affected default lab browser flows."""
+from pathlib import Path
+import hashlib,json,os,re,shutil,subprocess,sys,time,uuid
+
+root=Path.cwd().resolve();base=root/'.studio-local/lab-api-foundation';out=base/'verified';out.mkdir(exist_ok=False);cache=root.parent/'.xverse-studio-cache'
+env=dict(os.environ,SPECIFY_FEATURE_DIRECTORY='specs/001-industry-agnostic-studio',PYTEST_DISABLE_PLUGIN_AUTOLOAD='1',PATH=str(cache/'node-v24.22.1-linux-x64/bin')+os.pathsep+os.environ['PATH'],PLAYWRIGHT_BROWSERS_PATH=str(cache/'playwright'),TMPDIR=str(cache/'tmp'),TEMP=str(cache/'tmp'),TMP=str(cache/'tmp'))
+previous=json.loads((root/'evidence/studio/M4-campaign-delegation-conformance/application-and-input-hashes.json').read_text())
+selected=sorted([*previous,'docs/architecture/ADR-0023-lab-lease-knowledge.md'])
+def inputs():return {name:hashlib.sha256((root/name).read_bytes()).hexdigest() for name in selected}
+def save(path,value):path.write_text(json.dumps(value,indent=2)+'\n')
+frozen=inputs();assert len(frozen)==300;save(out/'source-before.json',frozen)
+changed={name:{'previous':h,'current':frozen[name]} for name,h in previous.items() if frozen[name]!=h};assert set(changed)=={'services/studio-api/src/xverse_studio/lab/reservations.py','tests/integration/test_lab_reservations.py'}
+save(out/'input-amendment.json',{'scope':'Registry-only lease history/uncertainty repair, six added contract cases and ADR23. Production app still constructs LabRegistry() without providers or persisted leases, and physical HTTP mutations remain refused. No UI/browser-test/compiled/query/runtime-worker source changed. Current full474/performance2 are historical, not a fresh complete GUI/performance execution for this changed backend source.','previousCandidate':'ad92d2b221e67a5867b246c3b765781435dcba6f','changes':changed,'added':['docs/architecture/ADR-0023-lab-lease-knowledge.md'],'priorBrowserEvidence':'evidence/studio/M1-parameter-presentation-focus/verification.json'})
+rows=[]
+def run(name,command):
+    start=time.monotonic()
+    with (out/(name+'.log')).open('w') as log:r=subprocess.run(command,cwd=root,env=env,stdout=log,stderr=subprocess.STDOUT)
+    assert inputs()==frozen
+    row={'name':name,'command':command,'exitCode':r.returncode,'seconds':round(time.monotonic()-start,3),'selectedInputs':300,'sourceUnchanged':True};rows.append(row);save(out/'verification.json',rows);print(json.dumps(row),flush=True)
+    if r.returncode:raise SystemExit(r.returncode)
+    return (out/(name+'.log')).read_text()
+try:
+    for name,command in [('spec',[sys.executable,'-I','scripts/validate_spec_package.py']),('architecture',[sys.executable,'-I','scripts/check_architecture.py']),('compatibility',[sys.executable,'-I','scripts/check_platform_compatibility.py']),('ruff',[str(root/'.venv/bin/ruff'),'check','--select','F821','services/studio-api/src','scripts','tests']),('environment',[sys.executable,'-I','scripts/record_environment.py','--output',str(out/'environment.json')])]:run(name,command)
+    text=run('collection',[sys.executable,'-I','-m','pytest','--collect-only','-q']);match=re.search(r'(\d+) tests collected',text);assert match and int(match[1])==944
+    run('pytest',[sys.executable,'-I','-m','pytest','tests','-q','--tb=short','--basetemp='+str(base/('owned-full-test-data-'+uuid.uuid4().hex)),'--junitxml='+str(out/'junit.xml')])
+    browser=base/'targeted-browser';browser.mkdir(exist_ok=False);save(browser/'source-before.json',frozen)
+    run('targeted-browser',[sys.executable,'-I','scripts/test_browser.py','--grep','lab inventory:|physical placements:|owned reference browser workflow:'])
+    for name in ['browser-report.json']:shutil.copyfile(root/'test-results'/name,browser/name)
+    shutil.copytree(root/'test-results/browser',browser/'browser-output');save(browser/'source-after.json',inputs())
+    report=json.loads((browser/'browser-report.json').read_text());assert report['stats']['expected']==83 and not any(report['stats'][k] for k in ['skipped','unexpected','flaky'])
+    print('Fresh944 backend and83 affected native browser checks passed',flush=True)
+finally:save(out/'source-after.json',inputs());assert inputs()==frozen

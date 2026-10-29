@@ -1,0 +1,50 @@
+from pathlib import Path
+from collections import Counter
+import hashlib
+import json
+import os
+import re
+import subprocess
+
+root = Path.cwd().resolve()
+base = Path(__file__).resolve().parent
+out = root / 'evidence/studio/M1-presentation-route-lifetime'
+read = lambda path: json.loads(path.read_text())
+hashes = read(out / 'application-and-input-hashes.json')
+assert len(hashes) == 316
+for name, value in hashes.items():
+    assert hashlib.sha256((root / name).read_bytes()).hexdigest() == value, name
+previous = read(root / 'evidence/studio/M3-reservation-api/application-and-input-hashes.json')
+assert {name for name in hashes if hashes[name] != previous[name]} == {'tests/e2e/parameter-presentation-focus.spec.ts'}
+assert not (root / 'tests/e2e/presentation-route-lifetime.probe.spec.ts').exists()
+old_source = (base / 'original.spec.ts.txt').read_text()
+source = (root / 'tests/e2e/parameter-presentation-focus.spec.ts').read_text()
+assert source.replace('await page.unrouteAll({ behavior: "wait" });', 'await page.unroute(pattern);') == old_source
+cache = root.parent / '.xverse-studio-cache'
+env = dict(os.environ, PATH=str(cache / 'node-v24.22.1-linux-x64/bin') + os.pathsep + os.environ['PATH'])
+command = [str(cache / 'node-v24.22.1-linux-x64/bin/node'),
+    str(cache / 'node-v24.22.1-linux-x64/lib/node_modules/npm/bin/npm-cli.js'), 'run', 'test:e2e', '--', '--list']
+listed = subprocess.check_output(command, cwd=root, env=env, text=True)
+assert re.search(r'Total: 474 tests', listed)
+(base / 'main/collection.txt').write_text(listed)
+(out / 'main/collection.txt').write_text(listed)
+trace = read(root / 'specs/001-industry-agnostic-studio/traceability.json')
+prior = json.loads(subprocess.check_output(['git', 'show', 'HEAD:specs/001-industry-agnostic-studio/traceability.json']))
+assert Counter(task['status'] for task in trace['tasks']) == {'completed': 47, 'in_progress': 43, 'blocked': 10}
+for before, after in zip(prior['tasks'], trace['tasks']):
+    assert {k: value for k, value in before.items() if k not in ('implementation_note', 'implementation_evidence')} == {k: value for k, value in after.items() if k not in ('implementation_note', 'implementation_evidence')}
+for key in ['milestones', 'requirements', 'success_criteria', 'acceptance_cases']:
+    assert trace[key] == prior[key], key
+path = root / 'docs/implementation/STATUS.md'
+text = path.read_text()
+summary = ('Latest verified work adds the configured reservation API foundation (1,055 backend tests, 83 affected browser checks, two performance checks and a clean 110-file Linux package) and drains presentation-test callbacks (48 fresh parameter/wizard checks). The dossiers disclose the generated-contract amendment and inherited unchanged runtime evidence. The stock launcher still has no physical integration; physical commands, active-run renewal, reservation UI and wider acceptance gates remain unfinished. Prior full-browser CI is mixed and retained separately.\n\n')
+marker = 'Latest recorded task completion:'
+assert marker in text
+path.write_text(text.replace(marker, summary + marker, 1))
+(out / 'precommit-review.json').write_text(json.dumps({'all316InputsMatch': True, 'all315OtherInputsUnchanged': True,
+    'allOriginalAssertionsAndThresholdsPreserved': True, 'onlyOwnedTemporaryProbeRemoved': True,
+    'currentFullBrowserCollected': 474, 'currentFullBrowserExecuted': False,
+    'all100TaskStatesAndDefinitionsPreserved': True, 'allRequirementsAcceptanceAndMilestonesPreserved': True,
+    'rootImplementationReviewOnly': True, 'collectionCommand': command}, indent=2) + '\n')
+(out / 'controllers/precommit.py.txt').write_text(Path(__file__).read_text())
+print('Only callback cleanup changes;474 cases collected,48 fresh passes; all task/requirement/milestone states preserved.')

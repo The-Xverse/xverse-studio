@@ -1,0 +1,78 @@
+
+> xverse-studio-workspace@0.1.0 test:e2e
+> playwright test -c tests/e2e/playwright.config.ts --grep owned optional controls:
+
+
+Running 2 tests using 1 worker
+
+(node:2605926) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 tests/e2e/reference-pause.spec.ts:18:7 › owned optional controls: keyboard Pause, reload, Resume and Stop at 1024 (21.0s)
+(node:2606197) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 tests/e2e/reference-pause.spec.ts:18:7 › owned optional controls: keyboard Pause, reload, Resume and Stop at 1440 (39.5s)
+
+
+  1) tests/e2e/reference-pause.spec.ts:18:7 › owned optional controls: keyboard Pause, reload, Resume and Stop at 1024
+
+    Error: expect(locator).toBeEnabled() failed
+
+    Locator:  getByRole('region', { name: 'Run controls', exact: true }).getByRole('button', { name: 'Pause', exact: true })
+    Expected: enabled
+    Received: disabled
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toBeEnabled" getByRole('region', { name: 'Run controls', exact: true }).getByRole('button', { name: 'Pause', exact: true }) with timeout 10000ms
+      - waiting for getByRole('region', { name: 'Run controls', exact: true }).getByRole('button', { name: 'Pause', exact: true })
+        19 × locator resolved to <button disabled class="button" aria-describedby="control-reason-pause">Pause</button>
+           - unexpected value "disabled"
+
+
+      74 |     await expect(
+      75 |       controls.getByRole("button", { name: "Pause", exact: true }),
+    > 76 |     ).toBeEnabled();
+         |       ^
+      77 |     await expect(
+      78 |       controls.getByRole("button", { name: "Resume", exact: true }),
+      79 |     ).toBeDisabled();
+        at <repo>/tests/e2e/reference-pause.spec.ts:76:7
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/reference-pause-owned-opti-6cf2c-oad-Resume-and-Stop-at-1024/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/reference-pause-owned-opti-6cf2c-oad-Resume-and-Stop-at-1024/error-context.md
+
+  2) tests/e2e/reference-pause.spec.ts:18:7 › owned optional controls: keyboard Pause, reload, Resume and Stop at 1440
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByRole('region', { name: 'Run controls', exact: true }).locator('[data-control-operation="completed"]')
+    Expected substring: "Pause request"
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toContainText" getByRole('region', { name: 'Run controls', exact: true }).locator('[data-control-operation="completed"]') with timeout 10000ms
+      - waiting for getByRole('region', { name: 'Run controls', exact: true }).locator('[data-control-operation="completed"]')
+
+
+      117 |     await expect(
+      118 |       controls.locator('[data-control-operation="completed"]'),
+    > 119 |     ).toContainText("Pause request");
+          |       ^
+      120 |     await expect(
+      121 |       controls.getByRole("button", { name: "Pause", exact: true }),
+      122 |     ).toBeDisabled();
+        at <repo>/tests/e2e/reference-pause.spec.ts:119:7
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/reference-pause-owned-opti-7b740-oad-Resume-and-Stop-at-1440/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/reference-pause-owned-opti-7b740-oad-Resume-and-Stop-at-1440/error-context.md
+
+  2 failed
+    tests/e2e/reference-pause.spec.ts:18:7 › owned optional controls: keyboard Pause, reload, Resume and Stop at 1024
+    tests/e2e/reference-pause.spec.ts:18:7 › owned optional controls: keyboard Pause, reload, Resume and Stop at 1440

@@ -1,0 +1,4 @@
+import {defineConfig} from '@playwright/test';
+export default defineConfig({testDir:'.',testMatch:['expanded.spec.ts','deadline.spec.ts'],workers:1,retries:0,timeout:60000,expect:{timeout:10000},
+ reporter:[['list'],['json',{outputFile:process.env.STUDIO_BROWSER_REPORT}]],outputDir:process.env.STUDIO_BROWSER_OUTPUT,
+ use:{baseURL:process.env.STUDIO_BASE_URL,browserName:'chromium',actionTimeout:15000,screenshot:'only-on-failure',trace:'off',video:'off'}});

@@ -1,0 +1,70 @@
+from copy import deepcopy
+import re
+
+
+def _tick(value):
+    # Canonical source tick strings retain exact integer identity; never round clocks.
+    if isinstance(value, int) and not isinstance(value, bool) and 0 <= value < 10 ** 32:
+        return value
+    if isinstance(value, str) and re.fullmatch(r"(?:0|[1-9][0-9]{0,31})", value):
+        return int(value)
+    return None
+
+
+def _window(coverage):
+    if not isinstance(coverage, dict):
+        return None
+    start, end = (_tick(coverage.get(key)) for key in ("startTick", "endTick"))
+    if start is None or end is None or end < start:
+        return None
+    return start, end
+
+
+def _text(value):
+    return isinstance(value, str) and 0 < len(value) <= 512
+
+
+def compare_runs(left: dict, right: dict) -> dict:
+    """Compare recorded provenance first; no interpolation, new run, or verdict."""
+    if not isinstance(left, dict) or not isinstance(right, dict):
+        raise ValueError("INVALID_COMPARISON")
+    result = {"leftRunId": left.get("runId"), "rightRunId": right.get("runId"), "mode": "recorded_observation_comparison", "rerunRequiresFreshAdmission": True, "differences": [], "compatible": True, "diagnostics": [], "fields": []}
+    def block(code):
+        result["compatible"] = False
+        if code not in result["diagnostics"]: result["diagnostics"].append(code)
+    a, b = left.get("snapshot", {}), right.get("snapshot", {})
+    for key in ("semanticDigest", "planDigest", "parameters", "artifactIdentities", "profileIdentities", "providerIdentity", "capabilityDigest", "clockDomainRef"):
+        if a.get(key) != b.get(key):
+            result["differences"].append({"field": key, "left": deepcopy(a.get(key)), "right": deepcopy(b.get(key))})
+    for run in (left, right):
+        evidence = run.get("evidence", {})
+        if evidence.get("integrity") != "valid": block("EVIDENCE_INTEGRITY_UNPROVEN")
+        if evidence.get("status") != "complete": block("EVIDENCE_INCOMPLETE")
+    obs_a, obs_b = left.get("observations", []), right.get("observations", [])
+    if not isinstance(obs_a, list) or not isinstance(obs_b, list) or len(obs_a) > 32 or len(obs_b) > 32:
+        raise ValueError("COMPARISON_LIMIT")
+    key = lambda item: (item.get("observerRef"), item.get("field"))
+    by_a = {key(o): o for o in obs_a}; by_b = {key(o): o for o in obs_b}
+    if len(by_a) != len(obs_a) or len(by_b) != len(obs_b): block("AMBIGUOUS_OBSERVER")
+    if not by_a or by_a.keys() != by_b.keys(): block("OBSERVATIONS_UNAVAILABLE")
+    for field in sorted(by_a.keys() & by_b.keys(), key=lambda item: tuple(str(v) for v in item)):
+        x, y = by_a[field], by_b[field]
+        reasons = []
+        if not all(_text(v) for v in field):
+            reasons.append("OBSERVER_IDENTITY_UNAVAILABLE")
+        if any(x.get(k) != y.get(k) or x.get(k) is None for k in ("unit", "quantity", "unitDefinitionDigest")):
+            reasons.append("QUANTITY_INCOMPATIBLE")
+        if x.get("clockDomainRef") != y.get("clockDomainRef") or x.get("clockDomainRef") is None:
+            reasons.append("CLOCK_INCOMPATIBLE")
+        for value in (x, y):
+            coverage = value.get("coverage", {})
+            if coverage.get("complete") is not True or coverage.get("gaps") != []:
+                reasons.append("OBSERVATION_COVERAGE_INCOMPLETE")
+        windows = [_window(v.get("coverage")) for v in (x, y)]
+        if any(w is None for w in windows):
+            reasons.append("OBSERVATION_WINDOW_UNAVAILABLE")
+        elif windows[0] != windows[1]:
+            reasons.append("OBSERVATION_WINDOW_INCOMPATIBLE")
+        for reason in reasons: block(reason)
+        result["fields"].append({"observerRef": field[0], "field": field[1], "compatible": not reasons, "reasons": list(dict.fromkeys(reasons))})
+    return result

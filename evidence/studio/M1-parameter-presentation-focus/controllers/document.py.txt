@@ -1,0 +1,90 @@
+"""Update evidence and traces together only after all final browser stages pass."""
+from pathlib import Path
+from collections import Counter
+import json
+
+root=Path.cwd().resolve();out=root/'evidence/studio/M1-parameter-presentation-focus';v=json.loads((out/'verification.json').read_text())
+assert v['full']['expected']==474 and v['targeted']['expected']==48 and v['performance']['expected']==2 and v['allCurrentStageInputsIdentical']
+(out/'README.md').write_text('''# Parameter presentation keyboard focus
+
+Late inert presentation metadata can regroup parameter forms after authoring begins.
+The existing guard tracked value controls but omitted their Apply buttons. A controlled
+actual owned HTTP200 reply reproduced focus falling to BODY at both required widths,
+leaving the typed value unsaved. The earlier CI wizard failure also retained an unsaved
+value, but its original event timing was not captured; that timing remains unproven.
+Original mixed CI, controlled red and separate isolated proposal evidence remain in
+`../M4-campaign-worker-failure/follow-on-presentation/`.
+
+The integrated repair tracks value and Apply controls by the same semantic identity.
+It restores only a disconnected focused control's enabled replacement while BODY has
+focus and no modal is active. Deliberate blur, another control, a newer source dialog
+and Home take precedence. Metadata still applies immediately and never submits an edit.
+Explicit Enter uses the existing canonical revision transaction once. Backend authority,
+provider admission, immutable evidence and runtime timing are unchanged.
+
+All 48 affected checks pass: 12 new presentation cases, 28 existing parameter checks
+and eight unchanged wizard/history checks. The full 474-check browser suite and separate
+two-viewport performance checks also pass with zero skips/flaky/unexpected outcomes.
+All 298 selected source/test/config/lock/ADR/guide/compiled inputs remain identical
+within and across the final stages. New tests preserve the isolated semantic TypeScript
+AST after helper-import adaptation and formatting; the runtime source exactly matches
+the tested isolated proposal. Original wizard assertions are unchanged.
+
+Actual pinned Chromium, native launcher ownership and retained commands/environments
+are recorded. The new cases hold actual presentation responses without changing their
+payloads, use native Tab/Enter and verify either one canonical edit/revision or no edit
+with original documents intact. No new case starts a run. Backend934 is inherited from
+the native worker-failure candidate via exact unchanged backend/Python inputs; only the
+UI and compiled assets changed, with the browser test and non-executable ADR13 added.
+
+Both prior39d8 Ubuntu24 push/PR CI jobs separately passed932/full462/package smoke.
+The PR checkout/package identity is a synthetic merge, while push used the branch head.
+Those historical passes neither verify this repair nor erase the original4c failure.
+
+This is the implementation agent's review, not independent milestone acceptance.
+Native Windows is held. Actual AT, novice users, live external/physical providers and
+full task/milestone gates remain open. Counts stay47 completed/43 in progress/10 blocked;
+zero milestones accepted. Full M0–M4 remains the objective and M5 stays deferred.
+
+Clean committed successor package verification is pending.
+''')
+(out/'implementation-review.md').write_text('''# Root implementation review
+
+The existing M0–M4 scope, requirements, tasks and dependencies are retained. This is
+the implementation agent's review; no independent review or milestone closure is implied.
+
+The witness includes the existing project/document/Scenario/parameter key and control
+kind. Ref cleanup bounds its maps to current mounted controls. The layout guard requires
+the original node to be disconnected and its corresponding replacement enabled/current;
+it acts only when BODY owns focus and no modal is open. Connected-node blur clears the
+witness. A project/view departure cannot transfer that identity to unrelated controls.
+Existing successful-save draft generations and guarded value-focus handling remain.
+
+Fresh affected48, full474 and performance2 exercise one frozen298-input candidate.
+Original wizard/history assertions are unchanged. New positive cases require exact
+canonical edits and revisions; negative cases require no edits and unchanged documents.
+Actual metadata is applied rather than bypassed or replaced. Backend934 is inherited
+through exact unchanged backend/Python bytes, with the UI-only amendment recorded.
+
+Original failed4c CI and the two-case native red remain failed historical evidence.
+Matching the reproduced focus mechanism does not prove the original CI event sequence.
+Prior39d8 CI passes are separate candidates. Actual AT/human, Windows and external/physical
+provider acceptance are not established by this Linux reference verification.
+''')
+note=' Parameter presentation focus successor: late actual inert metadata now preserves the focused enabled Apply button as well as its value control through regrouping, using the same semantic identity and guarded BODY/no-modal restoration. Newer focus/dialog/Home takes precedence. Fresh48 affected/full474/separate performance2 pass on298 identical inputs; original wizard/history assertions stay unchanged. Twelve new native-keyboard cases use unmodified actual HTTP200 metadata, verify exactly one canonical edit or unchanged original documents, and create no run. Backend934 is inherited through exact unchanged backend/Python inputs; prior39d8 CI932/full462/package and failed4c push443/1 remain separate historical outcomes. Evidence: evidence/studio/M1-parameter-presentation-focus/. Windows/actual AT/human/provider/full gates remain open; counts47/43/10 and zero accepted milestones unchanged.'
+path=root/'specs/001-industry-agnostic-studio/traceability.json';trace=json.loads(path.read_text());before=Counter(t['status'] for t in trace['tasks']);assert before=={'completed':47,'in_progress':43,'blocked':10}
+for task in trace['tasks']:
+    if task['id'] in ['T038','T067','T095','T096','T097','T098']:
+        assert task['status']=='in_progress';assert note.strip() not in task['implementation_note'];task['implementation_note']+=note
+        for name in ['evidence/studio/M1-parameter-presentation-focus/verification.json','evidence/studio/M1-parameter-presentation-focus/implementation-review.md','docs/architecture/ADR-0013-revision-history-and-recovery.md','evidence/studio/native-ci/ubuntu-24.04-39d8d46-runs.json']:
+            if name not in task.setdefault('implementation_evidence',[]):task['implementation_evidence'].append(name)
+record=trace['implementation_record'];record['code_candidate']='Uncommitted parameter-presentation focus repair;298-input binding in evidence/studio/M1-parameter-presentation-focus/application-and-input-hashes.json; clean package binding pending'
+verification=record['verification'];verification.update({'backend_tests_passed':934,'playwright_checks_passed':474,'playwright_checks_failed':0,'playwright_scope':'Fresh native Linux full474 and affected48 plus separate performance2 with298 identical inputs. Original4c failed push443/1 and its successful PR444 remain historical; prior39d8 push/PR932/full462/package also passed separately. Original wizard/history assertions unchanged. No Windows/AT/human/live-provider/milestone acceptance.','evidence':'evidence/studio/M1-parameter-presentation-focus/','backend_inheritance':'evidence/studio/M1-parameter-presentation-focus/backend-inheritance.json (934 inherited by exact unchanged backend/Python inputs)','affected_playwright_checks_passed':48,'current_full_playwright_collection':474,'current_full_playwright_execution':'PASSED','browser_inheritance':'Not inherited: fresh main48/full474/performance2 execution.','prior_package_evidence':verification['package_evidence'],'package_evidence':'PENDING clean committed focus-repair package; prior b355 package retains its earlier UI bytes.'})
+for run in json.loads((root/'evidence/studio/native-ci/ubuntu-24.04-39d8d46-runs.json').read_text())['runs']:
+    assert run['conclusion']=='success';entry={'runId':run['id'],'head':run['head'],'event':run['event'],'conclusion':'success','backendPassed':932,'browserPassed':462,'browserFailed':0,'packageSmokePassed':True}
+    assert not any(p['runId']==run['id'] for p in verification['prior_browser_ci_outcomes']);verification['prior_browser_ci_outcomes'].append(entry)
+assert Counter(t['status'] for t in trace['tasks'])==before
+path.write_text(json.dumps(trace,ensure_ascii=False,indent=2)+'\n')
+path=root/'specs/001-industry-agnostic-studio/tasks.md';path.write_text(path.read_text()+'\n'+note.strip()+'\n')
+path=root/'docs/implementation/STATUS.md';text=path.read_text();marker='Native campaign worker-failure successor:';assert marker in text;path.write_text(text.replace(marker,note.strip()+'\n\n'+marker,1))
+print(json.dumps({'counts':dict(before),'tasksAndTraceUpdatedTogether':True,'acceptedMilestones':0}))

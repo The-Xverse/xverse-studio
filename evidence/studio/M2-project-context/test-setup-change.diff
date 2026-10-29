@@ -1,0 +1,76 @@
+--- before/evidence-filters.spec.ts
++++ after/evidence-filters.spec.ts
+@@ -583,15 +583,64 @@
+   test.setTimeout(90000);
+   await connectStudio(page, testInfo);
+   const made = await ownedRun(page, "Incompatible display metadata fixture");
+-  await expect
+-    .poll(async () =>
+-      page.evaluate(
+-        async (id) =>
+-          (await fetch(`/api/v1/runs/${id}`).then((r) => r.json())).state,
+-        made.runId,
+-      ),
+-    )
+-    .toBe("stopped");
++  const settlementStarted = performance.now(),
++    observations: {
++      elapsedMilliseconds: number;
++      requestMilliseconds: number;
++      httpStatus: number;
++      state?: string;
++      stateVersion?: number;
++      code?: string;
++    }[] = [];
++  try {
++    await expect
++      .poll(
++        async () => {
++          const observed = await page.evaluate(async (id) => {
++            const started = performance.now(),
++              response = await fetch(`/api/v1/runs/${id}`),
++              value = await response.json();
++            return {
++              requestMilliseconds: performance.now() - started,
++              httpStatus: response.status,
++              state: value.state,
++              stateVersion: value.stateVersion,
++              code: value.code,
++            };
++          }, made.runId);
++          observations.push({
++            ...observed,
++            elapsedMilliseconds: performance.now() - settlementStarted,
++          });
++          if (observations.length > 64) observations.shift();
++          return (
++            observed.httpStatus !== 200 ||
++            ["stopped", "failed", "unknown"].includes(observed.state)
++          );
++        },
++        {
++          timeout: 30000,
++          message:
++            "The actual reference fixture must settle before display compatibility is checked.",
++        },
++      )
++      .toBe(true);
++    expect(observations.at(-1)).toMatchObject({
++      httpStatus: 200,
++      state: "stopped",
++    });
++  } finally {
++    await testInfo.attach("owned-reference-settlement.json", {
++      body: JSON.stringify({
++        runId: made.runId,
++        observationDeadlineMilliseconds: 30000,
++        observations,
++        scope:
++          "Actual owned 0.2-second reference prerequisite for display assertions; not a completion-latency benchmark. Failed/unknown/HTTP-error observations fail explicitly.",
++      }),
++      contentType: "application/json",
++    });
++  }
+   let mismatch: "resolution" | "units" = "resolution";
+   await page.route(
+     `**/api/v1/runs/${made.runId}/observations*`,

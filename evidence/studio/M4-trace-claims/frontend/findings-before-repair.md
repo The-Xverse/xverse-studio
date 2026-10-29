@@ -1,0 +1,9 @@
+# Results trace-link UI findings before repair
+
+2026-10-25, Linux. Current Results annotations view creates/updates comments only. Trace-link rows are visible through raw JSON but have no create/edit/remove controls, no explicit reported claim display, and no frozen subject selection. This leaves the FR-062 browser workflow unavailable despite admitted backend annotation associations.
+
+Repair scope: ResultsView.tsx only, plus new native Playwright trace-claim helper/spec. Preserve comment form, use verified frozen snapshot/definition subjects, opaque exact optional reported status and revision-checked sidecar updates. No assertion schema/profile/run/source/evidence bytes are edited. External claims remain neutral text, separate from actual assertion verdict. Windows installation/testing stays held.
+
+First implemented native run reached the trace form but failed the exact accessible-name check: the claim input's label included its nested explanatory small text, so its accessible name was longer than 'Reported claim status'. Record: native-after.txt (first implemented run, later preserved under first-implemented-failure). Repair keeps the field label concise and moves help text to an aria-describedby paragraph; no backend contract change.
+
+Pre-freeze read-through also found a compatibility restriction: a failed frozen-subject lookup disabled all trace saves, although the backend deliberately permits legacy/unscoped and journal-only links without frozen source availability. Repair limits the failure to unavailable model/definition associations and requires explicit removal of any retained unavailable subjects before saving; it never silently drops them. The browser workflow will simulate a 503 subject-reader response for this UI branch while using the actual backend for the resulting journal-only annotation. This transport simulation is not native source-recovery evidence.

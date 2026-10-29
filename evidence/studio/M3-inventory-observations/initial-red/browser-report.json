@@ -1,0 +1,418 @@
+{
+  "config": {
+    "argv": [
+      "<loop-cache>/node-v24.22.1-linux-x64/bin/node",
+      "<repo>/node_modules/.bin/playwright",
+      "test",
+      "-c",
+      "tests/e2e/playwright.config.ts",
+      "--grep",
+      "lab inventory:"
+    ],
+    "configFile": "<repo>/tests/e2e/playwright.config.ts",
+    "rootDir": "<repo>/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "<repo>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "<repo>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "*.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "<repo>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "<repo>/tests/e2e",
+        "snapshotDir": "<repo>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": "*.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "baseURL": "http://127.0.0.1:50557",
+          "browserName": "chromium",
+          "actionTimeout": 15000,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "trace": "off",
+          "screenshot": "only-on-failure",
+          "video": "off"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "<repo>/test-results/browser-report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "lab-inventory-accessibility.spec.ts",
+      "file": "lab-inventory-accessibility.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "lab inventory: incomplete public observation at 1024x768",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 10593,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('.diagnostic-list strong').filter({ hasText: /^PROVIDER_INVENTORY_UNAVAILABLE$/ })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toBeVisible\" locator('.diagnostic-list strong').filter({ hasText: /^PROVIDER_INVENTORY_UNAVAILABLE$/ }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('.diagnostic-list strong').filter({ hasText: /^PROVIDER_INVENTORY_UNAVAILABLE$/ })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('.diagnostic-list strong').filter({ hasText: /^PROVIDER_INVENTORY_UNAVAILABLE$/ })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toBeVisible\" locator('.diagnostic-list strong').filter({ hasText: /^PROVIDER_INVENTORY_UNAVAILABLE$/ }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('.diagnostic-list strong').filter({ hasText: /^PROVIDER_INVENTORY_UNAVAILABLE$/ })\u001b[22m\n\n    at <repo>/tests/e2e/lab-inventory-accessibility.spec.ts:91:14",
+                    "location": {
+                      "file": "<repo>/tests/e2e/lab-inventory-accessibility.spec.ts",
+                      "column": 14,
+                      "line": 91
+                    },
+                    "snippet": "  89 |                 .filter({ hasText: /^PROVIDER_INVENTORY_UNAVAILABLE$/ }),\n  90 |             )\n> 91 |             .toBeVisible();\n     |              ^\n  92 |         } else {\n  93 |           const card = page\n  94 |             .locator(\"section.panel\")"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/lab-inventory-accessibility.spec.ts",
+                        "column": 14,
+                        "line": 91
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('.diagnostic-list strong').filter({ hasText: /^PROVIDER_INVENTORY_UNAVAILABLE$/ })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toBeVisible\" locator('.diagnostic-list strong').filter({ hasText: /^PROVIDER_INVENTORY_UNAVAILABLE$/ }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('.diagnostic-list strong').filter({ hasText: /^PROVIDER_INVENTORY_UNAVAILABLE$/ })\u001b[22m\n\n\n  89 |                 .filter({ hasText: /^PROVIDER_INVENTORY_UNAVAILABLE$/ }),\n  90 |             )\n> 91 |             .toBeVisible();\n     |              ^\n  92 |         } else {\n  93 |           const card = page\n  94 |             .locator(\"section.panel\")\n    at <repo>/tests/e2e/lab-inventory-accessibility.spec.ts:91:14"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T00:38:19.421Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "lab-inventory-observation.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJtb2RlIjoiaW5jb21wbGV0ZSIsImxhYmVsbGVkVHJhbnNwb3J0Rml4dHVyZSI6dHJ1ZSwiZml4dHVyZUdlbmVyYXRlZEJ5QmFja2VuZFByb2plY3Rpb24iOnRydWUsImFjdHVhbEludmVudG9yeUVtcHR5QW5kVW5hZG1pdHRlZCI6dHJ1ZSwiY2Fub25pY2FsTGlzdHNVbmNoYW5nZWQiOnRydWUsIm11dGF0aXZlUmVxdWVzdHMiOjAsInBoeXNpY2FsQWN0aW9ucyI6MCwicmVhZHMiOjEsInNjb3BlIjoiVUkgcHJvamVjdGlvbiBvYnNlcnZhdGlvbiBvbmx5OyBzeW50aGV0aWMgb3duZWQgcHJvdmlkZXIgdXNlZCBieSBvZmZsaW5lIGdlbmVyYXRvciwgbm8gcnVudGltZSBhZG1pc3Npb24sIGRldmljZSBhY2Nlc3Mgb3IgU3RhcnQifQ=="
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/lab-inventory-accessibilit-34891-lic-observation-at-1024x768/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/lab-inventory-accessibilit-34891-lic-observation-at-1024x768/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/lab-inventory-accessibility.spec.ts",
+                    "column": 14,
+                    "line": 91
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "6de69e8ea4b7ea841de5-a99bc9cdb1c5f90e00e2",
+          "file": "lab-inventory-accessibility.spec.ts",
+          "line": 43,
+          "column": 9
+        },
+        {
+          "title": "lab inventory: observed public observation at 1024x768",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 10553,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('section.panel').filter({ has: getByRole('heading', { name: 'urn:fixture:inventory-presentation', exact: true }) }).locator('.key-values > div').filter({ has: getByText('Firmware', { exact: true }) }).locator('dd')\nExpected substring: \u001b[32m\"fixture-1.2.3\"\u001b[39m\nReceived string:    \u001b[31m\"Unknown\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toContainText\" locator('section.panel').filter({ has: getByRole('heading', { name: 'urn:fixture:inventory-presentation', exact: true }) }).locator('.key-values > div').filter({ has: getByText('Firmware', { exact: true }) }).locator('dd') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('section.panel').filter({ has: getByRole('heading', { name: 'urn:fixture:inventory-presentation', exact: true }) }).locator('.key-values > div').filter({ has: getByText('Firmware', { exact: true }) }).locator('dd')\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <dd>Unknown</dd>\u001b[22m\n\u001b[2m       - unexpected value \"Unknown\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('section.panel').filter({ has: getByRole('heading', { name: 'urn:fixture:inventory-presentation', exact: true }) }).locator('.key-values > div').filter({ has: getByText('Firmware', { exact: true }) }).locator('dd')\nExpected substring: \u001b[32m\"fixture-1.2.3\"\u001b[39m\nReceived string:    \u001b[31m\"Unknown\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toContainText\" locator('section.panel').filter({ has: getByRole('heading', { name: 'urn:fixture:inventory-presentation', exact: true }) }).locator('.key-values > div').filter({ has: getByText('Firmware', { exact: true }) }).locator('dd') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('section.panel').filter({ has: getByRole('heading', { name: 'urn:fixture:inventory-presentation', exact: true }) }).locator('.key-values > div').filter({ has: getByText('Firmware', { exact: true }) }).locator('dd')\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <dd>Unknown</dd>\u001b[22m\n\u001b[2m       - unexpected value \"Unknown\"\u001b[22m\n\n    at <repo>/tests/e2e/lab-inventory-accessibility.spec.ts:105:39",
+                    "location": {
+                      "file": "<repo>/tests/e2e/lab-inventory-accessibility.spec.ts",
+                      "column": 39,
+                      "line": 105
+                    },
+                    "snippet": "  103 |             .filter({ has: page.getByText(\"Firmware\", { exact: true }) })\n  104 |             .locator(\"dd\");\n> 105 |           await expect.soft(firmware).toContainText(\"fixture-1.2.3\");\n      |                                       ^\n  106 |           await expect(\n  107 |             card.getByRole(\"button\", {\n  108 |               name: \"Reserve observe-only\","
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/lab-inventory-accessibility.spec.ts",
+                        "column": 39,
+                        "line": 105
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('section.panel').filter({ has: getByRole('heading', { name: 'urn:fixture:inventory-presentation', exact: true }) }).locator('.key-values > div').filter({ has: getByText('Firmware', { exact: true }) }).locator('dd')\nExpected substring: \u001b[32m\"fixture-1.2.3\"\u001b[39m\nReceived string:    \u001b[31m\"Unknown\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toContainText\" locator('section.panel').filter({ has: getByRole('heading', { name: 'urn:fixture:inventory-presentation', exact: true }) }).locator('.key-values > div').filter({ has: getByText('Firmware', { exact: true }) }).locator('dd') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('section.panel').filter({ has: getByRole('heading', { name: 'urn:fixture:inventory-presentation', exact: true }) }).locator('.key-values > div').filter({ has: getByText('Firmware', { exact: true }) }).locator('dd')\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <dd>Unknown</dd>\u001b[22m\n\u001b[2m       - unexpected value \"Unknown\"\u001b[22m\n\n\n  103 |             .filter({ has: page.getByText(\"Firmware\", { exact: true }) })\n  104 |             .locator(\"dd\");\n> 105 |           await expect.soft(firmware).toContainText(\"fixture-1.2.3\");\n      |                                       ^\n  106 |           await expect(\n  107 |             card.getByRole(\"button\", {\n  108 |               name: \"Reserve observe-only\",\n    at <repo>/tests/e2e/lab-inventory-accessibility.spec.ts:105:39"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T00:38:30.642Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "lab-inventory-observation.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJtb2RlIjoib2JzZXJ2ZWQiLCJsYWJlbGxlZFRyYW5zcG9ydEZpeHR1cmUiOnRydWUsImZpeHR1cmVHZW5lcmF0ZWRCeUJhY2tlbmRQcm9qZWN0aW9uIjp0cnVlLCJhY3R1YWxJbnZlbnRvcnlFbXB0eUFuZFVuYWRtaXR0ZWQiOnRydWUsImNhbm9uaWNhbExpc3RzVW5jaGFuZ2VkIjp0cnVlLCJtdXRhdGl2ZVJlcXVlc3RzIjowLCJwaHlzaWNhbEFjdGlvbnMiOjAsInJlYWRzIjoxLCJzY29wZSI6IlVJIHByb2plY3Rpb24gb2JzZXJ2YXRpb24gb25seTsgc3ludGhldGljIG93bmVkIHByb3ZpZGVyIHVzZWQgYnkgb2ZmbGluZSBnZW5lcmF0b3IsIG5vIHJ1bnRpbWUgYWRtaXNzaW9uLCBkZXZpY2UgYWNjZXNzIG9yIFN0YXJ0In0="
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/lab-inventory-accessibilit-d70d3-lic-observation-at-1024x768/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/lab-inventory-accessibilit-d70d3-lic-observation-at-1024x768/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/lab-inventory-accessibility.spec.ts",
+                    "column": 39,
+                    "line": 105
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "6de69e8ea4b7ea841de5-09950459727737b22b82",
+          "file": "lab-inventory-accessibility.spec.ts",
+          "line": 43,
+          "column": 9
+        },
+        {
+          "title": "lab inventory: incomplete public observation at 1440x900",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 10507,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('.diagnostic-list strong').filter({ hasText: /^PROVIDER_INVENTORY_UNAVAILABLE$/ })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toBeVisible\" locator('.diagnostic-list strong').filter({ hasText: /^PROVIDER_INVENTORY_UNAVAILABLE$/ }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('.diagnostic-list strong').filter({ hasText: /^PROVIDER_INVENTORY_UNAVAILABLE$/ })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('.diagnostic-list strong').filter({ hasText: /^PROVIDER_INVENTORY_UNAVAILABLE$/ })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toBeVisible\" locator('.diagnostic-list strong').filter({ hasText: /^PROVIDER_INVENTORY_UNAVAILABLE$/ }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('.diagnostic-list strong').filter({ hasText: /^PROVIDER_INVENTORY_UNAVAILABLE$/ })\u001b[22m\n\n    at <repo>/tests/e2e/lab-inventory-accessibility.spec.ts:91:14",
+                    "location": {
+                      "file": "<repo>/tests/e2e/lab-inventory-accessibility.spec.ts",
+                      "column": 14,
+                      "line": 91
+                    },
+                    "snippet": "  89 |                 .filter({ hasText: /^PROVIDER_INVENTORY_UNAVAILABLE$/ }),\n  90 |             )\n> 91 |             .toBeVisible();\n     |              ^\n  92 |         } else {\n  93 |           const card = page\n  94 |             .locator(\"section.panel\")"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/lab-inventory-accessibility.spec.ts",
+                        "column": 14,
+                        "line": 91
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('.diagnostic-list strong').filter({ hasText: /^PROVIDER_INVENTORY_UNAVAILABLE$/ })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"soft toBeVisible\" locator('.diagnostic-list strong').filter({ hasText: /^PROVIDER_INVENTORY_UNAVAILABLE$/ }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('.diagnostic-list strong').filter({ hasText: /^PROVIDER_INVENTORY_UNAVAILABLE$/ })\u001b[22m\n\n\n  89 |                 .filter({ hasText: /^PROVIDER_INVENTORY_UNAVAILABLE$/ }),\n  90 |             )\n> 91 |             .toBeVisible();\n     |              ^\n  92 |         } else {\n  93 |           const card = page\n  94 |             .locator(\"section.panel\")\n    at <repo>/tests/e2e/lab-inventory-accessibility.spec.ts:91:14"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T00:38:41.559Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "lab-inventory-observation.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJtb2RlIjoiaW5jb21wbGV0ZSIsImxhYmVsbGVkVHJhbnNwb3J0Rml4dHVyZSI6dHJ1ZSwiZml4dHVyZUdlbmVyYXRlZEJ5QmFja2VuZFByb2plY3Rpb24iOnRydWUsImFjdHVhbEludmVudG9yeUVtcHR5QW5kVW5hZG1pdHRlZCI6dHJ1ZSwiY2Fub25pY2FsTGlzdHNVbmNoYW5nZWQiOnRydWUsIm11dGF0aXZlUmVxdWVzdHMiOjAsInBoeXNpY2FsQWN0aW9ucyI6MCwicmVhZHMiOjEsInNjb3BlIjoiVUkgcHJvamVjdGlvbiBvYnNlcnZhdGlvbiBvbmx5OyBzeW50aGV0aWMgb3duZWQgcHJvdmlkZXIgdXNlZCBieSBvZmZsaW5lIGdlbmVyYXRvciwgbm8gcnVudGltZSBhZG1pc3Npb24sIGRldmljZSBhY2Nlc3Mgb3IgU3RhcnQifQ=="
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/lab-inventory-accessibilit-f8454-lic-observation-at-1440x900/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/lab-inventory-accessibilit-f8454-lic-observation-at-1440x900/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/lab-inventory-accessibility.spec.ts",
+                    "column": 14,
+                    "line": 91
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "6de69e8ea4b7ea841de5-50e51d29cd31d936dffd",
+          "file": "lab-inventory-accessibility.spec.ts",
+          "line": 43,
+          "column": 9
+        },
+        {
+          "title": "lab inventory: observed public observation at 1440x900",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 10526,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('section.panel').filter({ has: getByRole('heading', { name: 'urn:fixture:inventory-presentation', exact: true }) }).locator('.key-values > div').filter({ has: getByText('Firmware', { exact: true }) }).locator('dd')\nExpected substring: \u001b[32m\"fixture-1.2.3\"\u001b[39m\nReceived string:    \u001b[31m\"Unknown\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toContainText\" locator('section.panel').filter({ has: getByRole('heading', { name: 'urn:fixture:inventory-presentation', exact: true }) }).locator('.key-values > div').filter({ has: getByText('Firmware', { exact: true }) }).locator('dd') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('section.panel').filter({ has: getByRole('heading', { name: 'urn:fixture:inventory-presentation', exact: true }) }).locator('.key-values > div').filter({ has: getByText('Firmware', { exact: true }) }).locator('dd')\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <dd>Unknown</dd>\u001b[22m\n\u001b[2m       - unexpected value \"Unknown\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('section.panel').filter({ has: getByRole('heading', { name: 'urn:fixture:inventory-presentation', exact: true }) }).locator('.key-values > div').filter({ has: getByText('Firmware', { exact: true }) }).locator('dd')\nExpected substring: \u001b[32m\"fixture-1.2.3\"\u001b[39m\nReceived string:    \u001b[31m\"Unknown\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toContainText\" locator('section.panel').filter({ has: getByRole('heading', { name: 'urn:fixture:inventory-presentation', exact: true }) }).locator('.key-values > div').filter({ has: getByText('Firmware', { exact: true }) }).locator('dd') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('section.panel').filter({ has: getByRole('heading', { name: 'urn:fixture:inventory-presentation', exact: true }) }).locator('.key-values > div').filter({ has: getByText('Firmware', { exact: true }) }).locator('dd')\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <dd>Unknown</dd>\u001b[22m\n\u001b[2m       - unexpected value \"Unknown\"\u001b[22m\n\n    at <repo>/tests/e2e/lab-inventory-accessibility.spec.ts:105:39",
+                    "location": {
+                      "file": "<repo>/tests/e2e/lab-inventory-accessibility.spec.ts",
+                      "column": 39,
+                      "line": 105
+                    },
+                    "snippet": "  103 |             .filter({ has: page.getByText(\"Firmware\", { exact: true }) })\n  104 |             .locator(\"dd\");\n> 105 |           await expect.soft(firmware).toContainText(\"fixture-1.2.3\");\n      |                                       ^\n  106 |           await expect(\n  107 |             card.getByRole(\"button\", {\n  108 |               name: \"Reserve observe-only\","
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/lab-inventory-accessibility.spec.ts",
+                        "column": 39,
+                        "line": 105
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('section.panel').filter({ has: getByRole('heading', { name: 'urn:fixture:inventory-presentation', exact: true }) }).locator('.key-values > div').filter({ has: getByText('Firmware', { exact: true }) }).locator('dd')\nExpected substring: \u001b[32m\"fixture-1.2.3\"\u001b[39m\nReceived string:    \u001b[31m\"Unknown\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"soft toContainText\" locator('section.panel').filter({ has: getByRole('heading', { name: 'urn:fixture:inventory-presentation', exact: true }) }).locator('.key-values > div').filter({ has: getByText('Firmware', { exact: true }) }).locator('dd') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('section.panel').filter({ has: getByRole('heading', { name: 'urn:fixture:inventory-presentation', exact: true }) }).locator('.key-values > div').filter({ has: getByText('Firmware', { exact: true }) }).locator('dd')\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <dd>Unknown</dd>\u001b[22m\n\u001b[2m       - unexpected value \"Unknown\"\u001b[22m\n\n\n  103 |             .filter({ has: page.getByText(\"Firmware\", { exact: true }) })\n  104 |             .locator(\"dd\");\n> 105 |           await expect.soft(firmware).toContainText(\"fixture-1.2.3\");\n      |                                       ^\n  106 |           await expect(\n  107 |             card.getByRole(\"button\", {\n  108 |               name: \"Reserve observe-only\",\n    at <repo>/tests/e2e/lab-inventory-accessibility.spec.ts:105:39"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T00:38:52.449Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "lab-inventory-observation.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJtb2RlIjoib2JzZXJ2ZWQiLCJsYWJlbGxlZFRyYW5zcG9ydEZpeHR1cmUiOnRydWUsImZpeHR1cmVHZW5lcmF0ZWRCeUJhY2tlbmRQcm9qZWN0aW9uIjp0cnVlLCJhY3R1YWxJbnZlbnRvcnlFbXB0eUFuZFVuYWRtaXR0ZWQiOnRydWUsImNhbm9uaWNhbExpc3RzVW5jaGFuZ2VkIjp0cnVlLCJtdXRhdGl2ZVJlcXVlc3RzIjowLCJwaHlzaWNhbEFjdGlvbnMiOjAsInJlYWRzIjoxLCJzY29wZSI6IlVJIHByb2plY3Rpb24gb2JzZXJ2YXRpb24gb25seTsgc3ludGhldGljIG93bmVkIHByb3ZpZGVyIHVzZWQgYnkgb2ZmbGluZSBnZW5lcmF0b3IsIG5vIHJ1bnRpbWUgYWRtaXNzaW9uLCBkZXZpY2UgYWNjZXNzIG9yIFN0YXJ0In0="
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/lab-inventory-accessibilit-2fb54-lic-observation-at-1440x900/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/lab-inventory-accessibilit-2fb54-lic-observation-at-1440x900/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/lab-inventory-accessibility.spec.ts",
+                    "column": 39,
+                    "line": 105
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "6de69e8ea4b7ea841de5-a4b2703b8210b8591285",
+          "file": "lab-inventory-accessibility.spec.ts",
+          "line": 43,
+          "column": 9
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-27T00:38:18.907Z",
+    "duration": 44176.27,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 4,
+    "flaky": 0
+  }
+}

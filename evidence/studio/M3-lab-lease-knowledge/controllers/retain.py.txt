@@ -1,0 +1,143 @@
+"""Retain the terminal registry repair verification, including original failures."""
+from pathlib import Path
+import base64
+import hashlib
+import json
+import re
+import sys
+import xml.etree.ElementTree as ET
+
+root = Path.cwd().resolve()
+local = root / '.studio-local/lab-api-foundation'
+out = root / 'evidence/studio/M3-lab-lease-knowledge'
+
+def read(path):
+    return json.loads(path.read_text())
+
+def clean_text(value):
+    for original, replacement in [
+        (str(root.parent / '.xverse-studio-cache'), '<loop-cache>'),
+        (str(root), '<repo>'), (str(Path.home() / 'xverse-studio'), '<repo>'),
+        (sys.base_prefix, '<python-install>'), (str(Path.home()), '<user-home>'),
+        (str(root.parent), '<workspace-volume>'),
+    ]:
+        value = value.replace(original, replacement)
+    value = re.sub(r'(?i)(\bstudio_session=)[A-Za-z0-9_-]{16,}', r'\1<redacted>', value)
+    value = re.sub(r'''(?i)(x-csrf-token["']?\s*[:=]\s*["']?)[A-Za-z0-9._-]{16,}''', r'\1<redacted>', value)
+    return re.sub(r'(?i)(bearer\s+)[A-Za-z0-9._-]{16,}', r'\1<redacted>', value)
+
+def clean(value):
+    if isinstance(value, str):
+        return clean_text(value)
+    if isinstance(value, list):
+        return [clean(v) for v in value]
+    if isinstance(value, dict):
+        result = {k: ('<redacted>' if k.lower() in {
+            'studio_session', 'csrftoken', 'x-csrf-token', 'bootstraptoken',
+            'x-studio-bootstrap', 'sessiontoken', 'ownerkey', 'authorization',
+            'cookie', 'set-cookie',
+        } else clean(v)) for k, v in value.items()}
+        if value.get('contentType', '').startswith(('text/', 'application/json')) and 'body' in value:
+            try:
+                result['body'] = base64.b64encode(clean_text(base64.b64decode(value['body']).decode()).encode()).decode()
+            except (ValueError, UnicodeError):
+                pass
+        return result
+    return value
+
+def save(name, value):
+    path = out / name
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(clean(value), indent=2) + '\n')
+
+def copy(name, path):
+    if path.suffix == '.json':
+        return save(name, read(path))
+    target = out / name
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_text('\n'.join(line.rstrip() for line in clean_text(path.read_text()).splitlines()).rstrip() + '\n')
+
+def totals(tree):
+    suites = list(tree.getroot().iter('testsuite'))
+    return {k: sum(int(s.get(k, 0)) for s in suites) for k in ('tests', 'failures', 'errors', 'skipped')}
+
+verified = local / 'verified'
+frozen = read(verified / 'source-before.json')
+assert len(frozen) == 300 and frozen == read(verified / 'source-after.json')
+for name, digest in frozen.items():
+    assert hashlib.sha256((root / name).read_bytes()).hexdigest() == digest, name
+rows = read(verified / 'verification.json')
+assert rows[-1]['name'] == 'targeted-browser' and all(v['exitCode'] == 0 and v['sourceUnchanged'] for v in rows)
+browser = local / 'targeted-browser'
+assert frozen == read(browser / 'source-before.json') == read(browser / 'source-after.json')
+report = read(browser / 'browser-report.json')
+assert report['stats']['expected'] == 83 and not any(report['stats'][k] for k in ('skipped', 'unexpected', 'flaky'))
+assert totals(ET.parse(verified / 'junit.xml')) == {'tests': 944, 'failures': 0, 'errors': 0, 'skipped': 0}
+out.mkdir(exist_ok=False)
+save('application-and-input-hashes.json', frozen)
+for path in verified.iterdir():
+    if path.is_file() and path.suffix != '.xml':
+        copy('final/' + path.name.replace('.log', '.txt'), path)
+save('browser/browser-report.json', report)
+save('browser/source-before.json', frozen)
+save('browser/source-after.json', frozen)
+omitted = [{'path': str(p.relative_to(browser)), 'sha256': hashlib.sha256(p.read_bytes()).hexdigest()}
+           for p in sorted((browser / 'browser-output').rglob('*')) if p.is_file()]
+save('browser/omitted-artifacts.json', {'scope': 'Only structured report and actual runner log retained; screenshots/output stay private and are not acceptance proof.', 'artifacts': omitted})
+xml_records = []
+stages = [('initial-terminal', local / 'red', 2, 2),
+          ('typed-uncertainty', local / 'combined-red', 4, 4),
+          ('complete-red', local / 'extended-red', 6, 5),
+          ('private-successor', local / 'registry-successor', 66, 0),
+          ('main-successor', local / 'main-registry', 66, 0),
+          ('final-full', verified / 'junit', 944, 0)]
+for label, stem, count, failures in stages:
+    raw = stem.with_suffix('.xml')
+    tree = ET.parse(raw)
+    expected = {'tests': count, 'failures': failures, 'errors': 0, 'skipped': 0}
+    assert totals(tree) == expected
+    original_names = [(e.get('classname'), e.get('name')) for e in tree.getroot().iter('testcase')]
+    removed = 0
+    for element in tree.getroot().iter():
+        if 'hostname' in element.attrib:
+            del element.attrib['hostname']
+            removed += 1
+        element.attrib.update({k: clean_text(v) for k, v in element.attrib.items()})
+        if element.text:
+            element.text = '\n'.join(line.rstrip() for line in clean_text(element.text).split('\n'))
+        if element.tail:
+            element.tail = clean_text(element.tail)
+    target = out / 'history' / label / 'junit.xml'
+    target.parent.mkdir(parents=True, exist_ok=True)
+    tree.write(target, encoding='utf-8', xml_declaration=True)
+    assert totals(ET.parse(target)) == expected
+    assert original_names == [(e.get('classname'), e.get('name')) for e in tree.getroot().iter('testcase')]
+    xml_records.append({'stage': label, **expected, 'hostnameAttributesRemoved': removed,
+        'testcaseIdentitiesAndOutcomesPreserved': True, 'pathsAndCredentialLiteralsSanitizedBeforeXMLSerialization': True,
+        'failureTextTrailingWhitespaceRemoved': True,
+        'privateRawSha256': hashlib.sha256(raw.read_bytes()).hexdigest(),
+        'retainedSha256': hashlib.sha256(target.read_bytes()).hexdigest()})
+    log = stem.with_suffix('.log') if label != 'final-full' else verified / 'pytest.log'
+    copy('history/' + label + '/pytest.txt', log)
+save('junit-sanitization.json', xml_records)
+for name in ['source-before.json', 'test-promotion.json', 'base-candidate.txt',
+             'reservations.py.before.txt', 'extended-red.source.py.txt', 'main-tests.before.py.txt']:
+    copy('history/' + name, local / name)
+for name in ['verify.py', 'retain.py', 'document.py', 'privacy-check.py']:
+    copy('controllers/' + name + '.txt', local / name)
+save('verification.json', {
+    'scope': 'Registry-only restoration and uncertainty repair; fixture provider has no hardware IO. Production inventory remains empty and unadmitted physical HTTP mutations remain refused.',
+    'backendTestsPassed': 944, 'backendFailures': 0, 'backendErrors': 0, 'backendSkipped': 0,
+    'affectedBrowserPassed': 83, 'browserSkipped': 0, 'browserUnexpected': 0, 'browserFlaky': 0,
+    'selectedInputs': 300, 'allSelectedInputsUnchanged': True,
+    'red': {'cases': 6, 'failures': 5, 'passedBusyControl': 1},
+    'mainRegistryAndPhysicalContractPassed': 66, 'newRegistryCases': 6,
+    'fullBrowserExecutedForThisRepair': False, 'performanceExecutedForThisRepair': False,
+    'positiveHTTPReservationAuthorityImplemented': False,
+    'completedTasks': 47, 'inProgressTasks': 43, 'blockedTasks': 10, 'acceptedMilestones': [],
+    'limitations': ['Fresh83 affected browser checks are not full474 or performance2 verification of changed backend source; older results remain historical.',
+        'Serialized registry fixtures and call counts prove no actual device/provider admission or production SQLite lease backing.',
+        'Authority and persistence prototypes remain private, unpromoted and outside944/83; they are follow-on work, not shipped features.',
+        'Review is by the implementation agent; native Windows, actual AT/human/SADS, live provider and complete milestone gates remain open.'],
+})
+print(json.dumps({'dossier': str(out.relative_to(root)), 'backend': 944, 'affectedBrowser': 83, 'inputs': 300, 'originalRedFailuresRetained': 5}))

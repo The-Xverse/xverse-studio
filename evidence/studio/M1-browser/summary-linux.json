@@ -1,0 +1,58 @@
+{
+  "scope": "owned native Linux backend + Chromium browser; fixture rendering and reference-provider execution only",
+  "command": "python scripts/test_browser.py --performance",
+  "nodeVersion": "24.22.1",
+  "browserVersion": "156.0.8078.4",
+  "viewports": [
+    {
+      "width": 1024,
+      "height": 768
+    },
+    {
+      "width": 1440,
+      "height": 900
+    }
+  ],
+  "tests": [
+    {
+      "name": "malformed imported source stays inspectable without becoming a graph or changing bytes",
+      "status": "passed",
+      "durationMs": 11
+    },
+    {
+      "name": "unknown extension payload is retained while the presentation uses stable instance references",
+      "status": "passed",
+      "durationMs": 2
+    },
+    {
+      "name": "owned reference browser workflow: author, preflight, execute, reconnect, inspect and annotate",
+      "status": "passed",
+      "durationMs": 105255
+    }
+  ],
+  "stats": {
+    "expected": 3,
+    "unexpected": 0,
+    "flaky": 0,
+    "skipped": 0,
+    "duration": 106429.859
+  },
+  "sourceDigests": {
+    "apps/studio-web/src/api/client.ts": "304fcda1c4b99368f3c112335da79cd502f93ac31b2500682731793ff113490f",
+    "apps/studio-web/src/api/types.ts": "0dab215f293f9d1a353a3b678e1550a2e7ca71c4c3de30dee4b1fa214505aa73",
+    "apps/studio-web/src/app/App.tsx": "b4ccf63a3211985bf816413ccddcdc1ff8349dfb0dc9765f50286498cc6e484d",
+    "apps/studio-web/src/app/OperationsViews.tsx": "7b7a9e6773ead47d922fe87c6293e90fa543a8880f7a5cc71ad7b556bb0c6d66",
+    "apps/studio-web/src/app/style.css": "351115a70679918996a60e5941ccc81a1c7b7d0126f66bb9a9bbe123b6e738d9",
+    "apps/studio-web/src/app/ui.tsx": "b12343ddbc2dda41e15fa6d9b1f82193c4a47440e816bbf0efd75e555dd1323b",
+    "apps/studio-web/src/features/model/Views.tsx": "febf7bf8951cc4ecbf093362004b8dd17ccb35d9864971aa8cf2bc0c8bb28752",
+    "apps/studio-web/src/features/model/projection.ts": "539fd8256945d1722e12ba335cfe49a3d3d8f3ca1b0bdb00e3bb080a2489bdf9",
+    "apps/studio-web/src/features/results/ResultsView.tsx": "f3b4818adde13b1e2c996ddb0435c17798ba3d546d7074512f448078deb1a86c",
+    "apps/studio-web/src/main.tsx": "c7e6eb14da81a3cc9c845c6d46d8cead52a6a60ac2731554e55d634da9a3d3e2"
+  },
+  "limitations": [
+    "Native Windows NOT_RUN; other browser engines/assistive-technology matrix NOT_RUN.",
+    "No live external simulator, native X-COM or physical-device integration claim.",
+    "Browser first-page history rendering over 50,000 events was not measured by this suite. API-reader performance is a separate result.",
+    "Screenshots accompany executed interaction tests; they are not standalone acceptance evidence."
+  ]
+}

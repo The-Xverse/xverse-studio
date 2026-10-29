@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "1.0",
+  "scope": "Linux explicit project/artifact/run-file retention and guarded failure recovery",
+  "command": [
+    ".venv/bin/python",
+    "-m",
+    "pytest",
+    "--basetemp",
+    "<loop10-unique-retention-temp>",
+    "tests/integration/test_exchange_and_retention.py",
+    "tests/integration/test_retention_failures.py",
+    "tests/integration/test_advanced_api.py",
+    "-q"
+  ],
+  "exitCode": 0,
+  "elapsedSeconds": 39.01827907562256,
+  "environment": {
+    "os": "Linux",
+    "release": "6.8.0-138-generic",
+    "python": "3.13.13",
+    "filesystem": "loop10",
+    "pytestPluginAutoload": false
+  },
+  "candidate": {
+    "gitHead": "ba5ef0a33c8d161096420cad4b868205830ba1fd",
+    "workingTree": true,
+    "fileDigests": {
+      "services/studio-api/src/xverse_studio/retention/__init__.py": "sha256:b9c6e8d746da2fc843ff2cb6cbdb9d7ba2166671ebb8d421a889042dcb7cdb80",
+      "services/studio-api/src/xverse_studio/retention/files.py": "sha256:552593c394248c6a45a7ab8e97601592fc893a867ed2fc3c0b3bfe075f54abe6",
+      "services/studio-api/src/xverse_studio/retention/service.py": "sha256:0cd2f51b7e19c15e418b9acab8fbf8f90dc5ff429e88070ae06b8b05c021e845",
+      "services/studio-api/src/xverse_studio/api/advanced.py": "sha256:84ffb65a4a73fd7e2204df045d58dee053c144d5fa4fe885207d772ada286169",
+      "services/studio-api/src/xverse_studio/api/models.py": "sha256:22bbcc18c1e078636af7fe3b00a58760ccd10b7af095fd3eb1ae5794e4871533",
+      "tests/integration/test_exchange_and_retention.py": "sha256:1bb3a25f2776996cd85d5f5c04b81b546b44a61ddc04f41348046b627e8b080d",
+      "tests/integration/test_retention_failures.py": "sha256:d012f2389ce5ecbe2d11b05909cdc8b8905b5ddec027d4aada94fec58378f6ba",
+      "tests/integration/test_advanced_api.py": "sha256:d1ac2311d4d3a3720ad9c8699b6ccb7c91a0da68423bbb6ba8d4ddaa4ba23163"
+    },
+    "ownedFilesUnchangedDuringRun": true
+  },
+  "stdout": "..................................................                       [100%]\n=============================== warnings summary ===============================\n.venv/lib/python3.13/site-packages/fastapi/testclient.py:1\n  <workspace>/.venv/lib/python3.13/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.\n    from starlette.testclient import TestClient as TestClient  # noqa\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n50 passed, 1 warning in 38.27s\n",
+  "stderr": "",
+  "limitations": [
+    "Windows installation/testing intentionally NOT_RUN per user instruction.",
+    "Artifact deletion retires registration metadata only; external bytes are never opened or deleted.",
+    "Historical snapshots/evidence and referenced inputs are protected, not cascaded.",
+    "Commit/crash/partial-filesystem failures are owned isolated fixtures; no physical provider claim.",
+    "No milestone or full release completion claim."
+  ]
+}

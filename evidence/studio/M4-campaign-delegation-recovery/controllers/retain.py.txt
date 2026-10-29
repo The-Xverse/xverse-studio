@@ -1,0 +1,54 @@
+"""Retain only terminal, exact-input browser evidence; authentication roots stay private."""
+from pathlib import Path
+import base64,hashlib,json,re,sys
+
+root=Path.cwd().resolve();local=root/'.studio-local/campaign-delegation-recovery';out=root/'evidence/studio/M4-campaign-delegation-recovery'
+def read(path):return json.loads(path.read_text())
+def clean_text(value):
+    for original,replacement in [(str(root.parent/'.xverse-studio-cache'),'<loop-cache>'),(str(root),'<repo>'),(str(Path.home()/'xverse-studio'),'<repo>'),(sys.base_prefix,'<python-install>'),(str(Path.home()),'<user-home>'),(str(root.parent),'<workspace-volume>')]:value=value.replace(original,replacement)
+    value=re.sub(r'(?i)(\bstudio_session=)[A-Za-z0-9_-]{16,}',r'\1<redacted>',value)
+    value=re.sub(r'''(?i)(x-csrf-token["']?\s*[:=]\s*["']?)[A-Za-z0-9._-]{16,}''',r'\1<redacted>',value)
+    value=re.sub(r'(?i)(bearer\s+)[A-Za-z0-9._-]{16,}',r'\1<redacted>',value)
+    return value
+def clean(value):
+    if isinstance(value,str):return clean_text(value)
+    if isinstance(value,list):return [clean(v) for v in value]
+    if isinstance(value,dict):
+        result={k:('<redacted>' if k.lower() in {'studio_session','csrftoken','x-csrf-token','bootstraptoken','x-studio-bootstrap','sessiontoken','ownerkey','authorization','cookie','set-cookie'} else clean(v)) for k,v in value.items()}
+        if value.get('contentType','').startswith(('text/','application/json')) and 'body' in value:
+            try:result['body']=base64.b64encode(clean_text(base64.b64decode(value['body']).decode()).encode()).decode()
+            except (ValueError,UnicodeError):pass
+        return result
+    return value
+def save(name,value):
+    path=out/name;path.parent.mkdir(parents=True,exist_ok=True);path.write_text(json.dumps(clean(value),indent=2)+'\n')
+def copy(name,path):
+    target=out/name;target.parent.mkdir(parents=True,exist_ok=True)
+    if path.suffix=='.png':target.write_bytes(path.read_bytes())
+    elif path.suffix=='.json':save(name,read(path))
+    else:target.write_text('\n'.join(line.rstrip() for line in clean_text(path.read_text()).splitlines()).rstrip()+'\n')
+def results(report):
+    for suite in report.get('suites',[]):yield from results(suite)
+    for spec in report.get('specs',[]):
+        for test in spec['tests']:
+            for result in test['results']:yield spec['title'],result
+
+frozen=read(root/'.studio-local/parameter-presentation-workflow/frozen-inputs.json');assert len(frozen)==298
+for name,h in frozen.items():assert hashlib.sha256((root/name).read_bytes()).hexdigest()==h,name
+lanes=['while-running-successor','after-terminal'];receipts=[]
+for name in lanes:
+    d=local/name;v=read(d/'receipt.json');assert v['outcome']=='passed' and v['noDuplicateRuns'] and v['canonicalProjectUnchanged'] and v['activeSnapshotUnchanged'] and v['mainFrozenInputsUnchanged']
+    assert read(d/'source-before.json')==read(d/'source-after.json')==frozen
+    assert [c['state'] for c in v['before']['children']]==['dispatching','pending'] and v['before']['children'][0]['runId'] is None
+    assert [c['state'] for c in v['final']['children']]==['stopped','stopped']
+    assert v['durableStartReceipt']['runId']==v['final']['children'][0]['runId']
+    receipts.append(v)
+review=read(local/'terminal-identity-review.json');assert len(review['lanes'])==2 and all(v['originalWorkerIdentityRetained'] for v in review['lanes'])
+failed=read(local/'while-running/receipt.json');assert failed['outcome']=='failed' and 'PARAMETER_UNRESOLVED' in failed['failure'] and failed['mainFrozenInputsUnchanged']
+out.mkdir(exist_ok=False)
+save('application-and-input-hashes.json',frozen);save('terminal-identity-review.json',review)
+for name in ['while-running',*lanes]:
+    for leaf in ['receipt.json','source-before.json','source-after.json','run.py.source.txt','backend_gate.py.source.txt']:copy(name+'/'+leaf,local/name/leaf)
+for name in ['run.py','backend_gate.py','retain.py','document.py','privacy-check.py']:copy('controllers/'+name+'.txt',local/name)
+save('verification.json',{'scope':'Supplemental deterministic pause fixture in actual native Linux backend, with unmodified real worker and ordinary native launcher restart. Initial backend is instrumented only at CampaignState.mark_started; this is not an uninstrumented initial-launcher timing observation.','passedLanes':2,'failedInitialFixtureAttempts':1,'initialFailure':'Wrong fixture parameterId time_step correctly rejected with PARAMETER_UNRESOLVED before campaign/worker allocation; corrected to existing timestep.','stages':lanes,'seconds':[v['seconds'] for v in receipts],'frozenInputs':298,'allSelectedInputsUnchanged':True,'canonicalProjectUnchanged':True,'activeSnapshotsUnchanged':True,'noDuplicateRuns':True,'originalWorkerIdentityRetained':True,'backendSuiteRelation':'Supplemental two native subprocess probes, not included in or added to the existing934 pytest tally.','browserSuiteRelation':'Independent from the parameter-focus browser pipeline, which was still running when these probes were retained. No full474 or performance outcome is inferred.','rootReview':'Implementation agent review only; not independent milestone acceptance.','completedTasks':47,'acceptedMilestones':[],'limitations':['Actual owned SIGKILL only after durable Start receipt and verified worker PID/birth/argv/owner. The test-only pause changes initial backend timing and holds campaign acknowledgement; it does not rewrite stored records, worker code/argv or canonical evidence.','Successor starts through the unmodified native launcher. One lane restarts while the worker is running; another after its own complete terminal write. Snapshot identity and no duplicate runs are verified in both; terminal worker files are compared across restart only in the terminal lane.','No worker failure, arbitrary interruption point, mid-journal write, native Windows, external/physical-provider or complete campaign matrix acceptance is established.']})
+print(json.dumps({'dossier':str(out.relative_to(root)),'passedLanes':2,'failedInitialFixtureAttempts':1,'inputs':298,'allSelectedInputsUnchanged':True}))

@@ -1,0 +1,1671 @@
+{
+  "config": {
+    "argv": [
+      "<loop-cache>/node-v24.22.1-linux-x64/bin/node",
+      "<repo>/node_modules/.bin/playwright",
+      "test",
+      "-c",
+      "tests/e2e/playwright.config.ts",
+      "--grep",
+      "physical placements:"
+    ],
+    "configFile": "<repo>/tests/e2e/playwright.config.ts",
+    "rootDir": "<repo>/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "<repo>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "<repo>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "*.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "<repo>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "<repo>/tests/e2e",
+        "snapshotDir": "<repo>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": "*.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "baseURL": "http://127.0.0.1:42747",
+          "browserName": "chromium",
+          "actionTimeout": 15000,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "trace": "off",
+          "screenshot": "only-on-failure",
+          "video": "off"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "<repo>/test-results/browser-report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "physical-placements-accessibility.spec.ts",
+      "file": "physical-placements-accessibility.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "physical placements: actual absence differs from unknown at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4134,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T02:41:32.802Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "placement-journey.json",
+                      "contentType": "application/json",
+                      "body": "eyJwcm9qZWN0SWQiOiJwcmotZTE3ZmM0MTAtMzBiZi00Y2FlLWI0ZGEtMzBjYjZhYTdjMDgzIiwicmV2aXNpb24iOjMsInJlYWRzIjpbIi9hcGkvdjEvcHJvamVjdHMvcHJqLWUxN2ZjNDEwLTMwYmYtNGNhZS1iNGRhLTMwY2I2YWE3YzA4My9kZXBsb3ltZW50LXZhcmlhbnRzL2RvYy0zL3BoeXNpY2FsLWJpbmRpbmdzP3JldmlzaW9uPTMiXSwibXV0YXRpdmVSZXF1ZXN0c0FmdGVyU2V0dXAiOjAsImNhbm9uaWNhbFByb2plY3RBbmRSdW5zVW5jaGFuZ2VkIjp0cnVlLCJhY3R1YWxFbXB0eVJlcG9ydCI6eyJiaW5kaW5nT2JzZXJ2YXRpb25WZXJzaW9uIjoiMS4wIiwicHJvamVjdElkIjoicHJqLWUxN2ZjNDEwLTMwYmYtNGNhZS1iNGRhLTMwY2I2YWE3YzA4MyIsImRvY3VtZW50SWQiOiJkb2MtMyIsInJldmlzaW9uIjozLCJzb3VyY2VWYWxpZCI6dHJ1ZSwic2NvcGUiOiJyZWFkX29ubHlfcGxhY2VtZW50X29ic2VydmF0aW9uIiwiYWN0aXZlUmVhZHkiOmZhbHNlLCJydW50aW1lQWRtaXNzaW9uIjoidW5hdmFpbGFibGUiLCJiaW5kaW5ncyI6W10sImRpYWdub3N0aWNzIjpbXSwibGltaXRhdGlvbnMiOlsiRG9lcyBub3QgY2hhbmdlIGRlcGxveW1lbnQgcmVzb2x1dGlvbiBvciBydW50aW1lIGFkbWlzc2lvbi4iLCJQaHlzaWNhbCBjb250cm9scyBhbmQgcmVzZXJ2YXRpb25zIHJlbWFpbiB1bmFkbWl0dGVkLiJdLCJzeXN0ZW1SZWYiOiJ4ZGw6Ly9vcmcueHZlcnNlLnN0dWRpby5wcm9jZXNzLWNvbnRyb2wvc3lzdGVtL3JlZmVyZW5jZS1sb29wIiwiZGVwbG95bWVudFJlZiI6InhkbDovL29yZy54dmVyc2Uuc3R1ZGlvLnByb2Nlc3MtY29udHJvbC9kZXBsb3ltZW50L2xvY2FsLXJlZmVyZW5jZSIsImludmVudG9yeVRydW5jYXRlZCI6ZmFsc2UsImludmVudG9yeUNvbXBsZXRlIjp0cnVlfSwic2NvcGUiOiJSZWFkLW9ubHkgbmF0aXZlIGJyb3dzZXIgaW5zcGVjdGlvbjsgYWN0dWFsIEFQSSByZXN1bHRzIGFuZCBsYWJlbGxlZCB0cmFuc3BvcnQgZml4dHVyZXMgYXJlIGRpc3Rpbmd1aXNoZWQuIE5vIHBoeXNpY2FsIHByb3ZpZGVyIGluc3RhbGxlZCwgcmVzZXJ2YXRpb24sIGRldmljZSBvcGVyYXRpb24gb3IgU3RhcnQuIn0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a94800dbbc8a48884adb-554d6c0550f442a53758",
+          "file": "physical-placements-accessibility.spec.ts",
+          "line": 161,
+          "column": 7
+        },
+        {
+          "title": "physical placements: actual stale revision refuses and explicit reopen recovers at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3986,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T02:41:37.003Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "placement-journey.json",
+                      "contentType": "application/json",
+                      "body": "eyJwcm9qZWN0SWQiOiJwcmotODc2M2ZiNmQtMTEyZS00MmFjLTg5OGMtMDM3NjRhYjhiMTNkIiwicmV2aXNpb24iOjMsInJlYWRzIjpbIi9hcGkvdjEvcHJvamVjdHMvcHJqLTg3NjNmYjZkLTExMmUtNDJhYy04OThjLTAzNzY0YWI4YjEzZC9kZXBsb3ltZW50LXZhcmlhbnRzL2RvYy0zL3BoeXNpY2FsLWJpbmRpbmdzP3JldmlzaW9uPTIiLCIvYXBpL3YxL3Byb2plY3RzL3Byai04NzYzZmI2ZC0xMTJlLTQyYWMtODk4Yy0wMzc2NGFiOGIxM2QvZGVwbG95bWVudC12YXJpYW50cy9kb2MtMy9waHlzaWNhbC1iaW5kaW5ncz9yZXZpc2lvbj0yIiwiL2FwaS92MS9wcm9qZWN0cy9wcmotODc2M2ZiNmQtMTEyZS00MmFjLTg5OGMtMDM3NjRhYjhiMTNkL2RlcGxveW1lbnQtdmFyaWFudHMvZG9jLTMvcGh5c2ljYWwtYmluZGluZ3M/cmV2aXNpb249MyJdLCJtdXRhdGl2ZVJlcXVlc3RzQWZ0ZXJTZXR1cCI6MCwiY2Fub25pY2FsUHJvamVjdEFuZFJ1bnNVbmNoYW5nZWQiOnRydWUsImFjdHVhbFJldmlzaW9uQ29uZmxpY3RSZXNwb25zZXMiOls0MTIsNDEyLDIwMF0sIm9sZFVJUmV2aXNpb24iOjIsImV4cGxpY2l0UmVvcGVuUmVjb3ZlcmVkIjp0cnVlLCJzY29wZSI6IlJlYWQtb25seSBuYXRpdmUgYnJvd3NlciBpbnNwZWN0aW9uOyBhY3R1YWwgQVBJIHJlc3VsdHMgYW5kIGxhYmVsbGVkIHRyYW5zcG9ydCBmaXh0dXJlcyBhcmUgZGlzdGluZ3Vpc2hlZC4gTm8gcGh5c2ljYWwgcHJvdmlkZXIgaW5zdGFsbGVkLCByZXNlcnZhdGlvbiwgZGV2aWNlIG9wZXJhdGlvbiBvciBTdGFydC4ifQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a94800dbbc8a48884adb-eccf83cecd0638801825",
+          "file": "physical-placements-accessibility.spec.ts",
+          "line": 177,
+          "column": 7
+        },
+        {
+          "title": "physical placements: actual unreadable source stays unavailable without acknowledgement at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2156,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T02:41:41.000Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "placement-journey.json",
+                      "contentType": "application/json",
+                      "body": "eyJwcm9qZWN0SWQiOiJwcmotNjkxNTQ2M2ItMzU2Yy00MjcxLThjZjEtY2FlMTVkOTA4NjI1IiwicmV2aXNpb24iOjIsInJlYWRzIjpbIi9hcGkvdjEvcHJvamVjdHMvcHJqLTY5MTU0NjNiLTM1NmMtNDI3MS04Y2YxLWNhZTE1ZDkwODYyNS9kZXBsb3ltZW50LXZhcmlhbnRzL2RvYy0zL3BoeXNpY2FsLWJpbmRpbmdzP3JldmlzaW9uPTIiLCIvYXBpL3YxL3Byb2plY3RzL3Byai02OTE1NDYzYi0zNTZjLTQyNzEtOGNmMS1jYWUxNWQ5MDg2MjUvZGVwbG95bWVudC12YXJpYW50cy9kb2MtMy9waHlzaWNhbC1iaW5kaW5ncz9yZXZpc2lvbj0yIl0sIm11dGF0aXZlUmVxdWVzdHNBZnRlclNldHVwIjowLCJjYW5vbmljYWxQcm9qZWN0QW5kUnVuc1VuY2hhbmdlZCI6dHJ1ZSwiYWN0dWFsVW5yZWFkYWJsZUhUVFA0MDkiOnRydWUsImV4YWN0T3duZWRGaWxlUmVzdG9yZWQiOnRydWUsInNjb3BlIjoiUmVhZC1vbmx5IG5hdGl2ZSBicm93c2VyIGluc3BlY3Rpb247IGFjdHVhbCBBUEkgcmVzdWx0cyBhbmQgbGFiZWxsZWQgdHJhbnNwb3J0IGZpeHR1cmVzIGFyZSBkaXN0aW5ndWlzaGVkLiBObyBwaHlzaWNhbCBwcm92aWRlciBpbnN0YWxsZWQsIHJlc2VydmF0aW9uLCBkZXZpY2Ugb3BlcmF0aW9uIG9yIFN0YXJ0LiJ9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a94800dbbc8a48884adb-06a16b22ba096126867a",
+          "file": "physical-placements-accessibility.spec.ts",
+          "line": 196,
+          "column": 7
+        },
+        {
+          "title": "physical placements: Home ignores held HTTP200 at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2473,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T02:41:43.168Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "placement-journey.json",
+                      "contentType": "application/json",
+                      "body": "eyJwcm9qZWN0SWQiOiJwcmotYjBkNzI3MDItZTYyMC00NTdkLTlhYTEtNGM0NmE0NjVkMmRkIiwicmV2aXNpb24iOjIsInJlYWRzIjpbIi9hcGkvdjEvcHJvamVjdHMvcHJqLWIwZDcyNzAyLWU2MjAtNDU3ZC05YWExLTRjNDZhNDY1ZDJkZC9kZXBsb3ltZW50LXZhcmlhbnRzL2RvYy0zL3BoeXNpY2FsLWJpbmRpbmdzP3JldmlzaW9uPTIiXSwibXV0YXRpdmVSZXF1ZXN0c0FmdGVyU2V0dXAiOjAsImNhbm9uaWNhbFByb2plY3RBbmRSdW5zVW5jaGFuZ2VkIjp0cnVlLCJoZWxkU3RhdHVzIjoyMDAsImFjdHVhbFJlcG9ydEhlbGQiOnRydWUsImxhYmVsbGVkVHJhbnNwb3J0RmFpbHVyZSI6ZmFsc2UsImRlcGFydGVkSG9tZSI6dHJ1ZSwic2NvcGUiOiJSZWFkLW9ubHkgbmF0aXZlIGJyb3dzZXIgaW5zcGVjdGlvbjsgYWN0dWFsIEFQSSByZXN1bHRzIGFuZCBsYWJlbGxlZCB0cmFuc3BvcnQgZml4dHVyZXMgYXJlIGRpc3Rpbmd1aXNoZWQuIE5vIHBoeXNpY2FsIHByb3ZpZGVyIGluc3RhbGxlZCwgcmVzZXJ2YXRpb24sIGRldmljZSBvcGVyYXRpb24gb3IgU3RhcnQuIn0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a94800dbbc8a48884adb-d159d249b8305944a0bc",
+          "file": "physical-placements-accessibility.spec.ts",
+          "line": 215,
+          "column": 9
+        },
+        {
+          "title": "physical placements: Home ignores held HTTP503 at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2396,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T02:41:45.652Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "placement-journey.json",
+                      "contentType": "application/json",
+                      "body": "eyJwcm9qZWN0SWQiOiJwcmotZDA5ZWU5ZTMtYjQ4My00NmY3LTlkZmMtMzk5Y2QwYWJiNmQ5IiwicmV2aXNpb24iOjIsInJlYWRzIjpbIi9hcGkvdjEvcHJvamVjdHMvcHJqLWQwOWVlOWUzLWI0ODMtNDZmNy05ZGZjLTM5OWNkMGFiYjZkOS9kZXBsb3ltZW50LXZhcmlhbnRzL2RvYy0zL3BoeXNpY2FsLWJpbmRpbmdzP3JldmlzaW9uPTIiXSwibXV0YXRpdmVSZXF1ZXN0c0FmdGVyU2V0dXAiOjAsImNhbm9uaWNhbFByb2plY3RBbmRSdW5zVW5jaGFuZ2VkIjp0cnVlLCJoZWxkU3RhdHVzIjo1MDMsImFjdHVhbFJlcG9ydEhlbGQiOmZhbHNlLCJsYWJlbGxlZFRyYW5zcG9ydEZhaWx1cmUiOnRydWUsImRlcGFydGVkSG9tZSI6dHJ1ZSwic2NvcGUiOiJSZWFkLW9ubHkgbmF0aXZlIGJyb3dzZXIgaW5zcGVjdGlvbjsgYWN0dWFsIEFQSSByZXN1bHRzIGFuZCBsYWJlbGxlZCB0cmFuc3BvcnQgZml4dHVyZXMgYXJlIGRpc3Rpbmd1aXNoZWQuIE5vIHBoeXNpY2FsIHByb3ZpZGVyIGluc3RhbGxlZCwgcmVzZXJ2YXRpb24sIGRldmljZSBvcGVyYXRpb24gb3IgU3RhcnQuIn0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a94800dbbc8a48884adb-d3063cb197b2c96006a5",
+          "file": "physical-placements-accessibility.spec.ts",
+          "line": 215,
+          "column": 9
+        },
+        {
+          "title": "physical placements: pending Enter and deliberate focus preserve one read at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2404,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T02:41:48.057Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "placement-journey.json",
+                      "contentType": "application/json",
+                      "body": "eyJwcm9qZWN0SWQiOiJwcmotMWQ1OTlkZTktMzM1Ny00MGVmLTk4NmQtYzM3YmE0MThiOGNkIiwicmV2aXNpb24iOjIsInJlYWRzIjpbIi9hcGkvdjEvcHJvamVjdHMvcHJqLTFkNTk5ZGU5LTMzNTctNDBlZi05ODZkLWMzN2JhNDE4YjhjZC9kZXBsb3ltZW50LXZhcmlhbnRzL2RvYy0zL3BoeXNpY2FsLWJpbmRpbmdzP3JldmlzaW9uPTIiXSwibXV0YXRpdmVSZXF1ZXN0c0FmdGVyU2V0dXAiOjAsImNhbm9uaWNhbFByb2plY3RBbmRSdW5zVW5jaGFuZ2VkIjp0cnVlLCJhY3R1YWxSZXBvcnRIZWxkIjp0cnVlLCJyZXBlYXRlZFN1Ym1pc3Npb25SZWFkQ291bnQiOjEsImRlbGliZXJhdGVGb2N1c1ByZXNlcnZlZCI6dHJ1ZSwiY29udHJvbEJvdW5kcyI6eyJib3giOnsieCI6NzkyLjI2NTYyNSwieSI6MzY1LjI1LCJ3aWR0aCI6MTkyLjczNDM3NSwiaGVpZ2h0IjozOCwidG9wIjozNjUuMjUsInJpZ2h0Ijo5ODUsImJvdHRvbSI6NDAzLjI1LCJsZWZ0Ijo3OTIuMjY1NjI1fSwib3V0bGluZSI6InNvbGlkIiwib3V0bGluZVdpZHRoIjozfSwic2NvcGUiOiJSZWFkLW9ubHkgbmF0aXZlIGJyb3dzZXIgaW5zcGVjdGlvbjsgYWN0dWFsIEFQSSByZXN1bHRzIGFuZCBsYWJlbGxlZCB0cmFuc3BvcnQgZml4dHVyZXMgYXJlIGRpc3Rpbmd1aXNoZWQuIE5vIHBoeXNpY2FsIHByb3ZpZGVyIGluc3RhbGxlZCwgcmVzZXJ2YXRpb24sIGRldmljZSBvcGVyYXRpb24gb3IgU3RhcnQuIn0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a94800dbbc8a48884adb-0ed56b619e1cb3a71893",
+          "file": "physical-placements-accessibility.spec.ts",
+          "line": 228,
+          "column": 7
+        },
+        {
+          "title": "physical placements: newer source draft keeps dialog focus after held observation at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2190,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T02:41:50.472Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "placement-journey.json",
+                      "contentType": "application/json",
+                      "body": "eyJwcm9qZWN0SWQiOiJwcmotZGI0N2Q1NTQtOGJjNy00ZGY5LWIzMWEtZjc5NDVhZjk4MmNlIiwicmV2aXNpb24iOjIsInJlYWRzIjpbIi9hcGkvdjEvcHJvamVjdHMvcHJqLWRiNDdkNTU0LThiYzctNGRmOS1iMzFhLWY3OTQ1YWY5ODJjZS9kZXBsb3ltZW50LXZhcmlhbnRzL2RvYy0zL3BoeXNpY2FsLWJpbmRpbmdzP3JldmlzaW9uPTIiXSwibXV0YXRpdmVSZXF1ZXN0c0FmdGVyU2V0dXAiOjAsImNhbm9uaWNhbFByb2plY3RBbmRSdW5zVW5jaGFuZ2VkIjp0cnVlLCJhY3R1YWxSZXBvcnRIZWxkIjp0cnVlLCJuZXdlclVuc2F2ZWRTb3VyY2VQcmVzZXJ2ZWQiOnRydWUsImRpYWxvZ0ZvY3VzUHJlc2VydmVkIjp0cnVlLCJzY29wZSI6IlJlYWQtb25seSBuYXRpdmUgYnJvd3NlciBpbnNwZWN0aW9uOyBhY3R1YWwgQVBJIHJlc3VsdHMgYW5kIGxhYmVsbGVkIHRyYW5zcG9ydCBmaXh0dXJlcyBhcmUgZGlzdGluZ3Vpc2hlZC4gTm8gcGh5c2ljYWwgcHJvdmlkZXIgaW5zdGFsbGVkLCByZXNlcnZhdGlvbiwgZGV2aWNlIG9wZXJhdGlvbiBvciBTdGFydC4ifQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a94800dbbc8a48884adb-779542d6df1711f7a9bd",
+          "file": "physical-placements-accessibility.spec.ts",
+          "line": 240,
+          "column": 7
+        },
+        {
+          "title": "physical placements: labelled wrong revision stays unknown at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2003,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T02:41:52.669Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "placement-journey.json",
+                      "contentType": "application/json",
+                      "body": "eyJwcm9qZWN0SWQiOiJwcmotMjRmMTI5OTQtZTdmNS00ZjljLWI0YTktZTBlYjZlZTkxNzRjIiwicmV2aXNpb24iOjIsInJlYWRzIjpbIi9hcGkvdjEvcHJvamVjdHMvcHJqLTI0ZjEyOTk0LWU3ZjUtNGY5Yy1iNGE5LWUwZWI2ZWU5MTc0Yy9kZXBsb3ltZW50LXZhcmlhbnRzL2RvYy0zL3BoeXNpY2FsLWJpbmRpbmdzP3JldmlzaW9uPTIiLCIvYXBpL3YxL3Byb2plY3RzL3Byai0yNGYxMjk5NC1lN2Y1LTRmOWMtYjRhOS1lMGViNmVlOTE3NGMvZGVwbG95bWVudC12YXJpYW50cy9kb2MtMy9waHlzaWNhbC1iaW5kaW5ncz9yZXZpc2lvbj0yIl0sIm11dGF0aXZlUmVxdWVzdHNBZnRlclNldHVwIjowLCJjYW5vbmljYWxQcm9qZWN0QW5kUnVuc1VuY2hhbmdlZCI6dHJ1ZSwibGFiZWxsZWRNYWxmb3JtZWRUcmFuc3BvcnQiOiJ3cm9uZyByZXZpc2lvbiIsImFjdHVhbFJldHJ5U3VjY2VlZGVkIjp0cnVlLCJzY29wZSI6IlJlYWQtb25seSBuYXRpdmUgYnJvd3NlciBpbnNwZWN0aW9uOyBhY3R1YWwgQVBJIHJlc3VsdHMgYW5kIGxhYmVsbGVkIHRyYW5zcG9ydCBmaXh0dXJlcyBhcmUgZGlzdGluZ3Vpc2hlZC4gTm8gcGh5c2ljYWwgcHJvdmlkZXIgaW5zdGFsbGVkLCByZXNlcnZhdGlvbiwgZGV2aWNlIG9wZXJhdGlvbiBvciBTdGFydC4ifQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a94800dbbc8a48884adb-9b47083b485ac6122934",
+          "file": "physical-placements-accessibility.spec.ts",
+          "line": 256,
+          "column": 9
+        },
+        {
+          "title": "physical placements: labelled wrong project stays unknown at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2113,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T02:41:54.681Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "placement-journey.json",
+                      "contentType": "application/json",
+                      "body": "eyJwcm9qZWN0SWQiOiJwcmotNzg2YzUxNWMtMmUxMC00YmU3LTg1MGEtZWVkNjVlMjZkZGFjIiwicmV2aXNpb24iOjIsInJlYWRzIjpbIi9hcGkvdjEvcHJvamVjdHMvcHJqLTc4NmM1MTVjLTJlMTAtNGJlNy04NTBhLWVlZDY1ZTI2ZGRhYy9kZXBsb3ltZW50LXZhcmlhbnRzL2RvYy0zL3BoeXNpY2FsLWJpbmRpbmdzP3JldmlzaW9uPTIiLCIvYXBpL3YxL3Byb2plY3RzL3Byai03ODZjNTE1Yy0yZTEwLTRiZTctODUwYS1lZWQ2NWUyNmRkYWMvZGVwbG95bWVudC12YXJpYW50cy9kb2MtMy9waHlzaWNhbC1iaW5kaW5ncz9yZXZpc2lvbj0yIl0sIm11dGF0aXZlUmVxdWVzdHNBZnRlclNldHVwIjowLCJjYW5vbmljYWxQcm9qZWN0QW5kUnVuc1VuY2hhbmdlZCI6dHJ1ZSwibGFiZWxsZWRNYWxmb3JtZWRUcmFuc3BvcnQiOiJ3cm9uZyBwcm9qZWN0IiwiYWN0dWFsUmV0cnlTdWNjZWVkZWQiOnRydWUsInNjb3BlIjoiUmVhZC1vbmx5IG5hdGl2ZSBicm93c2VyIGluc3BlY3Rpb247IGFjdHVhbCBBUEkgcmVzdWx0cyBhbmQgbGFiZWxsZWQgdHJhbnNwb3J0IGZpeHR1cmVzIGFyZSBkaXN0aW5ndWlzaGVkLiBObyBwaHlzaWNhbCBwcm92aWRlciBpbnN0YWxsZWQsIHJlc2VydmF0aW9uLCBkZXZpY2Ugb3BlcmF0aW9uIG9yIFN0YXJ0LiJ9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a94800dbbc8a48884adb-c6b18b1d68e37c751ea9",
+          "file": "physical-placements-accessibility.spec.ts",
+          "line": 256,
+          "column": 9
+        },
+        {
+          "title": "physical placements: labelled wrong deployment stays unknown at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2100,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T02:41:56.805Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "placement-journey.json",
+                      "contentType": "application/json",
+                      "body": "eyJwcm9qZWN0SWQiOiJwcmotMGZmMzdhNWItYmQzYS00YjYzLWJhMmYtZmFmMjMxYjI5MmQ3IiwicmV2aXNpb24iOjIsInJlYWRzIjpbIi9hcGkvdjEvcHJvamVjdHMvcHJqLTBmZjM3YTViLWJkM2EtNGI2My1iYTJmLWZhZjIzMWIyOTJkNy9kZXBsb3ltZW50LXZhcmlhbnRzL2RvYy0zL3BoeXNpY2FsLWJpbmRpbmdzP3JldmlzaW9uPTIiLCIvYXBpL3YxL3Byb2plY3RzL3Byai0wZmYzN2E1Yi1iZDNhLTRiNjMtYmEyZi1mYWYyMzFiMjkyZDcvZGVwbG95bWVudC12YXJpYW50cy9kb2MtMy9waHlzaWNhbC1iaW5kaW5ncz9yZXZpc2lvbj0yIl0sIm11dGF0aXZlUmVxdWVzdHNBZnRlclNldHVwIjowLCJjYW5vbmljYWxQcm9qZWN0QW5kUnVuc1VuY2hhbmdlZCI6dHJ1ZSwibGFiZWxsZWRNYWxmb3JtZWRUcmFuc3BvcnQiOiJ3cm9uZyBkZXBsb3ltZW50IiwiYWN0dWFsUmV0cnlTdWNjZWVkZWQiOnRydWUsInNjb3BlIjoiUmVhZC1vbmx5IG5hdGl2ZSBicm93c2VyIGluc3BlY3Rpb247IGFjdHVhbCBBUEkgcmVzdWx0cyBhbmQgbGFiZWxsZWQgdHJhbnNwb3J0IGZpeHR1cmVzIGFyZSBkaXN0aW5ndWlzaGVkLiBObyBwaHlzaWNhbCBwcm92aWRlciBpbnN0YWxsZWQsIHJlc2VydmF0aW9uLCBkZXZpY2Ugb3BlcmF0aW9uIG9yIFN0YXJ0LiJ9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a94800dbbc8a48884adb-2911d0b1ebc7861d1a25",
+          "file": "physical-placements-accessibility.spec.ts",
+          "line": 256,
+          "column": 9
+        },
+        {
+          "title": "physical placements: labelled wrong system stays unknown at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2097,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T02:41:58.920Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "placement-journey.json",
+                      "contentType": "application/json",
+                      "body": "eyJwcm9qZWN0SWQiOiJwcmotYTE0MWRjMGMtMWZlZC00NTMxLTgxOWYtZDQyMWVmNzA3MzA4IiwicmV2aXNpb24iOjIsInJlYWRzIjpbIi9hcGkvdjEvcHJvamVjdHMvcHJqLWExNDFkYzBjLTFmZWQtNDUzMS04MTlmLWQ0MjFlZjcwNzMwOC9kZXBsb3ltZW50LXZhcmlhbnRzL2RvYy0zL3BoeXNpY2FsLWJpbmRpbmdzP3JldmlzaW9uPTIiLCIvYXBpL3YxL3Byb2plY3RzL3Byai1hMTQxZGMwYy0xZmVkLTQ1MzEtODE5Zi1kNDIxZWY3MDczMDgvZGVwbG95bWVudC12YXJpYW50cy9kb2MtMy9waHlzaWNhbC1iaW5kaW5ncz9yZXZpc2lvbj0yIl0sIm11dGF0aXZlUmVxdWVzdHNBZnRlclNldHVwIjowLCJjYW5vbmljYWxQcm9qZWN0QW5kUnVuc1VuY2hhbmdlZCI6dHJ1ZSwibGFiZWxsZWRNYWxmb3JtZWRUcmFuc3BvcnQiOiJ3cm9uZyBzeXN0ZW0iLCJhY3R1YWxSZXRyeVN1Y2NlZWRlZCI6dHJ1ZSwic2NvcGUiOiJSZWFkLW9ubHkgbmF0aXZlIGJyb3dzZXIgaW5zcGVjdGlvbjsgYWN0dWFsIEFQSSByZXN1bHRzIGFuZCBsYWJlbGxlZCB0cmFuc3BvcnQgZml4dHVyZXMgYXJlIGRpc3Rpbmd1aXNoZWQuIE5vIHBoeXNpY2FsIHByb3ZpZGVyIGluc3RhbGxlZCwgcmVzZXJ2YXRpb24sIGRldmljZSBvcGVyYXRpb24gb3IgU3RhcnQuIn0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a94800dbbc8a48884adb-95bb318dbe6fe3cfd94b",
+          "file": "physical-placements-accessibility.spec.ts",
+          "line": 256,
+          "column": 9
+        },
+        {
+          "title": "physical placements: labelled authority flag stays unknown at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2070,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T02:42:01.027Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "placement-journey.json",
+                      "contentType": "application/json",
+                      "body": "eyJwcm9qZWN0SWQiOiJwcmotZDE4YmQxMmUtOGQ4MS00ZTcyLTg4N2QtNGU4NDFmYjg3MWJmIiwicmV2aXNpb24iOjIsInJlYWRzIjpbIi9hcGkvdjEvcHJvamVjdHMvcHJqLWQxOGJkMTJlLThkODEtNGU3Mi04ODdkLTRlODQxZmI4NzFiZi9kZXBsb3ltZW50LXZhcmlhbnRzL2RvYy0zL3BoeXNpY2FsLWJpbmRpbmdzP3JldmlzaW9uPTIiLCIvYXBpL3YxL3Byb2plY3RzL3Byai1kMThiZDEyZS04ZDgxLTRlNzItODg3ZC00ZTg0MWZiODcxYmYvZGVwbG95bWVudC12YXJpYW50cy9kb2MtMy9waHlzaWNhbC1iaW5kaW5ncz9yZXZpc2lvbj0yIl0sIm11dGF0aXZlUmVxdWVzdHNBZnRlclNldHVwIjowLCJjYW5vbmljYWxQcm9qZWN0QW5kUnVuc1VuY2hhbmdlZCI6dHJ1ZSwibGFiZWxsZWRNYWxmb3JtZWRUcmFuc3BvcnQiOiJhdXRob3JpdHkgZmxhZyIsImFjdHVhbFJldHJ5U3VjY2VlZGVkIjp0cnVlLCJzZWxlY3RlZENvbnRyYXN0Ijp7ImxhYmVsIjoiUGxhY2VtZW50IG1hbGZvcm1lZCBhdXRob3JpdHkgcmVmdXNhbCIsInRleHQiOiJQaHlzaWNhbCBwbGFjZW1lbnQgYXZhaWxhYmlsaXR5IGlzIHVua25vd24uIFRoZSBwaHlzaWNhbCBwbGFjZW1lbnQgb2JzZXJ2YXRpb24gaXMgaW5jb21wbGV0ZSwgbWFsZm9ybWVkIG9yIGJlbG9uZ3MgdG8gYW5vdGhlciBjb250ZXh0LiBJbnNwZWN0IGFnYWluIHRvIHJldHJ5LiIsImNvbG9yIjoicmdiKDE2MSwgODksIDgxKSIsImZvbnRTaXplIjoiMTJweCIsImZvbnRXZWlnaHQiOiI0MDAiLCJ0aHJlc2hvbGQiOjQuNSwic2NvcGUiOiJTZWxlY3RlZCBub3JtYWwtc2l6ZSByZW5kZXJlZCB0ZXh0OyBubyBvdmVyYWxsIGFjY2Vzc2liaWxpdHkgY2VydGlmaWNhdGlvbiIsInN1cHBvcnRlZCI6dHJ1ZSwibGF5ZXJzIjpbInJnYigyNTUsIDI0MywgMjQyKSJdLCJiYWNrZ3JvdW5kIjpbMSwwLjk1Mjk0MTE3NjQ3MDU4ODIsMC45NDkwMTk2MDc4NDMxMzcyLDFdLCJjb21wb3NpdGVkRm9yZWdyb3VuZCI6WzAuNjMxMzcyNTQ5MDE5NjA3OCwwLjM0OTAxOTYwNzg0MzEzNzI0LDAuMzE3NjQ3MDU4ODIzNTI5NCwxXSwicmF0aW8iOjQuNzYzMzYwOTE2MTU1NzcyLCJwYXNzZWQiOnRydWUsImFzc3VtcHRpb25zIjoiQ1NTIHNSR0IgY29sb3JzOyBhbHBoYSBjb21wb3NpdGVkIHRocm91Z2ggZXhwbGljaXQgYmFja2dyb3VuZHM7IG5vIGFudGktYWxpYXNpbmcgYXBwcm94aW1hdGlvbiJ9LCJzY29wZSI6IlJlYWQtb25seSBuYXRpdmUgYnJvd3NlciBpbnNwZWN0aW9uOyBhY3R1YWwgQVBJIHJlc3VsdHMgYW5kIGxhYmVsbGVkIHRyYW5zcG9ydCBmaXh0dXJlcyBhcmUgZGlzdGluZ3Vpc2hlZC4gTm8gcGh5c2ljYWwgcHJvdmlkZXIgaW5zdGFsbGVkLCByZXNlcnZhdGlvbiwgZGV2aWNlIG9wZXJhdGlvbiBvciBTdGFydC4ifQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a94800dbbc8a48884adb-60ecb518d38ae9923a72",
+          "file": "physical-placements-accessibility.spec.ts",
+          "line": 256,
+          "column": 9
+        },
+        {
+          "title": "physical placements: labelled missing readiness stays unknown at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2036,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T02:42:03.108Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "placement-journey.json",
+                      "contentType": "application/json",
+                      "body": "eyJwcm9qZWN0SWQiOiJwcmotMWI1ZDUzYjUtYjFhNS00MTIzLWI1YzktMmFjNzhmNDJlYzI3IiwicmV2aXNpb24iOjIsInJlYWRzIjpbIi9hcGkvdjEvcHJvamVjdHMvcHJqLTFiNWQ1M2I1LWIxYTUtNDEyMy1iNWM5LTJhYzc4ZjQyZWMyNy9kZXBsb3ltZW50LXZhcmlhbnRzL2RvYy0zL3BoeXNpY2FsLWJpbmRpbmdzP3JldmlzaW9uPTIiLCIvYXBpL3YxL3Byb2plY3RzL3Byai0xYjVkNTNiNS1iMWE1LTQxMjMtYjVjOS0yYWM3OGY0MmVjMjcvZGVwbG95bWVudC12YXJpYW50cy9kb2MtMy9waHlzaWNhbC1iaW5kaW5ncz9yZXZpc2lvbj0yIl0sIm11dGF0aXZlUmVxdWVzdHNBZnRlclNldHVwIjowLCJjYW5vbmljYWxQcm9qZWN0QW5kUnVuc1VuY2hhbmdlZCI6dHJ1ZSwibGFiZWxsZWRNYWxmb3JtZWRUcmFuc3BvcnQiOiJtaXNzaW5nIHJlYWRpbmVzcyIsImFjdHVhbFJldHJ5U3VjY2VlZGVkIjp0cnVlLCJzY29wZSI6IlJlYWQtb25seSBuYXRpdmUgYnJvd3NlciBpbnNwZWN0aW9uOyBhY3R1YWwgQVBJIHJlc3VsdHMgYW5kIGxhYmVsbGVkIHRyYW5zcG9ydCBmaXh0dXJlcyBhcmUgZGlzdGluZ3Vpc2hlZC4gTm8gcGh5c2ljYWwgcHJvdmlkZXIgaW5zdGFsbGVkLCByZXNlcnZhdGlvbiwgZGV2aWNlIG9wZXJhdGlvbiBvciBTdGFydC4ifQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a94800dbbc8a48884adb-4c7cf477f33c6e21e047",
+          "file": "physical-placements-accessibility.spec.ts",
+          "line": 256,
+          "column": 9
+        },
+        {
+          "title": "physical placements: labelled duplicate binding stays unknown at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2157,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T02:42:05.156Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "placement-journey.json",
+                      "contentType": "application/json",
+                      "body": "eyJwcm9qZWN0SWQiOiJwcmotYmE2MTM3YzctN2ViOC00OWFjLWJlMzItMzc1M2ZhN2Y1MGNkIiwicmV2aXNpb24iOjIsInJlYWRzIjpbIi9hcGkvdjEvcHJvamVjdHMvcHJqLWJhNjEzN2M3LTdlYjgtNDlhYy1iZTMyLTM3NTNmYTdmNTBjZC9kZXBsb3ltZW50LXZhcmlhbnRzL2RvYy0zL3BoeXNpY2FsLWJpbmRpbmdzP3JldmlzaW9uPTIiLCIvYXBpL3YxL3Byb2plY3RzL3Byai1iYTYxMzdjNy03ZWI4LTQ5YWMtYmUzMi0zNzUzZmE3ZjUwY2QvZGVwbG95bWVudC12YXJpYW50cy9kb2MtMy9waHlzaWNhbC1iaW5kaW5ncz9yZXZpc2lvbj0yIl0sIm11dGF0aXZlUmVxdWVzdHNBZnRlclNldHVwIjowLCJjYW5vbmljYWxQcm9qZWN0QW5kUnVuc1VuY2hhbmdlZCI6dHJ1ZSwibGFiZWxsZWRNYWxmb3JtZWRUcmFuc3BvcnQiOiJkdXBsaWNhdGUgYmluZGluZyIsImFjdHVhbFJldHJ5U3VjY2VlZGVkIjp0cnVlLCJzY29wZSI6IlJlYWQtb25seSBuYXRpdmUgYnJvd3NlciBpbnNwZWN0aW9uOyBhY3R1YWwgQVBJIHJlc3VsdHMgYW5kIGxhYmVsbGVkIHRyYW5zcG9ydCBmaXh0dXJlcyBhcmUgZGlzdGluZ3Vpc2hlZC4gTm8gcGh5c2ljYWwgcHJvdmlkZXIgaW5zdGFsbGVkLCByZXNlcnZhdGlvbiwgZGV2aWNlIG9wZXJhdGlvbiBvciBTdGFydC4ifQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a94800dbbc8a48884adb-9205eadcbec82e7253d1",
+          "file": "physical-placements-accessibility.spec.ts",
+          "line": 256,
+          "column": 9
+        },
+        {
+          "title": "physical placements: labelled incomplete inventory stays unknown at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2128,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T02:42:07.323Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "placement-journey.json",
+                      "contentType": "application/json",
+                      "body": "eyJwcm9qZWN0SWQiOiJwcmotOTZkMTFlMzAtMDEzZS00NzUwLTg1NjEtMzU3ZjFlN2UxMDk2IiwicmV2aXNpb24iOjIsInJlYWRzIjpbIi9hcGkvdjEvcHJvamVjdHMvcHJqLTk2ZDExZTMwLTAxM2UtNDc1MC04NTYxLTM1N2YxZTdlMTA5Ni9kZXBsb3ltZW50LXZhcmlhbnRzL2RvYy0zL3BoeXNpY2FsLWJpbmRpbmdzP3JldmlzaW9uPTIiLCIvYXBpL3YxL3Byb2plY3RzL3Byai05NmQxMWUzMC0wMTNlLTQ3NTAtODU2MS0zNTdmMWU3ZTEwOTYvZGVwbG95bWVudC12YXJpYW50cy9kb2MtMy9waHlzaWNhbC1iaW5kaW5ncz9yZXZpc2lvbj0yIl0sIm11dGF0aXZlUmVxdWVzdHNBZnRlclNldHVwIjowLCJjYW5vbmljYWxQcm9qZWN0QW5kUnVuc1VuY2hhbmdlZCI6dHJ1ZSwibGFiZWxsZWRNYWxmb3JtZWRUcmFuc3BvcnQiOiJpbmNvbXBsZXRlIGludmVudG9yeSIsImFjdHVhbFJldHJ5U3VjY2VlZGVkIjp0cnVlLCJzY29wZSI6IlJlYWQtb25seSBuYXRpdmUgYnJvd3NlciBpbnNwZWN0aW9uOyBhY3R1YWwgQVBJIHJlc3VsdHMgYW5kIGxhYmVsbGVkIHRyYW5zcG9ydCBmaXh0dXJlcyBhcmUgZGlzdGluZ3Vpc2hlZC4gTm8gcGh5c2ljYWwgcHJvdmlkZXIgaW5zdGFsbGVkLCByZXNlcnZhdGlvbiwgZGV2aWNlIG9wZXJhdGlvbiBvciBTdGFydC4ifQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a94800dbbc8a48884adb-076511d2ecd51bc1ac06",
+          "file": "physical-placements-accessibility.spec.ts",
+          "line": 256,
+          "column": 9
+        },
+        {
+          "title": "physical placements: labelled matched metadata cannot grant admission at 1024x768",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 2504,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mfalse\u001b[39m\nReceived: \u001b[31mtrue\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mfalse\u001b[39m\nReceived: \u001b[31mtrue\u001b[39m\n    at <repo>/tests/e2e/physical-placements-accessibility.spec.ts:288:88",
+                    "location": {
+                      "file": "<repo>/tests/e2e/physical-placements-accessibility.spec.ts",
+                      "column": 88,
+                      "line": 288
+                    },
+                    "snippet": "  286 |     await expect(panel(page).getByText(\"PROVIDER_INVENTORY_UNAVAILABLE\",{exact:true})).toBeVisible();await expect(panel(page).getByRole(\"button\",{name:/Reserve|Start|Connect|Probe/})).toHaveCount(0);\n  287 |     await activate(page,card.locator(\"summary\"));await expect(card.locator(\"pre\")).not.toContainText(\"OMITTED-FIXTURE-SENTINEL\");\n> 288 |     expect(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1)).toBe(false);\n      |                                                                                        ^\n  289 |     const selectedContrast=await Promise.all([paint(panel(page).locator(\"p.field-hint\").first(),\"Placement guidance\"),paint(card.locator(\".badge\"),\"Placement evidence scope\"),paint(field(card,\"Provider admission\"),\"Placement unavailable admission\"),paint(field(card,\"Active operation\"),\"Placement blocked operation\")]);\n  290 |     await finish({labelledMatchedPublicTransport:true,backendProjectionFixture:fixture.fixtureScope,admissionUnchanged:true,unicodeCodePoints:Array.from(asset.firmware.version).length,selectedContrast});\n  291 |   });"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/e2e/physical-placements-accessibility.spec.ts",
+                        "column": 88,
+                        "line": 288
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mfalse\u001b[39m\nReceived: \u001b[31mtrue\u001b[39m\n\n  286 |     await expect(panel(page).getByText(\"PROVIDER_INVENTORY_UNAVAILABLE\",{exact:true})).toBeVisible();await expect(panel(page).getByRole(\"button\",{name:/Reserve|Start|Connect|Probe/})).toHaveCount(0);\n  287 |     await activate(page,card.locator(\"summary\"));await expect(card.locator(\"pre\")).not.toContainText(\"OMITTED-FIXTURE-SENTINEL\");\n> 288 |     expect(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1)).toBe(false);\n      |                                                                                        ^\n  289 |     const selectedContrast=await Promise.all([paint(panel(page).locator(\"p.field-hint\").first(),\"Placement guidance\"),paint(card.locator(\".badge\"),\"Placement evidence scope\"),paint(field(card,\"Provider admission\"),\"Placement unavailable admission\"),paint(field(card,\"Active operation\"),\"Placement blocked operation\")]);\n  290 |     await finish({labelledMatchedPublicTransport:true,backendProjectionFixture:fixture.fixtureScope,admissionUnchanged:true,unicodeCodePoints:Array.from(asset.firmware.version).length,selectedContrast});\n  291 |   });\n    at <repo>/tests/e2e/physical-placements-accessibility.spec.ts:288:88"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T02:42:09.466Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/test-results/browser/physical-placements-access-c91f4-grant-admission-at-1024x768/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/test-results/browser/physical-placements-access-c91f4-grant-admission-at-1024x768/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/e2e/physical-placements-accessibility.spec.ts",
+                    "column": 88,
+                    "line": 288
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "a94800dbbc8a48884adb-784ced45718407849ac8",
+          "file": "physical-placements-accessibility.spec.ts",
+          "line": 275,
+          "column": 7
+        },
+        {
+          "title": "physical placements: labelled maximum report is accessible in bounded pages at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 24283,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T02:42:12.339Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "placement-journey.json",
+                      "contentType": "application/json",
+                      "body": "eyJwcm9qZWN0SWQiOiJwcmotZGU1Yzk0ZmMtNDQ4ZS00ZGI4LWEwMDctMTk1Njk3ODY3MmFkIiwicmV2aXNpb24iOjIsInJlYWRzIjpbIi9hcGkvdjEvcHJvamVjdHMvcHJqLWRlNWM5NGZjLTQ0OGUtNGRiOC1hMDA3LTE5NTY5Nzg2NzJhZC9kZXBsb3ltZW50LXZhcmlhbnRzL2RvYy0zL3BoeXNpY2FsLWJpbmRpbmdzP3JldmlzaW9uPTIiXSwibXV0YXRpdmVSZXF1ZXN0c0FmdGVyU2V0dXAiOjAsImNhbm9uaWNhbFByb2plY3RBbmRSdW5zVW5jaGFuZ2VkIjp0cnVlLCJsYWJlbGxlZE1heGltdW1SZXBvcnRUcmFuc3BvcnQiOnRydWUsInRvdGFsQWNjZXNzaWJsZVJvd3MiOjEwMDAsIm1heGltdW1SZW5kZXJlZFJvd3MiOjUwLCJsb2NhbFBhZ2luYXRpb25SZWFkcyI6MSwic2NvcGUiOiJSZWFkLW9ubHkgbmF0aXZlIGJyb3dzZXIgaW5zcGVjdGlvbjsgYWN0dWFsIEFQSSByZXN1bHRzIGFuZCBsYWJlbGxlZCB0cmFuc3BvcnQgZml4dHVyZXMgYXJlIGRpc3Rpbmd1aXNoZWQuIE5vIHBoeXNpY2FsIHByb3ZpZGVyIGluc3RhbGxlZCwgcmVzZXJ2YXRpb24sIGRldmljZSBvcGVyYXRpb24gb3IgU3RhcnQuIn0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a94800dbbc8a48884adb-6e53976e7777dca8f8a5",
+          "file": "physical-placements-accessibility.spec.ts",
+          "line": 293,
+          "column": 7
+        },
+        {
+          "title": "physical placements: actual absence differs from unknown at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3376,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T02:42:36.684Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "placement-journey.json",
+                      "contentType": "application/json",
+                      "body": "eyJwcm9qZWN0SWQiOiJwcmotZThjNWNkMDItYWMyZS00ZjNkLWE2OWQtMmUyZTE5NWNjZGQ2IiwicmV2aXNpb24iOjMsInJlYWRzIjpbIi9hcGkvdjEvcHJvamVjdHMvcHJqLWU4YzVjZDAyLWFjMmUtNGYzZC1hNjlkLTJlMmUxOTVjY2RkNi9kZXBsb3ltZW50LXZhcmlhbnRzL2RvYy0zL3BoeXNpY2FsLWJpbmRpbmdzP3JldmlzaW9uPTMiXSwibXV0YXRpdmVSZXF1ZXN0c0FmdGVyU2V0dXAiOjAsImNhbm9uaWNhbFByb2plY3RBbmRSdW5zVW5jaGFuZ2VkIjp0cnVlLCJhY3R1YWxFbXB0eVJlcG9ydCI6eyJiaW5kaW5nT2JzZXJ2YXRpb25WZXJzaW9uIjoiMS4wIiwicHJvamVjdElkIjoicHJqLWU4YzVjZDAyLWFjMmUtNGYzZC1hNjlkLTJlMmUxOTVjY2RkNiIsImRvY3VtZW50SWQiOiJkb2MtMyIsInJldmlzaW9uIjozLCJzb3VyY2VWYWxpZCI6dHJ1ZSwic2NvcGUiOiJyZWFkX29ubHlfcGxhY2VtZW50X29ic2VydmF0aW9uIiwiYWN0aXZlUmVhZHkiOmZhbHNlLCJydW50aW1lQWRtaXNzaW9uIjoidW5hdmFpbGFibGUiLCJiaW5kaW5ncyI6W10sImRpYWdub3N0aWNzIjpbXSwibGltaXRhdGlvbnMiOlsiRG9lcyBub3QgY2hhbmdlIGRlcGxveW1lbnQgcmVzb2x1dGlvbiBvciBydW50aW1lIGFkbWlzc2lvbi4iLCJQaHlzaWNhbCBjb250cm9scyBhbmQgcmVzZXJ2YXRpb25zIHJlbWFpbiB1bmFkbWl0dGVkLiJdLCJzeXN0ZW1SZWYiOiJ4ZGw6Ly9vcmcueHZlcnNlLnN0dWRpby5wcm9jZXNzLWNvbnRyb2wvc3lzdGVtL3JlZmVyZW5jZS1sb29wIiwiZGVwbG95bWVudFJlZiI6InhkbDovL29yZy54dmVyc2Uuc3R1ZGlvLnByb2Nlc3MtY29udHJvbC9kZXBsb3ltZW50L2xvY2FsLXJlZmVyZW5jZSIsImludmVudG9yeVRydW5jYXRlZCI6ZmFsc2UsImludmVudG9yeUNvbXBsZXRlIjp0cnVlfSwic2NvcGUiOiJSZWFkLW9ubHkgbmF0aXZlIGJyb3dzZXIgaW5zcGVjdGlvbjsgYWN0dWFsIEFQSSByZXN1bHRzIGFuZCBsYWJlbGxlZCB0cmFuc3BvcnQgZml4dHVyZXMgYXJlIGRpc3Rpbmd1aXNoZWQuIE5vIHBoeXNpY2FsIHByb3ZpZGVyIGluc3RhbGxlZCwgcmVzZXJ2YXRpb24sIGRldmljZSBvcGVyYXRpb24gb3IgU3RhcnQuIn0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a94800dbbc8a48884adb-a16c2c0f5c5bf45f5135",
+          "file": "physical-placements-accessibility.spec.ts",
+          "line": 161,
+          "column": 7
+        },
+        {
+          "title": "physical placements: actual stale revision refuses and explicit reopen recovers at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3728,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T02:42:40.070Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "placement-journey.json",
+                      "contentType": "application/json",
+                      "body": "eyJwcm9qZWN0SWQiOiJwcmotZWEyN2U2ZWItZGRmMC00OTZhLWFhYWMtYzY2MGY0ODJmNWI5IiwicmV2aXNpb24iOjMsInJlYWRzIjpbIi9hcGkvdjEvcHJvamVjdHMvcHJqLWVhMjdlNmViLWRkZjAtNDk2YS1hYWFjLWM2NjBmNDgyZjViOS9kZXBsb3ltZW50LXZhcmlhbnRzL2RvYy0zL3BoeXNpY2FsLWJpbmRpbmdzP3JldmlzaW9uPTIiLCIvYXBpL3YxL3Byb2plY3RzL3Byai1lYTI3ZTZlYi1kZGYwLTQ5NmEtYWFhYy1jNjYwZjQ4MmY1YjkvZGVwbG95bWVudC12YXJpYW50cy9kb2MtMy9waHlzaWNhbC1iaW5kaW5ncz9yZXZpc2lvbj0yIiwiL2FwaS92MS9wcm9qZWN0cy9wcmotZWEyN2U2ZWItZGRmMC00OTZhLWFhYWMtYzY2MGY0ODJmNWI5L2RlcGxveW1lbnQtdmFyaWFudHMvZG9jLTMvcGh5c2ljYWwtYmluZGluZ3M/cmV2aXNpb249MyJdLCJtdXRhdGl2ZVJlcXVlc3RzQWZ0ZXJTZXR1cCI6MCwiY2Fub25pY2FsUHJvamVjdEFuZFJ1bnNVbmNoYW5nZWQiOnRydWUsImFjdHVhbFJldmlzaW9uQ29uZmxpY3RSZXNwb25zZXMiOls0MTIsNDEyLDIwMF0sIm9sZFVJUmV2aXNpb24iOjIsImV4cGxpY2l0UmVvcGVuUmVjb3ZlcmVkIjp0cnVlLCJzY29wZSI6IlJlYWQtb25seSBuYXRpdmUgYnJvd3NlciBpbnNwZWN0aW9uOyBhY3R1YWwgQVBJIHJlc3VsdHMgYW5kIGxhYmVsbGVkIHRyYW5zcG9ydCBmaXh0dXJlcyBhcmUgZGlzdGluZ3Vpc2hlZC4gTm8gcGh5c2ljYWwgcHJvdmlkZXIgaW5zdGFsbGVkLCByZXNlcnZhdGlvbiwgZGV2aWNlIG9wZXJhdGlvbiBvciBTdGFydC4ifQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a94800dbbc8a48884adb-4897d068a3c8c41c4e25",
+          "file": "physical-placements-accessibility.spec.ts",
+          "line": 177,
+          "column": 7
+        },
+        {
+          "title": "physical placements: actual unreadable source stays unavailable without acknowledgement at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2327,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T02:42:43.806Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "placement-journey.json",
+                      "contentType": "application/json",
+                      "body": "eyJwcm9qZWN0SWQiOiJwcmotNWEzNzMzMTgtOGRmOC00OTNhLWEzYmItZjllMmFmYTc0ZDZlIiwicmV2aXNpb24iOjIsInJlYWRzIjpbIi9hcGkvdjEvcHJvamVjdHMvcHJqLTVhMzczMzE4LThkZjgtNDkzYS1hM2JiLWY5ZTJhZmE3NGQ2ZS9kZXBsb3ltZW50LXZhcmlhbnRzL2RvYy0zL3BoeXNpY2FsLWJpbmRpbmdzP3JldmlzaW9uPTIiLCIvYXBpL3YxL3Byb2plY3RzL3Byai01YTM3MzMxOC04ZGY4LTQ5M2EtYTNiYi1mOWUyYWZhNzRkNmUvZGVwbG95bWVudC12YXJpYW50cy9kb2MtMy9waHlzaWNhbC1iaW5kaW5ncz9yZXZpc2lvbj0yIl0sIm11dGF0aXZlUmVxdWVzdHNBZnRlclNldHVwIjowLCJjYW5vbmljYWxQcm9qZWN0QW5kUnVuc1VuY2hhbmdlZCI6dHJ1ZSwiYWN0dWFsVW5yZWFkYWJsZUhUVFA0MDkiOnRydWUsImV4YWN0T3duZWRGaWxlUmVzdG9yZWQiOnRydWUsInNjb3BlIjoiUmVhZC1vbmx5IG5hdGl2ZSBicm93c2VyIGluc3BlY3Rpb247IGFjdHVhbCBBUEkgcmVzdWx0cyBhbmQgbGFiZWxsZWQgdHJhbnNwb3J0IGZpeHR1cmVzIGFyZSBkaXN0aW5ndWlzaGVkLiBObyBwaHlzaWNhbCBwcm92aWRlciBpbnN0YWxsZWQsIHJlc2VydmF0aW9uLCBkZXZpY2Ugb3BlcmF0aW9uIG9yIFN0YXJ0LiJ9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a94800dbbc8a48884adb-931728a1e4e76c4f2b36",
+          "file": "physical-placements-accessibility.spec.ts",
+          "line": 196,
+          "column": 7
+        },
+        {
+          "title": "physical placements: Home ignores held HTTP200 at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2197,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T02:42:46.143Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "placement-journey.json",
+                      "contentType": "application/json",
+                      "body": "eyJwcm9qZWN0SWQiOiJwcmotYzI5ZWMxMzItNzg2MC00Nzc4LWJhODUtMDM3ODE2OTlkMGU1IiwicmV2aXNpb24iOjIsInJlYWRzIjpbIi9hcGkvdjEvcHJvamVjdHMvcHJqLWMyOWVjMTMyLTc4NjAtNDc3OC1iYTg1LTAzNzgxNjk5ZDBlNS9kZXBsb3ltZW50LXZhcmlhbnRzL2RvYy0zL3BoeXNpY2FsLWJpbmRpbmdzP3JldmlzaW9uPTIiXSwibXV0YXRpdmVSZXF1ZXN0c0FmdGVyU2V0dXAiOjAsImNhbm9uaWNhbFByb2plY3RBbmRSdW5zVW5jaGFuZ2VkIjp0cnVlLCJoZWxkU3RhdHVzIjoyMDAsImFjdHVhbFJlcG9ydEhlbGQiOnRydWUsImxhYmVsbGVkVHJhbnNwb3J0RmFpbHVyZSI6ZmFsc2UsImRlcGFydGVkSG9tZSI6dHJ1ZSwic2NvcGUiOiJSZWFkLW9ubHkgbmF0aXZlIGJyb3dzZXIgaW5zcGVjdGlvbjsgYWN0dWFsIEFQSSByZXN1bHRzIGFuZCBsYWJlbGxlZCB0cmFuc3BvcnQgZml4dHVyZXMgYXJlIGRpc3Rpbmd1aXNoZWQuIE5vIHBoeXNpY2FsIHByb3ZpZGVyIGluc3RhbGxlZCwgcmVzZXJ2YXRpb24sIGRldmljZSBvcGVyYXRpb24gb3IgU3RhcnQuIn0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a94800dbbc8a48884adb-28d0771394f3114ec669",
+          "file": "physical-placements-accessibility.spec.ts",
+          "line": 215,
+          "column": 9
+        },
+        {
+          "title": "physical placements: Home ignores held HTTP503 at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2307,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T02:42:48.349Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "placement-journey.json",
+                      "contentType": "application/json",
+                      "body": "eyJwcm9qZWN0SWQiOiJwcmotZjM5NjBkMWUtOTNiNi00YTNhLWJkMDgtOTdjZTJhMjUwYjdkIiwicmV2aXNpb24iOjIsInJlYWRzIjpbIi9hcGkvdjEvcHJvamVjdHMvcHJqLWYzOTYwZDFlLTkzYjYtNGEzYS1iZDA4LTk3Y2UyYTI1MGI3ZC9kZXBsb3ltZW50LXZhcmlhbnRzL2RvYy0zL3BoeXNpY2FsLWJpbmRpbmdzP3JldmlzaW9uPTIiXSwibXV0YXRpdmVSZXF1ZXN0c0FmdGVyU2V0dXAiOjAsImNhbm9uaWNhbFByb2plY3RBbmRSdW5zVW5jaGFuZ2VkIjp0cnVlLCJoZWxkU3RhdHVzIjo1MDMsImFjdHVhbFJlcG9ydEhlbGQiOmZhbHNlLCJsYWJlbGxlZFRyYW5zcG9ydEZhaWx1cmUiOnRydWUsImRlcGFydGVkSG9tZSI6dHJ1ZSwic2NvcGUiOiJSZWFkLW9ubHkgbmF0aXZlIGJyb3dzZXIgaW5zcGVjdGlvbjsgYWN0dWFsIEFQSSByZXN1bHRzIGFuZCBsYWJlbGxlZCB0cmFuc3BvcnQgZml4dHVyZXMgYXJlIGRpc3Rpbmd1aXNoZWQuIE5vIHBoeXNpY2FsIHByb3ZpZGVyIGluc3RhbGxlZCwgcmVzZXJ2YXRpb24sIGRldmljZSBvcGVyYXRpb24gb3IgU3RhcnQuIn0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a94800dbbc8a48884adb-189360b0db36106039ba",
+          "file": "physical-placements-accessibility.spec.ts",
+          "line": 215,
+          "column": 9
+        },
+        {
+          "title": "physical placements: pending Enter and deliberate focus preserve one read at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2693,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T02:42:50.662Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "placement-journey.json",
+                      "contentType": "application/json",
+                      "body": "eyJwcm9qZWN0SWQiOiJwcmotZTAxYzFlM2YtMDE1MS00NTMzLThiOTktZmNiMmIzZWQ4Y2I3IiwicmV2aXNpb24iOjIsInJlYWRzIjpbIi9hcGkvdjEvcHJvamVjdHMvcHJqLWUwMWMxZTNmLTAxNTEtNDUzMy04Yjk5LWZjYjJiM2VkOGNiNy9kZXBsb3ltZW50LXZhcmlhbnRzL2RvYy0zL3BoeXNpY2FsLWJpbmRpbmdzP3JldmlzaW9uPTIiXSwibXV0YXRpdmVSZXF1ZXN0c0FmdGVyU2V0dXAiOjAsImNhbm9uaWNhbFByb2plY3RBbmRSdW5zVW5jaGFuZ2VkIjp0cnVlLCJhY3R1YWxSZXBvcnRIZWxkIjp0cnVlLCJyZXBlYXRlZFN1Ym1pc3Npb25SZWFkQ291bnQiOjEsImRlbGliZXJhdGVGb2N1c1ByZXNlcnZlZCI6dHJ1ZSwiY29udHJvbEJvdW5kcyI6eyJib3giOnsieCI6MTE5Ni4yNjU2MjUsInkiOjQzMS4yNSwid2lkdGgiOjE5Mi43MzQzNzUsImhlaWdodCI6MzgsInRvcCI6NDMxLjI1LCJyaWdodCI6MTM4OSwiYm90dG9tIjo0NjkuMjUsImxlZnQiOjExOTYuMjY1NjI1fSwib3V0bGluZSI6InNvbGlkIiwib3V0bGluZVdpZHRoIjozfSwic2NvcGUiOiJSZWFkLW9ubHkgbmF0aXZlIGJyb3dzZXIgaW5zcGVjdGlvbjsgYWN0dWFsIEFQSSByZXN1bHRzIGFuZCBsYWJlbGxlZCB0cmFuc3BvcnQgZml4dHVyZXMgYXJlIGRpc3Rpbmd1aXNoZWQuIE5vIHBoeXNpY2FsIHByb3ZpZGVyIGluc3RhbGxlZCwgcmVzZXJ2YXRpb24sIGRldmljZSBvcGVyYXRpb24gb3IgU3RhcnQuIn0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a94800dbbc8a48884adb-fd6bea09575b61b4c0bb",
+          "file": "physical-placements-accessibility.spec.ts",
+          "line": 228,
+          "column": 7
+        },
+        {
+          "title": "physical placements: newer source draft keeps dialog focus after held observation at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2435,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T02:42:53.363Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "placement-journey.json",
+                      "contentType": "application/json",
+                      "body": "eyJwcm9qZWN0SWQiOiJwcmotNDcxOWM5ZmQtZGRlYS00MjYzLTlhMTUtZDU2NWJlMTJlZGE5IiwicmV2aXNpb24iOjIsInJlYWRzIjpbIi9hcGkvdjEvcHJvamVjdHMvcHJqLTQ3MTljOWZkLWRkZWEtNDI2My05YTE1LWQ1NjViZTEyZWRhOS9kZXBsb3ltZW50LXZhcmlhbnRzL2RvYy0zL3BoeXNpY2FsLWJpbmRpbmdzP3JldmlzaW9uPTIiXSwibXV0YXRpdmVSZXF1ZXN0c0FmdGVyU2V0dXAiOjAsImNhbm9uaWNhbFByb2plY3RBbmRSdW5zVW5jaGFuZ2VkIjp0cnVlLCJhY3R1YWxSZXBvcnRIZWxkIjp0cnVlLCJuZXdlclVuc2F2ZWRTb3VyY2VQcmVzZXJ2ZWQiOnRydWUsImRpYWxvZ0ZvY3VzUHJlc2VydmVkIjp0cnVlLCJzY29wZSI6IlJlYWQtb25seSBuYXRpdmUgYnJvd3NlciBpbnNwZWN0aW9uOyBhY3R1YWwgQVBJIHJlc3VsdHMgYW5kIGxhYmVsbGVkIHRyYW5zcG9ydCBmaXh0dXJlcyBhcmUgZGlzdGluZ3Vpc2hlZC4gTm8gcGh5c2ljYWwgcHJvdmlkZXIgaW5zdGFsbGVkLCByZXNlcnZhdGlvbiwgZGV2aWNlIG9wZXJhdGlvbiBvciBTdGFydC4ifQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a94800dbbc8a48884adb-3c11b889a90bbd4f7b0c",
+          "file": "physical-placements-accessibility.spec.ts",
+          "line": 240,
+          "column": 7
+        },
+        {
+          "title": "physical placements: labelled wrong revision stays unknown at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2170,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T02:42:55.806Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "placement-journey.json",
+                      "contentType": "application/json",
+                      "body": "eyJwcm9qZWN0SWQiOiJwcmotODQ4MzY1ODAtNmZkNy00ZTIyLTk3NWYtYmExMzY2ZGZhNmI2IiwicmV2aXNpb24iOjIsInJlYWRzIjpbIi9hcGkvdjEvcHJvamVjdHMvcHJqLTg0ODM2NTgwLTZmZDctNGUyMi05NzVmLWJhMTM2NmRmYTZiNi9kZXBsb3ltZW50LXZhcmlhbnRzL2RvYy0zL3BoeXNpY2FsLWJpbmRpbmdzP3JldmlzaW9uPTIiLCIvYXBpL3YxL3Byb2plY3RzL3Byai04NDgzNjU4MC02ZmQ3LTRlMjItOTc1Zi1iYTEzNjZkZmE2YjYvZGVwbG95bWVudC12YXJpYW50cy9kb2MtMy9waHlzaWNhbC1iaW5kaW5ncz9yZXZpc2lvbj0yIl0sIm11dGF0aXZlUmVxdWVzdHNBZnRlclNldHVwIjowLCJjYW5vbmljYWxQcm9qZWN0QW5kUnVuc1VuY2hhbmdlZCI6dHJ1ZSwibGFiZWxsZWRNYWxmb3JtZWRUcmFuc3BvcnQiOiJ3cm9uZyByZXZpc2lvbiIsImFjdHVhbFJldHJ5U3VjY2VlZGVkIjp0cnVlLCJzY29wZSI6IlJlYWQtb25seSBuYXRpdmUgYnJvd3NlciBpbnNwZWN0aW9uOyBhY3R1YWwgQVBJIHJlc3VsdHMgYW5kIGxhYmVsbGVkIHRyYW5zcG9ydCBmaXh0dXJlcyBhcmUgZGlzdGluZ3Vpc2hlZC4gTm8gcGh5c2ljYWwgcHJvdmlkZXIgaW5zdGFsbGVkLCByZXNlcnZhdGlvbiwgZGV2aWNlIG9wZXJhdGlvbiBvciBTdGFydC4ifQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a94800dbbc8a48884adb-884432d68d0ff74ba5db",
+          "file": "physical-placements-accessibility.spec.ts",
+          "line": 256,
+          "column": 9
+        },
+        {
+          "title": "physical placements: labelled wrong project stays unknown at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2345,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T02:42:57.987Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "placement-journey.json",
+                      "contentType": "application/json",
+                      "body": "eyJwcm9qZWN0SWQiOiJwcmotZTg0NjEyMTktNDdmMi00ZTE0LTg5NTEtZDBjYTJmZjI5NThlIiwicmV2aXNpb24iOjIsInJlYWRzIjpbIi9hcGkvdjEvcHJvamVjdHMvcHJqLWU4NDYxMjE5LTQ3ZjItNGUxNC04OTUxLWQwY2EyZmYyOTU4ZS9kZXBsb3ltZW50LXZhcmlhbnRzL2RvYy0zL3BoeXNpY2FsLWJpbmRpbmdzP3JldmlzaW9uPTIiLCIvYXBpL3YxL3Byb2plY3RzL3Byai1lODQ2MTIxOS00N2YyLTRlMTQtODk1MS1kMGNhMmZmMjk1OGUvZGVwbG95bWVudC12YXJpYW50cy9kb2MtMy9waHlzaWNhbC1iaW5kaW5ncz9yZXZpc2lvbj0yIl0sIm11dGF0aXZlUmVxdWVzdHNBZnRlclNldHVwIjowLCJjYW5vbmljYWxQcm9qZWN0QW5kUnVuc1VuY2hhbmdlZCI6dHJ1ZSwibGFiZWxsZWRNYWxmb3JtZWRUcmFuc3BvcnQiOiJ3cm9uZyBwcm9qZWN0IiwiYWN0dWFsUmV0cnlTdWNjZWVkZWQiOnRydWUsInNjb3BlIjoiUmVhZC1vbmx5IG5hdGl2ZSBicm93c2VyIGluc3BlY3Rpb247IGFjdHVhbCBBUEkgcmVzdWx0cyBhbmQgbGFiZWxsZWQgdHJhbnNwb3J0IGZpeHR1cmVzIGFyZSBkaXN0aW5ndWlzaGVkLiBObyBwaHlzaWNhbCBwcm92aWRlciBpbnN0YWxsZWQsIHJlc2VydmF0aW9uLCBkZXZpY2Ugb3BlcmF0aW9uIG9yIFN0YXJ0LiJ9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a94800dbbc8a48884adb-bc9bba8be6df8b98aaf3",
+          "file": "physical-placements-accessibility.spec.ts",
+          "line": 256,
+          "column": 9
+        },
+        {
+          "title": "physical placements: labelled wrong deployment stays unknown at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2204,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T02:43:00.343Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "placement-journey.json",
+                      "contentType": "application/json",
+                      "body": "eyJwcm9qZWN0SWQiOiJwcmotYjBhOGJlZWItMzdmMy00YTI5LWI5OTMtNDRiNmNmMDQxOWI0IiwicmV2aXNpb24iOjIsInJlYWRzIjpbIi9hcGkvdjEvcHJvamVjdHMvcHJqLWIwYThiZWViLTM3ZjMtNGEyOS1iOTkzLTQ0YjZjZjA0MTliNC9kZXBsb3ltZW50LXZhcmlhbnRzL2RvYy0zL3BoeXNpY2FsLWJpbmRpbmdzP3JldmlzaW9uPTIiLCIvYXBpL3YxL3Byb2plY3RzL3Byai1iMGE4YmVlYi0zN2YzLTRhMjktYjk5My00NGI2Y2YwNDE5YjQvZGVwbG95bWVudC12YXJpYW50cy9kb2MtMy9waHlzaWNhbC1iaW5kaW5ncz9yZXZpc2lvbj0yIl0sIm11dGF0aXZlUmVxdWVzdHNBZnRlclNldHVwIjowLCJjYW5vbmljYWxQcm9qZWN0QW5kUnVuc1VuY2hhbmdlZCI6dHJ1ZSwibGFiZWxsZWRNYWxmb3JtZWRUcmFuc3BvcnQiOiJ3cm9uZyBkZXBsb3ltZW50IiwiYWN0dWFsUmV0cnlTdWNjZWVkZWQiOnRydWUsInNjb3BlIjoiUmVhZC1vbmx5IG5hdGl2ZSBicm93c2VyIGluc3BlY3Rpb247IGFjdHVhbCBBUEkgcmVzdWx0cyBhbmQgbGFiZWxsZWQgdHJhbnNwb3J0IGZpeHR1cmVzIGFyZSBkaXN0aW5ndWlzaGVkLiBObyBwaHlzaWNhbCBwcm92aWRlciBpbnN0YWxsZWQsIHJlc2VydmF0aW9uLCBkZXZpY2Ugb3BlcmF0aW9uIG9yIFN0YXJ0LiJ9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a94800dbbc8a48884adb-07dae96c395e5a27feba",
+          "file": "physical-placements-accessibility.spec.ts",
+          "line": 256,
+          "column": 9
+        },
+        {
+          "title": "physical placements: labelled wrong system stays unknown at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1959,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T02:43:02.557Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "placement-journey.json",
+                      "contentType": "application/json",
+                      "body": "eyJwcm9qZWN0SWQiOiJwcmotNGM4MDY1ZjQtMjUwMi00NjBiLWEzMGYtZmM0MDIyZTg1ZDAwIiwicmV2aXNpb24iOjIsInJlYWRzIjpbIi9hcGkvdjEvcHJvamVjdHMvcHJqLTRjODA2NWY0LTI1MDItNDYwYi1hMzBmLWZjNDAyMmU4NWQwMC9kZXBsb3ltZW50LXZhcmlhbnRzL2RvYy0zL3BoeXNpY2FsLWJpbmRpbmdzP3JldmlzaW9uPTIiLCIvYXBpL3YxL3Byb2plY3RzL3Byai00YzgwNjVmNC0yNTAyLTQ2MGItYTMwZi1mYzQwMjJlODVkMDAvZGVwbG95bWVudC12YXJpYW50cy9kb2MtMy9waHlzaWNhbC1iaW5kaW5ncz9yZXZpc2lvbj0yIl0sIm11dGF0aXZlUmVxdWVzdHNBZnRlclNldHVwIjowLCJjYW5vbmljYWxQcm9qZWN0QW5kUnVuc1VuY2hhbmdlZCI6dHJ1ZSwibGFiZWxsZWRNYWxmb3JtZWRUcmFuc3BvcnQiOiJ3cm9uZyBzeXN0ZW0iLCJhY3R1YWxSZXRyeVN1Y2NlZWRlZCI6dHJ1ZSwic2NvcGUiOiJSZWFkLW9ubHkgbmF0aXZlIGJyb3dzZXIgaW5zcGVjdGlvbjsgYWN0dWFsIEFQSSByZXN1bHRzIGFuZCBsYWJlbGxlZCB0cmFuc3BvcnQgZml4dHVyZXMgYXJlIGRpc3Rpbmd1aXNoZWQuIE5vIHBoeXNpY2FsIHByb3ZpZGVyIGluc3RhbGxlZCwgcmVzZXJ2YXRpb24sIGRldmljZSBvcGVyYXRpb24gb3IgU3RhcnQuIn0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a94800dbbc8a48884adb-68e6f359b8d8d0495717",
+          "file": "physical-placements-accessibility.spec.ts",
+          "line": 256,
+          "column": 9
+        },
+        {
+          "title": "physical placements: labelled authority flag stays unknown at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2132,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T02:43:04.527Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "placement-journey.json",
+                      "contentType": "application/json",
+                      "body": "eyJwcm9qZWN0SWQiOiJwcmotMGUxZWNjMTktNTEyMS00MzAxLTg0YWMtYjNkNGQ4YWJkYjkwIiwicmV2aXNpb24iOjIsInJlYWRzIjpbIi9hcGkvdjEvcHJvamVjdHMvcHJqLTBlMWVjYzE5LTUxMjEtNDMwMS04NGFjLWIzZDRkOGFiZGI5MC9kZXBsb3ltZW50LXZhcmlhbnRzL2RvYy0zL3BoeXNpY2FsLWJpbmRpbmdzP3JldmlzaW9uPTIiLCIvYXBpL3YxL3Byb2plY3RzL3Byai0wZTFlY2MxOS01MTIxLTQzMDEtODRhYy1iM2Q0ZDhhYmRiOTAvZGVwbG95bWVudC12YXJpYW50cy9kb2MtMy9waHlzaWNhbC1iaW5kaW5ncz9yZXZpc2lvbj0yIl0sIm11dGF0aXZlUmVxdWVzdHNBZnRlclNldHVwIjowLCJjYW5vbmljYWxQcm9qZWN0QW5kUnVuc1VuY2hhbmdlZCI6dHJ1ZSwibGFiZWxsZWRNYWxmb3JtZWRUcmFuc3BvcnQiOiJhdXRob3JpdHkgZmxhZyIsImFjdHVhbFJldHJ5U3VjY2VlZGVkIjp0cnVlLCJzZWxlY3RlZENvbnRyYXN0Ijp7ImxhYmVsIjoiUGxhY2VtZW50IG1hbGZvcm1lZCBhdXRob3JpdHkgcmVmdXNhbCIsInRleHQiOiJQaHlzaWNhbCBwbGFjZW1lbnQgYXZhaWxhYmlsaXR5IGlzIHVua25vd24uIFRoZSBwaHlzaWNhbCBwbGFjZW1lbnQgb2JzZXJ2YXRpb24gaXMgaW5jb21wbGV0ZSwgbWFsZm9ybWVkIG9yIGJlbG9uZ3MgdG8gYW5vdGhlciBjb250ZXh0LiBJbnNwZWN0IGFnYWluIHRvIHJldHJ5LiIsImNvbG9yIjoicmdiKDE2MSwgODksIDgxKSIsImZvbnRTaXplIjoiMTJweCIsImZvbnRXZWlnaHQiOiI0MDAiLCJ0aHJlc2hvbGQiOjQuNSwic2NvcGUiOiJTZWxlY3RlZCBub3JtYWwtc2l6ZSByZW5kZXJlZCB0ZXh0OyBubyBvdmVyYWxsIGFjY2Vzc2liaWxpdHkgY2VydGlmaWNhdGlvbiIsInN1cHBvcnRlZCI6dHJ1ZSwibGF5ZXJzIjpbInJnYigyNTUsIDI0MywgMjQyKSJdLCJiYWNrZ3JvdW5kIjpbMSwwLjk1Mjk0MTE3NjQ3MDU4ODIsMC45NDkwMTk2MDc4NDMxMzcyLDFdLCJjb21wb3NpdGVkRm9yZWdyb3VuZCI6WzAuNjMxMzcyNTQ5MDE5NjA3OCwwLjM0OTAxOTYwNzg0MzEzNzI0LDAuMzE3NjQ3MDU4ODIzNTI5NCwxXSwicmF0aW8iOjQuNzYzMzYwOTE2MTU1NzcyLCJwYXNzZWQiOnRydWUsImFzc3VtcHRpb25zIjoiQ1NTIHNSR0IgY29sb3JzOyBhbHBoYSBjb21wb3NpdGVkIHRocm91Z2ggZXhwbGljaXQgYmFja2dyb3VuZHM7IG5vIGFudGktYWxpYXNpbmcgYXBwcm94aW1hdGlvbiJ9LCJzY29wZSI6IlJlYWQtb25seSBuYXRpdmUgYnJvd3NlciBpbnNwZWN0aW9uOyBhY3R1YWwgQVBJIHJlc3VsdHMgYW5kIGxhYmVsbGVkIHRyYW5zcG9ydCBmaXh0dXJlcyBhcmUgZGlzdGluZ3Vpc2hlZC4gTm8gcGh5c2ljYWwgcHJvdmlkZXIgaW5zdGFsbGVkLCByZXNlcnZhdGlvbiwgZGV2aWNlIG9wZXJhdGlvbiBvciBTdGFydC4ifQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a94800dbbc8a48884adb-285d0f037e1a8c47fbaf",
+          "file": "physical-placements-accessibility.spec.ts",
+          "line": 256,
+          "column": 9
+        },
+        {
+          "title": "physical placements: labelled missing readiness stays unknown at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2197,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T02:43:06.671Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "placement-journey.json",
+                      "contentType": "application/json",
+                      "body": "eyJwcm9qZWN0SWQiOiJwcmotYzM3OGEwMzQtMDE2NS00Njg0LWJkYWEtMjc4NDNlNzI1NTMxIiwicmV2aXNpb24iOjIsInJlYWRzIjpbIi9hcGkvdjEvcHJvamVjdHMvcHJqLWMzNzhhMDM0LTAxNjUtNDY4NC1iZGFhLTI3ODQzZTcyNTUzMS9kZXBsb3ltZW50LXZhcmlhbnRzL2RvYy0zL3BoeXNpY2FsLWJpbmRpbmdzP3JldmlzaW9uPTIiLCIvYXBpL3YxL3Byb2plY3RzL3Byai1jMzc4YTAzNC0wMTY1LTQ2ODQtYmRhYS0yNzg0M2U3MjU1MzEvZGVwbG95bWVudC12YXJpYW50cy9kb2MtMy9waHlzaWNhbC1iaW5kaW5ncz9yZXZpc2lvbj0yIl0sIm11dGF0aXZlUmVxdWVzdHNBZnRlclNldHVwIjowLCJjYW5vbmljYWxQcm9qZWN0QW5kUnVuc1VuY2hhbmdlZCI6dHJ1ZSwibGFiZWxsZWRNYWxmb3JtZWRUcmFuc3BvcnQiOiJtaXNzaW5nIHJlYWRpbmVzcyIsImFjdHVhbFJldHJ5U3VjY2VlZGVkIjp0cnVlLCJzY29wZSI6IlJlYWQtb25seSBuYXRpdmUgYnJvd3NlciBpbnNwZWN0aW9uOyBhY3R1YWwgQVBJIHJlc3VsdHMgYW5kIGxhYmVsbGVkIHRyYW5zcG9ydCBmaXh0dXJlcyBhcmUgZGlzdGluZ3Vpc2hlZC4gTm8gcGh5c2ljYWwgcHJvdmlkZXIgaW5zdGFsbGVkLCByZXNlcnZhdGlvbiwgZGV2aWNlIG9wZXJhdGlvbiBvciBTdGFydC4ifQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a94800dbbc8a48884adb-c89382c3e0b4f276822d",
+          "file": "physical-placements-accessibility.spec.ts",
+          "line": 256,
+          "column": 9
+        },
+        {
+          "title": "physical placements: labelled duplicate binding stays unknown at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2123,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T02:43:08.877Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "placement-journey.json",
+                      "contentType": "application/json",
+                      "body": "eyJwcm9qZWN0SWQiOiJwcmotZTE4YjFlZDUtOWY2Yi00ZTUxLTlkNGUtZjRiOGUxOWYxNTUyIiwicmV2aXNpb24iOjIsInJlYWRzIjpbIi9hcGkvdjEvcHJvamVjdHMvcHJqLWUxOGIxZWQ1LTlmNmItNGU1MS05ZDRlLWY0YjhlMTlmMTU1Mi9kZXBsb3ltZW50LXZhcmlhbnRzL2RvYy0zL3BoeXNpY2FsLWJpbmRpbmdzP3JldmlzaW9uPTIiLCIvYXBpL3YxL3Byb2plY3RzL3Byai1lMThiMWVkNS05ZjZiLTRlNTEtOWQ0ZS1mNGI4ZTE5ZjE1NTIvZGVwbG95bWVudC12YXJpYW50cy9kb2MtMy9waHlzaWNhbC1iaW5kaW5ncz9yZXZpc2lvbj0yIl0sIm11dGF0aXZlUmVxdWVzdHNBZnRlclNldHVwIjowLCJjYW5vbmljYWxQcm9qZWN0QW5kUnVuc1VuY2hhbmdlZCI6dHJ1ZSwibGFiZWxsZWRNYWxmb3JtZWRUcmFuc3BvcnQiOiJkdXBsaWNhdGUgYmluZGluZyIsImFjdHVhbFJldHJ5U3VjY2VlZGVkIjp0cnVlLCJzY29wZSI6IlJlYWQtb25seSBuYXRpdmUgYnJvd3NlciBpbnNwZWN0aW9uOyBhY3R1YWwgQVBJIHJlc3VsdHMgYW5kIGxhYmVsbGVkIHRyYW5zcG9ydCBmaXh0dXJlcyBhcmUgZGlzdGluZ3Vpc2hlZC4gTm8gcGh5c2ljYWwgcHJvdmlkZXIgaW5zdGFsbGVkLCByZXNlcnZhdGlvbiwgZGV2aWNlIG9wZXJhdGlvbiBvciBTdGFydC4ifQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a94800dbbc8a48884adb-17db373a09d47887f384",
+          "file": "physical-placements-accessibility.spec.ts",
+          "line": 256,
+          "column": 9
+        },
+        {
+          "title": "physical placements: labelled incomplete inventory stays unknown at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2392,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T02:43:11.008Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "placement-journey.json",
+                      "contentType": "application/json",
+                      "body": "eyJwcm9qZWN0SWQiOiJwcmotZGFhMTk5ZWUtNzg5Yy00OTI1LTlmOWYtN2Y0MWMwMmY3Y2I4IiwicmV2aXNpb24iOjIsInJlYWRzIjpbIi9hcGkvdjEvcHJvamVjdHMvcHJqLWRhYTE5OWVlLTc4OWMtNDkyNS05ZjlmLTdmNDFjMDJmN2NiOC9kZXBsb3ltZW50LXZhcmlhbnRzL2RvYy0zL3BoeXNpY2FsLWJpbmRpbmdzP3JldmlzaW9uPTIiLCIvYXBpL3YxL3Byb2plY3RzL3Byai1kYWExOTllZS03ODljLTQ5MjUtOWY5Zi03ZjQxYzAyZjdjYjgvZGVwbG95bWVudC12YXJpYW50cy9kb2MtMy9waHlzaWNhbC1iaW5kaW5ncz9yZXZpc2lvbj0yIl0sIm11dGF0aXZlUmVxdWVzdHNBZnRlclNldHVwIjowLCJjYW5vbmljYWxQcm9qZWN0QW5kUnVuc1VuY2hhbmdlZCI6dHJ1ZSwibGFiZWxsZWRNYWxmb3JtZWRUcmFuc3BvcnQiOiJpbmNvbXBsZXRlIGludmVudG9yeSIsImFjdHVhbFJldHJ5U3VjY2VlZGVkIjp0cnVlLCJzY29wZSI6IlJlYWQtb25seSBuYXRpdmUgYnJvd3NlciBpbnNwZWN0aW9uOyBhY3R1YWwgQVBJIHJlc3VsdHMgYW5kIGxhYmVsbGVkIHRyYW5zcG9ydCBmaXh0dXJlcyBhcmUgZGlzdGluZ3Vpc2hlZC4gTm8gcGh5c2ljYWwgcHJvdmlkZXIgaW5zdGFsbGVkLCByZXNlcnZhdGlvbiwgZGV2aWNlIG9wZXJhdGlvbiBvciBTdGFydC4ifQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a94800dbbc8a48884adb-27ca03e6b95e7a1f90fa",
+          "file": "physical-placements-accessibility.spec.ts",
+          "line": 256,
+          "column": 9
+        },
+        {
+          "title": "physical placements: labelled matched metadata cannot grant admission at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2688,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T02:43:13.412Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "placement-journey.json",
+                      "contentType": "application/json",
+                      "body": "eyJwcm9qZWN0SWQiOiJwcmotODI4ZTU5YjYtMjhmZi00ZWU1LWJkMGUtN2RlYjU2MDQ0MjAwIiwicmV2aXNpb24iOjIsInJlYWRzIjpbIi9hcGkvdjEvcHJvamVjdHMvcHJqLTgyOGU1OWI2LTI4ZmYtNGVlNS1iZDBlLTdkZWI1NjA0NDIwMC9kZXBsb3ltZW50LXZhcmlhbnRzL2RvYy0zL3BoeXNpY2FsLWJpbmRpbmdzP3JldmlzaW9uPTIiXSwibXV0YXRpdmVSZXF1ZXN0c0FmdGVyU2V0dXAiOjAsImNhbm9uaWNhbFByb2plY3RBbmRSdW5zVW5jaGFuZ2VkIjp0cnVlLCJsYWJlbGxlZE1hdGNoZWRQdWJsaWNUcmFuc3BvcnQiOnRydWUsImJhY2tlbmRQcm9qZWN0aW9uRml4dHVyZSI6IlVJIHRyYW5zcG9ydCBmaXh0dXJlIGdlbmVyYXRlZCBieSB0aGUgcmVhbCBwdWJsaWMgcHJvamVjdGlvbiBvdmVyIGFuIG93bmVkIGluLW1lbW9yeSBwcm92aWRlci4gTm8gZGV2aWNlIG9yIGxpdmUgcHJvdmlkZXIgYWRtaXNzaW9uLiIsImFkbWlzc2lvblVuY2hhbmdlZCI6dHJ1ZSwidW5pY29kZUNvZGVQb2ludHMiOjI1Niwic2VsZWN0ZWRDb250cmFzdCI6W3sibGFiZWwiOiJQbGFjZW1lbnQgZ3VpZGFuY2UiLCJ0ZXh0IjoiUmVhZC1vbmx5IG9ic2VydmF0aW9uIG9mIHRoZSBzZWxlY3RlZCBEZXBsb3ltZW50IGFuZCBjb21taXR0ZWQgcmV2aXNpb24uIExvZ2ljYWwgaWRlbnRpdHkgYW5kIGF1dGhvcmVkIHNvdXJjZSBzdGF5IHVuY2hhbmdlZC4gQXNzZXQgb2JzZXJ2YXRpb25zIGRvIG5vdCBncmFudCBwZXJtaXNzaW9uIG9yIG1ha2UgcGh5IiwiY29sb3IiOiJyZ2IoMTAxLCAxMTcsIDE0MSkiLCJmb250U2l6ZSI6IjEycHgiLCJmb250V2VpZ2h0IjoiNDAwIiwidGhyZXNob2xkIjo0LjUsInNjb3BlIjoiU2VsZWN0ZWQgbm9ybWFsLXNpemUgcmVuZGVyZWQgdGV4dDsgbm8gb3ZlcmFsbCBhY2Nlc3NpYmlsaXR5IGNlcnRpZmljYXRpb24iLCJzdXBwb3J0ZWQiOnRydWUsImxheWVycyI6WyJyZ2JhKDAsIDAsIDAsIDApIiwicmdiKDI1NSwgMjU1LCAyNTUpIl0sImJhY2tncm91bmQiOlsxLDEsMSwxXSwiY29tcG9zaXRlZEZvcmVncm91bmQiOlswLjM5NjA3ODQzMTM3MjU0OSwwLjQ1ODgyMzUyOTQxMTc2NDcsMC41NTI5NDExNzY0NzA1ODgzLDFdLCJyYXRpbyI6NC42ODQ5MTMxNTk4ODk2MjA1LCJwYXNzZWQiOnRydWUsImFzc3VtcHRpb25zIjoiQ1NTIHNSR0IgY29sb3JzOyBhbHBoYSBjb21wb3NpdGVkIHRocm91Z2ggZXhwbGljaXQgYmFja2dyb3VuZHM7IG5vIGFudGktYWxpYXNpbmcgYXBwcm94aW1hdGlvbiJ9LHsibGFiZWwiOiJQbGFjZW1lbnQgZXZpZGVuY2Ugc2NvcGUiLCJ0ZXh0IjoiZml4dHVyZSIsImNvbG9yIjoicmdiKDk4LCAxMTMsIDEzOCkiLCJmb250U2l6ZSI6IjlweCIsImZvbnRXZWlnaHQiOiI2MDAiLCJ0aHJlc2hvbGQiOjQuNSwic2NvcGUiOiJTZWxlY3RlZCBub3JtYWwtc2l6ZSByZW5kZXJlZCB0ZXh0OyBubyBvdmVyYWxsIGFjY2Vzc2liaWxpdHkgY2VydGlmaWNhdGlvbiIsInN1cHBvcnRlZCI6dHJ1ZSwibGF5ZXJzIjpbInJnYigyNDUsIDI0NywgMjUwKSJdLCJiYWNrZ3JvdW5kIjpbMC45NjA3ODQzMTM3MjU0OTAyLDAuOTY4NjI3NDUwOTgwMzkyMiwwLjk4MDM5MjE1Njg2Mjc0NTEsMV0sImNvbXBvc2l0ZWRGb3JlZ3JvdW5kIjpbMC4zODQzMTM3MjU0OTAxOTYxLDAuNDQzMTM3MjU0OTAxOTYwNzYsMC41NDExNzY0NzA1ODgyMzUzLDFdLCJyYXRpbyI6NC42MDU4MDgzMjUxNDg3MjMsInBhc3NlZCI6dHJ1ZSwiYXNzdW1wdGlvbnMiOiJDU1Mgc1JHQiBjb2xvcnM7IGFscGhhIGNvbXBvc2l0ZWQgdGhyb3VnaCBleHBsaWNpdCBiYWNrZ3JvdW5kczsgbm8gYW50aS1hbGlhc2luZyBhcHByb3hpbWF0aW9uIn0seyJsYWJlbCI6IlBsYWNlbWVudCB1bmF2YWlsYWJsZSBhZG1pc3Npb24iLCJ0ZXh0IjoidW5hdmFpbGFibGUiLCJjb2xvciI6InJnYig2NywgODUsIDExNCkiLCJmb250U2l6ZSI6IjEwcHgiLCJmb250V2VpZ2h0IjoiNDAwIiwidGhyZXNob2xkIjo0LjUsInNjb3BlIjoiU2VsZWN0ZWQgbm9ybWFsLXNpemUgcmVuZGVyZWQgdGV4dDsgbm8gb3ZlcmFsbCBhY2Nlc3NpYmlsaXR5IGNlcnRpZmljYXRpb24iLCJzdXBwb3J0ZWQiOnRydWUsImxheWVycyI6WyJyZ2JhKDAsIDAsIDAsIDApIiwicmdiYSgwLCAwLCAwLCAwKSIsInJnYmEoMCwgMCwgMCwgMCkiLCJyZ2IoMjU1LCAyNTUsIDI1NSkiXSwiYmFja2dyb3VuZCI6WzEsMSwxLDFdLCJjb21wb3NpdGVkRm9yZWdyb3VuZCI6WzAuMjYyNzQ1MDk4MDM5MjE1NywwLjMzMzMzMzMzMzMzMzMzMzMsMC40NDcwNTg4MjM1Mjk0MTE4LDFdLCJyYXRpbyI6Ny41NTExMzQxNDkwNjI3OTYsInBhc3NlZCI6dHJ1ZSwiYXNzdW1wdGlvbnMiOiJDU1Mgc1JHQiBjb2xvcnM7IGFscGhhIGNvbXBvc2l0ZWQgdGhyb3VnaCBleHBsaWNpdCBiYWNrZ3JvdW5kczsgbm8gYW50aS1hbGlhc2luZyBhcHByb3hpbWF0aW9uIn0seyJsYWJlbCI6IlBsYWNlbWVudCBibG9ja2VkIG9wZXJhdGlvbiIsInRleHQiOiJibG9ja2VkIiwiY29sb3IiOiJyZ2IoNjcsIDg1LCAxMTQpIiwiZm9udFNpemUiOiIxMHB4IiwiZm9udFdlaWdodCI6IjQwMCIsInRocmVzaG9sZCI6NC41LCJzY29wZSI6IlNlbGVjdGVkIG5vcm1hbC1zaXplIHJlbmRlcmVkIHRleHQ7IG5vIG92ZXJhbGwgYWNjZXNzaWJpbGl0eSBjZXJ0aWZpY2F0aW9uIiwic3VwcG9ydGVkIjp0cnVlLCJsYXllcnMiOlsicmdiYSgwLCAwLCAwLCAwKSIsInJnYmEoMCwgMCwgMCwgMCkiLCJyZ2JhKDAsIDAsIDAsIDApIiwicmdiKDI1NSwgMjU1LCAyNTUpIl0sImJhY2tncm91bmQiOlsxLDEsMSwxXSwiY29tcG9zaXRlZEZvcmVncm91bmQiOlswLjI2Mjc0NTA5ODAzOTIxNTcsMC4zMzMzMzMzMzMzMzMzMzMzLDAuNDQ3MDU4ODIzNTI5NDExOCwxXSwicmF0aW8iOjcuNTUxMTM0MTQ5MDYyNzk2LCJwYXNzZWQiOnRydWUsImFzc3VtcHRpb25zIjoiQ1NTIHNSR0IgY29sb3JzOyBhbHBoYSBjb21wb3NpdGVkIHRocm91Z2ggZXhwbGljaXQgYmFja2dyb3VuZHM7IG5vIGFudGktYWxpYXNpbmcgYXBwcm94aW1hdGlvbiJ9XSwic2NvcGUiOiJSZWFkLW9ubHkgbmF0aXZlIGJyb3dzZXIgaW5zcGVjdGlvbjsgYWN0dWFsIEFQSSByZXN1bHRzIGFuZCBsYWJlbGxlZCB0cmFuc3BvcnQgZml4dHVyZXMgYXJlIGRpc3Rpbmd1aXNoZWQuIE5vIHBoeXNpY2FsIHByb3ZpZGVyIGluc3RhbGxlZCwgcmVzZXJ2YXRpb24sIGRldmljZSBvcGVyYXRpb24gb3IgU3RhcnQuIn0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a94800dbbc8a48884adb-061c8fe61aa1a1c1d78c",
+          "file": "physical-placements-accessibility.spec.ts",
+          "line": 275,
+          "column": 7
+        },
+        {
+          "title": "physical placements: labelled maximum report is accessible in bounded pages at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 21068,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T02:43:16.108Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "placement-journey.json",
+                      "contentType": "application/json",
+                      "body": "eyJwcm9qZWN0SWQiOiJwcmotOGE3ZGViZWYtNzU1Yy00ZmQ1LWE2YjAtMGY3NGU4ZDVlNGVlIiwicmV2aXNpb24iOjIsInJlYWRzIjpbIi9hcGkvdjEvcHJvamVjdHMvcHJqLThhN2RlYmVmLTc1NWMtNGZkNS1hNmIwLTBmNzRlOGQ1ZTRlZS9kZXBsb3ltZW50LXZhcmlhbnRzL2RvYy0zL3BoeXNpY2FsLWJpbmRpbmdzP3JldmlzaW9uPTIiXSwibXV0YXRpdmVSZXF1ZXN0c0FmdGVyU2V0dXAiOjAsImNhbm9uaWNhbFByb2plY3RBbmRSdW5zVW5jaGFuZ2VkIjp0cnVlLCJsYWJlbGxlZE1heGltdW1SZXBvcnRUcmFuc3BvcnQiOnRydWUsInRvdGFsQWNjZXNzaWJsZVJvd3MiOjEwMDAsIm1heGltdW1SZW5kZXJlZFJvd3MiOjUwLCJsb2NhbFBhZ2luYXRpb25SZWFkcyI6MSwic2NvcGUiOiJSZWFkLW9ubHkgbmF0aXZlIGJyb3dzZXIgaW5zcGVjdGlvbjsgYWN0dWFsIEFQSSByZXN1bHRzIGFuZCBsYWJlbGxlZCB0cmFuc3BvcnQgZml4dHVyZXMgYXJlIGRpc3Rpbmd1aXNoZWQuIE5vIHBoeXNpY2FsIHByb3ZpZGVyIGluc3RhbGxlZCwgcmVzZXJ2YXRpb24sIGRldmljZSBvcGVyYXRpb24gb3IgU3RhcnQuIn0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a94800dbbc8a48884adb-0a415cd8b22a1f9703c0",
+          "file": "physical-placements-accessibility.spec.ts",
+          "line": 293,
+          "column": 7
+        },
+        {
+          "title": "physical placements: actual invalid source is not an empty observation at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3048,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T02:43:37.183Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "placement-journey.json",
+                      "contentType": "application/json",
+                      "body": "eyJwcm9qZWN0SWQiOiJwcmotNTAyNTNiNTItYmQ5Zi00NzgyLWJjMDAtM2RmODJlYjExYmM3IiwicmV2aXNpb24iOjMsInJlYWRzIjpbIi9hcGkvdjEvcHJvamVjdHMvcHJqLTUwMjUzYjUyLWJkOWYtNDc4Mi1iYzAwLTNkZjgyZWIxMWJjNy9kZXBsb3ltZW50LXZhcmlhbnRzL2RvYy0zL3BoeXNpY2FsLWJpbmRpbmdzP3JldmlzaW9uPTMiXSwibXV0YXRpdmVSZXF1ZXN0c0FmdGVyU2V0dXAiOjAsImNhbm9uaWNhbFByb2plY3RBbmRSdW5zVW5jaGFuZ2VkIjp0cnVlLCJhY3R1YWxJbnZhbGlkUmVzb2x2ZXJSZXBvcnQiOnsiYmluZGluZ09ic2VydmF0aW9uVmVyc2lvbiI6IjEuMCIsInByb2plY3RJZCI6InByai01MDI1M2I1Mi1iZDlmLTQ3ODItYmMwMC0zZGY4MmViMTFiYzciLCJkb2N1bWVudElkIjoiZG9jLTMiLCJyZXZpc2lvbiI6Mywic291cmNlVmFsaWQiOmZhbHNlLCJzY29wZSI6InJlYWRfb25seV9wbGFjZW1lbnRfb2JzZXJ2YXRpb24iLCJhY3RpdmVSZWFkeSI6ZmFsc2UsInJ1bnRpbWVBZG1pc3Npb24iOiJ1bmF2YWlsYWJsZSIsImJpbmRpbmdzIjpbXSwiZGlhZ25vc3RpY3MiOlt7ImNvZGUiOiJYREwtUEFSU0UtWUFNTCJ9XSwibGltaXRhdGlvbnMiOlsiRG9lcyBub3QgY2hhbmdlIGRlcGxveW1lbnQgcmVzb2x1dGlvbiBvciBydW50aW1lIGFkbWlzc2lvbi4iLCJQaHlzaWNhbCBjb250cm9scyBhbmQgcmVzZXJ2YXRpb25zIHJlbWFpbiB1bmFkbWl0dGVkLiJdfSwic2NvcGUiOiJSZWFkLW9ubHkgbmF0aXZlIGJyb3dzZXIgaW5zcGVjdGlvbjsgYWN0dWFsIEFQSSByZXN1bHRzIGFuZCBsYWJlbGxlZCB0cmFuc3BvcnQgZml4dHVyZXMgYXJlIGRpc3Rpbmd1aXNoZWQuIE5vIHBoeXNpY2FsIHByb3ZpZGVyIGluc3RhbGxlZCwgcmVzZXJ2YXRpb24sIGRldmljZSBvcGVyYXRpb24gb3IgU3RhcnQuIn0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a94800dbbc8a48884adb-8fd804d380b3accdbce5",
+          "file": "physical-placements-accessibility.spec.ts",
+          "line": 359,
+          "column": 7
+        },
+        {
+          "title": "physical placements: actual unresolved authored binding is read-only at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1876,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T02:43:40.236Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "physical-placement-observation.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJwcm9qZWN0SWQiOiJwcmotNDdhZDg4NzEtZGJhNS00YmJiLTk2MTktYzY0NGMyMjViY2Y3IiwiZG9jdW1lbnRJZCI6ImRvYy0zIiwicmV2aXNpb24iOjIsImFjdHVhbFJlc29sdmVyUmVwb3J0Ijp7ImJpbmRpbmdPYnNlcnZhdGlvblZlcnNpb24iOiIxLjAiLCJwcm9qZWN0SWQiOiJwcmotNDdhZDg4NzEtZGJhNS00YmJiLTk2MTktYzY0NGMyMjViY2Y3IiwiZG9jdW1lbnRJZCI6ImRvYy0zIiwicmV2aXNpb24iOjIsInNvdXJjZVZhbGlkIjp0cnVlLCJzY29wZSI6InJlYWRfb25seV9wbGFjZW1lbnRfb2JzZXJ2YXRpb24iLCJhY3RpdmVSZWFkeSI6ZmFsc2UsInJ1bnRpbWVBZG1pc3Npb24iOiJ1bmF2YWlsYWJsZSIsImJpbmRpbmdzIjpbeyJiaW5kaW5nSWQiOiJwbGFudC1iaW5kaW5nIiwibG9naWNhbFJlZiI6InhkbDovL29yZy54dmVyc2Uuc3R1ZGlvLnByb2Nlc3MtY29udHJvbC9zeXN0ZW0vcmVmZXJlbmNlLWxvb3AjcGxhbnQiLCJ0YXJnZXRJZCI6InJlZmVyZW5jZS10YXJnZXQiLCJyZWFsaXphdGlvbkNsYXNzIjoicGh5c2ljYWwiLCJhc3NldElkIjoidXJuOmZpeHR1cmU6dW5yZXNvbHZlZC1iZW5jaCIsImFzc2V0IjpudWxsLCJyZXF1aXJlZEludGVyZmFjZXMiOnsiY29tbWFuZCI6eyJpZCI6ImNvbW1hbmQiLCJkaXJlY3Rpb24iOiJiaWRpcmVjdGlvbmFsIiwicGF5bG9hZFNjaGVtYSI6InVybjp4dmVyc2U6c3R1ZGlvOm5vcm1hbGl6ZWQtc2NhbGFyOnYxIiwidW5pdFNlbWFudGljcyI6IjEiLCJjb21wYXRpYmlsaXR5IjoiZXhhY3QifSwic3RhdGUiOnsiaWQiOiJzdGF0ZSIsImRpcmVjdGlvbiI6ImJpZGlyZWN0aW9uYWwiLCJwYXlsb2FkU2NoZW1hIjoidXJuOnh2ZXJzZTpzdHVkaW86bm9ybWFsaXplZC1zY2FsYXI6djEiLCJ1bml0U2VtYW50aWNzIjoiMSIsImNvbXBhdGliaWxpdHkiOiJleGFjdCJ9fSwicmVxdWlyZWRJbnRlcmZhY2VzVHJ1bmNhdGVkIjpmYWxzZSwiZXZpZGVuY2VTY29wZSI6InVua25vd24iLCJyZWFkeSI6ZmFsc2UsImFjdGl2ZVJlYWR5IjpmYWxzZSwiZGlhZ25vc3RpY3MiOlsiUEhZU0lDQUxfUFJPVklERVJfTk9UX0FETUlUVEVEIiwiQVNTRVRfVU5BVkFJTEFCTEUiXSwicmVhZGluZXNzIjp7ImlkZW50aXR5IjoidW5rbm93biIsImludGVyZmFjZXMiOiJ1bmtub3duIiwiYXZhaWxhYmlsaXR5IjoidW5rbm93biIsIm1ldGFkYXRhIjoidW5rbm93biIsInByb3ZpZGVyQWRtaXNzaW9uIjoidW5hdmFpbGFibGUiLCJwZXJtaXNzaW9uIjoidW5rbm93biIsImFjdGl2ZU9wZXJhdGlvbiI6ImJsb2NrZWQifX1dLCJkaWFnbm9zdGljcyI6W10sImxpbWl0YXRpb25zIjpbIkRvZXMgbm90IGNoYW5nZSBkZXBsb3ltZW50IHJlc29sdXRpb24gb3IgcnVudGltZSBhZG1pc3Npb24uIiwiUGh5c2ljYWwgY29udHJvbHMgYW5kIHJlc2VydmF0aW9ucyByZW1haW4gdW5hZG1pdHRlZC4iXSwic3lzdGVtUmVmIjoieGRsOi8vb3JnLnh2ZXJzZS5zdHVkaW8ucHJvY2Vzcy1jb250cm9sL3N5c3RlbS9yZWZlcmVuY2UtbG9vcCIsImRlcGxveW1lbnRSZWYiOiJ4ZGw6Ly9vcmcueHZlcnNlLnN0dWRpby5wcm9jZXNzLWNvbnRyb2wvZGVwbG95bWVudC9sb2NhbC1yZWZlcmVuY2UiLCJpbnZlbnRvcnlUcnVuY2F0ZWQiOmZhbHNlLCJpbnZlbnRvcnlDb21wbGV0ZSI6dHJ1ZX0sImFjdHVhbENhbm9uaWNhbFVuY2hhbmdlZCI6dHJ1ZSwibXV0YXRpdmVSZXF1ZXN0c0FmdGVyU2V0dXAiOjAsIm9ic2VydmVkVUlSZWFkcyI6WyI/cmV2aXNpb249MiJdLCJzY29wZSI6IkFjdHVhbCBwdWJsaWMgc291cmNlIGRlY2xhcmF0aW9uIGFuZCBhdXRob3JpdGF0aXZlIHJlYWQtb25seSByZXNvbHZlciB3aXRoIGVtcHR5L3VuYWRtaXR0ZWQgaW52ZW50b3J5OyBubyBmaXh0dXJlIHByb3ZpZGVyIGluc3RhbGxlZCwgZGV2aWNlIG9wZXJhdGlvbiwgcmVzZXJ2YXRpb24gb3IgU3RhcnQifQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a94800dbbc8a48884adb-3aad4c2db67492bf3746",
+          "file": "physical-placements-accessibility.spec.ts",
+          "line": 380,
+          "column": 7
+        },
+        {
+          "title": "physical placements: actual invalid source is not an empty observation at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2755,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T02:43:42.123Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "placement-journey.json",
+                      "contentType": "application/json",
+                      "body": "eyJwcm9qZWN0SWQiOiJwcmotNjlmZWNlYWYtZWI3Ni00OTdkLTliYzgtYWVjYzgyOWZiNTkyIiwicmV2aXNpb24iOjMsInJlYWRzIjpbIi9hcGkvdjEvcHJvamVjdHMvcHJqLTY5ZmVjZWFmLWViNzYtNDk3ZC05YmM4LWFlY2M4MjlmYjU5Mi9kZXBsb3ltZW50LXZhcmlhbnRzL2RvYy0zL3BoeXNpY2FsLWJpbmRpbmdzP3JldmlzaW9uPTMiXSwibXV0YXRpdmVSZXF1ZXN0c0FmdGVyU2V0dXAiOjAsImNhbm9uaWNhbFByb2plY3RBbmRSdW5zVW5jaGFuZ2VkIjp0cnVlLCJhY3R1YWxJbnZhbGlkUmVzb2x2ZXJSZXBvcnQiOnsiYmluZGluZ09ic2VydmF0aW9uVmVyc2lvbiI6IjEuMCIsInByb2plY3RJZCI6InByai02OWZlY2VhZi1lYjc2LTQ5N2QtOWJjOC1hZWNjODI5ZmI1OTIiLCJkb2N1bWVudElkIjoiZG9jLTMiLCJyZXZpc2lvbiI6Mywic291cmNlVmFsaWQiOmZhbHNlLCJzY29wZSI6InJlYWRfb25seV9wbGFjZW1lbnRfb2JzZXJ2YXRpb24iLCJhY3RpdmVSZWFkeSI6ZmFsc2UsInJ1bnRpbWVBZG1pc3Npb24iOiJ1bmF2YWlsYWJsZSIsImJpbmRpbmdzIjpbXSwiZGlhZ25vc3RpY3MiOlt7ImNvZGUiOiJYREwtUEFSU0UtWUFNTCJ9XSwibGltaXRhdGlvbnMiOlsiRG9lcyBub3QgY2hhbmdlIGRlcGxveW1lbnQgcmVzb2x1dGlvbiBvciBydW50aW1lIGFkbWlzc2lvbi4iLCJQaHlzaWNhbCBjb250cm9scyBhbmQgcmVzZXJ2YXRpb25zIHJlbWFpbiB1bmFkbWl0dGVkLiJdfSwic2NvcGUiOiJSZWFkLW9ubHkgbmF0aXZlIGJyb3dzZXIgaW5zcGVjdGlvbjsgYWN0dWFsIEFQSSByZXN1bHRzIGFuZCBsYWJlbGxlZCB0cmFuc3BvcnQgZml4dHVyZXMgYXJlIGRpc3Rpbmd1aXNoZWQuIE5vIHBoeXNpY2FsIHByb3ZpZGVyIGluc3RhbGxlZCwgcmVzZXJ2YXRpb24sIGRldmljZSBvcGVyYXRpb24gb3IgU3RhcnQuIn0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a94800dbbc8a48884adb-709123f3f2bb13e82c18",
+          "file": "physical-placements-accessibility.spec.ts",
+          "line": 359,
+          "column": 7
+        },
+        {
+          "title": "physical placements: actual unresolved authored binding is read-only at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2060,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T02:43:44.889Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "physical-placement-observation.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJwcm9qZWN0SWQiOiJwcmotMWQ5MmQzZjgtZGZkZS00YzM2LWFmNDAtMjZkODg1YTYyN2FhIiwiZG9jdW1lbnRJZCI6ImRvYy0zIiwicmV2aXNpb24iOjIsImFjdHVhbFJlc29sdmVyUmVwb3J0Ijp7ImJpbmRpbmdPYnNlcnZhdGlvblZlcnNpb24iOiIxLjAiLCJwcm9qZWN0SWQiOiJwcmotMWQ5MmQzZjgtZGZkZS00YzM2LWFmNDAtMjZkODg1YTYyN2FhIiwiZG9jdW1lbnRJZCI6ImRvYy0zIiwicmV2aXNpb24iOjIsInNvdXJjZVZhbGlkIjp0cnVlLCJzY29wZSI6InJlYWRfb25seV9wbGFjZW1lbnRfb2JzZXJ2YXRpb24iLCJhY3RpdmVSZWFkeSI6ZmFsc2UsInJ1bnRpbWVBZG1pc3Npb24iOiJ1bmF2YWlsYWJsZSIsImJpbmRpbmdzIjpbeyJiaW5kaW5nSWQiOiJwbGFudC1iaW5kaW5nIiwibG9naWNhbFJlZiI6InhkbDovL29yZy54dmVyc2Uuc3R1ZGlvLnByb2Nlc3MtY29udHJvbC9zeXN0ZW0vcmVmZXJlbmNlLWxvb3AjcGxhbnQiLCJ0YXJnZXRJZCI6InJlZmVyZW5jZS10YXJnZXQiLCJyZWFsaXphdGlvbkNsYXNzIjoicGh5c2ljYWwiLCJhc3NldElkIjoidXJuOmZpeHR1cmU6dW5yZXNvbHZlZC1iZW5jaCIsImFzc2V0IjpudWxsLCJyZXF1aXJlZEludGVyZmFjZXMiOnsiY29tbWFuZCI6eyJpZCI6ImNvbW1hbmQiLCJkaXJlY3Rpb24iOiJiaWRpcmVjdGlvbmFsIiwicGF5bG9hZFNjaGVtYSI6InVybjp4dmVyc2U6c3R1ZGlvOm5vcm1hbGl6ZWQtc2NhbGFyOnYxIiwidW5pdFNlbWFudGljcyI6IjEiLCJjb21wYXRpYmlsaXR5IjoiZXhhY3QifSwic3RhdGUiOnsiaWQiOiJzdGF0ZSIsImRpcmVjdGlvbiI6ImJpZGlyZWN0aW9uYWwiLCJwYXlsb2FkU2NoZW1hIjoidXJuOnh2ZXJzZTpzdHVkaW86bm9ybWFsaXplZC1zY2FsYXI6djEiLCJ1bml0U2VtYW50aWNzIjoiMSIsImNvbXBhdGliaWxpdHkiOiJleGFjdCJ9fSwicmVxdWlyZWRJbnRlcmZhY2VzVHJ1bmNhdGVkIjpmYWxzZSwiZXZpZGVuY2VTY29wZSI6InVua25vd24iLCJyZWFkeSI6ZmFsc2UsImFjdGl2ZVJlYWR5IjpmYWxzZSwiZGlhZ25vc3RpY3MiOlsiUEhZU0lDQUxfUFJPVklERVJfTk9UX0FETUlUVEVEIiwiQVNTRVRfVU5BVkFJTEFCTEUiXSwicmVhZGluZXNzIjp7ImlkZW50aXR5IjoidW5rbm93biIsImludGVyZmFjZXMiOiJ1bmtub3duIiwiYXZhaWxhYmlsaXR5IjoidW5rbm93biIsIm1ldGFkYXRhIjoidW5rbm93biIsInByb3ZpZGVyQWRtaXNzaW9uIjoidW5hdmFpbGFibGUiLCJwZXJtaXNzaW9uIjoidW5rbm93biIsImFjdGl2ZU9wZXJhdGlvbiI6ImJsb2NrZWQifX1dLCJkaWFnbm9zdGljcyI6W10sImxpbWl0YXRpb25zIjpbIkRvZXMgbm90IGNoYW5nZSBkZXBsb3ltZW50IHJlc29sdXRpb24gb3IgcnVudGltZSBhZG1pc3Npb24uIiwiUGh5c2ljYWwgY29udHJvbHMgYW5kIHJlc2VydmF0aW9ucyByZW1haW4gdW5hZG1pdHRlZC4iXSwic3lzdGVtUmVmIjoieGRsOi8vb3JnLnh2ZXJzZS5zdHVkaW8ucHJvY2Vzcy1jb250cm9sL3N5c3RlbS9yZWZlcmVuY2UtbG9vcCIsImRlcGxveW1lbnRSZWYiOiJ4ZGw6Ly9vcmcueHZlcnNlLnN0dWRpby5wcm9jZXNzLWNvbnRyb2wvZGVwbG95bWVudC9sb2NhbC1yZWZlcmVuY2UiLCJpbnZlbnRvcnlUcnVuY2F0ZWQiOmZhbHNlLCJpbnZlbnRvcnlDb21wbGV0ZSI6dHJ1ZX0sImFjdHVhbENhbm9uaWNhbFVuY2hhbmdlZCI6dHJ1ZSwibXV0YXRpdmVSZXF1ZXN0c0FmdGVyU2V0dXAiOjAsIm9ic2VydmVkVUlSZWFkcyI6WyI/cmV2aXNpb249MiJdLCJzY29wZSI6IkFjdHVhbCBwdWJsaWMgc291cmNlIGRlY2xhcmF0aW9uIGFuZCBhdXRob3JpdGF0aXZlIHJlYWQtb25seSByZXNvbHZlciB3aXRoIGVtcHR5L3VuYWRtaXR0ZWQgaW52ZW50b3J5OyBubyBmaXh0dXJlIHByb3ZpZGVyIGluc3RhbGxlZCwgZGV2aWNlIG9wZXJhdGlvbiwgcmVzZXJ2YXRpb24gb3IgU3RhcnQifQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a94800dbbc8a48884adb-d56ff0a8e1c454467cf1",
+          "file": "physical-placements-accessibility.spec.ts",
+          "line": 380,
+          "column": 7
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-27T02:41:32.218Z",
+    "duration": 134786.869,
+    "expected": 37,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

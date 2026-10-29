@@ -1,0 +1,142 @@
+import { test, expect, type Page, type Locator } from "@playwright/test";
+import { readFileSync } from "node:fs";
+import path from "node:path";
+import { connectStudio } from "./connect-studio";
+
+const observations = JSON.parse(
+  readFileSync(
+    path.resolve("tests/fixtures/providers/lab-inventory-observation.json"),
+    "utf8",
+  ),
+);
+
+async function tabTo(page: Page, target: Locator) {
+  await expect(target).toBeVisible();
+  for (const [key, limit] of [
+    ["Shift+Tab", 40],
+    ["Tab", 220],
+  ] as const) {
+    for (let i = 0; i < limit; i++) {
+      if (await target.evaluate((n) => document.activeElement === n)) return;
+      await page.keyboard.press(key);
+    }
+  }
+  await expect(target).toBeFocused();
+}
+async function activate(page: Page, target: Locator) {
+  await tabTo(page, target);
+  await page.keyboard.press("Enter");
+}
+async function get(page: Page, route: string) {
+  return page.evaluate(async (route) => {
+    const response = await fetch("/api/v1" + route);
+    if (!response.ok) throw new Error(`Owned read failed: ${response.status}`);
+    return response.json();
+  }, route);
+}
+
+for (const viewport of [
+  { width: 1024, height: 768 },
+  { width: 1440, height: 900 },
+]) {
+  for (const mode of ["incomplete", "observed"] as const) {
+    test(`lab inventory: ${mode} public observation at ${viewport.width}x${viewport.height}`, async ({
+      page,
+    }, info) => {
+      await page.setViewportSize(viewport);
+      await connectStudio(page, info);
+      const before = {
+        assets: await get(page, "/assets"),
+        runs: await get(page, "/runs"),
+        projects: await get(page, "/projects"),
+      };
+      expect(before.assets).toMatchObject({
+        items: [],
+        complete: true,
+        truncated: false,
+        activeReady: false,
+        physicalProviderStatus: "unavailable",
+      });
+      let writes = 0,
+        reads = 0;
+      page.on("request", (r) => {
+        if (!["GET", "HEAD"].includes(r.method())) writes++;
+      });
+      const pattern = "**/api/v1/assets";
+      await page.route(pattern, async (route) => {
+        reads++;
+        expect(route.request().method()).toBe("GET");
+        await route.fulfill({
+          status: 200,
+          contentType: "application/json",
+          body: JSON.stringify(observations[mode]),
+        });
+      });
+      try {
+        await activate(
+          page,
+          page.getByRole("button", { name: "Laboratory", exact: true }),
+        );
+        await expect(
+          page.getByRole("heading", { name: "Physical assets", exact: true }),
+        ).toBeVisible();
+        await expect.poll(() => reads).toBe(1);
+        if (mode === "incomplete") {
+          await expect
+            .soft(
+              page
+                .locator(".diagnostic-list strong")
+                .filter({ hasText: /^PROVIDER_INVENTORY_UNAVAILABLE$/ }),
+            )
+            .toBeVisible();
+        } else {
+          const card = page
+            .locator("section.panel")
+            .filter({
+              has: page.getByRole("heading", {
+                name: "urn:fixture:inventory-presentation",
+                exact: true,
+              }),
+            });
+          const firmware = card
+            .locator(".key-values > div")
+            .filter({ has: page.getByText("Firmware", { exact: true }) })
+            .locator("dd");
+          await expect.soft(firmware).toContainText("fixture-1.2.3");
+          await expect(
+            card.getByRole("button", {
+              name: "Reserve observe-only",
+              exact: true,
+            }),
+          ).toBeDisabled();
+        }
+        await page.unroute(pattern);
+        const after = {
+          assets: await get(page, "/assets"),
+          runs: await get(page, "/runs"),
+          projects: await get(page, "/projects"),
+        };
+        expect(after).toEqual(before);
+        expect(writes).toBe(0);
+        await info.attach("lab-inventory-observation.json", {
+          body: JSON.stringify({
+            viewport,
+            mode,
+            labelledTransportFixture: true,
+            fixtureGeneratedByBackendProjection: true,
+            actualInventoryEmptyAndUnadmitted: true,
+            canonicalListsUnchanged: true,
+            mutativeRequests: writes,
+            physicalActions: 0,
+            reads,
+            scope:
+              "UI projection observation only; synthetic owned provider used by offline generator, no runtime admission, device access or Start",
+          }),
+          contentType: "application/json",
+        });
+      } finally {
+        await page.unroute(pattern);
+      }
+    });
+  }
+}

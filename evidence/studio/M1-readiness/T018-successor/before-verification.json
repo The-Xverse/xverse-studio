@@ -1,0 +1,23 @@
+{
+  "scope": "New T018 slice after published de395ff; separate from its 393-test cohort. Local Linux API fixtures, process creation forbidden; no Windows/hardware/external provider claim.",
+  "command": "PYTHONDONTWRITEBYTECODE=1 PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 .venv/bin/python -I -m pytest tests/integration/test_preflight.py -k 'exceeded_advertised or required_clock_admission_absence or conflicting_authority_scope or missing_binding_or_mismatched_artifact or removed_required_cross_clock or unknown_execution_owner' --basetemp=.studio-local/t018-before-pytest -o cache_dir=.studio-local/pytest -q",
+  "passed": 9,
+  "failed": 1,
+  "deselected": 19,
+  "seconds": 16.81,
+  "exitCode": 1,
+  "testSourceCopy": ".studio-local/t018-before-test-source.py",
+  "testSourceSha256": "9650314620cbdb1b8d3955009814f5007600da9d7c5cb6c8f22376098edc6240",
+  "productSourceBefore": {
+    "services/studio-api/src/xverse_studio/preflight/__init__.py": "09d7ad0db237991d7a5444ff4ad9a3bc1ad34cdfdd3746b7a9f7bc71543c4330",
+    "services/studio-api/src/xverse_studio/runs/service.py": "ead5c3b2f96edecfbd69f3d819b5ad35280b9832b1980fa4c9fb51576e3dca8e",
+    "services/studio-api/src/xverse_studio/api/app.py": "c5b75e6d2c0b4f3c0f09980a7128e1f19cdebce14a1b4cee31b46f977b703201"
+  },
+  "productSourceAfter": {
+    "services/studio-api/src/xverse_studio/preflight/__init__.py": "09d7ad0db237991d7a5444ff4ad9a3bc1ad34cdfdd3746b7a9f7bc71543c4330",
+    "services/studio-api/src/xverse_studio/runs/service.py": "ead5c3b2f96edecfbd69f3d819b5ad35280b9832b1980fa4c9fb51576e3dca8e",
+    "services/studio-api/src/xverse_studio/api/app.py": "c5b75e6d2c0b4f3c0f09980a7128e1f19cdebce14a1b4cee31b46f977b703201"
+  },
+  "failure": "one_binding_missing still reports artifacts=available although compiled binding artifact counts are [0,1]; public XDL remains valid, target/start remain blocked by CAPABILITY_UNSUPPORTED.",
+  "fixtureCorrection": "The draft initially used maxSamples499, which did not exceed the actual default 50 samples. Corrected to advertised maxSamples1; this case now passes."
+}

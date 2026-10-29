@@ -1,0 +1,24 @@
+
+> xverse-studio-workspace@0.1.0 test:e2e
+> playwright test -c tests/e2e/playwright.config.ts --grep parameter accessibility:
+
+SyntaxError: <repo>/tests/e2e/parameter-accessibility.spec.ts: Unexpected token (435:8)
+
+  433 |           contentType: "application/json",
+  434 |         });
+> 435 |       } finally {
+      |         ^
+  436 |         await pending.close();
+  437 |       }
+  438 |     });
+
+   at parameter-accessibility.spec.ts:435
+
+  433 |           contentType: "application/json",
+  434 |         });
+> 435 |       } finally {
+      |        ^
+  436 |         await pending.close();
+  437 |       }
+  438 |     });
+Error: No tests found

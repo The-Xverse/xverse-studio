@@ -1,0 +1,23 @@
+{
+  "headSha": "5b8a957",
+  "observedAt": "2026-10-25",
+  "runs": [
+    {
+      "event": "push",
+      "runId": 40225476005,
+      "jobId": 121265807665,
+      "conclusion": "failure",
+      "backend": "499 passed",
+      "browser": "43 passed, 1 failed",
+      "failedCheck": "run-reconnect.spec.ts: double Start, page close/reopen and a lost Stop acknowledgement keep one run and one command",
+      "failure": "Expected the pending-control reason, received 'Not available while the run is stopped.'",
+      "diagnosis": "Test race: the lost-acknowledgement fault injection delivers Stop to the backend before dropping the response, so on a slower host the run already stopped. Both reasons are truthful; the successor accepts either while still requiring the control to be disabled. Product behavior unchanged."
+    },
+    {
+      "event": "pull_request",
+      "runId": 40225481036,
+      "conclusion": "success"
+    }
+  ],
+  "windows": "NOT_RUN; held at user request"
+}

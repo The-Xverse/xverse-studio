@@ -1,0 +1,66 @@
+import {test,expect} from '@playwright/test';
+import {readFileSync} from 'node:fs';
+import path from 'node:path';
+import {createHash} from 'node:crypto';
+import {connectStudio} from '../../tests/e2e/connect-studio';
+import {traceApi} from '../../tests/e2e/trace-claims-flow';
+
+for(const width of [1024,1440]) {
+ test(`actual frozen-input reply preserves a newer recorded run at ${width}`,async({page},info)=>{
+  await page.setViewportSize({width,height:width===1024?768:900});
+  await connectStudio(page,info);
+  let project=(await traceApi(page,'/projects','POST',{name:'Frozen inspection context '+width})).body;
+  const runs:any[]=[];
+  for(const gain of [0.8,1.2]) {
+   const saved=await traceApi(page,`/projects/${project.projectId}/edits`,'POST',{
+    baseRevision:project.revision,edits:[{kind:'set_parameter',parameterId:'duration',value:0.2},{kind:'set_parameter',parameterId:'gain',value:gain}],
+   },project.revision);
+   expect(saved.status).toBe(200);project=saved.body;
+   const pf=(await traceApi(page,`/projects/${project.projectId}/preflights`,'POST',{revision:project.revision})).body;
+   expect(pf.status).toBe('ready');
+   const started=await traceApi(page,'/runs','POST',{snapshotId:pf.snapshotId,preflightId:pf.preflightId});
+   expect(started.status).toBe(202);
+   await expect.poll(async()=>(await traceApi(page,'/runs/'+started.body.runId)).body.state,{timeout:20000}).toBe('stopped');
+   runs.push((await traceApi(page,'/runs/'+started.body.runId)).body);
+  }
+  const [original,newer]=runs;
+  const digest=(name:string)=>createHash('sha256').update(readFileSync(path.join(process.env.STUDIO_BROWSER_DATA!,name))).digest('hex');
+  const names=runs.flatMap(run=>[`runs/${run.runId}/evidence.jsonl`,`snapshots/${run.snapshotId}/snapshot.json`]);
+  const before=Object.fromEntries(names.map(name=>[name,digest(name)]));
+  await page.evaluate(({pid,rid})=>{
+   localStorage.setItem('studio.projectId',pid);localStorage.setItem('studio.lastRun',rid);localStorage.setItem('studio.lastRun.'+pid,rid);
+  },{pid:project.projectId,rid:original.runId});
+  await page.reload();await page.getByRole('tab',{name:'Results',exact:false}).click();
+  const selected=page.getByLabel('Recorded run',{exact:true});await expect(selected).toHaveValue(original.runId);
+  let release!:()=>void,ready!:()=>void,complete!:()=>void;
+  const held=new Promise<void>(r=>release=r),actual=new Promise<void>(r=>ready=r),delivered=new Promise<void>(r=>complete=r);
+  let returned:any,delivery='pending';
+  await page.route(`**/api/v1/runs/${original.runId}/snapshot`,async route=>{
+   const response=await route.fetch();expect(response.status()).toBe(200);returned=await response.json();
+   expect(returned.integrity).toBe('valid');expect(returned.readOnly).toBe(true);expect(returned.snapshot.snapshotId).toBe(original.snapshotId);
+   ready();await held;
+   try{await route.fulfill({response});delivery='fulfilled';}
+   catch(error){if(!route.request().failure())throw error;delivery='browser aborted';}
+   finally{complete();}
+  });
+  const workloads:string[]=[];
+  page.on('request',request=>{
+   const url=new URL(request.url());
+   if(request.method()==='POST' && (/\/api\/v1\/(runs|campaigns)$/.test(url.pathname)||/\/(reruns|commands|evaluations)$/.test(url.pathname))) workloads.push(url.pathname);
+  });
+  const button=page.getByRole('button',{name:'Frozen inputs',exact:true});await button.focus();await page.keyboard.press('Enter');await actual;
+  await selected.selectOption(newer.runId);await expect(selected).toHaveValue(newer.runId);
+  release();await delivered;
+  await expect(page.getByText('Verifying immutable run inputs…',{exact:true})).toHaveCount(0);
+  await page.evaluate(()=>new Promise<void>(resolve=>requestAnimationFrame(()=>requestAnimationFrame(()=>resolve()))));
+  const dialog=page.getByRole('dialog'),count=await dialog.count();
+  const facts={scope:'Two actual native owned runs; only delivery of the original managed HTTP200 snapshot reply was held.',width,
+   originalRunId:original.runId,originalSnapshotId:original.snapshotId,newerRunId:newer.runId,newerSnapshotId:newer.snapshotId,
+   currentRunId:await selected.inputValue(),returnedSnapshotId:returned.snapshot.snapshotId,delivery,dialogCount:count,
+   dialogContainsOriginalSnapshot:count?((await dialog.textContent())||'').includes(original.snapshotId):false,
+   canonicalBytesUnchanged:names.every(name=>digest(name)===before[name]),workloads};
+  await info.attach('frozen-input-context-control',{contentType:'application/json',body:JSON.stringify(facts)});
+  expect(facts.canonicalBytesUnchanged).toBe(true);expect(workloads).toEqual([]);expect(facts.currentRunId).toBe(newer.runId);
+  await expect(dialog).toHaveCount(0);
+ });
+}

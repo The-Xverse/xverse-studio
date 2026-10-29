@@ -1,0 +1,71 @@
+from pathlib import Path
+from collections import Counter
+from copy import deepcopy
+import hashlib
+import json
+import subprocess
+from ruamel.yaml import YAML
+
+root=Path.cwd();out=root/'evidence/studio/native-ci/ci-budget-amendment';out.mkdir(exist_ok=True)
+ui_candidate=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()
+full=json.loads((root/'evidence/studio/M2-keyboard-source-recovery/application-and-input-hashes.json').read_text())
+workflow='.github/workflows/ci.yml';p=root/workflow;current=p.read_text()
+before=current if hashlib.sha256(current.encode()).hexdigest()==full[workflow] else (out/'workflow-before.yml.txt').read_text()
+assert hashlib.sha256(before.encode()).hexdigest()==full[workflow]
+assert all(hashlib.sha256((root/n).read_bytes()).hexdigest()==h for n,h in full.items() if n!=workflow)
+assert before.count('    timeout-minutes: 25\n')==1
+after=before.replace('    timeout-minutes: 25\n','    timeout-minutes: 45\n',1)
+assert current in (before, after)
+yaml=YAML(typ='safe');old=yaml.load(before);new=yaml.load(after);expected=deepcopy(old);expected['jobs']['native']['timeout-minutes']=45
+assert old['jobs']['native']['timeout-minutes']==25 and new==expected
+assert new['jobs']['native']['strategy']['matrix']['os']==['ubuntu-24.04']
+backend=json.loads((root/'evidence/studio/M2-keyboard-source-recovery/backend-source-equivalence.json').read_text());assert workflow in backend['checkedFiles']
+assert hashlib.sha256(before.encode()).hexdigest()==backend['checkedFiles'][workflow]
+assert all(hashlib.sha256((root/n).read_bytes()).hexdigest()==h for n,h in backend['checkedFiles'].items() if n!=workflow)
+manifest=json.loads((root/'evidence/studio/M2-keyboard-source-recovery/package/package-manifest.json').read_text());assert manifest['candidate']==ui_candidate and len(manifest['files'])==100 and workflow not in manifest['files']
+assert all('sha256:'+hashlib.sha256((root/n).read_bytes()).hexdigest()==h for n,h in manifest['files'].items())
+p.write_text(after)
+assert all(hashlib.sha256((root/n).read_bytes()).hexdigest()==h for n,h in full.items() if n!=workflow)
+(out/'workflow-before.yml.txt').write_text(before);(out/'workflow-after.yml.txt').write_text(after)
+proof={'scope':'CI-only scheduling amendment after frozen UI209/performance checks; not runtime timing or a completed fresh-host result','uiCandidate':ui_candidate,'workflow':workflow,'beforeSha256':hashlib.sha256(before.encode()).hexdigest(),'afterSha256':hashlib.sha256(after.encode()).hexdigest(),'beforeJobMinutes':25,'afterJobMinutes':45,'onlyParsedWorkflowDifference':'jobs.native.timeout-minutes','allOtherWorkflowSemanticsIdentical':True,'commandsStepsEnvironmentActionPinsMatrixIdentical':True,'windowsHeld':True,'unchangedFrozenInputs':{n:h for n,h in full.items() if n!=workflow},'backendInheritance':{'previousProof':'evidence/studio/M2-keyboard-source-recovery/backend-source-equivalence.json','passed':851,'testsRerun':False,'byteIdenticalInputs':{n:h for n,h in backend['checkedFiles'].items() if n!=workflow},'changedInput':workflow,'changedInputPreservesTestCommands':True},'packagedPayload':{'candidate':ui_candidate,'files':100,'allCurrentFileHashesMatchVerifiedCleanPackage':True,'workflowIsNotPackaged':True},'currentCandidateCI':'Pending a new native Ubuntu24 run; cancelled predecessor jobs remain cancelled'}
+(out/'verification.json').write_text(json.dumps(proof,indent=2)+'\n')
+(out/'README.md').write_text('''# Native CI job budget amendment — 2026-10-26
+
+The source-editor predecessor jobs exhausted the total25-minute job limit during browser
+checks, after setup/backend/browser installation used roughly13 minutes. All four GitHub
+annotations explicitly report that limit. Their logs reached161/170/162/165 passing browser
+cases, with no assertion-failure lines before cancellation, and never completed the cohort
+or package stages. Preserve cancelled outcomes; partial progress is not a CI pass.
+
+The native Ubuntu24 job budget is now45 minutes. Only jobs.native.timeout-minutes changes
+in the parsed workflow. Actions/pins, commands, environment, matrix, test repetitions and
+per-test deadlines are unchanged. Windows remains held. This gives the measured setup,
+growing209-case browser cohort and package/artifact stages room within a finite job deadline;
+it does not hide test failures or establish a fresh-host result.
+
+The recovery UI candidate completed its209 local browser checks and separate performance
+run with the old CI25 input frozen. This amendment follows those checks as a declared
+non-runtime input change. verification.json retains264 unchanged source/compiled/fixed inputs
+and the sole changed workflow's before/after digests and YAML control. For backend851
+inheritance,163 inputs are byte-identical; the changed CI input has identical test commands.
+The verified clean100-file packaged payload is also byte-identical, and never includes
+this workflow. Candidate CI under45 minutes remains a separate observed gate.
+'''.replace('total25','total 25').replace('roughly13','roughly 13').replace('reached161','reached 161').replace('now45','now 45').replace('growing209','growing 209').replace('its209','its 209').replace('CI25','CI 25').replace('retains264','retains 264').replace('backend851','backend 851').replace('inheritance,163','inheritance, 163').replace('clean100','clean 100').replace('under45','under 45'))
+tracepath=root/'specs/001-industry-agnostic-studio/traceability.json';trace=json.loads(tracepath.read_text());assert Counter(t['status'] for t in trace['tasks'])=={'completed':47,'in_progress':43,'blocked':10}
+for task in trace['tasks']:
+ if task['id']=='T002':
+  assert task['status']=='in_progress';task['implementation_note']+=' Native Ubuntu24 CI job budget amended 25→45 minutes after four actual 25-minute cancellations. Parsed workflow comparison proves all other semantics/commands/steps/env/pins/matrix unchanged; runtime/test/compiled inputs and 100 packaged payload files unchanged. Predecessor cancellations retained; new candidate CI pending; Windows held. This changes no per-test deadline or milestone claim.'
+  for name in ['evidence/studio/native-ci/ci-budget-amendment/README.md','evidence/studio/native-ci/ci-budget-amendment/verification.json']:
+   if name not in task.setdefault('implementation_evidence',[]):task['implementation_evidence'].append(name)
+tracepath.write_text(json.dumps(trace,ensure_ascii=False,indent=2)+'\n')
+tasks=root/'specs/001-industry-agnostic-studio/tasks.md';tasks.write_text(tasks.read_text()+'\nT002 CI scheduling amendment: actual 25-minute cancellations motivate45-minute native Ubuntu24 job budget.\nAll other parsed workflow semantics and 100 packaged files are identical; no per-test limit changes.\nEvidence: `evidence/studio/native-ci/ci-budget-amendment/`. T002 stays in_progress; Windows held.\n')
+status=root/'docs/implementation/STATUS.md';s=status.read_text();marker='The preceding source-editor successor';assert marker in s
+para=('After the frozen recovery checks, the CI job budget was amended 25→45 minutes. Parsed YAML\n'
+ 'comparison proves all other workflow semantics identical; source/compiled/test inputs and 100\n'
+ 'packaged files are unchanged. The single declared fixed-input difference is CI scheduling.\n'
+ 'Backend851 inheritance now has163 byte-identical inputs plus the unchanged-command CI control;\n'
+ 'the original164-input proof remains exact for the frozen UI candidate. See native-ci/ci-budget-\n'
+ 'amendment/. New candidate CI remains a separate outcome. T002 stays in_progress; Windows held.\n\n')
+for a,b in [('amended25','amended 25'),('and 100','and 100'),('Backend851','Backend 851'),('has163','has 163'),('original164','original 164')]:para=para.replace(a,b)
+status.write_text(s.replace(marker,para+marker,1))
+print(json.dumps({'uiCandidate':ui_candidate,'jobMinutes':[25,45],'unchangedFrozenInputs':len(full)-1,'unchangedBackendInputs':len(backend['checkedFiles'])-1,'packagedFiles':100}))

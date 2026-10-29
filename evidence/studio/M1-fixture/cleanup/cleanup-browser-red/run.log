@@ -1,0 +1,76 @@
+
+> xverse-studio-workspace@0.1.0 test:e2e
+> playwright test -c tests/e2e/playwright.config.ts --grep run startup cleanup_failure
+
+
+Running 2 tests using 1 worker
+
+(node:2772501) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 tests/e2e/run-startup-outcomes.spec.ts:24:11 › run startup cleanup_failure at 1024 › actual startup and cleanup facts preserve immutable inputs (17.2s)
+(node:2772783) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 tests/e2e/run-startup-outcomes.spec.ts:24:11 › run startup cleanup_failure at 1440 › actual startup and cleanup facts preserve immutable inputs (17.7s)
+
+
+  1) tests/e2e/run-startup-outcomes.spec.ts:24:11 › run startup cleanup_failure at 1024 › actual startup and cleanup facts preserve immutable inputs
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByRole('region', { name: 'Unresolved run resources', exact: true })
+    Expected substring: "Worker temporary directory"
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toContainText" getByRole('region', { name: 'Unresolved run resources', exact: true }) with timeout 10000ms
+      - waiting for getByRole('region', { name: 'Unresolved run resources', exact: true })
+
+
+      177 |           }]);
+      178 |           const resources = page.getByRole("region", { name: "Unresolved run resources", exact: true });
+    > 179 |           await expect(resources).toContainText("Worker temporary directory");
+          |                                   ^
+      180 |           await expect(resources).toContainText(`${run.runId}:temporary-directory`);
+      181 |           await expect(resources).toContainText("retained");
+      182 |         }
+        at <repo>/tests/e2e/run-startup-outcomes.spec.ts:179:35
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/run-startup-outcomes-run-s-6e7fd-s-preserve-immutable-inputs/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/run-startup-outcomes-run-s-6e7fd-s-preserve-immutable-inputs/error-context.md
+
+  2) tests/e2e/run-startup-outcomes.spec.ts:24:11 › run startup cleanup_failure at 1440 › actual startup and cleanup facts preserve immutable inputs
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByRole('region', { name: 'Unresolved run resources', exact: true })
+    Expected substring: "Worker temporary directory"
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toContainText" getByRole('region', { name: 'Unresolved run resources', exact: true }) with timeout 10000ms
+      - waiting for getByRole('region', { name: 'Unresolved run resources', exact: true })
+
+
+      177 |           }]);
+      178 |           const resources = page.getByRole("region", { name: "Unresolved run resources", exact: true });
+    > 179 |           await expect(resources).toContainText("Worker temporary directory");
+          |                                   ^
+      180 |           await expect(resources).toContainText(`${run.runId}:temporary-directory`);
+      181 |           await expect(resources).toContainText("retained");
+      182 |         }
+        at <repo>/tests/e2e/run-startup-outcomes.spec.ts:179:35
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/run-startup-outcomes-run-s-6da8b-s-preserve-immutable-inputs/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/run-startup-outcomes-run-s-6da8b-s-preserve-immutable-inputs/error-context.md
+
+  2 failed
+    tests/e2e/run-startup-outcomes.spec.ts:24:11 › run startup cleanup_failure at 1024 › actual startup and cleanup facts preserve immutable inputs
+    tests/e2e/run-startup-outcomes.spec.ts:24:11 › run startup cleanup_failure at 1440 › actual startup and cleanup facts preserve immutable inputs

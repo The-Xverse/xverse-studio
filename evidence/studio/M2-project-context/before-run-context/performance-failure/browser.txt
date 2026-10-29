@@ -1,0 +1,82 @@
+
+> xverse-studio-workspace@0.1.0 test:e2e
+> playwright test -c tests/e2e/playwright.config.ts --grep operability:
+
+
+Running 2 tests using 1 worker
+
+(node:2014547) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 tests/e2e/accessibility.spec.ts:30:7 › operability: keyboard, focus, textual status and reference workloads at 1024x768 (1.3m)
+(node:2015284) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 tests/e2e/accessibility.spec.ts:30:7 › operability: keyboard, focus, textual status and reference workloads at 1440x900 (1.3m)
+
+
+  1) tests/e2e/accessibility.spec.ts:30:7 › operability: keyboard, focus, textual status and reference workloads at 1024x768
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByText('Recorded fixture scope', { exact: true })
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByText('Recorded fixture scope', { exact: true }) with timeout 10000ms
+      - waiting for getByText('Recorded fixture scope', { exact: true })
+
+
+       at ../performance/browser-history.ts:59
+
+      57 |   await expect(
+      58 |     page.getByText("Recorded fixture scope", { exact: true }),
+    > 59 |   ).toBeVisible();
+         |     ^
+      60 |   await expect(
+      61 |     page.getByRole("button", { name: "Stop", exact: true }),
+      62 |   ).toHaveCount(0);
+        at measureHistory (<repo>/tests/performance/browser-history.ts:59:5)
+        at <repo>/tests/e2e/accessibility.spec.ts:90:7
+
+    attachment #3: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/accessibility-operability--474d1-rence-workloads-at-1024x768/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/accessibility-operability--474d1-rence-workloads-at-1024x768/error-context.md
+
+  2) tests/e2e/accessibility.spec.ts:30:7 › operability: keyboard, focus, textual status and reference workloads at 1440x900
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByText('Recorded fixture scope', { exact: true })
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByText('Recorded fixture scope', { exact: true }) with timeout 10000ms
+      - waiting for getByText('Recorded fixture scope', { exact: true })
+
+
+       at ../performance/browser-history.ts:59
+
+      57 |   await expect(
+      58 |     page.getByText("Recorded fixture scope", { exact: true }),
+    > 59 |   ).toBeVisible();
+         |     ^
+      60 |   await expect(
+      61 |     page.getByRole("button", { name: "Stop", exact: true }),
+      62 |   ).toHaveCount(0);
+        at measureHistory (<repo>/tests/performance/browser-history.ts:59:5)
+        at <repo>/tests/e2e/accessibility.spec.ts:90:7
+
+    attachment #3: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/accessibility-operability--5e28b-rence-workloads-at-1440x900/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/accessibility-operability--5e28b-rence-workloads-at-1440x900/error-context.md
+
+  2 failed
+    tests/e2e/accessibility.spec.ts:30:7 › operability: keyboard, focus, textual status and reference workloads at 1024x768
+    tests/e2e/accessibility.spec.ts:30:7 › operability: keyboard, focus, textual status and reference workloads at 1440x900

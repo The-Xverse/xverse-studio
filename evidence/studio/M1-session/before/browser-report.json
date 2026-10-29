@@ -1,0 +1,378 @@
+{
+  "config": {
+    "argv": [
+      "<loop10-cache>/node-v24.22.1-linux-x64/bin/node",
+      "<workspace>/node_modules/@playwright/test/cli.js",
+      "test",
+      "-c",
+      "tests/e2e/playwright.config.ts",
+      "--grep",
+      "session contract:"
+    ],
+    "configFile": "<workspace>/tests/e2e/playwright.config.ts",
+    "rootDir": "<workspace>/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "<workspace>/tests/e2e/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "<workspace>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "*.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "<workspace>/tests/e2e/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "<workspace>/tests/e2e",
+        "snapshotDir": "<workspace>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": "*.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "baseURL": "http://127.0.0.1:8876",
+          "browserName": "chromium",
+          "actionTimeout": 15000,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "trace": "off",
+          "screenshot": "only-on-failure",
+          "video": "off"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results/browser-report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "session-contract.spec.ts",
+      "file": "session-contract.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "session contract: callback acceptance precedes acknowledged reconnect cursor",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 760,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoHaveLength\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected length: \u001b[32m1\u001b[39m\nReceived length: \u001b[31m2\u001b[39m\nReceived array:  \u001b[31m[\"/api/v1/runs/run-session-fixture/events\", \"/api/v1/runs/run-session-fixture/events?after=st1.eyJyIjoicnVuLXNlc3Npb24tZml4dHVyZSIsInMiOiJzbmFwc2hvdC1zZXNzaW9uLWZpeHR1cmUiLCJxIjoiMSIsImQiOiJhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhIn0\"]\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoHaveLength\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected length: \u001b[32m1\u001b[39m\nReceived length: \u001b[31m2\u001b[39m\nReceived array:  \u001b[31m[\"/api/v1/runs/run-session-fixture/events\", \"/api/v1/runs/run-session-fixture/events?after=st1.eyJyIjoicnVuLXNlc3Npb24tZml4dHVyZSIsInMiOiJzbmFwc2hvdC1zZXNzaW9uLWZpeHR1cmUiLCJxIjoiMSIsImQiOiJhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhIn0\"]\u001b[39m\n    at <workspace>/tests/e2e/session-contract.spec.ts:16:79",
+                    "location": {
+                      "file": "<workspace>/tests/e2e/session-contract.spec.ts",
+                      "column": 79,
+                      "line": 16
+                    },
+                    "snippet": "  14 |  globalThis.fetch=async(input)=>{calls.push(String(input));return sse(calls.length===1?frame:end);};\n  15 |  const stop=subscribe(runId,async()=>{entered=true;await g.promise;},()=>{},async()=>{}, {snapshotId});\n> 16 |  try{await expect.poll(()=>entered).toBe(true);await pause(650);expect(calls).toHaveLength(1);g.release();await expect.poll(()=>calls.length).toBe(2);expect(new URL(calls[1],'http://fixture').searchParams.get('after')).toBe(cursor('1'));}finally{g.release();stop();globalThis.fetch=original;}\n     |                                                                               ^\n  17 | });\n  18 | test('session contract: expiry awaits full state and history resynchronization before reconnect',async()=>{\n  19 |  const original=globalThis.fetch,g=gate(),calls:string[]=[];let entered=false;let received:any;"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<workspace>/tests/e2e/session-contract.spec.ts",
+                        "column": 79,
+                        "line": 16
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoHaveLength\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected length: \u001b[32m1\u001b[39m\nReceived length: \u001b[31m2\u001b[39m\nReceived array:  \u001b[31m[\"/api/v1/runs/run-session-fixture/events\", \"/api/v1/runs/run-session-fixture/events?after=st1.eyJyIjoicnVuLXNlc3Npb24tZml4dHVyZSIsInMiOiJzbmFwc2hvdC1zZXNzaW9uLWZpeHR1cmUiLCJxIjoiMSIsImQiOiJhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhIn0\"]\u001b[39m\n\n  14 |  globalThis.fetch=async(input)=>{calls.push(String(input));return sse(calls.length===1?frame:end);};\n  15 |  const stop=subscribe(runId,async()=>{entered=true;await g.promise;},()=>{},async()=>{}, {snapshotId});\n> 16 |  try{await expect.poll(()=>entered).toBe(true);await pause(650);expect(calls).toHaveLength(1);g.release();await expect.poll(()=>calls.length).toBe(2);expect(new URL(calls[1],'http://fixture').searchParams.get('after')).toBe(cursor('1'));}finally{g.release();stop();globalThis.fetch=original;}\n     |                                                                               ^\n  17 | });\n  18 | test('session contract: expiry awaits full state and history resynchronization before reconnect',async()=>{\n  19 |  const original=globalThis.fetch,g=gate(),calls:string[]=[];let entered=false;let received:any;\n    at <workspace>/tests/e2e/session-contract.spec.ts:16:79"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-25T14:47:34.187Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<workspace>/tests/e2e/test-results/browser/session-contract-session-c-74c90-knowledged-reconnect-cursor/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<workspace>/tests/e2e/session-contract.spec.ts",
+                    "column": 79,
+                    "line": 16
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "867a6ceef9ff0fe48626-4aec27e276939246f457",
+          "file": "session-contract.spec.ts",
+          "line": 12,
+          "column": 5
+        },
+        {
+          "title": "session contract: expiry awaits full state and history resynchronization before reconnect",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 657,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoHaveLength\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected length: \u001b[32m1\u001b[39m\nReceived length: \u001b[31m2\u001b[39m\nReceived array:  \u001b[31m[\"/api/v1/runs/run-session-fixture/events\", \"/api/v1/runs/run-session-fixture/events\"]\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoHaveLength\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected length: \u001b[32m1\u001b[39m\nReceived length: \u001b[31m2\u001b[39m\nReceived array:  \u001b[31m[\"/api/v1/runs/run-session-fixture/events\", \"/api/v1/runs/run-session-fixture/events\"]\u001b[39m\n    at <workspace>/tests/e2e/session-contract.spec.ts:22:112",
+                    "location": {
+                      "file": "<workspace>/tests/e2e/session-contract.spec.ts",
+                      "column": 112,
+                      "line": 22
+                    },
+                    "snippet": "  20 |  globalThis.fetch=async(input)=>{const url=String(input);calls.push(url);if(url.includes('/resync'))return Response.json(recovery);if(calls.filter(c=>c.includes('/events')).length===1)return Response.json({code:'CURSOR_EXPIRED',runId,snapshotId},{status:410});return sse(end);};\n  21 |  const stop=subscribe(runId,()=>{},()=>{},async(value:any)=>{received=value;entered=true;await g.promise;},{snapshotId});\n> 22 |  try{await expect.poll(()=>entered).toBe(true);await pause(650);expect(calls.filter(c=>c.includes('/events'))).toHaveLength(1);expect(received.history.integrity).toBe('valid');g.release();await expect.poll(()=>calls.filter(c=>c.includes('/events')).length).toBe(2);expect(new URL(calls.at(-1)!,'http://fixture').searchParams.get('after')).toBe(recovery.resumeCursor);}finally{g.release();stop();globalThis.fetch=original;}\n     |                                                                                                                ^\n  23 | });\n  24 | test('session contract: SSE CRLF split across chunks preserves one canonical frame',async()=>{\n  25 |  const original=globalThis.fetch;const seen:any[]=[];let requests=0;"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<workspace>/tests/e2e/session-contract.spec.ts",
+                        "column": 112,
+                        "line": 22
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoHaveLength\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected length: \u001b[32m1\u001b[39m\nReceived length: \u001b[31m2\u001b[39m\nReceived array:  \u001b[31m[\"/api/v1/runs/run-session-fixture/events\", \"/api/v1/runs/run-session-fixture/events\"]\u001b[39m\n\n  20 |  globalThis.fetch=async(input)=>{const url=String(input);calls.push(url);if(url.includes('/resync'))return Response.json(recovery);if(calls.filter(c=>c.includes('/events')).length===1)return Response.json({code:'CURSOR_EXPIRED',runId,snapshotId},{status:410});return sse(end);};\n  21 |  const stop=subscribe(runId,()=>{},()=>{},async(value:any)=>{received=value;entered=true;await g.promise;},{snapshotId});\n> 22 |  try{await expect.poll(()=>entered).toBe(true);await pause(650);expect(calls.filter(c=>c.includes('/events'))).toHaveLength(1);expect(received.history.integrity).toBe('valid');g.release();await expect.poll(()=>calls.filter(c=>c.includes('/events')).length).toBe(2);expect(new URL(calls.at(-1)!,'http://fixture').searchParams.get('after')).toBe(recovery.resumeCursor);}finally{g.release();stop();globalThis.fetch=original;}\n     |                                                                                                                ^\n  23 | });\n  24 | test('session contract: SSE CRLF split across chunks preserves one canonical frame',async()=>{\n  25 |  const original=globalThis.fetch;const seen:any[]=[];let requests=0;\n    at <workspace>/tests/e2e/session-contract.spec.ts:22:112"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-25T14:47:35.279Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<workspace>/tests/e2e/test-results/browser/session-contract-session-c-4617d-ronization-before-reconnect/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<workspace>/tests/e2e/session-contract.spec.ts",
+                    "column": 112,
+                    "line": 22
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "867a6ceef9ff0fe48626-e3555cc3def078e57e97",
+          "file": "session-contract.spec.ts",
+          "line": 18,
+          "column": 5
+        },
+        {
+          "title": "session contract: SSE CRLF split across chunks preserves one canonical frame",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 861,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m1\u001b[39m\nReceived: \u001b[31m0\u001b[39m\n\nCall Log:\n- Timeout 1500ms exceeded while waiting on the predicate",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m1\u001b[39m\nReceived: \u001b[31m0\u001b[39m\n\nCall Log:\n- Timeout 1500ms exceeded while waiting on the predicate\n    at <workspace>/tests/e2e/session-contract.spec.ts:28:56",
+                    "location": {
+                      "file": "<workspace>/tests/e2e/session-contract.spec.ts",
+                      "column": 56,
+                      "line": 28
+                    },
+                    "snippet": "  26 |  globalThis.fetch=async()=>{requests++;const text=(frame+end).replaceAll('\\n','\\r\\n');return new Response(new ReadableStream({start(c){for(let i=0;i<text.length;i++)c.enqueue(new TextEncoder().encode(text[i]));c.close();}}),{headers:{'Content-Type':'text/event-stream'}});};\n  27 |  const stop=subscribe(runId,e=>{seen.push(e);},()=>{},async()=>{},{snapshotId});\n> 28 |  try{await expect.poll(()=>seen.length,{timeout:1500}).toBe(1);await pause(100);expect(requests).toBe(1);expect(seen[0].eventId).toBe(event.eventId);}finally{stop();globalThis.fetch=original;}\n     |                                                        ^\n  29 | });\n  30 | test('session contract: unknown presentation loss stays unknown and outside canonical records',async()=>{\n  31 |  const original=globalThis.fetch,controls:any[]=[],records:any[]=[];let streams=0;"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<workspace>/tests/e2e/session-contract.spec.ts",
+                        "column": 56,
+                        "line": 28
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m1\u001b[39m\nReceived: \u001b[31m0\u001b[39m\n\nCall Log:\n- Timeout 1500ms exceeded while waiting on the predicate\n\n  26 |  globalThis.fetch=async()=>{requests++;const text=(frame+end).replaceAll('\\n','\\r\\n');return new Response(new ReadableStream({start(c){for(let i=0;i<text.length;i++)c.enqueue(new TextEncoder().encode(text[i]));c.close();}}),{headers:{'Content-Type':'text/event-stream'}});};\n  27 |  const stop=subscribe(runId,e=>{seen.push(e);},()=>{},async()=>{},{snapshotId});\n> 28 |  try{await expect.poll(()=>seen.length,{timeout:1500}).toBe(1);await pause(100);expect(requests).toBe(1);expect(seen[0].eventId).toBe(event.eventId);}finally{stop();globalThis.fetch=original;}\n     |                                                        ^\n  29 | });\n  30 | test('session contract: unknown presentation loss stays unknown and outside canonical records',async()=>{\n  31 |  const original=globalThis.fetch,controls:any[]=[],records:any[]=[];let streams=0;\n    at <workspace>/tests/e2e/session-contract.spec.ts:28:56"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-25T14:47:36.266Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<workspace>/tests/e2e/test-results/browser/session-contract-session-c-0abb5-eserves-one-canonical-frame/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<workspace>/tests/e2e/session-contract.spec.ts",
+                    "column": 56,
+                    "line": 28
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "867a6ceef9ff0fe48626-3d47ee258a052ebc81d3",
+          "file": "session-contract.spec.ts",
+          "line": 24,
+          "column": 5
+        },
+        {
+          "title": "session contract: unknown presentation loss stays unknown and outside canonical records",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 862,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\nCall Log:\n- Timeout 1500ms exceeded while waiting on the predicate",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\nCall Log:\n- Timeout 1500ms exceeded while waiting on the predicate\n    at <workspace>/tests/e2e/session-contract.spec.ts:35:84",
+                    "location": {
+                      "file": "<workspace>/tests/e2e/session-contract.spec.ts",
+                      "column": 84,
+                      "line": 35
+                    },
+                    "snippet": "  33 |  globalThis.fetch=async input=>String(input).includes('/resync')?Response.json(recovery):sse(++streams===1?`event: studio.stream_control\\ndata: ${JSON.stringify(control)}\\n\\n`:end);\n  34 |  const stop=subscribe(runId,e=>{records.push(e);},()=>{},async()=>{},{snapshotId,onControl:(c:any)=>{controls.push(c);}});\n> 35 |  try{await expect.poll(()=>controls.some(c=>c.type==='stream.gap'),{timeout:1500}).toBe(true);expect(records).toEqual([]);expect(controls.find(c=>c.type==='stream.gap').missingCount).toBeNull();}finally{stop();globalThis.fetch=original;}\n     |                                                                                    ^\n  36 | });\n  37 |"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<workspace>/tests/e2e/session-contract.spec.ts",
+                        "column": 84,
+                        "line": 35
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\nCall Log:\n- Timeout 1500ms exceeded while waiting on the predicate\n\n  33 |  globalThis.fetch=async input=>String(input).includes('/resync')?Response.json(recovery):sse(++streams===1?`event: studio.stream_control\\ndata: ${JSON.stringify(control)}\\n\\n`:end);\n  34 |  const stop=subscribe(runId,e=>{records.push(e);},()=>{},async()=>{},{snapshotId,onControl:(c:any)=>{controls.push(c);}});\n> 35 |  try{await expect.poll(()=>controls.some(c=>c.type==='stream.gap'),{timeout:1500}).toBe(true);expect(records).toEqual([]);expect(controls.find(c=>c.type==='stream.gap').missingCount).toBeNull();}finally{stop();globalThis.fetch=original;}\n     |                                                                                    ^\n  36 | });\n  37 |\n    at <workspace>/tests/e2e/session-contract.spec.ts:35:84"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-25T14:47:37.478Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<workspace>/tests/e2e/test-results/browser/session-contract-session-c-33aa4-d-outside-canonical-records/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<workspace>/tests/e2e/session-contract.spec.ts",
+                    "column": 84,
+                    "line": 35
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "867a6ceef9ff0fe48626-ee36a51cf2800a701ac7",
+          "file": "session-contract.spec.ts",
+          "line": 30,
+          "column": 5
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-25T14:47:33.656Z",
+    "duration": 4729.106,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 4,
+    "flaky": 0
+  }
+}

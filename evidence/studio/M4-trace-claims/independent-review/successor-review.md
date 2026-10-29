@@ -1,0 +1,17 @@
+# Independent annotation / trace UI successor review
+
+Reviewed ResultsView SHA `2504172d35c12b56158b674d4b9c062f5b97421341b9939eadb8e6d02a6faba1`, unchanged during this read-only review. The reviewer made no UI, backend or test implementation edits.
+
+The active review-note portion of TRACE-UI-I01 is repaired: the run-ID effect resets both `editingAnnotation` and note text; render-scoped context identity prevents delayed saves/removals/refreshes from replacing a newer run's annotation rows or draft. The context object also changes when returning to a previously visited run, so prior callbacks are not mistaken for current work. The trace editor was already keyed by run ID; the original contrary assertion remains explicitly withdrawn in the findings amendment and is not counted as a repair.
+
+The author’s `frontend/native-context-after.txt` records two actual native Linux browser tests passing in 17.7 seconds. The added context case performs same-view frozen reruns, verifies old note edits and trace drafts reset, confirms old annotations are unchanged, then delays an intentionally submitted old-run save/refresh and verifies the new run’s draft/list remains intact. The existing trace case still preserves an external reported PASS exactly while the actual assertion verdict remains fail; source/evidence and inert exchange semantics remain unchanged. Source inspection matches those tested branches.
+
+TRACE-IO-I02 is repaired separately: the GET snapshot route now delegates to `Runs.verify_snapshot`. The independent `snapshot-io-successor.json` returns 200/valid without reaching the prohibited unbounded Path reader; source hashes match before/after and snapshot bytes remain unchanged. Root’s additional 13 affected HTTP/rerun cases are recorded separately in `snapshot-reader-verification.json`; these overlap prior suites and are not added to the full-suite count.
+
+No further concrete issue was found in the requested literal trace/annotation component scope. This is a read-only independent source/receipt review plus the separate independent snapshot route probe; it is not a claim that this reviewer reran the author’s browser test. Root’s final combined browser/performance cohort remains the final publication-candidate check.
+
+## T094 component recommendation
+
+Recommend marking T094 completed as the implemented and verified component: revisioned external requirement/test associations with exact reported status and revision; frozen model/Scenario/assertion/evidence subjects; comments/derived reports separated from canonical evidence; expected-revision updates, history and tombstones; explicit dependency-aware retention plans/applies with stale-state and failure handling. The owner’s 29-case backend receipt, the current two native browser cases, the retained exchange/retention evidence and separate independent reviews substantiate this scope. The additive annotation representation does not change pinned v1 assertion schema bytes, old run inputs, or old history fields.
+
+This recommendation does not close M4, AC-029/SC-008 or release readiness. Windows installation/testing remains held, native-platform gaps retain their existing tasks, external simulator/hardware authority remains unavailable, and the current final combined browser/performance run must be reported on its own exact candidate. A reported external claim remains unverified metadata, never proof of a passed requirement.

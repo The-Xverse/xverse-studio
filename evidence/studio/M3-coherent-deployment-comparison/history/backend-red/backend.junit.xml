@@ -1,0 +1,49 @@
+<testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="2" time="1.169" timestamp="2026-10-28T14:37:38.783807+00:00" hostname="&lt;native-linux-host&gt;"><testcase classname="tests.integration.test_deployment_comparison" name="test_resolution_refuses_requested_stale_revision_instead_of_relabelling_new_source" time="0.656"><failure message="AssertionError: {&quot;code&quot;:&quot;REQUEST_INVALID&quot;,&quot;message&quot;:&quot;The request does not match the versioned schema.&quot;,&quot;requestId&quot;:&quot;req-c05e22de-1ed5-4b7e-a02b-193a723a9a1d&quot;,&quot;retryable&quot;:false,&quot;diagnostics&quot;:[{&quot;code&quot;:&quot;SCHEMA_INVALID&quot;,&quot;severity&quot;:&quot;error&quot;,&quot;location&quot;:{&quot;pointer&quot;:&quot;body/baseRevision&quot;},&quot;message&quot;:&quot;Field required&quot;}]}&#10;assert 422 == 201&#10; +  where 422 = &lt;Response [422 Unprocessable Entity]&gt;.status_code">client = &lt;starlette.testclient.TestClient object at 0x7052d29d1010&gt;
+
+    def test_resolution_refuses_requested_stale_revision_instead_of_relabelling_new_source(client):
+&gt;       project, left, _, url = variants(client)
+                                ^^^^^^^^^^^^^^^^
+
+tests/integration/test_deployment_comparison.py:20:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+client = &lt;starlette.testclient.TestClient object at 0x7052d29d1010&gt;
+
+    def variants(client):
+        response = client.post('/api/v1/projects', json={'name': 'Coherent variants'})
+        assert response.status_code == 201
+        project = response.json()
+        url = '/api/v1/projects/' + project['projectId'] + '/deployment-variants'
+        left = client.get(url).json()['items'][0]
+        response = client.post(url, headers={'If-Match': str(project['revision'])},
+                               json={'name': 'Comparison candidate'})
+&gt;       assert response.status_code == 201, response.text
+E       AssertionError: {"code":"REQUEST_INVALID","message":"The request does not match the versioned schema.","requestId":"req-c05e22de-1ed5-4b7e-a02b-193a723a9a1d","retryable":false,"diagnostics":[{"code":"SCHEMA_INVALID","severity":"error","location":{"pointer":"body/baseRevision"},"message":"Field required"}]}
+E       assert 422 == 201
+E        +  where 422 = &lt;Response [422 Unprocessable Entity]&gt;.status_code
+
+tests/integration/test_deployment_comparison.py:14: AssertionError</failure></testcase><testcase classname="tests.integration.test_deployment_comparison" name="test_comparison_uses_one_authored_revision_and_preserves_project_and_runs" time="0.467"><failure message="AssertionError: {&quot;code&quot;:&quot;REQUEST_INVALID&quot;,&quot;message&quot;:&quot;The request does not match the versioned schema.&quot;,&quot;requestId&quot;:&quot;req-dd5821a4-45ed-44d4-a576-feca0ee23c52&quot;,&quot;retryable&quot;:false,&quot;diagnostics&quot;:[{&quot;code&quot;:&quot;SCHEMA_INVALID&quot;,&quot;severity&quot;:&quot;error&quot;,&quot;location&quot;:{&quot;pointer&quot;:&quot;body/baseRevision&quot;},&quot;message&quot;:&quot;Field required&quot;}]}&#10;assert 422 == 201&#10; +  where 422 = &lt;Response [422 Unprocessable Entity]&gt;.status_code">client = &lt;starlette.testclient.TestClient object at 0x7052d0ebc7d0&gt;
+
+    def test_comparison_uses_one_authored_revision_and_preserves_project_and_runs(client):
+&gt;       project, left, right, url = variants(client)
+                                    ^^^^^^^^^^^^^^^^
+
+tests/integration/test_deployment_comparison.py:28:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+client = &lt;starlette.testclient.TestClient object at 0x7052d0ebc7d0&gt;
+
+    def variants(client):
+        response = client.post('/api/v1/projects', json={'name': 'Coherent variants'})
+        assert response.status_code == 201
+        project = response.json()
+        url = '/api/v1/projects/' + project['projectId'] + '/deployment-variants'
+        left = client.get(url).json()['items'][0]
+        response = client.post(url, headers={'If-Match': str(project['revision'])},
+                               json={'name': 'Comparison candidate'})
+&gt;       assert response.status_code == 201, response.text
+E       AssertionError: {"code":"REQUEST_INVALID","message":"The request does not match the versioned schema.","requestId":"req-dd5821a4-45ed-44d4-a576-feca0ee23c52","retryable":false,"diagnostics":[{"code":"SCHEMA_INVALID","severity":"error","location":{"pointer":"body/baseRevision"},"message":"Field required"}]}
+E       assert 422 == 201
+E        +  where 422 = &lt;Response [422 Unprocessable Entity]&gt;.status_code
+
+tests/integration/test_deployment_comparison.py:14: AssertionError</failure></testcase></testsuite></testsuites>

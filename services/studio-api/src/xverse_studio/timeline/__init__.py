@@ -1,0 +1,304 @@
+"""Feature-layer scenario/evidence projection; never grants effects or evaluates data."""
+
+import base64
+from decimal import Decimal, InvalidOperation
+import json
+import math
+import re
+
+from pydantic import BaseModel, ConfigDict, Field
+from ruamel.yaml import YAML
+
+from xverse_studio.assertions import EvaluationError, snapshot_definitions
+from xverse_studio.deployments import resource_ref
+from xverse_studio.evidence.query import (
+    HistoryQuery, parse_tick, project_evidence, receipt_time,
+    reference_tick_unit, source_time, REFERENCE_CLOCK_VERSIONS,
+)
+from xverse_studio.lab.assets import public_text
+from xverse_studio.storage.core import Problem, digest
+
+MAX_RECORDS = 50_000
+MAX_INTENTS = 1_000
+MAX_EVALUATIONS = 200
+MAX_CLOCKS = 64
+MAX_DEFINITIONS = 32
+CODEC = "studio.reference.seconds-microseconds.v1"
+
+
+class TimelineQuery(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    snapshotId: str | None = Field(default=None, min_length=1, max_length=80)
+    clockDomain: str | None = Field(default=None, min_length=1, max_length=512)
+    cursor: str | None = Field(default=None, min_length=1, max_length=2048)
+    limit: int = Field(default=100, ge=1, le=200)
+
+
+def _position(clock=None, tick=None, unit=None, reason="SOURCE_TIME_UNAVAILABLE", end=None):
+    value = {"clockDomain": clock, "tick": tick, "tickUnit": unit,
+             "status": "unplaced" if reason else "aligned", "reason": reason}
+    if end is not None:
+        value["endTick"] = end
+    return value
+
+
+def _number(value):
+    try:
+        return isinstance(value, (int, float)) and not isinstance(value, bool) and math.isfinite(value)
+    except OverflowError:
+        return False
+
+
+def _scalar(value):
+    if isinstance(value, bool) or _number(value):
+        return value
+    return public_text(value)
+
+
+def _source_metadata(value):
+    if not isinstance(value, dict):
+        return {}
+    return {k: v for k, v in value.items() if k in ["tick", "clockDomain", "resolution", "uncertainty"] and _scalar(v) is not None}
+
+
+def _public_gaps(gaps):
+    result = []
+    for gap in gaps:
+        payload = gap.get("payload") if isinstance(gap.get("payload"), dict) else {}
+        detail = public_text(gap.get("reason")) or public_text(payload.get("reason"))
+        result.append({"eventId": gap.get("eventId"), "sourceTime": _source_metadata(gap.get("sourceTime")),
+                       "reason": detail, "detailUnavailable": detail is None, "integrity": gap.get("integrity")})
+    return result
+
+
+def _reference(value):
+    if not isinstance(value, dict):
+        return None
+    return (f"xdl://{value['namespace']}/{value['kind'].lower()}/{value['name']}"
+            + ("#" + value["element"] if value.get("element") else ""))
+
+
+def _selected(snapshot, adapter):
+    if digest({k: v for k, v in snapshot.items() if k != "snapshotDigest"}) != snapshot.get("snapshotDigest"):
+        raise Problem("SNAPSHOT_INTEGRITY", "The frozen snapshot cannot be verified.", 409)
+    validation = adapter.validate(snapshot.get("documents"))
+    if validation.get("valid") is not True:
+        raise Problem("SNAPSHOT_XDL_INVALID", "The frozen source set is not supported by the authoritative validator.", 409)
+    resources = [YAML(typ="safe").load(raw) for raw in snapshot["documents"].values()]
+    selected = {}
+    for key, kind in [("systemRef", "System"), ("deploymentRef", "Deployment"), ("scenarioRef", "Scenario")]:
+        found = [r for r in resources if r["kind"] == kind and resource_ref(r) == snapshot.get("selection", {}).get(key)]
+        if len(found) != 1:
+            raise Problem("TIMELINE_SELECTION_UNRESOLVED", "The frozen resource selection is unresolved.", 409)
+        selected[kind] = found[0]
+    system_ref = snapshot["selection"]["systemRef"]
+    if (_reference(selected["Scenario"]["spec"]["systemRef"]) != system_ref
+            or _reference(selected["Deployment"]["spec"]["systemRef"]) != system_ref
+            or _reference(selected["Scenario"]["spec"].get("deploymentRef")) != snapshot["selection"]["deploymentRef"]):
+        raise Problem("TIMELINE_SELECTION_UNRESOLVED", "Frozen resource references are incompatible.", 409)
+    return selected["System"], selected["Scenario"]
+
+
+def _seconds_codec(run, snapshot):
+    configuration, provider = snapshot.get("configuration"), snapshot.get("providerIdentity")
+    return bool(
+        run.get("evidenceScope") == "owned_reference"
+        and run.get("providerId") == snapshot.get("providerId") == "studio.reference"
+        and isinstance(provider, dict) and provider.get("providerVersion") in REFERENCE_CLOCK_VERSIONS
+        and isinstance(configuration, dict) and configuration.get("clockDomain") == "simulation-time"
+        and configuration.get("planDigest") == snapshot.get("planDigest") == run.get("effectivePlanDigest")
+        and configuration.get("semanticDigest") == snapshot.get("semanticDigest") == run.get("effectiveSemanticDigest")
+    )
+
+
+def _intent_position(item, selected_clock, codec):
+    clock, schedule = item.get("timeDomainId"), item.get("schedule")
+    if not isinstance(schedule, dict):
+        return _position(clock, reason="DECLARED_TIME_UNAVAILABLE")
+    if clock != selected_clock:
+        return _position(clock, reason="CLOCK_NOT_SELECTED")
+    if not codec or clock != "simulation-time" or schedule.get("unit") != "s" or not _number(schedule.get("at")):
+        return _position(clock, reason="SCHEDULE_ENCODING_UNADMITTED")
+    try:
+        tick = Decimal(str(schedule["at"])) * 1_000_000
+        if not tick.is_finite() or tick != tick.to_integral_value() or abs(tick) >= 10 ** 31:
+            return _position(clock, reason="NONINTEGRAL_OR_OVERSIZED_POSITION")
+        return _position(clock, str(int(tick)), "microsecond", None)
+    except (InvalidOperation, ValueError, OverflowError):
+        return _position(clock, reason="SCHEDULE_ENCODING_UNADMITTED")
+
+
+def _cursor(offset, identity):
+    return base64.urlsafe_b64encode(json.dumps({"offset": offset, "identity": identity}, separators=(",", ":")).encode()).decode().rstrip("=")
+
+
+def _offset(value, identity):
+    if value is None:
+        return 0
+    try:
+        if not re.fullmatch(r"[A-Za-z0-9_-]+", value):
+            raise ValueError
+        decoded = json.loads(base64.urlsafe_b64decode(value + "=" * (-len(value) % 4)))
+        if (not isinstance(decoded, dict) or set(decoded) != {"offset", "identity"}
+                or type(decoded["offset"]) is not int or not 0 <= decoded["offset"] <= MAX_RECORDS + MAX_INTENTS + MAX_EVALUATIONS):
+            raise ValueError
+    except (ValueError, TypeError, UnicodeError, RecursionError):
+        raise Problem("TIMELINE_CURSOR_INVALID", "Supply a timeline cursor from this projection.") from None
+    if decoded["identity"] != identity:
+        raise Problem("TIMELINE_CURSOR_STALE", "Timeline inputs or selection changed. Refresh from the first page.", 409)
+    return decoded["offset"]
+
+
+def project_timeline(run, snapshot, records, integrity, evaluations, adapter, query, *, evaluations_complete=True):
+    """Caller supplies the protected snapshot and existing canonical-reader output."""
+    if query.snapshotId is not None and query.snapshotId != run["snapshotId"]:
+        raise Problem("SNAPSHOT_SELECTION_MISMATCH", "Select this run's exact snapshot.", 409)
+    if snapshot.get("snapshotId") != run["snapshotId"] or snapshot.get("projectId") != run["projectId"]:
+        raise Problem("SNAPSHOT_SELECTION_MISMATCH", "Run and snapshot identities disagree.", 409)
+    system, scenario = _selected(snapshot, adapter)
+    scope, spec = run.get("evidenceScope", "unknown"), scenario["spec"]
+    declared = {entry["id"] for entry in system["spec"].get("timeDomains", [])}
+    observed = {clock for record in records[:MAX_RECORDS] if (clock := source_time(record)[1]) is not None}
+    clocks = sorted(declared | observed)
+    selected_clock = query.clockDomain or system["spec"].get("defaultTimeDomainId")
+    if selected_clock is not None and selected_clock not in clocks:
+        raise Problem("CLOCK_SELECTION_UNRESOLVED", "Select a declared or observed clock domain.")
+    codec = _seconds_codec(run, snapshot)
+    rows, diagnostics = [], []
+    intent_count = 0
+    for collection, kind in [("steps", "step"), ("faults", "fault"), ("observers", "observer"), ("metrics", "metric")]:
+        for item in spec.get(collection, []):
+            intent_count += 1
+            if intent_count > MAX_INTENTS:
+                continue
+            row = {"id": f"intent:{collection}:{item['id']}", "layer": "intent", "kind": "intent." + kind,
+                   "intentId": item["id"], "logicalRef": snapshot["selection"]["scenarioRef"] + "#" + item["id"],
+                   "targetRef": _reference(item.get("targetRef")), "evidenceScope": "declared_intent_only",
+                   "position": _intent_position(item, selected_clock, codec)}
+            if kind == "step":
+                row.update(actionKind=public_text(item.get("actionKind")),
+                           schedule={"at": item.get("schedule", {}).get("at"), "unit": public_text(item.get("schedule", {}).get("unit"))},
+                           opaqueActionPreservedInSource=bool(item.get("action")))
+            if kind == "fault":
+                row.update(faultKind=public_text(item.get("faultKind")), activation="opaque_declared_intent",
+                           recovery="opaque_declared_intent", position=_position(reason="OPAQUE_FAULT_SCHEDULE"))
+            if kind == "observer":
+                row.update(clockDomain=item.get("timeDomainId"), unit=public_text(item.get("unitSemantics")), sampling="declared_intent")
+            if kind == "metric":
+                row.update(unit=public_text(item.get("unitSemantics")), evaluationStatus="not_evaluated_by_intent")
+            rows.append(row)
+    # The installed reference profile configures its owned fault through a frozen
+    # parameter. Do not fabricate a Scenario fault element or an authored timestamp.
+    if codec and snapshot["configuration"].get("fault") not in (None, "none"):
+        intent_count += 1
+        if intent_count <= MAX_INTENTS:
+            rows.append({"id": "intent:configuration:fault", "layer": "intent", "kind": "intent.provider_configuration",
+                         "intentId": "configuration.fault", "logicalRef": snapshot["selection"]["scenarioRef"],
+                         "targetRef": None, "evidenceScope": "declared_intent_only",
+                         "configurationParameter": "fault", "declaredValue": public_text(snapshot["configuration"]["fault"]),
+                         "configurationDigest": digest(snapshot["configuration"]),
+                         "sourceField": "extensions.io.xverse.experiment.parameters[id=fault]",
+                         "position": _position(reason="CONFIGURATION_HAS_NO_AUTHORED_POSITION")})
+    for record in records[:MAX_RECORDS]:
+        tick, clock, status = source_time(record)
+        unit = reference_tick_unit(record, scope)
+        reason = ("EVIDENCE_INTEGRITY_UNPROVEN" if integrity != "valid" else "SOURCE_TIME_UNAVAILABLE" if status != "known" else "CLOCK_NOT_SELECTED" if clock != selected_clock
+                  else "TICK_ENCODING_UNADMITTED" if unit is None else None)
+        row = {"id": "recorded:" + record["eventId"], "layer": "recorded", "kind": record["type"],
+               "eventId": record["eventId"], "sequence": record["sequence"], "evidenceScope": scope, "evidenceIntegrity": integrity,
+               "position": _position(clock, str(tick) if tick is not None else None, unit, reason),
+               "sourceTime": _source_metadata(record.get("sourceTime")), "sourceTimeStatus": status,
+               "source": {k: shown for k, value in (record.get("source") if isinstance(record.get("source"), dict) else {}).items()
+                          if k in {"providerId", "version"} and (shown := public_text(value)) is not None},
+               "recordedAtUtc": receipt_time(record)[1], "receiptEncoding": receipt_time(record)[2],
+               "evidenceRefs": [run["runId"] + ":reference-journal"] if scope == "owned_reference" else [],
+               "elementRefs": record.get("elementRefs", [])[:64]}
+        payload = record.get("payload") if isinstance(record.get("payload"), dict) else {}
+        row["facts"] = {k: shown for k in ["state", "status", "code", "kind", "observerRef", "measuredValue"]
+                        if (shown := _scalar(payload.get(k))) is not None}
+        if record["type"] == "observation.available":
+            values, units = payload.get("values"), payload.get("units")
+            row["values"] = {key: value for key, value in list(values.items())[:64] if _number(value) or isinstance(value, bool)} if isinstance(values, dict) else {}
+            row["unsupportedValueCount"] = len(values) - len(row["values"]) if isinstance(values, dict) else 1
+            row["units"] = {key: public_text(units.get(key)) if isinstance(units, dict) else None for key in row["values"]}
+        rows.append(row)
+    definition_status = "available"
+    try:
+        selected_definitions = [d for d in snapshot_definitions(snapshot, adapter)
+                                if d["definition"]["scenarioRef"] == snapshot["selection"]["scenarioRef"]]
+        definitions = {d["definitionRef"]: d for d in selected_definitions[:MAX_DEFINITIONS]}
+    except EvaluationError:
+        definitions = {}
+        selected_definitions = []
+        definition_status = "unavailable"
+        diagnostics.append({"code": "TIMELINE_DEFINITIONS_UNAVAILABLE"})
+    definitions_complete = definition_status == "available" and len(selected_definitions) <= MAX_DEFINITIONS
+    if len(selected_definitions) > MAX_DEFINITIONS:
+        diagnostics.append({"code": "TIMELINE_DEFINITIONS_LIMIT"})
+    for result in evaluations[:MAX_EVALUATIONS]:
+        definition = definitions.get(result.get("definitionRef"))
+        if (result.get("runId") != run["runId"] or result.get("snapshotId") != run["snapshotId"]
+                or definition is None or result.get("definitionDigest") != definition["definitionDigest"]):
+            diagnostics.append({"code": "TIMELINE_EVALUATION_UNRESOLVED"})
+            continue
+        window = definition["definition"]["window"]
+        clock = window["clockDomainRef"]
+        position = _position(clock, window["startTick"], "microsecond" if codec and clock == "simulation-time" else None,
+                             None if codec and clock == selected_clock == "simulation-time" else "EVALUATION_CLOCK_UNADMITTED", window["endTick"])
+        rows.append({"id": "evaluation:" + result["evaluationId"], "layer": "evaluation", "kind": definition["definition"]["kind"],
+                     "evaluationId": result["evaluationId"], "definitionRef": result["definitionRef"], "definitionDigest": result["definitionDigest"],
+                     "resultDigest": digest(result), "position": position, "window": window,
+                     "executionStatus": result.get("status"), "verdict": result.get("verdict"),
+                     "value": result.get("value"), "unit": result.get("unit"), "coverage": result.get("coverage"), "partial": result.get("partial"),
+                     "reasons": [shown for reason in result.get("reasons", [])[:100] if (shown := public_text(reason)) is not None],
+                     "reasonsComplete": len(result.get("reasons", [])) <= 100,
+                     "evaluatorIdentity": {k: shown for k, v in result.get("evaluatorIdentity", {}).items()
+                                           if k in {"version", "contractVersion", "implementation", "implementationDigest"}
+                                           and (shown := public_text(v)) is not None},
+                     "evidenceDigests": result.get("evidenceDigests", []), "inputEvidenceDigests": result.get("inputEvidenceDigests", []),
+                     "matchesCurrentEvidence": integrity == "valid" and result.get("evidenceDigests") == [run.get("journalDigest")],
+                     "evidenceScope": scope})
+    ordered = sorted(enumerate(rows), key=lambda pair: (
+        pair[1]["position"]["status"] != "aligned",
+        parse_tick(pair[1]["position"]["tick"]) if pair[1]["position"]["status"] == "aligned" else 0,
+        {"intent": 0, "recorded": 1, "evaluation": 2}[pair[1]["layer"]], pair[0]))
+    rows = [row for _, row in ordered]
+    identity = digest({"version": "1.0", "runId": run["runId"], "snapshotDigest": snapshot["snapshotDigest"], "clock": selected_clock,
+                       "interpretation": {"codec": CODEC if codec else None, "scope": scope, "state": run.get("state"), "collection": run.get("evidence")},
+                       "integrity": integrity, "records": len(records), "lastRecordDigest": records[-1].get("digest") if records else None,
+                       "declaredJournalDigest": run.get("journalDigest"), "evaluations": [digest(r) for r in evaluations[:MAX_EVALUATIONS]],
+                       "definitions": {"status": definition_status, "complete": definitions_complete,
+                                       "identities": [[d["definitionRef"], d["definitionDigest"], d["schemaDigest"]] for d in definitions.values()]},
+                       "evaluationsComplete": evaluations_complete})
+    offset = _offset(query.cursor, identity)
+    if offset > len(rows):
+        raise Problem("TIMELINE_CURSOR_INVALID", "The page offset exceeds this timeline.")
+    page = rows[offset:offset + query.limit]
+    quality = project_evidence(records, integrity, HistoryQuery(), run["runId"], "history", evidence_scope=scope)
+    if len(records) > MAX_RECORDS or intent_count > MAX_INTENTS or not evaluations_complete or len(evaluations) > MAX_EVALUATIONS:
+        diagnostics.append({"code": "TIMELINE_INPUT_LIMIT"})
+    return {"timelineVersion": "1.0", "readOnly": True, "runId": run["runId"], "snapshotId": snapshot["snapshotId"],
+            "snapshotDigest": snapshot["snapshotDigest"], "projectId": snapshot["projectId"], "projectRevision": snapshot["revision"],
+            "selection": snapshot["selection"], "inputIdentity": identity, "evidenceScope": scope,
+            "clockDomain": selected_clock,
+            "tickUnit": "microsecond" if selected_clock == "simulation-time" and (codec or any(
+                r["position"]["status"] == "aligned" and r["position"]["tickUnit"] == "microsecond" for r in rows)) else None,
+            "intentClockCodec": CODEC if codec and selected_clock == "simulation-time" else None,
+            "clockDomains": [{"id": c, "declared": c in declared, "observed": c in observed} for c in clocks[:MAX_CLOCKS]],
+            "clockDomainsComplete": len(clocks) <= MAX_CLOCKS and len(records) <= MAX_RECORDS and integrity == "valid",
+            "items": page, "nextCursor": _cursor(offset + len(page), identity) if offset + len(page) < len(rows) else None,
+            "assessmentDefinitions": {"status": definition_status, "complete": definitions_complete, "items": list(definitions.values())},
+            "counts": {"matchedRows": len(rows), "returnedRows": len(page), "unplacedRows": sum(r["position"]["status"] != "aligned" for r in rows),
+                       "recordedInputs": len(records), "recordedInputsConsidered": min(len(records), MAX_RECORDS), "intentInputs": intent_count,
+                       "intentInputsConsidered": min(intent_count, MAX_INTENTS),
+                       "evaluationInputsConsidered": min(len(evaluations), MAX_EVALUATIONS)},
+            "inputsComplete": {"recorded": len(records) <= MAX_RECORDS and integrity == "valid", "intents": intent_count <= MAX_INTENTS,
+                               "evaluations": evaluations_complete and len(evaluations) <= MAX_EVALUATIONS},
+            "reduction": {"method": "page", "canonical": False, "pageStart": offset, "pageSize": query.limit},
+            "recorded": {"integrity": integrity, "collectionStatus": run.get("evidence"), "coverage": "not_attested_by_timeline",
+                         "qualityScope": "whole_journal",
+                         **{k: quality[k] for k in ["quality", "gapCount", "gapsComplete"]}, "gaps": _public_gaps(quality["gaps"])},
+            "diagnostics": diagnostics[:100], "diagnosticsComplete": len(diagnostics) <= 100,
+            "limitations": ["Same-axis placement is not causality or proof of an intended effect.",
+                            "Unplaced declarations and unknown clocks remain unsupported; receipt time is independent.",
+                            "Windowed evaluations retain their own exact evidence provenance and do not change lifecycle."]}

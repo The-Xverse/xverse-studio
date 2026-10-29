@@ -1,0 +1,97 @@
+"""Freeze installed reservation authority, then run backend/default UI/performance."""
+from pathlib import Path
+import hashlib
+import json
+import os
+import re
+import shutil
+import subprocess
+import sys
+import time
+import uuid
+
+root = Path.cwd().resolve()
+base = root / '.studio-local/lab-api-integration'
+out = base / 'verified'
+out.mkdir(exist_ok=False)
+cache = root.parent / '.xverse-studio-cache'
+env = dict(os.environ, SPECIFY_FEATURE_DIRECTORY='specs/001-industry-agnostic-studio',
+    PYTEST_DISABLE_PLUGIN_AUTOLOAD='1',
+    PATH=str(cache / 'node-v24.22.1-linux-x64/bin') + os.pathsep + os.environ['PATH'],
+    PLAYWRIGHT_BROWSERS_PATH=str(cache / 'playwright'),
+    TMPDIR=str(cache / 'tmp'), TEMP=str(cache / 'tmp'), TMP=str(cache / 'tmp'))
+previous = json.loads((root / 'evidence/studio/M3-lab-lease-knowledge/application-and-input-hashes.json').read_text())
+added = [
+    'docs/architecture/ADR-0024-durable-lab-authority.md',
+    'docs/providers/reservation-service.md',
+    'specs/001-industry-agnostic-studio/contracts/studio-api.md',
+    'specs/001-industry-agnostic-studio/contracts/provider-contract.md',
+    *['services/studio-api/src/xverse_studio/lab/' + name + '.py' for name in ['authority', 'bounded', 'configuration', 'operations', 'persistence']],
+    *['tests/integration/test_lab_' + name + '.py' for name in ['authority', 'bounded', 'configuration', 'http', 'operations', 'persistence']],
+    'tests/platform/test_lab_lease_recovery.py',
+]
+selected = sorted(set(previous) | set(added))
+def inputs():
+    return {name: hashlib.sha256((root / name).read_bytes()).hexdigest() for name in selected}
+def save(path, value):
+    path.write_text(json.dumps(value, indent=2) + '\n')
+frozen = inputs()
+save(out / 'source-before.json', frozen)
+changed = {name: {'previous': h, 'current': frozen[name]} for name, h in previous.items() if frozen[name] != h}
+assert set(changed) == {'services/studio-api/src/xverse_studio/api/advanced.py',
+    'services/studio-api/src/xverse_studio/api/app.py', 'services/studio-api/src/xverse_studio/api/models.py',
+    'services/studio-api/src/xverse_studio/host/recovery.py', 'services/studio-api/src/xverse_studio/lab/reservations.py'}
+save(out / 'input-amendment.json', {'scope': 'Installed typed native-host reservation API with durable backing/server policy and guarded private backup. Default launcher stays unconfigured and physical runtime unavailable. Actual provider operations are owned fixture calls only; physical commands/active-run renewal/UI/live hardware/Windows remain unfinished.',
+    'previousCandidate': 'f985eb3ba02a23a48a64f013d269797236eefe2a', 'changes': changed,
+    'addedSelectedInputs': sorted(set(selected) - set(previous)),
+    'historicalFullBrowser': 474, 'freshFullBrowserForThisChange': False,
+    'allUIBrowserTestCompiledAndLockInputsUnchanged': True})
+rows = []
+def run(name, command):
+    start = time.monotonic()
+    with (out / (name + '.log')).open('w') as log:
+        result = subprocess.run(command, cwd=root, env=env, stdout=log, stderr=subprocess.STDOUT)
+    assert inputs() == frozen
+    row = {'name': name, 'command': command, 'exitCode': result.returncode,
+           'seconds': round(time.monotonic() - start, 3), 'selectedInputs': len(frozen), 'sourceUnchanged': True}
+    rows.append(row)
+    save(out / 'verification.json', rows)
+    print(json.dumps(row), flush=True)
+    if result.returncode:
+        raise SystemExit(result.returncode)
+    return (out / (name + '.log')).read_text()
+
+def browser(label, command, count):
+    target = base / label
+    target.mkdir(exist_ok=False)
+    save(target / 'source-before.json', frozen)
+    run(label, command)
+    shutil.copyfile(root / 'test-results/browser-report.json', target / 'browser-report.json')
+    shutil.copytree(root / 'test-results/browser', target / 'browser-output')
+    save(target / 'source-after.json', inputs())
+    report = json.loads((target / 'browser-report.json').read_text())
+    assert report['stats']['expected'] == count and not any(report['stats'][key] for key in ['skipped', 'unexpected', 'flaky'])
+
+try:
+    for name, command in [
+        ('spec', [sys.executable, '-I', 'scripts/validate_spec_package.py']),
+        ('architecture', [sys.executable, '-I', 'scripts/check_architecture.py']),
+        ('compatibility', [sys.executable, '-I', 'scripts/check_platform_compatibility.py']),
+        ('ruff', [str(root / '.venv/bin/ruff'), 'check', '--select', 'F821', 'services/studio-api/src', 'scripts', 'tests']),
+        ('environment', [sys.executable, '-I', 'scripts/record_environment.py', '--output', str(out / 'environment.json')]),
+    ]:
+        run(name, command)
+    text = run('collection', [sys.executable, '-I', '-m', 'pytest', '--collect-only', '-q'])
+    match = re.search(r'(\d+) tests collected', text)
+    assert match and int(match[1]) == 1055
+    run('pytest', [sys.executable, '-I', '-m', 'pytest', 'tests', '-q', '--tb=short',
+        '--basetemp=' + str(base / ('owned-full-test-data-' + uuid.uuid4().hex)),
+        '--junitxml=' + str(out / 'junit.xml')])
+    browser('targeted-browser', [sys.executable, '-I', 'scripts/test_browser.py',
+        '--grep', 'lab inventory:|physical placements:|owned reference browser workflow:'], 83)
+    browser('performance', [sys.executable, '-I', 'scripts/test_browser.py', '--performance',
+        '--grep', 'operability: keyboard, focus, textual status and reference workloads'], 2)
+    print('Fresh1055 backend/83 affected browser/performance2 passed; source unchanged.', flush=True)
+finally:
+    save(out / 'source-after.json', inputs())
+    assert inputs() == frozen

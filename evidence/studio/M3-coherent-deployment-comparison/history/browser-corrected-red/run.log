@@ -1,0 +1,82 @@
+
+> xverse-studio-workspace@0.1.0 test:e2e
+> playwright test -c tests/e2e/playwright.config.ts --grep hybrid comparison:
+
+
+Running 2 tests using 1 worker
+
+(node:2446631) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 tests/e2e/hybrid-comparison.spec.ts:44:9 › hybrid comparison: coherent declarations at 1024 › native comparison separates declared clocks and controls from physical evidence (11.8s)
+(node:2446802) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 tests/e2e/hybrid-comparison.spec.ts:44:9 › hybrid comparison: coherent declarations at 1440 › native comparison separates declared clocks and controls from physical evidence (11.1s)
+
+
+  1) tests/e2e/hybrid-comparison.spec.ts:44:9 › hybrid comparison: coherent declarations at 1024 › native comparison separates declared clocks and controls from physical evidence
+
+    Error: expect(locator).not.toHaveValue(expected) failed
+
+    Locator:  getByLabel('Deployment variant', { exact: true })
+    Expected: not ""
+    Received: ""
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "not toHaveValue" getByLabel('Deployment variant', { exact: true }) with timeout 10000ms
+      - waiting for getByLabel('Deployment variant', { exact: true })
+        24 × locator resolved to <select aria-label="Deployment variant">…</select>
+           - unexpected value ""
+
+
+      35 |   const deployment = page.getByRole("tab", { name: /Deployment/ });
+      36 |   await tabTo(page, deployment); await page.keyboard.press("Enter");
+    > 37 |   await expect(page.getByLabel("Deployment variant", { exact: true })).not.toHaveValue("");
+         |                                                                            ^
+      38 |   await choose(page, page.getByLabel("Deployment variant", { exact: true }), value.left.ref);
+      39 |   return value;
+      40 | }
+        at prepare (<repo>/tests/e2e/hybrid-comparison.spec.ts:37:76)
+        at <repo>/tests/e2e/hybrid-comparison.spec.ts:46:21
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/hybrid-comparison-hybrid-c-6827f-rols-from-physical-evidence/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/hybrid-comparison-hybrid-c-6827f-rols-from-physical-evidence/error-context.md
+
+  2) tests/e2e/hybrid-comparison.spec.ts:44:9 › hybrid comparison: coherent declarations at 1440 › native comparison separates declared clocks and controls from physical evidence
+
+    Error: expect(locator).not.toHaveValue(expected) failed
+
+    Locator:  getByLabel('Deployment variant', { exact: true })
+    Expected: not ""
+    Received: ""
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "not toHaveValue" getByLabel('Deployment variant', { exact: true }) with timeout 10000ms
+      - waiting for getByLabel('Deployment variant', { exact: true })
+        24 × locator resolved to <select aria-label="Deployment variant">…</select>
+           - unexpected value ""
+
+
+      35 |   const deployment = page.getByRole("tab", { name: /Deployment/ });
+      36 |   await tabTo(page, deployment); await page.keyboard.press("Enter");
+    > 37 |   await expect(page.getByLabel("Deployment variant", { exact: true })).not.toHaveValue("");
+         |                                                                            ^
+      38 |   await choose(page, page.getByLabel("Deployment variant", { exact: true }), value.left.ref);
+      39 |   return value;
+      40 | }
+        at prepare (<repo>/tests/e2e/hybrid-comparison.spec.ts:37:76)
+        at <repo>/tests/e2e/hybrid-comparison.spec.ts:46:21
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/hybrid-comparison-hybrid-c-87481-rols-from-physical-evidence/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/hybrid-comparison-hybrid-c-87481-rols-from-physical-evidence/error-context.md
+
+  2 failed
+    tests/e2e/hybrid-comparison.spec.ts:44:9 › hybrid comparison: coherent declarations at 1024 › native comparison separates declared clocks and controls from physical evidence
+    tests/e2e/hybrid-comparison.spec.ts:44:9 › hybrid comparison: coherent declarations at 1440 › native comparison separates declared clocks and controls from physical evidence

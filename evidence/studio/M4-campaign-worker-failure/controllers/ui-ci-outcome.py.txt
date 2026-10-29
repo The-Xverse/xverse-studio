@@ -1,0 +1,11 @@
+"""Make the primary browser tally explicitly reflect the retained failed CI lane."""
+from pathlib import Path
+import json
+root=Path.cwd().resolve();p=root/'specs/001-industry-agnostic-studio/traceability.json';trace=json.loads(p.read_text());receipt=json.loads((root/'evidence/studio/native-ci/ubuntu-24.04-4c37433-runs.json').read_text());lanes=[]
+for run in receipt['runs']:
+ job=run['jobs'][0];lanes.append({'runId':run['id'],'head':run['head'],'event':run['event'],'conclusion':run['conclusion'],'backendPassed':int(job['pytestPassCounts'][0]),'browserPassed':int(job['browserPassCounts'][0]),'browserFailed':len(job['failedBrowserTitles']),'packageSmokePassed':job['packageSmokePassed']})
+failed=next(v for v in lanes if v['event']=='push');assert failed['browserPassed']==443 and failed['browserFailed']==1
+v=trace['implementation_record']['verification'];v['playwright_checks_passed']=failed['browserPassed'];v['playwright_checks_failed']=failed['browserFailed'];v['playwright_scope']='The numeric browser tally records failed4c push443/1; its parallel PR passed444. '+v['playwright_scope'];v['prior_browser_ci_outcomes']=lanes
+p.write_text(json.dumps(trace,ensure_ascii=False,indent=2)+'\n')
+out=root/'evidence/studio/M4-campaign-worker-failure';(out/'controllers/ui-ci-outcome.py.txt').write_text(Path(__file__).read_text());(out/'ui-ci-outcomes.json').write_text(json.dumps({'scope':'Primary browser tally is explicitly scoped to the retained failed4c push. Neither its successful PR nor the native934 result waives the known focus defect.','lanes':lanes},indent=2)+'\n')
+print(json.dumps(lanes))

@@ -1,0 +1,76 @@
+
+> xverse-studio-workspace@0.1.0 test:e2e
+> playwright test -c tests/e2e/playwright.config.ts --grep physical placements:
+
+
+Running 2 tests using 1 worker
+
+(node:2247045) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 tests/e2e/physical-placements-accessibility.spec.ts:129:7 › physical placements: actual unresolved authored binding is read-only at 1024x768 (12.2s)
+(node:2247400) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 tests/e2e/physical-placements-accessibility.spec.ts:129:7 › physical placements: actual unresolved authored binding is read-only at 1440x900 (11.9s)
+
+
+  1) tests/e2e/physical-placements-accessibility.spec.ts:129:7 › physical placements: actual unresolved authored binding is read-only at 1024x768
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('button', { name: 'Inspect physical placements', exact: true })
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "soft toBeVisible" getByRole('button', { name: 'Inspect physical placements', exact: true }) with timeout 10000ms
+      - waiting for getByRole('button', { name: 'Inspect physical placements', exact: true })
+
+
+      148 |       exact: true,
+      149 |     });
+    > 150 |     await expect.soft(inspect).toBeVisible();
+          |                                ^
+      151 |     if (await inspect.count()) {
+      152 |       await activate(page, inspect);
+      153 |       const panel = page.getByRole("region", {
+        at <repo>/tests/e2e/physical-placements-accessibility.spec.ts:150:32
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/physical-placements-access-40a28-ng-is-read-only-at-1024x768/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/physical-placements-access-40a28-ng-is-read-only-at-1024x768/error-context.md
+
+  2) tests/e2e/physical-placements-accessibility.spec.ts:129:7 › physical placements: actual unresolved authored binding is read-only at 1440x900
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('button', { name: 'Inspect physical placements', exact: true })
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "soft toBeVisible" getByRole('button', { name: 'Inspect physical placements', exact: true }) with timeout 10000ms
+      - waiting for getByRole('button', { name: 'Inspect physical placements', exact: true })
+
+
+      148 |       exact: true,
+      149 |     });
+    > 150 |     await expect.soft(inspect).toBeVisible();
+          |                                ^
+      151 |     if (await inspect.count()) {
+      152 |       await activate(page, inspect);
+      153 |       const panel = page.getByRole("region", {
+        at <repo>/tests/e2e/physical-placements-accessibility.spec.ts:150:32
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/physical-placements-access-2a938-ng-is-read-only-at-1440x900/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/physical-placements-access-2a938-ng-is-read-only-at-1440x900/error-context.md
+
+  2 failed
+    tests/e2e/physical-placements-accessibility.spec.ts:129:7 › physical placements: actual unresolved authored binding is read-only at 1024x768
+    tests/e2e/physical-placements-accessibility.spec.ts:129:7 › physical placements: actual unresolved authored binding is read-only at 1440x900

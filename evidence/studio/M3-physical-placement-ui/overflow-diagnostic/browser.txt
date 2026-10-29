@@ -1,0 +1,40 @@
+
+> xverse-studio-workspace@0.1.0 test:e2e
+> playwright test -c tests/e2e/playwright.config.ts --grep physical placements: labelled matched
+
+
+Running 2 tests using 1 worker
+
+(node:2267546) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 tests/e2e/physical-placements-accessibility.spec.ts:275:7 › physical placements: labelled matched metadata cannot grant admission at 1024x768 (3.4s)
+(node:2267669) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  2 tests/e2e/physical-placements-accessibility.spec.ts:275:7 › physical placements: labelled matched metadata cannot grant admission at 1440x900 (2.1s)
+
+
+  1) tests/e2e/physical-placements-accessibility.spec.ts:275:7 › physical placements: labelled matched metadata cannot grant admission at 1024x768
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: false
+    Received: true
+
+      288 |     const overflow = await page.evaluate(()=>({width:innerWidth,scrollWidth:document.documentElement.scrollWidth,scrollX, elements:Array.from(document.querySelectorAll("body *")).map(n=>({tag:n.tagName,classes:n.className,rect:n.getBoundingClientRect().toJSON(),scrollWidth:n.scrollWidth,clientWidth:n.clientWidth})).filter(n=>n.rect.right>innerWidth+1 || n.rect.left < -1).slice(0,40)}));
+      289 |     await info.attach("placement-overflow-observation.json",{body:JSON.stringify(overflow),contentType:"application/json"});
+    > 290 |     expect(overflow.scrollWidth>overflow.width+1).toBe(false);
+          |                                                   ^
+      291 |     const selectedContrast=await Promise.all([paint(panel(page).locator("p.field-hint").first(),"Placement guidance"),paint(card.locator(".badge"),"Placement evidence scope"),paint(field(card,"Provider admission"),"Placement unavailable admission"),paint(field(card,"Active operation"),"Placement blocked operation")]);
+      292 |     await finish({labelledMatchedPublicTransport:true,backendProjectionFixture:fixture.fixtureScope,admissionUnchanged:true,unicodeCodePoints:Array.from(asset.firmware.version).length,selectedContrast});
+      293 |   });
+        at <repo>/tests/e2e/physical-placements-accessibility.spec.ts:290:51
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/physical-placements-access-c91f4-grant-admission-at-1024x768/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/physical-placements-access-c91f4-grant-admission-at-1024x768/error-context.md
+
+  1 failed
+    tests/e2e/physical-placements-accessibility.spec.ts:275:7 › physical placements: labelled matched metadata cannot grant admission at 1024x768
+  1 passed (6.6s)

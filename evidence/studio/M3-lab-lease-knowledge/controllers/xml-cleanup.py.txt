@@ -1,0 +1,25 @@
+from pathlib import Path
+import hashlib
+import json
+import xml.etree.ElementTree as ET
+
+root = Path.cwd()
+out = root / 'evidence/studio/M3-lab-lease-knowledge'
+records = json.loads((out / 'junit-sanitization.json').read_text())
+for record in records:
+    path = out / 'history' / record['stage'] / 'junit.xml'
+    tree = ET.parse(path)
+    attributes = [dict(e.attrib) for e in tree.getroot().iter()]
+    for element in tree.getroot().iter():
+        if element.text:
+            element.text = '\n'.join(line.rstrip() for line in element.text.split('\n'))
+    assert attributes == [dict(e.attrib) for e in tree.getroot().iter()]
+    tree.write(path, encoding='utf-8', xml_declaration=True)
+    record['failureTextTrailingWhitespaceRemoved'] = True
+    record['retainedSha256'] = hashlib.sha256(path.read_bytes()).hexdigest()
+(out / 'junit-sanitization.json').write_text(json.dumps(records, indent=2) + '\n')
+for name in ['retain.py', 'xml-cleanup.py']:
+    (out / 'controllers' / (name + '.txt')).write_text((root / '.studio-local/lab-api-foundation' / name).read_text())
+path = out / 'README.md'
+path.write_text(path.read_text().replace('testcase identities and outcomes are preserved.', 'testcase identities and outcomes are preserved; trailing whitespace in failure text is removed.'))
+print('Normalized failure-text trailing whitespace; all XML attributes/outcomes unchanged.')

@@ -1,0 +1,95 @@
+"""Retain only successful terminal final gates and described historical cohorts."""
+from pathlib import Path
+import base64
+import hashlib
+import json
+import re
+import sys
+
+root=Path.cwd().resolve();local=root/'.studio-local/frozen-rerun-workflow';out=root/'evidence/studio/M4-frozen-rerun-context'
+def read(path): return json.loads(path.read_text())
+def clean_text(value):
+    for original,replacement in [(str(root.parent/'.xverse-studio-cache'),'<loop-cache>'),(str(root),'<repo>'),('<repo>','<repo>'),(sys.base_prefix,'<python-install>')]: value=value.replace(original,replacement)
+    value=re.sub(r'(?i)(\bstudio_session=)[A-Za-z0-9_-]{16,}', r'\1<redacted>', value)
+    value=re.sub(r'''(?i)(x-csrf-token["']?\s*[:=]\s*["']?)[A-Za-z0-9._-]{16,}''', r'\1<redacted>', value)
+    value=re.sub(r'(?i)(bearer\s+)[A-Za-z0-9._-]{16,}', r'\1<redacted>', value)
+    return value
+
+def clean(value):
+    if isinstance(value,str):return clean_text(value)
+    if isinstance(value,list):return [clean(v) for v in value]
+    if isinstance(value,dict):
+        result={k:('<redacted>' if k.lower() in {'studio_session','csrftoken','x-csrf-token','bootstraptoken','x-studio-bootstrap','sessiontoken','ownerkey','authorization','cookie','set-cookie'} else clean(v)) for k,v in value.items()}
+        if value.get('contentType','').startswith(('text/','application/json')) and 'body' in value:
+            try:result['body']=base64.b64encode(clean_text(base64.b64decode(value['body']).decode()).encode()).decode()
+            except (ValueError,UnicodeError):pass
+        return result
+    return value
+
+def save(name,value):
+    path=out/name;path.parent.mkdir(parents=True,exist_ok=True);path.write_text(json.dumps(clean(value),indent=2)+'\n')
+def copy_text(name,path):
+    target=out/name;target.parent.mkdir(parents=True,exist_ok=True)
+    target.write_text('\n'.join(line.rstrip() for line in clean_text(path.read_text()).splitlines()).rstrip()+'\n')
+def results(report):
+    for suite in report.get('suites',[]):yield from results(suite)
+    for spec in report.get('specs',[]):
+        for test in spec['tests']:
+            for result in test['results']:yield spec['title'],result
+
+
+frozen=read(local/'frozen-inputs.json');assert len(frozen)==289
+for n,h in frozen.items():assert hashlib.sha256((root/n).read_bytes()).hexdigest()==h,n
+stages={}
+for label,count in [('targeted',37),('performance',2)]:
+ d=local/label;s=read(d/'summary.json');r=read(d/'browser-report.json')
+ assert s['exitCode']==0 and s['sourceUnchanged'] and s['inputs']==len(frozen)
+ assert frozen==read(d/'source-before.json')==read(d/'source-after.json')
+ assert r['stats']['expected']==count and not any(r['stats'][k] for k in ['skipped','flaky','unexpected'])
+ stages[label]=(d,s,r)
+inherit=read(local/'backend-inheritance.json');assert inherit['unchangedPreviousInputs']==217
+assert set(inherit['documentChanges'])=={'docs/architecture/ADR-0021-recorded-comparison.md'}
+build=read(local/'build/summary.json');assert all(s['exitCode']==0 for s in build)
+previous=read(root/'evidence/studio/M4-recorded-comparison/application-and-input-hashes.json')
+changed={n:{'previous':previous.get(n),'current':frozen.get(n)} for n in sorted(set(previous)|set(frozen)) if previous.get(n)!=frozen.get(n)}
+assert {n for n in changed if not n.startswith('apps/studio-web/dist/')}=={
+ 'apps/studio-web/src/features/results/ResultsView.tsx','docs/architecture/ADR-0021-recorded-comparison.md',
+ 'docs/user/run-comparison.md','tests/e2e/frozen-rerun-acknowledgements.spec.ts','tests/e2e/frozen-rerun-completion.spec.ts'}
+out.mkdir(exist_ok=False)
+save('application-and-input-hashes.json',frozen)
+save('environment.json',read(local/'environment.json'))
+save('input-amendment.json',{'scope':'Previous full397 and fresh932 belong to the comparison candidate9a0f189. Current successor changes one UI source, two browser test files, ADR/guide and compiled assets. Current37 affected/performance2 are fresh; no full413 pass is inferred.','changedInputs':changed})
+save('backend-inheritance.json',inherit)
+for label,(d,s,r) in stages.items():
+ save(label+'/verification.json',s);save(label+'/browser-report.json',r)
+ for n in ['source-before.json','source-after.json']:save(label+'/'+n,read(d/n))
+ copy_text(label+'/browser.txt',d/'browser.log')
+ for title,result in results(r):
+  title=re.sub(r'[^A-Za-z0-9_-]','-',title)
+  for a in result.get('attachments',[]):
+   if a.get('contentType')=='application/json' and 'body' in a:
+    save(label+'/journeys/'+title+'/'+a['name'],json.loads(base64.b64decode(a['body'])))
+ for p in (d/'browser-output').rglob('*.png'):
+  dest=out/label/'screenshots'/p.relative_to(d/'browser-output');dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes(p.read_bytes())
+ if label=='performance':
+  for p in (d/'browser-output').rglob('*performance.json'):
+   v=read(p);w=v['viewport'];save(f'performance/{w["width"]}x{w["height"]}/{p.name}',v)
+for p in (local/'build').iterdir():
+ if p.suffix=='.json':save('checks/'+p.name,read(p))
+ elif p.is_file():copy_text('checks/'+p.name.replace('.log','.txt'),p)
+for n in ['promotion.json','backend-collection.json','full-browser-collection.json']:save('checks/'+n,read(local/n))
+for n in ['run.py','retain.py','document.py','privacy-check.py']:copy_text('controllers/'+n+'.txt',local/n)
+save('verification.json',{'baseCandidate':stages['targeted'][1]['baseCandidate'],'scope':'Owned native Linux frozen-rerun presentation/acknowledgement successor; partial T091, no milestone acceptance.',
+ 'targeted':stages['targeted'][2]['stats'],'performance':stages['performance'][2]['stats'],
+ 'frozenInputs':len(frozen),'compiledAssets':6,'allCurrentStageInputsIdentical':True,
+ 'inheritedBackendTestsPassed':932,'backendInheritance':'backend-inheritance.json','previousFullBrowserPassed':397,
+ 'previousFullBrowserCandidate':'9a0f189d3c7c87b2d945dc8ffbf57ae575cc9a91','currentFull413':'NOT_RUN',
+ 'applicationAndInputDigest':'sha256:'+hashlib.sha256(json.dumps(frozen,sort_keys=True,separators=(',',':')).encode()).hexdigest(),
+ 'originalRedAndIsolatedProof':'../M4-recorded-comparison/follow-on-rerun/',
+ 'completedTasks':47,'acceptedMilestones':[],
+ 'limitations':['Identity-negative cases alter labelled transport DTO fields after actual owned child creation; they do not alter canonical files or establish provider admission.',
+  'The fifteen-second read deadline and protection of another tabs newer receipt have source review, not separate timed/cross-tab acceptance cases.',
+  'Abort stops browser reads, not backend execution. Repeated uncertain acknowledgement retains its original idempotency key.',
+  'Native Windows, AT/human, external/physical providers and complete task dependencies retain their own gates.',
+  'Previous397 is historical full coverage; no fresh413 or backend932 run is inferred from the affected37 current UI checks.']})
+print(json.dumps({'dossier':str(out.relative_to(root)),'targeted':37,'performance':2,'inputs':len(frozen),'backend':'inherited932;217 inputs unchanged plus ADR-only amendment','full413':'NOT_RUN'}))

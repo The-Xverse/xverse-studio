@@ -1,0 +1,1402 @@
+{
+  "config": {
+    "argv": [
+      "<loop-cache>/node-v24.22.1-linux-x64/bin/node",
+      "<repo>/node_modules/.bin/playwright",
+      "test",
+      "-c",
+      "tests/e2e/playwright.config.ts",
+      "--grep",
+      "lab inventory:"
+    ],
+    "configFile": "<repo>/tests/e2e/playwright.config.ts",
+    "rootDir": "<repo>/tests/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "<repo>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "<repo>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "*.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "<repo>/test-results/browser",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "<repo>/tests/e2e",
+        "snapshotDir": "<repo>/tests/e2e",
+        "testIgnore": [],
+        "testMatch": "*.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "baseURL": "http://127.0.0.1:46123",
+          "browserName": "chromium",
+          "actionTimeout": 15000,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "trace": "off",
+          "screenshot": "only-on-failure",
+          "video": "off"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "<repo>/test-results/browser-report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "lab-inventory-accessibility.spec.ts",
+      "file": "lab-inventory-accessibility.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "lab inventory: actual empty observation and native refresh at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1123,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T00:51:45.202Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "lab-inventory-journey.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJhY3R1YWxSZWdpc3RyeSI6dHJ1ZSwicmVhZHMiOjIsImJ1dHRvbkZvY3VzIjp7ImJveCI6eyJ4Ijo4MjcuOTY4NzUsInkiOjEyNS40Mzc1LCJ3aWR0aCI6MTU4LjAzMTI1LCJoZWlnaHQiOjM4LCJ0b3AiOjEyNS40Mzc1LCJyaWdodCI6OTg2LCJib3R0b20iOjE2My40Mzc1LCJsZWZ0Ijo4MjcuOTY4NzV9LCJvdXRsaW5lIjoic29saWQiLCJvdXRsaW5lV2lkdGgiOjN9LCJjb21wbGV0aW9uRm9jdXMiOnsiYm94Ijp7IngiOjEzNSwieSI6NDUzLjE3MTg3NSwid2lkdGgiOjgzMiwiaGVpZ2h0IjoyNS41LCJ0b3AiOjQ1My4xNzE4NzUsInJpZ2h0Ijo5NjcsImJvdHRvbSI6NDc4LjY3MTg3NSwibGVmdCI6MTM1fSwib3V0bGluZSI6ImF1dG8iLCJvdXRsaW5lV2lkdGgiOjF9LCJtZWFzdXJlbWVudHMiOlt7ImxhYmVsIjoiQ29tcGxldGUgYWN0dWFsIGludmVudG9yeSBvYnNlcnZhdGlvbiIsInRleHQiOiJQcm92aWRlciBpbnZlbnRvcnkgb2JzZXJ2YXRpb24gaXMgY29tcGxldGUuIiwiY29sb3IiOiJyZ2IoMTAxLCAxMTcsIDE0MSkiLCJmb250U2l6ZSI6IjEycHgiLCJmb250V2VpZ2h0IjoiNDAwIiwidGhyZXNob2xkIjo0LjUsInNjb3BlIjoiU2VsZWN0ZWQgbm9ybWFsLXNpemUgcmVuZGVyZWQgdGV4dDsgbm8gb3ZlcmFsbCBhY2Nlc3NpYmlsaXR5IGNlcnRpZmljYXRpb24iLCJzdXBwb3J0ZWQiOnRydWUsImxheWVycyI6WyJyZ2JhKDAsIDAsIDAsIDApIiwicmdiKDI1NSwgMjU1LCAyNTUpIl0sImJhY2tncm91bmQiOlsxLDEsMSwxXSwiY29tcG9zaXRlZEZvcmVncm91bmQiOlswLjM5NjA3ODQzMTM3MjU0OSwwLjQ1ODgyMzUyOTQxMTc2NDcsMC41NTI5NDExNzY0NzA1ODgzLDFdLCJyYXRpbyI6NC42ODQ5MTMxNTk4ODk2MjA1LCJwYXNzZWQiOnRydWUsImFzc3VtcHRpb25zIjoiQ1NTIHNSR0IgY29sb3JzOyBhbHBoYSBjb21wb3NpdGVkIHRocm91Z2ggZXhwbGljaXQgYmFja2dyb3VuZHM7IG5vIGFudGktYWxpYXNpbmcgYXBwcm94aW1hdGlvbiJ9LHsibGFiZWwiOiJPYnNlcnZlZCBlbXB0eSBpbnZlbnRvcnkgcGFnZSIsInRleHQiOiJObyBhc3NldHMgd2VyZSByZXR1cm5lZCBvbiB0aGlzIHBhZ2UuIiwiY29sb3IiOiJyZ2IoMTAxLCAxMTcsIDE0MSkiLCJmb250U2l6ZSI6IjEycHgiLCJmb250V2VpZ2h0IjoiNDAwIiwidGhyZXNob2xkIjo0LjUsInNjb3BlIjoiU2VsZWN0ZWQgbm9ybWFsLXNpemUgcmVuZGVyZWQgdGV4dDsgbm8gb3ZlcmFsbCBhY2Nlc3NpYmlsaXR5IGNlcnRpZmljYXRpb24iLCJzdXBwb3J0ZWQiOnRydWUsImxheWVycyI6WyJyZ2JhKDAsIDAsIDAsIDApIiwicmdiKDI1NSwgMjU1LCAyNTUpIl0sImJhY2tncm91bmQiOlsxLDEsMSwxXSwiY29tcG9zaXRlZEZvcmVncm91bmQiOlswLjM5NjA3ODQzMTM3MjU0OSwwLjQ1ODgyMzUyOTQxMTc2NDcsMC41NTI5NDExNzY0NzA1ODgzLDFdLCJyYXRpbyI6NC42ODQ5MTMxNTk4ODk2MjA1LCJwYXNzZWQiOnRydWUsImFzc3VtcHRpb25zIjoiQ1NTIHNSR0IgY29sb3JzOyBhbHBoYSBjb21wb3NpdGVkIHRocm91Z2ggZXhwbGljaXQgYmFja2dyb3VuZHM7IG5vIGFudGktYWxpYXNpbmcgYXBwcm94aW1hdGlvbiJ9XSwibXV0YXRpdmVSZXF1ZXN0cyI6MCwiY2Fub25pY2FsTGlzdHNVbmNoYW5nZWQiOnRydWUsIm5vU3RhcnRPckRldmljZU9wZXJhdGlvbiI6dHJ1ZSwic2NvcGUiOiJOYXRpdmUgYnJvd3NlciBVSSBvdmVyIGFjdHVhbCBlbXB0eS91bmFkbWl0dGVkIGludmVudG9yeSBhbmQgZXhwbGljaXRseSBsYWJlbGxlZCBjb250cm9sbGVkIHB1YmxpYyBvYnNlcnZhdGlvbnM7IG5vIHBoeXNpY2FsIGludGVncmF0aW9uIGNsYWltIn0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6de69e8ea4b7ea841de5-156e42b876cd73f0c8ec",
+          "file": "lab-inventory-accessibility.spec.ts",
+          "line": 141,
+          "column": 7
+        },
+        {
+          "title": "lab inventory: HTTP503 retry reads actual inventory at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1072,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T00:51:46.390Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "lab-inventory-journey.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJjb250cm9sbGVkSW5pdGlhbFN0YXR1cyI6NTAzLCJyZXRyeUFjdHVhbFN0YXR1cyI6MjAwLCJyZWFkcyI6MiwibWVhc3VyZW1lbnRzIjpbeyJsYWJlbCI6IlVua25vd24gaW52ZW50b3J5IHRyYW5zcG9ydCBvYnNlcnZhdGlvbiIsInRleHQiOiJJbnZlbnRvcnkgYXZhaWxhYmlsaXR5IGlzIHVua25vd24uIElOVkVOVE9SWV9VTkFWQUlMQUJMRTogU3ludGhldGljIGludmVudG9yeSB0cmFuc3BvcnQgZmFpbHVyZSBSZWZyZXNoIGludmVudG9yeSB0byByZXRyeS4iLCJjb2xvciI6InJnYigxNjEsIDg5LCA4MSkiLCJmb250U2l6ZSI6IjEycHgiLCJmb250V2VpZ2h0IjoiNDAwIiwidGhyZXNob2xkIjo0LjUsInNjb3BlIjoiU2VsZWN0ZWQgbm9ybWFsLXNpemUgcmVuZGVyZWQgdGV4dDsgbm8gb3ZlcmFsbCBhY2Nlc3NpYmlsaXR5IGNlcnRpZmljYXRpb24iLCJzdXBwb3J0ZWQiOnRydWUsImxheWVycyI6WyJyZ2IoMjU1LCAyNDMsIDI0MikiXSwiYmFja2dyb3VuZCI6WzEsMC45NTI5NDExNzY0NzA1ODgyLDAuOTQ5MDE5NjA3ODQzMTM3MiwxXSwiY29tcG9zaXRlZEZvcmVncm91bmQiOlswLjYzMTM3MjU0OTAxOTYwNzgsMC4zNDkwMTk2MDc4NDMxMzcyNCwwLjMxNzY0NzA1ODgyMzUyOTQsMV0sInJhdGlvIjo0Ljc2MzM2MDkxNjE1NTc3MiwicGFzc2VkIjp0cnVlLCJhc3N1bXB0aW9ucyI6IkNTUyBzUkdCIGNvbG9yczsgYWxwaGEgY29tcG9zaXRlZCB0aHJvdWdoIGV4cGxpY2l0IGJhY2tncm91bmRzOyBubyBhbnRpLWFsaWFzaW5nIGFwcHJveGltYXRpb24ifV0sIm11dGF0aXZlUmVxdWVzdHMiOjAsImNhbm9uaWNhbExpc3RzVW5jaGFuZ2VkIjp0cnVlLCJub1N0YXJ0T3JEZXZpY2VPcGVyYXRpb24iOnRydWUsInNjb3BlIjoiTmF0aXZlIGJyb3dzZXIgVUkgb3ZlciBhY3R1YWwgZW1wdHkvdW5hZG1pdHRlZCBpbnZlbnRvcnkgYW5kIGV4cGxpY2l0bHkgbGFiZWxsZWQgY29udHJvbGxlZCBwdWJsaWMgb2JzZXJ2YXRpb25zOyBubyBwaHlzaWNhbCBpbnRlZ3JhdGlvbiBjbGFpbSJ9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6de69e8ea4b7ea841de5-a0c9020edaf8fb287995",
+          "file": "lab-inventory-accessibility.spec.ts",
+          "line": 199,
+          "column": 7
+        },
+        {
+          "title": "lab inventory: missing completeness remains unknown at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1075,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T00:51:47.479Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "lab-inventory-journey.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJtb2RlIjoibWlzc2luZyBjb21wbGV0ZW5lc3MiLCJsYWJlbGxlZE1hbGZvcm1lZFRyYW5zcG9ydE9ic2VydmF0aW9uIjp0cnVlLCJyZXRyeUFjdHVhbEludmVudG9yeSI6dHJ1ZSwibXV0YXRpdmVSZXF1ZXN0cyI6MCwiY2Fub25pY2FsTGlzdHNVbmNoYW5nZWQiOnRydWUsIm5vU3RhcnRPckRldmljZU9wZXJhdGlvbiI6dHJ1ZSwic2NvcGUiOiJOYXRpdmUgYnJvd3NlciBVSSBvdmVyIGFjdHVhbCBlbXB0eS91bmFkbWl0dGVkIGludmVudG9yeSBhbmQgZXhwbGljaXRseSBsYWJlbGxlZCBjb250cm9sbGVkIHB1YmxpYyBvYnNlcnZhdGlvbnM7IG5vIHBoeXNpY2FsIGludGVncmF0aW9uIGNsYWltIn0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6de69e8ea4b7ea841de5-18218d0de228f8db15fc",
+          "file": "lab-inventory-accessibility.spec.ts",
+          "line": 251,
+          "column": 9
+        },
+        {
+          "title": "lab inventory: duplicate identity remains unknown at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 929,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T00:51:48.566Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "lab-inventory-journey.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJtb2RlIjoiZHVwbGljYXRlIGlkZW50aXR5IiwibGFiZWxsZWRNYWxmb3JtZWRUcmFuc3BvcnRPYnNlcnZhdGlvbiI6dHJ1ZSwicmV0cnlBY3R1YWxJbnZlbnRvcnkiOnRydWUsIm11dGF0aXZlUmVxdWVzdHMiOjAsImNhbm9uaWNhbExpc3RzVW5jaGFuZ2VkIjp0cnVlLCJub1N0YXJ0T3JEZXZpY2VPcGVyYXRpb24iOnRydWUsInNjb3BlIjoiTmF0aXZlIGJyb3dzZXIgVUkgb3ZlciBhY3R1YWwgZW1wdHkvdW5hZG1pdHRlZCBpbnZlbnRvcnkgYW5kIGV4cGxpY2l0bHkgbGFiZWxsZWQgY29udHJvbGxlZCBwdWJsaWMgb2JzZXJ2YXRpb25zOyBubyBwaHlzaWNhbCBpbnRlZ3JhdGlvbiBjbGFpbSJ9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6de69e8ea4b7ea841de5-9bfd752288f50e15781c",
+          "file": "lab-inventory-accessibility.spec.ts",
+          "line": 251,
+          "column": 9
+        },
+        {
+          "title": "lab inventory: unsupported authority remains unknown at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1091,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T00:51:49.502Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "lab-inventory-journey.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJtb2RlIjoidW5zdXBwb3J0ZWQgYXV0aG9yaXR5IiwibGFiZWxsZWRNYWxmb3JtZWRUcmFuc3BvcnRPYnNlcnZhdGlvbiI6dHJ1ZSwicmV0cnlBY3R1YWxJbnZlbnRvcnkiOnRydWUsIm11dGF0aXZlUmVxdWVzdHMiOjAsImNhbm9uaWNhbExpc3RzVW5jaGFuZ2VkIjp0cnVlLCJub1N0YXJ0T3JEZXZpY2VPcGVyYXRpb24iOnRydWUsInNjb3BlIjoiTmF0aXZlIGJyb3dzZXIgVUkgb3ZlciBhY3R1YWwgZW1wdHkvdW5hZG1pdHRlZCBpbnZlbnRvcnkgYW5kIGV4cGxpY2l0bHkgbGFiZWxsZWQgY29udHJvbGxlZCBwdWJsaWMgb2JzZXJ2YXRpb25zOyBubyBwaHlzaWNhbCBpbnRlZ3JhdGlvbiBjbGFpbSJ9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6de69e8ea4b7ea841de5-1168b7530f9e528337c3",
+          "file": "lab-inventory-accessibility.spec.ts",
+          "line": 251,
+          "column": 9
+        },
+        {
+          "title": "lab inventory: non-progressing cursor remains unknown at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1032,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T00:51:50.598Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "lab-inventory-journey.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJtb2RlIjoibm9uLXByb2dyZXNzaW5nIGN1cnNvciIsImxhYmVsbGVkTWFsZm9ybWVkVHJhbnNwb3J0T2JzZXJ2YXRpb24iOnRydWUsInJldHJ5QWN0dWFsSW52ZW50b3J5Ijp0cnVlLCJtdXRhdGl2ZVJlcXVlc3RzIjowLCJjYW5vbmljYWxMaXN0c1VuY2hhbmdlZCI6dHJ1ZSwibm9TdGFydE9yRGV2aWNlT3BlcmF0aW9uIjp0cnVlLCJzY29wZSI6Ik5hdGl2ZSBicm93c2VyIFVJIG92ZXIgYWN0dWFsIGVtcHR5L3VuYWRtaXR0ZWQgaW52ZW50b3J5IGFuZCBleHBsaWNpdGx5IGxhYmVsbGVkIGNvbnRyb2xsZWQgcHVibGljIG9ic2VydmF0aW9uczsgbm8gcGh5c2ljYWwgaW50ZWdyYXRpb24gY2xhaW0ifQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6de69e8ea4b7ea841de5-340d95267bb0cbd59a89",
+          "file": "lab-inventory-accessibility.spec.ts",
+          "line": 251,
+          "column": 9
+        },
+        {
+          "title": "lab inventory: unknown metadata has explicit limits at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 962,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T00:51:51.638Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "lab-inventory-journey.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJtb2RlIjoidW5rbm93biBtZXRhZGF0YSIsImxhYmVsbGVkVHJhbnNwb3J0Rml4dHVyZSI6dHJ1ZSwibWVhc3VyZW1lbnRzIjpbeyJsYWJlbCI6IlVua25vd24gZmlybXdhcmUgb2JzZXJ2YXRpb24iLCJ0ZXh0IjoiVW5rbm93biIsImNvbG9yIjoicmdiKDY3LCA4NSwgMTE0KSIsImZvbnRTaXplIjoiMTBweCIsImZvbnRXZWlnaHQiOiI0MDAiLCJ0aHJlc2hvbGQiOjQuNSwic2NvcGUiOiJTZWxlY3RlZCBub3JtYWwtc2l6ZSByZW5kZXJlZCB0ZXh0OyBubyBvdmVyYWxsIGFjY2Vzc2liaWxpdHkgY2VydGlmaWNhdGlvbiIsInN1cHBvcnRlZCI6dHJ1ZSwibGF5ZXJzIjpbInJnYmEoMCwgMCwgMCwgMCkiLCJyZ2JhKDAsIDAsIDAsIDApIiwicmdiYSgwLCAwLCAwLCAwKSIsInJnYigyNTUsIDI1NSwgMjU1KSJdLCJiYWNrZ3JvdW5kIjpbMSwxLDEsMV0sImNvbXBvc2l0ZWRGb3JlZ3JvdW5kIjpbMC4yNjI3NDUwOTgwMzkyMTU3LDAuMzMzMzMzMzMzMzMzMzMzMywwLjQ0NzA1ODgyMzUyOTQxMTgsMV0sInJhdGlvIjo3LjU1MTEzNDE0OTA2Mjc5NiwicGFzc2VkIjp0cnVlLCJhc3N1bXB0aW9ucyI6IkNTUyBzUkdCIGNvbG9yczsgYWxwaGEgY29tcG9zaXRlZCB0aHJvdWdoIGV4cGxpY2l0IGJhY2tncm91bmRzOyBubyBhbnRpLWFsaWFzaW5nIGFwcHJveGltYXRpb24ifV0sImRpYWxvZ3MiOjAsIm11dGF0aXZlUmVxdWVzdHMiOjAsImNhbm9uaWNhbExpc3RzVW5jaGFuZ2VkIjp0cnVlLCJub1N0YXJ0T3JEZXZpY2VPcGVyYXRpb24iOnRydWUsInNjb3BlIjoiTmF0aXZlIGJyb3dzZXIgVUkgb3ZlciBhY3R1YWwgZW1wdHkvdW5hZG1pdHRlZCBpbnZlbnRvcnkgYW5kIGV4cGxpY2l0bHkgbGFiZWxsZWQgY29udHJvbGxlZCBwdWJsaWMgb2JzZXJ2YXRpb25zOyBubyBwaHlzaWNhbCBpbnRlZ3JhdGlvbiBjbGFpbSJ9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6de69e8ea4b7ea841de5-a05aeaea7581ed5d548e",
+          "file": "lab-inventory-accessibility.spec.ts",
+          "line": 299,
+          "column": 9
+        },
+        {
+          "title": "lab inventory: truncated observation has explicit limits at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 949,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T00:51:52.610Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "lab-inventory-journey.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJtb2RlIjoidHJ1bmNhdGVkIG9ic2VydmF0aW9uIiwibGFiZWxsZWRUcmFuc3BvcnRGaXh0dXJlIjp0cnVlLCJtZWFzdXJlbWVudHMiOlt7ImxhYmVsIjoiVHJ1bmNhdGVkIGFzc2V0IG9ic2VydmF0aW9uIiwidGV4dCI6IlRoaXMgYXNzZXQncyBtZXRhZGF0YSBvYnNlcnZhdGlvbiBpcyB0cnVuY2F0ZWQ7IG9taXR0ZWQgbWV0YWRhdGEgcmVtYWlucyB1bmtub3duLiIsImNvbG9yIjoicmdiKDEwMSwgMTE3LCAxNDEpIiwiZm9udFNpemUiOiIxMnB4IiwiZm9udFdlaWdodCI6IjQwMCIsInRocmVzaG9sZCI6NC41LCJzY29wZSI6IlNlbGVjdGVkIG5vcm1hbC1zaXplIHJlbmRlcmVkIHRleHQ7IG5vIG92ZXJhbGwgYWNjZXNzaWJpbGl0eSBjZXJ0aWZpY2F0aW9uIiwic3VwcG9ydGVkIjp0cnVlLCJsYXllcnMiOlsicmdiYSgwLCAwLCAwLCAwKSIsInJnYigyNTUsIDI1NSwgMjU1KSJdLCJiYWNrZ3JvdW5kIjpbMSwxLDEsMV0sImNvbXBvc2l0ZWRGb3JlZ3JvdW5kIjpbMC4zOTYwNzg0MzEzNzI1NDksMC40NTg4MjM1Mjk0MTE3NjQ3LDAuNTUyOTQxMTc2NDcwNTg4MywxXSwicmF0aW8iOjQuNjg0OTEzMTU5ODg5NjIwNSwicGFzc2VkIjp0cnVlLCJhc3N1bXB0aW9ucyI6IkNTUyBzUkdCIGNvbG9yczsgYWxwaGEgY29tcG9zaXRlZCB0aHJvdWdoIGV4cGxpY2l0IGJhY2tncm91bmRzOyBubyBhbnRpLWFsaWFzaW5nIGFwcHJveGltYXRpb24ifV0sImRpYWxvZ3MiOjAsIm11dGF0aXZlUmVxdWVzdHMiOjAsImNhbm9uaWNhbExpc3RzVW5jaGFuZ2VkIjp0cnVlLCJub1N0YXJ0T3JEZXZpY2VPcGVyYXRpb24iOnRydWUsInNjb3BlIjoiTmF0aXZlIGJyb3dzZXIgVUkgb3ZlciBhY3R1YWwgZW1wdHkvdW5hZG1pdHRlZCBpbnZlbnRvcnkgYW5kIGV4cGxpY2l0bHkgbGFiZWxsZWQgY29udHJvbGxlZCBwdWJsaWMgb2JzZXJ2YXRpb25zOyBubyBwaHlzaWNhbCBpbnRlZ3JhdGlvbiBjbGFpbSJ9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6de69e8ea4b7ea841de5-823898c81d4e34aaa1f2",
+          "file": "lab-inventory-accessibility.spec.ts",
+          "line": 299,
+          "column": 9
+        },
+        {
+          "title": "lab inventory: inert metadata has explicit limits at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 926,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T00:51:53.571Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "lab-inventory-journey.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJtb2RlIjoiaW5lcnQgbWV0YWRhdGEiLCJsYWJlbGxlZFRyYW5zcG9ydEZpeHR1cmUiOnRydWUsIm1lYXN1cmVtZW50cyI6W10sImRpYWxvZ3MiOjAsIm11dGF0aXZlUmVxdWVzdHMiOjAsImNhbm9uaWNhbExpc3RzVW5jaGFuZ2VkIjp0cnVlLCJub1N0YXJ0T3JEZXZpY2VPcGVyYXRpb24iOnRydWUsInNjb3BlIjoiTmF0aXZlIGJyb3dzZXIgVUkgb3ZlciBhY3R1YWwgZW1wdHkvdW5hZG1pdHRlZCBpbnZlbnRvcnkgYW5kIGV4cGxpY2l0bHkgbGFiZWxsZWQgY29udHJvbGxlZCBwdWJsaWMgb2JzZXJ2YXRpb25zOyBubyBwaHlzaWNhbCBpbnRlZ3JhdGlvbiBjbGFpbSJ9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6de69e8ea4b7ea841de5-35e4074bf5e2a0633e68",
+          "file": "lab-inventory-accessibility.spec.ts",
+          "line": 299,
+          "column": 9
+        },
+        {
+          "title": "lab inventory: native pages preserve bounded page observations at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2232,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T00:51:54.507Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "lab-inventory-journey.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJwYWdlRmFpbHVyZSI6ZmFsc2UsImNhbGxzIjpbIi9hcGkvdjEvYXNzZXRzIiwiL2FwaS92MS9hc3NldHM/Y3Vyc29yPTEwMCIsIi9hcGkvdjEvYXNzZXRzIl0sInJlY29yZHNPbkZpcnN0UGFnZSI6MTAwLCJsYWJlbGxlZFRyYW5zcG9ydFBhZ2VzIjp0cnVlLCJtdXRhdGl2ZVJlcXVlc3RzIjowLCJjYW5vbmljYWxMaXN0c1VuY2hhbmdlZCI6dHJ1ZSwibm9TdGFydE9yRGV2aWNlT3BlcmF0aW9uIjp0cnVlLCJzY29wZSI6Ik5hdGl2ZSBicm93c2VyIFVJIG92ZXIgYWN0dWFsIGVtcHR5L3VuYWRtaXR0ZWQgaW52ZW50b3J5IGFuZCBleHBsaWNpdGx5IGxhYmVsbGVkIGNvbnRyb2xsZWQgcHVibGljIG9ic2VydmF0aW9uczsgbm8gcGh5c2ljYWwgaW50ZWdyYXRpb24gY2xhaW0ifQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6de69e8ea4b7ea841de5-ba22d2e068e256eb9ad1",
+          "file": "lab-inventory-accessibility.spec.ts",
+          "line": 416,
+          "column": 9
+        },
+        {
+          "title": "lab inventory: native pages recover actual first page after failure at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2097,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T00:51:56.746Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "lab-inventory-journey.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJwYWdlRmFpbHVyZSI6dHJ1ZSwiY2FsbHMiOlsiL2FwaS92MS9hc3NldHMiLCIvYXBpL3YxL2Fzc2V0cz9jdXJzb3I9MTAwIiwiL2FwaS92MS9hc3NldHMiXSwicmVjb3Jkc09uRmlyc3RQYWdlIjoxMDAsImxhYmVsbGVkVHJhbnNwb3J0UGFnZXMiOnRydWUsIm11dGF0aXZlUmVxdWVzdHMiOjAsImNhbm9uaWNhbExpc3RzVW5jaGFuZ2VkIjp0cnVlLCJub1N0YXJ0T3JEZXZpY2VPcGVyYXRpb24iOnRydWUsInNjb3BlIjoiTmF0aXZlIGJyb3dzZXIgVUkgb3ZlciBhY3R1YWwgZW1wdHkvdW5hZG1pdHRlZCBpbnZlbnRvcnkgYW5kIGV4cGxpY2l0bHkgbGFiZWxsZWQgY29udHJvbGxlZCBwdWJsaWMgb2JzZXJ2YXRpb25zOyBubyBwaHlzaWNhbCBpbnRlZ3JhdGlvbiBjbGFpbSJ9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6de69e8ea4b7ea841de5-28d7a88db144e3115ec9",
+          "file": "lab-inventory-accessibility.spec.ts",
+          "line": 416,
+          "column": 9
+        },
+        {
+          "title": "lab inventory: departed context ignores held HTTP200 at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 994,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T00:51:58.849Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "lab-inventory-journey.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJzdGF0dXMiOjIwMCwiZGVwYXJ0ZWQiOnRydWUsImFjdHVhbFJlc3BvbnNlSGVsZCI6dHJ1ZSwibGFiZWxsZWRUcmFuc3BvcnRGYWlsdXJlIjpmYWxzZSwibXV0YXRpdmVSZXF1ZXN0cyI6MCwiY2Fub25pY2FsTGlzdHNVbmNoYW5nZWQiOnRydWUsIm5vU3RhcnRPckRldmljZU9wZXJhdGlvbiI6dHJ1ZSwic2NvcGUiOiJOYXRpdmUgYnJvd3NlciBVSSBvdmVyIGFjdHVhbCBlbXB0eS91bmFkbWl0dGVkIGludmVudG9yeSBhbmQgZXhwbGljaXRseSBsYWJlbGxlZCBjb250cm9sbGVkIHB1YmxpYyBvYnNlcnZhdGlvbnM7IG5vIHBoeXNpY2FsIGludGVncmF0aW9uIGNsYWltIn0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6de69e8ea4b7ea841de5-a8bce07209da8af7bfd7",
+          "file": "lab-inventory-accessibility.spec.ts",
+          "line": 515,
+          "column": 9
+        },
+        {
+          "title": "lab inventory: departed context ignores held HTTP503 at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 911,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T00:51:59.849Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "lab-inventory-journey.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJzdGF0dXMiOjUwMywiZGVwYXJ0ZWQiOnRydWUsImFjdHVhbFJlc3BvbnNlSGVsZCI6ZmFsc2UsImxhYmVsbGVkVHJhbnNwb3J0RmFpbHVyZSI6dHJ1ZSwibXV0YXRpdmVSZXF1ZXN0cyI6MCwiY2Fub25pY2FsTGlzdHNVbmNoYW5nZWQiOnRydWUsIm5vU3RhcnRPckRldmljZU9wZXJhdGlvbiI6dHJ1ZSwic2NvcGUiOiJOYXRpdmUgYnJvd3NlciBVSSBvdmVyIGFjdHVhbCBlbXB0eS91bmFkbWl0dGVkIGludmVudG9yeSBhbmQgZXhwbGljaXRseSBsYWJlbGxlZCBjb250cm9sbGVkIHB1YmxpYyBvYnNlcnZhdGlvbnM7IG5vIHBoeXNpY2FsIGludGVncmF0aW9uIGNsYWltIn0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6de69e8ea4b7ea841de5-1fda207d3a1fe37f6c58",
+          "file": "lab-inventory-accessibility.spec.ts",
+          "line": 515,
+          "column": 9
+        },
+        {
+          "title": "lab inventory: pending repeat and moved focus retain one observation at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1229,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T00:52:00.769Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "lab-inventory-journey.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJyZWFkcyI6MiwicGVuZGluZ1JlcGVhdENyZWF0ZWROb0V4dHJhUmVhZCI6dHJ1ZSwiZGVsaWJlcmF0ZWx5TW92ZWRGb2N1c1ByZXNlcnZlZCI6dHJ1ZSwibXV0YXRpdmVSZXF1ZXN0cyI6MCwiY2Fub25pY2FsTGlzdHNVbmNoYW5nZWQiOnRydWUsIm5vU3RhcnRPckRldmljZU9wZXJhdGlvbiI6dHJ1ZSwic2NvcGUiOiJOYXRpdmUgYnJvd3NlciBVSSBvdmVyIGFjdHVhbCBlbXB0eS91bmFkbWl0dGVkIGludmVudG9yeSBhbmQgZXhwbGljaXRseSBsYWJlbGxlZCBjb250cm9sbGVkIHB1YmxpYyBvYnNlcnZhdGlvbnM7IG5vIHBoeXNpY2FsIGludGVncmF0aW9uIGNsYWltIn0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6de69e8ea4b7ea841de5-36a3395c3b006014d023",
+          "file": "lab-inventory-accessibility.spec.ts",
+          "line": 582,
+          "column": 7
+        },
+        {
+          "title": "lab inventory: actual empty observation and native refresh at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1089,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T00:52:02.007Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "lab-inventory-journey.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJhY3R1YWxSZWdpc3RyeSI6dHJ1ZSwicmVhZHMiOjIsImJ1dHRvbkZvY3VzIjp7ImJveCI6eyJ4IjoxMjQzLjk2ODc1LCJ5IjowLjQzNzUsIndpZHRoIjoxNTguMDMxMjUsImhlaWdodCI6MzgsInRvcCI6MC40Mzc1LCJyaWdodCI6MTQwMiwiYm90dG9tIjozOC40Mzc1LCJsZWZ0IjoxMjQzLjk2ODc1fSwib3V0bGluZSI6InNvbGlkIiwib3V0bGluZVdpZHRoIjozfSwiY29tcGxldGlvbkZvY3VzIjp7ImJveCI6eyJ4IjoxNDAsInkiOjQ0Ny43ODEyNSwid2lkdGgiOjEyMzgsImhlaWdodCI6MjUuNSwidG9wIjo0NDcuNzgxMjUsInJpZ2h0IjoxMzc4LCJib3R0b20iOjQ3My4yODEyNSwibGVmdCI6MTQwfSwib3V0bGluZSI6ImF1dG8iLCJvdXRsaW5lV2lkdGgiOjF9LCJtZWFzdXJlbWVudHMiOlt7ImxhYmVsIjoiQ29tcGxldGUgYWN0dWFsIGludmVudG9yeSBvYnNlcnZhdGlvbiIsInRleHQiOiJQcm92aWRlciBpbnZlbnRvcnkgb2JzZXJ2YXRpb24gaXMgY29tcGxldGUuIiwiY29sb3IiOiJyZ2IoMTAxLCAxMTcsIDE0MSkiLCJmb250U2l6ZSI6IjEycHgiLCJmb250V2VpZ2h0IjoiNDAwIiwidGhyZXNob2xkIjo0LjUsInNjb3BlIjoiU2VsZWN0ZWQgbm9ybWFsLXNpemUgcmVuZGVyZWQgdGV4dDsgbm8gb3ZlcmFsbCBhY2Nlc3NpYmlsaXR5IGNlcnRpZmljYXRpb24iLCJzdXBwb3J0ZWQiOnRydWUsImxheWVycyI6WyJyZ2JhKDAsIDAsIDAsIDApIiwicmdiKDI1NSwgMjU1LCAyNTUpIl0sImJhY2tncm91bmQiOlsxLDEsMSwxXSwiY29tcG9zaXRlZEZvcmVncm91bmQiOlswLjM5NjA3ODQzMTM3MjU0OSwwLjQ1ODgyMzUyOTQxMTc2NDcsMC41NTI5NDExNzY0NzA1ODgzLDFdLCJyYXRpbyI6NC42ODQ5MTMxNTk4ODk2MjA1LCJwYXNzZWQiOnRydWUsImFzc3VtcHRpb25zIjoiQ1NTIHNSR0IgY29sb3JzOyBhbHBoYSBjb21wb3NpdGVkIHRocm91Z2ggZXhwbGljaXQgYmFja2dyb3VuZHM7IG5vIGFudGktYWxpYXNpbmcgYXBwcm94aW1hdGlvbiJ9LHsibGFiZWwiOiJPYnNlcnZlZCBlbXB0eSBpbnZlbnRvcnkgcGFnZSIsInRleHQiOiJObyBhc3NldHMgd2VyZSByZXR1cm5lZCBvbiB0aGlzIHBhZ2UuIiwiY29sb3IiOiJyZ2IoMTAxLCAxMTcsIDE0MSkiLCJmb250U2l6ZSI6IjEycHgiLCJmb250V2VpZ2h0IjoiNDAwIiwidGhyZXNob2xkIjo0LjUsInNjb3BlIjoiU2VsZWN0ZWQgbm9ybWFsLXNpemUgcmVuZGVyZWQgdGV4dDsgbm8gb3ZlcmFsbCBhY2Nlc3NpYmlsaXR5IGNlcnRpZmljYXRpb24iLCJzdXBwb3J0ZWQiOnRydWUsImxheWVycyI6WyJyZ2JhKDAsIDAsIDAsIDApIiwicmdiKDI1NSwgMjU1LCAyNTUpIl0sImJhY2tncm91bmQiOlsxLDEsMSwxXSwiY29tcG9zaXRlZEZvcmVncm91bmQiOlswLjM5NjA3ODQzMTM3MjU0OSwwLjQ1ODgyMzUyOTQxMTc2NDcsMC41NTI5NDExNzY0NzA1ODgzLDFdLCJyYXRpbyI6NC42ODQ5MTMxNTk4ODk2MjA1LCJwYXNzZWQiOnRydWUsImFzc3VtcHRpb25zIjoiQ1NTIHNSR0IgY29sb3JzOyBhbHBoYSBjb21wb3NpdGVkIHRocm91Z2ggZXhwbGljaXQgYmFja2dyb3VuZHM7IG5vIGFudGktYWxpYXNpbmcgYXBwcm94aW1hdGlvbiJ9XSwibXV0YXRpdmVSZXF1ZXN0cyI6MCwiY2Fub25pY2FsTGlzdHNVbmNoYW5nZWQiOnRydWUsIm5vU3RhcnRPckRldmljZU9wZXJhdGlvbiI6dHJ1ZSwic2NvcGUiOiJOYXRpdmUgYnJvd3NlciBVSSBvdmVyIGFjdHVhbCBlbXB0eS91bmFkbWl0dGVkIGludmVudG9yeSBhbmQgZXhwbGljaXRseSBsYWJlbGxlZCBjb250cm9sbGVkIHB1YmxpYyBvYnNlcnZhdGlvbnM7IG5vIHBoeXNpY2FsIGludGVncmF0aW9uIGNsYWltIn0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6de69e8ea4b7ea841de5-5a25d84700c2c45a6eab",
+          "file": "lab-inventory-accessibility.spec.ts",
+          "line": 141,
+          "column": 7
+        },
+        {
+          "title": "lab inventory: HTTP503 retry reads actual inventory at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1081,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T00:52:03.107Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "lab-inventory-journey.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJjb250cm9sbGVkSW5pdGlhbFN0YXR1cyI6NTAzLCJyZXRyeUFjdHVhbFN0YXR1cyI6MjAwLCJyZWFkcyI6MiwibWVhc3VyZW1lbnRzIjpbeyJsYWJlbCI6IlVua25vd24gaW52ZW50b3J5IHRyYW5zcG9ydCBvYnNlcnZhdGlvbiIsInRleHQiOiJJbnZlbnRvcnkgYXZhaWxhYmlsaXR5IGlzIHVua25vd24uIElOVkVOVE9SWV9VTkFWQUlMQUJMRTogU3ludGhldGljIGludmVudG9yeSB0cmFuc3BvcnQgZmFpbHVyZSBSZWZyZXNoIGludmVudG9yeSB0byByZXRyeS4iLCJjb2xvciI6InJnYigxNjEsIDg5LCA4MSkiLCJmb250U2l6ZSI6IjEycHgiLCJmb250V2VpZ2h0IjoiNDAwIiwidGhyZXNob2xkIjo0LjUsInNjb3BlIjoiU2VsZWN0ZWQgbm9ybWFsLXNpemUgcmVuZGVyZWQgdGV4dDsgbm8gb3ZlcmFsbCBhY2Nlc3NpYmlsaXR5IGNlcnRpZmljYXRpb24iLCJzdXBwb3J0ZWQiOnRydWUsImxheWVycyI6WyJyZ2IoMjU1LCAyNDMsIDI0MikiXSwiYmFja2dyb3VuZCI6WzEsMC45NTI5NDExNzY0NzA1ODgyLDAuOTQ5MDE5NjA3ODQzMTM3MiwxXSwiY29tcG9zaXRlZEZvcmVncm91bmQiOlswLjYzMTM3MjU0OTAxOTYwNzgsMC4zNDkwMTk2MDc4NDMxMzcyNCwwLjMxNzY0NzA1ODgyMzUyOTQsMV0sInJhdGlvIjo0Ljc2MzM2MDkxNjE1NTc3MiwicGFzc2VkIjp0cnVlLCJhc3N1bXB0aW9ucyI6IkNTUyBzUkdCIGNvbG9yczsgYWxwaGEgY29tcG9zaXRlZCB0aHJvdWdoIGV4cGxpY2l0IGJhY2tncm91bmRzOyBubyBhbnRpLWFsaWFzaW5nIGFwcHJveGltYXRpb24ifV0sIm11dGF0aXZlUmVxdWVzdHMiOjAsImNhbm9uaWNhbExpc3RzVW5jaGFuZ2VkIjp0cnVlLCJub1N0YXJ0T3JEZXZpY2VPcGVyYXRpb24iOnRydWUsInNjb3BlIjoiTmF0aXZlIGJyb3dzZXIgVUkgb3ZlciBhY3R1YWwgZW1wdHkvdW5hZG1pdHRlZCBpbnZlbnRvcnkgYW5kIGV4cGxpY2l0bHkgbGFiZWxsZWQgY29udHJvbGxlZCBwdWJsaWMgb2JzZXJ2YXRpb25zOyBubyBwaHlzaWNhbCBpbnRlZ3JhdGlvbiBjbGFpbSJ9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6de69e8ea4b7ea841de5-540d1ffdfb1df3fc00ab",
+          "file": "lab-inventory-accessibility.spec.ts",
+          "line": 199,
+          "column": 7
+        },
+        {
+          "title": "lab inventory: missing completeness remains unknown at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1040,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T00:52:04.199Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "lab-inventory-journey.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJtb2RlIjoibWlzc2luZyBjb21wbGV0ZW5lc3MiLCJsYWJlbGxlZE1hbGZvcm1lZFRyYW5zcG9ydE9ic2VydmF0aW9uIjp0cnVlLCJyZXRyeUFjdHVhbEludmVudG9yeSI6dHJ1ZSwibXV0YXRpdmVSZXF1ZXN0cyI6MCwiY2Fub25pY2FsTGlzdHNVbmNoYW5nZWQiOnRydWUsIm5vU3RhcnRPckRldmljZU9wZXJhdGlvbiI6dHJ1ZSwic2NvcGUiOiJOYXRpdmUgYnJvd3NlciBVSSBvdmVyIGFjdHVhbCBlbXB0eS91bmFkbWl0dGVkIGludmVudG9yeSBhbmQgZXhwbGljaXRseSBsYWJlbGxlZCBjb250cm9sbGVkIHB1YmxpYyBvYnNlcnZhdGlvbnM7IG5vIHBoeXNpY2FsIGludGVncmF0aW9uIGNsYWltIn0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6de69e8ea4b7ea841de5-732b8c8db5ff1845e681",
+          "file": "lab-inventory-accessibility.spec.ts",
+          "line": 251,
+          "column": 9
+        },
+        {
+          "title": "lab inventory: duplicate identity remains unknown at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1078,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T00:52:05.253Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "lab-inventory-journey.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJtb2RlIjoiZHVwbGljYXRlIGlkZW50aXR5IiwibGFiZWxsZWRNYWxmb3JtZWRUcmFuc3BvcnRPYnNlcnZhdGlvbiI6dHJ1ZSwicmV0cnlBY3R1YWxJbnZlbnRvcnkiOnRydWUsIm11dGF0aXZlUmVxdWVzdHMiOjAsImNhbm9uaWNhbExpc3RzVW5jaGFuZ2VkIjp0cnVlLCJub1N0YXJ0T3JEZXZpY2VPcGVyYXRpb24iOnRydWUsInNjb3BlIjoiTmF0aXZlIGJyb3dzZXIgVUkgb3ZlciBhY3R1YWwgZW1wdHkvdW5hZG1pdHRlZCBpbnZlbnRvcnkgYW5kIGV4cGxpY2l0bHkgbGFiZWxsZWQgY29udHJvbGxlZCBwdWJsaWMgb2JzZXJ2YXRpb25zOyBubyBwaHlzaWNhbCBpbnRlZ3JhdGlvbiBjbGFpbSJ9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6de69e8ea4b7ea841de5-b6834f5e04d7a285fe68",
+          "file": "lab-inventory-accessibility.spec.ts",
+          "line": 251,
+          "column": 9
+        },
+        {
+          "title": "lab inventory: unsupported authority remains unknown at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1048,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T00:52:06.345Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "lab-inventory-journey.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJtb2RlIjoidW5zdXBwb3J0ZWQgYXV0aG9yaXR5IiwibGFiZWxsZWRNYWxmb3JtZWRUcmFuc3BvcnRPYnNlcnZhdGlvbiI6dHJ1ZSwicmV0cnlBY3R1YWxJbnZlbnRvcnkiOnRydWUsIm11dGF0aXZlUmVxdWVzdHMiOjAsImNhbm9uaWNhbExpc3RzVW5jaGFuZ2VkIjp0cnVlLCJub1N0YXJ0T3JEZXZpY2VPcGVyYXRpb24iOnRydWUsInNjb3BlIjoiTmF0aXZlIGJyb3dzZXIgVUkgb3ZlciBhY3R1YWwgZW1wdHkvdW5hZG1pdHRlZCBpbnZlbnRvcnkgYW5kIGV4cGxpY2l0bHkgbGFiZWxsZWQgY29udHJvbGxlZCBwdWJsaWMgb2JzZXJ2YXRpb25zOyBubyBwaHlzaWNhbCBpbnRlZ3JhdGlvbiBjbGFpbSJ9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6de69e8ea4b7ea841de5-739687d0c93080a19de3",
+          "file": "lab-inventory-accessibility.spec.ts",
+          "line": 251,
+          "column": 9
+        },
+        {
+          "title": "lab inventory: non-progressing cursor remains unknown at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1010,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T00:52:07.405Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "lab-inventory-journey.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJtb2RlIjoibm9uLXByb2dyZXNzaW5nIGN1cnNvciIsImxhYmVsbGVkTWFsZm9ybWVkVHJhbnNwb3J0T2JzZXJ2YXRpb24iOnRydWUsInJldHJ5QWN0dWFsSW52ZW50b3J5Ijp0cnVlLCJtdXRhdGl2ZVJlcXVlc3RzIjowLCJjYW5vbmljYWxMaXN0c1VuY2hhbmdlZCI6dHJ1ZSwibm9TdGFydE9yRGV2aWNlT3BlcmF0aW9uIjp0cnVlLCJzY29wZSI6Ik5hdGl2ZSBicm93c2VyIFVJIG92ZXIgYWN0dWFsIGVtcHR5L3VuYWRtaXR0ZWQgaW52ZW50b3J5IGFuZCBleHBsaWNpdGx5IGxhYmVsbGVkIGNvbnRyb2xsZWQgcHVibGljIG9ic2VydmF0aW9uczsgbm8gcGh5c2ljYWwgaW50ZWdyYXRpb24gY2xhaW0ifQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6de69e8ea4b7ea841de5-61dee78683269eab4e4c",
+          "file": "lab-inventory-accessibility.spec.ts",
+          "line": 251,
+          "column": 9
+        },
+        {
+          "title": "lab inventory: unknown metadata has explicit limits at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 964,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T00:52:08.421Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "lab-inventory-journey.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJtb2RlIjoidW5rbm93biBtZXRhZGF0YSIsImxhYmVsbGVkVHJhbnNwb3J0Rml4dHVyZSI6dHJ1ZSwibWVhc3VyZW1lbnRzIjpbeyJsYWJlbCI6IlVua25vd24gZmlybXdhcmUgb2JzZXJ2YXRpb24iLCJ0ZXh0IjoiVW5rbm93biIsImNvbG9yIjoicmdiKDY3LCA4NSwgMTE0KSIsImZvbnRTaXplIjoiMTBweCIsImZvbnRXZWlnaHQiOiI0MDAiLCJ0aHJlc2hvbGQiOjQuNSwic2NvcGUiOiJTZWxlY3RlZCBub3JtYWwtc2l6ZSByZW5kZXJlZCB0ZXh0OyBubyBvdmVyYWxsIGFjY2Vzc2liaWxpdHkgY2VydGlmaWNhdGlvbiIsInN1cHBvcnRlZCI6dHJ1ZSwibGF5ZXJzIjpbInJnYmEoMCwgMCwgMCwgMCkiLCJyZ2JhKDAsIDAsIDAsIDApIiwicmdiYSgwLCAwLCAwLCAwKSIsInJnYigyNTUsIDI1NSwgMjU1KSJdLCJiYWNrZ3JvdW5kIjpbMSwxLDEsMV0sImNvbXBvc2l0ZWRGb3JlZ3JvdW5kIjpbMC4yNjI3NDUwOTgwMzkyMTU3LDAuMzMzMzMzMzMzMzMzMzMzMywwLjQ0NzA1ODgyMzUyOTQxMTgsMV0sInJhdGlvIjo3LjU1MTEzNDE0OTA2Mjc5NiwicGFzc2VkIjp0cnVlLCJhc3N1bXB0aW9ucyI6IkNTUyBzUkdCIGNvbG9yczsgYWxwaGEgY29tcG9zaXRlZCB0aHJvdWdoIGV4cGxpY2l0IGJhY2tncm91bmRzOyBubyBhbnRpLWFsaWFzaW5nIGFwcHJveGltYXRpb24ifV0sImRpYWxvZ3MiOjAsIm11dGF0aXZlUmVxdWVzdHMiOjAsImNhbm9uaWNhbExpc3RzVW5jaGFuZ2VkIjp0cnVlLCJub1N0YXJ0T3JEZXZpY2VPcGVyYXRpb24iOnRydWUsInNjb3BlIjoiTmF0aXZlIGJyb3dzZXIgVUkgb3ZlciBhY3R1YWwgZW1wdHkvdW5hZG1pdHRlZCBpbnZlbnRvcnkgYW5kIGV4cGxpY2l0bHkgbGFiZWxsZWQgY29udHJvbGxlZCBwdWJsaWMgb2JzZXJ2YXRpb25zOyBubyBwaHlzaWNhbCBpbnRlZ3JhdGlvbiBjbGFpbSJ9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6de69e8ea4b7ea841de5-64d62c38c52df638209a",
+          "file": "lab-inventory-accessibility.spec.ts",
+          "line": 299,
+          "column": 9
+        },
+        {
+          "title": "lab inventory: truncated observation has explicit limits at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 930,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T00:52:09.393Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "lab-inventory-journey.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJtb2RlIjoidHJ1bmNhdGVkIG9ic2VydmF0aW9uIiwibGFiZWxsZWRUcmFuc3BvcnRGaXh0dXJlIjp0cnVlLCJtZWFzdXJlbWVudHMiOlt7ImxhYmVsIjoiVHJ1bmNhdGVkIGFzc2V0IG9ic2VydmF0aW9uIiwidGV4dCI6IlRoaXMgYXNzZXQncyBtZXRhZGF0YSBvYnNlcnZhdGlvbiBpcyB0cnVuY2F0ZWQ7IG9taXR0ZWQgbWV0YWRhdGEgcmVtYWlucyB1bmtub3duLiIsImNvbG9yIjoicmdiKDEwMSwgMTE3LCAxNDEpIiwiZm9udFNpemUiOiIxMnB4IiwiZm9udFdlaWdodCI6IjQwMCIsInRocmVzaG9sZCI6NC41LCJzY29wZSI6IlNlbGVjdGVkIG5vcm1hbC1zaXplIHJlbmRlcmVkIHRleHQ7IG5vIG92ZXJhbGwgYWNjZXNzaWJpbGl0eSBjZXJ0aWZpY2F0aW9uIiwic3VwcG9ydGVkIjp0cnVlLCJsYXllcnMiOlsicmdiYSgwLCAwLCAwLCAwKSIsInJnYigyNTUsIDI1NSwgMjU1KSJdLCJiYWNrZ3JvdW5kIjpbMSwxLDEsMV0sImNvbXBvc2l0ZWRGb3JlZ3JvdW5kIjpbMC4zOTYwNzg0MzEzNzI1NDksMC40NTg4MjM1Mjk0MTE3NjQ3LDAuNTUyOTQxMTc2NDcwNTg4MywxXSwicmF0aW8iOjQuNjg0OTEzMTU5ODg5NjIwNSwicGFzc2VkIjp0cnVlLCJhc3N1bXB0aW9ucyI6IkNTUyBzUkdCIGNvbG9yczsgYWxwaGEgY29tcG9zaXRlZCB0aHJvdWdoIGV4cGxpY2l0IGJhY2tncm91bmRzOyBubyBhbnRpLWFsaWFzaW5nIGFwcHJveGltYXRpb24ifV0sImRpYWxvZ3MiOjAsIm11dGF0aXZlUmVxdWVzdHMiOjAsImNhbm9uaWNhbExpc3RzVW5jaGFuZ2VkIjp0cnVlLCJub1N0YXJ0T3JEZXZpY2VPcGVyYXRpb24iOnRydWUsInNjb3BlIjoiTmF0aXZlIGJyb3dzZXIgVUkgb3ZlciBhY3R1YWwgZW1wdHkvdW5hZG1pdHRlZCBpbnZlbnRvcnkgYW5kIGV4cGxpY2l0bHkgbGFiZWxsZWQgY29udHJvbGxlZCBwdWJsaWMgb2JzZXJ2YXRpb25zOyBubyBwaHlzaWNhbCBpbnRlZ3JhdGlvbiBjbGFpbSJ9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6de69e8ea4b7ea841de5-85c535e0b9bcde458b47",
+          "file": "lab-inventory-accessibility.spec.ts",
+          "line": 299,
+          "column": 9
+        },
+        {
+          "title": "lab inventory: inert metadata has explicit limits at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 958,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T00:52:10.334Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "lab-inventory-journey.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJtb2RlIjoiaW5lcnQgbWV0YWRhdGEiLCJsYWJlbGxlZFRyYW5zcG9ydEZpeHR1cmUiOnRydWUsIm1lYXN1cmVtZW50cyI6W10sImRpYWxvZ3MiOjAsIm11dGF0aXZlUmVxdWVzdHMiOjAsImNhbm9uaWNhbExpc3RzVW5jaGFuZ2VkIjp0cnVlLCJub1N0YXJ0T3JEZXZpY2VPcGVyYXRpb24iOnRydWUsInNjb3BlIjoiTmF0aXZlIGJyb3dzZXIgVUkgb3ZlciBhY3R1YWwgZW1wdHkvdW5hZG1pdHRlZCBpbnZlbnRvcnkgYW5kIGV4cGxpY2l0bHkgbGFiZWxsZWQgY29udHJvbGxlZCBwdWJsaWMgb2JzZXJ2YXRpb25zOyBubyBwaHlzaWNhbCBpbnRlZ3JhdGlvbiBjbGFpbSJ9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6de69e8ea4b7ea841de5-128b3f4cb085dc97c64c",
+          "file": "lab-inventory-accessibility.spec.ts",
+          "line": 299,
+          "column": 9
+        },
+        {
+          "title": "lab inventory: native pages preserve bounded page observations at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2106,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T00:52:11.302Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "lab-inventory-journey.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJwYWdlRmFpbHVyZSI6ZmFsc2UsImNhbGxzIjpbIi9hcGkvdjEvYXNzZXRzIiwiL2FwaS92MS9hc3NldHM/Y3Vyc29yPTEwMCIsIi9hcGkvdjEvYXNzZXRzIl0sInJlY29yZHNPbkZpcnN0UGFnZSI6MTAwLCJsYWJlbGxlZFRyYW5zcG9ydFBhZ2VzIjp0cnVlLCJtdXRhdGl2ZVJlcXVlc3RzIjowLCJjYW5vbmljYWxMaXN0c1VuY2hhbmdlZCI6dHJ1ZSwibm9TdGFydE9yRGV2aWNlT3BlcmF0aW9uIjp0cnVlLCJzY29wZSI6Ik5hdGl2ZSBicm93c2VyIFVJIG92ZXIgYWN0dWFsIGVtcHR5L3VuYWRtaXR0ZWQgaW52ZW50b3J5IGFuZCBleHBsaWNpdGx5IGxhYmVsbGVkIGNvbnRyb2xsZWQgcHVibGljIG9ic2VydmF0aW9uczsgbm8gcGh5c2ljYWwgaW50ZWdyYXRpb24gY2xhaW0ifQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6de69e8ea4b7ea841de5-8077717e2e2c41539d2c",
+          "file": "lab-inventory-accessibility.spec.ts",
+          "line": 416,
+          "column": 9
+        },
+        {
+          "title": "lab inventory: native pages recover actual first page after failure at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1824,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T00:52:13.415Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "lab-inventory-journey.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJwYWdlRmFpbHVyZSI6dHJ1ZSwiY2FsbHMiOlsiL2FwaS92MS9hc3NldHMiLCIvYXBpL3YxL2Fzc2V0cz9jdXJzb3I9MTAwIiwiL2FwaS92MS9hc3NldHMiXSwicmVjb3Jkc09uRmlyc3RQYWdlIjoxMDAsImxhYmVsbGVkVHJhbnNwb3J0UGFnZXMiOnRydWUsIm11dGF0aXZlUmVxdWVzdHMiOjAsImNhbm9uaWNhbExpc3RzVW5jaGFuZ2VkIjp0cnVlLCJub1N0YXJ0T3JEZXZpY2VPcGVyYXRpb24iOnRydWUsInNjb3BlIjoiTmF0aXZlIGJyb3dzZXIgVUkgb3ZlciBhY3R1YWwgZW1wdHkvdW5hZG1pdHRlZCBpbnZlbnRvcnkgYW5kIGV4cGxpY2l0bHkgbGFiZWxsZWQgY29udHJvbGxlZCBwdWJsaWMgb2JzZXJ2YXRpb25zOyBubyBwaHlzaWNhbCBpbnRlZ3JhdGlvbiBjbGFpbSJ9"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6de69e8ea4b7ea841de5-96ac1889f36158139637",
+          "file": "lab-inventory-accessibility.spec.ts",
+          "line": 416,
+          "column": 9
+        },
+        {
+          "title": "lab inventory: departed context ignores held HTTP200 at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 908,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T00:52:15.247Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "lab-inventory-journey.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJzdGF0dXMiOjIwMCwiZGVwYXJ0ZWQiOnRydWUsImFjdHVhbFJlc3BvbnNlSGVsZCI6dHJ1ZSwibGFiZWxsZWRUcmFuc3BvcnRGYWlsdXJlIjpmYWxzZSwibXV0YXRpdmVSZXF1ZXN0cyI6MCwiY2Fub25pY2FsTGlzdHNVbmNoYW5nZWQiOnRydWUsIm5vU3RhcnRPckRldmljZU9wZXJhdGlvbiI6dHJ1ZSwic2NvcGUiOiJOYXRpdmUgYnJvd3NlciBVSSBvdmVyIGFjdHVhbCBlbXB0eS91bmFkbWl0dGVkIGludmVudG9yeSBhbmQgZXhwbGljaXRseSBsYWJlbGxlZCBjb250cm9sbGVkIHB1YmxpYyBvYnNlcnZhdGlvbnM7IG5vIHBoeXNpY2FsIGludGVncmF0aW9uIGNsYWltIn0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6de69e8ea4b7ea841de5-00e0ad6c5421adcacc8d",
+          "file": "lab-inventory-accessibility.spec.ts",
+          "line": 515,
+          "column": 9
+        },
+        {
+          "title": "lab inventory: departed context ignores held HTTP503 at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 895,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T00:52:16.163Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "lab-inventory-journey.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJzdGF0dXMiOjUwMywiZGVwYXJ0ZWQiOnRydWUsImFjdHVhbFJlc3BvbnNlSGVsZCI6ZmFsc2UsImxhYmVsbGVkVHJhbnNwb3J0RmFpbHVyZSI6dHJ1ZSwibXV0YXRpdmVSZXF1ZXN0cyI6MCwiY2Fub25pY2FsTGlzdHNVbmNoYW5nZWQiOnRydWUsIm5vU3RhcnRPckRldmljZU9wZXJhdGlvbiI6dHJ1ZSwic2NvcGUiOiJOYXRpdmUgYnJvd3NlciBVSSBvdmVyIGFjdHVhbCBlbXB0eS91bmFkbWl0dGVkIGludmVudG9yeSBhbmQgZXhwbGljaXRseSBsYWJlbGxlZCBjb250cm9sbGVkIHB1YmxpYyBvYnNlcnZhdGlvbnM7IG5vIHBoeXNpY2FsIGludGVncmF0aW9uIGNsYWltIn0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6de69e8ea4b7ea841de5-62e484e2cb53d9ba2637",
+          "file": "lab-inventory-accessibility.spec.ts",
+          "line": 515,
+          "column": 9
+        },
+        {
+          "title": "lab inventory: pending repeat and moved focus retain one observation at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1141,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T00:52:17.063Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "lab-inventory-journey.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJyZWFkcyI6MiwicGVuZGluZ1JlcGVhdENyZWF0ZWROb0V4dHJhUmVhZCI6dHJ1ZSwiZGVsaWJlcmF0ZWx5TW92ZWRGb2N1c1ByZXNlcnZlZCI6dHJ1ZSwibXV0YXRpdmVSZXF1ZXN0cyI6MCwiY2Fub25pY2FsTGlzdHNVbmNoYW5nZWQiOnRydWUsIm5vU3RhcnRPckRldmljZU9wZXJhdGlvbiI6dHJ1ZSwic2NvcGUiOiJOYXRpdmUgYnJvd3NlciBVSSBvdmVyIGFjdHVhbCBlbXB0eS91bmFkbWl0dGVkIGludmVudG9yeSBhbmQgZXhwbGljaXRseSBsYWJlbGxlZCBjb250cm9sbGVkIHB1YmxpYyBvYnNlcnZhdGlvbnM7IG5vIHBoeXNpY2FsIGludGVncmF0aW9uIGNsYWltIn0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6de69e8ea4b7ea841de5-e247fea335db221667f2",
+          "file": "lab-inventory-accessibility.spec.ts",
+          "line": 582,
+          "column": 7
+        },
+        {
+          "title": "lab inventory: incomplete public observation at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 413,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T00:52:18.212Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "lab-inventory-observation.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJtb2RlIjoiaW5jb21wbGV0ZSIsImxhYmVsbGVkVHJhbnNwb3J0Rml4dHVyZSI6dHJ1ZSwiZml4dHVyZUdlbmVyYXRlZEJ5QmFja2VuZFByb2plY3Rpb24iOnRydWUsImFjdHVhbEludmVudG9yeUVtcHR5QW5kVW5hZG1pdHRlZCI6dHJ1ZSwiY2Fub25pY2FsTGlzdHNVbmNoYW5nZWQiOnRydWUsIm11dGF0aXZlUmVxdWVzdHMiOjAsInBoeXNpY2FsQWN0aW9ucyI6MCwibWVhc3VyZW1lbnRzIjpbXSwicmVhZHMiOjEsInNjb3BlIjoiVUkgcHJvamVjdGlvbiBvYnNlcnZhdGlvbiBvbmx5OyBzeW50aGV0aWMgb3duZWQgcHJvdmlkZXIgdXNlZCBieSBvZmZsaW5lIGdlbmVyYXRvciwgbm8gcnVudGltZSBhZG1pc3Npb24sIGRldmljZSBhY2Nlc3Mgb3IgU3RhcnQifQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6de69e8ea4b7ea841de5-a99bc9cdb1c5f90e00e2",
+          "file": "lab-inventory-accessibility.spec.ts",
+          "line": 658,
+          "column": 9
+        },
+        {
+          "title": "lab inventory: observed public observation at 1024x768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 463,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T00:52:18.634Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "lab-inventory-observation.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTAyNCwiaGVpZ2h0Ijo3Njh9LCJtb2RlIjoib2JzZXJ2ZWQiLCJsYWJlbGxlZFRyYW5zcG9ydEZpeHR1cmUiOnRydWUsImZpeHR1cmVHZW5lcmF0ZWRCeUJhY2tlbmRQcm9qZWN0aW9uIjp0cnVlLCJhY3R1YWxJbnZlbnRvcnlFbXB0eUFuZFVuYWRtaXR0ZWQiOnRydWUsImNhbm9uaWNhbExpc3RzVW5jaGFuZ2VkIjp0cnVlLCJtdXRhdGl2ZVJlcXVlc3RzIjowLCJwaHlzaWNhbEFjdGlvbnMiOjAsIm1lYXN1cmVtZW50cyI6W3sibGFiZWwiOiJPYnNlcnZlZCBmaXJtd2FyZSByZXZpc2lvbiIsInRleHQiOiJPYnNlcnZlZCDCtyBmaXh0dXJlLTEuMi4zIiwiY29sb3IiOiJyZ2IoNjcsIDg1LCAxMTQpIiwiZm9udFNpemUiOiIxMHB4IiwiZm9udFdlaWdodCI6IjQwMCIsInRocmVzaG9sZCI6NC41LCJzY29wZSI6IlNlbGVjdGVkIG5vcm1hbC1zaXplIHJlbmRlcmVkIHRleHQ7IG5vIG92ZXJhbGwgYWNjZXNzaWJpbGl0eSBjZXJ0aWZpY2F0aW9uIiwic3VwcG9ydGVkIjp0cnVlLCJsYXllcnMiOlsicmdiYSgwLCAwLCAwLCAwKSIsInJnYmEoMCwgMCwgMCwgMCkiLCJyZ2JhKDAsIDAsIDAsIDApIiwicmdiKDI1NSwgMjU1LCAyNTUpIl0sImJhY2tncm91bmQiOlsxLDEsMSwxXSwiY29tcG9zaXRlZEZvcmVncm91bmQiOlswLjI2Mjc0NTA5ODAzOTIxNTcsMC4zMzMzMzMzMzMzMzMzMzMzLDAuNDQ3MDU4ODIzNTI5NDExOCwxXSwicmF0aW8iOjcuNTUxMTM0MTQ5MDYyNzk2LCJwYXNzZWQiOnRydWUsImFzc3VtcHRpb25zIjoiQ1NTIHNSR0IgY29sb3JzOyBhbHBoYSBjb21wb3NpdGVkIHRocm91Z2ggZXhwbGljaXQgYmFja2dyb3VuZHM7IG5vIGFudGktYWxpYXNpbmcgYXBwcm94aW1hdGlvbiJ9LHsibGFiZWwiOiJGaXh0dXJlIGV2aWRlbmNlIHNjb3BlIiwidGV4dCI6ImZpeHR1cmUiLCJjb2xvciI6InJnYig5OCwgMTEzLCAxMzgpIiwiZm9udFNpemUiOiI5cHgiLCJmb250V2VpZ2h0IjoiNjAwIiwidGhyZXNob2xkIjo0LjUsInNjb3BlIjoiU2VsZWN0ZWQgbm9ybWFsLXNpemUgcmVuZGVyZWQgdGV4dDsgbm8gb3ZlcmFsbCBhY2Nlc3NpYmlsaXR5IGNlcnRpZmljYXRpb24iLCJzdXBwb3J0ZWQiOnRydWUsImxheWVycyI6WyJyZ2IoMjQ1LCAyNDcsIDI1MCkiXSwiYmFja2dyb3VuZCI6WzAuOTYwNzg0MzEzNzI1NDkwMiwwLjk2ODYyNzQ1MDk4MDM5MjIsMC45ODAzOTIxNTY4NjI3NDUxLDFdLCJjb21wb3NpdGVkRm9yZWdyb3VuZCI6WzAuMzg0MzEzNzI1NDkwMTk2MSwwLjQ0MzEzNzI1NDkwMTk2MDc2LDAuNTQxMTc2NDcwNTg4MjM1MywxXSwicmF0aW8iOjQuNjA1ODA4MzI1MTQ4NzIzLCJwYXNzZWQiOnRydWUsImFzc3VtcHRpb25zIjoiQ1NTIHNSR0IgY29sb3JzOyBhbHBoYSBjb21wb3NpdGVkIHRocm91Z2ggZXhwbGljaXQgYmFja2dyb3VuZHM7IG5vIGFudGktYWxpYXNpbmcgYXBwcm94aW1hdGlvbiJ9LHsibGFiZWwiOiJCbG9ja2VkIHBoeXNpY2FsLW9wZXJhdGlvbiByZWFkaW5lc3MiLCJ0ZXh0IjoiQmxvY2tlZCIsImNvbG9yIjoicmdiKDY3LCA4NSwgMTE0KSIsImZvbnRTaXplIjoiMTBweCIsImZvbnRXZWlnaHQiOiI0MDAiLCJ0aHJlc2hvbGQiOjQuNSwic2NvcGUiOiJTZWxlY3RlZCBub3JtYWwtc2l6ZSByZW5kZXJlZCB0ZXh0OyBubyBvdmVyYWxsIGFjY2Vzc2liaWxpdHkgY2VydGlmaWNhdGlvbiIsInN1cHBvcnRlZCI6dHJ1ZSwibGF5ZXJzIjpbInJnYmEoMCwgMCwgMCwgMCkiLCJyZ2JhKDAsIDAsIDAsIDApIiwicmdiYSgwLCAwLCAwLCAwKSIsInJnYigyNTUsIDI1NSwgMjU1KSJdLCJiYWNrZ3JvdW5kIjpbMSwxLDEsMV0sImNvbXBvc2l0ZWRGb3JlZ3JvdW5kIjpbMC4yNjI3NDUwOTgwMzkyMTU3LDAuMzMzMzMzMzMzMzMzMzMzMywwLjQ0NzA1ODgyMzUyOTQxMTgsMV0sInJhdGlvIjo3LjU1MTEzNDE0OTA2Mjc5NiwicGFzc2VkIjp0cnVlLCJhc3N1bXB0aW9ucyI6IkNTUyBzUkdCIGNvbG9yczsgYWxwaGEgY29tcG9zaXRlZCB0aHJvdWdoIGV4cGxpY2l0IGJhY2tncm91bmRzOyBubyBhbnRpLWFsaWFzaW5nIGFwcHJveGltYXRpb24ifV0sInJlYWRzIjoxLCJzY29wZSI6IlVJIHByb2plY3Rpb24gb2JzZXJ2YXRpb24gb25seTsgc3ludGhldGljIG93bmVkIHByb3ZpZGVyIHVzZWQgYnkgb2ZmbGluZSBnZW5lcmF0b3IsIG5vIHJ1bnRpbWUgYWRtaXNzaW9uLCBkZXZpY2UgYWNjZXNzIG9yIFN0YXJ0In0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6de69e8ea4b7ea841de5-09950459727737b22b82",
+          "file": "lab-inventory-accessibility.spec.ts",
+          "line": 658,
+          "column": 9
+        },
+        {
+          "title": "lab inventory: incomplete public observation at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 354,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T00:52:19.105Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "lab-inventory-observation.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJtb2RlIjoiaW5jb21wbGV0ZSIsImxhYmVsbGVkVHJhbnNwb3J0Rml4dHVyZSI6dHJ1ZSwiZml4dHVyZUdlbmVyYXRlZEJ5QmFja2VuZFByb2plY3Rpb24iOnRydWUsImFjdHVhbEludmVudG9yeUVtcHR5QW5kVW5hZG1pdHRlZCI6dHJ1ZSwiY2Fub25pY2FsTGlzdHNVbmNoYW5nZWQiOnRydWUsIm11dGF0aXZlUmVxdWVzdHMiOjAsInBoeXNpY2FsQWN0aW9ucyI6MCwibWVhc3VyZW1lbnRzIjpbXSwicmVhZHMiOjEsInNjb3BlIjoiVUkgcHJvamVjdGlvbiBvYnNlcnZhdGlvbiBvbmx5OyBzeW50aGV0aWMgb3duZWQgcHJvdmlkZXIgdXNlZCBieSBvZmZsaW5lIGdlbmVyYXRvciwgbm8gcnVudGltZSBhZG1pc3Npb24sIGRldmljZSBhY2Nlc3Mgb3IgU3RhcnQifQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6de69e8ea4b7ea841de5-50e51d29cd31d936dffd",
+          "file": "lab-inventory-accessibility.spec.ts",
+          "line": 658,
+          "column": 9
+        },
+        {
+          "title": "lab inventory: observed public observation at 1440x900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 418,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-27T00:52:19.465Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "lab-inventory-observation.json",
+                      "contentType": "application/json",
+                      "body": "eyJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9LCJtb2RlIjoib2JzZXJ2ZWQiLCJsYWJlbGxlZFRyYW5zcG9ydEZpeHR1cmUiOnRydWUsImZpeHR1cmVHZW5lcmF0ZWRCeUJhY2tlbmRQcm9qZWN0aW9uIjp0cnVlLCJhY3R1YWxJbnZlbnRvcnlFbXB0eUFuZFVuYWRtaXR0ZWQiOnRydWUsImNhbm9uaWNhbExpc3RzVW5jaGFuZ2VkIjp0cnVlLCJtdXRhdGl2ZVJlcXVlc3RzIjowLCJwaHlzaWNhbEFjdGlvbnMiOjAsIm1lYXN1cmVtZW50cyI6W3sibGFiZWwiOiJPYnNlcnZlZCBmaXJtd2FyZSByZXZpc2lvbiIsInRleHQiOiJPYnNlcnZlZCDCtyBmaXh0dXJlLTEuMi4zIiwiY29sb3IiOiJyZ2IoNjcsIDg1LCAxMTQpIiwiZm9udFNpemUiOiIxMHB4IiwiZm9udFdlaWdodCI6IjQwMCIsInRocmVzaG9sZCI6NC41LCJzY29wZSI6IlNlbGVjdGVkIG5vcm1hbC1zaXplIHJlbmRlcmVkIHRleHQ7IG5vIG92ZXJhbGwgYWNjZXNzaWJpbGl0eSBjZXJ0aWZpY2F0aW9uIiwic3VwcG9ydGVkIjp0cnVlLCJsYXllcnMiOlsicmdiYSgwLCAwLCAwLCAwKSIsInJnYmEoMCwgMCwgMCwgMCkiLCJyZ2JhKDAsIDAsIDAsIDApIiwicmdiKDI1NSwgMjU1LCAyNTUpIl0sImJhY2tncm91bmQiOlsxLDEsMSwxXSwiY29tcG9zaXRlZEZvcmVncm91bmQiOlswLjI2Mjc0NTA5ODAzOTIxNTcsMC4zMzMzMzMzMzMzMzMzMzMzLDAuNDQ3MDU4ODIzNTI5NDExOCwxXSwicmF0aW8iOjcuNTUxMTM0MTQ5MDYyNzk2LCJwYXNzZWQiOnRydWUsImFzc3VtcHRpb25zIjoiQ1NTIHNSR0IgY29sb3JzOyBhbHBoYSBjb21wb3NpdGVkIHRocm91Z2ggZXhwbGljaXQgYmFja2dyb3VuZHM7IG5vIGFudGktYWxpYXNpbmcgYXBwcm94aW1hdGlvbiJ9LHsibGFiZWwiOiJGaXh0dXJlIGV2aWRlbmNlIHNjb3BlIiwidGV4dCI6ImZpeHR1cmUiLCJjb2xvciI6InJnYig5OCwgMTEzLCAxMzgpIiwiZm9udFNpemUiOiI5cHgiLCJmb250V2VpZ2h0IjoiNjAwIiwidGhyZXNob2xkIjo0LjUsInNjb3BlIjoiU2VsZWN0ZWQgbm9ybWFsLXNpemUgcmVuZGVyZWQgdGV4dDsgbm8gb3ZlcmFsbCBhY2Nlc3NpYmlsaXR5IGNlcnRpZmljYXRpb24iLCJzdXBwb3J0ZWQiOnRydWUsImxheWVycyI6WyJyZ2IoMjQ1LCAyNDcsIDI1MCkiXSwiYmFja2dyb3VuZCI6WzAuOTYwNzg0MzEzNzI1NDkwMiwwLjk2ODYyNzQ1MDk4MDM5MjIsMC45ODAzOTIxNTY4NjI3NDUxLDFdLCJjb21wb3NpdGVkRm9yZWdyb3VuZCI6WzAuMzg0MzEzNzI1NDkwMTk2MSwwLjQ0MzEzNzI1NDkwMTk2MDc2LDAuNTQxMTc2NDcwNTg4MjM1MywxXSwicmF0aW8iOjQuNjA1ODA4MzI1MTQ4NzIzLCJwYXNzZWQiOnRydWUsImFzc3VtcHRpb25zIjoiQ1NTIHNSR0IgY29sb3JzOyBhbHBoYSBjb21wb3NpdGVkIHRocm91Z2ggZXhwbGljaXQgYmFja2dyb3VuZHM7IG5vIGFudGktYWxpYXNpbmcgYXBwcm94aW1hdGlvbiJ9LHsibGFiZWwiOiJCbG9ja2VkIHBoeXNpY2FsLW9wZXJhdGlvbiByZWFkaW5lc3MiLCJ0ZXh0IjoiQmxvY2tlZCIsImNvbG9yIjoicmdiKDY3LCA4NSwgMTE0KSIsImZvbnRTaXplIjoiMTBweCIsImZvbnRXZWlnaHQiOiI0MDAiLCJ0aHJlc2hvbGQiOjQuNSwic2NvcGUiOiJTZWxlY3RlZCBub3JtYWwtc2l6ZSByZW5kZXJlZCB0ZXh0OyBubyBvdmVyYWxsIGFjY2Vzc2liaWxpdHkgY2VydGlmaWNhdGlvbiIsInN1cHBvcnRlZCI6dHJ1ZSwibGF5ZXJzIjpbInJnYmEoMCwgMCwgMCwgMCkiLCJyZ2JhKDAsIDAsIDAsIDApIiwicmdiYSgwLCAwLCAwLCAwKSIsInJnYigyNTUsIDI1NSwgMjU1KSJdLCJiYWNrZ3JvdW5kIjpbMSwxLDEsMV0sImNvbXBvc2l0ZWRGb3JlZ3JvdW5kIjpbMC4yNjI3NDUwOTgwMzkyMTU3LDAuMzMzMzMzMzMzMzMzMzMzMywwLjQ0NzA1ODgyMzUyOTQxMTgsMV0sInJhdGlvIjo3LjU1MTEzNDE0OTA2Mjc5NiwicGFzc2VkIjp0cnVlLCJhc3N1bXB0aW9ucyI6IkNTUyBzUkdCIGNvbG9yczsgYWxwaGEgY29tcG9zaXRlZCB0aHJvdWdoIGV4cGxpY2l0IGJhY2tncm91bmRzOyBubyBhbnRpLWFsaWFzaW5nIGFwcHJveGltYXRpb24ifV0sInJlYWRzIjoxLCJzY29wZSI6IlVJIHByb2plY3Rpb24gb2JzZXJ2YXRpb24gb25seTsgc3ludGhldGljIG93bmVkIHByb3ZpZGVyIHVzZWQgYnkgb2ZmbGluZSBnZW5lcmF0b3IsIG5vIHJ1bnRpbWUgYWRtaXNzaW9uLCBkZXZpY2UgYWNjZXNzIG9yIFN0YXJ0In0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6de69e8ea4b7ea841de5-a4b2703b8210b8591285",
+          "file": "lab-inventory-accessibility.spec.ts",
+          "line": 658,
+          "column": 9
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-27T00:51:44.644Z",
+    "duration": 35303.686,
+    "expected": 32,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

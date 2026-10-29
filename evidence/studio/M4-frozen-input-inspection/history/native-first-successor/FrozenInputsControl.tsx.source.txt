@@ -1,0 +1,133 @@
+import { useLayoutEffect, useRef, useState, useId } from "react";
+import { api } from "../../api/client";
+import type { Data, Run } from "../../api/types";
+import { Icon } from "../../app/ui";
+import { FrozenInputs } from "./FrozenInputs";
+
+function sourceMap(value: unknown): value is Record<string, string> {
+  return (
+    value !== null &&
+    typeof value === "object" &&
+    !Array.isArray(value) &&
+    Object.values(value).every((source) => typeof source === "string")
+  );
+}
+
+function verifiedSnapshot(response: Data, run: Run): Data {
+  const snapshot = response?.snapshot;
+  if (
+    !response ||
+    response.integrity !== "valid" ||
+    response.readOnly !== true ||
+    !snapshot ||
+    typeof snapshot !== "object" ||
+    Array.isArray(snapshot) ||
+    snapshot.snapshotId !== run.snapshotId ||
+    snapshot.projectId !== run.projectId ||
+    typeof snapshot.snapshotDigest !== "string" ||
+    !/^sha256:[0-9a-f]{64}$/.test(snapshot.snapshotDigest) ||
+    !sourceMap(snapshot.documents) ||
+    !Object.keys(snapshot.documents).length ||
+    (snapshot.projectDocuments != null &&
+      !sourceMap(snapshot.projectDocuments)) ||
+    ["revision", "planDigest", "semanticDigest"].some(
+      (field) => run[field] !== undefined && snapshot[field] !== run[field],
+    )
+  )
+    throw new Error(
+      "The backend response does not verify the selected run's immutable snapshot. Retry Frozen inputs.",
+    );
+  return snapshot;
+}
+
+/** Keyed by the caller's immutable selection/tab; stale reads cannot open a new dialog. */
+export function FrozenInputsControl({ run }: { run: Run }) {
+  const [snapshot, setSnapshot] = useState<Data | null>(null),
+    [loading, setLoading] = useState(false),
+    [error, setError] = useState("");
+  const mounted = useRef(false),
+    request = useRef<AbortController | null>(null),
+    statusId = useId();
+  useLayoutEffect(() => {
+    mounted.current = true;
+    return () => {
+      mounted.current = false;
+      request.current?.abort();
+    };
+  }, []);
+  async function inspect() {
+    if (request.current) return;
+    const controller = new AbortController(),
+      origin = document.activeElement;
+    request.current = controller;
+    const current = () => mounted.current && request.current === controller;
+    let timedOut = false;
+    const timer = setTimeout(() => {
+      timedOut = true;
+      controller.abort();
+    }, 30000);
+    setLoading(true);
+    setError("");
+    setSnapshot(null);
+    try {
+      const value = await api(
+        `/runs/${encodeURIComponent(run.runId)}/snapshot`,
+        { signal: controller.signal },
+      );
+      if (!current()) return;
+      const verified = verifiedSnapshot(value, run);
+      if (
+        controller.signal.aborted ||
+        document.querySelector('[role="dialog"]') ||
+        (document.activeElement !== origin &&
+          document.activeElement !== document.body)
+      )
+        return;
+      setSnapshot(verified);
+    } catch (failure) {
+      if (current())
+        setError(
+          timedOut
+            ? "Reading frozen inputs timed out. Retry Frozen inputs; inspection creates no workload."
+            : (failure instanceof Error
+                ? failure.message
+                : "Frozen inputs could not be read. Retry inspection."
+              ).slice(0, 1000),
+        );
+    } finally {
+      clearTimeout(timer);
+      if (current()) setLoading(false);
+      if (request.current === controller) request.current = null;
+    }
+  }
+  return (
+    <div className="frozen-inputs-control">
+      <button
+        className="button"
+        data-frozen-inputs-trigger=""
+        disabled={loading}
+        aria-describedby={loading || error ? statusId : undefined}
+        onClick={() => void inspect()}
+      >
+        <Icon name="code" /> Frozen inputs
+      </button>
+      {loading && (
+        <p id={statusId} className="hint" role="status">
+          Verifying immutable run inputs…
+        </p>
+      )}
+      {error && (
+        <p id={statusId} className="field-error" role="alert">
+          {error}
+        </p>
+      )}
+      {snapshot && (
+        <FrozenInputs
+          runId={run.runId}
+          snapshot={snapshot}
+          onClose={() => setSnapshot(null)}
+        />
+      )}
+    </div>
+  );
+}

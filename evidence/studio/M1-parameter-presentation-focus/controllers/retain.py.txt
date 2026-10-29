@@ -1,0 +1,72 @@
+"""Retain only terminal, exact-input browser evidence; authentication roots stay private."""
+from pathlib import Path
+import base64,hashlib,json,re,sys
+
+root=Path.cwd().resolve();local=root/'.studio-local/parameter-presentation-workflow';out=root/'evidence/studio/M1-parameter-presentation-focus'
+def read(path):return json.loads(path.read_text())
+def clean_text(value):
+    for original,replacement in [(str(root.parent/'.xverse-studio-cache'),'<loop-cache>'),(str(root),'<repo>'),(str(Path.home()/'xverse-studio'),'<repo>'),(sys.base_prefix,'<python-install>'),(str(Path.home()),'<user-home>'),(str(root.parent),'<workspace-volume>')]:value=value.replace(original,replacement)
+    value=re.sub(r'(?i)(\bstudio_session=)[A-Za-z0-9_-]{16,}',r'\1<redacted>',value)
+    value=re.sub(r'''(?i)(x-csrf-token["']?\s*[:=]\s*["']?)[A-Za-z0-9._-]{16,}''',r'\1<redacted>',value)
+    value=re.sub(r'(?i)(bearer\s+)[A-Za-z0-9._-]{16,}',r'\1<redacted>',value)
+    return value
+def clean(value):
+    if isinstance(value,str):return clean_text(value)
+    if isinstance(value,list):return [clean(v) for v in value]
+    if isinstance(value,dict):
+        result={k:('<redacted>' if k.lower() in {'studio_session','csrftoken','x-csrf-token','bootstraptoken','x-studio-bootstrap','sessiontoken','ownerkey','authorization','cookie','set-cookie'} else clean(v)) for k,v in value.items()}
+        if value.get('contentType','').startswith(('text/','application/json')) and 'body' in value:
+            try:result['body']=base64.b64encode(clean_text(base64.b64decode(value['body']).decode()).encode()).decode()
+            except (ValueError,UnicodeError):pass
+        return result
+    return value
+def save(name,value):
+    path=out/name;path.parent.mkdir(parents=True,exist_ok=True);path.write_text(json.dumps(clean(value),indent=2)+'\n')
+def copy(name,path):
+    target=out/name;target.parent.mkdir(parents=True,exist_ok=True)
+    if path.suffix=='.png':target.write_bytes(path.read_bytes())
+    elif path.suffix=='.json':save(name,read(path))
+    else:target.write_text('\n'.join(line.rstrip() for line in clean_text(path.read_text()).splitlines()).rstrip()+'\n')
+def results(report):
+    for suite in report.get('suites',[]):yield from results(suite)
+    for spec in report.get('specs',[]):
+        for test in spec['tests']:
+            for result in test['results']:yield spec['title'],result
+frozen=read(local/'frozen-inputs.json');assert len(frozen)==298
+for name,digest in frozen.items():assert hashlib.sha256((root/name).read_bytes()).hexdigest()==digest,name
+stages={}
+for label,count in [('targeted',48),('full',474),('performance',2)]:
+    d=local/label;s=read(d/'summary.json');report=read(d/'browser-report.json')
+    assert s['exitCode']==0 and s['sourceUnchanged'] and s['inputs']==298
+    assert frozen==read(d/'source-before.json')==read(d/'source-after.json')
+    assert report['stats']['expected']==count and not any(report['stats'][k] for k in ['skipped','flaky','unexpected'])
+    stages[label]=(d,s,report)
+assert all(r['exitCode']==0 for r in read(local/'checks/summary.json'))
+promotion=read(local/'promotion.json');assert hashlib.sha256((root/'tests/e2e/wizard-accessibility.spec.ts').read_bytes()).hexdigest()==promotion['unchangedOriginalWizardSpecSha256']
+assert frozen[promotion['runtimeSource']]==promotion['runtimeHash']
+assert read(local/'test-source-equivalence.json')['allParsedTestStatementsPreserved']
+inherit=read(local/'backend-inheritance.json');assert all(n=='apps/studio-web/src/features/model/Views.tsx' or n.startswith('apps/studio-web/dist/') for n in inherit['changes'])
+out.mkdir(exist_ok=False)
+save('application-and-input-hashes.json',frozen)
+for name in ['environment.json','browser-environment.json','promotion.json','test-source-equivalence.json','backend-inheritance.json','root-source-review.json']:save(name,read(local/name))
+save('input-amendment.json',{'scope':'Runtime Views.tsx now exactly matches the separately tested isolated proposal. Compiled UI changes with it. Added browser regression preserves all semantic TypeScript AST nodes after helper-import adaptation; non-executable ADR0013 records the presentation focus amendment. Original wizard assertions and all backend/Python inputs remain unchanged.','previousCandidate':'b355c4cdb5e1621566db0239bf0083bc1c8b526a','sourceDifferences':inherit['changes'],'added':inherit['added'],'priorEvidence':'../M4-campaign-worker-failure/follow-on-presentation/','priorCI':'../native-ci/ubuntu-24.04-39d8d46-runs.json'})
+for label,(d,s,report) in stages.items():
+    save(label+'/verification.json',s);save(label+'/browser-report.json',report)
+    for name in ['source-before.json','source-after.json']:save(label+'/'+name,read(d/name))
+    copy(label+'/browser.txt',d/'browser.log')
+    for title,result in results(report):
+        title=re.sub(r'[^A-Za-z0-9_-]','-',title)
+        for attachment in result.get('attachments',[]):
+            if attachment.get('contentType')=='application/json' and 'body' in attachment:
+                save(label+'/journeys/'+title+'/'+attachment['name'],json.loads(base64.b64decode(attachment['body'])))
+    for path in (d/'browser-output').rglob('*.png'):copy(label+'/screenshots/'+str(path.relative_to(d/'browser-output')),path)
+    if label=='performance':
+        for path in (d/'browser-output').rglob('*performance.json'):
+            v=read(path);w=v['viewport'];save(f'performance/{w["width"]}x{w["height"]}/{path.name}',v)
+for path in (local/'checks').iterdir():
+    if path.is_file():copy('checks/'+path.name.replace('.log','.txt'),path)
+for name in ['backend-collection.json','full-browser-collection.json','targeted-browser-collection.json']:save('checks/'+name,read(local/name))
+save('orchestration-review.json',{'scope':'No product assertion was weakened or rerun by these controller corrections.','observations':['The first run-controller guard rejected a renamed compiled asset before launching browser stages. The guard was corrected to distinguish compiled additions/removals from the two new noncompiled inputs; all298 inputs then froze for the actual run.','Initial TypeScript printer comparison was unsuitable for formatting changes. The final semantic AST comparison excludes SourceFile raw text and formatting metadata, and compares ordered semantic nodes, declaration flags and literal text. It passes without changing the test source.']})
+for name in ['run.py','check.py','retain.py','document.py','privacy-check.py','test-equivalence.mjs','prior-ci.py']:copy('controllers/'+name+'.txt',local/name)
+save('verification.json',{'baseCandidate':stages['targeted'][1]['baseCandidate'],'scope':'Native Linux parameter presentation keyboard-focus repair; partial operability verification, no task or milestone acceptance.','targeted':stages['targeted'][2]['stats'],'full':stages['full'][2]['stats'],'performance':stages['performance'][2]['stats'],'frozenInputs':298,'compiledAssets':6,'allCurrentStageInputsIdentical':True,'inheritedBackendTestsPassed':934,'backendInheritance':'backend-inheritance.json','priorFullBrowserPassed':462,'priorFullBrowserEvidence':'../native-ci/ubuntu-24.04-39d8d46-runs.json','applicationAndInputDigest':'sha256:'+hashlib.sha256(json.dumps(frozen,sort_keys=True,separators=(',',':')).encode()).hexdigest(),'completedTasks':47,'acceptedMilestones':[],'limitations':['Late actual owned HTTP200 presentation metadata is held without DTO mutation. Native keyboard input and explicit Apply preserve exact canonical revisions and create no run.','Original4c CI event timing was not captured. A controlled actual response reproduces a matching focus mechanism; the original mixed CI outcomes and red remain retained.','Fresh main48/full474/performance2 are separate from inherited fresh934 backend. Original wizard/history assertions are unchanged.','Native Windows remains held; actual assistive technology, novice users, live external/physical providers and full task/milestone gates remain open.']})
+print(json.dumps({'dossier':str(out.relative_to(root)),'targeted':48,'full':474,'performance':2,'inputs':298,'backend':'inherited934'}))

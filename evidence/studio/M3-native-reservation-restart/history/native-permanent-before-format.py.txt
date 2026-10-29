@@ -1,0 +1,151 @@
+"""Native Linux reservation restart with an owned, volatile provider fixture.
+
+The provider dictionary dies with the backend. These cases verify conservative
+unknown state and no replay; they do not establish external-device recovery.
+"""
+from pathlib import Path
+from contextlib import closing
+import json
+import os
+import selectors
+import signal
+import subprocess
+import sys
+import time
+import httpx
+import pytest
+
+ROOT = Path(__file__).resolve().parents[2]
+pytestmark = pytest.mark.skipif(
+    sys.platform != "linux",
+    reason="Linux process-identity crash probe; native Windows remains a separate held lane.",
+)
+
+
+def identity(child, args):
+    proc = Path("/proc") / str(child.pid)
+    assert child.poll() is None and proc.stat().st_uid == os.getuid()
+    fields = (proc / "stat").read_text().split(") ", 1)[1].split()
+    assert int(fields[1]) == os.getpid()
+    argv = (proc / "cmdline").read_bytes().split(b"\0")[:-1]
+    assert argv == [os.fsencode(value) for value in args]
+    return {"pid": child.pid, "parent": int(fields[1]), "birthTicks": fields[19], "argv": args}
+
+
+def start(data, scenario, phase):
+    args = [sys.executable, "-I", str(ROOT / "tests/fixtures/providers/physical/browser_host.py"), "--data", str(data), "--scenario", scenario]
+    log = (data.parent / (phase + "-stderr.private.log")).open("wb")
+    child = subprocess.Popen(args, cwd=ROOT, stdin=subprocess.DEVNULL, stdout=subprocess.PIPE, stderr=log)
+    try:
+        proof = identity(child, args)
+        with selectors.DefaultSelector() as selector:
+            selector.register(child.stdout, selectors.EVENT_READ)
+            assert selector.select(15), "Owned fixture startup output timeout"
+            message = child.stdout.readline(4097)
+        assert len(message) <= 4096 and message.endswith(b"\n")
+        origin = json.loads(message)["origin"]
+        assert origin.startswith("http://127.0.0.1:")
+        until = time.monotonic() + 15
+        while time.monotonic() < until:
+            try:
+                if httpx.get(origin + "/api/v1/session", timeout=1).status_code == 401:
+                    break
+            except httpx.HTTPError:
+                pass
+            time.sleep(0.1)
+        else:
+            raise AssertionError("Owned fixture HTTP readiness timeout")
+        return child, args, proof, origin
+    except BaseException:
+        if child.poll() is None:
+            identity(child, args)
+            child.kill()
+        child.wait(timeout=15)
+        raise
+    finally:
+        log.close()
+
+
+def login(data, origin):
+    client = httpx.Client(base_url=origin, timeout=10, headers={"Origin": origin})
+    bootstrap = json.loads((data / "bootstrap.json").read_text())
+    response = client.post("/api/v1/session", json={"bootstrapToken": bootstrap["bootstrapToken"]})
+    assert response.status_code == 200
+    client.headers["X-CSRF-Token"] = response.json()["csrfToken"]
+    return client
+
+
+def exercise(scenario, directory):
+    directory.mkdir()
+    data = directory / "owned backend Ω"
+    children = []
+    key = "owned-crash-reserve-" + scenario
+    route = "/api/v1/assets/fixture:bench-sensor/reservations"
+    try:
+        child, args, first_identity, origin = start(data, scenario, "before")
+        children.append((child, args))
+        with closing(login(data, origin)) as client:
+            accepted = client.post(route, headers={"Idempotency-Key": key}, json={"durationSeconds": 300})
+            assert accepted.status_code == 202
+            receipt = accepted.json()
+            assert receipt["status"] == ("completed" if scenario == "observe" else "unknown")
+            rid = receipt["reservationId"]
+            original = client.get("/api/v1/reservations/" + rid).json()
+            assert original["status"] == ("owned" if scenario == "observe" else "unknown")
+            if scenario == "observe":
+                assert original["fencingIdentity"]
+            else:
+                assert original["fencingIdentity"] is None
+            assert client.get("/api/v1/runs").json()["items"] == []
+        assert identity(child, args) == first_identity
+        child.send_signal(signal.SIGKILL)
+        assert child.wait(timeout=15) == -signal.SIGKILL
+        assert not (data / "fixture-observation.json").exists()
+        child, args, second_identity, origin = start(data, scenario, "after")
+        children.append((child, args))
+        with closing(login(data, origin)) as client:
+            observed = client.get("/api/v1/reservations/" + rid)
+            assert observed.status_code == 200
+            current = observed.json()
+            assert current["status"] == "unknown"
+            for field in ["reservationId", "owner", "assetId", "providerId", "scope", "fencingIdentity", "expiry"]:
+                assert current[field] == original[field], field
+            historical = client.post(route, headers={"Idempotency-Key": key}, json={"durationSeconds": 300})
+            assert historical.status_code == 202 and historical.json() == receipt
+            operation = client.get("/api/v1/operations/" + receipt["operationId"])
+            assert operation.status_code == 200 and operation.json() == receipt
+            refused = client.post("/api/v1/reservations/" + rid + "/renewals", headers={"Idempotency-Key": "owned-crash-renew"}, json={"durationSeconds": 300, "fencingIdentity": original["fencingIdentity"] or "unconfirmed-fixture-fence"})
+            assert refused.status_code == 422 and refused.json()["code"] == "OWNERSHIP_UNCERTAIN"
+            checked = client.post("/api/v1/reservations/" + rid + "/reconciliations", headers={"Idempotency-Key": "owned-explicit-inspect"}, json={})
+            assert checked.status_code == 202
+            assert client.get("/api/v1/reservations/" + rid).json()["status"] == "unknown"
+            assert client.get("/api/v1/runs").json()["items"] == []
+            discovery = client.get("/api/v1/capabilities").json()["labReservations"]
+            assert discovery["runtimeAdmission"] == "unavailable" and discovery["physicalCommands"] == []
+        assert identity(child, args) == second_identity
+        child.terminate()
+        assert child.wait(timeout=15) in (0, -signal.SIGTERM)
+        observation = json.loads((data / "fixture-observation.json").read_text())
+        assert observation["reservationCount"] == 0 and observation["remainingProviderLeases"] == 0
+        assert observation["calls"] == ["inventory", "inventory", "inventory", "inspect"]
+        result = {"scenario": scenario, "outcome": "passed", "firstProcess": first_identity, "restartedProcess": second_identity, "crashSignal": "SIGKILL", "originalStatus": original["status"], "restoredStatus": "unknown", "historicalReceiptUnchanged": True, "sameReservationAndFence": True, "uncertainRenewalRefused": True, "explicitInspectDidNotInventOwnership": True, "restartProviderObservation": observation, "runs": 0, "scope": "Native Linux actual HTTP/backend SIGKILL/restart; in-memory fixture provider dies with backend and loses its held dictionary. Does not establish persistent external-provider recovery, in-flight delegation crash, physical cleanup, automatic run renewal, Windows or hardware acceptance."}
+        (directory / "result.private.json").write_text(json.dumps(result, indent=2) + "\n")
+        return result
+    finally:
+        for child, args in children:
+            if child.poll() is None:
+                identity(child, args)
+                child.terminate()
+                try:
+                    child.wait(timeout=15)
+                except subprocess.TimeoutExpired:
+                    identity(child, args)
+                    child.kill()
+                    child.wait(timeout=5)
+
+
+
+@pytest.mark.parametrize("scenario", ["observe", "reserve-unknown"])
+def test_native_backend_crash_keeps_original_lease_unknown_without_replay(tmp_path, scenario):
+    result = exercise(scenario, tmp_path / scenario)
+    assert result["outcome"] == "passed" and result["runs"] == 0

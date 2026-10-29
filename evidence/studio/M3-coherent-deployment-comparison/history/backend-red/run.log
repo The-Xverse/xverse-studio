@@ -1,0 +1,66 @@
+FF                                                                       [100%]
+=================================== FAILURES ===================================
+_ test_resolution_refuses_requested_stale_revision_instead_of_relabelling_new_source _
+
+client = <starlette.testclient.TestClient object at 0x7052d29d1010>
+
+    def test_resolution_refuses_requested_stale_revision_instead_of_relabelling_new_source(client):
+>       project, left, _, url = variants(client)
+                                ^^^^^^^^^^^^^^^^
+
+tests/integration/test_deployment_comparison.py:20:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+client = <starlette.testclient.TestClient object at 0x7052d29d1010>
+
+    def variants(client):
+        response = client.post('/api/v1/projects', json={'name': 'Coherent variants'})
+        assert response.status_code == 201
+        project = response.json()
+        url = '/api/v1/projects/' + project['projectId'] + '/deployment-variants'
+        left = client.get(url).json()['items'][0]
+        response = client.post(url, headers={'If-Match': str(project['revision'])},
+                               json={'name': 'Comparison candidate'})
+>       assert response.status_code == 201, response.text
+E       AssertionError: {"code":"REQUEST_INVALID","message":"The request does not match the versioned schema.","requestId":"req-c05e22de-1ed5-4b7e-a02b-193a723a9a1d","retryable":false,"diagnostics":[{"code":"SCHEMA_INVALID","severity":"error","location":{"pointer":"body/baseRevision"},"message":"Field required"}]}
+E       assert 422 == 201
+E        +  where 422 = <Response [422 Unprocessable Entity]>.status_code
+
+tests/integration/test_deployment_comparison.py:14: AssertionError
+__ test_comparison_uses_one_authored_revision_and_preserves_project_and_runs ___
+
+client = <starlette.testclient.TestClient object at 0x7052d0ebc7d0>
+
+    def test_comparison_uses_one_authored_revision_and_preserves_project_and_runs(client):
+>       project, left, right, url = variants(client)
+                                    ^^^^^^^^^^^^^^^^
+
+tests/integration/test_deployment_comparison.py:28:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+client = <starlette.testclient.TestClient object at 0x7052d0ebc7d0>
+
+    def variants(client):
+        response = client.post('/api/v1/projects', json={'name': 'Coherent variants'})
+        assert response.status_code == 201
+        project = response.json()
+        url = '/api/v1/projects/' + project['projectId'] + '/deployment-variants'
+        left = client.get(url).json()['items'][0]
+        response = client.post(url, headers={'If-Match': str(project['revision'])},
+                               json={'name': 'Comparison candidate'})
+>       assert response.status_code == 201, response.text
+E       AssertionError: {"code":"REQUEST_INVALID","message":"The request does not match the versioned schema.","requestId":"req-dd5821a4-45ed-44d4-a576-feca0ee23c52","retryable":false,"diagnostics":[{"code":"SCHEMA_INVALID","severity":"error","location":{"pointer":"body/baseRevision"},"message":"Field required"}]}
+E       assert 422 == 201
+E        +  where 422 = <Response [422 Unprocessable Entity]>.status_code
+
+tests/integration/test_deployment_comparison.py:14: AssertionError
+=============================== warnings summary ===============================
+.venv/lib/python3.13/site-packages/fastapi/testclient.py:1
+  <repo>/.venv/lib/python3.13/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/integration/test_deployment_comparison.py::test_resolution_refuses_requested_stale_revision_instead_of_relabelling_new_source
+FAILED tests/integration/test_deployment_comparison.py::test_comparison_uses_one_authored_revision_and_preserves_project_and_runs
+2 failed, 1 warning in 1.17s

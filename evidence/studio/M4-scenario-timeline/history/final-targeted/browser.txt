@@ -1,0 +1,72 @@
+
+> xverse-studio-workspace@0.1.0 test:e2e
+> playwright test -c tests/e2e/playwright.config.ts --grep scenario timeline:|scenario timeline outcomes:|scenario authoring completion:|scenario intent:
+
+
+Running 25 tests using 1 worker
+
+(node:2370521) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 tests/e2e/scenario-authoring.spec.ts:4:5 › scenario intent: typed stimulus, fault, observer and metric forms preserve opaque source and block unsupported execution (11.0s)
+  ✘   2 tests/e2e/scenario-timeline-outcomes.spec.ts:41:7 › scenario timeline outcomes: actual pass, fail, indeterminate and metric provenance at 1024 (15.5s)
+(node:2371110) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   3 tests/e2e/scenario-timeline-outcomes.spec.ts:41:7 › scenario timeline outcomes: actual pass, fail, indeterminate and metric provenance at 1440 (5.5s)
+  ✓   4 tests/e2e/scenario-timeline.spec.ts:128:7 › scenario timeline: native frozen intent, observed faults and evaluation windows at 1024 (5.5s)
+  ✓   5 tests/e2e/scenario-timeline.spec.ts:128:7 › scenario timeline: native frozen intent, observed faults and evaluation windows at 1440 (3.9s)
+  ✓   6 tests/e2e/scenario-timeline.spec.ts:230:7 › scenario authoring completion: held conditions acknowledgement preserves a reopened draft at 1024 (5.8s)
+  ✓   7 tests/e2e/scenario-timeline.spec.ts:230:7 › scenario authoring completion: held conditions acknowledgement preserves a reopened draft at 1440 (4.4s)
+  ✓   8 tests/e2e/scenario-timeline.spec.ts:324:7 › scenario timeline: malformed transport contracts and HTTP retry stay unknown at 1024 (5.0s)
+  ✓   9 tests/e2e/scenario-timeline.spec.ts:410:7 › scenario timeline: labelled exact large ticks, gaps and unsupported clock remain separate at 1024 (3.4s)
+  ✓  10 tests/e2e/scenario-timeline.spec.ts:538:7 › scenario timeline: native canonical pages preserve identities and reject changed evaluation cursors at 1024 (7.9s)
+  ✓  11 tests/e2e/scenario-timeline.spec.ts:614:9 › scenario timeline: held actual read preserves focus at 1024 (3.6s)
+  ✓  12 tests/e2e/scenario-timeline.spec.ts:614:9 › scenario timeline: held actual read preserves home at 1024 (4.7s)
+  ✓  13 tests/e2e/scenario-timeline.spec.ts:675:7 › scenario timeline: draft marker opens the typed form and saves canonical intent at 1024 (4.2s)
+  ✓  14 tests/e2e/scenario-timeline.spec.ts:324:7 › scenario timeline: malformed transport contracts and HTTP retry stay unknown at 1440 (3.8s)
+  ✓  15 tests/e2e/scenario-timeline.spec.ts:410:7 › scenario timeline: labelled exact large ticks, gaps and unsupported clock remain separate at 1440 (3.4s)
+  ✓  16 tests/e2e/scenario-timeline.spec.ts:538:7 › scenario timeline: native canonical pages preserve identities and reject changed evaluation cursors at 1440 (7.1s)
+  ✓  17 tests/e2e/scenario-timeline.spec.ts:614:9 › scenario timeline: held actual read preserves focus at 1440 (3.6s)
+  ✓  18 tests/e2e/scenario-timeline.spec.ts:614:9 › scenario timeline: held actual read preserves home at 1440 (5.1s)
+  ✓  19 tests/e2e/scenario-timeline.spec.ts:675:7 › scenario timeline: draft marker opens the typed form and saves canonical intent at 1440 (5.4s)
+  ✓  20 tests/e2e/scenario-timeline.spec.ts:719:7 › scenario authoring completion: a newer item draft survives its earlier actual save at 1024 (4.4s)
+  ✓  21 tests/e2e/scenario-timeline.spec.ts:775:7 › scenario authoring completion: real stale revision refuses without discarding the form at 1024 (5.9s)
+  ✓  22 tests/e2e/scenario-timeline.spec.ts:820:7 › scenario authoring completion: a removed fault acknowledgement preserves a newer removal dialog at 1024 (7.8s)
+  ✓  23 tests/e2e/scenario-timeline.spec.ts:719:7 › scenario authoring completion: a newer item draft survives its earlier actual save at 1440 (4.5s)
+  ✓  24 tests/e2e/scenario-timeline.spec.ts:775:7 › scenario authoring completion: real stale revision refuses without discarding the form at 1440 (4.1s)
+  ✓  25 tests/e2e/scenario-timeline.spec.ts:820:7 › scenario authoring completion: a removed fault acknowledgement preserves a newer removal dialog at 1440 (6.6s)
+
+
+  1) tests/e2e/scenario-timeline-outcomes.spec.ts:41:7 › scenario timeline outcomes: actual pass, fail, indeterminate and metric provenance at 1024
+
+    Error: expect(locator).toBeFocused() failed
+
+    Locator:  getByRole('region', { name: 'Selected run timeline', exact: true }).getByRole('heading', { name: 'Selected run timeline', exact: true })
+    Expected: focused
+    Received: inactive
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toBeFocused" getByRole('region', { name: 'Selected run timeline', exact: true }).getByRole('heading', { name: 'Selected run timeline', exact: true }) with timeout 10000ms
+      - waiting for getByRole('region', { name: 'Selected run timeline', exact: true }).getByRole('heading', { name: 'Selected run timeline', exact: true })
+        24 × locator resolved to <h3 tabindex="-1">Selected run timeline</h3>
+           - unexpected value "inactive"
+
+
+      250 |         exact: true,
+      251 |       }),
+    > 252 |     ).toBeFocused();
+          |       ^
+      253 |     for (const job of jobs) {
+      254 |       const row = panel.locator(
+      255 |         `[data-timeline-id="evaluation:${job.evaluationId}"]`,
+        at <repo>/tests/e2e/scenario-timeline-outcomes.spec.ts:252:7
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser/scenario-timeline-outcomes-e792c-d-metric-provenance-at-1024/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser/scenario-timeline-outcomes-e792c-d-metric-provenance-at-1024/error-context.md
+
+  1 failed
+    tests/e2e/scenario-timeline-outcomes.spec.ts:41:7 › scenario timeline outcomes: actual pass, fail, indeterminate and metric provenance at 1024
+  24 passed (2.4m)
