@@ -29,7 +29,7 @@ normal host administration if it is stopped. Running the launcher without
 2. Choose **Preflight & run**, review the selected provider and frozen inputs,
    then select **Start frozen snapshot**. Component preparation appears in Results.
    Android boot can take several minutes. Stop and Cancel also work during preparation.
-3. In Results, select **Enable browser driver**. Raising Throttle releases Brake.
+3. In Results, select **Open driving controls**, then **Enable browser driver**. Raising Throttle releases Brake.
    Use the sliders, or focus the keyboard pad for W/S/A/D and Space. The simulator
    camera opens as a native window. Keep the browser focused while driving.
 4. Use **Coast / release pedals**, then **Engage cruise** once observed speed is at
@@ -38,7 +38,8 @@ normal host administration if it is stopped. Running the launcher without
 5. **Release driver and brake** relinquishes input. Lost browser input expires the
    0.75-second lease and requests zero throttle, braking and cruise disengagement.
    These requests are separate from the observed vehicle response. Browser loss
-   does not stop the demo lifecycle. Select **Stop** to release the whole owned stack.
+   does not stop the demo lifecycle. Closing the driving-controls dialog also releases
+   the driver. Select **Stop** to release the whole owned stack.
 
 The **Android digital cluster** link opens Cuttlefish's existing local HTTPS viewer.
 Its local certificate may require the normal browser exception. If the app uses a

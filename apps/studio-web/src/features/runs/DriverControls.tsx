@@ -137,7 +137,7 @@ export function DriverControls({ run }: { run: Run }) {
   return (
     <section className="panel driver-controls" aria-label="Browser driving controls">
       <h3>Browser driving controls</h3>
-      {run.inputSurface?.companionUrl === "https://localhost:8443" && <p><a href="https://localhost:8443" target="_blank" rel="noreferrer noopener">{run.inputSurface.companionLabel || "Open companion view"}</a></p>}
+      {!running && <p role="status">Driving is unavailable while the run is {run.state || "unknown"}. Review startup details in Results and start the run before enabling the driver.</p>}
       <p>Vehicle speed: <strong data-testid="driver-speed">{speed === null ? "Unknown or stale" : `${Number(speed).toFixed(1)} km/h`}</strong></p>
       <p>Cruise: {cruise === null ? "Unknown or stale" : cruise ? "Engaged" : "Disengaged"}. Reverse: {reverse === null ? "Unknown or stale" : reverse ? "Engaged" : "Disengaged"}.</p>
       <p>Target speed: {fresh("cruiseTargetSpeed") ? `${Number(items.cruiseTargetSpeed.value).toFixed(1)} km/h` : "Unknown or stale"}.</p>
@@ -187,6 +187,7 @@ export function DriverControls({ run }: { run: Run }) {
       </div>
       <p role="status">{message}</p>
       {failure && <p role="alert">{failure}</p>}
+      {run.inputSurface?.companionUrl === "https://localhost:8443" && <p><a href="https://localhost:8443" target="_blank" rel="noreferrer noopener">{run.inputSurface.companionLabel || "Open companion view"}</a></p>}
       <small>Input lease: 0.75 s. Expiry requests zero throttle, brake and cruise-off. Interface observations use host receipt time; simulation time and vehicle acknowledgement are unavailable.</small>
     </section>
   );

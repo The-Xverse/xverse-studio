@@ -1,0 +1,41 @@
+{
+  "scope": "reported native startup and control-discoverability regression; no milestone acceptance",
+  "baseCandidate": "85efcdcb7d901132d09c1b9df1c30ba73f5fdda6",
+  "sourceDigest": "sha256:100666a1a04feb263c90d1f99a821287f436cec107029ba4067dcf34ac412334",
+  "reportedFailure": {
+    "code": "AUTOVERSE_COMMAND_FAILED_carla-prepare",
+    "operation": "world.wait_for_tick(10.0)",
+    "stage": "simulator",
+    "outcome": "failed; cleanup complete",
+    "retention": "Original run logs/state and frozen installed candidate retained privately; no credentials exported."
+  },
+  "repair": "Prepare the owned simulator using explicit synchronous public settings/tick; open driving controls in a dedicated accessible dialog.",
+  "checks": {
+    "contractsPassed": 104,
+    "bootstrapContractCases": 5,
+    "actualSimulatorStartCycles": 3,
+    "nativeBrowser": {
+      "startTime": "2026-10-29T10:07:35.427Z",
+      "duration": 118551.83799999999,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "viewport": {
+      "width": 1024,
+      "height": 768
+    },
+    "controlButtonInViewport": true,
+    "actualDrivingCruiseAndroidAndStop": "passed",
+    "journalIntegrity": "valid",
+    "typecheck": "passed",
+    "F821": "passed",
+    "build": "passed"
+  },
+  "limitations": [
+    "Scoped Linux proof only; not Windows or full milestone acceptance.",
+    "Standalone bootstrap harness is retained privately because it contains the selected machine enrollment path; its exact source hash is recorded."
+  ],
+  "privateBootstrapHarnessSha256": "e1956c5b02ab83229fbde5ec8fdc461280fec6c8a976f9db0c6677137d7d13a1"
+}

@@ -698,3 +698,9 @@ No task checkbox/status or milestone acceptance changes: broader Windows/live
 integration/independent gates remain open. Source pins, preserved failures, review
 and exact evidence are in `evidence/studio/autoverse-linux/`. The earlier scheduled
 fault-runtime work remains separately preserved and is not part of this goal.
+
+Autoverse control-window regression: explicit owned synchronous bootstrap replaces
+the failed asynchronous frame prerequisite, and a visible button opens the driving
+controls dialog. Three real simulator starts,104 affected contracts and the complete
+1024x768 native browser workflow pass. T020/T021/T023/T024 gain scoped evidence only;
+no task states or milestone acceptance change. Evidence: `evidence/studio/autoverse-control-window/`.

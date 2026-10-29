@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { api, mutationKey } from "../../api/client";
 import type { Run } from "../../api/types";
-import { Badge, Icon, statusTone } from "../../app/ui";
+import { Badge, Icon, Modal, statusTone } from "../../app/ui";
 import { DriverControls } from "./DriverControls";
 import { LiveTargetInput } from "./LiveTargetInput";
 import {
@@ -49,6 +49,8 @@ export function RunControls({
   run: Run;
   onRunUpdated: (run: Run) => void;
 }) {
+  const [drivingOpen, setDrivingOpen] = useState(false);
+  const driverSupported = run.inputSurface?.kind === "normalized-driver" && run.inputSurface.version === "1.0";
   const [pending, setPending] = useState<PendingCommand | null>(() =>
       readPendingCommand(run.runId),
     ),
@@ -70,6 +72,7 @@ export function RunControls({
     if (runId === shownRun.current) setPending(null);
   }, []);
   useEffect(() => {
+    setDrivingOpen(false);
     setPending(readPendingCommand(run.runId));
     setFailure("");
     // Another tab shares the same durable receipt and its request identity.
@@ -223,6 +226,7 @@ export function RunControls({
             </div>
           );
         })}
+        {driverSupported && <button className="button primary" onClick={() => setDrivingOpen(true)}>Open driving controls</button>}
         {notAdmitted.length > 0 && (
           <p className="run-controls-scope">
             Not admitted for this run: {notAdmitted.join(", ")}. The backend
@@ -245,7 +249,7 @@ export function RunControls({
             }
           />
         )}
-      {run.inputSurface?.kind === "normalized-driver" && run.inputSurface.version === "1.0" && <DriverControls key={run.runId} run={run} />}
+      {driverSupported && drivingOpen && <Modal title="Vehicle driving controls" onClose={() => setDrivingOpen(false)}><DriverControls key={run.runId} run={run} /></Modal>}
       {capabilities.includes("pause") && (
         <p className="hint">
           Simulation pause preserves the current model step; it does not pause

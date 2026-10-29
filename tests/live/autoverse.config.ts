@@ -5,5 +5,5 @@ export default defineConfig({
   reporter: [["list"], ["json", { outputFile: process.env.STUDIO_BROWSER_REPORT }]],
   outputDir: process.env.STUDIO_BROWSER_OUTPUT || "test-results/autoverse-live",
   use: { baseURL: process.env.STUDIO_BASE_URL, browserName: "chromium", headless: true,
-    viewport: { width: 1440, height: 1000 }, screenshot: "only-on-failure", trace: "off", video: "off" },
+    viewport: { width: 1024, height: 768 }, screenshot: "only-on-failure", trace: "off", video: "off" },
 });

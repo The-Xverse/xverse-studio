@@ -39,6 +39,9 @@ export function RunStartupStatus({ run }: { run: Data }) {
           : reason === "EFFECTIVE_INPUT_MISMATCH"
             ? "The provider rejected effective inputs before the workload started. Inspect the frozen inputs and diagnosis before making a fresh request."
             : "The backend reported a launch failure before a workload start was recorded. Cleanup and evidence remain separate reported outcomes.";
+  } else if (state === "failed") {
+    summary = "Startup failed";
+    detail = "Preparation did not complete. Review the reported component stage and reason before starting a new run.";
   } else if (
     ["requested", "accepted", "preparing", "ready", "starting"].includes(state)
   ) {

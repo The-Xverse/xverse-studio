@@ -42,6 +42,11 @@ test("actual Autoverse: browser load, full start, driving, cruise, lease expiry 
       if (value.state === "failed") throw new Error("Native startup failed: " + value.reason);
       return value.state;
     }, { timeout: 540000, intervals: [1000] }).toBe("running");
+    const openControls = page.getByRole("button", { name: "Open driving controls", exact: true });
+    await expect(openControls).toBeVisible();
+    await expect(openControls).toBeInViewport({ ratio: 0.5 });
+    await openControls.click();
+    await expect(page.getByRole("dialog", { name: "Vehicle driving controls" })).toBeVisible();
     const panel = page.getByRole("region", { name: "Browser driving controls", exact: true });
     await expect(panel).toBeVisible();
     const android = androidNodes();
@@ -109,6 +114,8 @@ test("actual Autoverse: browser load, full start, driving, cruise, lease expiry 
   } finally {
     await info.attach("actual-interface-observations.json", { body: JSON.stringify(observations), contentType: "application/json" });
     await page.unroute(`**/api/v1/runs/${rid}/input/**`);
+    const dialog = page.getByRole("dialog", { name: "Vehicle driving controls" });
+    if (await dialog.isVisible()) await dialog.getByRole("button", { name: "Close dialog", exact: true }).click();
     const current = await run();
     if (["preparing", "ready", "running", "paused"].includes(current.state)) {
       const stop = page.getByRole("region", { name: "Run controls", exact: true }).getByRole("button", { name: "Stop", exact: true });

@@ -85,3 +85,17 @@ SOME/IP mapping scales those seconds to milliseconds. Its signal metadata says
 frame-delta milliseconds. Preserve that conflict and label the observed raw
 interface `reportedElapsedSeconds`; no absolute mapping to host time is inferred.
 The earlier description of this interface as a measured frame delta was incorrect.
+
+Control-window regression amendment: reported user runs failed before vehicle-client
+launch because the preparer waited for an asynchronous frame. The admitted demo
+already selects synchronous advancement. Preparation now constructs known public
+CARLA settings for that mode and requests a bounded explicit tick before handing
+advancement to the existing vehicle CLI. Missing/invalid frame acknowledgement still
+fails readiness. Three newly owned real simulator starts and the full browser demo
+passed after this change; original failed-run diagnostics remain retained.
+
+Driving controls now open from a prominent button in a dedicated, keyboard-accessible
+Studio dialog. Closing it releases the existing input lease. The Android companion
+link follows the driving controls. Failed startup is labelled explicitly rather than
+leaving an unexplained disabled control surface. The native window and control APIs,
+canonical sources, backend authority checks and companion assets remain unchanged.
