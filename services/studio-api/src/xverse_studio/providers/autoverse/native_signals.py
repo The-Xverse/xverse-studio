@@ -15,4 +15,3 @@ SIGNALS = (
     ("vcu-brake-status", "vcu/control/brake_sts", "from-vcu"),
 )
 OBSERVED = frozenset(("vehicle-speed", "vcu-throttle", "vcu-brake"))
-
