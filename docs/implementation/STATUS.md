@@ -1,5 +1,7 @@
 # Current implementation status
 
+Owned fault-intent compilation now passes **127 affected checks**, including56 new contract cases, on399 unchanged inputs. Existing experiment-lite timing is reused through full public XDL compilation; the new measurement binding remains offline with executionAllowed false. Worker effects, provider admission and forms are still pending. T082/T083 remain open;49/41/10, zero milestones. [Current evidence](../../evidence/studio/M4-fault-intent/README.md).
+
 Failure-retention update: **observed full1267 passes** on392 unchanged inputs; the original late-Stop mismatch remains unresolved. **14 current focused checks pass** on394 inputs after test-only bounded failure capture. Original native assertions and all116 product payloads stay unchanged. No expanded full after the capture changes is claimed. Counts49/41/10, zero milestones. [Current evidence](../../evidence/studio/M1-fixture/failure-retention/README.md).
 
 Current cleanup-interruption source`cb65206`: **37 affected checks and98 unique browser cases pass; clean Linux package116 passes. Full backend:1264 passed/1 failed**, with the original late-Stop assertion retained. The operation/canonical failure-code mismatch remains unresolved; later passing observations do not prove a fix. Two additional native pre-launch crash/restart cases pass on392 unchanged inputs, without a new full-suite claim. T033 stays open;49 complete/41 in progress/10 blocked, zero milestones. [Current evidence](../../evidence/studio/M1-fixture/cleanup-interruption/candidate-binding.json).

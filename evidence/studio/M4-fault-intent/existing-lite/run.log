@@ -1,0 +1,195 @@
+F.FFFFF.FFF........FFFFFFFF.......F.FFF.......F                          [100%]
+=================================== FAILURES ===================================
+______ test_explicit_profile_compiles_exact_full_sources_and_stays_inert _______
+tests/contract/test_reference_fault_intent.py:61: in test_explicit_profile_compiles_exact_full_sources_and_stays_inert
+    report = compile_reference_fault_intent(source)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+services/studio-api/src/xverse_studio/experiments/reference_faults.py:106: in compile_reference_fault_intent
+    planned_faults = {f["faultId"]: f for f in compiled["plan"]["faults"]}
+                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'faults'
+_________ test_adjacent_intervals_sort_without_mutating_authored_order _________
+tests/contract/test_reference_fault_intent.py:99: in test_adjacent_intervals_sort_without_mutating_authored_order
+    assert [item["faultId"] for item in compile_reference_fault_intent(documents(source))["schedules"]] == ["hold-one", "hold-next"]
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+services/studio-api/src/xverse_studio/experiments/reference_faults.py:106: in compile_reference_fault_intent
+    planned_faults = {f["faultId"]: f for f in compiled["plan"]["faults"]}
+                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'faults'
+______ test_first_and_last_observable_boundaries_are_supported[0-100000] _______
+tests/contract/test_reference_fault_intent.py:107: in test_first_and_last_observable_boundaries_are_supported
+    schedule = compile_reference_fault_intent(documents(source))["schedules"][0]
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+services/studio-api/src/xverse_studio/experiments/reference_faults.py:106: in compile_reference_fault_intent
+    planned_faults = {f["faultId"]: f for f in compiled["plan"]["faults"]}
+                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'faults'
+___ test_first_and_last_observable_boundaries_are_supported[4800000-100000] ____
+tests/contract/test_reference_fault_intent.py:107: in test_first_and_last_observable_boundaries_are_supported
+    schedule = compile_reference_fault_intent(documents(source))["schedules"][0]
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+services/studio-api/src/xverse_studio/experiments/reference_faults.py:106: in compile_reference_fault_intent
+    planned_faults = {f["faultId"]: f for f in compiled["plan"]["faults"]}
+                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'faults'
+_ test_quantization_nonempty_order_horizon_and_quantity_bounds[1000001-1000000] _
+tests/contract/test_reference_fault_intent.py:120: in test_quantization_nonempty_order_horizon_and_quantity_bounds
+    compile_reference_fault_intent(documents(source))
+services/studio-api/src/xverse_studio/experiments/reference_faults.py:106: in compile_reference_fault_intent
+    planned_faults = {f["faultId"]: f for f in compiled["plan"]["faults"]}
+                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'faults'
+_ test_quantization_nonempty_order_horizon_and_quantity_bounds[1000000-1000001] _
+tests/contract/test_reference_fault_intent.py:120: in test_quantization_nonempty_order_horizon_and_quantity_bounds
+    compile_reference_fault_intent(documents(source))
+services/studio-api/src/xverse_studio/experiments/reference_faults.py:106: in compile_reference_fault_intent
+    planned_faults = {f["faultId"]: f for f in compiled["plan"]["faults"]}
+                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'faults'
+___ test_quantization_nonempty_order_horizon_and_quantity_bounds[1000000-0] ____
+tests/contract/test_reference_fault_intent.py:120: in test_quantization_nonempty_order_horizon_and_quantity_bounds
+    compile_reference_fault_intent(documents(source))
+services/studio-api/src/xverse_studio/experiments/reference_faults.py:106: in compile_reference_fault_intent
+    planned_faults = {f["faultId"]: f for f in compiled["plan"]["faults"]}
+                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'faults'
+_ test_quantization_nonempty_order_horizon_and_quantity_bounds[1000000-4000000] _
+tests/contract/test_reference_fault_intent.py:120: in test_quantization_nonempty_order_horizon_and_quantity_bounds
+    compile_reference_fault_intent(documents(source))
+services/studio-api/src/xverse_studio/experiments/reference_faults.py:106: in compile_reference_fault_intent
+    planned_faults = {f["faultId"]: f for f in compiled["plan"]["faults"]}
+                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'faults'
+_ test_quantization_nonempty_order_horizon_and_quantity_bounds[1000000-4100000] _
+tests/contract/test_reference_fault_intent.py:120: in test_quantization_nonempty_order_horizon_and_quantity_bounds
+    compile_reference_fault_intent(documents(source))
+services/studio-api/src/xverse_studio/experiments/reference_faults.py:106: in compile_reference_fault_intent
+    planned_faults = {f["faultId"]: f for f in compiled["plan"]["faults"]}
+                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'faults'
+_____ test_existing_lite_units_preserved_with_exact_platform_ticks[s-1-1] ______
+tests/contract/test_reference_fault_intent.py:140: in test_existing_lite_units_preserved_with_exact_platform_ticks
+    schedule = compile_reference_fault_intent(documents(source))["schedules"][0]
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+services/studio-api/src/xverse_studio/experiments/reference_faults.py:106: in compile_reference_fault_intent
+    planned_faults = {f["faultId"]: f for f in compiled["plan"]["faults"]}
+                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'faults'
+__ test_existing_lite_units_preserved_with_exact_platform_ticks[ms-1000-1000] __
+tests/contract/test_reference_fault_intent.py:140: in test_existing_lite_units_preserved_with_exact_platform_ticks
+    schedule = compile_reference_fault_intent(documents(source))["schedules"][0]
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+services/studio-api/src/xverse_studio/experiments/reference_faults.py:106: in compile_reference_fault_intent
+    planned_faults = {f["faultId"]: f for f in compiled["plan"]["faults"]}
+                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'faults'
+_ test_existing_lite_units_preserved_with_exact_platform_ticks[us-1000000-1000000] _
+tests/contract/test_reference_fault_intent.py:140: in test_existing_lite_units_preserved_with_exact_platform_ticks
+    schedule = compile_reference_fault_intent(documents(source))["schedules"][0]
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+services/studio-api/src/xverse_studio/experiments/reference_faults.py:106: in compile_reference_fault_intent
+    planned_faults = {f["faultId"]: f for f in compiled["plan"]["faults"]}
+                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'faults'
+_ test_existing_lite_units_preserved_with_exact_platform_ticks[ns-1000000000-1000000000] _
+tests/contract/test_reference_fault_intent.py:140: in test_existing_lite_units_preserved_with_exact_platform_ticks
+    schedule = compile_reference_fault_intent(documents(source))["schedules"][0]
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+services/studio-api/src/xverse_studio/experiments/reference_faults.py:106: in compile_reference_fault_intent
+    planned_faults = {f["faultId"]: f for f in compiled["plan"]["faults"]}
+                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'faults'
+___ test_native_binding_and_unknown_semantics_fail_closed[opaque-activation] ___
+tests/contract/test_reference_fault_intent.py:182: in test_native_binding_and_unknown_semantics_fail_closed
+    compile_reference_fault_intent(documents(source))
+services/studio-api/src/xverse_studio/experiments/reference_faults.py:106: in compile_reference_fault_intent
+    planned_faults = {f["faultId"]: f for f in compiled["plan"]["faults"]}
+                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'faults'
+____ test_native_binding_and_unknown_semantics_fail_closed[opaque-recovery] ____
+tests/contract/test_reference_fault_intent.py:182: in test_native_binding_and_unknown_semantics_fail_closed
+    compile_reference_fault_intent(documents(source))
+services/studio-api/src/xverse_studio/experiments/reference_faults.py:106: in compile_reference_fault_intent
+    planned_faults = {f["faultId"]: f for f in compiled["plan"]["faults"]}
+                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'faults'
+_________ test_native_binding_and_unknown_semantics_fail_closed[kind] __________
+tests/contract/test_reference_fault_intent.py:182: in test_native_binding_and_unknown_semantics_fail_closed
+    compile_reference_fault_intent(documents(source))
+services/studio-api/src/xverse_studio/experiments/reference_faults.py:106: in compile_reference_fault_intent
+    planned_faults = {f["faultId"]: f for f in compiled["plan"]["faults"]}
+                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'faults'
+________ test_native_binding_and_unknown_semantics_fail_closed[target] _________
+tests/contract/test_reference_fault_intent.py:182: in test_native_binding_and_unknown_semantics_fail_closed
+    compile_reference_fault_intent(documents(source))
+services/studio-api/src/xverse_studio/experiments/reference_faults.py:106: in compile_reference_fault_intent
+    planned_faults = {f["faultId"]: f for f in compiled["plan"]["faults"]}
+                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'faults'
+____ test_native_binding_and_unknown_semantics_fail_closed[declared-order] _____
+tests/contract/test_reference_fault_intent.py:182: in test_native_binding_and_unknown_semantics_fail_closed
+    compile_reference_fault_intent(documents(source))
+services/studio-api/src/xverse_studio/experiments/reference_faults.py:106: in compile_reference_fault_intent
+    planned_faults = {f["faultId"]: f for f in compiled["plan"]["faults"]}
+                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'faults'
+____ test_native_binding_and_unknown_semantics_fail_closed[submicrosecond] _____
+tests/contract/test_reference_fault_intent.py:182: in test_native_binding_and_unknown_semantics_fail_closed
+    compile_reference_fault_intent(documents(source))
+services/studio-api/src/xverse_studio/experiments/reference_faults.py:106: in compile_reference_fault_intent
+    planned_faults = {f["faultId"]: f for f in compiled["plan"]["faults"]}
+                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'faults'
+_____ test_native_binding_and_unknown_semantics_fail_closed[extra-intent] ______
+tests/contract/test_reference_fault_intent.py:182: in test_native_binding_and_unknown_semantics_fail_closed
+    compile_reference_fault_intent(documents(source))
+services/studio-api/src/xverse_studio/experiments/reference_faults.py:106: in compile_reference_fault_intent
+    planned_faults = {f["faultId"]: f for f in compiled["plan"]["faults"]}
+                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'faults'
+____________________ test_overlap_has_no_implicit_priority _____________________
+tests/contract/test_reference_fault_intent.py:189: in test_overlap_has_no_implicit_priority
+    compile_reference_fault_intent(documents(source))
+services/studio-api/src/xverse_studio/experiments/reference_faults.py:106: in compile_reference_fault_intent
+    planned_faults = {f["faultId"]: f for f in compiled["plan"]["faults"]}
+                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'faults'
+_ test_changed_timing_changes_authoritative_identity_and_unknown_payload_stays_intact _
+tests/contract/test_reference_fault_intent.py:214: in test_changed_timing_changes_authoritative_identity_and_unknown_payload_stays_intact
+    before = compile_reference_fault_intent(documents(source))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+services/studio-api/src/xverse_studio/experiments/reference_faults.py:106: in compile_reference_fault_intent
+    planned_faults = {f["faultId"]: f for f in compiled["plan"]["faults"]}
+                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'faults'
+=============================== warnings summary ===============================
+.venv/lib/python3.13/site-packages/fastapi/testclient.py:1
+  <repo>/.venv/lib/python3.13/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/contract/test_reference_fault_intent.py::test_explicit_profile_compiles_exact_full_sources_and_stays_inert
+FAILED tests/contract/test_reference_fault_intent.py::test_adjacent_intervals_sort_without_mutating_authored_order
+FAILED tests/contract/test_reference_fault_intent.py::test_first_and_last_observable_boundaries_are_supported[0-100000]
+FAILED tests/contract/test_reference_fault_intent.py::test_first_and_last_observable_boundaries_are_supported[4800000-100000]
+FAILED tests/contract/test_reference_fault_intent.py::test_quantization_nonempty_order_horizon_and_quantity_bounds[1000001-1000000]
+FAILED tests/contract/test_reference_fault_intent.py::test_quantization_nonempty_order_horizon_and_quantity_bounds[1000000-1000001]
+FAILED tests/contract/test_reference_fault_intent.py::test_quantization_nonempty_order_horizon_and_quantity_bounds[1000000-0]
+FAILED tests/contract/test_reference_fault_intent.py::test_quantization_nonempty_order_horizon_and_quantity_bounds[1000000-4000000]
+FAILED tests/contract/test_reference_fault_intent.py::test_quantization_nonempty_order_horizon_and_quantity_bounds[1000000-4100000]
+FAILED tests/contract/test_reference_fault_intent.py::test_existing_lite_units_preserved_with_exact_platform_ticks[s-1-1]
+FAILED tests/contract/test_reference_fault_intent.py::test_existing_lite_units_preserved_with_exact_platform_ticks[ms-1000-1000]
+FAILED tests/contract/test_reference_fault_intent.py::test_existing_lite_units_preserved_with_exact_platform_ticks[us-1000000-1000000]
+FAILED tests/contract/test_reference_fault_intent.py::test_existing_lite_units_preserved_with_exact_platform_ticks[ns-1000000000-1000000000]
+FAILED tests/contract/test_reference_fault_intent.py::test_native_binding_and_unknown_semantics_fail_closed[opaque-activation]
+FAILED tests/contract/test_reference_fault_intent.py::test_native_binding_and_unknown_semantics_fail_closed[opaque-recovery]
+FAILED tests/contract/test_reference_fault_intent.py::test_native_binding_and_unknown_semantics_fail_closed[kind]
+FAILED tests/contract/test_reference_fault_intent.py::test_native_binding_and_unknown_semantics_fail_closed[target]
+FAILED tests/contract/test_reference_fault_intent.py::test_native_binding_and_unknown_semantics_fail_closed[declared-order]
+FAILED tests/contract/test_reference_fault_intent.py::test_native_binding_and_unknown_semantics_fail_closed[submicrosecond]
+FAILED tests/contract/test_reference_fault_intent.py::test_native_binding_and_unknown_semantics_fail_closed[extra-intent]
+FAILED tests/contract/test_reference_fault_intent.py::test_overlap_has_no_implicit_priority
+FAILED tests/contract/test_reference_fault_intent.py::test_changed_timing_changes_authoritative_identity_and_unknown_payload_stays_intact
+22 failed, 25 passed, 1 warning in 14.41s

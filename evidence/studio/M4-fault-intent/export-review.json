@@ -1,0 +1,23 @@
+{
+  "scope": "Primary contributor export/index review, not application test failures",
+  "finding": "Angle-bracket path placeholders broke sanitized JUnit XML; fixed to XML-safe square-bracket placeholders before publication.",
+  "affectedCopies": [
+    {
+      "path": "initial/junit.xml",
+      "beforeSha256": "bcaa192317f74381d1a0e678f9dbee712c6965c7cb5a2dceb6ad03261fcb4ff5",
+      "afterSha256": "c99b264a016b29e305992a3e58cc798227c8bdc6c569123420fb896998cdee0b",
+      "finding": "not well-formed (invalid token): line 4, column 284",
+      "repair": "XML-safe path placeholders; no source/results edits"
+    },
+    {
+      "path": "profile-repair/junit.xml",
+      "beforeSha256": "befcd568af44ee8a5df09ca7f41761b31dbbde61d5e89cfe0bc3b34b9c96c90f",
+      "afterSha256": "77d7c039dcf3aa919bd519921a4fd7f1630204cf879e0f750cc567d26ecaed4a",
+      "finding": "not well-formed (invalid token): line 4, column 284",
+      "repair": "XML-safe path placeholders; no source/results edits"
+    }
+  ],
+  "tested399InputsUnchanged": true,
+  "rerunRequired": "No application change; parse every repaired XML and recheck staged source/evidence.",
+  "normalization": "Public log/XML path-prefix replacement and trailing-whitespace removal; private originals unchanged."
+}

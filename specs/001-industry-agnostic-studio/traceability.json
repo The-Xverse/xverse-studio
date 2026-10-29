@@ -5239,11 +5239,14 @@
         "AC-025"
       ],
       "status": "in_progress",
-      "implementation_note": "Scenario authoring contracts and HTTP negatives added for stable identity, schedules/clocks/targets, observer dependencies, bounded/deep/malformed inputs and no dispatch. Provider-specific scheduled-effect/recovery matrices remain open.",
+      "implementation_note": "Scenario authoring contracts and HTTP negatives added for stable identity, schedules/clocks/targets, observer dependencies, bounded/deep/malformed inputs and no dispatch. Provider-specific scheduled-effect/recovery matrices remain open. Owned fault-intent checkpoint: 127 affected checks pass (56 new offline contract cases) on 399 unchanged inputs. The selected public XDL compiler requires existing experiment-lite fault-intent trigger/duration; new Profile binds only the measured field. Pure compilation preserves authoritative identities and exact plan/source ticks, enforces clocks, targets, bounds, attachment, nonoverlap and legacy-mix refusal. It always returns executionAllowed false; runtime, provider admission, forms and observed activation/recovery remain unimplemented. T082/T083 and their dependencies remain open; counts49/41/10, zero milestones. Evidence: evidence/studio/M4-fault-intent/candidate-binding.json.",
       "implementation_evidence": [
         "tests/contract/test_scenario_authoring.py",
         "tests/integration/test_scenario_authoring_http.py",
-        "evidence/studio/M4-scenario-authoring/independent-review-successor.md"
+        "evidence/studio/M4-scenario-authoring/independent-review-successor.md",
+        "docs/architecture/ADR-0031-owned-fault-intent.md",
+        "evidence/studio/M4-fault-intent/candidate-binding.json",
+        "tests/contract/test_reference_fault_intent.py"
       ]
     },
     {
@@ -5270,11 +5273,14 @@
         "AC-025"
       ],
       "status": "in_progress",
-      "implementation_note": "Transactional public-XDL Scenario edits implemented for conditions, steps, faults, observers, metrics and owned assessment definitions. Pure profile reference checks run after complete transaction; strings/action objects remain inert. Only admitted exact reference execution is supported; broader actual effect/recovery schedules remain blocked on provider admission.",
+      "implementation_note": "Transactional public-XDL Scenario edits implemented for conditions, steps, faults, observers, metrics and owned assessment definitions. Pure profile reference checks run after complete transaction; strings/action objects remain inert. Only admitted exact reference execution is supported; broader actual effect/recovery schedules remain blocked on provider admission. Owned fault-intent checkpoint: 127 affected checks pass (56 new offline contract cases) on 399 unchanged inputs. The selected public XDL compiler requires existing experiment-lite fault-intent trigger/duration; new Profile binds only the measured field. Pure compilation preserves authoritative identities and exact plan/source ticks, enforces clocks, targets, bounds, attachment, nonoverlap and legacy-mix refusal. It always returns executionAllowed false; runtime, provider admission, forms and observed activation/recovery remain unimplemented. T082/T083 and their dependencies remain open; counts49/41/10, zero milestones. Evidence: evidence/studio/M4-fault-intent/candidate-binding.json.",
       "implementation_evidence": [
         "services/studio-api/src/xverse_studio/experiments/authoring.py",
         "docs/architecture/ADR-0007-typed-scenario-authoring.md",
-        "evidence/studio/M4-scenario-authoring/independent-review-successor.md"
+        "evidence/studio/M4-scenario-authoring/independent-review-successor.md",
+        "docs/architecture/ADR-0031-owned-fault-intent.md",
+        "evidence/studio/M4-fault-intent/candidate-binding.json",
+        "tests/contract/test_reference_fault_intent.py"
       ]
     },
     {
