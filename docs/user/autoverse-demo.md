@@ -1,7 +1,7 @@
 # Run the Autoverse demo from Studio
 
 Studio can load the complete Autoverse System, start its existing Linux components,
-and drive the simulated vehicle from the browser. The installed provider is a
+and open the original Pygame **Vehicle Manual Control** window on the Studio host desktop. The installed provider is a
 prototype. Its Linux driving workflow has been exercised with real CARLA, Zenoh,
 SOME/IP, S-CORE and Android; this does not close the product's broader acceptance gates.
 
@@ -29,17 +29,24 @@ normal host administration if it is stopped. Running the launcher without
 2. Choose **Preflight & run**, review the selected provider and frozen inputs,
    then select **Start frozen snapshot**. Component preparation appears in Results.
    Android boot can take several minutes. Stop and Cancel also work during preparation.
-3. In Results, select **Open driving controls**, then **Enable browser driver**. Raising Throttle releases Brake.
-   Use the sliders, or focus the keyboard pad for W/S/A/D and Space. The simulator
-   camera opens as a native window. Keep the browser focused while driving.
-4. Use **Coast / release pedals**, then **Engage cruise** once observed speed is at
-   least 10 km/h and forward mode is observed. Use the cruise speed buttons and
-   inspect the separately reported target speed and controller engagement.
-5. **Release driver and brake** relinquishes input. Lost browser input expires the
-   0.75-second lease and requests zero throttle, braking and cruise disengagement.
-   These requests are separate from the observed vehicle response. Browser loss
-   does not stop the demo lifecycle. Closing the driving-controls dialog also releases
-   the driver. Select **Stop** to release the whole owned stack.
+3. After Android finishes starting, the original **Vehicle Manual Control** Pygame
+   window opens on the computer running Studio, alongside the vehicle camera.
+   Focus **Vehicle Manual Control** to drive. W/Up accelerates, S/Down brakes,
+   and A/D or Left/Right steers.
+4. Release the accelerator and press C to toggle cruise control. Z decreases its
+   target by 5 km/h; X increases it by 5 km/h. Q toggles reverse. These are the
+   original demo's keyboard controls and controller behavior.
+5. Select **Stop** in Studio to stop the complete owned stack. Closing the Pygame
+   control window or pressing Escape also stops the demo. Browser refresh or loss
+   does not release native keyboard input or stop the run; this mode uses the
+   original manual controller rather than the browser's 0.75-second driver lease.
+
+New examples select `native-pygame` in their canonical Scenario. Historical
+`studio-browser` projects keep their recorded mode and browser controls. Create a
+new example to select Pygame; existing run snapshots are never silently rewritten.
+The Pygame process initializes display, fonts and keyboard only. Physical steering
+wheel/joystick access is excluded. Studio's telemetry connection is observe-only
+and publishes no driving commands, including during shutdown.
 
 The **Android digital cluster** link opens Cuttlefish's existing local HTTPS viewer.
 Its local certificate may require the normal browser exception. If the app uses a
@@ -48,9 +55,10 @@ existing emulator's host gateway on port 7447, then Save and restart the app. Th
 provider opens Zenoh on loopback and that existing emulator gateway, rather than
 all network interfaces. Existing Android preferences are preserved.
 
-Commands are capability checked in the backend. Cruise/reverse requests require
-fresh compatible observations. The browser displays unknown or stale data explicitly;
-acceptance of an input is not an acknowledgement from the vehicle. Simulation timing
+Studio lifecycle commands are capability checked in the backend. Browser driving
+requests are rejected for native-window runs. Pygame retains the original manual
+controller behavior; its requests remain separate from observed vehicle effects.
+Studio displays missing or stale telemetry explicitly. Simulation timing
 is owned by the existing vehicle client's public synchronous option with a fixed
 0.05-second step. The reported clock signal is elapsed seconds; its installed metadata
 incorrectly describes frame-delta milliseconds, and Studio retains that conflict.

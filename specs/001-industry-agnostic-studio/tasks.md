@@ -704,3 +704,14 @@ the failed asynchronous frame prerequisite, and a visible button opens the drivi
 controls dialog. Three real simulator starts,104 affected contracts and the complete
 1024x768 native browser workflow pass. T020/T021/T023/T024 gain scoped evidence only;
 no task states or milestone acceptance change. Evidence: `evidence/studio/autoverse-control-window/`.
+
+
+Autoverse Pygame amendment: the user's requested original manual-control window
+now replaces browser input for new examples. Native Linux complete startup, owned
+660x530 Pygame window, actual keyboard driving, cruise engagement and whole-stack
+cleanup on Escape pass.67 affected contracts and1 presentation browser check pass;
+30 shared regression checks passed before the final declarative route/contract
+clarification. The installed101-payload copy matches source and is running with
+existing projects/sessions preserved. Earlier CARLA sensor stall and overlong-input
+assertion failure remain qualified in evidence/studio/autoverse-pygame/.
+T020/T021/T023/T024 gain scoped evidence only; no task states or milestones close.

@@ -12,7 +12,7 @@
     "contractRef": {"type": "string", "format": "uri-reference", "minLength": 1, "maxLength": 256},
     "feedback": {"const": "externally-managed-asynchronous-communication"},
     "durationSeconds": {"type": "integer", "minimum": 30, "maximum": 1800},
-    "inputSurface": {"const": "studio-browser"}
+    "inputSurface": {"enum": ["studio-browser", "native-pygame"]}
   },
   "allOf": [
     {"if": {"properties": {"kind": {"const": "communication"}}},

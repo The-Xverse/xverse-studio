@@ -250,6 +250,14 @@ export function RunControls({
           />
         )}
       {driverSupported && drivingOpen && <Modal title="Vehicle driving controls" onClose={() => setDrivingOpen(false)}><DriverControls key={run.runId} run={run} /></Modal>}
+      {run.inputSurface?.kind === "native-window" && (
+        <div className="native-window-controls" role="status">
+          <h3>{String(run.inputSurface.title || "Manual control window")}</h3>
+          <p>{String(run.inputSurface.instructions || "Use the native control window on the Studio host desktop.")}</p>
+          <p>Focus that desktop window to drive. Closing it stops the demo.</p>
+          {run.inputSurface.companionUrl === "https://localhost:8443" && <a href="https://localhost:8443" target="_blank" rel="noreferrer">Android digital cluster</a>}
+        </div>
+      )}
       {capabilities.includes("pause") && (
         <p className="hint">
           Simulation pause preserves the current model step; it does not pause

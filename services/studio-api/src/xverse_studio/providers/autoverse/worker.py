@@ -119,7 +119,7 @@ class Demo:
                     self.log_sizes[role] = size + len(kept)
                 self.log_dropped[role] = self.log_dropped.get(role, 0) + len(data) - len(kept)
         now = time.monotonic()
-        if self.bridge_ready and not self.stop_requested:
+        if self.bridge_ready and not self.stop_requested and self.request["configuration"].get("inputSurface", "studio-browser") == "studio-browser":
             packet = self.signed(self.root / "input.json")
             if packet and type(packet.get("generation")) is int and packet["generation"] >= self.input_generation and packet.get("expiresAt", 0) > now and 0 <= now - packet.get("issuedAt", 0) <= 0.75:
                 from .controls import driver_frame
@@ -246,7 +246,7 @@ class Demo:
         self.phase("vehicle-and-driver")
         examples = r / "bridges/carla/examples"
         self.launch("vehicle", [i["python"], "-E", str(Path(__file__).with_name("public_entry.py")), str(examples / "virtual_vehicle.py"), "--verbose", "--sync", "--host", "127.0.0.1", "--port", "2000", "--router", "127.0.0.1", "--res", "1280x960", "--filter", "vehicle.audi.etron", "--rolename", "ego_vehicle", "--signals-config", str(examples / "signals_config.json"), "--enable-camera-display"], cwd=str(examples))
-        self.launch("driver", [i["python"], "-E", str(Path(__file__).with_name("zenoh_bridge.py")), "--duration", "1800"], interactive=True)
+        self.launch("driver", [i["python"], "-E", str(Path(__file__).with_name("zenoh_bridge.py")), "--duration", "1800", *(["--observe-only"] if actual["inputSurface"] == "native-pygame" else [])], interactive=True)
         deadline = time.monotonic() + 120
         while not self.bridge_ready or self.state["inputTelemetry"].get("items", {}).get("speed", {}).get("status") != "observed":
             self.tick()
@@ -271,6 +271,22 @@ class Demo:
         self.execute("android-install", [i["adb"], "-s", "localhost:6520", "install", "-r", str(r / "aaos_digital_cluster/cuttlefish_emulator/apk/digital-cluster-app-debug.apk")], timeout=90)
         self.execute("android-density", [i["adb"], "-s", "localhost:6520", "shell", "wm", "density", "90"])
         self.execute("android-open", [i["adb"], "-s", "localhost:6520", "shell", "am", "start", "-a", "android.intent.action.MAIN", "-c", "android.intent.category.LAUNCHER", "-p", "com.example.digitalclusterapp"])
+        if actual["inputSurface"] == "native-pygame":
+            self.phase("manual-control-window")
+            ready_file = self.root / "manual-window.private.json"
+            manual = self.launch("manual", [i["python"], "-E", str(Path(__file__).with_name("pygame_manual.py")),
+                "--root", str(r), "--ready-file", str(ready_file)], cwd=str(examples))
+            deadline = time.monotonic() + 30
+            while not ready_file.exists():
+                self.tick()
+                if manual.poll() is not None or time.monotonic() > deadline:
+                    raise InstallationError("AUTOVERSE_MANUAL_WINDOW_UNAVAILABLE")
+            ready = json.loads(ready_file.read_bytes())
+            if (ready.get("pid") != manual.pid or type(ready.get("windowId")) is not int
+                or ready["windowId"] <= 0 or ready.get("title") != "Vehicle Manual Control" or ready.get("keyboardOnly") is not True):
+                raise InstallationError("AUTOVERSE_MANUAL_WINDOW_UNCONFIRMED")
+            self.state["runtimeStatus"]["nativeWindow"] = {"status": "opened", "title": ready["title"], "keyboardOnly": True}
+            self.state["runtimeStatus"]["components"]["manual"] = "window_opened"
         self.state.update(state="running", stateVersion=2, startedAt=time.time())
         self.state["runtimeStatus"]["phase"] = "running"
         self.state["runtimeStatus"]["components"].update(router="running", driver="transport_ready", vehicle="speed_telemetry_observed", vcu="interface_observed", android="booted_apk_started")
@@ -279,6 +295,13 @@ class Demo:
         deadline = time.monotonic() + actual["durationSeconds"]
         while time.monotonic() < deadline:
             self.tick()
+            if "manual" in self.processes:
+                result = self.processes["manual"]["process"].poll()
+                if result == 0:
+                    self.state["reason"] = "AUTOVERSE_MANUAL_WINDOW_CLOSED"
+                    return
+                if result is not None:
+                    raise InstallationError("AUTOVERSE_COMPONENT_EXITED_manual")
             for role in ("router", "carla", "vcu", "vehicle", "driver"):
                 if self.processes[role]["process"].poll() is not None:
                     raise InstallationError("AUTOVERSE_COMPONENT_EXITED_" + role)
@@ -296,7 +319,7 @@ class Demo:
     def cleanup(self):
         self.stop_requested = True
         outcomes = []
-        # Close the publisher first: its finally path requests brake/cruise-off.
+        # Close the owned bridge; observe-only mode never publishes driver input.
         driver = self.processes.get("driver")
         if driver and driver["process"].stdin:
             driver["process"].stdin.close()
@@ -311,7 +334,7 @@ class Demo:
                     raise InstallationError("AUTOVERSE_PROCESS_IDENTITY_UNKNOWN")
                 # Capture descendant identities before signaling their owned parent.
                 descendants = [(child, child.create_time()) for child in owner.children(recursive=True)]
-                owner.send_signal(signal.SIGINT if role in ("vehicle", "driver") else signal.SIGTERM)
+                owner.send_signal(signal.SIGINT if role in ("vehicle", "driver", "manual") else signal.SIGTERM)
                 try:
                     process.wait(timeout=8)
                 except subprocess.TimeoutExpired:

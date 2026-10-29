@@ -12,7 +12,7 @@ import subprocess
 import sys
 
 
-def native_check(router, bridge_path):
+def native_check(router, bridge_path, observe_only=False):
     import queue
     import socket
     import threading
@@ -68,7 +68,7 @@ def native_check(router, bridge_path):
                     entries.append(bytes(sample.payload).decode())
                     del entries[:-64]
             subscribers.append(session.declare_subscriber(topic, receive))
-        bridge = subprocess.Popen([sys.executable, "-E", bridge_path, "--endpoint", endpoint, "--duration", "15"],
+        bridge = subprocess.Popen([sys.executable, "-E", bridge_path, "--endpoint", endpoint, "--duration", "15", *(["--observe-only"] if observe_only else [])],
                                   env=env, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         incoming = queue.Queue(maxsize=64)
         def read_output():
@@ -96,6 +96,22 @@ def native_check(router, bridge_path):
         def send(request):
             bridge.stdin.write((json.dumps(request) + "\n").encode())
             bridge.stdin.flush()
+        if observe_only:
+            assert ready["inputMode"] == "observe-only"
+            send({"type": "drive", "id": "denied", "frame": frame})
+            denied = receive_until(lambda row: row.get("id") == "denied", "Observer rejects input")
+            assert denied["code"] == "CONTROL_INPUT_NOT_SUPPORTED"
+            session.put("vehicle/status/velocity_status", "12.5")
+            receive_until(lambda row: row.get("type") == "telemetry" and row["data"]["items"]["speed"]["value"] == 12.5, "Observer fixture telemetry")
+            time.sleep(1)
+            assert all(not values(topic) for topic in topics), seen
+            send({"type": "stop", "id": "stop"})
+            assert bridge.wait(timeout=5) == 0
+            time.sleep(.25)
+            assert all(not values(topic) for topic in topics), seen
+            return {"outcome": "passed", "scope": "owned isolated loopback native Zenoh observer",
+                    "observeOnly": True, "driverRequestsRejected": True, "noDriverPublicationsIncludingShutdown": True,
+                    "telemetryValues": "explicit fixtures over actual transport", "actualVehicleEffect": False}
         send({"type": "drive", "id": "first", "frame": frame})
         first = receive_until(lambda row: row.get("id") == "first", "Input receipt")
         assert first["type"] == "input_accepted" and first["duplicate"] is False
@@ -146,18 +162,19 @@ def main():
     parser.add_argument("--python", type=Path)
     parser.add_argument("--router", required=True, type=Path)
     parser.add_argument("--output", type=Path)
+    parser.add_argument("--observe-only", action="store_true")
     parser.add_argument("--native-child", action="store_true", help=argparse.SUPPRESS)
     args = parser.parse_args()
     root = Path(__file__).resolve().parents[1]
     if args.native_child:
-        result = native_check(str(args.router.resolve()), str(root / "services/studio-api/src/xverse_studio/providers/autoverse/zenoh_bridge.py"))
+        result = native_check(str(args.router.resolve()), str(root / "services/studio-api/src/xverse_studio/providers/autoverse/zenoh_bridge.py"), args.observe_only)
     else:
         if args.python is None or args.output is None:
             parser.error("Provide the admitted component --python and a new --output receipt.")
         if args.output.exists():
             parser.error("Refusing to overwrite an existing verification receipt.")
         env = dict(os.environ); env.pop("PYTHONPATH", None)
-        native = subprocess.run([str(args.python), "-E", str(Path(__file__).resolve()), "--router", str(args.router), "--native-child"],
+        native = subprocess.run([str(args.python), "-E", str(Path(__file__).resolve()), "--router", str(args.router), "--native-child", *(["--observe-only"] if args.observe_only else [])],
                                 capture_output=True, text=True, timeout=35, env=env)
         if native.returncode:
             args.output.parent.mkdir(parents=True, exist_ok=True)

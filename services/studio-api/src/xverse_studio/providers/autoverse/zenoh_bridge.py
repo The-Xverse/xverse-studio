@@ -25,7 +25,7 @@ REQUEST_ID = re.compile(r"^[A-Za-z0-9-]{1,64}$")
 ENDPOINT = re.compile(r"^tcp/127\.0\.0\.1:([1-9][0-9]{0,4})$")
 
 
-def run(endpoint, duration):
+def run(endpoint, duration, observe_only=False):
     import zenoh  # Existing admitted component dependency; no import opens a session.
 
     config = zenoh.Config()
@@ -64,7 +64,7 @@ def run(endpoint, duration):
             publishers[topic].put(payload)
 
     try:
-        for entry in DRIVER_SIGNALS.values():
+        for entry in ([] if observe_only else DRIVER_SIGNALS.values()):
             publishers[entry.topic] = session.declare_publisher(entry.topic, congestion_control=zenoh.CongestionControl.DROP)
         for entry in TELEMETRY_SIGNALS.values():
             def received(sample, topic=entry.topic):
@@ -76,7 +76,7 @@ def run(endpoint, duration):
         os.set_blocking(stdin, False)
         os.set_blocking(stdout, False)
         emit({"type": "ready", "protocolVersion": PROTOCOL_VERSION,
-              "authority": "parent-owned-stdio", "physicalEffects": False}, True)
+              "authority": "parent-owned-stdio", "physicalEffects": False, "inputMode": "observe-only" if observe_only else "driver"}, True)
         started = time.monotonic()
         next_publish = next_report = started
         blocked_since = None
@@ -86,7 +86,8 @@ def run(endpoint, duration):
                 requested = lease.requested(now)
                 # Explicit requests are sent once at acceptance; continuous
                 # analog values repeat at20Hz. Expiry requests cruise off.
-                publish(requested["frame"], requests=not requested["active"])
+                if not observe_only:
+                    publish(requested["frame"], requests=not requested["active"])
                 next_publish = now + .05
             if now >= next_report:
                 emit({"type": "telemetry", "data": telemetry.snapshot(now),
@@ -127,6 +128,8 @@ def run(endpoint, duration):
                             stopping = True
                             emit({"type": "stopping", "id": request["id"]}, True)
                         elif request.get("type") == "drive" and set(request) in ({"type", "id", "frame"}, {"type", "id", "frame", "issuedAt"}):
+                            if observe_only:
+                                raise ControlRejected("CONTROL_INPUT_NOT_SUPPORTED")
                             received_at = time.monotonic()
                             issued_at = request.get("issuedAt", received_at)
                             if type(issued_at) not in (int, float) or not 0 <= received_at - issued_at < .75:
@@ -161,12 +164,13 @@ def main():
     parser = argparse.ArgumentParser(description="Owned Autoverse stdio/Zenoh adapter")
     parser.add_argument("--endpoint", default="tcp/127.0.0.1:7447")
     parser.add_argument("--duration", type=int, default=1800)
+    parser.add_argument("--observe-only", action="store_true")
     args = parser.parse_args()
     endpoint = ENDPOINT.fullmatch(args.endpoint)
     if endpoint is None or int(endpoint.group(1)) > 65535 or not 1 <= args.duration <= 1800:
         parser.error("Use an admitted loopback endpoint and duration between1 and1800 seconds.")
     try:
-        run(args.endpoint, args.duration)
+        run(args.endpoint, args.duration, args.observe_only)
         return 0
     except Exception as exc:
         # Do not copy dependency exceptions, credentials or installation paths

@@ -1,0 +1,55 @@
+{
+  "date": "2026-10-29",
+  "scope": "native Linux Pygame prototype; complete stack keyboard driving, cruise and window-close cleanup",
+  "payloadDigest": "8835367c657e225760106fd3eaa31b407e5e85bf4ff237eb9ec800e27c41c210",
+  "payloadFiles": 101,
+  "contractsPassed": 67,
+  "sharedRegressionPassed": 30,
+  "browserPresentationChecksPassed": 1,
+  "build": "passed",
+  "architecture": "passed",
+  "nativeWindow": {
+    "title": "Vehicle Manual Control",
+    "viewable": true,
+    "width": 660,
+    "height": 530,
+    "keyboardOnly": true
+  },
+  "nativeDrivingCruiseClose": "passed",
+  "deliveredInstalledCopy": {
+    "payloadsEqualSource": true,
+    "state": "running",
+    "nativeWindow": "viewable",
+    "existingProjectsAndSessions": "preserved"
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "outcome": "failed",
+      "reason": "CARLA sensor initialization stalled; telemetry unavailable; cleanup complete"
+    },
+    {
+      "attempt": 2,
+      "outcome": "blocked",
+      "reason": "enrollment while prior cleanup still owned containers; no bypass"
+    },
+    {
+      "attempt": 3,
+      "outcome": "failed test assertion",
+      "reason": "held throttle 8s, observed speed reached77km/h then collision stopped vehicle before final speed assertion; cleanup complete"
+    },
+    {
+      "attempt": 4,
+      "outcome": "passed",
+      "reason": "release throttle after observed speed above15km/h; cruise and Escape-triggered complete cleanup observed"
+    }
+  ],
+  "limitations": [
+    "No full suite, Windows, physical vehicle, native X-COM or Argus admission.",
+    "CARLA first-attempt sensor stall cause remains unestablished; successful retries do not prove resolution.",
+    "Native keyboard behavior has no browser driver lease.",
+    "Browser check is a presentation fixture; native full-stack proof is separate."
+  ],
+  "taskStatusChanges": [],
+  "milestonesClosed": 0
+}

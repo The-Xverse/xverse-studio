@@ -19,6 +19,7 @@ from xverse_studio.storage.core import canonical, digest
 
 CONTAINERS = {"someip-bridge": "bridge-e2e", "score": "docker_setup-adas_score-1", "android": "cuttlefish-orchestration-cont"}
 REQUIRED = ["run_autoverse.py", "vecu/vcu_zenoh/src/main.py",
+            "bridges/carla/examples/vehicle_manual_control.py", "bridges/carla/examples/signals_config_manual_control.json",
             "bridges/carla/examples/virtual_vehicle.py", "bridges/carla/examples/signals_config.json",
             "aaos_digital_cluster/cuttlefish_emulator/ctl.sh",
             "aaos_digital_cluster/cuttlefish_emulator/apk/digital-cluster-app-debug.apk",

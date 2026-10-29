@@ -20,7 +20,8 @@ def configuration(documents, compiled):
         actual = {Path(name).name: YAML(typ="safe").load(source) for name, source in documents.items()}
         if len(actual) != len(documents):
             return None
-        expected = resources()
+        input_surface = actual["scenario.xdl.yaml"]["extensions"][NAMESPACE]["inputSurface"]
+        expected = resources(input_surface)
         if set(actual) != set(expected):
             return None
         duration = actual["scenario.xdl.yaml"]["extensions"][NAMESPACE]["durationSeconds"]
@@ -36,7 +37,7 @@ def configuration(documents, compiled):
                 expected[name]["metadata"].pop(key, None)
             if digest(value) != digest(expected[name]):
                 return None
-        return {"contractRef": CONTRACT_REF, "durationSeconds": duration, "physicalEffects": False,
+        return {"contractRef": CONTRACT_REF, "durationSeconds": duration, "physicalEffects": False, "inputSurface": input_surface,
                 "simulatorAdvancement": "public-vehicle-cli-synchronous", "fixedDeltaSeconds": 0.05,
                 "sourceClockMapping": "unavailable", "randomness": "external_uncontrolled_no_applied_seed"}
     except (ValueError, KeyError, TypeError):
@@ -60,6 +61,7 @@ class AutoverseProvider:
                 "clockDomains": ["host-runtime"], "realizationClasses": ["simulated", "virtual"],
                 "targetClasses": ["process", "container"], "hostExecutionClass": "native-process-and-existing-containers",
                 "connectionContracts": {"externalRuntime": EXTERNAL_CONTRACT},
+                "supportedInputSurfaces": ["native-pygame", "studio-browser"],
                 "inputSurface": {"kind": "normalized-driver", "version": "1.0", "leaseSeconds": 0.75, "companionLabel": "Android digital cluster", "companionUrl": "https://localhost:8443"},
                 "limits": {"maxDurationSeconds": 1800, "maxConcurrentRuns": 1, "maxElements": 6, "maxConnections": 32},
                 "capabilityRecords": [{"kind": kind, "targetClass": "process", "legalStates": ["ready"] if kind == "start" else ["preparing", "running", "ready"],
@@ -94,3 +96,11 @@ class AutoverseProvider:
     def input_request(self, root, action, payload, session):
         from .input import input_request
         return input_request(root, action, payload, session)
+
+    def run_metadata(self, config):
+        if config["inputSurface"] == "native-pygame":
+            return {"inputSurface": {"kind": "native-window", "version": "1.0", "title": "Vehicle Manual Control",
+                "keyboardOnly": True, "location": "Studio host desktop",
+                "instructions": "Use the original Pygame Vehicle Manual Control window on the computer running Studio. W/Up: throttle; S/Down: brake; A/D or Left/Right: steering; C: cruise; Z/X: cruise speed; Q: reverse.",
+                "companionLabel": "Android digital cluster", "companionUrl": "https://localhost:8443"}}
+        return {"inputSurface": self.descriptor()["inputSurface"]}

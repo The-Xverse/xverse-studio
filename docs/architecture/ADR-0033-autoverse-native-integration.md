@@ -99,3 +99,29 @@ Studio dialog. Closing it releases the existing input lease. The Android compani
 link follows the driving controls. Failed startup is labelled explicitly rather than
 leaving an unexplained disabled control surface. The native window and control APIs,
 canonical sources, backend authority checks and companion assets remain unchanged.
+
+
+Pygame amendment (2026-10-29): the user explicitly requested the original native
+`vehicle_manual_control.py` window instead of browser driving. New examples select
+`native-pygame` in the canonical Scenario extension and initial conditions. The
+existing Profile schema admits this additional explicit value; old browser sources
+retain their meaning and historical snapshots are immutable. New profile locks
+bind the amended schema, and old locks require normal reconciliation before a new
+run. No task IDs, requirements or existing acceptance gates are replaced.
+
+The installed provider selects per-run `native-window` metadata through its generic
+metadata hook. The backend rejects browser input for that run. Its bounded Zenoh
+adapter declares subscribers only and never publishes input, even at shutdown.
+The original companion script is invoked through its public CLI in a separately
+owned process. An own-process Pygame wrapper initializes display/font only and
+supplies a no-device joystick facade: no wheel discovery or audio initialization.
+The same wrapper confines the public Zenoh configuration to the enrolled local
+router. Companion files, rendering and controller algorithms remain unchanged.
+
+The manual window starts after Android to keep it available on the host desktop.
+Readiness requires a matching owned process and a real native window identity with
+the expected caption. Normal window close triggers orderly whole-demo cleanup;
+abnormal process exit reports failure. Native keyboard input does not use the
+browser lease/watchdog. The original controller's behavior, including simulated
+speed-inhibit control, remains its own. The verification receipt records actual
+window, keyboard, vehicle response and cleanup separately from contract tests.

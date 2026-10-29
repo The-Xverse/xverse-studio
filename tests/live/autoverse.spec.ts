@@ -3,6 +3,7 @@ import { test, expect } from "@playwright/test";
 import { execFileSync } from "node:child_process";
 import path from "node:path";
 import { readFileSync } from "node:fs";
+import YAML from "yaml";
 import { connectStudio } from "../e2e/connect-studio";
 
 if (process.env.STUDIO_AUTOVERSE_LIVE !== "1") throw new Error("This test requires an explicitly enrolled native Autoverse backend and STUDIO_AUTOVERSE_LIVE=1.");
@@ -12,6 +13,38 @@ test("actual Autoverse: browser load, full start, driving, cruise, lease expiry 
   await page.bringToFront();
   await page.locator(".example-grid").getByRole("button", { name: /Autoverse complete demo/ }).click();
   await expect(page.locator(".project-header h1")).toHaveText("Autoverse complete demo");
+  // This retained case explicitly selects historical browser mode. New examples
+  // default to the original native Pygame window.
+  const pid = await page.evaluate(() => localStorage.getItem("studio.projectId"));
+  let project = await (await page.request.get(`/api/v1/projects/${pid}`)).json();
+  const { csrfToken } = await (await page.request.get("/api/v1/session")).json();
+  for (const [id, doc] of Object.entries(project.documents) as [string, any][]) {
+    const source = YAML.parse(doc.content);
+    if (source.kind === "Scenario") {
+      source.spec.initialConditions.driverSurface = "studio-browser";
+      source.spec.initialConditions.initialBrakingRequest = 1;
+      source.extensions["io.xverse.studio.native-runtime"].inputSurface = "studio-browser";
+    } else if (source.kind === "System") {
+      source.spec.nodes.find((n: any) => n.id === "driver-node").roles = ["Browser driver controls"];
+      source.spec.interfaces = source.spec.interfaces.filter((v: any) => v.id !== "driver-speed-inhibit");
+      source.spec.endpoints = source.spec.endpoints.filter((v: any) => v.interfaceId !== "driver-speed-inhibit");
+      source.spec.flows = source.spec.flows.filter((v: any) => v.interfaceId !== "driver-speed-inhibit");
+    } else if (source.kind === "Component" && source.metadata.name === "driver") {
+      source.spec.interfaces = source.spec.interfaces.filter((v: any) => v.id !== "driver-speed-inhibit");
+    } else if (source.kind === "Deployment") {
+      const contract = JSON.parse(readFileSync(path.resolve("services/studio-api/src/xverse_studio/blueprints/autoverse-contract.json"), "utf8"));
+      const { createHash } = await import("node:crypto");
+      source.spec.artifacts[0].digest = "sha256:" + createHash("sha256").update(readFileSync(path.resolve("services/studio-api/src/xverse_studio/blueprints/autoverse-contract.json"))).digest("hex");
+      expect(contract.inputSurface).toBe("studio-browser");
+    } else continue;
+    const response = await page.request.put(`/api/v1/projects/${pid}/documents/${id}`, {
+      headers: { "Origin": new URL(page.url()).origin, "X-CSRF-Token": csrfToken, "If-Match": String(project.revision) },
+      data: { content: YAML.stringify(source), format: doc.format },
+    });
+    expect(response.ok()).toBe(true);
+    project = await response.json();
+  }
+  await page.reload();
   await page.getByRole("button", { name: "Preflight & run", exact: true }).click();
   const start = page.getByRole("button", { name: "Start frozen snapshot", exact: true });
   await expect(start).toBeEnabled({ timeout: 45000 });

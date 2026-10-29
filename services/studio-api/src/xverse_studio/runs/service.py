@@ -417,7 +417,8 @@ class Runs:
                 "controlLimits": {} if snap["providerId"] in self.installed_providers else {"maxPausedWallSeconds": MAX_PAUSED_WALL_SECONDS},
             }
             if snap["providerId"] in self.installed_providers:
-                run["inputSurface"] = snap["providerIdentity"].get("inputSurface")
+                installed = self.installed_providers[snap["providerId"]]
+                run.update(installed.run_metadata(config) if hasattr(installed, "run_metadata") else {"inputSurface": snap["providerIdentity"].get("inputSurface")})
                 run.update(journalId=rid + ":provider-journal", journalReader="studio.hash-chain-v1")
             if "set_parameter" in run["capabilities"]:
                 run.update(liveInputs=config["liveInputs"], liveValues={"target": config["target"]}, liveMutationCount=0)
@@ -857,7 +858,7 @@ class Runs:
         with self.store.lock:
             run = self.read(rid)
             provider = self.installed_providers.get(run["providerId"])
-            if provider is None or not hasattr(provider, "input_request"):
+            if provider is None or not hasattr(provider, "input_request") or (run.get("inputSurface") or {}).get("kind") != "normalized-driver":
                 raise Problem("CAPABILITY_UNSUPPORTED", "This run has no admitted browser input surface.")
             if run["state"] != "running":
                 raise Problem("STATE_CONFLICT", "Browser input requires the observed running state.", 409)
