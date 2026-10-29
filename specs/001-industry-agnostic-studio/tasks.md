@@ -715,3 +715,14 @@ clarification. The installed101-payload copy matches source and is running with
 existing projects/sessions preserved. Earlier CARLA sensor stall and overlong-input
 assertion failure remain qualified in evidence/studio/autoverse-pygame/.
 T020/T021/T023/T024 gain scoped evidence only; no task states or milestones close.
+
+
+Existing-project/native-sensor repair: the active legacy project's canonical source
+was migrated from browser input to native-pygame at revision2 with old revisions and
+snapshots unchanged. Recurrent GNSS subscription stalls are addressed by one bounded,
+acknowledged preparation frame for each of the five initial public sensor subscriptions
+in the owned vehicle process; the original method is restored for later camera changes.
+69 affected contracts and the complete original Pygame keyboard/cruise/Escape cleanup
+check pass on the final source. Unsuccessful asynchronous and bounded-thread experiments
+were reverted and retained privately. T020/T021/T023/T024 gain scoped Linux evidence
+only; no statuses or milestones close. Evidence: evidence/studio/autoverse-sensor-startup/.

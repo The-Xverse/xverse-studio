@@ -42,3 +42,35 @@ def test_native_window_rejects_browser_input_even_when_provider_has_input_api(cl
     with pytest.raises(Problem) as caught:
         Runs.input_request(runs, 'fixture', 'acquire', {}, 'fixture')
     assert caught.value.code == 'CAPABILITY_UNSUPPORTED'
+
+
+def test_sensor_startup_publishes_owned_frame_before_public_subscription():
+    from xverse_studio.providers.autoverse.public_entry import prepare_sensor_subscriptions
+    calls=[]
+    class Sensor:
+        def get_world(self):return SimpleNamespace(tick=lambda timeout:calls.append(('tick',timeout)) or 7)
+        def listen(self,callback):calls.append(('listen',callback))
+    carla=SimpleNamespace(Sensor=Sensor)
+    prepare_sensor_subscriptions(carla)
+    callback=object()
+    Sensor().listen(callback)
+    assert calls==[('tick',10.0),('listen',callback)]
+
+
+def test_sensor_preparation_is_limited_to_startup_and_rejects_missing_frame():
+    from xverse_studio.providers.autoverse.public_entry import prepare_sensor_subscriptions
+    calls=[]
+    class Sensor:
+        def get_world(self):return SimpleNamespace(tick=lambda timeout:calls.append('tick') or 9)
+        def listen(self,callback):calls.append('listen')
+    carla=SimpleNamespace(Sensor=Sensor)
+    prepare_sensor_subscriptions(carla)
+    for _ in range(6):Sensor().listen(None)
+    assert calls==['tick','listen']*5+['listen']
+    class MissingFrame:
+        def get_world(self):return SimpleNamespace(tick=lambda timeout:0)
+        def listen(self,callback):pytest.fail('Unconfirmed sensor must not subscribe')
+    carla=SimpleNamespace(Sensor=MissingFrame)
+    prepare_sensor_subscriptions(carla)
+    with pytest.raises(RuntimeError,match='CARLA_SENSOR_FRAME_UNCONFIRMED'):
+        MissingFrame().listen(None)

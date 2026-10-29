@@ -1,0 +1,53 @@
+{
+  "date": "2026-10-29",
+  "scope": "existing-project native-control configuration and synchronous sensor startup repair; Linux prototype",
+  "candidatePayloadDigest": "fad969495ab724a863eb1d2924407b3cd4be9e8a0507d233a542e897cde60bfe",
+  "candidatePayloadFiles": 101,
+  "contractsPassed": 69,
+  "sourceNativeVerification": "passed; keyboard driving, cruise, Escape-triggered complete cleanup",
+  "previousPrototypeNativeVerification": "passed; uncapped sensor priming; not final candidate",
+  "projectRepair": {
+    "before": "studio-browser",
+    "after": "native-pygame",
+    "revisionBefore": 1,
+    "revisionAfter": 2,
+    "historicalSourceAndSnapshots": "preserved byte-for-byte",
+    "sessions": "preserved"
+  },
+  "retainedExperiments": [
+    {
+      "experiment": "two user native starts without sensor preparation",
+      "outcome": "failed: telemetry unavailable; GNSS listen stalled; cleanup complete"
+    },
+    {
+      "experiment": "one public preparation tick and empty tick batch on stalled owned instances",
+      "outcome": "RPC timed out; not an improvement"
+    },
+    {
+      "experiment": "asynchronous advancement",
+      "outcome": "not shipped; first launch opened but final speed assertion failed; second stalled at GNSS"
+    },
+    {
+      "experiment": "bounded client thread pool",
+      "outcome": "not shipped; GNSS initialization stalled"
+    }
+  ],
+  "implementation": "One acknowledged preparation tick before each of five initial public sensor subscriptions; original method restored afterwards. Original public CLI and companion algorithms preserved.",
+  "limitations": [
+    "Actual native Linux simulation only. No full suite, Windows, physical vehicle, independent milestone acceptance or upstream root-cause claim.",
+    "Later camera switches retain the original method and acquire no preparation ticks.",
+    "Browser UI build is unchanged from the previous101-payload delivery."
+  ],
+  "taskStatusChanges": [],
+  "milestonesClosed": 0,
+  "installedPreview": {
+    "state": "running",
+    "windowTitle": "Vehicle Manual Control",
+    "viewable": true,
+    "onCurrentDesktop": true,
+    "focused": true,
+    "payloadsEqualSource": 101,
+    "projectRevision": 2,
+    "sessionsPreserved": true
+  }
+}

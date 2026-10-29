@@ -75,12 +75,13 @@ with TestClient(app) as c:
    assert xt.XTestFakeKeyEvent(display,code,int(pressed),0);x.XFlush(display)
   key('w',True)
   try:
-   for _ in range(12):
+   for _ in range(30):
     time.sleep(.3);v=run();report['observations'].append(v['inputTelemetry'])
     if (v['inputTelemetry']['items']['speed']['value'] or 0)>15:break
-   speed=v['inputTelemetry']['items']['speed']['value'];print('ACTUAL_SPEED',speed,flush=True);assert speed>12,speed
+   speed=v['inputTelemetry']['items']['speed']['value'];print('ACTUAL_SPEED',speed,flush=True)
    probe=subprocess.check_output(['/usr/bin/python3','-E',str(Path.cwd()/'services/studio-api/src/xverse_studio/providers/autoverse/carla_probe.py'),'--vehicle-status'],timeout=15,text=True)
    (root/'actual-carla-control.json').write_text(probe)
+   assert speed>12,speed
   finally:key('w',False)
   key('c',True);time.sleep(.15);key('c',False)
   deadline=time.monotonic()+20

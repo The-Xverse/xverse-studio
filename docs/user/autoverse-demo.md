@@ -41,7 +41,9 @@ normal host administration if it is stopped. Running the launcher without
    does not release native keyboard input or stop the run; this mode uses the
    original manual controller rather than the browser's 0.75-second driver lease.
 
-New examples select `native-pygame` in their canonical Scenario. Historical
+Check the selected project: an older project can still request browser controls.
+The input mode is recorded in its Scenario, and refreshing Studio loads any newly
+saved project revision. New examples select `native-pygame` in their canonical Scenario. Historical
 `studio-browser` projects keep their recorded mode and browser controls. Create a
 new example to select Pygame; existing run snapshots are never silently rewritten.
 The Pygame process initializes display, fonts and keyboard only. Physical steering

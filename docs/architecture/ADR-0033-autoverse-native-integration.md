@@ -125,3 +125,20 @@ abnormal process exit reports failure. Native keyboard input does not use the
 browser lease/watchdog. The original controller's behavior, including simulated
 speed-inhibit control, remains its own. The verification receipt records actual
 window, keyboard, vehicle response and cleanup separately from contract tests.
+
+
+Existing-project/startup repair (2026-10-29): the user's active project still
+selected the preserved browser mode, while the newly created example used Pygame.
+The active project's canonical input surface was migrated through a revision-checked
+project mutation, preserving its previous revision, snapshots, other metadata and
+sessions. This is a project change, not a reinterpretation of historical browser runs.
+
+Two subsequent starts stalled at the public GNSS sensor subscription. Asynchronous
+startup and a smaller client thread pool did not establish a repair and are not
+shipped. The public vehicle CLI wrapper now requests one bounded synchronous frame
+before each of its five initial public sensor subscriptions, using that same owned
+vehicle process as tick owner. A missing frame blocks the subscription. The wrapper
+restores the original subscription method after those five sensors, so later camera
+changes acquire no extra ticks. Companion files and control algorithms stay intact.
+The original startup failures and unsuccessful experiments remain retained. This is
+scoped Linux evidence and does not establish upstream cause or broad acceptance.
