@@ -39,6 +39,7 @@ def native_identity(installation):
         "platformRevision": PLATFORM_REVISION,
         "sdkModules": {p.name: file_digest(p) for p in sorted(modules.glob("*.py"))},
         "providerFiles": {p.name: file_digest(p) for p in sorted(Path(__file__).parent.glob("*.py"))},
+        "backendTask": file_digest(Path(__file__).parent.parent / "backend_task.py"),
         "nativeSources": {name: file_digest(native_source_root() / name) for name in ("bridge.cpp", "CMakeLists.txt")},
         "runtimeRoot": registered["runtimeRoot"], "hostId": registered["hostId"]}
 

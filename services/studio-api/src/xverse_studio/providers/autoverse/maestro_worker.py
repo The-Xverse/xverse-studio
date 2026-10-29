@@ -29,7 +29,8 @@ from .worker import Cancelled, Demo
 class PlatformDemo(Demo):
     provider_id = "autoverse.platform"
 
-    def __init__(self, root):
+    def __init__(self, root, *, owner_task_id=None):
+        self.owner_task_id = owner_task_id
         self.native_buffer = bytearray()
         self.native_ready = None
         self.native_pipe_closed = False
@@ -44,6 +45,8 @@ class PlatformDemo(Demo):
         self.activation_deadline = time.monotonic() + self.request["configuration"]["durationSeconds"] + 900
 
     def save(self):
+        if self.owner_task_id is not None:
+            self.state["ownerTaskId"] = self.owner_task_id
         if self.platform_latest:
             self.state["platformStatus"] = {k: self.platform_latest[k] for k in (
                 "runId", "planDigest", "inputSemanticDigest", "operationId", "correlationId",
@@ -232,7 +235,7 @@ def supervise(demo, finished):
             demo.stop_requested = True
 
 
-def run(demo):
+def run(demo, *, owner=None):
     compiled, config = demo.validate_requested_inputs()
     adapter = PlatformProvider(demo.installation)
     registered = demo.installation["nativeBridge"]
@@ -243,8 +246,9 @@ def run(demo):
     preparation = prepare_snapshot(demo.request["runId"], demo.snapshot, installation=demo.installation,
         host_id=registered["hostId"], runtime_adapter=adapter)
     provider = PlatformExecution(demo, preparation, runtime_adapter=adapter)
-    demo.service = PublicExecutionService(Path(registered["runtimeRoot"]), preparation.host, (provider,),
-        max_runtime_seconds=runtime_budget, cleanup_budget_seconds=60)
+    demo.service = (owner.acquire(preparation, provider) if owner is not None else
+        PublicExecutionService(Path(registered["runtimeRoot"]), preparation.host, (provider,),
+            max_runtime_seconds=runtime_budget, cleanup_budget_seconds=60))
     now = time.time()
     permit = HostExecutionPermit("studio-" + demo.request["runId"], preparation.host.identity(),
         preparation.prepared.digest, preparation.lifecycle.digest, preparation.host.host_id,
@@ -319,25 +323,29 @@ def run(demo):
         finally:
             finished.set()
             watcher.join(timeout=2)
-            demo.service.close()
+            if owner is None:
+                demo.service.close()
+            else:
+                owner.release_run(demo, snapshot)
 
 
-def main():
-    demo = PlatformDemo(Path(sys.argv[1]).resolve())
-    for kind in (signal.SIGTERM, signal.SIGINT):
-        signal.signal(kind, lambda *_: setattr(demo, "stop_requested", True))
+def execute(demo, *, owner=None):
     failed = False
     snapshot = None
     try:
-        snapshot = run(demo)
+        snapshot = run(demo, owner=owner)
     except Exception as error:
         failed = True
         demo.state["reason"] = str(error) if isinstance(error, (InstallationError, ExecutionInputError)) else "AUTOVERSE_PLATFORM_WORKER_FAILED"
     actual = snapshot or demo.platform_latest or {}
+    release_contradiction = getattr(demo, "owner_cleanup_contradiction", False)
+    if release_contradiction:
+        failed = True
+        demo.state["reason"] = "AUTOVERSE_PLATFORM_RELEASE_CONTRADICTION"
     cancelled_start = demo.stop_requested and actual.get("failureCode") == "MPX-START-CANCELLED"
     failed |= actual.get("state") != "stopped" and not cancelled_start
     demo.state.update(state="failed" if failed else "stopped", stateVersion=demo.state["stateVersion"] + 1,
-        endedAt=time.time(), cleanup="complete" if actual.get("cleanup") == "released" else "unknown", evidence="partial")
+        endedAt=time.time(), cleanup="complete" if actual.get("cleanup") == "released" and not release_contradiction else "unknown", evidence="partial")
     demo.state["runtimeStatus"]["phase"] = demo.state["state"]
     for resource in demo.state.get("cleanupResources", []):
         if resource["status"] == "released":
@@ -364,6 +372,13 @@ def main():
             demo.lock.close()
         demo.selector.close()
     return int(failed)
+
+
+def main():
+    demo = PlatformDemo(Path(sys.argv[1]).resolve())
+    for kind in (signal.SIGTERM, signal.SIGINT):
+        signal.signal(kind, lambda *_: setattr(demo, "stop_requested", True))
+    return execute(demo)
 
 
 if __name__ == "__main__":

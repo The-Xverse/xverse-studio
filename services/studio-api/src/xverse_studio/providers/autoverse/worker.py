@@ -173,7 +173,7 @@ class Demo:
         prior = self.processes.get(role)
         if prior and prior["process"].poll() is None:
             raise InstallationError("AUTOVERSE_RESOURCE_STILL_OWNED")
-        process = subprocess.Popen(argv, cwd=cwd, env=self.environment(), start_new_session=True,
+        process = subprocess.Popen(argv, cwd=str(self.root) if cwd is None else cwd, env=self.environment(), start_new_session=True,
                                    stdin=subprocess.PIPE if interactive else subprocess.DEVNULL,
                                    stdout=subprocess.PIPE, stderr=subprocess.PIPE if diagnostics else subprocess.STDOUT if not interactive else subprocess.DEVNULL, close_fds=True)
         # Retain the original child before ownership observation or pipe setup:

@@ -527,6 +527,35 @@ class Runs:
                 dict(status="failed", code="PREPARATION_FAILED"),
             )
             return
+        installed = self.installed_providers.get(snap["providerId"])
+        prepare_task = getattr(installed, "prepare_backend_task", None)
+        if callable(prepare_task):
+            from xverse_studio.providers.backend_task import BackendTask
+            try:
+                task = prepare_task(root)
+                if type(task) is not BackendTask:
+                    raise ValueError("PROVIDER_TASK_INVALID")
+            except (Problem, OSError, ValueError):
+                self._record_dispatch(rid,
+                    dict(state="failed", cleanup="complete", evidence="unavailable",
+                         reason="PROVIDER_TASK_PREPARATION_FAILED", endedAt=time.time()),
+                    dict(status="failed", code="PROVIDER_TASK_PREPARATION_FAILED"))
+                return
+            # Record the actual backend/task identity BEFORE its callback can
+            # acquire anything. An alive backend PID alone is not task liveness.
+            self.children[rid] = task
+            self._record_dispatch(rid,
+                dict(ownerDigest=digest(secret), state="preparing", executionKind="backend-task",
+                     ownerTaskId=task.task_id, pid=task.pid, createTime=task.create_time,
+                     launchArgvDigest=digest(task.argv), launchStartedAt=time.time()),
+                dict(status="delegated"), acknowledged_pid=task.pid)
+            try:
+                task.start()
+            except (OSError, RuntimeError):
+                self._record_dispatch(rid,
+                    dict(state="unknown", cleanup="unknown", evidence="partial", reason="LAUNCH_ACKNOWLEDGEMENT_LOST"),
+                    dict(status="unknown"))
+            return
         launch_argv = [
             sys.executable,
             "-I",
@@ -660,7 +689,18 @@ class Runs:
                         "createTime"
                     ) != observed.get("createTime"):
                         observed = None
+                if (observed and run.get("executionKind") == "backend-task"
+                        and observed.get("ownerTaskId") != run.get("ownerTaskId")):
+                    observed = None
                 if observed and observed["state"] not in ("stopped", "failed"):
+                    if run.get("executionKind") == "backend-task":
+                        task = self.children.get(rid)
+                        if (task is None or task.task_id != run.get("ownerTaskId")
+                                or observed.get("ownerTaskId") != run.get("ownerTaskId")
+                                or task.poll() is not None):
+                            observed = self._terminal_after_exit(statepath, run)
+                    if observed is None:
+                        raise ValueError("ORIGINAL_BACKEND_TASK_UNAVAILABLE")
                     try:
                         process = psutil.Process(observed["pid"])
                         if abs(process.create_time() - observed["createTime"]) > 0.001:
@@ -727,8 +767,12 @@ class Runs:
                     except Problem:
                         pass
             elif run["state"] in ACTIVE:
+                task = self.children.get(rid)
+                startup_identity_available = (run.get("executionKind") != "backend-task"
+                    or (task is not None and task.task_id == run.get("ownerTaskId") and task.poll() is None))
                 if (
                     run.get("state") == "preparing"
+                    and startup_identity_available
                     and time.time() - run.get("launchStartedAt", run["createdAt"]) < 5
                 ):
                     return run
@@ -898,3 +942,9 @@ class Runs:
             for rid in list(self.children):
                 self.read(rid)
             time.sleep(0.05)
+        # Installed long-lived services close only after their original tasks
+        # have settled; they do not gain process-signalling authority here.
+        for provider in self.installed_providers.values():
+            close_owner = getattr(provider, "close_backend_owner", None)
+            if callable(close_owner):
+                close_owner()

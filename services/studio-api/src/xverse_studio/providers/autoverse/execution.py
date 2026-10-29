@@ -1,8 +1,8 @@
 """Per-binding public Maestro callbacks for the installed Autoverse worker.
 
-Not registered by Studio yet: native messaging, worker supervision and browser
-evidence admission remain required. These callbacks never call Demo.run or issue
-their own platform permit. The original Studio journal retains its own origin.
+The installed host owner registers these callbacks under the public platform
+contract. They never call Demo.run or issue their own platform permit. The
+original Studio journal retains its own origin, separate from Argus evidence.
 """
 import json
 import time

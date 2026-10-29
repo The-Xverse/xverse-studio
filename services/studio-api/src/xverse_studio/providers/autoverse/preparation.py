@@ -1,8 +1,8 @@
 """Pure preparation of the actual Autoverse inputs for public Maestro.
 
-This is not a runtime registration. No permit is issued, installation probed or
-resource acquired here. The production dispatch/cleanup binding and native
-communication adapter must be verified before Studio advertises this runtime.
+No permit is issued, installation probed or resource acquired here. The installed
+owner supplies concrete dispatch/cleanup callbacks separately; pure preparation
+does not establish live runtime acceptance.
 """
 from dataclasses import dataclass
 from pathlib import Path
