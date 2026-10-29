@@ -6,6 +6,7 @@ import hmac
 import json
 import os
 from pathlib import Path
+import stat
 import sys
 import time
 import traceback
@@ -16,12 +17,51 @@ from xverse_studio.providers.reference_control import (
 )
 
 
+def _directory_identity(path):
+    """Observe a directory without adopting a symlink/junction or an unknown ID."""
+    try:
+        entry = path.lstat()
+    except FileNotFoundError:
+        return ("absent",)
+    except OSError:
+        return ("unverified",)
+    if not stat.S_ISDIR(entry.st_mode) or not entry.st_ino or getattr(entry, "st_reparse_tag", 0):
+        return ("unverified",)
+    return ("directory", entry.st_dev, entry.st_ino)
+
+
+def _temporary_resource(run_id, status, code):
+    return [{"resourceId": run_id + ":temporary-directory", "kind": "temporary-directory",
+             "status": status, "code": code}]
+
+
+def _release_temporary_directory(path, identity, run_id):
+    """One empty-directory release; never enumerate, recurse or remove contents."""
+    current = _directory_identity(path)
+    if identity == current == ("absent",):
+        return {"cleanup": "complete", "cleanupResources": []}
+    unknown = {"cleanup": "unknown", "cleanupResources": _temporary_resource(
+        run_id, "unknown", "TEMPORARY_DIRECTORY_IDENTITY_UNCONFIRMED")}
+    if identity[0] != "directory" or current != identity:
+        return unknown
+    try:
+        path.rmdir()
+    except OSError:
+        if _directory_identity(path) != identity:
+            return unknown
+        return {"cleanup": "failed", "cleanupResources": _temporary_resource(
+            run_id, "retained", "TEMPORARY_DIRECTORY_NOT_RELEASED")}
+    return {"cleanup": "complete", "cleanupResources": []}
+
+
 def main():
     root = Path(sys.argv[1]).resolve()
     request = json.loads((root / "request.json").read_text())
     secret = (root / "owner.key").read_bytes()
     config = request["configuration"]
     snapshot = request["snapshot"]
+    temporary = root / "tmp"
+    temporary_identity = _directory_identity(temporary)
     # Re-validate exact effective inputs in the admitted provider, before effects.
     from xverse_studio.xdl import XDLAdapter
     from xverse_studio.xdl import reference_configuration
@@ -40,7 +80,7 @@ def main():
                 {
                     "state": "failed",
                     "stateVersion": 1,
-                    "cleanup": "complete",
+                    **_release_temporary_directory(temporary, temporary_identity, request["runId"]),
                     "evidence": "unavailable",
                     "reason": "EFFECTIVE_INPUT_MISMATCH",
                     "pid": os.getpid(),
@@ -275,7 +315,8 @@ def main():
                 time.sleep(min(delay, step))
         state["state"] = "stopped"
         state["stateVersion"] += 1
-        state["cleanup"] = "complete"
+        phase = "cleanup"
+        state.update(_release_temporary_directory(temporary, temporary_identity, runid))
         state["evidence"] = "complete"
         state["endedAt"] = time.time()
         phase = "finalization"
@@ -288,7 +329,7 @@ def main():
             },
             round((i if stopped else n) * step * 1e6),
         )
-        emit("cleanup.updated", {"status": "complete", "resources": []})
+        emit("cleanup.updated", {"status": state["cleanup"], "resources": state["cleanupResources"]})
         for op, result in state["commandResults"].items():
             if result["status"] == "completed" and op not in completed_controls:
                 emit("command.completed", {"operationId": op})
@@ -320,13 +361,20 @@ def main():
     except BaseException as error:
         if phase == "journal_open":
             state.update(
-                state="failed", stateVersion=1, cleanup="complete",
+                state="failed", stateVersion=1,
                 evidence="unavailable", reason="EVIDENCE_OPEN_FAILED", endedAt=time.time(),
             )
+            state.update(_release_temporary_directory(temporary, temporary_identity, runid))
             state.pop("effectivePlanDigest", None)
             state.pop("effectiveSemanticDigest", None)
+        elif phase == "cleanup":
+            # Model execution already stopped; interrupted cleanup establishes
+            # neither resource release nor permission to touch another identity.
+            state.update(cleanup="unknown", evidence="partial", endedAt=time.time(),
+                         cleanupResources=_temporary_resource(runid, "unknown", "TEMPORARY_DIRECTORY_RELEASE_INTERRUPTED"))
+            state.setdefault("reason", "REFERENCE_CLEANUP_INTERRUPTED")
         elif phase == "finalization":
-            # The model already stopped and its runtime cleanup is known. An
+            # The model already stopped and its cleanup outcome is recorded. An
             # evidence commit failure cannot undo those independent facts.
             state["evidence"] = "partial"
             state.pop("journalDigest", None)
@@ -349,7 +397,7 @@ def main():
                     {
                         "severity": "error", "code": code,
                         "message": (
-                            "The owned model stopped and cleanup completed, but its evidence could not be finalized."
+                            "The owned model stopped, but its evidence could not be finalized. Inspect the separate cleanup outcome."
                             if phase == "finalization"
                             else "Reference workload failed; inspect canonical evidence and ownership."
                         ),
@@ -377,7 +425,7 @@ def main():
                 evidence.close()
             except OSError:
                 pass
-    return 0
+    return 0 if state["cleanup"] == "complete" else 1
 
 
 if __name__ == "__main__":

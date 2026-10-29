@@ -138,13 +138,13 @@ with the original worker and verify the denied live control request.
 
 The owned worker creates its canonical journal before reporting a workload start.
 An opening failure reports `EVIDENCE_OPEN_FAILED` with its trusted PID/birth/owner
-identity, failed startup, complete runtime cleanup and unavailable evidence. No
+identity, failed startup, the separately observed cleanup outcome and unavailable evidence. No
 start time or effective execution identity is invented. Exclusive creation stays
 in place: an existing journal is preserved rather than truncated or replaced.
 
-Once model execution has stopped and runtime cleanup has completed, a failure in
+Once model execution has stopped and its cleanup outcome is recorded, a failure in
 evidence flush, synchronization, digest acquisition, close or final publication
-does not undo those lifecycle facts. The worker retains stopped/complete cleanup,
+does not undo those independent facts. The worker retains stopped lifecycle and the recorded cleanup outcome,
 marks evidence partial and reports `EVIDENCE_FINALIZATION_FAILED` separately in
 `evidenceFailure`. An existing termination reason, such as pause-budget exhaustion,
 is preserved. Unpublished journal-completion markers are removed. The backend
@@ -164,3 +164,38 @@ original path, then verifies its unchanged prefix and complete hash chain after
 the real worker exits. Browser fixtures use the same unmodified worker argv and
 verify PID/birth/owner before the latter fault. These are filesystem failures,
 not physical-provider cleanup or native Windows acceptance.
+
+### Owned temporary-resource release
+
+The backend already creates a private per-run temporary directory and supplies it
+as the worker's `TMPDIR`, `TEMP` and `TMP`. The worker now observes that directory's
+device/inode identity before compilation. A symlink, reparse point or unavailable
+identity is not adopted. After the model stops, or a known startup rejection, it
+attempts one `rmdir` of the same observed empty directory. It never enumerates or
+recursively deletes its contents, follows a replacement link, or touches another
+run's data. This is reference-provider resource management, not a new XDL resource
+or a physical-provider release operation.
+
+A failed release with the original identity still observable reports
+`cleanup=failed`. Changed, missing or unobservable identity reports
+`cleanup=unknown` and withholds deletion. Both carry one bounded `cleanupResources`
+entry with a logical resource ID, kind, status and stable code; host paths and
+retained file contents are excluded. A confirmed release reports an empty list.
+The trusted state report and canonical `cleanup.updated` event retain the same
+outcome. The backend copies that report through the existing ownership checks;
+the browser and diagnostics identify the unresolved resource for inspection.
+There is no automatic cleanup retry or new cleanup endpoint.
+
+Model termination, command application, cleanup and journal integrity remain
+separate. A Stop/Cancel applied to the model may complete while cleanup fails.
+Healthy journal finalization can still be complete in that case. A concurrent
+finalization error preserves failed/unknown cleanup and marks evidence partial;
+an interrupted cleanup retains stopped model lifecycle with unknown release.
+The worker exits nonzero for an unresolved release. Snapshot/project bytes,
+worker CAS, native command authority, source clocks, limits and external runtime
+admission remain unchanged; only the owned implementation digest changes.
+
+Native Linux tests exercise empty release, retained bytes after Stop/Cancel or
+duration completion, symlink/directory replacement, a missing adopted directory,
+and concurrent journal-finalization failure. Retained and unrelated bytes remain
+unchanged. These tests do not establish native Windows or physical cleanup.

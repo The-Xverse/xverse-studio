@@ -372,7 +372,7 @@ def _source_clock(record):
     return domain, "known"
 
 
-# The workload never executed: no process ran and no journal was produced.
+# No model workload start was established; a provider process may have rejected it.
 NOT_STARTED = {"PREPARATION_FAILED", "EVIDENCE_OPEN_FAILED", "LAUNCH_FAILED", "EFFECTIVE_INPUT_MISMATCH"}
 ACTIVE_STATES = {"requested", "preparing", "running", "stopping"}
 
@@ -513,6 +513,14 @@ def explain_run(
             _event_ref(r) for r in records if r.get("type") == "cleanup.updated"
         ]
         f1 = finding.fact(f"The recorded cleanup outcome is {cleanup}.", evidence)
+        resources = run.get("cleanupResources")
+        if isinstance(resources, list):
+            for resource in resources[:1]:
+                if isinstance(resource, dict) and resource.get("kind") == "temporary-directory":
+                    finding.fact(
+                        "The worker could not confirm release of its temporary directory: " + str(resource.get("resourceId", "unavailable")),
+                        [_run_ref(run, "cleanupResources")],
+                    )
         finding.consequence(
             "Owned resources may remain allocated; a replacement run could contend for them.",
             [f1],

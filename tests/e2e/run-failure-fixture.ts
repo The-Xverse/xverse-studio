@@ -113,6 +113,9 @@ export const test = base.extend<{ scenario: string; failureHost: Host }>({
         expect(observed.journalFinalizationFaults).toBe(
           scenario === "journal_finalize" ? 1 : 0,
         );
+        expect(observed.cleanupObstructions).toBe(
+          scenario === "cleanup_failure" ? 1 : 0,
+        );
         expect(observed.corruptions).toBe(scenario === "mismatch" ? 1 : 0);
         expect(observed.launchRefusals).toBe(
           scenario === "launch_denied" ? 1 : 0,

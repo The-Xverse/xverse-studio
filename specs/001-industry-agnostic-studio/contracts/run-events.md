@@ -23,6 +23,17 @@ Each event has:
 
 `sequence` orders delivery; it does not prove physical causality across clocks. Stream generation after a backend restart retains monotonic continuity or emits an explicit discontinuity and resync requirement.
 
+Owned-reference cleanup reports retain the string `cleanup` outcome and add
+`cleanupResources`, a list of at most one unresolved worker temporary-directory
+resource. Its `resourceId` is `<runId>:temporary-directory`, `kind` is
+`temporary-directory`, `status` is `retained|unknown`, and `code` is a stable
+release/identity/interruption diagnosis. No host path or retained file content is
+included. The corresponding `cleanup.updated` payload is `{status, resources}`.
+Successful release has an empty list. Failed release of the verified directory
+is `failed`; uncertain/replaced identity is `unknown` and grants no deletion
+authority. Neither outcome changes known model termination or manufactures an
+assertion verdict. Earlier records without this optional field remain readable.
+
 ## Event kinds
 
 - `command.accepted`, `command.delegated`, `command.completed`, `command.rejected`, `command.failed`, `command.unknown`.
@@ -166,7 +177,7 @@ storage outcome persistence must succeed before the new failure is reported.
 
 The owned reference reports a journal-opening failure as `EVIDENCE_OPEN_FAILED`
 before recording any workload start. A later evidence-finalization failure retains
-known stopped lifecycle and complete runtime cleanup while marking evidence
+known stopped lifecycle and the separately reported cleanup outcome while marking evidence
 partial and reporting `evidenceFailure: EVIDENCE_FINALIZATION_FAILED`. These facts
 do not establish canonical source validity, complete coverage or a functional
 verdict. Existing termination reasons remain separate; no alternate retained file

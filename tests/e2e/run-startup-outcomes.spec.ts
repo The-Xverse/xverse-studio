@@ -12,6 +12,7 @@ for (const viewport of [
     "prepare_denied",
     "journal_open",
     "journal_finalize",
+    "cleanup_failure",
   ]) {
     test.describe(`run startup ${scenario} at ${viewport.width}`, () => {
       test.use({ viewport, scenario });
@@ -70,7 +71,7 @@ for (const viewport of [
             localStorage.setItem("studio.projectId", result.projectId);
             return result;
           },
-          scenario === "normal" ? 10 : 5,
+          scenario === "normal" || scenario === "cleanup_failure" ? 10 : 5,
         );
         await page.reload();
         await expect(
@@ -104,7 +105,7 @@ for (const viewport of [
           exact: true,
         });
         await expect(startup).toBeVisible();
-        if (scenario === "normal") {
+        if (scenario === "normal" || scenario === "cleanup_failure") {
           await expect(startup).toContainText("Workload start recorded");
           await keyboard(
             page,
@@ -132,7 +133,9 @@ for (const viewport of [
           );
         }
         const expected =
-          scenario === "normal" || scenario === "journal_finalize"
+          scenario === "normal" ||
+          scenario === "journal_finalize" ||
+          scenario === "cleanup_failure"
             ? "stopped"
             : "failed";
         await expect
@@ -155,15 +158,37 @@ for (const viewport of [
           ).json()
         ).items[0];
         const cleanup =
-          scenario === "normal" ||
-          scenario === "mismatch" ||
-          scenario === "prepare_denied" ||
-          scenario === "journal_open" ||
-          scenario === "journal_finalize"
-            ? "complete"
-            : "unknown";
+          scenario === "cleanup_failure"
+            ? "failed"
+            : scenario === "normal" ||
+                scenario === "mismatch" ||
+                scenario === "prepare_denied" ||
+                scenario === "journal_open" ||
+                scenario === "journal_finalize"
+              ? "complete"
+              : "unknown";
         expect(run.cleanup).toBe(cleanup);
         expect(run.verdict).toBeNull();
+        if (scenario === "cleanup_failure") {
+          expect(run.evidence).toBe("complete");
+          expect(run.cleanupResources).toEqual([
+            {
+              resourceId: `${run.runId}:temporary-directory`,
+              kind: "temporary-directory",
+              status: "retained",
+              code: "TEMPORARY_DIRECTORY_NOT_RELEASED",
+            },
+          ]);
+          const resources = page.getByRole("region", {
+            name: "Unresolved run resources",
+            exact: true,
+          });
+          await expect(resources).toContainText("Worker temporary directory");
+          await expect(resources).toContainText(
+            `${run.runId}:temporary-directory`,
+          );
+          await expect(resources).toContainText("retained");
+        }
         if (scenario === "journal_open" || scenario === "journal_finalize") {
           expect(run.evidence).toBe("invalid");
           expect(run.reason).toBe(

@@ -641,6 +641,47 @@ export function ResultsView({
           detail="Integrity and completeness"
         />
       </div>
+      {Array.isArray(run.cleanupResources) &&
+        run.cleanupResources.length > 0 && (
+          <section
+            className="panel"
+            role="region"
+            aria-label="Unresolved run resources"
+          >
+            <h3>Resources requiring inspection</h3>
+            <p>
+              Workload termination does not confirm resource release. Retain
+              this run and inspect its data using the recovery guide before
+              manual cleanup.
+            </p>
+            <ul>
+              {run.cleanupResources
+                .slice(0, 1)
+                .filter(
+                  (resource) =>
+                    resource &&
+                    typeof resource === "object" &&
+                    resource.kind === "temporary-directory" &&
+                    typeof resource.resourceId === "string" &&
+                    resource.resourceId.length <= 512 &&
+                    ["retained", "unknown"].includes(resource.status) &&
+                    typeof resource.code === "string" &&
+                    resource.code.length <= 128,
+                )
+                .map((resource) => (
+                  <li key={resource.resourceId}>
+                    <strong>Worker temporary directory</strong>
+                    {" · "}
+                    {resource.status}
+                    {" · "}
+                    <code>{resource.resourceId}</code>
+                    {" · "}
+                    <code>{resource.code}</code>
+                  </li>
+                ))}
+            </ul>
+          </section>
+        )}
       <div className="results-scope">
         <Badge>
           {run.evidenceScope === "recorded_fixture"

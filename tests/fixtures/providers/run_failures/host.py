@@ -20,12 +20,12 @@ from xverse_studio.storage.core import canonical
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--data", type=Path, required=True)
-    parser.add_argument("--scenario", choices=["mismatch", "launch_denied", "active_failure", "normal", "ownership_recovery", "prepare_denied", "journal_open", "journal_finalize"], required=True)
+    parser.add_argument("--scenario", choices=["mismatch", "launch_denied", "active_failure", "normal", "ownership_recovery", "prepare_denied", "journal_open", "journal_finalize", "cleanup_failure"], required=True)
     args = parser.parse_args()
     args.data = args.data.resolve()
     root = Path(__file__).resolve().parents[4]
     observation = dict(scope="owned native fault fixture; no equipment", scenario=args.scenario,
-                       workerAttempts=0, corruptions=0, launchRefusals=0, interruptions=0, ownershipDenials=0, preparationRefusals=0, journalOpenFaults=0, journalFinalizationFaults=0, errors=[])
+                       workerAttempts=0, corruptions=0, launchRefusals=0, interruptions=0, ownershipDenials=0, preparationRefusals=0, journalOpenFaults=0, journalFinalizationFaults=0, cleanupObstructions=0, errors=[])
     threads = []
     with socket.socket() as listener:
         listener.bind(("127.0.0.1", 0))
@@ -134,6 +134,18 @@ def main():
                     observation["launchRefusals"] += 1
                     raise OSError("Labelled owned launch refusal")
             child = original_launch(argv, *values, **options)
+            if worker and args.scenario == "cleanup_failure":
+                import psutil
+                from xverse_studio.storage.core import digest
+                known = store.get("run", directory.name)
+                process = psutil.Process(child.pid)
+                assert child.poll() is None and process.is_running()
+                assert process.cmdline() == argv and digest(argv) == known["launchArgvDigest"]
+                assert digest((directory / "owner.key").read_bytes()) == known["ownerDigest"]
+                # Only this closed fixture's private runtime temporary directory.
+                # No worker report or argv is substituted; its real rmdir fails.
+                (directory / "tmp" / "retained-fixture.bin").write_bytes(b"Owned native cleanup fixture bytes\n")
+                observation["cleanupObstructions"] += 1
             if worker and args.scenario == "active_failure":
                 thread = threading.Thread(target=interrupt_after_sample, args=(directory.name,), daemon=True)
                 threads.append(thread)

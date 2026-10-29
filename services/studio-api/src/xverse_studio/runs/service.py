@@ -653,6 +653,7 @@ class Runs:
                             "state",
                             "stateVersion",
                             "cleanup",
+                            "cleanupResources",
                             "evidence",
                             "evidenceFailure",
                             "reason",

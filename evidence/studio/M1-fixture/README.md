@@ -1,5 +1,10 @@
 # Owned-fixture lifecycle verification
 
+The [uncommitted cleanup successor](cleanup/README.md) now passes fresh 1,219
+backend tests, 88 affected browser checks and two performance cases on identical
+380 inputs. Its clean package check is pending. The published binding below
+retains its earlier source identity.
+
 T033 remains in progress. Source`0bc939d` passes **1,211 backend tests,86 affected
 browser checks and two separate performance cases** on379 identical inputs.
 Its clean native Linux offline package passes115 payloads, all archive/file hashes

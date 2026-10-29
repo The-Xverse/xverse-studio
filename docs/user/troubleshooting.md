@@ -11,7 +11,7 @@
 | `PAUSE_BUDGET_EXHAUSTED` | The owned model reached its cumulative 30-second wall-time pause budget and stopped with incomplete simulation coverage. Inspect retained evidence and create a fresh run if needed. |
 | `PREPARATION_FAILED` | The local run files could not be prepared; no workload launch was attempted. Retain the failed run, check local storage access and capacity, then recheck preflight before creating a fresh request. Retrying the original request returns its original receipt. |
 | `EVIDENCE_OPEN_FAILED` | The provider could not create its canonical journal and did not start the workload. Preserve any existing files, check local storage access and capacity, and recheck preflight before a fresh request. |
-| `EVIDENCE_FINALIZATION_FAILED` | The workload stopped and runtime cleanup completed, but its evidence could not be finalized. Preserve the retained files and inspect the evidence diagnosis; stopped execution does not imply valid or complete results. |
+| `EVIDENCE_FINALIZATION_FAILED` | The workload stopped, but its evidence could not be finalized. Inspect the separate cleanup outcome and preserve retained files; stopped execution does not imply resource release or valid and complete results. |
 | `DEP-RUN-CONFIG` | An external public effective-input/plan contract is missing. Reference success cannot admit Lite/CARLA. |
 | `OWNERSHIP_UNKNOWN` | Reconcile exact native ownership. Do not kill by PID/name/address or blindly restart. |
 | `EVIDENCE_INVALID` | Preserve original bytes; do not use corrupted evidence to establish a verdict. |
@@ -29,3 +29,12 @@ this candidate. Do not enable permissive CORS or bind to all interfaces to conce
 Liveness is not functional health. Missing traffic without an admitted expected coverage window is
 unobserved, not an established failure. Wall-clock receipt time never substitutes for simulation or
 device time. Indeterminate assertion results preserve missing coverage and uncertainty reasons.
+
+## Retained temporary resources
+
+If Results reports failed or unknown cleanup, inspect **Resources requiring
+inspection** and retain the run data. The owned reference releases only its
+verified empty temporary directory; retained files and replacement identities
+are left untouched. A stopped workload or complete evidence journal does not
+confirm resource release. Follow the recovery guide before any manual cleanup;
+retrying Start or Stop does not erase retained data or acquire another resource.
