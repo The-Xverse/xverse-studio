@@ -30,6 +30,8 @@ def main():
     parser.add_argument("--port", type=int, default=8765)
     parser.add_argument("--static-dir", type=Path)
     parser.add_argument("--autoverse-root", type=Path, help="Enroll the explicitly selected existing Linux Autoverse demo installation; no downloads or builds.")
+    parser.add_argument("--autoverse-native-bridge", type=Path,
+        help="Explicit verified native bridge build directory; requires --autoverse-root and enables the separate platform simulation provider.")
     maintenance = parser.add_mutually_exclusive_group()
     maintenance.add_argument(
         "--backup",
@@ -47,6 +49,8 @@ def main():
         help="Verify a private full backup and restore into a new --data-dir; never starts execution.",
     )
     args = parser.parse_args()
+    if args.autoverse_native_bridge is not None and args.autoverse_root is None:
+        parser.error("--autoverse-native-bridge requires the explicitly enrolled --autoverse-root.")
     if not 1024 <= args.port <= 65535:
         parser.error("Choose an unprivileged loopback port 1024–65535.")
     root = args.data_dir.absolute()
@@ -114,6 +118,12 @@ def _owned_main(args, root, parser):
         from xverse_studio.providers.autoverse.installation import enroll, InstallationError
         try:
             installed = {PROVIDER_ID: AutoverseProvider(enroll(args.autoverse_root))}
+            if args.autoverse_native_bridge is not None:
+                from xverse_studio.providers.autoverse.platform_adapter import PlatformProvider
+                from xverse_studio.providers.autoverse.platform_installation import enroll_platform
+                platform_installation = enroll_platform(args.autoverse_root, args.autoverse_native_bridge,
+                    root / "platform-runtime" / "autoverse")
+                installed["autoverse.platform"] = PlatformProvider(platform_installation)
         except (InstallationError, OSError) as error:
             parser.error(str(error) if isinstance(error, InstallationError) else "AUTOVERSE_ENROLLMENT_FAILED")
     app = create_app(

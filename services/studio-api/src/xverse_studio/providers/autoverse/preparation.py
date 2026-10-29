@@ -16,7 +16,7 @@ from xverse_studio.blueprints.autoverse import REALIZATIONS, ROLES
 from xverse_studio.storage.core import canonical, digest
 from xverse_studio.xdl import XDLAdapter
 
-from .adapter import AutoverseProvider, PROVIDER_ID, configuration
+from .adapter import AutoverseProvider, PROVIDER_ID
 
 
 @dataclass(frozen=True)
@@ -31,9 +31,16 @@ class AutoverseInputs:
     """Host-installed pure mapping; preserve the actual submitted source bytes."""
     provider_id = PROVIDER_ID
 
-    def __init__(self, installation):
-        self.implementation_digest = AutoverseProvider(installation).descriptor()["implementationDigest"]
-        self.installation_digest = installation["identityDigest"]
+    def __init__(self, installation, *, runtime_adapter=None):
+        self.runtime_adapter = runtime_adapter or AutoverseProvider(installation)
+        descriptor = self.runtime_adapter.descriptor()
+        self.provider_id = descriptor["providerId"]
+        self.implementation_digest = descriptor["implementationDigest"]
+        self._installation_digest = installation["identityDigest"]
+
+    @property
+    def installation_digest(self):
+        return self._installation_digest
 
     def prepare_effective_configuration(self, submission, inspection):
         # The public compiler independently inspects these same immutable bytes.
@@ -41,7 +48,7 @@ class AutoverseInputs:
         # finite semantic contract; a compiled model alone is insufficient.
         documents = {name: raw.decode("utf-8") for name, raw in submission.documents}
         compiled = XDLAdapter().compile(documents)
-        actual = configuration(documents, compiled)
+        actual = self.runtime_adapter.configuration(documents, compiled)
         if actual is None:
             raise ExecutionInputError("AUTOVERSE-SOURCE-UNSUPPORTED")
         if (compiled["planDigest"] != submission.expected_plan_digest
@@ -63,7 +70,7 @@ class AutoverseInputs:
                 or effective not in tuple(p.configuration for p in prepared.providers)):
             raise ExecutionInputError("AUTOVERSE-BINDINGS-UNSUPPORTED")
         definitions = (
-            ("carla-router-prepare", "carla", "prepare", (), 10),
+            ("carla-router-prepare", "carla", "prepare", (), 20),
             ("carla-server-prepare", "carla", "prepare", ("carla-router-prepare",), 160),
             ("vcu-prepare", "vcu", "prepare", ("carla-server-prepare",), 10),
             ("vcu-start", "vcu", "start", ("vcu-prepare",), 10),
@@ -87,12 +94,18 @@ class AutoverseInputs:
             ("driver-start", "driver", "start", ("driver-observer-prepare", "carla-ready", "android-ready"), 40),
             ("driver-ready", "driver", "ready", ("driver-start",), 10),
         )
+        if self.provider_id == "autoverse.platform":
+            definitions = (*definitions[:2],
+                ("vcu-native-prepare", "vcu", "prepare", ("carla-router-prepare",), 20),
+                *definitions[2:])
+            definitions = tuple((i, r, o, (*n, "vcu-native-prepare") if i == "vcu-start" else n, t)
+                                for i, r, o, n, t in definitions)
         return tuple(LifecyclePhase(identifier, units[role]["logicalId"], self.provider_id,
                                     operation, needs, timeout)
                      for identifier, role, operation, needs, timeout in definitions)
 
 
-def prepare_snapshot(run_id, snapshot, *, installation, host_id):
+def prepare_snapshot(run_id, snapshot, *, installation, host_id, runtime_adapter=None):
     """Called by trusted host code with a frozen Studio snapshot and enrollment.
 
     Paths, schema pins, provider code and placement capabilities come from the
@@ -100,7 +113,7 @@ def prepare_snapshot(run_id, snapshot, *, installation, host_id):
     identities. No browser/project field supplies a runtime permit.
     """
     adapter = XDLAdapter()
-    provider = AutoverseInputs(installation)
+    provider = AutoverseInputs(installation, runtime_adapter=runtime_adapter)
     try:
         documents = snapshot["documents"]
         selection = snapshot["plan"]["selection"]

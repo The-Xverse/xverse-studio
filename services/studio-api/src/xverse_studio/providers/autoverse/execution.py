@@ -17,8 +17,8 @@ from .worker import Cancelled
 
 
 class AutoverseExecution(AutoverseInputs):
-    def __init__(self, demo, preparation):
-        super().__init__(demo.installation)
+    def __init__(self, demo, preparation, *, runtime_adapter=None):
+        super().__init__(demo.installation, runtime_adapter=runtime_adapter)
         self.demo = demo
         self.preparation = preparation
         self._phases = {p.phase_id: p for p in preparation.lifecycle.phases}
@@ -80,6 +80,8 @@ class AutoverseExecution(AutoverseInputs):
                 demo.prepare_simulator()
             elif identifier == "vcu-start":
                 demo.start_vcu()
+            elif identifier == "vcu-native-prepare":
+                demo.start_native_bridge(context, self.preparation.prepared)
             elif identifier == "someip-start":
                 demo.start_container("someip-bridge")
             elif identifier == "score-start":

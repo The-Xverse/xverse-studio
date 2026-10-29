@@ -680,6 +680,7 @@ class Runs:
                             "cleanup",
                             "cleanupResources",
                             "runtimeStatus",
+                            "platformStatus",
                             "inputTelemetry",
                             "liveValues",
                             "liveMutationCount",
@@ -878,7 +879,9 @@ class Runs:
                     )
                 except (Problem, OSError):
                     pass
-        deadline = time.monotonic() + (45 if self.installed_providers else 3)
+        shutdown_budget = max((min(90, max(3, getattr(provider, "shutdown_timeout_seconds", 45)))
+                               for provider in self.installed_providers.values()), default=3)
+        deadline = time.monotonic() + shutdown_budget
         while self.children and time.monotonic() < deadline:
             for rid in list(self.children):
                 self.read(rid)

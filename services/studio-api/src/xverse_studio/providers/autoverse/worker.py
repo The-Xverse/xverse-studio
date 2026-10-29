@@ -22,6 +22,7 @@ class Cancelled(Exception):
 
 
 class Demo:
+    provider_id = "autoverse.demo"
     def __init__(self, root):
         self.root = root
         self.request = json.loads((root / "request.json").read_text())
@@ -56,7 +57,7 @@ class Demo:
         body = {"schemaVersion": "1.0", "eventId": f'{self.request["runId"]}:{self.count}',
                 "runId": self.request["runId"], "snapshotId": self.snapshot["snapshotId"], "sequence": str(self.count),
                 "type": kind, "recordedAt": time.time(), "sourceTime": None,
-                "source": {"providerId": "autoverse.demo", "version": "0.1.0"}, "elementRefs": [],
+                "source": {"providerId": self.provider_id, "version": "0.1.0"}, "elementRefs": [],
                 "evidenceClass": "observed", "payload": payload, "evidenceRefs": [self.request["runId"] + ":provider-journal"], "previousDigest": self.previous}
         self.previous = hashlib.sha256(canonical(body).encode()).hexdigest()
         line = (canonical({**body, "digest": self.previous}) + "\n").encode()
@@ -97,6 +98,9 @@ class Demo:
             data = os.read(key.fileobj.fileno(), 16384)
             if not data:
                 self.selector.unregister(key.fileobj)
+                self.process_eof(role)
+                continue
+            if self.process_output(role, data):
                 continue
             if role == "driver":
                 self.bridge_buffer.extend(data)
@@ -157,7 +161,13 @@ class Demo:
         if deadline is not None and time.monotonic() >= deadline:
             raise InstallationError("AUTOVERSE_PHASE_DEADLINE")
 
-    def launch(self, role, argv, cwd=None, interactive=False):
+    def process_output(self, role, data):
+        return False
+
+    def process_eof(self, role):
+        pass
+
+    def launch(self, role, argv, cwd=None, interactive=False, diagnostics=False):
         self.check_phase_deadline()
         self.emit("log.appended", {"severity": "info", "message": "Starting registered component " + role})
         prior = self.processes.get(role)
@@ -165,7 +175,7 @@ class Demo:
             raise InstallationError("AUTOVERSE_RESOURCE_STILL_OWNED")
         process = subprocess.Popen(argv, cwd=cwd, env=self.environment(), start_new_session=True,
                                    stdin=subprocess.PIPE if interactive else subprocess.DEVNULL,
-                                   stdout=subprocess.PIPE, stderr=subprocess.STDOUT if not interactive else subprocess.DEVNULL, close_fds=True)
+                                   stdout=subprocess.PIPE, stderr=subprocess.PIPE if diagnostics else subprocess.STDOUT if not interactive else subprocess.DEVNULL, close_fds=True)
         # Retain the original child before ownership observation or pipe setup:
         # either may fail after a successful acquisition.
         record = {"process": process, "pid": process.pid, "createTime": None, "argvDigest": None}
@@ -177,6 +187,9 @@ class Demo:
         if interactive:
             os.set_blocking(process.stdin.fileno(), False)
         self.selector.register(process.stdout, selectors.EVENT_READ, role)
+        if diagnostics:
+            os.set_blocking(process.stderr.fileno(), False)
+            self.selector.register(process.stderr, selectors.EVENT_READ, role + "-diagnostic")
         self.state["runtimeStatus"]["components"][role] = "starting"
         atomic(self.root / "resources.private.json", canonical({key: {k: v for k, v in value.items() if k != "process"} for key, value in self.processes.items()}).encode())
         return process

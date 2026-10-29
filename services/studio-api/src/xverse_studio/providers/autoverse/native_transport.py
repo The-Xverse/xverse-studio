@@ -183,7 +183,7 @@ def run(binary):
     parent_pending, output = bytearray(), bytearray()
     config = read_line(stdin, parent_pending, time.monotonic() + 5)
     validate(config)
-    native = NativeRPC(binary, config["binarySha256"], config["native"])
+    native = None
     incoming = queue.Queue(maxsize=128)
     sessions, subscribers, publishers = {}, [], []
     fault, lock = [], threading.RLock()
@@ -220,7 +220,10 @@ def run(binary):
     try:
         for kind in (signal.SIGTERM, signal.SIGINT):
             previous_handlers[kind] = signal.signal(kind, signal_stop)
+        native = NativeRPC(binary, config["binarySha256"], config["native"])
         for side, endpoint in config["endpoints"].items():
+            if stop:
+                raise BridgeError("NATIVE_PARENT_STOP_OR_DEADLINE")
             options = zenoh.Config()
             for key, value in {"mode": "client", "connect/endpoints": [endpoint],
                 "connect/timeout_ms": 3000, "connect/exit_on_failure": True, "listen/endpoints": [],
@@ -323,7 +326,8 @@ def run(binary):
             except Exception:
                 pass
         try:
-            native.close()
+            if native is not None:
+                native.close()
         finally:
             for kind, prior in previous_handlers.items():
                 signal.signal(kind, prior)

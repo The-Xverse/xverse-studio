@@ -161,3 +161,48 @@ def example():
             "limitations": ["Loading the declaration starts nothing. Native Autoverse provider installation and readiness are required.",
                             "Linux provider with CARLA, Zenoh, Docker, S-CORE and Android dependencies; no Windows demo claim.",
                             "Source simulation time and deterministic replay remain unavailable; command publication is separate from observed vehicle effect."]}
+
+
+PLATFORM_CONTRACT_REF = "urn:xverse:studio:autoverse:platform:1.0"
+PLATFORM_PROVIDER_ID = "autoverse.platform"
+
+
+def platform_resources(input_surface="native-pygame"):
+    """Distinct explicit runtime contract; classic authored bytes are unchanged."""
+    if input_surface != "native-pygame":
+        raise ValueError("The platform contract currently admits the native keyboard window only")
+    result = resources(input_surface)
+    for value in result.values():
+        value["metadata"]["provenance"].update(source=PLATFORM_CONTRACT_REF, revision="1.0.0",
+            limitations=["Requires an explicitly enrolled Linux simulation installation and native bridge.",
+                         "Native FIFO receipt, external publication and vehicle effects are distinct; simulation time is unmapped."])
+        if value["kind"] != "Profile":
+            value["metadata"]["version"] = "1.1.0"
+    system, deployment, scenario = (result[name + ".xdl.yaml"] for name in ("system", "deployment", "scenario"))
+    for resource_value in (system, scenario):
+        resource_value["extensions"][NAMESPACE].update(providerId=PLATFORM_PROVIDER_ID, contractRef=PLATFORM_CONTRACT_REF)
+    artifact = deployment["spec"]["artifacts"][0]
+    artifact.update(sourceRef=PLATFORM_CONTRACT_REF,
+        digest="sha256:" + hashlib.sha256(Path(__file__).with_name("autoverse-platform-contract.json").read_bytes()).hexdigest())
+    scenario["spec"]["steps"][0]["action"]["operation"] = "run-autoverse-platform"
+    for name, unit in (("vehicle-speed", "km/h"), ("vcu-throttle", "scalar"), ("vcu-brake", "scalar")):
+        scenario["spec"]["observers"].append({"id": "native-" + name,
+            "targetRef": reference("System", "autoverse-demo", name + "-flow"), "timeDomainId": "host-runtime",
+            "samplingIntent": "Host-scheduled pulls of native capacity-one coalesce-latest taps, at most250 plus final cutoff. Original native source clock is separate and unmapped; coalescing degrades evidence.",
+            "payloadSchema": "urn:xverse:autoverse:wire-utf8-number:v1", "unitSemantics": unit,
+            "evidenceSinkRef": "urn:xverse:argus:public-maestro-execution"})
+    scenario["spec"]["acceptanceIntent"] = "Operate the complete simulation through public Maestro, carry VCU-boundary payloads through native X-COM, and inspect original Argus evidence."
+    return result
+
+
+def platform_example():
+    value = example()
+    value.update(id="autoverse-platform", entryId="autoverse-platform", name="Autoverse with X-Verse platform",
+        description="Run the complete simulation with Maestro component phases, native X-COM forwarding and original Argus evidence.",
+        providerId=PLATFORM_PROVIDER_ID, version="1.0.0", scope="platform_simulation",
+        documents={name: dump_yaml(item) for name, item in platform_resources().items()},
+        expectedObservations=["Original Maestro phase/cleanup records and sampled native X-COM messages in Argus."],
+        limitations=["Requires explicit enrollment of the existing Linux simulation installation and verified native bridge.",
+                     "Three native routes are sampled with original coalescing counters; downstream consumption and simulator time remain separate.",
+                     "No physical vehicle, Windows provider, deterministic replay or general solver claim."])
+    return value

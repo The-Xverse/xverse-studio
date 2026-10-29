@@ -66,11 +66,11 @@ def inspect(docker, identifier, *, timeout=15):
     return rows[0]
 
 
-def container_file_digest(docker, identifier, name):
+def container_file_digest(docker, identifier, name, *, timeout=60):
     # Docker's read-only archive API can resolve mounted Bazel outputs while the
     # container is stopped; host access to the Docker data directory is unnecessary.
     result = subprocess.run([docker, "cp", "-L", identifier + ":" + name, "-"],
-                            capture_output=True, timeout=60, check=False)
+                            capture_output=True, timeout=timeout, check=False)
     if result.returncode or len(result.stdout) > 256 * 1024 * 1024:
         raise InstallationError("AUTOVERSE_CONTAINER_ARTIFACT_MISSING")
     with tarfile.open(fileobj=io.BytesIO(result.stdout)) as archive:

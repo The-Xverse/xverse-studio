@@ -297,6 +297,7 @@ def examples() -> list[dict]:
                        + ([{"namespace": LIVE_NAMESPACE, "version": "1.0.0"}] if live_controls else [])
                        # Owned presentation-only domain terminology (T062); it never changes semantics.
                        + ([{"namespace": domain_profile, "version": "1.0.0"}] if domain_profile else [])})
-    from xverse_studio.blueprints.autoverse import example as autoverse_example
+    from xverse_studio.blueprints.autoverse import example as autoverse_example, platform_example
     result.insert(len(result) - 1, autoverse_example())
+    result.insert(len(result) - 1, platform_example())
     return result

@@ -14,6 +14,10 @@ EXTERNAL_CONTRACT = {"version": "1.0", "kind": "communication", "providerId": PR
 
 
 def configuration(documents, compiled):
+    return configuration_for(documents, compiled, resources, CONTRACT_REF)
+
+
+def configuration_for(documents, compiled, resource_factory, contract_ref):
     if not compiled.get("valid"):
         return None
     try:
@@ -21,7 +25,7 @@ def configuration(documents, compiled):
         if len(actual) != len(documents):
             return None
         input_surface = actual["scenario.xdl.yaml"]["extensions"][NAMESPACE]["inputSurface"]
-        expected = resources(input_surface)
+        expected = resource_factory(input_surface)
         if set(actual) != set(expected):
             return None
         duration = actual["scenario.xdl.yaml"]["extensions"][NAMESPACE]["durationSeconds"]
@@ -37,7 +41,7 @@ def configuration(documents, compiled):
                 expected[name]["metadata"].pop(key, None)
             if digest(value) != digest(expected[name]):
                 return None
-        return {"contractRef": CONTRACT_REF, "durationSeconds": duration, "physicalEffects": False, "inputSurface": input_surface,
+        return {"contractRef": contract_ref, "durationSeconds": duration, "physicalEffects": False, "inputSurface": input_surface,
                 "simulatorAdvancement": "public-vehicle-cli-synchronous", "fixedDeltaSeconds": 0.05,
                 "sourceClockMapping": "unavailable", "randomness": "external_uncontrolled_no_applied_seed"}
     except (ValueError, KeyError, TypeError):
@@ -47,6 +51,7 @@ def configuration(documents, compiled):
 class AutoverseProvider:
     worker_module = "xverse_studio.providers.autoverse.worker"
     controls = ["stop", "cancel"]
+    configuration = staticmethod(configuration)
 
     def __init__(self, installation):
         self.installation = deepcopy(installation)
@@ -71,7 +76,7 @@ class AutoverseProvider:
                                 "Input acceptance means publication, not vehicle acknowledgement. No native X-COM or physical vehicle."]}
 
     def readiness(self, documents, compiled, provider_id, provider, active_count):
-        config = configuration(documents, compiled)
+        config = self.configuration(documents, compiled)
         code = None
         if config is None:
             code = "AUTOVERSE_SOURCE_UNSUPPORTED"
@@ -79,7 +84,7 @@ class AutoverseProvider:
             code = "RESOURCE_BUSY"
         else:
             try:
-                verify(self.installation)
+                self.verify_installation()
             except (InstallationError, OSError, subprocess.SubprocessError) as error:
                 code = str(error) if isinstance(error, InstallationError) else "AUTOVERSE_INSTALLATION_UNAVAILABLE"
         fact = {"status": "blocked" if code else "available", "message": code or "Pinned existing installation is available; exclusive ownership is acquired only by the worker.",
@@ -92,6 +97,9 @@ class AutoverseProvider:
         errors = [] if not code else [{"code": code, "severity": "error", "message": "The installed demo cannot start: " + code,
                                      "remediation": "Restore the pinned stopped installation or resolve the reported resource conflict, then preflight again."}]
         return checks, errors, config if not code else None, self.descriptor()["limits"]
+
+    def verify_installation(self):
+        verify(self.installation)
 
     def input_request(self, root, action, payload, session):
         from .input import input_request

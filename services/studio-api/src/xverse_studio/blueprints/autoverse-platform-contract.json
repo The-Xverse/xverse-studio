@@ -1,0 +1,21 @@
+{
+  "contractVersion": "1.0",
+  "contractId": "urn:xverse:studio:autoverse:platform:1.0",
+  "providerId": "autoverse.platform",
+  "inputSurface": "native-pygame",
+  "runtimeOwnership": "public-maestro-execution-per-binding-phases",
+  "nativeCommunication": "actual-cpp-in-process-fifo-before-external-zenoh-publication",
+  "nativeBoundaryRoutes": 11,
+  "sampledNativeRoutes": ["vehicle-speed-flow", "vcu-throttle-flow", "vcu-brake-flow"],
+  "observationPolicy": "capacity-one-coalesce-latest-degrade-on-loss",
+  "maxNormalNativePulls": 250,
+  "evidence": "actual-public-argus-writer-and-reader",
+  "nativeClock": "process-elapsed-monotonic; realization-identity-bound-to-start-operation",
+  "hostAndSimulationClockMapping": "unavailable",
+  "downstreamConsumption": "unacknowledged-unless-separately-observed",
+  "physicalEffects": false,
+  "maxDurationSeconds": 1800,
+  "startupBudgetSeconds": 900,
+  "cleanupBudgetSeconds": 60,
+  "liveAcceptance": "requires-actual-complete-stack-and-shared-identity-browser-evidence"
+}

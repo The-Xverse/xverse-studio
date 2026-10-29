@@ -97,6 +97,39 @@ input/output requirement for that capability, not an invented callable API:
 
 ## Studio implementation and boundaries
 
+The explicit `autoverse.platform` / `urn:xverse:studio:autoverse:platform:1.0`
+contract is distinct from the historical classic demo. It preserves logical
+resource URIs, uses new executable resource versions and a separately digested
+integration artifact, and leaves the classic authored bytes unchanged. The
+existing generic native-runtime schema admits its explicit provider/contract
+identity; no unknown extension is dropped to make execution possible.
+
+Scenario observer timing denotes host-scheduled collection. Original native
+process elapsed clocks are declared separately to Argus, without conversion to
+host or simulator time. An initial two-clock scenario failed the authoritative
+compiler's required mapping check; that source and diagnostic remain retained.
+The final contract does not assert a nonexistent synchronization mapping or use
+native source clocks for scenario scheduling.
+
+Host enrollment explicitly selects the verified native build and a persistent
+private Maestro root under the Studio data root. A per-run grant binds the actual
+current artifact/installation identity, compiled inputs, phase graph and runtime
+root to at most 2700 seconds (requested driving duration plus 900 startup) and
+60 seconds cleanup. This is the public interface's host policy, not a private
+runtime review/containment waiver. Imports cannot nominate a root, binary or grant.
+All runs in that registration reuse the same root; unresolved claims are never
+bypassed by allocating a new run root. Shared installation ownership still fences
+classic and platform providers against simultaneous acquisition.
+
+The provider delegates individual component acquisitions and cleanup through
+Maestro. Separate supervision can cancel a start without calling Stop from a
+callback holding the SDK operation lock. Normal running Stop first quiesces the
+native bridge and imports its final batch, then requests public Maestro Stop.
+Native faults abort through an actual provider observation and retain incomplete
+evidence. Backend shutdown allows the installed provider's bounded cleanup budget.
+Signed bounded SDK read snapshots are derived metadata; canonical records remain
+in Argus. Complete live/browser acceptance remains required.
+
 A host-installed binding selects admitted service/reader implementations and roots;
 HTTP requests choose opaque IDs, never host paths, binaries, sockets or credentials.
 The evidence adapter calls the actual public Argus reader, preserves raw accepted
