@@ -48,3 +48,6 @@ Two [additional native Start-acceptance crash cases](start-acceptance/verificati
 T033 remains open for complete clause/environment review. Native Windows is held;
 external Lite, physical, human/AT/SADS and independent milestone gates remain open.
 Counts remain49 completed/41 in progress/10 blocked, zero accepted milestones.
+
+
+Original-failure evidence limitation: the suite report, assertion, source and input maps are retained. The failed worker directory was inspected read-only, but was not copied before subsequent pytest retention removed it. The later worker/journal/operation code observations are recorded as [transcribed tool observations](full-original/observation-limitations.json), not replacement raw records or an atomic assertion-time witness. Original raw journal integrity and the exact interleaving remain unverified.
