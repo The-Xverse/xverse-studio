@@ -1,5 +1,7 @@
 # Owned-fixture lifecycle verification
 
+[Additional native command-terminal checks](command-terminal/README.md) pass10 new actual native cases and8 related regressions on389 unchanged inputs. All prior388 inputs and116 package payloads remain identical; the application is unchanged. The prior1250/92/2/package116 retains its original scope. T033 remains open.
+
 The [live-target successor](live-target/README.md), source`d67624a`, passes1250backend/92affectedbrowser/2performance on388 identical inputs and clean nativeLinux package116/all payload hashes/6 tested UI assets. Actual installed target changes, finite-command rejection, immutable inputs and owned shutdown also pass. Complete lifecycle/fault/recovery review remains open; T033 and49/41/10 stay unchanged. Earlier cleanup/preparation receipts below retain their source identities.
 
 The [cleanup successor](cleanup/README.md), source`cc65590`, passes fresh

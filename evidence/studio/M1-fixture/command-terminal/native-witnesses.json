@@ -1,0 +1,144 @@
+[
+  {
+    "case": "test_native_pending_command_stays_unknown_without_owned_terminal_proof[worker_interrupted-stop]",
+    "property": "native_pending_command",
+    "witness": {
+      "kind": "stop",
+      "fault": "worker_interrupted",
+      "scope": "Actual owned native process; signed mailbox delivery loss and explicit test fault; no equipment",
+      "originalPidBirthArgvOwnerVerified": true,
+      "uncertainOutcomeRetained": true,
+      "ownershipRecovery": "not recovered",
+      "noReplayOrRespawn": true,
+      "immutableInputs": true
+    }
+  },
+  {
+    "case": "test_native_pending_command_stays_unknown_without_owned_terminal_proof[worker_interrupted-cancel]",
+    "property": "native_pending_command",
+    "witness": {
+      "kind": "cancel",
+      "fault": "worker_interrupted",
+      "scope": "Actual owned native process; signed mailbox delivery loss and explicit test fault; no equipment",
+      "originalPidBirthArgvOwnerVerified": true,
+      "uncertainOutcomeRetained": true,
+      "ownershipRecovery": "not recovered",
+      "noReplayOrRespawn": true,
+      "immutableInputs": true
+    }
+  },
+  {
+    "case": "test_native_pending_command_stays_unknown_without_owned_terminal_proof[recorded_owner_lost-stop]",
+    "property": "native_pending_command",
+    "witness": {
+      "kind": "stop",
+      "fault": "recorded_owner_lost",
+      "scope": "Actual owned native process; signed mailbox delivery loss and explicit test fault; no equipment",
+      "originalPidBirthArgvOwnerVerified": true,
+      "uncertainOutcomeRetained": true,
+      "ownershipRecovery": "original recorded birth restored after original worker natural exit",
+      "noReplayOrRespawn": true,
+      "immutableInputs": true
+    }
+  },
+  {
+    "case": "test_native_pending_command_stays_unknown_without_owned_terminal_proof[recorded_owner_lost-cancel]",
+    "property": "native_pending_command",
+    "witness": {
+      "kind": "cancel",
+      "fault": "recorded_owner_lost",
+      "scope": "Actual owned native process; signed mailbox delivery loss and explicit test fault; no equipment",
+      "originalPidBirthArgvOwnerVerified": true,
+      "uncertainOutcomeRetained": true,
+      "ownershipRecovery": "original recorded birth restored after original worker natural exit",
+      "noReplayOrRespawn": true,
+      "immutableInputs": true
+    }
+  },
+  {
+    "case": "test_native_reconciliation_before_delegation_does_not_reopen_settled_command[stop]",
+    "property": "native_settled_command",
+    "witness": {
+      "kind": "stop",
+      "scope": "Actual owned native process and intervening read after natural exit; no equipment",
+      "originalPidBirthArgvOwnerVerified": true,
+      "originalOperationResultPreserved": true,
+      "noMailboxWrite": true,
+      "noReplayOrRespawn": true,
+      "immutableInputs": true
+    }
+  },
+  {
+    "case": "test_native_reconciliation_before_delegation_does_not_reopen_settled_command[cancel]",
+    "property": "native_settled_command",
+    "witness": {
+      "kind": "cancel",
+      "scope": "Actual owned native process and intervening read after natural exit; no equipment",
+      "originalPidBirthArgvOwnerVerified": true,
+      "originalOperationResultPreserved": true,
+      "noMailboxWrite": true,
+      "noReplayOrRespawn": true,
+      "immutableInputs": true
+    }
+  },
+  {
+    "case": "test_native_late_command_outcome_preserves_natural_completion_and_exact_retry[after_final_poll-stop]",
+    "property": "native_late_command",
+    "witness": {
+      "kind": "stop",
+      "boundary": "after_final_poll",
+      "scope": "Actual owned native process and source ticks; signed mailbox delivery fault only; no equipment",
+      "originalPidBirthArgvOwnerVerified": true,
+      "finalSampleTick": "2000000",
+      "operation": "RUN_COMPLETED_BEFORE_COMMAND",
+      "naturalCompletion": true,
+      "originalJournalUnchangedAfterRetry": true,
+      "immutableInputs": true
+    }
+  },
+  {
+    "case": "test_native_late_command_outcome_preserves_natural_completion_and_exact_retry[after_final_poll-cancel]",
+    "property": "native_late_command",
+    "witness": {
+      "kind": "cancel",
+      "boundary": "after_final_poll",
+      "scope": "Actual owned native process and source ticks; signed mailbox delivery fault only; no equipment",
+      "originalPidBirthArgvOwnerVerified": true,
+      "finalSampleTick": "2000000",
+      "operation": "RUN_COMPLETED_BEFORE_COMMAND",
+      "naturalCompletion": true,
+      "originalJournalUnchangedAfterRetry": true,
+      "immutableInputs": true
+    }
+  },
+  {
+    "case": "test_native_late_command_outcome_preserves_natural_completion_and_exact_retry[after_exit-stop]",
+    "property": "native_late_command",
+    "witness": {
+      "kind": "stop",
+      "boundary": "after_exit",
+      "scope": "Actual owned native process and source ticks; signed mailbox delivery fault only; no equipment",
+      "originalPidBirthArgvOwnerVerified": true,
+      "finalSampleTick": "2000000",
+      "operation": "RUN_TERMINAL_BEFORE_COMMAND",
+      "naturalCompletion": true,
+      "originalJournalUnchangedAfterRetry": true,
+      "immutableInputs": true
+    }
+  },
+  {
+    "case": "test_native_late_command_outcome_preserves_natural_completion_and_exact_retry[after_exit-cancel]",
+    "property": "native_late_command",
+    "witness": {
+      "kind": "cancel",
+      "boundary": "after_exit",
+      "scope": "Actual owned native process and source ticks; signed mailbox delivery fault only; no equipment",
+      "originalPidBirthArgvOwnerVerified": true,
+      "finalSampleTick": "2000000",
+      "operation": "RUN_TERMINAL_BEFORE_COMMAND",
+      "naturalCompletion": true,
+      "originalJournalUnchangedAfterRetry": true,
+      "immutableInputs": true
+    }
+  }
+]

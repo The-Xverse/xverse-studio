@@ -1,5 +1,7 @@
 # Current implementation status
 
+Additional native Stop/Cancel verification: **10 new native cases plus8 related regressions pass (18 total)** on389 unchanged inputs. All prior388 tested inputs and116 package payloads match published`91e81bd`; application unchanged. Actual late delivery, interruption, ownership uncertainty/recovery and settlement-before-delegation preserve receipts and immutable inputs. This is additional focused proof, not a fresh expanded full suite. T033 stays open,49/41/10 andzero milestones. [Evidence](../../evidence/studio/M1-fixture/command-terminal/candidate-binding.json).
+
 Current source `d67624a` passes **1250 backend/92 affected browser/2 separate performance checks** on the same388 inputs. Its clean native Linux package passes116 payload/archive hashes and6 identical tested UI assets. Actual installed target1→2, model evolution, immutable/effective inputs, malformed-command422 and owned Stop/exit pass. T033 stays open for the complete lifecycle/fault/recovery review;49/41/10 and zero milestones. [Current source/package binding](../../evidence/studio/M1-fixture/live-target/candidate-binding.json).
 
 Scope: runnable development reference implementation on `implement/studio-m0-m4`. No M0–M4 milestone
