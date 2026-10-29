@@ -643,7 +643,7 @@ export function ResultsView({
         />
       </div>
       {Array.isArray(run.cleanupResources) &&
-        run.cleanupResources.length > 0 && (
+        run.cleanupResources.some((resource) => resource?.status !== "released") && (
           <section
             className="panel"
             role="region"

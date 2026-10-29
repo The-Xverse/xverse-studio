@@ -12,7 +12,8 @@ const [dataArg, url, python] = process.argv.slice(2);
 assert(dataArg && /^http:\/\/127\.0\.0\.1:\d+$/.test(url) && python, 'Usage: node scripts/verify_platform_browser.mjs private-data-dir loopback-url enrolled-python');
 const data = path.resolve(dataArg);
 const browser = await chromium.launch({headless: true});
-const context = await browser.newContext({ baseURL: url, ...(process.env.STUDIO_RESUME_RUN ? {storageState:path.join(data,'browser-session.private.json')} : {}), viewport: {width:1440,height:900} });
+const reuseSession = Boolean(process.env.STUDIO_RESUME_RUN || process.env.STUDIO_REUSE_SESSION);
+const context = await browser.newContext({ baseURL: url, ...(reuseSession ? {storageState:path.join(data,'browser-session.private.json')} : {}), viewport: {width:1440,height:900} });
 const page = await context.newPage();
 page.setDefaultTimeout(20000);
 let runId, completed = false;
@@ -27,7 +28,7 @@ page.on('response', async response => {
 const getRun = async () => (await page.request.get(`/api/v1/runs/${runId}`)).json();
 try {
   await page.goto(url);
-  if (process.env.STUDIO_RESUME_RUN) {
+  if (reuseSession) {
     const state = JSON.parse(readFileSync(path.join(data,'browser-session.private.json'),'utf8'));
     await context.addCookies(state.cookies);
     await page.reload();
@@ -40,6 +41,7 @@ try {
   chmodSync(path.join(data,'browser-session.private.json'),0o600);
   }
   if (!process.env.STUDIO_RESUME_RUN) {
+  await page.getByRole('button',{name:'X-Verse Studio home',exact:true}).click();
   await page.locator('.example-grid').getByRole('button',{name:/Autoverse with X-Verse platform/}).click();
   await page.getByRole('button',{name:'Preflight & run',exact:true}).click();
   await expect(page.getByRole('button',{name:'Start frozen snapshot',exact:true})).toBeEnabled({timeout:30000});

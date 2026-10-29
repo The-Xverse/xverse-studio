@@ -3,7 +3,8 @@ import { chromium, expect } from '@playwright/test';
 import {readFileSync,writeFileSync,existsSync} from 'node:fs';
 import path from 'node:path';
 import assert from 'node:assert/strict';
-const [dataArg,url]=process.argv.slice(2);
+const [dataArg,url,mode]=process.argv.slice(2);
+assert(mode===undefined||mode==='live','Optional mode must be live.');
 assert(dataArg && /^http:\/\/127\.0\.0\.1:\d+$/.test(url), 'Usage: node scripts/verify_platform_views.mjs private-data-dir loopback-url');
 const data=path.resolve(dataArg);
 const identities=JSON.parse(readFileSync(path.join(data,'platform-view-selection.private.json'),'utf8'));
@@ -12,7 +13,8 @@ const reuse=existsSync(session)&&JSON.parse(readFileSync(session,'utf8')).cookie
 const browser=await chromium.launch({headless:true});
 const context=await browser.newContext({...reuse?{storageState:session}:{},baseURL:url,viewport:{width:1440,height:900}});
 const page=await context.newPage();page.setDefaultTimeout(15000);
-const report={scope:'actual historical complete backend experiment, linked browser read projection only; reconstructed Studio metadata envelope; no browser Start/Stop or driving claim',outcome:'failed',runId:identities.runId,responses:[],errors:[]};
+const report={scope:mode==='live'?'read-only final views of the actual browser-started experiment; original persisted Studio metadata':
+ 'actual historical complete backend experiment, linked browser read projection only; reconstructed Studio metadata envelope; no browser Start/Stop or driving claim',outcome:'failed',runId:identities.runId,responses:[],errors:[]};
 page.on('pageerror',e=>report.errors.push(e.message));
 page.on('response',async r=>{if(r.url().includes('/platform?')&&r.ok()){const b=await r.json();report.responses.push({view:b.view,snapshotId:b.snapshotId,sourceWitness:b.sourceWitness,identity:b.identity,counts:b.counts,filter:b.effectiveFilter,evidence:b.evidence});}});
 try{
@@ -23,6 +25,7 @@ try{
  }
  await page.evaluate(({projectId,runId})=>{localStorage.setItem('studio.projectId',projectId);localStorage.setItem('studio.lastRun.'+projectId,runId);localStorage.setItem('studio.lastRun',runId);},identities);
  await page.reload();await page.getByRole('tab',{name:/^Results/}).click();
+ if(mode==='live') await expect(page.getByRole('region',{name:'Unresolved run resources',exact:true})).toHaveCount(0);
  const panel=page.getByRole('region',{name:'Linked platform views',exact:true});
  await page.getByRole('tab',{name:'Communications',exact:true}).click();
  await expect(panel.getByRole('button',{name:'Original cause',exact:true}).first()).toBeVisible();
@@ -39,7 +42,7 @@ try{
  await expect(panel.getByText(/^51–/)).toBeVisible();
  await page.getByRole('tab',{name:'Communications',exact:true}).click();
  await expect(panel.getByRole('button',{name:'Original cause',exact:true}).first()).toBeVisible();
- await expect(panel.getByText(`1–50 of ${identities.expectedCounts.communications} matching records`,{exact:true})).toBeVisible();
+ await expect(panel.getByText(`1–${Math.min(50,identities.expectedCounts.communications)} of ${identities.expectedCounts.communications} matching records`,{exact:true})).toBeVisible();
  await page.getByRole('tab',{name:'Evidence',exact:true}).click();
  await expect(panel.getByText(`1–50 of ${identities.expectedCounts.retained} matching records`,{exact:true})).toBeVisible();
  await panel.getByRole('button',{name:'Evidence record',exact:true}).first().click();
@@ -62,6 +65,6 @@ try{
  const bounds=await panel.boundingBox();assert(bounds.x>=0&&bounds.x+bounds.width<=1025);
  await page.screenshot({path:path.join(data,'linked-views-1024.png'),fullPage:true});
  assert.equal(report.errors.length,0,report.errors.join('\n'));
- report.outcome='passed';console.log('ACTUAL_HISTORICAL_LINKED_BROWSER_VIEWS_PASS',identities.runId);
+ report.outcome='passed';console.log(mode==='live'?'ACTUAL_LIVE_EXPERIMENT_FINAL_BROWSER_VIEWS_PASS':'ACTUAL_HISTORICAL_LINKED_BROWSER_VIEWS_PASS',identities.runId);
 }catch(e){report.failure=e.message;console.log('FAILURE',e.message);await page.screenshot({path:path.join(data,'failure.png'),fullPage:true});process.exitCode=1;}
-finally{writeFileSync(path.join(data,'browser-verification.json'),JSON.stringify(report,null,2)+'\n',{mode:0o600});await context.storageState({path:path.join(data,'browser-session.private.json')});await browser.close();}
+finally{writeFileSync(path.join(data,mode==='live'?'browser-views-verification.json':'browser-verification.json'),JSON.stringify(report,null,2)+'\n',{mode:0o600});await context.storageState({path:path.join(data,'browser-session.private.json')});await browser.close();}
