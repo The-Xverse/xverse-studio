@@ -39,6 +39,9 @@ class Demo:
         self.stop_command, self.stop_requested, self.bridge_ready = None, False, False
         self.last_input, self.input_generation = 0, 0
         self.bridge_buffer = bytearray()
+        self.phase_deadline = None
+        self.active_phase = None
+        self.phase_resources = {}
         self.journal = (root / "evidence.jsonl").open("xb", buffering=0)
         self.lock = None
         self.save()
@@ -87,6 +90,7 @@ class Demo:
             self.stop_requested = True
 
     def tick(self, *, cancellable=True):
+        self.check_phase_deadline()
         self.check_command()
         for key, _ in self.selector.select(0.03):
             role = key.data
@@ -148,14 +152,27 @@ class Demo:
         env.update(HOME=self.installation["home"], USER=self.installation["user"], LOGNAME=self.installation["user"], PYTHONUNBUFFERED="1", SDL_AUDIODRIVER="dummy")
         return env
 
+    def check_phase_deadline(self):
+        deadline = getattr(self, "phase_deadline", None)
+        if deadline is not None and time.monotonic() >= deadline:
+            raise InstallationError("AUTOVERSE_PHASE_DEADLINE")
+
     def launch(self, role, argv, cwd=None, interactive=False):
+        self.check_phase_deadline()
         self.emit("log.appended", {"severity": "info", "message": "Starting registered component " + role})
+        prior = self.processes.get(role)
+        if prior and prior["process"].poll() is None:
+            raise InstallationError("AUTOVERSE_RESOURCE_STILL_OWNED")
         process = subprocess.Popen(argv, cwd=cwd, env=self.environment(), start_new_session=True,
                                    stdin=subprocess.PIPE if interactive else subprocess.DEVNULL,
                                    stdout=subprocess.PIPE, stderr=subprocess.STDOUT if not interactive else subprocess.DEVNULL, close_fds=True)
-        owner = psutil.Process(process.pid)
-        record = {"process": process, "pid": process.pid, "createTime": owner.create_time(), "argvDigest": digest(owner.cmdline())}
+        # Retain the original child before ownership observation or pipe setup:
+        # either may fail after a successful acquisition.
+        record = {"process": process, "pid": process.pid, "createTime": None, "argvDigest": None}
         self.processes[role] = record
+        self.register_phase_resource("processes", role)
+        owner = psutil.Process(process.pid)
+        record.update(createTime=owner.create_time(), argvDigest=digest(owner.cmdline()))
         os.set_blocking(process.stdout.fileno(), False)
         if interactive:
             os.set_blocking(process.stdin.fileno(), False)
@@ -181,16 +198,24 @@ class Demo:
             raise InstallationError("AUTOVERSE_COMMAND_FAILED_" + role)
         return process
 
+    def inspect_container(self, identifier, *, deadline=None):
+        deadline = self.phase_deadline if deadline is None else deadline
+        timeout = 15 if deadline is None else min(15, deadline - time.monotonic())
+        if timeout <= 0:
+            raise InstallationError("AUTOVERSE_PHASE_DEADLINE")
+        return inspect(self.installation["docker"], identifier, timeout=timeout)
+
     def start_container(self, role):
         expected = self.installation["containers"][role]
-        row = inspect(self.installation["docker"], expected["id"])
+        row = self.inspect_container(expected["id"])
         if container_fact(row) != expected or row["State"]["Running"]:
             raise InstallationError("AUTOVERSE_CONTAINER_BUSY_OR_CHANGED")
         intent = {"identity": expected, "intentAt": time.time(), "startedAt": None}
         self.containers[role] = intent
+        self.register_phase_resource("containers", role)
         self.container_receipt()
         self.execute("start-" + role, [self.installation["docker"], "start", expected["id"]])
-        row = inspect(self.installation["docker"], expected["id"])
+        row = self.inspect_container(expected["id"])
         if not row["State"]["Running"] or container_fact(row) != expected:
             raise InstallationError("AUTOVERSE_CONTAINER_NOT_RUNNING_" + role)
         intent["startedAt"] = row["State"]["StartedAt"]
@@ -200,29 +225,14 @@ class Demo:
     def container_receipt(self):
         atomic(self.root / "containers.private.json", canonical(self.containers).encode())
 
-    def run(self):
-        import fcntl  # This provider is admitted only on native Linux.
-        from xverse_studio.xdl import XDLAdapter
-        compiled = XDLAdapter().compile(self.snapshot["documents"])
-        actual = configuration(self.snapshot["documents"], compiled)
-        from .adapter import AutoverseProvider
-        if digest(AutoverseProvider(self.installation).descriptor()) != digest(self.snapshot.get("providerIdentity")):
-            raise InstallationError("AUTOVERSE_PROVIDER_IDENTITY_CHANGED")
-        if actual != self.request["configuration"] or compiled.get("planDigest") != self.snapshot["planDigest"] or compiled.get("semanticDigest") != self.snapshot["semanticDigest"]:
-            raise InstallationError("EFFECTIVE_INPUT_MISMATCH")
-        lock_path = Path("/tmp") / ("xverse-autoverse-" + str(os.getuid()) + "-" + hashlib.sha256(self.installation["root"].encode()).hexdigest()[:20] + ".lock")
-        self.lock = os.fdopen(os.open(lock_path, os.O_RDWR | os.O_CREAT | os.O_NOFOLLOW, 0o600), "a+")
-        try:
-            fcntl.flock(self.lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
-        except BlockingIOError:
-            raise InstallationError("AUTOVERSE_INSTALLATION_OWNED") from None
-        verify(self.installation)
-        self.state.update(effectivePlanDigest=compiled["planDigest"], effectiveSemanticDigest=compiled["semanticDigest"])
-        self.emit("run.state_changed", {"state": "preparing", "stateVersion": 1, "installationDigest": self.installation["identityDigest"]})
-        r, i = Path(self.installation["root"]), self.installation
+    def start_router(self):
+        i = self.installation
         self.phase("router")
         self.launch("router", [i["zenohd"], "--listen", "tcp/127.0.0.1:7447", "--listen", "tcp/" + i["androidGateway"] + ":7447", "--no-multicast-scouting", "--cfg", "scouting/gossip/enabled:false"])
         self.wait(1)
+
+    def prepare_simulator(self):
+        i = self.installation
         self.phase("simulator")
         self.launch("carla", [str(Path(i["carlaRoot"]) / "CarlaUE4/Binaries/Linux/CarlaUE4-Linux-Shipping"), "CarlaUE4", "-prefernvidia", "-quality-level=Epic", "-carla-rpc-port=2000", "-RenderOffScreen"], cwd=i["carlaRoot"])
         deadline = time.monotonic() + 120
@@ -236,27 +246,43 @@ class Demo:
                 self.wait(1)
         self.execute("carla-prepare", [i["python"], "-E", str(Path(__file__).with_name("carla_prepare.py"))], timeout=25)
         self.state["runtimeStatus"]["components"]["carla"] = "ready"
+
+    def start_vcu(self):
+        r, i = Path(self.installation["root"]), self.installation
         self.phase("vcu-and-communications")
         config = self.root / "zenoh.private.json5"
         atomic(config, canonical({"mode": "client", "connect": {"endpoints": ["tcp/127.0.0.1:7447"]}, "listen": {"endpoints": []}, "scouting": {"multicast": {"enabled": False}, "gossip": {"enabled": False}}}).encode())
         self.launch("vcu", [i["python"], "-E", str(r / "vecu/vcu_zenoh/src/main.py"), "--config", str(config)], cwd=str(r / "vecu/vcu_zenoh"))
-        self.start_container("someip-bridge")
-        self.start_container("score")
-        self.wait(12)
+
+    def start_vehicle(self):
+        r, i = Path(self.installation["root"]), self.installation
         self.phase("vehicle-and-driver")
         examples = r / "bridges/carla/examples"
         self.launch("vehicle", [i["python"], "-E", str(Path(__file__).with_name("public_entry.py")), str(examples / "virtual_vehicle.py"), "--verbose", "--sync", "--host", "127.0.0.1", "--port", "2000", "--router", "127.0.0.1", "--res", "1280x960", "--filter", "vehicle.audi.etron", "--rolename", "ego_vehicle", "--signals-config", str(examples / "signals_config.json"), "--enable-camera-display"], cwd=str(examples))
-        self.launch("driver", [i["python"], "-E", str(Path(__file__).with_name("zenoh_bridge.py")), "--duration", "1800", *(["--observe-only"] if actual["inputSurface"] == "native-pygame" else [])], interactive=True)
+
+    def start_driver_observer(self):
+        i = self.installation
+        self.launch("driver", [i["python"], "-E", str(Path(__file__).with_name("zenoh_bridge.py")), "--duration", "1800", *(["--observe-only"] if self.request["configuration"]["inputSurface"] == "native-pygame" else [])], interactive=True)
+
+    def wait_vehicle_telemetry(self):
         deadline = time.monotonic() + 120
         while not self.bridge_ready or self.state["inputTelemetry"].get("items", {}).get("speed", {}).get("status") != "observed":
             self.tick()
             if time.monotonic() > deadline:
                 raise InstallationError("AUTOVERSE_VEHICLE_TELEMETRY_UNAVAILABLE")
+
+    def start_android_container(self):
         self.phase("android")
         self.start_container("android")
+
+    def start_android_vm(self):
+        i = self.installation
         cid = i["containers"]["android"]["id"]
         self.execute("android-launch", [i["docker"], "exec", "--env", "ANDROID_HOST_OUT=/root/runtime", "--workdir", "/root/runtime", cid,
             "bash", "-c", "ulimit -n 65536; nohup ./bin/launch_cvd --system_image_dir=/root/runtime --assembly_dir=/root/runtime/cvd-assembly --instance_dir=/root/runtime/cvd-state --console=true --display0=width=1080,height=600,dpi=90 --display1=width=400,height=600,dpi=90 --start_webrtc=true --report_anonymous_usage_stats=no -- those --no-sandbox > cvd_launch.log 2>&1 &"])
+
+    def wait_android_boot(self):
+        i = self.installation
         deadline = time.monotonic() + 300
         while True:
             self.execute("adb-connect", [i["adb"], "connect", "localhost:6520"], timeout=10, allow_failure=True)
@@ -268,30 +294,79 @@ class Demo:
             if time.monotonic() > deadline:
                 raise InstallationError("AUTOVERSE_ANDROID_BOOT_TIMEOUT")
             self.wait(2)
+
+    def install_android_cluster(self):
+        r, i = Path(self.installation["root"]), self.installation
         self.execute("android-install", [i["adb"], "-s", "localhost:6520", "install", "-r", str(r / "aaos_digital_cluster/cuttlefish_emulator/apk/digital-cluster-app-debug.apk")], timeout=90)
         self.execute("android-density", [i["adb"], "-s", "localhost:6520", "shell", "wm", "density", "90"])
         self.execute("android-open", [i["adb"], "-s", "localhost:6520", "shell", "am", "start", "-a", "android.intent.action.MAIN", "-c", "android.intent.category.LAUNCHER", "-p", "com.example.digitalclusterapp"])
+
+    def start_manual_window(self):
+        r, i = Path(self.installation["root"]), self.installation
+        examples = r / "bridges/carla/examples"
+        self.phase("manual-control-window")
+        ready_file = self.root / "manual-window.private.json"
+        manual = self.launch("manual", [i["python"], "-E", str(Path(__file__).with_name("pygame_manual.py")),
+            "--root", str(r), "--ready-file", str(ready_file)], cwd=str(examples))
+        deadline = time.monotonic() + 30
+        while not ready_file.exists():
+            self.tick()
+            if manual.poll() is not None or time.monotonic() > deadline:
+                raise InstallationError("AUTOVERSE_MANUAL_WINDOW_UNAVAILABLE")
+        ready = json.loads(ready_file.read_bytes())
+        if (ready.get("pid") != manual.pid or type(ready.get("windowId")) is not int
+            or ready["windowId"] <= 0 or ready.get("title") != "Vehicle Manual Control" or ready.get("keyboardOnly") is not True):
+            raise InstallationError("AUTOVERSE_MANUAL_WINDOW_UNCONFIRMED")
+        self.state["runtimeStatus"]["nativeWindow"] = {"status": "opened", "title": ready["title"], "keyboardOnly": True}
+        self.state["runtimeStatus"]["components"]["manual"] = "window_opened"
+
+    def validate_requested_inputs(self):
+        from xverse_studio.xdl import XDLAdapter
+        compiled = XDLAdapter().compile(self.snapshot["documents"])
+        actual = configuration(self.snapshot["documents"], compiled)
+        from .adapter import AutoverseProvider
+        if digest(AutoverseProvider(self.installation).descriptor()) != digest(self.snapshot.get("providerIdentity")):
+            raise InstallationError("AUTOVERSE_PROVIDER_IDENTITY_CHANGED")
+        if actual != self.request["configuration"] or compiled.get("planDigest") != self.snapshot["planDigest"] or compiled.get("semanticDigest") != self.snapshot["semanticDigest"]:
+            raise InstallationError("EFFECTIVE_INPUT_MISMATCH")
+        return compiled, actual
+
+    def claim_installation(self, compiled):
+        import fcntl  # This provider is admitted only on native Linux.
+        lock_path = Path("/tmp") / ("xverse-autoverse-" + str(os.getuid()) + "-" + hashlib.sha256(self.installation["root"].encode()).hexdigest()[:20] + ".lock")
+        self.lock = os.fdopen(os.open(lock_path, os.O_RDWR | os.O_CREAT | os.O_NOFOLLOW, 0o600), "a+")
+        try:
+            fcntl.flock(self.lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except BlockingIOError:
+            raise InstallationError("AUTOVERSE_INSTALLATION_OWNED") from None
+        verify(self.installation)
+        self.state.update(effectivePlanDigest=compiled["planDigest"], effectiveSemanticDigest=compiled["semanticDigest"])
+        self.emit("run.state_changed", {"state": "preparing", "stateVersion": 1, "installationDigest": self.installation["identityDigest"]})
+
+    def run(self):
+        compiled, actual = self.validate_requested_inputs()
+        self.claim_installation(compiled)
+        self.start_router()
+        self.prepare_simulator()
+        self.start_vcu()
+        self.start_container("someip-bridge")
+        self.start_container("score")
+        self.wait(12)
+        self.start_vehicle()
+        self.start_driver_observer()
+        self.wait_vehicle_telemetry()
+        self.start_android_container()
+        self.start_android_vm()
+        self.wait_android_boot()
+        self.install_android_cluster()
         if actual["inputSurface"] == "native-pygame":
-            self.phase("manual-control-window")
-            ready_file = self.root / "manual-window.private.json"
-            manual = self.launch("manual", [i["python"], "-E", str(Path(__file__).with_name("pygame_manual.py")),
-                "--root", str(r), "--ready-file", str(ready_file)], cwd=str(examples))
-            deadline = time.monotonic() + 30
-            while not ready_file.exists():
-                self.tick()
-                if manual.poll() is not None or time.monotonic() > deadline:
-                    raise InstallationError("AUTOVERSE_MANUAL_WINDOW_UNAVAILABLE")
-            ready = json.loads(ready_file.read_bytes())
-            if (ready.get("pid") != manual.pid or type(ready.get("windowId")) is not int
-                or ready["windowId"] <= 0 or ready.get("title") != "Vehicle Manual Control" or ready.get("keyboardOnly") is not True):
-                raise InstallationError("AUTOVERSE_MANUAL_WINDOW_UNCONFIRMED")
-            self.state["runtimeStatus"]["nativeWindow"] = {"status": "opened", "title": ready["title"], "keyboardOnly": True}
-            self.state["runtimeStatus"]["components"]["manual"] = "window_opened"
+            self.start_manual_window()
         self.state.update(state="running", stateVersion=2, startedAt=time.time())
         self.state["runtimeStatus"]["phase"] = "running"
         self.state["runtimeStatus"]["components"].update(router="running", driver="transport_ready", vehicle="speed_telemetry_observed", vcu="interface_observed", android="booted_apk_started")
         self.emit("run.state_changed", {"state": "running", "stateVersion": 2, "evidenceScope": "external_demo", "sourceClockMapping": "unavailable"})
         self.save()
+        i = self.installation
         deadline = time.monotonic() + actual["durationSeconds"]
         while time.monotonic() < deadline:
             self.tick()
@@ -316,19 +391,33 @@ class Demo:
                 self.emit("observation.available", {"observerId": "autoverse-telemetry", "scope": "external_interface_receipts", **self.state["inputTelemetry"]})
                 self.last_evidence = time.monotonic()
 
-    def cleanup(self):
-        self.stop_requested = True
+    def cleanup_resources(self, *, processes=None, containers=None, deadline=None):
+        process_roles = list(self.processes) if processes is None else list(processes)
+        container_roles = list(self.containers) if containers is None else list(containers)
         outcomes = []
+        def budget(maximum):
+            if deadline is None:
+                return maximum
+            remaining = deadline - time.monotonic()
+            if remaining <= 0:
+                raise InstallationError("AUTOVERSE_CLEANUP_DEADLINE")
+            return min(maximum, remaining)
         # Close the owned bridge; observe-only mode never publishes driver input.
-        driver = self.processes.get("driver")
+        driver = self.processes.get("driver") if "driver" in process_roles else None
         if driver and driver["process"].stdin:
-            driver["process"].stdin.close()
-        for role in reversed(list(self.processes)):
+            try:
+                budget(1)
+                driver["process"].stdin.close()
+            except (OSError, InstallationError):
+                pass  # Continue every exact-resource cleanup attempt below.
+        for role in reversed(process_roles):
             record = self.processes[role]
             process = record["process"]
             if process.poll() is not None:
+                outcomes.append({"resourceId": role, "kind": "process", "status": "released"})
                 continue
             try:
+                budget(1)
                 owner = psutil.Process(record["pid"])
                 if owner.create_time() != record["createTime"] or digest(owner.cmdline()) != record["argvDigest"]:
                     raise InstallationError("AUTOVERSE_PROCESS_IDENTITY_UNKNOWN")
@@ -336,43 +425,47 @@ class Demo:
                 descendants = [(child, child.create_time()) for child in owner.children(recursive=True)]
                 owner.send_signal(signal.SIGINT if role in ("vehicle", "driver", "manual") else signal.SIGTERM)
                 try:
-                    process.wait(timeout=8)
+                    process.wait(timeout=budget(8))
                 except subprocess.TimeoutExpired:
+                    budget(1)
                     if owner.create_time() == record["createTime"]:
                         owner.kill()
-                    process.wait(timeout=3)
+                    process.wait(timeout=budget(3))
                 for child, born in descendants:
                     try:
                         if child.create_time() == born and child.status() != psutil.STATUS_ZOMBIE:
+                            budget(1)
                             child.terminate()
                             try:
-                                child.wait(timeout=3)
+                                child.wait(timeout=budget(3))
                             except psutil.TimeoutExpired:
+                                budget(1)
                                 if child.create_time() == born:
                                     child.kill()
-                                    child.wait(timeout=3)
+                                    child.wait(timeout=budget(3))
                     except psutil.NoSuchProcess:
                         pass
                 outcomes.append({"resourceId": role, "kind": "process", "status": "released"})
             except (psutil.Error, OSError, InstallationError, subprocess.TimeoutExpired):
                 outcomes.append({"resourceId": role, "kind": "process", "status": "unknown"})
-        for role, claim in reversed(list(self.containers.items())):
+        for role in reversed(container_roles):
+            claim = self.containers[role]
             expected = claim["identity"]
             try:
-                row = inspect(self.installation["docker"], expected["id"])
+                row = inspect(self.installation["docker"], expected["id"], timeout=budget(15))
                 if container_fact(row) != expected or claim["startedAt"] is None or row["State"]["StartedAt"] != claim["startedAt"]:
                     raise InstallationError("AUTOVERSE_CONTAINER_OWNERSHIP_UNKNOWN")
                 if row["State"]["Running"]:
                     if role == "android":
-                        subprocess.run([self.installation["docker"], "exec", "--env", "ANDROID_HOST_OUT=/root/runtime", "--env", "CUTTLEFISH_CONFIG_FILE=/root/runtime/cvd-assembly/cuttlefish_config.json", "--workdir", "/root/runtime", expected["id"], "./bin/stop_cvd"], capture_output=True, timeout=20, check=False)
-                    subprocess.run([self.installation["docker"], "stop", "--time", "10", expected["id"]], capture_output=True, timeout=20, check=True)
-                row = inspect(self.installation["docker"], expected["id"])
+                        subprocess.run([self.installation["docker"], "exec", "--env", "ANDROID_HOST_OUT=/root/runtime", "--env", "CUTTLEFISH_CONFIG_FILE=/root/runtime/cvd-assembly/cuttlefish_config.json", "--workdir", "/root/runtime", expected["id"], "./bin/stop_cvd"], capture_output=True, timeout=budget(20), check=False)
+                    subprocess.run([self.installation["docker"], "stop", "--time", "10", expected["id"]], capture_output=True, timeout=budget(20), check=True)
+                row = inspect(self.installation["docker"], expected["id"], timeout=budget(15))
                 if row["State"]["Running"]:
                     raise InstallationError("AUTOVERSE_CONTAINER_STOP_UNCONFIRMED")
                 outcomes.append({"resourceId": role, "kind": "container", "status": "released"})
             except (ValueError, KeyError, OSError, subprocess.SubprocessError):
                 outcomes.append({"resourceId": role, "kind": "container", "status": "unknown"})
-        score = self.containers.get("score")
+        score = self.containers.get("score") if "score" in container_roles else None
         if score and score.get("startedAt") and any(row["resourceId"] == "score" and row["status"] == "released" and row["kind"] == "container" for row in outcomes):
             from .working_state import remember
             try:
@@ -380,6 +473,24 @@ class Demo:
                 self.state["runtimeStatus"]["scratch"] = "retained_verified_middleware_working_files"
             except (ValueError, OSError):
                 outcomes.append({"resourceId": "middleware-scratch", "kind": "working-state", "status": "unknown"})
+        return outcomes
+
+    def register_phase_resource(self, kind, role):
+        phase = getattr(self, "active_phase", None)
+        if phase is not None:
+            resources = self.phase_resources.setdefault(phase, {"processes": [], "containers": []})
+            if role not in resources[kind]:
+                resources[kind].append(role)
+
+    def cleanup_phase(self, phase, deadline):
+        resources = self.phase_resources.get(phase, {"processes": [], "containers": []})
+        outcomes = self.cleanup_resources(**resources, deadline=deadline)
+        self.state.setdefault("cleanupResources", []).extend({**item, "phaseId": phase} for item in outcomes)
+        return "released" if all(row["status"] == "released" for row in outcomes) else "unknown"
+
+    def cleanup(self):
+        self.stop_requested = True
+        outcomes = self.cleanup_resources()
         self.state["cleanupResources"] = outcomes
         self.state["cleanup"] = "complete" if all(row["status"] == "released" for row in outcomes) else "unknown"
         if self.lock:

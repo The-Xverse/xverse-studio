@@ -15,7 +15,7 @@ import socket
 import subprocess
 import psutil
 
-from xverse_studio.storage.core import canonical, digest
+from xverse_studio.storage.core import digest
 
 CONTAINERS = {"someip-bridge": "bridge-e2e", "score": "docker_setup-adas_score-1", "android": "cuttlefish-orchestration-cont"}
 REQUIRED = ["run_autoverse.py", "vecu/vcu_zenoh/src/main.py",
@@ -59,8 +59,8 @@ def container_fact(row):
             "configurationDigest": digest({key: row[key] for key in ("Config", "HostConfig", "Mounts")})}
 
 
-def inspect(docker, identifier):
-    rows = json.loads(command([docker, "inspect", identifier]))
+def inspect(docker, identifier, *, timeout=15):
+    rows = json.loads(command([docker, "inspect", identifier], timeout=timeout))
     if len(rows) != 1:
         raise InstallationError("AUTOVERSE_CONTAINER_IDENTITY_UNKNOWN")
     return rows[0]
