@@ -1,0 +1,113 @@
+{
+  "date": "2026-10-29",
+  "scope": "Studio dependency admission; actual Maestro/Autoverse/native-XCOM integration and linked views remain open",
+  "studioCandidate": "6a80067e6b74a86917c2f73b38a04dcfe1d0627c",
+  "studioBranch": "feat/platform-observability",
+  "sourceDigest": "17f170be169158a5398154f737a8ba2bb51aac66ebfacda5bae1c3d9d3b6ccd6",
+  "platformRevision": "ce2d5558cd36de5b29ab1e3c622303c7a77c61eb",
+  "sourceUrl": "https://github.com/The-Xverse/xverse-platform.git",
+  "version": "0.4.0",
+  "python": "3.13.13",
+  "os": "Linux",
+  "architecture": "x86_64",
+  "acceptedSourceFingerprint": "0f1c5bd2040c1a8e1a0b6997269ec27ab5edcf32c0924a2a9fa2388595069045",
+  "installedImplementationFiles": {
+    "xverse/maestro/execution/__init__.py": "0117a690043836e11b7552515f6d48691dbbc0256cb371f19bceda437e3ebfc7",
+    "xverse/maestro/execution/admission.py": "2bf3b38dfdf3365e2f67b4831864e08d10841353daadc729a9c1e47459b8bea9",
+    "xverse/maestro/execution/evidence.py": "be808624a5d78b5aca658381a95700742a04dc4d33cb64ec611c1fb05fe18238",
+    "xverse/maestro/execution/inspection.py": "6260a5ca1728321ccfd46adc3a9c485c8010d5571253207c0b50e0bba3e56d73",
+    "xverse/maestro/execution/observations.py": "bd587ad0438970e558a6913af59e49140a9e4157db446eeff1b9636b089207ec",
+    "xverse/maestro/execution/permissions.py": "71824e2019d64f4a8b514861baadd3542b7a15977e1be918cf08d0ad26dc20f4",
+    "xverse/maestro/execution/planning.py": "e4105ee608bbfc3fbba3fe96efcd4e8841c7528d1cc6b1bcc4c61e45c6962a2e",
+    "xverse/maestro/execution/process.py": "eed73f48297da0827349b7f1d9362f7bfc8642c935d016c170685ef7ba71c9fb",
+    "xverse/maestro/execution/runtime.py": "0cbb026e7764229e5e6e030eeb7ed614eb28d11c9ac1fe1a6e192a5670e2a7a4"
+  },
+  "installedImplementationMatchesAccepted": true,
+  "publicExportsChecked": [
+    "CanonicalSubmission",
+    "EffectiveInspection",
+    "ExecutionInputError",
+    "ExperimentSelection",
+    "InspectionHost",
+    "SchemaPin",
+    "TargetBinding",
+    "inspect_submission",
+    "EffectiveConfiguration",
+    "ExecutionProvider",
+    "PreparedExecution",
+    "PreparedProvider",
+    "prepare_execution",
+    "LifecycleGraph",
+    "LifecyclePhase",
+    "plan_lifecycle",
+    "HostExecutionPermit",
+    "PhaseReceipt",
+    "PublicExecutionService",
+    "RuntimeContext",
+    "RuntimeProvider",
+    "FixedProcessInstallation",
+    "InstallationFile",
+    "OwnedChild",
+    "ProcessOwnershipError",
+    "NativeObservationBatch"
+  ],
+  "nativePlatformVerificationSha256": "bfdfd146d73a9436a965c5f8ea1c6144a706a54c79d2e23079a4f9d3c01099a4",
+  "platformUserAcceptance": {
+    "accepted": true,
+    "userMessage": "I accept",
+    "recordedAtUtc": "2026-10-29 16:16:03 UTC",
+    "scope": "public platform boundary only"
+  },
+  "upstreamAssembledVerification": {
+    "codeMerge": "f0e57c844bf9a23b18836c86ca6ca11b4f4b1282",
+    "pythonPassed": 190,
+    "ctestPassed": 3,
+    "sourceAndNativeArtifactMatchAccepted": true
+  },
+  "provisioning": {
+    "lock": "uv lock --python .venv/bin/python",
+    "install": "uv sync --frozen --python .venv/bin/python",
+    "source": "accepted local Git repository via ephemeral URL rewrite; canonical Git URL and exact VCS commit preserved",
+    "globalGitConfigurationChanged": false,
+    "published": false,
+    "remoteOnlyInstallation": "unavailable until separate publication"
+  },
+  "checks": {
+    "passed": 185,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "exitStatus": 0,
+    "pytestSeconds": 94.591,
+    "command": "PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 .venv/bin/python -I -m pytest tests/contract/test_xdl_adapter.py tests/contract/test_platform_argus.py tests/contract/test_autoverse_admission.py tests/contract/test_autoverse_blueprint.py tests/contract/test_autoverse_cleanup.py tests/contract/test_autoverse_carla_prepare.py tests/contract/test_autoverse_pygame.py tests/contract/test_autoverse_controls.py tests/contract/test_runtime_lifecycle.py tests/contract/test_capabilities.py tests/contract/test_api_versions.py tests/contract/test_architecture_boundaries.py tests/integration/test_preflight.py --junitxml=.studio-local/platform-sdk-admission/report.xml",
+    "reportSha256": "bc167fff915a443cc7113fc472d7ebfdc76169df48b5c231b1fe5164747258ac",
+    "logSha256": "6ce39a77cdbadca6ec93dd998e17b46457634fc9d8774fa18a81a7342e3975f3",
+    "rawReportsRetainedPrivately": true
+  },
+  "otherChecks": {
+    "descriptiveBaseline": "passed; no runtime authority",
+    "specificationStructure": "passed; no application acceptance",
+    "diffWhitespace": "passed"
+  },
+  "review": {
+    "kind": "separate primary-agent scope/source review; not independent milestone acceptance",
+    "findings": [
+      {
+        "finding": "Preexisting descriptive manifest still recorded pre-Pygame native profile schema hash.",
+        "resolution": "Reconciled to the unchanged packaged schema cfb8abb7864cc838dcc61f75d47fed2d26e099912a6f3ac2be5a57bc991bcbc0, already retained by Autoverse sensor-startup payload evidence. No schema edited."
+      },
+      {
+        "finding": "Reference provider digest includes XDL adapter bytes, so the platform pin changes its identity.",
+        "resolution": "Recomputed descriptor snapshot; lifecycle, preflight and capability regressions pass. No available provider/operation expanded."
+      }
+    ],
+    "limitations": [
+      "Full browser/backend suites not rerun for this dependency-only checkpoint.",
+      "Native Windows remains held; historical evidence candidates are unchanged.",
+      "Existing user Pygame preview and data were not changed."
+    ]
+  },
+  "taskStatusChanges": [],
+  "milestonesClosed": 0,
+  "goalComplete": false
+}

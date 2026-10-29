@@ -747,3 +747,20 @@ Studio has not admitted or pinned this unaccepted candidate; native shared-run
 integration, actual Autoverse adapter, all three views and platform acceptance/main
 integration remain open. Existing task statuses/dependencies and milestones remain
 unchanged. Evidence: evidence/studio/platform-observability-foundation/maestro-runtime-checkpoint.json.
+
+
+Accepted public Maestro SDK admission — 2026-10-29: the user accepted the exact
+platform boundary; accepted code merge f0e57c844 and metadata successor ce2d5558c
+are integrated into local platform main. Assembled platform verification passed
+190 Python and three native CTest cases, with identical accepted source and native
+artifact bytes. Studio candidate 6a80067 now pins/installs ce2d5558c with exact
+canonical Git provenance; all nine installed public implementation files match.
+185 scoped Studio compiler/Argus/Autoverse/admission/lifecycle/security-boundary
+checks pass without failures, errors or skips. Descriptive baseline and package
+structure checks pass. Provisioning used the accepted local Git source; no push
+or remote-only installation claim. Public runtime availability in Studio remains
+closed pending the concrete per-binding Autoverse provider, actual native X-COM
+payload route and three linked views. T001/T004/T010/T012/T020–T024/T027–T030/
+T034–T035 retain their existing states and dependencies; 49 completed, 41 in
+progress, 10 blocked, zero accepted milestones. Evidence:
+`evidence/studio/platform-observability-foundation/sdk-admission.json`.
