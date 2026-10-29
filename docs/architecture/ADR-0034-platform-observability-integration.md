@@ -188,3 +188,9 @@ than replaying activation. Existing lost-owner claims need an admitted recovery 
 before that registration can execute again. Full browser Start/Stop, native driving
 and cruise on the same complete platform experiment remain outstanding. This is a
 Studio owner-lifetime finding, not a relaxation of the accepted SDK ownership rules.
+
+The Studio owner-lifetime successor keeps one public service in the native backend
+and selects exact per-run callback contexts. Original task identity, shutdown,
+release uncertainty and restart fences require their own verification. This does
+not recover the predecessor registration. ADR-0035 records the narrow proposed
+public recovery scope; it is not an implemented or admitted recovery interface.

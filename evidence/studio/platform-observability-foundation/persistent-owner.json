@@ -1,0 +1,96 @@
+{
+  "recordedAt": "2026-10-29T20:02:20.515397+00:00",
+  "candidate": "1d13b7debd1657e575106607138edbe7501e8a31",
+  "outcome": "passed-in-scope",
+  "scope": "persistent public Maestro owner with actual owned-child/API/Argus fixtures; external demo phases and native sampling explicitly substituted; not complete live Autoverse acceptance",
+  "platformRevision": "ce2d5558cd36de5b29ab1e3c622303c7a77c61eb",
+  "environment": {
+    "python": "3.13.13",
+    "os": "Linux-6.8.0-138-generic-x86_64-with-glibc2.35"
+  },
+  "verification": {
+    "passed": 91,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "seconds": 108.961,
+    "groups": {
+      "tests.contract.test_platform_owner": 9,
+      "tests.contract.test_platform_views": 14,
+      "tests.contract.test_platform_argus": 9,
+      "tests.contract.test_autoverse_platform_mode": 6,
+      "tests.contract.test_architecture_boundaries": 41,
+      "tests.contract.test_security_boundary": 5,
+      "tests.contract.test_runtime_lifecycle": 3,
+      "tests.integration.test_owned_state_handoff": 2,
+      "tests.platform.test_native_start_acceptance_recovery": 2
+    },
+    "ruff": "affected files passed",
+    "specCheck": "passed; task/milestone states unchanged",
+    "baselineCheck": "passed; separate descriptive runtimeAdmission false"
+  },
+  "commands": [
+    "PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 .venv/bin/python -I -m pytest tests/contract/test_platform_owner.py tests/contract/test_platform_views.py tests/contract/test_platform_argus.py tests/contract/test_autoverse_platform_mode.py tests/contract/test_architecture_boundaries.py tests/contract/test_security_boundary.py tests/contract/test_runtime_lifecycle.py tests/integration/test_owned_state_handoff.py tests/platform/test_native_start_acceptance_recovery.py -q --basetemp=.studio-local/platform-owner-verification/candidate-data --junitxml=.studio-local/platform-owner-verification/candidate.xml",
+    "python -I scripts/check_platform_compatibility.py",
+    "python -I scripts/validate_spec_package.py"
+  ],
+  "actualChecks": [
+    "Two different canonical input runs reuse the identical public service and keep original run/operation/correlation identities separate.",
+    "Two normal Stop runs execute real public phases and release their actual owned child while retaining Core ownership.",
+    "HTTP Start/Cancel uses actual backend tasks, original signed commands and original Argus; original task handle loss is unknown even with the backend PID alive.",
+    "Dead task cannot remain running merely because backend PID is alive.",
+    "Backend shutdown cancels original active task before closing public Core.",
+    "Unknown cleanup retains original callback context and blocks activation/close.",
+    "A false released receipt cannot discard an actual live original child; original Core evidence remains unchanged, Studio reports contradictory cleanup as unknown.",
+    "Predecessor owner marker blocks before installation probe, including same-PID replacement.",
+    "Ordinary child cwd remains the run directory without changing backend cwd."
+  ],
+  "earlierResults": [
+    {
+      "scope": "prior implementation and existing adapters",
+      "passed": 20,
+      "failures": 0
+    },
+    {
+      "scope": "initial original-owner fixtures",
+      "passed": 3,
+      "failures": 1,
+      "finding": "Missing original task handle was hidden by the existing five-second preparing grace. Production grace was restricted to actual live original tasks; repaired four-case successor passed."
+    },
+    {
+      "scope": "normal sequential Stop successor",
+      "passed": 6,
+      "failures": 0
+    },
+    {
+      "scope": "broader before final guards/cwd",
+      "passed": 86,
+      "failures": 0
+    },
+    {
+      "scope": "contradictory cleanup and handoff guards",
+      "passed": 14,
+      "failures": 0
+    },
+    {
+      "scope": "broader before explicit cwd preservation",
+      "passed": 91,
+      "failures": 0
+    }
+  ],
+  "limits": {
+    "publicServiceMaxRuntimeSeconds": 2700,
+    "permitRuntimeSeconds": "requested duration +900, enforced by public service expiry",
+    "cleanupSeconds": 60,
+    "runLimitPerOwner": 128,
+    "shutdownWaitSeconds": 75
+  },
+  "held": [
+    "Existing real lost-owner registration remains fenced; no claim deletion, root replacement or private handle reconstruction.",
+    "No new complete Autoverse/browser Start/Stop/driving/cruise result claimed for this candidate.",
+    "ADR-0035 is proposed additional companion scope, not an admitted public recovery operation.",
+    "Native Windows provider and physical/hybrid capabilities are not admitted."
+  ],
+  "taskStatusChanges": [],
+  "milestonesClosed": 0
+}

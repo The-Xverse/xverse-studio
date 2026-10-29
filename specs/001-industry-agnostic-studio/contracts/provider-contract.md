@@ -112,3 +112,43 @@ hash-chain evidence remains distinct from native component logs and from functio
 observations. Failure to persist state or evidence cannot prevent owned cleanup.
 The normalized browser input surface is described in the Studio API amendment;
 it cannot pause/reset the external simulator or execute arbitrary project commands.
+
+## Installed backend-owned task lifecycle — ADR-0034
+
+An installed host provider may prepare a native `BackendTask` instead of a new
+per-run worker process. Preparation creates no runtime workload. Studio records
+its actual backend process birth/argv identity and unique `ownerTaskId` before
+starting the callback. `executionKind: backend-task` distinguishes this scope;
+the private PID is not a claim that a separate worker process exists. Browser or
+profile data cannot nominate this callback or a process identity.
+
+A live backend PID is insufficient: active observations require the original
+registered task handle, matching task ID and a nonterminal task result. A missing
+or dead task leaves active state/cleanup unknown, including during the startup
+grace interval. Historical terminal reports remain historical receipts. Backend
+restart never reconstructs task or provider resource handles from a PID or file.
+Existing signed command, capability and expected-state-version checks still apply.
+
+The installed platform owner keeps one original public Maestro service for the
+backend lifetime and dispatches callbacks by exact run ID. Frozen configurations,
+phase attempts, native bridges, observations, permits and resources stay per run.
+Its public service ceiling is2700seconds; each permit limits actual execution to
+requested driving duration plus900seconds, with60seconds cleanup. Ordinary child
+commands retain their run directory as cwd without changing the backend cwd.
+
+Only observed released cleanup plus absence of the original owned child processes
+retires a run's callback context and closes its exited stdio handles. Unknown or
+contradictory release retains context, reports uncertainty and blocks acquisition.
+The SDK's original records are not rewritten if a Studio observation contradicts
+a provider receipt. At most128 runs are admitted by an owner; no capacity condition
+allocates a fresh root. Shutdown requests existing signed cancellation, waits the
+installed provider's bounded budget and closes the service only after original tasks
+and contexts settle. It never signals the backend PID as if it were a worker.
+
+A private owner-lifetime marker fences a preceding owner, including re-creation in
+the same process. It is diagnostic metadata, not an ownership/recovery receipt.
+Existing SDK durable claims remain authoritative fences even if no marker predates
+them. `AUTOVERSE_PLATFORM_OWNER_RECOVERY_REQUIRED` explains that retained historical
+views remain readable and public recovery is required before another Start. The
+ADR-0035 recovery proposal is not an admitted interface. Native Windows support
+for Studio core does not imply support for this Linux simulation provider.

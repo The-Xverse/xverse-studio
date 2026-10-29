@@ -828,3 +828,19 @@ refuses further activation. Claims and root remain intact. A persistent Studio
 Maestro owner and complete browser Start/Stop/driving/cruise acceptance remain open.
 No task/milestone state changes;49completed/41in_progress/10blocked, zero accepted
 milestones. Evidence:`evidence/studio/platform-observability-foundation/linked-views.json`.
+
+
+Persistent public Maestro owner — 2026-10-29: candidate1d13b7d keeps Core ownership
+in the native backend across separate run tasks. Original run callback contexts,
+frozen inputs, permits and resource handles remain distinct. Dead/missing task
+handles cannot borrow backend PID liveness; startup grace, signed commands and
+shutdown retain ownership checks. Unknown or contradictory cleanup preserves the
+original context and fences activation. The original child cwd remains per run.
+Fresh91 affected tests pass, including actual public Core/owned children/Argus and
+HTTP handoff, sequential normal Stop/cancellation, active shutdown and lost-owner
+fences. External simulation/native sampling is explicitly substituted in this
+verification. The existing real lost-owner registration remains fenced; additional
+public recovery is proposed in ADR-0035 and requires separately scoped companion
+authorization/admission. Full same-candidate browser Start/Stop and driving/cruise
+remain open. Task/milestone states unchanged:49completed/41in_progress/10blocked,
+zero accepted milestones. Evidence:`evidence/studio/platform-observability-foundation/persistent-owner.json`.
