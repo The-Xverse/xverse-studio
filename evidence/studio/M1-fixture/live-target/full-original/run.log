@@ -1,0 +1,192 @@
+{
+  "valid": true,
+  "scope": "planning-package",
+  "application_acceptance": "not_evaluated_by_this_check",
+  "requirements": 75,
+  "success_criteria": 8,
+  "tasks": 100,
+  "acceptance_cases": 32,
+  "milestones": 5,
+  "errors": []
+}
+{
+  "valid": true,
+  "scope": "descriptive_platform_baseline_only",
+  "runtimeAdmission": false,
+  "errors": []
+}
+Architecture boundaries: passed (imports, dependency direction, industry dispatch, private runtime, executable input and browser executable hooks).
+........................................................................ [  5%]
+........................................................................ [ 11%]
+........................................................................ [ 17%]
+........................................................................ [ 23%]
+........................................................................ [ 29%]
+........................................................................ [ 34%]
+........................................................................ [ 40%]
+........................................................................ [ 46%]
+........................................................................ [ 52%]
+........................................................................ [ 58%]
+........................................................................ [ 63%]
+........................................................................ [ 69%]
+........................................................................ [ 75%]
+...........................................................F............ [ 81%]
+........................................................................ [ 87%]
+........................................................................ [ 92%]
+.............F.......................................................... [ 98%]
+...............                                                          [100%]
+=================================== FAILURES ===================================
+_____ test_explicit_dependency_import_verifies_declared_locks_and_sidecars _____
+tests/integration/test_project_inspection.py:117: in test_explicit_dependency_import_verifies_declared_locks_and_sidecars
+    assert {lock["namespace"]: lock["status"] for lock in locks} == {
+E   AssertionError: assert {'io.xverse.e...dmitted', ...} == {'io.xverse.e...dmitted', ...}
+E
+E     Omitting 5 identical items, use -vv to show
+E     Left contains 1 more item:
+E     {'io.xverse.studio.reference-controls': 'admitted'}
+E     Use -v to get more diff
+_ test_native_evidence_io_failure_preserves_known_lifecycle_and_cleanup[journal_exists] _
+tests/integration/test_worker_evidence_io.py:75: in test_native_evidence_io_failure_preserves_known_lifecycle_and_cleanup
+    accepted = client.post("/api/v1/runs", headers=headers, json=payload)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/httpx/_client.py:1144: in post
+    return self.request(
+.venv/lib/python3.13/site-packages/starlette/testclient.py:518: in request
+    return super().request(
+.venv/lib/python3.13/site-packages/httpx/_client.py:825: in request
+    return self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/httpx/_client.py:928: in send
+    raise exc
+.venv/lib/python3.13/site-packages/httpx/_client.py:922: in send
+    response.read()
+.venv/lib/python3.13/site-packages/httpx/_models.py:881: in read
+    self._content = b"".join(self.iter_bytes())
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/httpx/_models.py:897: in iter_bytes
+    for raw_bytes in self.iter_raw():
+                     ^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/httpx/_models.py:951: in iter_raw
+    for raw_stream_bytes in self.stream:
+                            ^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/httpx/_client.py:153: in __iter__
+    for chunk in self._stream:
+                 ^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/starlette/testclient.py:384: in iter_body
+    exit_stack.close()
+<user-home>/.pyenv/versions/3.13.13/lib/python3.13/contextlib.py:627: in close
+    self.__exit__(None, None, None)
+<user-home>/.pyenv/versions/3.13.13/lib/python3.13/contextlib.py:619: in __exit__
+    raise exc
+<user-home>/.pyenv/versions/3.13.13/lib/python3.13/contextlib.py:604: in __exit__
+    if cb(*exc_details):
+       ^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/starlette/testclient.py:399: in close_app
+    raise exception
+.venv/lib/python3.13/site-packages/anyio/from_thread.py:265: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/starlette/testclient.py:366: in run_app
+    await self.app(scope, receive, send)
+.venv/lib/python3.13/site-packages/fastapi/applications.py:1160: in __call__
+    await super().__call__(scope, receive, send)
+.venv/lib/python3.13/site-packages/starlette/applications.py:96: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv/lib/python3.13/site-packages/starlette/middleware/errors.py:186: in __call__
+    raise exc
+.venv/lib/python3.13/site-packages/starlette/middleware/errors.py:164: in __call__
+    await self.app(scope, receive, _send)
+.venv/lib/python3.13/site-packages/starlette/middleware/base.py:203: in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+services/studio-api/src/xverse_studio/api/app.py:242: in boundary
+    result = await call_next(request)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/starlette/middleware/base.py:179: in call_next
+    raise app_exc from app_exc.__cause__ or app_exc.__context__
+.venv/lib/python3.13/site-packages/starlette/middleware/base.py:149: in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+.venv/lib/python3.13/site-packages/starlette/middleware/exceptions.py:63: in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+.venv/lib/python3.13/site-packages/starlette/_exception_handler.py:53: in wrapped_app
+    raise exc
+.venv/lib/python3.13/site-packages/starlette/_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+.venv/lib/python3.13/site-packages/fastapi/middleware/asyncexitstack.py:18: in __call__
+    await self.app(scope, receive, send)
+.venv/lib/python3.13/site-packages/starlette/routing.py:683: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv/lib/python3.13/site-packages/starlette/routing.py:704: in app
+    await route.handle(scope, receive, send)
+.venv/lib/python3.13/site-packages/starlette/routing.py:289: in handle
+    await self.app(scope, receive, send)
+.venv/lib/python3.13/site-packages/fastapi/routing.py:130: in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+.venv/lib/python3.13/site-packages/starlette/_exception_handler.py:53: in wrapped_app
+    raise exc
+.venv/lib/python3.13/site-packages/starlette/_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+.venv/lib/python3.13/site-packages/fastapi/routing.py:116: in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/fastapi/routing.py:670: in app
+    raw_response = await run_endpoint_function(
+.venv/lib/python3.13/site-packages/fastapi/routing.py:326: in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/starlette/concurrency.py:34: in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/anyio/to_thread.py:65: in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+.venv/lib/python3.13/site-packages/anyio/_backends/_asyncio.py:2706: in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/anyio/_backends/_asyncio.py:1100: in run
+    result = context.run(func, *args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+services/studio-api/src/xverse_studio/api/app.py:596: in start
+    return runs.start(
+services/studio-api/src/xverse_studio/runs/service.py:422: in start
+    self._dispatch(result["runId"])
+services/studio-api/src/xverse_studio/runs/service.py:532: in _dispatch
+    process = subprocess.Popen(
+tests/integration/test_worker_evidence_io.py:67: in launch_with_owned_path_fault
+    assert child.pid != os.getpid() and process.cmdline() == expected
+E   AssertionError: assert (2821639 != 2813032 and [] == ['/media/jeff...54362e170dc5']
+E    +  where 2821639 = <Popen: returncode: None args: ['/media/jefferson/11c42dee-73a3-4c2b-ab42-a0...>.pid
+E    +  and   2813032 = <built-in function getpid>()
+E    +    where <built-in function getpid> = os.getpid
+E
+E     Right contains 5 more items, first extra item: '<repo>/.venv/bin/python'
+E     Use -v to get more diff)
+=============================== warnings summary ===============================
+.venv/lib/python3.13/site-packages/fastapi/testclient.py:1
+  <repo>/.venv/lib/python3.13/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+tests/integration/test_reference_live_target.py::test_native_live_target_changes_actual_samples_with_provenance_and_immutable_inputs
+  tests/integration/test_reference_live_target.py:230: PytestWarning: record_property is incompatible with junit_family 'xunit2' (use 'legacy' or 'xunit1')
+    def test_native_live_target_changes_actual_samples_with_provenance_and_immutable_inputs(client, record_property):
+
+tests/integration/test_worker_cleanup.py::test_native_cleanup_reports_actual_retained_resources_without_deleting_contents[empty]
+tests/integration/test_worker_cleanup.py::test_native_cleanup_reports_actual_retained_resources_without_deleting_contents[stop]
+tests/integration/test_worker_cleanup.py::test_native_cleanup_reports_actual_retained_resources_without_deleting_contents[cancel]
+tests/integration/test_worker_cleanup.py::test_native_cleanup_reports_actual_retained_resources_without_deleting_contents[duration]
+tests/integration/test_worker_cleanup.py::test_native_cleanup_reports_actual_retained_resources_without_deleting_contents[substitution]
+tests/integration/test_worker_cleanup.py::test_native_cleanup_reports_actual_retained_resources_without_deleting_contents[replacement]
+tests/integration/test_worker_cleanup.py::test_native_cleanup_reports_actual_retained_resources_without_deleting_contents[missing]
+tests/integration/test_worker_cleanup.py::test_native_cleanup_reports_actual_retained_resources_without_deleting_contents[finalization]
+  tests/integration/test_worker_cleanup.py:20: PytestWarning: record_property is incompatible with junit_family 'xunit2' (use 'legacy' or 'xunit1')
+    @pytest.mark.skipif(sys.platform != "linux", reason="Owned Linux resource/symlink fault lane; native Windows remains held")
+
+tests/integration/test_worker_evidence_io.py::test_native_evidence_io_failure_preserves_known_lifecycle_and_cleanup[journal_open]
+tests/integration/test_worker_evidence_io.py::test_native_evidence_io_failure_preserves_known_lifecycle_and_cleanup[journal_exists]
+tests/integration/test_worker_evidence_io.py::test_native_evidence_io_failure_preserves_known_lifecycle_and_cleanup[journal_finalize]
+  tests/integration/test_worker_evidence_io.py:22: PytestWarning: record_property is incompatible with junit_family 'xunit2' (use 'legacy' or 'xunit1')
+    @pytest.mark.skipif(sys.platform != "linux", reason="Owned Linux filesystem-fault lane; native Windows remains held")
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/integration/test_project_inspection.py::test_explicit_dependency_import_verifies_declared_locks_and_sidecars
+FAILED tests/integration/test_worker_evidence_io.py::test_native_evidence_io_failure_preserves_known_lifecycle_and_cleanup[journal_exists]
+2 failed, 1237 passed, 13 warnings in 1222.34s (0:20:22)

@@ -1,0 +1,148 @@
+"""Exercise only the verified fresh package's owned, nonphysical reference model."""
+from pathlib import Path
+import hashlib
+import json
+import os
+import re
+import socket
+import subprocess
+import time
+
+import httpx
+import psutil
+
+root = Path.cwd().resolve()
+base = root / '.studio-local/fixture-matrix'
+out = base / 'live-target-package-artifacts'
+receipt = json.loads((out / 'verification.json').read_text())
+candidate = receipt['candidate']
+assert re.fullmatch('[0-9a-f]{40}', candidate)
+assert receipt['allArchiveAndFileHashesVerified'] and receipt['testedUiBytesIdentical']
+checkout = base / 'live-target-package-source' / candidate[:7]
+installs = list((checkout / '.studio-local/package-smoke').glob('*/extracted/xverse-studio'))
+assert len(installs) == 1
+installed = installs[0]
+native = installed / ('.venv/Scripts/python.exe' if os.name == 'nt' else '.venv/bin/python')
+data = out / 'Installed live target Ω data'
+data.mkdir()
+with socket.socket() as sock:
+    sock.bind(('127.0.0.1', 0))
+    port = sock.getsockname()[1]
+url = f'http://127.0.0.1:{port}'
+backend = subprocess.Popen([str(native), '-I', '-m', 'xverse_studio.host.launcher',
+    '--data-dir', str(data), '--port', str(port)], stdin=subprocess.DEVNULL,
+    stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, cwd=installed)
+proof = {'candidate': candidate, 'scope': 'Actual fresh native Linux package; owned model only',
+         'windows': 'NOT_RUN', 'physicalEffects': False, 'outcome': 'failed'}
+try:
+    deadline = time.monotonic() + 20
+    while time.monotonic() < deadline:
+        try:
+            if httpx.get(url + '/api/v1/session', timeout=1).status_code == 401:
+                break
+        except httpx.HTTPError:
+            pass
+        time.sleep(.05)
+    else:
+        raise RuntimeError('PACKAGED_BACKEND_START_TIMEOUT')
+    with httpx.Client(base_url=url, headers={'Origin': url}, timeout=10) as client:
+        bootstrap = json.loads((data/'bootstrap.json').read_text())
+        response = client.post('/api/v1/session', json={'bootstrapToken': bootstrap['bootstrapToken']})
+        response.raise_for_status()
+        client.headers['X-CSRF-Token'] = response.json()['csrfToken']
+
+        def get(path):
+            response = client.get('/api/v1' + path)
+            response.raise_for_status()
+            return response.json()
+
+        def post(path, payload, key=None):
+            response = client.post('/api/v1' + path, json=payload,
+                headers={'Idempotency-Key': key} if key else {})
+            response.raise_for_status()
+            return response.json()
+
+        def until(path, predicate):
+            deadline = time.monotonic() + 10
+            while time.monotonic() < deadline:
+                value = get(path)
+                if predicate(value):
+                    return value
+                time.sleep(.025)
+            raise RuntimeError('PACKAGED_MODEL_OBSERVATION_TIMEOUT')
+
+        provider = next(item for item in get('/providers')['items'] if item['providerId'] == 'studio.reference')
+        declared = next(item for item in json.loads((installed/'config/platform-compatibility.json').read_text())['providerDescriptorSnapshots'] if item['providerId'] == 'studio.reference')
+        assert provider['providerVersion'] == declared['providerVersion'] == '1.2.0'
+        assert provider['implementationDigest'] == declared['implementationDigest']
+        assert provider['limits']['maxLiveMutations'] == 32
+        project = post('/projects', {'name': 'Installed live target Ω', 'blueprintRef': 'reference-live-target'})
+        checked = post(f"/projects/{project['projectId']}/preflights", {'revision': project['revision']})
+        assert checked['status'] == 'ready'
+        started = post('/runs', {'snapshotId': checked['snapshotId'], 'preflightId': checked['preflightId']}, 'installed-live-start')
+        run_path = '/runs/' + started['runId']
+        running = until(run_path, lambda run: run['state'] == 'running')
+        assert 'set_parameter' in running['capabilities']
+        assert running['liveValues'] == {'target': 1}
+        frozen = get(run_path + '/snapshot')
+        assert frozen['integrity'] == 'valid'
+        assert frozen['snapshot']['configuration']['target'] == 1
+        directory = data/'runs'/started['runId']
+        state = json.loads((directory/'state.json').read_text())
+        process = psutil.Process(state['pid'])
+        assert process.create_time() == state['createTime']
+        assert process.cmdline() == [str(native), '-I', '-m', 'xverse_studio.providers.worker', str(directory)]
+        owner = 'sha256:' + hashlib.sha256((directory/'owner.key').read_bytes()).hexdigest()
+        assert owner == state['ownerDigest']
+        invalid = client.post('/api/v1' + run_path + '/commands',
+            headers={'Idempotency-Key': 'installed-nonfinite-target', 'Content-Type': 'application/json'},
+            content='{"kind":"set_parameter","expectedStateVersion":'+str(running['stateVersion'])+',"parameters":{"inputId":"target","expectedValue":1,"value":1e999}}')
+        assert invalid.status_code == 422 and invalid.json()['code'] == 'REQUEST_INVALID'
+        unchanged = get(run_path)
+        assert unchanged['liveValues'] == {'target': 1} and unchanged['liveMutationCount'] == 0
+        changed = post(run_path + '/commands', {'kind': 'set_parameter',
+            'expectedStateVersion': running['stateVersion'],
+            'parameters': {'inputId': 'target', 'expectedValue': 1, 'value': 2}}, 'installed-live-change')
+        current = until(run_path, lambda run: run.get('liveValues') == {'target': 2})
+        operation = get('/operations/' + changed['operationId'])
+        assert operation['status'] == 'completed'
+        mutation = operation['result']['mutation']
+        assert mutation['oldValue'] == 1 and mutation['newValue'] == 2
+        assert mutation['authority'] == {'principal': 'local-operator', 'scope': 'native-backend-owned', 'physicalEffects': False}
+        observations = until(run_path + '/observations',
+            lambda page: len([item for item in page['items'] if item['values']['target'] == 2]) >= 2)
+        applied = [item['values'] for item in observations['items'] if item['values']['target'] == 2]
+        assert all(item['source'] == {'providerId': 'studio.reference', 'version': '1.2.0'}
+                   for item in observations['items'] if item['values']['target'] == 2)
+        assert abs(applied[0]['control'] - .8*(2-applied[0]['measured'])) < 1e-9
+        assert abs(applied[1]['value'] - (applied[0]['value'] + applied[0]['control']*.1)) < 1e-9
+        assert current['liveMutationCount'] == 1
+        stopped = post(run_path + '/commands', {'kind': 'stop', 'expectedStateVersion': current['stateVersion']}, 'installed-live-stop')
+        ended = until(run_path, lambda run: run['state'] == 'stopped')
+        assert ended['cleanup'] == ended['evidence'] == 'complete'
+        assert get('/operations/' + stopped['operationId'])['status'] == 'completed'
+        assert get(run_path + '/snapshot') == frozen
+        assert get(run_path + '/observations')['integrity'] == 'valid'
+        until(run_path, lambda run: not psutil.pid_exists(state['pid']))
+        proof.update(outcome='passed', originalNativeOwnershipVerified=True,
+            providerVersion='1.2.0', blueprint='reference-live-target', schemaPackaged=True,
+            runId=started['runId'], snapshotId=started['snapshotId'], immutableSnapshot=True,
+            oldValue=1, newValue=2, liveMutationCount=ended['liveMutationCount'],
+            actualControlAndNextModelStateVerified=True, finalState=ended['state'],
+            nonfiniteRequestRejectedBeforeMutation=True,
+            cleanup=ended['cleanup'], evidence=ended['evidence'], finalIntegrity='valid',
+            originalWorkerExited=True)
+except Exception as error:
+    proof['diagnostic'] = type(error).__name__
+    raise
+finally:
+    backend.terminate()
+    try:
+        backend.wait(timeout=10)
+    except subprocess.TimeoutExpired:
+        backend.kill()
+        backend.wait(timeout=5)
+    target = out/'installed-live-target.private.json'
+    with target.open('x') as stream:
+        stream.write(json.dumps(proof, indent=2)+'\n')
+print(json.dumps(proof))

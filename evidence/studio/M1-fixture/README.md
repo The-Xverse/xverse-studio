@@ -1,6 +1,6 @@
 # Owned-fixture lifecycle verification
 
-The [live-target successor](live-target/README.md) passes1250 backend/92 affected browser/2 separate performance checks on the same388 unchanged inputs. Clean native Linux packaging and complete lifecycle/fault/recovery review remain pending.629browser cases/61files are collected separately. Original failures and earlier source scopes remain recorded. T033 stays open; published cleanup/preparation receipts below retain their identities.
+The [live-target successor](live-target/README.md), source`d67624a`, passes1250backend/92affectedbrowser/2performance on388 identical inputs and clean nativeLinux package116/all payload hashes/6 tested UI assets. Actual installed target changes, finite-command rejection, immutable inputs and owned shutdown also pass. Complete lifecycle/fault/recovery review remains open; T033 and49/41/10 stay unchanged. Earlier cleanup/preparation receipts below retain their source identities.
 
 The [cleanup successor](cleanup/README.md), source`cc65590`, passes fresh
 1,219 backend tests, 88 affected browser checks and two performance cases on

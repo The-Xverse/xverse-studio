@@ -1,7 +1,7 @@
 # Owned live target input — focused verification
 
-This is an **uncommitted successor** to published `62c8296`, scoped to the owned
-native Linux reference model. It does not accept a milestone or close T033.
+This is source **`d67624a`**, a successor to published `62c8296`, scoped to the
+owned native Linux reference model. It does not accept a milestone or close T033.
 The initial focused source/configuration/contract/test/UI identity is the
 387-entry [input map](selected-input-hashes.json). An intermediate fixture repair
 changed only two test files. The latest finite-JSON repair adds an HTTP boundary
@@ -19,7 +19,14 @@ this concrete repair; that prefix is not a full result. Fresh1250 full backend
 passes **1,250 tests with no failures/errors/skips** in1157.90s, on the same388
 unchanged inputs as the40-case verification. **92 affected browser checks and two
 separate performance cases also pass on the identical388-input map**. Clean
-native Linux packaging remains pending. The629-case/61-file full browser
+native Linux packaging passes116 payload/archive hashes and six identical tested
+UI assets. Actual installed-model smoke passes target1→2/control/next-state,
+nonfinite422 without mutation, exact immutable/effective inputs, owned Stop/exit
+and valid evidence. See the [source/package binding](candidate-binding.json).
+Its initial extra-smoke receipt helper failed on a missing Start-receipt field
+after functional assertions; corrected fresh-data verification passes, and the
+original helper/failed receipt remain under `package-extra-history/`.
+The629-case/61-file full browser
 collection is separate from execution. See the
 [combined verification](final-verification.json).
 
