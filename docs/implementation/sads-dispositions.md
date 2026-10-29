@@ -18,6 +18,11 @@ mapping or mark these source requirements implemented. Accessible authorized nor
 the exact prerequisite for a statement-level coverage claim. This evidence gap does not block work
 on the explicit FR/NFR requirements in the supplied Studio specification.
 
+Linux reassessment on2026-10-29 confirms the public register file is byte-identical
+between that original inspection and selected SDK12615d402. Its20allocated UI/SDK
+IDs therefore retain these dispositions. ADR-0036 removes the Windows delivery gate;
+it does not invent normative SADS wording or promote allocation to satisfaction.
+
 Shared lifecycle, observation, timing, fault, communication and security services remain allocated to
 their actual platform/provider owners. Studio's UI and API wrappers do not implement those underlying
 services merely by displaying their state. No private source excerpt is included in this repository.

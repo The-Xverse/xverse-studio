@@ -6,7 +6,7 @@ Maestro capability was accepted and integrated into local platform `main`.
 
 | Input | Selected immutable revision | Admission scope |
 |---|---|---|
-| [xverse-platform](https://github.com/The-Xverse/xverse-platform/tree/12615d402ba16cde3cd48c55b70aca464ea90261) | `12615d402ba16cde3cd48c55b70aca464ea90261` | Installed `xverse-xdl` 0.4.0 from accepted local main; offline XDL/Argus compatibility checked. Public Maestro boundary accepted upstream; concrete Studio runtime integration remains open. |
+| [xverse-platform](https://github.com/The-Xverse/xverse-platform/tree/12615d402ba16cde3cd48c55b70aca464ea90261) | `12615d402ba16cde3cd48c55b70aca464ea90261` | Installed `xverse-xdl`0.4.0 from accepted local main; matching public execution modules and offline XDL/Argus checks. Explicit Autoverse platform enrollment has actual complete Linux browser/native evidence; this does not admit unrelated Lite/compat/blueprint bindings. |
 | [xverse-compat](https://github.com/The-Xverse/xverse-compat/tree/f5b3957ca84cccfd98cddd9eb3ab95b0a4643eed) | `f5b3957ca84cccfd98cddd9eb3ab95b0a4643eed` | Source inspection only; no driver/simulator admission. |
 | [xverse-blueprints](https://github.com/The-Xverse/xverse-blueprints/tree/0741e01b9e86b9bb9360e2feb220807b36bcbdc4) | `0741e01b9e86b9bb9360e2feb220807b36bcbdc4` | Source inspection only; no live blueprint admission. |
 
@@ -21,8 +21,11 @@ until publication is separately authorized.
 
 These revisions differ from the historical rc.1 compatibility set. Their selection
 does not establish a mutually admitted live runtime set. The selected XDL file
-hashes below are unchanged from the initial baseline; historical Linux and held
-Windows evidence retain their original candidates and outcomes.
+hashes below are unchanged from the initial baseline. Historical Linux and Windows
+evidence retain their original candidates/outcomes; Windows is now outside the
+required delivery scope under ADR-0036. The actual admitted simulation subset is
+recorded in `evidence/studio/platform-observability-foundation/live-browser-experiment.json`
+and `live-follow.json`, rather than inferred from this source-head inventory.
 
 The dependency pin is an immutable Git revision, resolved in `uv.lock`. The Studio adapter imports
 public exports from `xverse_xdl`: `validate_sources`, `canonical_json`,

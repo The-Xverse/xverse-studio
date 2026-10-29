@@ -1,6 +1,12 @@
 import base64
 import io
+import json
+import subprocess
 import zipfile
+
+import pytest
+from ruamel.yaml import YAML
+from xverse_studio.xdl import examples
 
 
 def test_project_exchange_preserves_sources_layout_and_no_execution(client):
@@ -45,13 +51,6 @@ def test_project_exchange_preserves_sources_layout_and_no_execution(client):
     assert client.get("/api/v1/runs").json()["items"] == []
 
 
-import json
-
-import pytest
-from ruamel.yaml import YAML
-
-from xverse_studio.xdl import examples
-
 
 def _archive(documents, manifest=None, extra=None):
     data = io.BytesIO()
@@ -72,7 +71,8 @@ def _import(client, archive):
 
 
 @pytest.mark.parametrize("example", [e["id"] for e in examples()])
-def test_prepared_examples_onboard_ready_with_exact_bytes(client, example):
+def test_prepared_examples_preserve_bytes_scope_and_provider_admission(client, monkeypatch, example):
+    monkeypatch.setattr(subprocess, "Popen", lambda *a, **k: pytest.fail("Onboarding and preflight must not dispatch"))
     entry = next(e for e in examples() if e["id"] == example)
     project = client.post("/api/v1/projects", json={"name": entry["name"], "blueprintRef": example})
     assert project.status_code == 201, project.text
@@ -80,14 +80,24 @@ def test_prepared_examples_onboard_ready_with_exact_bytes(client, example):
     contents = {d["path"].rsplit("/", 1)[-1]: d["content"] for d in project["documents"].values()}
     assert contents == entry["documents"]
     # The guided entry states what it demonstrates and what stays unavailable.
-    assert entry["scope"] == "owned_reference" and entry["maturity"] == "fixture"
+    declared = {
+        "studio.reference": ("owned_reference", "fixture"),
+        "autoverse.demo": ("external_demo", "prototype"),
+        "autoverse.platform": ("platform_simulation", "prototype"),
+    }
+    assert (entry["scope"], entry["maturity"]) == declared[entry["providerId"]]
     assert entry["limitations"] and entry["expectedObservations"]
     validation = client.post(f"/api/v1/projects/{project['projectId']}/validations",
                              json={"revision": project["revision"]}).json()
     assert validation["valid"]
     preflight = client.post(f"/api/v1/projects/{project['projectId']}/preflights",
-                            json={"revision": project["revision"]}).json()
-    assert preflight["status"] == "ready"
+                            json={"revision": project["revision"], "providerId": entry["providerId"]}).json()
+    assert preflight["providerId"] == entry["providerId"]
+    if entry["providerId"] == "studio.reference":
+        assert preflight["status"] == "ready"
+    else:
+        assert preflight["status"] == "blocked"
+        assert "PROVIDER_UNAVAILABLE" in {d["code"] for d in preflight["diagnostics"]}
     assert client.get("/api/v1/runs").json()["items"] == []  # onboarding executes nothing
 
 

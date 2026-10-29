@@ -88,6 +88,13 @@ class Runs:
         installed = self.installed_providers.get(provider_id)
         return (installed.readiness if installed else reference_readiness)(documents, compiled, provider_id, provider, active_count)
 
+    def _reconcile_active_observations(self):
+        # Aggregate readiness uses the same original-owner and evidence checks
+        # as Start. Unknown observations remain active; this never dispatches.
+        for old in self.store.all("run"):
+            if old["state"] in ACTIVE:
+                self.read(old["runId"])
+
     def directory(self, rid):
         return contained(self.store.root, self.store.root / "runs" / rid)
 
@@ -123,6 +130,7 @@ class Runs:
             (value for value in self.provider_descriptors() if value["providerId"] == provider_id),
             None,
         )
+        self._reconcile_active_observations()
         active_count = sum(row["state"] in ACTIVE for row in self.store.all("run"))
         readiness, admission_diagnostics, configuration, limits = self.readiness(
             documents, compiled, provider_id, provider, active_count
@@ -445,9 +453,7 @@ class Runs:
             self.store.put("operation", oid, operation, db)
             return {"runId": rid, "operationId": oid, "stateVersion": 0}
 
-        for old in self.store.all("run"):
-            if old["state"] in ACTIVE:
-                self.read(old["runId"])
+        self._reconcile_active_observations()
         result, new = self.store.idempotent(
             principal, "POST /runs", key, payload, accepted
         )

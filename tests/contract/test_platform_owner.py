@@ -512,6 +512,41 @@ def test_history_durability_failure_retains_marker_and_releases_public_lock(
     assert successor.close()
 
 
+def test_preflight_observes_finished_original_task_without_a_separate_run_get(tmp_path, owned_actions):
+    entered, _ = owned_actions
+    native = installation(tmp_path)
+    provider = PlatformProvider(native)
+    app = create_app(tmp_path / "unobserved-data", allowed_hosts=["testserver"],
+                     bootstrap_token="unobserved-owner", installed_providers={"autoverse.platform": provider})
+    with TestClient(app, base_url="http://testserver") as client:
+        client.headers["Origin"] = "http://testserver"
+        session = client.post("/api/v1/session", json={"bootstrapToken": "unobserved-owner"}).json()
+        client.headers["X-CSRF-Token"] = session["csrfToken"]
+        project = client.post("/api/v1/projects", json={"name": "Unobserved completion", "blueprintRef": "autoverse-platform"}).json()
+        selection = {"revision": project["revision"], "providerId": "autoverse.platform"}
+        path = "/api/v1/projects/" + project["projectId"] + "/preflights"
+        preflight = client.post(path, json=selection).json()
+        started = client.post("/api/v1/runs", headers={"Idempotency-Key": "unobserved-start"},
+                              json={"snapshotId": preflight["snapshotId"], "preflightId": preflight["preflightId"]})
+        assert started.status_code == 202, started.text
+        rid = started.json()["runId"]
+        until(lambda: rid in entered)
+        task = app.state.studio.runs.children[rid]
+        # Original signed command and actual child compensation; no lifecycle GET
+        # consumes the final state before the next preflight observes it.
+        cancel(app.state.studio.runs.directory(rid))
+        assert task.wait(10) == 0
+        cached = app.state.studio.store.get("run", rid)
+        assert cached["state"] in {"requested", "preparing", "running"}
+        response = client.post(path, json=selection)
+        assert response.status_code == 200, response.text
+        assert response.json()["status"] == "ready", response.json()["diagnostics"]
+        observed = app.state.studio.store.get("run", rid)
+        assert observed["state"] == "stopped" and observed["cleanup"] == "complete"
+        assert provider._owner.service.read(rid)["cleanup"] == "released"
+        assert provider._owner.service is not None
+
+
 def test_dead_backend_task_is_unknown_even_when_backend_process_is_alive(
     tmp_path, owned_actions, monkeypatch
 ):

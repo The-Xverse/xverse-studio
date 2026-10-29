@@ -1951,8 +1951,8 @@
       "acceptance_ids": [
         "AC-001"
       ],
-      "status": "in_progress",
-      "implementation_note": "ADR-0036 removes Windows delivery from current requirements. Prior host-scope note is retained separately. Reassess this task against all amended Linux requirements and its exact evidence; scope removal alone is not completion.",
+      "status": "completed",
+      "implementation_note": "Completed the entire amended Linux baseline/source/version/limit/disposition inventory. Three actual selected Git commits, ten matching installed SDK execution modules, selected compatibility/profile/lock checks and twenty unchanged SADS allocations verified. No normative SADS, mutual live set, standalone Lite, other-host or milestone acceptance inferred.",
       "implementation_evidence": [
         "evidence/studio/M0-linux-baseline/README.md",
         "evidence/studio/M0-linux-baseline/verification.json",
@@ -1962,7 +1962,9 @@
         "evidence/studio/M0-compatibility-manifest/verification.json",
         "evidence/studio/M0-compatibility-manifest/negative-controls.json",
         "evidence/studio/M0-compatibility-manifest/independent-review.md",
-        "evidence/studio/M0-compatibility-manifest/package/verification.json"
+        "evidence/studio/M0-compatibility-manifest/package/verification.json",
+        "evidence/studio/linux-scope-baseline/verification.json",
+        "evidence/studio/linux-scope-baseline/review.md"
       ],
       "historical_host_scope_note": "Linux-only partial baseline verification records Ubuntu/tool identities and confirms installed xverse-xdl 0.4.0 matches all five selected-baseline file hashes plus the unchanged lockfile. Native Windows, admitted live runtime compatibility and normative SADS source gaps remain open. The planned config/platform-compatibility.json now consolidates selected source/installed-package/schema/lock identities, adapter versus platform limits, descriptor declarations, exact scoped Linux evidence and held Windows/source-inspected I/O gaps. Live compatibility set stays null; SADS satisfaction stays unclaimed. A read-only contributor drift check compares fixed trusted sources and successful evidence, with 18 rejected consistency controls and 18 restored passes; runtime admission remains unchanged. T001 remains open. Fresh unchanged-source contributor gate passes 851 backend tests plus the compatibility check, architecture and spec structure. Prior 89 browser checks and built UI remain applicable through exact unchanged source/byte comparisons; no browser rerun for metadata."
     },
@@ -8357,6 +8359,42 @@
       "scopedGoalFinalReview": "evidence/studio/platform-observability-foundation/live-review-02.md",
       "scopedGoalActualRun": "run-fad40cd5-65d9-4b4d-bf14-f547e9ec9cd9",
       "scope": "approved Linux simulation only; broader task and milestone states unchanged"
+    },
+    "linux_scope_reassessment": {
+      "requiredHost": "Linux",
+      "completedAfterAudit": [
+        "T001"
+      ],
+      "next": "T007/T009/T010/T011 foundation and T023 current recovery evidence audits",
+      "focusedReports": {
+        "preflight-repaired": {
+          "passed": 60,
+          "failed": 0,
+          "skipped": 0,
+          "reportSha256": "d5ee197d493f18b4165ded9666cbf220a5d8d9e6690d323709c7fc3ade3cfcda",
+          "logSha256": "3474a256219888cce9ef2d3e1f75ac6934d5f7df90ce9e1ea39c8d826add5802"
+        },
+        "foundation-repaired": {
+          "passed": 72,
+          "failed": 0,
+          "skipped": 0,
+          "reportSha256": "2866b035c20e7a5b34da4c03b637f7ba7b7b22e8dae8ee90b38c2a25f63e4671",
+          "logSha256": "185d031aa277d255878f4440a89807dec17cd8f50ee08fe2e77679e7c923a31e"
+        },
+        "onboarding-final": {
+          "passed": 6,
+          "failed": 0,
+          "skipped": 0,
+          "reportSha256": "800579c8a12b61bead5b50b31d6fbb8664a91269b0eafd52ccc9f5510aa671c0",
+          "logSha256": "6e8af95f190962bc7a5d0923ddf7910ef7f91c0f906eb449d472320aea19669b"
+        }
+      },
+      "counts": {
+        "completed": 50,
+        "in_progress": 40,
+        "blocked": 10
+      },
+      "milestonesAccepted": 0
     }
   },
   "scope_amendments": [
