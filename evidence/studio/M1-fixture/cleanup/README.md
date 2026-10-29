@@ -1,10 +1,11 @@
 # Owned temporary-resource cleanup
 
-This is an uncommitted successor to `af25449`. T033 remains in progress.
+Source `cc65590` is the cleanup successor to `af25449`. T033 remains in progress.
 The final clarified source passes **1,219 backend tests, 88 affected browser
 checks and two separate performance cases**, with no failures/errors/skips/flaky
 outcomes in their applicable phases. All final phases use identical 380 inputs.
-Clean Linux packaging is pending. [Current verification](verification.json).
+Clean native Linux source`cc65590` packaging passes115 payload/archive hashes
+and six identical tested UI assets. [Source/package binding](candidate-binding.json).
 
 The worker now attempts one release of its verified empty temporary directory.
 Retained contents produce failed cleanup; replaced, missing or unobservable
