@@ -726,3 +726,14 @@ in the owned vehicle process; the original method is restored for later camera c
 check pass on the final source. Unsuccessful asynchronous and bounded-thread experiments
 were reverted and retained privately. T020/T021/T023/T024 gain scoped Linux evidence
 only; no statuses or milestones close. Evidence: evidence/studio/autoverse-sensor-startup/.
+
+
+Platform-observability goal started under ADR-0034: user separately authorized
+capability022 public Maestro execution-interface work in xverse-platform, retaining
+platform review and user acceptance. Studio now has an internal host-bound adapter
+to the actual Argus reader with9 passing focused checks. The separate platform
+worktree has18 public static/effective-input inspection checks, including installed
+CLI identity; lifecycle execution, native X-COM integration and all three linked
+views remain unfinished. T001/T004/T010/T012/T020–T024/T027–T030/T034–T035 gain
+scoped work/evidence only; all existing statuses/dependencies and milestone gates
+are unchanged. Evidence: evidence/studio/platform-observability-foundation/.
