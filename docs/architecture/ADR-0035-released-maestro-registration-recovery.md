@@ -29,12 +29,18 @@ not invent an existing callable API.
    for retirement, using the actual original claim and public Argus reader. Bind
    each claim's run, compiled plan, authored-input, operation and correlation
    identities, root identity and source witness. Return explicit refusal reasons.
-2. Permit retirement only when original, closed and structurally verified lifecycle
-   evidence accounts for every attempted acquisition with released cleanup and a
+2. Permit retirement only when original, terminal-writer and structurally verified
+   lifecycle evidence accounts for every attempted acquisition with released cleanup and a
    terminal stopped/failed outcome. Unknown cleanup, missing lifecycle facts,
    corruption, an open writer or changing source remains ineligible. Incomplete
    native observation sampling is a separate dimension; it cannot conceal missing
-   lifecycle provenance or manufacture a complete trace.
+   lifecycle provenance or manufacture a complete trace. A writer terminated through
+   the actual public abort path has state `failed`, not `closed`; that state alone
+   is neither proof of corruption nor eligibility. Its original incomplete verdict
+   must remain intact, and all identity, integrity and compensation conditions still
+   apply. An interrupted phase may lack a success outcome only when its original
+   acquiring intent is explicitly accounted for by released cleanup and the original
+   terminal failure; absent compensation is not inferred from silence.
 3. Require an explicit host-owned, finite and digest-bound recovery permit for the
    exact inspected registration/claims/source witnesses and installed provider.
    Imported XDL, browser fields, caller-invented records and PID lists grant no
@@ -71,3 +77,16 @@ has no released-claim retirement operation. This proposal is additional companio
 scope; the previous acceptance is preserved. Until separately authorized and
 admitted, the existing registration stays fenced. The end-to-end goal and its live
 acceptance cases remain open, with existing task IDs and milestone states unchanged.
+
+
+## Retained registration inspection
+
+Read-only inspection of the existing registration found one predecessor claim,
+43 original Argus records, no public-reader diagnostics, eleven phase intents,
+ten phase outcomes, nine cleanup intents and nine released cleanup outcomes. Its
+original terminal event is failed with `MPX-START-CANCELLED`, cleanup released and
+zero observation-transport gaps. Run/plan/input identities match the original
+claim. The public abort path closes its stream and publishes a failed manifest;
+its recorded and assessed evidence statuses are both incomplete. These facts
+inform the proposed verifier; this inspection is not an admitted retirement proof,
+recovered ownership handle, eligibility decision, or authorization to activate.
