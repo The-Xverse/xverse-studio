@@ -10,11 +10,12 @@ async function setup(page: Page, info: Parameters<typeof connectStudio>[1]) {
   await page.getByRole("button", { name: "Start frozen snapshot", exact: true }).click();
   await expect.poll(() => page.evaluate(() => localStorage.getItem("studio.lastRun"))).toBeTruthy();
   const runId = (await page.evaluate(() => localStorage.getItem("studio.lastRun")))!;
-  const state = { fresh: 0, fail: false, hold: false, release: () => {}, requests: [] as URL[] };
+  const state = { fresh: 0, terminal: 0, fail: false, hold: false, release: () => {}, requests: [] as URL[] };
   await page.route(`**/api/v1/runs/${runId}/platform?*`, async route => {
     const url = new URL(route.request().url());
     state.requests.push(url);
     const snapshot = url.searchParams.get("snapshot") || `fixture-${++state.fresh}`;
+    if (!url.searchParams.has("snapshot") && (await page.getByRole("heading", { name: /^Run results/ }).innerText()).includes("stopped")) state.terminal++;
     const ordinal = Number(snapshot.split("-").at(-1));
     if (!url.searchParams.has("snapshot") && state.hold) {
       state.hold = false;
@@ -162,10 +163,12 @@ test("platform live follow captures the terminal state once then stops polling",
     await page.clock.runFor(2400);
     await expect(panel.getByRole("checkbox", { name: "Follow live", exact: true })).toBeDisabled();
     await expect.poll(() => state.fresh).toBeGreaterThan(before);
+    await expect.poll(() => state.terminal).toBe(1);
     await expect(panel.getByText("Reading platform evidence…", { exact: true })).toHaveCount(0);
     const terminal = state.fresh;
     await page.clock.runFor(8000);
     expect(state.fresh).toBe(terminal);
+    expect(state.terminal).toBe(1);
     await expect(panel.getByRole("checkbox", { name: "Follow live", exact: true })).not.toBeChecked();
   } finally { await finish(); }
 });

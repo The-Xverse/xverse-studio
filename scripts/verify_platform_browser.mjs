@@ -23,7 +23,7 @@ page.on('response', async response => {
   if (response.url().includes('/platform?') && response.ok()) {
     const body = await response.json();
     report.responses.push({view:body.view,snapshotId:body.snapshotId,sourceWitness:body.sourceWitness,runId:body.identity.runId,counts:body.counts,
-      order:body.order,queriedSnapshot:new URL(response.url()).searchParams.get('snapshot'),
+      order:body.order,requestedOrder:new URL(response.url()).searchParams.get('order'),queriedSnapshot:new URL(response.url()).searchParams.get('snapshot'),
       newestOrdinal:body.items[0]?.ingestionOrdinal,
       sampledScalars:body.items.filter(row=>row.communication).slice(0,3).map(row=>({eventId:row.eventId,routeId:row.communication.routeId,value:row.communication.payload.value}))});
   }
@@ -79,10 +79,11 @@ try {
   let pinnedStart=0;
   if(process.env.STUDIO_VERIFY_LIVE_FOLLOW) {
     const first=report.responses.length;
+    const liveCaptures=()=>report.responses.slice(first).filter(r=>r.requestedOrder==='newest'&&!r.queriedSnapshot);
     await panel.getByRole('checkbox',{name:'Follow live',exact:true}).check();
-    await expect.poll(()=>new Set(report.responses.slice(first).map(r=>r.snapshotId)).size,{timeout:30000}).toBeGreaterThanOrEqual(3);
-    await expect.poll(()=>new Set(report.responses.slice(first).map(r=>r.sourceWitness)).size,{timeout:30000}).toBeGreaterThanOrEqual(2);
-    const captures=report.responses.slice(first);
+    await expect.poll(()=>new Set(liveCaptures().map(r=>r.snapshotId)).size,{timeout:30000}).toBeGreaterThanOrEqual(3);
+    await expect.poll(()=>new Set(liveCaptures().map(r=>r.sourceWitness)).size,{timeout:30000}).toBeGreaterThanOrEqual(2);
+    const captures=liveCaptures();
     assert(captures.every(r=>r.runId===runId&&r.order==='newest'));
     assert(captures.some(r=>r.sampledScalars.length>0));
     assert(new Set(captures.map(r=>r.newestOrdinal)).size>=2);
