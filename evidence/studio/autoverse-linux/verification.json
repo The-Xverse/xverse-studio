@@ -1,0 +1,154 @@
+{
+  "scope": "native_linux_autoverse_prototype; not full Studio milestone acceptance",
+  "sourceDigest": "sha256:90cb842dd5370d117e67dcddeae9e9599909a54e37d6b1542a64eda485637a05",
+  "sourceInputCount": 380,
+  "contractChecks": {
+    "tests": 147,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "nativeBrowser": [
+    {
+      "label": "source",
+      "stats": {
+        "startTime": "2026-10-29T09:01:38.274Z",
+        "duration": 129716.805,
+        "expected": 1,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "runId": "run-899d1247-8270-4838-807e-87fc34aa953b",
+      "planDigest": "sha256:1de3cf9106dbcc4b232ecf8f19172b8d1984cd2fa1664e9ea7cb8f1c9f6f0c7a",
+      "semanticDigest": "sha256:7614237d2b1a07868bbc0c81a11bc7c955e14927c5a9b494d4d15bd38895c3bc",
+      "journalDigest": "sha256:351574c87eaf3e907c359f0a5317fe4aa4daae9dad22874c51e914e19611f39e",
+      "integrity": "valid",
+      "cleanup": "complete",
+      "androidLiveStateSpeedRangeKmh": [
+        29,
+        49
+      ],
+      "verified": [
+        "browser_example_load",
+        "backend_preflight",
+        "full_stack_start",
+        "actual_acceleration",
+        "cruise_engagement",
+        "actual_target_increment",
+        "browser_input_loss_watchdog",
+        "full_stop",
+        "canonical_integrity",
+        "android_live_state_and_screen"
+      ]
+    },
+    {
+      "label": "installed",
+      "stats": {
+        "startTime": "2026-10-29T09:12:07.378Z",
+        "duration": 120966.643,
+        "expected": 1,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "runId": "run-6634c109-31b0-4d62-910b-8bedd3618cc5",
+      "planDigest": "sha256:1de3cf9106dbcc4b232ecf8f19172b8d1984cd2fa1664e9ea7cb8f1c9f6f0c7a",
+      "semanticDigest": "sha256:7614237d2b1a07868bbc0c81a11bc7c955e14927c5a9b494d4d15bd38895c3bc",
+      "journalDigest": "sha256:9b8c58877287518de036c19ca813e03cdce0458df86ba9e81d0118d85fe5dfc0",
+      "integrity": "valid",
+      "cleanup": "complete",
+      "androidLiveStateSpeedRangeKmh": [
+        0,
+        47
+      ],
+      "verified": [
+        "browser_example_load",
+        "backend_preflight",
+        "full_stack_start",
+        "actual_acceleration",
+        "cruise_engagement",
+        "actual_target_increment",
+        "browser_input_loss_watchdog",
+        "full_stop",
+        "canonical_integrity",
+        "android_live_state_and_screen"
+      ]
+    }
+  ],
+  "nativeSdkTransport": {
+    "outcome": "passed",
+    "scope": "owned_isolated_loopback_native_zenoh_transport",
+    "componentPython": "3.10.12",
+    "zenohPython": "1.3.4",
+    "actualInputPublication": true,
+    "sameFrameNoDeltaReplay": true,
+    "leaseExpiryBrakingRequest": true,
+    "invalidInputRejected": true,
+    "telemetryValues": "explicit fixtures over actual transport",
+    "actualVehicleEffect": false,
+    "completeAutoverseDemo": false,
+    "protocolRecords": 10
+  },
+  "otherChecks": [
+    "pinned_ruff_F821",
+    "architecture_boundaries",
+    "descriptive_platform_manifest",
+    "spec_package_structure",
+    "typescript",
+    "copied_payload_equality_96_files",
+    "clean_prepared_cache_offline_install"
+  ],
+  "priorScopedReferenceRegression": {
+    "passed": 56,
+    "durationSeconds": 261.3,
+    "qualification": "Predates final native-only cleanup/gear refinements; not a full current-suite claim."
+  },
+  "retainedFailures": [
+    "Initial native preparation/env/telemetry/boot errors retained privately; not every early diagnostic source was snapshotted.",
+    "Earlier asynchronous browser attempts had zero speed or an unavailable independent tick probe. The supported public synchronous option then passed actual vehicle and cruise effects.",
+    "Three later Android screen checks failed after observing a later stationary sample. Capturing the moving screen and actual application state updates passed; Android topic receipt was established before the corrected check.",
+    "Gear review initially exposed three failing backend/lease cases; repaired and included in the final147."
+  ],
+  "limitations": [
+    "Ubuntu22.04.5 x86_64 only for this provider; Windows demo unavailable and broader Windows acceptance held.",
+    "Existing installed demo assets required; no downloads/builds or companion source changes.",
+    "Host receipt clocks and simulation time remain unmapped; signal metadata conflict retained.",
+    "No physical effects, deterministic replay, native X-COM or Argus admission claim.",
+    "No full backend/browser suite, independent milestone review or broad task completion claim."
+  ],
+  "commandNotes": "Machine-specific executable/data paths and authentication state remain private; commands below use portable roles for those paths.",
+  "commands": [
+    [
+      ".venv/bin/python",
+      "-I",
+      "-m",
+      "pytest",
+      "tests/contract/test_autoverse_admission.py",
+      "tests/contract/test_autoverse_cleanup.py",
+      "tests/contract/test_autoverse_controls.py",
+      "tests/contract/test_autoverse_blueprint.py",
+      "tests/contract/test_profiles.py",
+      "tests/contract/test_xdl_adapter.py",
+      "tests/contract/test_architecture_boundaries.py",
+      "tests/contract/test_api_versions.py",
+      "-q"
+    ],
+    [
+      "<pinned-node>",
+      "node_modules/@playwright/test/cli.js",
+      "test",
+      "-c",
+      "tests/live/autoverse.config.ts"
+    ],
+    [
+      "uv",
+      "sync",
+      "--offline",
+      "--frozen",
+      "--all-packages",
+      "--python",
+      "<pinned-python>"
+    ]
+  ]
+}

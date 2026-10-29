@@ -93,3 +93,22 @@ Supported maturity values distinguish `fixture`, `prototype`, `admitted_integrat
 ## Conformance suite
 
 Test static validation without side effects; unauthorized/unsupported operations; at-most-once start; duplicate and conflicting operation IDs; stale state/lease tokens; partial prepare/start; readiness timeout; lost acknowledgement; browser loss; backend crash and reconciliation; event gaps; capability changes invalidating preflight; stop with incomplete cleanup; device disappearance/replacement; and evidence reader failure. Tests use the owned fixture on native Linux and Windows first, including paths with spaces/Unicode and OS-specific child ownership/termination. Real integrations repeat applicable cases on their exact admitted environment and record untestable cases explicitly.
+
+## Native external demo amendment (ADR-0033)
+
+An explicitly enrolled native installation can supply a trusted provider adapter to
+Studio's existing run service. Provider registration remains host administration;
+XDL/profile/imported metadata never selects Python modules, commands or installation
+paths. The Autoverse prototype maps an exact supported canonical blueprint through
+public component CLIs and APIs, with independent source/plan revalidation before effects.
+It is separate from the unavailable Lite adapter and confers no Maestro, native
+X-COM, Argus, physical-device or Windows integration claim.
+
+The adapter binds actual implementation/installation digests, exact container IDs,
+image/configuration identities and mounted artifacts. It acquires an exclusive
+installation lock, checks stopped/unoccupied resources and records process birth/argv
+and container-start identities. Stop/Cancel release only those resources. Canonical
+hash-chain evidence remains distinct from native component logs and from functional
+observations. Failure to persist state or evidence cannot prevent owned cleanup.
+The normalized browser input surface is described in the Studio API amendment;
+it cannot pause/reset the external simulator or execute arbitrary project commands.

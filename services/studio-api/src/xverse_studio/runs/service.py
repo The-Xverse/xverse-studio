@@ -55,9 +55,26 @@ ACTIVE = {
 
 
 class Runs:
-    def __init__(self, store, projects, adapter):
+    def __init__(self, store, projects, adapter, installed_providers=None):
         self.store, self.projects, self.adapter = store, projects, adapter
         self.children = {}
+        self.installed_providers = dict(installed_providers or {})
+        from xverse_studio.providers.registry import admit_descriptor
+        builtins = {entry["providerId"] for entry in descriptors()}
+        for provider_id, provider in self.installed_providers.items():
+            descriptor = admit_descriptor(provider.descriptor())
+            if provider_id in builtins or descriptor["providerId"] != provider_id:
+                raise Problem("PROVIDER_DESCRIPTOR_INVALID", "Installed provider identities must be unique and match their registration.")
+
+    def provider_descriptors(self):
+        return [*descriptors(), *(provider.descriptor() for provider in self.installed_providers.values())]
+
+    def capability_digest(self):
+        return digest(self.provider_descriptors()) if self.installed_providers else capability_digest()
+
+    def readiness(self, documents, compiled, provider_id, provider, active_count):
+        installed = self.installed_providers.get(provider_id)
+        return (installed.readiness if installed else reference_readiness)(documents, compiled, provider_id, provider, active_count)
 
     def directory(self, rid):
         return contained(self.store.root, self.store.root / "runs" / rid)
@@ -91,11 +108,11 @@ class Runs:
         diagnostics = list(compiled["diagnostics"])
         provider_id = selection.get("providerId", "studio.reference")
         provider = next(
-            (value for value in descriptors() if value["providerId"] == provider_id),
+            (value for value in self.provider_descriptors() if value["providerId"] == provider_id),
             None,
         )
         active_count = sum(row["state"] in ACTIVE for row in self.store.all("run"))
-        readiness, admission_diagnostics, configuration, limits = reference_readiness(
+        readiness, admission_diagnostics, configuration, limits = self.readiness(
             documents, compiled, provider_id, provider, active_count
         )
         diagnostics.extend(admission_diagnostics)
@@ -148,7 +165,7 @@ class Runs:
             "configuration": configuration,
             "providerId": provider_id,
             "providerIdentity": provider,
-            "capabilityDigest": capability_digest(),
+            "capabilityDigest": self.capability_digest(),
             "createdAt": time.time(),
             "compiler": compiled.get("compiler"),
             "selection": refs,
@@ -169,7 +186,7 @@ class Runs:
             "status": "ready" if ready else "blocked",
             "planDigest": compiled.get("planDigest"),
             "semanticDigest": compiled.get("semanticDigest"),
-            "capabilityDigest": capability_digest(),
+            "capabilityDigest": self.capability_digest(),
             "expiresAt": time.time() + 60,
             "diagnostics": diagnostics,
             "dimensions": {
@@ -291,7 +308,7 @@ class Runs:
                 )
             if (
                 pf["expiresAt"] <= time.time()
-                or pf["capabilityDigest"] != capability_digest()
+                or pf["capabilityDigest"] != self.capability_digest()
             ):
                 raise Problem(
                     "PREFLIGHT_STALE",
@@ -322,12 +339,12 @@ class Runs:
             current_provider = next(
                 (
                     value
-                    for value in descriptors()
+                    for value in self.provider_descriptors()
                     if value["providerId"] == snap.get("providerId")
                 ),
                 None,
             )
-            if snap.get("providerId") != "studio.reference":
+            if snap.get("providerId") != "studio.reference" and snap.get("providerId") not in self.installed_providers:
                 raise Problem(
                     "ADMISSION_REJECTED",
                     "This runtime cannot substitute an owned provider for the selected provider.",
@@ -341,7 +358,7 @@ class Runs:
             current_active = sum(
                 row["state"] in ACTIVE for row in self.store.all("run", db)
             )
-            checks, errors, config, _ = reference_readiness(
+            checks, errors, config, _ = self.readiness(
                 snap["documents"],
                 compiled,
                 snap["providerId"],
@@ -391,14 +408,17 @@ class Runs:
                 "evidence": "pending",
                 "evaluation": "not_started",
                 "verdict": None,
-                "evidenceScope": "owned_reference",
-                "providerId": "studio.reference",
+                "evidenceScope": snap["providerIdentity"]["evidenceScope"],
+                "providerId": snap["providerId"],
                 "createdAt": time.time(),
                 "planDigest": snap["planDigest"],
                 "semanticDigest": snap["semanticDigest"],
-                "capabilities": admitted_controls(snap["providerIdentity"], config),
-                "controlLimits": {"maxPausedWallSeconds": MAX_PAUSED_WALL_SECONDS},
+                "capabilities": list(self.installed_providers[snap["providerId"]].controls) if snap["providerId"] in self.installed_providers else admitted_controls(snap["providerIdentity"], config),
+                "controlLimits": {} if snap["providerId"] in self.installed_providers else {"maxPausedWallSeconds": MAX_PAUSED_WALL_SECONDS},
             }
+            if snap["providerId"] in self.installed_providers:
+                run["inputSurface"] = snap["providerIdentity"].get("inputSurface")
+                run.update(journalId=rid + ":provider-journal", journalReader="studio.hash-chain-v1")
             if "set_parameter" in run["capabilities"]:
                 run.update(liveInputs=config["liveInputs"], liveValues={"target": config["target"]}, liveMutationCount=0)
                 run["controlLimits"]["maxLiveMutations"] = MAX_LIVE_MUTATIONS
@@ -478,6 +498,7 @@ class Runs:
                         "operationId": run["operationId"],
                         "snapshot": snap,
                         "configuration": snap["configuration"],
+                        **({"nativeInstallation": self.installed_providers[snap["providerId"]].installation} if snap["providerId"] in self.installed_providers else {}),
                     }
                 ).encode(),
             )
@@ -497,7 +518,7 @@ class Runs:
             sys.executable,
             "-I",
             "-m",
-            "xverse_studio.providers.worker",
+            self.installed_providers[snap["providerId"]].worker_module if snap["providerId"] in self.installed_providers else "xverse_studio.providers.worker",
             str(root),
         ]
         self._record_dispatch(
@@ -657,6 +678,8 @@ class Runs:
                             "stateVersion",
                             "cleanup",
                             "cleanupResources",
+                            "runtimeStatus",
+                            "inputTelemetry",
                             "liveValues",
                             "liveMutationCount",
                             "evidence",
@@ -674,7 +697,7 @@ class Runs:
                 )
                 op = self.store.get("operation", run["operationId"])
                 previous_operation = canonical(op)
-                op["status"] = "completed"
+                op["status"] = ("failed" if observed["state"] == "failed" and not observed.get("startedAt") else "delegated" if observed["state"] in ("preparing", "ready") else "completed")
                 op["result"] = {
                     "effectivePlanDigest": observed.get("effectivePlanDigest")
                 }
@@ -830,11 +853,21 @@ class Runs:
                     self.store.put("operation", op["operationId"], op)
         return result
 
+    def input_request(self, rid, action, payload, session):
+        with self.store.lock:
+            run = self.read(rid)
+            provider = self.installed_providers.get(run["providerId"])
+            if provider is None or not hasattr(provider, "input_request"):
+                raise Problem("CAPABILITY_UNSUPPORTED", "This run has no admitted browser input surface.")
+            if run["state"] != "running":
+                raise Problem("STATE_CONFLICT", "Browser input requires the observed running state.", 409)
+            return provider.input_request(self.directory(rid), action, payload, session)
+
     def shutdown(self):
         # Native foreground shutdown requests only admitted, ownership-confirmed cancellation.
         for r in self.store.all("run"):
             run = self.read(r["runId"])
-            if run["state"] in ("running", "paused"):
+            if run["state"] in ("running", "paused", "preparing", "ready"):
                 try:
                     self.command(
                         run["runId"],
@@ -844,7 +877,7 @@ class Runs:
                     )
                 except (Problem, OSError):
                     pass
-        deadline = time.monotonic() + 3
+        deadline = time.monotonic() + (45 if self.installed_providers else 3)
         while self.children and time.monotonic() < deadline:
             for rid in list(self.children):
                 self.read(rid)

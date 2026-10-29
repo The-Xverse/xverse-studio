@@ -19,7 +19,7 @@ from ruamel.yaml import YAML
 from xverse_studio.providers.registry import descriptors
 from xverse_studio.xdl import MAX_DOCUMENT_BYTES, MAX_DOCUMENTS, PLATFORM_REVISION, XDLAdapter
 from xverse_studio.xdl.examples import (
-    CONNECTIONS_NAMESPACE, DOMAIN_PROFILES, EVALUATION_NAMESPACE, LIVE_NAMESPACE, PROFILE_NAMESPACE, reference_resources,
+    NATIVE_RUNTIME_NAMESPACE, CONNECTIONS_NAMESPACE, DOMAIN_PROFILES, EVALUATION_NAMESPACE, LIVE_NAMESPACE, PROFILE_NAMESPACE, reference_resources,
 )
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -86,7 +86,8 @@ def observed_baseline():
     profile_namespaces = [[{"namespace": name, "version": profile_versions[name]}]
                          for name in [PROFILE_NAMESPACE, EVALUATION_NAMESPACE, CONNECTIONS_NAMESPACE]] + [
                           [{"namespace": p["namespace"], "version": p["version"]} for p in DOMAIN_PROFILES],
-                          [{"namespace": LIVE_NAMESPACE, "version": profile_versions[LIVE_NAMESPACE]}]]
+                          [{"namespace": LIVE_NAMESPACE, "version": profile_versions[LIVE_NAMESPACE]}],
+                          [{"namespace": NATIVE_RUNTIME_NAMESPACE, "version": "1.0.0"}]]
     profiles = []
     for index, (path, namespaces) in enumerate(zip(adapter.profile_schema_paths, profile_namespaces, strict=True)):
         path = Path(path)

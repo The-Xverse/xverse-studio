@@ -446,3 +446,30 @@ while omitted revision retains latest-read compatibility. Committed-source integ
 required. Browser reads supply and validate revision/document/provider context, use one coherent
 comparison response, bound display data/pages and suppress obsolete responses without moving focus
 away from newer user intent. A malformed or unsupported response remains unavailable.
+
+## Native input surface amendment (ADR-0033)
+
+A trusted installed provider may expose `inputSurface.kind=normalized-driver`,
+version `1.0`, on an admitted run. This does not install providers from projects.
+`POST /api/v1/runs/{runId}/input/{action}` uses the existing local session, exact
+Origin and CSRF checks. Backend capability and observed running-state checks precede
+provider input validation. Unsupported runs reject the endpoint.
+
+- `acquire`: empty object; returns a random lease token, increasing generation and
+  `leaseSeconds=0.75`. A current driver lease conflicts rather than being stolen.
+- `frame`: exact `leaseToken`, `generation` and `frame` fields. A frame requires an
+  increasing safe-integer `sequence`, `throttle`/`brake` in `[0,1]`, and `steer` in
+  `[-1,1]`. Positive throttle and brake together are rejected. Optional `cruise`
+  and `reverse` are strict boolean desired states; `deltaSpeed` is a one-shot bounded
+  `[-20,20]` km/h request. Values must be finite. Fresh observed speed and controller
+  states constrain engagement, reverse and target-speed changes in the backend.
+- `release`: exact `leaseToken` and `generation`; stages zero throttle, full brake,
+  zero steering and cruise-off, then expires the lease.
+
+A lease is tied to the authenticated session. Old generations, expired tokens,
+conflicting sequences and excessive rate are rejected. Exact retries do not renew
+leases or replay increments. The mailbox retains one bounded signed latest frame;
+new input cannot overwrite an unconfirmed discrete request. There are at most 256
+discrete requests per run. Staging, interface publication, vehicle observations,
+run lifecycle and canonical evidence are separate facts. Driver input does not
+create an unbounded stream of durable lifecycle operations.

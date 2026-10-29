@@ -87,6 +87,7 @@ def create_app(
     allowed_hosts=None,
     bootstrap_token=None,
     static_dir: Path | None = None,
+    installed_providers=None,
     lab_host: LabHostConfiguration | None = None,
     lab_probe_host: LabProbeConfiguration | None = None,
 ):
@@ -97,7 +98,7 @@ def create_app(
     store = Store(Path(data_dir))
     adapter = XDLAdapter()
     projects = Projects(store, adapter)
-    runs = Runs(store, projects, adapter)
+    runs = Runs(store, projects, adapter, installed_providers)
     event_streams = EventStreams(store, runs)
     hosts = allowed_hosts or ["127.0.0.1:8765", "localhost:8765"]
     token = bootstrap_token or secrets.token_urlsafe(32)
@@ -337,12 +338,12 @@ def create_app(
 
     @app.get("/api/v1/capabilities")
     def caps():
-        return {**capabilities(), 'labReservations': app.state.studio.lab_reservations.discovery(),
+        return {**capabilities(), "providers": runs.provider_descriptors(), "capabilityDigest": runs.capability_digest(), 'labReservations': app.state.studio.lab_reservations.discovery(),
                 'labProbes': app.state.studio.lab_probes.discovery()}
 
     @app.get("/api/v1/providers")
     def providers():
-        return {"items": descriptors(), "nextCursor": None}
+        return {"items": runs.provider_descriptors(), "nextCursor": None}
 
     @app.get("/api/v1/projects")
     def list_projects(cursor: str | None = None, limit: int = 200):
@@ -644,6 +645,10 @@ def create_app(
         return project_timeline(run, snapshot, records, integrity, observed[:MAX_EVALUATIONS], adapter, query,
                                 evaluations_complete=len(observed) <= MAX_EVALUATIONS)
 
+    @app.post("/api/v1/runs/{runId}/input/{action}")
+    def runtime_input(runId: str, action: str, body: dict, request: Request):
+        return runs.input_request(runId, action, body, hashlib.sha256(request.state.session["csrfToken"].encode()).hexdigest())
+
     @app.post("/api/v1/runs/{runId}/commands", status_code=202)
     def command(runId: str, body: Command, request: Request):
         return runs.command(
@@ -683,12 +688,12 @@ def create_app(
         return {
             "items": [
                 {
-                    "evidenceId": runId + ":reference-journal",
+                    "evidenceId": r.get("journalId", runId + ":reference-journal"),
                     "digest": r.get("journalDigest"),
                     "integrity": integrity,
                     "status": r["evidence"],
                     "recordCount": len(records),
-                    "reader": "studio.reference.hash-chain-v1",
+                    "reader": r.get("journalReader", "studio.reference.hash-chain-v1"),
                     "evidenceScope": r.get("evidenceScope", "unknown"),
                 }
             ],
@@ -769,7 +774,7 @@ def create_app(
         return explain_preflight(
             pf,
             current_revision=projects.read(projectId)["revision"],
-            capability_digest=capability_digest(),
+            capability_digest=runs.capability_digest(),
         )
 
     @app.get("/api/v1/runs/{runId}/resync")

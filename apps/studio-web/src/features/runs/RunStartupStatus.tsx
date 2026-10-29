@@ -51,6 +51,7 @@ export function RunStartupStatus({ run }: { run: Data }) {
       <h3>Reported startup</h3>
       <p role="status">{summary}</p>
       <p>{detail}</p>
+      {typeof run.runtimeStatus?.phase === "string" && <p>Component stage: {run.runtimeStatus.phase}</p>}
       {reason && (
         <p>
           Reported reason: <code>{reason}</code>

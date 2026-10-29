@@ -101,3 +101,15 @@ def test_browser_executable_hooks_are_detected(source):
 
 def test_ordinary_browser_code_is_not_flagged():
     assert module.inspect_web("setTimeout(() => refresh(), 2000); const isFunction = typeof x === 'function';", "x.tsx") == []
+
+
+def test_provider_domain_scope_does_not_exempt_shared_core_or_executable_inputs():
+    integration='services/studio-api/src/xverse_studio/providers/autoverse/worker.py'
+    source='import carla\nif role == "carla":\n    start_registered()'
+    assert module.inspect_source(source,integration)==[]
+    assert module.inspect_source(source,CORE.format('runs'))
+    for source in ('eval(project)', 'subprocess.run(project,shell=True)', 'from runtime import _OriginalRuntimeRun'):
+        assert module.inspect_source(source,integration)
+    data='services/studio-api/src/xverse_studio/blueprints/autoverse.py'
+    assert module.inspect_source('ROLES={"carla":"Vehicle"}',data)==[]
+    assert module.inspect_source('import subprocess\nsubprocess.run(argv)',data)

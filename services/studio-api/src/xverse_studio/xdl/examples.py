@@ -16,6 +16,8 @@ CONNECTIONS_NAMESPACE = "io.xverse.studio.connections"
 CONNECTIONS_SCHEMA_ID = "https://schemas.xverse.io/studio/connections/1.0/connection-contracts.schema.json"
 LIVE_NAMESPACE = "io.xverse.studio.reference-controls"
 LIVE_SCHEMA_ID = "https://schemas.xverse.io/studio/reference-controls/1.0/schema.json"
+NATIVE_RUNTIME_NAMESPACE = "io.xverse.studio.native-runtime"
+NATIVE_RUNTIME_SCHEMA_ID = "https://schemas.xverse.io/studio/native-runtime/1.0/schema.json"
 LIVE_INPUT = {"id": "target", "initialParameterId": "target", "mutable": True,
               "valueType": "number", "unit": "1", "minimum": -100, "maximum": 100}
 MODEL_CONTRACT = (
@@ -295,4 +297,6 @@ def examples() -> list[dict]:
                        + ([{"namespace": LIVE_NAMESPACE, "version": "1.0.0"}] if live_controls else [])
                        # Owned presentation-only domain terminology (T062); it never changes semantics.
                        + ([{"namespace": domain_profile, "version": "1.0.0"}] if domain_profile else [])})
+    from xverse_studio.blueprints.autoverse import example as autoverse_example
+    result.insert(len(result) - 1, autoverse_example())
     return result

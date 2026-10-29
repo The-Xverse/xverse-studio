@@ -1,0 +1,419 @@
+"""Owned native demo lifecycle. Fixed public entry points; no imported commands."""
+from pathlib import Path
+import hashlib
+import hmac
+import json
+import os
+import selectors
+import signal
+import subprocess
+import sys
+import time
+import psutil
+from xverse_studio.storage.core import atomic, canonical, digest
+from .adapter import configuration
+from .installation import container_fact, inspect, verify, InstallationError
+
+MAX_LOG_BYTES = 2 * 1024 * 1024
+
+
+class Cancelled(Exception):
+    pass
+
+
+class Demo:
+    def __init__(self, root):
+        self.root = root
+        self.request = json.loads((root / "request.json").read_text())
+        self.secret = (root / "owner.key").read_bytes()
+        self.installation = self.request["nativeInstallation"]
+        self.snapshot = self.request["snapshot"]
+        self.state = {"state": "preparing", "stateVersion": 1, "cleanup": "not_started", "evidence": "collecting",
+                      "pid": os.getpid(), "createTime": psutil.Process().create_time(), "ownerDigest": digest(self.secret),
+                      "commandResults": {}, "runtimeStatus": {"phase": "verifying", "components": {}}, "inputTelemetry": {"items": {}}}
+        self.processes, self.containers = {}, {}
+        self.selector = selectors.DefaultSelector()
+        self.log_sizes, self.log_dropped = {}, {}
+        self.previous, self.count, self.journal_bytes = "0" * 64, 0, 0
+        self.last_save = self.last_evidence = self.last_container_check = 0
+        self.stop_command, self.stop_requested, self.bridge_ready = None, False, False
+        self.last_input, self.input_generation = 0, 0
+        self.bridge_buffer = bytearray()
+        self.journal = (root / "evidence.jsonl").open("xb", buffering=0)
+        self.lock = None
+        self.save()
+
+    def save(self):
+        self.state["updatedAt"] = time.time()
+        atomic(self.root / "state.json", canonical(self.state).encode())
+        self.last_save = time.monotonic()
+
+    def emit(self, kind, payload):
+        self.count += 1
+        body = {"schemaVersion": "1.0", "eventId": f'{self.request["runId"]}:{self.count}',
+                "runId": self.request["runId"], "snapshotId": self.snapshot["snapshotId"], "sequence": str(self.count),
+                "type": kind, "recordedAt": time.time(), "sourceTime": None,
+                "source": {"providerId": "autoverse.demo", "version": "0.1.0"}, "elementRefs": [],
+                "evidenceClass": "observed", "payload": payload, "evidenceRefs": [self.request["runId"] + ":provider-journal"], "previousDigest": self.previous}
+        self.previous = hashlib.sha256(canonical(body).encode()).hexdigest()
+        line = (canonical({**body, "digest": self.previous}) + "\n").encode()
+        if self.journal_bytes + len(line) > 48 * 1024 * 1024 or self.count > 50000:
+            raise InstallationError("AUTOVERSE_EVIDENCE_LIMIT")
+        self.journal.write(line)
+        self.journal_bytes += len(line)
+
+    def phase(self, name):
+        self.state["runtimeStatus"]["phase"] = name
+        self.emit("log.appended", {"severity": "info", "message": "Demo preparation: " + name})
+        self.save()
+
+    def signed(self, path):
+        try:
+            raw = path.read_bytes()
+            if len(raw) > 8192:
+                return None
+            value = json.loads(raw)
+            signature = value.pop("signature", "")
+            if not isinstance(signature, str) or not hmac.compare_digest(signature, hmac.new(self.secret, canonical(value).encode(), hashlib.sha256).hexdigest()):
+                return None
+            return value
+        except (OSError, ValueError, TypeError):
+            return None
+
+    def check_command(self):
+        value = self.signed(self.root / "command.json")
+        if value and value.get("kind") in ("stop", "cancel") and value.get("operationId") not in self.state["commandResults"]:
+            self.stop_command = value
+            self.stop_requested = True
+
+    def tick(self, *, cancellable=True):
+        self.check_command()
+        for key, _ in self.selector.select(0.03):
+            role = key.data
+            data = os.read(key.fileobj.fileno(), 16384)
+            if not data:
+                self.selector.unregister(key.fileobj)
+                continue
+            if role == "driver":
+                self.bridge_buffer.extend(data)
+                if len(self.bridge_buffer) > 131072:
+                    raise InstallationError("AUTOVERSE_BRIDGE_OUTPUT_LIMIT")
+                while b"\n" in self.bridge_buffer:
+                    line, _, remaining = self.bridge_buffer.partition(b"\n")
+                    self.bridge_buffer[:] = remaining
+                    value = json.loads(line)
+                    if value["type"] == "ready":
+                        self.bridge_ready = True
+                    elif value["type"] == "telemetry":
+                        self.state["inputTelemetry"] = {**value.get("data", {}), "driverLeaseActive": value.get("driverLeaseActive", False), "lastPublishedSequence": self.state["inputTelemetry"].get("lastPublishedSequence", 0)}
+                    elif value["type"] == "input_accepted":
+                        self.state["inputTelemetry"]["lastPublishedSequence"] = int(value["id"][2:])
+                    elif value["type"] == "input_rejected":
+                        self.state["inputTelemetry"]["lastRejection"] = value.get("code")
+            else:
+                size = self.log_sizes.get(role, 0)
+                kept = data[:max(0, MAX_LOG_BYTES - size)]
+                if kept:
+                    with (self.root / (role + ".private.log")).open("ab") as out:
+                        out.write(kept)
+                    self.log_sizes[role] = size + len(kept)
+                self.log_dropped[role] = self.log_dropped.get(role, 0) + len(data) - len(kept)
+        now = time.monotonic()
+        if self.bridge_ready and not self.stop_requested:
+            packet = self.signed(self.root / "input.json")
+            if packet and type(packet.get("generation")) is int and packet["generation"] >= self.input_generation and packet.get("expiresAt", 0) > now and 0 <= now - packet.get("issuedAt", 0) <= 0.75:
+                from .controls import driver_frame
+                frame = driver_frame(packet["frame"])
+                if frame["sequence"] > self.last_input:
+                    payload = (canonical({"type": "drive", "id": "i-" + str(frame["sequence"]), "frame": frame, "issuedAt": packet["issuedAt"]}) + "\n").encode()
+                    try:
+                        written = os.write(self.processes["driver"]["process"].stdin.fileno(), payload)
+                        if written != len(payload):
+                            raise InstallationError("AUTOVERSE_INPUT_BACKPRESSURE")
+                    except BlockingIOError:
+                        raise InstallationError("AUTOVERSE_INPUT_BACKPRESSURE") from None
+                    self.last_input, self.input_generation = frame["sequence"], packet["generation"]
+                    if set(frame) & {"cruise", "reverse", "deltaSpeed"}:
+                        self.emit("log.appended", {"severity": "info", "message": "Discrete driver request delegated; publication and vehicle observations remain separate.", "inputSequence": self.last_input, "requests": frame})
+        if now - self.last_save >= 0.2:
+            self.save()
+        if cancellable and self.stop_requested:
+            raise Cancelled()
+
+    def environment(self):
+        env = {key: os.environ[key] for key in ("PATH", "HOME", "LANG", "USER", "LOGNAME") if key in os.environ}
+        for key, field in (("DISPLAY", "display"), ("XAUTHORITY", "xauthority"), ("XDG_RUNTIME_DIR", "runtimeDir")):
+            if self.installation.get(field):
+                env[key] = self.installation[field]
+        env.update(HOME=self.installation["home"], USER=self.installation["user"], LOGNAME=self.installation["user"], PYTHONUNBUFFERED="1", SDL_AUDIODRIVER="dummy")
+        return env
+
+    def launch(self, role, argv, cwd=None, interactive=False):
+        self.emit("log.appended", {"severity": "info", "message": "Starting registered component " + role})
+        process = subprocess.Popen(argv, cwd=cwd, env=self.environment(), start_new_session=True,
+                                   stdin=subprocess.PIPE if interactive else subprocess.DEVNULL,
+                                   stdout=subprocess.PIPE, stderr=subprocess.STDOUT if not interactive else subprocess.DEVNULL, close_fds=True)
+        owner = psutil.Process(process.pid)
+        record = {"process": process, "pid": process.pid, "createTime": owner.create_time(), "argvDigest": digest(owner.cmdline())}
+        self.processes[role] = record
+        os.set_blocking(process.stdout.fileno(), False)
+        if interactive:
+            os.set_blocking(process.stdin.fileno(), False)
+        self.selector.register(process.stdout, selectors.EVENT_READ, role)
+        self.state["runtimeStatus"]["components"][role] = "starting"
+        atomic(self.root / "resources.private.json", canonical({key: {k: v for k, v in value.items() if k != "process"} for key, value in self.processes.items()}).encode())
+        return process
+
+    def wait(self, duration):
+        deadline = time.monotonic() + duration
+        while time.monotonic() < deadline:
+            self.tick()
+
+    def execute(self, role, argv, timeout=30, cancellable=True, allow_failure=False):
+        process = self.launch(role, argv)
+        deadline = time.monotonic() + timeout
+        while process.poll() is None:
+            self.tick(cancellable=cancellable)
+            if time.monotonic() >= deadline:
+                raise InstallationError("AUTOVERSE_COMMAND_TIMEOUT_" + role)
+        self.tick(cancellable=cancellable)
+        if process.returncode and not allow_failure:
+            raise InstallationError("AUTOVERSE_COMMAND_FAILED_" + role)
+        return process
+
+    def start_container(self, role):
+        expected = self.installation["containers"][role]
+        row = inspect(self.installation["docker"], expected["id"])
+        if container_fact(row) != expected or row["State"]["Running"]:
+            raise InstallationError("AUTOVERSE_CONTAINER_BUSY_OR_CHANGED")
+        intent = {"identity": expected, "intentAt": time.time(), "startedAt": None}
+        self.containers[role] = intent
+        self.container_receipt()
+        self.execute("start-" + role, [self.installation["docker"], "start", expected["id"]])
+        row = inspect(self.installation["docker"], expected["id"])
+        if not row["State"]["Running"] or container_fact(row) != expected:
+            raise InstallationError("AUTOVERSE_CONTAINER_NOT_RUNNING_" + role)
+        intent["startedAt"] = row["State"]["StartedAt"]
+        self.container_receipt()
+        self.state["runtimeStatus"]["components"][role] = "running"
+
+    def container_receipt(self):
+        atomic(self.root / "containers.private.json", canonical(self.containers).encode())
+
+    def run(self):
+        import fcntl  # This provider is admitted only on native Linux.
+        from xverse_studio.xdl import XDLAdapter
+        compiled = XDLAdapter().compile(self.snapshot["documents"])
+        actual = configuration(self.snapshot["documents"], compiled)
+        from .adapter import AutoverseProvider
+        if digest(AutoverseProvider(self.installation).descriptor()) != digest(self.snapshot.get("providerIdentity")):
+            raise InstallationError("AUTOVERSE_PROVIDER_IDENTITY_CHANGED")
+        if actual != self.request["configuration"] or compiled.get("planDigest") != self.snapshot["planDigest"] or compiled.get("semanticDigest") != self.snapshot["semanticDigest"]:
+            raise InstallationError("EFFECTIVE_INPUT_MISMATCH")
+        lock_path = Path("/tmp") / ("xverse-autoverse-" + str(os.getuid()) + "-" + hashlib.sha256(self.installation["root"].encode()).hexdigest()[:20] + ".lock")
+        self.lock = os.fdopen(os.open(lock_path, os.O_RDWR | os.O_CREAT | os.O_NOFOLLOW, 0o600), "a+")
+        try:
+            fcntl.flock(self.lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except BlockingIOError:
+            raise InstallationError("AUTOVERSE_INSTALLATION_OWNED") from None
+        verify(self.installation)
+        self.state.update(effectivePlanDigest=compiled["planDigest"], effectiveSemanticDigest=compiled["semanticDigest"])
+        self.emit("run.state_changed", {"state": "preparing", "stateVersion": 1, "installationDigest": self.installation["identityDigest"]})
+        r, i = Path(self.installation["root"]), self.installation
+        self.phase("router")
+        self.launch("router", [i["zenohd"], "--listen", "tcp/127.0.0.1:7447", "--listen", "tcp/" + i["androidGateway"] + ":7447", "--no-multicast-scouting", "--cfg", "scouting/gossip/enabled:false"])
+        self.wait(1)
+        self.phase("simulator")
+        self.launch("carla", [str(Path(i["carlaRoot"]) / "CarlaUE4/Binaries/Linux/CarlaUE4-Linux-Shipping"), "CarlaUE4", "-prefernvidia", "-quality-level=Epic", "-carla-rpc-port=2000", "-RenderOffScreen"], cwd=i["carlaRoot"])
+        deadline = time.monotonic() + 120
+        while True:
+            try:
+                self.execute("carla-probe", [i["python"], "-E", str(Path(__file__).with_name("carla_probe.py"))], timeout=8)
+                break
+            except InstallationError:
+                if time.monotonic() >= deadline or self.processes["carla"]["process"].poll() is not None:
+                    raise InstallationError("AUTOVERSE_CARLA_NOT_READY") from None
+                self.wait(1)
+        self.execute("carla-prepare", [i["python"], "-E", str(Path(__file__).with_name("carla_prepare.py"))], timeout=25)
+        self.state["runtimeStatus"]["components"]["carla"] = "ready"
+        self.phase("vcu-and-communications")
+        config = self.root / "zenoh.private.json5"
+        atomic(config, canonical({"mode": "client", "connect": {"endpoints": ["tcp/127.0.0.1:7447"]}, "listen": {"endpoints": []}, "scouting": {"multicast": {"enabled": False}, "gossip": {"enabled": False}}}).encode())
+        self.launch("vcu", [i["python"], "-E", str(r / "vecu/vcu_zenoh/src/main.py"), "--config", str(config)], cwd=str(r / "vecu/vcu_zenoh"))
+        self.start_container("someip-bridge")
+        self.start_container("score")
+        self.wait(12)
+        self.phase("vehicle-and-driver")
+        examples = r / "bridges/carla/examples"
+        self.launch("vehicle", [i["python"], "-E", str(Path(__file__).with_name("public_entry.py")), str(examples / "virtual_vehicle.py"), "--verbose", "--sync", "--host", "127.0.0.1", "--port", "2000", "--router", "127.0.0.1", "--res", "1280x960", "--filter", "vehicle.audi.etron", "--rolename", "ego_vehicle", "--signals-config", str(examples / "signals_config.json"), "--enable-camera-display"], cwd=str(examples))
+        self.launch("driver", [i["python"], "-E", str(Path(__file__).with_name("zenoh_bridge.py")), "--duration", "1800"], interactive=True)
+        deadline = time.monotonic() + 120
+        while not self.bridge_ready or self.state["inputTelemetry"].get("items", {}).get("speed", {}).get("status") != "observed":
+            self.tick()
+            if time.monotonic() > deadline:
+                raise InstallationError("AUTOVERSE_VEHICLE_TELEMETRY_UNAVAILABLE")
+        self.phase("android")
+        self.start_container("android")
+        cid = i["containers"]["android"]["id"]
+        self.execute("android-launch", [i["docker"], "exec", "--env", "ANDROID_HOST_OUT=/root/runtime", "--workdir", "/root/runtime", cid,
+            "bash", "-c", "ulimit -n 65536; nohup ./bin/launch_cvd --system_image_dir=/root/runtime --assembly_dir=/root/runtime/cvd-assembly --instance_dir=/root/runtime/cvd-state --console=true --display0=width=1080,height=600,dpi=90 --display1=width=400,height=600,dpi=90 --start_webrtc=true --report_anonymous_usage_stats=no -- those --no-sandbox > cvd_launch.log 2>&1 &"])
+        deadline = time.monotonic() + 300
+        while True:
+            self.execute("adb-connect", [i["adb"], "connect", "localhost:6520"], timeout=10, allow_failure=True)
+            self.execute("android-boot", [i["adb"], "-s", "localhost:6520", "shell", "getprop", "sys.boot_completed"], timeout=10, allow_failure=True)
+            self.tick()
+            output = (self.root / "android-boot.private.log").read_bytes() if (self.root / "android-boot.private.log").exists() else b""
+            if b"1" in output.split():
+                break
+            if time.monotonic() > deadline:
+                raise InstallationError("AUTOVERSE_ANDROID_BOOT_TIMEOUT")
+            self.wait(2)
+        self.execute("android-install", [i["adb"], "-s", "localhost:6520", "install", "-r", str(r / "aaos_digital_cluster/cuttlefish_emulator/apk/digital-cluster-app-debug.apk")], timeout=90)
+        self.execute("android-density", [i["adb"], "-s", "localhost:6520", "shell", "wm", "density", "90"])
+        self.execute("android-open", [i["adb"], "-s", "localhost:6520", "shell", "am", "start", "-a", "android.intent.action.MAIN", "-c", "android.intent.category.LAUNCHER", "-p", "com.example.digitalclusterapp"])
+        self.state.update(state="running", stateVersion=2, startedAt=time.time())
+        self.state["runtimeStatus"]["phase"] = "running"
+        self.state["runtimeStatus"]["components"].update(router="running", driver="transport_ready", vehicle="speed_telemetry_observed", vcu="interface_observed", android="booted_apk_started")
+        self.emit("run.state_changed", {"state": "running", "stateVersion": 2, "evidenceScope": "external_demo", "sourceClockMapping": "unavailable"})
+        self.save()
+        deadline = time.monotonic() + actual["durationSeconds"]
+        while time.monotonic() < deadline:
+            self.tick()
+            for role in ("router", "carla", "vcu", "vehicle", "driver"):
+                if self.processes[role]["process"].poll() is not None:
+                    raise InstallationError("AUTOVERSE_COMPONENT_EXITED_" + role)
+            if time.monotonic() - self.last_container_check >= 2:
+                for role, claim in self.containers.items():
+                    row = inspect(i["docker"], claim["identity"]["id"])
+                    if (not row["State"]["Running"] or container_fact(row) != claim["identity"]
+                        or row["State"]["StartedAt"] != claim["startedAt"]):
+                        raise InstallationError("AUTOVERSE_COMPONENT_EXITED_OR_REPLACED_" + role)
+                self.last_container_check = time.monotonic()
+            if time.monotonic() - self.last_evidence >= 1:
+                self.emit("observation.available", {"observerId": "autoverse-telemetry", "scope": "external_interface_receipts", **self.state["inputTelemetry"]})
+                self.last_evidence = time.monotonic()
+
+    def cleanup(self):
+        self.stop_requested = True
+        outcomes = []
+        # Close the publisher first: its finally path requests brake/cruise-off.
+        driver = self.processes.get("driver")
+        if driver and driver["process"].stdin:
+            driver["process"].stdin.close()
+        for role in reversed(list(self.processes)):
+            record = self.processes[role]
+            process = record["process"]
+            if process.poll() is not None:
+                continue
+            try:
+                owner = psutil.Process(record["pid"])
+                if owner.create_time() != record["createTime"] or digest(owner.cmdline()) != record["argvDigest"]:
+                    raise InstallationError("AUTOVERSE_PROCESS_IDENTITY_UNKNOWN")
+                # Capture descendant identities before signaling their owned parent.
+                descendants = [(child, child.create_time()) for child in owner.children(recursive=True)]
+                owner.send_signal(signal.SIGINT if role in ("vehicle", "driver") else signal.SIGTERM)
+                try:
+                    process.wait(timeout=8)
+                except subprocess.TimeoutExpired:
+                    if owner.create_time() == record["createTime"]:
+                        owner.kill()
+                    process.wait(timeout=3)
+                for child, born in descendants:
+                    try:
+                        if child.create_time() == born and child.status() != psutil.STATUS_ZOMBIE:
+                            child.terminate()
+                            try:
+                                child.wait(timeout=3)
+                            except psutil.TimeoutExpired:
+                                if child.create_time() == born:
+                                    child.kill()
+                                    child.wait(timeout=3)
+                    except psutil.NoSuchProcess:
+                        pass
+                outcomes.append({"resourceId": role, "kind": "process", "status": "released"})
+            except (psutil.Error, OSError, InstallationError, subprocess.TimeoutExpired):
+                outcomes.append({"resourceId": role, "kind": "process", "status": "unknown"})
+        for role, claim in reversed(list(self.containers.items())):
+            expected = claim["identity"]
+            try:
+                row = inspect(self.installation["docker"], expected["id"])
+                if container_fact(row) != expected or claim["startedAt"] is None or row["State"]["StartedAt"] != claim["startedAt"]:
+                    raise InstallationError("AUTOVERSE_CONTAINER_OWNERSHIP_UNKNOWN")
+                if row["State"]["Running"]:
+                    if role == "android":
+                        subprocess.run([self.installation["docker"], "exec", "--env", "ANDROID_HOST_OUT=/root/runtime", "--env", "CUTTLEFISH_CONFIG_FILE=/root/runtime/cvd-assembly/cuttlefish_config.json", "--workdir", "/root/runtime", expected["id"], "./bin/stop_cvd"], capture_output=True, timeout=20, check=False)
+                    subprocess.run([self.installation["docker"], "stop", "--time", "10", expected["id"]], capture_output=True, timeout=20, check=True)
+                row = inspect(self.installation["docker"], expected["id"])
+                if row["State"]["Running"]:
+                    raise InstallationError("AUTOVERSE_CONTAINER_STOP_UNCONFIRMED")
+                outcomes.append({"resourceId": role, "kind": "container", "status": "released"})
+            except (ValueError, KeyError, OSError, subprocess.SubprocessError):
+                outcomes.append({"resourceId": role, "kind": "container", "status": "unknown"})
+        score = self.containers.get("score")
+        if score and score.get("startedAt") and any(row["resourceId"] == "score" and row["status"] == "released" and row["kind"] == "container" for row in outcomes):
+            from .working_state import remember
+            try:
+                remember(self.installation, score["startedAt"])
+                self.state["runtimeStatus"]["scratch"] = "retained_verified_middleware_working_files"
+            except (ValueError, OSError):
+                outcomes.append({"resourceId": "middleware-scratch", "kind": "working-state", "status": "unknown"})
+        self.state["cleanupResources"] = outcomes
+        self.state["cleanup"] = "complete" if all(row["status"] == "released" for row in outcomes) else "unknown"
+        if self.lock:
+            self.lock.close()
+        self.selector.close()
+
+
+def finish(demo, failed):
+    """Release owned resources even when state/evidence storage has failed."""
+    io_failed = False
+    def save():
+        nonlocal io_failed
+        try:
+            demo.save()
+        except OSError:
+            io_failed = True
+    demo.state.update(state="stopping", stateVersion=demo.state["stateVersion"] + 1)
+    save()
+    try:
+        demo.cleanup()
+    except Exception:
+        # A cleanup implementation failure never manufactures release facts.
+        demo.state["cleanup"] = "unknown"
+        demo.state.setdefault("reason", "AUTOVERSE_CLEANUP_UNCONFIRMED")
+    if demo.stop_command:
+        demo.state["commandResults"][demo.stop_command["operationId"]] = {"status": "completed" if demo.state["cleanup"] == "complete" else "unknown"}
+    demo.state.update(state="failed" if failed else "stopped", stateVersion=demo.state["stateVersion"] + 1,
+                      endedAt=time.time(), evidence="partial" if failed or io_failed else "available")
+    try:
+        demo.emit("run.state_changed", {"state": demo.state["state"], "stateVersion": demo.state["stateVersion"], "cleanup": demo.state["cleanup"], "reason": demo.state.get("reason")})
+    except (OSError, InstallationError):
+        io_failed = True
+    try:
+        demo.journal.close()
+        demo.state.update(journalDigest=digest((demo.root / "evidence.jsonl").read_bytes()), eventCount=demo.count)
+    except OSError:
+        io_failed = True
+    if io_failed:
+        demo.state.update(evidence="partial", evidenceFailure="AUTOVERSE_EVIDENCE_IO_FAILED")
+    save()
+    return int(failed or io_failed)
+
+
+def main():
+    demo = Demo(Path(sys.argv[1]).resolve())
+    signal.signal(signal.SIGTERM, lambda *_: setattr(demo, "stop_requested", True))
+    signal.signal(signal.SIGINT, lambda *_: setattr(demo, "stop_requested", True))
+    failed = False
+    try:
+        demo.run()
+    except Cancelled:
+        pass
+    except Exception as error:
+        failed = True
+        demo.state["reason"] = str(error) if isinstance(error, InstallationError) else "AUTOVERSE_WORKER_FAILED_" + type(error).__name__
+    return finish(demo, failed)
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

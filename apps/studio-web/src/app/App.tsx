@@ -339,7 +339,7 @@ export default function App() {
       ),
     );
     if (changed) {
-      setExecutionProvider("studio.reference");
+      setExecutionProvider(catalog.find((c) => (c.id || c.entryId) === saved.manifest?.provenance?.blueprintRef)?.providerId || "studio.reference");
       setSelected("");
       setView("Model");
       try {
@@ -472,7 +472,7 @@ export default function App() {
   async function refreshProjects() {
     setProjects(items<Project>(await api("/projects")));
   }
-  async function loadProject(projectId: string) {
+  async function loadProject(projectId: string, knownCatalog = catalog) {
     projectLoadSequence.current++;
     const context = projectIntent();
     let value: Project;
@@ -501,7 +501,7 @@ export default function App() {
     setSection("workspace");
     setPreflight(null);
     if (changed) {
-      setExecutionProvider("studio.reference");
+      setExecutionProvider(knownCatalog.find((c) => (c.id || c.entryId) === value.manifest?.provenance?.blueprintRef)?.providerId || "studio.reference");
       setSelected("");
       setView("Model");
       try {
@@ -571,7 +571,7 @@ export default function App() {
     if (!sameProjectIntent(context)) return;
     const saved = localStorage.getItem("studio.projectId");
     if (saved && items<Project>(p).some((p) => p.projectId === saved))
-      await loadProject(saved);
+      await loadProject(saved, items<CatalogEntry>(c));
   }
   useEffect(() => {
     let active = true;
@@ -2269,7 +2269,7 @@ function Home({
             <h2>Start with an example</h2>
             <p>A guided path from a model to a recorded result.</p>
           </div>
-          <Badge tone="info">OWNED REFERENCE PROVIDER</Badge>
+          <Badge tone="info">EXAMPLES AND INTEGRATIONS</Badge>
         </div>
         <div className="example-grid">
           {catalog

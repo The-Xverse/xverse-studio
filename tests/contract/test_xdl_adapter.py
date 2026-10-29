@@ -17,6 +17,8 @@ def documents():
 
 def test_both_owned_examples_compile_with_public_platform_apis():
     for entry in examples():
+        if entry["providerId"] != "studio.reference":
+            continue
         validation = XDLAdapter().validate(entry["documents"])
         compiled = XDLAdapter().compile(entry["documents"])
         assert validation["valid"], validation["diagnostics"]

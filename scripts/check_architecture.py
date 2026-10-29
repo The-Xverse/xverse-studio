@@ -24,7 +24,7 @@ FEATURES = {"profiles", "connections", "deployments", "projects", "runs", "api",
 SEMANTIC_HELPERS = {"assertions", "experiments"}
 API_IMPORTERS = {"api", "host"}
 # Modules whose job is declarative domain data (owned blueprints and their presentation).
-DATA_MODULES = {"xdl/examples.py"}
+DATA_MODULES = {"xdl/examples.py", "blueprints/autoverse.py"}
 WEB_FORBIDDEN = (
     (re.compile(r"dangerouslySetInnerHTML|\b(?:inner|outer)HTML\b|insertAdjacentHTML|document\.write|\bsrcdoc\b"),
      "executable HTML hook"),
@@ -95,20 +95,23 @@ def inspect_source(source, filename):
     issues = []
     package = _package(filename)
     relative = "/".join(_module_path(filename) + [Path(filename).name]) if package else None
+    integration = relative is not None and relative.startswith("providers/autoverse/")
     for node in ast.walk(ast.parse(source)):
         modules = []
         if isinstance(node, ast.ImportFrom) and node.module:
             modules = [node.module]
         elif isinstance(node, ast.Import):
             modules = [x.name for x in node.names]
-        if any(set(module.lower().split(".")) & DOMAINS for module in modules):
+        if not integration and any(set(module.lower().split(".")) & DOMAINS for module in modules):
             issues.append(f"{filename}:{node.lineno}: core imports industry implementation")
+        if relative in DATA_MODULES and any(module.split('.')[0] in {'subprocess', 'socket', 'os', 'psutil'} for module in modules):
+            issues.append(f"{filename}:{node.lineno}: declarative blueprint imports effects")
         for target in _targets(node, filename):
             if package in FOUNDATIONAL and (target in FEATURES or (package != "xdl" and target in SEMANTIC_HELPERS)):
                 issues.append(f"{filename}:{node.lineno}: foundational {package} imports feature {target}")
             if target == "api" and package not in API_IMPORTERS and package is not None:
                 issues.append(f"{filename}:{node.lineno}: {package} imports the API layer")
-        if relative not in DATA_MODULES and _keyed_by_domain(node):
+        if not integration and relative not in DATA_MODULES and _keyed_by_domain(node):
             issues.append(f"{filename}:{node.lineno}: industry dispatch in shared core")
         if isinstance(node, ast.ImportFrom) and any(x.name == "_OriginalRuntimeRun" for x in node.names):
             issues.append(f"{filename}:{node.lineno}: private runtime import")
@@ -122,7 +125,7 @@ def inspect_source(source, filename):
         elif isinstance(node, ast.match_case):
             tests.append(node.pattern)
         flagged = [test for test in tests if _has_domain_literal(test)]
-        if flagged:
+        if flagged and not integration:
             line = getattr(node, "lineno", None) or getattr(flagged[0], "lineno", 0)
             issues.append(f"{filename}:{line}: industry dispatch in shared core")
         if isinstance(node, ast.Call):
@@ -130,6 +133,8 @@ def inspect_source(source, filename):
                     else node.func.attr if isinstance(node.func, ast.Attribute) else None)
             if name in ("eval", "exec"):
                 issues.append(f"{filename}:{node.lineno}: executable input")
+            if relative in DATA_MODULES and name in {"Popen", "system", "run", "call", "check_call", "check_output", "spawn", "fork", "kill", "unlink", "rmdir", "mkdir", "write_text", "write_bytes"}:
+                issues.append(f"{filename}:{node.lineno}: declarative blueprint performs effects")
             if any(k.arg == "shell" and isinstance(k.value, ast.Constant) and k.value.value is True for k in node.keywords):
                 issues.append(f"{filename}:{node.lineno}: shell execution")
     return sorted(set(issues))

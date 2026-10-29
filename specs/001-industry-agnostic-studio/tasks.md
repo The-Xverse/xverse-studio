@@ -686,3 +686,15 @@ Failure-retention successor: a fresh full1267 backend execution passes0failures/
 Prior91e81bd push40809550411 and PR40809556858 CI are both terminalSUCCESS with actual1250backend/full629browser/package116 smoke from decoded logs. PR checkoutc7a66dcf1847bd38ae928f99a099b1e75cefaa56 and published91 have identical Git tree9775430403370c034c7958364658d2cd6a239d32 and environment sourceDigest. Artifact metadata retained without archive download/payload re-verification. These jobs predate ddc native terminal tests and later cleanup/recovery; they do not establish resolution or passing full current source. Evidence: evidence/studio/native-ci/ubuntu-24.04-91e81bd-runs.json.
 
 Owned fault-intent checkpoint: 127 affected checks pass (56 new offline contract cases) on 399 unchanged inputs. The selected public XDL compiler requires existing experiment-lite fault-intent trigger/duration; new Profile binds only the measured field. Pure compilation preserves authoritative identities and exact plan/source ticks, enforces clocks, targets, bounds, attachment, nonoverlap and legacy-mix refusal. It always returns executionAllowed false; runtime, provider admission, forms and observed activation/recovery remain unimplemented. T082/T083 and their dependencies remain open; counts49/41/10, zero milestones. Evidence: evidence/studio/M4-fault-intent/candidate-binding.json.
+
+Autoverse native prototype amendment (ADR-0033): the user's separately scoped goal
+loads, starts, drives and stops the complete installed demo through Studio. T004,
+T010, T019 and T020–T024 gain scoped Linux evidence for installed-provider admission,
+backend ownership, browser input leases, actual vehicle/cruise/Android observations
+and immutable canonical evidence. The source and clean isolated installed copy each
+pass the full live browser workflow;147 final contracts pass on380 unchanged source
+inputs. Existing reference regressions retain their separately qualified scope.
+No task checkbox/status or milestone acceptance changes: broader Windows/live
+integration/independent gates remain open. Source pins, preserved failures, review
+and exact evidence are in `evidence/studio/autoverse-linux/`. The earlier scheduled
+fault-runtime work remains separately preserved and is not part of this goal.

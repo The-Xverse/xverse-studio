@@ -472,7 +472,17 @@ def admit_connections(documents, validation, provider=None):
                 if edge[0] in members and edge[1] in members
             ]
             provider_clocks = set((provider or {}).get("clockDomains") or [])
-            if "unit-delay" not in contracts["causality"]:
+            external_contract = (provider or {}).get("connectionContracts", {}).get("externalRuntime")
+            declared_external = (resource.get("extensions") or {}).get("io.xverse.studio.native-runtime")
+            if (isinstance(external_contract, dict) and external_contract == declared_external
+                and external_contract.get("version") == "1.0"
+                and external_contract.get("feedback") == "externally-managed-asynchronous-communication"
+                and external_contract.get("providerId") == (provider or {}).get("providerId")):
+                status, code, message = (
+                    "admitted", None,
+                    "The selected provider owns this declared external asynchronous communication topology. No unit delay, algebraic solver, native X-COM or source-clock synchronization is inferred; exact-source provider admission remains required.",
+                )
+            elif "unit-delay" not in contracts["causality"]:
                 status, code, message = (
                     "unsupported",
                     "CAUSALITY_CONTRACT_UNSUPPORTED",

@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { api, mutationKey } from "../../api/client";
 import type { Run } from "../../api/types";
 import { Badge, Icon, statusTone } from "../../app/ui";
+import { DriverControls } from "./DriverControls";
 import { LiveTargetInput } from "./LiveTargetInput";
 import {
   clearPendingCommand,
@@ -244,6 +245,7 @@ export function RunControls({
             }
           />
         )}
+      {run.inputSurface?.kind === "normalized-driver" && run.inputSurface.version === "1.0" && <DriverControls key={run.runId} run={run} />}
       {capabilities.includes("pause") && (
         <p className="hint">
           Simulation pause preserves the current model step; it does not pause

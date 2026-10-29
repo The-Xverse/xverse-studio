@@ -16,7 +16,7 @@ def test_admitted_profile_lock_materializes_exact_local_schema_and_preserves_exe
     before = adapter.compile(projects.sources(project))
     updated = registry.bind(projects, project["projectId"], 1, locks)
     assert updated["revision"] == 2
-    assert len(updated["manifest"]["profiles"]) == len(registry.list()["items"]) == 6
+    assert len(updated["manifest"]["profiles"]) == len(registry.list()["items"]) == 7
     for lock in updated["manifest"]["profiles"]:
         assert lock["schemaPath"] in updated["supportingFiles"]
         assert lock["presentationPath"] in updated["supportingFiles"]
@@ -283,6 +283,7 @@ def test_api_profile_discovery_is_exact_and_independent_of_providers_and_bluepri
         "io.xverse.studio.domain.process-control": (Path(assertions.__file__).parent.parent / "profiles" / "domain-presentation-v1.schema.json").read_bytes(),
         "io.xverse.studio.domain.automotive": (Path(assertions.__file__).parent.parent / "profiles" / "domain-presentation-v1.schema.json").read_bytes(),
         "io.xverse.studio.reference-controls": (Path(assertions.__file__).parent.parent / "xdl" / "reference-controls-v1.schema.json").read_bytes(),
+        "io.xverse.studio.native-runtime": (Path(assertions.__file__).parent.parent / "profiles/native-runtime-v1.schema.json").read_bytes(),
     }
     declared = {ref["namespace"]: ref["version"] for example in examples() for ref in example["profileRefs"]}
     listing = client.get("/api/v1/profiles").json()["items"]
@@ -302,7 +303,8 @@ def test_api_profile_discovery_is_exact_and_independent_of_providers_and_bluepri
         detail = client.get("/api/v1/profiles/" + entry["profileId"]).json()
         assert detail["version"] == declared[detail["namespace"]]
         assert detail["schemaDigest"] == digest(sources[detail["namespace"]])
-        assert detail["maturity"] == ("fixture" if detail.get("kind") in {"domain-presentation", "reference-controls"} else "admitted_integration") and detail["limitations"]
+        expected_maturity = "prototype" if detail.get("kind") == "native-runtime" else "fixture" if detail.get("kind") in {"domain-presentation", "reference-controls"} else "admitted_integration"
+        assert detail["maturity"] == expected_maturity and detail["limitations"]
         for field in ("namespace", "version", "maturity", "limitations", "schemaDigest", "presentationDigest"):
             assert detail[field] == entry[field]
         # A profile never claims OS support, provider identity or execution authority.

@@ -20,7 +20,8 @@ from xverse_xdl import (
 )
 
 from .examples import (API_VERSION, CONNECTIONS_NAMESPACE, CONVERTER_BOUND, CONVERTER_TEMPLATE, EVALUATION_NAMESPACE, EVALUATION_SCHEMA_ID, PARAMETERS,
-                       PROFILE_NAMESPACE, LIVE_NAMESPACE, LIVE_SCHEMA_ID, LIVE_INPUT, examples, reference_resources)
+                       PROFILE_NAMESPACE, LIVE_NAMESPACE, LIVE_SCHEMA_ID, LIVE_INPUT, examples, reference_resources,
+                       NATIVE_RUNTIME_NAMESPACE, NATIVE_RUNTIME_SCHEMA_ID)
 
 PLATFORM_REVISION = "7fab6a290c3731533c2b88517158055c768b9d4e"
 MAX_DOCUMENTS = 128
@@ -58,7 +59,8 @@ class XDLAdapter:
         connections = Path(__file__).parent.parent / "connections" / "connections-v1.schema.json"
         domain = Path(__file__).parent.parent / "profiles" / "domain-presentation-v1.schema.json"
         live_controls = Path(__file__).parent / "reference-controls-v1.schema.json"
-        self.profile_schema_paths = (str(packaged), str(evaluation), str(connections), str(domain), str(live_controls), *tuple(str(p) for p in profile_schema_paths))
+        native_runtime = Path(__file__).parent.parent / "profiles/native-runtime-v1.schema.json"
+        self.profile_schema_paths = tuple(dict.fromkeys((str(packaged), str(evaluation), str(connections), str(domain), str(live_controls), str(native_runtime), *tuple(str(p) for p in profile_schema_paths))))
         self._validation_cache = OrderedDict()
         self._validation_cache_lock = threading.RLock()
         self._cache_result_bytes = self._cache_source_bytes = 0
@@ -359,7 +361,15 @@ def reference_configuration(documents: dict[str, str], compiled: dict | None = N
             raise XDLRejected("The domain presentation profile identity is incompatible.", "PROFILE_UNRESOLVED")
         return True
 
-    authored = [r for r in authored if not presentation_profile(r)]
+    def inert_native_profile(resource):
+        if resource.get("kind") != "Profile" or resource.get("spec", {}).get("extensionNamespace") != NATIVE_RUNTIME_NAMESPACE:
+            return False
+        expected_spec = {"extensionNamespace": NATIVE_RUNTIME_NAMESPACE, "compatibleApiVersions": [API_VERSION],
+                         "schemaRef": NATIVE_RUNTIME_SCHEMA_ID, "documentationRef": "urn:xverse:studio:native-runtime:1.0", "conflictPolicy": "reject"}
+        if resource.get("metadata", {}).get("version") != "1.0.0" or resource.get("spec") != expected_spec or resource.get("extensions"):
+            raise XDLRejected("The native runtime Profile identity is incompatible.", "PROFILE_UNRESOLVED")
+        return True
+    authored = [r for r in authored if not presentation_profile(r) and not inert_native_profile(r)]
     assessment_profiles = [r for r in authored if assessment_profile(r)]
     for resource in authored:
         payload = resource.get("extensions", {}).get(EVALUATION_NAMESPACE)

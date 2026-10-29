@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.xverse.io/studio/native-runtime/1.0/schema.json",
+  "title": "Explicit external native runtime contract 1.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "kind", "providerId", "contractRef"],
+  "properties": {
+    "version": {"const": "1.0"},
+    "kind": {"enum": ["communication", "scenario"]},
+    "providerId": {"type": "string", "pattern": "^[a-z][a-z0-9.-]{0,127}$"},
+    "contractRef": {"type": "string", "format": "uri-reference", "minLength": 1, "maxLength": 256},
+    "feedback": {"const": "externally-managed-asynchronous-communication"},
+    "durationSeconds": {"type": "integer", "minimum": 30, "maximum": 1800},
+    "inputSurface": {"const": "studio-browser"}
+  },
+  "allOf": [
+    {"if": {"properties": {"kind": {"const": "communication"}}},
+     "then": {"required": ["feedback"], "not": {"anyOf": [{"required": ["durationSeconds"]}, {"required": ["inputSurface"]}]}}},
+    {"if": {"properties": {"kind": {"const": "scenario"}}},
+     "then": {"required": ["durationSeconds", "inputSurface"], "not": {"required": ["feedback"]}}}
+  ]
+}

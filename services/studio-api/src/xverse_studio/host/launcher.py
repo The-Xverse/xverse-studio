@@ -29,6 +29,7 @@ def main():
     parser.add_argument("--data-dir", type=Path, default=default_root())
     parser.add_argument("--port", type=int, default=8765)
     parser.add_argument("--static-dir", type=Path)
+    parser.add_argument("--autoverse-root", type=Path, help="Enroll the explicitly selected existing Linux Autoverse demo installation; no downloads or builds.")
     maintenance = parser.add_mutually_exclusive_group()
     maintenance.add_argument(
         "--backup",
@@ -107,10 +108,19 @@ def _owned_main(args, root, parser):
         return
     from xverse_studio.api.app import create_app
 
+    installed = None
+    if args.autoverse_root is not None:
+        from xverse_studio.providers.autoverse.adapter import AutoverseProvider, PROVIDER_ID
+        from xverse_studio.providers.autoverse.installation import enroll, InstallationError
+        try:
+            installed = {PROVIDER_ID: AutoverseProvider(enroll(args.autoverse_root))}
+        except (InstallationError, OSError) as error:
+            parser.error(str(error) if isinstance(error, InstallationError) else "AUTOVERSE_ENROLLMENT_FAILED")
     app = create_app(
         root,
         allowed_hosts=[f"127.0.0.1:{args.port}", f"localhost:{args.port}"],
         static_dir=args.static_dir,
+        installed_providers=installed,
     )
     print(f"Studio: http://127.0.0.1:{args.port}")
     print(
