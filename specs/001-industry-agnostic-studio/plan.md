@@ -7,7 +7,7 @@
 
 ## Summary
 
-Build a web-based, local-first engineering workbench around the existing XDL model, with the backend running natively on Linux or Windows and the user interface accessed through a browser. A user opens or composes a System, chooses compatible realizations, connects interfaces, creates a Scenario, runs an admitted experiment, and inspects correlated observations. The five views—Model, Connections, Deployment, Experiments, Results—are projections of shared identities. Industry profiles supply terminology; they never fork the editor or redefine XDL semantics.
+Build a web-based, local-first engineering workbench around the existing XDL model, with the backend running natively on Linux and the user interface accessed through a browser. A user opens or composes a System, chooses compatible realizations, connects interfaces, creates a Scenario, runs an admitted experiment, and inspects correlated observations. The five views—Model, Connections, Deployment, Experiments, Results—are projections of shared identities. Industry profiles supply terminology; they never fork the editor or redefine XDL semantics.
 
 Deliver the entire M0–M4 scope incrementally. A milestone is usable only after its acceptance evidence exists. An unavailable external capability blocks that integration, not unrelated offline authoring work. Future M5 items are roadmap entries, not hidden acceptance obligations for Studio 1.0.
 
@@ -23,12 +23,12 @@ Deliver the entire M0–M4 scope incrementally. A milestone is usable only after
 | Runtime integration | Versioned Studio adapter facade over admitted platform/provider contracts | Maestro owns intra-run lifecycle, time and resource scheduling. Studio may queue independent admitted runs for a bounded campaign; it does not duplicate that intra-run scheduler. |
 | Evidence | Argus readers and indexed projections | Do not rewrite historical Argus records or reinterpret integrity failures as success. |
 | Toolchain | Node LTS + npm lockfile; supported Python + uv lockfile | Exact versions selected, compatibility-tested and pinned during M0. No unspecified floating release dependency in delivery. |
-| Initial deployment | Native Linux or Windows backend; browser UI served by backend | Install/start/stop/restart and offline core workflows on both hosts. WSL, containers or a separate Linux machine are not prerequisites for Windows Studio. Remote exposure is outside M0–M4. |
+| Initial deployment | Native Linux backend; browser UI served by backend | Install/start/stop/restart and offline core workflows on the recorded Linux host. Bash, containers or a separate host are not implicit core prerequisites. Remote exposure is outside M0–M4. |
 | Verification | Python contract/integration tests; frontend component tests; Playwright user journeys | Tests exercise invariants and failure boundaries, not merely DOM presence. |
 
-No application packages or dependency locks are created by this plan. At M0, validate the chosen versions against the exact XDL package and admitted runtime bindings on both native host operating systems. Keep any CARLA client interpreter or native gateway requirement inside its provider environment; do not force its Python version or operating system onto Studio. Provider support is separate from Studio host support: a Linux-only provider is explicitly unavailable on Windows until a native compatible integration is admitted.
+No application packages or dependency locks are created by this plan. At M0, validate the chosen versions against the exact XDL package and admitted runtime bindings on the recorded native Linux host. Keep any CARLA client interpreter or native gateway requirement inside its provider environment; do not force its Python version or operating system onto Studio. Provider support is separate from Studio host support: an unavailable provider returns explicit capability diagnostics without disabling core authoring.
 
-Mandatory packaging scope is a locally installable backend and native foreground or launcher-managed background process with documented install/start/stop/restart/uninstall procedures. OS service-manager registration and automatic start are optional additions with their own tested Linux/Windows implementations; no untested systemd or Windows Service Control Manager behaviour is implied. `scripts/package_studio.py` is the shared packaging entry point; shell-only launch scripts cannot satisfy Windows delivery.
+Mandatory packaging scope is a locally installable backend and native foreground or launcher-managed background process with documented install/start/stop/restart/uninstall procedures. OS service-manager registration and automatic start are optional additions with their own tested Linux implementations; no untested service-manager behaviour is implied. `scripts/package_studio.py` is the shared packaging entry point; an installed native launcher remains the supported core entry point.
 
 ## Constitution check
 
@@ -62,7 +62,7 @@ Inspect [sources.md](sources.md) and current upstream contracts before coding ea
 | Dependency | Known source boundary | M0 outcome / subsequent gate |
 |---|---|---|
 | DEP-XDL | Local validator, normalizer and experiment compiler exist; API/schema versions matter. | Record package version, source revision and digests; prove equivalent CLI/API plans and diagnostic source locations. |
-| DEP-RUN | The inspected rc.1 blueprint uses trusted-host `_OriginalRuntimeRun`; its external `RuntimeService` path remains closed. That harness is Linux-specific. | Evaluate a fixed-argv wrapper of the documented run-live.sh harness on its supported Linux host, or an admitted successor service. Prove requested/effective input equality; see DEP-RUN-CONFIG below. Windows needs an admitted native provider for the same live capability; unavailable integrations must not disable native Studio authoring/fixture workflows. |
+| DEP-RUN | The inspected rc.1 blueprint uses trusted-host `_OriginalRuntimeRun`; its external `RuntimeService` path remains closed. That harness is Linux-specific. | Evaluate a fixed-argv wrapper of the documented run-live.sh harness on its supported Linux host, or an admitted successor service. Prove requested/effective input equality; see DEP-RUN-CONFIG below. Every claimed live capability requires its own admitted provider; unavailable integrations do not disable native Linux authoring/fixtures. |
 | DEP-RUN-CONFIG | The inspected harness generates XDL internally through build_documents; a preset invocation does not imply support for GUI-authored inputs or changed parameters. | Require an offline effective-input/plan identity contract and exact requested/effective digest comparison before start. Edited-parameter/live acceptance remains blocked until an admitted successor consumes the requested declared inputs. |
 | DEP-ARGUS | Read/verify/export APIs exist; integrity and collection limitations remain meaningful. | Use compatible reader contracts and keep original verdicts. Missing evidence remains missing. |
 | DEP-FLOW | Lite flow runtime mirrors bounded X-COM rules; it does not activate the C++ core. | Display actual source/provider scope. Native X-COM introspection is a later admitted integration. |
@@ -131,7 +131,7 @@ tests/contract/            shared API/provider/format/event contract verificatio
 tests/integration/         real XDL APIs, owned runtime fixture and failure recovery
 tests/e2e/                 browser user journeys and accessibility
 tests/performance/         declared workloads and repeatable measurements
-tests/platform/            Linux/Windows native installation, paths and lifecycle matrix
+tests/platform/            Native Linux installation, paths and lifecycle matrix
 tests/fixtures/            neutral, automotive and process-control fixtures
 docs/implementation/       operator, developer, migration and release guidance
 ```
@@ -142,9 +142,9 @@ Directories above are implementation targets, not existing capabilities. Root-le
 
 ### M0 — Foundation and contracts
 
-Pin toolchains and upstream inputs for native Linux and Windows. Establish app/API skeleton, portable owned fixture provider, database migrations, project revision service, local session protection and contract tests. Implement safe import without execution, capability discovery and basic XDL validation/compilation. Produce the per-OS supported capability matrix and resolve DEP-RUN for real Lite execution on each claimed provider/host combination. A fixture permits service testing but is visibly labelled fixture-only. A missing Windows runtime integration cannot be hidden behind an automatic WSL requirement.
+Pin toolchains and upstream inputs for native Linux. Establish app/API skeleton, portable owned fixture provider, database migrations, project revision service, local session protection and contract tests. Implement safe import without execution, capability discovery and basic XDL validation/compilation. Produce the per-OS supported capability matrix and resolve DEP-RUN for real Lite execution on each claimed provider/host combination. A fixture permits service testing but is visibly labelled fixture-only. A missing runtime integration remains explicit; an execution layer is never installed implicitly.
 
-Exit: contracts can be exercised; platform compatibility is identified; model-only and owned-fixture workflows work offline on native Linux and Windows; no runtime success is claimed for an unavailable provider/OS integration.
+Exit: contracts can be exercised; platform compatibility is identified; model-only and owned-fixture workflows work offline on native Linux; no runtime success is claimed for an unavailable provider/OS integration.
 
 ### M1 — Guided operation / Studio 0.1
 
@@ -185,15 +185,15 @@ Specify separately before implementation: distributed execution and remote acces
 - Simulator time, wall time and device time are recorded distinctly. Correlation requires declared mappings and uncertainty; unsynchronized samples are not silently plotted as a common clock.
 - SQLite is not a second runtime journal. Store command acceptance/reconciliation and index references, retaining canonical Argus evidence separately.
 
-## Cross-platform host contract
+## Native Linux host contract
 
 - Use a browser-delivered application shell. A desktop wrapper may be optional later; it cannot be the only way to operate Studio.
 - Separate `host/` path/process adapters from domain and runtime semantics. Use native path APIs and explicit configured data roots, not embedded `/home`, drive letters, Unix sockets or Bash assumptions.
-- On Linux use declared XDG/app-local defaults; on Windows use the declared per-user application-data location. Record actual paths in local configuration, not portable XDL identity. Support paths with spaces and Unicode; diagnose unavailable/network-backed roots explicitly.
-- Enforce path containment after native normalization and link resolution. Test case-insensitive collisions, Windows reserved device names, alternate data stream syntax, drive-relative/UNC paths, Linux symlinks and Windows junction/reparse-point escapes. Portable archives reject ambiguous/colliding paths on either supported host.
-- Spawn admitted executables with argument vectors and explicit environment/cwd; never concatenate user text into a shell. Linux process groups/signals and Windows process handles/job/termination mechanisms require separate tested implementations. Do not pretend SIGTERM semantics are portable or infer child ownership from PID reuse.
-- Reconcile backend/owned-child processes after crash and stop on both OSes; handle file-lock/rename and SQLite shutdown differences. Startup must not require administrator/root privileges for ordinary per-user authoring and fixtures.
-- Run backend contract/integration tests, packaged install/start/stop/restart and representative browser flows natively on both Linux and Windows. Record browser/version, OS edition/version, architecture, filesystem and toolchain per lane. WSL or Linux containers on Windows do not close the native Windows lane.
+- Use declared Linux XDG/app-local defaults. Record actual paths in local configuration, not portable XDL identity. Support paths with spaces and Unicode; diagnose unavailable/network-backed roots explicitly.
+- Enforce path containment after native normalization and link resolution. Test case-insensitive collisions, Windows reserved device names, alternate data stream syntax, drive-relative/UNC paths, Linux symlink escapes. Foreign path forms stay inert hostile-input cases; portable archives reject ambiguous/colliding names.
+- Spawn admitted executables with argument vectors and explicit environment/cwd; never concatenate user text into a shell. Native Linux ownership and termination use original verified handles/identities; never infer ownership from PID reuse.
+- Reconcile backend/owned-child processes after crash and stop on Linux; cover actual file-lock/rename and SQLite shutdown behavior. Startup must not require administrator/root privileges for ordinary per-user authoring and fixtures.
+- Run backend contract/integration tests, packaged install/start/stop/restart and representative browser flows natively on the recorded Linux host. Record browser/version, distribution/release, architecture, filesystem and toolchain.
 - Provider descriptors advertise OS/architecture and external dependency requirements. Feature controls explain unsupported providers on that host; their absence does not remove core authoring or results inspection.
 
 ## Verification strategy
@@ -202,7 +202,7 @@ Use the scenario IDs in [acceptance.md](acceptance.md) and requirement mapping i
 
 Performance targets are acceptance targets, not measurements. Establish a reference machine/browser/runtime dataset in M0, retain raw commands and timing distributions, and evaluate the specification's NFRs against that identity. Decimate plot display without discarding canonical evidence. Bounded queues must disclose dropped live presentation samples; they may not silently drop required evidence.
 
-Maintain separate native Linux and native Windows verification lanes. Run common API/XDL/project/fixture/browser workflows in each; run real provider lanes only where that provider is admitted, reporting unsupported combinations explicitly. Core cross-platform acceptance cannot be waived because the first real Lite provider is Linux-only.
+Maintain the recorded native Linux verification lane for common API/XDL/project/fixture/browser workflows. Run real provider lanes only where separately admitted and report unsupported combinations. Native Windows delivery is outside current scope under ADR-0036.
 
 Review each milestone separately from implementation. Record findings and fix affected issues in a successor candidate. Re-run affected tests after changes. Runtime/hardware-dependent tests cannot be replaced by screenshots or mocked success.
 

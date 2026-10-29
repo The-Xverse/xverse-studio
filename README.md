@@ -8,7 +8,7 @@ The React/TypeScript browser application and native Python/FastAPI backend imple
 editing, graph projections, preflight, durable reference-run control, observations, bounded assertions,
 finite campaigns, comparisons, annotations, safe exchange and retention. The executable reference model
 is explicitly scoped; it does not establish CARLA, physical-device, Argus or native X-COM integration.
-Native Windows, real hardware and first-time usability gates remain unverified or blocked.
+Native Windows is outside the current release scope (ADR-0036). Actual hardware and first-time usability gates remain unverified or blocked.
 
 After provisioning the pinned Python 3.13.13/uv 0.12.17 and Node 24.22.1 toolchain:
 
@@ -32,9 +32,9 @@ users add elements, connect interfaces, choose realizations, run experiments, an
 ECUs, PLCs, robot controllers, and energy equipment are profile specializations. XDL is canonical;
 Maestro owns execution, X-COM communication contracts, and Argus observation/evidence boundaries.
 
-Studio targets a **browser UI and native Linux/Windows backends**. This candidate is verified on
-recorded Linux hosts; Windows installation and tests are currently **blocked at user request**, after
-an initial dependency-checkout failure. Local Linux operation needs no WSL or cloud account. Provider
+Studio targets a **browser UI and native Linux backend** under user-approved ADR-0036.
+Recorded Linux evidence qualifies its verified scope. Windows delivery is outside scope;
+the historical failed installation remains preserved. Local Linux operation needs no WSL or cloud account. Provider
 OS support is declared separately, and unavailable providers preserve authoring/inspection workflows.
 
 ## Specification and implementation evidence

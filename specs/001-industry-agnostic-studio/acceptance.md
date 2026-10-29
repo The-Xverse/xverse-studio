@@ -14,9 +14,9 @@ Cases start at their first applicable milestone and are retained through subsequ
 
 ## Reference environment and thresholds
 
-M0 records reproducible native Linux and native Windows reference hosts with at least four CPU cores, 8 GiB RAM, local SSD and exact supported distribution/edition/release, architecture, browser and language-runtime versions. This defines supported combinations and does not promise every Linux or Windows release. Provider/simulator overhead and provider OS/driver availability are separate from the Studio application and isolated reference measurements.
+M0 records reproducible native Linux reference host with at least four CPU cores, 8 GiB RAM, local SSD and exact supported distribution/edition/release, architecture, browser and language-runtime versions. This defines supported combinations and does not promise every Linux release. Provider/simulator overhead and provider OS/driver availability are separate from the Studio application and isolated reference measurements.
 
-- SC-008 M1 platform gate: AC-032 must pass independently on both native hosts for install/start/browser access, import/save/reopen, validation, owned-reference run/cancel, results, reconnection, backend recovery and clean stop. A Windows browser using a Linux backend or WSL cannot satisfy the Windows lane. Core operation has no undeclared Bash/VM/container/remote-Linux dependency. Optional OS service registration is assessed only if offered.
+- SC-008 M1 platform gate: AC-032 must pass on the recorded native Linux host for install/start/browser access, import/save/reopen, validation, owned-reference run/cancel, results, reconnection, backend recovery and clean stop. Windows is outside this release scope under ADR-0036. Core operation has no undeclared Bash/VM/container/remote-Linux dependency. Optional OS service registration is assessed only if offered.
 - M2 and later: repeat applicable authoring, bidirectional portable-project exchange, accessibility and performance cases on the native support matrix. Preserve platform-specific results. Live simulator/hardware cases identify the actually admitted host and remain blocked on unsupported hosts; a correct unavailable-provider diagnostic is a core capability test, not proof of that provider's execution.
 
 - SC-001: at least 4 of 5 first-time X-Verse users complete the prepared example/change/run/result/failure task within 15 minutes without terminal commands or facilitator intervention. Record setup separately and retain failures in the denominator.
@@ -36,9 +36,9 @@ Use the actual measurements. The targets above are not benchmark results, a simu
 **Success criteria:** Supports the stated requirements directly.\
 **Tasks:** T001, T002, T003, T004, T011, T012, T013, T014, T099, T100.
 
-**Given:** An exact platform/profile/package set and owned provider fixtures with supported, unsupported and incompatible capabilities. The selected Linux and Windows native support matrix records distribution/edition/release, architecture, browser and language-runtime versions.
+**Given:** An exact platform/profile/package set and owned provider fixtures with supported, unsupported and incompatible capabilities. The selected Linux native support matrix records distribution/edition/release, architecture, browser and language-runtime versions.
 
-**Procedure:** Inspect version/capability responses; change a provider or profile version; request an unsupported operation directly through the API. Inspect Studio-host capability and provider OS/driver capability independently on each native host.
+**Procedure:** Inspect version/capability responses; change a provider or profile version; request an unsupported operation directly through the API. Inspect Studio-host capability and provider OS/driver capability on the recorded native Linux host.
 
 **Expected:** Record immutable baseline identities and admitted limits; incompatible semantics remain unresolved; unsupported operations fail in the backend before effects. No generic runtime service is inferred from private Lite classes. Core Studio capability does not disappear because a simulator is unsupported on that OS; provider operations correctly remain unavailable and their platform limits are explicit.
 
@@ -52,7 +52,7 @@ Use the actual measurements. The targets above are not benchmark results, a simu
 
 **Given:** Valid YAML/JSON representations of one system and equivalent CLI compiler inputs.
 
-**Procedure:** Import, validate, compile, save and reopen; vary comments, file ordering and source formatting; compare canonical semantics and plan identity using the platform rules. Repeat native validation and persistence on Linux and Windows and exchange supported portable inputs in both directions.
+**Procedure:** Import, validate, compile, save and reopen; vary comments, file ordering and source formatting; compare canonical semantics and plan identity using the platform rules. Repeat native validation and persistence on Linux and exchange supported portable inputs between isolated Linux workspaces.
 
 **Expected:** Equivalent declared inputs produce equivalent plans. Source and semantic identity are distinguished; no second graph configuration overrides XDL; required profile files and references are explicit. Path and line-ending differences do not create unintended executable semantic changes; host-local bindings are resolved separately.
 
@@ -80,7 +80,7 @@ Use the actual measurements. The targets above are not benchmark results, a simu
 
 **Given:** A prepared example, an offline environment and a separately prepared admitted live environment.
 
-**Procedure:** Open the example, inspect purpose/interfaces, edit an allowed parameter and follow environment diagnostics. Run the prepared reference example through a native Linux backend and a native Windows backend in their supported browsers.
+**Procedure:** Open the example, inspect purpose/interfaces, edit an allowed parameter and follow environment diagnostics. Run the prepared reference example through the native Linux backend in the declared supported browsers.
 
 **Expected:** Useful project/evidence views work offline; prerequisites identify exact remediation and unsupported operations. An admitted owned executable reference provider offers Run with explicit reference scope. Only an admitted live provider can claim live integration; unavailable live providers remain disabled, and previews or replayed/mock outputs are never reported as live execution. Required settings have units, bounds and defaults with provenance. The core workflow works without WSL, VM, container or remote-Linux prerequisites. An unavailable live provider has an actionable OS-specific message; reference execution is labelled with its actual scope.
 
@@ -94,7 +94,7 @@ Use the actual measurements. The targets above are not benchmark results, a simu
 
 **Given:** A valid project with known artifact identities, resource limits, target health and a preflight result.
 
-**Procedure:** Change model, deployment, artifact, capability version or resource availability before Start; exceed admitted unit/time limits; retry with unchanged admissible inputs. Exercise a fixed workflow that generates its own XDL and ignores a requested parameter/model edit. Request the Linux-only historical shell-wrapper candidate from native Windows, and separately exercise a supported native reference provider.
+**Procedure:** Change model, deployment, artifact, capability version or resource availability before Start; exceed admitted unit/time limits; retry with unchanged admissible inputs. Exercise a fixed workflow that generates its own XDL and ignores a requested parameter/model edit. Request a provider unavailable on the selected Linux host, and separately exercise a supported native reference provider.
 
 **Expected:** Preflight is invalidated or refreshed on relevant changes and Start verifies the same snapshot. Model-valid, artifacts-available, target-ready and permits are separate facts. Limits block execution before acquiring or starting resources. The adapter exposes its effective normalized inputs/plan for comparison before Start. Unsupported edits are rejected until a compatible config-input integration exists; unchanged fixed workflows remain explicitly scoped. Studio/backend availability and runtime/provider compatibility are separate findings; the unsupported shell wrapper is rejected without starting WSL, a remote host or another unrequested execution environment.
 
@@ -108,7 +108,7 @@ Use the actual measurements. The targets above are not benchmark results, a simu
 
 **Given:** An admitted supported experiment with explicit ownership and observers.
 
-**Procedure:** Start, observe startup, finish normally, request stop where supported and read the final run. Repeat owned reference-runtime start/finish/stop and evidence readback on both native platforms; run live variants only on their admitted OS.
+**Procedure:** Start, observe startup, finish normally, request stop where supported and read the final run. Repeat owned reference-runtime start/finish/stop and evidence readback on the recorded native Linux host; run live variants only on their admitted OS.
 
 **Expected:** One run ID anchors state/events and immutable inputs. Startup respects dependencies. Completion, cleanup and evidence-integrity states are independent; a completed process does not assert functional success. The real lane records actual provider and scope. The actual effective generated XDL/plan recorded by the adapter equals the requested admitted immutable snapshot; a wrapper ignoring input edits cannot pass this case.
 
@@ -122,9 +122,9 @@ Use the actual measurements. The targets above are not benchmark results, a simu
 
 **Given:** A run with failure points during prepare, startup, active operation, stop and evidence finalization.
 
-**Procedure:** Inject failures at each boundary; repeat cancellation; fail cleanup or evidence collection. Exercise platform-specific process termination/cleanup using verified owned resources on native Linux and Windows.
+**Procedure:** Inject failures at each boundary; repeat cancellation; fail cleanup or evidence collection. Exercise platform-specific process termination/cleanup using verified owned resources on native Linux.
 
-**Expected:** Only owned resources are stopped; commands are idempotent; bounded stop policy is respected. Cleanup uncertainty/failure remains visible and actionable, evidence gaps remain visible, and no state is promoted to a success merely to close the UI. No POSIX-only signal or process-group assumption is required for native Windows run ownership and cleanup.
+**Expected:** Only owned resources are stopped; commands are idempotent; bounded stop policy is respected. Cleanup uncertainty/failure remains visible and actionable, evidence gaps remain visible, and no state is promoted to a success merely to close the UI. Native Linux cleanup uses original verified ownership; PID, name or port matching alone never grants authority.
 
 ### AC-008 — Browser reconnection and duplicate command handling
 
@@ -152,7 +152,7 @@ Use the actual measurements. The targets above are not benchmark results, a simu
 
 **Procedure:** Restart or kill/relaunch the control service at lifecycle boundaries, then reconcile. Repeat native backend stop/restart on both OS families, including held files and stale process identities/handles.
 
-**Expected:** Runs are reconciled against recorded ownership and provider facts. Unknown outcomes remain unknown pending reconciliation; no blind respawn, process-name kill or port-based ownership inference occurs; duplicate starts remain prevented across restart. Windows handle/locking differences and Linux process semantics are covered explicitly; only validated ownership permits mutation after restart.
+**Expected:** Runs are reconciled against recorded ownership and provider facts. Unknown outcomes remain unknown pending reconciliation; no blind respawn, process-name kill or port-based ownership inference occurs; duplicate starts remain prevented across restart. Native Linux handle, locking and process semantics are covered explicitly; only validated ownership permits mutation after restart.
 
 ### AC-010 — Bounded event and log delivery
 
@@ -206,7 +206,7 @@ Use the actual measurements. The targets above are not benchmark results, a simu
 
 **Given:** A valid project with stable IDs, multiple subsystems and a saved layout sidecar.
 
-**Procedure:** Edit through graph, inspector and XDL source; move/recolour/group nodes; save/reopen; compare platform semantic/plan identities. Round-trip portable projects from Linux to Windows and back with supported source names and line endings.
+**Procedure:** Edit through graph, inspector and XDL source; move/recolour/group nodes; save/reopen; compare platform semantic/plan identities. Round-trip portable projects between isolated Linux workspaces with supported source names and line endings.
 
 **Expected:** Semantic edits agree across views and compiler; presentation-only edits leave executable semantics unchanged. Identity survives labels and layout. Source extensions are not dropped; invalid source keeps a clear draft state and cannot execute. Host-specific paths remain outside portable semantic identity and valid project content survives both directions.
 
@@ -430,7 +430,7 @@ Use the actual measurements. The targets above are not benchmark results, a simu
 
 **Given:** Runs with different configurations, clocks, observations and integrity states; a portable project/evidence package.
 
-**Procedure:** Compare baselines, replay observations, request a real rerun, export/import and tamper with referenced evidence. Export/import the supported portable package in both native Linux/Windows directions, test stale annotation revisions, and revalidate retention dry-run plans before apply.
+**Procedure:** Compare baselines, replay observations, request a real rerun, export/import and tamper with referenced evidence. Export/import the supported portable package between supported native Linux workspaces, test stale annotation revisions, and revalidate retention dry-run plans before apply.
 
 **Expected:** Comparison exposes configuration and time differences. Replay only re-presents recorded data; rerun requires fresh admission. Export includes provenance and hashes, excludes secrets, reports missing/restricted artifacts and detects integrity problems without rewriting original evidence. A stale annotation or changed retention dependency is rejected; platform-local bindings cannot leak into or silently reinterpret a portable package.
 
@@ -444,7 +444,7 @@ Use the actual measurements. The targets above are not benchmark results, a simu
 
 **Given:** The exact reference environment, workload sizes, warm/cold conditions and thresholds defined by spec.md.
 
-**Procedure:** Run declared canvas, API, streaming/backpressure and history workloads; record distributions, resource consumption, dropped-display counts and evidence retention. Execute the workload on both recorded native Linux and Windows reference environments and retain each result independently.
+**Procedure:** Run declared canvas, API, streaming/backpressure and history workloads; record distributions, resource consumption, dropped-display counts and evidence retention. Execute the workload on the recorded native Linux reference environment and retain each result.
 
 **Expected:** Apply every specified threshold to measured results; failures remain failures. Report capacity/provider limitations and test command/configuration hashes. Do not extrapolate fixture throughput to simulator or hardware capacity. Every platform meets its applicable threshold; aggregate averages cannot conceal a failed native-platform result.
 
@@ -458,23 +458,23 @@ Use the actual measurements. The targets above are not benchmark results, a simu
 
 **Given:** The model, forms, errors, operation controls, diagnostics and results views.
 
-**Procedure:** Complete critical flows without a pointing device; inspect focus, labels, contrast, non-colour status, dynamic announcements and resizing at the specified viewports. Repeat the declared supported browser/accessibility matrix against native Linux and Windows backends.
+**Procedure:** Complete critical flows without a pointing device; inspect focus, labels, contrast, non-colour status, dynamic announcements and resizing at the specified viewports. Repeat the declared supported browser/accessibility matrix against the native Linux backend.
 
 **Expected:** Critical operations and validation findings remain usable through an accessible alternative to drag-only canvas interaction. Focus and error locations are meaningful; no essential state depends only on colour, hover or animation.
 
 ### AC-032 — Offline packaging, migration and release evidence
 
 **Milestone:** M1; retained through M4. **Status:** NOT_RUN.\
-**Environment:** clean recorded native Linux and native Windows hosts; supported browsers; owned reference provider; previous/current project fixtures.\
+**Environment:** clean recorded native Linux host; supported browsers; owned reference provider; previous/current project fixtures.\
 **Requirements:** NFR-003, NFR-004, NFR-009, NFR-010, NFR-012, FR-006, FR-008, NFR-005, NFR-006.\
 **Success criteria:** SC-008.\
 **Tasks:** T002, T009, T010, T036, T039, T040, T092, T098, T099, T100.
 
-**Given:** A packaged candidate with pinned dependencies, documented install/start/backup/recovery steps and locally available admitted artifacts. There is one clean supported native Linux host and one clean supported native Windows host; neither Windows browser access to Linux nor WSL substitutes for the Windows host.
+**Given:** A packaged candidate with pinned dependencies, documented install/start/backup/recovery steps and locally available admitted artifacts. There is a clean supported native Linux host; no implicit virtualized or remote execution layer substitutes for it.
 
-**Procedure:** Install/start in the documented offline envelope, migrate/restore projects, run compatibility/regression checks and audit the release manifest. On each OS install the package, start the native backend, open its browser UI, import/save/reopen XDL, validate, run/cancel the owned reference provider, inspect results, reconnect the browser, restart/reconcile the backend, and stop cleanly. Exercise documented update/recovery and portable exchange paths. Verify optional service-manager registration only if offered.
+**Procedure:** Install/start in the documented offline envelope, migrate/restore projects, run compatibility/regression checks and audit the release manifest. On Linux install the package, start the native backend, open its browser UI, import/save/reopen XDL, validate, run/cancel the owned reference provider, inspect results, reconnect the browser, restart/reconcile the backend, and stop cleanly. Exercise documented update/recovery and portable exchange paths. Verify optional service-manager registration only if offered.
 
-**Expected:** Core operation requires no cloud or AI service; absent dependencies produce actionable errors. Migrations preserve originals and identities. Evidence binds commands, versions, sanitized environment, exit status, hashes and limitations to the exact candidate; incomplete external lanes remain explicit. Both native core smoke lanes pass independently without undeclared Bash/WSL/VM/Docker/remote-Linux dependencies. Foreground or launcher-managed background operation is documented. Provider-specific live limitations remain visible and are not misreported as native runtime support.
+**Expected:** Core operation requires no cloud or AI service; absent dependencies produce actionable errors. Migrations preserve originals and identities. Evidence binds commands, versions, sanitized environment, exit status, hashes and limitations to the exact candidate; incomplete external lanes remain explicit. The native Linux core smoke lane passes without undeclared Bash/WSL/VM/Docker/remote-Linux dependencies. Foreground or launcher-managed background operation is documented. Provider-specific live limitations remain visible and are not misreported as native runtime support.
 
 ## Release interpretation
 
@@ -484,4 +484,4 @@ A blocker does not erase independent successful work. Report the exact supported
 
 ## Current execution evidence scope
 
-Targeted native Linux reference-provider, contract, browser and performance records are linked from [implementation status](../../docs/implementation/STATUS.md). They do not establish a complete acceptance case by themselves. Native Windows remains NOT_RUN until its actual lane succeeds; live Lite/two-industry, physical-device and first-time-user cases remain blocked. Existing historical failures and partial lanes are retained.
+Targeted native Linux reference-provider, contract, browser and performance records are linked from [implementation status](../../docs/implementation/STATUS.md). They do not establish a complete acceptance case by themselves. Native Windows is outside current release scope under ADR-0036; historical NOT_RUN/failure evidence is retained; live Lite/two-industry, physical-device and first-time-user cases remain blocked. Existing historical failures and partial lanes are retained.

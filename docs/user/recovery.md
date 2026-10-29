@@ -37,13 +37,13 @@ Preserve it for diagnosis and restore into a different new destination. Never re
 promote a partial restore. Failed backups without a verified manifest are unusable.
 
 Full recovery is covered by native Linux subprocess tests, including a completed reference run,
-byte-identical evidence, unchanged compiled plan and absence of run replay. Native Windows installation
-and testing remain **BLOCKED at user request**; these Linux results do not establish that lane.
+byte-identical evidence, unchanged compiled plan and absence of run replay. Native Windows delivery
+is outside current scope under ADR-0036; these Linux results make no Windows claim.
 
 The secure acquisition successor requires admitted native directory/handle primitives. The current
 implementation supplies Linux descriptor traversal and fails explicitly on unsupported hosts; it
 does not silently fall back to path-only checks. Native Windows secure file acquisition remains an
-implementation/verification gap under the held Windows lane. See the [support matrix](../implementation/platform-support.md).
+out-of-scope implementation/verification limitation. See the [support matrix](../implementation/platform-support.md).
 
 The launcher also retains the smaller metadata-only backup:
 
@@ -65,7 +65,7 @@ On a backend crash, the reference worker has its own bounded native lifetime. Re
 its exact persisted run/operation, worker owner digest and process creation identity. It reconciles
 current state without replaying Start. Missing ownership evidence remains `unknown` and blocks active
 commands. PID reuse is not ownership. Controlled backend-crash recovery is exercised by
-`tests/platform/test_native_recovery.py`; Windows remains pending until executed natively there.
+`tests/platform/test_native_recovery.py`; Windows is outside the current Linux delivery scope.
 
 A project revision is committed through a staged directory and transactional metadata pointer. A failed
 save cannot activate a partial multi-file revision. External modifications are preserved and produce
@@ -89,7 +89,7 @@ to commit exact authored text. A revision conflict retains your local draft: clo
 **Load current revision**, reopen the document and use **Compare changes** before explicitly saving
 again. A size refusal requires correcting the source; reloading cannot raise the document limit.
 Saving changes the project's draft revision and never changes an active run's frozen inputs. These
-browser recovery journeys have native Linux evidence; Windows verification remains held.
+browser recovery journeys have native Linux evidence; Windows verification is outside current release scope.
 
 For files changed outside Studio, **Source recovery** offers explicit adoption or restoration.
 Adoption requires readable UTF-8 source. Restoration requires a recorded revision whose saved copies

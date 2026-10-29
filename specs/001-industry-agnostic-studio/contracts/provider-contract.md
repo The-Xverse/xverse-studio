@@ -4,7 +4,7 @@
 
 ## Descriptor and admission
 
-Each provider publishes an immutable descriptor with `providerId`, `providerVersion`, `contractVersion`, implementation identity/digest, provenance, supported XDL/profile versions, realization classes, target classes, supported host OS/architectures, external dependencies, capabilities, limits and evidence scope. An adapter's descriptor names the underlying runtime identity and compatibility-set digest. Studio runs natively on Linux and Windows; provider support is admitted separately for each host combination. Unsupported combinations return a diagnostic, never silently install/use WSL or a container.
+Each provider publishes an immutable descriptor with `providerId`, `providerVersion`, `contractVersion`, implementation identity/digest, provenance, supported XDL/profile versions, realization classes, target classes, supported host OS/architectures, external dependencies, capabilities, limits and evidence scope. An adapter's descriptor names the underlying runtime identity and compatibility-set digest. The current Studio release runs natively on Linux (ADR-0036); provider support is admitted separately for each host combination. Unsupported combinations return a diagnostic, never silently install/use WSL or a container.
 
 Capabilities are scoped records, not a single boolean list. Each operation specifies target class, legal lifecycle states, typed parameters, authority requirements, maximum duration, observable completion, failure semantics and whether it can affect the physical environment. Time capabilities state clock domains, ownership of advancement, pause/step availability, synchronization requirements and uncertainty reporting. Observation capabilities state schema, retention/throughput bounds, possible perturbation and canonical evidence support.
 
@@ -29,7 +29,7 @@ Admission verifies descriptor/schema compatibility, pinned implementation identi
 | `read_evidence(run_id, scope)` | Read original evidence through its authoritative reader; retain integrity verdict. |
 | `release(reservation_ref, authority)` | Release only owned resources, reporting remaining or unknown state explicitly. |
 
-These are conceptual callable contracts; implementation may use in-process calls or protected local IPC with a tested implementation for the host OS. A remote transport or Unix-domain socket on Windows is not implied. No API accepts arbitrary command-line strings, executable paths from the browser, unrestricted environment overrides or unrestricted process identifiers. Launchers use argument vectors, explicit working directories and declared environment variables through native host adapters. Process groups/signals on Linux and ownership/termination handles on Windows are tested independently; a PID alone is not authority.
+These are conceptual callable contracts; implementation may use in-process calls or protected local IPC with a tested implementation for the host OS. A remote transport or Unix-domain socket on Windows is not implied. No API accepts arbitrary command-line strings, executable paths from the browser, unrestricted environment overrides or unrestricted process identifiers. Launchers use argument vectors, explicit working directories and declared environment variables through native host adapters. Native Linux ownership/termination is tested using original handles; a PID alone is not authority.
 
 ADR-0027 adds an explicit observe-only Studio facade for the existing conceptual
 probe operation. A separate native installation and exact observation permission
@@ -42,8 +42,8 @@ does not admit a physical provider or establish actual hardware acceptance.
 
 ## Integration classes
 
-- **Owned fixture provider:** portable deterministic small workloads and controlled failures for native Linux/Windows conformance tests. Display `fixture` evidence scope. It cannot establish legacy, simulator or physical-device integration claims.
-- **Lite runtime adapter:** on its supported Linux host, the first integration candidate is a fixed-argv wrapper of the documented `automotive/thesis-lite-carla-closed-loop/run-live.sh` harness, using a pinned executable path, closed case enum and backend-owned output directory. An admitted successor platform service is an alternative. A native Windows provider requires its own admitted launcher/contract; the Bash harness is not assumed portable. Neither exposes arbitrary shell commands. The inspected rc.1 trusted-host/private runtime path is not a generic public API; no web handler imports it. If an admitted wrapper/API is absent, this provider remains unavailable for that host and DEP-RUN is recorded.
+- **Owned fixture provider:** portable deterministic small workloads and controlled failures for native Linux conformance tests. Display `fixture` evidence scope. It cannot establish legacy, simulator or physical-device integration claims.
+- **Lite runtime adapter:** on its supported Linux host, the first integration candidate is a fixed-argv wrapper of the documented `automotive/thesis-lite-carla-closed-loop/run-live.sh` harness, using a pinned executable path, closed case enum and backend-owned output directory. An admitted successor platform service is an alternative. A future provider on another host requires separately scoped native admission; the Bash harness is not assumed portable. Neither exposes arbitrary shell commands. The inspected rc.1 trusted-host/private runtime path is not a generic public API; no web handler imports it. If an admitted wrapper/API is absent, this provider remains unavailable for that host and DEP-RUN is recorded.
 - **Physical asset provider:** binds logical devices to identified assets. Observe-only and stimulation scopes are separate. Requires declared ownership, firmware/version observations where supported, connection-loss policy and shutdown/cleanup semantics.
 - **Model provider:** declares model format, input/output contracts, fidelity, step/time behaviour and supported coupling semantics. It does not imply a general-purpose solver.
 
@@ -92,7 +92,7 @@ Supported maturity values distinguish `fixture`, `prototype`, `admitted_integrat
 
 ## Conformance suite
 
-Test static validation without side effects; unauthorized/unsupported operations; at-most-once start; duplicate and conflicting operation IDs; stale state/lease tokens; partial prepare/start; readiness timeout; lost acknowledgement; browser loss; backend crash and reconciliation; event gaps; capability changes invalidating preflight; stop with incomplete cleanup; device disappearance/replacement; and evidence reader failure. Tests use the owned fixture on native Linux and Windows first, including paths with spaces/Unicode and OS-specific child ownership/termination. Real integrations repeat applicable cases on their exact admitted environment and record untestable cases explicitly.
+Test static validation without side effects; unauthorized/unsupported operations; at-most-once start; duplicate and conflicting operation IDs; stale state/lease tokens; partial prepare/start; readiness timeout; lost acknowledgement; browser loss; backend crash and reconciliation; event gaps; capability changes invalidating preflight; stop with incomplete cleanup; device disappearance/replacement; and evidence reader failure. Tests use the owned fixture on native Linux first, including paths with spaces/Unicode and OS-specific child ownership/termination. Real integrations repeat applicable cases on their exact admitted environment and record untestable cases explicitly.
 
 ## Native external demo amendment (ADR-0033)
 
@@ -150,5 +150,8 @@ the same process. It is diagnostic metadata, not an ownership/recovery receipt.
 Existing SDK durable claims remain authoritative fences even if no marker predates
 them. `AUTOVERSE_PLATFORM_OWNER_RECOVERY_REQUIRED` explains that retained historical
 views remain readable and public recovery is required before another Start. The
-ADR-0035 recovery proposal is not an admitted interface. Native Windows support
-for Studio core does not imply support for this Linux simulation provider.
+ADR-0035 public recovery capability is now explicitly accepted and admitted at
+platform12615d402. Only an exact host inspection, finite permit and currently
+verified separate retirement receipt can admit a new owner; original claims and
+Argus bytes remain unchanged and old lost-owner reads remain unknown. Windows
+delivery is outside the current Linux release scope under ADR-0036.

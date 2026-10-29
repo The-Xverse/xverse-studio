@@ -12,8 +12,10 @@ update affected traces. Never represent planned features as implemented.
 
 ## Industry neutrality and architecture
 
-Ship a browser-based application with a natively runnable backend on Linux and Windows. Verify
-installation, startup/shutdown, browser operation, persistence, paths, and process ownership on both.
+Ship a browser-based application with a natively runnable backend on Linux. Verify
+installation, startup/shutdown, browser operation, persistence, paths and process ownership on the
+recorded native Linux host. Windows requirements are removed by user-approved ADR-0036; retain
+historical results without treating Windows as a current acceptance gate.
 Do not make Bash, WSL, or containers an implicit application requirement. Provider support is a separate
 OS-specific capability: unsupported runtime/device integration must be explicit and actionable.
 

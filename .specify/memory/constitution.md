@@ -1,6 +1,6 @@
 # X-Verse Studio Constitution
 
-Version: 1.0.0 | Established: 2026-10-25 | Last amended: 2026-10-25
+Version: 1.1.0 | Established: 2026-10-25 | Last amended: 2026-10-29
 
 Status: initial constitution authored from the user's Studio planning request. This defines
 implementation obligations; it is not product acceptance or evidence of runtime capability.
@@ -37,8 +37,8 @@ separate from re-execution and from evidence of determinism.
 
 ## V. Accessible operation and useful failures
 
-Studio SHALL be a web application with a browser UI and a backend that runs natively on Linux and
-Windows. Installation and core operation SHALL NOT implicitly require WSL, Bash, or containers.
+Studio SHALL be a web application with a browser UI and a backend that runs natively on the recorded native
+Linux host. Windows is outside the current release scope under user-approved ADR-0036. Installation and core operation SHALL NOT implicitly require Bash, a VM, or containers.
 Each provider SHALL expose its own verified OS compatibility independently of Studio's core support.
 
 First use SHALL guide a user through a supported example. Controls SHALL explain purpose, units,
@@ -71,3 +71,7 @@ new user approval. Amend this constitution with a version, reason, and impact as
 
 Specification completion differs from product acceptance. The planning package requires structural
 checks and content review. Each implemented milestone requires its own evidence and environment.
+
+Version1.1.0 amendment: user-approved ADR-0036 removes native Windows delivery
+requirements and retains the recorded Linux host as the required release target.
+All other principles, ownership/security rules and evidence obligations remain.

@@ -11,7 +11,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # Windows installation/tests are blocked at the user's request (2026-10-25).
+        # User-approved ADR-0036 makes native Linux the required delivery host.
         os: [ubuntu-24.04]
     runs-on: ${{ matrix.os }}
     # The full serial browser cohort reached its final summary at the old

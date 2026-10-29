@@ -28,16 +28,12 @@ On the implementation host all repository, data, build and temporary files resid
 selected loop10 filesystem. Set tool caches and temporary roots there too when provisioning on
 that host; do not redirect application data into another filesystem.
 
-## Native Windows — blocked
+## Supported host scope
 
-Windows installation and testing are blocked at the user's request. The initial native Server 2022
-installation attempt failed while checking out the pinned XDL dependency repository, which contains
-Windows-invalid filenames. Backend and browser workflows did not run. A prepared public XDL wheel
-workaround is held for later admission; the current dependency lock is unchanged.
-
-No verified Windows installation procedure is advertised for this candidate. Resume the Windows scope,
-complete native package admission and rerun installation/startup/browser/process/persistence/exchange
-checks before claiming Windows support. WSL or a browser pointed at Linux cannot satisfy that gate.
+The required native host is Linux. Windows delivery requirements were removed by
+the user under ADR-0036; no verified Windows installation procedure is advertised.
+Historical installation failures and NOT_RUN results remain in the evidence archive
+and do not block Linux delivery. Optional future support requires a separate scope.
 
 ## Guided prepared example
 

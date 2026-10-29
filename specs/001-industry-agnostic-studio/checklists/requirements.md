@@ -4,7 +4,7 @@ Scope: quality of this planning package, not application execution or milestone 
 Reviewed on 2026-10-25. All items were checked after final package review; application acceptance remains separate.
 
 - [x] User outcome and industry-agnostic scope are explicit.
-- [x] Web UI and native Linux/Windows backend support have separate checks from provider OS compatibility.
+- [x] Web UI and native Linux backend support have separate checks from provider OS compatibility.
 - [x] Stories have observable Given/When/Then cases and priorities.
 - [x] XDL remains authoritative with supported and unresolved semantics distinguished.
 - [x] Requirements have stable IDs and milestone allocation.

@@ -148,7 +148,7 @@ def observed_baseline():
             "repositoryEvidence": ["evidence/studio/M3-physical-contracts/environment.json", "evidence/studio/M1-shell-operability/verification.json",
                 "evidence/studio/M1-shell-operability/journeys/1024x768/login/native-browser-environment.json"]},
             "Windows": {"lastAttempt": windows["platform"], "installation": windows["installation"], "applicationAndBrowser": "NOT_RUN",
-                "currentStatus": "BLOCKED_USER_REQUEST", "installationDiagnostic": "UPSTREAM_NONPORTABLE_FILENAMES",
+                "currentStatus": "OUT_OF_SCOPE_ADR0036", "installationDiagnostic": "UPSTREAM_NONPORTABLE_FILENAMES",
                 "knownOwnedGap": {"diagnostic": "PLATFORM_IO_UNAVAILABLE", "basis": "source inspection; native Windows execution NOT_RUN"},
                 "repositoryEvidence": ["evidence/studio/native-ci/windows-initial-install-failure.json", "docs/implementation/platform-support.md"]}},
         "unavailableIntegrations": [
@@ -164,7 +164,7 @@ def observed_baseline():
         "limitations": ["Source pins do not establish a coherent admitted live execution set.",
             "Provider supportedHostOS/available fields are descriptor declarations; native host evidence qualifies verification independently.",
             "Repository evidence references require the source checkout; they are not promises that evidence is embedded in the application bundle.",
-            "Native Windows is held; normative SADS and live runtime/provider gates remain open. T001 remains in progress."],
+            "Native Windows is outside the current Linux delivery scope (ADR-0036); normative SADS and live runtime/provider gates retain independent dispositions. T001 requires a Linux-scope evidence audit."],
     }
     # These references come from the checker literals above, never from the input manifest.
     def fixed_evidence(value):

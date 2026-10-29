@@ -16,8 +16,8 @@ python3 scripts/validate_spec_package.py
 SPECIFY_FEATURE_DIRECTORY=specs/001-industry-agnostic-studio bash .specify/scripts/bash/check-prerequisites.sh --json --require-spec --require-tasks --include-tasks
 ```
 
-On Windows PowerShell, use `py -3 scripts/validate_spec_package.py`. The optional upstream helper
-requires Bash contributor tooling; neither Bash nor WSL is a Studio product requirement.
+Windows delivery is outside the current scope under ADR-0036. The optional upstream
+helper uses Bash contributor tooling; Bash is not a Studio product requirement.
 The native launcher now exists. Follow `docs/user/getting-started.md` and `docs/user/recovery.md`
 for actual commands and their per-OS verification limits; show runtime/device availability separately.
 
@@ -42,8 +42,8 @@ blueprints are separate. Preserve logical identity across compatible realization
 and keep layout outside execution semantics. Reuse admitted platform contracts;
 never bypass permits or import private runtime entry points to make a demo work.
 
-Build a web application: browser UI plus a backend running natively on Linux and
-Windows. Test core installation/start/stop and browser journeys on both. No implicit
+Build a web application: browser UI plus a backend running natively on Linux. Test core installation/start/stop and browser
+journeys on the recorded native Linux host. Windows requirements are removed by ADR-0036. No implicit
 WSL, Bash, or container dependency. Report provider OS support separately and keep
 authoring available when a runtime/device integration is unsupported.
 

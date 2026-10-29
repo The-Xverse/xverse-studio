@@ -11,9 +11,10 @@ an example. Studio should let non-experts compose systems, choose simulated/soft
 realizations, persist XDL, inspect X-COM-related connections/evidence, run experiments, and understand
 logs/results. This planning change does not implement the application or authorize physical operations.
 
-The user's subsequent platform clarification is binding: Studio is a web-based application that must
-run on Linux and Windows. This package interprets that as a shared browser UI and natively runnable
-backend on both hosts, with separately declared/tested runtime-provider compatibility.
+Historical platform clarification requested Linux and Windows. The user's2026-10-29
+instruction removes Windows requirements and continues the remaining implementation.
+ADR-0036 supersedes the native Windows delivery gate: the required release host is
+Linux, with separately admitted provider compatibility. Original source history is retained.
 
 ## Inspected repository identities
 

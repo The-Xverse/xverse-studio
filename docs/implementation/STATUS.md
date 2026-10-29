@@ -1,3 +1,27 @@
+# Current Linux delivery scope —2026-10-29
+
+The user authorized continuation of the remaining implementation and removal of
+Windows requirements. ADR-0036/constitution1.1.0 amend the existing plan to native
+Linux, preserving all100task IDs and32acceptance cases. Historical notes below
+retain their original candidate/host qualifications; Windows is now outside scope
+and is not a current release blocker. Task states remain49completed/41in_progress/
+10blocked pending an evidence-based Linux reassessment. Scope removal is not a pass.
+
+The admitted public Maestro/native-X-COM/Argus integration passed two complete
+browser Start/Stop/Pygame driving/cruise runs on final runtimee1fb69f. Exact current
+proof is in `evidence/studio/platform-observability-foundation/live-browser-experiment.json`.
+The live-follow successor has65affected backend checks and5controlled browser checks;
+its actual native verification is being recorded separately. The initial request-
+boundary verifier failure and delayed final-poll fixture failure remain retained.
+
+Next audit: remaining native Linux foundation/recovery/package/acceptance tasks,
+including the observed stale-active-count preflight after an unobserved completed
+run. Real hardware permissions, human studies, normative SADS and independent
+milestone review retain their own requirements. No Windows, physical or complete
+message-trace support is inferred from these Linux simulation results.
+
+## Historical implementation checkpoints
+
 # Current implementation status
 
 Owned fault-intent compilation now passes **127 affected checks**, including56 new contract cases, on399 unchanged inputs. Existing experiment-lite timing is reused through full public XDL compilation; the new measurement binding remains offline with executionAllowed false. Worker effects, provider admission and forms are still pending. T082/T083 remain open;49/41/10, zero milestones. [Current evidence](../../evidence/studio/M4-fault-intent/README.md).

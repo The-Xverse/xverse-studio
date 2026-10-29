@@ -1,7 +1,7 @@
 # Native installation scope
 
-Use [getting started](getting-started.md) for source-checkout Linux commands and the current Windows
-hold status. Windows installation/testing are blocked at user request. The foreground launcher installs no OS service.
+Use [getting started](getting-started.md) for supported source-checkout Linux commands. Native Windows
+delivery is outside the current release scope under ADR-0036. The foreground launcher installs no OS service.
 No WSL, Bash, container or remote Linux host is part of its runtime startup.
 
 For a reviewed source bundle produced by `scripts/package_studio.py`, verify the distributed archive
@@ -22,8 +22,8 @@ air-gapped first installation needs a prepared, verified native wheelhouse that 
 The shared package entry point is `uv run python scripts/package_studio.py`. It refuses output overwrite,
 requires an existing frontend build, excludes caches/secrets and records exact contributing file hashes,
 Git candidate and dirty-tree state. A dirty package is an explicitly identified development artifact,
-not an exact committed release. Native Windows acceptance and OS-specific process/ACL behaviour require
-actual native verification; the presence of a Windows-targeted command or CI file does not pass it.
+not an exact committed release. Native Linux package, process and file-permission acceptance require actual native
+verification; a command or CI declaration alone does not establish a pass.
 
 The bundled recovery guide includes its local native support matrix. Contributor verification with
 `scripts/run_checks.py` requires the complete repository checkout and development dependencies;
