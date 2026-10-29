@@ -39,8 +39,11 @@ The [scope record](scope.json) binds the391 inputs and exact diagnostic insertio
 Of the prior389 inputs,387 are unchanged; only worker text and its recorded digest
 change. Two test files are added. Of the prior116 package payloads,114 and all six
 compiled UI assets remain unchanged. The prior package therefore retains its
-earlier source identity. Fresh full backend and affected browser checks are
-running; a clean successor package has not yet run at this checkpoint.
+earlier source identity. The [clean successor package](package/candidate-binding.json) passes all116 payload/archive hashes and six identical UI assets. The [92-case main browser](browser/verification.json) and [nine-case evidence/diagnosis cohort](evidence-browser/verification.json) pass; three diagnoses overlap, giving98 unique cases. The initial anchored selector matched zero cases and is retained separately.
+
+The [full1265 result](full-original/verification.json) ends1264passed/1failed, with zero errors/skips. The late-Stop operation read returned `RUN_TERMINAL_BEFORE_COMMAND`, while the actual worker recorded `RUN_COMPLETED_BEFORE_COMMAND`; its stored result later matched the worker. The original assertion and exact source remain. Read-only instrumentation subsequently observes one initial and eight repeated passing executions; this does not establish the original cause or resolution. Pytest deduplicated the first repeated-node selection to one case.
+
+Two [additional native Start-acceptance crash cases](start-acceptance/verification.json) pass in7.17s on392 identical inputs. A labelled initial-backend gate holds actual durable Start before private preparation or immediately before launch; only that verified backend is killed. The ordinary native restart retains the original receipt and snapshot/private bytes, reports unknown ownership/cleanup, rejects controls and launches no worker. All prior391 hashes and116 package payloads remain identical; no expanded full suite was run after these added cases. [Current binding and qualifications](candidate-binding.json).
 
 T033 remains open for complete clause/environment review. Native Windows is held;
 external Lite, physical, human/AT/SADS and independent milestone gates remain open.

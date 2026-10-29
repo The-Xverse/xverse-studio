@@ -1,6 +1,6 @@
 # Owned-fixture lifecycle verification
 
-The [cleanup-interruption successor](cleanup-interruption/README.md) passes37 affected checks, including five new real native failure cases, on391 unchanged inputs. It corrects a reproduced misleading cleanup log. Full backend/affected browser are running and a successor package remains pending; older source/package bindings retain their original scope.
+The [cleanup-interruption successor](cleanup-interruption/README.md), source`cb65206`, passes37 affected checks,98 unique browser cases and clean Linux package116. Its full1265 result is1264passed/1failed with an unresolved late-Stop operation/canonical code mismatch; original failures remain. Two additional native pre-launch crash cases pass independently. T033 stays open; earlier bindings retain their source scopes.
 
 [Additional native command-terminal checks](command-terminal/README.md) pass10 new actual native cases and8 related regressions on389 unchanged inputs. All prior388 inputs and116 package payloads remain identical; the application is unchanged. The prior1250/92/2/package116 retains its original scope. T033 remains open.
 
