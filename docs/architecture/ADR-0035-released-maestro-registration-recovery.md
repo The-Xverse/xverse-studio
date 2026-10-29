@@ -1,6 +1,7 @@
 # ADR-0035: Recovery of a verifiably released Maestro registration
 
-Status: proposed scope; no companion implementation or platform acceptance implied.
+Status: implementation/specification/tests/review authorized by the user’s “I approve”
+on2026-10-29. Candidate work is in progress; platform acceptance remains separate.
 
 ## Concrete prerequisite
 
@@ -73,9 +74,10 @@ publication and cloud deployment.
 
 Studio `AGENTS.md` states: “Cross-repository changes require separately scoped work
 under that repository's rules.” The accepted boundary at `ce2d5558...` intentionally
-has no released-claim retirement operation. This proposal is additional companion
-scope; the previous acceptance is preserved. Until separately authorized and
-admitted, the existing registration stays fenced. The end-to-end goal and its live
+has no released-claim retirement operation. This is additional companion
+scope authorized by the user after this proposal; the previous acceptance is
+preserved. Until the new interface is accepted and admitted, the existing
+registration stays fenced. The end-to-end goal and its live
 acceptance cases remain open, with existing task IDs and milestone states unchanged.
 
 
