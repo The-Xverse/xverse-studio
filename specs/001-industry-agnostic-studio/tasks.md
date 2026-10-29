@@ -764,3 +764,19 @@ payload route and three linked views. T001/T004/T010/T012/T020–T024/T027–T03
 T034–T035 retain their existing states and dependencies; 49 completed, 41 in
 progress, 10 blocked, zero accepted milestones. Evidence:
 `evidence/studio/platform-observability-foundation/sdk-admission.json`.
+
+
+Autoverse public Maestro adapter foundation — 2026-10-29: candidate 73de5cf
+prepares the original canonical source bytes through the accepted SDK, expands
+21 phases over the six existing bindings and delegates actual fixed startup
+actions individually. It retains acquisition handles before ownership inspection
+and supports scoped, deadline-bound cleanup. An actual public-service conformance
+case verifies failure after three owned fixture-child acquisitions, reverse
+rollback and original Argus records; external installation/actions are explicitly
+substituted and do not satisfy live Autoverse acceptance. The initial snapshot
+key-order comparison failure was retained, diagnosed and repaired without changing
+source bodies or semantic identities. Fresh scoped verification: 196 passed,
+zero failed/errors/skipped. New runtime callbacks remain unregistered pending
+concrete admission/supervision, actual native payload forwarding and the three
+linked views. Existing task statuses and milestone gates remain unchanged. Evidence:
+`evidence/studio/platform-observability-foundation/autoverse-phases.json`.
