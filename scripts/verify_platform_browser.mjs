@@ -22,7 +22,10 @@ page.on('pageerror', error => report.errors.push(error.message));
 page.on('response', async response => {
   if (response.url().includes('/platform?') && response.ok()) {
     const body = await response.json();
-    report.responses.push({view:body.view,snapshotId:body.snapshotId,sourceWitness:body.sourceWitness,runId:body.identity.runId,counts:body.counts});
+    report.responses.push({view:body.view,snapshotId:body.snapshotId,sourceWitness:body.sourceWitness,runId:body.identity.runId,counts:body.counts,
+      order:body.order,queriedSnapshot:new URL(response.url()).searchParams.get('snapshot'),
+      newestOrdinal:body.items[0]?.ingestionOrdinal,
+      sampledScalars:body.items.filter(row=>row.communication).slice(0,3).map(row=>({eventId:row.eventId,routeId:row.communication.routeId,value:row.communication.payload.value}))});
   }
 });
 const getRun = async () => (await page.request.get(`/api/v1/runs/${runId}`)).json();
@@ -73,6 +76,23 @@ try {
   const panel=page.getByRole('region',{name:'Linked platform views',exact:true});
   await page.getByRole('tab',{name:'Communications',exact:true}).click();
   await expect(panel.getByRole('heading',{name:'Communications · X-Verse platform',exact:true})).toBeVisible();
+  let pinnedStart=0;
+  if(process.env.STUDIO_VERIFY_LIVE_FOLLOW) {
+    const first=report.responses.length;
+    await panel.getByRole('checkbox',{name:'Follow live',exact:true}).check();
+    await expect.poll(()=>new Set(report.responses.slice(first).map(r=>r.snapshotId)).size,{timeout:30000}).toBeGreaterThanOrEqual(3);
+    await expect.poll(()=>new Set(report.responses.slice(first).map(r=>r.sourceWitness)).size,{timeout:30000}).toBeGreaterThanOrEqual(2);
+    const captures=report.responses.slice(first);
+    assert(captures.every(r=>r.runId===runId&&r.order==='newest'));
+    assert(captures.some(r=>r.sampledScalars.length>0));
+    assert(new Set(captures.map(r=>r.newestOrdinal)).size>=2);
+    report.liveFollow={outcome:'passed',snapshots:new Set(captures.map(r=>r.snapshotId)).size,
+      changingSourceWitnesses:new Set(captures.map(r=>r.sourceWitness)).size,
+      newestRecordsAdvance:true,admittedScalarSamplesVisible:true};
+    await panel.getByRole('checkbox',{name:'Follow live',exact:true}).uncheck();
+    pinnedStart=report.responses.length;
+    console.log('ACTUAL_NATIVE_LIVE_FOLLOW_PASS',JSON.stringify(report.liveFollow));
+  }
   await expect(panel.getByRole('button',{name:'Correlated orchestration',exact:true}).first()).toBeVisible();
   await panel.getByRole('button',{name:'Correlated orchestration',exact:true}).first().click();
   await expect(panel.getByRole('heading',{name:'Orchestration · X-Verse platform',exact:true})).toBeFocused();
@@ -88,8 +108,10 @@ try {
   await cause.focus(); await page.keyboard.press('Enter');
   await expect(panel.getByRole('heading',{name:'Evidence · X-Verse platform',exact:true})).toBeFocused();
   await expect(panel.getByText('Native ingress fact',{exact:true})).toBeVisible();
-  assert.equal(new Set(report.responses.map(r=>r.snapshotId)).size,1);
-  assert.equal(new Set(report.responses.map(r=>r.sourceWitness)).size,1);
+  const pinnedResponses=process.env.STUDIO_VERIFY_LIVE_FOLLOW?report.responses.slice(pinnedStart).filter(r=>r.queriedSnapshot):report.responses;
+  assert(pinnedResponses.length>0);
+  assert.equal(new Set(pinnedResponses.map(r=>r.snapshotId)).size,1);
+  assert.equal(new Set(pinnedResponses.map(r=>r.sourceWitness)).size,1);
   assert(report.responses.every(r=>r.runId===runId));
   report.sharedSnapshotVerified=true;
   await page.screenshot({path:path.join(data,'linked-evidence.png'),fullPage:true});
