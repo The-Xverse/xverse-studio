@@ -811,3 +811,20 @@ input-surface display without rewriting that experiment. Linked HTTP/browser vie
 are now being implemented and require live verification. Tasks and milestone states
 remain49completed/41in_progress/10blocked, zero accepted milestones. Evidence:
 `evidence/studio/platform-observability-foundation/complete-backend-experiment.json`.
+
+
+Linked platform read views — 2026-10-29: backend6327b82 and bounded-table/helper
+successor80cea9f and final reader guard0e39680 implement host-bound original Argus capture, immutable shared paging,
+closed scalar payload policy and linked Orchestration/Communications/Evidence tabs.
+75 affected backend checks pass after the native-input metadata guard; pinned Node24.22.1 typecheck/build, baseline and
+spec checks pass. Actual historical browser verification at1440x900 and1024x768
+passes original cause/correlation links, shared snapshot/witness, view changes after
+paging, keyboard links and bounded keyboard table scrolling on the complete237-row
+experiment (120Maestro,117native rows). This is a read projection over actual original
+evidence with a reconstructed Studio metadata envelope, not GUI execution acceptance.
+Actual GUI Start attempts exposed the per-run-worker/public-owner lifetime mismatch:
+a preceding released run's claim is unknown to a new Core owner, which correctly
+refuses further activation. Claims and root remain intact. A persistent Studio
+Maestro owner and complete browser Start/Stop/driving/cruise acceptance remain open.
+No task/milestone state changes;49completed/41in_progress/10blocked, zero accepted
+milestones. Evidence:`evidence/studio/platform-observability-foundation/linked-views.json`.

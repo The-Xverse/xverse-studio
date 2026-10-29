@@ -160,3 +160,31 @@ must preserve that distinction; it cannot infer the latter from the former. The
 first internal adapter exposes original accepted Argus records only to trusted
 host code. A browser projection still needs a declared payload/log policy and
 live snapshot/paging behavior; this internal reader is not a completed dashboard.
+
+
+## Verified read views and owner-lifetime finding — 2026-10-29
+
+The immutable host-bound HTTP capture and three linked React views are implemented.
+Actual historical browser verification follows the complete237-record experiment
+across120 Maestro rows and117 native ingress/observation/snapshot rows. Original
+cause/correlation navigation, paging, keyboard access, shared witness, verdicts and
+unmapped clocks are verified at both desktop viewports. The Studio metadata envelope
+for this historical check was reconstructed from the retained original request;
+this does not establish that the original backend experiment was GUI-started.
+
+Two real GUI Start attempts exposed a Studio integration mismatch. The first was
+cancelled after a verifier URL error; actual SDK cleanup released and owned resources
+were independently checked absent/stopped. The second correctly failed with
+`MPX-ORIGINAL-OWNERSHIP-UNAVAILABLE`: the preceding per-run worker had closed its
+public Core owner, and a new Core instance cannot recover original resource handles
+from a durable claim. A terminal signed projection or external absence check is not
+permission to delete claims, rewrite Argus, construct private handles or silently
+choose a fresh root. The existing registration remains fenced.
+
+Studio needs a persistent host-owned public Maestro service across runs, retaining
+original Core/provider ownership and clean per-run input/resource boundaries. Its
+lifetime and shutdown must be explicit; backend/owner loss remains unknown rather
+than replaying activation. Existing lost-owner claims need an admitted recovery path
+before that registration can execute again. Full browser Start/Stop, native driving
+and cruise on the same complete platform experiment remain outstanding. This is a
+Studio owner-lifetime finding, not a relaxation of the accepted SDK ownership rules.
