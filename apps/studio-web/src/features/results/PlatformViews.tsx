@@ -132,7 +132,7 @@ export function PlatformViews({ runId, active, view, onView, onLogical }: {
       </div>}
       <p className="field-hint">Original clock domains and units are retained. Ingestion order does not establish causation; no cross-clock latency or synchronization is inferred. Payloads use host-allowlisted scalar codecs; private logs are withheld.</p>
       {Object.keys(selection).length > 0 && <div className="results-scope"><span>Selected links: {JSON.stringify(selection)}</span><button className="button" onClick={() => navigate(view)}>Clear platform selection</button></div>}
-      <div className="table-scroll"><table className="data-table">
+      <div className="table-scroll" role="region" aria-label="Platform record table" tabIndex={0}><table className="data-table">
         <caption>{titles[view]} records from the shared evidence snapshot</caption>
         <thead><tr><th scope="col">Original record</th><th scope="col">{view === "orchestration" ? "Maestro phase and outcome" : view === "communications" ? "Native communication" : "Source and kind"}</th><th scope="col">Original clocks</th><th scope="col">Linked views</th></tr></thead>
         <tbody>{shown.items.map(row => <tr key={`${row.ingestionOrdinal}:${row.eventId}`}>
