@@ -338,6 +338,12 @@ def main():
     failed |= actual.get("state") != "stopped" and not cancelled_start
     demo.state.update(state="failed" if failed else "stopped", stateVersion=demo.state["stateVersion"] + 1,
         endedAt=time.time(), cleanup="complete" if actual.get("cleanup") == "released" else "unknown", evidence="partial")
+    demo.state["runtimeStatus"]["phase"] = demo.state["state"]
+    for resource in demo.state.get("cleanupResources", []):
+        if resource["status"] == "released":
+            demo.state["runtimeStatus"]["components"][resource["resourceId"]] = "released"
+            if resource["resourceId"] == "manual" and "nativeWindow" in demo.state["runtimeStatus"]:
+                demo.state["runtimeStatus"]["nativeWindow"]["status"] = "closed"
     try:
         original = EvidenceStore.read_run(Path(demo.installation["nativeBridge"]["runtimeRoot"]) / (demo.request["runId"] + ".argus"))
         demo.state["evidence"] = "available" if not failed and original.assessed_evidence_status == "complete" else "partial"

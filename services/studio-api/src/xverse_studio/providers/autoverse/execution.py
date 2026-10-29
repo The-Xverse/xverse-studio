@@ -124,6 +124,9 @@ class AutoverseExecution(AutoverseInputs):
             resources = demo.phase_resources.get(identifier, {"processes": [], "containers": []})
             references = tuple(kind + "-" + role for kind, roles in resources.items() for role in roles)
             outcome = {"prepare": "prepared", "start": "started", "ready": "ready"}[phase.operation]
+            if outcome == "ready":
+                role = phase.logical_id.rsplit("#", 1)[-1]
+                demo.state["runtimeStatus"]["components"][role] = readiness + "_observed"
             return PhaseReceipt(outcome, references, readiness, canonical(observation).encode())
         except Cancelled:
             raise ExecutionInputError("MPX-START-CANCELLED") from None

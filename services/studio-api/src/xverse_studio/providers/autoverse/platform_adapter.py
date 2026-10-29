@@ -40,4 +40,5 @@ class PlatformProvider(AutoverseProvider):
         value["limits"].update(maxStartupSeconds=900, maxCleanupSeconds=60, maxNativeMessageBytes=128,
             maxNativeBatchBytes=32768, maxNativeQueueMessages=128, maxNativeNormalPulls=250,
             nativeSampledRoutes=3, maxEvidenceEvents=4096)
+        value["inputSurface"] = self.run_metadata({"inputSurface": "native-pygame"})["inputSurface"]
         return value
