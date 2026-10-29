@@ -780,3 +780,19 @@ zero failed/errors/skipped. New runtime callbacks remain unregistered pending
 concrete admission/supervision, actual native payload forwarding and the three
 linked views. Existing task statuses and milestone gates remain unchanged. Evidence:
 `evidence/studio/platform-observability-foundation/autoverse-phases.json`.
+
+
+Native payload bridge checkpoint — 2026-10-29: Studio candidate 81aaf79 builds
+its own bounded bridge using the accepted public C++ X-COM interfaces and verified
+native SDK libraries. Eleven VCU-boundary routes carry actual bytes through native
+submit/receive before public Zenoh publication; three configured native taps retain
+original coalescing counters, clocks and ingress causes. Twelve explicit native
+contracts pass, including actual Argus imports and honest incomplete coverage.
+An actual two-router isolated network case verifies bidirectional payload receipt,
+native child exit and no forwarding after closure. The affected suite passed 142
+cases; exact candidate/source/build scopes and original failures are retained.
+This is controlled native/transport verification, not complete Autoverse acceptance.
+The new bridge remains unregistered pending source-mode/installation admission,
+full per-binding worker supervision and the three linked views. Task states and
+milestone gates remain unchanged. Evidence:
+`evidence/studio/platform-observability-foundation/native-bridge.json`.

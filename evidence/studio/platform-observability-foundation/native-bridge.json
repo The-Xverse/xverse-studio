@@ -1,0 +1,112 @@
+{
+  "date": "2026-10-29",
+  "studioCandidate": "81aaf797f0defee04b34f7e8ad94f05926175eb9",
+  "platformRevision": "ce2d5558cd36de5b29ab1e3c622303c7a77c61eb",
+  "scope": "actual public C++ FIFO bridge and isolated owned Zenoh network verification; complete Maestro/Autoverse integration and linked views remain open",
+  "sourceDigest": "4efbecd0ba56e60fae8c58ce995e324fee4826dd9194a4a2cb9458f7e42da155",
+  "build": {
+    "manifestSha256": "802625b1619b980a9cb9f37c1ac9a66d1f7e67b966ebf6cf9e82398f1e830a36",
+    "binarySha256": "sha256:149ec56f53b2c8341a9131e9e62d75095dd58a128bb686636ab5a035e0fe88d7",
+    "compiler": "c++ (Ubuntu 11.4.0-1ubuntu1~22.04.3) 11.4.0",
+    "cmake": "cmake version 3.22.1",
+    "nativeLibraries": {
+      "provider_loopback": "sha256:4b0b950a558fd8dc3d8b15e1363f0206d52194f0deea8af965713388b1c63d79",
+      "endpoint_route_lifecycle": "sha256:72427df4d4ffec0eb2a620e7cf8ea440f0e11e76598a68f29546c62404caf3b4",
+      "observation": "sha256:9a3ed468a41c99adb8231c953dd3f505a9ea319d8e841203e1fe2ba1cfa2661c",
+      "core_types": "sha256:8c0444ae6b3243522b0a3902eb78e63a4f0a60ed3ddd88d8852588e2bdfc9f65"
+    },
+    "studioNativeSources": {
+      "bridge.cpp": "sha256:1eeead9b04619c915324e193ad3e480725e7936cddeab209d1a8350a4a1853ce",
+      "CMakeLists.txt": "sha256:13e4a7eaaacbcca3bdab4312dea29d87babde6d768331f22bc9eadc03db3b116"
+    },
+    "warningsAsErrors": true,
+    "companionSourcesChanged": false,
+    "nativeSdkDryRun": "no work to do; no companion rebuild or source mutation"
+  },
+  "finalNativeContracts": {
+    "tests": 12,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "seconds": 2.146,
+    "reportSha256": "81e0c71620c3e49a2d94d9bde0f40426b1263fdc4c116a4841e0658d51ee5a1d",
+    "logSha256": "131d55e3fea6d5095503cc73e213d52587048e3e1775ae020d0b75203f9e2e32"
+  },
+  "finalNativeContractExitStatus": 0,
+  "affectedChecks": {
+    "tests": 142,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "seconds": 34.02,
+    "reportSha256": "3ceb9885a5f35aab8eaf5895bf36f45074005d27721f2fcda5fbc0275cfe2c38",
+    "logSha256": "bd5a56067a326e71b6eda487b1a859ab668626c0f100eef7c9bb7974a856cfed",
+    "candidate": "7bc933bda72a68a635079495d10ecf4980b3010f",
+    "changesToFinalCandidate": "two terminal blank lines removed; native executable byte-identical after fresh rebuild"
+  },
+  "network": {
+    "exitStatus": 0,
+    "configuredRoutes": 11,
+    "sampledRoutes": 3,
+    "bidirectionalPayloadReceipt": true,
+    "stoppedBridgePreventsForwarding": true,
+    "originalCoalescingObserved": true,
+    "unknownUpstreamCausePreserved": true,
+    "nativeChildExitIndependentlyChecked": true,
+    "resultSha256": "b3c4ac229245c13b389ca78b3a447f2ed33c259cfc11e5e35964e0b70701f884",
+    "projectionSha256": "000a6eff1a26a9dfe4871a426f4343df1a69d730157c8b402bee4fd08e5961e2",
+    "collectionSha256": "082d1eae6fa4b18f6628bf2952432ef25c0086fe886cee0b2c0408affa7c8e8a",
+    "stopSha256": "28981a063a294b5c6aad7634ed334c2fd46ffb282ebe061ab752b8fb667605fe",
+    "componentPython": "3.10.12",
+    "zenoh": "1.3.4",
+    "scope": "two owned ephemeral isolated loopback routers and public publishers/subscribers; no CARLA, S-CORE, Android or complete Autoverse workload"
+  },
+  "commands": {
+    "build": ".venv/bin/python -I scripts/build_native_bridge.py --platform-source <accepted-local-source> --platform-build <verified-native-sdk-build> --third-party-include <admitted-header-prefix> --output .studio-local/native-bridge-verified-build",
+    "nativeContracts": "XVERSE_STUDIO_NATIVE_BRIDGE=<verified-host-built-artifact> PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 .venv/bin/python -I -m pytest tests/live/native_bridge_contract.py -q --junitxml=.studio-local/native-bridge-verification/final-contract.xml --basetemp=.studio-local/native-bridge-verification/final-contract-data",
+    "network": "/usr/bin/python3 -E tests/live/native_bridge_exchange.py --native .studio-local/native-bridge-verified-build/studio_native_xcom_bridge --configuration .studio-local/native-bridge-build/transport-config.private.json --output .studio-local/native-bridge-verification/network-final",
+    "affected": "XVERSE_STUDIO_NATIVE_BRIDGE=<verified-host-built-artifact> PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 .venv/bin/python -I -m pytest tests/live/native_bridge_contract.py tests/contract/test_autoverse_admission.py tests/contract/test_autoverse_blueprint.py tests/contract/test_autoverse_cleanup.py tests/contract/test_autoverse_carla_prepare.py tests/contract/test_autoverse_pygame.py tests/contract/test_autoverse_controls.py tests/contract/test_autoverse_maestro_preparation.py tests/contract/test_autoverse_maestro_execution.py tests/contract/test_architecture_boundaries.py tests/contract/test_platform_argus.py -q --junitxml=.studio-local/native-bridge-verification/affected.xml --basetemp=.studio-local/native-bridge-verification/affected-data"
+  },
+  "implemented": [
+    "Every forwarded payload traverses actual public ProviderComposition submit and receive, with full item equality before external publication.",
+    "Eleven canonical VCU boundary routes; three capacity-one native coalescing observation taps with original counters and snapshots.",
+    "Native ingress facts bind actual local receipt clocks, original correlation and explicit unknown upstream cause.",
+    "Actual public Argus import and reader retain the incomplete verdict on real coalescing loss.",
+    "Finite parent/native pipes, queue bounds, fail-closed overload, exact inspected native binary inode and original pidfd cleanup.",
+    "Atomic callback admission cutoff and bounded drain before actual native route close."
+  ],
+  "limitations": [
+    "LoopbackProvider proves owned in-process FIFO communication; it is not a network protocol, timing or reliability model.",
+    "Public Zenoh put return is distinct from downstream application consumption.",
+    "Source simulator clocks and end-to-end latency remain unknown; native core reuses source time at its observation point.",
+    "Three sampled routes are not a complete traffic trace; actual coalescing degrades evidence.",
+    "Network test uses a controlled test registration; complete Autoverse installation enrollment/admission has not occurred.",
+    "Current runtime callbacks remain unregistered; actual six-element worker supervision, host permit/root and original source-mode admission are unfinished.",
+    "No HTTP or browser views are implemented by this checkpoint."
+  ],
+  "failureHistory": {
+    "initialNativeContract": {
+      "tests": 12,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 6.171,
+      "reportSha256": "327526abb4c7fd2650bb30a6a033adc89af3fc76907f4895b1297791bc58f902",
+      "logSha256": "895563a38cf686aaf837c240318a7b7bc79ebdf79bb3bcfb40ba3c127c925003"
+    },
+    "initialNetwork": {
+      "exitStatus": 1,
+      "diagnostic": "NATIVE_BINARY_INVALID",
+      "cause": "new build executable group-writable under contributor umask; private mode/log/config retained",
+      "resolution": "private host build output and mode0755; runtime guard unchanged"
+    },
+    "initialBuild": "warning-as-error Json/optional conversions; original build logs retained, explicit optional construction repaired",
+    "nativeContractRepair": "test used required-key indexing for optional Argus causation; production unknown cause remained absent and no source record was changed"
+  },
+  "review": "evidence/studio/platform-observability-foundation/native-bridge-review.md",
+  "rawFailureAndSuccessDataRetainedPrivately": true,
+  "taskStatusChanges": [],
+  "milestonesClosed": 0,
+  "userPreviewChanged": false,
+  "goalComplete": false
+}
