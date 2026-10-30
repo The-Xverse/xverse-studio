@@ -225,3 +225,21 @@ platform12615d402. Only an exact host inspection, finite permit and currently
 verified separate retirement receipt can admit a new owner; original claims and
 Argus bytes remain unchanged and old lost-owner reads remain unknown. Windows
 delivery is outside the current Linux release scope under ADR-0036.
+
+### Declared observation cost admission (ADR-0053)
+
+Optional `observationContracts` uses exact `contractVersion: "1.0"`, an `observers`
+list of unique `observerId` records with optional `costs` quantities (`value`, `unit`),
+`intrusiveness` and `retention` text, and a `budgets` list (`maximum`, `unit`). Costs
+and budgets use exact safe unit identifiers; no conversions are inferred. Each
+selected observer needs a cost in every budgeted dimension. Missing values remain
+unknown and refuse that budget. Costs in undeclared dimensions are never assumed
+zero. The optional integral `limits.maxObservers` independently limits count.
+
+Syntax and budget admission are pure backend checks before the selected provider's
+readiness callback, also used by read-only Scenario inspection. Invalid, ambiguous,
+unknown or exceeded declarations cannot dispatch a new run. Metadata and retained
+inspection results confer no ownership, permit or observation effect. Classic
+Autoverse declares one `observer-slot` against capacity one; platform mode separately
+limits its existing four observers without inheriting classic cost declarations.
+CPU/memory/latency and retention policy remain undeclared where unavailable.

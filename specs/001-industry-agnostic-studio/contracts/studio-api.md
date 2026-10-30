@@ -54,6 +54,7 @@ while ordinary locations remain useful. No request secret/value is echoed.
 | `GET /profiles` | Admitted namespace/version/schema/presentation identities and compatibility/conflicts; read-only discovery | M2 |
 | `GET /profiles/{profileId}` | Exact schema/presentation metadata and dependency/limitation summary for an admitted profile | M2 |
 | `POST /projects/{projectId}/profile-bindings` | Expected revision plus admitted profile IDs/versions/digests; creates explicit lock/resource changes or conflict diagnostics, never executes provider code | M2 |
+| `GET /projects/{projectId}/scenario-admission` | ADR-0053: required current revision/provider and optional Scenario; coherent read-only source/observer/budget inspection, always separate from live readiness and effects | M4 |
 | `POST /projects/{projectId}/preflights` | Revision + deployment/scenario/parameter selection; returns frozen snapshot and preflight result | M1 |
 | `POST /runs` | `snapshotId`, `preflightId`, permitted run options; returns `runId`, `operationId`, state version | M1 |
 | `GET /runs` | Cursor-paged filters by project, snapshot, status and time | M1 |
@@ -526,3 +527,27 @@ new input cannot overwrite an unconfirmed discrete request. There are at most 25
 discrete requests per run. Staging, interface publication, vehicle observations,
 run lifecycle and canonical evidence are separate facts. Driver input does not
 create an unbounded stream of durable lifecycle operations.
+
+### Scenario inspection and observation budgets (ADR-0053)
+
+`GET /projects/{projectId}/scenario-admission` requires `revision` and `providerId`,
+with optional `scenarioRef`. Unknown/duplicate query fields refuse with 422; stale
+revision 412 and unknown provider 404. A captured descriptor/source set feeds the
+existing public contributor selector/compiler and installed static configuration
+mapping. No readiness contact, snapshot, permit or operation is created. The 1.0
+response binds project/revision/provider/selection/semantic and plan digests, reports
+source support and bounded step/fault/observer declarations, and returns at most
+100 diagnostics, 64 steps, 32 faults and 32 observer rows with completeness flags.
+Invalid or unresolved source has unavailable observation counts/costs, not zero.
+Positive inspection is `preflight_required`; it is not readiness or observed effects.
+
+Known provider `observationContracts` 1.0 declarations hold at most 32 unique observer
+records, 8 exact-unit costs per record and 8 unique unit budgets. Numeric values are
+finite, nonnegative and at most 1e15. Missing cost under a declared budget, unknown
+contract versions, malformed/duplicate dimensions, fractional count bounds and
+exceeded budgets block the shared backend readiness boundary before selected-provider
+contact. Start retains its independent fresh-admission checks and recompiles the frozen
+complete System/Deployment/Scenario selection; missing selection requires a fresh
+preflight. No quantity is
+converted across units. Undeclared dimensions, intrusiveness and retention remain
+unknown; metadata cannot authorize execution or intrusive access.

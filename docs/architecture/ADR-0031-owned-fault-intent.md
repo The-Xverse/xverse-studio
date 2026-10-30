@@ -56,3 +56,11 @@ with `executionAllowed: false`. Existing reference preflight still rejects the n
 declarations. Verification must exercise both positive full-source compilation and
 negative bindings, timing, conflicts, limits, profile identity and non-dispatch.
 CLI/library identity agreement proves only compilation, not observed fault effects.
+
+2026-10-30 status amendment: the status above records the original offline checkpoint.
+T082 test specification and T083 generic admitted-semantics backend are now complete
+under the scoped Autoverse verification in M4-scenario-test-closure and
+M4-scenario-admission. This does not implement or admit this conditional model's
+runtime/schema, its positive effect matrix, forms or AC025 acceptance. Its existing
+executionAllowed=false result and original design remain unchanged. Windows is
+outside current release scope under ADR0036.

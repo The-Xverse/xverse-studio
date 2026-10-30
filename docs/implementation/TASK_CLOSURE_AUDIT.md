@@ -1,3 +1,15 @@
+# Backend scenario admission complete — 2026-10-30
+
+**65 completed / 25 in progress / 10 blocked; zero accepted milestones.**
+T083 now validates admitted scenario/stimulus/fault semantics and declared observation
+budgets, with coherent read-only inspection. 204 actual-enrolled Autoverse checks and
+a complete native demo pass on identical source; invalid-source and frozen-Start
+selection bugs repaired. T084 forms/timeline and full AC025 remain open. Unknown
+CPU/memory/latency/retention and unadmitted model semantics stay explicit.
+See [component review](../../evidence/studio/M4-scenario-admission/review.md).
+
+## Earlier checkpoints
+
 # Scenario test specification completed — 2026-10-30
 
 **64 completed / 26 in progress / 10 blocked; zero accepted milestones.**

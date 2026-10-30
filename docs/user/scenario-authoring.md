@@ -131,3 +131,19 @@ Fault records carry a declared host-relative microsecond clock. Vehicle telemetr
 remains unmapped, and generic timeline marker placement for this new codec is still
 unsupported. The actual fixed input rate limit remains 25 requests/second. No native
 X-COM fault, simulation clock mapping or deterministic replay is claimed.
+
+## Inspect source support and observation budgets
+
+The read-only Scenario admission API accepts the current project revision, chosen
+execution provider and optional Scenario reference. It reports declared stimuli,
+faults, observer source/clock/sampling/units and known provider cost budgets. Its
+positive result says **preflight required**: it does not contact runtime resources
+or create a run. A fresh preflight and Start are still required.
+
+Classic Autoverse declares one observer slot against capacity one. CPU, memory,
+latency and retention policy are not measured or inferred from that slot count.
+Platform mode exposes four existing observer declarations with undeclared costs.
+Missing costs under an explicitly declared budget block execution; mismatched
+units are not converted. Invalid source keeps counts/costs unavailable rather
+than appearing as a zero-cost configuration. Guided display of this inspection
+remains separate UI work.
