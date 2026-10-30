@@ -36,3 +36,11 @@ The final cohort includes the earlier boundary and new malformed-history checks;
 no passing total is assembled by relabelling an older candidate. T008 stays open
 for its generic private binding sidecar implementation; task counts remain55/35/10
 and no milestone acceptance is implied.
+
+Clean offline package source934cf16 verifies162 payloads (156 exact committed
+files plus6 tested UI assets), all archive/extracted hashes and the canonical
+accepted SDK12615d402. Its installed native backend reproduces a manifest conflict,
+refuses compilation/export, performs explicit forward recovery preserving the
+external bytes and recompiles the exact original plan, with no run dispatch. The
+original native handle stops cleanly. This is installed component evidence, not
+full T008/local-binding/milestone completion.

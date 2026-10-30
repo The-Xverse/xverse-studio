@@ -947,3 +947,14 @@ isolation/connection injection remain retained. Complete clause mapping is in
 evidence/studio/M0-linux-copy-migration/review.md. T008 and full AC-002/032, live,
 human and independent gates remain open. Counts55completed/35in_progress/10blocked;
 zero accepted milestones.
+
+T008 partial storage repair2026-10-30: ADR-0039 verifies the generated revision
+envelope against its sealed identity before new current-draft work; explicit
+forward recovery preserves external bytes and uses recorded metadata. Layout,
+prior metadata, original receipts and frozen reruns remain separate. Candidate
+934cf16 passes187 affected backend/10 actual native browser cases on412 unchanged
+tracked inputs plus6 UI assets, with clean installed package162 exact hashes and
+actual refusal/recovery/unchanged-plan proof. T008 stays unchecked: generic private
+local-binding sidecar storage/CAS/export exclusion/moved-root review is still a
+software gap. Evidence: evidence/studio/M0-revision-manifest-integrity/. Counts
+55completed/35in_progress/10blocked; zero accepted milestones.

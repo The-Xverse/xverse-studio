@@ -1,3 +1,16 @@
+# T008 storage gap review — 2026-10-30
+
+Counts stay55completed/35in_progress/10blocked, zero accepted milestones.
+The generated revision envelope was ignored by reopen/admission/export/recovery;
+ADR-0039 repairs it with187 current affected backend/10 native browser checks and
+clean installed package162 proof. See [review](../../evidence/studio/M0-revision-manifest-integrity/review.md).
+T008 stays open: generic versioned private local environment-binding sidecars,
+atomic CAS publication, export exclusion and moved-root review remain a concrete
+software gap. Existing provider install roots/asset observations are separate.
+Do not close it from this repair, prior migration proof or removed Windows gates.
+
+## Previous T007 closure
+
 # T007 Linux component closure — 2026-10-30
 
 Current counts:55completed/35in_progress/10blocked, zero accepted milestones.

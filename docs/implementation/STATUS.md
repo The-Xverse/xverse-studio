@@ -1,3 +1,28 @@
+# Revision envelope integrity update — 2026-10-30
+
+**55 completed /35 in progress /10 blocked; zero accepted milestones.** T008's
+storage audit found and repaired an ignored revision envelope. Candidate934cf16
+checks `project.studio.json` against the manifest sealed for its source revision;
+current-draft edits, compilation, preflight/Start and export refuse a mismatch.
+Explicit recovery preserves external bytes and creates a new forward revision
+using recorded metadata. Layout, older metadata, completed receipts and verified
+original frozen reruns remain distinct.
+
+Final verification passes187 affected backend and10 actual native browser cases
+on412 unchanged tracked inputs plus6 unchanged UI assets. Clean offline Linux
+package162 matches all source/archive/extracted hashes and accepted SDK12615d402.
+Its installed native backend verifies conflict/refusal, byte-preserving recovery,
+unchanged authoritative plan and no workload dispatch. The user demo is not restarted.
+
+T008 remains open: generic private project-local environment bindings, atomic CAS
+publication, export exclusion and moved-root revalidation still need implementation.
+Configured provider CLI roots and asset observations do not substitute for that
+storage model. The task's full scope and all later gates remain.
+See [review](../../evidence/studio/M0-revision-manifest-integrity/review.md) and
+[installed proof](../../evidence/studio/M0-revision-manifest-integrity/package-binding.json).
+
+## Previous copy migration update
+
 # Linux copy migration update — 2026-10-30
 
 **55 completed /35 in progress /10 blocked; zero accepted milestones.** T007

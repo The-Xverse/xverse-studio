@@ -2193,8 +2193,24 @@
         "AC-002"
       ],
       "status": "in_progress",
-      "implementation_note": "ADR-0036 removes Windows delivery from current requirements. Prior host-scope note is retained separately. Reassess this task against all amended Linux requirements and its exact evidence; scope removal alone is not completion.",
-      "historical_host_scope_note": "Owned Linux foundation implemented and exercised; native Windows and selected external runtime admission remain open. See evidence/studio/M0-review and docs/implementation/platform-support.md."
+      "implementation_note": "Current storage audit repairs an ignored revision envelope under ADR-0039. Candidate934cf16 verifies the sealed manifest before current-draft edit/compile/preflight/Start/export and preserves external envelope bytes through explicit forward recovery. Layout-only and prior-metadata compatibility, malformed sealed history, completed receipts and original frozen reruns stay distinct.187 affected backend and10 actual native browser cases pass on412 unchanged tracked inputs plus6 UI assets; clean installed package162 verifies refusal/recovery/unchanged plan with exact source/archive hashes. T008 remains open: a generic versioned private local environment-binding sidecar with CAS publication, export exclusion and moved-root review is still missing; provider CLI roots/asset observations do not substitute for it. Windows delivery remains outside scope. No full suite or milestone acceptance.",
+      "historical_host_scope_note": "Owned Linux foundation implemented and exercised; native Windows and selected external runtime admission remain open. See evidence/studio/M0-review and docs/implementation/platform-support.md.",
+      "remaining_implementation": [
+        "Generic project-local private environment-binding sidecar storage and closed declaration schema.",
+        "Revision-checked atomic publication with failure/orphan handling and explicit unknown/unsupported states.",
+        "Portable export exclusion, inert import and private backup/moved-root revalidation conformance; no provider contact or execution/physical authority from a declaration."
+      ],
+      "implementation_evidence": [
+        "docs/architecture/ADR-0039-revision-manifest-integrity.md",
+        "docs/implementation/STORAGE_INTEGRITY_REVIEW.md",
+        "evidence/studio/M0-revision-manifest-integrity/review.md",
+        "evidence/studio/M0-revision-manifest-integrity/verification.json",
+        "evidence/studio/M0-revision-manifest-integrity/package-binding.json",
+        "tests/integration/test_project_manifest_integrity.py",
+        "tests/integration/test_manifest_history_corruption.py",
+        "tests/integration/test_manifest_operation_boundaries.py",
+        "tests/e2e/project-manifest-recovery.spec.ts"
+      ]
     },
     {
       "id": "T009",
@@ -8471,6 +8487,23 @@
       "milestonesAccepted": 0,
       "taskClosed": "T007",
       "remaining": "T008 complete storage/component audit, T002 remote dependency distribution, remaining foundation/runtime/lab/scenario and actual external/human acceptance."
+    },
+    "linux_revision_manifest_integrity": {
+      "candidate": "934cf1672d789882f51c16b30e6d60314adcde95",
+      "task": "T008",
+      "taskStatus": "in_progress",
+      "evidence": "evidence/studio/M0-revision-manifest-integrity/verification.json",
+      "package": "evidence/studio/M0-revision-manifest-integrity/package-binding.json",
+      "backendPassed": 187,
+      "nativeBrowserPassed": 10,
+      "counts": {
+        "completed": 55,
+        "in_progress": 35,
+        "blocked": 10
+      },
+      "milestonesAccepted": 0,
+      "taskStatusChanges": [],
+      "remaining": "Generic private project-local environment-binding storage/CAS/export exclusion/moved-root review; no provider authority from declarations."
     }
   },
   "scope_amendments": [
@@ -8522,6 +8555,15 @@
       ],
       "change": "Make the already-existing known metadata0-to-1 transition explicit, backup-preserving and copy-only with report/review before separate new-root activation. No envelope/XDL version change, unknown-version admission, task-ID/dependency/acceptance reduction or provider authority.",
       "evidence": "evidence/studio/M0-linux-copy-migration/review.md"
+    },
+    {
+      "id": "ADR-0039",
+      "status": "implemented_verified_revision_envelope_boundary",
+      "tasks": [
+        "T008"
+      ],
+      "change": "Inspect the already sealed revision manifest, block new conflicted current-draft work and retain external envelope bytes through explicit forward recovery. Existing layout, old metadata, receipts and original frozen runs retain separate identity. T008 stays open for generic private binding sidecars.",
+      "evidence": "evidence/studio/M0-revision-manifest-integrity/review.md"
     }
   ]
 }
