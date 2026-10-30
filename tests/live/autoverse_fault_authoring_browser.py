@@ -3,6 +3,7 @@
 import json
 import os
 import signal
+import select
 import subprocess
 import time
 from xverse_studio.storage.core import digest
@@ -60,8 +61,32 @@ def author(native, host, api, project, output, node, cli, cache, *, stage="autho
             stderr=subprocess.STDOUT,
         )
         process = native.psutil.Process(child.pid)
-        original = native.OriginalProcess(
-            child.pid, process.create_time(), digest(argv), parent=os.getpid()
+        birth = process.create_time()
+        fd = os.pidfd_open(child.pid, 0)
+
+        def exited():
+            return bool(select.select([fd], [], [], 0)[0])
+
+        def verify():
+            assert (
+                process.create_time() == birth
+                and process.ppid() == os.getpid()
+                and process.uids().real == os.getuid()
+            )
+
+        # Node's test runner legitimately rewrites process.title/cmdline. The child
+        # comes from our fixed Popen argv; bind its original pidfd, birth, parent/uid.
+        verify()
+        (output / f"{stage}-driver.private.json").write_text(
+            json.dumps(
+                {
+                    "pid": child.pid,
+                    "birth": birth,
+                    "launchArgvDigest": digest(argv),
+                    "observedCmdline": process.cmdline(),
+                    "parentAndUidVerified": True,
+                }
+            )
         )
         try:
             deadline = time.monotonic() + 240
@@ -77,10 +102,12 @@ def author(native, host, api, project, output, node, cli, cache, *, stage="autho
             return {
                 "passed": 1,
                 "viewports": [1024, 1440],
-                "originalBrowserDriverExited": original.exited(),
+                "originalBrowserDriverExited": exited(),
             }
         finally:
             if child.poll() is None:
-                original.send(signal.SIGTERM)
+                if not exited():
+                    verify()
+                    signal.pidfd_send_signal(fd, signal.SIGTERM, None, 0)
                 child.wait(timeout=15)
-            original.close()
+            os.close(fd)
