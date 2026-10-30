@@ -3,11 +3,18 @@
 import json
 from typing import Annotated, Any
 
-from pydantic import AfterValidator, BaseModel, ConfigDict
+from pydantic import AfterValidator, BaseModel, ConfigDict, model_validator
 
 
 class Body(BaseModel):
     model_config = ConfigDict(extra="forbid", strict=True, allow_inf_nan=False)
+
+    @model_validator(mode="after")
+    def finite_values(self):
+        # Any-valued objects and dictionary keys require the same JSON boundary
+        # as typed scalars. Inspect without rewriting opaque authored values.
+        finite_json(self.model_dump())
+        return self
 
 
 def finite_json(value):

@@ -21,7 +21,8 @@ from xverse_studio.api.models import *
 from xverse_studio.providers.descriptors import ProviderPage
 from xverse_studio.security.models import JsonObject
 from xverse_studio.storage.core import Store, Problem, atomic, canonical, digest, uid
-from xverse_studio.security.files import MAX_BYTES, check_text
+from xverse_studio.security.files import MAX_BYTES, check_text, diagnostic_location
+from xverse_studio.security.session import matches_secret, valid_session
 from xverse_studio.projects.service import Projects
 from xverse_studio.runs.service import Runs, ACTIVE
 from xverse_studio.providers.registry import (
@@ -167,8 +168,20 @@ def create_app(
         store=store, projects=projects, runs=runs, adapter=adapter, events=event_streams
     )
 
+    def secure_response(result, request):
+        result.headers["X-Content-Type-Options"] = "nosniff"
+        result.headers["Referrer-Policy"] = "no-referrer"
+        result.headers["X-Frame-Options"] = "DENY"
+        result.headers["Content-Security-Policy"] = (
+            "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; object-src 'none'"
+        )
+        result.headers["X-Request-ID"] = request.state.requestId
+        if request.url.path.startswith("/api/"):
+            result.headers["Cache-Control"] = "no-store"
+        return result
+
     def error(code, message, status, request, **details):
-        return JSONResponse(
+        return secure_response(JSONResponse(
             {
                 "code": code,
                 "message": message,
@@ -177,7 +190,7 @@ def create_app(
                 **details,
             },
             status_code=status,
-        )
+        ), request)
 
     @app.middleware("http")
     async def boundary(request, call_next):
@@ -210,23 +223,23 @@ def create_app(
                     session = store.get(
                         "session", hashlib.sha256(session_token.encode()).hexdigest()
                     )
-                except Problem:
+                except (Problem, ValueError, TypeError, OverflowError):
                     return error(
                         "UNAUTHORIZED",
                         "Sign in using the native launcher bootstrap file.",
                         401,
                         request,
                     )
-                if session["expiresAt"] < time.time():
+                if not valid_session(session, time.time()):
                     return error(
                         "UNAUTHORIZED",
-                        "The local session expired. Restart the native launcher to obtain a new bootstrap.",
+                        "The local session expired or cannot be verified. Restart the native launcher to obtain a new bootstrap.",
                         401,
                         request,
                     )
                 request.state.principal = "local-operator"
                 request.state.session = session
-                if mutation and not hmac.compare_digest(
+                if mutation and not matches_secret(
                     request.headers.get("x-csrf-token", ""), session["csrfToken"]
                 ):
                     return error(
@@ -243,17 +256,7 @@ def create_app(
                     )
                 chunks.append(chunk)
             request._body = b"".join(chunks)
-        result = await call_next(request)
-        result.headers["X-Content-Type-Options"] = "nosniff"
-        result.headers["Referrer-Policy"] = "no-referrer"
-        result.headers["X-Frame-Options"] = "DENY"
-        result.headers["Content-Security-Policy"] = (
-            "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; object-src 'none'"
-        )
-        result.headers["X-Request-ID"] = request.state.requestId
-        if request.url.path.startswith("/api/"):
-            result.headers["Cache-Control"] = "no-store"
-        return result
+        return secure_response(await call_next(request), request)
 
     @app.exception_handler(Problem)
     async def problem_handler(request, e):
@@ -274,7 +277,7 @@ def create_app(
                 {
                     "code": "SCHEMA_INVALID",
                     "severity": "error",
-                    "location": {"pointer": "/".join(map(str, x["loc"]))},
+                    "location": diagnostic_location(x["loc"]),
                     "message": x["msg"],
                 }
                 for x in e.errors()[:20]

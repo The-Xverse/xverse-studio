@@ -38,6 +38,7 @@ def main():
         "outcome": "failed",
         "inputResults": [],
         "finiteJsonResults": [],
+        "authenticationResults": [],
         "failures": [],
     }
     rid = None
@@ -156,6 +157,90 @@ def main():
                     break
                 time.sleep(0.1)
             assert report.get("actualNativePublicationObserved")
+            # The complete actual demo remains running while invalid callers
+            # attempt both input publication and owned Stop. Never replay an
+            # uncertain mutation; each negative has its own transport.
+            for invalid in [
+                "missing-session",
+                "missing-origin",
+                "wrong-origin",
+                "missing-csrf",
+                "wrong-csrf",
+                "nonascii-csrf",
+            ]:
+                headers = dict(api.headers)
+                cookies = api.cookies
+                if invalid == "missing-session":
+                    cookies = {}
+                elif invalid == "missing-origin":
+                    headers.pop("origin", None)
+                elif invalid == "wrong-origin":
+                    headers["origin"] = "http://foreign.invalid"
+                elif invalid == "missing-csrf":
+                    headers.pop("x-csrf-token", None)
+                else:
+                    headers["x-csrf-token"] = "invalid"
+                encoded_headers = [
+                    (k.encode("ascii"), v.encode("ascii")) for k, v in headers.items()
+                ]
+                if invalid == "nonascii-csrf":
+                    encoded_headers = [
+                        (k, v) for k, v in encoded_headers if k != b"x-csrf-token"
+                    ]
+                    encoded_headers.append((b"x-csrf-token", b"\xff"))
+                for action in ["frame", "stop"]:
+                    original = mailbox()
+                    command_file = runroot / "command.json"
+                    command_before = (
+                        command_file.read_bytes() if command_file.exists() else None
+                    )
+                    body = (
+                        {**positive, "frame": {**frame, "sequence": 2}}
+                        if action == "frame"
+                        else {
+                            "kind": "stop",
+                            "expectedStateVersion": run()["stateVersion"],
+                        }
+                    )
+                    endpoint = route + (
+                        "/input/frame" if action == "frame" else "/commands"
+                    )
+                    with httpx.Client(
+                        base_url=args.url,
+                        headers=encoded_headers,
+                        cookies=cookies,
+                        timeout=30,
+                    ) as refused:
+                        response = refused.post(
+                            endpoint,
+                            json=body,
+                            headers={"Idempotency-Key": "denied-autoverse-" + invalid},
+                        )
+                    expected = 401 if invalid == "missing-session" else 403
+                    report["authenticationResults"].append(
+                        {
+                            "case": invalid,
+                            "action": action,
+                            "status": response.status_code,
+                        }
+                    )
+                    check(
+                        response.status_code == expected,
+                        f"{invalid}/{action}: expected authentication refusal",
+                    )
+                    check(
+                        mailbox() == original,
+                        f"{invalid}/{action}: changed original input mailbox",
+                    )
+                    check(
+                        (command_file.read_bytes() if command_file.exists() else None)
+                        == command_before,
+                        f"{invalid}/{action}: delegated an unauthorized command",
+                    )
+                    check(
+                        run()["state"] == "running",
+                        f"{invalid}/{action}: changed actual running lifecycle",
+                    )
             # Expired ownership is never silently renewed by a read observation.
             time.sleep(0.8)
 

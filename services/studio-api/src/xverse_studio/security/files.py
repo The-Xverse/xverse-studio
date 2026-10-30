@@ -22,8 +22,9 @@ RESERVED = {
     *(f"LPT{i}" for i in range(10)),
 }
 SECRET = re.compile(
-    r'(?i)(?:["\']?(?:password|passwd|access[_-]?token|api[_-]?key|private[_-]?key|client[_-]?secret)["\']?\s*[:=]\s*["\']?[^\s"\',}]+|-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----|gh[pousr]_[A-Za-z0-9]{20,})'
+    r'(?i)(?:["\']?(?:password|passwd|(?:access|refresh|session|bootstrap|csrf)[_-]?token|(?<![A-Za-z0-9])id[_-]?token|studio_session|api[_-]?key|private[_-]?key|client[_-]?secret)["\']?\s*[:=]\s*["\']?[^\s"\',}]+|["\']?authorization["\']?\s*[:=]\s*["\']?(?:Bearer|Basic)\s+[^\s"\',}]+|-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----|gh[pousr]_[A-Za-z0-9]{20,})'
 )
+JSON_STRING = re.compile(r'"(?:[^"\\]|\\.)*"')
 
 
 def safe_name(name):
@@ -61,16 +62,54 @@ def safe_name(name):
 
 
 def check_text(content):
-    if len(content.encode()) > 1024 * 1024:
+    try:
+        size = len(content.encode("utf-8"))
+    except UnicodeError:
+        raise Problem("TEXT_INVALID", "Use valid UTF-8 text.") from None
+    if size > 1024 * 1024:
         raise Problem("LIMIT_EXCEEDED", "A document is limited to 1 MiB.", 413)
-    if SECRET.search(content) or re.search(
-        r"(?i)\b[a-z][a-z0-9+.-]*://[^/\s?#]*@", content
+
+    def decoded_literal(match):
+        try:
+            return '"' + json.loads(match.group()) + '"'
+        except ValueError:
+            return match.group()
+
+    # A bounded security observation, not another model parser. Recognize JSON
+    # string escapes in keys/values and YAML double-quoted text; retain original
+    # authored bytes and leave authoritative semantics to XDL.
+    inspected = JSON_STRING.sub(decoded_literal, content)
+    if SECRET.search(inspected) or re.search(
+        r"(?i)\b[a-z][a-z0-9+.-]*://[^/\s?#]*@", inspected
     ):
         raise Problem(
             "CREDENTIAL_REJECTED",
             "Remove inline credentials and use an external secret reference.",
         )
     return content
+
+
+def diagnostic_location(parts):
+    """Bound untrusted validation paths; never echo credentials or host paths."""
+    result = []
+    redacted = False
+    for part in parts:
+        value = str(part)
+        try:
+            if len(value) > 256:
+                raise ValueError()
+            check_portable_text(value)
+        except (Problem, ValueError):
+            value, redacted = "[redacted]", True
+        if sum(len(p) + 1 for p in result) + len(value) > 1024:
+            result.append("[redacted]")
+            redacted = True
+            break
+        result.append(value)
+    location = {"pointer": "/".join(result)}
+    if redacted:
+        location["redacted"] = True
+    return location
 
 
 def read_archive(encoded):

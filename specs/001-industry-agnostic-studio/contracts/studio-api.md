@@ -14,6 +14,13 @@
 
 ## Routes
 
+ADR-0044 retains finite UTF-8 JSON across opaque request values and keys before
+resource lookup or effects. Missing/corrupt/expired native sessions grant no
+authority; malformed CSRF headers receive typed403. Early API refusals retain
+no-store/security/request-ID headers. Validation locations redact sensitive,
+unencodable or oversized components (256 characters each,1024 total) explicitly,
+while ordinary locations remain useful. No request secret/value is echoed.
+
 | Method / path | Request / result | Milestone |
 |---|---|---|
 | `GET /capabilities` | API/runtime and host OS/architecture identities, provider descriptors, supported operations, resource/graph/time limits, blocked reasons and evidence scope | M0 |

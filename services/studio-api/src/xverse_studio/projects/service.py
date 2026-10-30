@@ -308,6 +308,7 @@ class Projects:
         manifest_template=None,
         layout=None,
     ):
+        check_text(name)
         if documents is None:
             from xverse_studio.xdl import examples
 
@@ -451,6 +452,7 @@ class Projects:
                     412,
                     currentRevision=p["presentationRevision"],
                 )
+            check_text(canonical(layout))
             p["layout"] = layout
             p["presentationRevision"] += 1
             sidecar = contained(

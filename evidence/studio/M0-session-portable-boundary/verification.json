@@ -1,0 +1,62 @@
+{
+  "target": "actual enrolled Autoverse classic/platform, native browser authoring and security",
+  "apiAndNativeCli": {
+    "tests": 317,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "seconds": 148.213,
+    "rawXmlSha256": "ac395f176afcc1ba01f5e41d1c2b2819f7b1b0e35d859c28157bf2bb4452528c"
+  },
+  "browser": [
+    {
+      "descriptor": "valid",
+      "stats": {
+        "startTime": "2026-10-30T09:56:53.410Z",
+        "duration": 14259.848,
+        "expected": 4,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "rawSha256": "a03ce77958c0ac5d53eae196406c9dea886197b02e593aa838ab793e810247be"
+    },
+    {
+      "descriptor": "invalid",
+      "stats": {
+        "startTime": "2026-10-30T09:57:10.719Z",
+        "duration": 12312.391000000001,
+        "expected": 4,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "rawSha256": "5a726fdcc6d5cdf6717fc2b8f402b0092c501695d16069178fedac5ed04cb9cc"
+    }
+  ],
+  "sourceInputs": 435,
+  "compiledUiAssets": 6,
+  "allCapturedInputsUnchanged": true,
+  "commands": [
+    "STUDIO_AUTOVERSE_TEST_INSTALLATION=<private-receipt> PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 .venv/bin/python -I -m pytest -q tests/live/autoverse_provider_admission.py tests/live/autoverse_launcher_availability.py tests/live/autoverse_project_writes.py tests/live/autoverse_container_cleanup.py tests/live/autoverse_security_boundary.py --basetemp=<owned-root> --junitxml=<private-report>",
+    "<native-python> -I tests/live/autoverse_admission_host.py --receipt <private-receipt> --data-dir <fresh-browser-tests-root> --static-dir <tested-ui> --port <loopback-port> --fault valid|invalid",
+    "<node> <playwright-cli> test --config tests/live/autoverse-admission.config.ts"
+  ],
+  "tools": {
+    "python": "3.13.13",
+    "node": "24.22.1",
+    "playwright": "1.64.1"
+  },
+  "staticChecks": [
+    "Ruff new security modules and tests",
+    "F821 changed existing API/project service",
+    "architecture boundaries",
+    "generated contracts; no schema drift",
+    "git diff --check"
+  ],
+  "warnings": [
+    "Existing Starlette TestClient httpx deprecation warning. A broader F401 probe reports seven pre-existing API imports; no full API lint pass is claimed."
+  ],
+  "installedCompleteDemo": "pending",
+  "taskStatus": "T010 remains in_progress;57/33/10, zero accepted milestones"
+}

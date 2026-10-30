@@ -103,6 +103,13 @@ remain preserved. Importing an envelope never installs a provider or grants auth
 
 Exports include manifest, authored resources, declared schemas/layout, locks and explicitly selected documentation. Exclude credentials, session tokens, host-only secrets, caches, arbitrary home directories and run evidence unless explicitly selected. Preserve unavailable/restricted artifact references with their limitations rather than copying prohibited content.
 
+ADR-0044 applies known inline authentication assignment/header recognition to
+authored text, names, layouts, imports and portable output, including JSON string
+escapes. Session/bootstrap/CSRF/refresh/ID tokens and Basic/Bearer headers are
+rejected without echo or rewriting historical bytes. External credentialRef and
+sessionTokenRef handles remain exact inert references; storing one never resolves
+a secret, installs a provider or grants execution.
+
 ## Migration and verification
 
 Migrations run on a copy, retain original manifest/bytes, produce a versioned migration report and textual/semantic diff, and require explicit application to replace the working revision. Failure leaves the original readable. Never migrate historical run snapshots in place.
