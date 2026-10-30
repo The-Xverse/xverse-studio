@@ -17,12 +17,14 @@ from xverse_xdl import plan_matches_digest
 
 from xverse_studio.api.models import Body
 from xverse_studio.security.files import MAX_BYTES, MAX_EXPANDED, check_text, safe_name
+from xverse_studio.security.managed_io import read_bounded
 from xverse_studio.storage.core import Problem, atomic, canonical, contained, digest, uid
+from xverse_studio.xdl import XDLRejected
 
 ALLOWED_FILES = {"manifest.json", "snapshot.json", "run.json", "report.json", "evaluations.json", "annotations.json", "evidence/reference.jsonl"}
 REQUIRED_FILES = {"manifest.json", "snapshot.json", "run.json", "report.json"}
 INTEGRITIES = {"valid", "verified_prefix", "invalid", "unavailable"}
-AVAILABILITIES = {"pending", "collecting", "complete", "partial", "invalid", "unavailable"}
+AVAILABILITIES = {"pending", "collecting", "available", "complete", "partial", "invalid", "unavailable"}
 
 
 class EvidenceImport(Body):
@@ -208,11 +210,13 @@ def _inspect(files, adapter):
         diagnostics.append("DECLARED_AND_OBSERVED_INTEGRITY_DIFFER")
     if manifest["availability"] != report["evidenceStatus"]:
         diagnostics.append("DECLARED_AVAILABILITY_DISAGREEMENT")
-    availability_order = {"complete": 0, "collecting": 1, "pending": 2, "partial": 3, "unavailable": 4, "invalid": 5}
+    availability_order = {"complete": 0, "available": 1, "collecting": 2, "pending": 3, "partial": 4, "unavailable": 5, "invalid": 6}
     availability = max((report["evidenceStatus"], manifest["availability"]), key=availability_order.__getitem__)
     if availability == "complete" and (journal["integrity"] != "valid" or not journal["coverageComplete"]):
         availability = "unavailable" if journal["integrity"] == "unavailable" else "partial"
         diagnostics.append("COMPLETE_COVERAGE_UNPROVEN")
+    if availability == "available" and journal["integrity"] in {"unavailable", "invalid"}:
+        availability = "unavailable" if journal["integrity"] == "unavailable" else "partial"
     if run.get("effectivePlanDigest") != snapshot["planDigest"] or run.get("effectiveSemanticDigest") != snapshot["semanticDigest"]:
         integrity = "invalid"
         diagnostics.append("EFFECTIVE_INPUT_IDENTITY_UNPROVEN")
@@ -230,7 +234,6 @@ def _inspect(files, adapter):
 
 # Only typed authoritative compiler failures become unresolved inspection. A
 # bundle identity failure remains an explicit rejection, never silently caught.
-from xverse_studio.xdl import XDLRejected
 XDL_COMPILE_FAILURES = (XDLRejected, ValueError, TypeError, KeyError)
 
 
@@ -264,17 +267,21 @@ def install_evidence_exchange(app, store, projects, runs):
     @app.get("/api/v1/evidence/imports/{bundleId}")
     def evidence_import_detail(bundleId: str):
         record = store.get("importedEvidence", bundleId)
-        root = contained(store.root, store.root / "evidence-imports" / bundleId)
+        root = store.root / "evidence-imports" / bundleId
         files = {}
         try:
+            remaining = MAX_EXPANDED
             for name in {"manifest.json", *record["manifest"]["files"]}:
-                path = contained(root, root / name)
-                if path.is_symlink() or not path.is_file():
+                safe_name(name)
+                if name not in ALLOWED_FILES:
                     raise OSError()
                 maximum = MAX_EXPANDED if name.endswith(".jsonl") else 1024 * 1024
-                if path.stat().st_size > maximum:
+                files[name] = read_bounded(store.root, root / name, min(maximum, remaining))
+                remaining -= len(files[name])
+                if name != "manifest.json" and digest(files[name]) != record["manifest"]["files"][name]:
                     raise OSError()
-                files[name] = path.read_bytes()
+            if _json(files["manifest.json"]) != record["manifest"]:
+                raise OSError()
             current = _inspect(files, projects.adapter)
             return {**{k: v for k, v in record.items() if k != "importedBy"}, **current}
         except (OSError, Problem):

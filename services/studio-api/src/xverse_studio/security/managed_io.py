@@ -209,6 +209,24 @@ def open_read(root, path):
                 os.close(descriptor)
 
 
+def read_bounded(root, path, maximum):
+    """Capture one anchored regular file, including growth, within a byte cap."""
+    with open_read(root, path) as stream:
+        if os.fstat(stream.fileno()).st_size > maximum:
+            raise SafeIOError("LIMIT_EXCEEDED")
+        chunks, size = [], 0
+        while True:
+            chunk = stream.read(min(65536, maximum + 1 - size))
+            if not chunk:
+                break
+            chunks.append(chunk)
+            size += len(chunk)
+            if size > maximum:
+                raise SafeIOError("LIMIT_EXCEEDED")
+        data = b"".join(chunks)
+    return data
+
+
 @contextmanager
 def open_write(root, path, *, parents=False):
     """Exclusively create a private regular file through anchored directories."""

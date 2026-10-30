@@ -19,20 +19,26 @@ MAX_JOURNAL_RECORDS = 100000
 MAX_ACQUIRE_ATTEMPTS = 4
 
 
-def read_journal(root, state):
+def _invalid_state(state):
     if not isinstance(state, dict):
-        return [], "invalid"
+        return True
     declared_digest = state.get("journalDigest")
     if declared_digest is not None and (
         not isinstance(declared_digest, str)
         or not re.fullmatch(r"sha256:[0-9a-f]{64}", declared_digest)
     ):
-        return [], "invalid"
+        return True
     if any(
         state.get(field) is not None
         and (not isinstance(state[field], str) or not 0 < len(state[field]) <= 512)
         for field in ("runId", "snapshotId")
     ):
+        return True
+    return False
+
+
+def read_journal(root, state):
+    if _invalid_state(state):
         return [], "invalid"
     path = root / "evidence.jsonl"
     for attempt in range(MAX_ACQUIRE_ATTEMPTS):
@@ -73,6 +79,24 @@ def read_journal(root, state):
             } else "invalid"
         except OSError:
             return [], "unavailable"
+    records, integrity = verify_journal(data, state)
+    if integrity == "invalid":
+        return records, integrity
+    with _CACHE_LOCK:
+        # At most two source projections and 64MiB of contributing source bytes.
+        _CACHE[key] = (records, integrity, len(data))
+        while (
+            len(_CACHE) > 2
+            or sum(value[2] for value in _CACHE.values()) > MAX_JOURNAL_BYTES
+        ):
+            _CACHE.popitem(last=False)
+    return records, integrity
+
+
+def verify_journal(data, state):
+    """Verify the exact supplied capture; never acquire a second filename."""
+    if _invalid_state(state) or not isinstance(data, bytes) or len(data) > MAX_JOURNAL_BYTES:
+        return [], "invalid"
     records = []
     identities = set()
     previous = "0" * 64
@@ -124,14 +148,6 @@ def read_journal(root, state):
     except (ValueError, KeyError, TypeError, RecursionError):
         return records, "invalid"
     integrity = "valid" if state.get("journalDigest") else "verified_prefix"
-    with _CACHE_LOCK:
-        # At most two source projections and 64MiB of contributing source bytes.
-        _CACHE[key] = (records, integrity, len(data))
-        while (
-            len(_CACHE) > 2
-            or sum(value[2] for value in _CACHE.values()) > MAX_JOURNAL_BYTES
-        ):
-            _CACHE.popitem(last=False)
     return records, integrity
 
 

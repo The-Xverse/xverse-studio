@@ -15,6 +15,14 @@ README.md                  human project description (optional)
 
 Runs are stored in a separate managed run root, not silently included in project archives. A user may explicitly export an evidence bundle linked to exact project/snapshot identity. Downloadable artifacts are not fetched during project open/import.
 
+ADR-0045 bounds compressed exchange/download capture and aggregate expanded output
+to16MiB using anchored native regular-file acquisition. Run evidence verification
+describes exactly the included capture, retaining original scope/status and bytes.
+The legacy version1.0 `evidence/reference.jsonl` member name conveys no reference
+execution claim. Imported detail checks original stored digests/manifest semantics;
+local rehashing cannot replace the original report. Source `available` is distinct
+from complete coverage, and an unsupported imported reader grants no authority.
+
 ## Manifest fields
 
 | Field | Rule |

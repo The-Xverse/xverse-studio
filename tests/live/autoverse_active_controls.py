@@ -6,11 +6,14 @@ for an integrity negative. No provider lifecycle, telemetry or outcome is faked.
 """
 
 import argparse
+import base64
+import io
 import json
 from pathlib import Path
 import re
 import statistics
 import time
+import zipfile
 
 import httpx
 
@@ -378,6 +381,62 @@ def main():
                     key: value.get(key) for key in ("state", "cleanup", "evidence")
                 },
             )
+            # Exercise actual complete-demo evidence exchange after owned Stop,
+            # while fresh provider admission remains explicitly unavailable.
+            journal = (runroot / "evidence.jsonl").read_bytes()
+            exported = api.post(
+                route + "/exports",
+                headers={"Idempotency-Key": "actual-autoverse-evidence-export"},
+                json={},
+            )
+            assert exported.status_code == 202, exported.text
+            operation = exported.json()
+            bundle = api.get(operation["result"]["downloadUrl"])
+            assert bundle.status_code == 200
+            assert digest(bundle.content) == operation["result"]["digest"]
+            assert len(bundle.content) == operation["result"]["size"]
+            with zipfile.ZipFile(io.BytesIO(bundle.content)) as archive:
+                files = {name: archive.read(name) for name in archive.namelist()}
+            assert files["evidence/reference.jsonl"] == journal
+            assert files["snapshot.json"] == canonical(json.loads(snapshot_raw)).encode()
+            derived = json.loads(files["report.json"])
+            assert derived["evidenceScope"] == value["evidenceScope"] == "external_demo"
+            assert derived["integrity"] == "valid"
+            assert derived["evidenceStatus"] == value["evidence"]
+            imported = api.post(
+                "/api/v1/evidence/imports",
+                json={"archiveBase64": base64.b64encode(bundle.content).decode()},
+            )
+            assert imported.status_code == 201, imported.text
+            recorded = imported.json()
+            inspection = recorded["inspection"]
+            assert inspection["executionAllowed"] is False
+            assert inspection["declaredEvidenceScope"] == "external_demo"
+            assert inspection["declaredAvailability"] == value["evidence"]
+            assert "SOURCE_PROVIDER_READER_UNSUPPORTED" in inspection["diagnostics"]
+            detail = api.get("/api/v1/evidence/imports/" + recorded["bundleId"])
+            assert detail.status_code == 200 and detail.json()["inspection"] == inspection
+            assert [r["runId"] for r in api.get("/api/v1/runs").json()["items"]] == [rid]
+            export_retry = api.post(
+                route + "/exports",
+                headers={"Idempotency-Key": "actual-autoverse-evidence-export"},
+                json={},
+            )
+            assert export_retry.status_code == 202 and export_retry.json() == operation
+            assert (runroot / "evidence.jsonl").read_bytes() == journal
+            report["exchange"] = {
+                "bundleDigest": digest(bundle.content),
+                "journalDigest": digest(journal),
+                "exactOriginalJournalAndSnapshotBytes": True,
+                "sourceEvidenceScopePreserved": derived["evidenceScope"],
+                "sourceEvidenceStatusPreserved": derived["evidenceStatus"],
+                "exportIntegrity": derived["integrity"],
+                "sameExportReceipt": True,
+                "importExecutionAllowed": False,
+                "importedReaderUnsupportedReported": True,
+                "originalJournalUnchanged": True,
+                "noAdditionalRunAllocated": True,
+            }
             report["outcome"] = "passed" if not report["failures"] else "failed"
         finally:
             if rid:

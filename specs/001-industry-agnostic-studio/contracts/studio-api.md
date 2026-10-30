@@ -32,6 +32,9 @@ while ordinary locations remain useful. No request secret/value is echoed.
 | `PUT /projects/{projectId}/layout` | Layout sidecar + expected presentation revision; no semantic mutation | M2 |
 | `POST /projects/imports` | Bounded archive/upload handle; returns inspectable import report and newly allocated project only after safe extraction | M0/M2 |
 | `POST /projects/{projectId}/exports` | Exact revision, inclusion policy; returns operation for a bounded credential-free archive | M2 |
+| `GET /exports/{operationId}` | ADR-0045: anchored bounded original regular-file capture, stored digest verification; missing404, unsafe422, changed409, excess413, unsupported secure access503 | M2 |
+| `POST /runs/{runId}/exports` | ADR-0045: verify exactly the included journal capture; preserve original scope/status, snapshot and journal bytes; bounded ZIP operation with digest/size | M2 |
+| `GET /evidence/imports/{bundleId}` | ADR-0045: inert original-digest/manifest-bound detail, bounded anchored reads; changed local files degrade current inspection without rewriting original records | M2 |
 | `POST /projects/{projectId}/validations` | `revision`; returns typed report tied to input/validator identities | M0 |
 | `GET /projects/{projectId}/revisions?before=&limit=` | Append-only revision history, newest first, cursor-paged (≤200): origin, document digests; unrecorded legacy revisions are reported; see ADR-0013 | M2 |
 | `POST /projects/{projectId}/revisions/{revision}/restore` | `If-Match`; new forward revision from verified copies of an earlier revision (undo/redo transaction) | M2 |

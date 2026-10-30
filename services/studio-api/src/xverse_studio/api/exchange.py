@@ -6,8 +6,26 @@ from fastapi import Request
 from fastapi.responses import Response
 from xverse_studio.api.models import Export
 from xverse_studio.storage.core import Problem, canonical, digest, uid, atomic
-from xverse_studio.security.files import check_portable_text, safe_name
-from xverse_studio.evidence.reader import read_journal
+from xverse_studio.security.files import MAX_EXPANDED, check_portable_text, safe_name
+from xverse_studio.security.managed_io import read_bounded, SafeIOError
+from xverse_studio.evidence.reader import verify_journal
+
+
+def capture(root, path, *, missing_ok=False):
+    try:
+        return read_bounded(root, path, MAX_EXPANDED)
+    except SafeIOError as error:
+        if error.code == "FILE_MISSING":
+            if missing_ok:
+                return None
+            raise Problem("EVIDENCE_UNAVAILABLE", "The selected bundle is unavailable.", 404) from None
+        if error.code == "LIMIT_EXCEEDED":
+            raise Problem("LIMIT_EXCEEDED", "The exchange byte limit is 16 MiB.", 413) from None
+        if error.code == "SECURE_IO_UNAVAILABLE":
+            raise Problem("SECURE_IO_UNAVAILABLE", "Secure native exchange acquisition is unavailable on this host.", 503) from None
+        if error.code == "SOURCE_CHANGED":
+            raise Problem("EVIDENCE_CHANGED", "The selected bytes changed during acquisition; retry with a fresh observation.", 409) from None
+        raise Problem("EVIDENCE_INVALID", "The selected exchange source cannot be acquired safely.") from None
 
 
 def install_exchange(app, store, projects, runs):
@@ -23,12 +41,15 @@ def install_exchange(app, store, projects, runs):
                     check_portable_text(content)
                     content = content.encode()
                 total += len(content)
-                if total > 16 * 1024 * 1024:
+                if total > MAX_EXPANDED:
                     raise Problem(
                         "LIMIT_EXCEEDED", "Exchange expanded byte limit exceeded.", 413
                     )
                 z.writestr(path, content)
-        return target.getvalue()
+        data = target.getvalue()
+        if len(data) > MAX_EXPANDED:
+            raise Problem("LIMIT_EXCEEDED", "The exchange byte limit is 16 MiB.", 413)
+        return data
 
     @app.post("/api/v1/projects/{projectId}/exports", status_code=202)
     def export_project(projectId: str, body: Export, request: Request):
@@ -101,11 +122,7 @@ def install_exchange(app, store, projects, runs):
                 "NOT_FOUND", "This operation has no downloadable bundle.", 404
             )
         path = store.root / "exports" / f"{operationId}.zip"
-        if not path.is_file():
-            raise Problem(
-                "EVIDENCE_UNAVAILABLE", "The selected bundle is unavailable.", 404
-            )
-        data = path.read_bytes()
+        data = capture(store.root, path)
         if digest(data) != op["result"]["digest"]:
             raise Problem("EVIDENCE_INVALID", "Export integrity verification failed.")
         return Response(
@@ -120,8 +137,8 @@ def install_exchange(app, store, projects, runs):
 
         def accepted(db):
             snap = store.get("snapshot", r["snapshotId"], db)
-            records, integrity = read_journal(runs.directory(runId), r)
-            evidence_file = runs.directory(runId) / "evidence.jsonl"
+            raw = capture(store.root, runs.directory(runId) / "evidence.jsonl", missing_ok=True)
+            _, integrity = verify_journal(raw, r) if raw is not None else ([], "unavailable")
             files = {
                 "snapshot.json": canonical(snap),
                 "run.json": canonical(
@@ -139,9 +156,9 @@ def install_exchange(app, store, projects, runs):
                         "planDigest": snap["planDigest"],
                         "evidenceStatus": r["evidence"],
                         "integrity": integrity,
-                        "evidenceScope": "owned_reference",
+                        "evidenceScope": r.get("evidenceScope", "unknown"),
                         "limitations": [
-                            "Owned executable reference evidence; no external simulator, device or native X-COM claim.",
+                            "This bundle contains the original Studio provider journal; it does not admit another runtime, Argus reader or physical device.",
                             "Replay is recorded evidence inspection, not re-execution.",
                         ],
                     }
@@ -161,14 +178,7 @@ def install_exchange(app, store, projects, runs):
                     if row.get("runId") == runId
                 ]
             )
-            if evidence_file.exists():
-                raw = evidence_file.read_bytes()
-                if len(raw) > 16 * 1024 * 1024:
-                    raise Problem(
-                        "LIMIT_EXCEEDED",
-                        "Canonical evidence exceeds the exchange limit.",
-                        413,
-                    )
+            if raw is not None:
                 try:
                     for line in raw.decode("utf-8").splitlines():
                         check_portable_text(line)
@@ -200,6 +210,7 @@ def install_exchange(app, store, projects, runs):
                 "result": {
                     "downloadUrl": f"/api/v1/exports/{oid}",
                     "digest": digest(bundle),
+                    "size": len(bundle),
                     "integrity": integrity,
                 },
             }
