@@ -1,3 +1,22 @@
+# Linux security implementation closure — 2026-10-30
+
+**58 completed /32 in progress /10 blocked; zero accepted milestones.** T010
+closes after its complete original session/origin, bounded native file, inert
+import, credential/redaction and admitted-execution clause review. Current395
+Autoverse API/native CLI and8 native browser checks pass on438 unchanged inputs/6UI.
+
+Clean candidate911d26b package167 matches all source/archive/UI hashes and
+canonical SDK12615d402. Its complete installed demo runs from an exact imported
+project after explicit preflight/Start, then passes original Stop/receipt retry,
+immutable evidence exchange and unsupported-operation refusal.16 original processes
+are absent,3 exact containers stopped,root lock released and21 original platform
+files unchanged. The existing operator is not restarted. Original failures and
+corrected test assertions remain qualified. Full M0/AC-003/032 acceptance and the
+remaining lifecycle/hardware/human tasks stay open; next complete T011/T014.
+See [full review](../../evidence/studio/M0-native-metadata-inert-imports/review.md).
+
+## Earlier component checkpoints
+
 # Bounded Autoverse evidence exchange update — 2026-10-30
 
 **57 completed /33 in progress /10 blocked; zero accepted milestones.** T010

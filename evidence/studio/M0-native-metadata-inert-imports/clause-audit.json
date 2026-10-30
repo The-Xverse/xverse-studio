@@ -1,0 +1,129 @@
+{
+  "task": "T010",
+  "status": "completed",
+  "candidate": "911d26b7401fb54a3d739d2afa44e9b99745e024",
+  "originalTaskScopePreserved": true,
+  "requiredHost": "recorded native Linux; Windows removed by ADR-0036",
+  "clauses": [
+    {
+      "clause": "Local binding, sessions and origins",
+      "finding": "Native loopback default; exact admitted Host/Origin, one-use expiring bootstrap, finite signed-in session and CSRF checks before mutation. Local declarations stay private/unverified and do not resolve secrets or grant provider/device authority.",
+      "evidence": [
+        "verification.json",
+        "nominal.json",
+        "../M0-session-portable-boundary/",
+        "../M0-private-local-bindings/"
+      ],
+      "currentProof": "Actual classic/platform authentication/authoring,8 native browser checks and12 invalid-caller live input/Stop refusals with zero denied idempotency mappings.",
+      "disposition": "verified_for_original_T010_Linux_scope",
+      "sourceHashes": {
+        "host/launcher.py": "e75c7fb8667fcbd78d54e1555400b45e49de3a113827b41e707a121e133c4bde",
+        "api/app.py": "8cb2acad84763d9faf693250e0f1a169db13561d5dc09bff8336f0ac26ff7f79",
+        "security/session.py": "54f815a2f7640a5afe05fab6c56c0fcef72a458445be3b1ee6cf274604ff5e5c",
+        "security/models.py": "513bce9624d9159e333cf70f6c2a0f94cd1a993dfff8b4ae21e1e700ef7ea666",
+        "projects/local_bindings.py": "ba518010a24608e07dc57bd8bc3c81023bebca10b72c4ce94371bff2f2117152"
+      }
+    },
+    {
+      "clause": "Bounded project-file access and native ownership",
+      "finding": "Project/revision/private-sidecar reads use anchored native regular-file acquisition and declared caps. Atomic publication/rollback preserves original identity. Exchange captures are16MiB bounded and digest-bound; snapshots reuse64MiB immutable canonical verification; runtime reports are1MiB unique-key UTF-8 with at most4 replacement attempts. No unchecked project-controlled filename is executed.",
+      "evidence": [
+        "verification.json",
+        "nominal.json",
+        "../M0-anchored-project-writes/",
+        "../M0-bounded-evidence-exchange/",
+        "../M0-private-local-bindings/"
+      ],
+      "currentProof": "Current native Autoverse writes, journal/download/imported-file faults, report links/shared/oversize/duplicates, actual atomic-replacement retry/refusal and original source/imported/snapshot byte binding.",
+      "disposition": "verified_for_original_T010_Linux_scope",
+      "sourceHashes": {
+        "security/managed_io.py": "a58084d19d054c1a4cdbb013d7c03518763600cf714c116ac4f953ace6a70cb1",
+        "projects/service.py": "d868ffb2c00c4c671a0e6bca8903c87a262ee904ca2d5c77bdf559e16543b8c5",
+        "projects/revisions.py": "8a8f6ed8d9c5fe18ee9822110f708fec2d525c61acbe377b581d44a7cc936130",
+        "projects/local_bindings.py": "ba518010a24608e07dc57bd8bc3c81023bebca10b72c4ce94371bff2f2117152",
+        "api/exchange.py": "dbaed2f5eda4608c635c9a204fcdd2facdacad9f9aef46817ba8d2b12ae0a74e",
+        "api/evidence_exchange.py": "260cf0620e6a8e9e74ea2b02301efa18193af120db199c0cb7a9fe81a210984c",
+        "api/reruns.py": "d433a958cc49c67f155c133ba730a39c69b6e96fe2058057790b563dc4212ec4",
+        "runs/service.py": "b0c75d0c8425c4f53b4339f0457e788da1d19b3bd4772d1176d92ac77984d1b9"
+      }
+    },
+    {
+      "clause": "Inert imports and unsupported content",
+      "finding": "Archive paths, collisions, file kinds, counts, bytes and compression ratio refuse before allocation. Known executable profile fields/URLs are screened without rewriting source. Safe YAML/JSON and fixed admitted profile identities convey no plugin authority. Opaque envelope/documentation bytes round-trip; unknown XDL remains inspectable and blocked at Start.",
+      "evidence": [
+        "verification.json",
+        "nominal.json",
+        "phase-history.json"
+      ],
+      "currentProof": "Actual classic/platform hostile archive matrix with dispatch/host command calls forbidden; exact export/reimport including large inert profile; unknown locks refuse preflight and unknown XDL produces blocked intent/Start rejection. Complete actual demo starts only after explicit preflight/Start of an exact imported project.",
+      "disposition": "verified_for_original_T010_Linux_scope",
+      "sourceHashes": {
+        "security/files.py": "0a124bb71f5b0dfae2e21050856bc038dc1af9fed86dc657448c21d479a2a905",
+        "projects/service.py": "d868ffb2c00c4c671a0e6bca8903c87a262ee904ca2d5c77bdf559e16543b8c5",
+        "projects/inspection.py": "30648b42456fadf32646fcc98a633db23c88e8af2937ef51810f0733df7188ec",
+        "profiles/__init__.py": "b10ad5a802f38a77838dcbd665c1136c076f962f2c8a3a33f722a1156d9471ef",
+        "profiles/presentation.py": "b568a1d924de0bd0bb6630e53f3cb8412b3452cb7533bc1bf2392b4c45bfd1da",
+        "providers/autoverse/adapter.py": "32a4aa9b3373085f341d5e9f7861722a5cf9878ebe9a08def922d40bca9b0b3b"
+      }
+    },
+    {
+      "clause": "Redaction and credential exclusion",
+      "finding": "Known inline credentials/headers/JSON escapes refuse in authored text, names/layouts and portable output; external handles remain inert. Diagnostic locations and early envelopes are bounded/redacted. Private binding/request/key/mailbox/log files are excluded from portable bundles. Historical journals and Argus bytes are never rewritten to make output pass.",
+      "evidence": [
+        "verification.json",
+        "nominal.json",
+        "../M0-session-portable-boundary/",
+        "../M0-bounded-evidence-exchange/"
+      ],
+      "currentProof": "Current authentication/content/diagnostic cases, exact immutable journal/snapshot export, source scope/status preserved, inert unsupported-reader import and all21 original platform files unchanged.",
+      "disposition": "verified_for_original_T010_Linux_scope",
+      "sourceHashes": {
+        "security/files.py": "0a124bb71f5b0dfae2e21050856bc038dc1af9fed86dc657448c21d479a2a905",
+        "api/app.py": "8cb2acad84763d9faf693250e0f1a169db13561d5dc09bff8336f0ac26ff7f79",
+        "api/exchange.py": "dbaed2f5eda4608c635c9a204fcdd2facdacad9f9aef46817ba8d2b12ae0a74e",
+        "api/evidence_exchange.py": "260cf0620e6a8e9e74ea2b02301efa18193af120db199c0cb7a9fe81a210984c",
+        "projects/service.py": "d868ffb2c00c4c671a0e6bca8903c87a262ee904ca2d5c77bdf559e16543b8c5"
+      }
+    },
+    {
+      "clause": "Only installed admitted operations cross execution boundary",
+      "finding": "Provider objects and lab grants are native host configuration, never project deserialization. Start rechecks original inputs, readiness and exact provider identity; active operations recheck admission. Owned cleanup retains original authority. Fixed worker entry points and signed private mailboxes do not interpret project metadata as commands. Physical/probe grants stay independent and default-denied.",
+      "evidence": [
+        "verification.json",
+        "nominal.json",
+        "../M0-active-provider-controls/",
+        "../M1-owned-container-readback/"
+      ],
+      "currentProof": "Current classic/platform descriptor and dispatch-refusal cases; complete installed imported-project execution/native publication; unsupported Pause and Autoverse rerun denied without effects;12 invalid callers,15 metadata faults,4 nonfinite inputs,corrupt snapshot, owned Stop under invalid fresh admission and identical terminal receipt.",
+      "disposition": "verified_for_original_T010_Linux_scope",
+      "sourceHashes": {
+        "runs/service.py": "b0c75d0c8425c4f53b4339f0457e788da1d19b3bd4772d1176d92ac77984d1b9",
+        "providers/descriptors.py": "0eb761808f3db63314c9fc2f9bbce1a8307e9d6a4d221e6ccd8e260539aefc99",
+        "providers/autoverse/adapter.py": "32a4aa9b3373085f341d5e9f7861722a5cf9878ebe9a08def922d40bca9b0b3b",
+        "providers/autoverse/worker.py": "08cf93beb5b3c0c434c6e0461cbb9344bfa9f6d44808a10085ea8650614c3c75",
+        "lab/configuration.py": "ae5b8fcd5eeb7a1e3a873f4836e3a1e96a407a1f854b8525cd3f91b051e8202d",
+        "lab/authority.py": "c7ef0cd56799abd642d00ee5df40d6c3cce77ab59e8d2638693048354ff3640f",
+        "lab/probe_configuration.py": "05f9caa29dfb4173487f5f7e90714721c477670ca14ba54f890fb32acee1f35a"
+      }
+    }
+  ],
+  "trustBoundary": {
+    "untrusted": "Portable projects, authored XDL, profiles, descriptions, archive metadata and browser requests. Project external edits never confer execution authority.",
+    "trustedHost": "Operator-selected private metadata database, installed executable packages/provider objects and enrolled native environment. Worker request/key/mailbox paths are server-generated outside portable project roots; keys are32 random bytes from native dispatch, private and signed, not imported payload.",
+    "disposition": "Inspection of private worker protocol does not invent a general VFS against arbitrary same-account replacement of the trusted database/installation. Report/evidence capture faults remain explicit, never process-matched or replayed. Operational private-file corruption/failure matrices stay in lifecycle/recovery tasks; no new execution authority is granted."
+  },
+  "remainingOutsideTask": [
+    "Full AC-003/032 and independent milestone review",
+    "T011 fixture completion and T014 foundation verification",
+    "T002 remote-only provisioning",
+    "Complete lifecycle/command/recovery matrix including T033",
+    "Physical nomination/permissions and hardware execution",
+    "Second-industry, human usability/accessibility and later M0–M4 acceptance"
+  ],
+  "counts": {
+    "completed": 58,
+    "in_progress": 32,
+    "blocked": 10
+  },
+  "acceptedMilestones": 0
+}

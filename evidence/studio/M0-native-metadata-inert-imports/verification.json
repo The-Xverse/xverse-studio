@@ -1,0 +1,71 @@
+{
+  "verifiedCandidate": "911d26b7401fb54a3d739d2afa44e9b99745e024",
+  "target": "Autoverse enrolled classic/platform, actual stopped-demo source recording and native browser authoring",
+  "apiAndNativeCli": {
+    "phase": "verified",
+    "tests": 395,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "seconds": 214.835,
+    "rawXmlSha256": "5de7896106f6227980d42603238d3a3b929d69d82060a330ffbf13c7d70e0c12"
+  },
+  "browser": [
+    {
+      "descriptor": "valid",
+      "stats": {
+        "startTime": "2026-10-30T10:52:36.651Z",
+        "duration": 13598.129,
+        "expected": 4,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "rawSha256": "a4f5469e2884ecc11c84cc6097503be8abc12ec1d30c4f49e39a7873d498a36b"
+    },
+    {
+      "descriptor": "invalid",
+      "stats": {
+        "startTime": "2026-10-30T10:52:53.209Z",
+        "duration": 11720.842999999999,
+        "expected": 4,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "rawSha256": "7cecf66711e9dc8843badcb7a3b7dc1d205d8fde894c9b62eb9dea8d4a48faf8"
+    }
+  ],
+  "environment": {
+    "os": "Linux-6.8.0-138-generic-x86_64-with-glibc2.35",
+    "python": "3.13.13",
+    "distribution": "Ubuntu 22.04.5 LTS"
+  },
+  "tools": {
+    "python": "3.13.13",
+    "node": "24.22.1",
+    "playwright": "1.64.1"
+  },
+  "startedAt": "2026-10-30T10:48:58.175809+00:00",
+  "finishedAt": "2026-10-30T10:53:05.209857+00:00",
+  "sourceInputs": 438,
+  "compiledUiAssets": 6,
+  "allInputsUnchanged": true,
+  "commands": [
+    "STUDIO_AUTOVERSE_TEST_INSTALLATION=<private-receipt> STUDIO_AUTOVERSE_RECORDED_ROOT=<original-stopped-complete-demo-root> PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 .venv/bin/python -I -m pytest -q tests/live/autoverse_provider_admission.py tests/live/autoverse_launcher_availability.py tests/live/autoverse_project_writes.py tests/live/autoverse_container_cleanup.py tests/live/autoverse_security_boundary.py tests/live/autoverse_exchange_boundary.py tests/live/autoverse_runtime_metadata.py tests/live/autoverse_inert_imports.py --basetemp=<owned-root> --junitxml=<private-report>",
+    "<native-python> -I tests/live/autoverse_admission_host.py --receipt <private-receipt> --data-dir <fresh-browser-tests-root> --static-dir <tested-ui> --port <loopback-port> --fault valid|invalid",
+    "<node> <playwright-cli> test --config tests/live/autoverse-admission.config.ts"
+  ],
+  "staticChecks": [
+    "Ruff changed exchange/rerun/security modules and target tests",
+    "F821 existing run service",
+    "architecture boundaries",
+    "spec-package structure",
+    "git diff --check"
+  ],
+  "warnings": [
+    "Existing Starlette TestClient httpx deprecation; no dependency change."
+  ],
+  "installedDemo": "passed_from_exact_imported_project_with_owned_cleanup",
+  "taskStatus": "T010 completed after full Linux security clause review;58 completed/32 in_progress/10 blocked;zero accepted milestones"
+}

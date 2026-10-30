@@ -1,6 +1,8 @@
 # ADR-0046: Native runtime reports and inert profile imports
 
-Status: implementation under Autoverse verification. T010 remains in progress.
+Status: implemented and verified;395 Autoverse API/native CLI and8 browser checks
+pass with a complete installed imported-project demo. The full Linux clause audit
+in evidence/studio/M0-native-metadata-inert-imports/ closes T010, not a milestone.
 
 A nominated real stopped Autoverse recording reproduces acceptance of linked,
 shared, oversized and duplicate-key native state reports. Both ordinary lifecycle
@@ -19,8 +21,9 @@ for the existing five-second initial-report grace. No blind process matching,
 respawn, termination or immutable-evidence repair is introduced.
 
 Failed acquisition retains the prior known terminal history; active ownership
-continues to use the existing unknown/reconciliation rules. Native observation
-does not resolve a symlink before its protected acquisition. This is a boundary
+continues to use the existing unknown/reconciliation rules. Native report
+acquisition does not follow symlinks or substitute a resolver check for an
+opened-file guarantee. This is a boundary
 on the managed report protocol, not a new defence against arbitrary replacement
 of the operator's trusted SQLite database by a privileged same-account process.
 
@@ -28,8 +31,7 @@ Profile import screening reuses the existing bounded JSON string security view
 for known script fields, HTML script fragments and executable URLs. Known bare
 or quoted YAML mapping keys are also screened. Leading indentation scans only
 horizontal whitespace, avoiding repeated scans across blank lines. Unsupported
-archive file kinds, including FIFO metadata, refuse before allocation. Original authored bytes are never
-rewritten and this observation is not a second XDL/profile semantic parser.
+archive file kinds, including FIFO metadata, refuse before allocation. Original authored bytes are never rewritten and this observation is not a second XDL/profile semantic parser.
 Unknown declarative content and command-shaped ordinary documentation remain
 inert and round-trip exactly. Unknown profile locks remain unresolved and cannot
 create a run or frozen snapshot through preflight. An imported command string
@@ -53,5 +55,6 @@ real complete-demo recording, including native atomic report replacement. Positi
 execution requires the complete installed demo after a supported project import:
 same original source, authoritative plan and semantic digests, preserved opaque
 metadata, no implicit run, then explicit admitted preflight/Start and owned cleanup.
-Remaining command-key/input-mailbox and full T010 execution review stay separate;
-this amendment alone is not complete T010 or milestone acceptance.
+The separate full clause audit includes the server-owned private worker protocol
+and installed execution boundary. Full lifecycle/recovery, independent milestone
+and external/human acceptance remain separate.
