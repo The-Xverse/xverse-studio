@@ -19,6 +19,7 @@ from starlette.exceptions import HTTPException
 from xverse_studio import __version__
 from xverse_studio.api.models import *
 from xverse_studio.providers.descriptors import ProviderPage
+from xverse_studio.security.models import JsonObject
 from xverse_studio.storage.core import Store, Problem, atomic, canonical, digest, uid
 from xverse_studio.security.files import MAX_BYTES, check_text
 from xverse_studio.projects.service import Projects
@@ -654,7 +655,7 @@ def create_app(
                                 evaluations_complete=len(observed) <= MAX_EVALUATIONS)
 
     @app.post("/api/v1/runs/{runId}/input/{action}")
-    def runtime_input(runId: str, action: str, body: dict, request: Request):
+    def runtime_input(runId: str, action: str, body: JsonObject, request: Request):
         return runs.input_request(runId, action, body, hashlib.sha256(request.state.session["csrfToken"].encode()).hexdigest())
 
     @app.post("/api/v1/runs/{runId}/commands", status_code=202)

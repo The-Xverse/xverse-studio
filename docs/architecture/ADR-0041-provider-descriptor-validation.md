@@ -36,3 +36,44 @@ and platform adapters as validation targets. Controlled malformed descriptors pr
 refusal without provider operations. Actual complete-demo operation is separate
 positive evidence. Preserve original operator sessions, claims and Argus bytes.
 This repair alone does not establish all T004 clauses or milestone acceptance.
+
+## Active-control follow-up under implementation
+
+An active installed-provider input callback must use the exact verified frozen
+provider identity, current valid description, availability and host compatibility.
+Verify the sealed snapshot before the callback; metadata is not ownership. Apply
+this to acquire/frame/release, including duplicate frames: release also publishes
+controls and must not enter an unverified callback. A refused request leaves the
+driver owner/mailbox unchanged; its original short lease expires independently.
+Refusal explains Stop/Cancel and fresh preflight rather than inventing renewed
+authority. Provider-specific field validation remains in its admitted adapter.
+
+Fresh non-cleanup lifecycle commands also require installed-provider compatibility
+inside acceptance. Existing same-key command receipts remain historical and do not
+delegate again. Stop/Cancel continue through the original ownership/state/signature
+checks even while fresh provider admission or the independent snapshot is invalid.
+Historical read-only evidence remains available through its admitted reader.
+
+Reject nonfinite/unencodable JSON at the generic input API boundary before lookup
+or provider contact, as already required for command parameters. This introduces
+no vehicle schema or industry dispatch in shared runtime-control code. Confirm
+with actual Autoverse runtime controls, typed refusal, mailbox invariance, recorded
+native publication and original owned cleanup; do not mark a fabricated run active.
+
+The installed v1 binding must also implement the callbacks used by this Studio
+facade: compatible readiness/optional metadata/owner-close signatures, unique
+controls within declared operations, a finite UTF-8 private installation object
+bounded to1MiB, and a backend-task factory or bounded Python module identity.
+Advertised normalized input requires its compatible callable. Check shape without
+invoking lifecycle, importing the worker or publishing private installation data.
+Incompatible bindings become unavailable; authoring remains usable. This is the
+existing Studio native callback protocol, not a new companion platform API.
+
+Requested native enrollment also fails independently of core startup. If the
+Autoverse tools or optional platform build are unavailable, retain a server-created
+unavailable observation with a bounded typed reason and no executable binding.
+A platform enrollment failure preserves a healthy classic adapter. Do not expose
+raw probe exceptions or paths. Core storage, migration and server startup errors
+remain fatal; this recovery applies only to optional integration enrollment.
+Actual native launcher tests reproduce both missing-tool and missing-build failures
+before the repair and verify authoring/compilation plus blocked preflight afterward.

@@ -37,6 +37,31 @@ invalidate frozen admission; the post-accept dispatch boundary also refuses befo
 worker/task acquisition. Existing original provider handles remain for ownership
 inspection and cleanup rather than being discarded by a discovery failure.
 
+Active installed input callbacks verify the same frozen provider/snapshot identity
+and fresh compatibility before acquire/frame/release; a refusal cannot mutate or
+renew the driver mailbox. Release publishes controls, so it also requires compatible
+admission. An original short driver lease expires independently. New non-cleanup
+commands recheck inside acceptance and before delegation. Stop/Cancel retain their
+original owned state/version/signature checks while fresh admission is unavailable;
+same-key command receipts remain historical and never delegate again. Read-only
+historical readers keep their separate scope. Generic input JSON must be finite
+and UTF-8 encodable before resource lookup or provider contact; provider-specific
+field validation remains authoritative in its admitted adapter.
+
+Native installed v1 bindings require compatible callable signatures and declared
+controls, a finite private installation dictionary bounded to1MiB and either a
+backend-task factory or Python module identity. A normalized input declaration
+requires its compatible callback. Shape inspection performs no lifecycle call or
+worker import. Invalid bindings expose `PROVIDER_BINDING_INCOMPATIBLE` rather than
+disabling authoring or producing untyped callback failures. Private installation
+data is never copied into discovery responses.
+
+Optional native enrollment failure must not disable Studio authoring. A trusted
+launcher may register a server-owned unavailable observation under the requested
+provider ID, with a bounded typed reason and no execution callbacks. Independent
+healthy integrations remain usable. This does not suppress core startup failures
+or admit an unavailable integration to preflight or execution.
+
 ## Operations
 
 | Operation | Contract |

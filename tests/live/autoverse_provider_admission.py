@@ -399,6 +399,113 @@ def test_autoverse_authoring_negotiates_versions_and_closed_requests_before_allo
         assert api.get("/api/v1/projects").json()["items"] == []
 
 
+@pytest.mark.parametrize(
+    "literal", ["NaN", "Infinity", "-Infinity", "1e999", '"\\ud800"']
+)
+def test_autoverse_input_rejects_nonfinite_or_unencodable_json_before_run_lookup(
+    target, tmp_path, literal
+):
+    provider, _ = target
+    app = application(tmp_path, provider)
+    with authenticated(app) as api:
+        body = '{"private":"owned-private-marker","frame":{"throttle":' + literal + "}}"
+        response = api.post(
+            "/api/v1/runs/no-such-autoverse-run/input/frame",
+            content=body,
+            headers={"Content-Type": "application/json"},
+        )
+        assert response.status_code == 422, response.text
+        assert "owned-private-marker" not in response.text
+        assert app.state.studio.store.all("run") == []
+        assert app.state.studio.store.all("operation") == []
+
+
+@pytest.mark.parametrize("value", [float("nan"), float("inf"), float("-inf"), "\ud800"])
+def test_enrolled_autoverse_adapter_rejects_invalid_json_before_mailbox_access(
+    target, tmp_path, value
+):
+    provider, _ = target
+    with pytest.raises(Problem) as error:
+        provider.input_request(
+            tmp_path,
+            "frame",
+            {"frame": {"throttle": value}},
+            "owned-autoverse-negative",
+        )
+    assert error.value.code == "CONTROL_REQUEST_INVALID"
+    assert list(tmp_path.iterdir()) == []
+
+
+@pytest.mark.parametrize(
+    "fault",
+    [
+        "readiness",
+        "readiness-arity",
+        "controls",
+        "installation",
+        "factory",
+        "factory-arity",
+        "metadata",
+    ],
+)
+def test_unverified_native_autoverse_binding_cannot_disable_authoring_or_reach_callbacks(
+    target, tmp_path, monkeypatch, fault
+):
+    provider, blueprint = target
+    descriptor = provider.descriptor()
+    monkeypatch.setattr(provider, "descriptor", lambda: descriptor)
+    if fault == "readiness":
+        monkeypatch.setattr(provider, "readiness", None)
+    elif fault == "readiness-arity":
+        monkeypatch.setattr(provider, "readiness", lambda: None)
+    elif fault == "controls":
+        monkeypatch.setattr(provider, "controls", ["unadvertised-control"])
+    elif fault == "installation":
+        monkeypatch.setattr(provider, "installation", {"invalid": float("nan")})
+    elif fault == "factory":
+        monkeypatch.setattr(provider, "prepare_backend_task", 42, raising=False)
+    elif fault == "factory-arity":
+        monkeypatch.setattr(
+            provider, "prepare_backend_task", lambda: None, raising=False
+        )
+    else:
+        monkeypatch.setattr(provider, "run_metadata", 42)
+    app = application(tmp_path, provider)
+    with authenticated(app) as api:
+        p = project(api, blueprint)
+        result = api.get("/api/v1/providers")
+        assert result.status_code == 200, result.text
+        blocked = next(
+            d
+            for d in result.json()["items"]
+            if d["providerId"] == descriptor["providerId"]
+        )
+        assert (
+            blocked["available"] is False
+            and blocked["blockedReasons"][0]["code"] == "PROVIDER_BINDING_INCOMPATIBLE"
+        ), blocked
+        pf = preflight(api, p, descriptor["providerId"])
+        assert pf.status_code == 200 and pf.json()["status"] == "blocked", pf.text
+        assert api.get("/api/v1/runs").json()["items"] == []
+
+
+@pytest.mark.parametrize("target", ["classic"], indirect=True)
+def test_advertised_autoverse_input_callback_must_be_callable_before_admission(
+    target, tmp_path, monkeypatch
+):
+    provider, blueprint = target
+    monkeypatch.setattr(provider, "input_request", None)
+    app = application(tmp_path, provider)
+    with authenticated(app) as api:
+        p = project(api, blueprint)
+        pf = preflight(api, p, "autoverse.demo")
+        assert pf.status_code == 200 and pf.json()["status"] == "blocked", pf.text
+        assert (
+            pf.json()["providerIdentity"]["blockedReasons"][0]["code"]
+            == "PROVIDER_BINDING_INCOMPATIBLE"
+        )
+
+
 @pytest.mark.parametrize("condition", ["unavailable", "host", "architecture"])
 def test_incompatible_enrolled_autoverse_host_is_blocked_before_readiness_contact(
     target, tmp_path, monkeypatch, condition

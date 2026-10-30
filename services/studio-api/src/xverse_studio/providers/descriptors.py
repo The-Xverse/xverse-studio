@@ -3,7 +3,10 @@
 from __future__ import annotations
 
 import json
+import inspect
+from copy import deepcopy
 import math
+import re
 from typing import Annotated, Literal
 
 from jsonschema import Draft202012Validator, SchemaError
@@ -206,6 +209,8 @@ def admit_descriptor(descriptor):
 
 
 def unavailable_descriptor(provider_id, code):
+    if not isinstance(code, str) or not re.fullmatch(r"[A-Z][A-Z0-9_-]{0,127}", code):
+        code = "PROVIDER_DESCRIPTOR_UNAVAILABLE"
     return {
         "providerId": provider_id,
         "providerVersion": "unavailable",
@@ -226,3 +231,72 @@ def unavailable_descriptor(provider_id, code):
             }
         ],
     }
+
+
+class UnavailableProvider:
+    """Server-created enrollment observation; never an executable adapter."""
+
+    controls = ()
+
+    def __init__(self, provider_id, code):
+        self._description = unavailable_descriptor(provider_id, code)
+        self._description["blockedReasons"][0]["message"] = (
+            "This requested native integration could not be enrolled. Restore its dependencies "
+            "and verify the native configuration; Studio authoring remains available."
+        )
+
+    def descriptor(self):
+        return deepcopy(self._description)
+
+
+def validate_installed_binding(provider, descriptor):
+    """Check the native v1 callback shape without invoking lifecycle operations."""
+
+    def accepts(name, count, *, required=True):
+        value = getattr(provider, name, None)
+        if value is None and not required:
+            return
+        if not callable(value):
+            raise ValueError()
+        inspect.signature(value).bind(*([None] * count))
+
+    try:
+        accepts("readiness", 5)
+        accepts("run_metadata", 1, required=False)
+        accepts("close_backend_owner", 0, required=False)
+        controls = getattr(provider, "controls", None)
+        if (
+            not isinstance(controls, (list, tuple))
+            or len(controls) > 128
+            or any(type(value) is not str or value == "start" for value in controls)
+            or len(controls) != len(set(controls))
+            or not set(controls) <= set(descriptor["operations"])
+        ):
+            raise ValueError()
+        installation = getattr(provider, "installation", None)
+        if (
+            not isinstance(installation, dict)
+            or len(canonical(installation).encode("utf-8")) > 1024 * 1024
+        ):
+            raise ValueError()
+        factory = getattr(provider, "prepare_backend_task", None)
+        if factory is not None:
+            accepts("prepare_backend_task", 1)
+        else:
+            module = getattr(provider, "worker_module", None)
+            if (
+                not isinstance(module, str)
+                or len(module) > 256
+                or not re.fullmatch(
+                    r"[A-Za-z_][A-Za-z0-9_]*(?:\.[A-Za-z_][A-Za-z0-9_]*)*", module
+                )
+            ):
+                raise ValueError()
+        surface = descriptor.get("inputSurface")
+        if isinstance(surface, dict) and surface.get("kind") == "normalized-driver":
+            accepts("input_request", 4)
+    except (ValueError, TypeError, AttributeError, RecursionError, OverflowError):
+        raise Problem(
+            "PROVIDER_BINDING_INCOMPATIBLE",
+            "The native provider binding does not implement its declared v1 callbacks. Repair its installation before execution.",
+        ) from None

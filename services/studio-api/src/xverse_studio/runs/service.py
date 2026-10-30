@@ -108,13 +108,17 @@ class Runs:
                 raise Problem("PROVIDER_DESCRIPTOR_INVALID", "Installed provider identities must be unique and match their registration.")
 
     def provider_descriptors(self):
-        from xverse_studio.providers.descriptors import admit_descriptor, unavailable_descriptor
+        from xverse_studio.providers.descriptors import admit_descriptor, unavailable_descriptor, validate_installed_binding, UnavailableProvider
         result = descriptors()
         for provider_id, provider in self.installed_providers.items():
+            if type(provider) is UnavailableProvider:
+                result.append(provider.descriptor())
+                continue
             try:
                 descriptor = admit_descriptor(provider.descriptor())
                 if descriptor["providerId"] != provider_id:
                     raise Problem("PROVIDER_DESCRIPTOR_INVALID", "The provider identity differs from its native registration.")
+                validate_installed_binding(provider, descriptor)
             except Problem as error:
                 descriptor = unavailable_descriptor(provider_id, error.code)
             except Exception:
@@ -995,6 +999,31 @@ class Runs:
             op["status"] = "unknown"
             self.store.put("operation", oid, op)
 
+    def _require_active_provider(self, run, db=None):
+        """Fresh callback compatibility, separate from original cleanup authority."""
+        import platform
+        try:
+            snapshot = self.store.get("snapshot", run["snapshotId"], db)
+            if not isinstance(snapshot, dict):
+                raise ValueError()
+            self.verify_snapshot(snapshot)
+            if any(snapshot.get(key) != run.get(key) for key in (
+                    "snapshotId", "projectId", "revision", "providerId", "planDigest", "semanticDigest")):
+                raise ValueError()
+        except Problem as error:
+            if error.code != "NOT_FOUND":
+                raise
+            raise Problem("SNAPSHOT_INTEGRITY", "The original frozen input identity cannot be verified.") from None
+        except (KeyError, ValueError, TypeError, AttributeError, RecursionError):
+            raise Problem("SNAPSHOT_INTEGRITY", "The original frozen input identity cannot be verified.") from None
+        current = next((value for value in self.provider_descriptors() if value["providerId"] == run["providerId"]), None)
+        if (current != snapshot.get("providerIdentity") or not current
+                or current.get("available") is not True or current.get("hostCompatible") is not True
+                or platform.system() not in current.get("supportedHostOS", [])
+                or platform.machine() not in current.get("architectures", [])):
+            raise Problem("PROVIDER_ADMISSION_CHANGED",
+                "Provider admission changed. Stop or Cancel the owned run, then verify the installation and preflight again.", 409)
+
     def command(self, rid, principal, key, payload):
         # Reconciliation precedes state/authority enforcement; retries still resolve before a new mutation.
         self.read(rid)
@@ -1023,6 +1052,8 @@ class Runs:
                     "The current owned state does not permit this command.",
                     409,
                 )
+            if payload["kind"] not in ("stop", "cancel") and run["providerId"] in self.installed_providers:
+                self._require_active_provider(run, db)
             if payload["kind"] == "set_parameter":
                 try:
                     live_change(payload.get("parameters"), run.get("liveInputs"), run.get("liveValues"), run.get("liveMutationCount"))
@@ -1076,6 +1107,16 @@ class Runs:
                     and self.store.get("run", rid).get("pendingCommandId")
                     == op["operationId"]
                 ):
+                    current = self.store.get("run", rid)
+                    if payload["kind"] not in ("stop", "cancel") and current["providerId"] in self.installed_providers:
+                        try:
+                            self._require_active_provider(current)
+                        except Problem as error:
+                            op.update(status="rejected", code=error.code)
+                            self.store.put("operation", op["operationId"], op)
+                            current.pop("pendingCommandId", None)
+                            self.store.put("run", rid, current)
+                            return result
                     atomic(root / "command.json", canonical(cmd).encode())
                     op["status"] = "delegated"
                     self.store.put("operation", op["operationId"], op)
@@ -1089,6 +1130,7 @@ class Runs:
                 raise Problem("CAPABILITY_UNSUPPORTED", "This run has no admitted browser input surface.")
             if run["state"] != "running":
                 raise Problem("STATE_CONFLICT", "Browser input requires the observed running state.", 409)
+            self._require_active_provider(run)
             return provider.input_request(self.directory(rid), action, payload, session)
 
     def shutdown(self):

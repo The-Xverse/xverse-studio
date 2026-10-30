@@ -126,16 +126,29 @@ def _owned_main(args, root, parser):
     if args.autoverse_root is not None:
         from xverse_studio.providers.autoverse.adapter import AutoverseProvider, PROVIDER_ID
         from xverse_studio.providers.autoverse.installation import enroll, InstallationError
+        from xverse_studio.providers.descriptors import UnavailableProvider
+        installed = {}
+        prerequisite = None
         try:
-            installed = {PROVIDER_ID: AutoverseProvider(enroll(args.autoverse_root))}
-            if args.autoverse_native_bridge is not None:
-                from xverse_studio.providers.autoverse.platform_adapter import PlatformProvider
-                from xverse_studio.providers.autoverse.platform_installation import enroll_platform
-                platform_installation = enroll_platform(args.autoverse_root, args.autoverse_native_bridge,
-                    root / "platform-runtime" / "autoverse")
-                installed["autoverse.platform"] = PlatformProvider(platform_installation)
-        except (InstallationError, OSError) as error:
-            parser.error(str(error) if isinstance(error, InstallationError) else "AUTOVERSE_ENROLLMENT_FAILED")
+            installed[PROVIDER_ID] = AutoverseProvider(enroll(args.autoverse_root))
+        except Exception as error:
+            # Enrollment is read-only. A requested integration failure must not
+            # disable native authoring or expose private probe/path diagnostics.
+            prerequisite = str(error) if isinstance(error, InstallationError) else "AUTOVERSE_ENROLLMENT_FAILED"
+            installed[PROVIDER_ID] = UnavailableProvider(PROVIDER_ID, prerequisite)
+        if args.autoverse_native_bridge is not None:
+            try:
+                if prerequisite:
+                    installed["autoverse.platform"] = UnavailableProvider("autoverse.platform", prerequisite)
+                else:
+                    from xverse_studio.providers.autoverse.platform_adapter import PlatformProvider
+                    from xverse_studio.providers.autoverse.platform_installation import enroll_platform
+                    platform_installation = enroll_platform(args.autoverse_root, args.autoverse_native_bridge,
+                        root / "platform-runtime" / "autoverse")
+                    installed["autoverse.platform"] = PlatformProvider(platform_installation)
+            except Exception as error:
+                code = str(error) if isinstance(error, InstallationError) else "AUTOVERSE_PLATFORM_ENROLLMENT_FAILED"
+                installed["autoverse.platform"] = UnavailableProvider("autoverse.platform", code)
     app = create_app(
         root,
         allowed_hosts=[f"127.0.0.1:{args.port}", f"localhost:{args.port}"],

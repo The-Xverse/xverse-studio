@@ -1,0 +1,62 @@
+{
+  "testTarget": "actual enrolled Autoverse classic and platform adapters; native authoring browser",
+  "api": {
+    "tests": 135,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "seconds": 79.374,
+    "rawXmlSha256": "7c03fe83393fa489949345f262b0c6886e77517add87f853b086643d24f2a3c1"
+  },
+  "browser": [
+    {
+      "fault": "valid",
+      "stats": {
+        "startTime": "2026-10-30T08:36:08.793Z",
+        "duration": 9060.103,
+        "expected": 2,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "rawReportSha256": "a1b47321c11d7d16ecf2373d653fec8ae5ba9202764c7c1303146e91047cb7e8"
+    },
+    {
+      "fault": "invalid",
+      "stats": {
+        "startTime": "2026-10-30T08:36:20.730Z",
+        "duration": 8029.82,
+        "expected": 2,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "rawReportSha256": "1eb6ab755641087535fcf81acbb2d0e410417bba1178de81ad6c407095de923b"
+    }
+  ],
+  "sourceInputs": 428,
+  "uiAssets": 6,
+  "allCapturedInputsUnchanged": true,
+  "tools": {
+    "python": "3.13.13",
+    "node": "24.22.1",
+    "playwright": "1.64.1"
+  },
+  "commands": [
+    "STUDIO_AUTOVERSE_TEST_INSTALLATION=<private-receipt> PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 .venv/bin/python -I -m pytest -q tests/live/autoverse_provider_admission.py tests/live/autoverse_launcher_availability.py --basetemp=<owned-data> --junitxml=<private-report>",
+    "<native-python> -I tests/live/autoverse_admission_host.py --receipt <private-receipt> --data-dir <fresh-browser-tests-root> --static-dir <tested-ui> --port <loopback-port> --fault valid|invalid",
+    "<node> <playwright-cli> test --config tests/live/autoverse-admission.config.ts"
+  ],
+  "staticChecks": [
+    "Ruff affected new modules and tests",
+    "F821 changed existing modules",
+    "architecture boundaries",
+    "spec package consistency",
+    "generated contracts (no schema drift)",
+    "git diff --check"
+  ],
+  "warnings": [
+    "Existing Starlette TestClient httpx deprecation warning; no dependency change."
+  ],
+  "installedCompleteDemo": "pending; intermediate proof is separately labelled"
+}

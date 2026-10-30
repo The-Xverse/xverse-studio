@@ -12,18 +12,37 @@ def main():
     parser.add_argument("--data-dir", type=Path, required=True)
     parser.add_argument("--static-dir", type=Path, required=True)
     parser.add_argument("--port", type=int, required=True)
-    parser.add_argument("--fault", choices=["valid", "invalid"], required=True)
+    parser.add_argument(
+        "--fault", choices=["valid", "invalid", "mutable"], required=True
+    )
     args = parser.parse_args()
     if not args.data_dir.parent.name == "browser-tests":
         parser.error("A dedicated Studio browser-tests root is required.")
     enrolled = json.loads(args.receipt.read_bytes())["classic"]
-    if args.fault == "invalid":
+    if args.fault in ("invalid", "mutable"):
         from xverse_studio.providers.autoverse.adapter import AutoverseProvider
 
         describe = AutoverseProvider.descriptor
 
         def invalid(provider):
-            return {**describe(provider), "implementationDigest": "sha256:invalid"}
+            fault = "invalid"
+            if args.fault == "mutable":
+                state = args.data_dir / "descriptor-fault.txt"
+                fault = state.read_text() if state.exists() else "valid"
+            value = describe(provider)
+            if fault == "valid":
+                return value
+            if fault == "invalid":
+                return {**value, "implementationDigest": "sha256:invalid"}
+            if fault == "changed":
+                return {**value, "implementationDigest": "sha256:" + "0" * 64}
+            if fault == "unavailable":
+                return {**value, "available": False}
+            if fault == "host":
+                return {**value, "supportedHostOS": ["unavailable-host"]}
+            if fault == "broken":
+                raise RuntimeError("owned-private-marker: descriptor read failure")
+            raise ValueError("Unknown controlled native descriptor fault")
 
         AutoverseProvider.descriptor = invalid
     sys.argv = [

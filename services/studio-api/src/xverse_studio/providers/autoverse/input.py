@@ -9,7 +9,11 @@ from .controls import ControlRejected, driver_frame
 
 
 def input_request(root, action, payload, session):
-    if not isinstance(payload, dict) or len(canonical(payload)) > 2048:
+    try:
+        encoded = canonical(payload).encode("utf-8")
+    except (TypeError, ValueError, RecursionError, OverflowError):
+        raise Problem("CONTROL_REQUEST_INVALID", "Use finite UTF-8 values in the declared input contract.") from None
+    if not isinstance(payload, dict) or len(encoded) > 2048:
         raise Problem("CONTROL_REQUEST_INVALID", "Use the declared bounded input contract.")
     owner_path = root / "input-owner.json"
     owner = json.loads(owner_path.read_text()) if owner_path.exists() else {"generation": 0, "expires": 0, "globalSequence": 0}
