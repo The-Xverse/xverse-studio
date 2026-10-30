@@ -1,3 +1,27 @@
+# Active provider controls closure — 2026-10-30
+
+**57 completed /33 in progress /10 blocked; zero accepted milestones.** T004
+closes after its full API/capability/ownership/host-availability review. Active
+controls verify frozen inputs and fresh provider admission before effects;
+original Stop/Cancel remains available. Optional enrollment failure leaves core
+authoring usable and reports the affected integration as unavailable.
+
+Current confirmation targets Autoverse, as requested:135 API/native CLI and4 native
+browser checks pass on428 unchanged inputs and6 UI assets. Clean candidate9cb445c
+package165 matches all source/archive/extracted/UI hashes and canonical SDK12615d402.
+Its complete installed classic demo passes real publication, incompatible-input
+and corrupt-snapshot refusal, mailbox invariance, owned Stop under invalid facts
+and identical terminal receipt retry. All16 original processes are absent;3 exact
+container/start identities are stopped;21 original platform files remain intact.
+The existing operator has not been restarted. Original failed observations remain.
+
+The full original plan stays active. T010/T011/T014, T002 remote provisioning and
+later runtime/lab/scenario/acceptance work remain. Windows is outside scope under
+ADR-0036. See [full clause review](../../evidence/studio/M0-active-provider-controls/review.md)
+and [installed Autoverse proof](../../evidence/studio/M0-active-provider-controls/package-binding.json).
+
+## Previous admission update
+
 # Autoverse provider admission update — 2026-10-30
 
 **56 completed /34 in progress /10 blocked; zero accepted milestones.** T004

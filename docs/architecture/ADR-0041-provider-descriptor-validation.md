@@ -1,7 +1,7 @@
 # ADR-0041: Bounded strict installed-provider descriptor validation
 
-Status: new-work admission implemented and verified against enrolled/installed
-Autoverse; T004's remaining active-control review stays open. No companion/runtime API is added.
+Status: implemented and verified against enrolled and installed Autoverse,
+including active controls and native enrollment failure. No companion/runtime API is added.
 
 The existing descriptor gate accepts malformed implementation identities and field
 types and raises TypeError for a null capability list. Admission must verify the
@@ -37,7 +37,7 @@ refusal without provider operations. Actual complete-demo operation is separate
 positive evidence. Preserve original operator sessions, claims and Argus bytes.
 This repair alone does not establish all T004 clauses or milestone acceptance.
 
-## Active-control follow-up under implementation
+## Active-control compatibility and original cleanup authority
 
 An active installed-provider input callback must use the exact verified frozen
 provider identity, current valid description, availability and host compatibility.

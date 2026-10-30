@@ -31,8 +31,22 @@ client wall time, not command application or vehicle latency. Sampled telemetry
 does not establish every-message X-COM capture or physical-clock synchronization.
 
 Final source-bound confirmation passes135 API/native CLI and4 browser cases on428
-unchanged inputs and6 UI assets. Clean installed complete-demo verification remains
-required before component closure. T004 remains in progress at this checkpoint;
-task counts stay56/34/10 with zero accepted milestones. T002 remote provisioning,
+unchanged inputs and6 UI assets. Clean candidate9cb445c5aa9c61e0fdc251b2dad198d86fd4ef76
+package165 matches159 committed payloads,6 tested UI assets and all428 source
+inputs. Prepared-cache offline provisioning retains canonical SDK12615d402.
+Its installed native backend runs the complete classic demo and passes all15
+incompatible-input refusals,4 nonfinite refusals, corrupt-snapshot refusal and
+exact mailbox invariance. Native publication is observed; original owned Stop
+under invalid admission and same-key terminal retry both pass. All16 original
+PID/birth instances are absent and3 exact container/start identities are stopped.
+The original native root lock is released and21 original platform files are intact.
+See `package-binding.json` for exact run, snapshot, digests and outcomes.
+
+The server exits-15 after explicit SIGTERM to its original handle: pinned Uvicorn
+re-raises the captured signal after graceful shutdown. This observed outcome is
+retained, not changed to an invented exit0 or used to repeat the live test.
+
+The full original T004 clauses above now have component evidence; T004 closes.
+Task counts become57/33/10 with zero accepted milestones. T002 remote provisioning,
 full M0 acceptance, physical hardware, another industry and human-study gates retain
 their separate requirements. Windows remains outside scope under ADR-0036.

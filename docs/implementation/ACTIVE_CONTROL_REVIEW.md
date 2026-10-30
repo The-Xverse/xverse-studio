@@ -46,3 +46,13 @@ browser checks against the actual enrolled Autoverse target. All428 captured inp
 and6 tested UI assets remain unchanged. Clean installed complete-demo verification
 is still pending; the intermediate live run is not substituted for that candidate.
 See `evidence/studio/M0-active-provider-controls/` for the phase distinctions.
+
+The clean candidate9cb445c5aa9c61e0fdc251b2dad198d86fd4ef76 package165 now
+passes the complete installed native demo control matrix. All428 source inputs,
+159 committed payloads,6 UI assets and canonical SDK12615d402 match. Native
+publication, all refusals, mailbox invariance, original Stop under invalid facts
+and identical terminal receipt pass. All16 original processes are absent;3 exact
+container/start identities are stopped; the root lock releases and21 original
+platform files are unchanged. The final whole-clause review closes T004 with
+paired task/trace updates:57/33/10, zero accepted milestones. All remaining original
+tasks and independent acceptance gates remain; Autoverse is the current test target.
