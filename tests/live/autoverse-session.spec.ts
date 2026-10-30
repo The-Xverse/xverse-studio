@@ -160,7 +160,7 @@ test("actual Autoverse browser receipts, delivery ordering and retained recovery
   });
   await page.getByRole("button", { name: "Preflight & run", exact: true }).click();
   await expect(page.getByLabel("Execution provider", { exact: true })).toHaveValue("autoverse.demo");
-  await page.getByRole("button", { name: "Start frozen snapshot", exact: true }).click();
+  await page.getByRole("button", { name: "Start frozen snapshot", exact: true }).dblclick();
   await expect(page.getByText("REQUEST_UNAVAILABLE")).toBeVisible();
   await page.reload();
   await expect(page.locator("[data-pending-start]")).toHaveAttribute("data-pending-start", "unacknowledged");
@@ -261,9 +261,9 @@ test("actual Autoverse browser receipts, delivery ordering and retained recovery
     }, { route });
     progress("waiting-real-replay-boundary", { acknowledged: cursor.q, requiredRecords: Number(cursor.q) + 1001, published });
     await expect.poll(async () => {
-      const run = await reopened.request.get(route).then(r => r.json());
+      const run = await reopened.request.get(route, { maxRetries: 2 }).then(r => r.json());
       expect(run.state).toBe("running");
-      const h = await reopened.request.get(`${route}/history?limit=1`).then(r => r.json());
+      const h = await reopened.request.get(`${route}/history?limit=1`, { maxRetries: 2 }).then(r => r.json());
       return h.counts.totalRecords;
     }, { timeout: 1100000, intervals: [5000] }).toBeGreaterThan(Number(cursor.q) + 1000);
     await checkpoint("expired-cursor-original-worker");
