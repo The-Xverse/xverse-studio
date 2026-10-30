@@ -28,6 +28,7 @@ from .worker import Cancelled, Demo
 
 class PlatformDemo(Demo):
     provider_id = "autoverse.platform"
+    provider_version = "0.1.0"
 
     def __init__(self, root, *, owner_task_id=None):
         self.owner_task_id = owner_task_id

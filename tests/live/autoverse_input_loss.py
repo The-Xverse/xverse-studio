@@ -1,6 +1,5 @@
 """Versioned positive/negative input-loss intent on actual enrolled Autoverse."""
 
-
 import pytest
 from ruamel.yaml import YAML
 
@@ -10,39 +9,11 @@ from autoverse_provider_admission import application, authenticated, project
 from xverse_studio.blueprints.autoverse import documents, NAMESPACE
 from xverse_studio.xdl.examples import dump_yaml
 
-ACTIVATION = "urn:xverse:studio:autoverse:input-loss:1.0:activation"
-RECOVERY = "urn:xverse:studio:autoverse:input-loss:1.0:recovery"
+from autoverse_input_loss_sources import fault
+
 PROFILE = "io.xverse.experiment"
 SAFE = YAML(typ="safe")
 target = enrollment.target
-
-
-def fault(scenario, identifier="input-loss", at=5, duration=3, unit="s"):
-    target = {**scenario["spec"]["systemRef"], "element": "driver"}
-    owner = {
-        "apiVersion": scenario["apiVersion"],
-        "kind": "Scenario",
-        **{k: scenario["metadata"][k] for k in ["namespace", "name"]},
-        "element": identifier,
-    }
-    return {
-        "id": identifier,
-        "targetRef": target,
-        "faultKind": "driver-input-loss",
-        "activation": ACTIVATION,
-        "recovery": RECOVERY,
-        "maturity": "prototype",
-        "extensions": {
-            PROFILE: {
-                "schemaVersion": "0.1",
-                "kind": "fault-intent",
-                "target": owner,
-                "trigger": {"kind": "time", "at": at, "unit": unit},
-                "duration": {"value": duration, "unit": unit},
-                "timeDomainId": "host-runtime",
-            }
-        },
-    }
 
 
 @pytest.fixture

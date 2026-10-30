@@ -15,6 +15,8 @@ def platform_configuration(documents, compiled):
 
 
 class PlatformProvider(AutoverseProvider):
+    provider_version = "0.1.0"
+    input_loss_schedules = False
     worker_module = "xverse_studio.providers.autoverse.maestro_worker"
     configuration = staticmethod(platform_configuration)
     shutdown_timeout_seconds = 75

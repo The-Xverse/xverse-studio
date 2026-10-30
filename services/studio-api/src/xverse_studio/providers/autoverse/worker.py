@@ -11,7 +11,7 @@ import sys
 import time
 import psutil
 from xverse_studio.storage.core import atomic, canonical, digest
-from .adapter import configuration
+from .adapter import configuration, PROVIDER_VERSION
 from .installation import container_fact, inspect, verify, InstallationError
 
 MAX_LOG_BYTES = 2 * 1024 * 1024
@@ -27,6 +27,7 @@ class JournalOpenFailed(InstallationError):
 
 class Demo:
     provider_id = "autoverse.demo"
+    provider_version = PROVIDER_VERSION
     def __init__(self, root):
         self.root = root
         self.request = json.loads((root / "request.json").read_text())
@@ -48,6 +49,7 @@ class Demo:
         self.active_phase = None
         self.phase_resources = {}
         self.lock = None
+        self.input_loss = None
         try:
             self.journal = (root / "evidence.jsonl").open("xb", buffering=0)
         except OSError:
@@ -66,12 +68,12 @@ class Demo:
         atomic(self.root / "state.json", canonical(self.state).encode())
         self.last_save = time.monotonic()
 
-    def emit(self, kind, payload):
+    def emit(self, kind, payload, source_time=None, element_refs=None):
         self.count += 1
         body = {"schemaVersion": "1.0", "eventId": f'{self.request["runId"]}:{self.count}',
                 "runId": self.request["runId"], "snapshotId": self.snapshot["snapshotId"], "sequence": str(self.count),
-                "type": kind, "recordedAt": time.time(), "sourceTime": None,
-                "source": {"providerId": self.provider_id, "version": "0.1.0"}, "elementRefs": [],
+                "type": kind, "recordedAt": time.time(), "sourceTime": source_time,
+                "source": {"providerId": self.provider_id, "version": self.provider_version}, "elementRefs": element_refs or [],
                 "evidenceClass": "observed", "payload": payload, "evidenceRefs": [self.request["runId"] + ":provider-journal"], "previousDigest": self.previous}
         self.previous = hashlib.sha256(canonical(body).encode()).hexdigest()
         line = (canonical({**body, "digest": self.previous}) + "\n").encode()
@@ -107,6 +109,8 @@ class Demo:
     def tick(self, *, cancellable=True):
         self.check_phase_deadline()
         self.check_command()
+        if self.input_loss is not None and not self.stop_requested:
+            self.input_loss.advance(time.monotonic_ns())
         for key, _ in self.selector.select(0.03):
             role = key.data
             data = os.read(key.fileobj.fileno(), 16384)
@@ -128,8 +132,12 @@ class Demo:
                         self.bridge_ready = True
                     elif value["type"] == "telemetry":
                         self.state["inputTelemetry"] = {**value.get("data", {}), "driverLeaseActive": value.get("driverLeaseActive", False), "lastPublishedSequence": self.state["inputTelemetry"].get("lastPublishedSequence", 0)}
+                        if self.input_loss is not None and not self.stop_requested:
+                            self.input_loss.observe(value.get("driverLeaseActive"), value.get("reportedAtMonotonic"), time.monotonic_ns())
                     elif value["type"] == "input_accepted":
                         self.state["inputTelemetry"]["lastPublishedSequence"] = int(value["id"][2:])
+                        if self.input_loss is not None:
+                            self.input_loss.acknowledge(int(value["id"][2:]))
                     elif value["type"] == "input_rejected":
                         self.state["inputTelemetry"]["lastRejection"] = value.get("code")
             else:
@@ -147,6 +155,9 @@ class Demo:
                 from .controls import driver_frame
                 frame = driver_frame(packet["frame"])
                 if frame["sequence"] > self.last_input:
+                    if self.input_loss is not None and self.input_loss.suppress(frame["sequence"], int(packet["issuedAt"] * 1_000_000_000), time.monotonic_ns()):
+                        self.last_input, self.input_generation = frame["sequence"], packet["generation"]
+                        return  # Consumed, never replayed after the interval.
                     payload = (canonical({"type": "drive", "id": "i-" + str(frame["sequence"]), "frame": frame, "issuedAt": packet["issuedAt"]}) + "\n").encode()
                     try:
                         written = os.write(self.processes["driver"]["process"].stdin.fileno(), payload)
@@ -370,6 +381,10 @@ class Demo:
         self.state.update(effectivePlanDigest=compiled["planDigest"], effectiveSemanticDigest=compiled["semanticDigest"])
         self.emit("run.state_changed", {"state": "preparing", "stateVersion": 1, "installationDigest": self.installation["identityDigest"]})
 
+    def fault_event(self, kind, payload, source_time, target):
+        ref = f"xdl://{target['namespace']}/{target['kind'].lower()}/{target['name']}#{target['element']}"
+        self.emit(kind, payload, source_time, [ref])
+
     def run(self):
         compiled, actual = self.validate_requested_inputs()
         self.claim_installation(compiled)
@@ -389,6 +404,9 @@ class Demo:
         if actual["inputSurface"] == "native-pygame":
             self.start_manual_window()
         self.state.update(state="running", stateVersion=2, startedAt=time.time())
+        if actual.get("inputLoss"):
+            from .input_loss import InputLoss
+            self.input_loss = InputLoss(actual["inputLoss"], time.monotonic_ns(), self.fault_event)
         self.state["runtimeStatus"]["phase"] = "running"
         self.state["runtimeStatus"]["components"].update(router="running", driver="transport_ready", vehicle="speed_telemetry_observed", vcu="interface_observed", android="booted_apk_started")
         self.emit("run.state_changed", {"state": "running", "stateVersion": 2, "evidenceScope": "external_demo", "sourceClockMapping": "unavailable"})
@@ -522,6 +540,11 @@ def finish(demo, failed):
             io_failed = True
     demo.state.update(state="stopping", stateVersion=demo.state["stateVersion"] + 1)
     save()
+    try:
+        if demo.input_loss is not None:
+            demo.input_loss.close(time.monotonic_ns())
+    except (OSError, InstallationError):
+        io_failed = True  # Evidence failure must not skip resource cleanup.
     try:
         demo.cleanup()
     except Exception:

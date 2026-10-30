@@ -91,7 +91,7 @@ def run(endpoint, duration, observe_only=False):
                 next_publish = now + .05
             if now >= next_report:
                 emit({"type": "telemetry", "data": telemetry.snapshot(now),
-                      "driverLeaseActive": lease.requested(now)["active"],
+                      "driverLeaseActive": lease.requested(now)["active"], "reportedAtMonotonic": now,
                       "droppedTelemetryReports": dropped})
                 next_report = now + .2
             if len(pending) >= MAX_OUTPUT_BYTES - CONTROL_RESERVE_BYTES:

@@ -9,15 +9,16 @@ from xverse_studio.storage.core import digest
 from .installation import InstallationError, verify
 
 PROVIDER_ID = "autoverse.demo"
+PROVIDER_VERSION = "0.2.0"
 EXTERNAL_CONTRACT = {"version": "1.0", "kind": "communication", "providerId": PROVIDER_ID,
                      "contractRef": CONTRACT_REF, "feedback": "externally-managed-asynchronous-communication"}
 
 
 def configuration(documents, compiled):
-    return configuration_for(documents, compiled, resources, CONTRACT_REF)
+    return configuration_for(documents, compiled, resources, CONTRACT_REF, allow_input_loss=True)
 
 
-def configuration_for(documents, compiled, resource_factory, contract_ref):
+def configuration_for(documents, compiled, resource_factory, contract_ref, *, allow_input_loss=False):
     if not compiled.get("valid"):
         return None
     try:
@@ -32,6 +33,14 @@ def configuration_for(documents, compiled, resource_factory, contract_ref):
         if type(duration) is not int or not 30 <= duration <= 1800:
             return None
         expected["scenario.xdl.yaml"]["extensions"][NAMESPACE]["durationSeconds"] = duration
+        loss = None
+        faults = actual["scenario.xdl.yaml"]["spec"].get("faults")
+        if faults:
+            if not allow_input_loss:
+                return None
+            from .input_loss import compile_input_loss
+            loss = compile_input_loss(actual["scenario.xdl.yaml"], compiled, duration, input_surface)
+            expected["scenario.xdl.yaml"]["spec"]["faults"] = deepcopy(faults)
         # Presentation/provenance text is inert. Every executable field and stable
         # metadata identity is compared, including unknown extension payloads.
         for name in actual:
@@ -43,7 +52,7 @@ def configuration_for(documents, compiled, resource_factory, contract_ref):
                 return None
         return {"contractRef": contract_ref, "durationSeconds": duration, "physicalEffects": False, "inputSurface": input_surface,
                 "simulatorAdvancement": "public-vehicle-cli-synchronous", "fixedDeltaSeconds": 0.05,
-                "sourceClockMapping": "unavailable", "randomness": "external_uncontrolled_no_applied_seed"}
+                "sourceClockMapping": "unavailable", "randomness": "external_uncontrolled_no_applied_seed", **({"inputLoss": loss} if loss else {})}
     except (ValueError, KeyError, TypeError):
         return None
 
@@ -51,6 +60,8 @@ def configuration_for(documents, compiled, resource_factory, contract_ref):
 class AutoverseProvider:
     worker_module = "xverse_studio.providers.autoverse.worker"
     controls = ["stop", "cancel"]
+    provider_version = PROVIDER_VERSION
+    input_loss_schedules = True
     configuration = staticmethod(configuration)
 
     def __init__(self, installation):
@@ -58,7 +69,9 @@ class AutoverseProvider:
 
     def descriptor(self):
         implementation = digest(b"".join(p.read_bytes() for p in sorted(Path(__file__).parent.glob("*.py"))))
-        return {"providerId": PROVIDER_ID, "providerVersion": "0.1.0", "contractVersion": "1.0",
+        from .input_loss import DESCRIPTOR
+        return {"providerId": PROVIDER_ID, "providerVersion": self.provider_version,
+                **({"scenarioContracts": deepcopy(DESCRIPTOR)} if self.input_loss_schedules else {}), "contractVersion": "1.0",
                 "name": "Autoverse complete demo", "maturity": "prototype", "available": True,
                 "hostCompatible": platform.system() == "Linux", "supportedHostOS": ["Linux"], "architectures": ["x86_64"],
                 "evidenceScope": "external_demo", "implementationDigest": implementation,
