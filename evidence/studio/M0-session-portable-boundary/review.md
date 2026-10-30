@@ -24,10 +24,21 @@ Final317 API/native CLI and8 native browser cases pass on435 unchanged inputs an
 source after rejected credentials, redacted schema locations, HttpOnly/Strict
 cookies and unauthorized mutation refusal. No runtime is claimed from authoring.
 
-Clean installed complete-demo verification is pending. The live driver now checks
-12 invalid-caller input/Stop attempts against an actually running Autoverse demo,
-requiring refusal with unchanged mailbox/command/lifecycle before ordinary owned
-Stop. T010 stays open for bounded exchange/imported-evidence/metadata reads and
+Clean candidate90d6a452ed84cd93c9013ebb502a80e1bef0e94a package167 verifies161
+committed payloads,6 tested UI assets,all435 source inputs and canonical SDK12615d402
+through prepared-cache offline provisioning. Its actual complete native demo
+passes12 invalid-caller input/Stop attempts while running, with no input mailbox,
+command, lifecycle or denied-idempotency effects. It then passes all prior active
+provider/snapshot/finite-input refusals and native publication, original owned Stop
+under invalid admission and identical same-key terminal receipt. All16 original
+process instances are absent and3 exact container/configuration/start identities
+are stopped; the native root lock releases. Actual canonical cleanup facts remain
+valid,21 original platform files and all435 inputs/6UI remain unchanged. Original
+native-handle SIGTERM exit-15 reflects pinned Uvicorn signal replay after shutdown;
+the live driver exits0. See `nominal.json` and `package-binding.json`.
+
+This is primary-agent component review, not independent milestone acceptance.
+T010 stays open for bounded exchange/imported-evidence/metadata reads and
 the full security clause review. The original full plan, task IDs/dependencies and
 milestone gates remain; counts57/33/10 and zero accepted milestones. Windows is
 outside scope; prior failed runs and platform/Argus evidence remain unchanged.

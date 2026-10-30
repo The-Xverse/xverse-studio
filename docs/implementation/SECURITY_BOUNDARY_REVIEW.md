@@ -47,12 +47,27 @@ T010 or the full lifecycle matrix. Continue the original clauses below.
 
 The remaining review covers every original T010 clause:
 
+Session/content follow-up under ADR-0044 now passes317 enrolled Autoverse API/native
+CLI and8 native browser checks on435 unchanged inputs/6UI. It rejects malformed
+CSRF, corrupt/non-finite native sessions, non-finite opaque JSON and tested inline
+credential assignments/escaped values, preserving ordinary data/external handles.
+Diagnostic locations are bounded/redacted and early refusals retain security
+headers. The separately reproduced gridToken false positive is repaired, with
+original outcomes retained. Clean candidate90d6a45 package167 runs the complete
+actual demo and refuses12 invalid-caller input/Stop requests without effects,
+before successful owned cleanup and same-key retry. All16 original processes/3
+exact containers are stopped and21 original platform files unchanged. See
+`evidence/studio/M0-session-portable-boundary/`. This advances the first/fourth
+clauses; full T010 closure still requires the remaining access/import/metadata/
+execution review. The source review specifically retains ordinary exchange and
+imported-evidence reads that reopen checked filenames as the next concrete area.
+
 | Clause | Current review disposition |
 | --- | --- |
-| Local binding, sessions and origins | Native launcher binds loopback; API has exact Host/Origin, one-use bootstrap, session expiry and mutation CSRF checks. Fresh target negatives must cover malformed and expired credentials, not merely reuse historical smoke checks. |
+| Local binding, sessions and origins | Native launcher binds loopback. ADR-0044 confirms exact Host/Origin, one-use/expired bootstrap, session integrity/expiry, CSRF, safe early headers and live running-control refusal against Autoverse. No wider remote/multi-user authority is introduced. |
 | Bounded project-file access on native Linux | Read acquisition is anchored. ADR-0042 repairs the reproduced revision-write/rollback gap. Continue auditing exchange/download, imported evidence and metadata access rather than treating one repaired path as the entire clause. |
 | Inert imports | T009 hostile import evidence exists. Revision allocation now uses the repaired native writer. Confirm original project/profile/script/unknown payload refusals against Autoverse and preserve all existing projects without dispatch. |
-| Redaction and credential exclusion | Inspect actual portable project/run exports and ordinary diagnostics. Exercise session/bootstrap/authorization material explicitly; private delivery or provider-owned private logs are not ordinary export streams. Do not rewrite immutable Argus or historical source bytes. |
+| Redaction and credential exclusion | ADR-0044 confirms known credential assignments/headers/JSON escapes across actual Autoverse authoring/import/legacy export, safe diagnostic locations and exact external-handle round trips. Finish run-export/read-path review; private delivery/provider-owned private logs remain separate. No immutable Argus/history bytes are rewritten. |
 | Admitted execution and ownership only | T004's installed complete-demo evidence covers new-work/active compatibility, frozen inputs and owned cleanup. Audit other routes and imported metadata for registration/dispatch bypasses; unknown content never grants execution authority. |
 
 These are remaining verification obligations, not newly claimed passes or a new

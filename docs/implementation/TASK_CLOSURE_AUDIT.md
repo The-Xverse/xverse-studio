@@ -1,3 +1,27 @@
+# Session and portable-content boundary update — 2026-10-30
+
+**57 completed /33 in progress /10 blocked; zero accepted milestones.** T010
+now validates native session facts, rejects malformed CSRF/non-finite opaque JSON,
+keeps safe headers on early refusals and bounds/redacts sensitive error locations.
+Known inline authentication material is rejected across source/name/layout/import/
+portable output while ordinary fields and external handles remain exact.
+
+Candidate90d6a45 passes317 actual enrolled Autoverse API/native CLI and8 native
+browser checks on435 unchanged inputs/6UI. Its clean offline package167 matches
+all source/archive/extracted/UI hashes and canonical SDK12615d402. The complete
+installed demo refuses12 invalid-caller input/Stop attempts without effects, then
+completes original owned Stop and same-key retry.16 original processes are absent,
+3 exact containers stopped and21 original platform files unchanged. Original
+failures and the separately repaired interim gridToken false positive remain.
+The original operator has not been restarted.
+
+T010 stays open for bounded exchange/imported-evidence/metadata reads and its full
+security/import/execution review. The full original plan remains active; Windows
+is outside scope with historical results preserved. See [review](../../evidence/studio/M0-session-portable-boundary/review.md)
+and [installed Autoverse proof](../../evidence/studio/M0-session-portable-boundary/package-binding.json).
+
+## Previous container readback update
+
 # Owned container readback update — 2026-10-30
 
 **57 completed /33 in progress /10 blocked; zero accepted milestones.** The

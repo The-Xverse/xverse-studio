@@ -1,6 +1,7 @@
 # ADR-0044: Native session and portable credential boundaries
 
-Status: implemented; final Autoverse browser/installed confirmation in progress.
+Status: implemented;317 target API/native CLI and8 native browser checks pass,
+with complete installed Autoverse confirmation and12 live invalid-caller refusals.
 T010 remains open for its complete security review; no wider authority is granted.
 
 Actual enrolled Autoverse tests reproduce non-ASCII CSRF server errors, acceptance
@@ -49,5 +50,10 @@ running demo controls/Stop. This alone does not close bounded exchange/metadata
 read review, the full T010/lifecycle matrix, or external/human/milestone gates.
 
 Final source confirmation passes317 API/native CLI checks and8 native browser
-checks on435 unchanged inputs plus6 UI assets. Clean installed full-demo
-confirmation remains separate and pending at this source checkpoint.
+checks on435 unchanged inputs plus6 UI assets. Clean candidate90d6a45 package167
+matches161 committed payloads,6 tested UI assets and canonical SDK12615d402. Its
+complete native demo verifies12 invalid-caller input/Stop refusals with no mailbox,
+command, lifecycle or denied-idempotency effects, then completes original owned
+Stop and same-key retry. All16 original processes are absent,3 exact containers
+stopped,root lock released and21 original platform files unchanged. This confirms
+the scoped boundary, not all remaining T010 or milestone requirements.
