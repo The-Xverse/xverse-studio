@@ -370,6 +370,64 @@ def main():
             and third[-1]["payload"]["recoveryObserved"] is False
         )
         assert final["verdict"] is None
+
+        def timeline_rows(version):
+            rows, cursor = [], None
+            for _ in range(300):
+                params = {
+                    "snapshotId": receipt["snapshotId"],
+                    "formatVersion": version,
+                    "limit": 200,
+                }
+                if cursor:
+                    params["cursor"] = cursor
+                page = native.checked(api.get(route + "/timeline", params=params))
+                rows.extend(page["items"])
+                cursor = page["nextCursor"]
+                if cursor is None:
+                    return page, rows
+            raise AssertionError("Bounded timeline did not terminate")
+
+        legacy, legacy_rows = timeline_rows("1.0")
+        assert legacy["intentClockCodec"] is None and all(
+            r["position"]["status"] == "unplaced" for r in legacy_rows
+        )
+        timeline, rows = timeline_rows("1.1")
+        intentions = [r for r in rows if r["kind"] == "intent.fault"]
+        events = [
+            r
+            for r in rows
+            if r["layer"] == "recorded" and r["kind"].startswith("fault.")
+        ]
+        assert (
+            len(intentions) == 3
+            and len(events) == 11
+            and all(r["position"]["status"] == "aligned" for r in intentions + events)
+        )
+        assert all(
+            r["position"]["status"] == "unplaced"
+            for r in rows
+            if r["layer"] == "recorded" and not r["kind"].startswith("fault.")
+        )
+        report["timeline"] = {
+            "version": "1.1",
+            "alignedIntentions": 3,
+            "alignedFaultEvents": 11,
+            "legacyUnplaced": True,
+            "clockInterpretation": timeline["clockInterpretation"],
+        }
+        if args.authoring_browser:
+            report["browserTimeline"] = browser.author(
+                native,
+                host,
+                api,
+                {**p, "_runId": rid, "_snapshotId": receipt["snapshotId"]},
+                args.output,
+                args.node,
+                args.playwright_cli,
+                args.browser_cache,
+                stage="timeline",
+            )
         report.update(
             outcome="passed",
             canonicalIntegrity=integrity,

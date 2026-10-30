@@ -654,7 +654,8 @@ def create_app(
                 "SELECT body FROM records WHERE kind='evaluation' AND json_extract(body, '$.runId')=? "
                 "ORDER BY rowid DESC LIMIT ?", (runId, MAX_EVALUATIONS + 1))]
         return project_timeline(run, snapshot, records, integrity, observed[:MAX_EVALUATIONS], adapter, query,
-                                evaluations_complete=len(observed) <= MAX_EVALUATIONS)
+                                evaluations_complete=len(observed) <= MAX_EVALUATIONS,
+                                provider_clock=getattr(runs.installed_providers.get(run.get("providerId")), "timeline_context", None))
 
     @app.post("/api/v1/runs/{runId}/input/{action}")
     def runtime_input(runId: str, action: str, body: JsonObject, request: Request):

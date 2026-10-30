@@ -8,7 +8,8 @@ import time
 from xverse_studio.storage.core import digest
 
 
-def author(native, host, api, project, output, node, cli, cache):
+def author(native, host, api, project, output, node, cli, cache, *, stage="authoring"):
+    assert stage in {"authoring", "timeline"}
     data = host.data
     (data / "fault-authoring-project.private.json").write_text(json.dumps(project))
     session = {
@@ -26,15 +27,17 @@ def author(native, host, api, project, output, node, cli, cache):
         ]
     }
     private = data / "browser-session.private.json"
-    with private.open("x") as stream:
-        os.chmod(private, 0o600)
-        json.dump(session, stream)
+    if not private.exists():
+        with private.open("x") as stream:
+            os.chmod(private, 0o600)
+            json.dump(session, stream)
     env = dict(
         os.environ,
         STUDIO_BASE_URL=host.url,
+        STUDIO_AUTOVERSE_BROWSER_STAGE=stage,
         STUDIO_BROWSER_DATA=str(data),
-        STUDIO_BROWSER_REPORT=str(output / "authoring-browser.json"),
-        STUDIO_BROWSER_OUTPUT=str(output / "authoring-artifacts"),
+        STUDIO_BROWSER_REPORT=str(output / f"{stage}-browser.json"),
+        STUDIO_BROWSER_OUTPUT=str(output / f"{stage}-artifacts"),
         PLAYWRIGHT_BROWSERS_PATH=str(cache),
     )
     argv = [
@@ -44,10 +47,10 @@ def author(native, host, api, project, output, node, cli, cache):
         "--config",
         "tests/live/autoverse-fault-authoring.config.ts",
     ]
-    (output / "authoring-command.private.json").write_text(
+    (output / f"{stage}-command.private.json").write_text(
         json.dumps({"argv": argv, "dataRoot": str(data)})
     )
-    with (output / "authoring-browser.log").open("x") as log:
+    with (output / f"{stage}-browser.log").open("x") as log:
         child = subprocess.Popen(
             argv,
             cwd=native.ROOT,
@@ -67,7 +70,7 @@ def author(native, host, api, project, output, node, cli, cache):
             assert child.poll() == 0, (
                 "Actual Autoverse browser authoring failed; see retained report."
             )
-            report = json.loads((output / "authoring-browser.json").read_bytes())
+            report = json.loads((output / f"{stage}-browser.json").read_bytes())
             assert report["stats"]["expected"] == 1 and all(
                 report["stats"][k] == 0 for k in ["unexpected", "skipped", "flaky"]
             )

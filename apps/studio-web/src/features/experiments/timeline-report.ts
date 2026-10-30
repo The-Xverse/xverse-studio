@@ -3,6 +3,7 @@ import { text } from "../lab/public-observations";
 import { tick } from "../results/evidenceFilters";
 
 export type TimelineContext = {
+  formatVersion?: "1.0" | "1.1";
   projectId: string;
   runId: string;
   snapshotId: string;
@@ -69,7 +70,7 @@ export function timelineReport(value: Data, context: TimelineContext): Data {
   };
   if (
     !object(value) ||
-    value.timelineVersion !== "1.0" ||
+    value.timelineVersion !== (context.formatVersion || "1.0") ||
     value.readOnly !== true ||
     value.projectId !== context.projectId ||
     value.runId !== context.runId ||
@@ -89,9 +90,8 @@ export function timelineReport(value: Data, context: TimelineContext): Data {
     !(value.clockDomain === null || text(value.clockDomain, 512)) ||
     (context.clock && value.clockDomain !== context.clock) ||
     ![null, "microsecond"].includes(value.tickUnit) ||
-    ![null, "studio.reference.seconds-microseconds.v1"].includes(
-      value.intentClockCodec,
-    ) ||
+    !(value.intentClockCodec === null || value.intentClockCodec === "studio.reference.seconds-microseconds.v1" ||
+      value.timelineVersion === "1.1" && object(value.clockInterpretation) && value.intentClockCodec === value.clockInterpretation.codec) ||
     !text(value.evidenceScope, 128) ||
     !Array.isArray(value.items) ||
     value.items.length > 200 ||
@@ -163,6 +163,14 @@ export function timelineReport(value: Data, context: TimelineContext): Data {
     !strings(value.limitations, 100, 1000)
   )
     fail();
+  if (value.timelineVersion === "1.1" && value.clockInterpretation !== null) {
+    const c = value.clockInterpretation;
+    if (!object(c) || c.contractVersion !== "1.0" || !text(c.codec,128) || !/^[A-Za-z][A-Za-z0-9._/-]{0,127}$/.test(c.codec) ||
+        !text(c.clockDomain,128) || c.tickUnit !== "microsecond" || !text(c.epoch,128) ||
+        c.evidenceScope !== value.evidenceScope || !text(c.sourceProviderId,128) || !text(c.sourceVersion,64) ||
+        !value.clockDomains.some((d: Data) => d.id === c.clockDomain && d.declared) ||
+        c.clockDomain === value.clockDomain && (value.intentClockCodec !== c.codec || value.tickUnit !== c.tickUnit)) fail();
+  }
   const declared = value.assessmentDefinitions;
   if (
     !object(declared) ||
@@ -429,6 +437,7 @@ export function timelineReport(value: Data, context: TimelineContext): Data {
     clockDomain: value.clockDomain,
     tickUnit: value.tickUnit,
     intentClockCodec: value.intentClockCodec,
+    ...(value.timelineVersion === "1.1" ? { clockInterpretation: value.clockInterpretation ? { ...value.clockInterpretation } : null } : {}),
     evidenceScope: value.evidenceScope,
     clockDomains: value.clockDomains.map((c: Data) => ({
       id: c.id,

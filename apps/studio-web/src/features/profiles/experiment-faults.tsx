@@ -59,3 +59,13 @@ export function faultChoices(provider?: Data): Data[] {
   return contract.faults.filter((f: Data) => f && ["kind", "target", "activation", "recovery", "maturity", "inputSurface"].every(k => typeof f[k] === "string" && f[k].length > 0 && f[k].length <= 512))
     .map((f: Data) => ({ ...f, clockDomain: contract.clockDomain }));
 }
+
+/** Original declared coordinates only; this does not admit a runtime codec. */
+export function declaredFaultTiming(scenario: Data, projection: Projection, item: Data) {
+  const declared = projection.resources.some(r => r.kind === "Profile" && r.spec?.extensionNamespace === FAULT_PROFILE && r.metadata?.version === "0.1.0" && r.spec.schemaRef === SCHEMA);
+  const p = item.extensions?.[FAULT_PROFILE];
+  if (!declared || !p || p.schemaVersion !== "0.1" || p.kind !== "fault-intent" || p.trigger?.kind !== "time" ||
+      !isNumber(p.trigger.at) || !isNumber(p.duration?.value) || !units.includes(p.trigger.unit) || !units.includes(p.duration.unit) ||
+      p.target?.kind !== "Scenario" || p.target.namespace !== scenario.metadata.namespace || p.target.name !== scenario.metadata.name || p.target.element !== item.id || typeof p.timeDomainId !== "string") return null;
+  return { at: p.trigger.at, unit: p.trigger.unit, duration: p.duration.value, durationUnit: p.duration.unit, clock: p.timeDomainId };
+}

@@ -1,3 +1,4 @@
+import { declaredFaultTiming } from "../profiles/experiment-faults";
 import { useState } from "react";
 import type { Data } from "../../api/types";
 import type { Projection } from "../model/projection";
@@ -51,6 +52,10 @@ export function DraftScenarioTimeline({
       typeof item.schedule.at === "number" &&
       Number.isFinite(item.schedule.at),
   );
+  const faultPoints = rows.filter(r => r.kind === "fault").flatMap(r => {
+    const timing = declaredFaultTiming(scenario, projection, r.item);
+    return timing && timing.clock === clock && timing.unit === unit ? [{ item: r.item, timing }] : [];
+  });
   const reduced = ["steps", "faults", "observers", "metrics"].some(
     (key) =>
       Array.isArray(scenario.spec[key]) &&
@@ -61,7 +66,7 @@ export function DraftScenarioTimeline({
   );
   const display = (v: unknown) =>
     typeof v === "string" || typeof v === "number" ? String(v) : "Unknown";
-  const at: number[] = steps.map(({ item }) => item.schedule.at),
+  const at: number[] = [...steps.map(({ item }) => item.schedule.at), ...faultPoints.map(p => p.timing.at)],
     low = Math.min(...at),
     high = Math.max(...at),
     span = high - low;
@@ -70,7 +75,7 @@ export function DraftScenarioTimeline({
       rows
         .filter(({ kind }) => kind === "step")
         .map(({ item }) => item.schedule?.unit)
-        .filter((v) => typeof v === "string" && v.length <= 256),
+        .filter((v) => typeof v === "string" && v.length <= 256).concat(rows.filter(r => r.kind === "fault").flatMap(r => { const p = declaredFaultTiming(scenario, projection, r.item); return p ? [p.unit] : []; })),
     ),
   ] as string[];
   return (
@@ -131,13 +136,13 @@ export function DraftScenarioTimeline({
       {at.length > 0 && Number.isFinite(span) && (
         <figure className="timeline-plot">
           <figcaption>
-            Declared step positions · {clock} · {unit}. No conversion or runtime
+            Declared activation positions · {clock} · {unit}. No conversion or runtime
             admission is implied.
           </figcaption>
           <svg
             viewBox="0 0 900 70"
             role="img"
-            aria-label="Authored step markers; edit and exact schedule alternatives in Authored timeline entries table"
+            aria-label="Authored intent markers; edit and exact schedule alternatives in Authored timeline entries table"
           >
             <path d="M 25 25 H 875" className="timeline-axis" />
             {steps.map(({ item }) => (
@@ -157,6 +162,7 @@ export function DraftScenarioTimeline({
                 </title>
               </circle>
             ))}
+            {faultPoints.map(({ item, timing }) => <rect key={"fault:" + item.id} className="timeline-marker intent" x={span === 0 ? 446 : 21 + ((timing.at - low) / span) * 850} y="21" width="8" height="8"><title>{item.id}: activation {timing.at} {timing.unit}; declared intent only</title></rect>)}
             <text x="25" y="60">
               {low}
             </text>
@@ -194,7 +200,10 @@ export function DraftScenarioTimeline({
                       {display(item.schedule?.unit)}
                       <small>{display(item.timeDomainId)}</small>
                     </>
-                  ) : kind === "observer" ? (
+                  ) : kind === "fault" && declaredFaultTiming(scenario, projection, item) ? (() => {
+                    const p = declaredFaultTiming(scenario, projection, item)!;
+                    return <>{p.at} {p.unit}<small>Duration {p.duration} {p.durationUnit} · {p.clock}</small></>;
+                  })() : kind === "observer" ? (
                     display(item.timeDomainId)
                   ) : (
                     "Unplaced"
@@ -204,7 +213,7 @@ export function DraftScenarioTimeline({
                   {textRef(item.targetRef)}
                   <small>
                     {kind === "fault"
-                      ? "Opaque activation/recovery; not an observed event"
+                      ? declaredFaultTiming(scenario, projection, item) ? "Typed profile timing; recovery after declared duration; not an observed event" : "Opaque activation/recovery; not an observed event"
                       : kind === "metric"
                         ? "Unevaluated metric intent"
                         : kind === "observer"

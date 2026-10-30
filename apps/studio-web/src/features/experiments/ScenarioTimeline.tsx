@@ -107,6 +107,7 @@ export function ScenarioTimeline({
       const query = new URLSearchParams({
         snapshotId: run.snapshotId,
         limit: "100",
+        formatVersion: "1.1",
       });
       if (clock) query.set("clockDomain", clock);
       if (target.cursor) query.set("cursor", target.cursor);
@@ -116,6 +117,7 @@ export function ScenarioTimeline({
         }),
         {
           projectId,
+          formatVersion: "1.1",
           runId: run.runId,
           snapshotId: run.snapshotId,
           clock: clock || undefined,
@@ -239,6 +241,7 @@ export function ScenarioTimeline({
               "Frozen Deployment": report.selection.deploymentRef,
               "Source clock": report.clockDomain || "Unknown",
               "Admitted axis unit": report.tickUnit || "Unknown",
+              "Clock epoch": report.clockInterpretation?.epoch || "Unavailable",
               "Intent display codec": report.intentClockCodec || "Unavailable",
               "Evidence scope": report.evidenceScope,
               "Journal integrity": report.recorded.integrity,

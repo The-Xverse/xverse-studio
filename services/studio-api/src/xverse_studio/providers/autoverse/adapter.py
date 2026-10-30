@@ -95,6 +95,10 @@ class AutoverseProvider:
                 "limitations": ["Linux installation only; external simulation time and deterministic replay unavailable.",
                                 "Input acceptance means publication, not vehicle acknowledgement. No native X-COM or physical vehicle."]}
 
+    def timeline_context(self, run, snapshot):
+        from .timeline import context
+        return context(self, run, snapshot)
+
     def readiness(self, documents, compiled, provider_id, provider, active_count):
         config = self.configuration(documents, compiled)
         code = None

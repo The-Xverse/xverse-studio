@@ -5,6 +5,8 @@ from decimal import Decimal, InvalidOperation
 import json
 import math
 import re
+from typing import Literal
+from .provider_clock import inspect_context, recorded_unit
 
 from pydantic import BaseModel, ConfigDict, Field
 from ruamel.yaml import YAML
@@ -28,6 +30,7 @@ CODEC = "studio.reference.seconds-microseconds.v1"
 
 class TimelineQuery(BaseModel):
     model_config = ConfigDict(extra="forbid")
+    formatVersion: Literal["1.0", "1.1"] = "1.0"
     snapshotId: str | None = Field(default=None, min_length=1, max_length=80)
     clockDomain: str | None = Field(default=None, min_length=1, max_length=512)
     cursor: str | None = Field(default=None, min_length=1, max_length=2048)
@@ -149,7 +152,7 @@ def _offset(value, identity):
     return decoded["offset"]
 
 
-def project_timeline(run, snapshot, records, integrity, evaluations, adapter, query, *, evaluations_complete=True):
+def project_timeline(run, snapshot, records, integrity, evaluations, adapter, query, *, evaluations_complete=True, provider_clock=None):
     """Caller supplies the protected snapshot and existing canonical-reader output."""
     if query.snapshotId is not None and query.snapshotId != run["snapshotId"]:
         raise Problem("SNAPSHOT_SELECTION_MISMATCH", "Select this run's exact snapshot.", 409)
@@ -164,7 +167,8 @@ def project_timeline(run, snapshot, records, integrity, evaluations, adapter, qu
     if selected_clock is not None and selected_clock not in clocks:
         raise Problem("CLOCK_SELECTION_UNRESOLVED", "Select a declared or observed clock domain.")
     codec = _seconds_codec(run, snapshot)
-    rows, diagnostics = [], []
+    context, clock_diagnostics = inspect_context(provider_clock, run, snapshot, scenario, declared) if query.formatVersion == "1.1" else (None, [])
+    rows, diagnostics = [], list(clock_diagnostics)
     intent_count = 0
     for collection, kind in [("steps", "step"), ("faults", "fault"), ("observers", "observer"), ("metrics", "metric")]:
         for item in spec.get(collection, []):
@@ -182,6 +186,11 @@ def project_timeline(run, snapshot, records, integrity, evaluations, adapter, qu
             if kind == "fault":
                 row.update(faultKind=public_text(item.get("faultKind")), activation="opaque_declared_intent",
                            recovery="opaque_declared_intent", position=_position(reason="OPAQUE_FAULT_SCHEDULE"))
+                if context:
+                    position = next((p for p in context['faults'] if p['faultId'] == item['id']), None)
+                    if position:
+                        row['position'] = _position(context['clockDomain'], position['activationTick'], context['tickUnit'],
+                            None if selected_clock == context['clockDomain'] else 'CLOCK_NOT_SELECTED', end=position['recoveryTick'])
             if kind == "observer":
                 row.update(clockDomain=item.get("timeDomainId"), unit=public_text(item.get("unitSemantics")), sampling="declared_intent")
             if kind == "metric":
@@ -201,7 +210,7 @@ def project_timeline(run, snapshot, records, integrity, evaluations, adapter, qu
                          "position": _position(reason="CONFIGURATION_HAS_NO_AUTHORED_POSITION")})
     for record in records[:MAX_RECORDS]:
         tick, clock, status = source_time(record)
-        unit = reference_tick_unit(record, scope)
+        unit = reference_tick_unit(record, scope) or recorded_unit(context, record, tick, clock)
         reason = ("EVIDENCE_INTEGRITY_UNPROVEN" if integrity != "valid" else "SOURCE_TIME_UNAVAILABLE" if status != "known" else "CLOCK_NOT_SELECTED" if clock != selected_clock
                   else "TICK_ENCODING_UNADMITTED" if unit is None else None)
         row = {"id": "recorded:" + record["eventId"], "layer": "recorded", "kind": record["type"],
@@ -263,8 +272,9 @@ def project_timeline(run, snapshot, records, integrity, evaluations, adapter, qu
         parse_tick(pair[1]["position"]["tick"]) if pair[1]["position"]["status"] == "aligned" else 0,
         {"intent": 0, "recorded": 1, "evaluation": 2}[pair[1]["layer"]], pair[0]))
     rows = [row for _, row in ordered]
-    identity = digest({"version": "1.0", "runId": run["runId"], "snapshotDigest": snapshot["snapshotDigest"], "clock": selected_clock,
+    identity = digest({"version": query.formatVersion, "runId": run["runId"], "snapshotDigest": snapshot["snapshotDigest"], "clock": selected_clock,
                        "interpretation": {"codec": CODEC if codec else None, "scope": scope, "state": run.get("state"), "collection": run.get("evidence")},
+                       **({"providerClock": context, "clockDiagnostics": clock_diagnostics} if query.formatVersion == "1.1" else {}),
                        "integrity": integrity, "records": len(records), "lastRecordDigest": records[-1].get("digest") if records else None,
                        "declaredJournalDigest": run.get("journalDigest"), "evaluations": [digest(r) for r in evaluations[:MAX_EVALUATIONS]],
                        "definitions": {"status": definition_status, "complete": definitions_complete,
@@ -277,13 +287,14 @@ def project_timeline(run, snapshot, records, integrity, evaluations, adapter, qu
     quality = project_evidence(records, integrity, HistoryQuery(), run["runId"], "history", evidence_scope=scope)
     if len(records) > MAX_RECORDS or intent_count > MAX_INTENTS or not evaluations_complete or len(evaluations) > MAX_EVALUATIONS:
         diagnostics.append({"code": "TIMELINE_INPUT_LIMIT"})
-    return {"timelineVersion": "1.0", "readOnly": True, "runId": run["runId"], "snapshotId": snapshot["snapshotId"],
+    return {"timelineVersion": query.formatVersion,
+            **({"clockInterpretation": {k:v for k,v in context.items() if k not in {"faults", "eventKinds", "eventTickField"}} if context else None} if query.formatVersion == "1.1" else {}), "readOnly": True, "runId": run["runId"], "snapshotId": snapshot["snapshotId"],
             "snapshotDigest": snapshot["snapshotDigest"], "projectId": snapshot["projectId"], "projectRevision": snapshot["revision"],
             "selection": snapshot["selection"], "inputIdentity": identity, "evidenceScope": scope,
             "clockDomain": selected_clock,
-            "tickUnit": "microsecond" if selected_clock == "simulation-time" and (codec or any(
+            "tickUnit": "microsecond" if (context and selected_clock == context['clockDomain']) or selected_clock == "simulation-time" and (codec or any(
                 r["position"]["status"] == "aligned" and r["position"]["tickUnit"] == "microsecond" for r in rows)) else None,
-            "intentClockCodec": CODEC if codec and selected_clock == "simulation-time" else None,
+            "intentClockCodec": context["codec"] if context and selected_clock == context["clockDomain"] else CODEC if codec and selected_clock == "simulation-time" else None,
             "clockDomains": [{"id": c, "declared": c in declared, "observed": c in observed} for c in clocks[:MAX_CLOCKS]],
             "clockDomainsComplete": len(clocks) <= MAX_CLOCKS and len(records) <= MAX_RECORDS and integrity == "valid",
             "items": page, "nextCursor": _cursor(offset + len(page), identity) if offset + len(page) < len(rows) else None,
