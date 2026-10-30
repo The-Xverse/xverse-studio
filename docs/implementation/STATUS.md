@@ -1,3 +1,16 @@
+# GUI-authored fault schedules verified — 2026-10-30
+
+**65 completed / 25 in progress / 10 blocked; zero accepted milestones.**
+T084 now has guided admitted-profile timing and provider-declared fault choices.
+73 affected Autoverse checks, browser authoring at both desktop sizes and a complete
+actual demo pass on identical source. All three faults originate in the form; a
+5000 ms activation retains its separate 3 s duration. Unsupported metadata/profile/
+payload data stays preserved. Canonical recovery/interruption and exact native
+shutdown agree. Further clock timeline integration remains; T084 stays open.
+See [component review](../../evidence/studio/M4-gui-fault-authoring/review.md).
+
+## Earlier checkpoints
+
 # Backend scenario admission complete — 2026-10-30
 
 **65 completed / 25 in progress / 10 blocked; zero accepted milestones.**

@@ -243,3 +243,17 @@ inspection results confer no ownership, permit or observation effect. Classic
 Autoverse declares one `observer-slot` against capacity one; platform mode separately
 limits its existing four observers without inheriting classic cost declarations.
 CPU/memory/latency and retention policy remain undeclared where unavailable.
+
+### Inert fault authoring choices (ADR-0054)
+
+Optional `scenarioContracts.contractVersion: "1.0"` may declare an exact timing
+profile (`namespace`, payload `version`), clock, bounded fault choices and limits.
+A choice contains fault `kind`, local System `target`, `activation`/`recovery`
+markers, `maturity` and required `inputSurface`. Studio copies a compatible choice
+only after explicit user selection; matching the selected System and declared clock
+is required. The admitted experiment-lite 0.1 form writes that profile's existing
+fault-intent trigger/duration/owner/clock fields in XDL, preserving original units
+and unknown fields. Unsupported profile or payload versions retain source and an
+unavailable-authoring explanation. This metadata is not executable code, live
+readiness or authority. Full backend provider configuration/preflight/Start checks
+continue to reject unsupported source, bounds, target/mode or ownership.

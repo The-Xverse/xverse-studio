@@ -1,6 +1,6 @@
 # ADR-0054 — Profile-backed fault schedules and provider choices
 
-Date: 2026-10-30. Status: implementation candidate.
+Date: 2026-10-30. Status: implemented; scoped GUI/native Autoverse verification passed.
 
 T084 needs guided timing for faults whose native activation/recovery fields are
 opaque text. The admitted experiment-lite 0.1 profile already supplies typed
@@ -30,3 +30,7 @@ Autoverse project, unknown/mismatched profile and provider metadata, invalid clo
 and times, and actual positive preflight/complete native demo of GUI-authored
 faults. Preserve all failed attempts and exact source/build/environment evidence.
 This does not complete T084, timeline codec admission, AC025 or a milestone by itself.
+
+Verification: 73 affected API/causality checks, one real browser authoring case at
+both desktop sizes and a complete actual native demo passed on 475 unchanged inputs.
+See the [component review](../../evidence/studio/M4-gui-fault-authoring/review.md).

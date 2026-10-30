@@ -1,0 +1,88 @@
+{
+  "candidate": "fc80708b6999b2f3cfa91de49ac317ed7b6bde9b",
+  "task": "T084",
+  "status": "in_progress",
+  "scope": "Guided experiment-lite fault timing and inert provider choices; actual GUI-authored source executes through existing backend admission/native demo",
+  "apiAndCausalityGuards": {
+    "passed": 73,
+    "skipped": 0,
+    "inspection": 35,
+    "inputLoss": 28,
+    "causalityAndUnits": 10
+  },
+  "browserAuthoring": {
+    "passed": 1,
+    "viewports": [
+      {
+        "width": 1024,
+        "height": 768
+      },
+      {
+        "width": 1440,
+        "height": 900
+      }
+    ],
+    "faultsCreatedThroughForm": 3,
+    "originalUnits": "First activation edited from 5 s to 5000 ms; duration remains 3 s",
+    "unknownProviderContractRefused": true,
+    "unknownProfileDeclarationPreserved": true,
+    "unknownPayloadNotRewrittenAndSemanticEditRefused": true
+  },
+  "completeNativeDemo": {
+    "passed": 1,
+    "fullAndroidAndSpeedObserved": true,
+    "actualRecoveredIntervals": 2,
+    "actualInterruptedInterval": 1,
+    "canonicalFaultRecords": 11,
+    "stagedFrames": 153,
+    "recordedComponentInstancesExited": 16,
+    "exactStoppedContainers": 3,
+    "workerBackendAndBrowserDriverExited": true,
+    "rootLockReleased": true
+  },
+  "sourceInputs": 475,
+  "sameApiBrowserNativeSourceMap": true,
+  "privateUiAssets": 6,
+  "typeScriptAndViteBuild": "passed",
+  "originalPlatformFilesUnchanged": 21,
+  "originalOperatorUiAssetsUnchanged": 6,
+  "sourceInheritance": {
+    "priorInputs": 471,
+    "changedPriorFiles": [
+      "apps/studio-web/src/app/App.tsx",
+      "apps/studio-web/src/app/OperationsViews.tsx",
+      "apps/studio-web/src/features/experiments/ScenarioAuthoring.tsx",
+      "services/studio-api/src/xverse_studio/providers/autoverse/input_loss.py",
+      "tests/live/autoverse_scheduled_input_loss.py"
+    ],
+    "runtimeModuleOutsideDescriptorAstIdentical": true,
+    "newBackendMetadata": "Explicit scenarioContracts 1.0 timing profile and fault maturity; no new runtime semantics",
+    "earlierRegressionScope": "Prior204 checks remain at their original candidate; 73 affected checks and full GUI/native run repeat against current metadata/code. No new full-suite claim."
+  },
+  "environment": {
+    "os": "Ubuntu22.04.5 LTS/native Linux x86_64",
+    "python": "3.13.13",
+    "node": "24.22.1",
+    "chromium": "156.0.8078.4",
+    "playwright": "1.64.1",
+    "sdk": "12615d402ba16cde3cd48c55b70aca464ea90261"
+  },
+  "commands": [
+    "<admitted-node> node_modules/typescript/bin/tsc --noEmit --project apps/studio-web/tsconfig.json",
+    "<admitted-node> node_modules/vite/bin/vite.js build apps/studio-web --outDir <fresh-private-ui>",
+    "PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 PYTHONPATH= STUDIO_AUTOVERSE_TEST_INSTALLATION=<private-enrollment> .venv/bin/python -m pytest -q tests/live/autoverse_scenario_admission.py tests/live/autoverse_input_loss.py tests/live/autoverse_input_loss_guards.py --junitxml=<fresh-report> --basetemp=<fresh-private-root>",
+    ".venv/bin/python -I tests/live/autoverse_scheduled_input_loss.py --receipt <private-enrollment> --output <fresh-native-report> --static-dir <fresh-private-ui> --authoring-browser --node <admitted-node> --playwright-cli <admitted-playwright-cli> --browser-cache <admitted-browser-cache>"
+  ],
+  "limitations": [
+    "Classic browser-input-loss contract only; no physical/native-XCOM/simulation-clock effect claimed",
+    "Generic fault timeline placement remains unsupported; full T084 and AC025 are not complete",
+    "New UI built and tested privately; operator bundle preserved",
+    "Same-agent component review/readback, not independent milestone acceptance"
+  ],
+  "taskCounts": {
+    "completed": 65,
+    "in_progress": 25,
+    "blocked": 10
+  },
+  "acceptedMilestones": 0
+}

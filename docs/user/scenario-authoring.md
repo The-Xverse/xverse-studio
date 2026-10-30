@@ -152,3 +152,22 @@ these declarations for the chosen provider and current draft. Editing the draft
 clears the old result. A mismatched or unsupported response is unavailable, never
 a positive admission. Guided fault timing and further clock timeline integration
 remain separate work.
+
+## Author a timed fault
+
+In **Experiments → Scenario**, select **Add fault intent**. Choose a provider fault
+choice when one is declared, then choose the qualified target, clock, activation
+time and unit, duration and unit. The experiment-lite form writes the admitted
+profile's existing typed extension. Recovery is activation plus duration; the
+compiler and provider check timing, recovery margins and conflicts at preflight.
+
+A provider choice shows its required input surface. The classic Autoverse input-loss
+choice requires `studio-browser` in the Scenario's `io.xverse.studio.native-runtime`
+extension. Configure that supported input mode before preflight. Unknown choices,
+profile versions and payload versions remain unsupported; use source inspection
+for preserved data. A template cannot grant execution authority.
+
+Existing faults reopen with their original units. Changing a trigger from `5 s`
+to `5000 ms` preserves the milliseconds declaration and its separately declared
+duration. Actual fault effects are recorded only during an admitted run. Generic
+fault marker placement on the timeline remains unavailable pending codec integration.
