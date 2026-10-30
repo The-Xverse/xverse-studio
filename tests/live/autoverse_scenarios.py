@@ -21,7 +21,8 @@ from xverse_studio.blueprints.autoverse import NAMESPACE
 from xverse_studio.evidence.reader import read_journal
 from xverse_studio.experiments import scenario_timeline
 from xverse_studio.timeline import project_timeline, TimelineQuery
-from xverse_studio.xdl import XDLAdapter
+from xverse_studio.xdl import XDLAdapter, XDLRejected
+from xverse_studio.xdl.edits import semantic_edits
 from xverse_studio.xdl.examples import dump_yaml
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -359,3 +360,63 @@ def test_actual_autoverse_recorded_timeline_keeps_intent_observations_and_unmapp
         if v["kind"] == "intent.metric"
     )
     assert run["verdict"] is None
+
+
+@pytest.mark.parametrize(
+    "payload_kind", ["nan", "infinity", "negative-infinity", "depth", "nodes", "bytes"]
+)
+def test_actual_autoverse_edit_envelope_limits_precede_copy_or_effects(
+    authored, payload_kind
+):
+    _, api, _, p = authored
+    original = sources(p)
+    key, _ = document(p, "Scenario")
+    if payload_kind in {"nan", "infinity", "negative-infinity"}:
+        at = {
+            "nan": float("nan"),
+            "infinity": float("inf"),
+            "negative-infinity": float("-inf"),
+        }[payload_kind]
+        edit = edit_for(
+            p, {"itemKind": "step", "properties": {"schedule": {"at": at, "unit": "s"}}}
+        )
+        code = "INVALID_EDIT"
+    else:
+        if payload_kind == "depth":
+            value = {"leaf": "inert"}
+            for _ in range(600):
+                value = {"nested": value}
+        elif payload_kind == "nodes":
+            value = [None] * 10001
+        else:
+            value = "x" * (64 * 1024)
+        edit = {
+            "kind": "set_scenario_conditions",
+            "documentId": key,
+            "properties": {"initialConditions": {"boundedReview": value}},
+        }
+        code = "LIMIT_EXCEEDED"
+    with pytest.raises(XDLRejected) as rejected:
+        semantic_edits(original, [edit])
+    assert rejected.value.code == code and sources(p) == original
+    assert checked(api.get(f"/api/v1/projects/{p['projectId']}")) == p
+
+
+def test_actual_autoverse_multi_edit_failure_keeps_original_complete_source_set(
+    authored,
+):
+    _, api, _, p = authored
+    key, _ = document(p, "Scenario")
+    valid = {
+        "kind": "set_scenario_conditions",
+        "documentId": key,
+        "properties": {
+            "acceptanceIntent": "First edit must roll back when later reference fails"
+        },
+    }
+    invalid = edit_for(
+        p, {"itemKind": "step", "properties": {"timeDomainId": "absent"}}
+    )
+    refused = author(api, p, [valid, invalid])
+    assert refused.status_code == 422
+    assert checked(api.get(f"/api/v1/projects/{p['projectId']}")) == p
