@@ -1,0 +1,166 @@
+{
+  "pathNormalization": "Native tool/cache/root/report paths are normalized. Full raw reports and original failures remain in private local-binding-review output; no auth values are copied.",
+  "finalBackend": {
+    "argv": [
+      ".venv/bin/python",
+      "-I",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/integration/test_project_manifest_integrity.py",
+      "tests/integration/test_project_store.py",
+      "tests/integration/test_edit_conflicts.py",
+      "tests/integration/test_project_import.py",
+      "tests/integration/test_project_inspection.py",
+      "tests/integration/test_model_roundtrip.py",
+      "tests/contract/test_review_regressions.py",
+      "tests/contract/test_security_boundary.py",
+      "tests/platform/test_metadata_migration.py",
+      "tests/platform/test_metadata_schema_wal.py",
+      "tests/platform/test_linux_project_exchange.py",
+      "tests/platform/test_native_recovery.py",
+      "tests/platform/test_native_start_acceptance_recovery.py",
+      "tests/contract/test_runtime_lifecycle.py",
+      "tests/platform/test_full_recovery.py",
+      "tests/platform/test_recovery_safe_io.py",
+      "tests/integration/test_manifest_operation_boundaries.py",
+      "tests/integration/test_recorded_replay_and_rerun.py",
+      "tests/integration/test_local_bindings.py",
+      "tests/integration/test_local_binding_failures.py",
+      "tests/platform/test_native_local_bindings.py",
+      "tests/platform/test_local_binding_movement.py",
+      "tests/integration/test_retention_failures.py",
+      "tests/integration/test_exchange_and_retention.py",
+      "tests/contract/test_import_security_limits.py",
+      "tests/contract/test_api_versions.py",
+      "tests/integration/test_project_read_bounds.py",
+      "--basetemp=.studio-local/local-bindings-review/final-data",
+      "--junitxml=.studio-local/local-bindings-review/final.xml"
+    ],
+    "environment": {
+      "PYTEST_DISABLE_PLUGIN_AUTOLOAD": "1"
+    }
+  },
+  "phases": {
+    "red": {
+      "argv": [
+        ".venv/bin/python",
+        "-I",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/integration/test_local_bindings.py",
+        "--basetemp=.studio-local/local-bindings-review/red-data",
+        "--junitxml=.studio-local/local-bindings-review/red.xml"
+      ],
+      "note": "Case membership at the time of that phase is retained in the separate ledger; later tests are not retroactively counted."
+    },
+    "first": {
+      "argv": [
+        ".venv/bin/python",
+        "-I",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/integration/test_local_bindings.py",
+        "--basetemp=.studio-local/local-bindings-review/first-data",
+        "--junitxml=.studio-local/local-bindings-review/first.xml"
+      ],
+      "note": "Case membership at the time of that phase is retained in the separate ledger; later tests are not retroactively counted."
+    },
+    "failure-red": {
+      "argv": [
+        ".venv/bin/python",
+        "-I",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/integration/test_local_binding_failures.py",
+        "--basetemp=.studio-local/local-bindings-review/failure-red-data",
+        "--junitxml=.studio-local/local-bindings-review/failure-red.xml"
+      ],
+      "note": "Case membership at the time of that phase is retained in the separate ledger; later tests are not retroactively counted."
+    },
+    "affected": {
+      "argv": [
+        ".venv/bin/python",
+        "-I",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/integration/test_local_bindings.py",
+        "tests/integration/test_local_binding_failures.py",
+        "tests/integration/test_retention_failures.py",
+        "--basetemp=.studio-local/local-bindings-review/affected-data",
+        "--junitxml=.studio-local/local-bindings-review/affected.xml"
+      ],
+      "note": "Case membership at the time of that phase is retained in the separate ledger; later tests are not retroactively counted."
+    },
+    "expanded": {
+      "argv": [
+        ".venv/bin/python",
+        "-I",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/integration/test_local_bindings.py",
+        "tests/integration/test_local_binding_failures.py",
+        "tests/platform/test_native_local_bindings.py",
+        "--basetemp=.studio-local/local-bindings-review/expanded-data",
+        "--junitxml=.studio-local/local-bindings-review/expanded.xml"
+      ],
+      "note": "Case membership at the time of that phase is retained in the separate ledger; later tests are not retroactively counted."
+    },
+    "movement": {
+      "argv": [
+        ".venv/bin/python",
+        "-I",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/integration/test_local_bindings.py",
+        "tests/integration/test_local_binding_failures.py",
+        "tests/platform/test_native_local_bindings.py",
+        "tests/platform/test_local_binding_movement.py",
+        "--basetemp=.studio-local/local-bindings-review/movement-data",
+        "--junitxml=.studio-local/local-bindings-review/movement.xml"
+      ],
+      "note": "Case membership at the time of that phase is retained in the separate ledger; later tests are not retroactively counted."
+    }
+  },
+  "browser": {
+    "argv": [
+      "node",
+      "PINNED_PLAYWRIGHT_CLI",
+      "test",
+      "--config",
+      "tests/e2e/playwright.config.ts",
+      "tests/e2e/local-binding-isolation.spec.ts",
+      "tests/e2e/project-manifest-recovery.spec.ts",
+      "tests/e2e/source-recovery-accessibility.spec.ts",
+      "--grep",
+      "private declarations preserve|project envelope recovery|recovery accessibility: native"
+    ],
+    "launcherArgv": [
+      ".venv/bin/python",
+      "-I",
+      "-m",
+      "xverse_studio.host.launcher",
+      "--data-dir",
+      "FRESH_PROJECT_LOCAL_BROWSER_TEST_ROOT",
+      "--port",
+      "EPHEMERAL_LOOPBACK_PORT",
+      "--static-dir",
+      "apps/studio-web/dist"
+    ],
+    "environment": {
+      "node": "24.22.1",
+      "STUDIO_BASE_URL": "isolated native loopback URL",
+      "STUDIO_BROWSER_DATA": "fresh unique .studio-local/browser-tests root",
+      "STUDIO_BROWSER_REPORT": "absolute private phase report",
+      "STUDIO_BROWSER_OUTPUT": "absolute private phase artifacts",
+      "PLAYWRIGHT_BROWSERS_PATH": "prepared pinned browser cache"
+    },
+    "scope": "Actual browser-authenticated native API CAS and existing authoring/recovery UI. No local-binding forms or workload dispatch claimed. Original launcher handle stopped after Playwright finished."
+  }
+}

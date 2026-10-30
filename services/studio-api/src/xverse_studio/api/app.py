@@ -340,7 +340,7 @@ def create_app(
     @app.get("/api/v1/capabilities")
     def caps():
         return {**capabilities(), "providers": runs.provider_descriptors(), "capabilityDigest": runs.capability_digest(), 'labReservations': app.state.studio.lab_reservations.discovery(),
-                'labProbes': app.state.studio.lab_probes.discovery()}
+                'labProbes': app.state.studio.lab_probes.discovery(), 'localBindings': app.state.studio.local_bindings.discovery()}
 
     @app.get("/api/v1/providers")
     def providers():
@@ -843,6 +843,9 @@ def create_app(
     from xverse_studio.api.reruns import install_reruns
 
     install_reruns(app, store, projects, runs, adapter)
+    from xverse_studio.api.local_bindings import install_local_bindings
+
+    install_local_bindings(app, store, revision)
     from xverse_studio.api.exchange import install_exchange
 
     install_exchange(app, store, projects, runs)

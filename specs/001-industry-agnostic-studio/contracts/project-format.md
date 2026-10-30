@@ -45,6 +45,36 @@ Edits are transactional and optimistic: expected project revision plus staged fi
 
 Each layout document has `formatVersion`, `viewId`, `systemRef`, positions keyed by ElementRef, collapsed group references, viewport and optional purely visual annotations. Hierarchical subsystem semantics remain in XDL/profile content; a visual group cannot silently become a subsystem. Invalid/dangling layout refs can be removed or remapped without changing model semantics.
 
+## Private local binding sidecars (ADR-0040)
+
+Host declarations live outside the portable envelope and authored revisions, at
+`projects/<projectId>/local-bindings/<bindingRevision>-binding-<uuid>.json` in the
+managed private root. Their independent version1.0 document contains project ID,
+binding revision, a server-derived context digest and at most32 typed declarations
+(64KiB total). The SQLite `project_local_bindings` head seals the project, revision,
+relative sidecar path and byte digest; it contains no artifact path or secret handle.
+Publication uses secure exclusive native writes, verified bytes and a transactional
+revision-checked head. Prepared files stay private and do not become declarations
+without a committed head. A lost acknowledgement requires reloading that head.
+
+Each declaration has `bindingId`, a portable `reference`, `providerId`, and a kind:
+`artifact` with an absolute Linux `path`; `asset` with an opaque `assetId`; or
+`credential` with an external `secret://` or `urn:` handle in `credentialRef`.
+Inline credentials, executable fields and unknown versions are rejected. These
+are unverified declarations: saving/reading does not inspect a path, resolve a
+secret, query inventory or grant execution. Project/source/presentation revisions,
+XDL resources and compiled plan identities stay separate. Provider resolution and
+runtime authority require their own admitted interfaces.
+
+Portable export excludes all private sidecars; import rejects files of that kind
+and allocates no host declarations for the new project. Private full backup/restore
+and supported metadata copy migration preserve their exact files and head. A root
+or host-context change reports `needs_review`, `environmentChanged=true`,
+`validation=unverified`, `executionAllowed=false`. The digest is a change hint,
+not attestation. Explicit redeclaration updates context without granting authority.
+Corrupt/missing/unsafe/future state is preserved and refused, never treated as empty.
+Project retirement fences new publications and removes its head with its metadata.
+
 ## Artifact and profile lock
 
 Entries include kind, origin reference, immutable digest/revision, license/distribution restrictions when known, required platform/provider compatibility and availability. A mutable image tag alone is insufficient for a reproducible run. Missing immutable identity is a preflight diagnostic, not replaced by a guessed latest version.

@@ -467,6 +467,10 @@ class RetentionService:
                         "DELETE FROM records WHERE kind=? AND id=?",
                         ("project", identifier),
                     )
+                    db.execute(
+                        "DELETE FROM records WHERE kind=? AND id=?",
+                        ("project_local_bindings", identifier),
+                    )
                     # Revision history and recovery records belong to the removed project.
                     db.execute(
                         "DELETE FROM records WHERE kind IN ('revision', 'recovery') "

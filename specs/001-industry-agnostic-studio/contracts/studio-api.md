@@ -65,6 +65,8 @@
 | `PUT /annotations/{annotationId}` | Expected annotation revision and replacement content; retains revision history | M4 |
 | `DELETE /annotations/{annotationId}` | Expected revision; creates a tombstone without altering referenced evidence | M4 |
 | `GET /providers` | Admitted providers, versions, capabilities and unavailable dependencies | M0 |
+| `GET /projects/{projectId}/local-bindings` | ADR-0040: private typed declarations, independent binding revision/ETag and context-review state; no provider, path or secret contact | M0 |
+| `PUT /projects/{projectId}/local-bindings` | ADR-0040: complete replacement of private declarations with mandatory binding If-Match; verified atomic head publication, independent of source/layout and execution authority | M0 |
 | `GET /assets` | Explicitly scoped provider inventory; no unrestricted network scan | M3 |
 | `GET /assets/{assetId}/probe-options` | ADR-0027 amendment: independently granted observation eligibility and installed binding pin; no provider contact or runtime authority | M3 |
 | `POST /assets/{assetId}/probes` | ADR-0027 amendment: explicit current binding digest, observe-only scope and idempotency key; durable owner operation with bounded observation/unknown result; no lease or runtime grant | M3 |
@@ -85,6 +87,34 @@
 | `POST /retention/plans/{planId}/apply` | Explicit selected plan ID/fingerprint; idempotently applies only still-eligible removals and reports each outcome | M4 |
 
 Resource bodies, schemas and generated client types are implemented together from the data model and these contracts; contract tests must reject incompatible request variants. Unsupported milestone routes return `404` with capability discovery making their absence explicit.
+
+### Private local bindings amendment (ADR-0040)
+
+The closed request is `{formatVersion: "1.0", bindings: [...]}`; version defaults
+to1.0. Maximum32 entries and64KiB of encoded complete sidecar. Every entry has a
+unique `bindingId`, portable `reference` and `providerId`; provider/reference pairs
+are unique. `kind=artifact` requires absolute Linux `path`, `kind=asset` requires
+opaque `assetId`, and `kind=credential` requires an external `credentialRef`
+(`secret://` or `urn:` handle). Extra fields and inline credentials refuse with422
+without echoing values. This endpoint installs no provider and contacts no target.
+
+Both responses carry `formatVersion`, `projectId`, `bindingRevision`, `bindings`,
+`state=empty|declared|needs_review`, `environmentChanged`, `validation=unverified`
+and `executionAllowed=false`. GET of an existing project without a head returns
+revision0/empty without allocating files. ETag is the quoted binding revision;
+PUT requires its If-Match (missing428, stale412 with `currentBindingRevision`).
+Source/presentation revisions and snapshots are independent. Empty replacement
+still publishes a new binding revision. Whole-sidecar oversize gives413.
+
+Unsupported/corrupt/missing/unsafe committed state refuses with409 and a coded
+`LOCAL_BINDINGS_*` problem; it cannot be reset by writing an empty replacement.
+Native secure I/O unavailability gives503 `PLATFORM_IO_UNAVAILABLE`. Unacknowledged
+writes give503 `LOCAL_BINDINGS_WRITE_FAILED`: reload before explicit retry because
+a real commit may already be durable. Concurrent/uncertain project retirement
+gives409 `LOCAL_BINDINGS_BUSY`. Private backup/movement preserves declarations
+but marks a changed context for review; portable imports start with none.
+Capabilities expose `localBindings` version, host support, bounds and the same
+absence of validation/execution authority. No runtime/preflight consumer is added.
 
 ### Reservation authority amendment (ADR-0024)
 
