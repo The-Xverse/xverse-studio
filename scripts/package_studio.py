@@ -48,7 +48,7 @@ manifest = {
     ).strip(),
     "nativeVerification": {
         "Linux": "see candidate evidence",
-        "Windows": "BLOCKED at user request; native installation and tests are on hold",
+        "Windows": "OUT_OF_SCOPE_ADR0036",
     },
     "files": {
         str(p.relative_to(root)).replace("\\", "/"): "sha256:"
@@ -56,7 +56,7 @@ manifest = {
         for p in sorted(set(files))
     },
     "limitations": [
-        "External Lite/CARLA and hardware providers are unavailable.",
+        "External demo and physical providers require separate reviewed host admission; availability depends on the configured installation.",
         "Native target installation requires Python3.13 and uv0.12.17; first provisioning resolves the pinned Git dependency.",
         "No Studio1.0 release claim. M5 deferred.",
     ],

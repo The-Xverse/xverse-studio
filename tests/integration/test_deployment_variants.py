@@ -113,7 +113,16 @@ def test_http_profile_locks_and_catalog_are_revisioned_and_inert(client):
     response = client.post(f"/api/v1/projects/{project['projectId']}/profile-bindings", headers={"If-Match": "1"}, json={"baseRevision": 1, "profiles": locks})
     assert response.status_code == 200, response.text
     assert response.headers["ETag"] == '"2"'
-    assert len(response.json()["manifest"]["profiles"]) == len(profiles) == 6
+    bound = response.json()["manifest"]["profiles"]
+    assert {profile["profileId"] for profile in profiles} == {
+        "io.xverse.experiment", "io.xverse.studio.experiments", "io.xverse.studio.connections",
+        "io.xverse.studio.reference-controls", "io.xverse.studio.native-runtime",
+        "io.xverse.studio.domain.process-control", "io.xverse.studio.domain.automotive",
+    }
+    assert [{"profileId": profile["namespace"],
+             **{key: profile[key] for key in ("version", "schemaDigest", "presentationDigest")}}
+            for profile in bound] == locks
+    assert all(profile["executionAllowed"] is False for profile in profiles)
     catalog = client.get("/api/v1/catalog", params={"kind": "component", "role": "controller"}).json()["items"]
     assert len(catalog) == 1
     artifact = client.post("/api/v1/catalog/artifacts", headers={"Idempotency-Key": "http-inert-artifact"}, json={

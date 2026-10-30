@@ -1,24 +1,34 @@
-# Current Linux delivery scope —2026-10-29
+# Current Linux delivery scope — 2026-10-30
 
-The user authorized continuation of the remaining implementation and removal of
-Windows requirements. ADR-0036/constitution1.1.0 amend the existing plan to native
-Linux, preserving all100task IDs and32acceptance cases. Historical notes below
-retain their original candidate/host qualifications; Windows is now outside scope
-and is not a current release blocker. Task states remain49completed/41in_progress/
-10blocked pending an evidence-based Linux reassessment. Scope removal is not a pass.
+The active implementation goal retains the complete M0–M4 plan and removes Windows
+requirements under ADR-0036/constitution1.1.0. All100 task IDs and32 acceptance
+cases remain. Windows is outside scope; historical failures and NOT_RUN evidence
+remain unchanged.
 
-The admitted public Maestro/native-X-COM/Argus integration passed two complete
-browser Start/Stop/Pygame driving/cruise runs on final runtimee1fb69f. Exact current
-proof is in `evidence/studio/platform-observability-foundation/live-browser-experiment.json`.
-The live-follow successor has65affected backend checks and5controlled browser checks;
-its actual native verification is being recorded separately. The initial request-
-boundary verifier failure and delayed final-poll fixture failure remain retained.
+Current task status: **52 completed, 38 in progress, 10 blocked; zero accepted
+milestones**. T001's actual baseline audit closed first. T005 and T009 now close
+following complete Linux clause reviews, including new explicit-dependency CLI
+cases and authenticated hostile-import tests. The importer now rejects malformed
+manifest/profile/name/layout shapes before allocation while preserving opaque
+supported content. Final affected checks pass200; the final33 import checks
+include28 repeats, for205unique passing backend cases. A fresh native backend and
+Chromium onboarding journey also pass. The original full1456pass/3fail and first
+focused116pass/2fail remain retained; no new passing full-suite claim is made.
+See `evidence/studio/linux-foundation-reassessment/`.
 
-Next audit: remaining native Linux foundation/recovery/package/acceptance tasks,
-including the observed stale-active-count preflight after an unobserved completed
-run. Real hardware permissions, human studies, normative SADS and independent
-milestone review retain their own requirements. No Windows, physical or complete
-message-trace support is inferred from these Linux simulation results.
+The separately verified platform integration supports actual Maestro, native
+X-COM and Argus views. Follow live passed three changing captures during actual
+run `run-cb49e587-e12f-44cd-b798-5c8c880d7622`, with driving/cruise and verified
+Stop/cleanup. It exposes sampled communication with delay/coalescing, rather than
+every-message or hard-real-time evidence. Proof: platform-observability-foundation/
+`live-follow.json`. The stale-active-count preflight defect is repaired and tested.
+
+Next independent work: review the remaining Linux foundation/recovery clauses and
+complete isolated-workspace exchange evidence (T048), followed by the unresolved
+runtime/lab/scenario integration work. T007's migration workflow, physical-provider
+permissions, first-time-user measurements, unpublished dependency provisioning
+and independent milestone reviews retain their concrete prerequisites. Package
+verification of the latest import/scope successor is recorded separately.
 
 ## Historical implementation checkpoints
 

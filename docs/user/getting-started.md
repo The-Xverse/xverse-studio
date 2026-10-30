@@ -1,8 +1,11 @@
 # Run the current reference implementation
 
 This candidate implements native local Studio workflows with its owned executable first-order model.
-It is not an accepted M0–M4 release. External Lite/CARLA, physical devices and native X-COM remain
-unavailable. A successful reference run proves only the explicitly labelled reference scope.
+It is not an accepted M0–M4 release. The default installation supplies the owned
+reference provider; external demo and physical providers require separate host
+admission. The verified Autoverse installation adds Maestro, native X-COM and
+Argus views through the [Autoverse guide](autoverse-demo.md). A successful reference
+run proves only the explicitly labelled reference scope.
 
 ## Provision Linux
 

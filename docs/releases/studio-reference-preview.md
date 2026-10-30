@@ -4,6 +4,11 @@ Application candidate: `0dd3ea89f6b158849499d0b506b1919d05dfa953`.
 Branch: `implement/studio-m0-m4`. Draft review: https://github.com/The-Xverse/xverse-studio/pull/1.
 Status: runnable Linux development reference. **No M0–M4 milestone or Studio 1.0 acceptance claimed.**
 
+This is a historical candidate checkpoint. ADR-0036 subsequently removed Windows
+delivery requirements; Windows-related obligations below describe the original
+checkpoint and are not current release gates. Retain its original failures and
+NOT_RUN evidence. Current scope and progress are in `docs/implementation/STATUS.md`.
+
 The five System workflows share authoritative XDL identities. The browser can create/open/import,
 compose and edit source, pin profiles, author/select deployment/scenario variants, preflight and run
 the admitted owned model, reconnect, inspect immutable inputs/results, rerun frozen inputs, assess

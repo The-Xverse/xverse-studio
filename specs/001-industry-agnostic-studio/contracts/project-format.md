@@ -21,7 +21,7 @@ Runs are stored in a separate managed run root, not silently included in project
 |---|---|
 | `formatVersion` | Exact `1.0`; unsupported major versions open as inspect-only or reject without mutation. |
 | `projectId` | Opaque UUID allocated by Studio; cloning/importing as new creates a new envelope identity, leaving XDL identity semantics unchanged. |
-| `name` | Display label, bounded string. |
+| `name` | Display label, string of 1–120 characters, matching project creation. |
 | `resources` | Explicit relative file paths and source format for all XDL inputs. No implicit recursive discovery at execution time. |
 | `profiles` | Namespace, version, relative schema path, schema digest, optional presentation path/digest. |
 | `defaultSelection` | Optional existing System/Deployment/Scenario resource references; never an executable command. |
@@ -56,6 +56,12 @@ Profile presentation may supply labels, descriptions, icons from packaged allowl
 Accept only documented archive formats with bounded total expanded size, file count, compression ratio and path length. Reject traversal, absolute paths, symlink/hardlink escape, duplicate normalized names, executable auto-run hooks and files outside allowed project kinds. Extract into a fresh staged directory and validate before allocating the final project. Import never overwrites an existing project by display name.
 
 Portable manifest/archive paths use normalized relative slash-separated names. Reject unsafe/ambiguous portable paths on Linux, including case-insensitive collisions, Windows reserved device names, alternate data streams, drive-relative/UNC roots and trailing-dot/space ambiguities. Native working roots may contain spaces and Unicode; safe containment checks must also account for Linux symlinks and inert foreign link/path metadata. No portable project file embeds a required Linux home path or Windows drive path. Atomic-save and migration tests run on the recorded Linux host with its actual file-lock/rename behaviour.
+
+Malformed envelope roots, resource/profile/layout collection shapes, display names
+and layout roots return `MANIFEST_INVALID` before project allocation. Unsupported
+format versions retain `FORMAT_UNSUPPORTED`; unsafe paths and bounded-input failures
+retain their specific diagnostics. Unknown envelope fields and opaque authored XDL
+remain preserved. Importing an envelope never installs a provider or grants authority.
 
 Exports include manifest, authored resources, declared schemas/layout, locks and explicitly selected documentation. Exclude credentials, session tokens, host-only secrets, caches, arbitrary home directories and run evidence unless explicitly selected. Preserve unavailable/restricted artifact references with their limitations rather than copying prohibited content.
 

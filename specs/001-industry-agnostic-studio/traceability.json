@@ -2089,9 +2089,15 @@
       "acceptance_ids": [
         "AC-002"
       ],
-      "status": "in_progress",
-      "implementation_note": "ADR-0036 removes Windows delivery from current requirements. Prior host-scope note is retained separately. Reassess this task against all amended Linux requirements and its exact evidence; scope removal alone is not completion.",
-      "historical_host_scope_note": "Owned Linux foundation implemented and exercised; native Windows and selected external runtime admission remain open. See evidence/studio/M0-review and docs/implementation/platform-support.md."
+      "status": "completed",
+      "implementation_note": "Completed under ADR-0036 after whole-clause Linux review: checked-in explicit XDL corpus, actual selected CLI/library equivalence including missing Component/Profile, authoritative invalid-input diagnostics, source/semantic identity and supported semantic edits. All27 adapter and17 CLI/round-trip cases pass in the current200-case affected cohort. Scope and preserved full/initial failures: evidence/studio/linux-foundation-reassessment/. No standalone Lite, project migration or milestone acceptance inferred.",
+      "historical_host_scope_note": "Owned Linux foundation implemented and exercised; native Windows and selected external runtime admission remain open. See evidence/studio/M0-review and docs/implementation/platform-support.md.",
+      "implementation_evidence": [
+        "evidence/studio/linux-foundation-reassessment/verification.json",
+        "evidence/studio/linux-foundation-reassessment/review.md",
+        "evidence/studio/linux-foundation-reassessment/commands.json",
+        "evidence/studio/linux-foundation-reassessment/current-inputs.json"
+      ]
     },
     {
       "id": "T006",
@@ -2199,9 +2205,15 @@
         "AC-003",
         "AC-032"
       ],
-      "status": "in_progress",
-      "implementation_note": "ADR-0036 removes Windows delivery from current requirements. Prior host-scope note is retained separately. Reassess this task against all amended Linux requirements and its exact evidence; scope removal alone is not completion.",
-      "historical_host_scope_note": "Owned Linux foundation implemented and exercised; native Windows and selected external runtime admission remain open. See evidence/studio/M0-review and docs/implementation/platform-support.md."
+      "status": "completed",
+      "implementation_note": "Completed under ADR-0036 after whole-clause Linux testing review. Actual authenticated/anonymous API negatives cover session/Host/Origin/CSRF, inert traversal/drive/UNC/device/reparse metadata, collisions/reserved names, size/count/ratio budgets, credentials/scripts/executable kinds and no mutation/dispatch. Ten malformed-shape cases first fail, then200 affected checks and33 final import checks pass (205 unique,28 overlap). Prior source/file-boundary evidence retains its exact scope. No Windows runtime, physical or milestone acceptance inferred.",
+      "historical_host_scope_note": "Owned Linux foundation implemented and exercised; native Windows and selected external runtime admission remain open. See evidence/studio/M0-review and docs/implementation/platform-support.md.",
+      "implementation_evidence": [
+        "evidence/studio/linux-foundation-reassessment/verification.json",
+        "evidence/studio/linux-foundation-reassessment/review.md",
+        "evidence/studio/linux-foundation-reassessment/commands.json",
+        "evidence/studio/linux-foundation-reassessment/current-inputs.json"
+      ]
     },
     {
       "id": "T010",
@@ -6222,7 +6234,7 @@
         "T099",
         "T100"
       ],
-      "scope_note": "Targeted owned/Linux records exist; full case and retained multi-platform/live/human prerequisites are not inferred from component tests."
+      "scope_note": "Targeted owned/Linux records exist; component checks do not establish full case execution or its retained live, hardware and human prerequisites."
     },
     {
       "id": "AC-002",
@@ -6259,7 +6271,7 @@
         "T099",
         "T100"
       ],
-      "scope_note": "Targeted owned/Linux records exist; full case and retained multi-platform/live/human prerequisites are not inferred from component tests."
+      "scope_note": "Targeted owned/Linux records exist; component checks do not establish full case execution or its retained live, hardware and human prerequisites."
     },
     {
       "id": "AC-003",
@@ -6273,7 +6285,7 @@
       ],
       "success_criteria": [],
       "given": "Archives containing traversal, symlink escapes, oversized inputs, duplicate entries, unknown extensions, credentials and command-like content. Inputs also include Windows drive/UNC/device paths, reserved names, case collisions, junction escapes, spaces and non-ASCII names.",
-      "actions": "Attempt import and project export within an allowlisted workspace, including direct API requests. Run the hostile-input and file-boundary suite natively on both OS families.",
+      "actions": "Attempt import and project export within an allowlisted workspace, including direct API requests. Run the hostile-input and file-boundary suite natively on Linux, including inert foreign path and link metadata.",
       "expected": "Unsafe paths and limits are rejected; imports never run scripts or providers; unknown extension content is preserved but cannot become executable valid content; credentials are rejected/redacted according to the project contract and never appear in exports or diagnostics. Platform-specific path/locking behaviour cannot escape the project root or bypass admission; portable and host-local path meanings remain distinct.",
       "status": "NOT_RUN",
       "retained_in": [
@@ -6292,7 +6304,7 @@
         "T099",
         "T100"
       ],
-      "scope_note": "Targeted owned/Linux records exist; full case and retained multi-platform/live/human prerequisites are not inferred from component tests."
+      "scope_note": "Targeted owned/Linux records exist; component checks do not establish full case execution or its retained live, hardware and human prerequisites."
     },
     {
       "id": "AC-004",
@@ -6325,7 +6337,7 @@
         "T040",
         "T100"
       ],
-      "scope_note": "Targeted owned/Linux records exist; full case and retained multi-platform/live/human prerequisites are not inferred from component tests."
+      "scope_note": "Targeted owned/Linux records exist; component checks do not establish full case execution or its retained live, hardware and human prerequisites."
     },
     {
       "id": "AC-005",
@@ -6362,7 +6374,7 @@
         "T040",
         "T100"
       ],
-      "scope_note": "Targeted owned/Linux records exist; full case and retained multi-platform/live/human prerequisites are not inferred from component tests."
+      "scope_note": "Targeted owned/Linux records exist; component checks do not establish full case execution or its retained live, hardware and human prerequisites."
     },
     {
       "id": "AC-006",
@@ -6399,7 +6411,7 @@
         "T099",
         "T100"
       ],
-      "scope_note": "Targeted owned/Linux records exist; full case and retained multi-platform/live/human prerequisites are not inferred from component tests."
+      "scope_note": "Targeted owned/Linux records exist; component checks do not establish full case execution or its retained live, hardware and human prerequisites."
     },
     {
       "id": "AC-007",
@@ -6438,7 +6450,7 @@
         "T099",
         "T100"
       ],
-      "scope_note": "Targeted owned/Linux records exist; full case and retained multi-platform/live/human prerequisites are not inferred from component tests."
+      "scope_note": "Targeted owned/Linux records exist; component checks do not establish full case execution or its retained live, hardware and human prerequisites."
     },
     {
       "id": "AC-008",
@@ -6475,7 +6487,7 @@
         "T099",
         "T100"
       ],
-      "scope_note": "Targeted owned/Linux records exist; full case and retained multi-platform/live/human prerequisites are not inferred from component tests."
+      "scope_note": "Targeted owned/Linux records exist; component checks do not establish full case execution or its retained live, hardware and human prerequisites."
     },
     {
       "id": "AC-009",
@@ -6493,7 +6505,7 @@
         "SC-003"
       ],
       "given": "Persisted runs with known owned handles, an external resource and an uncertain in-flight command.",
-      "actions": "Restart or kill/relaunch the control service at lifecycle boundaries, then reconcile. Repeat native backend stop/restart on both OS families, including held files and stale process identities/handles.",
+      "actions": "Restart or kill/relaunch the control service at lifecycle boundaries, then reconcile. Repeat native backend stop/restart on Linux, including held files and stale process identities/handles.",
       "expected": "Runs are reconciled against recorded ownership and provider facts. Unknown outcomes remain unknown pending reconciliation; no blind respawn, process-name kill or port-based ownership inference occurs; duplicate starts remain prevented across restart. Native Linux handle, locking and process semantics are covered explicitly; only validated ownership permits mutation after restart.",
       "status": "NOT_RUN",
       "retained_in": [
@@ -6510,7 +6522,7 @@
         "T099",
         "T100"
       ],
-      "scope_note": "Targeted owned/Linux records exist; full case and retained multi-platform/live/human prerequisites are not inferred from component tests."
+      "scope_note": "Targeted owned/Linux records exist; component checks do not establish full case execution or its retained live, hardware and human prerequisites."
     },
     {
       "id": "AC-010",
@@ -6548,7 +6560,7 @@
         "T099",
         "T100"
       ],
-      "scope_note": "Targeted owned/Linux records exist; full case and retained multi-platform/live/human prerequisites are not inferred from component tests."
+      "scope_note": "Targeted owned/Linux records exist; component checks do not establish full case execution or its retained live, hardware and human prerequisites."
     },
     {
       "id": "AC-011",
@@ -6588,7 +6600,7 @@
         "T099",
         "T100"
       ],
-      "scope_note": "Targeted owned/Linux records exist; full case and retained multi-platform/live/human prerequisites are not inferred from component tests."
+      "scope_note": "Targeted owned/Linux records exist; component checks do not establish full case execution or its retained live, hardware and human prerequisites."
     },
     {
       "id": "AC-012",
@@ -6618,7 +6630,7 @@
         "T040",
         "T100"
       ],
-      "scope_note": "Targeted owned/Linux records exist; full case and retained multi-platform/live/human prerequisites are not inferred from component tests."
+      "scope_note": "Targeted owned/Linux records exist; component checks do not establish full case execution or its retained live, hardware and human prerequisites."
     },
     {
       "id": "AC-013",
@@ -6656,7 +6668,7 @@
         "T099",
         "T100"
       ],
-      "scope_note": "Targeted owned/Linux records exist; full case and retained multi-platform/live/human prerequisites are not inferred from component tests."
+      "scope_note": "Targeted owned/Linux records exist; component checks do not establish full case execution or its retained live, hardware and human prerequisites."
     },
     {
       "id": "AC-014",
@@ -6689,7 +6701,7 @@
         "T099",
         "T100"
       ],
-      "scope_note": "Targeted owned/Linux records exist; full case and retained multi-platform/live/human prerequisites are not inferred from component tests."
+      "scope_note": "Targeted owned/Linux records exist; component checks do not establish full case execution or its retained live, hardware and human prerequisites."
     },
     {
       "id": "AC-015",
@@ -6722,7 +6734,7 @@
         "T069",
         "T100"
       ],
-      "scope_note": "Targeted owned/Linux records exist; full case and retained multi-platform/live/human prerequisites are not inferred from component tests."
+      "scope_note": "Targeted owned/Linux records exist; component checks do not establish full case execution or its retained live, hardware and human prerequisites."
     },
     {
       "id": "AC-016",
@@ -6751,7 +6763,7 @@
         "T069",
         "T100"
       ],
-      "scope_note": "Targeted owned/Linux records exist; full case and retained multi-platform/live/human prerequisites are not inferred from component tests."
+      "scope_note": "Targeted owned/Linux records exist; component checks do not establish full case execution or its retained live, hardware and human prerequisites."
     },
     {
       "id": "AC-017",
@@ -6779,7 +6791,7 @@
         "T069",
         "T100"
       ],
-      "scope_note": "Targeted owned/Linux records exist; full case and retained multi-platform/live/human prerequisites are not inferred from component tests."
+      "scope_note": "Targeted owned/Linux records exist; component checks do not establish full case execution or its retained live, hardware and human prerequisites."
     },
     {
       "id": "AC-018",
@@ -6812,7 +6824,7 @@
         "T069",
         "T100"
       ],
-      "scope_note": "Targeted owned/Linux records exist; full case and retained multi-platform/live/human prerequisites are not inferred from component tests."
+      "scope_note": "Targeted owned/Linux records exist; component checks do not establish full case execution or its retained live, hardware and human prerequisites."
     },
     {
       "id": "AC-019",
@@ -6847,7 +6859,7 @@
         "T099",
         "T100"
       ],
-      "scope_note": "Targeted owned/Linux records exist; full case and retained multi-platform/live/human prerequisites are not inferred from component tests."
+      "scope_note": "Targeted owned/Linux records exist; component checks do not establish full case execution or its retained live, hardware and human prerequisites."
     },
     {
       "id": "AC-020",
@@ -6879,7 +6891,7 @@
         "T099",
         "T100"
       ],
-      "scope_note": "Targeted owned/Linux records exist; full case and retained multi-platform/live/human prerequisites are not inferred from component tests."
+      "scope_note": "Targeted owned/Linux records exist; component checks do not establish full case execution or its retained live, hardware and human prerequisites."
     },
     {
       "id": "AC-021",
@@ -6910,7 +6922,7 @@
         "T099",
         "T100"
       ],
-      "scope_note": "Targeted owned/Linux records exist; full case and retained multi-platform/live/human prerequisites are not inferred from component tests."
+      "scope_note": "Targeted owned/Linux records exist; component checks do not establish full case execution or its retained live, hardware and human prerequisites."
     },
     {
       "id": "AC-022",
@@ -6942,7 +6954,7 @@
         "T099",
         "T100"
       ],
-      "scope_note": "Targeted owned/Linux records exist; full case and retained multi-platform/live/human prerequisites are not inferred from component tests."
+      "scope_note": "Targeted owned/Linux records exist; component checks do not establish full case execution or its retained live, hardware and human prerequisites."
     },
     {
       "id": "AC-023",
@@ -6977,7 +6989,7 @@
         "T099",
         "T100"
       ],
-      "scope_note": "Targeted owned/Linux records exist; full case and retained multi-platform/live/human prerequisites are not inferred from component tests."
+      "scope_note": "Targeted owned/Linux records exist; component checks do not establish full case execution or its retained live, hardware and human prerequisites."
     },
     {
       "id": "AC-024",
@@ -7010,7 +7022,7 @@
         "T099",
         "T100"
       ],
-      "scope_note": "Targeted owned/Linux records exist; full case and retained multi-platform/live/human prerequisites are not inferred from component tests."
+      "scope_note": "Targeted owned/Linux records exist; component checks do not establish full case execution or its retained live, hardware and human prerequisites."
     },
     {
       "id": "AC-025",
@@ -7040,7 +7052,7 @@
         "T099",
         "T100"
       ],
-      "scope_note": "Targeted owned/Linux records exist; full case and retained multi-platform/live/human prerequisites are not inferred from component tests."
+      "scope_note": "Targeted owned/Linux records exist; component checks do not establish full case execution or its retained live, hardware and human prerequisites."
     },
     {
       "id": "AC-026",
@@ -7068,7 +7080,7 @@
         "T099",
         "T100"
       ],
-      "scope_note": "Targeted owned/Linux records exist; full case and retained multi-platform/live/human prerequisites are not inferred from component tests."
+      "scope_note": "Targeted owned/Linux records exist; component checks do not establish full case execution or its retained live, hardware and human prerequisites."
     },
     {
       "id": "AC-027",
@@ -7102,7 +7114,7 @@
         "T099",
         "T100"
       ],
-      "scope_note": "Targeted owned/Linux records exist; full case and retained multi-platform/live/human prerequisites are not inferred from component tests."
+      "scope_note": "Targeted owned/Linux records exist; component checks do not establish full case execution or its retained live, hardware and human prerequisites."
     },
     {
       "id": "AC-028",
@@ -7127,7 +7139,7 @@
         "T099",
         "T100"
       ],
-      "scope_note": "Targeted owned/Linux records exist; full case and retained multi-platform/live/human prerequisites are not inferred from component tests."
+      "scope_note": "Targeted owned/Linux records exist; component checks do not establish full case execution or its retained live, hardware and human prerequisites."
     },
     {
       "id": "AC-029",
@@ -7161,7 +7173,7 @@
         "T099",
         "T100"
       ],
-      "scope_note": "Targeted owned/Linux records exist; full case and retained multi-platform/live/human prerequisites are not inferred from component tests."
+      "scope_note": "Targeted owned/Linux records exist; component checks do not establish full case execution or its retained live, hardware and human prerequisites."
     },
     {
       "id": "AC-030",
@@ -7191,7 +7203,7 @@
         "T099",
         "T100"
       ],
-      "scope_note": "Targeted owned/Linux records exist; full case and retained multi-platform/live/human prerequisites are not inferred from component tests."
+      "scope_note": "Targeted owned/Linux records exist; component checks do not establish full case execution or its retained live, hardware and human prerequisites."
     },
     {
       "id": "AC-031",
@@ -7226,7 +7238,7 @@
         "T099",
         "T100"
       ],
-      "scope_note": "Targeted owned/Linux records exist; full case and retained multi-platform/live/human prerequisites are not inferred from component tests."
+      "scope_note": "Targeted owned/Linux records exist; component checks do not establish full case execution or its retained live, hardware and human prerequisites."
     },
     {
       "id": "AC-032",
@@ -7278,7 +7290,7 @@
           "status": "NOT_RUN"
         }
       ],
-      "scope_note": "Targeted owned/Linux records exist; full case and retained multi-platform/live/human prerequisites are not inferred from component tests."
+      "scope_note": "Targeted owned/Linux records exist; component checks do not establish full case execution or its retained live, hardware and human prerequisites."
     }
   ],
   "implementation_record": {
@@ -8420,7 +8432,14 @@
       "historical_windows_results": "preserved_without_reclassification_as_pass",
       "status": "normative_scope_amended_linux_task_reassessment_pending",
       "task_ids_preserved": true,
-      "review": "docs/implementation/LINUX_SCOPE_REVIEW.md"
+      "review": "docs/implementation/LINUX_SCOPE_REVIEW.md",
+      "residual_scope_review": "docs/implementation/LINUX_REASSESSMENT_REVIEW.md",
+      "residual_scope_artifacts": [
+        "specs/001-industry-agnostic-studio/roadmap.md",
+        "specs/001-industry-agnostic-studio/acceptance.md",
+        "scripts/package_studio.py",
+        "docs/implementation/LINUX_REASSESSMENT_REVIEW.md"
+      ]
     }
   ]
 }

@@ -1,0 +1,117 @@
+[
+  {
+    "phase": "baseline-full",
+    "environment": {
+      "PYTEST_DISABLE_PLUGIN_AUTOLOAD": "1"
+    },
+    "argv": [
+      ".venv/bin/python",
+      "-I",
+      "-m",
+      "pytest",
+      "-q",
+      "--junitxml=.studio-local/linux-reassessment/full-backend.xml",
+      "--basetemp=.studio-local/linux-reassessment/full-backend-data",
+      "--owned-failure-dir=.studio-local/linux-reassessment/full-owned-failures"
+    ],
+    "exitCode": 1,
+    "privateOutput": ".studio-local/linux-reassessment/full-backend.log",
+    "outputSha256": "68ea160c073b3eaf2b9dfed2cc6e8738a4432d3f0220088d3f080168d34c5f9d",
+    "outputBytes": 26841
+  },
+  {
+    "phase": "import-shapes-red",
+    "environment": {
+      "PYTEST_DISABLE_PLUGIN_AUTOLOAD": "1"
+    },
+    "argv": [
+      ".venv/bin/python",
+      "-I",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/contract/test_import_security_limits.py",
+      "-k",
+      "malformed",
+      "--junitxml=.studio-local/linux-reassessment/import-shapes-red.xml"
+    ],
+    "exitCode": 1,
+    "privateOutput": ".studio-local/linux-reassessment/import-shapes-red.log",
+    "outputSha256": "4ed507c59cc9628f2b641a1d3c9f0a2c836120c3509cab164912d0b36b3c59c4",
+    "outputBytes": 116117
+  },
+  {
+    "phase": "initial-focused",
+    "environment": {
+      "PYTEST_DISABLE_PLUGIN_AUTOLOAD": "1"
+    },
+    "argv": [
+      ".venv/bin/python",
+      "-I",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/contract/test_import_security_limits.py",
+      "tests/contract/test_xdl_adapter.py",
+      "tests/integration/test_model_roundtrip.py",
+      "tests/integration/test_communication_projections.py",
+      "tests/integration/test_deployment_variants.py",
+      "tests/integration/test_project_inspection.py",
+      "--junitxml=.studio-local/linux-reassessment/repaired-focused.xml"
+    ],
+    "exitCode": 1,
+    "privateOutput": ".studio-local/linux-reassessment/repaired-focused.log",
+    "outputSha256": "90e7cabcc6a6646afd6faacf0ac07b9d6c55502488f20fbfa1b5fcf5495c9a80",
+    "outputBytes": 5143
+  },
+  {
+    "phase": "final-focused",
+    "environment": {
+      "PYTEST_DISABLE_PLUGIN_AUTOLOAD": "1"
+    },
+    "argv": [
+      ".venv/bin/python",
+      "-I",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/contract/test_import_security_limits.py",
+      "tests/contract/test_xdl_adapter.py",
+      "tests/integration/test_model_roundtrip.py",
+      "tests/integration/test_communication_projections.py",
+      "tests/integration/test_deployment_variants.py",
+      "tests/integration/test_project_inspection.py",
+      "tests/contract/test_security_boundary.py",
+      "tests/contract/test_review_regressions.py",
+      "tests/contract/test_profiles.py",
+      "tests/contract/test_profile_presentation.py",
+      "tests/integration/test_project_import.py",
+      "tests/integration/test_project_read_bounds.py",
+      "tests/integration/test_project_store.py",
+      "--junitxml=.studio-local/linux-reassessment/final-focused.xml"
+    ],
+    "exitCode": 0,
+    "privateOutput": ".studio-local/linux-reassessment/final-focused.log",
+    "outputSha256": "e1b04d040f488be29ca20e0e5e92b7fbe9ac4acab12f759f410f713528df882e",
+    "outputBytes": 855
+  },
+  {
+    "phase": "final-import-security",
+    "environment": {
+      "PYTEST_DISABLE_PLUGIN_AUTOLOAD": "1"
+    },
+    "argv": [
+      ".venv/bin/python",
+      "-I",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/contract/test_import_security_limits.py",
+      "--junitxml=.studio-local/linux-reassessment/import-final.xml"
+    ],
+    "exitCode": 0,
+    "privateOutput": ".studio-local/linux-reassessment/import-final.log",
+    "outputSha256": "6425aedcbedace96351fcc0512b32153f48311fc4175fec81257d78adaaae756",
+    "outputBytes": 683
+  }
+]

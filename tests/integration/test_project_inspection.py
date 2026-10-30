@@ -117,6 +117,7 @@ def test_explicit_dependency_import_verifies_declared_locks_and_sidecars(client)
     assert {lock["namespace"]: lock["status"] for lock in locks} == {
         "io.xverse.experiment": "admitted", "io.xverse.studio.experiments": "admitted", "io.xverse.studio.connections": "admitted",
         "io.xverse.studio.reference-controls": "admitted",
+        "io.xverse.studio.native-runtime": "admitted",
         "io.xverse.studio.domain.process-control": "admitted", "io.xverse.studio.domain.automotive": "admitted"}
     sidecars = {f["path"] for f in report["dependencies"]["supportingFiles"]}
     assert {lock["schemaPath"] for lock in locks} <= sidecars and all(not f["executed"] for f in report["dependencies"]["supportingFiles"])
@@ -133,10 +134,11 @@ def test_explicit_dependency_import_verifies_declared_locks_and_sidecars(client)
     statuses = [(lock["namespace"], lock["status"]) for lock in report["dependencies"]["profileLocks"]]
     assert statuses == [("io.xverse.experiment", "conflict"), ("io.xverse.studio.experiments", "admitted"),
                         ("io.xverse.studio.connections", "admitted"), ("io.xverse.studio.reference-controls", "admitted"),
+                        ("io.xverse.studio.native-runtime", "admitted"),
                         ("io.xverse.studio.domain.process-control", "admitted"),
                         ("io.xverse.studio.domain.automotive", "admitted"), ("io.xverse.studio.experiments", "conflict")]
     assert "digest" in report["dependencies"]["profileLocks"][0]["reason"]
-    assert "more than one" in report["dependencies"]["profileLocks"][6]["reason"]
+    assert "more than one" in report["dependencies"]["profileLocks"][-1]["reason"]
     assert report["executionBlocked"] is True
 
 

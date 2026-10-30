@@ -47,5 +47,6 @@ Broad campaign/snapshot/index garbage collection is not supplied. Canonical evid
 assessment verdicts are never rewritten by deleting files or registration metadata.
 
 Stop Studio before full backup/removal and follow [recovery](recovery.md). Portable project/evidence
-exchange does not include an offline Python wheelhouse. First provisioning and cross-OS exchange need
-separate evidence; native Windows and bidirectional transport remain unverified until their lane runs.
+exchange does not include an offline Python wheelhouse. First provisioning and
+portable exchange between Linux workspaces need their own evidence. Windows is
+outside the current scope under ADR-0036; bidirectional transport remains unverified.

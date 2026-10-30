@@ -73,6 +73,7 @@ The exercised provider is an owned in-process fixture without equipment or netwo
 contact. The browser exposes explicit option checks, observe-only requests,
 same-key recovery and owner-only operation inspection; saved references and pending
 metadata are bounded to this tab and never constitute current authority.
-Native process-interruption and browser evidence remains fixture-scoped, with
-native Windows and actual device/provider/driver/permission/clock/stop acceptance
-separate. See [ADR-0027](../architecture/ADR-0027-explicit-lab-observations.md).
+Native process-interruption and browser evidence remains fixture-scoped. Actual
+device/provider/driver/permission/clock/stop acceptance remains separate; Windows
+delivery is outside scope under ADR-0036.
+See [ADR-0027](../architecture/ADR-0027-explicit-lab-observations.md).

@@ -66,7 +66,7 @@ Use the actual measurements. The targets above are not benchmark results, a simu
 
 **Given:** Archives containing traversal, symlink escapes, oversized inputs, duplicate entries, unknown extensions, credentials and command-like content. Inputs also include Windows drive/UNC/device paths, reserved names, case collisions, junction escapes, spaces and non-ASCII names.
 
-**Procedure:** Attempt import and project export within an allowlisted workspace, including direct API requests. Run the hostile-input and file-boundary suite natively on both OS families.
+**Procedure:** Attempt import and project export within an allowlisted workspace, including direct API requests. Run the hostile-input and file-boundary suite natively on Linux, including inert foreign path and link metadata.
 
 **Expected:** Unsafe paths and limits are rejected; imports never run scripts or providers; unknown extension content is preserved but cannot become executable valid content; credentials are rejected/redacted according to the project contract and never appear in exports or diagnostics. Platform-specific path/locking behaviour cannot escape the project root or bypass admission; portable and host-local path meanings remain distinct.
 
@@ -150,7 +150,7 @@ Use the actual measurements. The targets above are not benchmark results, a simu
 
 **Given:** Persisted runs with known owned handles, an external resource and an uncertain in-flight command.
 
-**Procedure:** Restart or kill/relaunch the control service at lifecycle boundaries, then reconcile. Repeat native backend stop/restart on both OS families, including held files and stale process identities/handles.
+**Procedure:** Restart or kill/relaunch the control service at lifecycle boundaries, then reconcile. Repeat native backend stop/restart on Linux, including held files and stale process identities/handles.
 
 **Expected:** Runs are reconciled against recorded ownership and provider facts. Unknown outcomes remain unknown pending reconciliation; no blind respawn, process-name kill or port-based ownership inference occurs; duplicate starts remain prevented across restart. Native Linux handle, locking and process semantics are covered explicitly; only validated ownership permits mutation after restart.
 

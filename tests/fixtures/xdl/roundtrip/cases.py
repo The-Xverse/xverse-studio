@@ -69,6 +69,14 @@ def _unknown_extension(documents):
     return out
 
 
+def _missing_component(documents):
+    return {path: text for path, text in documents.items() if path != "xdl/controller.xdl.yaml"}
+
+
+def _missing_profile(documents):
+    return {path: text for path, text in documents.items() if path != "xdl/profile.xdl.yaml"}
+
+
 # (name, derive, expectation): "equal" keeps semantic and plan identity, "changed" alters both,
 # "invalid" is rejected by both tools with the listed diagnostic code.
 CASES = [
@@ -80,4 +88,6 @@ CASES = [
     ("non-ascii-path-with-spaces", _non_ascii_path, "equal", None),
     ("parameter-value", _parameter, "changed", None),
     ("unknown-extension", _unknown_extension, "invalid", "XDL-SEMANTIC-PROFILE-MISSING"),
+    ("missing-explicit-component", _missing_component, "invalid", "XDL-REFERENCE-UNRESOLVED-RESOURCE"),
+    ("missing-explicit-profile", _missing_profile, "invalid", "XDL-SEMANTIC-PROFILE-MISSING"),
 ]

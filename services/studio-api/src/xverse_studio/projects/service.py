@@ -443,12 +443,24 @@ class Projects:
         files = read_archive(encoded)
         try:
             manifest = json.loads(files.get("project.studio.json", "{}"))
+            if not isinstance(manifest, dict):
+                raise ValueError("The project manifest must be an object")
             if manifest.get("formatVersion") != "1.0":
                 raise Problem(
                     "FORMAT_UNSUPPORTED",
                     "Only project envelope 1.0 can be imported. Original bytes remain unchanged.",
                 )
+            project_name = manifest.get("name", "Imported System")
             resources = manifest.get("resources", [])
+            profiles = manifest.get("profiles", [])
+            layouts = manifest.get("layoutFiles", [])
+            if (not isinstance(project_name, str) or not 1 <= len(project_name) <= 120
+                    or not isinstance(resources, list) or any(not isinstance(r, dict) for r in resources)
+                    or not isinstance(profiles, list) or any(not isinstance(p, dict) for p in profiles)
+                    or not isinstance(layouts, list)):
+                raise ValueError("Malformed project envelope fields")
+            if any(r.get("format", "yaml") not in ("yaml", "json") for r in resources):
+                raise ValueError("Unsupported source format")
             paths = [safe_name(r["path"]) for r in resources]
             if (
                 not paths
@@ -460,16 +472,18 @@ class Projects:
                     "The manifest must explicitly name existing XDL resources.",
                 )
             layout = {}
-            for name in manifest.get("layoutFiles", []):
+            for name in layouts:
                 safe_name(name)
                 if name not in files or not name.startswith("layout/"):
                     raise Problem(
                         "MANIFEST_INVALID", "A declared layout sidecar is unavailable."
                     )
                 layout = json.loads(files[name])
-            for profile in manifest.get("profiles", []):
+                if not isinstance(layout, dict):
+                    raise ValueError("A layout sidecar must be an object")
+            for profile in profiles:
                 for key in ("schemaPath", "presentationPath"):
-                    if profile.get(key):
+                    if key in profile:
                         name = safe_name(profile[key])
                         if name not in files or not name.startswith("profiles/"):
                             raise Problem(
@@ -482,7 +496,7 @@ class Projects:
                 if name not in paths and name != "project.studio.json"
             }
             return self.create(
-                manifest.get("name", "Imported System"),
+                project_name,
                 documents={p: files[p] for p in paths},
                 provenance={
                     "imported": True,
@@ -493,7 +507,7 @@ class Projects:
                 manifest_template=manifest,
                 layout=layout,
             )
-        except (KeyError, TypeError, ValueError):
+        except (KeyError, TypeError, ValueError, RecursionError):
             raise Problem(
                 "MANIFEST_INVALID", "The project manifest is malformed."
             ) from None

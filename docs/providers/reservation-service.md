@@ -9,8 +9,8 @@ This interface is under verification. The repository's exercised providers are
 owned in-memory fixtures. No actual device, driver, permission/clock/stop contract
 has been nominated or admitted; see
 [`physical-provider-admission.md`](../implementation/physical-provider-admission.md).
-Native Windows verification remains held. Fixture results do not establish those
-capabilities or physical acceptance.
+Windows delivery is outside the current scope under ADR-0036. Linux fixture
+results do not establish actual device capabilities or physical acceptance.
 
 Host code supplies a `LabHostConfiguration` with a tuple of
 `LeaseProviderInstallation` objects and a separate `LabAuthority`. Each installation

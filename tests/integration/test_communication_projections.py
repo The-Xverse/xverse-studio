@@ -90,7 +90,9 @@ def _project(records, state="running", integrity="valid", now=1_000_000.0, scena
 
 def test_freshness_is_live_stale_final_partial_or_unknown_never_guessed():
     now = 1_000_000.0
-    observed = lambda **kw: _project(**kw)["state-flow"]["observed"]
+
+    def observed(**kw):
+        return _project(**kw)["state-flow"]["observed"]
     assert observed(records=[_record(1, now)])["freshness"] == "live"
     stale = observed(records=[_record(60, now)])
     assert stale["freshness"] == "stale" and stale["ageSeconds"] == 60
@@ -153,13 +155,24 @@ def test_malformed_record_fields_never_crash_the_projection():
 
 
 def test_resolution_uses_its_own_flow_list_and_evidence_refs_stay_unchanged():
-    from xverse_studio.xdl import XDLAdapter, reference_configuration
+    from xverse_studio.xdl import XDLAdapter, XDLRejected, reference_configuration
 
     for entry in examples():
         documents = {"xdl/" + name: content for name, content in entry["documents"].items()}
-        config = reference_configuration(documents, XDLAdapter().compile(documents))
+        before = dict(documents)
+        compiled = XDLAdapter().compile(documents)
+        assert compiled["valid"], compiled["diagnostics"]
+        if entry["providerId"] != "studio.reference":
+            with pytest.raises(XDLRejected) as error:
+                reference_configuration(documents, compiled)
+            assert error.value.code == "CAPABILITY_UNSUPPORTED"
+            assert documents == before
+            continue
+        config = reference_configuration(documents, compiled)
         assert not any(ref.endswith("#command-flow") for ref in config["elementRefs"])
         assert any(ref.endswith("#command-flow") for ref in config["resolvedFlows"])
+        assert config["planDigest"] == compiled["planDigest"]
+        assert documents == before
 
 
 def test_http_refuses_a_run_whose_frozen_inputs_are_gone(client, monkeypatch):
