@@ -222,7 +222,7 @@ def main():
                 next_history = time.monotonic() + 0.3
             if third_observed:
                 break
-            time.sleep(0.015)
+            time.sleep(0.06)
         assert third_observed, (
             "Third real bridge lease-expiry observation not received before Stop"
         )
