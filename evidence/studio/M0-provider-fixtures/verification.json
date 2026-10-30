@@ -1,0 +1,86 @@
+{
+  "verifiedRuntimeCandidate": "918d2b09604650cc10bfe018c1eae94304c601d1",
+  "target": "Actual enrolled Autoverse classic/platform; complete installed classic demo; T011-only approved executable reference exception",
+  "apiAndNativeCli": {
+    "tests": 157,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "seconds": 110.329,
+    "rawXmlSha256": "c8bbd20c5136e8e32c1eb566fb4e44fd0c5980ab385f17a71c9e179a88a6bd57"
+  },
+  "nativeReference": {
+    "cases": 10,
+    "uniqueScenarios": 9,
+    "actualOriginalWorkers": 8,
+    "rootLocksReleased": 10,
+    "outcome": "passed"
+  },
+  "browser": [
+    {
+      "descriptor": "valid",
+      "stats": {
+        "startTime": "2026-10-30T11:37:07.866Z",
+        "duration": 13378.975,
+        "expected": 4,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "rawSha256": "6c20ed59796f10e8244e1fc7e10f5f044489cb4ad286fa377f52376c76988da5"
+    },
+    {
+      "descriptor": "invalid",
+      "stats": {
+        "startTime": "2026-10-30T11:37:24.160Z",
+        "duration": 11821.809000000001,
+        "expected": 4,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "rawSha256": "b3906e242f087939e56c9de382b58325c11d5ce09cfb07f1bde4fb381dd39dea"
+    }
+  ],
+  "installedReference": {
+    "cases": 2,
+    "outcome": "passed",
+    "scope": "normal and normal-repeat; full failure matrix is source proof"
+  },
+  "installedCompleteAutoverse": "passed",
+  "environment": {
+    "os": "Linux-6.8.0-138-generic-x86_64-with-glibc2.35",
+    "python": "3.13.13"
+  },
+  "tools": {
+    "python": "3.13.13",
+    "node": "24.22.1",
+    "playwright": "1.64.1"
+  },
+  "startedAt": "2026-10-30T11:34:27.951332+00:00",
+  "finishedSourceCohortAt": "2026-10-30T11:37:36.263775+00:00",
+  "sourceInputs": 447,
+  "compiledUiAssets": 6,
+  "sourceCohortAndInstalledDemoInputsUnchanged": true,
+  "postProofDescriptiveManifest": "compatibility-reconciliation.json",
+  "commands": [
+    "STUDIO_AUTOVERSE_TEST_INSTALLATION=<private-receipt> STUDIO_AUTOVERSE_RECORDED_ROOT=<original-complete-demo-root> PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 .venv/bin/python -I -m pytest -q tests/live/autoverse_provider_admission.py tests/live/autoverse_launcher_availability.py tests/live/autoverse_fixture_catalog.py --basetemp=<fresh-root> --junitxml=<report>",
+    ".venv/bin/python -I tests/live/reference_fixture_conformance.py --output <new-private-report-directory>",
+    "<native-python> -I tests/live/autoverse_admission_host.py --receipt <private-receipt> --data-dir <fresh-root> --static-dir <tested-ui> --port <loopback-port> --fault valid|invalid; <node> <playwright-cli> test --config tests/live/autoverse-admission.config.ts",
+    "<installed-python> -I tests/live/autoverse_admission_host.py --receipt <private-receipt> --data-dir <fresh-root> --static-dir <installed-ui> --port <loopback-port> --fault mutable; .venv/bin/python -I tests/live/autoverse_active_controls.py --data-dir <same-owned-root> --url <same-loopback-url>",
+    ".venv/bin/python -I tests/live/reference_fixture_conformance.py --output <new-private-report-directory> --backend-python <installed-python> --cases normal normal-repeat",
+    ".venv/bin/python -I scripts/check_platform_compatibility.py"
+  ],
+  "warnings": [
+    "Existing Starlette TestClient/httpx deprecation; dependency unchanged."
+  ],
+  "taskStatus": "T011 completed after full original clause review;59 completed/31 in_progress/10 blocked;zero accepted milestones",
+  "staticChecks": [
+    "Ruff changed Python fixtures/target drivers passed in final source review",
+    "Architecture boundaries passed",
+    "Spec structure passed:75 requirements/100 tasks/32 acceptance cases",
+    "git diff --check passed",
+    "Paired task/trace changes onlyT011; all other99 tasks and requirement/acceptance/milestone records unchanged",
+    "Descriptive platform compatibility checker passed after two-array reconciliation"
+  ]
+}

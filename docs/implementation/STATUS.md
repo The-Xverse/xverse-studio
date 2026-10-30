@@ -1,3 +1,13 @@
+# Provider fixtures completed — 2026-10-30
+
+**59 completed /31 in progress /10 blocked; zero accepted milestones.**
+T011 is complete after native reference, fake/recorded separation and exact
+installed Autoverse verification. The user-approved reference exception applies
+only to T011. Continue T014 and remaining M0–M4 tasks; T012 remains blocked.
+See [full fixture review](../../evidence/studio/M0-provider-fixtures/review.md).
+
+## Earlier checkpoints
+
 # Linux security implementation closure — 2026-10-30
 
 **58 completed /32 in progress /10 blocked; zero accepted milestones.** T010

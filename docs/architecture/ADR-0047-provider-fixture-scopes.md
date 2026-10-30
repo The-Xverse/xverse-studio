@@ -1,6 +1,9 @@
 # ADR-0047: Provider fixture scopes and native reference admission
 
-Status: implementation under verification for the original T011 task.
+Status: implemented and verified for the complete original T011 task. Exact runtime
+candidate918d2b0, final157 Autoverse API/native launcher,8 browser and10 approved
+native reference cases pass; installed reference normal/repeat and complete installed
+Autoverse demo pass. See evidence/studio/M0-provider-fixtures/. No milestone accepted.
 
 T011 requires an executable reference provider, separate fake/recorded fixtures,
 controlled failure points, clock/version metadata and explicit scope labels.
@@ -38,3 +41,7 @@ failure outcomes and compare repeated logical samples without claiming identical
 host timestamps, IDs or canonical journals. Other current tasks retain Autoverse
 as their verification target. This is not broader runtime/hardware admission or
 milestone acceptance.
+
+The post-proof descriptive compatibility manifest changes only the two reference
+OS/architecture arrays to match the verified descriptor. Its read-only checker
+passes; historical descriptor snapshots in evidence remain unchanged.
