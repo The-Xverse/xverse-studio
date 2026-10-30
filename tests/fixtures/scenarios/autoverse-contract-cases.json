@@ -1,0 +1,32 @@
+{
+  "version": "1.0",
+  "target": "Enrolled complete classic/platform Autoverse sources; no reference runtime",
+  "invalidEdits": [
+    {"id":"missing-step-target","itemKind":"step","properties":{"targetRef":{"element":"absent"}},"mergeReference":true},
+    {"id":"missing-step-clock","itemKind":"step","properties":{"timeDomainId":"absent"}},
+    {"id":"negative-time","itemKind":"step","properties":{"schedule":{"at":-1,"unit":"s"}}},
+    {"id":"boolean-time","itemKind":"step","properties":{"schedule":{"at":true,"unit":"s"}}},
+    {"id":"untyped-time","itemKind":"step","properties":{"schedule":{"at":"1","unit":"s"}}},
+    {"id":"empty-time-unit","itemKind":"step","properties":{"schedule":{"at":1,"unit":""}}},
+    {"id":"untyped-stimulus","itemKind":"step","properties":{"action":"do not execute this text"}},
+    {"id":"immutable-item-id","itemKind":"step","properties":{"id":"replacement"}},
+    {"id":"missing-observer-target","itemKind":"observer","properties":{"targetRef":{"element":"absent"}},"mergeReference":true},
+    {"id":"missing-observer-clock","itemKind":"observer","properties":{"timeDomainId":"absent"}},
+    {"id":"missing-metric-observer","itemKind":"metric","properties":{"observerIds":["absent"]}},
+    {"id":"unknown-observer-cost-field","itemKind":"observer","properties":{"resourceCost":{"value":10,"unit":"GiB"}}}
+  ],
+  "unsupportedIntent": [
+    {"id":"delayed-start","itemKind":"step","properties":{"schedule":{"at":1,"unit":"s"}}},
+    {"id":"unadmitted-time-unit","itemKind":"step","properties":{"schedule":{"at":0,"unit":"ms"}}},
+    {"id":"unadmitted-operation","itemKind":"step","properties":{"action":{"operation":"unadmitted-review-operation","text":"$(do-not-execute); inert input"}}},
+    {"id":"unadmitted-stimulus","itemKind":"step","properties":{"actionKind":"set_parameter","action":{"parameter":"target","value":2}}},
+    {"id":"unadmitted-sampling","itemKind":"observer","properties":{"samplingIntent":"Requested high-rate intrusive capture; cost and retention not admitted"}},
+    {"id":"unadmitted-units","itemKind":"observer","properties":{"unitSemantics":"m/s"}},
+    {"id":"unadmitted-payload","itemKind":"observer","properties":{"payloadSchema":"urn:xverse:review:unknown-payload"}},
+    {"id":"unadmitted-sink","itemKind":"observer","properties":{"evidenceSinkRef":"https://example.invalid/do-not-contact"}}
+  ],
+  "typedAuthoringBounds":{"step":64,"fault":32,"observer":32,"metric":64},
+  "admittedDurationSeconds":[30,1800],
+  "refusedDurationSeconds":[29,1801,true],
+  "effectEvidenceRule":"Authoring and intent markers are not execution. Actual canonical records alone establish recorded observations, with unmapped clocks explicitly unplaced."
+}
