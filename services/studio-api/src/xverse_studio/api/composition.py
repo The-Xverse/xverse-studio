@@ -84,7 +84,7 @@ def install_composition(app, store, projects, runs, adapter):
                          scenarioRef: str | None = Query(None, min_length=1, max_length=512)):
         allowed = {"revision", "providerId", "scenarioRef"}
         if any(k not in allowed or len(request.query_params.getlist(k)) != 1 for k in request.query_params):
-            raise Problem("SCENARIO_QUERY_INVALID", "Use each supported scenario-inspection query field once.", 400)
+            raise Problem("SCENARIO_QUERY_INVALID", "Use each supported scenario-inspection query field once.", 422)
         return scenario_admission.inspect(projectId, revision, providerId, scenarioRef)
 
     @app.get("/api/v1/catalog")

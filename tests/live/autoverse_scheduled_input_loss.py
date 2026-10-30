@@ -97,6 +97,27 @@ def main():
                         json={"content": raw},
                     )
                 )
+        admission = native.checked(
+            api.get(
+                f"/api/v1/projects/{p['projectId']}/scenario-admission",
+                params={"revision": p["revision"], "providerId": "autoverse.demo"},
+            )
+        )
+        assert (
+            admission["status"] == "preflight_required"
+            and admission["sourceMapping"] == "supported"
+        )
+        assert admission["observations"]["budgets"] == [
+            {"unit": "observer-slot", "maximum": 1, "total": 1, "status": "satisfied"}
+        ]
+        assert len(admission["faults"]) == 3 and all(
+            f["effectStatus"] == "declared_intent_only" for f in admission["faults"]
+        )
+        assert (
+            admission["observations"]["items"][0]["retention"]["status"]
+            == "not_declared"
+        )
+        report["scenarioAdmission"] = admission
         pf = native.checked(
             api.post(
                 f"/api/v1/projects/{p['projectId']}/preflights",

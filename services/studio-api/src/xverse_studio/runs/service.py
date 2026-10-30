@@ -178,7 +178,12 @@ class Runs:
                 checks["model"] = {"status": "valid", "message": "Authoritative compilation succeeded."}
                 checks["observations"] = {"status": "blocked", "message": "The declared observation contract/budget does not admit this Scenario.", "facts": observed}
                 return checks, observed["diagnostics"], None, deepcopy((provider or {}).get("limits", {}))
-        return (installed.readiness if installed else reference_readiness)(documents, compiled, provider_id, provider, active_count)
+        checks, diagnostics, configuration, limits = (installed.readiness if installed else reference_readiness)(documents, compiled, provider_id, provider, active_count)
+        if compiled.get("valid") is True:
+            checks = deepcopy(checks)
+            checks["observations"] = {"status": "compatible" if observed["status"] == "checked" or observed["maxObservers"] is not None else "unknown",
+                "message": "Declared observation bounds checked; undeclared resource-cost dimensions remain unknown.", "facts": observed}
+        return checks, diagnostics, configuration, limits
 
     def _reconcile_active_observations(self):
         # Aggregate readiness uses the same original-owner and evidence checks

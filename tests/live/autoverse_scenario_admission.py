@@ -157,7 +157,7 @@ def test_actual_autoverse_unknown_provider_and_stale_or_extra_query_refuse(autho
     _, api, provider, p = authored
     assert inspect(api, p, provider, providerId="absent").status_code == 404
     assert inspect(api, p, provider, revision=p["revision"] + 1).status_code == 412
-    assert inspect(api, p, provider, budget=999).status_code == 400
+    assert inspect(api, p, provider, budget=999).status_code == 422
     url = f"/api/v1/projects/{p['projectId']}/scenario-admission"
     assert (
         api.get(
@@ -168,7 +168,7 @@ def test_actual_autoverse_unknown_provider_and_stale_or_extra_query_refuse(autho
                 ("providerId", provider.descriptor()["providerId"]),
             ],
         ).status_code
-        == 400
+        == 422
     )
     assert (
         inspect(
