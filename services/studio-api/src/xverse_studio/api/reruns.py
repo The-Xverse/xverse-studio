@@ -30,9 +30,9 @@ class Reruns:
             raise Problem("RERUN_UNSUPPORTED", "This source has no admitted owned-reference rerun capability. Imported evidence and physical/live provider claims confer no execution authority.")
         try:
             snapshot = self.store.get("snapshot", source["snapshotId"], db)
-            path = contained(self.store.root, self.store.root / "snapshots" / snapshot["snapshotId"] / "snapshot.json")
-            if snapshot["snapshotId"] != source["snapshotId"] or snapshot.get("projectId") != source.get("projectId") or snapshot.get("revision") != source.get("revision") or path.is_symlink() or not path.is_file() or path.read_bytes() != canonical(snapshot).encode() or snapshot.get("snapshotDigest") != digest({k: v for k, v in snapshot.items() if k != "snapshotDigest"}):
+            if snapshot["snapshotId"] != source["snapshotId"] or snapshot.get("projectId") != source.get("projectId") or snapshot.get("revision") != source.get("revision"):
                 raise ValueError()
+            self.runs.verify_snapshot(snapshot)
             plan = snapshot["plan"]
             if not plan_matches_digest(plan) or "sha256:" + plan["digest"]["value"] != snapshot["planDigest"] or snapshot["planDigest"] != source.get("planDigest") or snapshot["semanticDigest"] != source.get("semanticDigest"):
                 raise ValueError()

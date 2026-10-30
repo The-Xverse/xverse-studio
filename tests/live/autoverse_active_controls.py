@@ -86,11 +86,64 @@ def main():
                 )
                 assert saved.status_code == 200, saved.text
                 p = saved.json()
+        original_project_id = p["projectId"]
+        compiled = api.post(
+            f"/api/v1/projects/{p['projectId']}/compilations", json={"revision": p["revision"]}
+        )
+        assert compiled.status_code == 200 and compiled.json()["valid"], compiled.text
+        project_export = api.post(
+            f"/api/v1/projects/{p['projectId']}/exports",
+            headers={"Idempotency-Key": "actual-autoverse-project-export"},
+            json={"revision": p["revision"]},
+        )
+        assert project_export.status_code == 202, project_export.text
+        source_bundle = api.get(project_export.json()["result"]["downloadUrl"])
+        assert source_bundle.status_code == 200
+        with zipfile.ZipFile(io.BytesIO(source_bundle.content)) as archive:
+            imported_files = {name: archive.read(name) for name in archive.namelist()}
+        manifest = json.loads(imported_files["project.studio.json"])
+        opaque = {"entrypoint": ["touch", "owned-import-sentinel"], "future": [None, False, {"Ω": 7}]}
+        manifest["futureOpaque"] = opaque
+        imported_files["project.studio.json"] = canonical(manifest).encode()
+        imported_files["README.md"] = b"Inert command-shaped documentation: touch owned-import-sentinel\n"
+        prepared = io.BytesIO()
+        with zipfile.ZipFile(prepared, "w", compression=zipfile.ZIP_DEFLATED) as archive:
+            for name, raw in imported_files.items():
+                archive.writestr(name, raw)
+        imported = api.post(
+            "/api/v1/projects/imports",
+            json={"archiveBase64": base64.b64encode(prepared.getvalue()).decode()},
+        )
+        assert imported.status_code == 201, imported.text
+        imported_project = imported.json()
+        assert imported_project["projectId"] != original_project_id
+        assert imported_project["manifest"]["futureOpaque"] == opaque
+        assert {d["path"]: d["content"] for d in imported_project["documents"].values()} == {
+            d["path"]: d["content"] for d in p["documents"].values()}
+        assert api.get("/api/v1/runs").json()["items"] == []
+        imported_compilation = api.post(
+            f"/api/v1/projects/{imported_project['projectId']}/compilations",
+            json={"revision": imported_project["revision"]},
+        )
+        assert imported_compilation.status_code == 200 and imported_compilation.json()["valid"]
+        for identity in ("planDigest", "semanticDigest"):
+            assert imported_compilation.json()[identity] == compiled.json()[identity]
+        p = imported_project
+        report["projectImport"] = {
+            "originalProjectId": original_project_id, "importedProjectId": p["projectId"],
+            "exactAuthoredBytesPreserved": True, "opaqueMetadataPreserved": True,
+            "importAllocatedNoRun": True, "sameAuthoritativePlanAndSemanticDigests": True,
+            "explicitPreflightAndStartRequired": True,
+            "planDigest": compiled.json()["planDigest"],
+            "semanticDigest": compiled.json()["semanticDigest"],
+        }
         pf = api.post(
             f"/api/v1/projects/{p['projectId']}/preflights",
             json={"revision": p["revision"], "providerId": "autoverse.demo"},
         )
         assert pf.status_code == 200 and pf.json()["status"] == "ready", pf.text
+        assert pf.json()["planDigest"] == report["projectImport"]["planDigest"]
+        assert pf.json()["semanticDigest"] == report["projectImport"]["semanticDigest"]
         snapshot_file = root / "snapshots" / pf.json()["snapshotId"] / "snapshot.json"
         snapshot_raw = snapshot_file.read_bytes()
         start = api.post(
@@ -160,6 +213,16 @@ def main():
                     break
                 time.sleep(0.1)
             assert report.get("actualNativePublicationObserved")
+            command_before = (runroot / "command.json").read_bytes() if (runroot / "command.json").exists() else None
+            unsupported = api.post(
+                route + "/commands",
+                headers={"Idempotency-Key": "denied-autoverse-unsupported-pause"},
+                json={"kind": "pause", "expectedStateVersion": run()["stateVersion"]},
+            )
+            assert unsupported.status_code == 422 and unsupported.json()["code"] == "CAPABILITY_UNSUPPORTED", unsupported.text
+            command_after = (runroot / "command.json").read_bytes() if (runroot / "command.json").exists() else None
+            assert command_after == command_before and run()["state"] == "running"
+            report["executionBoundary"] = {"unsupportedPauseStatus": 422, "unsupportedPauseNoCommandEffect": True}
             # The complete actual demo remains running while invalid callers
             # attempt both input publication and owned Stop. Never replay an
             # uncertain mutation; each negative has its own transport.
@@ -424,6 +487,12 @@ def main():
             )
             assert export_retry.status_code == 202 and export_retry.json() == operation
             assert (runroot / "evidence.jsonl").read_bytes() == journal
+            rejected_rerun = api.post(
+                route + "/reruns", headers={"Idempotency-Key": "denied-autoverse-rerun"}, json={}
+            )
+            assert rejected_rerun.status_code == 422 and rejected_rerun.json()["code"] == "RERUN_UNSUPPORTED", rejected_rerun.text
+            assert [r["runId"] for r in api.get("/api/v1/runs").json()["items"]] == [rid]
+            report["executionBoundary"].update(unsupportedRerunStatus=422, unsupportedRerunNoExtraRun=True)
             report["exchange"] = {
                 "bundleDigest": digest(bundle.content),
                 "journalDigest": digest(journal),

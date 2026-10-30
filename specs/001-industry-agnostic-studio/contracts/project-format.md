@@ -97,6 +97,12 @@ Entries include kind, origin reference, immutable digest/revision, license/distr
 
 Profile presentation may supply labels, descriptions, icons from packaged allowlisted assets, form grouping and help. It contains no JavaScript, Python, arbitrary HTML, executable URLs or shell hooks. Form validation is derived from declared schemas plus authoritative backend rules. Installing executable providers is a separate administrative workflow outside project import.
 
+ADR-0046 recognizes known executable profile fields/URLs in the existing JSON
+string security view and known bare/quoted YAML mapping keys before allocation.
+It retains original bytes, ordinary documentation and opaque metadata; unknown
+profile locks remain unresolved. Import never installs or dispatches a provider,
+and execution still requires explicit admitted preflight/Start of exact inputs.
+
 ## Import/export safety
 
 Accept only documented archive formats with bounded total expanded size, file count, compression ratio and path length. Reject traversal, absolute paths, symlink/hardlink escape, duplicate normalized names, executable auto-run hooks and files outside allowed project kinds. Extract into a fresh staged directory and validate before allocating the final project. Import never overwrites an existing project by display name.

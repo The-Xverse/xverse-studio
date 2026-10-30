@@ -2,6 +2,7 @@
 
 import io
 import zipfile
+import zlib
 from fastapi import Request
 from fastapi.responses import Response
 from xverse_studio.api.models import Export
@@ -45,7 +46,12 @@ def install_exchange(app, store, projects, runs):
                     raise Problem(
                         "LIMIT_EXCEEDED", "Exchange expanded byte limit exceeded.", 413
                     )
-                z.writestr(path, content)
+                compressor = zlib.compressobj(zlib.Z_DEFAULT_COMPRESSION, zlib.DEFLATED, -15)
+                compressed = compressor.compress(content) + compressor.flush()
+                # Preserve the same source bytes without producing an entry
+                # that the unchanged import compression-ratio guard rejects.
+                compression = zipfile.ZIP_STORED if len(content) / max(1, len(compressed)) > 100 else zipfile.ZIP_DEFLATED
+                z.writestr(path, content, compress_type=compression)
         data = target.getvalue()
         if len(data) > MAX_EXPANDED:
             raise Problem("LIMIT_EXCEEDED", "The exchange byte limit is 16 MiB.", 413)

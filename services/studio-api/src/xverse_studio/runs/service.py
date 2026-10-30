@@ -23,6 +23,7 @@ from xverse_studio.providers.registry import (
     descriptors,
 )
 from xverse_studio.evidence.reader import read_journal
+from xverse_studio.security.managed_io import read_bounded, SafeIOError
 from xverse_studio.deployments import compile_selection
 from xverse_studio.profiles import ProfileRegistry
 from xverse_studio.preflight import reference_readiness
@@ -53,6 +54,17 @@ ACTIVE = {
     "reconciling",
     "unknown",
 }
+MAX_RUNTIME_REPORT_BYTES = 1024 * 1024
+MAX_RUNTIME_REPORT_ATTEMPTS = 4
+
+
+def _unique_report_fields(pairs):
+    result = {}
+    for key, value in pairs:
+        if key in result:
+            raise ValueError("Duplicate runtime report field")
+        result[key] = value
+    return result
 
 
 def _valid_observed_report(value):
@@ -708,8 +720,20 @@ class Runs:
             operation_changes = {"status": "unknown"}
         self._record_dispatch(rid, acknowledgement, operation_changes, acknowledged_pid=process.pid)
 
-    @staticmethod
-    def _terminal_after_exit(statepath, run):
+    def _read_report(self, statepath):
+        for attempt in range(MAX_RUNTIME_REPORT_ATTEMPTS):
+            try:
+                raw = read_bounded(self.store.root, statepath, MAX_RUNTIME_REPORT_BYTES)
+                break
+            except SafeIOError as error:
+                # A producer can atomically publish another complete report
+                # during capture. Reacquire within the same declared bound.
+                if error.code == "SOURCE_CHANGED" and attempt + 1 < MAX_RUNTIME_REPORT_ATTEMPTS:
+                    continue
+                raise
+        return json.loads(raw.decode("utf-8"), object_pairs_hook=_unique_report_fields)
+
+    def _terminal_after_exit(self, statepath, run):
         """Reacquire once after exit, using only an already recorded owner identity."""
         if (
             run.get("pid") is None
@@ -717,7 +741,7 @@ class Runs:
             or not run.get("ownerDigest")
         ):
             return None
-        observed = json.loads(statepath.read_text())
+        observed = self._read_report(statepath)
         if (
             _valid_observed_report(observed)
             and observed.get("state") in ("stopped", "failed")
@@ -735,14 +759,19 @@ class Runs:
             run = self.store.get("run", rid)
             _observation_version(run)
             previous_run = canonical(run)
-            root = self.directory(rid)
+            # Observation acquisition enforces native containment itself. A
+            # rebound directory must become unavailable, not a resolver error
+            # before ownership reconciliation can retain its unknown outcome.
+            root = self.store.root / "runs" / rid
             statepath = root / "state.json"
             observed = None
             report_present = True  # An inspection failure cannot use initial-absence grace.
             try:
-                report_present = statepath.exists()
-                if report_present:
-                    observed = json.loads(statepath.read_text())
+                try:
+                    observed = self._read_report(statepath)
+                except SafeIOError as error:
+                    report_present = error.code != "FILE_MISSING"
+                    raise
                 if not _valid_observed_report(observed):
                     observed = None
                 if observed and (observed["stateVersion"] < run["stateVersion"]

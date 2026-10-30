@@ -182,6 +182,13 @@ Terminal history has no active authority. Each page is an independent observatio
 concurrent changes can alter page membership. The browser requests 50 rows and at
 most 20 pages from the bounded 1,000-record ledger, with explicit refresh/retry.
 
+ADR-0046 applies the same anchored native acquisition to ordinary and final
+runtime state reports:1MiB UTF-8 JSON, unique keys, at most four attempts only for
+concurrent replacement. Existing owner, version, command and terminal checks stay
+authoritative. Unavailable/unsafe data grants no observation or new lifecycle
+authority; known terminal history and active unknown ownership stay distinct.
+
+
 ## Catalog and profile operations
 
 Catalog entry IDs resolve server-admitted immutable metadata, not arbitrary URLs or executable paths. A blueprint entry includes the exact XDL resource set, profile locks, artifact/provider references and declared scope. Missing dependencies remain visible. `POST /projects` may select this admitted blueprint by ID/version/digest; a later catalog update cannot silently alter an existing project.

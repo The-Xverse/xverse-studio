@@ -25,6 +25,9 @@ SECRET = re.compile(
     r'(?i)(?:["\']?(?:password|passwd|(?:access|refresh|session|bootstrap|csrf)[_-]?token|(?<![A-Za-z0-9])id[_-]?token|studio_session|api[_-]?key|private[_-]?key|client[_-]?secret)["\']?\s*[:=]\s*["\']?[^\s"\',}]+|["\']?authorization["\']?\s*[:=]\s*["\']?(?:Bearer|Basic)\s+[^\s"\',}]+|-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----|gh[pousr]_[A-Za-z0-9]{20,})'
 )
 JSON_STRING = re.compile(r'"(?:[^"\\]|\\.)*"')
+PROFILE_CODE = re.compile(
+    r'''(?i)(<script|javascript:|(?:^|[\n\r{,])[ \t]*(?:-[ \t]+)?["']?(?:script|onload|onerror|exec|hooks)["']?\s*:)'''
+)
 
 
 def safe_name(name):
@@ -61,14 +64,7 @@ def safe_name(name):
     return name
 
 
-def check_text(content):
-    try:
-        size = len(content.encode("utf-8"))
-    except UnicodeError:
-        raise Problem("TEXT_INVALID", "Use valid UTF-8 text.") from None
-    if size > 1024 * 1024:
-        raise Problem("LIMIT_EXCEEDED", "A document is limited to 1 MiB.", 413)
-
+def _security_text(content):
     def decoded_literal(match):
         try:
             return '"' + json.loads(match.group()) + '"'
@@ -78,7 +74,17 @@ def check_text(content):
     # A bounded security observation, not another model parser. Recognize JSON
     # string escapes in keys/values and YAML double-quoted text; retain original
     # authored bytes and leave authoritative semantics to XDL.
-    inspected = JSON_STRING.sub(decoded_literal, content)
+    return JSON_STRING.sub(decoded_literal, content)
+
+
+def check_text(content):
+    try:
+        size = len(content.encode("utf-8"))
+    except UnicodeError:
+        raise Problem("TEXT_INVALID", "Use valid UTF-8 text.") from None
+    if size > 1024 * 1024:
+        raise Problem("LIMIT_EXCEEDED", "A document is limited to 1 MiB.", 413)
+    inspected = _security_text(content)
     if SECRET.search(inspected) or re.search(
         r"(?i)\b[a-z][a-z0-9+.-]*://[^/\s?#]*@", inspected
     ):
@@ -135,9 +141,10 @@ def read_archive(encoded):
                         "UNSAFE_ARCHIVE", "Duplicate portable path or case collision."
                     )
                 seen.add(norm)
-                if info.flag_bits & 1 or stat.S_ISLNK(info.external_attr >> 16):
+                mode = stat.S_IFMT(info.external_attr >> 16)
+                if info.flag_bits & 1 or mode not in {0, stat.S_IFREG, stat.S_IFDIR}:
                     raise Problem(
-                        "UNSAFE_ARCHIVE", "Encrypted entries and links are rejected."
+                        "UNSAFE_ARCHIVE", "Encrypted entries and non-regular file kinds are rejected."
                     )
                 if info.is_dir():
                     continue
@@ -172,10 +179,7 @@ def read_archive(encoded):
                     )
                 text = z.read(info).decode("utf-8")
                 check_text(text)
-                if name.startswith("profiles/") and re.search(
-                    r'(?i)(<script|javascript:|"(?:script|onload|onerror|exec|hooks)"\s*:)',
-                    text,
-                ):
+                if name.startswith("profiles/") and PROFILE_CODE.search(_security_text(text)):
                     raise Problem(
                         "UNSAFE_PROFILE",
                         "Profile presentation must be declarative and inert.",
