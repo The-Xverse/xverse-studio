@@ -34,7 +34,7 @@ def main():
     p.add_argument('--playwright-cli', type=Path, required=True)
     p.add_argument('--browser-cache', type=Path, required=True)
     p.add_argument('--static-dir', type=Path, required=True)
-    p.add_argument('--case', choices=['startup-failure', 'runtime-failure'], default='startup-failure')
+    p.add_argument('--case', choices=['startup-failure', 'runtime-failure', 'session-short', 'session-expiry'], default='startup-failure')
     args = p.parse_args()
     args.output.mkdir(parents=True)
     data = ROOT / '.studio-local/browser-tests' / ('browser-recovery-' + uuid.uuid4().hex)
@@ -42,13 +42,14 @@ def main():
         pass
     sources = documents('studio-browser')
     scenario = YAML(typ='safe').load(sources['scenario.xdl.yaml'])
-    scenario['extensions'][NAMESPACE]['durationSeconds'] = 180 if args.case == 'runtime-failure' else 30
+    is_session = args.case.startswith('session-')
+    scenario['extensions'][NAMESPACE]['durationSeconds'] = 1200 if args.case == 'session-expiry' else 180 if args.case in ('runtime-failure', 'session-short') else 30
     sources['scenario.xdl.yaml'] = dump_yaml(scenario)
     (data / 'author-inputs.private.json').write_text(json.dumps(sources))
     host = native.NativeHost(data, args.output, args.receipt.absolute(), Path(sys.executable), args.static_dir.absolute())
     node, worker, component = None, None, None
     rid, injected = None, False
-    report = {'scope': 'Actual native Autoverse and browser command-failure evidence', 'case': args.case, 'outcome': 'failed'}
+    report = {'scope': 'Actual native Autoverse and browser conformance', 'case': args.case, 'outcome': 'failed', 'nativeCheckpoints': []}
     try:
         host.start()
         env = dict(os.environ, STUDIO_BASE_URL=host.url, STUDIO_BROWSER_DATA=str(data), STUDIO_AUTOVERSE_RECONNECT_CASE=args.case, STUDIO_BROWSER_REPORT=str(args.output.absolute() / 'browser.json'), STUDIO_BROWSER_OUTPUT=str(args.output.absolute() / 'browser-artifacts'), PLAYWRIGHT_BROWSERS_PATH=str(args.browser_cache.absolute()))
@@ -61,7 +62,10 @@ def main():
             native.wait(lambda: original_node.ppid() == os.getpid() and original_node.uids().real == os.getuid()
                         and original_node.create_time() == browser_birth and original_node.cmdline() == argv, bool, timeout=3)
             report['originalBrowserDriver'] = {'pid': node.pid, 'birth': browser_birth, 'argvDigest': digest(argv), 'nativeParentAndUidVerified': True}
-            deadline = time.monotonic() + (720 if args.case == 'runtime-failure' else 180)
+            deadline = time.monotonic() + (2400 if args.case == 'session-expiry' else 720 if args.case in ('runtime-failure', 'session-short') else 180)
+            checked_stages = set()
+            last_progress = 0
+            snapshot_bytes = None
             while node.poll() is None and time.monotonic() < deadline:
                 context = data / 'browser-run.private.json'
                 if context.exists():
@@ -73,9 +77,10 @@ def main():
                         assert digest((directory / 'owner.key').read_bytes()) == r['ownerDigest']
                         worker = native.OriginalProcess(r['pid'], r['createTime'], r['launchArgvDigest'], parent=host.child.pid)
                         report.update(runId=rid, snapshotId=value['snapshotId'], operationId=value['operationId'], originalWorkerPidfdCaptured=True)
+                        snapshot_bytes = (data / 'snapshots' / value['snapshotId'] / 'snapshot.json').read_bytes()
                     state_path = directory / 'state.json'
                     resource_path = directory / 'resources.private.json'
-                    if not injected and worker is not None and state_path.exists() and resource_path.exists():
+                    if not is_session and not injected and worker is not None and state_path.exists() and resource_path.exists():
                         state = json.loads(state_path.read_bytes())
                         resources = json.loads(resource_path.read_bytes())
                         partial = state['state'] == 'preparing' and state['runtimeStatus']['phase'] == 'simulator' and 'vcu' not in resources
@@ -86,16 +91,37 @@ def main():
                             component.send(signal.SIGKILL)
                             injected = True
                             report['originalCarlaPidfdLoss'] = 'startup' if args.case == 'startup-failure' else 'after_observed_running'
+                    checkpoint = data / 'browser-checkpoint.private.json'
+                    if is_session and worker is not None and checkpoint.exists():
+                        stage = json.loads(checkpoint.read_bytes())['stage']
+                        assert stage in {'two-tab-original-worker', 'delivery-order-original-worker', 'all-ui-pages-closed-original-worker', 'reopened-original-worker', 'expired-cursor-original-worker'}
+                        if stage not in checked_stages:
+                            worker.verify()
+                            assert r['pid'] == worker.pid and r['createTime'] == worker.birth
+                            assert digest((directory / 'owner.key').read_bytes()) == r['ownerDigest']
+                            state = json.loads(state_path.read_bytes())
+                            assert state['state'] == 'running'
+                            assert (data / 'snapshots' / value['snapshotId'] / 'snapshot.json').read_bytes() == snapshot_bytes
+                            report['nativeCheckpoints'].append({'stage': stage, 'originalWorkerIdentityVerified': True, 'snapshotBytesUnchanged': True})
+                            native.atomic(data / 'native-checkpoint.private.json', json.dumps({'stage': stage}).encode())
+                            checked_stages.add(stage)
+                    if is_session and time.monotonic() - last_progress >= 30:
+                        progress = data / 'browser-progress.private.json'
+                        stage = json.loads(progress.read_bytes()).get('stage') if progress.exists() else 'browser-startup'
+                        print('AUTOVERSE_NATIVE_PROGRESS', stage, len(checked_stages), flush=True)
+                        last_progress = time.monotonic()
                 time.sleep(0.1)
             if node.poll() is None:
                 assert original_node.create_time() == browser_birth and original_node.cmdline() == argv
                 node.terminate()
             node.wait(timeout=30)
         report['browserExit'] = node.returncode
-        assert injected and rid is not None and worker is not None
+        assert (injected or is_session) and rid is not None and worker is not None
         native.wait(worker.exited, bool, timeout=90)
         report['cleanup'] = native.verify_released(data, rid)
         assert report['cleanup']['exactStoppedContainers'] == (0 if args.case == 'startup-failure' else 3)
+        if is_session:
+            assert len(checked_stages) == (5 if args.case == 'session-expiry' else 4)
         assert node.returncode == 0, 'Actual browser scenario failed; retain its original report'
         report['outcome'] = 'passed'
     finally:

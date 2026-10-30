@@ -5,6 +5,7 @@ import core from "../e2e/playwright.config";
 export default defineConfig({
   ...core,
   testDir: ".",
-  testMatch: "autoverse-reconnect.spec.ts",
+  testMatch: process.env.STUDIO_AUTOVERSE_RECONNECT_CASE?.startsWith("session-")
+    ? "autoverse-session.spec.ts" : "autoverse-reconnect.spec.ts",
   timeout: 180000,
 });
