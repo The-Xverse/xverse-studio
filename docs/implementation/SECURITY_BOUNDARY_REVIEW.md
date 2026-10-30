@@ -17,8 +17,24 @@ cases pass, including late collisions, actual short writes, pre/post-write and
 post-publication metadata failures, and unsupported publication refusal. Final
 source-bound confirmation passes153 API/native CLI cases and4 native browser
 checks on429 unchanged source/config/test inputs plus6 UI assets. Clean installed
-complete-demo confirmation remains pending. Evidence is retained under
+complete-demo confirmation is mixed, as recorded below. Evidence is retained under
 `evidence/studio/M0-anchored-project-writes/`.
+
+Clean candidatef754d1b package165 matches159 committed payloads,6 tested UI assets,
+all429 inputs and canonical SDK12615d402. Its installed complete demo reaches
+native publication and passes15 incompatible-input refusals,4 nonfinite refusals
+and corrupt-snapshot refusal. The terminal assertion fails: lifecycle is stopped
+but Android cleanup and its Stop receipt remain unknown. All16 original processes
+are absent and3 exact container/start identities are later observed stopped; those
+later facts do not rewrite the original result. The terminal same-key retry is not
+reached. Root lock releases,21 original platform files and all captured inputs
+remain unchanged. Preserve this failed live observation; do not replay to hide it.
+
+The source cleanup review finds that optional Android shutdown and mandatory
+container Stop share one exception boundary, and a CLI timeout skips final readback.
+The original swallowed exception prevents assigning that as the demonstrated cause.
+Next investigate with bounded coded diagnostics and exact-owner readback, retaining
+unknown whenever ownership/release cannot actually be established.
 
 The remaining review covers every original T010 clause:
 

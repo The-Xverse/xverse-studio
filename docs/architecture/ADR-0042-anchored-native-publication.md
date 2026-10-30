@@ -1,7 +1,8 @@
 # ADR-0042: Anchored native writes and owned revision publication
 
-Status: implemented; Autoverse confirmation in progress. T010 remains open for
-its complete security review. Linux delivery scope is unchanged.
+Status: implemented;153 target API/native CLI and4 native browser checks pass.
+Installed complete Autoverse verification is mixed at cleanup; T010 remains open
+for its complete security review. Linux delivery scope is unchanged.
 
 Autoverse project fault tests reproduce a check/reopen gap in revision writes.
 After a checked parent becomes a link, the old atomic helper writes into a foreign

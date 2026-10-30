@@ -1,3 +1,26 @@
+# Anchored native publication update — 2026-10-30
+
+**57 completed /33 in progress /10 blocked; zero accepted milestones.** T010
+now repairs a reproduced project-write escape and unsafe rollback deletion.
+Native writes retain directory descriptors and private modes; revision publication
+and cleanup preserve original ownership and late existing directories.
+
+Current Autoverse confirmation passes153 API/native CLI and4 native browser checks
+on429 unchanged inputs and6 UI assets. Clean candidatef754d1b package165 matches
+all hashes and SDK12615d402. The installed complete demo passes publication and
+control refusals, but its overall driver fails on Android cleanup/Stop receipt
+unknown. All16 original processes are later absent and3 exact containers stopped;
+21 original platform files remain unchanged. These later facts do not turn the
+original failed assertion into a pass. The original operator is not restarted.
+
+T010 remains open. Next investigate bounded native cleanup diagnostics and original
+owner readback, then finish sessions/origins, imports, redaction, other file paths
+and the full execution-boundary review. The complete original goal remains active;
+Windows is outside scope. See [review](../../evidence/studio/M0-anchored-project-writes/review.md)
+and [actual installed outcome](../../evidence/studio/M0-anchored-project-writes/package-binding.json).
+
+## Previous provider closure
+
 # Active provider controls closure — 2026-10-30
 
 **57 completed /33 in progress /10 blocked; zero accepted milestones.** T004
