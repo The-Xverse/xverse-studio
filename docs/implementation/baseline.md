@@ -50,7 +50,9 @@ line endings, YAML/JSON formatting and source order do not alter those executabl
 `tests/contract/test_xdl_adapter.py` executes the real installed platform CLI and public library over
 the same inputs and compares the complete emitted plan. The test also exercises hostile YAML,
 unresolved extensions, source locations, changed parameter identities and unsupported provider edits.
-Native Windows parity and portable exchange remain NOT_RUN until a Windows host is available.
+Historical native Windows parity remains NOT_RUN and is outside current delivery
+requirements under ADR-0036. Current Linux Autoverse CLI/API and persistence
+verification is recorded separately by T014; older fixture results retain their scope.
 
 Current live limitations are concrete:
 
@@ -72,13 +74,13 @@ Current live limitations are concrete:
   exact authored bytes, and returns an empty graph projection. This is not replacement validation or
   a claim that the platform produced semantic diagnostics. A corrected admitted public validator is
   needed to close DEP-XDL-DIAGNOSTIC; companion source is not patched by Studio.
-- Lite flow evidence is distinct from native C++ X-COM activation. The accepted
-  public Maestro boundary supports scoped Linux lifecycle and native observation
-  collection with real Argus evidence. Studio's concrete Maestro/Autoverse integration
-  and three linked views remain unfinished. The existing separately admitted
-  Autoverse prototype operates its simulator through public component interfaces;
-  it does not establish Maestro, native X-COM or Argus integration. Physical equipment
-  and general model coupling remain unavailable.
+- Lite flow evidence is distinct from native C++ X-COM activation. The separately
+  enrolled `autoverse.platform` provider has complete Linux experiment and linked
+  Maestro/native X-COM/Argus view evidence in
+  `evidence/studio/platform-observability-foundation/live-browser-experiment.json`
+  and `live-follow.json`. Original classic `autoverse.demo` results retain their
+  component-only scope. This explicit platform enrollment does not admit the old
+  Lite harness, arbitrary providers, physical equipment or general model coupling.
 
 The executable `studio.reference` provider is Studio-owned and has its own finite model contract.
 Its evidence scope is `owned_reference` and maturity is `fixture`. It proves owned application
@@ -96,4 +98,12 @@ XDL Git provenance and selected file hashes, lock/package versions, schema bytes
 toolchain declarations and fixed evidence receipts. It does not start/probe a provider or repeat the
 historical browser measurements. Intentional baseline changes need reviewed manifest/evidence
 updates; the checker does not rewrite the manifest. Repository evidence links require the checkout,
-and wheel-only provenance needs its own admission update. T001 remains open for its recorded gates.
+and wheel-only provenance needs its own admission update. T001's Linux baseline
+component is complete; its historical results do not accept an entire milestone.
+
+T014 rechecks the exact installed SDK pin and current Autoverse contracts, native
+project persistence, hostile imports and security boundaries. The standalone Lite
+binding remains unavailable for the precise provider-specific reasons in
+[dependencies.md](dependencies.md#standalone-lite-binding--t014-classification).
+The public Maestro API exists at the selected pin; its existence does not supply
+an admitted Lite configuration adapter or open the older private runtime path.
