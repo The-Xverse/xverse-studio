@@ -56,6 +56,13 @@ and frozen configuration remain immutable.
 - `cleanup.updated`, `evidence.updated`, `evaluation.updated`.
 - `stream.gap`, `stream.resync_required`, `capabilities.changed`.
 
+ADR-0049 adds classic Autoverse's original `command.failed` event for an accepted
+Start that fails before reaching running. The payload retains the server-issued
+`operationId`, `kind: start` and actual failure `code`; run/snapshot/source identities
+and unmapped source time remain unchanged. A later runtime failure does not fail
+an already completed Start. Cleanup and evidence/functional outcomes stay separate.
+The shared retained-history filter offers all six existing command outcome kinds.
+
 Requested fault activation is not evidence that a fault occurred. A connection event must identify whether it describes declared configuration, resolved routing or observed traffic. No traffic is `unobserved` unless the expectation/time window establishes a failure.
 
 ## SSE delivery and reconnect

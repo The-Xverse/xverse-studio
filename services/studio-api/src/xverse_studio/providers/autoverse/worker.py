@@ -519,6 +519,12 @@ def finish(demo, failed):
     demo.state.update(state="failed" if failed else "stopped", stateVersion=demo.state["stateVersion"] + 1,
                       endedAt=time.time(), evidence="partial" if failed or io_failed else "available")
     try:
+        if failed and not demo.state.get("startedAt"):
+            # The backend accepted this original Start, but the native target
+            # never reached running. Record that operation's actual failure;
+            # later workload failure must not retroactively fail a completed Start.
+            demo.emit("command.failed", {"operationId": demo.request["operationId"],
+                "kind": "start", "code": demo.state["reason"]})
         demo.emit("run.state_changed", {"state": demo.state["state"], "stateVersion": demo.state["stateVersion"], "cleanup": demo.state["cleanup"], "cleanupResources": demo.state.get("cleanupResources", []), "reason": demo.state.get("reason")})
     except (OSError, InstallationError):
         io_failed = True
