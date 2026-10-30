@@ -2,6 +2,7 @@ from __future__ import annotations
 import hashlib
 import hmac
 import json
+import math
 import os
 import platform
 import secrets
@@ -52,6 +53,44 @@ ACTIVE = {
     "reconciling",
     "unknown",
 }
+
+
+def _valid_observed_report(value):
+    """Inspect known envelope fields; this grants no process or command authority."""
+    if not isinstance(value, dict):
+        return False
+    try:
+        canonical(value).encode("utf-8")
+    except (TypeError, ValueError, RecursionError):
+        return False
+    state = value.get("state")
+    if not isinstance(state, str) or state not in ACTIVE | {"stopped", "failed"}:
+        return False
+    if type(value.get("stateVersion")) is not int or value["stateVersion"] < 0:
+        return False
+    if type(value.get("pid")) is not int or value["pid"] <= 0:
+        return False
+    birth = value.get("createTime")
+    if type(birth) not in (int, float):
+        return False
+    try:
+        if not math.isfinite(birth) or birth < 0:
+            return False
+    except OverflowError:
+        return False
+    if not isinstance(value.get("ownerDigest"), str) or not value["ownerDigest"]:
+        return False
+    for key, allowed in (
+        ("cleanup", {"not_started", "in_progress", "complete", "failed", "unknown"}),
+        ("evidence", {"pending", "collecting", "complete", "partial", "invalid", "unavailable", "available"}),
+    ):
+        if key in value and (not isinstance(value[key], str) or value[key] not in allowed):
+            return False
+    results = value.get("commandResults", {})
+    return isinstance(results, dict) and all(
+        isinstance(result, dict) and isinstance(result.get("status"), str)
+        for result in results.values()
+    )
 
 
 class Runs:
@@ -642,8 +681,10 @@ class Runs:
             return None
         observed = json.loads(statepath.read_text())
         if (
-            isinstance(observed, dict)
+            _valid_observed_report(observed)
             and observed.get("state") in ("stopped", "failed")
+            and observed["stateVersion"] >= run["stateVersion"]
+            and (run["state"] not in ("stopped", "failed") or observed["state"] == run["state"])
             and observed.get("ownerDigest") == run.get("ownerDigest")
             and observed.get("pid") == run["pid"]
             and observed.get("createTime") == run["createTime"]
@@ -659,9 +700,16 @@ class Runs:
             root = self.directory(rid)
             statepath = root / "state.json"
             observed = None
+            report_present = True  # An inspection failure cannot use initial-absence grace.
             try:
-                if statepath.exists():
+                report_present = statepath.exists()
+                if report_present:
                     observed = json.loads(statepath.read_text())
+                if not _valid_observed_report(observed):
+                    observed = None
+                if observed and (observed["stateVersion"] < run["stateVersion"]
+                        or (run["state"] in ("stopped", "failed") and observed["state"] != run["state"])):
+                    observed = None
                 if observed and observed.get("ownerDigest") != run.get("ownerDigest"):
                     observed = None
                 if observed:
@@ -720,7 +768,9 @@ class Runs:
                         # A running file read may precede the worker's final atomic
                         # replacement and exit. This grants no process control.
                         observed = self._terminal_after_exit(statepath, run)
-            except (OSError, ValueError, psutil.Error):
+            except (OSError, ValueError, RecursionError, psutil.Error):
+                observed = None
+            if observed and not self._valid_observed_commands(run, observed):
                 observed = None
             if observed:
                 if (
@@ -767,6 +817,12 @@ class Runs:
                     try:
                         op = self.store.get("operation", oid)
                         previous_operation = canonical(op)
+                        if result["status"] in ("accepted", "delegated"):
+                            # Producer progress cannot erase a known receipt or
+                            # turn an unknown outcome into a terminal result.
+                            if op["status"] not in ("accepted", "delegated", "unknown"):
+                                continue
+                            result = {**result, "status": op["status"]}
                         op.update(result)
                         if canonical(op) != previous_operation:
                             self.store.put("operation", oid, op)
@@ -778,6 +834,7 @@ class Runs:
                     or (task is not None and task.task_id == run.get("ownerTaskId") and task.poll() is None))
                 if (
                     run.get("state") == "preparing"
+                    and not report_present
                     and startup_identity_available
                     and time.time() - run.get("launchStartedAt", run["createdAt"]) < 5
                 ):
@@ -814,20 +871,93 @@ class Runs:
                 self.children.pop(rid)
             return run
 
+    def _valid_observed_commands(self, run, observed):
+        results = observed.get("commandResults", {})
+        if not results:
+            return True
+        immutable = ("operationId", "runId", "kind", "parameters", "principal", "expectedStateVersion")
+        with self.store.tx() as db:
+            for operation_id, result in results.items():
+                try:
+                    operation = self.store.get("operation", operation_id, db)
+                except Problem as error:
+                    if error.code == "NOT_FOUND":
+                        # Owner-side maintenance receipts remain opaque; they
+                        # cannot allocate or alter a Studio acceptance.
+                        continue
+                    return False
+                if (not isinstance(operation, dict) or operation.get("runId") != run["runId"]
+                        or operation_id == run["operationId"] or operation.get("kind") == "start"):
+                    return False
+                if result["status"] not in {"accepted", "delegated", "completed", "failed", "unknown", "rejected"}:
+                    return False
+                if any(key in result and (key not in operation or canonical(result[key]) != canonical(operation[key])) for key in immutable):
+                    return False
+        return True
+
+    def _command_producer_finished(self, run):
+        """Read original handle/identity liveness; never signal or adopt a process."""
+        child = self.children.get(run["runId"])
+        if child is not None:
+            if getattr(child, "pid", None) != run.get("pid"):
+                return None
+            if (run.get("executionKind") == "backend-task"
+                    and getattr(child, "task_id", None) != run.get("ownerTaskId")):
+                return None
+            return child.poll() is not None
+        if run.get("executionKind") == "backend-task":
+            # An alive backend PID does not establish completion of a lost task.
+            return None
+        if run.get("pid") is None or run.get("createTime") is None:
+            return None
+        try:
+            process = psutil.Process(run["pid"])
+            if abs(process.create_time() - run["createTime"]) > 0.001:
+                return True  # The recorded original exited; this PID belongs elsewhere.
+            return not process.is_running() or process.status() == psutil.STATUS_ZOMBIE
+        except psutil.NoSuchProcess:
+            return True
+        except psutil.Error:
+            return None
+
     def _reconcile_command(self, run, observed):
         # An accepted stop/cancel never stays delegated past the evidence that settles it.
         oid = run.get("pendingCommandId")
         if not oid:
             return
         op = self.store.get("operation", oid)
+        previous_operation = canonical(op)
         if op["status"] not in ("accepted", "delegated", "unknown"):
             run.pop("pendingCommandId")
         elif observed and observed.get("state") in ("stopped", "failed"):
-            # The worker has finished and did not apply this request: it failed, unexecuted.
-            op.update(status="failed", code="RUN_TERMINAL_BEFORE_COMMAND")
-            self.store.put("operation", oid, op)
-            run.pop("pendingCommandId")
-        elif run["state"] == "unknown" and op["status"] != "unknown":
+            finished = self._command_producer_finished(run)
+            if finished is False:
+                return  # Lifecycle may be terminal while cleanup/result reporting continues.
+            final = None
+            if finished is True:
+                try:
+                    final = self._terminal_after_exit(self.directory(run["runId"]) / "state.json", run)
+                    if (final and (not self._valid_observed_commands(run, final)
+                            or (run.get("executionKind") == "backend-task"
+                                and final.get("ownerTaskId") != run.get("ownerTaskId")))):
+                        final = None
+                except (OSError, ValueError, RecursionError):
+                    pass
+            if final is not None:
+                result = final.get("commandResults", {}).get(oid)
+                if result is not None:
+                    op.update(result)
+                    if result["status"] in ("accepted", "delegated"):
+                        op["status"] = "unknown"
+                else:
+                    op.update(status="failed", code="RUN_TERMINAL_BEFORE_COMMAND")
+                if op["status"] not in ("accepted", "delegated", "unknown"):
+                    run.pop("pendingCommandId")
+            else:
+                op["status"] = "unknown"
+            if canonical(op) != previous_operation:
+                self.store.put("operation", oid, op)
+        elif (observed is None or run["state"] == "unknown") and op["status"] != "unknown":
             op["status"] = "unknown"
             self.store.put("operation", oid, op)
 

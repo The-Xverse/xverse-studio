@@ -1,0 +1,160 @@
+{
+  "pathNormalization": "Executable/cache/absolute output paths are normalized for relocation; no credentials or original private session values are included. Earlier diagnostic phases have results and case identities but not a complete original CLI capture.",
+  "commands": [
+    {
+      "phase": "reacquisition-final",
+      "environment": {
+        "PYTEST_DISABLE_PLUGIN_AUTOLOAD": "1"
+      },
+      "argv": [
+        ".venv/bin/python",
+        "-I",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/contract/test_terminal_report_completion.py",
+        "tests/contract/test_run_observation_corruption.py",
+        "tests/contract/test_run_events.py",
+        "tests/integration/test_run_read_persistence.py",
+        "tests/contract/test_platform_owner.py::test_preflight_observes_finished_original_task_without_a_separate_run_get",
+        "--basetemp=.studio-local/run-observation-review/reacquisition-final-data",
+        "--junitxml=.studio-local/run-observation-review/reacquisition-final.xml"
+      ],
+      "exitCode": 0
+    },
+    {
+      "phase": "native-final",
+      "environment": {
+        "PYTEST_DISABLE_PLUGIN_AUTOLOAD": "1"
+      },
+      "argv": [
+        ".venv/bin/python",
+        "-I",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/platform/test_reconciliation_identity.py",
+        "tests/contract/test_platform_owner.py",
+        "tests/contract/test_runtime_lifecycle.py",
+        "tests/integration/test_native_command_terminal_boundaries.py",
+        "tests/platform/test_native_recovery.py",
+        "tests/platform/test_native_start_acceptance_recovery.py",
+        "tests/integration/test_worker_cleanup.py",
+        "tests/integration/test_worker_cleanup_interruption.py",
+        "--basetemp=.studio-local/run-observation-review/native-final-data",
+        "--junitxml=.studio-local/run-observation-review/native-final.xml"
+      ],
+      "exitCode": 0
+    },
+    {
+      "phase": "ownership-final",
+      "environment": {
+        "PYTEST_DISABLE_PLUGIN_AUTOLOAD": "1"
+      },
+      "argv": [
+        ".venv/bin/python",
+        "-I",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/contract/test_review_regressions.py::test_post_spawn_lost_birth_is_unknown_then_recovers_one_exact_owned_worker",
+        "tests/contract/test_review_regressions.py::test_reconciliation_does_not_adopt_a_matching_pid_with_wrong_argv",
+        "tests/integration/test_recorded_replay_and_rerun.py::test_restart_unknown_dispatch_never_replays_start",
+        "--basetemp=.studio-local/run-observation-review/ownership-final-data",
+        "--junitxml=.studio-local/run-observation-review/ownership-final.xml"
+      ],
+      "exitCode": 0
+    },
+    {
+      "phase": "reacquisition-red",
+      "argv": [
+        ".venv/bin/python",
+        "-I",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/contract/test_terminal_report_completion.py",
+        "-k",
+        "regressed",
+        "--basetemp=.studio-local/run-observation-review/reacquisition-red-data",
+        "--junitxml=.studio-local/run-observation-review/reacquisition-red.xml"
+      ],
+      "environment": {
+        "PYTEST_DISABLE_PLUGIN_AUTOLOAD": "1"
+      },
+      "exitCode": 1
+    },
+    {
+      "phase": "native-reacquisition-red",
+      "argv": [
+        ".venv/bin/python",
+        "-I",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/contract/test_run_observation_corruption.py",
+        "-k",
+        "native_exit_reacquisition",
+        "--basetemp=.studio-local/run-observation-review/native-reacquisition-red-data",
+        "--junitxml=.studio-local/run-observation-review/native-reacquisition-red.xml"
+      ],
+      "environment": {
+        "PYTEST_DISABLE_PLUGIN_AUTOLOAD": "1"
+      },
+      "exitCode": 1
+    },
+    {
+      "phase": "browser",
+      "argv": [
+        "node",
+        "../../../node_modules/@playwright/test/cli.js",
+        "test",
+        "--config",
+        "tests/e2e/playwright.config.ts",
+        "tests/e2e/run-startup-outcomes.spec.ts"
+      ],
+      "exitCode": 0,
+      "environment": "Pinned Node24.22.1 and cached Playwright Chromium; absolute report/output paths normalized under .studio-local/run-observation-review; each fixture owns its isolated native backend."
+    },
+    {
+      "phase": "reconnect",
+      "launcherArgv": [
+        ".venv/bin/python",
+        "-I",
+        "-m",
+        "xverse_studio.host.launcher",
+        "--data-dir",
+        "ISOLATED_ROOT",
+        "--port",
+        "EPHEMERAL_PORT",
+        "--static-dir",
+        "apps/studio-web/dist"
+      ],
+      "argv": [
+        "node",
+        "../../../node_modules/@playwright/test/cli.js",
+        "test",
+        "--config",
+        "tests/e2e/playwright.config.ts",
+        "tests/e2e/run-reconnect.spec.ts"
+      ],
+      "exitCode": 1,
+      "environment": "STUDIO_BASE_URL points to the original locally owned native launcher; STUDIO_BROWSER_DATA incorrectly selected .studio-local/run-observation-review/reconnect-data, so three protected fixture helpers correctly refuse. Other three native cases pass. Original handle terminates/waits launcher."
+    },
+    {
+      "phase": "reconnect-corrected",
+      "argv": [
+        "node",
+        "../../../node_modules/@playwright/test/cli.js",
+        "test",
+        "--config",
+        "tests/e2e/playwright.config.ts",
+        "tests/e2e/run-reconnect.spec.ts",
+        "--grep",
+        "unknown recorded state|UI metadata fixture|UI fixture renders"
+      ],
+      "exitCode": 0,
+      "environment": "Same owned native launcher argv, new .studio-local/browser-tests/<unique-id> root required by existing protected helpers; only three refused fixture cases repeated. Original handle terminates/waits launcher."
+    }
+  ]
+}

@@ -155,12 +155,15 @@ def _in_process_owned_run(client, monkeypatch, duration=0.5):
 
     class Launched:
         pid = os.getpid()
+        instances = {}
 
         def __init__(self, argv, **kwargs):
             self.argv = argv
+            self.returncode = None
+            self.instances[argv[-1]] = self
 
         def poll(self):
-            return 0
+            return self.returncode
 
     monkeypatch.setattr(service.subprocess, "Popen", Launched)
     p = client.post("/api/v1/projects", json={"name": "command outcomes"}).json()
@@ -186,7 +189,11 @@ def _in_process_owned_run(client, monkeypatch, duration=0.5):
     assert pf["status"] == "ready" and started.status_code == 202, started.text
     started = started.json()
     root = client.app.state.studio.runs.directory(started["runId"])
-    return started["runId"], root, SimpleNamespace
+
+    class OwnedClock(SimpleNamespace):
+        process = Launched.instances[str(root)]
+
+    return started["runId"], root, OwnedClock
 
 
 def _run_worker(monkeypatch, root, namespace, on_tick):
@@ -203,7 +210,11 @@ def _run_worker(monkeypatch, root, namespace, on_tick):
         worker, "time", namespace(time=time.time, monotonic=lambda: 0.0, sleep=sleep)
     )
     monkeypatch.setattr(worker.sys, "argv", ["worker", str(root)])
-    return worker.main(), ticks
+    code = worker.main()
+    # This labelled in-process fixture finishes when its actual worker call returns;
+    # it must not pretend its still-running call is an exited native process.
+    namespace.process.returncode = code
+    return code, ticks
 
 
 def _journal(root):
