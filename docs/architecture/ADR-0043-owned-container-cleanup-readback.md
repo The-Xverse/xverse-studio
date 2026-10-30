@@ -1,7 +1,9 @@
 # ADR-0043: Original-owner readback after uncertain container cleanup
 
-Status: implemented; final Autoverse confirmation in progress. T010/T033 and full
-milestone acceptance remain open. No companion API or ownership grant is changed.
+Status: implemented and verified by165 enrolled-target checks,4 native browser
+checks and3 complete installed Autoverse runs (nominal and both acknowledgement-loss
+cases). T010/T033 and full milestone acceptance remain open. No companion API or
+ownership grant is changed.
 
 The previous complete installed Autoverse run ended with Android cleanup/Stop
 receipt unknown. Later exact-container inspection found it stopped; its original

@@ -2276,7 +2276,7 @@
         "AC-032"
       ],
       "status": "in_progress",
-      "implementation_note": "ADR-0036 removes Windows delivery from current requirements. Prior host-scope note is retained separately. Reassess this task against all amended Linux requirements and its exact evidence; scope removal alone is not completion. Anchored publication progress2026-10-30: candidatef754d1b81a2e747b292476beecb4a816ceff4bd0 repairs actual Autoverse parent-swap foreign writes and foreign empty-directory rollback deletion under ADR-0042. Shared atomic writes use native no-follow directory descriptors/private modes; revision publication refuses existing destinations and cleanup checks original device/inode. Original6 failures retained; expanded18 target cases pass, followed by153 API/native CLI and4 native browser checks on429 unchanged inputs and6 UI assets. Clean offline package165 matches159 committed payloads,6UI and SDK12615d402. Its complete installed Autoverse demo passes native publication and active refusal checks but overall fails terminal cleanup with Android/Stop receipt unknown. Later16original processes absent/3exact containers stopped/rootlockreleased/21platformfiles unchanged do not rewrite that result; same-key terminal retry not reached. Investigate bounded cleanup diagnostics and owner readback, then finish all T010 clauses. Evidence evidence/studio/M0-anchored-project-writes/. T010 stays in_progress;57/33/10, zero accepted milestones.",
+      "implementation_note": "ADR-0036 removes Windows delivery from current requirements. Prior host-scope note is retained separately. Reassess this task against all amended Linux requirements and its exact evidence; scope removal alone is not completion. Anchored publication progress2026-10-30: candidatef754d1b81a2e747b292476beecb4a816ceff4bd0 repairs actual Autoverse parent-swap foreign writes and foreign empty-directory rollback deletion under ADR-0042. Shared atomic writes use native no-follow directory descriptors/private modes; revision publication refuses existing destinations and cleanup checks original device/inode. Original6 failures retained; expanded18 target cases pass, followed by153 API/native CLI and4 native browser checks on429 unchanged inputs and6 UI assets. Clean offline package165 matches159 committed payloads,6UI and SDK12615d402. Its complete installed Autoverse demo passes native publication and active refusal checks but overall fails terminal cleanup with Android/Stop receipt unknown. Later16original processes absent/3exact containers stopped/rootlockreleased/21platformfiles unchanged do not rewrite that result; same-key terminal retry not reached. Investigate bounded cleanup diagnostics and owner readback, then finish all T010 clauses. Evidence evidence/studio/M0-anchored-project-writes/. T010 stays in_progress;57/33/10, zero accepted milestones. Owned container readback progress2026-10-30: candidatec8336a296bd9daffb9d5404024d78698e0d6135a implements ADR-0043 with separate optional Android shutdown, one container Stop attempt and fresh exact configuration/start-identity readback, constant bounded codes and canonical terminal resource facts under unchanged budgets. A complete real Autoverse baseline loses acknowledgement after actual Docker Stop exit0 and reproduces unknown; preserve that and the prior uninstrumented failed cleanup.165 actual enrolled Autoverse API/native CLI and4 native browser checks pass on432 unchanged inputs/6UI. Clean offline package166 matches160 committed payloads,6 tested UI assets and canonical SDK12615d402. Three complete installed classic cases pass (Stop acknowledgement loss, optional Android shutdown acknowledgement loss, nominal original Docker), including native publication, active refusals, original completed Stop/same-key terminal retry and valid canonical cleanup facts. Each has16 original processes absent,3 exact container/config/start identities stopped,rootlockreleased;21 original platform files unchanged. This is component evidence, not the complete security/lifecycle matrix or new Maestro/Argus/physical acceptance. T010/T033 remain in_progress;57/33/10, zero accepted milestones. Evidence evidence/studio/M1-owned-container-readback/.",
       "historical_host_scope_note": "Owned Linux foundation implemented and exercised; native Windows and selected external runtime admission remain open. See evidence/studio/M0-review and docs/implementation/platform-support.md."
     },
     {
@@ -3207,7 +3207,7 @@
         "AC-027"
       ],
       "status": "in_progress",
-      "implementation_note": "ADR-0036 removes Windows delivery from current requirements. Prior host-scope note is retained separately. Reassess this task against all amended Linux requirements and its exact evidence; scope removal alone is not completion.",
+      "implementation_note": "ADR-0036 removes Windows delivery from current requirements. Prior host-scope note is retained separately. Reassess this task against all amended Linux requirements and its exact evidence; scope removal alone is not completion. Owned container readback progress2026-10-30: candidatec8336a296bd9daffb9d5404024d78698e0d6135a implements ADR-0043 with separate optional Android shutdown, one container Stop attempt and fresh exact configuration/start-identity readback, constant bounded codes and canonical terminal resource facts under unchanged budgets. A complete real Autoverse baseline loses acknowledgement after actual Docker Stop exit0 and reproduces unknown; preserve that and the prior uninstrumented failed cleanup.165 actual enrolled Autoverse API/native CLI and4 native browser checks pass on432 unchanged inputs/6UI. Clean offline package166 matches160 committed payloads,6 tested UI assets and canonical SDK12615d402. Three complete installed classic cases pass (Stop acknowledgement loss, optional Android shutdown acknowledgement loss, nominal original Docker), including native publication, active refusals, original completed Stop/same-key terminal retry and valid canonical cleanup facts. Each has16 original processes absent,3 exact container/config/start identities stopped,rootlockreleased;21 original platform files unchanged. This is component evidence, not the complete security/lifecycle matrix or new Maestro/Argus/physical acceptance. T010/T033 remain in_progress;57/33/10, zero accepted milestones. Evidence evidence/studio/M1-owned-container-readback/.",
       "implementation_evidence": [
         "evidence/studio/M1-fixture/matrix.json",
         "evidence/studio/M1-fixture/preparation-interleaving/verification.json",
@@ -7338,20 +7338,23 @@
         {
           "platform": "linux_native",
           "status": "NOT_RUN"
-        },
+        }
+      ],
+      "scope_note": "Targeted owned/Linux records exist; component checks do not establish full case execution or its retained live, hardware and human prerequisites.",
+      "historical_platform_lanes": [
         {
           "platform": "windows_native",
           "status": "NOT_RUN"
         }
       ],
-      "scope_note": "Targeted owned/Linux records exist; component checks do not establish full case execution or its retained live, hardware and human prerequisites."
+      "windows_scope": "OUT_OF_SCOPE_ADR0036; original NOT_RUN lane retained under historical_platform_lanes without a PASS claim."
     }
   ],
   "implementation_record": {
     "scope": "Owned reference implementation; no accepted M0–M4 milestone claimed.",
     "branch": "implement/studio-m0-m4",
     "status_document": "../../docs/implementation/STATUS.md",
-    "native_windows": "BLOCKED at user request. Initial native Server 2022 install failed on upstream Git filenames; application/browser NOT_RUN.",
+    "native_windows": "OUT_OF_SCOPE_ADR0036. Native Linux is the current delivery target; original Windows install failure and application/browser NOT_RUN remain historical evidence.",
     "m5": "deferred",
     "code_candidate": "d67624a76af4f34138c5befcdb361d595307558f verified owned live target/finite JSON source; fresh1250backend/92affectedbrowser/2performance on388 identical inputs, clean nativeLinux package116 with6 tested UI assets and actual installed-model smoke.49/41/10; zero accepted milestones.",
     "component_completed": 49,
@@ -8615,6 +8618,40 @@
       },
       "acceptedMilestones": 0,
       "next": "Investigate actual Android cleanup uncertainty with coded diagnostics and original-owner readback; preserve failed observation. Continue full T010 session/import/redaction/file/execution review and remaining original tasks."
+    },
+    "historical_native_windows_before_ADR0036": "BLOCKED at user request. Initial native Server 2022 install failed on upstream Git filenames; application/browser NOT_RUN.",
+    "autoverse_container_cleanup_readback": {
+      "candidate": "c8336a296bd9daffb9d5404024d78698e0d6135a",
+      "tasks": [
+        "T010",
+        "T033"
+      ],
+      "taskStatus": "in_progress",
+      "testTarget": "Autoverse",
+      "evidence": "evidence/studio/M1-owned-container-readback/",
+      "sourceInputs": 432,
+      "compiledUiAssets": 6,
+      "targetApiAndCliPassed": 165,
+      "nativeBrowserPassed": 4,
+      "cleanPackagePayloads": 166,
+      "completeInstalledDemoCasesPassed": 3,
+      "cases": [
+        "nominal original Docker",
+        "container Stop acknowledgement timeout after actual exit0",
+        "optional Android shutdown acknowledgement timeout after actual exit0"
+      ],
+      "originalProcessesAbsentPerCase": 16,
+      "exactStoppedContainersPerCase": 3,
+      "canonicalResourceFactsAndReceiptVerifiedPerCase": true,
+      "originalPlatformFilesUnchanged": 21,
+      "originalUnknownCleanupResultsPreserved": true,
+      "counts": {
+        "completed": 57,
+        "in_progress": 33,
+        "blocked": 10
+      },
+      "acceptedMilestones": 0,
+      "next": "Continue full T010 sessions/origins, bounded exchange/metadata reads, inert imports, credential exclusion and execution-boundary review, then remaining full lifecycle/scenario/lab/acceptance tasks. Windows current trace gates retired; original historical results retained."
     }
   },
   "scope_amendments": [
@@ -8647,7 +8684,15 @@
         "specs/001-industry-agnostic-studio/acceptance.md",
         "scripts/package_studio.py",
         "docs/implementation/LINUX_REASSESSMENT_REVIEW.md"
-      ]
+      ],
+      "windows_trace_retirement": {
+        "current_required_lanes": [
+          "linux_native"
+        ],
+        "historical_windows_lane_preserved": true,
+        "historical_overview_preserved": true,
+        "review": "evidence/studio/M1-owned-container-readback/windows-trace-retirement.json"
+      }
     },
     {
       "id": "ADR-0037",
@@ -8675,6 +8720,16 @@
       ],
       "change": "Inspect the already sealed revision manifest, block new conflicted current-draft work and retain external envelope bytes through explicit forward recovery. Existing layout, old metadata, receipts and original frozen runs retain separate identity. T008 stays open for generic private binding sidecars.",
       "evidence": "evidence/studio/M0-revision-manifest-integrity/review.md"
+    },
+    {
+      "id": "ADR-0043",
+      "status": "implemented_verified_autoverse_container_readback",
+      "tasks": [
+        "T010",
+        "T033"
+      ],
+      "change": "Read original container identity after command uncertainty within existing budgets; preserve unknown without evidence, retain bounded codes and canonical actual resource facts. No replay, wider grant or historical rewrite.",
+      "evidence": "evidence/studio/M1-owned-container-readback/"
     }
   ]
 }

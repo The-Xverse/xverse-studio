@@ -33,8 +33,17 @@ remain unchanged. Preserve this failed live observation; do not replay to hide i
 The source cleanup review finds that optional Android shutdown and mandatory
 container Stop share one exception boundary, and a CLI timeout skips final readback.
 The original swallowed exception prevents assigning that as the demonstrated cause.
-Next investigate with bounded coded diagnostics and exact-owner readback, retaining
-unknown whenever ownership/release cannot actually be established.
+ADR-0043 now verifies original-owner readback after command uncertainty and retains
+bounded constant codes in actual state and the canonical terminal event. The new
+controlled baseline runs real Docker Stop to exit0, loses acknowledgement and
+reproduces unknown. Clean candidatec8336a2 package166 then passes165 target API/native
+CLI and4 browser checks on432 unchanged inputs plus6 UI assets, followed by3 complete
+installed demo runs: both command acknowledgement-loss cases and nominal original
+Docker. Each verifies release, original receipt/same-key retry, canonical resource
+facts,16 original processes absent,3 exact containers stopped and21 platform files
+unchanged. Original failed observations remain. See
+`evidence/studio/M1-owned-container-readback/`; this resolves that mechanism, not all
+T010 or the full lifecycle matrix. Continue the original clauses below.
 
 The remaining review covers every original T010 clause:
 

@@ -1,3 +1,29 @@
+# Owned container readback update — 2026-10-30
+
+**57 completed /33 in progress /10 blocked; zero accepted milestones.** The
+Autoverse cleanup follow-up now verifies original-owner readback after command
+acknowledgement loss, preserves existing budgets and records bounded diagnostic
+codes with actual cleanup facts in the canonical terminal event.
+
+Candidatec8336a2 passes165 enrolled Autoverse API/native CLI and4 native browser
+checks on432 unchanged inputs/6UI. Clean offline package166 matches all source,
+archive,extracted and tested UI hashes plus canonical SDK12615d402. Its3 complete
+installed classic demo cases pass: lost container Stop acknowledgement, lost optional
+Android shutdown acknowledgement and nominal original Docker. Each verifies actual
+release, completed original Stop/same-key retry, valid canonical cleanup facts,
+16 original processes absent and3 exact containers stopped.21 original platform
+files are unchanged; the original operator is not restarted. Original failed
+cleanup observations stay recorded and their unknown results are not rewritten.
+
+Windows trace metadata now agrees with ADR-0036: Linux is the current AC-032 lane;
+the old Windows blocked/NOT_RUN descriptions remain historical. No Linux gate or
+task is removed. T010/T033 and the full original plan remain open. Next complete
+T010 sessions/origins, remaining bounded file paths, inert imports, credential
+exclusion and execution-boundary review. See [review](../../evidence/studio/M1-owned-container-readback/review.md)
+and [installed cases](../../evidence/studio/M1-owned-container-readback/package-binding.json).
+
+## Previous native publication update
+
 # Anchored native publication update — 2026-10-30
 
 **57 completed /33 in progress /10 blocked; zero accepted milestones.** T010

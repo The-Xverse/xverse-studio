@@ -1,0 +1,31 @@
+{
+  "authority": "User objective removes Windows requirements; ADR-0036 and constitution1.1.0 already define Linux-only delivery.",
+  "before": {
+    "native_windows": "BLOCKED at user request. Initial native Server 2022 install failed on upstream Git filenames; application/browser NOT_RUN.",
+    "AC-032_current_windows_lane": [
+      {
+        "platform": "windows_native",
+        "status": "NOT_RUN"
+      }
+    ]
+  },
+  "after": {
+    "native_windows": "OUT_OF_SCOPE_ADR0036. Native Linux is the current delivery target; original Windows install failure and application/browser NOT_RUN remain historical evidence.",
+    "historical_native_windows_before_ADR0036": "BLOCKED at user request. Initial native Server 2022 install failed on upstream Git filenames; application/browser NOT_RUN.",
+    "AC-032_current_platform_lanes": [
+      {
+        "platform": "linux_native",
+        "status": "NOT_RUN"
+      }
+    ],
+    "AC-032_historical_platform_lanes": [
+      {
+        "platform": "windows_native",
+        "status": "NOT_RUN"
+      }
+    ]
+  },
+  "taskStatusesUnchanged": true,
+  "linuxAcceptanceObligationsUnchanged": true,
+  "historicalWindowsResultsReclassifiedAsPass": false
+}

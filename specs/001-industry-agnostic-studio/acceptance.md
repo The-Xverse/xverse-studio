@@ -17,6 +17,10 @@ Cases start at their first applicable milestone and are retained through subsequ
 M0 records reproducible native Linux reference host with at least four CPU cores, 8 GiB RAM, local SSD and exact supported distribution/edition/release, architecture, browser and language-runtime versions. This defines supported combinations and does not promise every Linux release. Provider/simulator overhead and provider OS/driver availability are separate from the Studio application and isolated reference measurements.
 
 - SC-008 M1 platform gate: AC-032 must pass on the recorded native Linux host for install/start/browser access, import/save/reopen, validation, owned-reference run/cancel, results, reconnection, backend recovery and clean stop. Windows is outside this release scope under ADR-0036. Core operation has no undeclared Bash/VM/container/remote-Linux dependency. Optional OS service registration is assessed only if offered.
+
+AC-032's current `platform_lanes` trace contains Linux only. Its original Windows
+NOT_RUN row remains under `historical_platform_lanes`; the old blocked overview
+is also retained as history. Neither is a current Windows delivery gate or a PASS.
 - M2 and later: repeat applicable authoring, bidirectional portable-project exchange, accessibility and performance cases on the native support matrix. Preserve platform-specific results. Live simulator/hardware cases identify the actually admitted host and remain blocked on unsupported hosts; a correct unavailable-provider diagnostic is a core capability test, not proof of that provider's execution.
 
 - SC-001: at least 4 of 5 first-time X-Verse users complete the prepared example/change/run/result/failure task within 15 minutes without terminal commands or facilitator intervention. Record setup separately and retain failures in the denominator.
