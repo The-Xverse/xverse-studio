@@ -61,7 +61,10 @@ def text(value):
 def selected_scenario(documents, compiled):
     if compiled.get("valid") is not True:
         return None
-    selected = compiled["selection"]["scenarioRef"]
+    selection = compiled.get("selection")
+    if not isinstance(selection, dict) or not isinstance(selection.get("scenarioRef"), str):
+        return None
+    selected = selection["scenarioRef"]
     for raw in documents.values():
         value = YAML(typ="safe").load(raw)
         if value["kind"] == "Scenario":

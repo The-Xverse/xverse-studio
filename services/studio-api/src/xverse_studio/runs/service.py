@@ -452,7 +452,18 @@ class Runs:
                 raise Problem(
                     "PREFLIGHT_STALE", "Project inputs changed after preflight.", 409
                 )
-            compiled = self.adapter.compile(snap["documents"])
+            frozen_selection = snap.get("selection")
+            if (
+                not isinstance(frozen_selection, dict)
+                or set(frozen_selection) != {"systemRef", "deploymentRef", "scenarioRef"}
+                or any(not isinstance(ref, str) or not ref for ref in frozen_selection.values())
+            ):
+                raise Problem(
+                    "PREFLIGHT_STALE",
+                    "The frozen snapshot has no complete selection; preflight again.",
+                    409,
+                )
+            compiled = compile_selection(snap["documents"], frozen_selection, self.adapter)
             current_provider = next(
                 (
                     value
