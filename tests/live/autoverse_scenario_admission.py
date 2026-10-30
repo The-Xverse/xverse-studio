@@ -6,7 +6,7 @@ import pytest
 from ruamel.yaml import YAML
 
 import autoverse_provider_admission as enrollment
-from autoverse_composition import checked, document, sources, forbidden
+from autoverse_composition import checked, document, sources, forbidden, variants
 from autoverse_provider_admission import application, authenticated, project
 from xverse_studio.xdl.examples import dump_yaml
 
@@ -82,7 +82,17 @@ def test_actual_autoverse_static_scenario_inspection_is_bound_and_never_ready(au
 
 @pytest.mark.parametrize(
     "case",
-    ["exceeded", "unknown-cost", "duplicate-unit", "bad-type", "bad-version", "count"],
+    [
+        "exceeded",
+        "unknown-cost",
+        "duplicate-unit",
+        "bad-type",
+        "bad-version",
+        "count",
+        "unit-mismatch",
+        "duplicate-observer",
+        "fractional-count",
+    ],
 )
 def test_actual_autoverse_declared_budget_refuses_before_readiness_or_dispatch(
     authored, monkeypatch, case
@@ -109,12 +119,18 @@ def test_actual_autoverse_declared_budget_refuses_before_readiness_or_dispatch(
         contract["observers"][0]["costs"][0]["value"] = True
     elif case == "bad-version":
         contract["contractVersion"] = "2.0"
+    elif case == "unit-mismatch":
+        contract["observers"][0]["costs"][0]["unit"] = "other-unit"
+    elif case == "duplicate-observer":
+        contract["observers"].append(deepcopy(contract["observers"][0]))
 
     def descriptor():
         d = original()
         d["observationContracts"] = deepcopy(contract)
         if case == "count":
             d["limits"]["maxObservers"] = 0
+        elif case == "fractional-count":
+            d["limits"]["maxObservers"] = 0.5
         return d
 
     monkeypatch.setattr(provider, "descriptor", descriptor)
@@ -171,6 +187,19 @@ def test_actual_autoverse_unadmitted_observer_source_is_retained_and_sanitized(
     value["spec"]["observers"][0]["evidenceSinkRef"] = (
         "https://user:secret@example.invalid/forbidden"
     )
+    credentialed = dump_yaml(value)
+    rejected = api.put(
+        f"/api/v1/projects/{p['projectId']}/documents/{key}",
+        headers={"If-Match": str(p["revision"])},
+        json={"content": credentialed},
+    )
+    assert (
+        rejected.status_code == 422 and rejected.json()["code"] == "CREDENTIAL_REJECTED"
+    )
+    assert checked(api.get(f"/api/v1/projects/{p['projectId']}")) == p
+    value["spec"]["observers"][0]["evidenceSinkRef"] = (
+        "https://example.invalid/capture?scope=unadmitted"
+    )
     raw = dump_yaml(value)
     p = checked(
         api.put(
@@ -191,3 +220,107 @@ def test_actual_autoverse_unadmitted_observer_source_is_retained_and_sanitized(
         and document(p, "Scenario")[1]["content"] == raw
     )
     assert app.state.studio.store.all("snapshot") == []
+
+
+def test_actual_autoverse_invalid_source_never_becomes_zero_cost_or_complete(
+    authored, monkeypatch
+):
+    _, api, provider, p = authored
+    key, doc = document(p, "Scenario")
+    value = SAFE.load(doc["content"])
+    value["apiVersion"] = "xverse.io/xdl/v99"
+    raw = dump_yaml(value)
+    p = checked(
+        api.put(
+            f"/api/v1/projects/{p['projectId']}/documents/{key}",
+            headers={"If-Match": str(p["revision"])},
+            json={"content": raw},
+        )
+    )
+    monkeypatch.setattr(provider, "configuration", forbidden)
+    report = checked(inspect(api, p, provider))
+    assert report["status"] == "blocked" and not report["sourceValid"]
+    assert report["observations"]["status"] == "unavailable"
+    assert (
+        report["observations"]["observerCount"] is None
+        and report["observations"]["budgets"] == []
+    )
+    assert (
+        not report["stepsComplete"]
+        and not report["faultsComplete"]
+        and not report["observations"]["itemsComplete"]
+    )
+    assert document(p, "Scenario")[1]["content"] == raw
+
+
+def test_actual_autoverse_inspection_captures_one_descriptor(authored, monkeypatch):
+    _, api, provider, p = authored
+    original = provider.descriptor
+    pid = original()["providerId"]
+    calls = []
+
+    def changing():
+        d = original()
+        calls.append(d)
+        if len(calls) > 1:
+            d["available"] = False
+        return d
+
+    monkeypatch.setattr(provider, "descriptor", changing)
+    report = checked(
+        api.get(
+            f"/api/v1/projects/{p['projectId']}/scenario-admission",
+            params={"revision": p["revision"], "providerId": pid},
+        )
+    )
+    assert len(calls) == 1 and report["sourceMapping"] == "supported"
+
+
+def test_actual_autoverse_static_mapping_failure_is_unknown_without_private_exception(
+    authored, monkeypatch
+):
+    _, api, provider, p = authored
+
+    def broken(*args, **kwargs):
+        raise RuntimeError("private-marker-not-for-user")
+
+    monkeypatch.setattr(provider, "configuration", broken)
+    report = checked(inspect(api, p, provider))
+    assert report["status"] == "blocked" and report["sourceMapping"] == "unknown"
+    assert any(
+        v["code"] == "SCENARIO_INSPECTION_UNAVAILABLE" for v in report["diagnostics"]
+    )
+    assert "private-marker" not in str(report)
+
+
+def test_actual_autoverse_multiple_scenarios_require_explicit_compiler_selection(
+    authored,
+):
+    _, api, provider, p = authored
+    p, original, alternative = variants(api, p)
+    assert inspect(api, p, provider).status_code == 422
+    for ref in [original["scenarioRefs"][0], alternative["scenarioRefs"][0]]:
+        report = checked(inspect(api, p, provider, scenarioRef=ref))
+        assert (
+            report["selection"]["scenarioRef"] == ref
+            and report["revision"] == p["revision"]
+        )
+        assert report["status"] in {"preflight_required", "blocked"}
+        assert all(v["effectStatus"] == "declared_intent_only" for v in report["steps"])
+
+
+def test_actual_autoverse_unavailable_descriptor_has_no_static_runtime_admission(
+    authored, monkeypatch
+):
+    _, api, provider, p = authored
+    original = provider.descriptor
+
+    def unavailable():
+        d = original()
+        d["available"] = False
+        return d
+
+    monkeypatch.setattr(provider, "descriptor", unavailable)
+    report = checked(inspect(api, p, provider))
+    assert report["status"] == "blocked" and report["sourceMapping"] == "unsupported"
+    assert any(v["code"] == "PROVIDER_UNAVAILABLE" for v in report["diagnostics"])
