@@ -4,7 +4,6 @@ from __future__ import annotations
 import contextlib
 import hashlib
 import json
-import os
 from pathlib import Path
 import sqlite3
 import threading
@@ -31,16 +30,11 @@ def digest(value):
 
 
 def atomic(path: Path, data: bytes):
-    path.parent.mkdir(parents=True, exist_ok=True)
-    temp = path.with_name(path.name + "." + uuid.uuid4().hex + ".tmp")
-    try:
-        with temp.open("xb") as f:
-            f.write(data)
-            f.flush()
-            os.fsync(f.fileno())
-        os.replace(temp, path)
-    finally:
-        temp.unlink(missing_ok=True)
+    from xverse_studio.security.managed_io import atomic_write
+
+    # The caller owns the managed destination. Acquire each native ancestor
+    # without following links rather than reopening a previously checked name.
+    atomic_write(Path("/"), path.absolute(), data)
 
 
 def contained(root: Path, path: Path):

@@ -6,13 +6,16 @@ This module does not resolve paths through symlinks or execute imported content.
 """
 
 from contextlib import contextmanager
+import ctypes
 from dataclasses import dataclass
+import errno
 import io
 import os
 from pathlib import Path
 import shutil
 import stat
 import sys
+import uuid
 
 
 _DIR_FD_AVAILABLE = os.open in os.supports_dir_fd
@@ -275,6 +278,112 @@ def stat_file(root, path):
     with _parent(root, path) as (parent, name):
         try:
             return os.stat(name, dir_fd=parent, follow_symlinks=False)
+        except OSError as exc:
+            raise _error(exc) from None
+
+
+def atomic_write(root, path, data):
+    """Replace a regular file through retained native directory descriptors."""
+    path = _absolute(path)
+    with _parent(root, path, create=True) as (parent, name):
+        temporary = "." + uuid.uuid4().hex + ".tmp"
+        descriptor = None
+        created = False
+        try:
+            descriptor = os.open(
+                temporary,
+                os.O_WRONLY
+                | os.O_CREAT
+                | os.O_EXCL
+                | os.O_NOFOLLOW
+                | getattr(os, "O_CLOEXEC", 0),
+                0o600,
+                dir_fd=parent,
+            )
+            created = True
+            temporary_identity = _identity(os.fstat(descriptor))
+            os.fchmod(descriptor, 0o600)
+            with io.FileIO(descriptor, "wb", closefd=False) as stream:
+                if stream.write(data) != len(data):
+                    raise SafeIOError("WRITE_FAILED")
+                stream.flush()
+                os.fsync(descriptor)
+            with open_directory(root, path.parent) as current:
+                if _identity(os.fstat(current)) != _identity(os.fstat(parent)):
+                    raise SafeIOError("SOURCE_CHANGED")
+                try:
+                    existing = os.stat(name, dir_fd=parent, follow_symlinks=False)
+                except FileNotFoundError:
+                    existing = None
+                if existing is not None and (
+                    not stat.S_ISREG(existing.st_mode) or existing.st_nlink != 1
+                ):
+                    raise SafeIOError("UNSAFE_PATH")
+                if (
+                    _identity(os.fstat(descriptor)) != temporary_identity
+                    or _identity(
+                        os.stat(temporary, dir_fd=parent, follow_symlinks=False)
+                    )
+                    != temporary_identity
+                ):
+                    raise SafeIOError("SOURCE_CHANGED")
+                os.replace(temporary, name, src_dir_fd=parent, dst_dir_fd=parent)
+                created = False
+                os.fsync(parent)
+        except OSError as exc:
+            raise _error(exc) from None
+        finally:
+            if descriptor is not None:
+                os.close(descriptor)
+            if created:
+                try:
+                    if (
+                        _identity(
+                            os.stat(temporary, dir_fd=parent, follow_symlinks=False)
+                        )
+                        == temporary_identity
+                    ):
+                        os.unlink(temporary, dir_fd=parent)
+                except OSError:
+                    pass
+
+
+def publish_directory(root, source, target, *, expected_identity):
+    """Publish the original prepared directory without replacing another entry."""
+    source, target = _absolute(source), _absolute(target)
+    if source.parent != target.parent:
+        raise SafeIOError("UNSAFE_PATH")
+    _supported()
+    try:
+        rename = ctypes.CDLL(None, use_errno=True).renameat2
+    except (AttributeError, OSError):
+        raise SafeIOError("SECURE_IO_UNAVAILABLE") from None
+    rename.argtypes = [
+        ctypes.c_int,
+        ctypes.c_char_p,
+        ctypes.c_int,
+        ctypes.c_char_p,
+        ctypes.c_uint,
+    ]
+    rename.restype = ctypes.c_int
+    with _parent(root, target) as (parent, name):
+        try:
+            info = os.stat(source.name, dir_fd=parent, follow_symlinks=False)
+            if (
+                not stat.S_ISDIR(info.st_mode)
+                or (info.st_dev, info.st_ino) != expected_identity
+            ):
+                raise SafeIOError("SOURCE_CHANGED")
+            # Linux RENAME_NOREPLACE; never downgrade to an overwriting rename.
+            if (
+                rename(parent, os.fsencode(source.name), parent, os.fsencode(name), 1)
+                != 0
+            ):
+                code = ctypes.get_errno()
+                if code in (errno.ENOSYS, errno.EINVAL, errno.ENOTSUP):
+                    raise SafeIOError("SECURE_IO_UNAVAILABLE")
+                raise OSError(code, "Native directory publication refused")
+            os.fsync(parent)
         except OSError as exc:
             raise _error(exc) from None
 

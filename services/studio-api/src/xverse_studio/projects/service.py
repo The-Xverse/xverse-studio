@@ -1,7 +1,6 @@
 from __future__ import annotations
 import json
 import os
-import shutil
 import stat
 import time
 import unicodedata
@@ -14,7 +13,9 @@ from xverse_studio.storage.core import (
     contained,
 )
 from xverse_studio.security.files import safe_name, check_text, read_archive
-from xverse_studio.security.managed_io import open_read, SafeIOError
+from xverse_studio.security.managed_io import (
+    create_directory, open_read, publish_directory, remove_tree, SafeIOError,
+)
 
 
 class Projects:
@@ -242,7 +243,24 @@ class Projects:
                 412,
             )
         stage = target.with_name(target.name + "." + uid("stage-"))
+        owned_identity = None
+
+        def discard_owned_revision():
+            if owned_identity is None:
+                return
+            for path in (stage, target):
+                try:
+                    remove_tree(self.store.root, path, expected_identity=owned_identity)
+                    return
+                except OSError:
+                    # An unavailable/rebound name is not authority to delete it.
+                    # Keep uncommitted bytes when original ownership is uncertain.
+                    continue
+
         try:
+            with create_directory(self.store.root, stage, parents=True) as acquired:
+                info = os.fstat(acquired.descriptor)
+                owned_identity = (info.st_dev, info.st_ino)
             for doc in documents.values():
                 safe_name(doc["path"])
                 check_text(doc["content"])
@@ -265,18 +283,17 @@ class Projects:
             atomic(
                 stage / "project.studio.json", canonical(metadata["manifest"]).encode()
             )
-            target.parent.mkdir(parents=True, exist_ok=True)
-            stage.rename(target)
-            self.store.on_rollback(
-                db, lambda: shutil.rmtree(target) if target.exists() else None
-            )
+            publish_directory(self.store.root, stage, target, expected_identity=owned_identity)
+            self.store.on_rollback(db, discard_owned_revision)
             self.store.put("project", p["projectId"], metadata, db)
             self.history.seal(p, documents, db, origin)
+        except SafeIOError as exc:
+            discard_owned_revision()
+            if exc.code == "SECURE_IO_UNAVAILABLE":
+                raise Problem("PLATFORM_IO_UNAVAILABLE", "Secure native publication is unavailable on this host or filesystem. Preserve the workspace and use the recorded supported Linux environment.", 503) from None
+            raise Problem("PROJECT_UNAVAILABLE", "The original revision directory cannot be verified. Preserve its bytes and recover the workspace before saving again.", 409) from None
         except BaseException:
-            if stage.exists():
-                shutil.rmtree(stage)
-            elif target.exists():
-                shutil.rmtree(target)
+            discard_owned_revision()
             raise
         return self.read(p["projectId"], db)
 

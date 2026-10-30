@@ -1,0 +1,61 @@
+{
+  "testTarget": "actual enrolled Autoverse classic and platform adapters; native browser authoring",
+  "apiAndNativeCli": {
+    "tests": 153,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "seconds": 106.548,
+    "rawXmlSha256": "f710d29a7d4d9373f8fba4338444ee08194f79f5bdf927baa12b116dd4b536f3"
+  },
+  "browser": [
+    {
+      "fault": "valid",
+      "stats": {
+        "startTime": "2026-10-30T08:51:18.853Z",
+        "duration": 8922.211,
+        "expected": 2,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "rawReportSha256": "4d7724ced6895fef2bf3c27544f2f63fd524257a1dd8b16434b2ac826b2d1206"
+    },
+    {
+      "fault": "invalid",
+      "stats": {
+        "startTime": "2026-10-30T08:51:30.753Z",
+        "duration": 8272.729000000001,
+        "expected": 2,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "rawReportSha256": "bc9f4ba3a5ccddf1005762a99ffb922e189e165cd8fcc93b5b20b059dcebaf31"
+    }
+  ],
+  "sourceInputs": 429,
+  "compiledUiAssets": 6,
+  "allCapturedInputsUnchanged": true,
+  "tools": {
+    "python": "3.13.13",
+    "node": "24.22.1",
+    "playwright": "1.64.1"
+  },
+  "commands": [
+    "STUDIO_AUTOVERSE_TEST_INSTALLATION=<private-receipt> PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 .venv/bin/python -I -m pytest -q tests/live/autoverse_provider_admission.py tests/live/autoverse_launcher_availability.py tests/live/autoverse_project_writes.py --basetemp=<owned-private-data> --junitxml=<private-report>",
+    "<native-python> -I tests/live/autoverse_admission_host.py --receipt <private-receipt> --data-dir <fresh-browser-tests-root> --static-dir <tested-ui> --port <loopback-port> --fault valid|invalid",
+    "<node> <playwright-cli> test --config tests/live/autoverse-admission.config.ts"
+  ],
+  "staticChecks": [
+    "Ruff new managed I/O and Autoverse tests",
+    "F401/F821 changed existing modules",
+    "architecture boundaries",
+    "git diff --check"
+  ],
+  "warnings": [
+    "Existing Starlette TestClient httpx deprecation warning retained."
+  ],
+  "installedCompleteDemo": "pending",
+  "task": "T010 remains in_progress; counts57/33/10 and zero accepted milestones"
+}

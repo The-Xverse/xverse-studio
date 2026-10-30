@@ -41,6 +41,14 @@ Stable references link canvas elements, properties, source locations and diagnos
 
 Edits are transactional and optimistic: expected project revision plus staged file writes and an atomic committed manifest/revision update. Concurrent external file changes produce an explicit conflict. A failed multi-file edit leaves the preceding revision intact and recoverable.
 
+ADR-0042 anchors native atomic writes and revision publication to acquired directory
+descriptors. A prepared revision publishes without overwriting a late existing
+destination; rollback removes only its recorded original directory identity.
+Unknown/rebound names are preserved. Missing secure native publication support
+refuses with503 rather than using a weaker fallback. Private atomic files use0600
+and newly created directories0700; uncertain unpublished bytes remain outside the
+committed revision and convey no execution authority.
+
 ## Layout sidecars
 
 Each layout document has `formatVersion`, `viewId`, `systemRef`, positions keyed by ElementRef, collapsed group references, viewport and optional purely visual annotations. Hierarchical subsystem semantics remain in XDL/profile content; a visual group cannot silently become a subsystem. Invalid/dangling layout refs can be removed or remapped without changing model semantics.
