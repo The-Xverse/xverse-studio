@@ -33,12 +33,14 @@ function declaration(value: Data | undefined) {
 }
 export function ScenarioAdmission(context: Context) {
   const key = JSON.stringify(context), current = useRef(key), sequence = useRef(0),
-    controller = useRef<AbortController | null>(null),
+    controller = useRef<AbortController | null>(null), pending = useRef<string | null>(null),
     [result, setResult] = useState<Result>({ key });
   current.current = key;
-  useEffect(() => () => { sequence.current++; controller.current?.abort(); }, [key]);
+  useEffect(() => () => { sequence.current++; pending.current = null; controller.current?.abort(); }, [key]);
   const visible = result.key === key ? result : { key }, report = visible.report;
   async function inspect() {
+    if (pending.current === key) return;
+    pending.current = key;
     const submitted = key, request = ++sequence.current, abort = new AbortController();
     controller.current?.abort(); controller.current = abort;
     setResult({ key, loading: true });
@@ -52,12 +54,12 @@ export function ScenarioAdmission(context: Context) {
     } catch (error) {
       if ((!abort.signal.aborted || timedOut) && current.current === submitted && sequence.current === request)
         setResult({ key: submitted, error: timedOut ? "Inspection timed out. Inspect again to retry." : error instanceof Error ? error.message : "Inspection unavailable." });
-    } finally { clearTimeout(timer); }
+    } finally { clearTimeout(timer); if (sequence.current === request) pending.current = null; }
   }
   const observations = report?.observations;
   return <section className="panel" aria-label="Scenario support and observation budgets" aria-busy={visible.loading || false}>
     <div className="section-heading"><h3>Scenario support and observation budgets</h3>
-      <button className="button" disabled={visible.loading} onClick={() => void inspect()}>Inspect scenario support</button></div>
+      <button className="button" aria-disabled={visible.loading || false} onClick={() => void inspect()}>Inspect scenario support</button></div>
     <p>Inspect the current draft for <code>{context.providerId}</code>, revision {context.revision}. This read-only check does not contact runtime resources or create a run. Fresh preflight and Start are required.</p>
     {visible.loading && <p role="status">Inspecting the selected Scenario and provider declarations…</p>}
     {visible.error && <p role="alert">Scenario inspection unavailable: {visible.error.slice(0, 1000)}</p>}
