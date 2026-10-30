@@ -145,5 +145,10 @@ latency and retention policy are not measured or inferred from that slot count.
 Platform mode exposes four existing observer declarations with undeclared costs.
 Missing costs under an explicitly declared budget block execution; mismatched
 units are not converted. Invalid source keeps counts/costs unavailable rather
-than appearing as a zero-cost configuration. Guided display of this inspection
-remains separate UI work.
+than appearing as a zero-cost configuration.
+
+Open **Experiments → Scenario** and select **Inspect scenario support** to see
+these declarations for the chosen provider and current draft. Editing the draft
+clears the old result. A mismatched or unsupported response is unavailable, never
+a positive admission. Guided fault timing and further clock timeline integration
+remain separate work.

@@ -1,0 +1,64 @@
+{
+  "candidate": "fc78c1c9c270166b5fc81b4660dff0178f066d99",
+  "task": "T084",
+  "status": "in_progress",
+  "scope": "Experiments read-only selected Scenario/provider source support and observation declarations; no new runtime/effect claim",
+  "browserPassed": 2,
+  "viewports": [
+    {
+      "width": 1024,
+      "height": 768
+    },
+    {
+      "width": 1440,
+      "height": 900
+    }
+  ],
+  "skipped": 0,
+  "sourceInputs": 471,
+  "privateUiAssets": 6,
+  "typeScriptAndViteBuild": "passed",
+  "environment": {
+    "os": "Ubuntu22.04.5 LTS/native Linux x86_64",
+    "python": "3.13.13",
+    "node": "24.22.1",
+    "chromium": "156.0.8078.4",
+    "playwright": "1.64.1",
+    "sdk": "12615d402ba16cde3cd48c55b70aca464ea90261"
+  },
+  "commands": [
+    "<admitted-node> node_modules/typescript/bin/tsc --noEmit --project apps/studio-web/tsconfig.json",
+    "<admitted-node> node_modules/vite/bin/vite.js build apps/studio-web --outDir <fresh-private-ui>",
+    ".venv/bin/python -I tests/live/autoverse_admission_host.py --receipt <private-enrollment> --data-dir <fresh-browser-tests-root> --static-dir <fresh-private-ui> --port <free-loopback-port> --fault valid",
+    "STUDIO_BASE_URL=<private-host-url> STUDIO_BROWSER_DATA=<private-root> STUDIO_BROWSER_REPORT=<fresh-report> STUDIO_BROWSER_OUTPUT=<fresh-artifacts> PLAYWRIGHT_BROWSERS_PATH=<admitted-browser-cache> <admitted-node> node_modules/@playwright/test/cli.js test --config tests/live/autoverse-scenario-inspection.config.ts"
+  ],
+  "verified": [
+    "Actual native enrolled Autoverse target with source/budget1/unknown costs displayed",
+    "Keyboard Enter triggers inspection and retains focus during and after response",
+    "Provider/revision/version-mismatched real responses refused rather than showing stale support",
+    "Actual form edit creates a new revision, immediately hides old support, and reinspection reports unsupported source",
+    "No run/operation/snapshot/preflight allocated; browser/backend exit and native root released",
+    "Original 21platform/Argus files, 6operatorUI assets and prior actual recording preserved"
+  ],
+  "backendEvidenceInheritance": {
+    "verification": "evidence/studio/M4-scenario-admission/verification.json",
+    "unchangedPriorInputs": 466,
+    "changedPriorFiles": [
+      "apps/studio-web/src/app/App.tsx",
+      "apps/studio-web/src/app/OperationsViews.tsx"
+    ],
+    "allBackendInputsUnchanged": true,
+    "scope": "Earlier204 API/library and complete actual native demo evidence remains at unchanged backend scope; current browser inspection creates no new live-effect evidence."
+  },
+  "remaining": [
+    "Guided supported fault activation/recovery timing and profile fields",
+    "Further admitted fault intent/observed clock timeline integration",
+    "Full T084/AC025 and independent milestone acceptance"
+  ],
+  "taskCounts": {
+    "completed": 65,
+    "in_progress": 25,
+    "blocked": 10
+  },
+  "acceptedMilestones": 0
+}
