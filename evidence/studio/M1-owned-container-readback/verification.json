@@ -1,0 +1,61 @@
+{
+  "testTarget": "actual enrolled Autoverse classic/platform and native browser authoring",
+  "apiAndNativeCli": {
+    "tests": 165,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "seconds": 97.088,
+    "rawXmlSha256": "4e08de62fe87e1a9a721776a82301fd54483f489c287175e6f514117d988735e"
+  },
+  "browser": [
+    {
+      "mode": "valid",
+      "stats": {
+        "startTime": "2026-10-30T09:10:56.885Z",
+        "duration": 9891.966,
+        "expected": 2,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "rawSha256": "f95a686b1dee2c535dc4fa2c47a7c5d556b75a90750d972acd29dcabe8e257c5"
+    },
+    {
+      "mode": "invalid",
+      "stats": {
+        "startTime": "2026-10-30T09:11:09.841Z",
+        "duration": 7602.415,
+        "expected": 2,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "rawSha256": "1deccaac7849f3aaaac06691f3860cc175772c5c342b867bccea70ab550d0df0"
+    }
+  ],
+  "sourceInputs": 432,
+  "uiAssets": 6,
+  "allCapturedInputsUnchanged": true,
+  "commands": [
+    "STUDIO_AUTOVERSE_TEST_INSTALLATION=<private-receipt> PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 .venv/bin/python -I -m pytest -q tests/live/autoverse_provider_admission.py tests/live/autoverse_launcher_availability.py tests/live/autoverse_project_writes.py tests/live/autoverse_container_cleanup.py --basetemp=<owned-root> --junitxml=<private-report>",
+    "<native-python> -I tests/live/autoverse_admission_host.py --receipt <private-receipt> --data-dir <fresh-browser-tests-root> --static-dir <tested-ui> --port <loopback-port> --fault valid|invalid",
+    "<node> <playwright-cli> test --config tests/live/autoverse-admission.config.ts"
+  ],
+  "tools": {
+    "python": "3.13.13",
+    "node": "24.22.1",
+    "playwright": "1.64.1"
+  },
+  "staticChecks": [
+    "Ruff affected new modules/tests",
+    "F401/F821 changed existing worker",
+    "architecture boundaries",
+    "git diff --check"
+  ],
+  "warnings": [
+    "Existing Starlette httpx TestClient deprecation warning retained."
+  ],
+  "completeInstalledDemo": "pending",
+  "taskStatus": "T010 and T033 remain in_progress; counts57/33/10, zero accepted milestones"
+}

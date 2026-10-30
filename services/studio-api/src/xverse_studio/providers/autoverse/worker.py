@@ -462,22 +462,8 @@ class Demo:
             except (psutil.Error, OSError, InstallationError, subprocess.TimeoutExpired):
                 outcomes.append({"resourceId": role, "kind": "process", "status": "unknown"})
         for role in reversed(container_roles):
-            claim = self.containers[role]
-            expected = claim["identity"]
-            try:
-                row = inspect(self.installation["docker"], expected["id"], timeout=budget(15))
-                if container_fact(row) != expected or claim["startedAt"] is None or row["State"]["StartedAt"] != claim["startedAt"]:
-                    raise InstallationError("AUTOVERSE_CONTAINER_OWNERSHIP_UNKNOWN")
-                if row["State"]["Running"]:
-                    if role == "android":
-                        subprocess.run([self.installation["docker"], "exec", "--env", "ANDROID_HOST_OUT=/root/runtime", "--env", "CUTTLEFISH_CONFIG_FILE=/root/runtime/cvd-assembly/cuttlefish_config.json", "--workdir", "/root/runtime", expected["id"], "./bin/stop_cvd"], capture_output=True, timeout=budget(20), check=False)
-                    subprocess.run([self.installation["docker"], "stop", "--time", "10", expected["id"]], capture_output=True, timeout=budget(20), check=True)
-                row = inspect(self.installation["docker"], expected["id"], timeout=budget(15))
-                if row["State"]["Running"]:
-                    raise InstallationError("AUTOVERSE_CONTAINER_STOP_UNCONFIRMED")
-                outcomes.append({"resourceId": role, "kind": "container", "status": "released"})
-            except (ValueError, KeyError, OSError, subprocess.SubprocessError):
-                outcomes.append({"resourceId": role, "kind": "container", "status": "unknown"})
+            from .cleanup import cleanup_container
+            outcomes.append(cleanup_container(self.installation, role, self.containers[role], deadline=deadline))
         score = self.containers.get("score") if "score" in container_roles else None
         if score and score.get("startedAt") and any(row["resourceId"] == "score" and row["status"] == "released" and row["kind"] == "container" for row in outcomes):
             from .working_state import remember
@@ -533,7 +519,7 @@ def finish(demo, failed):
     demo.state.update(state="failed" if failed else "stopped", stateVersion=demo.state["stateVersion"] + 1,
                       endedAt=time.time(), evidence="partial" if failed or io_failed else "available")
     try:
-        demo.emit("run.state_changed", {"state": demo.state["state"], "stateVersion": demo.state["stateVersion"], "cleanup": demo.state["cleanup"], "reason": demo.state.get("reason")})
+        demo.emit("run.state_changed", {"state": demo.state["state"], "stateVersion": demo.state["stateVersion"], "cleanup": demo.state["cleanup"], "cleanupResources": demo.state.get("cleanupResources", []), "reason": demo.state.get("reason")})
     except (OSError, InstallationError):
         io_failed = True
     try:

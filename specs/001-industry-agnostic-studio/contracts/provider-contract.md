@@ -136,6 +136,15 @@ Browser disconnect leaves the backend-owned run active unless the frozen run pol
 
 After stop/cancel, report each resource's release state. A run may be terminal with `cleanup=failed|unknown`; hide neither orphan processes nor attached physical assets. Releasing an expired reservation must not modify another owner's newer reservation.
 
+ADR-0043 makes installed Autoverse container release depend on current readback of
+the original ID/configuration/start identity, including after command acknowledgement
+loss. Optional Android shutdown and the single container Stop attempt have separate
+failure boundaries; fresh ownership is required between them. A timeout never
+authorizes replay or a larger deadline. Changed/unavailable/still-running observations
+remain unknown. Per-resource outcomes carry at most four constant diagnostic codes,
+also retained by the existing canonical terminal event, without raw CLI output or
+exception text. Earlier unknown results and their journals remain unchanged.
+
 ## Error and maturity envelope
 
 Every failure returns stable `code`, `retryable`, `operationId`, target reference, observed state, evidence references, and a safe user explanation. Retryability describes the operation's documented semantics; it does not authorize an automatic retry with a new operation ID. Preserve the underlying diagnostic code in `providerDetails` after redaction.

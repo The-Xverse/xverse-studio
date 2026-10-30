@@ -2,6 +2,7 @@
 
 import argparse
 import json
+import os
 from pathlib import Path
 import sys
 
@@ -15,10 +16,52 @@ def main():
     parser.add_argument(
         "--fault", choices=["valid", "invalid", "mutable"], required=True
     )
+    parser.add_argument(
+        "--cleanup-fault",
+        choices=["none", "stop-timeout", "android-timeout"],
+        default="none",
+    )
     args = parser.parse_args()
     if not args.data_dir.parent.name == "browser-tests":
         parser.error("A dedicated Studio browser-tests root is required.")
     enrolled = json.loads(args.receipt.read_bytes())["classic"]
+    if args.cleanup_fault != "none":
+        from xverse_studio.providers.autoverse import installation
+        from xverse_studio.storage.core import digest
+
+        tools = args.data_dir / "native-fault-tools"
+        tools.mkdir(mode=0o700, parents=True)
+        wrapper = tools / "docker"
+        source = Path(__file__).with_name("autoverse_docker_fault.py").read_bytes()
+        assert not any(c.isspace() for c in sys.executable)
+        wrapper.write_bytes(("#!" + sys.executable + " -I\n").encode() + source)
+        wrapper.chmod(0o700)
+        configuration = tools / "fault.private.json"
+        configuration.write_text(
+            json.dumps(
+                {
+                    "docker": enrolled["docker"],
+                    "androidId": enrolled["containers"]["android"]["id"],
+                    "dataRoot": str(args.data_dir),
+                    "mode": args.cleanup_fault,
+                }
+            )
+        )
+        configuration.chmod(0o600)
+        os.environ["PATH"] = str(tools) + os.pathsep + os.environ.get("PATH", "")
+        original_enroll = installation.enroll
+
+        def enroll_fault(root):
+            actual = original_enroll(root)
+            for file in (Path(enrolled["docker"]), configuration):
+                actual["files"][str(file)] = installation.file_digest(file)
+            actual["identityDigest"] = digest(
+                {key: actual[key] for key in ("files", "containers", "containerFiles")}
+            )
+            installation.verify(actual)
+            return actual
+
+        installation.enroll = enroll_fault
     if args.fault in ("invalid", "mutable"):
         from xverse_studio.providers.autoverse.adapter import AutoverseProvider
 
