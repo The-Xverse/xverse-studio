@@ -26,7 +26,7 @@ def default_root():
 
 def main():
     parser = argparse.ArgumentParser(description="Native local X-Verse Studio")
-    parser.add_argument("--data-dir", type=Path, default=default_root())
+    parser.add_argument("--data-dir", type=Path)
     parser.add_argument("--port", type=int, default=8765)
     parser.add_argument("--static-dir", type=Path)
     parser.add_argument("--autoverse-root", type=Path, help="Enroll the explicitly selected existing Linux Autoverse demo installation; no downloads or builds.")
@@ -48,19 +48,29 @@ def main():
         type=Path,
         help="Verify a private full backup and restore into a new --data-dir; never starts execution.",
     )
+    maintenance.add_argument("--migrate-from", type=Path,
+        help="Copy known unversioned stopped metadata into a new --data-dir; requires --migration-backup and starts nothing.")
+    parser.add_argument("--migration-backup", type=Path,
+        help="New private backup directory required by --migrate-from; never overwritten.")
     args = parser.parse_args()
+    if bool(args.migrate_from) != bool(args.migration_backup):
+        parser.error("--migrate-from and --migration-backup must be selected together.")
+    if args.migrate_from and args.data_dir is None:
+        parser.error("--migrate-from requires an explicit new --data-dir candidate root.")
+    args.data_dir = args.data_dir or default_root()
     if args.autoverse_native_bridge is not None and args.autoverse_root is None:
         parser.error("--autoverse-native-bridge requires the explicitly enrolled --autoverse-root.")
     if not 1024 <= args.port <= 65535:
         parser.error("Choose an unprivileged loopback port 1024–65535.")
     root = args.data_dir.absolute()
-    if args.backup_full or args.restore_from:
+    if args.backup_full or args.restore_from or args.migrate_from:
         try:
-            result = (
-                restore_full(args.restore_from, root)
-                if args.restore_from
-                else backup_full(root, args.backup_full)
-            )
+            if args.migrate_from:
+                from xverse_studio.host.migration import migrate_full
+                result = migrate_full(args.migrate_from, args.migration_backup, root)
+            else:
+                result = (restore_full(args.restore_from, root)
+                          if args.restore_from else backup_full(root, args.backup_full))
         except (RecoveryError, OSError) as exc:
             parser.error(
                 str(exc)

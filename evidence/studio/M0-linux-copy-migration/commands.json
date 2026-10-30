@@ -1,0 +1,181 @@
+{
+  "pathNormalization": "All selected temporary roots are project-local; absolute cache/browser/tool paths are normalized. The original implicit default-target mistake and its verified correction are explicitly retained in verification.json.",
+  "commands": [
+    {
+      "phase": "red",
+      "environment": {
+        "PYTEST_DISABLE_PLUGIN_AUTOLOAD": "1"
+      },
+      "argv": [
+        ".venv/bin/python",
+        "-I",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/platform/test_metadata_migration.py",
+        "--basetemp=.studio-local/metadata-migration-review/red-data",
+        "--junitxml=.studio-local/metadata-migration-review/red.xml"
+      ]
+    },
+    {
+      "phase": "first",
+      "environment": {
+        "PYTEST_DISABLE_PLUGIN_AUTOLOAD": "1"
+      },
+      "argv": [
+        ".venv/bin/python",
+        "-I",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/platform/test_metadata_migration.py",
+        "--basetemp=.studio-local/metadata-migration-review/first-data",
+        "--junitxml=.studio-local/metadata-migration-review/first.xml"
+      ]
+    },
+    {
+      "phase": "failures-red",
+      "environment": {
+        "PYTEST_DISABLE_PLUGIN_AUTOLOAD": "1"
+      },
+      "argv": [
+        ".venv/bin/python",
+        "-I",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/platform/test_metadata_migration.py",
+        "-k",
+        "interrupted or explicit_candidate or nontext",
+        "--basetemp=.studio-local/metadata-migration-review/failures-red-data",
+        "--junitxml=.studio-local/metadata-migration-review/failures-red.xml"
+      ]
+    },
+    {
+      "phase": "failures-red-corrected",
+      "environment": {
+        "PYTEST_DISABLE_PLUGIN_AUTOLOAD": "1"
+      },
+      "argv": [
+        ".venv/bin/python",
+        "-I",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/platform/test_metadata_migration.py",
+        "-k",
+        "interrupted or explicit_candidate or nontext",
+        "--basetemp=.studio-local/metadata-migration-review/failures-red-corrected-data",
+        "--junitxml=.studio-local/metadata-migration-review/failures-red-corrected.xml"
+      ]
+    },
+    {
+      "phase": "expanded",
+      "environment": {
+        "PYTEST_DISABLE_PLUGIN_AUTOLOAD": "1"
+      },
+      "argv": [
+        ".venv/bin/python",
+        "-I",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/platform/test_metadata_migration.py",
+        "--basetemp=.studio-local/metadata-migration-review/expanded-data",
+        "--junitxml=.studio-local/metadata-migration-review/expanded.xml"
+      ]
+    },
+    {
+      "phase": "version-red",
+      "environment": {
+        "PYTEST_DISABLE_PLUGIN_AUTOLOAD": "1"
+      },
+      "argv": [
+        ".venv/bin/python",
+        "-I",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/platform/test_metadata_migration.py",
+        "-k",
+        "boolean_version",
+        "--basetemp=.studio-local/metadata-migration-review/version-red-data",
+        "--junitxml=.studio-local/metadata-migration-review/version-red.xml"
+      ]
+    },
+    {
+      "phase": "final",
+      "environment": {
+        "PYTEST_DISABLE_PLUGIN_AUTOLOAD": "1"
+      },
+      "argv": [
+        ".venv/bin/python",
+        "-I",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/platform/test_metadata_migration.py",
+        "tests/platform/test_full_recovery.py",
+        "tests/platform/test_recovery_safe_io.py",
+        "tests/platform/test_lab_lease_recovery.py",
+        "tests/platform/test_native_recovery.py",
+        "tests/integration/test_project_store.py",
+        "tests/integration/test_project_import.py",
+        "tests/platform/test_linux_project_exchange.py",
+        "tests/integration/test_model_roundtrip.py",
+        "tests/contract/test_review_regressions.py",
+        "--basetemp=.studio-local/metadata-migration-review/final-data",
+        "--junitxml=.studio-local/metadata-migration-review/final.xml"
+      ]
+    },
+    {
+      "phase": "portable",
+      "environment": {
+        "PYTEST_DISABLE_PLUGIN_AUTOLOAD": "1"
+      },
+      "argv": [
+        ".venv/bin/python",
+        "-I",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/contract/test_security_boundary.py::test_archive_portable_path_rejection",
+        "tests/contract/test_security_boundary.py::test_symlink_and_case_collision_zip_rejected",
+        "--basetemp=.studio-local/metadata-migration-review/portable-data",
+        "--junitxml=.studio-local/metadata-migration-review/portable.xml"
+      ]
+    },
+    {
+      "phase": "wal-guard",
+      "environment": {
+        "PYTEST_DISABLE_PLUGIN_AUTOLOAD": "1"
+      },
+      "argv": [
+        ".venv/bin/python",
+        "-I",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/platform/test_metadata_schema_wal.py",
+        "--basetemp=.studio-local/metadata-migration-review/wal-guard-data",
+        "--junitxml=.studio-local/metadata-migration-review/wal-guard.xml"
+      ]
+    },
+    {
+      "phase": "browser",
+      "procedure": [
+        "Select the one original completed native fixture root, resolving only generated pytest current aliases.",
+        "Invoke migrate_full into fresh project-local private browser backup/candidate roots.",
+        "Launch the original native Python handle with --data-dir candidate, ephemeral loopback port and current compiled static directory.",
+        "Run pinned Chromium at1024x768 and1440x900: fresh UI authentication, original project open, Validate, reload same revision and exactly one historical stopped run. Reuse only that new isolated authenticated browser context state.",
+        "Verify original source file identities unchanged, terminate/wait the original native launcher handle."
+      ],
+      "executableVersions": {
+        "node": "24.22.1",
+        "python": "3.13.13"
+      },
+      "report": "browser.json",
+      "privateDriverDigests": "Recorded in candidate-binding/package evidence when bound; machine-specific driver paths and authentication values are omitted."
+    }
+  ]
+}

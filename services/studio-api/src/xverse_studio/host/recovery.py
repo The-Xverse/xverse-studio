@@ -184,7 +184,7 @@ def _copy(source, target):
 
 
 @contextmanager
-def _staged_database(source, *, sanitize=False, staging_parent=None):
+def _staged_database(source, *, sanitize=False, staging_parent=None, schema=1, upgrade=False):
     """Copy DB+WAL via held source handles; SQLite opens ONLY private staging.
 
     The directory-descriptor URI retains WAL lookup in the staged directory.
@@ -235,12 +235,17 @@ def _staged_database(source, *, sanitize=False, staging_parent=None):
                         ):
                             src.backup(dst)
                             dst.execute("PRAGMA journal_mode=DELETE")
+                            _database(stage / "normalized.sqlite", immutable=True, schema=schema)
                             if sanitize:
                                 with dst:
                                     dst.execute(
                                         "DELETE FROM records WHERE kind='session'"
                                     )
-                        _database(stage / "normalized.sqlite", immutable=True)
+                            if upgrade:
+                                if schema != 0:
+                                    _fail("RECOVERY_SCHEMA_UNSUPPORTED")
+                                dst.execute("PRAGMA user_version=1")
+                        _database(stage / "normalized.sqlite", immutable=True, schema=1 if upgrade else schema)
                         yield stage / "normalized.sqlite"
                     if wal is None:
                         try:
@@ -275,7 +280,7 @@ def _settled_leases(db):
         _fail('RECOVERY_EXECUTION_UNSETTLED')
 
 
-def _database(path, *, immutable=False):
+def _database(path, *, immutable=False, schema=1):
     try:
         with (
             _safe_errors(),
@@ -286,8 +291,12 @@ def _database(path, *, immutable=False):
                 )
             ) as db,
         ):
-            if db.execute("PRAGMA user_version").fetchone()[0] != 1:
+            if type(schema) is not int or schema not in (0, 1) or db.execute("PRAGMA user_version").fetchone()[0] != schema:
                 _fail("RECOVERY_SCHEMA_UNSUPPORTED")
+            if schema == 0:
+                from xverse_studio.storage.schema import legacy_metadata_shape
+                if not legacy_metadata_shape(db):
+                    _fail("RECOVERY_SCHEMA_UNSUPPORTED")
             if db.execute("PRAGMA integrity_check").fetchall() != [("ok",)]:
                 _fail("RECOVERY_DATABASE_INVALID")
             _settled_leases(db)
@@ -333,6 +342,10 @@ def _new_target(path, *, check_name=True):
 
 
 def backup_full(source, destination):
+    return _backup_full(source, destination)
+
+
+def _backup_full(source, destination, *, schema=1):
     source, destination = _root(source), _root(destination)
     if (
         source == destination
@@ -356,7 +369,7 @@ def backup_full(source, destination):
             else:
                 _fail("RECOVERY_INCOMPLETE")
             files = _inventory(source, skip_transient=True)
-            with _staged_database(source) as database:
+            with _staged_database(source, schema=schema) as database:
                 operation.enter_context(_new_target(destination))
                 entries = []
                 data = destination / "files"
@@ -367,13 +380,13 @@ def backup_full(source, destination):
                         data / name,
                     )
                     entries.append({"path": name, **identity})
-                _database(data / "studio.sqlite", immutable=True)
+                _database(data / "studio.sqlite", immutable=True, schema=schema)
                 if _inventory(source, skip_transient=True) != files:
                     _fail("RECOVERY_SOURCE_CHANGED")
             manifest = {
                 "format": "studio.private-backup",
                 "version": 1,
-                "databaseSchema": 1,
+                "databaseSchema": schema,
                 "createdAt": time.time(),
                 "files": entries,
                 "filesDigest": digest(entries),
@@ -382,14 +395,14 @@ def backup_full(source, destination):
                 _io_root(destination), destination / "manifest.json"
             ) as output:
                 output.write(canonical(manifest).encode())
-            return _verified_manifest(destination)[1]
+            return _verified_manifest(destination, schema=schema)[1]
     except RootOwnedError:
         raise RecoveryError("RECOVERY_ROOT_OWNED") from None
     except RootUnsafeError:
         raise RecoveryError("RECOVERY_UNSAFE_FILE") from None
 
 
-def _verified_manifest(backup):
+def _verified_manifest(backup, *, schema=1):
     backup = _root(backup)
     manifest_file = backup / "manifest.json"
     try:
@@ -403,8 +416,8 @@ def _verified_manifest(backup):
         manifest = json.loads(raw.decode("utf-8"))
         if (
             manifest["format"] != "studio.private-backup"
-            or manifest["version"] != 1
-            or manifest["databaseSchema"] != 1
+            or type(manifest["version"]) is not int or manifest["version"] != 1
+            or type(manifest["databaseSchema"]) is not int or manifest["databaseSchema"] != schema
         ):
             _fail("RECOVERY_SCHEMA_UNSUPPORTED")
         entries = manifest["files"]
@@ -428,7 +441,7 @@ def _verified_manifest(backup):
         for entry in entries:
             if _hash(data / entry["path"]) != {k: entry[k] for k in ("size", "digest")}:
                 _fail("RECOVERY_DIGEST_MISMATCH")
-        _database(data / "studio.sqlite", immutable=True)
+        _database(data / "studio.sqlite", immutable=True, schema=schema)
         return manifest, {
             "integrity": "valid",
             "fileCount": len(entries),
@@ -446,12 +459,16 @@ def verify_backup(backup):
 
 
 def restore_full(backup, destination):
+    return _restore_full(backup, destination)
+
+
+def _restore_full(backup, destination, *, schema=1, report=None):
     backup, destination = _root(backup), _root(destination)
     if destination.is_relative_to(backup) or backup.is_relative_to(destination):
         _fail("RECOVERY_NESTED_TARGET")
     with _safe_errors(), ExitStack() as operation:
         backup_anchor = operation.enter_context(_bound(backup, check_name=False))
-        manifest, verified = _verified_manifest(backup)
+        manifest, verified = _verified_manifest(backup, schema=schema)
         destination_anchor = operation.enter_context(
             _new_target(destination, check_name=False)
         )
@@ -464,7 +481,7 @@ def restore_full(backup, destination):
             own_root(Path(f"/proc/self/fd/{destination_anchor.descriptor}"))
         )
         with _staged_database(
-            backup / "files", sanitize=True, staging_parent=destination.parent
+            backup / "files", sanitize=True, staging_parent=destination.parent, schema=schema, upgrade=schema == 0
         ) as database:
             for entry in manifest["files"]:
                 source = backup / "files" / entry["path"]
@@ -476,6 +493,7 @@ def restore_full(backup, destination):
                 elif _copy(source, destination / entry["path"]) != expected:
                     _fail("RECOVERY_SOURCE_CHANGED")
         _database(destination / "studio.sqlite", immutable=True)
+        report_result = report(backup, destination, manifest) if report else {}
         _check_named(backup_anchor)
         _check_named(destination_anchor)
         unlink(destination_anchor, marker)
@@ -488,4 +506,4 @@ def restore_full(backup, destination):
             with open_write(destination_anchor, marker) as output:
                 output.write(b"Restore target binding changed. Refuse startup.\n")
             raise
-    return {**verified, "status": "restored", "sessionsInvalidated": True}
+    return {**verified, "status": "restored", "sessionsInvalidated": True, **report_result}

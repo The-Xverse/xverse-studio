@@ -55,6 +55,39 @@ The destination must not already exist. Metadata alone is insufficient for full 
 migrated in place. Database version 1 is supported; unknown versions refuse startup with an explicit
 migration requirement. No unverified forward migration or arbitrary downgrade is advertised.
 
+For an existing **unversioned metadata root**, the supported copy migration is:
+
+```text
+.venv/bin/python -I -m xverse_studio.host.launcher --data-dir .studio-local/migrated-candidate --migrate-from .studio-local/old-data --migration-backup .studio-local/backups/before-migration
+```
+
+Stop the original backend and settle all runs, commands, campaigns and leases first.
+All three paths must be distinct and nonnested. Both candidate and backup must be
+new directories. The command verifies a private backup before creating the candidate,
+changes the known metadata schema0 to1, invalidates copied browser sessions, and
+returns without serving Studio or starting workloads. It preserves project IDs,
+revisions, source/manifest/layout/binding bytes, receipts and historical evidence.
+It supports only the exact existing records/idempotency schema; unknown database,
+project or XDL versions require a separately supported migration.
+
+Read `migration-report.json` inside the candidate root. Its textual diff identifies
+the version/session changes, and its stored-identity digests and file identities
+show what was preserved. This private report and full backup may accompany secret
+host data; keep them outside portable exports. Semantic preservation here does not
+validate an unsupported XDL version or admit a provider. To apply the candidate,
+explicitly select it in a later normal launch, for example:
+
+```text
+.venv/bin/python -I -m xverse_studio.host.launcher --data-dir .studio-local/migrated-candidate --port 8876
+```
+
+Retain the original root and backup until verification succeeds. Normal schema1
+restore does not reinterpret a schema0 migration backup. A failed copy retains an
+incomplete candidate that refuses startup. Retry from the unchanged original into
+new candidate/backup directories; never remove the incomplete marker to force use.
+These checks use controlled unversioned fixtures, including an actual completed
+native reference run; they do not identify an unspecified historical release.
+
 For updates, stop Studio, retain the full backup and exact existing lockfiles/commit, check out the
 reviewed successor, then run `uv sync --frozen`, `npm ci`, `npm run build`, and the native test command
 `uv run python scripts/run_checks.py`. Restart using the same explicit data root only after the

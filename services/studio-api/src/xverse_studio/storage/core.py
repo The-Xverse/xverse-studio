@@ -8,7 +8,6 @@ import os
 from pathlib import Path
 import sqlite3
 import threading
-import time
 import uuid
 
 
@@ -65,11 +64,20 @@ class Store:
     def __init__(self, root: Path):
         self.root = root.resolve()
         self.root.mkdir(parents=True, exist_ok=True)
+        self.dbpath = self.root / "studio.sqlite"
+        if self.dbpath.exists():
+            # Inspect committed metadata before enabling WAL or writing schema.
+            # The native launcher/maintenance root lock excludes another owner.
+            with contextlib.closing(sqlite3.connect(self.dbpath.as_uri() + "?mode=ro", uri=True)) as db:
+                version = db.execute("PRAGMA user_version").fetchone()[0]
+                empty = not db.execute("SELECT 1 FROM sqlite_schema LIMIT 1").fetchone()
+                if version != 1 and not (version == 0 and empty):
+                    raise Problem("MIGRATION_REQUIRED",
+                        "Existing metadata needs an explicit supported copy migration; keep the original root and backup.", 503)
         try:
             self.root.chmod(0o700)
         except OSError:
             pass
-        self.dbpath = self.root / "studio.sqlite"
         self.lock = threading.RLock()
         self._rollback_hooks = {}
         with self.tx() as db:

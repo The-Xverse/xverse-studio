@@ -70,3 +70,14 @@ Exports include manifest, authored resources, declared schemas/layout, locks and
 Migrations run on a copy, retain original manifest/bytes, produce a versioned migration report and textual/semantic diff, and require explicit application to replace the working revision. Failure leaves the original readable. Never migrate historical run snapshots in place.
 
 Conformance checks: supported open/edit/save/reopen semantic equality; layout-only digest invariance; comments/unknown extension preservation; cross-profile conflict; concurrent edit rejection; unsafe archive rejection; export secret exclusion; missing artifact identity; and migration rollback.
+
+ADR-0038 implements the existing SQLite metadata0-to-1 transition as an explicit
+stopped-root copy migration. It does not introduce another envelope or XDL version.
+Only the exact known unversioned records/idempotency schema is supported. Retain
+original files and a verified private schema0 backup; produce a schema1 candidate
+with a versioned textual/stored-identity diff. Browser sessions are invalidated;
+all other metadata, authored/layout/binding files, original receipts and historical
+snapshots/evidence retain their exact identities. The report does not reinterpret
+unsupported semantics. Activation requires a separate explicit normal launch of
+the new root after review. Unsupported versions and incomplete candidates refuse
+startup; unknown metadata is not relabelled to obtain readiness.
