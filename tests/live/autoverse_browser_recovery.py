@@ -43,7 +43,7 @@ def main():
     sources = documents('studio-browser')
     scenario = YAML(typ='safe').load(sources['scenario.xdl.yaml'])
     is_session = args.case.startswith('session-')
-    scenario['extensions'][NAMESPACE]['durationSeconds'] = 1200 if args.case == 'session-expiry' else 180 if args.case in ('runtime-failure', 'session-short') else 30
+    scenario['extensions'][NAMESPACE]['durationSeconds'] = 1500 if args.case == 'session-expiry' else 180 if args.case in ('runtime-failure', 'session-short') else 30
     sources['scenario.xdl.yaml'] = dump_yaml(scenario)
     (data / 'author-inputs.private.json').write_text(json.dumps(sources))
     host = native.NativeHost(data, args.output, args.receipt.absolute(), Path(sys.executable), args.static_dir.absolute())

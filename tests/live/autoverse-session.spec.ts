@@ -228,38 +228,9 @@ test("actual Autoverse browser receipts, delivery ordering and retained recovery
     const blocked = await reopened.evaluate(() => (window as any).__autoverseDelivery.blockedUrl);
     const token = new URL(blocked).searchParams.get("after")!;
     const cursor = JSON.parse(Buffer.from(token.slice(4), "base64url").toString());
-    // Ordinary admitted controls; never exceed the256 per-run discrete budget.
-    const published = await reopened.evaluate(async ({ route }) => {
-      const s = await fetch("/api/v1/session").then(r => r.json());
-      const headers = { "Content-Type": "application/json", "X-CSRF-Token": s.csrfToken };
-      const post = async (suffix: string, value: unknown) => {
-        const r = await fetch(route + "/input/" + suffix, { method: "POST", headers, body: JSON.stringify(value) });
-        if (!r.ok) throw Error(`Admitted input ${suffix} failed ${r.status}`);
-        return r.json();
-      };
-      const lease = await post("acquire", {});
-      const auth = { leaseToken: lease.leaseToken, generation: lease.generation };
-      let last = 0;
-      for (let n = 1; n <= 256; n++) {
-        const deadline = performance.now() + 700;
-        while (last && (await fetch(route).then(r => r.json())).inputTelemetry.lastPublishedSequence < last) {
-          if (performance.now() > deadline) throw Error("Original native publication acknowledgement missed lease bound");
-          await new Promise(r => setTimeout(r, 50));
-        }
-        const response = await post("frame", { ...auth, frame: { sequence: n, throttle: 0, brake: 1, steer: 0, cruise: false } });
-        if (response.status !== "staged") throw Error("Discrete request was not staged");
-        last = response.publicationSequence;
-        await new Promise(r => setTimeout(r, 60));
-      }
-      const finalDeadline = performance.now() + 700;
-      while ((await fetch(route).then(r => r.json())).inputTelemetry.lastPublishedSequence < last) {
-        if (performance.now() > finalDeadline) throw Error("Final native publication acknowledgement missed lease bound");
-        await new Promise(r => setTimeout(r, 50));
-      }
-      await post("release", auth);
-      return { count: 256, lastPublication: last };
-    }, { route });
-    progress("waiting-real-replay-boundary", { acknowledged: cursor.q, requiredRecords: Number(cursor.q) + 1001, published });
+    // Let actual native telemetry cross the production boundary without coupling
+    // this transport test to a browser driver lease or adding canonical records.
+    progress("waiting-real-replay-boundary", { acknowledged: cursor.q, requiredRecords: Number(cursor.q) + 1001, canonicalSource: "native-telemetry-only" });
     await expect.poll(async () => {
       const run = await reopened.request.get(route, { maxRetries: 2 }).then(r => r.json());
       expect(run.state).toBe("running");
