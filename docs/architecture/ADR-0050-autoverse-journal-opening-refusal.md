@@ -1,6 +1,6 @@
 # ADR-0050 — Autoverse journal-opening refusal
 
-Date: 2026-10-30. Status: implementation candidate; verification pending.
+Date: 2026-10-30. Status: implemented and verified for the scoped actual Autoverse cases below.
 
 ## Problem
 
@@ -43,3 +43,5 @@ This is T033 progress in the actual Autoverse integration lane, alongside the
 original owned-fixture matrix. It does not replace that matrix, resolve its earlier
 late-Stop mismatch, close T033, or establish full acceptance. Existing task IDs,
 requirements, acceptance cases, authority and public major versions stay unchanged.
+
+Verification: source `6847b974e8f71aadc614bb69562373597ea86ae4` passes three actual native/browser opening/reporting refusals and one complete nominal demo on456 unchanged committed inputs/6 UI assets. Separate readback verifies native identities, snapshots, original objects and exact resource release; all21 original platform evidence files remain unchanged. See [component review](../../evidence/studio/M1-autoverse-journal-opening/review.md). T033 remains open.

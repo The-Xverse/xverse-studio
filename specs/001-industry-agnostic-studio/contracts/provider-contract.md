@@ -174,6 +174,15 @@ observations. Failure to persist state or evidence cannot prevent owned cleanup.
 The normalized browser input surface is described in the Studio API amendment;
 it cannot pause/reset the external simulator or execute arbitrary project commands.
 
+ADR-0050 retains the existing provider-neutral `EVIDENCE_OPEN_FAILED` outcome
+when initial exclusive journal creation fails before native Autoverse resource
+acquisition. The original owner-bound report records failed startup, complete
+cleanup with no acquired resources, and unavailable native evidence. Existing
+journal objects remain unchanged; the independent reader may still report them
+invalid. No started/effective-plan identity, digest, event count or canonical
+failure event is invented. If publishing that initial report also fails, the
+backend retains unknown ownership and cleanup. This adds no operation or authority.
+
 ## Installed backend-owned task lifecycle — ADR-0034
 
 An installed host provider may prepare a native `BackendTask` instead of a new

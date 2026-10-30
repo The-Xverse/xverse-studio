@@ -1,3 +1,19 @@
+# Current actual-integration supplement — 2026-10-30
+
+The [Autoverse journal-opening supplement](../M1-autoverse-journal-opening/review.md)
+fixes a real missing startup report and passes three native/browser opening/reporting
+refusals plus a complete actual demo. It preserves original journal objects, failed
+versus unknown state, frozen inputs and cleanup evidence. All456 inputs/6UI match
+the committed candidate; separate source/native readback passes.
+
+This supplements the original fixture matrix below. T033 remains in progress and
+the earlier reference late-Stop mismatch remains unexplained. Overall counts are
+62 completed /28 in progress /10 blocked, with zero accepted milestones. Windows
+is outside current scope under ADR-0036; old held-lane descriptions remain history.
+The user's T011 reference exception is not extended.
+
+## Historical fixture checkpoints
+
 # Owned-fixture lifecycle verification
 
 The [failure-retention successor](failure-retention/README.md) records actual observed full1267 passes on392 inputs and14 focused passes after test-only capture changes on394 inputs. The earlier mismatch remains unestablished; no assertion is weakened. All116 product payloads remain identical.

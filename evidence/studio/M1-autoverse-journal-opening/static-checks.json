@@ -1,0 +1,30 @@
+{
+  "scope": "Static checks; actual target executions recorded separately",
+  "checks": [
+    {
+      "command": ".venv/bin/python scripts/validate_spec_package.py",
+      "exit": 0,
+      "output": "{\n  \"valid\": true,\n  \"scope\": \"planning-package\",\n  \"application_acceptance\": \"not_evaluated_by_this_check\",\n  \"requirements\": 75,\n  \"success_criteria\": 8,\n  \"tasks\": 100,\n  \"acceptance_cases\": 32,\n  \"milestones\": 5,\n  \"errors\": []\n}\n"
+    },
+    {
+      "command": ".venv/bin/python scripts/check_architecture.py",
+      "exit": 0,
+      "output": "Architecture boundaries: passed (imports, dependency direction, industry dispatch, private runtime, executable input and browser executable hooks).\n"
+    },
+    {
+      "command": ".venv/bin/python scripts/check_platform_compatibility.py",
+      "exit": 0,
+      "output": "{\n  \"valid\": true,\n  \"scope\": \"descriptive_platform_baseline_only\",\n  \"runtimeAdmission\": false,\n  \"errors\": []\n}\n"
+    },
+    {
+      "command": ".venv/bin/ruff check <changed-native-worker-and-test-files>",
+      "exit": 0,
+      "output": "All checks passed!\n"
+    },
+    {
+      "command": "git diff --check",
+      "exit": 0,
+      "output": "3\t1\tdocs/architecture/ADR-0050-autoverse-journal-opening-refusal.md\n12\t0\tdocs/implementation/STATUS.md\n12\t0\tdocs/implementation/TASK_CLOSURE_AUDIT.md\n16\t0\tevidence/studio/M1-fixture/README.md\n16\t0\tevidence/studio/M1-fixture/matrix.json\n9\t0\tspecs/001-industry-agnostic-studio/contracts/provider-contract.md\n3\t0\tspecs/001-industry-agnostic-studio/tasks.md\n21\t2\tspecs/001-industry-agnostic-studio/traceability.json\n"
+    }
+  ]
+}

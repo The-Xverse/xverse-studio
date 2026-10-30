@@ -1,3 +1,15 @@
+# Autoverse journal-opening failure repaired — 2026-10-30
+
+**62 completed / 28 in progress / 10 blocked; zero accepted milestones.**
+T033 progresses with actual native journal-opening refusals, preserved evidence
+objects and truthful unknown state when reporting also fails. Three native/browser
+negative cases and one complete Autoverse demo pass on456 committed inputs/6UI;
+separate source/ledger/resource readback agrees. The original fixture matrix and
+late-Stop mismatch remain open. All task statuses and acceptance gates are unchanged.
+See [scoped review](../../evidence/studio/M1-autoverse-journal-opening/review.md).
+
+## Earlier checkpoints
+
 # Native browser conformance completed — 2026-10-30
 
 **62 completed / 28 in progress / 10 blocked; zero accepted milestones.**
