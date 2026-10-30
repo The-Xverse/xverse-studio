@@ -81,3 +81,13 @@ snapshots/evidence retain their exact identities. The report does not reinterpre
 unsupported semantics. Activation requires a separate explicit normal launch of
 the new root after review. Unsupported versions and incomplete candidates refuse
 startup; unknown metadata is not relabelled to obtain readiness.
+
+ADR-0039 verifies the generated revision envelope against its already recorded
+manifest before current-draft compilation, new execution or export. Readable
+external envelope bytes are retained by explicit recovery as a sidecar; a new
+forward revision uses recorded metadata, never arbitrary external declarations.
+The sealed source revision is independent of later layout-only changes. Prior
+metadata without a recorded textual seal compares known non-layout envelope
+fields without inventing old byte provenance. Unreadable/malformed or foreign
+history cannot supply a replacement baseline. Existing receipts and separately
+verified original frozen rerun inputs retain their independent identities.

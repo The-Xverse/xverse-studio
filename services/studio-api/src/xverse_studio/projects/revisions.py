@@ -61,6 +61,65 @@ class RevisionHistory:
         data, status = self._read(path)
         return data if status == "present" and digest(data) == value_digest else None
 
+    @staticmethod
+    def _manifest_bytes(manifest):
+        if not isinstance(manifest, dict):
+            return None
+        try:
+            return canonical(manifest).encode("utf-8")
+        except (ValueError, TypeError, RecursionError):
+            return None
+
+    @staticmethod
+    def _record_manifest(record, pid, revision):
+        if (not isinstance(record, dict) or record.get("projectId") != pid
+                or type(record.get("revision")) is not int or record["revision"] != revision
+                or not isinstance(record.get("manifest"), dict)
+                or record["manifest"].get("projectId") != pid
+                or RevisionHistory._manifest_bytes(record["manifest"]) is None):
+            return None
+        return record["manifest"]
+
+    def observe_manifest(self, p, db=None):
+        """Inspect the revision's sealed envelope, independently of today's layout."""
+        pid, revision = p["projectId"], p["revision"]
+        recorded = True
+        try:
+            record = self.store.get("revision", f"{pid}:{revision}", db)
+            expected = self._record_manifest(record, pid, revision)
+        except Problem as error:
+            if error.code != "NOT_FOUND":
+                raise
+            recorded = False
+            expected = p.get("manifest")
+        except (ValueError, TypeError, RecursionError):
+            expected = None  # An unreadable recorded row is not a legacy baseline.
+        path = self.store.root / "projects" / pid / "revisions" / str(revision) / "project.studio.json"
+        data, status = self._read(path)
+        expected_digest = None
+        expected_bytes = self._manifest_bytes(expected)
+        if expected_bytes is not None:
+            expected_digest = digest(expected_bytes)
+            if status == "present":
+                if recorded and data == expected_bytes:
+                    return None
+                if not recorded:
+                    # Prior metadata has no textual seal. Compare its known
+                    # envelope identity; presentation has its own revision.
+                    try:
+                        observed = json.loads(data)
+                        if (isinstance(observed, dict)
+                                and canonical({k: v for k, v in observed.items() if k != "layoutFiles"})
+                                == canonical({k: v for k, v in expected.items() if k != "layoutFiles"})):
+                            return None
+                    except (ValueError, TypeError, RecursionError):
+                        pass
+        elif status == "present":
+            status = "unverified"
+        return {"kind": "sidecar", "id": "project.studio.json", "path": "project.studio.json",
+                "committedDigest": expected_digest, "observedDigest": digest(data) if data is not None else None,
+                "status": status, "bytes": data}
+
     def seal(self, p, documents, db, origin):
         """Record a committed revision and keep verified copies of its bytes."""
         pid = p["projectId"]
@@ -127,13 +186,16 @@ class RevisionHistory:
         self.store.get("project", pid)
         try:
             record = self.store.get("revision", f"{pid}:{revision}")
-        except Problem:
+        except (Problem, ValueError, TypeError, RecursionError):
             raise Problem(
                 "REVISION_UNRECOVERABLE",
-                "This revision has no recorded history to restore from.",
+                "This revision has no verifiable recorded history to restore from.",
                 409,
                 revision=revision,
             ) from None
+        if self._record_manifest(record, pid, revision) is None:
+            raise Problem("REVISION_UNRECOVERABLE", "The recorded revision envelope identity cannot be verified; nothing was changed.",
+                          409, revision=revision)
         directory = self._root(pid, "revisions", str(revision))
         missing = []
 
@@ -186,7 +248,7 @@ class RevisionHistory:
             origin={"kind": "restore", "fromRevision": revision},
         )
 
-    def observe(self, p):
+    def observe(self, p, db=None):
         """Compare every committed document and sidecar with the bytes now on disk."""
         directory = self._root(p["projectId"], "revisions", str(p["revision"]))
         observed = {}
@@ -210,6 +272,9 @@ class RevisionHistory:
                 "status": status,
                 "bytes": data,
             }
+        manifest = self.observe_manifest(p, db)
+        if manifest is not None:
+            observed["sidecar:project.studio.json"] = manifest
         return observed
 
     def recover(self, pid, expected, action, revision=None):
@@ -229,7 +294,7 @@ class RevisionHistory:
                     412,
                     currentRevision=p["revision"],
                 )
-            observed = self.observe(p)
+            observed = self.observe(p, db)
             if not observed:
                 raise Problem(
                     "RECOVERY_NOT_REQUIRED",

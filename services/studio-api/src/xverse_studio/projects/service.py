@@ -151,12 +151,30 @@ class Projects:
                         "message": "A committed sidecar changed outside the committed revision. Preserve it and recover before saving or execution.",
                     }
                 )
+        manifest = self.history.observe_manifest(p, db)
+        if manifest is not None:
+            result["sourceIntegrity"] = "modified"
+            result["sourceDiagnostics"].append({
+                "code": "REVISION_CONFLICT", "severity": "error", "sidecar": "project.studio.json",
+                "observed": manifest["status"], "expectedDigest": manifest["committedDigest"],
+                "actualDigest": manifest["observedDigest"],
+                "message": "The revision envelope differs from its recorded identity or cannot be verified. Preserve it and use explicit source recovery before editing, execution or export.",
+            })
         return result
+
+    @staticmethod
+    def assert_manifest_intact(p):
+        # Callers use a fresh Projects.read result in their existing transaction.
+        # Do not reopen SQLite while that transaction owns the write lock.
+        if any(d.get("sidecar") == "project.studio.json" for d in p.get("sourceDiagnostics", [])):
+            raise Problem("REVISION_CONFLICT", "The revision envelope cannot be verified; preserve it and recover explicitly before continuing.",
+                          412, currentRevision=p["revision"])
 
     def sources(self, p):
         return {d["path"]: d["content"] for d in p["documents"].values()}
 
     def assert_intact(self, p):
+        self.assert_manifest_intact(p)
         if any(
             digest(d["content"].encode()) != d["digest"]
             for d in p["documents"].values()

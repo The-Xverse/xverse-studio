@@ -1,9 +1,6 @@
 """Bounded credential-free exchange. Imports are inert; run journals remain immutable."""
 
-import base64
 import io
-import json
-import time
 import zipfile
 from fastapi import Request
 from fastapi.responses import Response
@@ -44,6 +41,7 @@ def install_exchange(app, store, projects, runs):
                     412,
                     currentRevision=p["revision"],
                 )
+            projects.assert_manifest_intact(p)
             oid = uid("op-")
             manifest = p["manifest"] | {"layoutFiles": ["layout/model.json"]}
             files = {

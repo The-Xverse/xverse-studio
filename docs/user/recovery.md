@@ -100,6 +100,21 @@ current state without replaying Start. Missing ownership evidence remains `unkno
 commands. PID reuse is not ownership. Controlled backend-crash recovery is exercised by
 `tests/platform/test_native_recovery.py`; Windows is outside the current Linux delivery scope.
 
+Studio checks each recorded revision's `project.studio.json` against its sealed
+manifest as well as checking authored sources and dependency sidecars. External
+changes, missing/unsafe files or an unverifiable history baseline appear in the
+source-recovery notice and block new work from that draft. A layout-only update
+keeps its own presentation revision and does not invalidate the source envelope.
+
+Use the existing **Source recovery** actions to resolve an envelope conflict.
+Recovery preserves readable external envelope bytes in its private backup before
+creating a new forward revision. Both actions use recorded envelope/sidecar
+metadata; **Adopt external changes** adopts source-document text, rather than
+turning an arbitrary external manifest into resource or provider authority.
+Original revisions, run snapshots and canonical evidence stay intact. A completed
+export receipt still resolves to its original bundle, and an explicitly admitted
+rerun from verified frozen inputs remains separate from the current draft.
+
 A project revision is committed through a staged directory and transactional metadata pointer. A failed
 save cannot activate a partial multi-file revision. External modifications are preserved and produce
 `REVISION_CONFLICT`; copy them to a separate trusted recovery location and compare explicitly before

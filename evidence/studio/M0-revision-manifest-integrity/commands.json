@@ -1,0 +1,189 @@
+{
+  "pathNormalization": "Absolute contributor/tool/cache/output locations are normalized; no authentication values or imported commands are included. The two browser invocations retain separate reports.",
+  "commands": [
+    {
+      "phase": "manifest-red",
+      "environment": {
+        "PYTEST_DISABLE_PLUGIN_AUTOLOAD": "1"
+      },
+      "argv": [
+        ".venv/bin/python",
+        "-I",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/integration/test_project_manifest_integrity.py",
+        "--basetemp=.studio-local/storage-integrity-review/manifest-red-data",
+        "--junitxml=.studio-local/storage-integrity-review/manifest-red.xml"
+      ]
+    },
+    {
+      "phase": "manifest-red-corrected",
+      "environment": {
+        "PYTEST_DISABLE_PLUGIN_AUTOLOAD": "1"
+      },
+      "argv": [
+        ".venv/bin/python",
+        "-I",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/integration/test_project_manifest_integrity.py",
+        "-k",
+        "start_rechecks or envelope_recovery",
+        "--basetemp=.studio-local/storage-integrity-review/manifest-red-corrected-data",
+        "--junitxml=.studio-local/storage-integrity-review/manifest-red-corrected.xml"
+      ]
+    },
+    {
+      "phase": "manifest-first",
+      "environment": {
+        "PYTEST_DISABLE_PLUGIN_AUTOLOAD": "1"
+      },
+      "argv": [
+        ".venv/bin/python",
+        "-I",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/integration/test_project_manifest_integrity.py",
+        "tests/integration/test_edit_conflicts.py",
+        "tests/integration/test_project_store.py",
+        "--basetemp=.studio-local/storage-integrity-review/manifest-first-data",
+        "--junitxml=.studio-local/storage-integrity-review/manifest-first.xml"
+      ]
+    },
+    {
+      "phase": "manifest-final",
+      "environment": {
+        "PYTEST_DISABLE_PLUGIN_AUTOLOAD": "1"
+      },
+      "argv": [
+        ".venv/bin/python",
+        "-I",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/integration/test_project_manifest_integrity.py",
+        "tests/integration/test_project_store.py",
+        "tests/integration/test_edit_conflicts.py",
+        "tests/integration/test_project_import.py",
+        "tests/integration/test_project_inspection.py",
+        "tests/integration/test_model_roundtrip.py",
+        "tests/contract/test_review_regressions.py",
+        "tests/contract/test_security_boundary.py",
+        "tests/platform/test_metadata_migration.py",
+        "tests/platform/test_metadata_schema_wal.py",
+        "tests/platform/test_linux_project_exchange.py",
+        "tests/platform/test_native_recovery.py",
+        "tests/platform/test_native_start_acceptance_recovery.py",
+        "tests/contract/test_runtime_lifecycle.py",
+        "tests/platform/test_full_recovery.py",
+        "tests/platform/test_recovery_safe_io.py",
+        "--basetemp=.studio-local/storage-integrity-review/manifest-final-data",
+        "--junitxml=.studio-local/storage-integrity-review/manifest-final.xml"
+      ]
+    },
+    {
+      "phase": "manifest-boundaries",
+      "environment": {
+        "PYTEST_DISABLE_PLUGIN_AUTOLOAD": "1"
+      },
+      "argv": [
+        ".venv/bin/python",
+        "-I",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/integration/test_manifest_operation_boundaries.py",
+        "tests/integration/test_recorded_replay_and_rerun.py",
+        "--basetemp=.studio-local/storage-integrity-review/manifest-boundaries-data",
+        "--junitxml=.studio-local/storage-integrity-review/manifest-boundaries.xml"
+      ]
+    },
+    {
+      "phase": "history-red",
+      "environment": {
+        "PYTEST_DISABLE_PLUGIN_AUTOLOAD": "1"
+      },
+      "argv": [
+        ".venv/bin/python",
+        "-I",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/integration/test_manifest_history_corruption.py",
+        "--basetemp=.studio-local/storage-integrity-review/history-red-data",
+        "--junitxml=.studio-local/storage-integrity-review/history-red.xml"
+      ]
+    },
+    {
+      "phase": "final",
+      "environment": {
+        "PYTEST_DISABLE_PLUGIN_AUTOLOAD": "1"
+      },
+      "argv": [
+        ".venv/bin/python",
+        "-I",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/integration/test_project_manifest_integrity.py",
+        "tests/integration/test_manifest_history_corruption.py",
+        "tests/integration/test_manifest_operation_boundaries.py",
+        "tests/integration/test_recorded_replay_and_rerun.py",
+        "tests/integration/test_project_store.py",
+        "tests/integration/test_edit_conflicts.py",
+        "tests/integration/test_project_import.py",
+        "tests/integration/test_project_inspection.py",
+        "tests/integration/test_model_roundtrip.py",
+        "tests/contract/test_review_regressions.py",
+        "tests/contract/test_security_boundary.py",
+        "tests/platform/test_metadata_migration.py",
+        "tests/platform/test_metadata_schema_wal.py",
+        "tests/platform/test_linux_project_exchange.py",
+        "tests/platform/test_native_recovery.py",
+        "tests/platform/test_native_start_acceptance_recovery.py",
+        "tests/contract/test_runtime_lifecycle.py",
+        "tests/platform/test_full_recovery.py",
+        "tests/platform/test_recovery_safe_io.py",
+        "--basetemp=.studio-local/storage-integrity-review/final-data",
+        "--junitxml=.studio-local/storage-integrity-review/final.xml"
+      ]
+    },
+    {
+      "phase": "browser_and_first-browser",
+      "argv": [
+        "node",
+        "PINNED_PLAYWRIGHT_CLI",
+        "test",
+        "--config",
+        "tests/e2e/playwright.config.ts",
+        "tests/e2e/project-manifest-recovery.spec.ts",
+        "tests/e2e/source-recovery-accessibility.spec.ts",
+        "--grep",
+        "project envelope recovery|recovery accessibility: native"
+      ],
+      "environment": {
+        "node": "24.22.1",
+        "STUDIO_BASE_URL": "original owned native launcher on an ephemeral loopback port",
+        "STUDIO_BROWSER_DATA": "fresh unique project-local .studio-local/browser-tests root",
+        "STUDIO_BROWSER_REPORT": "absolute project-local phase JSON report",
+        "STUDIO_BROWSER_OUTPUT": "absolute project-local phase artifact root"
+      },
+      "launcherArgv": [
+        ".venv/bin/python",
+        "-I",
+        "-m",
+        "xverse_studio.host.launcher",
+        "--data-dir",
+        "ISOLATED_ROOT",
+        "--port",
+        "EPHEMERAL_PORT",
+        "--static-dir",
+        "apps/studio-web/dist"
+      ],
+      "ownership": "Only the original native launcher handle is terminated/waited after the browser process exits. Fixture file mutations require an actual existing browser-tests root and realpath identity."
+    }
+  ]
+}
