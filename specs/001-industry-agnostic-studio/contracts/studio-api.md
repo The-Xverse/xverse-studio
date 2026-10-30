@@ -551,3 +551,26 @@ complete System/Deployment/Scenario selection; missing selection requires a fres
 preflight. No quantity is
 converted across units. Undeclared dimensions, intrusiveness and retention remain
 unknown; metadata cannot authorize execution or intrusive access.
+
+### Opt-in provider fault timeline 1.1 (ADR-0055)
+
+The timeline query additionally accepts `formatVersion: "1.0"|"1.1"`, defaulting to
+`1.0`. Version 1.0 retains its original interpretation. Version 1.1 may consult a
+read-only installed-provider adapter after protected frozen source/selection checks.
+Its strict bounded clock context binds source provider/version, evidence scope,
+codec, declared clock, microsecond unit, epoch, at most 16 fault event kinds and 32
+unique fault intervals. The adapter must reproduce the frozen configuration and
+verify effective public plan/semantic identities. No runtime resource probe occurs.
+
+Only matching original source/version, fault ID/event kind, clock/resolution and
+canonical nonnegative decimal tick equal to the declared payload tick field receive
+recorded placement. Unknowns and integrity failures remain unplaced; ordinary
+telemetry gains no receipt-derived time. Intentions retain separate declared-intent
+rows with activation tick and recovery `endTick`. Aligned host-relative intervals
+are not simulation synchronization, causality, measured vehicle effects or verdicts.
+
+Version 1.1 returns `clockInterpretation` (the bounded public codec/clock/epoch/source
+context, or null). Version and full interpretation bind cursor identity. Callback
+errors/malformed contexts produce sanitized diagnostics and preserve otherwise
+readable rows as unplaced. Unsupported format versions refuse. The frontend opts
+in explicitly and validates the requested response version and context.

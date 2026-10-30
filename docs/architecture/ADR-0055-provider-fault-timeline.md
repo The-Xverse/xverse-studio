@@ -1,6 +1,6 @@
 # ADR-0055 — Explicit provider fault clocks in timeline 1.1
 
-Date: 2026-10-30. Status: implementation candidate.
+Date: 2026-10-30. Status: implemented; scoped actual Autoverse/API/browser verification passed.
 
 Keep timeline HTTP 1.0 as the default with its original clock rules. Clients may
 explicitly request formatVersion=1.1 to use an installed provider's read-only
@@ -37,3 +37,9 @@ versions/ticks/clocks, gaps/integrity, callback failure/shape bounds and stale c
 Finish with the complete GUI-authored native demo and real browser timeline inspection
 at both desktop sizes. Preserve original canonical evidence. T084 completion requires
 its original forms/clock/intent/observation/unavailable clauses, not this decision alone.
+
+Verification:170 actual Autoverse API/projection/library checks, complete native
+GUI-authored demo and two real browser cases spanning both desktop sizes passed.
+Source/plan/canonical/native readback and task clause audit complete T084; full
+AC025 and independent milestone acceptance remain open. See the
+[review](../../evidence/studio/M4-fault-timeline/review.md).

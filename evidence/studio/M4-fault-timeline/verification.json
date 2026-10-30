@@ -1,0 +1,89 @@
+{
+  "candidate": "42c1b6fd5d1fadf0818062dfb32a6b7801eae337",
+  "task": "T084",
+  "status": "completed",
+  "apiProjectionAndLibrary": {
+    "passed": 170,
+    "skipped": 0,
+    "candidate": "b13dd2bd2789dd30ab5b45be9f30f3860bc5d4b3",
+    "newActualFaultClockCases": 20,
+    "legacyScenarioCases": 77,
+    "admission": 35,
+    "inputLoss": 28,
+    "causalityAndUnits": 10
+  },
+  "nativeAndBrowser": {
+    "completeDemoPassed": 1,
+    "authoringBrowserCases": 1,
+    "timelineBrowserCases": 1,
+    "viewports": [
+      [
+        1024,
+        768
+      ],
+      [
+        1440,
+        900
+      ]
+    ],
+    "sourceInputs": 479,
+    "intentIntervalsAligned": 3,
+    "canonicalFaultEventsAligned": 11,
+    "ordinarySourceTimesRemainUnmapped": true,
+    "realConditionsStimulusObserverEditsPreserveFrozenTimeline": true,
+    "recoveredIntervals": 2,
+    "activeStopInterruption": 1,
+    "originalComponentInstancesExited": 16,
+    "exactStoppedContainers": 3,
+    "rootReleased": true
+  },
+  "sourceInheritance": {
+    "apiToNative": {
+      "allProductInputsUnchanged": true,
+      "onlyChangedFiles": [
+        "tests/live/autoverse-fault-timeline.spec.ts",
+        "tests/live/autoverse_fault_authoring_browser.py",
+        "tests/live/autoverse_scheduled_input_loss.py"
+      ],
+      "change": "Browser assertions, preflight snapshot lookup and original pidfd test-driver tracking; all product inputs identical"
+    },
+    "buildCandidate": "96481e53fddfed7694e134da21fde219ce65ff70",
+    "onlyBuildSuccessorChanges": [
+      "tests/live/autoverse-fault-timeline.spec.ts",
+      "tests/live/autoverse_fault_authoring_browser.py",
+      "tests/live/autoverse_fault_timeline.py",
+      "tests/live/autoverse_scheduled_input_loss.py"
+    ],
+    "allProductUiInputsUnchangedAfterBuild": true
+  },
+  "originalPlatformFilesUnchanged": 21,
+  "operatorUiAssetsUnchanged": 6,
+  "environment": {
+    "os": "Ubuntu22.04.5 LTS/native Linux x86_64",
+    "python": "3.13.13",
+    "node": "24.22.1",
+    "chromium": "156.0.8078.4",
+    "playwright": "1.64.1",
+    "sdk": "12615d402ba16cde3cd48c55b70aca464ea90261"
+  },
+  "commands": [
+    "PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 PYTHONPATH= STUDIO_AUTOVERSE_TEST_INSTALLATION=<private-enrollment> STUDIO_AUTOVERSE_FAULT_RECORDING=<actual-completed-fault-report> STUDIO_AUTOVERSE_SCENARIO_RECORDED_REPORT=<actual-legacy-report> .venv/bin/python -m pytest -q tests/live/autoverse_scenario_admission.py tests/live/autoverse_fault_timeline.py tests/live/autoverse_scenarios.py tests/live/autoverse_input_loss.py tests/live/autoverse_input_loss_guards.py --junitxml=<fresh-report> --basetemp=<fresh-root>",
+    "<admitted-node> node_modules/typescript/bin/tsc --noEmit --project apps/studio-web/tsconfig.json",
+    "<admitted-node> node_modules/vite/bin/vite.js build apps/studio-web --outDir <fresh-private-ui>",
+    ".venv/bin/python -I tests/live/autoverse_scheduled_input_loss.py --receipt <private-enrollment> --output <fresh-native-report> --static-dir <fresh-private-ui> --authoring-browser --node <admitted-node> --playwright-cli <admitted-cli> --browser-cache <admitted-cache>"
+  ],
+  "taskCounts": {
+    "completed": 66,
+    "in_progress": 24,
+    "blocked": 10
+  },
+  "acceptedMilestones": 0,
+  "limitations": [
+    "Host-relative fault clock only; no simulation synchronization, physical effects or causal/functional verdict",
+    "Ordinary telemetry stays unplaced and timeline coverage is not attested",
+    "No new reference-provider execution; prior generic evidence stays at its original scope",
+    "New UI tested privately; operator bundle preserved",
+    "Same-agent component review/readback; all full acceptance and independent milestone gates remain open"
+  ],
+  "userRequestedPauseAfterCurrentTask": true
+}

@@ -1,3 +1,17 @@
+# T084 complete; user-requested pause — 2026-10-30
+
+**66 completed / 24 in progress / 10 blocked; zero accepted milestones.**
+Scenario/stimulus/fault/observer forms and clock timeline clauses now have scoped
+evidence.170 actual Autoverse checks, GUI authoring, the complete native demo and
+browser timeline at both desktop sizes pass. Version 1.1 places three declared
+fault intervals and eleven original fault events; ordinary telemetry stays unmapped.
+Real draft form edits leave frozen timeline identity unchanged. Two test-helper
+failures and verified release remain recorded. No next task is started; the user
+requested a pause after this task. Full M0–M4 scope and remaining gates are retained.
+See [review](../../evidence/studio/M4-fault-timeline/review.md).
+
+## Earlier checkpoints
+
 # GUI-authored fault schedules verified — 2026-10-30
 
 **65 completed / 25 in progress / 10 blocked; zero accepted milestones.**

@@ -1,0 +1,89 @@
+{
+  "phases": [
+    {
+      "phase": "api",
+      "candidate": "b13dd2bd2789dd30ab5b45be9f30f3860bc5d4b3",
+      "startedAt": "2026-10-30T16:40:32.303753+00:00",
+      "finishedAt": "2026-10-30T16:46:27.645887+00:00",
+      "sourceInputs": 479,
+      "inputsAndOriginalEvidenceUnchanged": true
+    },
+    {
+      "phase": "native",
+      "candidate": "283d3cda74fef97cf7cb91655575a0516d686659",
+      "startedAt": "2026-10-30T16:46:56.807521+00:00",
+      "finishedAt": "2026-10-30T16:49:26.846092+00:00",
+      "sourceInputs": 479,
+      "inputsAndOriginalEvidenceUnchanged": true,
+      "outcome": "failed",
+      "rootReleased": true,
+      "failureReadback": {
+        "originalProcessInstancesExited": 16,
+        "exactStoppedContainers": 3,
+        "originalResourceRoles": [
+          "adb-connect",
+          "android-boot",
+          "android-density",
+          "android-install",
+          "android-launch",
+          "android-open",
+          "carla",
+          "carla-prepare",
+          "carla-probe",
+          "driver",
+          "router",
+          "start-android",
+          "start-score",
+          "start-someip-bridge",
+          "vcu",
+          "vehicle"
+        ],
+        "containerRoles": [
+          "android",
+          "score",
+          "someip-bridge"
+        ],
+        "journalIntegrity": "valid",
+        "journalDigest": "sha256:a69dbb5dac88ae93bb292388ae06b039a28696b9352917ff69d690f4125d595b",
+        "terminalCleanupFactsMatchCanonicalJournal": true,
+        "recordCount": 85,
+        "observations": 21
+      }
+    },
+    {
+      "phase": "nativefixed",
+      "candidate": "a4c1edb3b5689242f5e0c0eb976b5f532c40b0b8",
+      "startedAt": "2026-10-30T16:50:25.401947+00:00",
+      "finishedAt": "2026-10-30T16:50:29.602571+00:00",
+      "sourceInputs": 479,
+      "inputsAndOriginalEvidenceUnchanged": true,
+      "outcome": "failed",
+      "rootReleased": true,
+      "failureReadback": {
+        "allocationCounts": {
+          "run": 0,
+          "operation": 0,
+          "snapshot": 0,
+          "preflight": 0
+        },
+        "rootReleased": true,
+        "failure": "Test-only browser driver title race before runtime dispatch"
+      }
+    },
+    {
+      "phase": "nativefinal",
+      "candidate": "42c1b6fd5d1fadf0818062dfb32a6b7801eae337",
+      "startedAt": "2026-10-30T16:52:04.438073+00:00",
+      "finishedAt": "2026-10-30T16:54:53.773929+00:00",
+      "sourceInputs": 479,
+      "inputsAndOriginalEvidenceUnchanged": true,
+      "outcome": "passed",
+      "rootReleased": true
+    }
+  ],
+  "failuresRetained": [
+    "First attempt completed actual GUI/native effects and release, then a test helper used snapshotId from the Start receipt; corrected to preflight snapshot ID.",
+    "Second attempt hit Node process-title mutation during test-driver argv verification before runtime allocation; zero run/operation/preflight/snapshot, root released. Test driver now binds original pidfd/birth/parent/uid and records both fixed launch argv and observed title. Application process checks unchanged."
+  ],
+  "priorSimulatorFailure": "Earlier sensor subscription stall remains unexplained; this pass does not establish its repair."
+}

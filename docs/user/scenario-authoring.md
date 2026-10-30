@@ -128,8 +128,9 @@ lease report. No input or missing bridge evidence leaves effects unobserved. Sto
 during an interval records interruption without inventing recovery.
 
 Fault records carry a declared host-relative microsecond clock. Vehicle telemetry
-remains unmapped, and generic timeline marker placement for this new codec is still
-unsupported. The actual fixed input rate limit remains 25 requests/second. No native
+remains unmapped. Timeline 1.1 places matching fault markers after validating the
+frozen provider configuration and effective plan. The input rate limit remains
+25 requests/second. No native
 X-COM fault, simulation clock mapping or deterministic replay is claimed.
 
 ## Inspect source support and observation budgets
@@ -169,5 +170,20 @@ for preserved data. A template cannot grant execution authority.
 
 Existing faults reopen with their original units. Changing a trigger from `5 s`
 to `5000 ms` preserves the milliseconds declaration and its separately declared
-duration. Actual fault effects are recorded only during an admitted run. Generic
-fault marker placement on the timeline remains unavailable pending codec integration.
+duration. Actual fault effects are recorded only during an admitted run. The
+selected-run timeline places matching frozen intentions and recorded fault markers
+through its admitted provider codec; unknown clocks/times remain unplaced.
+
+## Inspect frozen fault timing
+
+In **Experiments → Timeline**, select **Inspect selected run timeline** and choose
+a declared or observed clock. The current UI requests timeline 1.1 explicitly; API
+clients using the default 1.0 keep its previous interpretation. For the admitted
+classic Autoverse input-loss contract, the axis uses microseconds relative to the
+actual running transition. Declared intervals and requested/observed activation,
+recovery and interruption remain separate rows.
+
+Ordinary telemetry has no inferred source time. Unplaced reasons, integrity and
+gaps remain visible. A shared axis does not prove causality, physical vehicle
+effects or synchronization with simulation time. Draft edits stay separate from
+the selected run's frozen source and evidence.

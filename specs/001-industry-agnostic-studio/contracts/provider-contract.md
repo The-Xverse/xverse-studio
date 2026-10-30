@@ -257,3 +257,16 @@ and unknown fields. Unsupported profile or payload versions retain source and an
 unavailable-authoring explanation. This metadata is not executable code, live
 readiness or authority. Full backend provider configuration/preflight/Start checks
 continue to reject unsupported source, bounds, target/mode or ownership.
+
+### Read-only fault timeline adapter (ADR-0055)
+
+An installed provider may implement `timeline_context(run, snapshot)` for explicit
+Studio timeline 1.1 inspection. This cannot be supplied by a project/profile/log.
+After frozen snapshot selection validation, the strict context 1.0 contains codec,
+clockDomain, microsecond tickUnit, epoch, evidenceScope, sourceProviderId/version,
+allowed fault eventKinds, eventTickField and bounded fault activation/recovery ticks.
+Provider/effective input identities and declared fault IDs/clocks must agree. A
+missing, malformed or unavailable interpretation leaves positions unsupported; no
+fallback clock conversion or lifecycle operation is allowed. Classic 0.2.0 reads
+only its existing admitted browser-input-loss contract and preserves ordinary
+telemetry with no source-time mapping.
