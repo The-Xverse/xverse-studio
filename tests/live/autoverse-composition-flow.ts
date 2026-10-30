@@ -50,6 +50,7 @@ export async function inspectAutoverseComposition(page: Page, original: { projec
   await page.getByLabel("Deployment variant", { exact: true }).selectOption(before.items[0].ref);
   await expect(page.getByLabel("Associated Scenario", { exact: true })).toHaveValue(before.items[0].scenarioRefs[0]);
   await expect(page.getByRole("button", { name: "Preflight & run", exact: true })).toBeVisible();
+  return { providerId: pid, admittedConnections: admission.connections.length, admittedCycles: admission.cycles.length, browserViews: ["Connections", "Deployment", "Comparison"], variantsCreated: 1, restoredRevision: restored.revision, fidelity: compared.fidelity, physicalState: compared.physicalState };
 }
 
 export async function inspectAutoverseCommunication(page: Page, projectId: string, runId: string) {
@@ -61,4 +62,16 @@ export async function inspectAutoverseCommunication(page: Page, projectId: strin
   // mapping. Preserve that unavailable scope instead of fabricating native traffic.
   expect(report.flows.every((f: any) => f.resolved.status === "not_resolved")).toBe(true);
   expect(report.flows.every((f: any) => ["not_collected", "collected_none"].includes(f.observed.status))).toBe(true);
+  const refusals = await page.evaluate(async (runId) => {
+    const session = await fetch("/api/v1/session").then(r => r.json());
+    const outcomes = [];
+    for (const kind of ["pause", "resume", "step", "reset", "set_parameter"]) {
+      const live = await fetch(`/api/v1/runs/${runId}`).then(r => r.json());
+      const response = await fetch(`/api/v1/runs/${runId}/commands`, { method: "POST", headers: { "Content-Type": "application/json", "X-CSRF-Token": session.csrfToken, "Idempotency-Key": `composition-unsupported-${kind}` }, body: JSON.stringify({ kind, expectedStateVersion: live.stateVersion }) });
+      outcomes.push({ kind, status: response.status, code: (await response.json()).code });
+    }
+    return outcomes;
+  }, runId);
+  for (const r of refusals) { expect(r.status).toBe(422); expect(r.code).toBe("CAPABILITY_UNSUPPORTED"); }
+  return { providerId: report.providerId, runId, flowCount: report.flows.length, resolvedStatuses: [...new Set(report.flows.map((f: any) => f.resolved.status))], observedStatuses: [...new Set(report.flows.map((f: any) => f.observed.status))], unsupportedCommandRefusals: refusals };
 }

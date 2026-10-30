@@ -131,7 +131,7 @@ test("actual Autoverse browser receipts, delivery ordering and retained recovery
   }, sources);
   await page.reload();
   await expect(page.locator(".project-header h1")).toHaveText(project.name);
-  if (process.env.STUDIO_AUTOVERSE_COMPOSITION === "1") await inspectAutoverseComposition(page, project);
+  const compositionProof = process.env.STUDIO_AUTOVERSE_COMPOSITION === "1" ? await inspectAutoverseComposition(page, project) : null;
   const starts: { key: string; body: string }[] = [];
   const record = (tab: Page) => tab.on("request", r => {
     if (r.method() === "POST" && new URL(r.url()).pathname === "/api/v1/runs") starts.push({ key: r.headers()["idempotency-key"], body: r.postData()! });
@@ -189,7 +189,7 @@ test("actual Autoverse browser receipts, delivery ordering and retained recovery
   const live = await getRun();
   expect(live.runtimeStatus.components.android).toBe("booted_apk_started");
   expect(live.inputTelemetry.items.speed.status).toBe("observed");
-  if (process.env.STUDIO_AUTOVERSE_COMPOSITION === "1") await inspectAutoverseCommunication(page, project.projectId, accepted.runId);
+  const communicationProof = process.env.STUDIO_AUTOVERSE_COMPOSITION === "1" ? await inspectAutoverseCommunication(page, project.projectId, accepted.runId) : null;
   await checkpoint("two-tab-original-worker"); progress("running", { runId: accepted.runId });
   await page.getByRole("tab", { name: "Events & logs", exact: false }).click();
   await page.getByRole("button", { name: "Live buffer · at most 200", exact: true }).click();
@@ -282,5 +282,5 @@ test("actual Autoverse browser receipts, delivery ordering and retained recovery
   expect(allRuns.items).toHaveLength(1); expect(allRuns.items[0].runId).toBe(accepted.runId);
   expect(reopenedStarts).toEqual([]);
   progress("stopped-and-reconciled", { runId: accepted.runId });
-  await info.attach("actual-native-autoverse-session", { body: JSON.stringify({ scope: "Actual native complete Autoverse; delivery faults alter only original frame delivery", mode, runId: accepted.runId, snapshotId: live.snapshotId, startDeliveriesBeforeConflict: 3, sameStartKey: true, twoActualTabs: true, changedBodyConflict: true, exactDuplicateSuppressed: true, originalFrameReorderingResynchronized: true, originalWorkerNativeCheckpoints: true, allUiPagesClosedAndReopenedWithoutStart: true, stopReceiptLostAndRetried: stopReceipt.operationId, sameStopKeyBodyAndReceipt: true, expiryProof }), contentType: "application/json" });
+  await info.attach("actual-native-autoverse-session", { body: JSON.stringify({ scope: "Actual native complete Autoverse; delivery faults alter only original frame delivery", mode, runId: accepted.runId, snapshotId: live.snapshotId, startDeliveriesBeforeConflict: 3, sameStartKey: true, twoActualTabs: true, changedBodyConflict: true, exactDuplicateSuppressed: true, originalFrameReorderingResynchronized: true, originalWorkerNativeCheckpoints: true, allUiPagesClosedAndReopenedWithoutStart: true, stopReceiptLostAndRetried: stopReceipt.operationId, sameStopKeyBodyAndReceipt: true, compositionProof, communicationProof, expiryProof }), contentType: "application/json" });
 });

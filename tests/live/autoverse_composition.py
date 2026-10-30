@@ -781,7 +781,7 @@ def test_actual_autoverse_deployment_constraints_block_direct_start(composed, fa
             api,
             p,
             "Deployment",
-            lambda r: r["spec"]["targets"][0].update(targetClass="physical-device"),
+            lambda r: r["spec"]["targets"][0].update(targetClass="virtual-machine"),
         )
     else:
         p = save(
@@ -799,7 +799,8 @@ def test_actual_autoverse_deployment_constraints_block_direct_start(composed, fa
             ),
         )
     # XDL must still be valid: these are semantic compatibility negatives.
-    assert app.state.studio.adapter.validate(sources(p))["valid"]
+    validation = app.state.studio.adapter.validate(sources(p))
+    assert validation["valid"], validation
     v = checked(api.get(f"/api/v1/projects/{p['projectId']}/deployment-variants"))[
         "items"
     ][0]
