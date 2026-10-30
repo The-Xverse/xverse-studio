@@ -1,7 +1,7 @@
 """Closed native failure fixture; the stock application has no fault controls."""
 
 import argparse
-from contextlib import asynccontextmanager
+from contextlib import ExitStack, asynccontextmanager, contextmanager
 import importlib.util
 import json
 import os
@@ -13,8 +13,19 @@ import time
 import uvicorn
 
 from xverse_studio.api.app import create_app
+from xverse_studio.host.ownership import own_root
 from xverse_studio.runs import service as run_module
+from xverse_studio.security.managed_io import create_directory
 from xverse_studio.storage.core import canonical
+
+
+@contextmanager
+def claim_root(path):
+    """Only create a new private root; never reopen or adopt existing data."""
+    path = Path(path).absolute()
+    with create_directory(Path("/"), path, parents=True) as acquired:
+        with own_root(acquired.path):
+            yield acquired.path
 
 
 def main():
@@ -22,10 +33,18 @@ def main():
     parser.add_argument("--data", type=Path, required=True)
     parser.add_argument("--scenario", choices=["mismatch", "launch_denied", "active_failure", "normal", "ownership_recovery", "prepare_denied", "journal_open", "journal_finalize", "cleanup_failure"], required=True)
     args = parser.parse_args()
-    args.data = args.data.resolve()
+    with ExitStack() as claimed:
+        try:
+            args.data = claimed.enter_context(claim_root(args.data))
+        except OSError:
+            parser.error("FIXTURE_ROOT_UNAVAILABLE: select a new private native Linux test directory.")
+        serve(args)
+
+
+def serve(args):
     root = Path(__file__).resolve().parents[4]
     observation = dict(scope="owned native fault fixture; no equipment", scenario=args.scenario,
-                       workerAttempts=0, corruptions=0, launchRefusals=0, interruptions=0, ownershipDenials=0, preparationRefusals=0, journalOpenFaults=0, journalFinalizationFaults=0, cleanupObstructions=0, errors=[])
+                       workerAttempts=0, originalWorkers=[], corruptions=0, launchRefusals=0, interruptions=0, ownershipDenials=0, preparationRefusals=0, journalOpenFaults=0, journalFinalizationFaults=0, cleanupObstructions=0, errors=[])
     threads = []
     with socket.socket() as listener:
         listener.bind(("127.0.0.1", 0))
@@ -134,6 +153,21 @@ def main():
                     observation["launchRefusals"] += 1
                     raise OSError("Labelled owned launch refusal")
             child = original_launch(argv, *values, **options)
+            if worker:
+                import psutil
+                from xverse_studio.storage.core import digest
+
+                process = psutil.Process(child.pid)
+                known = store.get("run", directory.name)
+                assert child.poll() is None and process.is_running()
+                assert process.ppid() == os.getpid() and process.cmdline() == argv
+                assert digest(argv) == known["launchArgvDigest"]
+                assert digest((directory / "owner.key").read_bytes()) == known["ownerDigest"]
+                observation["originalWorkers"].append({
+                    "runId": directory.name, "pid": child.pid, "birth": process.create_time(),
+                    "originalHandleCaptured": True, "nativeParentVerified": True,
+                    "argvDigest": digest(argv), "privateOwnerVerified": True,
+                })
             if worker and args.scenario == "cleanup_failure":
                 import psutil
                 from xverse_studio.storage.core import digest

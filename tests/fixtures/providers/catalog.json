@@ -1,0 +1,88 @@
+{
+  "formatVersion": "1.0",
+  "purpose": "T011 fixture ownership and evidence distinctions; never a runtime configuration or dispatcher",
+  "ownedExecutable": {
+    "providerId": "studio.reference",
+    "providerVersion": "1.2.0",
+    "contractVersion": "1.0",
+    "workerSource": "services/studio-api/src/xverse_studio/providers/worker.py",
+    "registrySource": "services/studio-api/src/xverse_studio/providers/registry.py",
+    "module": "xverse_studio.providers.worker",
+    "maturity": "fixture",
+    "evidenceScope": "owned_reference",
+    "hostOS": "Linux",
+    "architecture": "x86_64",
+    "processOwnership": "original native child handle, PID, birth, argv digest and private owner digest",
+    "observations": "produced by the executing reference model, not this catalogue or a recording",
+    "clocks": {
+      "source": "simulation-time",
+      "tickEncoding": "integer string",
+      "resolution": "microsecond",
+      "uncertainty": 0,
+      "receipt": "host Unix seconds; separate from source ticks",
+      "determinism": "fixed model inputs and logical sample ticks; host timestamps, IDs and journal bytes are not promised identical"
+    }
+  },
+  "nativeFailureHost": {
+    "source": "tests/fixtures/providers/run_failures/host.py",
+    "selection": "closed trusted developer CLI scenario; absent from product routes and imported projects",
+    "scenarios": {
+      "normal": "actual owned reference execution",
+      "mismatch": "change effective configuration before original worker revalidation",
+      "prepare_denied": "refuse the new owned request file before launch",
+      "launch_denied": "refuse the original native worker launch",
+      "journal_open": "obstruct only the new owned journal path before actual worker entry",
+      "active_failure": "interrupt only original verified sleeping child after an actual sample",
+      "ownership_recovery": "deny observation only for the original registered child",
+      "journal_finalize": "obstruct only the original owned journal path after an actual sample",
+      "cleanup_failure": "retain a file only in the original owned temporary directory"
+    },
+    "limitations": [
+      "Fault placement is deterministic at the named boundary; wall-clock scheduling is not deterministic.",
+      "A controlled failure or fixture is not Autoverse, platform or physical execution evidence."
+    ],
+    "requiredInputs": {
+      "active_failure": {
+        "durationSeconds": 5.0,
+        "timestepSeconds": 1.0,
+        "gain": 0.8
+      },
+      "ownership_recovery": {
+        "durationSeconds": 3.0,
+        "timestepSeconds": 0.1,
+        "gain": 0.8
+      },
+      "other": {
+        "durationSeconds": 0.5,
+        "timestepSeconds": 0.1,
+        "gain": 0.8
+      }
+    }
+  },
+  "fakeProvider": {
+    "source": "tests/fixtures/providers/fake_provider.py",
+    "kind": "synthetic_descriptor",
+    "evidenceScope": "synthetic_not_execution",
+    "executionAllowed": false,
+    "processOwnership": "none",
+    "clockDomain": "synthetic-fixture-clock",
+    "clockMapping": "none",
+    "cases": [
+      "contract-version",
+      "implementation",
+      "capabilities",
+      "limits",
+      "availability",
+      "operations"
+    ]
+  },
+  "recordedEvidence": {
+    "metadata": "tests/fixtures/runs/autoverse-classic-recorded.json",
+    "archive": "tests/fixtures/runs/autoverse-classic-recorded.bundle.zip",
+    "kind": "recorded_actual_autoverse",
+    "inspectionScope": "imported_recorded_evidence",
+    "executionAllowed": false,
+    "processOwnership": "none",
+    "sourceClockMapping": "unavailable"
+  }
+}

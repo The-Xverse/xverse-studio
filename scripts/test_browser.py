@@ -1,4 +1,4 @@
-"""Run browser checks against an isolated real native launcher on either host OS."""
+"""Run browser checks against an isolated launcher on the recorded native Linux host."""
 
 from pathlib import Path
 import argparse

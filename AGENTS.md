@@ -54,6 +54,9 @@ scoped work under that repository's rules.
   to its actual enrolled descriptors; positive live claims require the complete demo.
   Preserve other acceptance obligations and historical results; an Autoverse simulation
   does not establish physical-device or another industry's acceptance.
+  The user explicitly approved one exception on2026-10-30 for T011 verification of
+  the separate self-contained `studio.reference` executable provider. Keep that
+  exception within T011 fixture verification; other current targets stay Autoverse.
 - Enforce capabilities in the backend; button visibility is insufficient.
 - Never execute commands supplied by imported projects, profile metadata, descriptions, or logs.
 - Exclude credentials and machine-specific paths from committed examples and exports.
