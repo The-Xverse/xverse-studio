@@ -10,6 +10,33 @@ Capabilities are scoped records, not a single boolean list. Each operation speci
 
 Admission verifies descriptor/schema compatibility, pinned implementation identity, explicit installation, required dependencies and conformance evidence. A project/profile may reference a provider but may not install or execute it. Imported endpoints remain uncontacted until an admitted, explicitly scoped probe is requested.
 
+### Strict discovery and installed admission (ADR-0041)
+
+The implemented1.0 discovery core uses noncoerced IDs/versions, an exact SHA256
+implementation digest, bounded unique host/architecture/operation names, scoped
+capabilities and numeric finite nonnegative limits. A positive duration and positive
+integral concurrency bound are required. Capabilities name a target class, unique
+legal states and authority requirements, a Boolean physical-effects flag and a
+closed object parameter schema. Its dialect is the installed Draft2020-12 default
+or its exact canonical schema ID. Schema syntax validation does not fetch instance
+references. Each operation has an unambiguous capability scope; unknown provider
+extensions remain inert exact JSON within64KiB/4096 values/16 levels.
+
+Validation captures independent JSON bytes and checks that same observation;
+subsequent mutation of a provider-owned dictionary cannot change it. Discovery is
+not provider installation or an execution permit. The authenticated providers route
+publishes generated healthy/unavailable response schemas. Existing unavailable Lite
+metadata remains distinct from admitted descriptors.
+
+A configured provider whose description fails validation is shown under its
+server-configured identity with no operations and a typed generic reason. Its raw
+payload/exception is withheld, underlying contractVersion is unavailable, and the
+facade discoveryVersion is1.0. Core authoring remains usable. Host/architecture and
+availability are checked before readiness contact. Current descriptor changes
+invalidate frozen admission; the post-accept dispatch boundary also refuses before
+worker/task acquisition. Existing original provider handles remain for ownership
+inspection and cleanup rather than being discarded by a discovery failure.
+
 ## Operations
 
 | Operation | Contract |

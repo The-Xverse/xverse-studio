@@ -80,7 +80,9 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "$ref": "#/components/schemas/ProviderPage"
+                }
               }
             }
           }
@@ -5002,6 +5004,83 @@
         ],
         "title": "Campaign"
       },
+      "CapabilityDescriptor": {
+        "properties": {
+          "kind": {
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 1,
+            "title": "Kind"
+          },
+          "targetClass": {
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 1,
+            "title": "Targetclass"
+          },
+          "legalStates": {
+            "items": {
+              "type": "string",
+              "maxLength": 256,
+              "minLength": 1
+            },
+            "type": "array",
+            "maxItems": 128,
+            "minItems": 1,
+            "title": "Legalstates"
+          },
+          "parametersSchema": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Parametersschema"
+          },
+          "authorityRequirements": {
+            "items": {
+              "type": "string",
+              "maxLength": 256,
+              "minLength": 1
+            },
+            "type": "array",
+            "maxItems": 128,
+            "minItems": 1,
+            "title": "Authorityrequirements"
+          },
+          "physicalEffects": {
+            "type": "boolean",
+            "title": "Physicaleffects"
+          },
+          "maxDurationSeconds": {
+            "anyOf": [
+              {
+                "anyOf": [
+                  {
+                    "type": "integer"
+                  },
+                  {
+                    "type": "number"
+                  }
+                ],
+                "gt": 0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Maxdurationseconds"
+          }
+        },
+        "additionalProperties": true,
+        "type": "object",
+        "required": [
+          "kind",
+          "targetClass",
+          "legalStates",
+          "parametersSchema",
+          "authorityRequirements",
+          "physicalEffects"
+        ],
+        "title": "CapabilityDescriptor"
+      },
       "Command": {
         "properties": {
           "kind": {
@@ -5531,6 +5610,154 @@
         ],
         "title": "ProfileLock"
       },
+      "ProviderDescriptor": {
+        "properties": {
+          "providerId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$",
+            "title": "Providerid"
+          },
+          "providerVersion": {
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 1,
+            "title": "Providerversion"
+          },
+          "contractVersion": {
+            "type": "string",
+            "const": "1.0",
+            "title": "Contractversion"
+          },
+          "implementationDigest": {
+            "type": "string",
+            "pattern": "^sha256:[a-f0-9]{64}$",
+            "title": "Implementationdigest"
+          },
+          "supportedHostOS": {
+            "items": {
+              "type": "string",
+              "maxLength": 256,
+              "minLength": 1
+            },
+            "type": "array",
+            "maxItems": 128,
+            "minItems": 1,
+            "title": "Supportedhostos"
+          },
+          "architectures": {
+            "items": {
+              "type": "string",
+              "maxLength": 256,
+              "minLength": 1
+            },
+            "type": "array",
+            "maxItems": 128,
+            "minItems": 1,
+            "title": "Architectures"
+          },
+          "operations": {
+            "items": {
+              "type": "string",
+              "maxLength": 256,
+              "minLength": 1
+            },
+            "type": "array",
+            "maxItems": 128,
+            "minItems": 1,
+            "title": "Operations"
+          },
+          "capabilityRecords": {
+            "items": {
+              "$ref": "#/components/schemas/CapabilityDescriptor"
+            },
+            "type": "array",
+            "maxItems": 128,
+            "minItems": 1,
+            "title": "Capabilityrecords"
+          },
+          "limits": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "number"
+                }
+              ],
+              "ge": 0
+            },
+            "propertyNames": {
+              "maxLength": 256,
+              "minLength": 1
+            },
+            "type": "object",
+            "maxProperties": 128,
+            "minProperties": 1,
+            "title": "Limits"
+          },
+          "evidenceScope": {
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 1,
+            "title": "Evidencescope"
+          },
+          "available": {
+            "type": "boolean",
+            "title": "Available"
+          },
+          "hostCompatible": {
+            "type": "boolean",
+            "title": "Hostcompatible"
+          }
+        },
+        "additionalProperties": true,
+        "type": "object",
+        "required": [
+          "providerId",
+          "providerVersion",
+          "contractVersion",
+          "implementationDigest",
+          "supportedHostOS",
+          "architectures",
+          "operations",
+          "capabilityRecords",
+          "limits",
+          "evidenceScope",
+          "available",
+          "hostCompatible"
+        ],
+        "title": "ProviderDescriptor"
+      },
+      "ProviderPage": {
+        "properties": {
+          "items": {
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/ProviderDescriptor"
+                },
+                {
+                  "$ref": "#/components/schemas/UnavailableProviderDescriptor"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "nextCursor": {
+            "type": "null",
+            "title": "Nextcursor"
+          }
+        },
+        "additionalProperties": true,
+        "type": "object",
+        "required": [
+          "items",
+          "nextCursor"
+        ],
+        "title": "ProviderPage"
+      },
       "Recovery": {
         "properties": {
           "expectedRevision": {
@@ -5743,6 +5970,87 @@
           "preflightId"
         ],
         "title": "Start"
+      },
+      "UnavailableProviderDescriptor": {
+        "properties": {
+          "providerId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$",
+            "title": "Providerid"
+          },
+          "providerVersion": {
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 1,
+            "title": "Providerversion"
+          },
+          "contractVersion": {
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 1,
+            "title": "Contractversion"
+          },
+          "available": {
+            "type": "boolean",
+            "const": false,
+            "title": "Available"
+          },
+          "supportedHostOS": {
+            "items": {
+              "type": "string",
+              "maxLength": 256,
+              "minLength": 1
+            },
+            "type": "array",
+            "maxItems": 128,
+            "title": "Supportedhostos"
+          },
+          "architectures": {
+            "items": {
+              "type": "string",
+              "maxLength": 256,
+              "minLength": 1
+            },
+            "type": "array",
+            "maxItems": 128,
+            "title": "Architectures"
+          },
+          "operations": {
+            "items": {
+              "type": "string",
+              "maxLength": 256,
+              "minLength": 1
+            },
+            "type": "array",
+            "maxItems": 0,
+            "title": "Operations"
+          },
+          "blockedReasons": {
+            "items": {
+              "additionalProperties": {
+                "type": "string"
+              },
+              "type": "object"
+            },
+            "type": "array",
+            "maxItems": 32,
+            "minItems": 1,
+            "title": "Blockedreasons"
+          }
+        },
+        "additionalProperties": true,
+        "type": "object",
+        "required": [
+          "providerId",
+          "providerVersion",
+          "contractVersion",
+          "available",
+          "supportedHostOS",
+          "architectures",
+          "operations",
+          "blockedReasons"
+        ],
+        "title": "UnavailableProviderDescriptor"
       },
       "ValidationError": {
         "properties": {

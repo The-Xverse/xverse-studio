@@ -18,6 +18,7 @@ from fastapi.responses import JSONResponse, StreamingResponse, FileResponse
 from starlette.exceptions import HTTPException
 from xverse_studio import __version__
 from xverse_studio.api.models import *
+from xverse_studio.providers.descriptors import ProviderPage
 from xverse_studio.storage.core import Store, Problem, atomic, canonical, digest, uid
 from xverse_studio.security.files import MAX_BYTES, check_text
 from xverse_studio.projects.service import Projects
@@ -342,7 +343,7 @@ def create_app(
         return {**capabilities(), "providers": runs.provider_descriptors(), "capabilityDigest": runs.capability_digest(), 'labReservations': app.state.studio.lab_reservations.discovery(),
                 'labProbes': app.state.studio.lab_probes.discovery(), 'localBindings': app.state.studio.local_bindings.discovery()}
 
-    @app.get("/api/v1/providers")
+    @app.get("/api/v1/providers", response_model=ProviderPage, response_model_exclude_unset=True)
     def providers():
         return {"items": runs.provider_descriptors(), "nextCursor": None}
 

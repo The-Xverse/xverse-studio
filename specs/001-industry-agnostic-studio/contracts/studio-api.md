@@ -88,6 +88,11 @@
 
 Resource bodies, schemas and generated client types are implemented together from the data model and these contracts; contract tests must reject incompatible request variants. Unsupported milestone routes return `404` with capability discovery making their absence explicit.
 
+Provider discovery's generated `ProviderPage` response retains exact installed
+extensions within the ADR-0041 bounded strict descriptor core. Incompatible or
+unreadable native descriptors become unavailable projections, not raw exceptions
+or execution authority; see [provider-contract.md](provider-contract.md).
+
 ### Private local bindings amendment (ADR-0040)
 
 The closed request is `{formatVersion: "1.0", bindings: [...]}`; version defaults

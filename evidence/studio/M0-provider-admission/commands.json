@@ -1,0 +1,133 @@
+{
+  "pathNormalization": "Absolute receipt/tool/cache/root/report paths are normalized; no authentication or private installation payload is copied.",
+  "backend": {
+    "argv": [
+      ".venv/bin/python",
+      "-I",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/live/autoverse_provider_admission.py",
+      "--basetemp=.studio-local/provider-admission-review/dedicated-data",
+      "--junitxml=.studio-local/provider-admission-review/dedicated.xml"
+    ],
+    "environment": {
+      "PYTEST_DISABLE_PLUGIN_AUTOLOAD": "1",
+      "STUDIO_AUTOVERSE_TEST_INSTALLATION": "absolute enrolled private receipt containing actual classic/platform identities"
+    }
+  },
+  "earlierPhases": {
+    "red": {
+      "cases": 80,
+      "sha256": "8a273dcb487e122829e710aa6ef60916925233d676b0535368141bd78212534a",
+      "outcomes": {
+        "passed": 5,
+        "failed": 75,
+        "error": 0,
+        "skipped": 0
+      }
+    },
+    "red-corrected": {
+      "cases": 78,
+      "sha256": "734db88c0b27074896d679fb2b4a14f9a5ad552683bcbae62efb4332c31bfceb",
+      "outcomes": {
+        "passed": 5,
+        "failed": 73,
+        "error": 0,
+        "skipped": 0
+      }
+    },
+    "first": {
+      "cases": 78,
+      "sha256": "63bbf804982f27976c31c74f170adeaa6a9171977ecff61143d7ad7f9e506876",
+      "outcomes": {
+        "passed": 77,
+        "failed": 1,
+        "error": 0,
+        "skipped": 0
+      }
+    },
+    "review": {
+      "cases": 90,
+      "sha256": "ccbd9874ab7c47c4c717cec6c939c7533a764c9ada4dc67c4cb17a546d7bf639",
+      "outcomes": {
+        "passed": 90,
+        "failed": 0,
+        "error": 0,
+        "skipped": 0
+      }
+    },
+    "boundary-red": {
+      "cases": 8,
+      "sha256": "c86d87e8083735b104fd6883b3d7b9d81bef4d961aa28b807f5b6d1a210d9288",
+      "outcomes": {
+        "passed": 0,
+        "failed": 8,
+        "error": 0,
+        "skipped": 0
+      }
+    },
+    "final": {
+      "cases": 100,
+      "sha256": "ace00565fd687150c68993feed6558f8b040c3447270b3cc726dd01c7985f03d",
+      "outcomes": {
+        "passed": 100,
+        "failed": 0,
+        "error": 0,
+        "skipped": 0
+      }
+    },
+    "confirm": {
+      "cases": 100,
+      "sha256": "c7e0fa1a53a0af2595deb34328707c15857cca38b1b827000100126ea06669a0",
+      "outcomes": {
+        "passed": 100,
+        "failed": 0,
+        "error": 0,
+        "skipped": 0
+      }
+    }
+  },
+  "browser": {
+    "argv": [
+      "node",
+      "PINNED_PLAYWRIGHT_CLI",
+      "test",
+      "--config",
+      "tests/live/autoverse-admission.config.ts"
+    ],
+    "launcherArgv": [
+      ".venv/bin/python",
+      "-I",
+      "tests/live/autoverse_admission_host.py",
+      "--receipt",
+      "PRIVATE_RECEIPT",
+      "--data-dir",
+      "FRESH_STUDIO_BROWSER_TEST_ROOT",
+      "--static-dir",
+      "UNCHANGED_TESTED_UI",
+      "--port",
+      "EPHEMERAL_PORT",
+      "--fault",
+      "valid|invalid"
+    ],
+    "environment": {
+      "STUDIO_AUTOVERSE_DESCRIPTOR_FAULT": "valid|invalid",
+      "STUDIO_BASE_URL": "original native host loopback URL",
+      "STUDIO_BROWSER_DATA": "fresh unique .studio-local/browser-tests root",
+      "STUDIO_BROWSER_REPORT": "absolute private phase report",
+      "STUDIO_BROWSER_OUTPUT": "absolute private artifacts",
+      "PLAYWRIGHT_BROWSERS_PATH": "prepared pinned cache"
+    },
+    "ownership": "Original native launcher handles stopped after each browser invocation; only metadata describe is faulted, actual Autoverse enrollment/source/preflight remain."
+  },
+  "checks": [
+    "Ruff new modules/live tests; F821 changed existing modules/verification helper",
+    "TypeScript --noEmit",
+    "Generated OpenAPI equals actual enrolled target API",
+    "Architecture boundaries",
+    "Descriptive compatibility baseline",
+    "Planning consistency",
+    "Source/UI before/after SHA256"
+  ]
+}

@@ -100,15 +100,29 @@ class Runs:
         self.installed_providers = dict(installed_providers or {})
         from xverse_studio.platform_observability.views import PlatformViews
         self.platform_views = PlatformViews()
-        from xverse_studio.providers.registry import admit_descriptor
+        import re
         builtins = {entry["providerId"] for entry in descriptors()}
-        for provider_id, provider in self.installed_providers.items():
-            descriptor = admit_descriptor(provider.descriptor())
-            if provider_id in builtins or descriptor["providerId"] != provider_id:
+        for provider_id in self.installed_providers:
+            if (not isinstance(provider_id, str) or not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._-]{0,127}", provider_id)
+                    or provider_id in builtins):
                 raise Problem("PROVIDER_DESCRIPTOR_INVALID", "Installed provider identities must be unique and match their registration.")
 
     def provider_descriptors(self):
-        return [*descriptors(), *(provider.descriptor() for provider in self.installed_providers.values())]
+        from xverse_studio.providers.descriptors import admit_descriptor, unavailable_descriptor
+        result = descriptors()
+        for provider_id, provider in self.installed_providers.items():
+            try:
+                descriptor = admit_descriptor(provider.descriptor())
+                if descriptor["providerId"] != provider_id:
+                    raise Problem("PROVIDER_DESCRIPTOR_INVALID", "The provider identity differs from its native registration.")
+            except Problem as error:
+                descriptor = unavailable_descriptor(provider_id, error.code)
+            except Exception:
+                # A native describe failure does not disable authoring or grant
+                # operations. Never expose the exception or invalid raw payload.
+                descriptor = unavailable_descriptor(provider_id, "PROVIDER_DESCRIPTOR_UNAVAILABLE")
+            result.append(descriptor)
+        return result
 
     def platform_view(self, rid, query):
         run = self.store.get("run", rid)
@@ -125,6 +139,18 @@ class Runs:
 
     def readiness(self, documents, compiled, provider_id, provider, active_count):
         installed = self.installed_providers.get(provider_id)
+        if installed is not None:
+            import platform
+            from xverse_studio.providers.descriptors import admit_descriptor
+            try:
+                value = admit_descriptor(provider)
+                usable = (value["providerId"] == provider_id and value["available"] is True
+                          and value["hostCompatible"] is True and platform.system() in value["supportedHostOS"]
+                          and platform.machine() in value["architectures"])
+            except Problem:
+                usable = False
+            if not usable:
+                return reference_readiness(documents, compiled, provider_id, provider, active_count)
         return (installed.readiness if installed else reference_readiness)(documents, compiled, provider_id, provider, active_count)
 
     def _reconcile_active_observations(self):
@@ -539,6 +565,14 @@ class Runs:
     def _dispatch(self, rid):
         run = self.store.get("run", rid)
         snap = self.store.get("snapshot", run["snapshotId"])
+        if snap["providerId"] in self.installed_providers:
+            current = next((p for p in self.provider_descriptors() if p["providerId"] == snap["providerId"]), None)
+            if current != snap["providerIdentity"] or not current or current.get("available") is not True:
+                self._record_dispatch(rid,
+                    dict(state="failed", cleanup="complete", evidence="unavailable",
+                         reason="PROVIDER_ADMISSION_CHANGED", endedAt=time.time()),
+                    dict(status="failed", code="PROVIDER_ADMISSION_CHANGED"))
+                return
         root = self.directory(rid)
         try:
             root.mkdir(parents=True, exist_ok=True)

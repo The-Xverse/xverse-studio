@@ -7,7 +7,7 @@ The new private data directory contains credentials; export verification.json on
 import argparse
 import ctypes as C
 import ctypes.util
-import json, os, subprocess, time
+import json, os, re, subprocess, time
 from pathlib import Path
 from fastapi.testclient import TestClient
 from xverse_studio.api.app import create_app
@@ -18,16 +18,35 @@ from xverse_studio.storage.core import atomic, canonical
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--autoverse-root', type=Path, required=True)
 parser.add_argument('--data-dir', type=Path, required=True)
+parser.add_argument('--native-url', help='Use an already launched isolated native backend at an explicit loopback URL.')
 args = parser.parse_args()
 root = args.data_dir.resolve()
-root.mkdir(mode=0o700, parents=True, exist_ok=False)
+if args.native_url:
+ if (not re.fullmatch(r'http://127\.0\.0\.1:[0-9]{1,5}', args.native_url)
+     or not (root/'bootstrap.json').is_file() or any((root/'runs').glob('*'))
+     or (root/'verification.json').exists()):
+  parser.error('Native verification requires a fresh owned root, bootstrap and exact loopback URL.')
+else:
+ root.mkdir(mode=0o700, parents=True, exist_ok=False)
 i = enroll(args.autoverse_root)
-app = create_app(root, allowed_hosts=['testserver'], bootstrap_token='isolated-local-check', installed_providers={'autoverse.demo':AutoverseProvider(i)})
-report = {'outcome':'failed', 'scope':'actual native Linux full demo with original Pygame keyboard input', 'observations':[]}
-with TestClient(app) as c:
- c.headers['Origin']='http://testserver'
- login=c.post('/api/v1/session',json={'bootstrapToken':'isolated-local-check'});assert login.status_code==200
+if args.native_url:
+ import httpx
+ client=httpx.Client(base_url=args.native_url,timeout=30)
+ bootstrap=json.loads((root/'bootstrap.json').read_bytes())['bootstrapToken']
+else:
+ app = create_app(root, allowed_hosts=['testserver'], bootstrap_token='isolated-local-check', installed_providers={'autoverse.demo':AutoverseProvider(i)})
+ client=TestClient(app)
+ bootstrap='isolated-local-check'
+report = {'outcome':'failed', 'scope':'actual native Linux full demo with original Pygame keyboard input',
+          'backendTransport':'native-http' if args.native_url else 'in-process-api', 'observations':[]}
+with client as c:
+ c.headers['Origin']=args.native_url or 'http://testserver'
+ login=c.post('/api/v1/session',json={'bootstrapToken':bootstrap});assert login.status_code==200
  c.headers['X-CSRF-Token']=login.json()['csrfToken']
+ providers=c.get('/api/v1/providers');assert providers.status_code==200,providers.text
+ installed=next(p for p in providers.json()['items'] if p['providerId']=='autoverse.demo')
+ assert installed==AutoverseProvider(i).descriptor()
+ report['providerDescriptorExact']=True
  p=c.post('/api/v1/projects',json={'name':'Pygame native verification','blueprintRef':'autoverse-classic'}).json()
  pf=c.post('/api/v1/projects/'+p['projectId']+'/preflights',json={'revision':p['revision'],'providerId':'autoverse.demo'}).json()
  print('PREFLIGHT',pf['status'],flush=True);assert pf['status']=='ready',pf
@@ -45,6 +64,9 @@ with TestClient(app) as c:
    time.sleep(1)
   assert v['state']=='running',v
   assert v['inputSurface']['kind']=='native-window'
+  pause=c.post('/api/v1/runs/'+rid+'/commands',json={'kind':'pause','expectedStateVersion':v['stateVersion']},headers={'Idempotency-Key':'unsupported-autoverse-pause'})
+  assert pause.status_code==422 and pause.json()['code']=='CAPABILITY_UNSUPPORTED',pause.text
+  report['unsupportedPauseRejected']=True
   assert c.post('/api/v1/runs/'+rid+'/input/acquire',json={}).json()['code']=='CAPABILITY_UNSUPPORTED'
   ready=json.loads((root/'runs'/rid/'manual-window.private.json').read_text())
   import psutil

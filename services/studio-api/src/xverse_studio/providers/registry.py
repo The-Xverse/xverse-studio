@@ -1,6 +1,7 @@
 import platform
 from pathlib import Path
 from xverse_studio.storage.core import digest
+from .descriptors import admit_descriptor as admit_descriptor  # Public compatibility import for existing callers.
 from .reference_control import CONTROL_STATES, MAX_PAUSED_WALL_SECONDS, MAX_LIVE_MUTATIONS, LIVE_PARAMETERS_SCHEMA, REFERENCE_VERSION
 
 REFERENCE = {
@@ -221,50 +222,3 @@ def capabilities():
         "evidenceScope": "owned_reference",
         "capabilityDigest": capability_digest(),
     }
-
-
-def admit_descriptor(descriptor):
-    """Trusted administrative integration gate; projects never register executable providers."""
-    from xverse_studio.storage.core import Problem
-
-    if not isinstance(descriptor, dict) or descriptor.get("contractVersion") != "1.0":
-        raise Problem(
-            "PROVIDER_VERSION_INCOMPATIBLE",
-            "The installed provider contract is incompatible with Studio v1.",
-        )
-    required = [
-        "providerId",
-        "providerVersion",
-        "implementationDigest",
-        "supportedHostOS",
-        "architectures",
-        "capabilityRecords",
-        "limits",
-        "evidenceScope",
-    ]
-    if (
-        any(key not in descriptor for key in required)
-        or not isinstance(descriptor["implementationDigest"], str)
-        or not descriptor["implementationDigest"].startswith("sha256:")
-    ):
-        raise Problem(
-            "PROVIDER_DESCRIPTOR_INVALID",
-            "An installed provider must declare exact implementation, authority, host and limit identities.",
-        )
-    for capability in descriptor["capabilityRecords"]:
-        if not isinstance(capability, dict) or any(
-            k not in capability
-            for k in (
-                "kind",
-                "targetClass",
-                "legalStates",
-                "parametersSchema",
-                "authorityRequirements",
-                "physicalEffects",
-            )
-        ):
-            raise Problem(
-                "PROVIDER_DESCRIPTOR_INVALID",
-                "Provider capabilities require scoped operation, state, parameter and authority contracts.",
-            )
-    return descriptor
