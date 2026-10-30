@@ -375,7 +375,7 @@ def main():
             rows, cursor = [], None
             for _ in range(300):
                 params = {
-                    "snapshotId": receipt["snapshotId"],
+                    "snapshotId": pf["snapshotId"],
                     "formatVersion": version,
                     "limit": 200,
                 }
@@ -421,7 +421,7 @@ def main():
                 native,
                 host,
                 api,
-                {**p, "_runId": rid, "_snapshotId": receipt["snapshotId"]},
+                {**p, "_runId": rid, "_snapshotId": pf["snapshotId"]},
                 args.output,
                 args.node,
                 args.playwright_cli,
