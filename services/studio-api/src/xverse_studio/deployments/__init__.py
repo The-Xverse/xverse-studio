@@ -77,8 +77,17 @@ def compile_selection(documents, selection=None, adapter=None):
 
 
 class Deployments:
-    def __init__(self, projects, adapter):
+    def __init__(self, projects, adapter, *, descriptor_source=None, configuration_for=None):
         self.projects, self.adapter = projects, adapter
+        self.descriptor_source, self.configuration_for = descriptor_source, configuration_for
+
+    def _provider(self, provider_id):
+        from xverse_studio.providers.registry import descriptors
+
+        provider = next((deepcopy(value) for value in (self.descriptor_source or descriptors)() if value["providerId"] == provider_id), None)
+        if provider is None:
+            raise Problem("PROVIDER_UNAVAILABLE", "No provider descriptor has this identity.", 404)
+        return provider
 
     def list(self, project_id):
         project = self.projects.read(project_id)
@@ -133,12 +142,8 @@ class Deployments:
 
     def _resolve(self, documents, deployment_ref, provider_id="studio.reference", *, provider=None):
         from xverse_studio.connections import admit_connections
-        from xverse_studio.providers.registry import descriptors
-
         if provider is None:
-            provider = next((value for value in descriptors() if value["providerId"] == provider_id), None)
-        if provider is None:
-            raise Problem("PROVIDER_UNAVAILABLE", "No provider descriptor has this identity.", 404)
+            provider = self._provider(provider_id)
         report = resolve_deployment(documents, deployment_ref, host_os=platform.system(), provider=provider)
         # Connection compatibility also depends on the provider's declared contracts (ADR-0016).
         # Summarized here for rebinding; preflight reports its blocking diagnostics itself.
@@ -250,10 +255,14 @@ class Deployments:
             compiled = compile_selection(updated, selection, self.adapter)
             readiness.update(status="blocked", diagnostics=compiled["diagnostics"])
             if compiled["valid"]:
-                resolution.update(self._resolve(updated, selection["deploymentRef"], provider_id))
+                provider = self._provider(provider_id)
+                resolution.update(self._resolve(updated, selection["deploymentRef"], provider_id, provider=provider))
             if compiled["valid"]:
                 try:
-                    reference_configuration(compiled["contributingDocuments"], compiled)
+                    if self.configuration_for is None:
+                        reference_configuration(compiled["contributingDocuments"], compiled)
+                    else:
+                        self.configuration_for(provider_id, provider, compiled["contributingDocuments"], compiled)
                     readiness.update(status="preflight_required", diagnostics=[])
                 except XDLRejected as error:
                     readiness["diagnostics"] = [{"code": error.code, "severity": "error", "message": str(error)}]

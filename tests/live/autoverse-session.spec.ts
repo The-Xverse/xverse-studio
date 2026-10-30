@@ -3,6 +3,7 @@ import { readFileSync, writeFileSync } from "node:fs";
 import { createHash } from "node:crypto";
 import path from "node:path";
 import { connectStudio } from "../e2e/connect-studio";
+import { inspectAutoverseComposition, inspectAutoverseCommunication } from "./autoverse-composition-flow";
 
 /** Modify only delivery of original SSE frames, never their canonical contents. */
 async function observeDelivery(context: BrowserContext) {
@@ -130,6 +131,7 @@ test("actual Autoverse browser receipts, delivery ordering and retained recovery
   }, sources);
   await page.reload();
   await expect(page.locator(".project-header h1")).toHaveText(project.name);
+  if (process.env.STUDIO_AUTOVERSE_COMPOSITION === "1") await inspectAutoverseComposition(page, project);
   const starts: { key: string; body: string }[] = [];
   const record = (tab: Page) => tab.on("request", r => {
     if (r.method() === "POST" && new URL(r.url()).pathname === "/api/v1/runs") starts.push({ key: r.headers()["idempotency-key"], body: r.postData()! });
@@ -187,6 +189,7 @@ test("actual Autoverse browser receipts, delivery ordering and retained recovery
   const live = await getRun();
   expect(live.runtimeStatus.components.android).toBe("booted_apk_started");
   expect(live.inputTelemetry.items.speed.status).toBe("observed");
+  if (process.env.STUDIO_AUTOVERSE_COMPOSITION === "1") await inspectAutoverseCommunication(page, project.projectId, accepted.runId);
   await checkpoint("two-tab-original-worker"); progress("running", { runId: accepted.runId });
   await page.getByRole("tab", { name: "Events & logs", exact: false }).click();
   await page.getByRole("button", { name: "Live buffer · at most 200", exact: true }).click();

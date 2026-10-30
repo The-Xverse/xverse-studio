@@ -28,7 +28,6 @@ from xverse_studio.runs.service import Runs, ACTIVE
 from xverse_studio.providers.registry import (
     capabilities,
     capability_digest,
-    descriptors,
 )
 from xverse_studio.diagnostics import explain_preflight, explain_run
 from xverse_studio.evidence.reader import read_journal
@@ -425,7 +424,7 @@ def create_app(
         documents = projects.sources(p)
         # Converters and causality are admitted only under the selected provider's contracts.
         provider = next(
-            (d for d in descriptors() if d["providerId"] == providerId), None
+            (d for d in runs.provider_descriptors() if d["providerId"] == providerId), None
         )
         if provider is None:
             raise Problem(

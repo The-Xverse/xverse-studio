@@ -1755,6 +1755,7 @@ export default function App() {
                     projection={projection}
                     projectId={project.projectId}
                     revision={project.revision}
+                    providerId={executionProvider}
                     onOpenView={(next) => setView(next as typeof view)}
                     runId={
                       run?.projectId === project.projectId

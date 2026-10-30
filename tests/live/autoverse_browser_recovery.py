@@ -35,7 +35,10 @@ def main():
     p.add_argument('--browser-cache', type=Path, required=True)
     p.add_argument('--static-dir', type=Path, required=True)
     p.add_argument('--case', choices=['startup-failure', 'runtime-failure', 'session-short', 'session-expiry'], default='startup-failure')
+    p.add_argument('--composition', action='store_true')
     args = p.parse_args()
+    if args.composition and args.case != 'session-short':
+        p.error('Composition verification uses the complete nominal session case.')
     args.output.mkdir(parents=True)
     data = ROOT / '.studio-local/browser-tests' / ('browser-recovery-' + uuid.uuid4().hex)
     with create_directory(Path('/'), data.absolute(), parents=True):
@@ -53,6 +56,8 @@ def main():
     try:
         host.start()
         env = dict(os.environ, STUDIO_BASE_URL=host.url, STUDIO_BROWSER_DATA=str(data), STUDIO_AUTOVERSE_RECONNECT_CASE=args.case, STUDIO_BROWSER_REPORT=str(args.output.absolute() / 'browser.json'), STUDIO_BROWSER_OUTPUT=str(args.output.absolute() / 'browser-artifacts'), PLAYWRIGHT_BROWSERS_PATH=str(args.browser_cache.absolute()))
+        if args.composition:
+            env['STUDIO_AUTOVERSE_COMPOSITION'] = '1'
         argv = [str(args.node.absolute()), str(args.playwright_cli.absolute()), 'test', '--config', 'tests/live/autoverse-reconnect.config.ts']
         (args.output / 'browser-command.private.json').write_text(json.dumps({'argv': argv, 'dataRoot': str(data)}, indent=2) + '\n')
         with (args.output / 'browser.log').open('xb') as log:

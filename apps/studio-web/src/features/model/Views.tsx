@@ -1234,6 +1234,7 @@ export function ConnectionsView({
   edit,
   projectId,
   revision,
+  providerId = "studio.reference",
   onOpenView,
   runId,
   runState,
@@ -1242,6 +1243,7 @@ export function ConnectionsView({
   edit: (edits: Data[]) => Promise<unknown>;
   projectId: string;
   revision: number;
+  providerId?: string;
   onOpenView?: (view: string) => void;
   runId?: string;
   runState?: string;
@@ -1253,7 +1255,7 @@ export function ConnectionsView({
     endpoints: Data[] = system?.spec?.endpoints || [],
     interfaces: Data[] = system?.spec?.interfaces || [];
   const term = useTerm();
-  const { report, failure } = useConnectionAdmission(projectId, revision),
+  const { report, failure } = useConnectionAdmission(projectId, revision, providerId),
     guidance = targetGuidance(endpoints, interfaces, source),
     chosen = guidance.find((g) => g.endpoint.id === target);
   return (

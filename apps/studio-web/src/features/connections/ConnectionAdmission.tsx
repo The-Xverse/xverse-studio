@@ -6,30 +6,30 @@ import { Badge } from "../../app/ui";
 // Presents backend connection admission 1.0. Studio never converts, infers or proves
 // executable correctness here; unknown and unsupported stay visible as such.
 
-export function useConnectionAdmission(projectId: string, revision: number) {
+export function useConnectionAdmission(projectId: string, revision: number, providerId = "studio.reference") {
   const [report, setReport] = useState<{ key: string; value: Data } | null>(
       null,
     ),
-    [failure, setFailure] = useState("");
-  const key = `${projectId}:${revision}`;
+    [failure, setFailure] = useState<{ key: string; message: string } | null>(null);
+  const key = JSON.stringify([projectId, revision, providerId]);
   useEffect(() => {
     const controller = new AbortController();
-    setFailure("");
-    api(`/projects/${encodeURIComponent(projectId)}/connections`, {
+    setFailure(null);
+    api(`/projects/${encodeURIComponent(projectId)}/connections?providerId=${encodeURIComponent(providerId)}`, {
       signal: controller.signal,
     })
       .then((value) => {
+        if (value.providerId !== providerId || value.revision !== revision)
+          throw Error("Connection admission does not match the selected provider and revision.");
         if (!controller.signal.aborted) setReport({ key, value });
       })
       .catch((error) => {
         if (!controller.signal.aborted)
-          setFailure(
-            error instanceof Error ? error.message : "Admission unavailable.",
-          );
+          setFailure({ key, message: error instanceof Error ? error.message : "Admission unavailable." });
       });
     return () => controller.abort();
-  }, [key, projectId]);
-  return { report: report?.key === key ? report.value : null, failure };
+  }, [key, projectId, providerId, revision]);
+  return { report: report?.key === key ? report.value : null, failure: failure?.key === key ? failure.message : "" };
 }
 
 const tone = (status: string) =>

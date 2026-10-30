@@ -423,3 +423,272 @@ def test_known_metadata_copy_migration_preserves_actual_autoverse_semantics(
     for name, raw in original.items():
         if name != "studio.sqlite":
             assert (destination / name).read_bytes() == raw
+
+
+@pytest.mark.parametrize("layer", ["default", "instance", "conflict"])
+def test_actual_autoverse_parameter_sources_never_invent_precedence(composed, layer):
+    app, api, provider, p = composed
+    _, component = document(p, "Component")
+    definition = SAFE.load(component["content"])["metadata"]["name"]
+    p = save(
+        api,
+        p,
+        "Component",
+        lambda r: r["spec"].update(
+            parameters=[
+                {
+                    "id": "review-rate",
+                    "valueType": "number",
+                    "unitSemantics": "1/s",
+                    "default": 1.0,
+                    "mutability": "configuration",
+                }
+            ]
+        ),
+    )
+    _, system = document(p, "System")
+    instance = next(
+        e["id"]
+        for e in SAFE.load(system["content"])["spec"]["componentInstances"]
+        if e["componentRef"]["name"] == definition
+    )
+    if layer != "default":
+
+        def instance_value(r):
+            next(e for e in r["spec"]["componentInstances"] if e["id"] == instance)[
+                "parameterValues"
+            ] = {"review-rate": 2.0}
+
+        p = save(api, p, "System", instance_value)
+    if layer == "conflict":
+
+        def binding_value(r):
+            next(
+                b
+                for b in r["spec"]["bindings"]
+                if b["logicalRef"]["element"] == instance
+            )["parameterValues"] = {"review-rate": 3.0}
+
+        p = save(api, p, "Deployment", binding_value)
+    variant = checked(
+        api.get(f"/api/v1/projects/{p['projectId']}/deployment-variants")
+    )["items"][0]
+    report = checked(
+        api.get(
+            f"/api/v1/projects/{p['projectId']}/deployment-variants/{variant['documentId']}/resolution",
+            params={"providerId": provider.descriptor()["providerId"]},
+        )
+    )
+    entry = next(
+        x
+        for x in report["parameters"]
+        if x["elementId"] == instance and x["parameterId"] == "review-rate"
+    )
+    assert [x["value"] for x in entry["chain"]] == {
+        "default": [1],
+        "instance": [1, 2],
+        "conflict": [1, 2, 3],
+    }[layer]
+    if layer == "conflict":
+        assert (
+            entry["status"] == "ambiguous"
+            and entry["code"] == "PRECEDENCE_UNDEFINED"
+            and entry["effective"] is None
+        )
+    else:
+        assert entry["effective"] == (1 if layer == "default" else 2)
+        assert entry["source"] == (
+            "definition-default" if layer == "default" else "system-instance"
+        )
+    assert app.state.studio.store.all("snapshot") == []
+
+
+def test_actual_autoverse_resource_and_environment_declarations_stay_unexecuted(
+    composed,
+):
+    app, api, provider, p = composed
+    original_system = document(p, "System")[1]["content"]
+
+    def constrained(r):
+        spec = r["spec"]
+        spec["resources"] = [
+            {
+                "id": "exclusive-review-gpu",
+                "resourceClass": "gpu",
+                "capacity": {"value": 1, "unit": "device"},
+                "allocationPolicy": "exclusive",
+            }
+        ]
+        for binding in spec["bindings"]:
+            binding["resourceIds"] = ["exclusive-review-gpu"]
+        spec["resources"].append(
+            {
+                "id": "review-spare",
+                "resourceClass": "storage",
+                "capacity": {"value": 1, "unit": "GiB"},
+                "allocationPolicy": "quota",
+            }
+        )
+        for target in spec["targets"]:
+            target["offeredResourceIds"] = ["review-spare"]
+        spec["bindings"][0]["secretRefs"] = ["secret://review-only/external-handle"]
+        spec["bindings"][0]["parameterValues"] = {
+            "cache": "/var/cache/declared-autoverse-review"
+        }
+
+    p = save(api, p, "Deployment", constrained)
+    variant = checked(
+        api.get(f"/api/v1/projects/{p['projectId']}/deployment-variants")
+    )["items"][0]
+    report = checked(
+        api.get(
+            f"/api/v1/projects/{p['projectId']}/deployment-variants/{variant['documentId']}/resolution",
+            params={"providerId": provider.descriptor()["providerId"]},
+        )
+    )
+    codes = {d["code"] for d in report["diagnostics"]}
+    assert {"RESOURCE_CONFLICT", "RESOURCE_NOT_OFFERED", "BINDING_UNRESOLVED"} <= codes
+    assert any(
+        e["kind"] == "secret" and e["status"] == "unresolved"
+        for e in report["environment"]
+    )
+    assert "secret://" not in json.dumps(report["portableIntent"])
+    assert any(c["pointer"].endswith("/cache") for c in report["portability"])
+    assert (
+        document(p, "System")[1]["content"] == original_system
+        and app.state.studio.store.all("snapshot") == []
+    )
+
+
+def test_actual_autoverse_compatible_domain_profiles_and_conflicting_lock_are_inert(
+    composed,
+):
+    app, api, _, p = composed
+    topology = document(p, "System")[1]["content"]
+    available = checked(api.get("/api/v1/profiles"))["items"]
+    chosen = [
+        v
+        for v in available
+        if v["profileId"]
+        in {
+            "io.xverse.experiment",
+            "io.xverse.studio.native-runtime",
+            "io.xverse.studio.domain.automotive",
+            "io.xverse.studio.domain.process-control",
+        }
+    ]
+    assert len(chosen) == 4
+    locks = [
+        {
+            k: v[k]
+            for k in ("profileId", "version", "schemaDigest", "presentationDigest")
+        }
+        for v in chosen
+    ]
+    p = checked(
+        api.post(
+            f"/api/v1/projects/{p['projectId']}/profile-bindings",
+            headers={"If-Match": str(p["revision"])},
+            json={"baseRevision": p["revision"], "profiles": locks},
+        )
+    )
+    assert document(p, "System")[1]["content"] == topology
+    assert app.state.studio.adapter.validate(sources(p))["valid"]
+    assert {x["namespace"] for x in p["manifest"]["profiles"]} == {
+        x["profileId"] for x in locks
+    }
+    altered = deepcopy(locks)
+    altered[0]["schemaDigest"] = "sha256:" + "0" * 64
+    refused = api.post(
+        f"/api/v1/projects/{p['projectId']}/profile-bindings",
+        headers={"If-Match": str(p["revision"])},
+        json={"baseRevision": p["revision"], "profiles": altered},
+    )
+    assert (
+        refused.status_code == 422
+        and checked(api.get(f"/api/v1/projects/{p['projectId']}")) == p
+    )
+    assert app.state.studio.store.all("snapshot") == []
+
+
+def test_actual_autoverse_unknown_xdl_version_remains_exact_and_blocked(composed):
+    app, api, provider, p = composed
+    key, source = document(p, "System")
+    value = SAFE.load(source["content"])
+    value["apiVersion"] = "xverse.io/xdl/v99"
+    raw = dump_yaml(value)
+    p = checked(
+        api.put(
+            f"/api/v1/projects/{p['projectId']}/documents/{key}",
+            headers={"If-Match": str(p["revision"])},
+            json={"content": raw},
+        )
+    )
+    assert p["documents"][key]["content"] == raw
+    report = checked(
+        api.post(
+            f"/api/v1/projects/{p['projectId']}/compilations",
+            json={
+                "revision": p["revision"],
+                "providerId": provider.descriptor()["providerId"],
+            },
+        )
+    )
+    assert report["valid"] is False
+    assert (
+        checked(api.get(f"/api/v1/projects/{p['projectId']}"))["documents"][key][
+            "content"
+        ]
+        == raw
+    )
+    assert app.state.studio.store.all("snapshot") == []
+
+
+def test_actual_autoverse_external_source_conflict_preserves_and_recovers_bytes(
+    composed,
+):
+    app, api, _, p = composed
+    key, doc = document(p, "System")
+    path = (
+        app.state.studio.store.root
+        / "projects"
+        / p["projectId"]
+        / "revisions"
+        / str(p["revision"])
+        / doc["path"]
+    )
+    external = "# External inert edit Ω\n" + doc["content"]
+    path.write_text(external)
+    refused = api.put(
+        f"/api/v1/projects/{p['projectId']}/documents/{key}",
+        headers={"If-Match": str(p["revision"])},
+        json={"content": doc["content"]},
+    )
+    assert (
+        refused.status_code == 412
+        and refused.json()["code"] == "REVISION_CONFLICT"
+        and path.read_text() == external
+    )
+    result = checked(
+        api.post(
+            f"/api/v1/projects/{p['projectId']}/recoveries",
+            headers={"If-Match": str(p["revision"])},
+            json={"expectedRevision": p["revision"], "action": "adopt_external"},
+        )
+    )
+    adopted = result["project"]
+    assert (
+        adopted["documents"][key]["content"] == external
+        and adopted["revision"] > p["revision"]
+    )
+    preserved = checked(
+        api.get(
+            f"/api/v1/projects/{p['projectId']}/recoveries/{result['recovery']['recoveryId']}/preserved",
+            params={"key": "document:" + key},
+        )
+    )
+    assert preserved["content"] == external
+    assert (
+        app.state.studio.adapter.compile(sources(adopted))["planDigest"]
+        == app.state.studio.adapter.compile(sources(p))["planDigest"]
+    )

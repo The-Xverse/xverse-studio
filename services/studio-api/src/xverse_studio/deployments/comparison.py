@@ -77,7 +77,7 @@ def compare(deployments, project_id, left_id, right_id, revision, provider_id):
             "SELECTION_UNRESOLVED", "The shared authored System must resolve uniquely."
         )
     provider = next(
-        (deepcopy(p) for p in descriptors() if p["providerId"] == provider_id), None
+        (deepcopy(p) for p in (deployments.descriptor_source or descriptors)() if p["providerId"] == provider_id), None
     )
     if provider is None:
         raise Problem(

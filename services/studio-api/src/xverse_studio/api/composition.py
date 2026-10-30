@@ -52,7 +52,24 @@ def _expected(request, base_revision):
 
 
 def install_composition(app, store, projects, runs, adapter):
-    catalog, profiles, deployments = Catalog(store), ProfileRegistry(adapter), Deployments(projects, adapter)
+    def configuration_for(provider_id, provider, documents, compiled):
+        # Static source mapping only. This authoring preview cannot contact
+        # readiness resources or acquire execution authority.
+        from xverse_studio.xdl import reference_configuration, XDLRejected
+
+        if provider.get("available") is not True or provider.get("hostCompatible") is not True:
+            raise XDLRejected("The selected provider is unavailable for configuration inspection.", "PROVIDER_UNAVAILABLE")
+        installed = runs.installed_providers.get(provider_id)
+        if installed is None:
+            return reference_configuration(documents, compiled)
+        mapping = getattr(installed, "configuration", None)
+        configuration = mapping(documents, compiled) if callable(mapping) else None
+        if not isinstance(configuration, dict):
+            raise XDLRejected("The selected provider does not admit these authored inputs.", "PROVIDER_SOURCE_UNSUPPORTED")
+        return configuration
+
+    catalog, profiles, deployments = Catalog(store), ProfileRegistry(adapter), Deployments(
+        projects, adapter, descriptor_source=runs.provider_descriptors, configuration_for=configuration_for)
     app.state.studio.catalog = catalog
     app.state.studio.profiles = profiles
     app.state.studio.deployments = deployments
