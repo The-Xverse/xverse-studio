@@ -1,3 +1,17 @@
+# Actual Autoverse scheduled input-loss effects verified — 2026-10-30
+
+**63 completed / 27 in progress / 10 blocked; zero accepted milestones.**
+Classic provider 0.2.0 now admits a bounded browser-input-loss scenario contract.
+159 API regressions, 10 clock/evidence guards and a complete native demo pass:
+two actual bridge lease-loss/recovery cycles, then Stop during a third without
+invented recovery. Frozen plan/source identities and exact native shutdown agree.
+This is bridge publication-lease evidence; vehicle effects remain unattested.
+T082/T083 retain the full original scheduled model/stimulus/observation-cost/UI
+scope and stay open. Failed sender/startup attempts and their limits are preserved.
+See [component review](../../evidence/studio/M4-autoverse-input-loss/review.md).
+
+## Earlier checkpoints
+
 # Autoverse scenario contract matrix expanded — 2026-10-30
 
 **63 completed / 27 in progress / 10 blocked; zero accepted milestones.**

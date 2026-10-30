@@ -1,6 +1,6 @@
 # ADR-0052 — Bounded Autoverse browser-input loss
 
-Date: 2026-10-30. Status: implementation candidate; live verification pending.
+Date: 2026-10-30. Status: implemented; scoped classic Autoverse live verification passed.
 
 T082/T083 require positive scheduled fault activation/recovery and evidence of
 actual effects. The admitted complete demo currently supports fixed startup and
@@ -22,7 +22,7 @@ seconds, and ends at least two seconds before the run horizon. Adjacent interval
 are refused: recovery needs its own observation opportunity. Only the exact
 existing browser-input blueprint may opt in; Pygame and platform mode refuse
 these declarations until separately admitted. Other semantics remain exact.
-The classic provider version advances to0.2.0; historical0.1.0 evidence is unchanged.
+The classic provider version advances to 0.2.0; historical 0.1.0 evidence is unchanged.
 
 At activation, the worker inhibits forwarding fresh authenticated browser frames
 to its original owned bridge. Dropped sequence numbers are consumed and never
@@ -55,3 +55,9 @@ cases, then a complete native Autoverse run proving real suppression, lease expi
 fresh recovery publication, immutable snapshots and exact owned shutdown. Until
 that passes, this remains an implementation candidate, not a live capability or
 a completed task/milestone.
+
+Verification: 159 API regression checks, 10 causality/time-unit guards and one
+complete actual native demo passed. Two intervals recover; Stop during a third
+records interruption without an invented recovery observation. Source/plan/native
+readback and original evidence preservation pass. Original failures and all
+remaining scope are retained in the [component review](../../evidence/studio/M4-autoverse-input-loss/review.md).

@@ -69,5 +69,65 @@ inspect evidence outside the timeline's processing window. A changed-input curso
 unavailable read or malformed response requires a new first-page inspection; it never
 turns missing observations into a known empty result.
 
-Windows installation/testing remains blocked at user request. Authoring and browser evidence are
-recorded for the actual Linux candidate; they do not establish native Windows acceptance.
+Native Linux is the current delivery target. Windows delivery is outside the release
+scope under ADR-0036; historical Windows results remain evidence, not current gates.
+
+## Autoverse browser-input loss
+
+Classic Autoverse provider 0.2.0 admits a bounded `driver-input-loss` fault for an
+already-supported `studio-browser` project. Pygame and platform-mode projects
+refuse this fault. Changing only a Pygame Scenario's input-surface field does not
+create the complete supported browser variant. Guided fault presets remain pending.
+
+Add this item under the Scenario's `spec.faults`, keeping the rest of its supported
+source unchanged. The existing experiment-lite Profile supplies typed timing.
+
+```yaml
+- id: input-loss
+  targetRef:
+    apiVersion: xverse.io/xdl/v1alpha1
+    kind: System
+    namespace: org.xverse.studio.autoverse
+    name: autoverse-demo
+    element: driver
+  faultKind: driver-input-loss
+  activation: urn:xverse:studio:autoverse:input-loss:1.0:activation
+  recovery: urn:xverse:studio:autoverse:input-loss:1.0:recovery
+  maturity: prototype
+  extensions:
+    io.xverse.experiment:
+      schemaVersion: '0.1'
+      kind: fault-intent
+      target:
+        apiVersion: xverse.io/xdl/v1alpha1
+        kind: Scenario
+        namespace: org.xverse.studio.autoverse
+        name: interactive-drive
+        element: input-loss
+      trigger: {kind: time, at: 5, unit: s}
+      duration: {value: 3, unit: s}
+      timeDomainId: host-runtime
+```
+
+Timing starts when the actual demo reaches running, after preparation. The worker
+suppresses fresh browser frames during the interval; suppressed sequences are
+consumed and never replayed. The bridge's existing 750 ms lease expires normally.
+Recovery requires fresh input. This affects the bridge's publication lease; it
+does not assert a vehicle response or physical safety outcome.
+
+At most eight faults are admitted. Activation must be at least two seconds after
+running, duration 2–30 seconds, recovery at least two seconds before the horizon,
+and the next activation at least two seconds after the previous recovery. Only
+whole-microsecond positions normalized by the public compiler are admitted.
+
+Inspect separate `fault.activation_requested`, `fault.activation_observed`,
+`fault.recovery_requested` and `fault.recovery_observed` records in retained history.
+An observed activation requires suppressed input and a fresh inactive bridge lease
+report; observed recovery requires a fresh publication acknowledgement and active
+lease report. No input or missing bridge evidence leaves effects unobserved. Stop
+during an interval records interruption without inventing recovery.
+
+Fault records carry a declared host-relative microsecond clock. Vehicle telemetry
+remains unmapped, and generic timeline marker placement for this new codec is still
+unsupported. The actual fixed input rate limit remains 25 requests/second. No native
+X-COM fault, simulation clock mapping or deterministic replay is claimed.

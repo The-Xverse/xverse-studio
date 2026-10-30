@@ -1,0 +1,55 @@
+{
+  "commands": [
+    {
+      "argv": [
+        ".venv/bin/ruff",
+        "check",
+        "services/studio-api/src/xverse_studio/providers/autoverse/input_loss.py",
+        "services/studio-api/src/xverse_studio/providers/autoverse/adapter.py",
+        "services/studio-api/src/xverse_studio/providers/autoverse/worker.py",
+        "services/studio-api/src/xverse_studio/providers/autoverse/maestro_worker.py",
+        "services/studio-api/src/xverse_studio/providers/autoverse/platform_adapter.py",
+        "services/studio-api/src/xverse_studio/providers/autoverse/zenoh_bridge.py",
+        "tests/live/autoverse_input_loss.py",
+        "tests/live/autoverse_input_loss_sources.py",
+        "tests/live/autoverse_input_loss_guards.py",
+        "tests/live/autoverse_scheduled_input_loss.py",
+        "tests/live/autoverse_lifecycle_conformance.py"
+      ],
+      "exit": 0
+    },
+    {
+      "argv": [
+        ".venv/bin/python",
+        "scripts/check_architecture.py"
+      ],
+      "exit": 0
+    },
+    {
+      "argv": [
+        ".venv/bin/python",
+        "scripts/check_platform_compatibility.py"
+      ],
+      "exit": 0
+    },
+    {
+      "argv": [
+        ".venv/bin/python",
+        "scripts/validate_spec_package.py"
+      ],
+      "exit": 0
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit": 0
+    }
+  ],
+  "productionUiBytesUnchanged": true,
+  "browserBuildRepeat": "Not run: no UI/TypeScript/lock change",
+  "sdkOrDependencyUpgrade": false,
+  "windowsGuideCorrection": "Removed stale current user-guide hold; ADR0036 native Linux scope preserved"
+}

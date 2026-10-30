@@ -1,0 +1,535 @@
+{
+  "candidate": "16198977a40fb85f5f83976a342b7760cf0797b0",
+  "outcome": "passed",
+  "scope": "Same-agent separate actual source/plan/ledger/canonical/native readback; not independent milestone acceptance",
+  "sourceInputs": 465,
+  "compiledUiAssetsPreserved": 6,
+  "apiRegressionCases": 159,
+  "apiCandidate": "114a402914e9aff6ed7949d3dcddd35a5f605283",
+  "causalityAndUnitGuards": 10,
+  "guardCandidate": "efa19400f48900bc5ca759bb70d433bd0a3b4d20",
+  "apiSourceInheritance": {
+    "commonInputsUnchanged": 461,
+    "changedFiles": [
+      "services/studio-api/src/xverse_studio/providers/autoverse/worker.py",
+      "tests/live/autoverse_lifecycle_conformance.py",
+      "tests/live/autoverse_scheduled_input_loss.py"
+    ],
+    "onlyChangedExistingWorkerFunction": "tick",
+    "workerChange": "Suppressed frames retain normal save/cancellation path; verified by final actual run heartbeat under continued input",
+    "apiControllerAndInputMappingModulesUnchanged": true
+  },
+  "guardSourceInheritance": {
+    "onlyChangedFiles": [
+      "tests/live/autoverse_lifecycle_conformance.py",
+      "tests/live/autoverse_scheduled_input_loss.py"
+    ],
+    "allProductInputsUnchanged": true
+  },
+  "runId": "run-f41aaf2c-6d05-4317-8db0-b644063e2e9a",
+  "snapshotDigest": "sha256:6d6e34fd80f901ca6bcd905ea36ad85d3e70539b5a5b6e7a942f229f4c41859c",
+  "planDigest": "sha256:9a3d1d4f0b84bf486c01198a860962ade0ca0520553dd090d007bedb14b2f707",
+  "semanticDigest": "sha256:be505de8fbca3fb8ff1431148cdc83090bbe1b2ca3813803c80eae10d175efcf",
+  "providerVersion": "0.2.0",
+  "fullAndroidAndSpeedObserved": true,
+  "faultEvents": [
+    {
+      "elementRefs": [
+        "xdl://org.xverse.studio.autoverse/system/autoverse-demo#driver"
+      ],
+      "eventId": "run-f41aaf2c-6d05-4317-8db0-b644063e2e9a:54",
+      "evidenceClass": "observed",
+      "evidenceRefs": [
+        "run-f41aaf2c-6d05-4317-8db0-b644063e2e9a:provider-journal"
+      ],
+      "payload": {
+        "actualTick": "5010358",
+        "clockCodec": "autoverse.host-elapsed-microseconds.v1",
+        "clockDomain": "host-runtime",
+        "contractRef": "urn:xverse:studio:autoverse:input-loss:1.0",
+        "effectScope": "driver-bridge-publication-lease",
+        "faultId": "first-loss",
+        "faultKind": "driver-input-loss",
+        "lastDroppedSequence": 0,
+        "scheduledActivationTick": "5000000",
+        "scheduledRecoveryTick": "8000000",
+        "suppressedFrames": 0,
+        "tickUnit": "microsecond",
+        "vehicleEffect": "not_attested"
+      },
+      "previousDigest": "ee973679e0c33368a778a42b0ff96626021e63fa06a16062ebb6b6aa1ed3d0d2",
+      "recordedAt": 1793373314.0980887,
+      "runId": "run-f41aaf2c-6d05-4317-8db0-b644063e2e9a",
+      "schemaVersion": "1.0",
+      "sequence": "54",
+      "snapshotId": "snap-8a239f05-fa55-49a1-b4eb-04062a58e8e4",
+      "source": {
+        "providerId": "autoverse.demo",
+        "version": "0.2.0"
+      },
+      "sourceTime": {
+        "clockDomain": "host-runtime",
+        "resolution": "microsecond",
+        "tick": "5010358"
+      },
+      "type": "fault.activation_requested",
+      "digest": "cc26c6654ba4c6df25999da459eec5fc76898534a1af9027a4425c0f6cec7809"
+    },
+    {
+      "elementRefs": [
+        "xdl://org.xverse.studio.autoverse/system/autoverse-demo#driver"
+      ],
+      "eventId": "run-f41aaf2c-6d05-4317-8db0-b644063e2e9a:56",
+      "evidenceClass": "observed",
+      "evidenceRefs": [
+        "run-f41aaf2c-6d05-4317-8db0-b644063e2e9a:provider-journal"
+      ],
+      "payload": {
+        "actualTick": "5889967",
+        "bridgeLeaseActive": false,
+        "bridgeReportedTick": "5889684",
+        "clockCodec": "autoverse.host-elapsed-microseconds.v1",
+        "clockDomain": "host-runtime",
+        "contractRef": "urn:xverse:studio:autoverse:input-loss:1.0",
+        "effectScope": "driver-bridge-publication-lease",
+        "faultId": "first-loss",
+        "faultKind": "driver-input-loss",
+        "lastDroppedSequence": 54,
+        "publicationSequence": 45,
+        "scheduledActivationTick": "5000000",
+        "scheduledRecoveryTick": "8000000",
+        "suppressedFrames": 9,
+        "tickUnit": "microsecond",
+        "vehicleEffect": "not_attested"
+      },
+      "previousDigest": "feb90808093d269779429164e67c4a0d4860c8cfa382e2e384eaeba2c9cccc86",
+      "recordedAt": 1793373314.9776998,
+      "runId": "run-f41aaf2c-6d05-4317-8db0-b644063e2e9a",
+      "schemaVersion": "1.0",
+      "sequence": "56",
+      "snapshotId": "snap-8a239f05-fa55-49a1-b4eb-04062a58e8e4",
+      "source": {
+        "providerId": "autoverse.demo",
+        "version": "0.2.0"
+      },
+      "sourceTime": {
+        "clockDomain": "host-runtime",
+        "resolution": "microsecond",
+        "tick": "5889967"
+      },
+      "type": "fault.activation_observed",
+      "digest": "0ad07a26b9ec87f0241a8d18a54613b2bbf7da95e8113c4434deda84024223e9"
+    },
+    {
+      "elementRefs": [
+        "xdl://org.xverse.studio.autoverse/system/autoverse-demo#driver"
+      ],
+      "eventId": "run-f41aaf2c-6d05-4317-8db0-b644063e2e9a:59",
+      "evidenceClass": "observed",
+      "evidenceRefs": [
+        "run-f41aaf2c-6d05-4317-8db0-b644063e2e9a:provider-journal"
+      ],
+      "payload": {
+        "activationObserved": true,
+        "actualTick": "8004167",
+        "clockCodec": "autoverse.host-elapsed-microseconds.v1",
+        "clockDomain": "host-runtime",
+        "contractRef": "urn:xverse:studio:autoverse:input-loss:1.0",
+        "effectScope": "driver-bridge-publication-lease",
+        "faultId": "first-loss",
+        "faultKind": "driver-input-loss",
+        "lastDroppedSequence": 76,
+        "scheduledActivationTick": "5000000",
+        "scheduledRecoveryTick": "8000000",
+        "suppressedFrames": 31,
+        "tickUnit": "microsecond",
+        "vehicleEffect": "not_attested"
+      },
+      "previousDigest": "e33f14a58c6e533ecf92487b51c823ba77ab122fb3f40405b852100cb48bab62",
+      "recordedAt": 1793373317.0918968,
+      "runId": "run-f41aaf2c-6d05-4317-8db0-b644063e2e9a",
+      "schemaVersion": "1.0",
+      "sequence": "59",
+      "snapshotId": "snap-8a239f05-fa55-49a1-b4eb-04062a58e8e4",
+      "source": {
+        "providerId": "autoverse.demo",
+        "version": "0.2.0"
+      },
+      "sourceTime": {
+        "clockDomain": "host-runtime",
+        "resolution": "microsecond",
+        "tick": "8004167"
+      },
+      "type": "fault.recovery_requested",
+      "digest": "5180015398c97f8c2f51ba31d53fe66951ffee82e5605d56f64830192254605b"
+    },
+    {
+      "elementRefs": [
+        "xdl://org.xverse.studio.autoverse/system/autoverse-demo#driver"
+      ],
+      "eventId": "run-f41aaf2c-6d05-4317-8db0-b644063e2e9a:60",
+      "evidenceClass": "observed",
+      "evidenceRefs": [
+        "run-f41aaf2c-6d05-4317-8db0-b644063e2e9a:provider-journal"
+      ],
+      "payload": {
+        "actualTick": "8090900",
+        "bridgeLeaseActive": true,
+        "bridgeReportedTick": "8090616",
+        "clockCodec": "autoverse.host-elapsed-microseconds.v1",
+        "clockDomain": "host-runtime",
+        "contractRef": "urn:xverse:studio:autoverse:input-loss:1.0",
+        "effectScope": "driver-bridge-publication-lease",
+        "faultId": "first-loss",
+        "faultKind": "driver-input-loss",
+        "lastDroppedSequence": 76,
+        "publicationSequence": 77,
+        "scheduledActivationTick": "5000000",
+        "scheduledRecoveryTick": "8000000",
+        "suppressedFrames": 31,
+        "tickUnit": "microsecond",
+        "vehicleEffect": "not_attested"
+      },
+      "previousDigest": "5180015398c97f8c2f51ba31d53fe66951ffee82e5605d56f64830192254605b",
+      "recordedAt": 1793373317.1786346,
+      "runId": "run-f41aaf2c-6d05-4317-8db0-b644063e2e9a",
+      "schemaVersion": "1.0",
+      "sequence": "60",
+      "snapshotId": "snap-8a239f05-fa55-49a1-b4eb-04062a58e8e4",
+      "source": {
+        "providerId": "autoverse.demo",
+        "version": "0.2.0"
+      },
+      "sourceTime": {
+        "clockDomain": "host-runtime",
+        "resolution": "microsecond",
+        "tick": "8090900"
+      },
+      "type": "fault.recovery_observed",
+      "digest": "0714cf1827be52c2f4fbd906de4e9855e0d52ead9583f829e2be7e835ec8de9f"
+    },
+    {
+      "elementRefs": [
+        "xdl://org.xverse.studio.autoverse/system/autoverse-demo#driver"
+      ],
+      "eventId": "run-f41aaf2c-6d05-4317-8db0-b644063e2e9a:66",
+      "evidenceClass": "observed",
+      "evidenceRefs": [
+        "run-f41aaf2c-6d05-4317-8db0-b644063e2e9a:provider-journal"
+      ],
+      "payload": {
+        "actualTick": "13002105",
+        "clockCodec": "autoverse.host-elapsed-microseconds.v1",
+        "clockDomain": "host-runtime",
+        "contractRef": "urn:xverse:studio:autoverse:input-loss:1.0",
+        "effectScope": "driver-bridge-publication-lease",
+        "faultId": "second-loss",
+        "faultKind": "driver-input-loss",
+        "lastDroppedSequence": 0,
+        "scheduledActivationTick": "13000000",
+        "scheduledRecoveryTick": "16000000",
+        "suppressedFrames": 0,
+        "tickUnit": "microsecond",
+        "vehicleEffect": "not_attested"
+      },
+      "previousDigest": "c4f5fbe03000fcc54aff789b282d7c35ad48b8295defe8159a85aa04fb368408",
+      "recordedAt": 1793373322.0898454,
+      "runId": "run-f41aaf2c-6d05-4317-8db0-b644063e2e9a",
+      "schemaVersion": "1.0",
+      "sequence": "66",
+      "snapshotId": "snap-8a239f05-fa55-49a1-b4eb-04062a58e8e4",
+      "source": {
+        "providerId": "autoverse.demo",
+        "version": "0.2.0"
+      },
+      "sourceTime": {
+        "clockDomain": "host-runtime",
+        "resolution": "microsecond",
+        "tick": "13002105"
+      },
+      "type": "fault.activation_requested",
+      "digest": "559511e149a6e3918b6d471f1d039c128d6da515d184a5db9f41a0621d141ea1"
+    },
+    {
+      "elementRefs": [
+        "xdl://org.xverse.studio.autoverse/system/autoverse-demo#driver"
+      ],
+      "eventId": "run-f41aaf2c-6d05-4317-8db0-b644063e2e9a:68",
+      "evidenceClass": "observed",
+      "evidenceRefs": [
+        "run-f41aaf2c-6d05-4317-8db0-b644063e2e9a:provider-journal"
+      ],
+      "payload": {
+        "actualTick": "13693518",
+        "bridgeLeaseActive": false,
+        "bridgeReportedTick": "13693184",
+        "clockCodec": "autoverse.host-elapsed-microseconds.v1",
+        "clockDomain": "host-runtime",
+        "contractRef": "urn:xverse:studio:autoverse:input-loss:1.0",
+        "effectScope": "driver-bridge-publication-lease",
+        "faultId": "second-loss",
+        "faultKind": "driver-input-loss",
+        "lastDroppedSequence": 135,
+        "publicationSequence": 128,
+        "scheduledActivationTick": "13000000",
+        "scheduledRecoveryTick": "16000000",
+        "suppressedFrames": 7,
+        "tickUnit": "microsecond",
+        "vehicleEffect": "not_attested"
+      },
+      "previousDigest": "51e5d305ac7936220600d360eec704898a24a49c916cbc248c3ca1f5198f76a4",
+      "recordedAt": 1793373322.781256,
+      "runId": "run-f41aaf2c-6d05-4317-8db0-b644063e2e9a",
+      "schemaVersion": "1.0",
+      "sequence": "68",
+      "snapshotId": "snap-8a239f05-fa55-49a1-b4eb-04062a58e8e4",
+      "source": {
+        "providerId": "autoverse.demo",
+        "version": "0.2.0"
+      },
+      "sourceTime": {
+        "clockDomain": "host-runtime",
+        "resolution": "microsecond",
+        "tick": "13693518"
+      },
+      "type": "fault.activation_observed",
+      "digest": "5475131dbc4c5498a5ae0762912c5f1e0604823c09d765aeb947170c0df23b6f"
+    },
+    {
+      "elementRefs": [
+        "xdl://org.xverse.studio.autoverse/system/autoverse-demo#driver"
+      ],
+      "eventId": "run-f41aaf2c-6d05-4317-8db0-b644063e2e9a:71",
+      "evidenceClass": "observed",
+      "evidenceRefs": [
+        "run-f41aaf2c-6d05-4317-8db0-b644063e2e9a:provider-journal"
+      ],
+      "payload": {
+        "activationObserved": true,
+        "actualTick": "16000608",
+        "clockCodec": "autoverse.host-elapsed-microseconds.v1",
+        "clockDomain": "host-runtime",
+        "contractRef": "urn:xverse:studio:autoverse:input-loss:1.0",
+        "effectScope": "driver-bridge-publication-lease",
+        "faultId": "second-loss",
+        "faultKind": "driver-input-loss",
+        "lastDroppedSequence": 160,
+        "scheduledActivationTick": "13000000",
+        "scheduledRecoveryTick": "16000000",
+        "suppressedFrames": 32,
+        "tickUnit": "microsecond",
+        "vehicleEffect": "not_attested"
+      },
+      "previousDigest": "a5c10a4781a04faa4e86034c2efb6a179e391d22c69bab365fabe18877e8dbec",
+      "recordedAt": 1793373325.0883336,
+      "runId": "run-f41aaf2c-6d05-4317-8db0-b644063e2e9a",
+      "schemaVersion": "1.0",
+      "sequence": "71",
+      "snapshotId": "snap-8a239f05-fa55-49a1-b4eb-04062a58e8e4",
+      "source": {
+        "providerId": "autoverse.demo",
+        "version": "0.2.0"
+      },
+      "sourceTime": {
+        "clockDomain": "host-runtime",
+        "resolution": "microsecond",
+        "tick": "16000608"
+      },
+      "type": "fault.recovery_requested",
+      "digest": "3e9a6943a67d6c35e02690aff6d6da0409723860d0ff9d7e644e722251da773d"
+    },
+    {
+      "elementRefs": [
+        "xdl://org.xverse.studio.autoverse/system/autoverse-demo#driver"
+      ],
+      "eventId": "run-f41aaf2c-6d05-4317-8db0-b644063e2e9a:72",
+      "evidenceClass": "observed",
+      "evidenceRefs": [
+        "run-f41aaf2c-6d05-4317-8db0-b644063e2e9a:provider-journal"
+      ],
+      "payload": {
+        "actualTick": "16094499",
+        "bridgeLeaseActive": true,
+        "bridgeReportedTick": "16094203",
+        "clockCodec": "autoverse.host-elapsed-microseconds.v1",
+        "clockDomain": "host-runtime",
+        "contractRef": "urn:xverse:studio:autoverse:input-loss:1.0",
+        "effectScope": "driver-bridge-publication-lease",
+        "faultId": "second-loss",
+        "faultKind": "driver-input-loss",
+        "lastDroppedSequence": 160,
+        "publicationSequence": 161,
+        "scheduledActivationTick": "13000000",
+        "scheduledRecoveryTick": "16000000",
+        "suppressedFrames": 32,
+        "tickUnit": "microsecond",
+        "vehicleEffect": "not_attested"
+      },
+      "previousDigest": "3e9a6943a67d6c35e02690aff6d6da0409723860d0ff9d7e644e722251da773d",
+      "recordedAt": 1793373325.1822329,
+      "runId": "run-f41aaf2c-6d05-4317-8db0-b644063e2e9a",
+      "schemaVersion": "1.0",
+      "sequence": "72",
+      "snapshotId": "snap-8a239f05-fa55-49a1-b4eb-04062a58e8e4",
+      "source": {
+        "providerId": "autoverse.demo",
+        "version": "0.2.0"
+      },
+      "sourceTime": {
+        "clockDomain": "host-runtime",
+        "resolution": "microsecond",
+        "tick": "16094499"
+      },
+      "type": "fault.recovery_observed",
+      "digest": "f784c030946ced2e2e27a466c7e79e83c49ea4c6d1d01e55543c2b6c171908b7"
+    },
+    {
+      "elementRefs": [
+        "xdl://org.xverse.studio.autoverse/system/autoverse-demo#driver"
+      ],
+      "eventId": "run-f41aaf2c-6d05-4317-8db0-b644063e2e9a:78",
+      "evidenceClass": "observed",
+      "evidenceRefs": [
+        "run-f41aaf2c-6d05-4317-8db0-b644063e2e9a:provider-journal"
+      ],
+      "payload": {
+        "actualTick": "21008086",
+        "clockCodec": "autoverse.host-elapsed-microseconds.v1",
+        "clockDomain": "host-runtime",
+        "contractRef": "urn:xverse:studio:autoverse:input-loss:1.0",
+        "effectScope": "driver-bridge-publication-lease",
+        "faultId": "interrupted-loss",
+        "faultKind": "driver-input-loss",
+        "lastDroppedSequence": 0,
+        "scheduledActivationTick": "21000000",
+        "scheduledRecoveryTick": "24000000",
+        "suppressedFrames": 0,
+        "tickUnit": "microsecond",
+        "vehicleEffect": "not_attested"
+      },
+      "previousDigest": "b75af0a5d744f3911f08b05efcae14437c4422c2a5a0fa7909076ea7bda241f5",
+      "recordedAt": 1793373330.0958128,
+      "runId": "run-f41aaf2c-6d05-4317-8db0-b644063e2e9a",
+      "schemaVersion": "1.0",
+      "sequence": "78",
+      "snapshotId": "snap-8a239f05-fa55-49a1-b4eb-04062a58e8e4",
+      "source": {
+        "providerId": "autoverse.demo",
+        "version": "0.2.0"
+      },
+      "sourceTime": {
+        "clockDomain": "host-runtime",
+        "resolution": "microsecond",
+        "tick": "21008086"
+      },
+      "type": "fault.activation_requested",
+      "digest": "d362efe325cf70aa36255ba20efb74cb341af36fb5d3696ba729179662afa519"
+    },
+    {
+      "elementRefs": [
+        "xdl://org.xverse.studio.autoverse/system/autoverse-demo#driver"
+      ],
+      "eventId": "run-f41aaf2c-6d05-4317-8db0-b644063e2e9a:79",
+      "evidenceClass": "observed",
+      "evidenceRefs": [
+        "run-f41aaf2c-6d05-4317-8db0-b644063e2e9a:provider-journal"
+      ],
+      "payload": {
+        "actualTick": "21697059",
+        "bridgeLeaseActive": false,
+        "bridgeReportedTick": "21696717",
+        "clockCodec": "autoverse.host-elapsed-microseconds.v1",
+        "clockDomain": "host-runtime",
+        "contractRef": "urn:xverse:studio:autoverse:input-loss:1.0",
+        "effectScope": "driver-bridge-publication-lease",
+        "faultId": "interrupted-loss",
+        "faultKind": "driver-input-loss",
+        "lastDroppedSequence": 217,
+        "publicationSequence": 211,
+        "scheduledActivationTick": "21000000",
+        "scheduledRecoveryTick": "24000000",
+        "suppressedFrames": 6,
+        "tickUnit": "microsecond",
+        "vehicleEffect": "not_attested"
+      },
+      "previousDigest": "d362efe325cf70aa36255ba20efb74cb341af36fb5d3696ba729179662afa519",
+      "recordedAt": 1793373330.7847912,
+      "runId": "run-f41aaf2c-6d05-4317-8db0-b644063e2e9a",
+      "schemaVersion": "1.0",
+      "sequence": "79",
+      "snapshotId": "snap-8a239f05-fa55-49a1-b4eb-04062a58e8e4",
+      "source": {
+        "providerId": "autoverse.demo",
+        "version": "0.2.0"
+      },
+      "sourceTime": {
+        "clockDomain": "host-runtime",
+        "resolution": "microsecond",
+        "tick": "21697059"
+      },
+      "type": "fault.activation_observed",
+      "digest": "36e4f8c0815d6b062af59b043aaa5bcd268dcc74bc09cb00f82e34744eb35c9b"
+    },
+    {
+      "elementRefs": [
+        "xdl://org.xverse.studio.autoverse/system/autoverse-demo#driver"
+      ],
+      "eventId": "run-f41aaf2c-6d05-4317-8db0-b644063e2e9a:81",
+      "evidenceClass": "observed",
+      "evidenceRefs": [
+        "run-f41aaf2c-6d05-4317-8db0-b644063e2e9a:provider-journal"
+      ],
+      "payload": {
+        "activationObserved": true,
+        "actualTick": "22121888",
+        "clockCodec": "autoverse.host-elapsed-microseconds.v1",
+        "clockDomain": "host-runtime",
+        "contractRef": "urn:xverse:studio:autoverse:input-loss:1.0",
+        "effectScope": "driver-bridge-publication-lease",
+        "faultId": "interrupted-loss",
+        "faultKind": "driver-input-loss",
+        "lastDroppedSequence": 221,
+        "recoveryObserved": false,
+        "scheduledActivationTick": "21000000",
+        "scheduledRecoveryTick": "24000000",
+        "suppressedFrames": 10,
+        "tickUnit": "microsecond",
+        "vehicleEffect": "not_attested"
+      },
+      "previousDigest": "c330b1c53626eb3515be5e2380c16bf503e211a8915fc64cd5581c34b90b3826",
+      "recordedAt": 1793373331.2096105,
+      "runId": "run-f41aaf2c-6d05-4317-8db0-b644063e2e9a",
+      "schemaVersion": "1.0",
+      "sequence": "81",
+      "snapshotId": "snap-8a239f05-fa55-49a1-b4eb-04062a58e8e4",
+      "source": {
+        "providerId": "autoverse.demo",
+        "version": "0.2.0"
+      },
+      "sourceTime": {
+        "clockDomain": "host-runtime",
+        "resolution": "microsecond",
+        "tick": "22121888"
+      },
+      "type": "fault.interrupted",
+      "digest": "3d67bfb1bf3ae8ed4804139e43e9b32036cf0b71ce045aca57a1a14ec4ddc810"
+    }
+  ],
+  "recoveredIntervals": 2,
+  "stopDuringActiveThirdInterval": true,
+  "interruptedWithoutRecoveryFabrication": true,
+  "actualFramesStaged": 221,
+  "nativeHeartbeatFreshnessVerified": true,
+  "canonicalRecords": 82,
+  "canonicalIntegrity": "valid",
+  "nonFaultSourceTimesRemainUnmapped": true,
+  "recordedComponentInstancesExited": 16,
+  "exactStoppedContainers": 3,
+  "originalWorkerAndBackendAbsent": true,
+  "rootLockReleased": true,
+  "originalPlatformFilesUnchanged": 21,
+  "operatorUiAssetsUnchanged": 6,
+  "newBrowserJourney": false,
+  "physicalVehicleEffect": "not_attested",
+  "functionalVerdict": null
+}

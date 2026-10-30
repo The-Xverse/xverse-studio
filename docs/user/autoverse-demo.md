@@ -120,3 +120,8 @@ The platform owner survives successive runs in one backend. After owner loss,
 claims remain fenced until the admitted host procedure in [platform recovery](platform-recovery.md)
 verifies and explicitly retires eligible predecessors. Restarting does not recreate
 old process handles, remove claims or upgrade an incomplete evidence verdict.
+
+Classic browser-input projects also support the versioned, bounded
+[driver-input-loss scenario](scenario-authoring.md#autoverse-browser-input-loss).
+This is a bridge publication-lease fault; it is separate from Pygame controls and
+from the platform provider's Maestro/native-X-COM/Argus integration.

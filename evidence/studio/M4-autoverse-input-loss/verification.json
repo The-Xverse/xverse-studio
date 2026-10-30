@@ -1,0 +1,67 @@
+{
+  "candidate": "16198977a40fb85f5f83976a342b7760cf0797b0",
+  "runtimeCandidate": "efa19400f48900bc5ca759bb70d433bd0a3b4d20",
+  "tasks": {
+    "T082": "in_progress",
+    "T083": "in_progress"
+  },
+  "scope": "Live-verified classic Autoverse browser-input-loss component; full scenario/fault/observation/UI scope remains open",
+  "provider": "autoverse.demo",
+  "providerVersion": "0.2.0",
+  "contractRef": "urn:xverse:studio:autoverse:input-loss:1.0",
+  "apiRegression": {
+    "passed": 159,
+    "candidate": "114a402914e9aff6ed7949d3dcddd35a5f605283",
+    "sourceInputs": 464
+  },
+  "causalityAndTimeUnitGuards": {
+    "passed": 10,
+    "candidate": "efa19400f48900bc5ca759bb70d433bd0a3b4d20",
+    "sourceInputs": 465
+  },
+  "completeNativeDemo": {
+    "passed": 1,
+    "sourceInputs": 465,
+    "actualRecoveredIntervals": 2,
+    "actualInterruptedInterval": 1,
+    "canonicalFaultRecords": 11,
+    "stagedFrames": 221,
+    "recordedComponentInstancesExited": 16,
+    "exactStoppedContainers": 3,
+    "originalWorkerBackendAbsent": true,
+    "rootLockReleased": true
+  },
+  "skipped": 0,
+  "originalPlatformFilesUnchanged": 21,
+  "originalOperatorUiAssetsUnchanged": 6,
+  "environment": {
+    "os": "Ubuntu22.04.5 LTS/native Linux x86_64",
+    "python": "3.13.13",
+    "node": "24.22.1",
+    "chromium": "156.0.8078.4",
+    "playwright": "1.64.1",
+    "sdk": "12615d402ba16cde3cd48c55b70aca464ea90261"
+  },
+  "commands": [
+    "PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 PYTHONPATH= STUDIO_AUTOVERSE_TEST_INSTALLATION=<private-enrollment> STUDIO_AUTOVERSE_SCENARIO_RECORDED_REPORT=<prior-complete-demo-report> .venv/bin/python -m pytest -q tests/live/autoverse_input_loss.py tests/live/autoverse_scenarios.py tests/live/autoverse_composition.py --junitxml=<fresh-report>/tests.junit.xml --basetemp=<fresh-private-root>",
+    "PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 PYTHONPATH= STUDIO_AUTOVERSE_TEST_INSTALLATION=<private-enrollment> .venv/bin/python -m pytest -q tests/live/autoverse_input_loss_guards.py --junitxml=<fresh-report>/tests.junit.xml --basetemp=<fresh-private-root>",
+    ".venv/bin/python -I tests/live/autoverse_scheduled_input_loss.py --receipt <private-enrollment> --output <fresh-native-report> --static-dir <preserved-private-ui>"
+  ],
+  "startedAt": "2026-10-30T14:54:27.597682+00:00",
+  "finishedAt": "2026-10-30T15:16:12.408269+00:00",
+  "taskCounts": {
+    "completed": 63,
+    "in_progress": 27,
+    "blocked": 10
+  },
+  "acceptedMilestones": 0,
+  "limitations": [
+    "Bridge publication-lease observations only; vehicle effect not attested, no physical device or native XCOM fault",
+    "Only classic browser-input mode; Pygame/platform refuse",
+    "Actual host scheduling/bridge timestamps are not simulation-clock synchronization; generic timeline codec admission remains unsupported",
+    "No newly configured observation cost/retention, general stimulus interpreter or reference scheduled-model admission",
+    "No new browser journey, installed package, full suite, performance, human, second-industry or independent milestone acceptance",
+    "CARLA startup subscription stall retained/unresolved; successful retry does not prove repair",
+    "API159 inherits unchanged controller/mapping sources across the separately verified worker heartbeat fix; exact candidate scopes retained"
+  ]
+}
