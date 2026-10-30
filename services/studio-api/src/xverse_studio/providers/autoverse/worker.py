@@ -155,18 +155,17 @@ class Demo:
                 from .controls import driver_frame
                 frame = driver_frame(packet["frame"])
                 if frame["sequence"] > self.last_input:
-                    if self.input_loss is not None and self.input_loss.suppress(frame["sequence"], int(packet["issuedAt"] * 1_000_000_000), time.monotonic_ns()):
-                        self.last_input, self.input_generation = frame["sequence"], packet["generation"]
-                        return  # Consumed, never replayed after the interval.
-                    payload = (canonical({"type": "drive", "id": "i-" + str(frame["sequence"]), "frame": frame, "issuedAt": packet["issuedAt"]}) + "\n").encode()
-                    try:
-                        written = os.write(self.processes["driver"]["process"].stdin.fileno(), payload)
-                        if written != len(payload):
-                            raise InstallationError("AUTOVERSE_INPUT_BACKPRESSURE")
-                    except BlockingIOError:
-                        raise InstallationError("AUTOVERSE_INPUT_BACKPRESSURE") from None
+                    suppressed = self.input_loss is not None and self.input_loss.suppress(frame["sequence"], int(packet["issuedAt"] * 1_000_000_000), time.monotonic_ns())
+                    if not suppressed:
+                        payload = (canonical({"type": "drive", "id": "i-" + str(frame["sequence"]), "frame": frame, "issuedAt": packet["issuedAt"]}) + "\n").encode()
+                        try:
+                            written = os.write(self.processes["driver"]["process"].stdin.fileno(), payload)
+                            if written != len(payload):
+                                raise InstallationError("AUTOVERSE_INPUT_BACKPRESSURE")
+                        except BlockingIOError:
+                            raise InstallationError("AUTOVERSE_INPUT_BACKPRESSURE") from None
                     self.last_input, self.input_generation = frame["sequence"], packet["generation"]
-                    if set(frame) & {"cruise", "reverse", "deltaSpeed"}:
+                    if not suppressed and set(frame) & {"cruise", "reverse", "deltaSpeed"}:
                         self.emit("log.appended", {"severity": "info", "message": "Discrete driver request delegated; publication and vehicle observations remain separate.", "inputSequence": self.last_input, "requests": frame})
         if now - self.last_save >= 0.2:
             self.save()

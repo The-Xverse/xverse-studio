@@ -195,6 +195,10 @@ def main():
                 assert r["state"] == "running", r
                 worker.verify()
                 assert snapshot_file.read_bytes() == snapshot_bytes
+                native_state = json.loads((directory / "state.json").read_bytes())
+                assert 0 <= time.time() - native_state["updatedAt"] < 1.0, (
+                    "Worker heartbeat must survive continuous suppressed frames"
+                )
                 observations.append(
                     {
                         "driverLeaseActive": r["inputTelemetry"].get(
@@ -218,7 +222,7 @@ def main():
                 next_history = time.monotonic() + 0.3
             if third_observed:
                 break
-            time.sleep(0.09)
+            time.sleep(0.015)
         assert third_observed, (
             "Third real bridge lease-expiry observation not received before Stop"
         )
