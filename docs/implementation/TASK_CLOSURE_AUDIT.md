@@ -1,3 +1,17 @@
+# T023 Linux component closure — 2026-10-30
+
+Current counts:54completed/36in_progress/10blocked, zero accepted milestones.
+The complete T023 restart/ownership/cleanup clauses pass current native, report
+corruption, original-producer and browser verification; see
+[clause review](../../evidence/studio/M1-linux-observation-recovery/review.md).
+Candidate15e6b73 matches404 tracked inputs,124 unique affected backend cases,
+22 browser cases and clean offline package160 with6 separately bound UI assets.
+This corrects the older keep-open recovery-review disposition below; T033's full
+runtime/live review and the unresolved historical late-Stop mismatch stay open.
+Windows remains outside delivery scope. No other component or milestone closes.
+
+## Prior Linux reassessment
+
 # Linux reassessment amendment — 2026-10-30
 
 Current status is53completed/37in_progress/10blocked, zero accepted milestones.

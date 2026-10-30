@@ -1,3 +1,28 @@
+# Linux reconciliation update — 2026-10-30
+
+**54 completed /36 in progress /10 blocked; zero accepted milestones.** T023 now
+closes after the complete Linux restart/ownership/cleanup component review.
+Candidate15e6b73 passes124 unique affected backend cases and22 unique browser
+cases. All404 tracked source/config/test inputs stay unchanged; six compiled UI
+assets are separately bound to the prior tested package and current served files.
+Fresh clean offline native package160 passes all source/archive/extracted hashes,
+provisioning, Unicode persistence, public compilation and owned shutdown.
+
+Reports are validated before promotion, accepted receipt identities cannot be
+rebound, stale observations cannot roll back lifecycle, and terminal lifecycle
+waits for the original producer before resolving an unreported command. Known
+termination, uncertain cleanup and unknown receipts remain distinct. Original
+failures, including three reconnect fixture-root refusals, are preserved; all
+three pass after correcting only the private test launcher directory.
+
+The historical late-Stop canonical-code mismatch stays unresolved; no missing
+original interleaving, full-suite result or milestone acceptance is inferred.
+The existing user demo was not restarted. T007 migration workflow and the later
+foundation/runtime/lab/scenario/acceptance gaps remain.
+See [review and evidence](../../evidence/studio/M1-linux-observation-recovery/review.md).
+
+## Previous foundation reassessment
+
 # Current Linux delivery scope — 2026-10-30
 
 The active implementation goal retains the complete M0–M4 plan and removes Windows
