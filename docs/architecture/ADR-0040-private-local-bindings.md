@@ -1,6 +1,6 @@
 # ADR-0040: Private project-local environment binding declarations
 
-Status: implementation under verification. Implements T008's missing binding
+Status: implemented; Linux storage component verified. Implements T008's missing binding
 sidecars within the existing plan; T060 and provider admission remain separate.
 No XDL resource family, industry dispatch or runtime entry point is added.
 

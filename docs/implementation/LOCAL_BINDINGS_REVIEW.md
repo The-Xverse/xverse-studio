@@ -27,3 +27,8 @@ review; portable exports exclude private declarations and imports reject that ki
 The complete T008 clause mapping is in
 evidence/studio/M0-private-local-bindings/review.md. Clean package verification and
 its candidate binding remain before the component completion decision.
+
+Clean source e1f9336 package164 and actual installed bindings/restart/portable
+exchange/private restore/context review now pass; all payload/source/UI/SDK hashes
+match. Full clause review closes T008 only, yielding56/34/10 and zero accepted
+milestones. Original verifier-name failure is preserved; product source is unchanged.

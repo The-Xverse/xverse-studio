@@ -3,8 +3,8 @@
 T008 retains its original FR-001/NFR-009, AC-002 and T002/T006/T007 dependencies.
 This review covers the whole storage component, including previous source-envelope
 and migration repairs. Full acceptance and milestone reviews remain independent.
-Clean package verification is pending at this source checkpoint; T008 stays open
-until that verification and the final clause review are recorded.
+T008 is component complete after the clause review and installed package verification
+below. This does not close T002's remote distribution or any milestone gate.
 
 | Original task clause | Current implementation and evidence |
 | --- | --- |
@@ -36,3 +36,15 @@ dependency distribution remains independently incomplete; the locally admitted
 SDK and offline provisioning are a separate demonstrated environment. No SDK or
 companion code is changed. Windows delivery remains out of scope under ADR-0036.
 The user's existing demo, private sessions and original Argus evidence are untouched.
+
+Clean detached candidate e1f933666ecbc6a2cb08a2d8e8b5241da8f7633e provisions
+offline and passes native smoke. All164 payloads (158 committed files plus6 tested
+UI assets), archive/manifest/extracted hashes and420 captured inputs match. Installed
+SDK distribution xverse-xdl has the canonical platform Git URL and exact accepted
+revision12615d402. Three actual installed native launcher lifetimes verify CAS,
+source/plan invariance, restart, portable export/import exclusion and private full
+backup/restore with moved-root review. Explicit redeclaration remains unverified
+and cannot grant execution. Original sidecar bytes remain; no workload is launched.
+All original launcher handles stop. The first private verifier used the repository
+name as a distribution name and exited before starting any backend; only that
+verifier name was corrected and the original failed log is retained.

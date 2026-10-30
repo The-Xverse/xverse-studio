@@ -1,3 +1,26 @@
+# Private local binding storage closure — 2026-10-30
+
+**56 completed /34 in progress /10 blocked; zero accepted milestones.** T008
+is complete after reviewing its full Linux storage scope. Candidate e1f9336 adds
+versioned private artifact/asset/credential declarations with independent revision
+CAS, secure byte-sealed publication, bounded failures and moved-root review.
+Portable projects exclude these declarations; private backups preserve them.
+Declarations remain unverified and grant no provider or execution authority.
+
+Verification passes310 affected backend cases and12 actual native browser journeys
+on420 unchanged source/config/test inputs plus6 UI assets. Clean offline package164
+matches158 committed files,6 tested UI assets and admitted SDK12615d402. Actual
+installed CAS/restart/export/import/private restore preserve source and plan, require
+review after movement and dispatch no workload. Original failures remain retained.
+
+T002 remote distribution, T004/T010/T011/T014 full audits and the remaining
+runtime/lab/scenario/acceptance work stay open. Windows is outside delivery scope
+under ADR-0036. The user's running demo is not restarted.
+See [complete clause review](../../evidence/studio/M0-private-local-bindings/review.md)
+and [installed proof](../../evidence/studio/M0-private-local-bindings/package-binding.json).
+
+## Previous storage integrity update
+
 # T008 storage gap review — 2026-10-30
 
 Counts stay55completed/35in_progress/10blocked, zero accepted milestones.
