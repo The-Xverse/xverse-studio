@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { faultChoices, useExperimentFaultTiming } from "../profiles/experiment-faults";
 import { DraftScenarioTimeline } from "./DraftScenarioTimeline";
 import { useTerm } from "../profiles/presentation";
 import type { Data } from "../../api/types";
@@ -44,6 +45,7 @@ function reference(resource: Data) {
 export function ScenarioAuthoring({
   scenario,
   projection,
+  provider,
   limits,
   edit,
   onSource,
@@ -52,6 +54,7 @@ export function ScenarioAuthoring({
   scenario: Data;
   projection: Projection;
   limits: Data;
+  provider?: Data;
   edit: (edits: Data[]) => Promise<unknown>;
   onSource: (target?: SourceTarget) => void;
   onIntent: () => void;
@@ -265,6 +268,7 @@ export function ScenarioAuthoring({
             scenario={scenario}
             projection={projection}
             kind={selection.kind}
+            provider={provider}
             item={selection.item}
             saving={busy}
             onSave={async (properties, itemId) => {
@@ -454,6 +458,7 @@ function ScenarioItemForm({
   projection,
   kind,
   item,
+  provider,
   onSave,
   saving,
 }: {
@@ -461,6 +466,7 @@ function ScenarioItemForm({
   projection: Projection;
   kind: ItemKind;
   item?: Data;
+  provider?: Data;
   onSave: (properties: Data, itemId: string) => Promise<void>;
   saving: boolean;
 }) {
@@ -544,6 +550,8 @@ function ScenarioItemForm({
     [acceptance, setAcceptance] = useState(item?.acceptance || ""),
     [error, setError] = useState(""),
     [busy, setBusy] = useState(false);
+  const timing = useExperimentFaultTiming(scenario, projection, item);
+  const choices = timing.available ? faultChoices(provider) : [];
   const sending = useRef(false);
   async function save(e: React.FormEvent) {
     e.preventDefault();
@@ -571,7 +579,7 @@ function ScenarioItemForm({
               action: object(action),
             }
           : kind === "fault"
-            ? { targetRef, faultKind, activation, recovery, maturity }
+            ? { targetRef, faultKind, activation, recovery, maturity, ...timing.properties(id) }
             : kind === "observer"
               ? {
                   targetRef,
@@ -695,6 +703,21 @@ function ScenarioItemForm({
         </>
       ) : kind === "fault" ? (
         <>
+          <label>Provider fault choice
+            <select aria-label="Provider fault choice" value="" onChange={e => {
+              if (!e.target.value) return;
+              const choice = choices[Number(e.target.value)];
+              const declared = choice && targets.find(t => t.ref.kind === "System" && t.ref.element === choice.target && t.ref.namespace === spec.systemRef.namespace && t.ref.name === spec.systemRef.name);
+              if (!choice || !declared || !clocks.some(c => c.id === choice.clockDomain)) return;
+              setTarget(declared.key); setFaultKind(choice.kind); setActivation(choice.activation);
+              setRecovery(choice.recovery); setMaturity(choice.maturity); timing.setClock(choice.clockDomain);
+            }}>
+              <option value="">Choose a provider declaration</option>
+              {choices.map((choice, index) => <option key={index} value={index}>{choice.kind} / {choice.target} (requires {choice.inputSurface})</option>)}
+            </select>
+          </label>
+          {!choices.length && <p className="notice">No compatible provider fault choices are declared. Opaque drafts do not grant execution support; inspect the selected provider and XDL.</p>}
+          {timing.fields}
           <label>
             Fault kind
             <input

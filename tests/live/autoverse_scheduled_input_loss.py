@@ -38,7 +38,17 @@ def main():
     parser.add_argument("--receipt", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--static-dir", type=Path, required=True)
+    parser.add_argument("--authoring-browser", action="store_true")
+    parser.add_argument("--node", type=Path)
+    parser.add_argument("--playwright-cli", type=Path)
+    parser.add_argument("--browser-cache", type=Path)
     args = parser.parse_args()
+    if args.authoring_browser and not all(
+        [args.node, args.playwright_cli, args.browser_cache]
+    ):
+        parser.error(
+            "The browser stage requires explicit admitted node, Playwright CLI and browser-cache paths."
+        )
     args.output.mkdir(parents=True)
     data = (
         ROOT
@@ -81,11 +91,15 @@ def main():
         variant = documents("studio-browser")
         scenario = YAML(typ="safe").load(variant["scenario.xdl.yaml"])
         scenario["extensions"][NAMESPACE]["durationSeconds"] = 30
-        scenario["spec"]["faults"] = [
-            source.fault(scenario, "first-loss", 5, 3),
-            source.fault(scenario, "second-loss", 13, 3),
-            source.fault(scenario, "interrupted-loss", 21, 3),
-        ]
+        scenario["spec"]["faults"] = (
+            []
+            if args.authoring_browser
+            else [
+                source.fault(scenario, "first-loss", 5, 3),
+                source.fault(scenario, "second-loss", 13, 3),
+                source.fault(scenario, "interrupted-loss", 21, 3),
+            ]
+        )
         variant["scenario.xdl.yaml"] = dump_yaml(scenario)
         for key, doc in list(p["documents"].items()):
             raw = variant[Path(doc["path"]).name]
@@ -97,6 +111,39 @@ def main():
                         json={"content": raw},
                     )
                 )
+        if args.authoring_browser:
+            browser = module(
+                "autoverse_gui_fault_authoring", "autoverse_fault_authoring_browser.py"
+            )
+            report["browserAuthoring"] = browser.author(
+                native,
+                host,
+                api,
+                p,
+                args.output,
+                args.node,
+                args.playwright_cli,
+                args.browser_cache,
+            )
+            p = native.checked(api.get(f"/api/v1/projects/{p['projectId']}"))
+            authored = YAML(typ="safe").load(
+                next(
+                    d["content"]
+                    for d in p["documents"].values()
+                    if Path(d["path"]).name == "scenario.xdl.yaml"
+                )
+            )
+            expected = [
+                source.fault(authored, "first-loss", 5, 3),
+                source.fault(authored, "second-loss", 13, 3),
+                source.fault(authored, "interrupted-loss", 21, 3),
+            ]
+            expected[0]["extensions"][source.PROFILE]["trigger"].update(
+                at=5000, unit="ms"
+            )
+            assert authored["spec"]["faults"] == expected, (
+                "The browser must author the exact admitted fault source."
+            )
         admission = native.checked(
             api.get(
                 f"/api/v1/projects/{p['projectId']}/scenario-admission",

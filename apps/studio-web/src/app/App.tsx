@@ -1784,6 +1784,7 @@ export default function App() {
                   />
                 ) : view === "Experiments" ? (
                   <ExperimentsView
+                    provider={providers.find(p => p.providerId === executionProvider)}
                     providerId={executionProvider}
                     project={project}
                     projection={projection}

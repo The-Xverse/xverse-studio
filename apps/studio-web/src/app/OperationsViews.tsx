@@ -31,6 +31,7 @@ export function ExperimentsView({
   edit,
   authoringLimits,
   providerId,
+  provider,
   onAuthoringIntent,
   campaignLimits,
   campaignEnabled,
@@ -46,6 +47,7 @@ export function ExperimentsView({
   edit: (edits: Data[]) => Promise<unknown>;
   authoringLimits: Data;
   providerId: string;
+  provider?: Data;
   onAuthoringIntent: () => void;
   campaignLimits: Data;
   campaignEnabled: boolean;
@@ -129,6 +131,7 @@ export function ExperimentsView({
               scenario={scenario}
               projection={projection}
               limits={authoringLimits}
+              provider={provider}
               edit={edit}
               onSource={onSource}
               onIntent={onAuthoringIntent}

@@ -15,6 +15,10 @@ CLOCK = "host-runtime"
 CODEC = "autoverse.host-elapsed-microseconds.v1"
 MAX_FAULTS = 8
 DESCRIPTOR = {
+    "contractVersion": "1.0",
+    "timingProfile": {"namespace": PROFILE_NAMESPACE, "version": "0.1"},
+    "minimumActivationSeconds": 2,
+    "recoveryMarginSeconds": 2,
     "contractRef": CONTRACT,
     "clockDomain": CLOCK,
     "clockCodec": CODEC,
@@ -27,6 +31,7 @@ DESCRIPTOR = {
             "kind": "driver-input-loss",
             "target": "driver",
             "inputSurface": "studio-browser",
+            "maturity": "prototype",
             "activation": ACTIVATION,
             "recovery": RECOVERY,
             "durationSeconds": {"minimum": 2, "maximum": 30},
