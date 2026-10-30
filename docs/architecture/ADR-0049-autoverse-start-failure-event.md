@@ -1,6 +1,8 @@
 # ADR-0049: Original Autoverse Start failure events
 
-Status: implementation under actual native Autoverse/browser verification.
+Status: scoped implementation verified by two actual native Autoverse/Chromium
+cases on candidate ed958f3. T025 remains in progress for its remaining browser/
+stream obligations. See evidence/studio/M1-autoverse-start-failure-events/.
 
 T025 requires command-failure events and a visible distinction between command
 acceptance and execution failure. An actual native browser case demonstrated

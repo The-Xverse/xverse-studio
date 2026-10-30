@@ -1,0 +1,62 @@
+{
+  "candidate": "ed958f33a7111037f1babe911cad443922d07600",
+  "task": "T025",
+  "taskStatus": "in_progress",
+  "scope": "Verified original startup failure event and generic command-outcome filtering; not full reconnection task",
+  "nativeBrowserCasesPassed": 2,
+  "skips": 0,
+  "flakes": 0,
+  "sourceInputs": 452,
+  "compiledUiAssets": 6,
+  "allFinalInputsMatchCommittedCandidate": true,
+  "originalUiAssetsUnchanged": 6,
+  "originalPlatformFilesUnchanged": 21,
+  "staticChecks": [
+    "TypeScript application typecheck",
+    "Private native UI build",
+    "Ruff changed worker and native controller",
+    "Architecture boundaries",
+    "Descriptive platform compatibility",
+    "Spec structure75 requirements/100tasks/32AC",
+    "git diff --check"
+  ],
+  "buildWarnings": [
+    "Existing XYFlow use-client directive ignored",
+    "Private outDir outside application tree; not emptied",
+    "Existing empty react chunk and >500kB main chunk warning"
+  ],
+  "runtimeWarnings": [
+    "Node NO_COLOR ignored with FORCE_COLOR; no failing check"
+  ],
+  "commands": [
+    ".venv/bin/python -I tests/live/autoverse_browser_recovery.py --receipt <private-enrollment> --output <fresh-report-directory> --node <pinned-native-node> --playwright-cli <installed-cli> --browser-cache <prepared-cache> --static-dir <private-built-ui> --case startup-failure|runtime-failure",
+    "<pinned-node> <playwright-cli> test --config tests/live/autoverse-reconnect.config.ts",
+    "<pinned-node> <typescript-cli> -p apps/studio-web/tsconfig.json --noEmit",
+    "<pinned-node> <vite-cli> build apps/studio-web --outDir <fresh-private-output>"
+  ],
+  "environment": {
+    "os": "Ubuntu22.04.5 LTS/nativeLinux x86_64",
+    "python": "3.13.13",
+    "node": "24.22.1",
+    "chromium": "156.0.8078.4",
+    "playwright": "1.64.1",
+    "sdk": "12615d402ba16cde3cd48c55b70aca464ea90261"
+  },
+  "startedAt": "2026-10-30T12:36:27.556889+00:00",
+  "finishedAt": "2026-10-30T12:38:29.916858+00:00",
+  "independentMilestoneReview": "Not performed; separate readback by same agent",
+  "remainingT025": [
+    "Duplicate Start and two actual browser tabs",
+    "UI delivery disconnect without backend ownership loss",
+    "Duplicate/out-of-order delivery and state ordering",
+    "Actual cursor expiry and resynchronization under declared bounds"
+  ],
+  "defaultReplayWindow": 1000,
+  "defaultReplayWindowExpiryClaimed": false,
+  "acceptedMilestones": 0,
+  "taskCounts": {
+    "completed": 61,
+    "in_progress": 29,
+    "blocked": 10
+  }
+}

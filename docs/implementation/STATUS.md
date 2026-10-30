@@ -1,3 +1,14 @@
+# Autoverse command failure events verified — 2026-10-30
+
+**61 completed / 29 in progress / 10 blocked; zero accepted milestones.**
+T025 remains in progress. Original failed-Start events and generic command-outcome
+filtering pass two actual native/browser cases, including a guard against failing
+an already completed Start. Continue two-tab, UI-disconnect, event-order, cursor
+expiry and resynchronization verification with Autoverse.
+See [scoped review](../../evidence/studio/M1-autoverse-start-failure-events/review.md).
+
+## Earlier checkpoints
+
 # Native lifecycle conformance completed — 2026-10-30
 
 **61 completed / 29 in progress / 10 blocked; zero accepted milestones.**
