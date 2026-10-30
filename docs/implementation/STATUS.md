@@ -1,3 +1,14 @@
+# Foundation verification completed — 2026-10-30
+
+**60 completed /30 in progress /10 blocked; zero accepted milestones.**
+T014 completes current Autoverse foundation checks and exact standalone Lite
+classification.427 API/native CLI and8 browser checks pass. T012 remains blocked
+on its provider-specific public mapping and permitted environment. Continue the
+original lifecycle/recovery and remaining M0–M4 tasks.
+See [full foundation review](../../evidence/studio/M0/foundation-20261030/review.md).
+
+## Earlier checkpoints
+
 # Provider fixtures completed — 2026-10-30
 
 **59 completed /31 in progress /10 blocked; zero accepted milestones.**

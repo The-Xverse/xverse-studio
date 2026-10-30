@@ -1,0 +1,78 @@
+{
+  "task": "T014",
+  "status": "completed",
+  "verifiedSourceCandidate": "5150e91df640a5dce242075af5dc660b5e155d50",
+  "runtimeCodeCandidate": "918d2b09604650cc10bfe018c1eae94304c601d1",
+  "target": "Actual Autoverse enrollment classic/platform; current native browser; exact installed SDK",
+  "apiAndNativeCli": {
+    "tests": 427,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "seconds": 302.532,
+    "rawXmlSha256": "864d55256d76cbb026ac9401647a298da9d9ede21c03d21952a9b97a1c8c5318"
+  },
+  "nativeBrowser": [
+    {
+      "descriptor": "valid",
+      "stats": {
+        "startTime": "2026-10-30T11:51:11.928Z",
+        "duration": 14753.927,
+        "expected": 4,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "rawSha256": "08b973e3ce5108e123ae4b6847570ee89b42e7b2e9cf6e8579e951a963f4d294"
+    },
+    {
+      "descriptor": "invalid",
+      "stats": {
+        "startTime": "2026-10-30T11:51:30.045Z",
+        "duration": 12000.225,
+        "expected": 4,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "rawSha256": "d6300f662d8cc900c42876045a51dc853251d5e7c3b3c3323089af914a2ee298"
+    }
+  ],
+  "sourceInputs": 448,
+  "compiledUiAssets": 6,
+  "allInputsUnchangedDuringVerification": true,
+  "sourceAndCommittedCandidateHashesMatch": true,
+  "environment": "environment.json",
+  "baselineInspection": "baseline-inspection.json",
+  "installedAutoverseEvidence": {
+    "scope": "Inherited existing complete demo on identical runtime/UI bytes, with one disclosed descriptive manifest difference",
+    "evidence": "../../M0-provider-fixtures/nominal.json",
+    "newLiveDemoForT014": false,
+    "newReferenceExecutionForT014": false,
+    "standaloneLiteExecution": false
+  },
+  "staticChecks": [
+    "Ruff new Autoverse foundation target",
+    "Architecture boundaries",
+    "Descriptive platform compatibility checker",
+    "Spec structure75 requirements/100 tasks/32 acceptance cases",
+    "SPECIFY_FEATURE_DIRECTORY prerequisites",
+    "git diff --check"
+  ],
+  "commands": [
+    "STUDIO_AUTOVERSE_TEST_INSTALLATION=<private-receipt> STUDIO_AUTOVERSE_RECORDED_ROOT=<original-complete-demo-root> PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 .venv/bin/python -I -m pytest -q tests/live/autoverse_provider_admission.py tests/live/autoverse_launcher_availability.py tests/live/autoverse_project_writes.py tests/live/autoverse_container_cleanup.py tests/live/autoverse_security_boundary.py tests/live/autoverse_exchange_boundary.py tests/live/autoverse_runtime_metadata.py tests/live/autoverse_inert_imports.py tests/live/autoverse_fixture_catalog.py tests/live/autoverse_foundation.py --basetemp=<fresh-root> --junitxml=<report>",
+    "<native-python> -I tests/live/autoverse_admission_host.py --receipt <private-receipt> --data-dir <fresh-root> --static-dir <tested-ui> --port <loopback-port> --fault valid|invalid; <node> <playwright-cli> test --config tests/live/autoverse-admission.config.ts",
+    ".venv/bin/python -I scripts/check_platform_compatibility.py",
+    "git -C <read-only-platform-checkout> show 12615d402ba16cde3cd48c55b70aca464ea90261:<selected-public-execution-or-legacy-contract-file>",
+    "git -C <read-only-blueprints-checkout> show 0741e01b9e86b9bb9360e2feb220807b36bcbdc4:automotive/thesis-lite-carla-closed-loop/<selected-file>",
+    "<native-python> -I -m xverse_xdl experiment compile --format json --profile-schema <each-host-installed-schema> <each-explicit-native-Autoverse-input>"
+  ],
+  "startedAt": "2026-10-30T11:46:05.059078+00:00",
+  "finishedAt": "2026-10-30T11:51:42.323810+00:00",
+  "warnings": [
+    "Existing Starlette TestClient/httpx deprecation; no dependency change."
+  ],
+  "standaloneLite": "blocked_DEP-RUN_DEP-RUN-CONFIG; provider-specific public effective-input mapping and permitted live environment absent",
+  "independentMilestoneReview": "not_performed_or_claimed_by_this_self_review",
+  "acceptedMilestones": 0
+}
