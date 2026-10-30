@@ -1,3 +1,22 @@
+# Bounded Autoverse evidence exchange update — 2026-10-30
+
+**57 completed /33 in progress /10 blocked; zero accepted milestones.** T010
+now binds bounded native download/export/imported reads to original regular-file
+captures and original stored import identity. Reports preserve Autoverse scope
+and status; imported evidence conveys no execution or new reader authority.
+
+Final337 target API/native CLI and8 native browser checks pass on436 unchanged
+inputs/6UI. Clean candidate0dd2db2 package167 matches all hashes and SDK12615d402.
+Its complete installed demo passes exact original journal/snapshot export, inert
+import/detail and identical export receipt, alongside existing active refusals,
+owned Stop and same-key terminal receipt.16 original processes are absent,3 exact
+containers stopped,root lock released and21 original platform files unchanged.
+The existing operator is not restarted. Original failures and test corrections
+remain recorded. T010 stays open for remaining metadata/import/execution review.
+See [review](../../evidence/studio/M0-bounded-evidence-exchange/review.md).
+
+## Previous session boundary update
+
 # Session and portable-content boundary update — 2026-10-30
 
 **57 completed /33 in progress /10 blocked; zero accepted milestones.** T010

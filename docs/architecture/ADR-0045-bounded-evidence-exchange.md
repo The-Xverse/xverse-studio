@@ -1,10 +1,12 @@
 # ADR-0045: Bounded native evidence exchange
 
-Status: implementation under verification against Autoverse. T010 remains open.
+Status: implemented;337 Autoverse API/native CLI and8 native browser checks pass,
+with exact original-evidence export/inert import in the complete installed demo.
+T010 remains open; see evidence/studio/M0-bounded-evidence-exchange/.
 
 Actual enrolled Autoverse project exports reproduce successful downloads through
-file/ancestor symlinks and hardlinks, and unbounded acquisition before a size
-refusal. A retained stopped complete-demo capture reproduces an inaccurate
+file/ancestor symlinks and hardlinks, and unbounded acquisition before integrity
+checking. A retained stopped complete-demo capture reproduces an inaccurate
 `owned_reference` report and a journal verification/reopen race. Its original
 `available` evidence status also reveals an export/import vocabulary mismatch.
 Original recordings and failed observations are retained; no evidence is repaired.

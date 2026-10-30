@@ -45,6 +45,16 @@ unchanged. Original failed observations remain. See
 `evidence/studio/M1-owned-container-readback/`; this resolves that mechanism, not all
 T010 or the full lifecycle matrix. Continue the original clauses below.
 
+ADR-0045 now repairs reproduced bounded exchange/download/imported-file gaps.
+Final337 Autoverse API/native CLI and8 native browser checks pass on436 unchanged
+inputs/6UI. The clean complete installed demo verifies exact source snapshot and
+journal export, preserved external_demo/available scope/status, inert import with
+unsupported-reader limitations, original-bound detail and identical export retry.
+All16 original processes/3 exact containers are stopped and21 original platform
+files unchanged. Original race reports and failed/corrected phases remain under
+`evidence/studio/M0-bounded-evidence-exchange/`. Continue native metadata and the
+remaining import/execution clauses; this component does not close full T010.
+
 The remaining review covers every original T010 clause:
 
 Session/content follow-up under ADR-0044 now passes317 enrolled Autoverse API/native
@@ -59,15 +69,16 @@ before successful owned cleanup and same-key retry. All16 original processes/3
 exact containers are stopped and21 original platform files unchanged. See
 `evidence/studio/M0-session-portable-boundary/`. This advances the first/fourth
 clauses; full T010 closure still requires the remaining access/import/metadata/
-execution review. The source review specifically retains ordinary exchange and
-imported-evidence reads that reopen checked filenames as the next concrete area.
+execution review. That checkpoint identified exchange/imported-evidence filename reopens; the
+ADR-0045 follow-up above repairs them. Remaining metadata/import/execution review
+stays open.
 
 | Clause | Current review disposition |
 | --- | --- |
 | Local binding, sessions and origins | Native launcher binds loopback. ADR-0044 confirms exact Host/Origin, one-use/expired bootstrap, session integrity/expiry, CSRF, safe early headers and live running-control refusal against Autoverse. No wider remote/multi-user authority is introduced. |
-| Bounded project-file access on native Linux | Read acquisition is anchored. ADR-0042 repairs the reproduced revision-write/rollback gap. Continue auditing exchange/download, imported evidence and metadata access rather than treating one repaired path as the entire clause. |
+| Bounded project-file access on native Linux | Read acquisition is anchored. ADR-0042 repairs the reproduced revision-write/rollback gap. ADR-0045 repairs bounded exchange/download/imported-evidence acquisition and exact capture/export identity. Continue remaining native metadata access and the complete clause review. |
 | Inert imports | T009 hostile import evidence exists. Revision allocation now uses the repaired native writer. Confirm original project/profile/script/unknown payload refusals against Autoverse and preserve all existing projects without dispatch. |
-| Redaction and credential exclusion | ADR-0044 confirms known credential assignments/headers/JSON escapes across actual Autoverse authoring/import/legacy export, safe diagnostic locations and exact external-handle round trips. Finish run-export/read-path review; private delivery/provider-owned private logs remain separate. No immutable Argus/history bytes are rewritten. |
+| Redaction and credential exclusion | ADR-0044 confirms known credential assignments/headers/JSON escapes across actual Autoverse authoring/import/legacy export, safe diagnostic locations and exact external-handle round trips. ADR-0045 verifies screened run export with exact original snapshot/journal bytes. Finish remaining read-path review; private delivery/provider-owned private logs remain separate. No immutable Argus/history bytes are rewritten. |
 | Admitted execution and ownership only | T004's installed complete-demo evidence covers new-work/active compatibility, frozen inputs and owned cleanup. Audit other routes and imported metadata for registration/dispatch bypasses; unknown content never grants execution authority. |
 
 These are remaining verification obligations, not newly claimed passes or a new

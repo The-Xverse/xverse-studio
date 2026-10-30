@@ -1,0 +1,73 @@
+{
+  "verifiedCandidate": "0dd2db26bc3d620ec778dae23ff8d901239f7c2f",
+  "testTarget": "Autoverse; enrolled classic/platform, nominated original complete-demo recording and native browser authoring",
+  "apiAndNativeCli": {
+    "phase": "final",
+    "tests": 337,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "seconds": 166.075,
+    "rawXmlSha256": "2f8fd0d43e8aa6109acce6f20b75dfc0fd53e5cb69948339df74fa04ba58b79d"
+  },
+  "browser": [
+    {
+      "descriptor": "valid",
+      "stats": {
+        "startTime": "2026-10-30T10:18:03.000Z",
+        "duration": 14676.601,
+        "expected": 4,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "rawSha256": "9b826b0986b40e430af17ff02aa2a90ec5b1c364584ea900f7c5125b85776abb"
+    },
+    {
+      "descriptor": "invalid",
+      "stats": {
+        "startTime": "2026-10-30T10:18:20.669Z",
+        "duration": 12745.688,
+        "expected": 4,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "rawSha256": "07440a2ab0b11ef2bb1f282fc9a11b8f1be93a71ec3a064170c6f8e427d979f0"
+    }
+  ],
+  "sourceInputs": 436,
+  "compiledUiAssets": 6,
+  "allInputsUnchanged": true,
+  "commands": [
+    "STUDIO_AUTOVERSE_TEST_INSTALLATION=<private-receipt> STUDIO_AUTOVERSE_RECORDED_ROOT=<original-stopped-complete-demo-root> PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 .venv/bin/python -I -m pytest -q tests/live/autoverse_provider_admission.py tests/live/autoverse_launcher_availability.py tests/live/autoverse_project_writes.py tests/live/autoverse_container_cleanup.py tests/live/autoverse_security_boundary.py tests/live/autoverse_exchange_boundary.py --basetemp=<owned-root> --junitxml=<private-report>",
+    "<native-python> -I tests/live/autoverse_admission_host.py --receipt <private-receipt> --data-dir <fresh-browser-tests-root> --static-dir <tested-ui> --port <loopback-port> --fault valid|invalid",
+    "<node> <playwright-cli> test --config tests/live/autoverse-admission.config.ts"
+  ],
+  "tools": {
+    "python": "3.13.13",
+    "node": "24.22.1",
+    "playwright": "1.64.1"
+  },
+  "staticChecks": [
+    "Ruff all changed Python modules and target tests",
+    "architecture boundaries",
+    "spec package structure",
+    "git diff --check"
+  ],
+  "warnings": [
+    "Existing Starlette TestClient httpx deprecation; no dependency change."
+  ],
+  "taskStatus": "T010 remains in_progress;57 completed/33 in_progress/10 blocked;zero accepted milestones",
+  "installedCompleteDemo": "passed_with_exact_original_evidence_export_and_inert_import",
+  "environment": {
+    "os": "Linux-6.8.0-138-generic-x86_64-with-glibc2.35",
+    "python": "3.13.13"
+  },
+  "startedAt": "2026-10-30T10:15:12.671006+00:00",
+  "finishedAt": "2026-10-30T10:18:33.747091+00:00",
+  "sourceWitnessSha256": {
+    "final-before.json": "eaccec236e9780da3b4ae5ab2e6d5849fa0577f9e7a1385b2750e4168528c34b",
+    "final-after.json": "c8f46bb8d201493251950d00c8d7c64bd7f967deb094b80bf239777f4c6ffed3"
+  }
+}
