@@ -1,0 +1,19 @@
+{
+  "scope": "Read-only review, not a reproduced live failure",
+  "task": "T004",
+  "status": "in_progress",
+  "method": "Runs.input_request",
+  "line": 1084,
+  "calls": [
+    "(run.get('inputSurface') or {}).get",
+    "Problem",
+    "hasattr",
+    "provider.input_request",
+    "run.get",
+    "self.directory",
+    "self.installed_providers.get",
+    "self.read"
+  ],
+  "finding": "Current new-work descriptor gates are verified. Review fresh compatibility/frozen authority for active provider input and other non-cleanup callbacks; this path calls the installed input callback without the new descriptor gate. Preserve original ownership and allow admitted cleanup; test the chosen policy against Autoverse.",
+  "goal": "Continue full remaining-task implementation with Autoverse as confirmation target"
+}

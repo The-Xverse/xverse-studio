@@ -3,8 +3,9 @@
 Source verification passes100 explicit Autoverse API cases and4 native browser
 cases on426 unchanged source/config/test inputs plus6 unchanged tested UI assets.
 Current confirmation follows the user's Autoverse-target instruction. No generic
-reference workload establishes these results. Complete installed-demo verification
-is pending at this source checkpoint; T004 remains open until its review finishes.
+reference workload establishes these results. Installed-demo verification now
+passes below. T004 remains open for active-control/frozen-authority review rather
+than treating new-work checks as its entire before-operations clause.
 
 | Original T004 clause | Current implementation and confirmation |
 | --- | --- |
@@ -33,3 +34,23 @@ classic complete demo. This does not newly claim Maestro/native-X-COM/Argus live
 acceptance, physical support, second-industry or human-study results. T002 remote
 dependency publication and full milestone acceptance remain separate. No companion
 repository or existing demo source is modified; only Studio wrappers are changed.
+
+Clean candidate6ed6e9339d97d777330405512b45684a416e4f0f package165 verifies
+all159 committed payloads,6 tested UI assets and426 captured inputs. Offline
+provisioning retains exact canonical SDK12615d402. Its actual native HTTP backend
+runs the complete classic demo, opens the owned Pygame window, drives to observed
+speed23.36229292381854, engages cruise, rejects unsupported Pause, and shuts the demo
+down on window close. All17 original recorded PID/birth instances are absent;
+all3 exact container IDs retain their original StartedAt and are stopped. The
+original native server receives SIGTERM and exits-15; its root lock is reacquirable.
+The initial private proof expected exit0, which is the wrong harness assumption:
+pinned Uvicorn re-raises the captured signal after server shutdown. Retain the
+actual outcome rather than changing product code or rerunning the demo to hide it.
+All21 original platform files and final source/UI inputs remain unchanged.
+
+The remaining review is explicit in remaining-review.json: active input/non-cleanup
+callback compatibility and frozen authority need a policy and Autoverse negatives.
+Runs.input_request still calls the installed input callback without the new
+descriptor gate. This is a source finding, not a reproduced live failure. Preserve
+original ownership and admitted cleanup while defining refusal for new active
+control. T004 remains unchecked; counts stay56/34/10 with no accepted milestone.

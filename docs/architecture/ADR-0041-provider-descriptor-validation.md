@@ -1,6 +1,7 @@
 # ADR-0041: Bounded strict installed-provider descriptor validation
 
-Status: implementation in progress under T004. No companion/runtime API is added.
+Status: new-work admission implemented and verified against enrolled/installed
+Autoverse; T004's remaining active-control review stays open. No companion/runtime API is added.
 
 The existing descriptor gate accepts malformed implementation identities and field
 types and raises TypeError for a null capability list. Admission must verify the

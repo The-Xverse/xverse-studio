@@ -45,3 +45,14 @@ invoked explicitly. Default core browser collection cannot assume this host's
 Autoverse installation. Their missing native prerequisite fails the explicit live
 invocation; no skipped case establishes confirmation. Current confirmation uses
 the enrolled target under the user's instruction, rather than a generic workload.
+
+Final100 API/four native browser cases pass on426 unchanged source inputs and6 UI
+assets. Clean source6ed6e93 package165 verifies every source/payload/archive/SDK
+identity. Actual installed native HTTP complete-demo operation passes owned Pygame
+driving/cruise, unsupported Pause refusal and window-close shutdown.17 original
+recorded processes are absent,3 exact container/start identities are stopped, the
+original server root lock is released and21 original platform files are unchanged.
+The private proof's initial exit0 assertion was incorrect: the actual server exits
+-15 after explicit SIGTERM and pinned Uvicorn re-raises that signal. Preserve this
+observed outcome. T004 stays open for active input/non-cleanup callback compatibility
+and frozen authority review, as recorded in M0-provider-admission/remaining-review.json.

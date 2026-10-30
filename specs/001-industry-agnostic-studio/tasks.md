@@ -977,3 +977,13 @@ browser cases; clean installed package164 and all421 source/6 UI hashes match.
 No task closure: pure no-contact descriptor validation probes expose malformed
 identity/field acceptance and untyped null-capability failure for the next repair.
 Evidence: evidence/studio/linux-capability-scope/. Counts remain56/34/10.
+
+T004 admission progress2026-10-30: ADR-0041 candidate6ed6e9339d97d777330405512b45684a416e4f0f
+repairs strict versioned descriptors, immutable capture, execution limits, unavailable
+provider/authoring independence and post-accept refusal before acquisition.100 actual
+enrolled Autoverse API cases and4 native browser cases pass on426 unchanged inputs
+plus6 UI assets; clean installed package165 runs the complete classic demo with
+Pygame driving/cruise and unsupported Pause refusal.17 original processes are absent,
+3 exact container instances stopped and21 original platform files unchanged. Keep
+T004 unchecked for its remaining active-control/callback compatibility and frozen
+authority review.56/34/10; zero accepted milestones. Evidence M0-provider-admission.

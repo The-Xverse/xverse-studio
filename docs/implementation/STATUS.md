@@ -1,3 +1,26 @@
+# Autoverse provider admission update — 2026-10-30
+
+**56 completed /34 in progress /10 blocked; zero accepted milestones.** T004
+now has strict bounded installed-provider descriptions, immutable observations,
+typed unavailable projections and new-work refusal before acquisition. Incompatible
+provider metadata leaves actual Autoverse authoring available. Versioned discovery
+responses and generated frontend contracts agree with actual enrolled targets.
+
+Final confirmation uses Autoverse, as requested:100 API cases and4 actual native
+browser cases pass on426 unchanged inputs plus6 UI assets. Clean offline package165
+runs the complete classic demo through native HTTP: owned Pygame driving/cruise,
+unsupported Pause refusal and window-close shutdown.17 original processes are absent,
+3 exact container/start identities are stopped and21 original platform files remain
+unchanged. Every committed payload/archive/extracted/UI/SDK hash matches.
+
+T004 remains open for active input/non-cleanup callback compatibility and frozen
+authority review. New-work admission alone does not satisfy its full operations
+clause. The complete original plan remains active; Windows stays outside scope.
+See [review](../../evidence/studio/M0-provider-admission/review.md) and
+[installed Autoverse proof](../../evidence/studio/M0-provider-admission/package-binding.json).
+
+## Previous binding storage update
+
 # Private local binding storage closure — 2026-10-30
 
 **56 completed /34 in progress /10 blocked; zero accepted milestones.** T008

@@ -129,5 +129,57 @@
     "Descriptive compatibility baseline",
     "Planning consistency",
     "Source/UI before/after SHA256"
-  ]
+  ],
+  "package": {
+    "candidate": "6ed6e9339d97d777330405512b45684a416e4f0f",
+    "argv": [
+      ".venv/bin/python",
+      "-I",
+      "CLEAN_DETACHED_CANDIDATE/scripts/package_studio.py",
+      "--output",
+      "PRIVATE_ARCHIVE"
+    ],
+    "provisionArgv": [
+      "uv",
+      "sync",
+      "--frozen",
+      "--no-dev",
+      "--offline",
+      "--project",
+      "FRESH_EXTRACTED_ROOT"
+    ],
+    "environment": {
+      "UV_CACHE_DIR": "prepared accepted SDK cache",
+      "UV_LINK_MODE": "copy"
+    },
+    "verification": "All426 source inputs,159 committed payloads,6 tested UI assets, archive/extracted hashes and exact canonical SDK12615d402 verified. No generic reference smoke is run."
+  },
+  "live": {
+    "launcherArgv": [
+      "INSTALLED_NATIVE_PYTHON",
+      "-I",
+      "-m",
+      "xverse_studio.host.launcher",
+      "--data-dir",
+      "FRESH_PRIVATE_LIVE_ROOT",
+      "--port",
+      "EPHEMERAL_PORT",
+      "--autoverse-root",
+      "EXPLICIT_ENROLLED_AUTOVERSE_ROOT"
+    ],
+    "driverArgv": [
+      ".venv/bin/python",
+      "-I",
+      "scripts/verify_autoverse_pygame.py",
+      "--autoverse-root",
+      "EXPLICIT_ENROLLED_AUTOVERSE_ROOT",
+      "--data-dir",
+      "FRESH_PRIVATE_LIVE_ROOT",
+      "--native-url",
+      "EXACT_LOOPBACK_URL"
+    ],
+    "driverCwd": "fresh extracted package root for the packaged public CARLA probe",
+    "ownedShutdown": "Original installed native handle receives SIGTERM; observed exit-15, root lock reacquirable. Pinned Uvicorn re-raises the captured signal after server shutdown.",
+    "verification": "Actual17 recorded PID/birth instances absent,3 exact container IDs/StartedAt stopped,21 original platform files unchanged, all source/UI inputs unchanged."
+  }
 }
