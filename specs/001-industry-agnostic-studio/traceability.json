@@ -2064,7 +2064,7 @@
         "AC-001"
       ],
       "status": "in_progress",
-      "implementation_note": "ADR-0036 removes Windows delivery from current requirements. Prior host-scope note is retained separately. Reassess this task against all amended Linux requirements and its exact evidence; scope removal alone is not completion.",
+      "implementation_note": "ADR-0036 removes Windows delivery from current requirements. Prior host-scope note is retained separately. Reassess this task against all amended Linux requirements and its exact evidence; scope removal alone is not completion. Linux scope follow-up2026-10-30: candidatebc80579f5640ceae36c345f4a6a79ade4c5e2357 corrects nativeTargets to Linux and windowsAcceptance to OUT_OF_SCOPE_ADR0036 with matching Environment wording under ADR-0036.69 affected backend and4 native browser cases pass on421 unchanged inputs plus6 private-built UI assets; clean offline installed package164 matches all hashes and SDK12615d402. Whole T004 stays open: pure descriptor-gate probes accept malformed SHA/field types and raise untyped TypeError for null capabilityRecords; no provider was registered or contacted by those probes. See evidence/studio/linux-capability-scope/.",
       "historical_host_scope_note": "Owned Linux foundation implemented and exercised; native Windows and selected external runtime admission remain open. See evidence/studio/M0-review and docs/implementation/platform-support.md."
     },
     {
@@ -8527,6 +8527,25 @@
       "nativeBrowserPassed": 12,
       "cleanPackagePayloads": 164,
       "remaining": "T004/T010/T011/T014 complete audits, T002 remote distribution, later runtime/lab/scenario and external/human acceptance; declaration storage grants no provider or physical authority."
+    },
+    "linux_capability_scope": {
+      "candidate": "bc80579f5640ceae36c345f4a6a79ade4c5e2357",
+      "evidence": "evidence/studio/linux-capability-scope/",
+      "task": "T004",
+      "taskStatus": "in_progress",
+      "backendPassed": 69,
+      "nativeBrowserPassed": 4,
+      "sourceInputs": 421,
+      "compiledUiFiles": 6,
+      "cleanPackagePayloads": 164,
+      "operatorAssetsUnchanged": true,
+      "counts": {
+        "completed": 56,
+        "in_progress": 34,
+        "blocked": 10
+      },
+      "acceptedMilestones": 0,
+      "next": "Repair and test descriptor validation/schema admission, then complete full T004 clause review; no milestone or distribution/hardware acceptance inferred."
     }
   },
   "scope_amendments": [

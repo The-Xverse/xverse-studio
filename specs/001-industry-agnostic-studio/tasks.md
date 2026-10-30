@@ -969,3 +969,11 @@ verifies158 committed payloads,6 tested UI assets and SDK12615d402; installed CA
 restart, portable exclusion/import, private backup/restore and context review retain
 source/plan and grant no execution.56completed/34in_progress/10blocked; zero accepted
 milestones. T002 distribution and complete acceptance/provider/hardware gates remain.
+
+T004 progress2026-10-30: actual capability discovery and Environment now reflect
+ADR-0036 Linux delivery and Windows out-of-scope rather than an obsolete hold.
+Candidatebc80579f5640ceae36c345f4a6a79ade4c5e2357 passes69 affected backend and4 native
+browser cases; clean installed package164 and all421 source/6 UI hashes match.
+No task closure: pure no-contact descriptor validation probes expose malformed
+identity/field acceptance and untyped null-capability failure for the next repair.
+Evidence: evidence/studio/linux-capability-scope/. Counts remain56/34/10.
