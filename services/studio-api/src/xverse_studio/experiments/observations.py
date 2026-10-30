@@ -72,6 +72,26 @@ def selected_scenario(documents, compiled):
 
 
 def observation_admission(scenario, provider):
+    if scenario is None:
+        return {
+            "observationAdmissionVersion": "1.0",
+            "status": "unavailable",
+            "items": [],
+            "itemsComplete": False,
+            "observerCount": None,
+            "maxObservers": (provider or {}).get("limits", {}).get("maxObservers"),
+            "budgets": [],
+            "diagnostics": [
+                {
+                    "code": "OBSERVATION_SOURCE_UNAVAILABLE",
+                    "severity": "error",
+                    "message": "No validated selected Scenario is available for observation admission; no zero-cost assumption is made.",
+                }
+            ],
+            "limitations": [
+                "Unknown source cannot establish observation counts, costs or budgets."
+            ],
+        }
     observers = (scenario or {}).get("spec", {}).get("observers", [])
     diagnostics = []
     contract = None

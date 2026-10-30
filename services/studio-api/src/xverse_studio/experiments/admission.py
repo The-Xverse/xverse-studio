@@ -115,9 +115,10 @@ class ScenarioAdmission:
             "diagnostics": diagnostics[:100],
             "diagnosticsComplete": len(diagnostics) <= 100,
             "steps": steps,
-            "stepsComplete": len(spec.get("steps", [])) <= 64,
+            "stepsComplete": scenario is not None and len(spec.get("steps", [])) <= 64,
             "faults": faults,
-            "faultsComplete": len(spec.get("faults", [])) <= 32,
+            "faultsComplete": scenario is not None
+            and len(spec.get("faults", [])) <= 32,
             "observations": observations,
             "limitations": [
                 "Static source support is not live readiness; fresh preflight and Start remain required.",
