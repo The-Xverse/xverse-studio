@@ -2557,8 +2557,8 @@ function Environment({
               capabilities.studio?.nativeTargets || "Not declared",
             "Verified native OS":
               capabilities.studio?.verifiedNativeOS || "Not declared",
-            "Windows checks":
-              capabilities.studio?.windowsAcceptance || "NOT_RUN",
+            "Windows scope":
+              capabilities.studio?.windowsAcceptance || "Not declared",
             "Execution owner": "Backend and admitted provider",
             Exposure: "Local authenticated session",
           }}

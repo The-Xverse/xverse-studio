@@ -132,9 +132,9 @@ def capabilities():
             "python": platform.python_version(),
         },
         "studio": {
-            "nativeTargets": ["Linux", "Windows"],
+            "nativeTargets": ["Linux"],
             "verifiedNativeOS": ["Linux"],
-            "windowsAcceptance": "BLOCKED_USER_REQUEST",
+            "windowsAcceptance": "OUT_OF_SCOPE_ADR0036",
         },
         "providers": descriptors(),
         "limits": {

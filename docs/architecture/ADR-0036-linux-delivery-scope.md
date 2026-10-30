@@ -41,3 +41,9 @@ No companion repository change, physical device operation, cloud deployment or
 publication is authorized by this host-scope decision. The request authorizes
 continuation of the existing Studio implementation plan, including the ongoing
 live-follow presentation work, rather than regeneration of the plan or task IDs.
+
+Implementation follow-up2026-10-30: capabilities discovery advertises only Linux
+as a Studio native delivery target and retains windowsAcceptance with the explicit
+OUT_OF_SCOPE_ADR0036 disposition. Environment labels this Windows scope. Provider
+host declarations remain independent. Current proof is in
+evidence/studio/linux-capability-scope/; this correction does not close T004.

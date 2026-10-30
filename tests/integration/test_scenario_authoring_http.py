@@ -64,7 +64,7 @@ def test_scenario_authoring_http_revision_controls_and_no_execution(
     )
     assert (
         client.get("/api/v1/capabilities").json()["studio"]["windowsAcceptance"]
-        == "BLOCKED_USER_REQUEST"
+        == "OUT_OF_SCOPE_ADR0036"
     )
     invalid = {
         "kind": "update_scenario_item",

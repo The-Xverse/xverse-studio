@@ -1,0 +1,64 @@
+{
+  "pathNormalization": "Native tool/cache/report paths normalized; no authentication values included.",
+  "backend": {
+    "argv": [
+      ".venv/bin/python",
+      "-I",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/contract/test_capabilities.py",
+      "tests/contract/test_api_versions.py",
+      "tests/integration/test_preflight.py",
+      "tests/integration/test_scenario_authoring_http.py",
+      "tests/contract/test_neutral_assets.py",
+      "--basetemp=.studio-local/linux-capabilities-review/final-data",
+      "--junitxml=.studio-local/linux-capabilities-review/final.xml"
+    ],
+    "environment": {
+      "PYTEST_DISABLE_PLUGIN_AUTOLOAD": "1"
+    }
+  },
+  "red": {
+    "selection": "tests/contract/test_capabilities.py -k studio_linux_delivery_scope",
+    "originalFailure": "nativeTargets incorrectly included Windows"
+  },
+  "browser": {
+    "argv": [
+      "node",
+      "PINNED_PLAYWRIGHT_CLI",
+      "test",
+      "--config",
+      "tests/e2e/playwright.config.ts",
+      "tests/e2e/environment-scope.spec.ts",
+      "tests/e2e/local-binding-isolation.spec.ts"
+    ],
+    "launcher": "Original isolated native launcher, fresh unique .studio-local/browser-tests root, ephemeral loopback port, private phase UI build; original handle stopped after browser exit.",
+    "environment": {
+      "STUDIO_BASE_URL": "isolated loopback URL",
+      "STUDIO_BROWSER_DATA": "fresh isolated project-local root",
+      "STUDIO_BROWSER_REPORT": "absolute private report",
+      "STUDIO_BROWSER_OUTPUT": "absolute private artifacts",
+      "PLAYWRIGHT_BROWSERS_PATH": "prepared pinned cache"
+    }
+  },
+  "ui": {
+    "typecheck": [
+      "node",
+      "PINNED_TYPESCRIPT_CLI",
+      "--noEmit",
+      "-p",
+      "apps/studio-web/tsconfig.json"
+    ],
+    "build": [
+      "node",
+      "PINNED_VITE_CLI",
+      "build",
+      "--outDir",
+      "../../.studio-local/linux-capabilities-review/ui"
+    ],
+    "cwd": "apps/studio-web",
+    "nodeVersion": "24.22.1",
+    "operatorDist": "not overwritten; all6 original hashes verified"
+  }
+}
