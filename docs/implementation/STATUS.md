@@ -1,3 +1,15 @@
+# Scenario test specification completed — 2026-10-30
+
+**64 completed / 26 in progress / 10 blocked; zero accepted milestones.**
+A literal clause audit completes T082 using169 existing actual Autoverse API/library
+checks and complete positive native fault execution. All465 tested source bytes
+and the original valid11-record fault evidence remain unchanged. Implementation,
+forms and full acceptance stay open under T083/T084 and later gates. Original
+model contracts and failed attempts remain preserved.
+See [audit](../../evidence/studio/M4-scenario-test-closure/review.md).
+
+## Earlier checkpoints
+
 # Actual Autoverse scheduled input-loss effects verified — 2026-10-30
 
 **63 completed / 27 in progress / 10 blocked; zero accepted milestones.**

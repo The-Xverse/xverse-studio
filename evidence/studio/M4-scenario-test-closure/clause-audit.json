@@ -1,0 +1,58 @@
+{
+  "task": "T082",
+  "description": "Specify scenario/observer/fault tests for target references, typed time/stimuli, bounds, conflicting schedules, unsupported operations and intended versus observed effects.",
+  "kind": "test",
+  "dependency": "T068 completed",
+  "clauses": [
+    {
+      "clause": "target references",
+      "tests": [
+        "tests/live/autoverse_scenarios.py",
+        "tests/live/autoverse_input_loss.py"
+      ],
+      "evidence": "Qualified absent element/clock references reject atomically; admitted driver target succeeds; unsupported carla fault target refuses."
+    },
+    {
+      "clause": "typed time/stimuli",
+      "tests": [
+        "tests/live/autoverse_scenarios.py",
+        "tests/live/autoverse_input_loss_guards.py"
+      ],
+      "evidence": "Negative/bool/string schedule values and unknown actions refuse; existing public typed time in4units preserves source and exact normalized plan; actual admitted startup/input-loss subset executes."
+    },
+    {
+      "clause": "bounds",
+      "tests": [
+        "tests/live/autoverse_scenarios.py",
+        "tests/live/autoverse_input_loss.py"
+      ],
+      "evidence": "Typed item counts, JSON bytes/depth/nodes/nonfinite values, duration and fault count/window/quantum bounds covered."
+    },
+    {
+      "clause": "conflicting schedules",
+      "tests": [
+        "tests/live/autoverse_scenarios.py",
+        "tests/live/autoverse_input_loss.py"
+      ],
+      "evidence": "Same-target/time startup conflict and overlapping/adjacent fault schedules refuse before dispatch."
+    },
+    {
+      "clause": "unsupported operations",
+      "tests": [
+        "tests/live/autoverse_scenarios.py",
+        "tests/live/autoverse_input_loss.py"
+      ],
+      "evidence": "Unadmitted stimulus, observer sampling/units/payload/sink, unknown fault semantics and unsupported provider/input modes remain inert with blocked preflight and Start."
+    },
+    {
+      "clause": "intended versus observed effects",
+      "tests": [
+        "tests/live/autoverse_input_loss_guards.py",
+        "tests/live/autoverse_scheduled_input_loss.py"
+      ],
+      "evidence": "No missing/stale input is upgraded to observed; complete actual demo produces distinct requested/observed activation/recovery for2intervals and an interrupted third with no fabricated recovery."
+    }
+  ],
+  "disposition": "Complete test-specification task. This is not completion of T083/T084 or acceptance of AC025.",
+  "scopeClarification": "The original T082 description does not require implementing every planned fault model or finishing forms. ADR0031 retains its offline measurement-hold model and conditional future runtime admission; it does not redefine the test task into model implementation. The user-directed Autoverse target supplies actual positive execution evidence. No requirement, original decision or unadmitted semantics is removed."
+}
