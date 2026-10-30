@@ -1,6 +1,6 @@
 # ADR-0051 — Composition uses the selected admitted provider
 
-Date: 2026-10-30. Status: implementation candidate; verification in progress.
+Date: 2026-10-30. Status: implemented; scoped Autoverse integration verified.
 
 ## Context
 
@@ -39,3 +39,9 @@ profile/parameter/placement and supported-copy migration. Retain the original
 Exercise the browser composition views and a complete admitted actual demo before
 claiming live integration. Static composition does not establish model fidelity,
 physical access, another industry's execution or complete milestone acceptance.
+
+Final verification: 54 actual classic/platform API cases and one complete native
+browser/demo session pass on candidate `19084f8fb883757b5648863f3b2b107154ac36db`,458 committed inputs/six
+new UI assets. Native cleanup and immutable-input readback agree. T068 complete;
+full acceptance and milestone review remain open. See
+[evidence review](../../evidence/studio/M2-integration/review.md).

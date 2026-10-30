@@ -1,3 +1,18 @@
+# Autoverse composition integration completed — 2026-10-30
+
+**63 completed / 27 in progress / 10 blocked; zero accepted milestones.**
+T068 completes combined authoring/deployment/connection verification: 54 actual
+classic/platform API checks and one complete native browser/demo session pass.
+Installed-provider discovery/configuration now agrees across Connections,
+Deployment and Run; direct negatives, source identity and supported migration
+are verified. Native readback confirms complete owned shutdown. Classic generic
+communication still has no admitted per-flow route/sample mapping; dedicated
+platform observability evidence is separate. Other tasks and full acceptance
+remain open, including T033's original late-Stop fixture discrepancy.
+See [review](../../evidence/studio/M2-integration/review.md).
+
+## Earlier checkpoints
+
 # Autoverse journal-opening failure repaired — 2026-10-30
 
 **62 completed / 28 in progress / 10 blocked; zero accepted milestones.**
