@@ -1,3 +1,16 @@
+# Native browser conformance completed — 2026-10-30
+
+**62 completed / 28 in progress / 10 blocked; zero accepted milestones.**
+T025 completes the original duplicate-Start/two-tab, UI-loss, delivery-order,
+changed-body conflict and default1,000-record expiry/resync clauses with actual
+Autoverse. The final telemetry-only case and exact Stop retry/cleanup pass;
+separate source/ledger/journal/native readback agrees. Earlier failed attempts and
+inherited command-failure cohorts retain their precise scopes. Continue T033 and
+the remaining original M0–M4 tasks; external/human/full acceptance stays open.
+See [full component review](../../evidence/studio/M1-native-autoverse-session/review.md).
+
+## Earlier checkpoints
+
 # Autoverse command failure events verified — 2026-10-30
 
 **61 completed / 29 in progress / 10 blocked; zero accepted milestones.**

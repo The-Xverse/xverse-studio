@@ -1,0 +1,126 @@
+{
+  "first": {
+    "candidate": "f1317a23f61d112bb706add0092ba25b60080587",
+    "outcome": "passed",
+    "sourceInputs": 453,
+    "sourceState": "Three test files were not committed at execution; exact before/after hashes retained privately",
+    "differencesFromFinalCandidate": [
+      "tests/live/autoverse-session.spec.ts"
+    ],
+    "qualification": "Final spec strengthens Stop key/body/receipt equality and waits for final frame native publication; original result is not relabelled as those stronger assertions"
+  },
+  "originalExpiry": {
+    "candidate": "b5eb0f60972243082a182fcb9fa3bdec83b2d826",
+    "outcome": "failed",
+    "sourceInputs": 453,
+    "failure": "Actual read-only run-status request raised ECONNRESET at9minutes, before default replay expiry",
+    "cause": "Not established; original backend was observed alive after failure",
+    "cleanup": {
+      "scope": "Failed actual expiry run; original browser ECONNRESET remains failed, cause not established",
+      "cleanup": {
+        "originalProcessInstancesExited": 16,
+        "exactStoppedContainers": 3,
+        "originalResourceRoles": [
+          "adb-connect",
+          "android-boot",
+          "android-density",
+          "android-install",
+          "android-launch",
+          "android-open",
+          "carla",
+          "carla-prepare",
+          "carla-probe",
+          "driver",
+          "router",
+          "start-android",
+          "start-score",
+          "start-someip-bridge",
+          "vcu",
+          "vehicle"
+        ],
+        "containerRoles": [
+          "android",
+          "score",
+          "someip-bridge"
+        ],
+        "journalIntegrity": "valid",
+        "journalDigest": "sha256:ece1278e441dfa945e926d643b782f809add2dd30f0f32a10411bebded7d1cfe",
+        "terminalCleanupFactsMatchCanonicalJournal": true,
+        "recordCount": 851,
+        "observations": 544
+      },
+      "originalPrefixUnchanged": true
+    },
+    "successorChange": "Only test code: at most2 ECONNRESET retries on read-only poll GETs; HTTP/lifecycle/expiry assertions unchanged; initial Start now uses actual double-click"
+  },
+  "publicationBurst": {
+    "candidate": "ebec15d5be08618572e60a335620951eabfd59ea",
+    "outcome": "failed",
+    "failure": "Optional discrete control burst missed its700ms native publication acknowledgement bound before expiry",
+    "cause": "Not established; later publication20 was observed",
+    "cleanup": {
+      "scope": "Failed optional publication burst; original acknowledgement-bound failure retained; no publication success inferred",
+      "cleanup": {
+        "originalProcessInstancesExited": 16,
+        "exactStoppedContainers": 3,
+        "originalResourceRoles": [
+          "adb-connect",
+          "android-boot",
+          "android-density",
+          "android-install",
+          "android-launch",
+          "android-open",
+          "carla",
+          "carla-prepare",
+          "carla-probe",
+          "driver",
+          "router",
+          "start-android",
+          "start-score",
+          "start-someip-bridge",
+          "vcu",
+          "vehicle"
+        ],
+        "containerRoles": [
+          "android",
+          "score",
+          "someip-bridge"
+        ],
+        "journalIntegrity": "valid",
+        "journalDigest": "sha256:7b984d86523c7c05b6e9d67842c2b5e2baabe3c53db3b351926a148d19ec993d",
+        "terminalCleanupFactsMatchCanonicalJournal": true,
+        "recordCount": 172,
+        "observations": 100
+      },
+      "originalPrefixUnchanged": true
+    },
+    "successorChange": "Remove optional input acceleration entirely; final case waits for ordinary native telemetry under unchanged default1000 retention and driver limits"
+  },
+  "doubleclick": {
+    "candidate": "ebec15d5be08618572e60a335620951eabfd59ea",
+    "outcome": "passed",
+    "sourceInputs": 453,
+    "allInputsMatchGit": true,
+    "qualification": "Complete actual short session with real double-click Start and strong Stop retry proof; final candidate changes only expiry-specific input acceleration/duration in2 test files; short-case behavior and all product/UI bytes remain unchanged"
+  },
+  "natural": {
+    "candidate": "022794083415b45a099264e557e64b6f2d7946c0",
+    "outcome": "passed",
+    "sourceInputs": 453,
+    "allInputsMatchGit": true,
+    "qualification": "Current-source full real session under default1000 replay window; double-click and stronger Stop/input assertions"
+  },
+  "inheritedFailureCases": {
+    "candidate": "ed958f33a7111037f1babe911cad443922d07600",
+    "sourceInputs": 452,
+    "unchangedSharedInputs": 450,
+    "changedTestHarnessInputs": [
+      "tests/live/autoverse-reconnect.config.ts",
+      "tests/live/autoverse_browser_recovery.py"
+    ],
+    "unchangedUiAssets": 6,
+    "productCodeAndLocksUnchanged": true,
+    "evidence": "../M1-autoverse-start-failure-events/verification.json",
+    "qualification": "Original startup/runtime failure events run there; not rerun or counted as fresh sessions here"
+  }
+}

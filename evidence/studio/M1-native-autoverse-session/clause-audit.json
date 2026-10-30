@@ -1,0 +1,43 @@
+{
+  "task": "T025",
+  "scope": "All literal task clauses; no rewritten requirements, task paths, dependencies or acceptance cases",
+  "outcome": "passed",
+  "clauses": [
+    {
+      "clause": "Duplicate Start and two-tab retry",
+      "evidence": "native-browser-cases.json: both actual sessions",
+      "result": "One original accepted receipt; two actual tabs resend identical key/body after real response loss; one native worker and one durable Start/run"
+    },
+    {
+      "clause": "UI disconnect/reopen",
+      "evidence": "native-browser-cases.json and independent-readback.json",
+      "result": "All UI pages close while native canonical records grow; original pidfd/owner/snapshot checkpoints agree; reopened UI observes same run without Start"
+    },
+    {
+      "clause": "Event order",
+      "evidence": "native-browser-cases.json",
+      "result": "Duplicate exact original SSE frame renders once; two original frames delivered in reverse trigger real resync; bounded DOM IDs unique and sequence strictly increases; canonical bytes untouched"
+    },
+    {
+      "clause": "Cursor expiry and resynchronization",
+      "evidence": "native-browser-cases.json: session-expiry; independent-readback.json",
+      "result": "Actual held proof cursor expires at unchanged1000 limit; real410 and exact positive missing range; <=200-row recovery with omissions and original watermark proof; same original run remains running"
+    },
+    {
+      "clause": "Changed-payload idempotency conflict",
+      "evidence": "native-browser-cases.json and independent-readback.json",
+      "result": "Actual409 IDEMPOTENCY_CONFLICT; one run and only original Start/Stop operations/two idempotency records"
+    },
+    {
+      "clause": "command.failed; acceptance versus execution failure",
+      "evidence": "../M1-autoverse-start-failure-events/verification.json and independent-readback.json",
+      "result": "Inherited original202 Start then native pre-running failure emits original command.failed before terminal state; UI/SSE/history agree. Complete-demo runtime failure preserves already completed Start. All product/UI bytes and450 prior source inputs unchanged"
+    },
+    {
+      "clause": "Browser reconnection on supported native Linux backend/browser matrix",
+      "evidence": "verification.json and native-browser-cases.json",
+      "result": "Actual native Ubuntu22.04.5 x86_64/Chromium156 via Playwright1.64.1, precise environment retained. Native Windows removed by ADR0036, no unverified browser claim"
+    }
+  ],
+  "milestonesAccepted": 0
+}

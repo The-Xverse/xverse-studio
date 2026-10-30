@@ -1,0 +1,50 @@
+{
+  "checks": [
+    {
+      "name": "architecture",
+      "cmd": ".venv/bin/python scripts/check_architecture.py",
+      "chunk_id": "e344cc",
+      "wall_time_seconds": 1.5586140469999998,
+      "exit_code": 0,
+      "original_token_count": 37,
+      "output": "Architecture boundaries: passed (imports, dependency direction, industry dispatch, private runtime, executable input and browser executable hooks).\n"
+    },
+    {
+      "name": "compatibility",
+      "cmd": ".venv/bin/python scripts/check_platform_compatibility.py",
+      "chunk_id": "bbd288",
+      "wall_time_seconds": 0.324365179,
+      "exit_code": 0,
+      "original_token_count": 29,
+      "output": "{\n  \"valid\": true,\n  \"scope\": \"descriptive_platform_baseline_only\",\n  \"runtimeAdmission\": false,\n  \"errors\": []\n}\n"
+    },
+    {
+      "name": "specification",
+      "cmd": ".venv/bin/python scripts/validate_spec_package.py",
+      "chunk_id": "d82575",
+      "wall_time_seconds": 1.5035e-05,
+      "exit_code": 0,
+      "original_token_count": 59,
+      "output": "{\n  \"valid\": true,\n  \"scope\": \"planning-package\",\n  \"application_acceptance\": \"not_evaluated_by_this_check\",\n  \"requirements\": 75,\n  \"success_criteria\": 8,\n  \"tasks\": 100,\n  \"acceptance_cases\": 32,\n  \"milestones\": 5,\n  \"errors\": []\n}\n"
+    },
+    {
+      "name": "controller-lint",
+      "cmd": ".venv/bin/ruff check tests/live/autoverse_browser_recovery.py",
+      "chunk_id": "58fdc6",
+      "wall_time_seconds": 1.7722e-05,
+      "exit_code": 0,
+      "original_token_count": 5,
+      "output": "All checks passed!\n"
+    },
+    {
+      "name": "diff",
+      "cmd": "git diff --check",
+      "chunk_id": "e2e566",
+      "wall_time_seconds": 1.3869e-05,
+      "exit_code": 0,
+      "original_token_count": 0,
+      "output": ""
+    }
+  ],
+  "scope": "Static checks only; no generic reference-provider tests"
+}
