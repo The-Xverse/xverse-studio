@@ -1,3 +1,15 @@
+# Autoverse scenario contract matrix expanded — 2026-10-30
+
+**63 completed / 27 in progress / 10 blocked; zero accepted milestones.**
+T082 progresses with 77 passing checks against both enrolled Autoverse targets
+and the previous complete demo's recorded evidence. Source/edit limits, typed
+references/time, unsupported schedules and intent/observation distinctions are
+verified. Positive scheduled fault activation/recovery and observed effects remain
+unimplemented and unverified; T082 stays open. No product runtime or UI changed.
+See [scoped review](../../evidence/studio/M4-autoverse-scenarios/review.md).
+
+## Earlier checkpoints
+
 # Autoverse composition integration completed — 2026-10-30
 
 **63 completed / 27 in progress / 10 blocked; zero accepted milestones.**

@@ -5423,14 +5423,19 @@
         "AC-025"
       ],
       "status": "in_progress",
-      "implementation_note": "Scenario authoring contracts and HTTP negatives added for stable identity, schedules/clocks/targets, observer dependencies, bounded/deep/malformed inputs and no dispatch. Provider-specific scheduled-effect/recovery matrices remain open. Owned fault-intent checkpoint: 127 affected checks pass (56 new offline contract cases) on 399 unchanged inputs. The selected public XDL compiler requires existing experiment-lite fault-intent trigger/duration; new Profile binds only the measured field. Pure compilation preserves authoritative identities and exact plan/source ticks, enforces clocks, targets, bounds, attachment, nonoverlap and legacy-mix refusal. It always returns executionAllowed false; runtime, provider admission, forms and observed activation/recovery remain unimplemented. T082/T083 and their dependencies remain open; counts49/41/10, zero milestones. Evidence: evidence/studio/M4-fault-intent/candidate-binding.json.",
+      "implementation_note": "2026-10-30 Autoverse matrix successor: 77 passing checks on 460 unchanged committed inputs/six preserved UI assets cover both enrolled targets and a read-only projection of the previous complete actual recording. Typed targets/time/stimuli, authoring/payload bounds, conflicts, unsupported operations, atomic source preservation and truthful intent/observation separation verified. Positive scheduled activation/recovery/effect matrix remains open; T082 stays in_progress. Previous checkpoint: Scenario authoring contracts and HTTP negatives added for stable identity, schedules/clocks/targets, observer dependencies, bounded/deep/malformed inputs and no dispatch. Provider-specific scheduled-effect/recovery matrices remain open. Owned fault-intent checkpoint: 127 affected checks pass (56 new offline contract cases) on 399 unchanged inputs. The selected public XDL compiler requires existing experiment-lite fault-intent trigger/duration; new Profile binds only the measured field. Pure compilation preserves authoritative identities and exact plan/source ticks, enforces clocks, targets, bounds, attachment, nonoverlap and legacy-mix refusal. It always returns executionAllowed false; runtime, provider admission, forms and observed activation/recovery remain unimplemented. T082/T083 and their dependencies remain open; counts49/41/10, zero milestones. Evidence: evidence/studio/M4-fault-intent/candidate-binding.json.",
       "implementation_evidence": [
         "tests/contract/test_scenario_authoring.py",
         "tests/integration/test_scenario_authoring_http.py",
         "evidence/studio/M4-scenario-authoring/independent-review-successor.md",
         "docs/architecture/ADR-0031-owned-fault-intent.md",
         "evidence/studio/M4-fault-intent/candidate-binding.json",
-        "tests/contract/test_reference_fault_intent.py"
+        "tests/contract/test_reference_fault_intent.py",
+        "evidence/studio/M4-autoverse-scenarios/verification.json",
+        "evidence/studio/M4-autoverse-scenarios/review.md",
+        "evidence/studio/M4-autoverse-scenarios/clause-audit.json",
+        "evidence/studio/M4-autoverse-scenarios/case-ledgers.json",
+        "evidence/studio/M4-autoverse-scenarios/preservation.json"
       ]
     },
     {
@@ -8901,6 +8906,17 @@
       "sourceInputs": 458,
       "compiledUiAssets": 6,
       "acceptedMilestones": 0
+    },
+    "autoverse_scenario_contract_matrix": {
+      "candidate": "880915877c958b1f482a1bcd60f03b859622941d",
+      "task": "T082",
+      "taskStatus": "in_progress",
+      "verification": "evidence/studio/M4-autoverse-scenarios/verification.json",
+      "testsPassed": 77,
+      "sourceInputs": 460,
+      "compiledUiAssetsPreserved": 6,
+      "newFullDemoRuns": 0,
+      "positiveScheduledEffectsRemainOpen": true
     }
   },
   "scope_amendments": [
