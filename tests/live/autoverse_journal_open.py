@@ -26,7 +26,7 @@ def main():
     p.add_argument("--receipt", type=Path, required=True)
     p.add_argument("--output", type=Path, required=True)
     p.add_argument("--static-dir", type=Path, required=True)
-    p.add_argument("--case", choices=["directory", "existing"], required=True)
+    p.add_argument("--case", choices=["directory", "existing", "report-unavailable"], required=True)
     p.add_argument("--node", type=Path, required=True)
     p.add_argument("--playwright-cli", type=Path, required=True)
     p.add_argument("--browser-cache", type=Path, required=True)
@@ -53,38 +53,44 @@ def main():
         assert marker["runId"] == rid and marker["operationId"] == receipt["operationId"]
         run = native.wait(lambda: native.checked(api.get(f"/api/v1/runs/{rid}")), lambda r: r["state"] in {"failed", "unknown"})
         report.update(runId=rid, snapshotId=preflight["snapshotId"], operationId=receipt["operationId"], observedState=run["state"], reason=run.get("reason"), cleanup=run["cleanup"], evidence=run["evidence"])
-        assert run["state"] == "failed", "Accepted Start must have a structured native opening-failure report"
-        assert run["reason"] == "EVIDENCE_OPEN_FAILED" and run["cleanup"] == "complete"
-        state = json.loads((directory / "state.json").read_bytes())
-        assert state["evidence"] == "unavailable" and state["evidenceFailure"] == "EVIDENCE_OPEN_FAILED"
-        assert not state.get("startedAt") and not state.get("effectivePlanDigest")
-        assert not state.get("journalDigest") and not state.get("eventCount")
         known = native.private_record(data, "run", rid)
-        assert state["pid"] == known["pid"] and state["createTime"] == known["createTime"]
-        assert state["ownerDigest"] == known["ownerDigest"] == digest((directory / "owner.key").read_bytes())
+        state = None
+        if args.case == "report-unavailable":
+            assert run["state"] == "unknown" and run["cleanup"] == "unknown" and run["reason"] == "OWNERSHIP_UNKNOWN"
+            assert (directory / "state.json").is_dir() and not list((directory / "state.json").iterdir())
+        else:
+            assert run["state"] == "failed", "Accepted Start must have a structured native opening-failure report"
+            assert run["reason"] == "EVIDENCE_OPEN_FAILED" and run["cleanup"] == "complete"
+            state = json.loads((directory / "state.json").read_bytes())
+            assert state["evidence"] == "unavailable" and state["evidenceFailure"] == "EVIDENCE_OPEN_FAILED"
+            assert not state.get("startedAt") and not state.get("effectivePlanDigest")
+            assert not state.get("journalDigest") and not state.get("eventCount")
+            assert state["pid"] == known["pid"] and state["createTime"] == known["createTime"]
+            assert state["ownerDigest"] == known["ownerDigest"] == digest((directory / "owner.key").read_bytes())
         def original_exited():
             try:
-                worker = psutil.Process(state["pid"])
-                return worker.create_time() != state["createTime"] or worker.status() == psutil.STATUS_ZOMBIE
+                worker = psutil.Process(known["pid"])
+                return worker.create_time() != known["createTime"] or worker.status() == psutil.STATUS_ZOMBIE
             except psutil.NoSuchProcess:
                 return True
         native.wait(original_exited, bool, timeout=10)
         assert not (directory / "resources.private.json").exists() and not (directory / "containers.private.json").exists()
         journal = directory / "evidence.jsonl"
-        if args.case == "directory":
+        if args.case != "existing":
             assert journal.is_dir() and not list(journal.iterdir())
         else:
             assert journal.is_file() and digest(journal.read_bytes()) == marker["originalBytesDigest"]
         assert run["evidence"] == "invalid", "Unsafe pre-existing objects retain their invalid original reader verdict"
         op = native.checked(api.get("/api/v1/operations/" + receipt["operationId"]))
-        assert op["status"] == "failed"
+        assert op["status"] == ("unknown" if args.case == "report-unavailable" else "failed")
         assert native.checked(api.post("/api/v1/runs", headers={"Idempotency-Key": "journal-open-original-start"}, json=body), 202) == receipt
         assert len(native.checked(api.get("/api/v1/runs"))["items"]) == 1
         assert (data / "snapshots" / preflight["snapshotId"] / "snapshot.json").read_bytes() == frozen
         assert native.checked(api.get(f"/api/v1/projects/{project['projectId']}")) == project
         diagnosis = native.checked(api.get(f"/api/v1/runs/{rid}/diagnostics"))
-        assert any(f["code"] == "EVIDENCE_OPEN_FAILED" for f in diagnosis["findings"])
-        context = {"projectId": project["projectId"], "runId": rid, "snapshotId": preflight["snapshotId"], "operationId": receipt["operationId"]}
+        if args.case != "report-unavailable":
+            assert any(f["code"] == "EVIDENCE_OPEN_FAILED" for f in diagnosis["findings"])
+        context = {"projectId": project["projectId"], "runId": rid, "snapshotId": preflight["snapshotId"], "operationId": receipt["operationId"], "case": args.case}
         native.atomic(data / "journal-open-browser.private.json", canonical(context).encode())
         # Transfer only this test's existing authenticated session to its owned
         # browser. Credentials remain inside the private0700 data root.
@@ -104,7 +110,7 @@ def main():
         report["browserExit"] = browser.returncode
         assert browser.returncode == 0, "Actual browser opening-failure case failed; retain its original report"
         report.update(outcome="passed", originalWorkerExited=True, noWorkloadResources=True, originalJournalObjectPreserved=True,
-                      immutableSnapshotPreserved=True, snapshotDigest=digest(frozen), sourceReportDigest=digest(canonical(state)),
+                      immutableSnapshotPreserved=True, snapshotDigest=digest(frozen), sourceReportDigest=digest(canonical(state)) if state is not None else None,
                       originalStartReceiptPreserved=True, startOperationStatus=op["status"], functionalVerdict=run["verdict"])
     finally:
         if browser is not None and browser.poll() is None:

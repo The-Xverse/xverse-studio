@@ -21,7 +21,7 @@ def main():
         choices=["none", "stop-timeout", "android-timeout"],
         default="none",
     )
-    parser.add_argument("--journal-open-fault", choices=["none", "directory", "existing"], default="none")
+    parser.add_argument("--journal-open-fault", choices=["none", "directory", "existing", "report-unavailable"], default="none")
     args = parser.parse_args()
     if not args.data_dir.parent.name == "browser-tests":
         parser.error("A dedicated Studio browser-tests root is required.")
@@ -46,11 +46,15 @@ def main():
                 journal = directory / "evidence.jsonl"
                 assert not journal.exists()
                 original = b"Owned native journal-opening refusal: preserve these bytes.\n"
-                if args.journal_open_fault == "directory":
+                if args.journal_open_fault in {"directory", "report-unavailable"}:
                     journal.mkdir(mode=0o700)
                 else:
                     with journal.open("xb") as out:
                         out.write(original)
+                if args.journal_open_fault == "report-unavailable":
+                    # Error reporting itself is unavailable. The backend must
+                    # retain unknown rather than guess the child's failure facts.
+                    (directory / "state.json").mkdir(mode=0o700)
                 atomic(args.data_dir / "journal-open-fault.private.json", canonical({
                     "case": args.journal_open_fault, "runId": directory.name,
                     "operationId": request["operationId"],

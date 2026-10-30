@@ -18,18 +18,24 @@ test("actual Autoverse journal-opening failure exposes known startup and separat
   await page.getByRole("tab", { name: "Results", exact: false }).click();
   await expect(page.locator(".run-identity code").first()).toHaveText(original.runId);
   const startup = page.getByRole("region", { name: "Reported startup", exact: true });
-  await expect(startup.getByText("Startup rejected", { exact: true })).toBeVisible();
-  await expect(startup).toContainText("could not create its canonical evidence journal and did not start the workload");
-  await expect(startup).toContainText("check local storage access and capacity");
-  await expect(startup.getByText("EVIDENCE_OPEN_FAILED", { exact: true })).toBeVisible();
-  await expect(page.locator(".stream-indicator")).toHaveText("Retained history available");
+  const unavailable = original.case === "report-unavailable";
+  if (unavailable) {
+    await expect(startup.getByText("Startup or ownership unresolved", { exact: true })).toBeVisible();
+    await expect(startup).toContainText("A workload start has not been established");
+  } else {
+    await expect(startup.getByText("Startup rejected", { exact: true })).toBeVisible();
+    await expect(startup).toContainText("could not create its canonical evidence journal and did not start the workload");
+    await expect(startup).toContainText("check local storage access and capacity");
+    await expect(startup.getByText("EVIDENCE_OPEN_FAILED", { exact: true })).toBeVisible();
+    await expect(page.locator(".stream-indicator")).toHaveText("Retained history available");
+  }
   const evidence = page.locator(".result-status-grid > *").filter({ has: page.getByText("Evidence", { exact: true }) });
   await expect(evidence.getByText("invalid", { exact: true })).toBeVisible();
   const run = await page.request.get(`/api/v1/runs/${original.runId}`).then(r => r.json());
-  expect(run.state).toBe("failed"); expect(run.cleanup).toBe("complete"); expect(run.evidence).toBe("invalid"); expect(run.verdict).toBeNull();
+  expect(run.state).toBe(unavailable ? "unknown" : "failed"); expect(run.cleanup).toBe(unavailable ? "unknown" : "complete"); expect(run.evidence).toBe("invalid"); expect(run.verdict).toBeNull();
   const operation = await page.request.get(`/api/v1/operations/${original.operationId}`).then(r => r.json());
-  expect(operation.status).toBe("failed"); expect(operation.kind).toBe("start"); expect(mutations).toEqual([]);
+  expect(operation.status).toBe(unavailable ? "unknown" : "failed"); expect(operation.kind).toBe("start"); expect(mutations).toEqual([]);
   await info.attach("actual-journal-opening-refusal", { body: JSON.stringify({ ...original, reportedReason: run.reason, lifecycle: run.state, cleanup: run.cleanup,
     originalReaderIntegrity: run.evidence, functionalVerdict: run.verdict, originalStartStatus: operation.status,
-    startupRejectionAndStorageRecoveryVisible: true, canonicalFailureEventInvented: false, browserRunMutations: 0 }), contentType: "application/json" });
+    startupRejectionAndStorageRecoveryVisible: !unavailable, unknownOutcomePreserved: unavailable, canonicalFailureEventInvented: false, browserRunMutations: 0 }), contentType: "application/json" });
 });
