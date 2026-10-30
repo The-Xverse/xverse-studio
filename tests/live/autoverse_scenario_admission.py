@@ -324,3 +324,44 @@ def test_actual_autoverse_unavailable_descriptor_has_no_static_runtime_admission
     report = checked(inspect(api, p, provider))
     assert report["status"] == "blocked" and report["sourceMapping"] == "unsupported"
     assert any(v["code"] == "PROVIDER_UNAVAILABLE" for v in report["diagnostics"])
+
+
+@pytest.mark.parametrize("target", ["classic"], indirect=True)
+def test_actual_autoverse_start_recheck_keeps_frozen_scenario_selection(
+    target, tmp_path, monkeypatch
+):
+    """API admission regression only; dispatch is captured, never live evidence."""
+    provider, blueprint = target
+    app = application(tmp_path / "Autoverse Start selection regression Ω", provider)
+    dispatched = []
+    monkeypatch.setattr(
+        app.state.studio.runs,
+        "_dispatch",
+        lambda *args, **kwargs: dispatched.append((args, kwargs)),
+    )
+    with authenticated(app) as api:
+        p = project(api, blueprint)
+        pf = checked(
+            api.post(
+                f"/api/v1/projects/{p['projectId']}/preflights",
+                json={
+                    "revision": p["revision"],
+                    "providerId": provider.descriptor()["providerId"],
+                },
+            )
+        )
+        assert (
+            pf["status"] == "ready"
+            and pf["readiness"]["observations"]["facts"]["budgets"][0]["status"]
+            == "satisfied"
+        )
+        receipt = checked(
+            api.post(
+                "/api/v1/runs",
+                headers={"Idempotency-Key": "frozen-scenario-selection"},
+                json={k: pf[k] for k in ["snapshotId", "preflightId"]},
+            ),
+            202,
+        )
+        assert receipt["runId"] and len(dispatched) == 1
+        assert len(app.state.studio.store.all("run")) == 1
