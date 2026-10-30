@@ -105,3 +105,13 @@ compiles simulated/virtual/hybrid declarations, not physical realization. Keep
 that original failure and verify byte preservation plus identical blocked
 compiler/CLI diagnostics for the physical case. Only the supported reference
 case can claim executable plan identity. No platform semantics may be weakened.
+
+## T007 successor review — 2026-10-30
+
+ADR-0038 now supplies the missing supported copy/report/review/application/rollback
+workflow for the concrete metadata0-to-1 transition previously accepted in place.
+This does not invent a predecessor project envelope or convert unsupported XDL.
+The full clause review and139 current affected checks, real migrated browser and
+installed package proof are in evidence/studio/M0-linux-copy-migration/. T007 now
+closes its testing component; T008/full AC-002/032 and milestone gates remain open.
+The earlier review and original failures remain unchanged.

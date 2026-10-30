@@ -1,3 +1,17 @@
+# T007 Linux component closure — 2026-10-30
+
+Current counts:55completed/35in_progress/10blocked, zero accepted milestones.
+T007's complete revision/persistence/path/exchange/migration testing component
+passes current verification; see [clause review](../../evidence/studio/M0-linux-copy-migration/review.md).
+This includes actual native copy migration and explicit candidate reopen without
+replay, two real migrated browser viewports and installed offline package162.
+The transition is the concrete existing metadata0-to-1 schema; no unknown envelope
+or XDL format is invented. The report's scope and native pinned-compiler plan
+comparison are explicit. T008 and full AC-002/032/independent gates stay open.
+Original failures and all historical keep-open assessments remain below.
+
+## Previous T023 closure
+
 # T023 Linux component closure — 2026-10-30
 
 Current counts:54completed/36in_progress/10blocked, zero accepted milestones.

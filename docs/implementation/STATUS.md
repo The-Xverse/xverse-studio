@@ -1,3 +1,27 @@
+# Linux copy migration update — 2026-10-30
+
+**55 completed /35 in progress /10 blocked; zero accepted milestones.** T007
+closes after its complete persistence/path/exchange/migration clause review.
+Candidate83f58fc provides an explicit copy migration for the already-existing
+unversioned metadata schema0-to-1 transition. It retains original data and a
+verified private backup, invalidates copied sessions, and writes a versioned report
+before the candidate can be explicitly selected in a separate normal launch.
+Project envelope/XDL versions remain unchanged; unknown versions stay blocked.
+
+Verification:139 unique affected backend cases, actual migrated Chromium operation
+at1024x768 and1440x900, plus a clean offline Linux package162. Installed migration
+CLI and candidate reopen preserve original source, the authoritative plan and one
+historical native run with no replay. All156 committed payloads and6 tested UI
+assets match;408 tracked inputs bind the final code/tests. Earlier failures and
+the corrected test-default-path/connection-proxy findings remain retained.
+
+The user's existing demo was not restarted. T008's complete storage/dependency
+review and later foundation/runtime/lab/scenario/external/human gates remain open.
+See [clause review](../../evidence/studio/M0-linux-copy-migration/review.md) and
+[installed proof](../../evidence/studio/M0-linux-copy-migration/package-binding.json).
+
+## Previous reconciliation update
+
 # Linux reconciliation update — 2026-10-30
 
 **54 completed /36 in progress /10 blocked; zero accepted milestones.** T023 now

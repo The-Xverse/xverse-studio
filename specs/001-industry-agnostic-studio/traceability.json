@@ -2139,7 +2139,9 @@
       "description": "Specify project revision, atomic persistence, stable references and backup-preserving migration tests using isolated project roots. Cover spaces/non-ASCII paths, drive/UNC paths, case collisions, reserved names, locks, replacement semantics and line endings; portable project identity must survive export/import between isolated native Linux workspaces.",
       "paths": [
         "tests/integration/test_project_store.py",
-        "tests/fixtures/projects/"
+        "tests/fixtures/projects/",
+        "tests/platform/test_metadata_migration.py",
+        "tests/platform/test_metadata_schema_wal.py"
       ],
       "depends_on": [
         "T001"
@@ -2151,9 +2153,21 @@
       "acceptance_ids": [
         "AC-002"
       ],
-      "status": "in_progress",
-      "implementation_note": "ADR-0036 removes Windows delivery from current requirements. Prior host-scope note is retained separately. Reassess this task against all amended Linux requirements and its exact evidence; scope removal alone is not completion.",
-      "historical_host_scope_note": "Owned Linux foundation implemented and exercised; native Windows and selected external runtime admission remain open. See evidence/studio/M0-review and docs/implementation/platform-support.md."
+      "status": "completed",
+      "implementation_note": "Closed after complete Linux T007 clause review under ADR-0038, using the concrete existing metadata0-to-1 transition with no invented predecessor envelope/XDL version. Candidate83f58fc passes139 unique affected backend cases, two actual migrated native browser viewports and clean offline package162 with all hashes. Actual installed CLI migration/native reopen preserve original source, project revision, authoritative plan, historical run/snapshot/journal and original receipts, with no replay.407 existing tracked inputs remain identical; an added two-case WAL test extends the map to408. All6 tested UI assets match. Original failures and corrected test isolation/connection-proxy findings are retained. T008, full AC-002/032, independent reviews and milestones remain open.",
+      "historical_host_scope_note": "Owned Linux foundation implemented and exercised; native Windows and selected external runtime admission remain open. See evidence/studio/M0-review and docs/implementation/platform-support.md.",
+      "completion_scope": "Complete project revision/persistence/path/exchange and backup-preserving supported-migration testing component in ADR-0036 Linux scope. Unknown versions remain unsupported; no historical release or full milestone acceptance is invented.",
+      "implementation_evidence": [
+        "docs/architecture/ADR-0038-copy-metadata-migration.md",
+        "docs/implementation/METADATA_MIGRATION_REVIEW.md",
+        "evidence/studio/M0-linux-copy-migration/review.md",
+        "evidence/studio/M0-linux-copy-migration/verification.json",
+        "evidence/studio/M0-linux-copy-migration/package-binding.json",
+        "tests/platform/test_metadata_migration.py",
+        "tests/platform/test_metadata_schema_wal.py",
+        "tests/platform/test_linux_project_exchange.py",
+        "tests/platform/test_recovery_safe_io.py"
+      ]
     },
     {
       "id": "T008",
@@ -8441,6 +8455,22 @@
       "milestonesAccepted": 0,
       "taskClosed": "T023",
       "remaining": "T007 supported backup-preserving migration workflow, later Linux foundation/component audits, runtime/lab/fault integration and actual external/human acceptance remain."
+    },
+    "linux_copy_migration": {
+      "candidate": "83f58fc7dd4ee720f7ef42a4268d9cb138de8c88",
+      "evidence": "evidence/studio/M0-linux-copy-migration/verification.json",
+      "package": "evidence/studio/M0-linux-copy-migration/package-binding.json",
+      "backendUniquePassed": 139,
+      "migratedNativeBrowserViewports": 2,
+      "packagedMigrationAndReopen": "passed",
+      "counts": {
+        "completed": 55,
+        "in_progress": 35,
+        "blocked": 10
+      },
+      "milestonesAccepted": 0,
+      "taskClosed": "T007",
+      "remaining": "T008 complete storage/component audit, T002 remote dependency distribution, remaining foundation/runtime/lab/scenario and actual external/human acceptance."
     }
   },
   "scope_amendments": [
@@ -8481,6 +8511,17 @@
       "task": "T023",
       "change": "Retain actual reconciliation facade/provider/launcher ownership allocation; original planned paths retained. All original task ID, dependencies, requirements and acceptance obligations unchanged.",
       "evidence": "evidence/studio/M1-linux-observation-recovery/review.md"
+    },
+    {
+      "id": "ADR-0038",
+      "status": "implemented_verified_component",
+      "tasks": [
+        "T007",
+        "T008",
+        "T039"
+      ],
+      "change": "Make the already-existing known metadata0-to-1 transition explicit, backup-preserving and copy-only with report/review before separate new-root activation. No envelope/XDL version change, unknown-version admission, task-ID/dependency/acceptance reduction or provider authority.",
+      "evidence": "evidence/studio/M0-linux-copy-migration/review.md"
     }
   ]
 }
