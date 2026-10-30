@@ -1,0 +1,45 @@
+{
+  "scope": "Test-driver native launcher guards; no workload execution",
+  "normalAcknowledgement": {
+    "scope": "Native Autoverse launcher identity acknowledgement only; no workload",
+    "outcome": "passed",
+    "observations": [
+      {
+        "launch": 1,
+        "originalIdentityVerified": true,
+        "termination": "original-handle SIGKILL",
+        "exit": -9
+      },
+      {
+        "launch": 2,
+        "originalIdentityVerified": true,
+        "termination": "original-handle SIGTERM",
+        "exit": -15
+      }
+    ],
+    "rootLockReleased": true
+  },
+  "intentionalAcknowledgementFailure": {
+    "scope": "Intentional test-driver acknowledgement refusal; actual enrolled Autoverse backend handles, no workload",
+    "outcome": "passed",
+    "initialFailurePreserved": true,
+    "secondOriginalOwnerRecordedBeforeFailure": true,
+    "freshUnreapedChildCleanupUsedOriginalPopenHandle": true,
+    "observations": [
+      {
+        "launch": 1,
+        "originalIdentityVerified": true,
+        "termination": "original-handle SIGKILL",
+        "exit": -9
+      },
+      {
+        "launch": 2,
+        "originalIdentityVerified": true,
+        "termination": "original-handle SIGTERM",
+        "exit": -15
+      }
+    ],
+    "originalRootLockReleased": true
+  },
+  "qualification": "The intentional observation refusal stays a driver failure; the guard result verifies original-child retention and cleanup, not product execution."
+}

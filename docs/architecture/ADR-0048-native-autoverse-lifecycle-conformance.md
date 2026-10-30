@@ -1,6 +1,9 @@
 # ADR-0048: Native Autoverse lifecycle conformance
 
-Status: verification in progress for T021. No milestone acceptance.
+Status: implemented and verified for the original T021 test scope. Three actual
+native Autoverse cases pass on candidate f17b294; full clause audit and qualified
+phase history are in evidence/studio/M1-native-autoverse-lifecycle/. No milestone
+acceptance or new reference execution is claimed.
 
 T021 requires lifecycle, immutable-input, idempotency, optional-control,
 partial-start, cancellation and backend-restart conformance. Its originally

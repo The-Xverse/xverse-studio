@@ -1,0 +1,64 @@
+{
+  "task": "T021",
+  "status": "completed",
+  "candidate": "f17b29482deac85ac576640a2bf55e5b72857b2c",
+  "originalScopePreserved": true,
+  "clauses": [
+    {
+      "clause": "Lifecycle and native process ownership",
+      "proof": "Actual complete demo reaches running with Android boot/APK and observed vehicle telemetry, retains original worker through backend SIGKILL, then completes its frozen duration without a Stop command. Original kernel pidfds/parent/UID/birth/argv/private-owner checks and independent readback verify release.",
+      "evidence": [
+        "native-cases.json",
+        "independent-readback.json"
+      ]
+    },
+    {
+      "clause": "Immutable run snapshot and active draft",
+      "proof": "A supported duration30 run freezes original authored bytes and actual effective plan. A separate active draft duration31 changes authoritative plan/semantics without modifying frozen bytes/current run. Independent readback compares canonical snapshot/store digest, original effective plan and anchored native changed draft.",
+      "evidence": [
+        "native-cases.json",
+        "independent-readback.json"
+      ]
+    },
+    {
+      "clause": "Idempotent Start and command handling",
+      "proof": "Concurrent initial Start clients, concurrent retries, restart and terminal retries return the original receipt. Changed payloads conflict. Each root retains exactly one run and one original Start mapping. Startup Cancel has one accepted/completed operation and unchanged retry; changed Cancel body conflicts. Rejected calls create no mapping.",
+      "evidence": [
+        "native-cases.json",
+        "independent-readback.json"
+      ]
+    },
+    {
+      "clause": "Optional controls and ownership uncertainty",
+      "proof": "Direct pause/resume/step/reset/set_parameter requests are unsupported and create no mailbox or operation. A closed mutable-report ownership mismatch yields unknown/unknown and blocks Stop. Exact original bytes are restored and the original worker resumes; current reason/state recover without dispatch. This is not simulator Pause or a permitted reference live-mutation claim.",
+      "evidence": [
+        "native-cases.json",
+        "independent-readback.json"
+      ]
+    },
+    {
+      "clause": "Partial startup and cancellation",
+      "proof": "Actual router/CARLA acquisition is cancelled through the public API or the original CARLA child is lost through its verified pidfd. Both stop only owned resources; neither reaches running. Cancellation is stopped/cleanup complete/evidence available, while component loss is failed/cleanup complete/evidence partial. Integrity remains valid and functional verdict null in both.",
+      "evidence": [
+        "native-cases.json",
+        "independent-readback.json"
+      ]
+    },
+    {
+      "clause": "Backend restart without blind respawn",
+      "proof": "Original backend is killed through its retained handle, same worker survives, replacement backend reobserves same run/snapshot and same-key Start returns original receipt. Fresh Autoverse enrollment is unavailable while original resources run; historical ownership remains separate from fresh admission. Native locks and four original backend launch identities are verified.",
+      "evidence": [
+        "native-cases.json",
+        "independent-readback.json",
+        "driver-guard-cases.json"
+      ]
+    }
+  ],
+  "scopeQualification": "Current confirmations use Autoverse as instructed. Existing reference contract/native tests and T011 reference results retain their separate source/evidence scope; none were rerun under a broadened exception.",
+  "counts": {
+    "completed": 61,
+    "in_progress": 29,
+    "blocked": 10
+  },
+  "acceptedMilestones": 0
+}

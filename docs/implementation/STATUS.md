@@ -1,3 +1,15 @@
+# Native lifecycle conformance completed — 2026-10-30
+
+**61 completed / 29 in progress / 10 blocked; zero accepted milestones.**
+T021 completes three actual Autoverse lifecycle cases, including backend crash/
+reconciliation without respawn, immutable active inputs, startup cancellation
+and original component loss. Source/runtime/UI identities and independent native
+resource/ledger readback are retained. Continue T025 browser/event reconnection
+and the remaining original M0–M4 tasks; T033 and external/human gates stay open.
+See [full lifecycle review](../../evidence/studio/M1-native-autoverse-lifecycle/review.md).
+
+## Earlier checkpoints
+
 # Foundation verification completed — 2026-10-30
 
 **60 completed /30 in progress /10 blocked; zero accepted milestones.**

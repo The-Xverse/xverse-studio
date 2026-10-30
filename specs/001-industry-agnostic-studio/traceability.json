@@ -2675,7 +2675,8 @@
       "description": "Add lifecycle, immutable-snapshot, idempotency, optional-control, partial-start, cancellation and backend-restart conformance tests against the owned provider. Run owned-process lifecycle and service-restart cases on native Linux; process ownership and termination must use original verified native Linux handles/identities.",
       "paths": [
         "tests/contract/test_runtime_lifecycle.py",
-        "tests/integration/test_run_recovery.py"
+        "tests/platform/test_native_recovery.py",
+        "tests/live/autoverse_lifecycle_conformance.py"
       ],
       "depends_on": [
         "T014"
@@ -2696,8 +2697,8 @@
         "AC-009",
         "AC-027"
       ],
-      "status": "in_progress",
-      "implementation_note": "ADR-0036 removes Windows delivery from current requirements. Prior host-scope note is retained separately. Reassess this task against all amended Linux requirements and its exact evidence; scope removal alone is not completion.",
+      "status": "completed",
+      "implementation_note": "ADR-0036 removes Windows delivery from current requirements. Prior host-scope note is retained separately. Reassess this task against all amended Linux requirements and its exact evidence; scope removal alone is not completion. T021 full native conformance2026-10-30: candidatef17b29482deac85ac576640a2bf55e5b72857b2c; three actual Autoverse cases pass on449 unchanged committed inputs/6UI/21original platform files. Complete demo uses frozen duration30 while a separate active duration31 draft changes authoritative plan/semantics. Concurrent initial/retried Start, changed-payload conflict, unsupported controls, ownership-unknown Stop refusal/restoration, original backend crash and same-worker/retry recovery, natural finish, startup Cancel/retry and actual original CARLA pidfd loss are verified.22recorded component instances+3workers exited,4nativebackend launches absent,3exact containers stopped,3rootlocks released; canonical snapshots/plan/journal/cleanup and ledger counts independently read back. Original driver-identity and inspector failures remain qualified; successor original-child guards pass. No new runtime/UI code or broadened reference exception; prior427API/8browser inherited via448 unchanged inputs, not rerun. T021 complete;61/29/10,zero accepted milestones. T025/T033/Lite/physical/human/whole acceptance remain separate. Evidence evidence/studio/M1-native-autoverse-lifecycle/.",
       "implementation_evidence": [
         "evidence/studio/M4-campaign-worker-failure/verification.json",
         "evidence/studio/M4-campaign-worker-failure/implementation-review.md",
@@ -2709,9 +2710,19 @@
         "evidence/studio/M4-campaign-delegation-conformance/verification.json",
         "evidence/studio/M4-campaign-delegation-conformance/backend-coverage.json",
         "evidence/studio/M4-campaign-delegation-conformance/implementation-review.md",
-        "evidence/studio/M4-campaign-delegation-conformance/package/receipt.json"
+        "evidence/studio/M4-campaign-delegation-conformance/package/receipt.json",
+        "docs/architecture/ADR-0048-native-autoverse-lifecycle-conformance.md",
+        "evidence/studio/M1-native-autoverse-lifecycle/clause-audit.json",
+        "evidence/studio/M1-native-autoverse-lifecycle/verification.json",
+        "evidence/studio/M1-native-autoverse-lifecycle/native-cases.json",
+        "evidence/studio/M1-native-autoverse-lifecycle/independent-readback.json",
+        "evidence/studio/M1-native-autoverse-lifecycle/review.md"
       ],
-      "historical_host_scope_note": "Owned native reference/browser workflows exercised, with exact input identity and failure regressions. Actual Lite, five-person usability and full native Windows gates remain open. Native campaign worker-failure successor: fresh934 backend tests pass with296 unchanged inputs, including two actual Linux worker failures at an owner/PID/birth/argv-verified kernel sleep point. stop_on_failure cancels the pending child; continue admits and executes the next child. Worker exit1, failed lifecycle, unknown cleanup, partial prefix-verified evidence and null verdict remain distinct. Canonical snapshots/journal and same-key retry identities are preserved. Application/UI code is unchanged; prior69/performance2 is inherited via293 unchanged inputs plus ADR-only change, with a backend test and guide added. Known4c CI push443/1 wizard failure, matching focus red and isolated proposal remain separate; no fullGUI/nativeWindows/launcher-restart/delegation/physical/milestone acceptance. Evidence: evidence/studio/M4-campaign-worker-failure/. Counts47/43/10 unchanged. Clean b355c4c native Linux offline prepared-cache package smoke passed; all 104 file/archive/manifest hashes and tested UI bytes verified with exact committed input binding. No Windows or milestone acceptance claim. Supplemental campaign delegation recovery: two actual native Linux backend crash/restart probes pass with298 selected inputs unchanged. An explicitly labelled test-only pause holds campaign acknowledgement after real Start and worker launch; durable Start receipt, exact PID/birth/argv/owner and original snapshot are verified before killing only the owned backend. Normal launcher restart recovers the same child/run while active or already terminal, schedules only pending work, preserves canonical project/snapshot and creates no duplicate run. Terminal-lane worker files/journal are unchanged across restart. Initial wrong fixture parameter is correctly rejected and retained separately. These two probes are separate from934 pytest and the still-running browser pipeline; no worker-failure/arbitrary crash/Windows/provider/full-matrix or milestone acceptance. Evidence: evidence/studio/M4-campaign-delegation-recovery/. Counts47/43/10 unchanged. Further native campaign delegation recovery: two failed-worker policy lanes pass after the owned backend crash. Exact PID/birth/argv/owner and actual Linux sleep-point checks precede SIGINT to only its original worker; normal launcher restart retains the failed child and durable Start receipt. Continue executes one pending successor; stop_on_failure cancels pending work without another run. Reader verified_prefix, independent journal hash-chain/error checks, unknown cleanup, partial evidence and null verdict remain distinct; terminal files/journal and canonical Project/snapshot are unchanged. Four final supplemental native subprocess lanes total, separate from934 pytest and the running browser pipeline; initial pause fixture and scope remain explicit. Evidence: evidence/studio/M4-campaign-delegation-recovery/. Counts47/43/10 and milestones unchanged. Permanent native delegation-recovery regression: baseline full938 backend tests pass, followed by final4 affected cases after broadening the existing final PID/birth assertion from failed-only handling to all modes. Every prior assertion and exact fault-fixture string remain; all other934 tests and runtime inputs are byte-identical. No final single-command full938 rerun is claimed. Actual unchanged native workers and ordinary launcher restart preserve original child/run/worker identities, base/child snapshots, Project, terminal journal and same-key deduplication across active/terminal and both failed-worker policies. Initial backend pause and Linux sleep-point fault scope are explicit. All299 final inputs stay unchanged. Prior48/full474/performance2 is inherited via297 identical of298 inputs plus non-executable ADR20 change and one backend-only test. Evidence: evidence/studio/M4-campaign-delegation-conformance/. Windows/AT/human/provider/full matrix and milestone gates stay open; counts47/43/10 unchanged. Clean be4d7e1 native Linux offline prepared-cache package smoke passed; all 104 file/archive/manifest hashes and tested UI bytes verified with exact committed input binding. No Windows or milestone acceptance claim."
+      "historical_host_scope_note": "Owned native reference/browser workflows exercised, with exact input identity and failure regressions. Actual Lite, five-person usability and full native Windows gates remain open. Native campaign worker-failure successor: fresh934 backend tests pass with296 unchanged inputs, including two actual Linux worker failures at an owner/PID/birth/argv-verified kernel sleep point. stop_on_failure cancels the pending child; continue admits and executes the next child. Worker exit1, failed lifecycle, unknown cleanup, partial prefix-verified evidence and null verdict remain distinct. Canonical snapshots/journal and same-key retry identities are preserved. Application/UI code is unchanged; prior69/performance2 is inherited via293 unchanged inputs plus ADR-only change, with a backend test and guide added. Known4c CI push443/1 wizard failure, matching focus red and isolated proposal remain separate; no fullGUI/nativeWindows/launcher-restart/delegation/physical/milestone acceptance. Evidence: evidence/studio/M4-campaign-worker-failure/. Counts47/43/10 unchanged. Clean b355c4c native Linux offline prepared-cache package smoke passed; all 104 file/archive/manifest hashes and tested UI bytes verified with exact committed input binding. No Windows or milestone acceptance claim. Supplemental campaign delegation recovery: two actual native Linux backend crash/restart probes pass with298 selected inputs unchanged. An explicitly labelled test-only pause holds campaign acknowledgement after real Start and worker launch; durable Start receipt, exact PID/birth/argv/owner and original snapshot are verified before killing only the owned backend. Normal launcher restart recovers the same child/run while active or already terminal, schedules only pending work, preserves canonical project/snapshot and creates no duplicate run. Terminal-lane worker files/journal are unchanged across restart. Initial wrong fixture parameter is correctly rejected and retained separately. These two probes are separate from934 pytest and the still-running browser pipeline; no worker-failure/arbitrary crash/Windows/provider/full-matrix or milestone acceptance. Evidence: evidence/studio/M4-campaign-delegation-recovery/. Counts47/43/10 unchanged. Further native campaign delegation recovery: two failed-worker policy lanes pass after the owned backend crash. Exact PID/birth/argv/owner and actual Linux sleep-point checks precede SIGINT to only its original worker; normal launcher restart retains the failed child and durable Start receipt. Continue executes one pending successor; stop_on_failure cancels pending work without another run. Reader verified_prefix, independent journal hash-chain/error checks, unknown cleanup, partial evidence and null verdict remain distinct; terminal files/journal and canonical Project/snapshot are unchanged. Four final supplemental native subprocess lanes total, separate from934 pytest and the running browser pipeline; initial pause fixture and scope remain explicit. Evidence: evidence/studio/M4-campaign-delegation-recovery/. Counts47/43/10 and milestones unchanged. Permanent native delegation-recovery regression: baseline full938 backend tests pass, followed by final4 affected cases after broadening the existing final PID/birth assertion from failed-only handling to all modes. Every prior assertion and exact fault-fixture string remain; all other934 tests and runtime inputs are byte-identical. No final single-command full938 rerun is claimed. Actual unchanged native workers and ordinary launcher restart preserve original child/run/worker identities, base/child snapshots, Project, terminal journal and same-key deduplication across active/terminal and both failed-worker policies. Initial backend pause and Linux sleep-point fault scope are explicit. All299 final inputs stay unchanged. Prior48/full474/performance2 is inherited via297 identical of298 inputs plus non-executable ADR20 change and one backend-only test. Evidence: evidence/studio/M4-campaign-delegation-conformance/. Windows/AT/human/provider/full matrix and milestone gates stay open; counts47/43/10 unchanged. Clean be4d7e1 native Linux offline prepared-cache package smoke passed; all 104 file/archive/manifest hashes and tested UI bytes verified with exact committed input binding. No Windows or milestone acceptance claim.",
+      "original_planned_paths_before_ADR0048": [
+        "tests/contract/test_runtime_lifecycle.py",
+        "tests/integration/test_run_recovery.py"
+      ]
     },
     {
       "id": "T022",
@@ -7381,7 +7392,7 @@
     "native_windows": "OUT_OF_SCOPE_ADR0036. Native Linux is the current delivery target; original Windows install failure and application/browser NOT_RUN remain historical evidence.",
     "m5": "deferred",
     "code_candidate": "d67624a76af4f34138c5befcdb361d595307558f verified owned live target/finite JSON source; fresh1250backend/92affectedbrowser/2performance on388 identical inputs, clean nativeLinux package116 with6 tested UI assets and actual installed-model smoke.49/41/10; zero accepted milestones.",
-    "component_completed": 60,
+    "component_completed": 61,
     "verification": {
       "backend_tests_passed": 1250,
       "backend_scope": "Fresh full source including finite JSON and live target,0failures/errors/skips;388 unchanged inputs.",
@@ -8731,8 +8742,8 @@
     },
     "historical_component_completed_before_T010_closure": 49,
     "current_task_counts": {
-      "completed": 60,
-      "in_progress": 30,
+      "completed": 61,
+      "in_progress": 29,
       "blocked": 10
     },
     "current_working_branch": "feat/platform-observability",
@@ -8796,6 +8807,23 @@
       },
       "acceptedMilestones": 0,
       "independentMilestoneReview": "not_claimed"
+    },
+    "autoverse_native_lifecycle_conformance": {
+      "candidate": "f17b29482deac85ac576640a2bf55e5b72857b2c",
+      "task": "T021",
+      "taskStatus": "completed",
+      "nativeCases": 3,
+      "sourceInputs": 449,
+      "compiledUiAssets": 6,
+      "originalPlatformFilesUnchanged": 21,
+      "evidence": "evidence/studio/M1-native-autoverse-lifecycle/",
+      "runtimeUiChanged": false,
+      "counts": {
+        "completed": 61,
+        "in_progress": 29,
+        "blocked": 10
+      },
+      "acceptedMilestones": 0
     }
   },
   "scope_amendments": [
@@ -8902,6 +8930,13 @@
       "task": "T011",
       "change": "Separate fixture scopes, fresh native root ownership and verified Linux descriptor/manifest; user-approved T011-only executable reference exception. No new runtime or physical authority.",
       "evidence": "evidence/studio/M0-provider-fixtures/"
+    },
+    {
+      "id": "ADR-0048",
+      "status": "implemented_verified_T021",
+      "task": "T021",
+      "change": "Allocate native Autoverse conformance to explicit developer driver instead of missing proposed integration file, retaining existing reference tests and original paths. No requirement, application contract or execution authority changed.",
+      "evidence": "evidence/studio/M1-native-autoverse-lifecycle/"
     }
   ]
 }

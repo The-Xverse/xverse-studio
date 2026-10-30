@@ -1,0 +1,41 @@
+{
+  "task": "T021",
+  "status": "completed",
+  "candidate": "f17b29482deac85ac576640a2bf55e5b72857b2c",
+  "target": "Actual enrolled Autoverse classic complete-demo provider; supported browser-input XDL variant and30-second frozen active duration",
+  "nativeCases": 3,
+  "outcome": "passed",
+  "sourceInputs": 449,
+  "compiledUiAssets": 6,
+  "originalPlatformFilesUnchanged": 21,
+  "allInputsMatchCommittedCandidate": true,
+  "startedAt": "2026-10-30T12:05:55.373870+00:00",
+  "finishedAt": "2026-10-30T12:08:31.720604+00:00",
+  "commands": [
+    ".venv/bin/python -I tests/live/autoverse_lifecycle_conformance.py --receipt <explicit-private-enrollment> --output <fresh-report-directory>",
+    "<native-python> -I tests/live/autoverse_admission_host.py --receipt <explicit-private-enrollment> --data-dir <fresh-owned-native-root> --static-dir <tested-ui> --port <loopback-port> --fault valid",
+    ".venv/bin/ruff check tests/live/autoverse_lifecycle_conformance.py",
+    ".venv/bin/python -I scripts/check_architecture.py",
+    ".venv/bin/python -I scripts/check_platform_compatibility.py",
+    ".venv/bin/python -I scripts/validate_spec_package.py",
+    "git diff --check"
+  ],
+  "staticChecks": "Ruff, architecture, compatibility, spec structure and diff passed",
+  "inheritedVerification": {
+    "evidence": "../M0/foundation-20261030/verification.json",
+    "all448PriorInputsAndSixUiAssetsUnchanged": true,
+    "apiAndNativeCli": 427,
+    "nativeBrowser": 8,
+    "executedAgainForT021": false
+  },
+  "referenceException": "T011-only user approval was not extended or used for new reference execution",
+  "installedPackage": "No new package or installed-demo claim. Runtime/UI bytes remain those qualified by M0 foundation package-inheritance.json; one descriptive compatibility manifest difference remains disclosed.",
+  "independentMilestoneReview": "Not performed or claimed; independent-readback means separate source/resource checks by the same agent",
+  "remaining": [
+    "T025 actual browser/event reconnect coverage",
+    "T033 complete owned-fixture guided/fault matrix",
+    "Standalone Lite integration and permitted environment",
+    "Independent milestone, hardware, human and second-industry acceptance"
+  ],
+  "acceptedMilestones": 0
+}
