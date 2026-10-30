@@ -87,3 +87,21 @@ That run finished 116 passed/two failed in 154.59s. Its second failure exposed a
 incorrect comparison between the request's `profileId` field and the persisted
 lock's `namespace` field. Compare the explicit mapping and all three immutable
 version/schema/presentation identities. Neither finding requires product changes.
+
+## Next dependency-ready component: T048
+
+T043/T044/T046/T047 are complete. Current CLI/round-trip cases cover source/layout
+identity, conflicts and failed-edit recovery, but their export/import stays inside
+one service root. Add actual native HTTP backend exchange between separate Unicode
+and space-containing roots, including reopen, CRLF/LF changes, retained private
+root/session separation and an unresolved physical binding. The binding must remain
+unexecutable; this is software contract verification with no admitted device or
+physical permission. Compare the exact source and public CLI/compiled identities.
+
+The first native exchange run passes the owned-reference case and fails the
+proposed physical fixture's expectation of a valid executable plan. The actual
+pinned compiler correctly reports `XDL1-PLAN-REALIZATION-UNSUPPORTED`: Phase1
+compiles simulated/virtual/hybrid declarations, not physical realization. Keep
+that original failure and verify byte preservation plus identical blocked
+compiler/CLI diagnostics for the physical case. Only the supported reference
+case can claim executable plan identity. No platform semantics may be weakened.

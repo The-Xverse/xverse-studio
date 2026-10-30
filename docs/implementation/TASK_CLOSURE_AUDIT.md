@@ -1,15 +1,15 @@
 # Linux reassessment amendment — 2026-10-30
 
-Current status is52completed/38in_progress/10blocked, zero accepted milestones.
+Current status is53completed/37in_progress/10blocked, zero accepted milestones.
 ADR-0036 removes the historical Windows gates below. Current clause-level review
-closes T001, T005 andT009 with actual Linux baseline, CLI/library and hostile-input
-evidence; the old audit and all original failures remain preserved below.
+closes T001, T005, T009 andT048 with actual Linux baseline, CLI/library, hostile-input
+and isolated native workspace exchange evidence; the old audit and all original failures remain preserved below.
 See [current review](LINUX_REASSESSMENT_REVIEW.md) and
 [task evidence](../../evidence/studio/linux-foundation-reassessment/review.md).
 
 The current source fixes typed import failures and the stale-active-count preflight.
-T007 migration, T023 recovery review, T048 isolated-workspace exchange and the
-runtime/lab/scenario gaps still need their own complete evidence. Scope amendment
+T048 closes with19native/CLI checks and full clause review. T007 migration, T023
+recovery review and the runtime/lab/scenario gaps still need their own complete evidence. Scope amendment
 alone does not close them. Actual hardware, live-industry and human-study gates
 remain independent. No full backend/browser or milestone acceptance is inferred
 from the latest205unique affected backend checks and one native browser journey.

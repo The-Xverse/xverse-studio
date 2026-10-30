@@ -76,7 +76,7 @@ After M0 owned contracts pass, guided operation (T015–T033), visual authoring 
 - [x] T045 [P] [US5] Add external-write races, interrupted saves, undo/redo reference integrity and simultaneous draft/run inspection cases. Paths: `tests/integration/test_edit_conflicts.py`, `tests/e2e/draft-run-isolation.spec.ts`. Depends on: T041. (FR-026; FR-028; NFR-009; AC-014)
 - [x] T046 [US5] Implement bounded autosave/recovery, undo/redo transactions and revision conflict resolution with recoverable source backups. Paths: `services/studio-api/src/xverse_studio/projects/revisions.py`, `apps/studio-web/src/features/model/history.ts`. Depends on: T042, T045. (FR-026; NFR-009; AC-014)
 - [x] T047 [US5] Show the editable draft revision and immutable selected run snapshot distinctly, including divergence badges and evidence navigation to snapshot identities. Paths: `apps/studio-web/src/features/model/run-overlay.tsx`. Depends on: T027, T044, T046. (FR-028; FR-015; AC-014; AC-027)
-- [ ] T048 [US5] Execute round-trip/layout/conflict scenarios against the pinned CLI/library and inspect resulting source/digest differences, including failed-edit recovery. Execute project exchange between isolated native Linux workspaces with spaces, non-ASCII names, line-ending changes and host-specific bindings, preserving executable semantic identity. Paths: `evidence/studio/M2-roundtrip/`. Depends on: T043, T044, T046, T047. (FR-023; FR-024; FR-025; FR-026; FR-027; FR-028; NFR-002; NFR-009; AC-013; AC-014)
+- [x] T048 [US5] Execute round-trip/layout/conflict scenarios against the pinned CLI/library and inspect resulting source/digest differences, including failed-edit recovery. Execute project exchange between isolated native Linux workspaces with spaces, non-ASCII names, line-ending changes and host-specific bindings, preserving executable semantic identity. Paths: `evidence/studio/M2-roundtrip/`. Depends on: T043, T044, T046, T047. (FR-023; FR-024; FR-025; FR-026; FR-027; FR-028; NFR-002; NFR-009; AC-013; AC-014)
 - [x] T049 [P] [US6] Specify catalog/wizard contract tests for versions, role-realization-placement independence, definition/instance identity, inert artifacts and untrusted form metadata. Paths: `tests/contract/test_catalog.py`, `tests/fixtures/catalog/`. Depends on: T014. (FR-029; FR-030; FR-031; FR-032; FR-033; NFR-004; AC-015)
 - [x] T050 [US6] Implement local catalog admission/filtering with immutable artifact references, schema/provenance/maturity records and explicit unavailable versions. Expose admitted catalog discovery through the specified API so the UI and external contract tests consume the same versioned entries. Paths: `services/studio-api/src/xverse_studio/catalog/`. Depends on: T049, T004, T008. (FR-029; FR-031; FR-033; AC-015)
 - [x] T051 [US6] Build Add element and instance wizards for generic roles/devices/model references, separate realization/placement and schema-backed configuration without hard-coded ECU core entities. Paths: `apps/studio-web/src/features/catalog/`, `apps/studio-web/src/features/elements/`. Depends on: T050, T043. (FR-030; FR-032; FR-033; AC-015)
@@ -916,3 +916,11 @@ with exact input bindings and repairs documented in
 `evidence/studio/linux-foundation-reassessment/`. Counts52completed/38in_progress/
 10blocked; zero accepted milestones. T007migration and broaderT010/T023reviews
 remain open. Windows delivery is outside scope; hostile foreign inputs remain tested.
+
+T048 Linux exchange closure2026-10-30:19actual native/CLI cases pass; separate
+Unicode workspaces retain source/plan identity, host-private sessions/material do
+not transfer and unsupported physical declarations remain blocked. Original1/1
+fixture-expectation failure is retained before repair. Component evidence:
+`evidence/studio/M2-linux-workspace-exchange/`. Counts53completed/37in_progress/
+10blocked, zero accepted milestones. Product6356007 also passes a separate fresh
+160-payload prepared-cache offline native package smoke with exact hashes.

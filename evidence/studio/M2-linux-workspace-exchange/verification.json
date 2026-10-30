@@ -1,0 +1,78 @@
+{
+  "task": "T048",
+  "status": "verified_complete_in_amended_linux_scope",
+  "scopeDecision": "ADR-0036",
+  "baseCandidate": "63560071e76cecdfd38ee4486b2aae55fba9a9de",
+  "sourceInputCount": 402,
+  "allPrior401InputsUnchanged": true,
+  "productionChangesForThisTask": false,
+  "results": {
+    "first": {
+      "passed": 1,
+      "failed": 1,
+      "seconds": 8.784
+    },
+    "final": {
+      "passed": 19,
+      "failed": 0,
+      "seconds": 45.624
+    }
+  },
+  "commands": [
+    {
+      "phase": "first",
+      "environment": {
+        "PYTEST_DISABLE_PLUGIN_AUTOLOAD": "1"
+      },
+      "argv": [
+        ".venv/bin/python",
+        "-I",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/platform/test_linux_project_exchange.py",
+        "--junitxml=.studio-local/linux-reassessment/native-exchange.xml"
+      ],
+      "exitCode": 1,
+      "temporaryData": "pytest default temporary root; retained original failed result"
+    },
+    {
+      "phase": "final",
+      "environment": {
+        "PYTEST_DISABLE_PLUGIN_AUTOLOAD": "1"
+      },
+      "argv": [
+        ".venv/bin/python",
+        "-I",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/platform/test_linux_project_exchange.py",
+        "tests/integration/test_model_roundtrip.py",
+        "--basetemp=.studio-local/linux-reassessment/exchange-data",
+        "--junitxml=.studio-local/linux-reassessment/native-exchange-final.xml"
+      ],
+      "exitCode": 0,
+      "temporaryData": "explicit project-local root on the selected filesystem"
+    }
+  ],
+  "actualNativeAssertions": {
+    "independentUnicodeRoots": true,
+    "sourceFilesWithSpacesUnicodeAndCRLF": true,
+    "actualPinnedCLIComparison": true,
+    "newEnvelopeIdentitySameSupportedPlan": true,
+    "LFSaveSameSupportedPlan": true,
+    "restartReopenSameBytesAndPlan": true,
+    "originalSessionRejectedInTargetRoot": true,
+    "privateHostMaterialNotExported": true,
+    "opaqueMetadataRetained": true,
+    "physicalDeclarationPreservedAndStillUnsupported": true,
+    "noWorkloadDispatchOrPhysicalProviderInstallation": true,
+    "sixOwnedNativeLaunchersStoppedViaOriginalHandles": true
+  },
+  "limits": [
+    "The first test expectation incorrectly assumed Phase1 physical-plan compilation; the preserved original 1/1 result was repaired to test the actual unsupported compiler diagnostic.",
+    "Executable identity is proven for the supported owned reference; the physical declaration has no executable plan and remains blocked in both CLI and service.",
+    "No real device, permission, cross-industry live run, browser-matrix or milestone acceptance is claimed."
+  ]
+}

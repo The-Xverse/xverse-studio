@@ -5,7 +5,7 @@ requirements under ADR-0036/constitution1.1.0. All100 task IDs and32 acceptance
 cases remain. Windows is outside scope; historical failures and NOT_RUN evidence
 remain unchanged.
 
-Current task status: **52 completed, 38 in progress, 10 blocked; zero accepted
+Current task status: **53 completed, 37 in progress, 10 blocked; zero accepted
 milestones**. T001's actual baseline audit closed first. T005 and T009 now close
 following complete Linux clause reviews, including new explicit-dependency CLI
 cases and authenticated hostile-import tests. The importer now rejects malformed
@@ -23,12 +23,17 @@ Stop/cleanup. It exposes sampled communication with delay/coalescing, rather tha
 every-message or hard-real-time evidence. Proof: platform-observability-foundation/
 `live-follow.json`. The stale-active-count preflight defect is repaired and tested.
 
+T048 also closes with19 actual native HTTP/CLI exchange cases across separate
+Unicode workspaces, including reopen and line-ending changes. Product6356007
+passes a fresh160-payload prepared-cache offline native package smoke; every
+source/archive/UI hash is verified. Original failed attempts remain retained.
+
 Next independent work: review the remaining Linux foundation/recovery clauses and
-complete isolated-workspace exchange evidence (T048), followed by the unresolved
-runtime/lab/scenario integration work. T007's migration workflow, physical-provider
+complete the unresolved runtime/lab/scenario integration work. T007's migration workflow, physical-provider
 permissions, first-time-user measurements, unpublished dependency provisioning
 and independent milestone reviews retain their concrete prerequisites. Package
-verification of the latest import/scope successor is recorded separately.
+verification and its cache-preparation prerequisite are recorded in the foundation
+evidence; remote-only provisioning remains unproven.
 
 ## Historical implementation checkpoints
 

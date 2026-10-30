@@ -57,3 +57,14 @@ scope. Historical Windows failure/NOT_RUN records remain unchanged. The package
 description distinguishes separately configured provider admission from the stock
 reference installation. No physical permission, live provider, first-time-user,
 normative SADS, independent milestone or release acceptance is inferred.
+
+The committed product candidate `63560071e76cecdfd38ee4486b2aae55fba9a9de`
+subsequently passed a fresh offline native package extraction/provision/start/UI
+index/Unicode-project/authoritative-compile/owned-shutdown smoke. Every archive,
+manifest and extracted payload hash matches; 154 source payloads match that exact
+commit and six UI files match the tested browser assets. The package retains the
+canonical accepted SDK12615d402 identity and declares Windows out of scope.
+The initial offline attempt lacked one cached wheel; its failed receipt is kept.
+Frozen cache preparation preceded a separate fresh successful offline extraction.
+This is prepared-cache installation evidence, not remote-only provisioning or a
+new browser/full-suite/milestone acceptance claim.
