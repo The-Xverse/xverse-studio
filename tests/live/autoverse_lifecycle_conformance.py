@@ -181,7 +181,7 @@ def author(api):
     return p, pf
 
 
-def verify_released(data, rid):
+def verify_released(data, rid, *, input_loss_clock=False):
     directory = data / 'runs' / rid
     state = json.loads((directory / 'state.json').read_bytes())
     processes = json.loads((directory / 'resources.private.json').read_bytes())
@@ -200,7 +200,15 @@ def verify_released(data, rid):
     assert integrity == 'valid' and state['cleanup'] == 'complete'
     terminal = [r for r in records if r['type'] == 'run.state_changed'][-1]
     assert terminal['payload']['cleanupResources'] == state['cleanupResources']
-    assert all(r['sourceTime'] is None for r in records)
+    for record in records:
+        if input_loss_clock and record['type'].startswith('fault.'):
+            assert record['source'] == {'providerId':'autoverse.demo','version':'0.2.0'}
+            assert record['payload']['clockCodec'] == 'autoverse.host-elapsed-microseconds.v1'
+            assert record['sourceTime'] == {'tick':record['payload']['actualTick'], 'clockDomain':'host-runtime', 'resolution':'microsecond'}
+            assert record['payload']['effectScope'] == 'driver-bridge-publication-lease'
+            assert record['payload']['vehicleEffect'] == 'not_attested'
+        else:
+            assert record['sourceTime'] is None
     return {'originalProcessInstancesExited': len(processes), 'exactStoppedContainers': len(containers),
             'originalResourceRoles': sorted(processes), 'containerRoles': sorted(containers),
             'journalIntegrity': integrity, 'journalDigest': state['journalDigest'],

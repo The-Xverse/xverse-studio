@@ -251,7 +251,7 @@ def main():
             == "completed"
         )
         native.wait(worker.exited, bool, timeout=90)
-        report["cleanup"] = native.verify_released(data, rid)
+        report["cleanup"] = native.verify_released(data, rid, input_loss_clock=True)
         assert report["cleanup"]["exactStoppedContainers"] == 3
         assert snapshot_file.read_bytes() == snapshot_bytes
         records, integrity = read_journal(directory, final)
