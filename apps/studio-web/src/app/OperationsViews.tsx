@@ -1,4 +1,5 @@
 import { CampaignWorkspace } from "../features/campaigns/CampaignWorkspace";
+import { ScenarioAdmission } from "../features/experiments/ScenarioAdmission";
 import { ScenarioAuthoring } from "../features/experiments/ScenarioAuthoring";
 import { ScenarioTimeline } from "../features/experiments/ScenarioTimeline";
 import type { SourceTarget } from "../features/model/Views";
@@ -29,6 +30,7 @@ export function ExperimentsView({
   onSource,
   edit,
   authoringLimits,
+  providerId,
   onAuthoringIntent,
   campaignLimits,
   campaignEnabled,
@@ -43,6 +45,7 @@ export function ExperimentsView({
   onSource: (target?: SourceTarget) => void;
   edit: (edits: Data[]) => Promise<unknown>;
   authoringLimits: Data;
+  providerId: string;
   onAuthoringIntent: () => void;
   campaignLimits: Data;
   campaignEnabled: boolean;
@@ -114,6 +117,8 @@ export function ExperimentsView({
       {tab === "Scenario" ? (
         scenario ? (
           <>
+            <ScenarioAdmission projectId={project.projectId} revision={project.revision} providerId={providerId}
+              scenarioRef={`xdl://${scenario.metadata.namespace}/scenario/${scenario.metadata.name}`} />
             <ScenarioAuthoring
               key={JSON.stringify([
                 project.projectId,

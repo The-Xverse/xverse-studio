@@ -1784,6 +1784,7 @@ export default function App() {
                   />
                 ) : view === "Experiments" ? (
                   <ExperimentsView
+                    providerId={executionProvider}
                     project={project}
                     projection={projection}
                     selection={executionSelection}
