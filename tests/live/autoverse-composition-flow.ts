@@ -44,6 +44,11 @@ export async function inspectAutoverseComposition(page: Page, original: { projec
   }, { projectId: original.projectId, revision: variants.revision, oldRevision: original.revision });
   expect(restored.revision).toBeGreaterThan(variants.revision);
   await page.reload();
+  // Restoring through the API deliberately leaves browser selection untouched.
+  // Choose the restored authored pair through the real UI before preflight.
+  await page.getByRole("tab", { name: "Deployment", exact: true }).click();
+  await page.getByLabel("Deployment variant", { exact: true }).selectOption(before.items[0].ref);
+  await expect(page.getByLabel("Associated Scenario", { exact: true })).toHaveValue(before.items[0].scenarioRefs[0]);
   await expect(page.getByRole("button", { name: "Preflight & run", exact: true })).toBeVisible();
 }
 

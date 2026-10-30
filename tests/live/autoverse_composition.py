@@ -692,3 +692,140 @@ def test_actual_autoverse_external_source_conflict_preserves_and_recovers_bytes(
         app.state.studio.adapter.compile(sources(adopted))["planDigest"]
         == app.state.studio.adapter.compile(sources(p))["planDigest"]
     )
+
+
+@pytest.mark.parametrize("fault", ["network", "clock", "placement", "artifact"])
+def test_actual_autoverse_deployment_constraints_block_direct_start(composed, fault):
+    app, api, provider, p = composed
+    topology = document(p, "System")[1]["content"]
+    system = SAFE.load(topology)
+    ref = {
+        "apiVersion": system["apiVersion"],
+        "kind": "System",
+        "namespace": system["metadata"]["namespace"],
+        "name": system["metadata"]["name"],
+    }
+    expected = {
+        "network": "NETWORK_BINDING_CONFLICT",
+        "clock": "CLOCK_MAPPING_MISSING",
+        "placement": "CAPABILITY_UNSUPPORTED",
+        "artifact": "ARTIFACT_REQUIREMENT_UNMET",
+    }[fault]
+    if fault == "network":
+        p = save(
+            api,
+            p,
+            "System",
+            lambda r: r["spec"].update(
+                networks=[
+                    {"id": "review-bus", "scope": "review", "capabilities": ["ordered"]}
+                ]
+            ),
+        )
+        _, profile = document(p, "Profile")
+        profile = SAFE.load(profile["content"])
+        profile_ref = {
+            "apiVersion": profile["apiVersion"],
+            "kind": "Profile",
+            "namespace": profile["metadata"]["namespace"],
+            "name": profile["metadata"]["name"],
+        }
+        p = save(
+            api,
+            p,
+            "Deployment",
+            lambda r: r["spec"].update(
+                networkBindings=[
+                    {
+                        "id": name,
+                        "logicalNetworkRef": {**ref, "element": "review-bus"},
+                        "profileRef": profile_ref,
+                        "limitations": ["Static review declaration only."],
+                    }
+                    for name in ["review-a", "review-b"]
+                ]
+            ),
+        )
+    elif fault == "clock":
+        p = save(
+            api,
+            p,
+            "System",
+            lambda r: r["spec"]["timeDomains"].append(
+                {
+                    "id": "review-wall",
+                    "clockClass": "wall",
+                    "epoch": "unix",
+                    "rate": "1",
+                    "monotonic": False,
+                }
+            ),
+        )
+        p = save(
+            api,
+            p,
+            "Deployment",
+            lambda r: r["spec"].update(
+                simulators=[
+                    {
+                        "id": "review-simulator",
+                        "standardRef": "urn:standard:fmi:3.0",
+                        "artifactId": "autoverse-contract",
+                        "timeDomainId": "review-wall",
+                    }
+                ]
+            ),
+        )
+    elif fault == "placement":
+        p = save(
+            api,
+            p,
+            "Deployment",
+            lambda r: r["spec"]["targets"][0].update(targetClass="physical-device"),
+        )
+    else:
+        p = save(
+            api,
+            p,
+            "Component",
+            lambda r: r["spec"].update(
+                artifactRequirements=[
+                    {
+                        "id": "review-firmware",
+                        "artifactKind": "firmware",
+                        "versionConstraint": "1.0.0",
+                    }
+                ]
+            ),
+        )
+    # XDL must still be valid: these are semantic compatibility negatives.
+    assert app.state.studio.adapter.validate(sources(p))["valid"]
+    v = checked(api.get(f"/api/v1/projects/{p['projectId']}/deployment-variants"))[
+        "items"
+    ][0]
+    report = checked(
+        api.get(
+            f"/api/v1/projects/{p['projectId']}/deployment-variants/{v['documentId']}/resolution",
+            params={"providerId": provider.descriptor()["providerId"]},
+        )
+    )
+    assert expected in {d["code"] for d in report["diagnostics"]}
+    pf = checked(
+        api.post(
+            f"/api/v1/projects/{p['projectId']}/preflights",
+            json={
+                "revision": p["revision"],
+                "providerId": provider.descriptor()["providerId"],
+            },
+        )
+    )
+    assert pf["status"] == "blocked" and expected in {
+        d["code"] for d in pf["diagnostics"]
+    }
+    refused = api.post(
+        "/api/v1/runs",
+        headers={"Idempotency-Key": "unsupported-deployment-review"},
+        json={k: pf[k] for k in ("snapshotId", "preflightId")},
+    )
+    assert refused.status_code == 422 and refused.json()["code"] == "ADMISSION_REJECTED"
+    assert app.state.studio.store.all("operation") == []
