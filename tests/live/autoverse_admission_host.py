@@ -1,4 +1,4 @@
-"""Closed native Autoverse browser validation host; only describe can be faulted."""
+"""Closed native Autoverse validation host with explicit trusted fault choices."""
 
 import argparse
 import json
@@ -21,10 +21,44 @@ def main():
         choices=["none", "stop-timeout", "android-timeout"],
         default="none",
     )
+    parser.add_argument("--journal-open-fault", choices=["none", "directory", "existing"], default="none")
     args = parser.parse_args()
     if not args.data_dir.parent.name == "browser-tests":
         parser.error("A dedicated Studio browser-tests root is required.")
     enrolled = json.loads(args.receipt.read_bytes())["classic"]
+    if args.journal_open_fault != "none":
+        if args.cleanup_fault != "none" or args.fault != "valid":
+            parser.error("Journal opening has its own single-fault native case.")
+        from xverse_studio.runs import service
+        from xverse_studio.storage.core import canonical, atomic, digest
+
+        original_popen = service.subprocess.Popen
+
+        def obstruct_journal(argv, *positional, **keywords):
+            # Only the fixed server-owned classic worker launch. No project,
+            # profile, log or imported metadata selects this test fault.
+            if (isinstance(argv, list) and len(argv) == 5
+                    and argv[:4] == [sys.executable, "-I", "-m", "xverse_studio.providers.autoverse.worker"]):
+                directory = Path(argv[4])
+                assert directory.parent == args.data_dir / "runs"
+                request = json.loads((directory / "request.json").read_bytes())
+                assert request["runId"] == directory.name
+                journal = directory / "evidence.jsonl"
+                assert not journal.exists()
+                original = b"Owned native journal-opening refusal: preserve these bytes.\n"
+                if args.journal_open_fault == "directory":
+                    journal.mkdir(mode=0o700)
+                else:
+                    with journal.open("xb") as out:
+                        out.write(original)
+                atomic(args.data_dir / "journal-open-fault.private.json", canonical({
+                    "case": args.journal_open_fault, "runId": directory.name,
+                    "operationId": request["operationId"],
+                    "originalBytesDigest": digest(original) if args.journal_open_fault == "existing" else None,
+                }).encode())
+            return original_popen(argv, *positional, **keywords)
+
+        service.subprocess.Popen = obstruct_journal
     if args.cleanup_fault != "none":
         from xverse_studio.providers.autoverse import installation
         from xverse_studio.storage.core import digest

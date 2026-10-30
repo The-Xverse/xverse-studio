@@ -21,6 +21,10 @@ class Cancelled(Exception):
     pass
 
 
+class JournalOpenFailed(InstallationError):
+    """An initial report was published before any runtime resource acquisition."""
+
+
 class Demo:
     provider_id = "autoverse.demo"
     def __init__(self, root):
@@ -43,8 +47,18 @@ class Demo:
         self.phase_deadline = None
         self.active_phase = None
         self.phase_resources = {}
-        self.journal = (root / "evidence.jsonl").open("xb", buffering=0)
         self.lock = None
+        try:
+            self.journal = (root / "evidence.jsonl").open("xb", buffering=0)
+        except OSError:
+            # Exclusive creation preserves a pre-existing object. No runtime
+            # acquisition or canonical record has occurred at this boundary.
+            self.selector.close()
+            self.state.update(state="failed", cleanup="complete", cleanupResources=[],
+                              evidence="unavailable", reason="EVIDENCE_OPEN_FAILED",
+                              evidenceFailure="EVIDENCE_OPEN_FAILED", endedAt=time.time())
+            self.save()  # A failed publication must remain unknown to the backend.
+            raise JournalOpenFailed("EVIDENCE_OPEN_FAILED") from None
         self.save()
 
     def save(self):
@@ -540,7 +554,10 @@ def finish(demo, failed):
 
 
 def main():
-    demo = Demo(Path(sys.argv[1]).resolve())
+    try:
+        demo = Demo(Path(sys.argv[1]).resolve())
+    except JournalOpenFailed:
+        return 1
     signal.signal(signal.SIGTERM, lambda *_: setattr(demo, "stop_requested", True))
     signal.signal(signal.SIGINT, lambda *_: setattr(demo, "stop_requested", True))
     failed = False
