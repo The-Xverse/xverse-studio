@@ -62,6 +62,12 @@ class AutoverseProvider:
     controls = ["stop", "cancel"]
     provider_version = PROVIDER_VERSION
     input_loss_schedules = True
+    max_observers = 1
+    observation_contract = {"contractVersion": "1.0", "observers": [{"observerId": "autoverse-telemetry",
+        "costs": [{"value": 1, "unit": "observer-slot"}],
+        "intrusiveness": "Interface subscriptions; driving publication is separately controlled by the input lease."}],
+        "budgets": [{"unit": "observer-slot", "maximum": 1}]}
+
     configuration = staticmethod(configuration)
 
     def __init__(self, installation):
@@ -71,7 +77,8 @@ class AutoverseProvider:
         implementation = digest(b"".join(p.read_bytes() for p in sorted(Path(__file__).parent.glob("*.py"))))
         from .input_loss import DESCRIPTOR
         return {"providerId": PROVIDER_ID, "providerVersion": self.provider_version,
-                **({"scenarioContracts": deepcopy(DESCRIPTOR)} if self.input_loss_schedules else {}), "contractVersion": "1.0",
+                **({"scenarioContracts": deepcopy(DESCRIPTOR)} if self.input_loss_schedules else {}),
+                **({"observationContracts": deepcopy(self.observation_contract)} if self.observation_contract is not None else {}), "contractVersion": "1.0",
                 "name": "Autoverse complete demo", "maturity": "prototype", "available": True,
                 "hostCompatible": platform.system() == "Linux", "supportedHostOS": ["Linux"], "architectures": ["x86_64"],
                 "evidenceScope": "external_demo", "implementationDigest": implementation,
@@ -81,7 +88,7 @@ class AutoverseProvider:
                 "connectionContracts": {"externalRuntime": EXTERNAL_CONTRACT},
                 "supportedInputSurfaces": ["native-pygame", "studio-browser"],
                 "inputSurface": {"kind": "normalized-driver", "version": "1.0", "leaseSeconds": 0.75, "companionLabel": "Android digital cluster", "companionUrl": "https://localhost:8443"},
-                "limits": {"maxDurationSeconds": 1800, "maxConcurrentRuns": 1, "maxElements": 6, "maxConnections": 32},
+                "limits": {"maxObservers": self.max_observers, "maxDurationSeconds": 1800, "maxConcurrentRuns": 1, "maxElements": 6, "maxConnections": 32},
                 "capabilityRecords": [{"kind": kind, "targetClass": "process", "legalStates": ["ready"] if kind == "start" else ["preparing", "running", "ready"],
                     "parametersSchema": {"type": "object", "additionalProperties": False},
                     "authorityRequirements": ["native-backend-owned", "exclusive-demo-installation"], "physicalEffects": False} for kind in ["start", *self.controls]],

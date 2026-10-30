@@ -1,4 +1,5 @@
 from __future__ import annotations
+from copy import deepcopy
 import hashlib
 import hmac
 import json
@@ -167,6 +168,16 @@ class Runs:
                 usable = False
             if not usable:
                 return reference_readiness(documents, compiled, provider_id, provider, active_count)
+        if compiled.get("valid") is True:
+            from xverse_studio.experiments.observations import observation_admission, selected_scenario
+            observed = observation_admission(selected_scenario(documents, compiled), provider)
+            if observed["diagnostics"]:
+                checks = {name: {"status": "unknown", "message": "Provider readiness was not contacted because observation admission failed."}
+                          for name in ("provider", "artifacts", "resources", "ownership", "target", "authority", "clocks", "capabilities")}
+                checks["backend"] = {"status": "available", "message": "The native control service is available."}
+                checks["model"] = {"status": "valid", "message": "Authoritative compilation succeeded."}
+                checks["observations"] = {"status": "blocked", "message": "The declared observation contract/budget does not admit this Scenario.", "facts": observed}
+                return checks, observed["diagnostics"], None, deepcopy((provider or {}).get("limits", {}))
         return (installed.readiness if installed else reference_readiness)(documents, compiled, provider_id, provider, active_count)
 
     def _reconcile_active_observations(self):

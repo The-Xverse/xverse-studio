@@ -74,6 +74,19 @@ def install_composition(app, store, projects, runs, adapter):
     app.state.studio.profiles = profiles
     app.state.studio.deployments = deployments
 
+    from xverse_studio.experiments.admission import ScenarioAdmission
+    scenario_admission = ScenarioAdmission(projects, adapter, runs.provider_descriptors, configuration_for)
+
+    @app.get("/api/v1/projects/{projectId}/scenario-admission")
+    def inspect_scenario(projectId: str, request: Request,
+                         revision: int = Query(ge=1, le=9007199254740991),
+                         providerId: str = Query(min_length=1, max_length=128),
+                         scenarioRef: str | None = Query(None, min_length=1, max_length=512)):
+        allowed = {"revision", "providerId", "scenarioRef"}
+        if any(k not in allowed or len(request.query_params.getlist(k)) != 1 for k in request.query_params):
+            raise Problem("SCENARIO_QUERY_INVALID", "Use each supported scenario-inspection query field once.", 400)
+        return scenario_admission.inspect(projectId, revision, providerId, scenarioRef)
+
     @app.get("/api/v1/catalog")
     def catalog_entries(kind: str | None = None, role: str | None = None, profile: str | None = None,
                         interface: str | None = None, providerId: str | None = None, query: str | None = None,
