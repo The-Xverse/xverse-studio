@@ -26,6 +26,12 @@ from xverse_studio.security.managed_io import (
     unlink,
 )
 from xverse_studio.security.windows_native import ObjectAttributes, native
+from xverse_studio.host.ownership import (
+    own_root,
+    prepare_root,
+    RootOwnedError,
+    RootUnsafeError,
+)
 
 
 pytestmark = pytest.mark.skipif(
@@ -287,3 +293,162 @@ def test_drive_root_is_taken_from_the_destination(tmp_path, monkeypatch):
     core.atomic(path, b"persisted")
     assert calls == [(Path(path.anchor), path)]
     assert path.read_bytes() == b"persisted"
+
+
+def test_native_workspace_lock_refuses_another_process_without_writing_the_file(
+    tmp_path,
+):
+    import subprocess
+
+    root = tmp_path / "owned workspace Ω"
+    with prepare_root(root):
+        pass
+    atomic_write(tmp_path, root / "studio.lock", b"preserve existing bytes")
+    child = """import sys
+from pathlib import Path
+from xverse_studio.host.ownership import own_root, RootOwnedError
+try:
+    with own_root(Path(sys.argv[1])):
+        raise SystemExit(9)
+except RootOwnedError:
+    raise SystemExit(0)
+"""
+    with own_root(root) as anchor:
+        native().verify_private(anchor.descriptor)
+        with pytest.raises(RootOwnedError, match="RECOVERY_ROOT_OWNED"):
+            with own_root(root):
+                pytest.fail("second owner admitted")
+        result = subprocess.run(
+            [sys.executable, "-I", "-c", child, str(root)],
+            capture_output=True,
+            text=True,
+            timeout=15,
+        )
+        assert result.returncode == 0, result.stderr
+    assert (root / "studio.lock").read_bytes() == b"preserve existing bytes"
+    with own_root(root):
+        pass
+
+
+def test_native_owner_holds_the_root_and_every_ancestor_name(tmp_path):
+    root = tmp_path / "parent" / "private root"
+    with prepare_root(root) as prepared, own_root(prepared):
+        for original in (root, root.parent):
+            with pytest.raises(OSError):
+                original.rename(original.with_name(original.name + ".moved"))
+    assert root.is_dir() and (root / "studio.lock").read_bytes() == b""
+
+
+def test_native_root_lock_refuses_hardlinks_and_junctions(tmp_path):
+    root, outside = tmp_path / "root", tmp_path / "outside"
+    with prepare_root(root):
+        pass
+    outside.mkdir()
+    sentinel = outside / "sentinel"
+    sentinel.write_bytes(b"outside original")
+    os.link(sentinel, root / "studio.lock")
+    with pytest.raises(RootUnsafeError, match="RECOVERY_UNSAFE_FILE"):
+        with own_root(root):
+            pytest.fail("hardlinked root lock admitted")
+    assert sentinel.read_bytes() == b"outside original"
+    alias = tmp_path / "alias"
+    junction(tmp_path, alias, outside)
+    try:
+        with pytest.raises(RootUnsafeError, match="RECOVERY_UNSAFE_FILE"):
+            with prepare_root(alias) as prepared, own_root(prepared):
+                pytest.fail("junction root admitted")
+        assert not (outside / "studio.lock").exists()
+    finally:
+        os.rmdir(alias)
+
+
+def acl_signature(descriptor):
+    api = native()
+    security, dacl = c.c_void_p(), c.c_void_p()
+    try:
+        error = api.GetSecurityInfo(
+            api.handle(descriptor),
+            1,
+            4,
+            None,
+            None,
+            c.byref(dacl),
+            None,
+            c.byref(security),
+        )
+        if error:
+            api.fail(error)
+        assert dacl.value
+        control, revision = c.c_uint16(), c.c_uint32()
+        assert api.GetSecurityDescriptorControl(
+            security, c.byref(control), c.byref(revision)
+        )
+        length = c.cast(dacl, c.POINTER(c.c_uint16))[1]
+        return control.value, c.string_at(dacl, length)
+    finally:
+        if security.value:
+            api.LocalFree(security)
+
+
+def test_native_existing_inherited_root_acl_is_rejected_without_rewriting_it(tmp_path):
+    parent = tmp_path / "private parent"
+    with prepare_root(parent):
+        pass
+    root = parent / "inherited child"
+    root.mkdir()
+    with open_directory(tmp_path, root) as descriptor:
+        before = acl_signature(descriptor)
+        assert not before[0] & 0x1000  # Explicitly establish the unsafe fixture.
+        with pytest.raises(RootUnsafeError, match="RECOVERY_UNSAFE_FILE"):
+            with own_root(root):
+                pytest.fail("inherited root ACL admitted")
+        assert acl_signature(descriptor) == before
+    assert not (root / "studio.lock").exists()
+
+
+def test_native_terminated_owner_releases_only_its_original_workspace_lock(tmp_path):
+    import subprocess
+    import time
+
+    root = tmp_path / "terminated owner"
+    with prepare_root(root):
+        pass
+    child = """import sys
+from pathlib import Path
+from xverse_studio.host.ownership import own_root
+root = Path(sys.argv[1])
+with own_root(root):
+    (root / 'owner-ready').write_bytes(b'owned')
+    sys.stdin.buffer.read(1)
+"""
+    owner = subprocess.Popen(
+        [sys.executable, "-I", "-c", child, str(root)],
+        stdin=subprocess.PIPE,
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+    )
+    try:
+        deadline = time.monotonic() + 10
+        while not (root / "owner-ready").exists():
+            assert owner.poll() is None
+            assert time.monotonic() < deadline
+            time.sleep(0.05)
+        with pytest.raises(RootOwnedError):
+            with own_root(root):
+                pytest.fail("live original owner bypassed")
+        owner.kill()  # Original Popen handle only; no PID/name-derived authority.
+        owner.wait(timeout=10)
+        deadline = time.monotonic() + 5
+        while True:
+            try:
+                with own_root(root):
+                    break
+            except RootOwnedError:
+                assert time.monotonic() < deadline
+                time.sleep(0.05)
+    finally:
+        if owner.poll() is None:
+            owner.kill()
+        owner.wait(timeout=10)
+        owner.stdin.close()
+    assert (root / "studio.lock").read_bytes() == b""

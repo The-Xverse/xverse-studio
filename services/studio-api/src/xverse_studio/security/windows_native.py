@@ -150,6 +150,8 @@ class Native:
             setattr(self, name, function)
 
         bind(self.kernel, "CloseHandle", BOOL, HANDLE)
+        bind(self.kernel, "LockFile", BOOL, HANDLE, DWORD, DWORD, DWORD, DWORD)
+        bind(self.kernel, "UnlockFile", BOOL, HANDLE, DWORD, DWORD, DWORD, DWORD)
         bind(
             self.kernel,
             "CreateFileW",
@@ -401,6 +403,7 @@ class Native:
         create=False,
         writable=False,
         delete=False,
+        shared_write=False,
     ):
         from .managed_io import SafeIOError
 
@@ -437,7 +440,7 @@ class Native:
                 c.byref(status),
                 None,
                 DIRECTORY if directory and create else 0x80,
-                3 if directory else 1,
+                3 if directory or shared_write else 1,
                 2 if create else 1,
                 options,
                 None,
@@ -523,6 +526,20 @@ class Native:
         if not self.SetFileInformationByHandle(
             self.handle(descriptor), 4, c.byref(delete), c.sizeof(delete)
         ):
+            self.fail()
+
+    def lock(self, descriptor):
+        """Exclusive immediate byte lock, including on a new empty file."""
+        from .managed_io import SafeIOError
+
+        if not self.LockFile(self.handle(descriptor), 0, 0, 1, 0):
+            error = c.get_last_error()
+            if error == 33:  # ERROR_LOCK_VIOLATION is contention, not unsafe IO.
+                raise SafeIOError("LOCK_HELD")
+            self.fail(error)
+
+    def unlock(self, descriptor):
+        if not self.UnlockFile(self.handle(descriptor), 0, 0, 1, 0):
             self.fail()
 
     def names(self, descriptor):

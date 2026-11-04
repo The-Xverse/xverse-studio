@@ -490,3 +490,70 @@ def create_directory(root, path, *, parents=False):
             yield AnchoredDirectory(_absolute(path), descriptor)
         finally:
             os.close(descriptor)
+
+
+@contextmanager
+def lock_directory(root):
+    """Hold one native owner lock through the original acquired directory.
+
+    LOCK_HELD is a contention result; unavailable primitives remain separate.
+    Existing lock bytes are never written, truncated or used as authority.
+    """
+    if sys.platform == "win32":
+        from . import windows_io
+
+        with windows_io.lock_directory(root) as anchor:
+            yield anchor
+        return
+    _supported()
+    import fcntl
+
+    path = _absolute(root.path if isinstance(root, AnchoredDirectory) else root)
+    with _parent(root, path / "studio.lock") as (parent, name):
+        descriptor, caller_failed = None, False
+        try:
+            if os.fstat(parent).st_uid != os.geteuid():
+                raise SafeIOError("UNSAFE_PATH")
+            flags = os.O_RDWR | os.O_NOFOLLOW | os.O_NONBLOCK | getattr(os, "O_CLOEXEC", 0)
+            try:
+                descriptor = os.open(name, flags | os.O_CREAT | os.O_EXCL, 0o600, dir_fd=parent)
+            except FileExistsError:
+                descriptor = os.open(name, flags, dir_fd=parent)
+
+            def check():
+                info = os.fstat(descriptor)
+                named = os.stat(name, dir_fd=parent, follow_symlinks=False)
+                if (
+                    not stat.S_ISREG(info.st_mode)
+                    or info.st_nlink != 1
+                    or info.st_uid != os.geteuid()
+                    or _identity(info) != _identity(named)
+                ):
+                    raise SafeIOError("UNSAFE_PATH")
+
+            check()
+            try:
+                fcntl.flock(descriptor, fcntl.LOCK_EX | fcntl.LOCK_NB)
+            except OSError as exc:
+                if exc.errno in (errno.EAGAIN, errno.EWOULDBLOCK):
+                    raise SafeIOError("LOCK_HELD") from None
+                if exc.errno in (errno.ENOSYS, errno.ENOTSUP):
+                    raise SafeIOError("SECURE_IO_UNAVAILABLE") from None
+                raise
+            check()
+            # The selected data root becomes private only after this owner wins.
+            # A refused contender must not alter the original owner's metadata.
+            os.fchmod(parent, 0o700)
+            try:
+                yield AnchoredDirectory(path, parent)
+            except BaseException:
+                caller_failed = True
+                raise
+            check()
+        except OSError as exc:
+            if caller_failed:
+                raise
+            raise _error(exc) from None
+        finally:
+            if descriptor is not None:
+                os.close(descriptor)

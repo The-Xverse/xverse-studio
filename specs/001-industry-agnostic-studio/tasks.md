@@ -15,6 +15,16 @@ deletion. Portable path/ABI checks and Linux regressions have separate evidence 
 process/root ownership, recovery and complete installed/browser verification remain
 open. Counts remain71 completed/19 in_progress/10 blocked, zero accepted milestones.
 
+T002/T039 progress (2026-11-04, ADR-0068): workspace ownership now acquires the
+original root and lock through native directory handles, separates contention from
+unavailable primitives, and preserves existing lock bytes. Startup retains its
+prepared root and checks interrupted-restore markers after taking ownership;
+recovery passes existing anchors directly. Linux regressions and original
+Autoverse recorded browser checks are scoped in
+`evidence/studio/M1-native-root-ownership-20261104/`. Windows native execution,
+recovery inventory/SQLite and broader installed/process acceptance remain open.
+No task closes; counts71/19/10 and zero accepted milestones are unchanged.
+
 
 **Feature:** `001-industry-agnostic-studio`\
 **Status:** implementation in progress. Checked tasks have the component evidence recorded in traceability.json; milestone acceptance and unverified native/live lanes remain open.\

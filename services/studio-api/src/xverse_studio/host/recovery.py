@@ -359,7 +359,7 @@ def _backup_full(source, destination, *, schema=1):
         with _safe_errors(), ExitStack() as operation:
             source_anchor = operation.enter_context(_bound(source))
             operation.enter_context(
-                own_root(Path(f"/proc/self/fd/{source_anchor.descriptor}"))
+                own_root(source_anchor)
             )
             try:
                 stat_file(source_anchor, source / ".recovery-incomplete")
@@ -398,8 +398,9 @@ def _backup_full(source, destination, *, schema=1):
             return _verified_manifest(destination, schema=schema)[1]
     except RootOwnedError:
         raise RecoveryError("RECOVERY_ROOT_OWNED") from None
-    except RootUnsafeError:
-        raise RecoveryError("RECOVERY_UNSAFE_FILE") from None
+    except RootUnsafeError as exc:
+        code = "RECOVERY_SECURE_IO_UNAVAILABLE" if str(exc) == "RECOVERY_SECURE_IO_UNAVAILABLE" else "RECOVERY_UNSAFE_FILE"
+        raise RecoveryError(code) from None
 
 
 def _verified_manifest(backup, *, schema=1):
@@ -478,7 +479,7 @@ def _restore_full(backup, destination, *, schema=1, report=None):
                 b"Restore interrupted. Refuse startup; restore into a different new root.\n"
             )
         operation.enter_context(
-            own_root(Path(f"/proc/self/fd/{destination_anchor.descriptor}"))
+            own_root(destination_anchor)
         )
         with _staged_database(
             backup / "files", sanitize=True, staging_parent=destination.parent, schema=schema, upgrade=schema == 0

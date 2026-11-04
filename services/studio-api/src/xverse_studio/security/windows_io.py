@@ -261,3 +261,52 @@ def create_directory(root, path, *, parents=False):
             descriptor = native().acquire(parent, name, directory=True, create=True)
         with _owned(descriptor):
             yield AnchoredDirectory(_absolute(path), descriptor)
+
+
+@contextmanager
+def lock_directory(root):
+    path = _absolute(root.path if isinstance(root, AnchoredDirectory) else root)
+    with _directory(root, path) as parent:
+        with _errors():
+            native().verify_private(parent)
+            try:
+                descriptor = native().acquire(
+                    parent,
+                    "studio.lock",
+                    directory=False,
+                    create=True,
+                    writable=True,
+                    shared_write=True,
+                )
+            except SafeIOError as exc:
+                if exc.code != "TARGET_EXISTS":
+                    raise
+                descriptor = native().acquire(
+                    parent,
+                    "studio.lock",
+                    directory=False,
+                    writable=True,
+                    shared_write=True,
+                )
+        with _owned(descriptor):
+            with _errors():
+                native().verify_private(descriptor)
+                native().lock(descriptor)
+            caller_failed = False
+            try:
+                with _errors():
+                    native().checked(descriptor, directory=False)
+                    native().verify_private(descriptor)
+                yield AnchoredDirectory(path, parent)
+                with _errors():
+                    native().checked(descriptor, directory=False)
+                    native().verify_private(descriptor)
+            except BaseException:
+                caller_failed = True
+                raise
+            finally:
+                try:
+                    native().unlock(descriptor)
+                except OSError:
+                    if not caller_failed:
+                        raise

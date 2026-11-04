@@ -8,8 +8,9 @@ import os
 from pathlib import Path
 import sqlite3
 import uvicorn
-from xverse_studio.host.ownership import own_root, RootOwnedError, RootUnsafeError
+from xverse_studio.host.ownership import own_root, prepare_root, RootOwnedError, RootUnsafeError
 from xverse_studio.host.recovery import backup_full, restore_full, RecoveryError
+from xverse_studio.security.managed_io import SafeIOError, stat_file
 
 
 def default_root():
@@ -79,22 +80,25 @@ def main():
             )
         print(json.dumps(result, sort_keys=True))
         return
-    root = root.resolve()
-    root.mkdir(parents=True, exist_ok=True)
-    if (root / ".recovery-incomplete").exists():
-        parser.error(
-            "RECOVERY_INCOMPLETE: restore into a new data root; do not start this partial root."
-        )
-    # OS-native advisory file lock prevents concurrent owners of the same data root.
+    # Keep the acquired root alive through both ownership and application life.
     try:
-        with own_root(root):
+        with prepare_root(root) as prepared, own_root(prepared) as owned:
+            try:
+                stat_file(owned, root / ".recovery-incomplete")
+            except SafeIOError as exc:
+                if exc.code != "FILE_MISSING":
+                    raise RootUnsafeError("RECOVERY_UNSAFE_FILE") from None
+            else:
+                parser.error(
+                    "RECOVERY_INCOMPLETE: restore into a new data root; do not start this partial root."
+                )
             _owned_main(args, root, parser)
     except RootOwnedError:
         parser.error("This data root is owned by another running Studio launcher.")
-    except RootUnsafeError:
-        parser.error(
-            "RECOVERY_UNSAFE_FILE: the data root lock must be a regular local file."
-        )
+    except RootUnsafeError as exc:
+        if str(exc) == "RECOVERY_SECURE_IO_UNAVAILABLE":
+            parser.error("RECOVERY_SECURE_IO_UNAVAILABLE: secure native workspace ownership is unavailable on this host or filesystem.")
+        parser.error("RECOVERY_UNSAFE_FILE: use a private local data directory without links and an original regular owner lock.")
 
 
 def _owned_main(args, root, parser):
