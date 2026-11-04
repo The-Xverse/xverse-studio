@@ -127,7 +127,7 @@ After M0 owned contracts pass, guided operation (T015–T033), visual authoring 
 - [x] T090 [US12] Implement finite campaign preview/scheduling/history with explicit budgets, immutable child identities and pending-only recovery under current admission limits. Paths: `services/studio-api/src/xverse_studio/campaigns/`, `apps/studio-web/src/features/campaigns/`. Depends on: T089, T083, T022, T023. (FR-058; AC-028)
 - [ ] T091 [US12] Add incompatible-quantity, gap, clock and replay/rerun regression cases first, then implement baseline comparison with configuration/clock/quantity compatibility and distinguish recorded observation playback from freshly admitted rerun. Paths: `tests/integration/test_comparison.py`, `services/studio-api/src/xverse_studio/comparison/`, `apps/studio-web/src/features/comparison/`. Depends on: T030, T059, T088. (FR-059; FR-060; AC-029)
 - [x] T092 [P] [US12] Add export/import integrity, missing/restricted dependency, malicious archive, credentials, revisioned trace links, annotation separation and dependency-aware retention tests. Paths: `tests/integration/test_exchange_and_retention.py`, `tests/fixtures/bundles/`. Depends on: T068. (FR-061; FR-062; FR-063; NFR-004; AC-029; AC-032)
-- [ ] T093 [US12] Implement sanitized manifests and project/evidence/report exchange with exact identities, unavailable references and integrity status; imports remain inert and local by explicit selection. Test portable package import/export between isolated native Linux workspaces and refuse incompatible host-local bindings without rewriting portable model identity. Paths: `services/studio-api/src/xverse_studio/exchange/`, `apps/studio-web/src/features/exchange/`. Depends on: T092, T008, T029. (FR-061; NFR-004; NFR-009; AC-029)
+- [x] T093 [US12] Implement sanitized manifests and project/evidence/report exchange with exact identities, unavailable references and integrity status; imports remain inert and local by explicit selection. Test portable package import/export between isolated native Linux workspaces and refuse incompatible host-local bindings without rewriting portable model identity. Paths: `services/studio-api/src/xverse_studio/exchange/`, `apps/studio-web/src/features/exchange/`. Depends on: T092, T008, T029. (FR-061; NFR-004; NFR-009; AC-029)
 - [x] T094 [US12] Implement revisioned external requirement/test references, separate annotations/derived reports and explicit dependency-aware retention/deletion without rewriting historical evidence. Enforce revision-checked annotation updates and the contract's retention dry-run/apply sequence, rechecking dependencies before a destructive retention action. Paths: `services/studio-api/src/xverse_studio/annotations/`, `services/studio-api/src/xverse_studio/retention/`, `apps/studio-web/src/features/results/`. Depends on: T092, T029, T091. (FR-062; FR-063; AC-029)
 - [ ] T095 [SETUP] Run positive/negative assertion and supported fault cases, bounded campaign recovery, baseline comparison and clean-environment exchange; record actual provider scope and SC-006/SC-007. Run owned experiment/campaign/exchange lanes on native Linux; record live-provider lanes separately by actual OS support. Paths: `tests/e2e/experiment-campaign.spec.ts`, `evidence/studio/M4-experiments/`. Depends on: T088, T090, T091, T093, T094, T035. (FR-053; FR-054; FR-055; FR-056; FR-057; FR-058; FR-059; FR-060; FR-061; FR-062; FR-063; NFR-004; NFR-003; NFR-009; AC-025; AC-026; AC-027; AC-028; AC-029)
 - [ ] T096 [P] [SETUP] Repeat declared canvas/history/event workloads with campaign/analysis features enabled, preserving bounded queues and meaningful control responsiveness evidence. Retain separate native Linux reference measurements and verify that queue/control behaviour is independent of POSIX-specific process assumptions. Paths: `tests/performance/`, `evidence/studio/M4-performance/`. Depends on: T090, T091, T093, T094. (NFR-007; NFR-008; NFR-011; NFR-003; AC-010; AC-011; AC-030)
@@ -1128,3 +1128,18 @@ replay or Windows verification is claimed. T091 stays in_progress; 69 completed 
 `evidence/studio/M4-installed-frozen-reruns/`; ADR-0061. Original 639 resolved payload
 and 93 host-file hashes match; original system Docker stays inactive and host TAP
 absent. Full acceptance and all other task statuses remain unchanged.
+
+T093 component closure 2026-11-04: source `0bb5af6f726b2037b860b249445af16417e1974d`
+passes 83 actual-recording guards, native exchange across three isolated Linux
+workspaces and one real browser journey at both viewports with four actual uploads.
+All 527 inputs match Git and final stages; six UI assets reproduce exactly.
+Protected snapshot binding, sanitized inert project/evidence/report exchange,
+exact dependency identities including compiled Profile pins, original 1.0 report
+compatibility, invalid versus unavailable integrity and incompatible host-local
+binding refusal are verified. Six recorded evaluations and two annotations preserve
+identity/history. No new run, operation, evaluation or dependency fetch is created.
+Original assets remain unchanged; four native backends exit and three roots release.
+See `evidence/studio/M4-native-autoverse-exchange/` and ADR-0062 for the clause audit,
+separate same-agent review and exact packages. Counts: **70 completed / 20 in progress
+/ 10 blocked; zero accepted milestones**. T091/CARLA, full T095/AC-029, Windows and
+broader release/human/AT/performance/package/independent milestone gates remain open.

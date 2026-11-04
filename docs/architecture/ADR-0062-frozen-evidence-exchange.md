@@ -1,6 +1,6 @@
 # ADR-0062 — Protected export inputs and truthful inert dependency inspection
 
-Date: 2026-11-04. Status: implementation and verification in progress.
+Date: 2026-11-04. Status: implemented; native Linux T093 component verified.
 
 Actual completed Autoverse 0.3/0.4 recording copies reproduce exports that ignore
 changed/missing/linked protected snapshots or changed run-to-snapshot identities.
@@ -70,3 +70,11 @@ retains their report bytes and adds
 `COMPILED_PROFILE_DEPENDENCY_SUMMARY_UNAVAILABLE`. It does not silently upgrade an
 old report to a complete inventory. The browser supports both versions and can
 inspect the compiled profile identity in 1.1. Unsupported versions remain refused.
+
+Verification outcome: source `0bb5af6f726b2037b860b249445af16417e1974d` passes
+83 affected guards, actual native exchange across three isolated workspaces and
+four real browser uploads at both required viewports on 527 unchanged inputs.
+See `evidence/studio/M4-native-autoverse-exchange/` for literal clause audit,
+original failures, exact packages and separate same-agent readback. T093 closes;
+T095/full AC-029, T091/CARLA readiness, Windows and independent milestone acceptance
+remain open. No runtime or physical authority is conferred by an imported package.

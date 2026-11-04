@@ -1,0 +1,31 @@
+{
+  "sourceCandidate": "0bb5af6f726b2037b860b249445af16417e1974d",
+  "scope": "Post-closure specification, architecture, descriptive baseline, affected Python lint and diff checks; not full acceptance",
+  "checks": [
+    {
+      "command": ".venv/bin/python -I scripts/validate_spec_package.py",
+      "exit": 0,
+      "output": "{\n  \"valid\": true,\n  \"scope\": \"planning-package\",\n  \"application_acceptance\": \"not_evaluated_by_this_check\",\n  \"requirements\": 75,\n  \"success_criteria\": 8,\n  \"tasks\": 100,\n  \"acceptance_cases\": 32,\n  \"milestones\": 5,\n  \"errors\": []\n}"
+    },
+    {
+      "command": ".venv/bin/python -I scripts/check_architecture.py",
+      "exit": 0,
+      "output": "Architecture boundaries: passed (imports, dependency direction, industry dispatch, private runtime, executable input and browser executable hooks)."
+    },
+    {
+      "command": ".venv/bin/python -I scripts/check_platform_compatibility.py",
+      "exit": 0,
+      "output": "{\n  \"valid\": true,\n  \"scope\": \"descriptive_platform_baseline_only\",\n  \"runtimeAdmission\": false,\n  \"errors\": []\n}"
+    },
+    {
+      "command": ".venv/bin/ruff check services/studio-api/src/xverse_studio/api/evidence_exchange.py services/studio-api/src/xverse_studio/api/exchange.py services/studio-api/src/xverse_studio/exchange tests/live/autoverse_evidence_exchange.py tests/live/autoverse_exchange_boundary.py tests/live/autoverse_exchange_browser.py tests/live/autoverse_exchange_native.py tests/live/autoverse_lifecycle_conformance.py",
+      "exit": 0,
+      "output": "All checks passed!"
+    },
+    {
+      "command": "git diff --check",
+      "exit": 0,
+      "output": ""
+    }
+  ]
+}
