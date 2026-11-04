@@ -68,6 +68,7 @@ while ordinary locations remain useful. No request secret/value is echoed.
 | `GET /runs/{runId}/timeline` | Read-only scenario/evidence timeline 1.0 (ADR-0019): verified frozen selection, distinct intention/recorded/evaluation rows, explicit admitted clock placement or unplaced reasons, original gaps/integrity, bounded pages and input-bound cursors; no execution or evaluation authority | M4 |
 | `GET /runs/{runId}/diagnostics` | Read-only explanation 1.0: evidence-linked facts, consequences, unconfirmed hypotheses, unknowns and closed next actions; see ADR-0012 | M1 |
 | `GET /projects/{projectId}/preflights/{preflightId}/diagnostics` | Read-only explanation 1.0 of a frozen preflight's coded readiness findings and stale-plan assumptions | M1 |
+| `GET /runs/{runId}/assessment-support` | Read-only version1.0 mapping support, exact frozen context, original evidence identity/reader and unsupported reasons; no admission from envelope integrity alone | M4 |
 | `POST /runs/{runId}/evaluations` | Snapshot-bound definition reference/digest and exact evidence selection; returns immutable evaluation ID and operation | M4 |
 | `GET /runs/{runId}/evaluations` | Cursor-paged definition/input identities, execution status and pass/fail/indeterminate verdicts | M4 |
 | `GET /evaluations/{evaluationId}` | Immutable definition/evaluator/evidence identities, values/units, execution status, verdict and reasons | M4 |
@@ -574,3 +575,23 @@ context, or null). Version and full interpretation bind cursor identity. Callbac
 errors/malformed contexts produce sanitized diagnostics and preserve otherwise
 readable rows as unplaced. Unsupported format versions refuse. The frontend opts
 in explicitly and validates the requested response version and context.
+
+### Assessment evidence support v1.0 (ADR-0056)
+
+`GET /runs/{runId}/assessment-support` returns `formatVersion`, `projectId`,
+`runId`, `snapshotId`, `snapshotDigest`, `providerId`, `evidenceScope`,
+`evidenceId`, `evidenceReader`, `status` (`supported|unsupported`) and bounded
+machine-readable `reasons`. Evidence identity/reader can be null when unavailable.
+A supported mapping does not establish valid/complete current evidence, an admitted
+definition, readiness, or an evaluation verdict. The protected frozen snapshot is
+verified before returning this report.
+
+New evaluation POST requests require an installed mapping for the actual frozen
+provider/scope and canonical reader/identity. Unsupported mappings are422
+`EVALUATION_EVIDENCE_UNSUPPORTED`, before creation of an evaluation/operation or
+idempotency receipt. Same-key retries of already accepted requests keep their
+original results. The installed reference measurement decoder remains scoped to
+owned reference evidence; external interface receipts sharing a canonical envelope
+are not reference samples. No provider mapping or unit/clock/coverage semantics are
+inferred from payload resemblance, timeline positions or receipt time. This
+endpoint grants no lifecycle operation and never changes original evidence.

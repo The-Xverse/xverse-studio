@@ -303,6 +303,51 @@ test("Labelled display fixture keeps metric, indeterminate and error states sepa
   }
 });
 
+test("Actual Autoverse evidence cannot enter the reference evaluator", async ({
+  page,
+}, info) => {
+  const panel = await open(page, info),
+    data = saved();
+  const support = await page.request.get(
+    `/api/v1/runs/${data.runId}/assessment-support`,
+  );
+  expect(support.status()).toBe(200);
+  const body = await support.json();
+  expect(body).toMatchObject({
+    formatVersion: "1.0",
+    runId: data.runId,
+    snapshotId: data.snapshotId,
+    projectId: data.projectId,
+    status: "unsupported",
+    reasons: ["EVALUATION_EVIDENCE_UNSUPPORTED"],
+    evidenceId: data.runId + ":provider-journal",
+    evidenceReader: "studio.hash-chain-v1",
+  });
+  const refused = await page.evaluate(async (data) => {
+    const session = await fetch("/api/v1/session").then((r) => r.json());
+    const response = await fetch(`/api/v1/runs/${data.runId}/evaluations`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRF-Token": session.csrfToken,
+        "Idempotency-Key": "unsupported-autoverse-assessment",
+      },
+      body: JSON.stringify({
+        snapshotId: data.snapshotId,
+        definitionRef: "unadmitted-definition",
+        definitionDigest: "sha256:" + "0".repeat(64),
+        evidenceRefs: [data.runId + ":provider-journal"],
+      }),
+    });
+    return { status: response.status, body: await response.json() };
+  }, data);
+  expect(refused.status).toBe(422);
+  expect(refused.body.code).toBe("EVALUATION_EVIDENCE_UNSUPPORTED");
+  await expect(panel).toContainText(
+    "No admitted assessment definitions in this frozen snapshot",
+  );
+});
+
 for (const change of [
   "snapshot",
   "project",
@@ -312,12 +357,27 @@ for (const change of [
   "cursor",
   "result-owner",
   "partial-pass",
+  "support-owner",
+  "support-identity",
+  "support-claims-missing-evidence",
+  "support-missing-reason",
 ]) {
   test(`Recorded Autoverse display rejects ${change} counterexample`, () => {
     const data = saved();
+    const support = structuredClone(data.supportResponse);
     const snapshot = structuredClone(data.snapshotResponse),
       definitions = { items: [] as any[], nextCursor: null as string | null },
       results = { items: [] as any[], nextCursor: null as string | null };
+    if (change === "support-owner") support.runId = "another-run";
+    if (change === "support-identity")
+      support.snapshotDigest = "sha256:" + "0".repeat(64);
+    if (change === "support-claims-missing-evidence")
+      Object.assign(support, {
+        status: "supported",
+        evidenceId: null,
+        reasons: [],
+      });
+    if (change === "support-missing-reason") support.reasons = [];
     if (change === "snapshot")
       snapshot.snapshot.snapshotId = "another-snapshot";
     if (change === "project") snapshot.snapshot.projectId = "another-project";
@@ -373,6 +433,7 @@ for (const change of [
           stateVersion: 1,
         },
         data.projectId,
+        support,
       ),
     ).toThrow();
   });

@@ -7,6 +7,7 @@ import { Badge, Json, KeyValues, statusTone } from "../../app/ui";
 
 type Report = {
   snapshot: Data;
+  support: Data;
   definitions: Data[];
   results: Data[];
   nextCursor: string | null;
@@ -32,6 +33,7 @@ export function assessmentReport(
   results: Data,
   run: Run,
   projectId: string,
+  support: Data,
 ): Report {
   const fail = (): never => {
     throw new Error(
@@ -64,6 +66,26 @@ export function assessmentReport(
       (typeof results.nextCursor === "string" &&
         /^[0-9]{1,16}$/.test(results.nextCursor))
     )
+  )
+    fail();
+  if (
+    !object(support) ||
+    support.formatVersion !== "1.0" ||
+    support.runId !== run.runId ||
+    support.snapshotId !== run.snapshotId ||
+    support.projectId !== projectId ||
+    support.snapshotDigest !== frozen.snapshotDigest ||
+    support.providerId !== frozen.providerIdentity?.providerId ||
+    support.evidenceScope !== frozen.providerIdentity?.evidenceScope ||
+    !["supported", "unsupported"].includes(support.status) ||
+    !Array.isArray(support.reasons) ||
+    support.reasons.length > 32 ||
+    !support.reasons.every((reason: unknown) => text(reason, 256)) ||
+    !(support.evidenceReader === null || text(support.evidenceReader, 128)) ||
+    !(support.evidenceId === null || text(support.evidenceId, 512)) ||
+    (support.status === "supported" &&
+      (!text(support.evidenceId, 512) || support.reasons.length !== 0)) ||
+    (support.status === "unsupported" && !support.reasons.length)
   )
     fail();
   const known = new Map<string, Data>();
@@ -144,6 +166,7 @@ export function assessmentReport(
   }
   return {
     snapshot: frozen,
+    support,
     definitions: definitions.items,
     results: results.items,
     nextCursor: results.nextCursor,
@@ -192,18 +215,20 @@ export function FrozenAssessments({
     void Promise.all([
       api(`${route}/snapshot`, { signal: abort.signal }),
       api(`${route}/definitions`, { signal: abort.signal }),
+      api(`${route}/assessment-support`, { signal: abort.signal }),
       api(
         `${route}/evaluations?${new URLSearchParams({ limit: "100", ...(cursor === null ? {} : { cursor }) })}`,
         { signal: abort.signal },
       ),
     ])
-      .then(([snapshot, definitions, results]) => {
+      .then(([snapshot, definitions, support, results]) => {
         const report = assessmentReport(
           snapshot,
           definitions,
           results,
           run,
           projectId,
+          support,
         );
         if (
           mounted.current &&
@@ -292,6 +317,23 @@ export function FrozenAssessments({
                   "Frozen System": report.snapshot.selection.systemRef,
                 }}
               />
+              <KeyValues
+                values={{
+                  "Evaluation evidence support": report.support.status,
+                  "Canonical evidence reader":
+                    report.support.evidenceReader ?? "Unavailable",
+                  "Canonical evidence identity":
+                    report.support.evidenceId ?? "Unavailable",
+                }}
+              />
+              {report.support.status === "unsupported" && (
+                <p role="status">
+                  Not evaluated: no admitted measurement, unit, clock and
+                  coverage mapping for this provider's evidence reader. Original
+                  evidence and historical results remain inspectable.{" "}
+                  {report.support.reasons.join(", ")}
+                </p>
+              )}
               <h4>Frozen definitions</h4>
               {report.definitions.length ? (
                 report.definitions.map((entry) => (
@@ -413,12 +455,18 @@ export function FrozenAssessments({
               <form
                 onSubmit={(e) => {
                   e.preventDefault();
-                  if (!run || !selected || pending.current) return;
+                  if (
+                    !run ||
+                    !selected ||
+                    pending.current ||
+                    report.support.status !== "supported"
+                  )
+                    return;
                   const body: Evaluation = {
                     snapshotId: run.snapshotId,
                     definitionRef: selected.definitionRef,
                     definitionDigest: selected.definitionDigest,
-                    evidenceRefs: [run.runId + ":reference-journal"],
+                    evidenceRefs: [report.support.evidenceId],
                   };
                   const fingerprint = JSON.stringify(body);
                   if (retry.current?.fingerprint !== fingerprint)
@@ -471,7 +519,11 @@ export function FrozenAssessments({
                 </label>
                 <button
                   className="button primary"
-                  disabled={!selected || submitting}
+                  disabled={
+                    !selected ||
+                    submitting ||
+                    report.support.status !== "supported"
+                  }
                 >
                   Evaluate assertion
                 </button>

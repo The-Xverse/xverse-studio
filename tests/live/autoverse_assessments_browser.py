@@ -31,8 +31,10 @@ def hashes(root):
 
 def ledger(root):
     with sqlite3.connect((root / "studio.sqlite").as_uri() + "?mode=ro", uri=True) as db:
-        return {kind: db.execute("SELECT count(*) FROM records WHERE kind=?", (kind,)).fetchone()[0]
-                for kind in ("run", "operation", "evaluation", "snapshot")}
+        counts = {kind: db.execute("SELECT count(*) FROM records WHERE kind=?", (kind,)).fetchone()[0]
+                  for kind in ("run", "operation", "evaluation", "snapshot")}
+        counts["idempotency"] = db.execute("SELECT count(*) FROM idempotency").fetchone()[0]
+        return counts
 
 
 def main():
@@ -82,7 +84,7 @@ def main():
             snapshot = native.checked(api.get("/api/v1/runs/" + result["runId"] + "/snapshot"))
             assert native.checked(api.get("/api/v1/runs/" + result["runId"] + "/definitions"))["items"] == []
             assert native.checked(api.get("/api/v1/runs/" + result["runId"] + "/evaluations"))["items"] == []
-            private = {"runId": run["runId"], "snapshotId": run["snapshotId"], "projectId": run["projectId"], "snapshotResponse": snapshot}
+            private = {"runId": run["runId"], "snapshotId": run["snapshotId"], "projectId": run["projectId"], "snapshotResponse": snapshot, "supportResponse": native.checked(api.get("/api/v1/runs/" + result["runId"] + "/assessment-support"))}
             (data / "assessment-recording.private.json").write_text(json.dumps(private))
             cookies = {"cookies": [{"name": c.name, "value": c.value, "domain": c.domain, "path": c.path, "secure": c.secure, "httpOnly": True, "sameSite": "Strict"} for c in api.cookies.jar]}
             session = data / "browser-session.private.json"

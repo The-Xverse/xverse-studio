@@ -15,6 +15,7 @@ from xverse_studio.assertions import EvaluationError, UNIT_DEFINITIONS, aggregat
 from xverse_studio.campaigns import CampaignError, CampaignPlanner, CampaignState
 from xverse_studio.assertions.dependencies import definition_order, metric_references
 from xverse_studio.assertions.evaluator import evaluator_identity
+from xverse_studio.assertions.evidence import evidence_support, require_evidence_support, UNSUPPORTED
 from xverse_studio.assertions.snapshot import definition_schema_digest
 from xverse_studio.comparison import ComparisonError, compare_runs, recorded_input
 from xverse_studio.evidence.reader import read_journal
@@ -59,6 +60,7 @@ def _failure(error):
 
 def _journal_projection(run, snapshot, records, integrity):
     """Project complete canonical reference samples, preserving explicit coverage."""
+    require_evidence_support(run, snapshot)
     coverage_records = [r["payload"].get("coverage") for r in records if r["type"] == "evidence.updated" and isinstance(r.get("payload", {}).get("coverage"), dict)]
     original = coverage_records[-1] if coverage_records else {}
     effective_matches = run.get("effectivePlanDigest") == snapshot.get("planDigest") and run.get("effectiveSemanticDigest") == snapshot.get("semanticDigest")
@@ -309,6 +311,13 @@ def install_advanced(app, store, projects, runs, adapter, *, lab_host=None, lab_
     def run_definitions(runId: str):
         return {"items": definitions(runId), "nextCursor": None}
 
+    @app.get("/api/v1/runs/{runId}/assessment-support")
+    def assessment_support(runId: str):
+        run = runs.read(runId)
+        snapshot = store.get("snapshot", run["snapshotId"])
+        runs.verify_snapshot(snapshot)
+        return evidence_support(run, snapshot)
+
     @app.post("/api/v1/runs/{runId}/evaluations", status_code=202)
     def new_evaluation(runId: str, body: Evaluation, request: Request):
         key = request.headers.get("idempotency-key")
@@ -326,13 +335,17 @@ def install_advanced(app, store, projects, runs, adapter, *, lab_host=None, lab_
         if body.snapshotId != run["snapshotId"]:
             raise Problem("SNAPSHOT_MISMATCH", "Evaluation must select the run's exact immutable snapshot.")
         snapshot = store.get("snapshot", run["snapshotId"])
+        runs.verify_snapshot(snapshot)
+        support = evidence_support(run, snapshot)
+        if support["status"] != "supported":
+            raise Problem(UNSUPPORTED, "The installed evaluator has no admitted measurement, unit, clock and coverage mapping for this run's provider and evidence reader. Inspect the original evidence or use an admitted evaluator integration.")
         admitted = definitions(runId)
         selected = next((d for d in admitted if d["definitionRef"] == body.definitionRef), None)
         if selected is None:
             raise Problem("PROFILE_UNRESOLVED", "This frozen run has no admitted evaluation definition with that identity.")
         if selected["definitionDigest"] != body.definitionDigest:
             raise Problem("DEFINITION_DIGEST_MISMATCH", "The definition digest differs from the frozen run inputs.")
-        evidence_id = runId + ":reference-journal"
+        evidence_id = support["evidenceId"]
         if body.evidenceRefs != [evidence_id]:
             raise Problem("EVIDENCE_SELECTION_INVALID", "Select this run's exact canonical reference journal.")
         # Read only authoritative bytes, never browser-supplied chart points.
