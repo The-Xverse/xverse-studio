@@ -1,5 +1,10 @@
 # Implementation Tasks: Industry-Agnostic X-Verse Studio
 
+**Global user pause (2026-11-04, ADR-0069): after saving the completed current Linux
+recorded-playback verification, stop all work until the user explicitly resumes.**
+The Windows freeze below remains independent. Task statuses retain their evidence
+scope; no task closes because work is paused. Current counts remain71/19/10.
+
 **Active user hold (2026-11-04, ADR-0069): all Windows-related work is frozen until
 the user explicitly lifts it.** Preserve current code/evidence. Skip Windows
 implementation, testing (including portable Windows policy/ABI checks), provisioning,

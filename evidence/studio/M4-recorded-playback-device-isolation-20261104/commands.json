@@ -1,0 +1,31 @@
+{
+  "cwd": "$WORKTREE",
+  "scope": "Explicit contributor-only browser isolation; ordinary native backend outside namespace",
+  "argv": [
+    "$WORKTREE/.venv/bin/python",
+    "-I",
+    "tests/live/autoverse_playback_browser.py",
+    "--recording",
+    "$PRIVATE_COMPLETE_T088_RECORDING",
+    "--static-dir",
+    "$PRIVATE_VERIFIED_UI",
+    "--output",
+    "$PRIVATE_OUTPUT",
+    "--node",
+    "$CACHE/node-v24.22.1-linux-x64/bin/node",
+    "--playwright-cli",
+    "$USER_HOME/xverse-studio/node_modules/@playwright/test/cli.js",
+    "--browser-cache",
+    "$CACHE/playwright",
+    "--isolate-browser-devices"
+  ],
+  "namespacePolicy": {
+    "backend": "ordinary host launcher, no provider registration",
+    "browser": "bwrap0.6.1 new user/mount namespace with same UID/GID; read-only host files except writable repository; minimal /dev; private /tmp and /run; display/auth/session-bus variables unset; die-with-parent",
+    "network": "existing loopback network; no simulator/network configuration change"
+  },
+  "exitCode": 0,
+  "driverProcessesObservedExited": 31,
+  "windowsTestsExecuted": false,
+  "noNewBuild": true
+}

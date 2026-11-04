@@ -17,3 +17,12 @@ acceptance gates. Existing task statuses retain their component scope; Windows
 remains NOT_RUN and no task/milestone closes because work is frozen. ADR-0063's
 required-host obligations remain open. No new provider/device/publication authority
 is granted. Only an explicit later user instruction lifts the hold.
+
+The user additionally instructs: "after you finish the curret task, stop the work
+until I decide to resume it". The current task is the Linux recorded-playback
+verification with browser devices isolated. Its 22 checks pass on candidate
+`ad8133460d7b43a77c71779368cee560a80c79e9`; save the evidence and then stop all work.
+The global pause lasts until the user explicitly resumes. A later general resume
+does not automatically lift the independent Windows hold. No task/milestone is
+completed by either hold. Evidence:
+`evidence/studio/M4-recorded-playback-device-isolation-20261104/`.

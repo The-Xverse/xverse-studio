@@ -1,3 +1,26 @@
+# Current Linux verification finished; user work pause — 2026-11-04
+
+**71 completed /19 in progress /10 blocked; zero accepted milestones.**
+No additional task closes. The current Linux recorded-playback verification is
+complete:22/22 unchanged browser checks pass atboth required widths, with browser
+GPU devices hidden and acceleration disabled. The ordinary backend remains on the
+host; original/copy canonicalbytes and ledger stayunchanged,31observed original
+processhandles exit and rootownership releases.550stable Git-bound inputs and
+six unchanged UIassets qualify the candidate. No new workload/provider is started.
+
+The earlier11failure/11skip cohort staysfailed and retained. User-confirmed reboot
+restores the display; graphics-stall cause remains unestablished. Current device
+isolation/rendering policy is recorded separately, with no hardware/performance
+or full-acceptance claim. Windows sources/tests are unchanged and unexecuted.
+
+**Per user instruction, all work stops after saving this task until explicit user
+resume. All Windows-related work remains separately frozen until explicitly lifted.**
+T091/full rerun and wider native/package/hardware/human/milestone gates remain open.
+See [qualified evidence and review](../../evidence/studio/M4-recorded-playback-device-isolation-20261104/README.md)
+and ADR-0069.
+
+## Earlier checkpoints
+
 # Native workspace ownership implemented; graphical verification interrupted — 2026-11-04
 
 **71 completed / 19 in progress / 10 blocked; zero accepted milestones.**
