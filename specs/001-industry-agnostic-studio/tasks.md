@@ -1109,3 +1109,22 @@ See `evidence/studio/M4-installed-campaigns/`. T095/full AC-028 retain the broad
 current-provider fault/pre-ack/failed-child/GUI-submission matrix and combined
 acceptance. Physical reservations, applied seeds, Windows, hardware/human/AT and
 other release gates are not established by these component closures.
+
+
+T091 installed frozen-rerun progress 2026-11-04: backend `640169e` admits exact
+historical classic Autoverse 0.3/0.4 inputs on the same installation through full
+current preflight and independent Start. Forty-two actual-recording/native
+read-only admission/publication guards pass. Current UI `8e2e597` passes one
+recorded comparison journey at both viewports, including a labelled retained-
+acknowledgement/foreign-child transport fixture; inspection creates no preflight,
+run, operation or evaluation. Two actual new children fail CARLA readiness and
+retain failed lifecycle/partial evidence despite completed child-creation receipts;
+all six retained component owner instances, two workers and two backends are
+absent, three enrolled containers stopped and roots released. A private authenticated
+virtual display avoids changing the unresponsive desktop, but simulator/GPU readiness
+remains unresolved. No successful full rerun, numeric telemetry pairing, deterministic
+replay or Windows verification is claimed. T091 stays in_progress; 69 completed /
+21 in progress / 10 blocked, zero accepted milestones. Evidence:
+`evidence/studio/M4-installed-frozen-reruns/`; ADR-0061. Original 639 resolved payload
+and 93 host-file hashes match; original system Docker stays inactive and host TAP
+absent. Full acceptance and all other task statuses remain unchanged.

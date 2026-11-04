@@ -1,6 +1,6 @@
 # ADR-0061 — Fresh admission of installed historical inputs
 
-Date: 2026-11-04. Status: implemented; verification in progress.
+Date: 2026-11-04. Status: implemented; admission/browser components verified, full native rerun unproven.
 
 The frozen rerun endpoint previously admitted only the executable reference
 provider. Add a closed opt-in `rerunContract` 1.0 for registered native providers.
@@ -25,8 +25,9 @@ unknown and unreconciled occupancy as busy. It does not read a worker or reconci
 ownership inside that transaction. A blocked attempt retains no execution intent,
 child, snapshot or idempotency receipt. A later explicit request can check again.
 
-Successful admission atomically records a new protected snapshot, full preflight,
-rerun operation and child dispatch intent. Lineage references the original run,
+Successful admission writes a new protected snapshot and commits its full preflight,
+rerun operation and child dispatch intent in one metadata transaction. A crash before
+commit can leave an unreferenced file; it grants no Start authority. Lineage references the original run,
 snapshot and digest, while the new snapshot records current compiler/provider and
 capabilities. The current draft never replaces historical inputs. Filesystem
 rollback removes only the native directory identity acquired by this attempt.
@@ -55,3 +56,16 @@ T091 and full acceptance remain open until the corresponding evidence is recorde
 native Windows remains unverified.
 
 Traces: T091; FR-059/FR-060; AC-029. Existing task IDs and scope are unchanged.
+
+
+Component outcome: 42 admission/publication checks pass on actual 0.3/0.4 recording
+copies. The current browser verifies comparison and generic installed-provider
+acknowledgement guards at both widths without new admission; its initial POST
+acknowledgement and foreign-child response are explicitly labelled transport fixtures
+over an actual retained operation. Two real new children fail CARLA readiness,
+retain partial canonical journals and release their owned resources. A responsive
+private authenticated display removes the X11 prerequisite, but the diagnostic
+CARLA process then waits at the NVIDIA modeset device; root cause remains unproven.
+No host desktop/driver changes were made. T091 remains open pending successful full
+native rerun and its remaining comparison/replay acceptance audit. See
+`evidence/studio/M4-installed-frozen-reruns/`.

@@ -33,8 +33,8 @@ backend admission for the historical inputs and creates a new run/snapshot ident
 Neither path guarantees reproducibility or admits an unsupported provider or physical
 operation. Native Windows and live-provider support require their own evidence.
 
-The installed classic Autoverse provider can rerun its original supported 0.3/0.4
-inputs on the same enrolled installation. It checks current full readiness and
+The installed classic Autoverse provider can request fresh admission of its original
+supported 0.3/0.4 inputs on the same enrolled installation. It checks current full readiness and
 creates a separate run; an occupied or changed installation blocks admission.
 The newer project draft is not substituted. Applied seeds and deterministic
 reproduction remain unavailable. Its external interface telemetry has no admitted
