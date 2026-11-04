@@ -1,0 +1,63 @@
+{
+  "overlappingPassesNotSummed": true,
+  "stages": [
+    {
+      "phase": "native-baseline",
+      "exit": 1,
+      "sourceCount": 528,
+      "sourceInputsUnchanged": true,
+      "seconds": 4.86222505569458
+    },
+    {
+      "phase": "native-baseline-2",
+      "exit": 0,
+      "sourceCount": 528,
+      "sourceInputsUnchanged": true,
+      "seconds": 13.516354322433472
+    },
+    {
+      "phase": "native-windows-metadata-red",
+      "exit": 1,
+      "sourceCount": 528,
+      "sourceInputsUnchanged": true,
+      "seconds": 0.25859522819519043
+    },
+    {
+      "phase": "native-final",
+      "exit": 1,
+      "sourceCount": 529,
+      "sourceInputsUnchanged": true,
+      "seconds": 11.193679571151733
+    },
+    {
+      "phase": "native-final-2",
+      "exit": 0,
+      "sourceCount": 529,
+      "sourceInputsUnchanged": true,
+      "seconds": 22.273264169692993
+    },
+    {
+      "phase": "native-doc-final",
+      "exit": 0,
+      "sourceCount": 529,
+      "sourceInputsUnchanged": true,
+      "seconds": 21.619211196899414
+    }
+  ],
+  "findings": {
+    "native-baseline": "Harness incorrectly required normal restart to invalidate a valid session. Existing native contract preserves it. Test corrected; restore invalidation retained separately.",
+    "native-baseline-2": "Earlier package component passes; old Windows out-of-scope metadata remains unqualified.",
+    "native-windows-metadata-red": "Actual earlier manifest reports OUT_OF_SCOPE_ADR0036, conflicting with current supplied native-host rules. Refused by successor check.",
+    "native-final": "Harness reopened an already authenticated httpx client context. Explicit finally-close repaired; application code unchanged. All owned hosts released.",
+    "native-final-2": "Earlier exact-source installed recovery and browser pass before guide-only amendment. Original source map is identical to final529.",
+    "native-doc-final": "Final exact-source installed recovery/migration and real browser cohort passes."
+  },
+  "metadataRed": {
+    "candidate": "4f0af4389346b230c4469ace387a22551ce0c5e6",
+    "archiveSha256": "582e634ebecfeec978f76d9123b31af6018a83c1ee89cf384a6b83d06285bf84",
+    "check": "Current package must report native Windows unverified, per the currently supplied engineering rules",
+    "observed": "OUT_OF_SCOPE_ADR0036",
+    "expected": "NOT_RUN",
+    "passed": false
+  }
+}

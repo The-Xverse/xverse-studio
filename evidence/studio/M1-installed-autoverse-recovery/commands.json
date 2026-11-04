@@ -1,0 +1,16 @@
+{
+  "package": [
+    "python -I scripts/package_studio.py --output <exclusive-archive>",
+    "uv sync --frozen --no-dev --offline"
+  ],
+  "installedLaunch": "<installed-python> -I -m xverse_studio.host.launcher --data-dir <explicit-new-root> --port <loopback-port>",
+  "recovery": [
+    "<installed-python> -I -m xverse_studio.host.launcher --data-dir <stopped-source> --backup-full <new-private-backup>",
+    "<installed-python> -I -m xverse_studio.host.launcher --data-dir <new-root> --restore-from <verified-private-backup>",
+    "<installed-python> -I -m xverse_studio.host.launcher --data-dir <new-candidate> --migrate-from <controlled-schema0-copy> --migration-backup <new-private-backup>"
+  ],
+  "browser": "node <playwright-cli> test --config tests/live/autoverse-package.config.ts",
+  "nativeDriver": "python -I tests/live/autoverse_package_recovery.py --installed <verified-extraction> --recording <completed-Autoverse-recording> --exchange <actual-export-dossier> --output <exclusive-output> --node <pinned-node> --playwright-cli <pinned-cli> --browser-cache <prepared-cache>",
+  "guards": "python -I -m pytest -q tests/live/autoverse_fixture_catalog.py::test_current_autoverse_host_discovery_does_not_advertise_unverified_reference_windows[classic] tests/live/autoverse_launcher_availability.py",
+  "qualification": "Actual private argv, versions, source maps and operator paths are retained locally. Placeholders describe explicit selected paths, not shell project commands."
+}

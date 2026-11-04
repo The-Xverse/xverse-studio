@@ -1,0 +1,31 @@
+{
+  "candidate": "96f4b9f41aaa3a2c9f4239e160a2e83b518c3eb3",
+  "scope": "Final specification, architecture, descriptive baseline, affected Python lint and diff checks; no full acceptance claim",
+  "checks": [
+    {
+      "command": ".venv/bin/python -I scripts/validate_spec_package.py",
+      "exit": 0,
+      "output": "{\n  \"valid\": true,\n  \"scope\": \"planning-package\",\n  \"application_acceptance\": \"not_evaluated_by_this_check\",\n  \"requirements\": 75,\n  \"success_criteria\": 8,\n  \"tasks\": 100,\n  \"acceptance_cases\": 32,\n  \"milestones\": 5,\n  \"errors\": []\n}"
+    },
+    {
+      "command": ".venv/bin/python -I scripts/check_architecture.py",
+      "exit": 0,
+      "output": "Architecture boundaries: passed (imports, dependency direction, industry dispatch, private runtime, executable input and browser executable hooks)."
+    },
+    {
+      "command": ".venv/bin/python -I scripts/check_platform_compatibility.py",
+      "exit": 0,
+      "output": "{\n  \"valid\": true,\n  \"scope\": \"descriptive_platform_baseline_only\",\n  \"runtimeAdmission\": false,\n  \"errors\": []\n}"
+    },
+    {
+      "command": ".venv/bin/ruff check services/studio-api/src/xverse_studio/providers/registry.py scripts/check_platform_compatibility.py scripts/package_studio.py tests/contract/test_capabilities.py tests/integration/test_scenario_authoring_http.py tests/live/autoverse_fixture_catalog.py tests/live/autoverse_lifecycle_conformance.py tests/live/autoverse_package_recovery.py",
+      "exit": 0,
+      "output": "All checks passed!"
+    },
+    {
+      "command": "git diff --check",
+      "exit": 0,
+      "output": ""
+    }
+  ]
+}

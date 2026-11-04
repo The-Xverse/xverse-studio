@@ -1151,3 +1151,18 @@ See `evidence/studio/M4-native-autoverse-exchange/` and ADR-0062 for the clause 
 separate same-agent review and exact packages. Counts: **70 completed / 20 in progress
 / 10 blocked; zero accepted milestones**. T091/CARLA, full T095/AC-029, Windows and
 broader release/human/AT/performance/package/independent milestone gates remain open.
+
+T039/T098 installed recovery progress2026-11-04: source `96f4b9f41aaa3a2c9f4239e160a2e83b518c3eb3`
+passes clean183-payload pinned prepared-cache offline installation, automatic package
+UI discovery, Unicode ownership/restart/full backup/restore/corruption/non-overwrite
+and controlled known-schema0 copy migration. All529 final inputs match Git;
+three real browser checks pass across both viewports with four actual uploads.
+No new run, operation or evaluation is created; original recording and639+93
+asset hashes match. Four original backend instances exit and three roots release.
+Three earlier focused Autoverse discovery/unavailability guards retain an explicit
+driver-only source amendment. Current host reporting follows ADR-0063: native Linux
+and Windows required, Linux recorded, Windows NOT_RUN; old ADR-0036 evidence retained.
+See `evidence/studio/M1-installed-autoverse-recovery/`. T039/T098 stay unchecked;
+all task statuses remain70 completed/20 in_progress/10 blocked, zero milestones.
+Windows, clean-host/network provision, full acceptance and independent review remain
+open. T091 CARLA readiness is unchanged; no simulator rerun was attempted.

@@ -1,7 +1,7 @@
 # ADR-0063 — Current native-host requirements and installed recovery verification
 
-Date: 2026-11-04. Status: verification correction implemented; native verification
-in progress. Traces: T002, T039, T098; NFR-009; AC-032.
+Date: 2026-11-04. Status: verification correction implemented; installed Linux recovery component
+verified, native Windows open. Traces: T002, T039, T098; NFR-009; AC-032.
 
 The currently supplied repository engineering instructions require native Linux
 and Windows installation, startup/shutdown, browser operation, persistence, paths
@@ -38,3 +38,9 @@ identities, invalidate copied sessions and require an explicit later launch.
 This verifies T039/T098's installed recovery component. Broader clean-host/network
 provisioning, full acceptance, Windows, performance and independent milestone gates
 remain open. A prepared-cache install is not a clean-host dependency download.
+
+Evidence: `evidence/studio/M1-installed-autoverse-recovery/`. Candidate
+`96f4b9f41aaa3a2c9f4239e160a2e83b518c3eb3` verifies183 packaged payloads,529 unchanged
+source inputs, four native backend instances and three actual browser checks.
+Three earlier Autoverse guards have an explicit driver-only source amendment.
+T039/T098 remain in progress;70/20/10 and zero accepted milestones are unchanged.
