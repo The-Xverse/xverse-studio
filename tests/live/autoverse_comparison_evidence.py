@@ -69,6 +69,7 @@ def test_actual_canonical_reader_keeps_integrity_but_has_no_numeric_comparison_m
         and "COMPARISON_EVIDENCE_UNSUPPORTED" in report["diagnostics"]
     )
     assert report["left"]["evidenceIntegrity"] == "valid"
+    assert "EVIDENCE_INCOMPLETE" not in report["diagnostics"]
     assert (run, snapshot, records) == original
 
 

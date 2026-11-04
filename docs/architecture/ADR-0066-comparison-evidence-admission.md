@@ -25,6 +25,11 @@ frozen configuration facts; configuration differences remain inspectable. The
 comparison explanation directs the user to original observation records. Raw
 history and ADR-0065 playback remain available and unchanged. Do not mark original
 evidence invalid or rewrite it to fit an owned schema.
+Do not interpret an unsupported source's original evidence-status vocabulary as
+owned-reference completeness. Keep its original status visible and compatibility
+blocked by unsupported interpretation. Known reference partial evidence still
+blocks every field; original reader integrity checks remain independent for all
+sources.
 
 The backend comparison API continues to verify protected snapshots before this
 pure decoder. Project/profile/log declarations cannot opt into its interpretation.

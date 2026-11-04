@@ -110,6 +110,17 @@ def test_unknown_side_keeps_known_baseline_values_and_configuration_differences(
     assert "COMPARISON_EVIDENCE_UNSUPPORTED" in report["fields"][0]["reasons"]
 
 
+def test_known_codec_incomplete_evidence_still_blocks_every_field():
+    run, snapshot, records = source_fixture()
+    run["evidence"] = "partial"
+    side = project(run, snapshot, records)
+    report = compare_runs(side, side)
+    assert report["left"]["evidenceStatus"] == "partial"
+    assert not report["compatible"]
+    assert "EVIDENCE_INCOMPLETE" in report["diagnostics"]
+    assert all("EVIDENCE_INCOMPLETE" in field["reasons"] for field in report["fields"])
+
+
 @pytest.mark.parametrize(
     "case",
     [

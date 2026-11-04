@@ -169,11 +169,13 @@ def compare_runs(left: dict, right: dict) -> dict:
         elif status == 'different': result['differences'].append({'field': key, 'left': deepcopy(x), 'right': deepcopy(y)})
     for run in (left, right):
         evidence = run.get('evidence', {})
+        projection_diagnostics = run.get('projectionDiagnostics', [])
         if run.get('snapshotIntegrity') != 'valid': block('SNAPSHOT_INTEGRITY_UNPROVEN')
         if run.get('effectiveInputsMatch') is not True: block('EFFECTIVE_INPUTS_UNVERIFIED')
         if evidence.get('integrity') != 'valid': block('EVIDENCE_INTEGRITY_UNPROVEN')
-        if evidence.get('status') != 'complete': block('EVIDENCE_INCOMPLETE')
-        for code in run.get('projectionDiagnostics', []): block(code)
+        if UNSUPPORTED_EVIDENCE not in projection_diagnostics and evidence.get('status') != 'complete':
+            block('EVIDENCE_INCOMPLETE')
+        for code in projection_diagnostics: block(code)
     observations = []
     for run in (left, right):
         values = run.get('observations', [])
