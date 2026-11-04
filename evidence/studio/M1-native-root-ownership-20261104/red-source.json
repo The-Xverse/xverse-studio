@@ -1,0 +1,21 @@
+{
+  "productCandidate": "a1d2b5cbcc43043280de08ff4f8bbbaead621908",
+  "original548InputsUnchanged": true,
+  "newTestSha256": "eeea1444d7e5e86e55e46ca6b6ba1b212d319758bf08df2323c21cd742839afc",
+  "newTestAssertions": [
+    "Assert(test=Compare(left=Call(func=Attribute(value=Name(id='outside', ctx=Load()), attr='read_bytes', ctx=Load())), ops=[Eq()], comparators=[Constant(value=b'preserve outside bytes')]))",
+    "Assert(test=UnaryOp(op=Not(), operand=Call(func=Attribute(value=BinOp(left=Name(id='outside', ctx=Load()), op=Div(), right=Constant(value='studio.lock')), attr='exists', ctx=Load()))))",
+    "Assert(test=BoolOp(op=And(), values=[Name(id='swaps', ctx=Load()), Compare(left=Call(func=Attribute(value=Name(id='held', ctx=Load()), attr='read_bytes', ctx=Load())), ops=[Eq()], comparators=[Constant(value=b'original lock bytes')])]))",
+    "Assert(test=Compare(left=Call(func=Attribute(value=Name(id='lock', ctx=Load()), attr='read_bytes', ctx=Load())), ops=[Eq()], comparators=[Constant(value=b'replacement bytes')]))",
+    "Assert(test=Compare(left=Call(func=Attribute(value=Name(id='lock', ctx=Load()), attr='read_bytes', ctx=Load())), ops=[Eq()], comparators=[Constant(value=b'original metadata is never a lock payload')]))",
+    "Assert(test=Compare(left=Attribute(value=Call(func=Attribute(value=Name(id='lock', ctx=Load()), attr='stat', ctx=Load())), attr='st_ino', ctx=Load()), ops=[Eq()], comparators=[Name(id='identity', ctx=Load())]))",
+    "Assert(test=Compare(left=Attribute(value=Name(id='completed', ctx=Load()), attr='returncode', ctx=Load()), ops=[Eq()], comparators=[Constant(value=0)]), msg=Attribute(value=Name(id='completed', ctx=Load()), attr='stderr', ctx=Load()))",
+    "Assert(test=Compare(left=Call(func=Attribute(value=BinOp(left=Name(id='root', ctx=Load()), op=Div(), right=Constant(value='studio.lock')), attr='read_bytes', ctx=Load())), ops=[Eq()], comparators=[Constant(value=b'')]))",
+    "Assert(test=Compare(left=Attribute(value=Name(id='failure', ctx=Load()), attr='value', ctx=Load()), ops=[Is()], comparators=[Name(id='marker', ctx=Load())]))",
+    "Assert(test=Compare(left=Name(id='observed', ctx=Load()), ops=[Eq()], comparators=[List(elts=[Tuple(elts=[Constant(value=False), Constant(value=384)], ctx=Load())], ctx=Load())]))",
+    "Assert(test=Compare(left=Name(id='observed', ctx=Load()), ops=[Eq()], comparators=[List(elts=[Name(id='root', ctx=Load())], ctx=Load())]))",
+    "Assert(test=Call(func=Name(id='isinstance', ctx=Load()), args=[Name(id='root', ctx=Load()), Name(id='AnchoredDirectory', ctx=Load())]))",
+    "Assert(test=Call(func=Attribute(value=BinOp(left=Name(id='held', ctx=Load()), op=Div(), right=Constant(value='studio.lock')), attr='is_file', ctx=Load())))",
+    "Assert(test=UnaryOp(op=Not(), operand=Call(func=Attribute(value=BinOp(left=Name(id='root', ctx=Load()), op=Div(), right=Constant(value='studio.lock')), attr='exists', ctx=Load()))))"
+  ]
+}

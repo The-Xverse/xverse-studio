@@ -1,3 +1,28 @@
+# Native workspace ownership implemented; graphical verification interrupted — 2026-11-04
+
+**71 completed / 19 in progress / 10 blocked; zero accepted milestones.**
+T002/T039 remain in progress; no new task closes.
+
+Candidate `4120832` binds workspace ownership to the original directory/lock,
+separates contention from unavailable primitives, preserves existing lock bytes,
+and checks interrupted restores after taking ownership. Linux root permissions
+change only after winning the lock. Windows native ownership has an implementation
+candidate; its actual execution remains NOT_RUN.
+
+140 selected Linux checks pass on549 stable Git-bound inputs.16 Windows cases
+collect only. The ordinary-launcher recorded Autoverse browser cohort has zero
+passes:11 failures and11 skips after interruption. The Home UI loads, but stable
+interaction times out. Kernel NVIDIA GPU progress timeouts and a frozen physical
+display are observed; cause is not established. All current verification processes
+exit, root ownership releases and canonical recording/copy bytes remain unchanged.
+Graphical verification is stopped while display recovery remains unresolved.
+
+Original Autoverse evidence is reused without a new workload or installed provider.
+No new build/package/performance/whole-regression/Windows or milestone pass is
+claimed. See [qualified evidence and review](../../evidence/studio/M1-native-root-ownership-20261104/README.md).
+
+## Earlier checkpoints
+
 # Native Windows managed-file candidate — 2026-11-04
 
 **71 completed / 19 in progress / 10 blocked; zero accepted milestones.**
