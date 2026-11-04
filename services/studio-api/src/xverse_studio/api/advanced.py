@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import json
 from collections import OrderedDict
+from copy import deepcopy
 import threading
 import time
 
@@ -316,7 +317,7 @@ def install_advanced(app, store, projects, runs, adapter, *, lab_host=None, lab_
         run = runs.read(runId)
         snapshot = store.get("snapshot", run["snapshotId"])
         runs.verify_snapshot(snapshot)
-        return evidence_support(run, snapshot)
+        return evidence_support(run, snapshot, runs.installed_providers.get(run.get("providerId")))
 
     @app.post("/api/v1/runs/{runId}/evaluations", status_code=202)
     def new_evaluation(runId: str, body: Evaluation, request: Request):
@@ -336,7 +337,8 @@ def install_advanced(app, store, projects, runs, adapter, *, lab_host=None, lab_
             raise Problem("SNAPSHOT_MISMATCH", "Evaluation must select the run's exact immutable snapshot.")
         snapshot = store.get("snapshot", run["snapshotId"])
         runs.verify_snapshot(snapshot)
-        support = evidence_support(run, snapshot)
+        provider = runs.installed_providers.get(run.get("providerId"))
+        support = evidence_support(run, snapshot, provider)
         if support["status"] != "supported":
             raise Problem(UNSUPPORTED, "The installed evaluator has no admitted measurement, unit, clock and coverage mapping for this run's provider and evidence reader. Inspect the original evidence or use an admitted evaluator integration.")
         admitted = definitions(runId)
@@ -350,7 +352,15 @@ def install_advanced(app, store, projects, runs, adapter, *, lab_host=None, lab_
             raise Problem("EVIDENCE_SELECTION_INVALID", "Select this run's exact canonical reference journal.")
         # Read only authoritative bytes, never browser-supplied chart points.
         records, integrity = read_journal(runs.directory(runId), run)
-        projected = _journal_projection(run, snapshot, records, integrity)
+        if support.get("mapping"):
+            try:
+                projected = provider.assessment_projection(deepcopy(run), deepcopy(snapshot), deepcopy(records), integrity)
+                if not isinstance(projected, list) or len(projected) > 32 or not all(isinstance(p, dict) and p.get("evidenceId") == evidence_id and p.get("snapshotId") == snapshot["snapshotId"] for p in projected):
+                    raise EvaluationError("EVALUATION_PROJECTION_UNSUPPORTED")
+            except Exception:
+                raise Problem("EVALUATION_PROJECTION_UNAVAILABLE", "The installed evidence projection is unavailable; no evaluation was accepted.") from None
+        else:
+            projected = _journal_projection(run, snapshot, records, integrity)
         try:
             definition_order(admitted, selected["definitionRef"])
         except EvaluationError as exc:
@@ -386,6 +396,7 @@ def install_advanced(app, store, projects, runs, adapter, *, lab_host=None, lab_
                 row["dependencyResults"] = dependency_results
                 row["inputEvidenceDigests"] = sorted({p["digest"] for p in projected if isinstance(p.get("digest"), str)})
                 row["evaluatorIdentity"] = evaluator_identity()
+                row["evidenceMapping"] = support
                 store.put("evaluation", evaluation_id, row)
                 operation = store.get("operation", operation_id)
                 operation["status"] = "delegated"
@@ -394,7 +405,7 @@ def install_advanced(app, store, projects, runs, adapter, *, lab_host=None, lab_
                 actual.pop("evaluationId", None)
                 if integrity != "valid" or run.get("effectivePlanDigest") != snapshot.get("planDigest") or run.get("effectiveSemanticDigest") != snapshot.get("semanticDigest"):
                     actual.update(status="complete", verdict="indeterminate" if entry["definition"]["kind"] == "assertion" else None, value=None, coverage="invalid", reasons=["EVIDENCE_INVALID" if integrity != "valid" else "EFFECTIVE_INPUT_MISMATCH"])
-                row.update(actual, completedAt=time.time(), evidenceReader="studio.reference.hash-chain-v1")
+                row.update(actual, completedAt=time.time(), evidenceReader=support["evidenceReader"])
                 store.put("evaluation", evaluation_id, row)
                 operation.update(status="completed" if actual["status"] == "complete" else "failed", result={"evaluationId": evaluation_id, "status": actual["status"], "verdict": actual["verdict"]})
                 store.put("operation", operation_id, operation)

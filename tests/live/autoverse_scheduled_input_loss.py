@@ -39,6 +39,7 @@ def main():
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--static-dir", type=Path, required=True)
     parser.add_argument("--authoring-browser", action="store_true")
+    parser.add_argument("--assessments", action="store_true")
     parser.add_argument("--node", type=Path)
     parser.add_argument("--playwright-cli", type=Path)
     parser.add_argument("--browser-cache", type=Path)
@@ -83,12 +84,16 @@ def main():
                 "/api/v1/projects",
                 json={
                     "name": "Autoverse scheduled input loss",
-                    "blueprintRef": "autoverse-classic",
+                    "blueprintRef": "autoverse-fault-assessments" if args.assessments else "autoverse-classic",
                 },
             ),
             201,
         )
-        variant = documents("studio-browser")
+        if args.assessments:
+            from xverse_studio.blueprints.autoverse import assessment_example
+            variant = assessment_example()["documents"]
+        else:
+            variant = documents("studio-browser")
         scenario = YAML(typ="safe").load(variant["scenario.xdl.yaml"])
         scenario["extensions"][NAMESPACE]["durationSeconds"] = 30
         scenario["spec"]["faults"] = (
@@ -319,7 +324,7 @@ def main():
             == "completed"
         )
         native.wait(worker.exited, bool, timeout=90)
-        report["cleanup"] = native.verify_released(data, rid, input_loss_clock=True)
+        report["cleanup"] = native.verify_released(data, rid, input_loss_clock=True, assessment_clock=args.assessments)
         assert report["cleanup"]["exactStoppedContainers"] == 3
         assert snapshot_file.read_bytes() == snapshot_bytes
         records, integrity = read_journal(directory, final)
@@ -346,7 +351,7 @@ def main():
             )
             for v in selected:
                 assert (
-                    v["source"]["version"] == "0.2.0"
+                    v["source"]["version"] == "0.3.0"
                     and v["sourceTime"]["clockDomain"] == "host-runtime"
                 )
                 assert (
@@ -428,6 +433,17 @@ def main():
                 args.browser_cache,
                 stage="timeline",
             )
+        if args.assessments:
+            assert args.authoring_browser, "The assessment lane requires actual browser verification."
+            p = native.checked(api.get(f"/api/v1/projects/{p['projectId']}"))
+            report["browserAssessments"] = browser.author(native, host, api,
+                {**p, "_runId": rid, "_snapshotId": pf["snapshotId"]}, args.output,
+                args.node, args.playwright_cli, args.browser_cache, stage="assessments")
+            jobs = native.checked(api.get(route + "/evaluations"))["items"]
+            assert len(jobs) == 6
+            report["assessments"] = jobs
+            report["finalAssessmentSummary"] = run()["evaluationSummary"]
+            assert run()["verdict"] == "fail" and snapshot_file.read_bytes() == snapshot_bytes
         report.update(
             outcome="passed",
             canonicalIntegrity=integrity,

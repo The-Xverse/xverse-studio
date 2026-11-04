@@ -12,7 +12,7 @@ def context(provider, run, snapshot):
         run.get("providerId") != "autoverse.demo"
         or snapshot.get("providerId") != run.get("providerId")
         or frozen.get("providerId") != run.get("providerId")
-        or frozen.get("providerVersion") != "0.2.0"
+        or frozen.get("providerVersion") not in {"0.2.0", "0.3.0"}
         or run.get("evidenceScope") != "external_demo"
         or declared.get("contractVersion") != "1.0"
         or declared.get("contractRef") != CONTRACT
@@ -50,7 +50,7 @@ def context(provider, run, snapshot):
         "epoch": "actual-running-transition",
         "evidenceScope": "external_demo",
         "sourceProviderId": run["providerId"],
-        "sourceVersion": "0.2.0",
+        "sourceVersion": frozen["providerVersion"],
         "eventTickField": "actualTick",
         "eventKinds": [
             "fault.activation_requested",

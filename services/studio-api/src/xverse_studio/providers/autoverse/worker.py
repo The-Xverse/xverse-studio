@@ -50,6 +50,8 @@ class Demo:
         self.phase_resources = {}
         self.lock = None
         self.input_loss = None
+        self.assessment = None
+        self.assessment_counts = {"activationObserved": 0, "recoveryObserved": 0}
         try:
             self.journal = (root / "evidence.jsonl").open("xb", buffering=0)
         except OSError:
@@ -383,9 +385,15 @@ class Demo:
     def fault_event(self, kind, payload, source_time, target):
         ref = f"xdl://{target['namespace']}/{target['kind'].lower()}/{target['name']}#{target['element']}"
         self.emit(kind, payload, source_time, [ref])
+        if self.assessment:
+            from xverse_studio.blueprints.autoverse_assessments import FIELDS
+            for field, event_kind in FIELDS.items():
+                if kind == event_kind:
+                    self.assessment_counts[field] += 1
 
     def run(self):
         compiled, actual = self.validate_requested_inputs()
+        self.assessment = actual.get("assessment")
         self.claim_installation(compiled)
         self.start_router()
         self.prepare_simulator()
@@ -541,7 +549,17 @@ def finish(demo, failed):
     save()
     try:
         if demo.input_loss is not None:
-            demo.input_loss.close(time.monotonic_ns())
+            cutoff_ns = time.monotonic_ns()
+            demo.input_loss.close(cutoff_ns)
+            if demo.assessment:
+                from .input_loss import CLOCK, CODEC
+                cutoff = demo.input_loss.tick(cutoff_ns)
+                demo.emit("assessment.coverage", {"contractRef": demo.assessment["contractRef"],
+                    "observerRef": demo.assessment["observerRef"], "clockDomain": CLOCK, "clockCodec": CODEC,
+                    "tickUnit": "microsecond", "coverageScope": "recorded-events-only", "startTick": "0", "endTick": str(cutoff + 1),
+                    "complete": not failed and not io_failed, "prefixDigest": demo.previous,
+                    "prefixSequence": str(demo.count), "sampleCounts": demo.assessment_counts.copy()},
+                    {"tick": str(cutoff), "clockDomain": CLOCK, "resolution": "microsecond"})
     except (OSError, InstallationError):
         io_failed = True  # Evidence failure must not skip resource cleanup.
     try:

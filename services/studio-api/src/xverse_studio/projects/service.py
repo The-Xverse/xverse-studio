@@ -329,8 +329,8 @@ class Projects:
                 )
             provenance = {
                 "blueprintRef": key,
-                "evidenceScope": "owned_reference",
-                "maturity": "fixture",
+                "evidenceScope": entry.get("scope", "unknown"),
+                "maturity": entry.get("maturity", "unknown"),
             }
         normalized = {}
         for i, (path, content) in enumerate(documents.items()):

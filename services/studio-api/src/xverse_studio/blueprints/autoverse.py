@@ -60,7 +60,7 @@ def resource(kind, name, spec, description):
             "spec": spec}
 
 
-def resources(input_surface="native-pygame"):
+def resources(input_surface="native-pygame", *, assessments=False):
     if input_surface not in {"studio-browser", "native-pygame"}:
         raise ValueError("Unsupported input surface")
     routes = ROUTES + ([("driver-speed-inhibit", "driver", ["carla"], "boolean", "N/A")] if input_surface == "native-pygame" else [])
@@ -144,6 +144,9 @@ def resources(input_surface="native-pygame"):
             "compatibleApiVersions": [API_VERSION], "documentationRef": documentation, "conflictPolicy": "reject"}, "Declarative profile; no installation or execution authority.")
         profile["metadata"]["version"] = version
         result[name + "-profile.xdl.yaml"] = profile
+    if assessments:
+        from .autoverse_assessments import extend
+        result = extend(result, reference, resource)
     return result
 
 
@@ -205,4 +208,17 @@ def platform_example():
         limitations=["Requires explicit enrollment of the existing Linux simulation installation and verified native bridge.",
                      "Three native routes are sampled with original coalescing counters; downstream consumption and simulator time remain separate.",
                      "No physical vehicle, Windows provider, deterministic replay or general solver claim."])
+    return value
+
+
+def assessment_example():
+    from .autoverse_assessments import NAMESPACE as assessment_namespace
+    value = example()
+    value.update(id="autoverse-fault-assessments", entryId="autoverse-fault-assessments",
+        name="Autoverse recorded-fault assessments", scope="external_demo",
+        description="Author browser-input losses, run the complete stack, and assess recorded bridge-lease acknowledgements with explicit host clock and event coverage.",
+        documents={name: dump_yaml(item) for name, item in resources("studio-browser", assessments=True).items()},
+        profileRefs=[*value["profileRefs"], {"namespace": assessment_namespace, "version": "1.0.0"}],
+        expectedObservations=["Actual recorded bridge-lease acknowledgements, bounded event counts and separate pass/fail/indeterminate/error outcomes."],
+        limitations=[*value["limitations"], "Assessment coverage counts recorded acknowledgement events; it does not prove vehicle effects or continuous bridge state."])
     return value

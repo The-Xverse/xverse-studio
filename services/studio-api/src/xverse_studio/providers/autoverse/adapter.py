@@ -9,7 +9,7 @@ from xverse_studio.storage.core import digest
 from .installation import InstallationError, verify
 
 PROVIDER_ID = "autoverse.demo"
-PROVIDER_VERSION = "0.2.0"
+PROVIDER_VERSION = "0.3.0"
 EXTERNAL_CONTRACT = {"version": "1.0", "kind": "communication", "providerId": PROVIDER_ID,
                      "contractRef": CONTRACT_REF, "feedback": "externally-managed-asynchronous-communication"}
 
@@ -27,6 +27,10 @@ def configuration_for(documents, compiled, resource_factory, contract_ref, *, al
             return None
         input_surface = actual["scenario.xdl.yaml"]["extensions"][NAMESPACE]["inputSurface"]
         expected = resource_factory(input_surface)
+        assessment = None
+        if allow_input_loss:
+            from .assessments import admit_sources
+            assessment, expected = admit_sources(actual, expected, documents)
         if set(actual) != set(expected):
             return None
         duration = actual["scenario.xdl.yaml"]["extensions"][NAMESPACE]["durationSeconds"]
@@ -52,7 +56,7 @@ def configuration_for(documents, compiled, resource_factory, contract_ref, *, al
                 return None
         return {"contractRef": contract_ref, "durationSeconds": duration, "physicalEffects": False, "inputSurface": input_surface,
                 "simulatorAdvancement": "public-vehicle-cli-synchronous", "fixedDeltaSeconds": 0.05,
-                "sourceClockMapping": "unavailable", "randomness": "external_uncontrolled_no_applied_seed", **({"inputLoss": loss} if loss else {})}
+                "sourceClockMapping": "unavailable", "randomness": "external_uncontrolled_no_applied_seed", **({"inputLoss": loss} if loss else {}), **({"assessment": assessment} if assessment else {})}
     except (ValueError, KeyError, TypeError):
         return None
 
@@ -62,10 +66,12 @@ class AutoverseProvider:
     controls = ["stop", "cancel"]
     provider_version = PROVIDER_VERSION
     input_loss_schedules = True
-    max_observers = 1
+    max_observers = 2
     observation_contract = {"contractVersion": "1.0", "observers": [{"observerId": "autoverse-telemetry",
         "costs": [{"value": 1, "unit": "observer-slot"}],
-        "intrusiveness": "Interface subscriptions; driving publication is separately controlled by the input lease."}],
+        "intrusiveness": "Interface subscriptions; driving publication is separately controlled by the input lease."},
+        {"observerId": "autoverse-fault-records", "costs": [{"value": 0, "unit": "observer-slot"}],
+         "intrusiveness": "Retrospective reads of existing recorded acknowledgement events; no new live subscription. CPU, storage and latency are not attested by subscription slots."}],
         "budgets": [{"unit": "observer-slot", "maximum": 1}]}
 
     configuration = staticmethod(configuration)
@@ -76,7 +82,9 @@ class AutoverseProvider:
     def descriptor(self):
         implementation = digest(b"".join(p.read_bytes() for p in sorted(Path(__file__).parent.glob("*.py"))))
         from .input_loss import DESCRIPTOR
+        from .assessments import DESCRIPTOR as ASSESSMENTS
         return {"providerId": PROVIDER_ID, "providerVersion": self.provider_version,
+                **({"assessmentContract": deepcopy(ASSESSMENTS)} if self.input_loss_schedules else {}),
                 **({"scenarioContracts": deepcopy(DESCRIPTOR)} if self.input_loss_schedules else {}),
                 **({"observationContracts": deepcopy(self.observation_contract)} if self.observation_contract is not None else {}), "contractVersion": "1.0",
                 "name": "Autoverse complete demo", "maturity": "prototype", "available": True,
@@ -94,6 +102,14 @@ class AutoverseProvider:
                     "authorityRequirements": ["native-backend-owned", "exclusive-demo-installation"], "physicalEffects": False} for kind in ["start", *self.controls]],
                 "limitations": ["Linux installation only; external simulation time and deterministic replay unavailable.",
                                 "Input acceptance means publication, not vehicle acknowledgement. No native X-COM or physical vehicle."]}
+
+    def assessment_context(self, run, snapshot):
+        from .assessments import context
+        return context(self, run, snapshot)
+
+    def assessment_projection(self, run, snapshot, records, integrity):
+        from .assessments import project
+        return project(run, snapshot, records, integrity)
 
     def timeline_context(self, run, snapshot):
         from .timeline import context

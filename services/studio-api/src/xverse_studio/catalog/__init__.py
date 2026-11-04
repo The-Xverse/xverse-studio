@@ -40,7 +40,7 @@ class Catalog:
                           provenance={"originRef": "urn:xverse:studio:reference-blueprint", "version": example["version"]},
                           profiles=[p["namespace"] for p in example["profileRefs"]], roles=["controller", "plant", "observer"],
                           realizationClasses=["simulated"], executionAllowed=False,
-                          availability="available", providerIds=["studio.reference"])
+                          availability="available", providerIds=[example.get("providerId", "studio.reference")])
             entries.append(public)
         for resource in reference_resources().values():
             if resource["kind"] != "Component":

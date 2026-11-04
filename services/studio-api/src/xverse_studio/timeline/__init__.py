@@ -252,8 +252,16 @@ def project_timeline(run, snapshot, records, integrity, evaluations, adapter, qu
             continue
         window = definition["definition"]["window"]
         clock = window["clockDomainRef"]
-        position = _position(clock, window["startTick"], "microsecond" if codec and clock == "simulation-time" else None,
-                             None if codec and clock == selected_clock == "simulation-time" else "EVALUATION_CLOCK_UNADMITTED", window["endTick"])
+        mapping = result.get("evidenceMapping", {})
+        mapped = mapping.get("mapping", {})
+        provider_axis = (context is not None and mapping.get("runId") == run["runId"]
+                         and mapping.get("snapshotDigest") == snapshot["snapshotDigest"]
+                         and mapping.get("status") == "supported" and clock == context["clockDomain"]
+                         and mapped.get("clockDomain") == clock and mapped.get("clockCodec") == context["codec"]
+                         and mapped.get("epoch") == context["epoch"] and mapped.get("sourceProviderId") == context["sourceProviderId"]
+                         and mapped.get("sourceVersion") == context["sourceVersion"] and mapped.get("tickUnit") == context["tickUnit"])
+        position = _position(clock, window["startTick"], "microsecond" if provider_axis or codec and clock == "simulation-time" else None,
+                             None if provider_axis and clock == selected_clock or codec and clock == selected_clock == "simulation-time" else "EVALUATION_CLOCK_UNADMITTED", window["endTick"])
         rows.append({"id": "evaluation:" + result["evaluationId"], "layer": "evaluation", "kind": definition["definition"]["kind"],
                      "evaluationId": result["evaluationId"], "definitionRef": result["definitionRef"], "definitionDigest": result["definitionDigest"],
                      "resultDigest": digest(result), "position": position, "window": window,

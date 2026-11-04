@@ -181,7 +181,7 @@ def author(api):
     return p, pf
 
 
-def verify_released(data, rid, *, input_loss_clock=False):
+def verify_released(data, rid, *, input_loss_clock=False, assessment_clock=False):
     directory = data / 'runs' / rid
     state = json.loads((directory / 'state.json').read_bytes())
     processes = json.loads((directory / 'resources.private.json').read_bytes())
@@ -200,13 +200,21 @@ def verify_released(data, rid, *, input_loss_clock=False):
     assert integrity == 'valid' and state['cleanup'] == 'complete'
     terminal = [r for r in records if r['type'] == 'run.state_changed'][-1]
     assert terminal['payload']['cleanupResources'] == state['cleanupResources']
+    frozen_provider = json.loads((directory / 'request.json').read_bytes())['snapshot']['providerIdentity']
     for record in records:
         if input_loss_clock and record['type'].startswith('fault.'):
-            assert record['source'] == {'providerId':'autoverse.demo','version':'0.2.0'}
+            assert record['source'] == {'providerId':'autoverse.demo','version':frozen_provider['providerVersion']}
             assert record['payload']['clockCodec'] == 'autoverse.host-elapsed-microseconds.v1'
             assert record['sourceTime'] == {'tick':record['payload']['actualTick'], 'clockDomain':'host-runtime', 'resolution':'microsecond'}
             assert record['payload']['effectScope'] == 'driver-bridge-publication-lease'
             assert record['payload']['vehicleEffect'] == 'not_attested'
+        elif assessment_clock and record['type'] == 'assessment.coverage':
+            payload = record['payload']
+            assert record['source'] == {'providerId':'autoverse.demo','version':frozen_provider['providerVersion']}
+            assert payload['coverageScope'] == 'recorded-events-only' and payload['complete'] is True
+            assert payload['prefixDigest'] == record['previousDigest'] and payload['prefixSequence'] == str(int(record['sequence']) - 1)
+            assert record['sourceTime'] == {'tick':str(int(payload['endTick']) - 1), 'clockDomain':'host-runtime', 'resolution':'microsecond'}
+            assert payload['sampleCounts'] == {'activationObserved':sum(r['type'] == 'fault.activation_observed' for r in records), 'recoveryObserved':sum(r['type'] == 'fault.recovery_observed' for r in records)}
         else:
             assert record['sourceTime'] is None
     return {'originalProcessInstancesExited': len(processes), 'exactStoppedContainers': len(containers),

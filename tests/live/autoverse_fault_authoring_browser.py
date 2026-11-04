@@ -10,7 +10,7 @@ from xverse_studio.storage.core import digest
 
 
 def author(native, host, api, project, output, node, cli, cache, *, stage="authoring"):
-    assert stage in {"authoring", "timeline"}
+    assert stage in {"authoring", "timeline", "assessments"}
     data = host.data
     (data / "fault-authoring-project.private.json").write_text(json.dumps(project))
     session = {
