@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='utf-8'?>
+<testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="3" skipped="0" tests="7" time="1.441" timestamp="2026-11-04T20:11:24.094035+00:00" hostname="&lt;native-linux-host&gt;"><testcase classname="tests.contract.test_terminal_report_completion" name="test_terminal_lifecycle_does_not_finish_a_live_original_task_command[completed]" time="0.368" /><testcase classname="tests.contract.test_terminal_report_completion" name="test_terminal_lifecycle_does_not_finish_a_live_original_task_command[failed]" time="0.168" /><testcase classname="tests.contract.test_terminal_report_completion" name="test_terminal_lifecycle_does_not_finish_a_live_original_task_command[accepted]" time="0.183" /><testcase classname="tests.contract.test_terminal_report_completion" name="test_terminal_lifecycle_does_not_finish_a_live_original_task_command[delegated]" time="0.193" /><testcase classname="tests.contract.test_terminal_report_completion" name="test_finished_original_task_reacquires_final_receipt_after_a_stale_terminal_read" time="0.142"><failure message="assert (0 &gt;= 2)&#10; +  where 0 = len([])">tests/contract/test_terminal_report_completion.py:108: in test_finished_original_task_reacquires_final_receipt_after_a_stale_terminal_read
+    assert len(reads) &gt;= 2 and path.read_bytes() == final
+E   assert (0 &gt;= 2)
+E    +  where 0 = len([])</failure></testcase><testcase classname="tests.contract.test_terminal_report_completion" name="test_final_reacquisition_cannot_settle_from_a_regressed_report[older-version]" time="0.154"><failure message="AssertionError: assert ('stopped' == 'stopped'&#10;  &#10;    stopped and 1 == 2)">tests/contract/test_terminal_report_completion.py:135: in test_final_reacquisition_cannot_settle_from_a_regressed_report
+    assert response.json()["state"] == "stopped" and response.json()["stateVersion"] == 2
+E   AssertionError: assert ('stopped' == 'stopped'
+E
+E       stopped and 1 == 2)</failure></testcase><testcase classname="tests.contract.test_terminal_report_completion" name="test_final_reacquisition_cannot_settle_from_a_regressed_report[changed-terminal]" time="0.142"><failure message="AssertionError: assert ('failed' == 'stopped'&#10;  &#10;  - stopped&#10;  + failed)">tests/contract/test_terminal_report_completion.py:135: in test_final_reacquisition_cannot_settle_from_a_regressed_report
+    assert response.json()["state"] == "stopped" and response.json()["stateVersion"] == 2
+E   AssertionError: assert ('failed' == 'stopped'
+E
+E     - stopped
+E     + failed)</failure></testcase></testsuite></testsuites>

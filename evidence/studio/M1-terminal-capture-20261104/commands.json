@@ -1,0 +1,26 @@
+{
+  "environment": {
+    "python": "3.13.13",
+    "pytest": "9.0.2",
+    "PYTEST_DISABLE_PLUGIN_AUTOLOAD": "1",
+    "PYTHONPATH": ""
+  },
+  "command": [
+    "<repo>/.venv/bin/python",
+    "-I",
+    "-m",
+    "pytest",
+    "tests/contract/test_run_observation_corruption.py",
+    "tests/contract/test_terminal_report_completion.py",
+    "tests/platform/test_reconciliation_identity.py",
+    "--basetemp=<private-output>/tmp",
+    "--junitxml=<private-output>/tests.junit.xml",
+    "-q",
+    "--tb=short",
+    "-o",
+    "cache_dir=<private-output>/pytest-cache"
+  ],
+  "originalPhases": "Same seven terminal-completion cases and50 corruption/identity cases run separately; exact IDs match final57-case cohort.",
+  "nativeBackendTasks": "Original created thread handles; all joined by reporter finally blocks. Controlled process-identity fixtures forbid spawn/inspect/control outside their injected observations.",
+  "privateOriginalsRetained": true
+}

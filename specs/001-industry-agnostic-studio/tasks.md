@@ -1182,3 +1182,14 @@ Counts: **71 completed / 19 in progress / 10 blocked; zero accepted milestones**
 T038/full critical-workflow/a11y matrix, current Windows obligations, live producer/
 control, other engines, hardware/human/AT, packaging and full AC030/031/SC008 remain
 independent and unwaived. T091 CARLA readiness is unchanged; no new simulator run.
+
+T033 terminal-capture verification progress (2026-11-04): three contributor test
+files still injected delayed reports through Path.read_text after secure report
+acquisition moved to the anchored bounded reader. The original 57 cases produce
+16 failures / 41 passes; the corrected injection passes all 57 on baac6a7, with
+all 83 original assertion ASTs unchanged and 536 Git-matching inputs stable.
+Production/runtime/frontend inputs are unchanged. See
+`evidence/studio/M1-terminal-capture-20261104/`. No executable reference workload,
+simulator or physical action was run. T033 stays in progress; the historical
+late-Stop cause, full matrix, Windows and milestone gates remain open. Counts
+remain 71 completed / 19 in progress / 10 blocked, zero accepted milestones.

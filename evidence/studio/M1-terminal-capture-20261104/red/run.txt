@@ -1,0 +1,31 @@
+....FFF                                                                  [100%]
+=================================== FAILURES ===================================
+_ test_finished_original_task_reacquires_final_receipt_after_a_stale_terminal_read _
+tests/contract/test_terminal_report_completion.py:108: in test_finished_original_task_reacquires_final_receipt_after_a_stale_terminal_read
+    assert len(reads) >= 2 and path.read_bytes() == final
+E   assert (0 >= 2)
+E    +  where 0 = len([])
+_ test_final_reacquisition_cannot_settle_from_a_regressed_report[older-version] _
+tests/contract/test_terminal_report_completion.py:135: in test_final_reacquisition_cannot_settle_from_a_regressed_report
+    assert response.json()["state"] == "stopped" and response.json()["stateVersion"] == 2
+E   AssertionError: assert ('stopped' == 'stopped'
+E
+E       stopped and 1 == 2)
+_ test_final_reacquisition_cannot_settle_from_a_regressed_report[changed-terminal] _
+tests/contract/test_terminal_report_completion.py:135: in test_final_reacquisition_cannot_settle_from_a_regressed_report
+    assert response.json()["state"] == "stopped" and response.json()["stateVersion"] == 2
+E   AssertionError: assert ('failed' == 'stopped'
+E
+E     - stopped
+E     + failed)
+=============================== warnings summary ===============================
+.venv/lib/python3.13/site-packages/fastapi/testclient.py:1
+  <repo>/.venv/lib/python3.13/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/contract/test_terminal_report_completion.py::test_finished_original_task_reacquires_final_receipt_after_a_stale_terminal_read
+FAILED tests/contract/test_terminal_report_completion.py::test_final_reacquisition_cannot_settle_from_a_regressed_report[older-version]
+FAILED tests/contract/test_terminal_report_completion.py::test_final_reacquisition_cannot_settle_from_a_regressed_report[changed-terminal]
+3 failed, 4 passed, 1 warning in 1.44s

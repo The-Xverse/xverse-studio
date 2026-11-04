@@ -1,0 +1,27 @@
+[
+  {
+    "command": ".venv/bin/python -I scripts/validate_spec_package.py",
+    "exit": 0,
+    "output": "{\n  \"valid\": true,\n  \"scope\": \"planning-package\",\n  \"application_acceptance\": \"not_evaluated_by_this_check\",\n  \"requirements\": 75,\n  \"success_criteria\": 8,\n  \"tasks\": 100,\n  \"acceptance_cases\": 32,\n  \"milestones\": 5,\n  \"errors\": []\n}\n"
+  },
+  {
+    "command": ".venv/bin/python -I scripts/check_architecture.py",
+    "exit": 0,
+    "output": "Architecture boundaries: passed (imports, dependency direction, industry dispatch, private runtime, executable input and browser executable hooks).\n"
+  },
+  {
+    "command": ".venv/bin/python -I scripts/check_platform_compatibility.py",
+    "exit": 0,
+    "output": "{\n  \"valid\": true,\n  \"scope\": \"descriptive_platform_baseline_only\",\n  \"runtimeAdmission\": false,\n  \"errors\": []\n}\n"
+  },
+  {
+    "command": ".venv/bin/ruff check tests/contract/test_terminal_report_completion.py tests/contract/test_run_observation_corruption.py tests/platform/test_reconciliation_identity.py",
+    "exit": 0,
+    "output": "All checks passed!\n"
+  },
+  {
+    "command": "git diff --check",
+    "exit": 0,
+    "output": ""
+  }
+]
