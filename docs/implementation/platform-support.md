@@ -1,5 +1,10 @@
 # Native host and provider support
 
+**Windows execution hold (2026-11-04, ADR-0069): all Windows-related work is frozen
+by the user until explicitly lifted.** Windows instructions below are historical
+reference while the hold is active. Preserve current code/evidence and continue
+independent Linux/Autoverse work; no Windows implementation or verification runs.
+
 Current supplied engineering rules require native Linux and Windows. Only the
 recorded Linux lanes below have qualifying application evidence. Windows remains
 unverified: the historical dependency-checkout failure and native secure

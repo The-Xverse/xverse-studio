@@ -1,5 +1,11 @@
 # Implementation Tasks: Industry-Agnostic X-Verse Studio
 
+**Active user hold (2026-11-04, ADR-0069): all Windows-related work is frozen until
+the user explicitly lifts it.** Preserve current code/evidence. Skip Windows
+implementation, testing (including portable Windows policy/ABI checks), provisioning,
+packaging and acceptance activity. Continue independent Linux/Autoverse work.
+The hold does not remove requirements or complete any task; counts remain71/19/10.
+
 Current host-requirement amendment (2026-11-04, ADR-0063): the supplied engineering
 rules require native Linux and Windows installation, start/stop, browser operation,
 persistence, paths and process ownership. This takes precedence over historical

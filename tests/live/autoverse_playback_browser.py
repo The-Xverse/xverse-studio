@@ -5,6 +5,7 @@ import importlib.util
 import json
 import os
 from pathlib import Path
+import shutil
 import subprocess
 import sys
 import uuid
@@ -21,9 +22,52 @@ _spec.loader.exec_module(exchange)
 native, recorded = exchange.native, exchange.recorded
 
 
+def device_free_browser_command(argv):
+    """Optional Linux contributor isolation; never an application prerequisite."""
+    wrapper = shutil.which("bwrap")
+    if not sys.platform.startswith("linux") or wrapper is None:
+        raise RuntimeError("BROWSER_DEVICE_ISOLATION_UNAVAILABLE")
+    return [
+        wrapper,
+        "--unshare-user",
+        "--uid",
+        str(os.getuid()),
+        "--gid",
+        str(os.getgid()),
+        "--ro-bind",
+        "/",
+        "/",
+        "--bind",
+        str(native.ROOT),
+        str(native.ROOT),
+        "--dev",
+        "/dev",
+        "--tmpfs",
+        "/tmp",
+        "--tmpfs",
+        "/run",
+        "--unsetenv",
+        "DISPLAY",
+        "--unsetenv",
+        "WAYLAND_DISPLAY",
+        "--unsetenv",
+        "XAUTHORITY",
+        "--unsetenv",
+        "DBUS_SESSION_BUS_ADDRESS",
+        "--die-with-parent",
+        "--",
+        *argv,
+    ]
+
+
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("--case-filter")
+    p.add_argument(
+        "--isolate-browser-devices",
+        action="store_true",
+        help="Linux contributor-only minimal /dev and software rendering; no application dependency.",
+    )
     for name in (
         "recording",
         "static-dir",
@@ -119,6 +163,13 @@ def main():
             ]
             if a.case_filter:
                 argv.extend(["--grep", a.case_filter])
+            if a.isolate_browser_devices:
+                env["STUDIO_BROWSER_CPU_ONLY"] = "1"
+                env["STUDIO_BROWSER_DEVICE_PROOF"] = str(
+                    a.output.resolve() / "browser-device-proof.private.json"
+                )
+                env["STUDIO_BROWSER_HOST_MOUNT_NS"] = os.readlink("/proc/self/ns/mnt")
+                argv = device_free_browser_command(argv)
             (a.output / "command.private.json").write_text(
                 json.dumps({"argv": argv}, indent=2) + "\n"
             )

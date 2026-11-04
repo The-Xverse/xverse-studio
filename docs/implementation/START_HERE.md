@@ -1,5 +1,11 @@
 # Implement X-Verse Studio with Codex or Claude
 
+**Active user hold (2026-11-04, ADR-0069): freeze all Windows-related work until the
+user explicitly lifts the hold.** Preserve the existing Windows code/evidence;
+do not execute historical Windows instructions or portable Windows policy/ABI tests.
+Continue independently authorized Linux/Autoverse work. Requirements and acceptance
+gates remain open; this hold is not a waiver or task closure.
+
 Current host-requirement amendment (2026-11-04, ADR-0063): the supplied engineering
 rules require native Linux and Windows installation, start/stop, browser operation,
 persistence, paths and process ownership. This takes precedence over historical
