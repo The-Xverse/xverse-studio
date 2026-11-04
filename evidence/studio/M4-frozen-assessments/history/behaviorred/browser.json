@@ -1,0 +1,191 @@
+{
+  "config": {
+    "argv": [
+      "<tool-cache>/node-v24.22.1-linux-x64/bin/node",
+      "<main-checkout>/node_modules/@playwright/test/cli.js",
+      "test",
+      "--config",
+      "tests/live/autoverse-assessments.config.ts",
+      "--grep",
+      "failed definition read"
+    ],
+    "configFile": "<repo>/tests/live/autoverse-assessments.config.ts",
+    "rootDir": "<repo>/tests/live",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "<repo>/tests/live/.studio-local/t088-assessment-review/behaviorred/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "<repo>/tests/live",
+        "testIgnore": [],
+        "testMatch": [
+          "autoverse-assessments.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "<repo>/tests/live/.studio-local/t088-assessment-review/behaviorred/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "<repo>/tests/live",
+        "snapshotDir": "<repo>/tests/live",
+        "testIgnore": [],
+        "testMatch": "autoverse-assessments.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "baseURL": "http://127.0.0.1:56181",
+          "browserName": "chromium",
+          "actionTimeout": 15000,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "trace": "off",
+          "screenshot": "only-on-failure",
+          "video": "off"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": ".studio-local/t088-assessment-review/behaviorred/browser.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "autoverse-assessments.spec.ts",
+      "file": "autoverse-assessments.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "A failed definition read is unknown and can be retried",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 11413,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('section[aria-label=\"Frozen assertions and metrics\"], .connection-layout').getByRole('alert')\nExpected substring: \u001b[32m\"Assessment availability is unknown\"\u001b[39m\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" locator('section[aria-label=\"Frozen assertions and metrics\"], .connection-layout').getByRole('alert') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('section[aria-label=\"Frozen assertions and metrics\"], .connection-layout').getByRole('alert')\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('section[aria-label=\"Frozen assertions and metrics\"], .connection-layout').getByRole('alert')\nExpected substring: \u001b[32m\"Assessment availability is unknown\"\u001b[39m\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" locator('section[aria-label=\"Frozen assertions and metrics\"], .connection-layout').getByRole('alert') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('section[aria-label=\"Frozen assertions and metrics\"], .connection-layout').getByRole('alert')\u001b[22m\n\n    at <repo>/tests/live/autoverse-assessments.spec.ts:82:42",
+                    "location": {
+                      "file": "<repo>/tests/live/autoverse-assessments.spec.ts",
+                      "column": 42,
+                      "line": 82
+                    },
+                    "snippet": "  80 |   );\n  81 |   const panel = await open(page, info);\n> 82 |   await expect(panel.getByRole(\"alert\")).toContainText(\n     |                                          ^\n  83 |     \"Assessment availability is unknown\",\n  84 |   );\n  85 |   await expect("
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/live/autoverse-assessments.spec.ts",
+                        "column": 42,
+                        "line": 82
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: locator('section[aria-label=\"Frozen assertions and metrics\"], .connection-layout').getByRole('alert')\nExpected substring: \u001b[32m\"Assessment availability is unknown\"\u001b[39m\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" locator('section[aria-label=\"Frozen assertions and metrics\"], .connection-layout').getByRole('alert') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('section[aria-label=\"Frozen assertions and metrics\"], .connection-layout').getByRole('alert')\u001b[22m\n\n\n  80 |   );\n  81 |   const panel = await open(page, info);\n> 82 |   await expect(panel.getByRole(\"alert\")).toContainText(\n     |                                          ^\n  83 |     \"Assessment availability is unknown\",\n  84 |   );\n  85 |   await expect(\n    at <repo>/tests/live/autoverse-assessments.spec.ts:82:42"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-04T08:30:48.726Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/tests/live/.studio-local/t088-assessment-review/behaviorred/artifacts/autoverse-assessments-A-fa-1419c--unknown-and-can-be-retried/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/tests/live/.studio-local/t088-assessment-review/behaviorred/artifacts/autoverse-assessments-A-fa-1419c--unknown-and-can-be-retried/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/live/autoverse-assessments.spec.ts",
+                    "column": 42,
+                    "line": 82
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "05ed87a70f8a8701902e-01a0f9a2e4c2670073af",
+          "file": "autoverse-assessments.spec.ts",
+          "line": 69,
+          "column": 5
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-04T08:30:48.338Z",
+    "duration": 11903.13,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

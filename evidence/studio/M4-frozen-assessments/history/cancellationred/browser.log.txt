@@ -1,0 +1,35 @@
+
+Running 1 test using 1 worker
+
+(node:4129881) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 tests/live/autoverse-assessments.spec.ts:151:5 › A failed read cancels its other pending assessment reads (6.3s)
+
+
+  1) tests/live/autoverse-assessments.spec.ts:151:5 › A failed read cancels its other pending assessment reads 
+
+    Error: expect(received).toBeGreaterThan(expected)
+
+    Expected: > 0
+    Received:   0
+
+    Call Log:
+    - Timeout 5000ms exceeded while waiting on the predicate
+
+      181 |       "Controlled sibling cancellation failure",
+      182 |     );
+    > 183 |     await expect.poll(() => aborted, { timeout: 5000 }).toBeGreaterThan(0);
+          |                                                         ^
+      184 |   } finally {
+      185 |     release();
+      186 |     await page.unrouteAll({ behavior: "wait" });
+        at <repo>/tests/live/autoverse-assessments.spec.ts:183:57
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    .studio-local/t088-assessment-review/cancellationred/artifacts/autoverse-assessments-A-fa-6e683-er-pending-assessment-reads/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: .studio-local/t088-assessment-review/cancellationred/artifacts/autoverse-assessments-A-fa-6e683-er-pending-assessment-reads/error-context.md
+
+  1 failed
+    tests/live/autoverse-assessments.spec.ts:151:5 › A failed read cancels its other pending assessment reads 

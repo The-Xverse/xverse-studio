@@ -1,3 +1,19 @@
+# Resumed T088 — frozen assessment inspection repaired — 2026-11-04
+
+**66 completed /24 in progress /10 blocked; zero accepted milestones.**
+The Assertions view now binds reads and controls to the frozen run/snapshot, rejects
+mismatched responses, distinguishes errors from empty definitions, cancels departed
+and sibling reads, and displays bounded history with definition/clock/evaluator/
+evidence provenance. Fourteen scoped checks pass on494unchanged inputs/6privateUI;
+original and copied Autoverse records/ledger counts remain unchanged and private
+host/browser/root release is verified. One result-card case is labelled synthetic;
+no actual evaluator-profile admission or new runtime execution is claimed. T088
+remains open. See [evidence/review](../../evidence/studio/M4-frozen-assessments/README.md).
+Current supplied instructions require Windows verification; this Linux component
+result does not resolve the branch's earlier Linux-only scope discrepancy.
+
+## Earlier checkpoints
+
 # T084 complete; user-requested pause — 2026-10-30
 
 **66 completed / 24 in progress / 10 blocked; zero accepted milestones.**

@@ -1,0 +1,45 @@
+
+Running 14 tests using 1 worker
+
+(node:4130688) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 tests/live/autoverse-assessments.spec.ts:33:7 › Actual recorded Autoverse has no admitted assessments at 1024 (2.3s)
+  ✓   2 tests/live/autoverse-assessments.spec.ts:33:7 › Actual recorded Autoverse has no admitted assessments at 1440 (2.1s)
+  ✓   3 tests/live/autoverse-assessments.spec.ts:71:5 › A failed definition read is unknown and can be retried (2.2s)
+  ✓   4 tests/live/autoverse-assessments.spec.ts:102:5 › A departed read cannot replace a newer failed inspection (1.9s)
+  ✘   5 tests/live/autoverse-assessments.spec.ts:151:5 › A failed read cancels its other pending assessment reads (1.7s)
+(node:4131033) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   6 tests/live/autoverse-assessments.spec.ts:190:5 › Labelled display fixture keeps metric, indeterminate and error states separate (1.6s)
+  ✓   7 tests/live/autoverse-assessments.spec.ts:300:7 › Recorded Autoverse display rejects snapshot counterexample (3ms)
+  ✓   8 tests/live/autoverse-assessments.spec.ts:300:7 › Recorded Autoverse display rejects project counterexample (1ms)
+  ✓   9 tests/live/autoverse-assessments.spec.ts:300:7 › Recorded Autoverse display rejects integrity counterexample (1ms)
+  ✓  10 tests/live/autoverse-assessments.spec.ts:300:7 › Recorded Autoverse display rejects definition-page counterexample (1ms)
+  ✓  11 tests/live/autoverse-assessments.spec.ts:300:7 › Recorded Autoverse display rejects result-page counterexample (1ms)
+  ✓  12 tests/live/autoverse-assessments.spec.ts:300:7 › Recorded Autoverse display rejects cursor counterexample (1ms)
+  ✓  13 tests/live/autoverse-assessments.spec.ts:300:7 › Recorded Autoverse display rejects result-owner counterexample (1ms)
+  ✓  14 tests/live/autoverse-assessments.spec.ts:300:7 › Recorded Autoverse display rejects partial-pass counterexample (1ms)
+
+
+  1) tests/live/autoverse-assessments.spec.ts:151:5 › A failed read cancels its other pending assessment reads 
+
+    Error: route.fulfill: Route is already handled!
+
+      167 |     seen();
+      168 |     await gate;
+    > 169 |     await route.fulfill({ response });
+          |                 ^
+      170 |   });
+      171 |   await page.route("**/api/v1/runs/*/definitions", async (route) => {
+      172 |     await started;
+        at <repo>/tests/live/autoverse-assessments.spec.ts:169:17
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    .studio-local/t088-assessment-review/reviewed/artifacts/autoverse-assessments-A-fa-6e683-er-pending-assessment-reads/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: .studio-local/t088-assessment-review/reviewed/artifacts/autoverse-assessments-A-fa-6e683-er-pending-assessment-reads/error-context.md
+
+  1 failed
+    tests/live/autoverse-assessments.spec.ts:151:5 › A failed read cancels its other pending assessment reads 
+  13 passed (12.8s)

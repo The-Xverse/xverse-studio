@@ -1,0 +1,39 @@
+
+Running 1 test using 1 worker
+
+(node:4113478) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 tests/live/autoverse-assessments.spec.ts:69:5 › A failed definition read is unknown and can be retried (11.4s)
+
+
+  1) tests/live/autoverse-assessments.spec.ts:69:5 › A failed definition read is unknown and can be retried 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: locator('section[aria-label="Frozen assertions and metrics"], .connection-layout').getByRole('alert')
+    Expected substring: "Assessment availability is unknown"
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toContainText" locator('section[aria-label="Frozen assertions and metrics"], .connection-layout').getByRole('alert') with timeout 10000ms
+      - waiting for locator('section[aria-label="Frozen assertions and metrics"], .connection-layout').getByRole('alert')
+
+
+      80 |   );
+      81 |   const panel = await open(page, info);
+    > 82 |   await expect(panel.getByRole("alert")).toContainText(
+         |                                          ^
+      83 |     "Assessment availability is unknown",
+      84 |   );
+      85 |   await expect(
+        at <repo>/tests/live/autoverse-assessments.spec.ts:82:42
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    tests/live/.studio-local/t088-assessment-review/behaviorred/artifacts/autoverse-assessments-A-fa-1419c--unknown-and-can-be-retried/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: tests/live/.studio-local/t088-assessment-review/behaviorred/artifacts/autoverse-assessments-A-fa-1419c--unknown-and-can-be-retried/error-context.md
+
+  1 failed
+    tests/live/autoverse-assessments.spec.ts:69:5 › A failed definition read is unknown and can be retried 

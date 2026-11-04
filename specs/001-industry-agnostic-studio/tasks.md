@@ -1043,3 +1043,12 @@ T084 Scenario support inspection (2026-10-30): two actual native Autoverse brows
 T084 guided fault timing (2026-10-30): 73 affected Autoverse checks, real browser authoring at both desktop sizes and a complete actual demo pass on 475 inputs. Three faults authored through forms; first activation 5000 ms/duration 3 s retained, unsupported metadata/profile/payload preserved. Two recoveries/one active Stop and immutable plan/canonical/native release verified. Timeline integration remains; all 100 statuses unchanged, 65/25/10, zero milestones accepted. Evidence: evidence/studio/M4-gui-fault-authoring/.
 
 T084 completion (2026-10-30):170 actual Autoverse checks, two browser cases across both desktop sizes and complete native demo verify original forms/clocks/intent/observed/unavailable clauses. Version1.1 scopes3intent intervals/11canonical fault rows; ordinary telemetry unmapped,1.0 preserved. Real draft edits preserve frozen timeline identity. Counts66/24/10, zero milestones accepted. User requested pause after current task. Evidence: evidence/studio/M4-fault-timeline/.
+
+T088 progress2026-11-04: frozen assessment inspection now clears departed context,
+validates exact run/snapshot/definition identities, distinguishes unavailable/empty,
+cancels obsolete/sibling reads and exposes bounded history/provenance. Final14
+scoped checks pass on494unchanged inputs/6privateUI, preserving original/copy
+recordings and ledger counts. One result-card case is explicitly synthetic; actual
+Autoverse evaluator-profile admission and remaining full acceptance are unverified.
+See `evidence/studio/M4-frozen-assessments/`. T088 remains unchecked;66/24/10 and zero
+accepted milestones. tasks.md and traceability.json are updated together.
