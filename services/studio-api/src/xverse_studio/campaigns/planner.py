@@ -22,6 +22,17 @@ def _identity(value):
         raise CampaignError("INVALID_CAMPAIGN") from None
 
 
+def _finite_number(value):
+    if not isinstance(value, (int, float)) or isinstance(value, bool):
+        return False
+    try:
+        return math.isfinite(value)
+    except OverflowError:
+        # JSON integers are arbitrary precision; the admitted numeric/time
+        # calculations still require a finite representable value.
+        return False
+
+
 class CampaignPlanner:
     def __init__(self, *, max_children=64, max_axes=8, max_axis_values=16, max_concurrency=1, allowed_parameters=None):
         self.max_children = max_children
@@ -48,20 +59,20 @@ class CampaignPlanner:
             values = matrix[axis]
             if not isinstance(values, list) or not 1 <= len(values) <= self.max_axis_values:
                 raise CampaignError("MATRIX_LIMIT")
-            if any(not isinstance(v, (int, float)) or isinstance(v, bool) or not math.isfinite(v) for v in values):
+            if any(not _finite_number(v) for v in values):
                 raise CampaignError("INVALID_PARAMETER")
             if len(set(values)) != len(values):
                 raise CampaignError("DUPLICATE_MATRIX_VALUE")
             cardinality *= len(values)
             if cardinality > min(self.max_children, max_runs):
                 raise CampaignError("CAMPAIGN_BUDGET")
-        if not isinstance(duration_seconds, (int, float)) or isinstance(duration_seconds, bool) or not math.isfinite(duration_seconds) or duration_seconds <= 0:
+        if not _finite_number(duration_seconds) or duration_seconds <= 0:
             raise CampaignError("INVALID_DURATION")
         total = cardinality * duration_seconds
         time_budget = budget.get("maxTotalSeconds", total)
-        if not isinstance(time_budget, (int, float)) or isinstance(time_budget, bool) or not math.isfinite(time_budget) or time_budget <= 0 or total > time_budget:
+        if not _finite_number(time_budget) or time_budget <= 0 or total > time_budget:
             raise CampaignError("CAMPAIGN_BUDGET")
-        if stop_policy not in {"continue", "stop_on_failure"}:
+        if not isinstance(stop_policy, str) or stop_policy not in {"continue", "stop_on_failure"}:
             raise CampaignError("INVALID_STOP_POLICY")
         base_digest = _identity(base_snapshot)
         children = []
@@ -156,13 +167,15 @@ class CampaignState:
             if state not in self.TERMINAL or child["state"] not in self.ACTIVE | self.TERMINAL:
                 raise CampaignError("CHILD_STATE_CONFLICT")
             if child["state"] in self.TERMINAL:
-                if child["state"] != state: raise CampaignError("CHILD_STATE_CONFLICT")
+                if child["state"] != state:
+                    raise CampaignError("CHILD_STATE_CONFLICT")
                 return
             def change():
                 child["state"] = state
                 if state in {"failed", "rejected"} and self.record["stopPolicy"] == "stop_on_failure":
                     for other in self.record["children"]:
-                        if other["state"] == "pending": other["state"] = "cancelled"
+                        if other["state"] == "pending":
+                            other["state"] = "cancelled"
                 if all(c["state"] in self.TERMINAL for c in self.record["children"]):
                     self.record["status"] = "cancelled" if self.record["cancelRequested"] else "complete"
             self._commit(change)
@@ -172,7 +185,8 @@ class CampaignState:
             affected = [c for c in self.record["children"] if c["state"] == "dispatching"]
             if affected:
                 def change():
-                    for c in affected: c.update(state="unknown", reason="RECONCILIATION_REQUIRED")
+                    for c in affected:
+                        c.update(state="unknown", reason="RECONCILIATION_REQUIRED")
                 self._commit(change)
             return deepcopy(self.record)
 
@@ -182,7 +196,8 @@ class CampaignState:
             def change():
                 self.record["cancelRequested"] = True
                 for child in self.record["children"]:
-                    if child["state"] == "pending": child["state"] = "cancelled"
+                    if child["state"] == "pending":
+                        child["state"] = "cancelled"
                 self.record["status"] = "cancelling" if any(c["state"] in self.ACTIVE for c in self.record["children"]) else "cancelled"
             self._commit(change)
             return {"campaignId": self.record["campaignId"], "activeRunIds": active if cancel_active else [], "activeCancellationRequested": cancel_active, "status": self.record["status"]}
