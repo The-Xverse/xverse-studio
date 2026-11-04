@@ -1,6 +1,6 @@
 # ADR-0066 — Numeric comparison requires an admitted evidence interpretation
 
-Date: 2026-11-04. Status: repair implemented; final verification pending.
+Date: 2026-11-04. Status: scoped repair implemented and verified.
 Traces: T091; FR-059/FR-060; NFR-002/NFR-009; AC-029.
 
 The recorded comparison decoder currently assigns owned-reference unit definitions
@@ -44,3 +44,9 @@ Repeat affected pure comparison checks and real read-only Autoverse comparison/
 playback browser journeys. No new reference workload, simulator or physical
 execution is needed or authorized by this repair. Full T091 rerun/Windows and
 milestone acceptance remain open.
+
+Final73039ef passes62 focused checks, the actual recorded-comparison browser case
+at both widths and22 native original-record playback checks. All543 selected inputs
+remain identical across final stages;79 frontend/build inputs and six inherited UI
+assets are unchanged. See evidence/studio/M4-comparison-evidence-admission-20261104/.
+Counts71/19/10 and zero accepted milestones remain unchanged.

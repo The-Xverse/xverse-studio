@@ -1205,3 +1205,16 @@ original canonical bytes and execution ledger counts remain unchanged. Evidence:
 `evidence/studio/M4-original-observation-playback-20261104/`; ADR-0065. No new live
 execution. T091's fresh rerun/CARLA prerequisite, broader T097/Windows/full acceptance
 remain open. Counts stay71 completed /19 in progress /10 blocked, zero milestones.
+
+T091 numeric comparison admission repair (2026-11-04): an unknown-source inert
+counterexample previously became compatible and actual Autoverse decoded-copy
+fixtures acquired reference units from shape. Source73039ef gates that decoder
+through existing admitted codec/context identity, preserves original integrity/
+status/configuration and leaves unsupported source completeness uninterpreted.
+Known reference partial evidence remains blocked. Final62 focused, one native
+comparison case/both widths and22 playback checks pass on543 stable Git-bound
+inputs and six unchanged UI assets. All84 original report assertion ASTs remain.
+See `evidence/studio/M4-comparison-evidence-admission-20261104/` and ADR-0066.
+No new reference/simulator/device workload; original canonical bytes and execution
+counts stay unchanged. T091/T097/full rerun/Windows/acceptance remain open. Counts
+stay71 completed /19 in progress /10 blocked, zero accepted milestones.

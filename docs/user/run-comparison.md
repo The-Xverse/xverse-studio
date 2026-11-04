@@ -19,6 +19,11 @@ Reports inspect at most 32 fields and bounded metadata. For an unsupported repor
 inspect the individual run evidence; original data is retained.
 Run state, cleanup, evidence integrity and functional assertion outcomes stay separate.
 
+**COMPARISON_EVIDENCE_UNSUPPORTED** means Studio has no admitted interpretation
+of this source's quantities, units, clocks and coverage for numeric comparison.
+Frozen configuration remains inspectable. The original integrity verdict and
+status remain visible; an unfamiliar status does not establish completeness.
+
 Changing the baseline clears its old report. Retry inspection after a failed read;
 refreshing or reopening does not execute a workload. Inspection does not modify
 protected snapshots or canonical evidence.
@@ -26,6 +31,15 @@ protected snapshots or canonical evidence.
 **Open recorded playback** returns to the selected run's original observations.
 **Replay observations** only changes their local presentation; leaving that tab stops
 local playback. It neither runs the model nor establishes determinism or physical replay.
+
+When no plot samples are available, select **Load original observation records**
+to inspect retained payloads. **Previous record**, **Next record** and **Play
+recorded payloads** browse the current page in journal order. **Previous payload
+page** and **Next payload page** retrieve up to 20 records at a time. The 500 ms
+display interval is separate from original source timing. Missing timestamps,
+freshness and unit metadata remain as recorded. Invalid integrity permits
+inspection and disables automatic playback. Clear a signal-field filter before
+inspecting opaque payloads; provider, element and time selectors still apply.
 
 **Preflight a new run** checks the current draft and creates a new frozen input snapshot;
 Start requires separate acceptance. **Rerun frozen inputs** instead requests fresh
