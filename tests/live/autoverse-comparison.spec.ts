@@ -1,0 +1,45 @@
+import { test, expect } from "@playwright/test";
+import { readFileSync } from "node:fs";
+import path from "node:path";
+import { connectStudio } from "../e2e/connect-studio";
+
+test("Actual Autoverse frozen rerun comparison exposes configuration and blocks unsupported numeric playback", async ({ page }, info) => {
+  const recording = JSON.parse(readFileSync(path.join(process.env.STUDIO_BROWSER_DATA!, "comparison-recording.private.json"), "utf8"));
+  await connectStudio(page, info);
+  await page.evaluate((r) => {
+    localStorage.setItem("studio.projectId", r.projectId);
+    localStorage.setItem("studio.lastRun", r.runId);
+    localStorage.setItem("studio.lastRun." + r.projectId, r.runId);
+  }, recording);
+  await page.reload();
+  await page.getByRole("tab", { name: "Results", exact: true }).click();
+  await expect(page.getByLabel("Recorded run", { exact: true })).toHaveValue(recording.runId);
+  await expect(page.getByRole("heading", { name: new RegExp("Run results " + recording.selectedState) })).toBeVisible();
+  for (const width of [1024, 1440]) {
+    await page.setViewportSize({ width, height: width === 1024 ? 768 : 900 });
+    await page.getByRole("tab", { name: "Compare", exact: true }).click();
+    for (const [baseline, parameterStatus] of [[recording.sourceRunId, "same"], [recording.siblingRunId, "different"]]) {
+      await page.getByLabel("Baseline run", { exact: true }).selectOption(baseline);
+      await expect(page.getByRole("region", { name: "Recorded comparison report", exact: true })).toHaveCount(0);
+      const inspect = page.getByRole("button", { name: "Inspect compatibility", exact: true });
+      await inspect.focus(); await page.keyboard.press("Enter");
+      const report = page.getByRole("region", { name: "Recorded comparison report", exact: true });
+      await expect(report).toBeVisible();
+      await expect(report).toContainText("Pairing blocked");
+      await expect(report).toContainText(baseline);
+      await expect(report).toContainText(recording.runId);
+      await expect(report).toContainText(recording.snapshotId);
+      await expect(report.getByRole("row").filter({ has: page.getByRole("rowheader", { name: new RegExp("^Parameters") }) })).toContainText(parameterStatus);
+      await expect(report).toContainText("OBSERVATION_PAYLOAD_UNAVAILABLE");
+      await expect(report).not.toContainText("Compatible recorded windows");
+      await expect(report.getByRole("heading", { name: "Comparison report", exact: true })).toBeFocused();
+    }
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    await page.screenshot({ path: info.outputPath(`actual-comparison-${width}.png`), fullPage: true });
+    await page.getByRole("button", { name: "Open recorded playback", exact: true }).click();
+    await expect(page.getByRole("tab", { name: "Observations", exact: true })).toHaveAttribute("aria-selected", "true");
+    await expect(page.getByRole("button", { name: "Replay observations", exact: true })).toBeDisabled();
+    await expect(page.getByRole("heading", { name: "No observations available", exact: true })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Rerun frozen inputs", exact: true })).toBeEnabled();
+  }
+});
