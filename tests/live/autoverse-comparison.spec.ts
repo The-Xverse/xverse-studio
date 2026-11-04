@@ -39,7 +39,7 @@ test("Actual Autoverse frozen rerun comparison exposes configuration and blocks 
     await page.getByRole("button", { name: "Open recorded playback", exact: true }).click();
     await expect(page.getByRole("tab", { name: "Observations", exact: true })).toHaveAttribute("aria-selected", "true");
     await expect(page.getByRole("button", { name: "Replay observations", exact: true })).toBeDisabled();
-    await expect(page.getByRole("heading", { name: "No observations available", exact: true })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "No plot samples available", exact: true })).toBeVisible();
     await expect(page.getByRole("button", { name: "Rerun frozen inputs", exact: true })).toBeEnabled();
   }
   // Labelled transport fixtures over the retained real operation and child.

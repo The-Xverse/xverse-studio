@@ -14,6 +14,7 @@ import {
   type EvidenceFilters,
 } from "./evidenceFilters";
 import { ObservationPlot, ObservationTable } from "./ObservationDisplay";
+import { RecordedObservationRecords } from "./RecordedObservationRecords";
 import { RetentionDialog } from "../retention/RetentionDialog";
 import { FrozenInputsControl } from "./FrozenInputsControl";
 import { RunControls } from "../runs/RunControls";
@@ -826,11 +827,20 @@ export function ResultsView({
                 />
               )
             ) : (
-              <Empty title="No observations available" icon="results">
+              <Empty title="No plot samples available" icon="results">
                 {active
                   ? "The provider is still collecting. Refresh after execution or inspect events for progress."
-                  : "No measured signal was returned by the admitted evidence reader. A missing signal is not a measured zero."}
+                  : "No interpreted signal was returned by the admitted evidence reader. A missing signal is not a measured zero; original observation payloads may still be retained."}
               </Empty>
+            )}
+            {!samples.length && !observationLoading && (
+              <RecordedObservationRecords
+                key={queryIdentity}
+                runId={run.runId}
+                snapshotId={run.snapshotId}
+                query={queryFilters(readFilters, selected, false).toString()}
+                fieldFilter={!!readFilters.field}
+              />
             )}
             {samples.length > 200 && showTable && (
               <p className="field-hint">
