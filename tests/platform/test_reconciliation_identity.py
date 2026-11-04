@@ -2,8 +2,6 @@
 
 import psutil
 import pytest
-import json
-from pathlib import Path
 
 from xverse_studio.projects.service import Projects
 from xverse_studio.runs.service import Runs
@@ -155,17 +153,19 @@ def test_terminal_reacquisition_never_upgrades_missing_or_conflicting_identity(
         if fault == "wrong_shape"
         else canonical(terminal)
     )
-    original = Path.read_text
+    # Real anchored acquisition precedes each controlled returned observation.
+    original = run_module.read_bounded
     reads, contacts = [], []
 
-    def state_read(path, *args, **kwargs):
+    def state_read(root, path, maximum):
+        captured = original(root, path, maximum)
         if path == statepath:
             reads.append(path)
             if len(reads) > 1:
                 if fault == "disappeared":
                     raise FileNotFoundError(path)
-                return replacement
-        return original(path, *args, **kwargs)
+                return replacement.encode()
+        return captured
 
     class ReusedProcess:
         def create_time(self):
@@ -183,7 +183,7 @@ def test_terminal_reacquisition_never_upgrades_missing_or_conflicting_identity(
     def forbid_spawn(*args, **kwargs):
         pytest.fail("Terminal observation cannot authorize process creation")
 
-    monkeypatch.setattr(Path, "read_text", state_read)
+    monkeypatch.setattr(run_module, "read_bounded", state_read)
     monkeypatch.setattr(run_module.psutil, "Process", process_observation)
     monkeypatch.setattr(run_module.subprocess, "Popen", forbid_spawn)
     result = runs.read(run["runId"])

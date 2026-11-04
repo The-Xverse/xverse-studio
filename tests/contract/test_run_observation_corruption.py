@@ -260,7 +260,6 @@ def test_provider_progress_cannot_erase_an_already_completed_receipt(client, mon
 
 def test_native_exit_reacquisition_cannot_lower_the_verified_version(client, monkeypatch):
     """Controlled NoSuchProcess boundary; no actual process is inspected or controlled."""
-    from pathlib import Path
     from xverse_studio.runs import service
 
     run, path = controlled_run(client)
@@ -270,21 +269,23 @@ def test_native_exit_reacquisition_cannot_lower_the_verified_version(client, mon
     raw = json.dumps({**run, "state": "stopped", "stateVersion": 4, "cleanup": "complete",
                       "commandResults": {run["pendingCommandId"]: {"status": "completed"}}})
     path.write_text(raw)
-    original_read = Path.read_text
+    # Inject the captured observation at the reader now used by Runs.
+    original_read = service.read_bounded
     reads = []
 
-    def delayed_snapshot(candidate, *args, **kwargs):
+    def delayed_snapshot(root, candidate, maximum):
+        captured = original_read(root, candidate, maximum)
         if candidate == path:
             reads.append(candidate)
             if len(reads) == 1:
-                return first
-        return original_read(candidate, *args, **kwargs)
+                return first.encode()
+        return captured
 
     def exited(pid):
         assert pid == run["pid"]
         raise service.psutil.NoSuchProcess(pid)
 
-    monkeypatch.setattr(Path, "read_text", delayed_snapshot)
+    monkeypatch.setattr(service, "read_bounded", delayed_snapshot)
     monkeypatch.setattr(service.psutil, "Process", exited)
     try:
         response = client.get("/api/v1/runs/" + run["runId"])

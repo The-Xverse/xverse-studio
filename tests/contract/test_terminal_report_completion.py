@@ -2,13 +2,13 @@
 
 from contextlib import contextmanager
 import json
-from pathlib import Path
 import threading
 
 import pytest
 
 from test_run_observation_corruption import controlled_run
 from xverse_studio.providers.backend_task import BackendTask
+from xverse_studio.runs import service
 from xverse_studio.storage.core import atomic, canonical
 
 
@@ -89,17 +89,20 @@ def test_finished_original_task_reacquires_final_receipt_after_a_stale_terminal_
         assert task.wait(5) == 0
         final = path.read_bytes()
         assert json.loads(final)["commandResults"][run["pendingCommandId"]]["status"] == "completed"
-        original_read = Path.read_text
+        # Delay captured bytes after the real anchored read, without replacing
+        # containment checks or the report decoder/identity validation.
+        original_read = service.read_bounded
         reads = []
 
-        def delayed_snapshot(candidate, *args, **kwargs):
+        def delayed_snapshot(root, candidate, maximum):
+            captured = original_read(root, candidate, maximum)
             if candidate == path:
                 reads.append(candidate)
                 if len(reads) == 1:
-                    return stale
-            return original_read(candidate, *args, **kwargs)
+                    return stale.encode()
+            return captured
 
-        monkeypatch.setattr(Path, "read_text", delayed_snapshot)
+        monkeypatch.setattr(service, "read_bounded", delayed_snapshot)
         response = client.get("/api/v1/runs/" + run["runId"])
         assert response.status_code == 200 and response.json()["state"] == "stopped", response.text
         # Inspect the receipt immediately: another GET must not be needed to repair a false failure.
@@ -119,17 +122,18 @@ def test_final_reacquisition_cannot_settle_from_a_regressed_report(client, monke
                      state="stopped" if fault == "older-version" else "failed")
         atomic(path, canonical(final).encode())
         original_bytes = path.read_bytes()
-        original_read = Path.read_text
+        original_read = service.read_bounded
         reads = []
 
-        def delayed_snapshot(candidate, *args, **kwargs):
+        def delayed_snapshot(root, candidate, maximum):
+            captured = original_read(root, candidate, maximum)
             if candidate == path:
                 reads.append(candidate)
                 if len(reads) == 1:
-                    return first
-            return original_read(candidate, *args, **kwargs)
+                    return first.encode()
+            return captured
 
-        monkeypatch.setattr(Path, "read_text", delayed_snapshot)
+        monkeypatch.setattr(service, "read_bounded", delayed_snapshot)
         response = client.get("/api/v1/runs/" + run["runId"])
         assert response.status_code == 200, response.text
         assert response.json()["state"] == "stopped" and response.json()["stateVersion"] == 2
