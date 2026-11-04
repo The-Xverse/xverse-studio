@@ -294,3 +294,16 @@ remains unsupported, and platform mode declares no campaign contract. Historical
 assessment/timeline readers admit the new classic version explicitly without
 changing their clock or recorded-event coverage semantics. Native Windows and
 physical campaign authority remain unverified.
+
+Installed frozen rerun amendment (ADR-0061): native registrations may opt into the
+closed `rerunContract` 1.0. Its keys are `contractVersion: "1.0"`,
+`inputPolicy: "exact-frozen-sources"`, `admissionPolicy: "current-full-preflight"`,
+`physicalEffects: false`, `reproducibility: "uncontrolled"` and `sourceVersions`
+(1–16 unique semantic version strings). Missing, unknown or malformed contracts
+confer no rerun authority. The protected source run/snapshot, original provider
+version and unchanged installation/contract/evidence scope must verify. Current
+compilation and provider configuration must reproduce the historical inputs.
+Full normal preflight and independent Start admission remain mandatory.
+Classic Autoverse admits its existing 0.3.0/0.4.0 mappings on the same installation;
+platform mode does not opt in. No physical authority or deterministic guarantee
+is added.

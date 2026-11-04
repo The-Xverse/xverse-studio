@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from copy import deepcopy
 import json
-import shutil
+import os
 import time
 
 from fastapi import Request
@@ -13,6 +13,7 @@ from xverse_studio.api.models import Body
 from xverse_studio.providers.registry import capability_digest, descriptors
 from xverse_studio.profiles import ProfileRegistry
 from xverse_studio.storage.core import Problem, atomic, canonical, contained, digest, uid
+from xverse_studio.security.managed_io import create_directory, remove_tree, SafeIOError
 from xverse_studio.xdl import XDLRejected, reference_configuration
 
 
@@ -26,6 +27,8 @@ class Reruns:
 
     def verify_source(self, source_run_id, db):
         source = self.store.get("run", source_run_id, db)
+        if source.get("providerId") != "studio.reference":
+            return self.verify_installed_source(source, db)
         if source.get("providerId") != "studio.reference" or source.get("evidenceScope") != "owned_reference":
             raise Problem("RERUN_UNSUPPORTED", "This source has no admitted owned-reference rerun capability. Imported evidence and physical/live provider claims confer no execution authority.")
         try:
@@ -55,34 +58,77 @@ class Reruns:
             raise Problem("RERUN_INPUT_INCOMPATIBLE", "The current admitted compiler/provider cannot execute these exact original frozen inputs without changing their semantics.") from None
         return source, snapshot, compiled, configuration, provider
 
+    def verify_installed_source(self, source, db):
+        from xverse_studio.runs.frozen import installed_source
+        try:
+            snapshot = self.store.get("snapshot", source["snapshotId"], db)
+            self.runs.verify_snapshot(snapshot)
+            if (any(snapshot.get(k) != source.get(k) for k in ("snapshotId", "projectId", "revision", "providerId", "planDigest", "semanticDigest"))
+                    or not plan_matches_digest(snapshot["plan"])
+                    or "sha256:" + snapshot["plan"]["digest"]["value"] != snapshot["planDigest"]):
+                raise ValueError()
+        except (Problem, OSError, ValueError, KeyError, TypeError, AttributeError, RecursionError):
+            raise Problem("SNAPSHOT_INTEGRITY", "The historical protected inputs or their source-run identity cannot be verified.") from None
+        ProfileRegistry(self.adapter).validate_snapshot(snapshot)
+        compiled, configuration, provider = installed_source(self.runs, source, snapshot)
+        return source, snapshot, compiled, configuration, provider
+
     def create(self, source_run_id, principal, key):
         def accepted(db):
             source, original, compiled, configuration, provider = self.verify_source(source_run_id, db)
-            operation_id, snapshot_id, preflight_id = uid("op-"), uid("snap-"), uid("pf-")
+            operation_id = uid("op-")
             now = time.time()
-            snapshot = deepcopy(original)
-            for field in ("snapshotDigest", "campaignId", "campaignChildKey"):
-                snapshot.pop(field, None)
-            snapshot.update(snapshotId=snapshot_id, parentSnapshotId=original["snapshotId"], sourceRunId=source_run_id,
+            lineage = dict(parentSnapshotId=original["snapshotId"], sourceRunId=source_run_id,
                             sourceSnapshotDigest=original["snapshotDigest"], rerunOperationId=operation_id,
-                            createdAt=now, compiler=compiled["compiler"], plan=compiled["plan"],
-                            capabilityDigest=capability_digest(), configuration=configuration, providerIdentity=provider)
-            snapshot["snapshotDigest"] = digest(snapshot)
-            preflight = {"preflightId": preflight_id, "snapshotId": snapshot_id, "status": "ready", "planDigest": compiled["planDigest"],
+                            createdAt=now)
+            if source["providerId"] == "studio.reference":
+                snapshot_id, preflight_id = uid("snap-"), uid("pf-")
+                snapshot = deepcopy(original)
+                for field in ("snapshotDigest", "campaignId", "campaignChildKey"):
+                    snapshot.pop(field, None)
+                snapshot.update(snapshotId=snapshot_id, **lineage, compiler=compiled["compiler"], plan=compiled["plan"],
+                                capabilityDigest=capability_digest(), configuration=configuration, providerIdentity=provider)
+                snapshot["snapshotDigest"] = digest(snapshot)
+                preflight = {"preflightId": preflight_id, "snapshotId": snapshot_id, "status": "ready", "planDigest": compiled["planDigest"],
                          "semanticDigest": compiled["semanticDigest"], "capabilityDigest": snapshot["capabilityDigest"],
                          "expiresAt": now + 60, "diagnostics": [], "selection": snapshot.get("selection", {}),
                          "dimensions": {"model": "valid", "target": "ready", "evidenceScope": "owned_reference"},
                          "limitations": ["Freshly admitted reference execution, separate from recorded observation replay. Completion alone is not an assertion verdict."]}
+            else:
+                from xverse_studio.runs.service import ACTIVE
+                # Do not refresh/read a live worker inside the acceptance
+                # transaction. Unknown and unreconciled occupancy stay busy.
+                snapshot, preflight = self.runs._build_preflight_sources(original["projectId"], original["revision"],
+                    original.get("projectDocuments", original["documents"]), original["profileLocks"],
+                    {**original["selection"], "providerId": original["providerId"]},
+                    sum(r["state"] in ACTIVE for r in self.store.all("run", db)), lineage=lineage)
+                if preflight["status"] != "ready":
+                    raise Problem("ADMISSION_REJECTED", "Current full readiness does not admit these historical inputs.", diagnostics=preflight["diagnostics"])
+                if any(digest(snapshot.get(k)) != digest(original.get(k)) for k in ("documents", "planDigest", "semanticDigest", "configuration")):
+                    raise Problem("RERUN_INPUT_INCOMPATIBLE", "Full admission changes the historical effective inputs; no execution is authorized.")
+                snapshot_id, preflight_id = snapshot["snapshotId"], preflight["preflightId"]
             operation = {"operationId": operation_id, "kind": "rerun", "status": "accepted", "sourceRunId": source_run_id,
                          "parentSnapshotId": original["snapshotId"], "snapshotId": snapshot_id, "createdAt": now,
-                         "evidenceScope": "owned_reference", "message": "This operation creates a new run; its completion does not imply experiment completion or a passing assertion."}
+                         "evidenceScope": source["evidenceScope"], "message": "This operation creates a new run; its completion does not imply experiment completion or a passing assertion."}
             dispatch = {"operationId": operation_id, "sourceRunId": source_run_id, "sourceSnapshotId": original["snapshotId"],
                         "snapshotId": snapshot_id, "preflightId": preflight_id, "principal": principal,
                         "childStartKey": "rerun-child-" + operation_id, "createdAt": now}
             root = contained(self.store.root, self.store.root / "snapshots" / snapshot_id)
-            if root.exists():
-                raise Problem("IDENTITY_CONFLICT", "The newly allocated snapshot identity is already in use.", 409)
-            self.store.on_rollback(db, lambda: shutil.rmtree(root) if root.exists() else None)
+            # Rollback may discard only the directory acquired by this request.
+            try:
+                with create_directory(self.store.root, root, parents=True) as acquired:
+                    info = os.fstat(acquired.descriptor)
+                    owned_identity = (info.st_dev, info.st_ino)
+            except SafeIOError as error:
+                if error.code == "TARGET_EXISTS":
+                    raise Problem("IDENTITY_CONFLICT", "The new snapshot destination is already in use.", 409) from None
+                raise Problem("SNAPSHOT_WRITE_FAILED", "The new snapshot destination cannot be safely acquired.") from None
+            def discard_owned_snapshot():
+                try:
+                    remove_tree(self.store.root, root, expected_identity=owned_identity)
+                except OSError:
+                    pass
+            self.store.on_rollback(db, discard_owned_snapshot)
             atomic(root / "snapshot.json", canonical(snapshot).encode())
             self.store.put("snapshot", snapshot_id, snapshot, db)
             self.store.put("preflight", preflight_id, preflight, db)

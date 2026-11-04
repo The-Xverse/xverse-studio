@@ -18,6 +18,7 @@ class PlatformProvider(AutoverseProvider):
     provider_version = "0.1.0"
     input_loss_schedules = False
     campaigns_enabled = False
+    reruns_enabled = False
     max_observers = 4
     observation_contract = None
     worker_module = "xverse_studio.providers.autoverse.maestro_worker"

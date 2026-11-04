@@ -221,6 +221,24 @@ class Runs:
 
     def _preflight_sources(self, pid, revision, project_documents, profile_locks, selection, *, lineage=None):
         """Freeze exact sources through the same read-only checks for drafts and children."""
+        self._reconcile_active_observations()
+        snapshot, pf = self._build_preflight_sources(pid, revision, project_documents,
+            profile_locks, selection, sum(row["state"] in ACTIVE for row in self.store.all("run")),
+            lineage=lineage)
+        with self.store.tx() as db:
+            self.store.put("snapshot", snapshot["snapshotId"], snapshot, db)
+            self.store.put("preflight", pf["preflightId"], pf, db)
+        atomic(self.store.root / "snapshots" / snapshot["snapshotId"] / "snapshot.json",
+               canonical(snapshot).encode())
+        return pf
+
+    def _build_preflight_sources(self, pid, revision, project_documents, profile_locks,
+                                 selection, active_count, *, lineage=None):
+        """Build the full admission result without persisting or dispatching.
+
+        Callers supply observed occupancy. Transactional frozen reruns retain
+        unknown occupancy conservatively and commit admission with their intent.
+        """
         registry = ProfileRegistry(self.adapter)
         documents = project_documents
         compiled = self.compilation(documents, selection)
@@ -233,8 +251,6 @@ class Runs:
             (value for value in self.provider_descriptors() if value["providerId"] == provider_id),
             None,
         )
-        self._reconcile_active_observations()
-        active_count = sum(row["state"] in ACTIVE for row in self.store.all("run"))
         readiness, admission_diagnostics, configuration, limits = self.readiness(
             documents, compiled, provider_id, provider, active_count
         )
@@ -338,14 +354,7 @@ class Runs:
             if compiled.get("plan")
             else None,
         }
-        with self.store.tx() as db:
-            self.store.put("snapshot", snapid, snapshot, db)
-            self.store.put("preflight", pfid, pf, db)
-        atomic(
-            self.store.root / "snapshots" / snapid / "snapshot.json",
-            canonical(snapshot).encode(),
-        )
-        return pf
+        return snapshot, pf
 
     def require_campaign_snapshot(self, snapshot, db=None):
         """Prior admission is required; a compiled blocked draft is not authority.

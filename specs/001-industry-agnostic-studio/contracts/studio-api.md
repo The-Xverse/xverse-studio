@@ -607,3 +607,17 @@ admits it. Active or unknown runs retain the exclusive installation slot. The
 existing HTTP routes, campaign presentation 1.0 and reference branch remain. A
 newer project draft does not replace frozen base inputs; exact accepted retries
 continue to resolve their original receipts before fresh mutable admission.
+
+Installed frozen rerun amendment (ADR-0061): the existing
+`POST /runs/{runId}/reruns` route also admits an explicitly installed
+`rerunContract` 1.0. It verifies protected original inputs and their source-run
+binding, the same enrolled installation, historical version support, current
+compilation/configuration, full preflight and independent Start readiness.
+Current draft edits cannot replace the original sources. Admission records a new
+snapshot and full preflight with `parentSnapshotId`, `sourceRunId`,
+`sourceSnapshotDigest` and `rerunOperationId`. The operation retains the source
+evidence scope; completion acknowledges new child creation, not its execution
+outcome or a deterministic replay. Unsupported mappings, changed inputs and busy
+resources reject before a child or execution intent is created. Exact accepted
+retries retain their original receipt without further admission; unknown dispatch
+is never automatically replayed. Original playback/comparison remain read-only.

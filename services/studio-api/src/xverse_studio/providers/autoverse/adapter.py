@@ -67,6 +67,7 @@ class AutoverseProvider:
     provider_version = PROVIDER_VERSION
     input_loss_schedules = True
     campaigns_enabled = True
+    reruns_enabled = True
     max_observers = 2
     observation_contract = {"contractVersion": "1.0", "observers": [{"observerId": "autoverse-telemetry",
         "costs": [{"value": 1, "unit": "observer-slot"}],
@@ -85,8 +86,10 @@ class AutoverseProvider:
         from .input_loss import DESCRIPTOR
         from .assessments import DESCRIPTOR as ASSESSMENTS
         from .campaigns import CONTRACT as CAMPAIGNS
+        from xverse_studio.runs.frozen import CONTRACT as RERUNS
         return {"providerId": PROVIDER_ID, "providerVersion": self.provider_version,
                 **({"campaignContract": deepcopy(CAMPAIGNS)} if self.campaigns_enabled else {}),
+                **({"rerunContract": {**RERUNS, "sourceVersions": ["0.3.0", "0.4.0"]}} if self.reruns_enabled else {}),
                 **({"assessmentContract": deepcopy(ASSESSMENTS)} if self.input_loss_schedules else {}),
                 **({"scenarioContracts": deepcopy(DESCRIPTOR)} if self.input_loss_schedules else {}),
                 **({"observationContracts": deepcopy(self.observation_contract)} if self.observation_contract is not None else {}), "contractVersion": "1.0",
