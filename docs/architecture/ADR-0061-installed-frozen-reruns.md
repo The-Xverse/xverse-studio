@@ -39,6 +39,12 @@ Durable child Start mapping reconciles lost acknowledgement. An intent with no
 acknowledged child stays unknown after restart and never automatically replays
 Start. Existing operation and UI acknowledgement semantics remain unchanged.
 
+The browser exposes the generic frozen-rerun admission request for recorded runs.
+Unsupported providers receive a backend refusal. A child acknowledgement must
+match the selected run's provider and evidence scope, as well as its original
+operation/run/snapshot/project identities; reference-only browser checks no longer
+hide admitted installed providers. Unknown or foreign replies retain their key.
+
 Classic Autoverse opts in for its existing 0.3.0 and 0.4.0 source mappings on the
 same enrolled installation. Platform mode stays unadmitted. This does not authorize
 other installations, hardware or companion repository changes. Verification uses

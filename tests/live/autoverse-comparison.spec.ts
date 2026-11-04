@@ -42,4 +42,29 @@ test("Actual Autoverse frozen rerun comparison exposes configuration and blocks 
     await expect(page.getByRole("heading", { name: "No observations available", exact: true })).toBeVisible();
     await expect(page.getByRole("button", { name: "Rerun frozen inputs", exact: true })).toBeEnabled();
   }
+  // Labelled transport fixtures over the retained real operation and child.
+  // The POST never reaches admission. Real operation reads and the final child
+  // read retain their actual provider/scope and failed execution state.
+  await page.getByLabel("Recorded run", { exact: true }).selectOption(recording.sourceRunId);
+  const rerunUrl = `**/api/v1/runs/${recording.sourceRunId}/reruns`;
+  const childUrl = `**/api/v1/runs/${recording.runId}`;
+  const keys: string[] = [];
+  await page.route(rerunUrl, async (route) => {
+    keys.push(route.request().headers()["idempotency-key"]);
+    await route.fulfill({ status: 202, contentType: "application/json", body: JSON.stringify({ operationId: recording.rerunOperationId }) });
+  });
+  await page.route(childUrl, async (route) => {
+    const response = await route.fetch();
+    await route.fulfill({ response, json: { ...(await response.json()), providerId: "unadmitted-other-provider" } });
+  });
+  await page.getByRole("button", { name: "Rerun frozen inputs", exact: true }).click();
+  await expect(page.getByText("The acknowledged child does not match this rerun. Retry retains the same request key.", { exact: false })).toBeVisible();
+  await expect(page.getByLabel("Recorded run", { exact: true })).toHaveValue(recording.sourceRunId);
+  expect(await page.evaluate((id) => localStorage.getItem("studio.pendingRerun." + id), recording.sourceRunId)).toBe(keys[0]);
+  await page.unroute(childUrl);
+  await page.getByRole("button", { name: "Rerun frozen inputs", exact: true }).click();
+  await expect(page.getByLabel("Recorded run", { exact: true })).toHaveValue(recording.runId);
+  expect(keys).toHaveLength(2); expect(keys[0]).toBeTruthy(); expect(keys[1]).toBe(keys[0]);
+  expect(await page.evaluate((id) => localStorage.getItem("studio.pendingRerun." + id), recording.sourceRunId)).toBeNull();
+  await page.unroute(rerunUrl);
 });

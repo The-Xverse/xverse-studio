@@ -70,7 +70,14 @@ def main():
     baseline = recorded.ledger(data)
     context = {
         k: result[k]
-        for k in ("projectId", "runId", "snapshotId", "sourceRunId", "sourceSnapshotId")
+        for k in (
+            "projectId",
+            "runId",
+            "snapshotId",
+            "sourceRunId",
+            "sourceSnapshotId",
+            "rerunOperationId",
+        )
     }
     with sqlite3.connect(
         (data / "studio.sqlite").as_uri() + "?mode=ro", uri=True
@@ -117,6 +124,7 @@ def main():
         "sourceNativeOutcome": result["outcome"],
         "selectedExecutionState": selected["state"],
         "fullRerunExecutionVerified": result["outcome"] == "passed",
+        "acknowledgementFixture": "The initial POST acknowledgement uses the retained actual operation; child-provider corruption is a labelled transport fixture. No new admission or Start.",
     }
     exit_code = 1
     try:

@@ -166,10 +166,13 @@ export function ResultsView({
           },
         );
         if (
+          !id(run.providerId) ||
+          !id(run.evidenceScope) ||
           operation.operationId !== accepted.operationId ||
           operation.kind !== "rerun" ||
           operation.sourceRunId !== run.runId ||
           operation.parentSnapshotId !== run.snapshotId ||
+          operation.evidenceScope !== run.evidenceScope ||
           !id(operation.snapshotId) ||
           operation.snapshotId === run.snapshotId ||
           ![
@@ -203,8 +206,8 @@ export function ResultsView({
             created.snapshotId !== operation.snapshotId ||
             created.projectId !== run.projectId ||
             created.operationId !== operation.result.startOperationId ||
-            created.providerId !== "studio.reference" ||
-            created.evidenceScope !== "owned_reference"
+            created.providerId !== run.providerId ||
+            created.evidenceScope !== run.evidenceScope
           )
             throw new Error(
               "The acknowledged child does not match this rerun. Retry retains the same request key.",
@@ -223,7 +226,7 @@ export function ResultsView({
         }
         if (operation.status === "rejected") {
           if (
-            operation.evidenceScope !== "owned_reference" ||
+            operation.evidenceScope !== run.evidenceScope ||
             operation.runId != null ||
             operation.result != null ||
             !id(operation.error?.code) ||
@@ -565,22 +568,19 @@ export function ResultsView({
             ])}
             run={run}
           />
-          {run.providerId === "studio.reference" &&
-            run.evidenceScope === "owned_reference" && (
-              <button
-                className="button"
-                disabled={!rerunEnabled || rerunBusy}
-                onClick={() =>
-                  void doAction(
-                    "Freshly admitting frozen inputs",
-                    rerunFrozenInputs,
-                  )
-                }
-              >
-                <Icon name="play" />
-                Rerun frozen inputs
-              </button>
-            )}
+          <button
+            className="button"
+            disabled={!rerunEnabled || rerunBusy}
+            onClick={() =>
+              void doAction(
+                "Freshly admitting frozen inputs",
+                rerunFrozenInputs,
+              )
+            }
+          >
+            <Icon name="play" />
+            Rerun frozen inputs
+          </button>
           <button
             className="button"
             onClick={() => {
