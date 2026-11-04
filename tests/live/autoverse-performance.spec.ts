@@ -2,6 +2,7 @@ import { test, expect, type Locator, type Page } from "@playwright/test";
 import { readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { connectStudio } from "../e2e/connect-studio";
+import { beginPresentationProbe, endPresentationProbe } from "../performance/presentation-probe";
 
 const p95 = (samples: number[]) => [...samples].sort((a, b) => a - b)[Math.ceil(samples.length * .95) - 1];
 const painted = (page: Page) => page.evaluate(() => new Promise<number>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve(performance.now())))));
@@ -32,12 +33,13 @@ test("Autoverse authoring and synthetic retained history meet the declared nativ
     await expect(page.locator(".tree-list button")).toHaveCount(200);
     await expect(page.locator(".react-flow__node-element")).toHaveCount(200);
     await expect(page.locator(".react-flow__edge")).toHaveCount(400);
-    const opens: number[] = [], selections: number[] = [];
+    const opens: number[] = [], selections: number[] = [], diagnostics: any[] = [];
     let openWarmup = 0, selectionWarmup = 0;
     for (let repeat = -1; repeat < 30; repeat++) {
       await page.getByRole("button", { name: "X-Verse Studio home", exact: true }).click();
       await expect(page.getByRole("heading", { name: "Recent projects", exact: true })).toBeVisible();
       const begin = await page.evaluate(() => performance.now());
+      await beginPresentationProbe(page, context.model.projectId, begin);
       const loaded = page.waitForResponse((r) => new URL(r.url()).pathname === `/api/v1/projects/${context.model.projectId}` && r.request().method() === "GET");
       await page.locator(".project-list").getByRole("button").filter({ hasText: context.model.projectName }).click();
       expect((await loaded).status()).toBe(200);
@@ -50,7 +52,9 @@ test("Autoverse authoring and synthetic retained history meet the declared nativ
       expect(validation.status()).toBe(200);
       expect((await validation.json()).valid).toBe(true);
       await expect(page.locator(".alerts")).toContainText("Authoritative platform validation passed");
-      const openElapsed = (await painted(page)) - begin;
+      const driverEnd = await painted(page);
+      const openElapsed = driverEnd - begin;
+      diagnostics.push(await endPresentationProbe(page, driverEnd));
       const id = context.model.selectionIds[repeat + 1];
       const elapsed = await page.evaluate((id) => {
         const button = [...document.querySelectorAll<HTMLButtonElement>(".tree-list button")].find((b) => b.querySelector("span")?.textContent === id);
@@ -70,7 +74,7 @@ test("Autoverse authoring and synthetic retained history meet the declared nativ
       await expect(page.locator(".inspector-summary h3")).toHaveText(id);
       if (repeat < 0) { openWarmup = openElapsed; selectionWarmup = elapsed; }
       else { opens.push(openElapsed); selections.push(elapsed); }
-      writeFileSync(info.outputPath(`model-${width}.partial.json`), JSON.stringify({ viewport: page.viewportSize(), completedRepetitions: opens.length, warmups: 1, openWarmup, selectionWarmup, opens, selections, scope: "Actual prefix; final keyboard and threshold checks may still be pending" }, null, 2));
+      writeFileSync(info.outputPath(`model-${width}.partial.json`), JSON.stringify({ viewport: page.viewportSize(), completedRepetitions: opens.length, warmups: 1, openWarmup, selectionWarmup, opens, selections, diagnostics, scope: "Actual prefix; final keyboard and threshold checks may still be pending" }, null, 2));
     }
     await activateByTab(page, page.getByRole("button", { name: "Table view", exact: true }));
     await expect(page.locator(".canvas-table tbody tr")).toHaveCount(200);
@@ -87,7 +91,7 @@ test("Autoverse authoring and synthetic retained history meet the declared nativ
       elements: 200, logicalAssets: context.model.logicalAssets, standalonePlacementNodes: context.model.standalonePlacementNodes, connections: 400, warmups: 1, repetitions: 30,
       openAndValidationPresentation: { milliseconds: opens, warmupMilliseconds: openWarmup, p95: p95(opens), threshold: 3000, passed: p95(opens) <= 3000 },
       selectionAndInspector: { milliseconds: selections, warmupMilliseconds: selectionWarmup, p95: p95(selections), threshold: 150, passed: p95(selections) <= 150 },
-      keyboardStructuredAlternative: true, visibleFocus: true, horizontalOverflow: false,
+      passivePresentationDiagnostics: diagnostics, keyboardStructuredAlternative: true, visibleFocus: true, horizontalOverflow: false,
       measurement: "Open through matching real project and validation HTTP responses and presented graph/status; local selection through exact inspector identity commit plus two animation frames.",
       limitations: ["Synthetic expanded authoring topology; no simulator scalability/fidelity/admission claim.", "Native Windows and other browser engines NOT_RUN."] };
     writeFileSync(info.outputPath(`model-${width}.json`), JSON.stringify(model, null, 2));
@@ -95,7 +99,7 @@ test("Autoverse authoring and synthetic retained history meet the declared nativ
 
     await page.evaluate((fixture) => { localStorage.setItem("studio.projectId", fixture.projectId); localStorage.setItem("studio.lastRun", fixture.runId); localStorage.setItem("studio.lastRun." + fixture.projectId, fixture.runId); }, context.history);
     await page.reload();
-    await page.getByRole("tab", { name: "Results", exact: true }).click();
+    await page.getByRole("tab", { name: /^Results(?:\s+\d+)?$/ }).click();
     await expect(page.getByText("Recorded fixture scope", { exact: true })).toBeVisible();
     await expect(page.getByRole("button", { name: "Stop", exact: true })).toHaveCount(0);
     await page.getByRole("tab", { name: "Events & logs", exact: false }).click();
