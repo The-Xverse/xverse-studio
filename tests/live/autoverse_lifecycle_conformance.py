@@ -91,10 +91,11 @@ class OriginalProcess:
 
 
 class NativeHost:
-    def __init__(self, data, output, receipt, backend, static, *, host_arguments=()):
+    def __init__(self, data, output, receipt, backend, static, *, host_arguments=(), register_provider=True):
         self.data, self.output, self.receipt = data, output, receipt
         self.backend, self.static = backend, static
         self.host_arguments = tuple(host_arguments)
+        self.register_provider = register_provider
         self.child, self.log, self.number = None, None, 0
         with socket.socket() as s:
             s.bind(('127.0.0.1', 0))
@@ -108,6 +109,10 @@ class NativeHost:
         argv = [str(self.backend), '-I', str(ROOT / 'tests/live/autoverse_admission_host.py'),
                 '--receipt', str(self.receipt), '--data-dir', str(self.data),
                 '--static-dir', str(self.static), '--port', str(self.port), '--fault', 'valid', *self.host_arguments]
+        if not self.register_provider:
+            assert not self.host_arguments
+            argv = [str(self.backend), '-I', '-m', 'xverse_studio.host.launcher',
+                    '--data-dir', str(self.data), '--static-dir', str(self.static), '--port', str(self.port)]
         self.log = (self.output / f'host-{self.number}.log').open('xb')
         self.child = subprocess.Popen(argv, cwd=ROOT, stdin=subprocess.DEVNULL, stdout=self.log, stderr=subprocess.STDOUT)
         p = psutil.Process(self.child.pid)

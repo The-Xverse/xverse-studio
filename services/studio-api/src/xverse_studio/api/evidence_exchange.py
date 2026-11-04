@@ -6,6 +6,7 @@ import hashlib
 import io
 import json
 import math
+import re
 import stat
 import time
 import unicodedata
@@ -20,6 +21,7 @@ from xverse_studio.security.files import MAX_BYTES, MAX_EXPANDED, check_text, sa
 from xverse_studio.security.managed_io import read_bounded
 from xverse_studio.storage.core import Problem, atomic, canonical, contained, digest, uid
 from xverse_studio.xdl import XDLRejected
+from xverse_studio.exchange.dependencies import dependency_summary
 
 ALLOWED_FILES = {"manifest.json", "snapshot.json", "run.json", "report.json", "evaluations.json", "annotations.json", "evidence/reference.jsonl"}
 REQUIRED_FILES = {"manifest.json", "snapshot.json", "run.json", "report.json"}
@@ -111,6 +113,7 @@ def _journal(data, run, snapshot):
     if data is None:
         return {"integrity": "unavailable", "recordCount": 0, "coverageComplete": False, "diagnostics": ["EVIDENCE_UNAVAILABLE"]}
     previous, count, coverage = "0" * 64, 0, False
+    identities = set()
     try:
         for line in data.splitlines(keepends=True):
             if not line.endswith(b"\n"):
@@ -118,7 +121,15 @@ def _journal(data, run, snapshot):
                     raise ValueError()
                 break  # incomplete final write is a verified prefix, not a record
             record = _json(line)
-            if not isinstance(record, dict):
+            if (not isinstance(record, dict)
+                    or any(not isinstance(record.get(field), str) or not 0 < len(record[field]) <= 512
+                           for field in ("eventId", "runId", "snapshotId", "type"))
+                    or record["eventId"] in identities
+                    or not isinstance(record.get("payload"), dict)
+                    or not isinstance(record.get("elementRefs"), list)
+                    or not isinstance(record.get("sequence"), str)
+                    or len(record["sequence"]) > 32
+                    or not re.fullmatch(r"(?:0|[1-9][0-9]*)", record["sequence"])):
                 raise ValueError()
             recorded_digest = record.pop("digest")
             if record.get("schemaVersion") != "1.0" or record["runId"] != run["runId"] or record["snapshotId"] != snapshot["snapshotId"] or record["previousDigest"] != previous or int(record["sequence"]) != count + 1:
@@ -126,6 +137,7 @@ def _journal(data, run, snapshot):
             if not isinstance(recorded_digest, str) or hashlib.sha256(canonical(record).encode()).hexdigest() != recorded_digest:
                 raise ValueError()
             previous = recorded_digest
+            identities.add(record["eventId"])
             count += 1
             if count > 100_000:
                 raise ValueError()
@@ -180,6 +192,11 @@ def _inspect(files, adapter):
     if not isinstance(snapshot.get("documents"), dict) or not 0 < len(snapshot["documents"]) <= 128 or any(not isinstance(name, str) or not isinstance(content, str) for name, content in snapshot["documents"].items()):
         _invalid("The frozen authored-input set is unavailable or exceeds its bound.")
     diagnostics = []
+    dependencies = report.get("dependencies")
+    if dependencies is None:
+        diagnostics.append("DEPENDENCY_SUMMARY_UNAVAILABLE")
+    elif digest(dependencies) != digest(dependency_summary(snapshot)):
+        _invalid("The dependency summary does not match the original frozen references or its supported version.")
     compilation = "unavailable"
     # Reuse the installed public compiler only when its immutable identity agrees.
     # A different compiler/profile leaves inspection available but unresolved.
@@ -201,7 +218,9 @@ def _inspect(files, adapter):
         diagnostics.append("COMPILER_IDENTITY_UNAVAILABLE")
     journal = _journal(files.get("evidence/reference.jsonl"), run, snapshot)
     if run.get("providerId") != "studio.reference":
-        journal.update(integrity="unavailable", coverageComplete=False)
+        # Unsupported interpretation cannot erase a proven envelope/digest
+        # failure. An intact envelope still confers no provider-reader authority.
+        journal.update(integrity="invalid" if journal["integrity"] == "invalid" else "unavailable", coverageComplete=False)
         journal["diagnostics"].append("SOURCE_PROVIDER_READER_UNSUPPORTED")
     declared_integrity = _degraded(manifest["integrity"], report["integrity"])
     integrity = _degraded(declared_integrity, journal["integrity"])
@@ -229,6 +248,7 @@ def _inspect(files, adapter):
             _invalid("A derived record references another frozen snapshot.")
         derived[filename.removesuffix(".json")] = rows
     inspection = {"sourceRunId": run["runId"], "sourceSnapshotId": snapshot["snapshotId"], "sourceProviderId": run["providerId"], "evidenceScope": "imported_recorded_evidence", "declaredEvidenceScope": report.get("evidenceScope", "unknown"), "providerAdmission": "not_conferred_by_import", "integrity": integrity, "declaredIntegrity": declared_integrity, "journalIntegrity": journal["integrity"], "availability": availability, "declaredAvailability": report["evidenceStatus"], "manifestAvailability": manifest["availability"], "recordCount": journal["recordCount"], "coverageComplete": journal["coverageComplete"], "snapshotIntegrity": "valid", "planIntegrity": "valid", "inputCompilation": compilation, "diagnostics": list(dict.fromkeys(diagnostics)), "executionAllowed": False, "limitations": ["Imported evidence is inert recorded data; it conveys no process, provider, device or execution authority.", "Internal digest consistency is not producer authentication or an external simulator/hardware admission claim.", "Original reports and derived verdicts are preserved; current import integrity is displayed separately."]}
+    inspection["dependencies"] = dependencies
     return {"manifest": manifest, "inspection": inspection, "report": report, **derived}
 
 

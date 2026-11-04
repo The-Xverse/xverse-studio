@@ -102,6 +102,9 @@ def recorded_demo(tmp_path):
     root.mkdir(parents=True)
     for name in ("state.json", "evidence.jsonl"):
         shutil.copyfile(source / "runs" / run["runId"] / name, root / name)
+    snapshot_root = store.root / "snapshots" / run["snapshotId"]
+    snapshot_root.mkdir(parents=True)
+    shutil.copyfile(source / "snapshots" / run["snapshotId"] / "snapshot.json", snapshot_root / "snapshot.json")
     assert digest((root / "evidence.jsonl").read_bytes()) == run["journalDigest"]
     for kind, key, body in rows:
         store.put(kind, key, json.loads(body))

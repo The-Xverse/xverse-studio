@@ -10,6 +10,7 @@ from xverse_studio.storage.core import Problem, canonical, digest, uid, atomic
 from xverse_studio.security.files import MAX_EXPANDED, check_portable_text, safe_name
 from xverse_studio.security.managed_io import read_bounded, SafeIOError
 from xverse_studio.evidence.reader import verify_journal
+from xverse_studio.exchange.dependencies import dependency_summary
 
 
 def capture(root, path, *, missing_ok=False):
@@ -143,6 +144,10 @@ def install_exchange(app, store, projects, runs):
 
         def accepted(db):
             snap = store.get("snapshot", r["snapshotId"], db)
+            runs.verify_snapshot(snap)
+            if any(snap.get(field) != r.get(field) for field in (
+                    "snapshotId", "projectId", "revision", "providerId", "planDigest", "semanticDigest")):
+                raise Problem("SNAPSHOT_INTEGRITY", "The selected run does not match its original protected snapshot.")
             raw = capture(store.root, runs.directory(runId) / "evidence.jsonl", missing_ok=True)
             _, integrity = verify_journal(raw, r) if raw is not None else ([], "unavailable")
             files = {
@@ -163,6 +168,7 @@ def install_exchange(app, store, projects, runs):
                         "evidenceStatus": r["evidence"],
                         "integrity": integrity,
                         "evidenceScope": r.get("evidenceScope", "unknown"),
+                        "dependencies": dependency_summary(snap),
                         "limitations": [
                             "This bundle contains the original Studio provider journal; it does not admit another runtime, Argus reader or physical device.",
                             "Replay is recorded evidence inspection, not re-execution.",

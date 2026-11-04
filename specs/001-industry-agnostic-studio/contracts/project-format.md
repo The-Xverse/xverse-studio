@@ -150,3 +150,22 @@ metadata without a recorded textual seal compares known non-layout envelope
 fields without inventing old byte provenance. Unreadable/malformed or foreign
 history cannot supply a replacement baseline. Existing receipts and separately
 verified original frozen rerun inputs retain their independent identities.
+
+Evidence report amendment (ADR-0062): exports verify original protected snapshot
+bytes and the run/project/revision/provider/plan/semantic binding before creating
+an export operation. Known-invalid journal envelopes remain invalid even when the
+original provider reader is unsupported; intact unsupported records remain
+unavailable and never confer execution authority.
+
+`report.json` may include `dependencies` version 1.0: `dependenciesVersion`, original
+`snapshotDigest`, `resolution: not_attempted`, at most 256 `items`, and limitations.
+Each item has a provider/compiler/profile/artifact `kind`, frozen `identity`,
+`identityStatus: frozen_declaration`, `contentIncluded: false` and
+`availability: not_included|unavailable`. This summarizes references and absent
+payloads, not host availability or redistribution rights. It never resolves paths
+or installs dependencies. Evidence envelope and report schema remain 1.0; their
+file hashes bind the complete report. Import checks a supplied summary against the
+frozen snapshot using canonical typed identity. Unsupported/mismatched summaries
+reject unchanged; legacy reports without one remain inert and explicitly unresolved
+with `DEPENDENCY_SUMMARY_UNAVAILABLE`. Inspection exposes `dependencies` separately
+from original report claims. Portable artifact locks keep their declared policies.
