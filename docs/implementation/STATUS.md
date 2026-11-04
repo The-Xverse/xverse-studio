@@ -1,3 +1,18 @@
+# Assessment evidence boundary verified — T088 remains open — 2026-11-04
+
+**66 completed /24 in progress /10 blocked; zero accepted milestones.**
+New evaluation requests require an admitted mapping for the actual frozen provider/
+reader. Autoverse interface receipts remain explicitly unsupported for evaluation;
+canonical integrity and reference-shaped payloads grant no unit/clock/coverage
+semantics. The UI displays the reason and canonical reader identity.32recording
+checks and19browser/guard checks pass on496unchanged sources/6privateUI, preserving
+original/copy bytes and ledger counts with verified private shutdown. One result
+card fixture remains synthetic. No new runtime/reference execution, actual
+Autoverse evaluator mapping, full-suite/package or Windows claim. T088 remains open.
+See [scoped evidence/review](../../evidence/studio/M4-assessment-evidence-admission/README.md).
+
+## Earlier checkpoints
+
 # Resumed T088 — frozen assessment inspection repaired — 2026-11-04
 
 **66 completed /24 in progress /10 blocked; zero accepted milestones.**

@@ -1,0 +1,191 @@
+{
+  "config": {
+    "argv": [
+      "<tool-cache>/node-v24.22.1-linux-x64/bin/node",
+      "<main-checkout>/node_modules/@playwright/test/cli.js",
+      "test",
+      "--config",
+      "tests/live/autoverse-assessments.config.ts",
+      "--grep",
+      "cannot enter the reference evaluator"
+    ],
+    "configFile": "<repo>/tests/live/autoverse-assessments.config.ts",
+    "rootDir": "<repo>/tests/live",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "<repo>/.studio-local/t088-evidence-boundary/red/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "<repo>/tests/live",
+        "testIgnore": [],
+        "testMatch": [
+          "autoverse-assessments.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "<repo>/.studio-local/t088-evidence-boundary/red/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "<repo>/tests/live",
+        "snapshotDir": "<repo>/tests/live",
+        "testIgnore": [],
+        "testMatch": "autoverse-assessments.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "baseURL": "http://127.0.0.1:49489",
+          "browserName": "chromium",
+          "actionTimeout": 15000,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "trace": "off",
+          "screenshot": "only-on-failure",
+          "video": "off"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "<repo>/.studio-local/t088-evidence-boundary/red/browser.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "autoverse-assessments.spec.ts",
+      "file": "autoverse-assessments.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Actual Autoverse evidence cannot enter the reference evaluator",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 2416,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m200\u001b[39m\nReceived: \u001b[31m404\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m200\u001b[39m\nReceived: \u001b[31m404\u001b[39m\n    at <repo>/tests/live/autoverse-assessments.spec.ts:309:28",
+                    "location": {
+                      "file": "<repo>/tests/live/autoverse-assessments.spec.ts",
+                      "column": 28,
+                      "line": 309
+                    },
+                    "snippet": "  307 |   const panel = await open(page, info), data = saved();\n  308 |   const support = await page.request.get(`/api/v1/runs/${data.runId}/assessment-support`);\n> 309 |   expect(support.status()).toBe(200);\n      |                            ^\n  310 |   const body = await support.json();\n  311 |   expect(body).toMatchObject({ formatVersion: \"1.0\", runId: data.runId, snapshotId: data.snapshotId,\n  312 |     projectId: data.projectId, status: \"unsupported\", reasons: [\"EVALUATION_EVIDENCE_UNSUPPORTED\"],"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo>/tests/live/autoverse-assessments.spec.ts",
+                        "column": 28,
+                        "line": 309
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m200\u001b[39m\nReceived: \u001b[31m404\u001b[39m\n\n  307 |   const panel = await open(page, info), data = saved();\n  308 |   const support = await page.request.get(`/api/v1/runs/${data.runId}/assessment-support`);\n> 309 |   expect(support.status()).toBe(200);\n      |                            ^\n  310 |   const body = await support.json();\n  311 |   expect(body).toMatchObject({ formatVersion: \"1.0\", runId: data.runId, snapshotId: data.snapshotId,\n  312 |     projectId: data.projectId, status: \"unsupported\", reasons: [\"EVALUATION_EVIDENCE_UNSUPPORTED\"],\n    at <repo>/tests/live/autoverse-assessments.spec.ts:309:28"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-04T08:56:12.723Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<repo>/.studio-local/t088-evidence-boundary/red/artifacts/autoverse-assessments-Actu-14ad5-ter-the-reference-evaluator/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo>/.studio-local/t088-evidence-boundary/red/artifacts/autoverse-assessments-Actu-14ad5-ter-the-reference-evaluator/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo>/tests/live/autoverse-assessments.spec.ts",
+                    "column": 28,
+                    "line": 309
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "05ed87a70f8a8701902e-f71cf3755594225a67c8",
+          "file": "autoverse-assessments.spec.ts",
+          "line": 306,
+          "column": 5
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-04T08:56:12.153Z",
+    "duration": 3122.295,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

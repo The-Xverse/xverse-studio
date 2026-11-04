@@ -1,0 +1,32 @@
+
+Running 1 test using 1 worker
+
+(node:4176454) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 tests/live/autoverse-assessments.spec.ts:306:5 › Actual Autoverse evidence cannot enter the reference evaluator (2.4s)
+
+
+  1) tests/live/autoverse-assessments.spec.ts:306:5 › Actual Autoverse evidence cannot enter the reference evaluator 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 404
+
+      307 |   const panel = await open(page, info), data = saved();
+      308 |   const support = await page.request.get(`/api/v1/runs/${data.runId}/assessment-support`);
+    > 309 |   expect(support.status()).toBe(200);
+          |                            ^
+      310 |   const body = await support.json();
+      311 |   expect(body).toMatchObject({ formatVersion: "1.0", runId: data.runId, snapshotId: data.snapshotId,
+      312 |     projectId: data.projectId, status: "unsupported", reasons: ["EVALUATION_EVIDENCE_UNSUPPORTED"],
+        at <repo>/tests/live/autoverse-assessments.spec.ts:309:28
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    .studio-local/t088-evidence-boundary/red/artifacts/autoverse-assessments-Actu-14ad5-ter-the-reference-evaluator/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: .studio-local/t088-evidence-boundary/red/artifacts/autoverse-assessments-Actu-14ad5-ter-the-reference-evaluator/error-context.md
+
+  1 failed
+    tests/live/autoverse-assessments.spec.ts:306:5 › Actual Autoverse evidence cannot enter the reference evaluator 

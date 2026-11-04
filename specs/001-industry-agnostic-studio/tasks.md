@@ -1052,3 +1052,12 @@ recordings and ledger counts. One result-card case is explicitly synthetic; actu
 Autoverse evaluator-profile admission and remaining full acceptance are unverified.
 See `evidence/studio/M4-frozen-assessments/`. T088 remains unchecked;66/24/10 and zero
 accepted milestones. tasks.md and traceability.json are updated together.
+
+T088 prerequisite2026-11-04: ADR0056/source1fdfb34 adds protected assessment
+reader/mapping support and backend refusal before unsupported evaluation acceptance;
+reference-shaped payloads cannot grant external coverage.32recording/Python and19
+browser/guard checks pass on496unchanged inputs/6privateUI, with immutable original/
+copy records and no new ledger/idempotency entries. Actual Autoverse definition and
+measurement mapping remains unimplemented/unverified. Evidence:
+`evidence/studio/M4-assessment-evidence-admission/`. T088 remains unchecked; statuses
+and all original milestone/acceptance obligations are unchanged.
