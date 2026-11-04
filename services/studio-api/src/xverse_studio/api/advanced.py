@@ -427,6 +427,9 @@ def install_advanced(app, store, projects, runs, adapter, *, lab_host=None, lab_
         snapshot = store.get("snapshot", body.snapshotId, db)
         runs.require_campaign_snapshot(snapshot, db)
         try:
+            if snapshot["providerId"] in runs.installed_providers:
+                return runs.campaign_mapping(snapshot).preview(body.matrix, budget=body.budget,
+                    concurrency=body.concurrency, stop_policy=body.stopPolicy)
             maximum_duration = max([snapshot["configuration"]["duration"], *body.matrix.get("duration", [])])
             return planner.preview(snapshot, body.matrix, budget=body.budget, concurrency=body.concurrency, duration_seconds=maximum_duration, stop_policy=body.stopPolicy)
         except (CampaignError, TypeError, ValueError) as exc:
@@ -437,6 +440,8 @@ def install_advanced(app, store, projects, runs, adapter, *, lab_host=None, lab_
 
     def prepare_child(campaign, child):
         base = campaign["baseSnapshot"]
+        if base["providerId"] in runs.installed_providers:
+            return runs.prepare_campaign_child(campaign, child)
         docs = semantic_edits(base["documents"], [{"kind": "set_parameter", "parameterId": key, "value": value} for key, value in child["parameters"].items()])
         compiled = adapter.compile(docs)
         configuration = reference_configuration(docs, compiled)
@@ -479,6 +484,9 @@ def install_advanced(app, store, projects, runs, adapter, *, lab_host=None, lab_
                 elif any(c["state"] != "pending" for c in children):
                     operation["status"] = "delegated"
                 store.put("operation", operation["operationId"], operation)
+                if (state.record["baseSnapshot"]["providerId"] in runs.installed_providers
+                        and not runs.campaign_slot_available()):
+                    continue
                 child = state.claim_next()
                 if child is None:
                     continue

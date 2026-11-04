@@ -9,7 +9,7 @@ from xverse_studio.storage.core import digest
 from .installation import InstallationError, verify
 
 PROVIDER_ID = "autoverse.demo"
-PROVIDER_VERSION = "0.3.0"
+PROVIDER_VERSION = "0.4.0"
 EXTERNAL_CONTRACT = {"version": "1.0", "kind": "communication", "providerId": PROVIDER_ID,
                      "contractRef": CONTRACT_REF, "feedback": "externally-managed-asynchronous-communication"}
 
@@ -66,6 +66,7 @@ class AutoverseProvider:
     controls = ["stop", "cancel"]
     provider_version = PROVIDER_VERSION
     input_loss_schedules = True
+    campaigns_enabled = True
     max_observers = 2
     observation_contract = {"contractVersion": "1.0", "observers": [{"observerId": "autoverse-telemetry",
         "costs": [{"value": 1, "unit": "observer-slot"}],
@@ -83,7 +84,9 @@ class AutoverseProvider:
         implementation = digest(b"".join(p.read_bytes() for p in sorted(Path(__file__).parent.glob("*.py"))))
         from .input_loss import DESCRIPTOR
         from .assessments import DESCRIPTOR as ASSESSMENTS
+        from .campaigns import CONTRACT as CAMPAIGNS
         return {"providerId": PROVIDER_ID, "providerVersion": self.provider_version,
+                **({"campaignContract": deepcopy(CAMPAIGNS)} if self.campaigns_enabled else {}),
                 **({"assessmentContract": deepcopy(ASSESSMENTS)} if self.input_loss_schedules else {}),
                 **({"scenarioContracts": deepcopy(DESCRIPTOR)} if self.input_loss_schedules else {}),
                 **({"observationContracts": deepcopy(self.observation_contract)} if self.observation_contract is not None else {}), "contractVersion": "1.0",
@@ -102,6 +105,10 @@ class AutoverseProvider:
                     "authorityRequirements": ["native-backend-owned", "exclusive-demo-installation"], "physicalEffects": False} for kind in ["start", *self.controls]],
                 "limitations": ["Linux installation only; external simulation time and deterministic replay unavailable.",
                                 "Input acceptance means publication, not vehicle acknowledgement. No native X-COM or physical vehicle."]}
+
+    def campaign_documents(self, sources, parameters):
+        from .campaigns import documents
+        return documents(self, sources, parameters)
 
     def assessment_context(self, run, snapshot):
         from .assessments import context

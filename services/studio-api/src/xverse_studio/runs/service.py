@@ -217,6 +217,12 @@ class Runs:
         profile_locks = registry.validate_project(p)
         documents = self.projects.sources(p)
         project_documents = documents
+        return self._preflight_sources(pid, p["revision"], project_documents, profile_locks, selection)
+
+    def _preflight_sources(self, pid, revision, project_documents, profile_locks, selection, *, lineage=None):
+        """Freeze exact sources through the same read-only checks for drafts and children."""
+        registry = ProfileRegistry(self.adapter)
+        documents = project_documents
         compiled = self.compilation(documents, selection)
         refs = compiled["selection"]
         if compiled["valid"]:
@@ -271,7 +277,7 @@ class Runs:
         snapshot = {
             "snapshotId": snapid,
             "projectId": pid,
-            "revision": p["revision"],
+            "revision": revision,
             "documents": documents,
             "projectDocuments": project_documents,
             "profileLocks": profile_locks,
@@ -287,6 +293,8 @@ class Runs:
             "compiler": compiled.get("compiler"),
             "selection": refs,
         }
+        if lineage is not None:
+            snapshot.update(lineage)
         snapshot["snapshotDigest"] = digest(snapshot)
         ready = configuration is not None and not any(
             d.get("severity") == "error" for d in diagnostics
@@ -295,7 +303,7 @@ class Runs:
             "preflightId": pfid,
             "snapshotId": snapid,
             "snapshotDigest": snapshot["snapshotDigest"],
-            "revision": p["revision"],
+            "revision": revision,
             "providerId": provider_id,
             "providerIdentity": provider,
             "readinessVersion": "1.0",
@@ -318,7 +326,7 @@ class Runs:
             "planPreview": {
                 "snapshotId": snapid,
                 "snapshotDigest": snapshot["snapshotDigest"],
-                "revision": p["revision"],
+                "revision": revision,
                 "selection": refs,
                 "planDigest": compiled.get("planDigest"),
                 "semanticDigest": compiled.get("semanticDigest"),
@@ -350,15 +358,16 @@ class Runs:
             with self.store.tx() as connection:
                 return self.require_campaign_snapshot(snapshot, connection)
         if (
-            snapshot.get("providerId") != "studio.reference"
-            or not snapshot.get("configuration")
+            not snapshot.get("configuration")
             or not snapshot.get("planDigest")
         ):
             raise Problem(
                 "ADMISSION_REJECTED",
-                "Campaigns require a previously admitted owned-reference snapshot.",
+                "Campaigns require an intact configured snapshot with an originally ready preflight and an admitted provider mapping.",
             )
         self.verify_snapshot(snapshot)
+        if snapshot.get("providerId") != "studio.reference":
+            self.campaign_mapping(snapshot)
         needle = '"snapshotId":' + canonical(snapshot["snapshotId"])
         candidates = []
         for row in db.execute(
@@ -378,6 +387,54 @@ class Runs:
                 "ADMISSION_REJECTED",
                 "A matching original ready preflight is required; blocked drafts confer no campaign authority.",
             )
+
+    def campaign_mapping(self, snapshot):
+        from xverse_studio.campaigns.mapping import InstalledCampaign
+        provider = self.installed_providers.get(snapshot.get("providerId"))
+        descriptor = next((p for p in self.provider_descriptors() if p["providerId"] == snapshot.get("providerId")), {})
+        mapping = InstalledCampaign(snapshot, provider, descriptor)
+        compiled = self.compilation(snapshot["documents"], snapshot["selection"])
+        if (not compiled["valid"] or compiled["planDigest"] != snapshot["planDigest"]
+                or compiled["semanticDigest"] != snapshot["semanticDigest"]
+                or provider.configuration(snapshot["documents"], compiled) != snapshot.get("configuration")):
+            raise Problem("ADMISSION_REJECTED", "The original campaign sources and configuration are outside the installed mapping.")
+        ProfileRegistry(self.adapter).validate_snapshot(snapshot)
+        return mapping
+
+    def prepare_campaign_child(self, campaign, child):
+        from xverse_studio.campaigns.planner import _identity
+        base = campaign["baseSnapshot"]
+        self.require_campaign_snapshot(base)
+        if (_identity(base) != campaign["baseSnapshotDigest"]
+                or self.store.get("snapshot", base["snapshotId"]) != base):
+            raise Problem("SNAPSHOT_INTEGRITY", "The campaign base differs from its original canonical snapshot.")
+        mapping = self.campaign_mapping(base)
+        planned = mapping.preview(campaign["matrix"], budget=campaign["budget"],
+                                  concurrency=campaign["concurrency"], stop_policy=campaign["stopPolicy"])
+        index = child.get("index")
+        if (type(index) is not int or not 0 <= index < len(planned["children"])
+                or any(child.get(k) != planned["children"][index][k] for k in ("childKey", "parameters"))):
+            raise Problem("CAMPAIGN_CHILD_IDENTITY", "The child differs from the original bounded matrix identity.")
+        documents = mapping.documents(child["parameters"])
+        compiled = self.compilation(documents, base["selection"])
+        configuration = mapping.provider.configuration(documents, compiled)
+        if configuration is None or any(configuration.get(k) != v for k, v in child["parameters"].items()):
+            raise Problem("CAMPAIGN_PARAMETER_MISMATCH", "The mapped sources do not apply the exact declared child parameters.")
+        project_documents = {**base.get("projectDocuments", base["documents"]), **documents}
+        selection = {**base["selection"], "providerId": base["providerId"]}
+        preflight = self._preflight_sources(base["projectId"], base["revision"], project_documents,
+            base["profileLocks"], selection, lineage={"parentSnapshotId": base["snapshotId"],
+                "campaignId": campaign["campaignId"], "campaignChildKey": child["childKey"]})
+        snapshot = self.store.get("snapshot", preflight["snapshotId"])
+        ProfileRegistry(self.adapter).validate_snapshot(snapshot)
+        if preflight["status"] != "ready":
+            raise Problem("ADMISSION_REJECTED", "Campaign child readiness failed; inspect its retained preflight.",
+                          diagnostics=preflight["diagnostics"], preflightId=preflight["preflightId"])
+        return {key: preflight[key] for key in ("snapshotId", "preflightId")}
+
+    def campaign_slot_available(self):
+        self._reconcile_active_observations()
+        return not any(row["state"] in ACTIVE for row in self.store.all("run"))
 
     def verify_snapshot(self, snapshot):
         from xverse_studio.security.managed_io import open_read, SafeIOError

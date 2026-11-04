@@ -18,6 +18,12 @@ export function CampaignWorkspace({
   limits: Data;
   enabled: boolean;
 }) {
+  const parameterContract = preflight?.providerIdentity?.campaignContract;
+  const admittedParameters = parameterContract?.contractVersion === "1.0" &&
+    parameterContract.parameters && typeof parameterContract.parameters === "object"
+    ? Object.entries(parameterContract.parameters).filter(([, rule]: [string, any]) =>
+        rule && Number.isFinite(rule.minimum) && Number.isFinite(rule.maximum) && typeof rule.unit === "string")
+    : [];
   const [matrix, setMatrix] = useState('{"gain": [0.5, 0.8, 1.2]}'),
     [budget, setBudget] = useState("8"),
     [seconds, setSeconds] = useState("240"),
@@ -504,6 +510,18 @@ export function CampaignWorkspace({
           repetition require a separately admitted provider contract; a campaign
           does not promise deterministic replay.
         </p>
+        {admittedParameters.length > 0 && (
+          <div className="field-hint">
+            <p>Admitted axes: {admittedParameters.map(([name, rule]: [string, any]) =>
+              `${name}: ${rule.minimum}–${rule.maximum} ${rule.unit}`).join("; ")}.
+              {parameterContract.seedPolicy === "unsupported" && " Applied seeds are unavailable."}</p>
+            <button type="button" className="button" onClick={() => {
+              changed();
+              setMatrix(JSON.stringify(Object.fromEntries(admittedParameters.map(([name, rule]: [string, any]) =>
+                [name, [rule.minimum]])), null, 2));
+            }}>Use admitted parameter example</button>
+          </div>
+        )}
         {!ready && (
           <p role="status">
             A ready preflight from this project revision and advertised campaign

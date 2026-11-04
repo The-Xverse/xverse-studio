@@ -11,7 +11,7 @@ from xverse_studio.xdl import XDLAdapter
 from .controls import MAX_INPUT_SEQUENCE
 from .input_loss import CLOCK, CODEC, CONTRACT as FAULT_CONTRACT
 
-VERSION = "0.3.0"
+VERSIONS = {"0.3.0", "0.4.0"}
 DESCRIPTOR = {"contractVersion": "1.0", "contractRef": CONTRACT, "observerRef": OBSERVER,
               "clockDomain": CLOCK, "clockCodec": CODEC, "tickUnit": "microsecond",
               "fields": {field: {"type": "boolean", "eventKind": kind} for field, kind in FIELDS.items()},
@@ -49,7 +49,7 @@ def admit_sources(actual, expected, documents):
 def context(provider, run, snapshot):
     frozen = snapshot.get("providerIdentity", {})
     if (run.get("providerId") != "autoverse.demo" or snapshot.get("providerId") != run.get("providerId")
-            or frozen.get("providerId") != run.get("providerId") or frozen.get("providerVersion") != VERSION
+            or frozen.get("providerId") != run.get("providerId") or frozen.get("providerVersion") not in VERSIONS
             or frozen.get("assessmentContract") != DESCRIPTOR or run.get("evidenceScope") != "external_demo"
             or run.get("journalReader") != "studio.hash-chain-v1"
             or run.get("journalId") != run["runId"] + ":provider-journal"):
@@ -63,7 +63,7 @@ def context(provider, run, snapshot):
         return None
     return {"contractVersion": "1.0", "mappingId": CONTRACT,
             "mappingDigest": "sha256:" + hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
-            "sourceProviderId": run["providerId"], "sourceVersion": VERSION,
+            "sourceProviderId": run["providerId"], "sourceVersion": frozen["providerVersion"],
             "clockDomain": CLOCK, "clockCodec": CODEC, "tickUnit": "microsecond",
             "epoch": "actual-running-transition", "observerRef": OBSERVER,
             "coverageScope": "recorded-events-only"}
@@ -105,7 +105,7 @@ def project(run, snapshot, records, integrity):
             raise ValueError("Unsupported coverage")
         def source(record):
             if (record.get("runId") != run["runId"] or record.get("snapshotId") != snapshot["snapshotId"]
-                    or record.get("source") != {"providerId": run["providerId"], "version": VERSION}
+                    or record.get("source") != {"providerId": run["providerId"], "version": snapshot["providerIdentity"]["providerVersion"]}
                     or record.get("evidenceRefs") != [evidence_id]
                     or record.get("sourceTime", {}).get("clockDomain") != CLOCK
                     or record["sourceTime"].get("resolution") != "microsecond"):
