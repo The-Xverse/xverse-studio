@@ -53,6 +53,7 @@ import {
 } from "../features/retention/RetentionDialog";
 import { PreflightReview } from "../features/preflight/PreflightReview";
 import { ResultsView } from "../features/results/ResultsView";
+import { EvidenceInspection } from "../features/exchange/EvidenceInspection";
 import { PendingStartNotice } from "../features/runs/PendingStartNotice";
 import {
   RecoveryPanel,
@@ -1869,21 +1870,7 @@ export default function App() {
             wide
             onClose={() => setModal("")}
           >
-            <p>
-              This is recorded evidence inspection. Import creates no run and
-              grants no execution authority.
-            </p>
-            <KeyValues
-              values={{
-                Bundle: evidenceImport.bundleId,
-                Integrity: evidenceImport.inspection?.integrity,
-                "Source run": evidenceImport.inspection?.sourceRunId,
-                "Source snapshot": evidenceImport.inspection?.sourceSnapshotId,
-                Availability: evidenceImport.inspection?.availability,
-                "Execution allowed": "No",
-              }}
-            />
-            <Json value={evidenceImport} expanded />
+            <EvidenceInspection bundle={evidenceImport} />
           </Modal>
         )}
         {modal === "new" && (

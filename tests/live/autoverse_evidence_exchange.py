@@ -299,6 +299,84 @@ def test_rehashed_noncanonical_envelopes_remain_invalid_for_an_unsupported_reade
     assert response.json()["inspection"]["executionAllowed"] is False
 
 
+def test_project_exchange_preserves_declared_missing_and_restricted_references_without_fetching(
+    recorded,
+):
+    api, store, _, snapshot, _ = recorded
+    project = api.post(
+        "/api/v1/projects",
+        json={
+            "name": "Autoverse dependency references Ω",
+            "blueprintRef": "autoverse-classic",
+        },
+    )
+    assert project.status_code == 201, project.text[:500]
+    p = project.json()
+    exported = api.post(
+        f"/api/v1/projects/{p['projectId']}/exports",
+        headers={"Idempotency-Key": "project-dependency-source"},
+        json={"revision": p["revision"]},
+    )
+    assert exported.status_code == 202, exported.text[:500]
+    files = unpack(api.get(exported.json()["result"]["downloadUrl"]).content)
+    # Controlled lock metadata, not an assertion of the vendor's actual license
+    # or local installation availability. The source XDL/plan is unchanged.
+    lock = {
+        "formatVersion": "1.0",
+        "entries": [
+            {
+                "kind": "runtime",
+                "providerId": "autoverse.demo",
+                "digest": snapshot["providerIdentity"]["installationDigest"],
+                "availability": "missing",
+                "originRef": "urn:exchange:unavailable-runtime",
+            },
+            {
+                "kind": "implementation",
+                "providerId": "autoverse.demo",
+                "digest": snapshot["providerIdentity"]["implementationDigest"],
+                "availability": "restricted",
+                "distribution": "test-only-no-redistribution",
+                "originRef": "urn:exchange:restricted-implementation",
+            },
+        ],
+    }
+    files["artifacts.lock.json"] = canonical(lock).encode()
+    before = (
+        len(store.all("run")),
+        len(store.all("snapshot")),
+        len(store.all("evaluation")),
+    )
+    stream = io.BytesIO()
+    with zipfile.ZipFile(stream, "w") as bundle:
+        for name, raw in files.items():
+            bundle.writestr(name, raw)
+    imported = api.post(
+        "/api/v1/projects/imports",
+        json={"archiveBase64": base64.b64encode(stream.getvalue()).decode()},
+    )
+    assert imported.status_code == 201, imported.text[:500]
+    q = imported.json()
+    assert q["supportingFiles"]["artifacts.lock.json"] == canonical(lock)
+    assert {d["path"]: d["content"] for d in p["documents"].values()} == {
+        d["path"]: d["content"] for d in q["documents"].values()
+    }
+    reexported = api.post(
+        f"/api/v1/projects/{q['projectId']}/exports",
+        headers={"Idempotency-Key": "project-dependency-roundtrip"},
+        json={"revision": q["revision"]},
+    )
+    assert reexported.status_code == 202, reexported.text[:500]
+    output = unpack(api.get(reexported.json()["result"]["downloadUrl"]).content)
+    assert output["artifacts.lock.json"] == files["artifacts.lock.json"]
+    assert not any(name.startswith("artifacts/") for name in output)
+    assert (
+        len(store.all("run")),
+        len(store.all("snapshot")),
+        len(store.all("evaluation")),
+    ) == before
+
+
 @pytest.mark.parametrize(
     "fault", ["database", "file", "missing", "symlink", "hardlink"]
 )
