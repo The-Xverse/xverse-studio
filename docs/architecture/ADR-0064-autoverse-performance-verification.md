@@ -1,6 +1,6 @@
 # ADR-0064 — Native authoring/history measurements and duplicate inspection decoding
 
-Date: 2026-11-04. Status: scoped repair implemented; verification in progress.
+Date: 2026-11-04. Status: scoped repair and complete T067 finite-reference verification implemented and verified.
 Traces: T038, T067; NFR-006/NFR-007/NFR-008/NFR-011; AC-030/AC-031.
 
 Measure the existing declared 200-visible-element/400-connection and 50,000-event/
@@ -49,3 +49,19 @@ Native Windows, other browser engines, assistive technology, human usability,
 continuous producer/control responsiveness, simulator scalability and full milestone
 acceptance remain independent. A finite synthetic history benchmark does not pass
 the live backpressure/control matrix or T096's combined campaign acceptance.
+
+Current test allocation: use tests/live/autoverse-performance.spec.ts/config.ts and
+its explicit native/preparation/visibility drivers plus actual-source inspection
+guards. Keep the original proposed tests/performance/model-canvas.spec.ts and
+accessibility locations in the task trace; historical reference helpers are retained.
+This allocation follows the current Autoverse target instruction and changes no
+workload, task ID, requirement, threshold, permission or remaining Windows gate.
+
+Final source2e0c782, with534 identical inputs in current49d4c56, passes both required
+viewports. Two additional contributor tools are independently executed on unchanged
+benchmark/app code. Open/validation p951167.5/1285.7ms, selection47.0/45.9ms and
+history411.5/407.5ms meet the original targets. All eight inspection/profile guards
+pass. See evidence/studio/M2-operability/autoverse-20261104/ for literal clause audit,
+raw arrays, failures, exact synthetic inputs and separate same-agent rendered/
+owner/source readback. T067 closes;71/19/10 and zero accepted milestones. T038 and
+broader current Windows/full acceptance remain open.

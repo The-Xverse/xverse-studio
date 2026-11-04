@@ -103,7 +103,7 @@ After M0 owned contracts pass, guided operation (T015–T033), visual authoring 
 - [ ] T064 [US9] Nominate exact automotive and independent process-control blueprint/provider artifacts; prepare a minimal reference process model and contract fixtures, and record any missing companion capability as external work before real admission. Paths: `docs/implementation/blueprint-admission.md`, `tests/fixtures/blueprints/process-control/`. Depends on: T001, T004, T061. (FR-046; FR-047; NFR-001; AC-020)
 - [ ] T065 [US9] Integrate the admitted example bundles and their declared observations/fidelity into the catalog; fixtures may demonstrate only their explicit scope and cannot masquerade as unavailable live providers. Paths: `tests/fixtures/blueprints/automotive/`, `tests/fixtures/blueprints/process-control/`, `apps/studio-web/src/features/projects/examples.ts`. Depends on: T064, T059, T062. (FR-046; FR-047; AC-020)
 - [ ] T066 [US9] Execute author/validate/deploy/run/inspect for both independent blueprints using their admitted implementations, recording provider scope and proving the core needs no domain-specific branch. Paths: `tests/e2e/cross-industry.spec.ts`, `evidence/studio/M2-domains/`. Depends on: T065, T035, T048, T052, T056. (FR-046; FR-047; NFR-001; AC-020)
-- [ ] T067 [P] [SETUP] Measure the 200-element/400-connection workload and retained evidence-query target over 30 repetitions after one warm-up; verify keyboard alternatives and the required viewports. Run the declared reference workloads and keyboard/browser checks on the recorded native Linux reference environment; retain each workload measurement independently. Paths: `tests/performance/model-canvas.spec.ts`, `tests/e2e/accessibility.spec.ts`, `evidence/studio/M2-operability/`. Depends on: T043, T044, T059, T062. (FR-027; NFR-006; NFR-007; NFR-008; NFR-011; NFR-003; NFR-009; AC-030; AC-031)
+- [x] T067 [P] [SETUP] Measure the 200-element/400-connection workload and retained evidence-query target over 30 repetitions after one warm-up; verify keyboard alternatives and the required viewports. Run the declared reference workloads and keyboard/browser checks on the recorded native Linux reference environment; retain each workload measurement independently. Paths: `tests/performance/model-canvas.spec.ts`, `tests/e2e/accessibility.spec.ts`, `evidence/studio/M2-operability/`. Depends on: T043, T044, T059, T062. (FR-027; NFR-006; NFR-007; NFR-008; NFR-011; NFR-003; NFR-009; AC-030; AC-031)
 - [x] T068 [SETUP] Run combined authoring/deployment/connection regression and direct API negatives, including unsupported physical coupling and version migration without semantic loss. Paths: `evidence/studio/M2-integration/`. Depends on: T048, T052, T056, T059, T063. (FR-034; FR-035; FR-036; FR-037; FR-038; FR-039; FR-040; FR-041; FR-042; NFR-002; NFR-009; AC-013; AC-014; AC-015; AC-016; AC-017; AC-018; AC-019)
 - [ ] T069 [SETUP] Review M2 and retained M1 evidence, record measured SC-002/SC-004/SC-008 and publish only the demonstrated profile/provider compatibility envelope. Paths: `evidence/studio/M2-review/`. Depends on: T040, T066, T067, T068. (NFR-001; NFR-010; AC-013; AC-014; AC-015; AC-016; AC-017; AC-018; AC-019; AC-020; AC-030; AC-031)
 
@@ -1166,3 +1166,19 @@ See `evidence/studio/M1-installed-autoverse-recovery/`. T039/T098 stay unchecked
 all task statuses remain70 completed/20 in_progress/10 blocked, zero milestones.
 Windows, clean-host/network provision, full acceptance and independent review remain
 open. T091 CARLA readiness is unchanged; no simulator rerun was attempted.
+
+T067 finite-reference verification closure2026-11-04: Autoverse-based inert fixtures
+meet200visible Elements/400connections and50000events/200displayed rows. All30-sample
+series after1documentedwarmup pass independently at1024x768/1440x900: open/validation
+p951167.5/1285.7ms, selection47.0/45.9ms, history411.5/407.5ms against unchanged
+3000/150/2000ms thresholds. Native keyboard structured alternatives/focus/paging,
+actual200CSS/viewport-visible nodes/400edges, bounded rows and no overflow pass.
+Source2e0c782 contributes534 exact tested inputs; current49d4c56 adds only two separately
+verified preparation/visibility tools. Duplicate large-resource inspection parsing
+is removed with8actual-source guards; all sources, original93-record journal and
+639+93asset hashes remain unchanged. See `evidence/studio/M2-operability/autoverse-20261104/`
+and ADR-0064 for every literal task clause, raw measurements and original failures.
+Counts: **71 completed / 19 in progress / 10 blocked; zero accepted milestones**.
+T038/full critical-workflow/a11y matrix, current Windows obligations, live producer/
+control, other engines, hardware/human/AT, packaging and full AC030/031/SC008 remain
+independent and unwaived. T091 CARLA readiness is unchanged; no new simulator run.

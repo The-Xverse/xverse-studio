@@ -1,0 +1,66 @@
+{
+  "cohortsNotSummed": true,
+  "stages": [
+    {
+      "phase": "browser-1",
+      "candidate": "3fa5952fa36198040ed014c4a73a1aedafec7095",
+      "exit": 1,
+      "sourceCount": 532,
+      "sourceInputsUnchanged": true,
+      "uiFilesUnchanged": true,
+      "seconds": 14.541068077087402
+    },
+    {
+      "phase": "browser-2",
+      "candidate": "2486bfcdf145a402934e5d6fe1f023e168685a58",
+      "exit": 1,
+      "sourceCount": 532,
+      "sourceInputsUnchanged": true,
+      "uiFilesUnchanged": true,
+      "seconds": 200.0280692577362
+    },
+    {
+      "phase": "browser-diagnostic",
+      "candidate": "52e14c8e330ccba4bb40ccacf66500e68fd14722",
+      "exit": 0,
+      "sourceCount": 533,
+      "sourceInputsUnchanged": true,
+      "uiFilesUnchanged": true,
+      "seconds": 193.8371560573578
+    },
+    {
+      "phase": "inspection-red",
+      "exit": 1,
+      "sourceCount": 534,
+      "sourceInputsUnchanged": true,
+      "seconds": 2.597837448120117
+    },
+    {
+      "phase": "inspection-green",
+      "exit": 0,
+      "sourceCount": 534,
+      "sourceInputsUnchanged": true,
+      "seconds": 18.705687046051025
+    },
+    {
+      "phase": "browser-final",
+      "candidate": "2e0c78209f3f04a80452e8e18de77dffd65529ab",
+      "exit": 0,
+      "sourceCount": 534,
+      "sourceInputsUnchanged": true,
+      "uiFilesUnchanged": true,
+      "seconds": 157.49654054641724
+    }
+  ],
+  "notes": {
+    "preparation": "First private probe lacked an import; next declared model had an unresolved old observer target. Both fixed before benchmarking. The first schema-valid variant displayed203 rather than200 Elements because standalone placement Nodes were omitted from fixture counting.",
+    "browser-1": "Correctly failed actual203 versus declared200; no timing cohort accepted.",
+    "browser-2": "1024 open/validation3534.8ms p95 exceeds3000; selection/history pass. Last1440 history not collected: the exact Results locator did not accept its count badge. All collected samples retained.",
+    "browser-diagnostic": "Corrected locator and passive timestamps; unchanged app passes full finite cohort while revealing about1.35s background inspection delay. Original rare stalls are not individually attributed.",
+    "inspection-red": "Actual large-model parsing2 rather than1 fails; seven other cases explicitly deselected.",
+    "inspection-green": "Eight controlled source/profile and read-only conformance cases pass after removing the duplicate large-resource decoding.",
+    "browser-final": "Original thresholds and end-to-end measurement method unchanged; full successor cohort passes both widths. Same generated journal bytes reused.",
+    "visibility-probes": "Two initial private probes timed out before app DOM collection, without actual visibility observations. Their exact cause is unestablished. Explicit project selection in the approved native environment and the final tracked visibility controller pass at both widths.",
+    "preparation-cli": "Separate reproduced source preparation has matching semantic/plan/source-journal identities; generated fixture IDs differ as expected."
+  }
+}
