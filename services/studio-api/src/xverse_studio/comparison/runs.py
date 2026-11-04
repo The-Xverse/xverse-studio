@@ -2,7 +2,7 @@
 from copy import deepcopy
 import json
 
-from .observations import ComparisonError, MAX_FIELDS, number, text, window
+from .observations import ComparisonError, MAX_FIELDS, UNSUPPORTED_EVIDENCE, number, text, window
 
 CONFIGURATION_FIELDS = ('semanticDigest', 'planDigest', 'model', 'deployment', 'scenario', 'parameters',
                         'artifactIdentities', 'profileIdentities', 'providerIdentity', 'capabilityDigest',
@@ -237,4 +237,6 @@ def compare_runs(left: dict, right: dict) -> dict:
         for code in reasons: block(code)
         result['fields'].append({'observerRef': key[0], 'field': key[1], 'compatible': not reasons,
                                  'reasons': reasons, 'left': _observation(x), 'right': _observation(y)})
+    if UNSUPPORTED_EVIDENCE in result['diagnostics']:
+        result['limitations'].append('The evidence reader has no supported interpretation for numeric comparison. Inspect the original observation records.')
     return result

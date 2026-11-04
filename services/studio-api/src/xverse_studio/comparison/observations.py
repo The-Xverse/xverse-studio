@@ -5,9 +5,11 @@ import math
 import re
 
 from xverse_studio.assertions import UNIT_DEFINITIONS
+from xverse_studio.assertions.evidence import evidence_support
 
 MAX_FIELDS = 32
 MAX_RECORDS = 100000
+UNSUPPORTED_EVIDENCE = 'COMPARISON_EVIDENCE_UNSUPPORTED'
 
 
 class ComparisonError(ValueError):
@@ -55,6 +57,23 @@ def recorded_input(run, snapshot, records, integrity, *, snapshot_integrity='unk
         and run.get('effectiveSemanticDigest') == snapshot.get('semanticDigest')
         and run.get('providerId') == snapshot.get('providerId')
     )
+    context = {
+        'runId': run.get('runId'), 'snapshot': snapshot, 'snapshotIntegrity': snapshot_integrity,
+        'state': run.get('state'), 'cleanup': run.get('cleanup'), 'effectiveInputsMatch': effective,
+        'evidence': {'integrity': integrity, 'status': run.get('evidence')},
+    }
+    try:
+        # Only the existing owned codec is understood here. Installed event/
+        # assessment callbacks do not admit this numeric unit/coverage decoder.
+        supported = (
+            all(text(run.get(key)) for key in ('runId', 'snapshotId', 'projectId'))
+            and all(text(snapshot.get(key)) for key in ('snapshotId', 'projectId', 'snapshotDigest'))
+            and evidence_support(run, snapshot)['status'] == 'supported'
+        )
+    except (KeyError, TypeError):
+        supported = False
+    if not supported:
+        return {**context, 'projectionDiagnostics': [UNSUPPORTED_EVIDENCE], 'observations': []}
     plan = snapshot.get('plan')
     declarations = plan.get('observers') if isinstance(plan, dict) else None
     declarations = declarations if isinstance(declarations, list) and len(declarations) <= MAX_FIELDS else []
@@ -141,9 +160,7 @@ def recorded_input(run, snapshot, records, integrity, *, snapshot_integrity='unk
                 or not group['summary']['sampleCount'] or payload_invalid):
             group['summary'].update(status='unavailable', minimum=None, maximum=None, lastValue=None)
     return {
-        'runId': run.get('runId'), 'snapshot': snapshot, 'snapshotIntegrity': snapshot_integrity,
-        'state': run.get('state'), 'cleanup': run.get('cleanup'), 'effectiveInputsMatch': effective,
-        'evidence': {'integrity': integrity, 'status': run.get('evidence')},
+        **context,
         'projectionDiagnostics': ['OBSERVATION_PAYLOAD_UNAVAILABLE'] if payload_invalid else [],
         'observations': list(groups.values()),
     }

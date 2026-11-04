@@ -30,7 +30,8 @@ test("Actual Autoverse frozen rerun comparison exposes configuration and blocks 
       await expect(report).toContainText(recording.runId);
       await expect(report).toContainText(recording.snapshotId);
       await expect(report.getByRole("row").filter({ has: page.getByRole("rowheader", { name: new RegExp("^Parameters") }) })).toContainText(parameterStatus);
-      await expect(report).toContainText("OBSERVATION_PAYLOAD_UNAVAILABLE");
+      await expect(report).toContainText("COMPARISON_EVIDENCE_UNSUPPORTED");
+      await expect(report).toContainText("Inspect the original observation records.");
       await expect(report).not.toContainText("Compatible recorded windows");
       await expect(report.getByRole("heading", { name: "Comparison report", exact: true })).toBeFocused();
     }

@@ -1,7 +1,6 @@
 """Comparison provenance, exact time and source-quality contracts; fixtures labelled below."""
 from copy import deepcopy
 import hashlib
-import json
 
 import pytest
 
@@ -157,11 +156,21 @@ def test_samples_outside_declared_coverage_do_not_gain_a_like_for_like_claim():
     assert out['compatible'] is False and 'OBSERVATION_WINDOW_MISMATCH' in out['diagnostics']
 
 
+def reference_projection_context():
+    """Inert known-codec identity fixture; never launches a reference workload."""
+    snapshot = fixture_run()['snapshot']
+    snapshot['providerId'] = 'studio.reference'
+    snapshot['providerIdentity'].update(providerId='studio.reference', evidenceScope='owned_reference')
+    run = {'runId': 'fixture-run', 'snapshotId': snapshot['snapshotId'], 'projectId': snapshot['projectId'],
+           'providerId': snapshot['providerId'], 'evidenceScope': 'owned_reference',
+           'state': 'stopped', 'cleanup': 'complete', 'evidence': 'complete',
+           'effectivePlanDigest': snapshot['planDigest'], 'effectiveSemanticDigest': snapshot['semanticDigest']}
+    return run, snapshot
+
+
 def test_reference_projection_rejects_mixed_metadata_and_preserves_explicit_gaps():
     from xverse_studio.comparison import recorded_input
-    snapshot = fixture_run()['snapshot']
-    run = {'runId': 'fixture-run', 'providerId': snapshot['providerId'], 'state': 'stopped', 'cleanup': 'complete', 'evidence': 'complete',
-           'effectivePlanDigest': snapshot['planDigest'], 'effectiveSemanticDigest': snapshot['semanticDigest']}
+    run, snapshot = reference_projection_context()
     def observation(tick, unit='1', clock='simulation-time'):
         return {'type': 'observation.available', 'payload': {'observerRef': 'fixture-observer', 'values': {'state': 1.0}, 'units': {'state': unit}},
                 'sourceTime': {'tick': tick, 'clockDomain': clock, 'resolution': 'microsecond', 'uncertainty': 0}}
@@ -229,9 +238,7 @@ def test_configuration_beyond_the_declared_display_depth_is_unavailable():
 
 def test_agreeing_observation_metadata_cannot_override_the_frozen_observer_contract():
     from xverse_studio.comparison import recorded_input
-    snapshot = fixture_run()['snapshot']
-    run = {'runId': 'fixture-run', 'providerId': snapshot['providerId'], 'state': 'stopped', 'cleanup': 'complete', 'evidence': 'complete',
-           'effectivePlanDigest': snapshot['planDigest'], 'effectiveSemanticDigest': snapshot['semanticDigest']}
+    run, snapshot = reference_projection_context()
     records = [{'type': 'observation.available', 'payload': {'observerRef': 'undeclared-observer', 'values': {'state': 1.0}, 'units': {'state': '1'}},
                 'sourceTime': {'tick': '0', 'clockDomain': 'simulation-time', 'resolution': 'microsecond', 'uncertainty': 0}},
                {'type': 'evidence.updated', 'payload': {'coverage': {'clockDomain': 'simulation-time', 'startTick': '0', 'endTick': '10', 'complete': True}}}]
