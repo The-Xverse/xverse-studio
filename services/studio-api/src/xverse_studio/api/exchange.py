@@ -7,10 +7,15 @@ from fastapi import Request
 from fastapi.responses import Response
 from xverse_studio.api.models import Export
 from xverse_studio.storage.core import Problem, canonical, digest, uid, atomic
-from xverse_studio.security.files import MAX_EXPANDED, check_portable_text, safe_name
+from xverse_studio.security.files import MAX_BYTES, MAX_EXPANDED, check_portable_text, safe_name
 from xverse_studio.security.managed_io import read_bounded, SafeIOError
 from xverse_studio.evidence.reader import verify_journal
 from xverse_studio.exchange.dependencies import dependency_summary
+
+# The unchanged 8 MiB JSON request contains base64 plus its JSON envelope. Match
+# the existing project uploader's conservative allowance rather than publishing
+# an archive its corresponding import cannot accept. Expanded capture stays 16 MiB.
+MAX_PORTABLE_ARCHIVE_BYTES = MAX_BYTES * 3 // 4 - 1024
 
 
 def capture(root, path, *, missing_ok=False):
@@ -54,8 +59,8 @@ def install_exchange(app, store, projects, runs):
                 compression = zipfile.ZIP_STORED if len(content) / max(1, len(compressed)) > 100 else zipfile.ZIP_DEFLATED
                 z.writestr(path, content, compress_type=compression)
         data = target.getvalue()
-        if len(data) > MAX_EXPANDED:
-            raise Problem("LIMIT_EXCEEDED", "The exchange byte limit is 16 MiB.", 413)
+        if len(data) > MAX_PORTABLE_ARCHIVE_BYTES:
+            raise Problem("LIMIT_EXCEEDED", "The portable archive exceeds the bounded import request allowance. Retain the original data and select a smaller project or run for exchange.", 413)
         return data
 
     @app.post("/api/v1/projects/{projectId}/exports", status_code=202)

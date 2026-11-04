@@ -12,6 +12,7 @@ import io
 import hashlib
 import json
 import os
+import random
 from pathlib import Path
 import shutil
 import sqlite3
@@ -375,6 +376,38 @@ def test_project_exchange_preserves_declared_missing_and_restricted_references_w
         len(store.all("snapshot")),
         len(store.all("evaluation")),
     ) == before
+
+
+def test_export_refuses_an_archive_that_cannot_fit_the_existing_import_request(
+    recorded,
+):
+    api, store, _, snapshot, _ = recorded
+    generator = random.Random(20261104)
+    # Controlled inert supporting documents on the actual source model. Their
+    # aggregate is below the expanded cap but compresses above the UI/request
+    # upload envelope; exporting it as transferable would be misleading.
+    supporting = {
+        f"profiles/opaque-{i}.schema.json": json.dumps(
+            generator.randbytes(512 * 1024 - 64).hex()
+        )
+        for i in range(12)
+    }
+    project = api.app.state.studio.projects.create(
+        "Bounded Autoverse exchange",
+        documents=snapshot["projectDocuments"],
+        supporting=supporting,
+    )
+    before = store.all("operation")
+    response = api.post(
+        f"/api/v1/projects/{project['projectId']}/exports",
+        headers={"Idempotency-Key": "untransferable-archive"},
+        json={"revision": project["revision"]},
+    )
+    assert (
+        response.status_code == 413 and response.json()["code"] == "LIMIT_EXCEEDED"
+    ), response.text[:500]
+    assert store.all("operation") == before
+    assert not list((store.root / "exports").glob("*.zip"))
 
 
 @pytest.mark.parametrize(

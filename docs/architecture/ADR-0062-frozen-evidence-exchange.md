@@ -49,3 +49,14 @@ execution. Repeat browser import/inspection and source/root/owner readback.
 Traces: T093; FR-061; NFR-004/NFR-009; AC-029. No task ID, original milestone scope,
 platform entry point, provider/hardware permission or execution language changes.
 Windows and full combined acceptance remain independently unverified.
+
+Portable-request compatibility amendment: an actual-source project with controlled
+inert supporting metadata produces a 7.18 MB export, below the old compressed and
+expanded caps, but it cannot fit the unchanged 8 MiB base64 JSON request. Bound new
+project/evidence exports to `requestBytes * 3 // 4 - 1024`, matching the existing
+project uploader allowance (6 MiB minus 1 KiB). Refuse excess before publishing an
+operation/download; retain original source/evidence. The 16 MiB expanded/capture
+limits, 8 MiB request/decoder safety limits and legacy bounded download access stay
+unchanged. No truncation, automatic partitioning, weaker limit or larger implicit
+request is introduced. This corrects export/import interoperability; it does not
+claim arbitrary-size package support.

@@ -169,3 +169,10 @@ frozen snapshot using canonical typed identity. Unsupported/mismatched summaries
 reject unchanged; legacy reports without one remain inert and explicitly unresolved
 with `DEPENDENCY_SUMMARY_UNAVAILABLE`. Inspection exposes `dependencies` separately
 from original report claims. Portable artifact locks keep their declared policies.
+
+New portable exports also fit the existing base64 JSON import envelope (ADR-0062):
+maximum compressed output is `requestBytes * 3 // 4 - 1024` (6 MiB minus 1 KiB for
+the current 8 MiB request). Excess returns `413 LIMIT_EXCEEDED` before publishing
+an export operation. Original data remains intact. Legacy bounded captures and the
+16 MiB expanded limit are unchanged; imported archives must independently satisfy
+all existing request, decoded-byte, entry, document and compression-ratio limits.
