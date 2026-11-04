@@ -98,7 +98,7 @@ On a backend crash, the reference worker has its own bounded native lifetime. Re
 its exact persisted run/operation, worker owner digest and process creation identity. It reconciles
 current state without replaying Start. Missing ownership evidence remains `unknown` and blocks active
 commands. PID reuse is not ownership. Controlled backend-crash recovery is exercised by
-`tests/platform/test_native_recovery.py`; Windows is outside the current Linux delivery scope.
+`tests/platform/test_native_recovery.py`; native Windows recovery remains unverified.
 
 Studio checks each recorded revision's `project.studio.json` against its sealed
 manifest as well as checking authored sources and dependency sidecars. External
@@ -137,7 +137,7 @@ to commit exact authored text. A revision conflict retains your local draft: clo
 **Load current revision**, reopen the document and use **Compare changes** before explicitly saving
 again. A size refusal requires correcting the source; reloading cannot raise the document limit.
 Saving changes the project's draft revision and never changes an active run's frozen inputs. These
-browser recovery journeys have native Linux evidence; Windows verification is outside current release scope.
+browser recovery journeys have native Linux evidence; native Windows verification remains open.
 
 For files changed outside Studio, **Source recovery** offers explicit adoption or restoration.
 Adoption requires readable UTF-8 source. Restoration requires a recorded revision whose saved copies

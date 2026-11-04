@@ -69,8 +69,9 @@ inspect evidence outside the timeline's processing window. A changed-input curso
 unavailable read or malformed response requires a new first-page inspection; it never
 turns missing observations into a known empty result.
 
-Native Linux is the current delivery target. Windows delivery is outside the release
-scope under ADR-0036; historical Windows results remain evidence, not current gates.
+Native Linux has the recorded verification lane. Current engineering rules also
+require native Windows, whose implementation and verification remain open. Historical
+Windows attempts and ADR-0036 scope statements retain their original evidence context.
 
 ## Autoverse browser-input loss
 
