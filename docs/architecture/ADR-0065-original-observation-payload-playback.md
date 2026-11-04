@@ -1,6 +1,6 @@
 # ADR-0065 — Playback of original observation records
 
-Date: 2026-11-04. Status: implemented; final verification in progress.
+Date: 2026-11-04. Status: implemented and verified for the recorded Linux component.
 Traces: T091, T097; FR-059, FR-060; AC-029, AC-031.
 
 The completed Autoverse recording contains observation.available records with
@@ -36,3 +36,9 @@ both viewports, with native keyboard playback and paging. Retain separate labell
 transport-failure/integrity/shape fixtures and late-response checks. Preserve all
 source journal/snapshot bytes and execution ledger counts. This work does not
 close T091's real rerun prerequisite, Windows or complete milestone acceptance.
+
+Final source9895675 passes22 actual/labelled native browser checks, the retained
+comparison journey at both widths, and all original finite benchmark thresholds.
+All541 selected inputs and six reproduced UI assets bind the final phases.
+See evidence/studio/M4-original-observation-playback-20261104/. T091/T097 stay open;
+counts71/19/10 and zero accepted milestones are unchanged.

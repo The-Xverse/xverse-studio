@@ -1193,3 +1193,15 @@ Production/runtime/frontend inputs are unchanged. See
 simulator or physical action was run. T033 stays in progress; the historical
 late-Stop cause, full matrix, Windows and milestone gates remain open. Counts
 remain 71 completed / 19 in progress / 10 blocked, zero accepted milestones.
+
+T091/T097 original-observation playback progress (2026-11-04): the actual completed
+Autoverse journal supplies21 original telemetry receipt records for bounded native
+keyboard record playback/paging, without inventing a signal or clock projection.
+Source9895675 passes22 checks at both widths, the existing recorded comparison
+journey and the original finite200/400 and50000/200 benchmark with30 samples after
+one warm-up. Both page-focus failures are retained before repair. All541 selected
+inputs and six reproduced UI assets bind final phases; backend/runtime sources,
+original canonical bytes and execution ledger counts remain unchanged. Evidence:
+`evidence/studio/M4-original-observation-playback-20261104/`; ADR-0065. No new live
+execution. T091's fresh rerun/CARLA prerequisite, broader T097/Windows/full acceptance
+remain open. Counts stay71 completed /19 in progress /10 blocked, zero milestones.

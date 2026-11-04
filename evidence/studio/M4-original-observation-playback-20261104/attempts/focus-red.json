@@ -1,0 +1,74 @@
+{
+  "stats": {
+    "startTime": "2026-11-04T20:30:28.569Z",
+    "duration": 33485.806,
+    "expected": 2,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  },
+  "cases": [
+    {
+      "title": "actual original records play and page through native keyboard at 1024",
+      "status": "unexpected",
+      "results": [
+        {
+          "status": "failed",
+          "duration": 13923,
+          "errors": [
+            {
+              "location": {
+                "file": "<repo>/tests/live/autoverse-recorded-payloads.spec.ts",
+                "column": 62,
+                "line": 61
+              },
+              "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('region', { name: 'Original observation records', exact: true }).locator('pre[data-original-record]')\nExpected: focused\nReceived: inactive\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeFocused\" getByRole('region', { name: 'Original observation records', exact: true }).locator('pre[data-original-record]') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('region', { name: 'Original observation records', exact: true }).locator('pre[data-original-record]')\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <pre tabindex=\"0\" data-original-record=\"true\" aria-label=\"Original observation record JSON\">{\u21b5  \"elementRefs\": [],\u21b5  \"eventId\": \"run-e96d00c6\u2026</pre>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n\n\n  59 |     await expect(panel).toContainText(\"1 of 21 matching records\");\n  60 |     expect(await current(page)).toEqual(source.records[20]);\n> 61 |     await expect(panel.locator(\"pre[data-original-record]\")).toBeFocused();\n     |                                                              ^\n  62 |     await expect(panel.getByRole(\"button\", { name: \"Next payload page\", exact: true })).toBeDisabled();\n  63 |     await activate(page, panel.getByRole(\"button\", { name: \"Previous payload page\", exact: true }));\n  64 |     await expect(panel).toContainText(\"20 of 21 matching records\");\n    at <repo>/tests/live/autoverse-recorded-payloads.spec.ts:61:62"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "late original response preserves deliberate focus at 1024",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 2389,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "title": "actual original records play and page through native keyboard at 1440",
+      "status": "unexpected",
+      "results": [
+        {
+          "status": "failed",
+          "duration": 13619,
+          "errors": [
+            {
+              "location": {
+                "file": "<repo>/tests/live/autoverse-recorded-payloads.spec.ts",
+                "column": 62,
+                "line": 61
+              },
+              "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('region', { name: 'Original observation records', exact: true }).locator('pre[data-original-record]')\nExpected: focused\nReceived: inactive\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeFocused\" getByRole('region', { name: 'Original observation records', exact: true }).locator('pre[data-original-record]') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('region', { name: 'Original observation records', exact: true }).locator('pre[data-original-record]')\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <pre tabindex=\"0\" data-original-record=\"true\" aria-label=\"Original observation record JSON\">{\u21b5  \"elementRefs\": [],\u21b5  \"eventId\": \"run-e96d00c6\u2026</pre>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n\n\n  59 |     await expect(panel).toContainText(\"1 of 21 matching records\");\n  60 |     expect(await current(page)).toEqual(source.records[20]);\n> 61 |     await expect(panel.locator(\"pre[data-original-record]\")).toBeFocused();\n     |                                                              ^\n  62 |     await expect(panel.getByRole(\"button\", { name: \"Next payload page\", exact: true })).toBeDisabled();\n  63 |     await activate(page, panel.getByRole(\"button\", { name: \"Previous payload page\", exact: true }));\n  64 |     await expect(panel).toContainText(\"20 of 21 matching records\");\n    at <repo>/tests/live/autoverse-recorded-payloads.spec.ts:61:62"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "late original response preserves deliberate focus at 1440",
+      "status": "expected",
+      "results": [
+        {
+          "status": "passed",
+          "duration": 2374,
+          "errors": []
+        }
+      ]
+    }
+  ]
+}

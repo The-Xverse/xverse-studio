@@ -1,0 +1,32 @@
+{
+  "nativePlayback": [
+    "<python>",
+    "-I",
+    "tests/live/autoverse_playback_browser.py",
+    "--recording",
+    "<completed-source>",
+    "--static-dir",
+    "<reproduced-ui>",
+    "--output",
+    "<private-output>",
+    "--node",
+    "<node>",
+    "--playwright-cli",
+    "<playwright-cli>",
+    "--browser-cache",
+    "<browser-cache>"
+  ],
+  "nativeComparison": "tests/live/autoverse_comparison_browser.py with the retained failed-rerun source and existing installation-3 receipt; no new admission or Start",
+  "nativePerformance": "tests/live/autoverse_performance.py with the exact previously prepared Autoverse200/400 and inert50000-event fixtures",
+  "wrapper": "Explicit existing approved environment entry wrapper; core application uses its ordinary native launcher.",
+  "build": [
+    "<node>",
+    "<vite-cli>",
+    "build",
+    "apps/studio-web",
+    "--outDir",
+    "<new-reproduction-output>"
+  ],
+  "browserConfig": "tests/live/autoverse-recorded-payloads.config.ts; retries0, worker1, original deadlines",
+  "originalPrivateCommandsRetained": true
+}

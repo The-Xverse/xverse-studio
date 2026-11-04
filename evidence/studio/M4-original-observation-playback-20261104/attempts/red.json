@@ -1,0 +1,52 @@
+{
+  "stats": {
+    "startTime": "2026-11-04T20:25:49.645Z",
+    "duration": 23235.124,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  },
+  "cases": [
+    {
+      "title": "actual original records play and page through native keyboard at 1024",
+      "status": "unexpected",
+      "results": [
+        {
+          "status": "failed",
+          "duration": 11588,
+          "errors": [
+            {
+              "location": {
+                "file": "<repo>/tests/live/autoverse-recorded-payloads.spec.ts",
+                "column": 95,
+                "line": 32
+              },
+              "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'No plot samples available', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('heading', { name: 'No plot samples available', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'No plot samples available', exact: true })\u001b[22m\n\n\n  30 |   await page.getByRole(\"tab\", { name: /^Results(?:\\s+\\d+)?$/ }).click();\n  31 |   await page.getByLabel(\"Recorded run\", { exact: true }).selectOption(source.runId);\n> 32 |   await expect(page.getByRole(\"heading\", { name: \"No plot samples available\", exact: true })).toBeVisible();\n     |                                                                                               ^\n  33 |   return source;\n  34 | }\n  35 | const region = (page: Page) => page.getByRole(\"region\", { name: \"Original observation records\", exact: true });\n    at open (<repo>/tests/live/autoverse-recorded-payloads.spec.ts:32:95)\n    at <repo>/tests/live/autoverse-recorded-payloads.spec.ts:39:20"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "actual original records play and page through native keyboard at 1440",
+      "status": "unexpected",
+      "results": [
+        {
+          "status": "failed",
+          "duration": 10823,
+          "errors": [
+            {
+              "location": {
+                "file": "<repo>/tests/live/autoverse-recorded-payloads.spec.ts",
+                "column": 95,
+                "line": 32
+              },
+              "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'No plot samples available', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByRole('heading', { name: 'No plot samples available', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'No plot samples available', exact: true })\u001b[22m\n\n\n  30 |   await page.getByRole(\"tab\", { name: /^Results(?:\\s+\\d+)?$/ }).click();\n  31 |   await page.getByLabel(\"Recorded run\", { exact: true }).selectOption(source.runId);\n> 32 |   await expect(page.getByRole(\"heading\", { name: \"No plot samples available\", exact: true })).toBeVisible();\n     |                                                                                               ^\n  33 |   return source;\n  34 | }\n  35 | const region = (page: Page) => page.getByRole(\"region\", { name: \"Original observation records\", exact: true });\n    at open (<repo>/tests/live/autoverse-recorded-payloads.spec.ts:32:95)\n    at <repo>/tests/live/autoverse-recorded-payloads.spec.ts:39:20"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
