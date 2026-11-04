@@ -124,7 +124,7 @@ def browser(host, api, args, context):
         str(args.playwright_cli.resolve()),
         "test",
         "--config",
-        "tests/live/autoverse-exchange.config.ts",
+        "tests/live/autoverse-package.config.ts",
     ]
     with (args.output / "browser.log").open("xb") as log:
         child = subprocess.Popen(
@@ -160,7 +160,7 @@ def browser(host, api, args, context):
             "Actual installed browser journey failed"
         )
     return {
-        "journeysPassed": 1,
+        "journeysPassed": 3,
         "actualUploads": 4,
         "viewports": [[1024, 768], [1440, 900]],
         "originalBrowserExited": True,
