@@ -392,7 +392,8 @@ def main():
         )
         hosts.append(migrated_host)
         migrated_host.start()
-        with native.login(migrated_host) as migrated_api:
+        migrated_api = native.login(migrated_host)
+        try:
             assert (
                 native.checked(migrated_api.get("/api/v1/runs/" + rid))["snapshotId"]
                 == sid
@@ -407,6 +408,8 @@ def main():
                 migrated_compile["valid"]
                 and migrated_compile["planDigest"] == compiled["planDigest"]
             )
+        finally:
+            migrated_api.close()
         migrated_host.stop()
         # Both backup and destination are private; refuse corruption/overwrite before allocation.
         cli(
