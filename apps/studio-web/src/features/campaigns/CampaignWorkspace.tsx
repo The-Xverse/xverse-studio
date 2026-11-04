@@ -566,7 +566,7 @@ export function CampaignWorkspace({
               />
             </label>
             <label>
-              Maximum total simulated seconds
+              Maximum total declared seconds
               <input
                 type="number"
                 min="0.001"
@@ -668,7 +668,7 @@ export function CampaignWorkspace({
                 "Frozen revision": shownPreview.baseInput.revision,
                 "Estimated total simulated seconds":
                   shownPreview.estimatedTotalSeconds,
-                "Maximum total simulated seconds":
+                "Maximum total declared seconds":
                   shownPreview.budget.maxTotalSeconds,
                 "Stop policy": shownPreview.stopPolicy,
               }}

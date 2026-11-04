@@ -96,7 +96,7 @@ for (const width of [1024, 1440]) {
       await page.getByLabel("Parameter matrix (JSON)").fill('{"gain":[0.5]}');
       await page.getByLabel("Maximum runs", { exact: true }).fill("1");
       await page
-        .getByLabel("Maximum total simulated seconds", { exact: true })
+        .getByLabel("Maximum total declared seconds", { exact: true })
         .fill("1");
       await page
         .getByRole("button", { name: "Preview campaign", exact: true })
@@ -489,7 +489,7 @@ for (const width of [1024, 1440]) {
     await page.getByLabel("Parameter matrix (JSON)").fill('{"gain":[0.5,0.8]}');
     await page.getByLabel("Maximum runs", { exact: true }).fill("2");
     await page
-      .getByLabel("Maximum total simulated seconds", { exact: true })
+      .getByLabel("Maximum total declared seconds", { exact: true })
       .fill("0.3");
     await page
       .getByLabel("Stop policy", { exact: true })
@@ -510,7 +510,7 @@ for (const width of [1024, 1440]) {
     ).toEqual(before);
     expect((await request(page, "/runs")).items.map((r: any) => r.runId)).toEqual(beforeRuns);
     await page
-      .getByLabel("Maximum total simulated seconds", { exact: true })
+      .getByLabel("Maximum total declared seconds", { exact: true })
       .fill("1");
     await preview.focus();
     await page.keyboard.press("Enter");
