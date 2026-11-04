@@ -14,6 +14,7 @@ from xverse_studio.api.models import (Annotation, AnnotationUpdate, Body, Campai
 from xverse_studio.annotations import AnnotationError, create_annotation, revise_annotation
 from xverse_studio.assertions import EvaluationError, UNIT_DEFINITIONS, aggregate_verdict, evaluate, snapshot_definitions
 from xverse_studio.campaigns import CampaignError, CampaignPlanner, CampaignState
+from xverse_studio.campaigns.planner import _identity as campaign_identity
 from xverse_studio.assertions.dependencies import definition_order, metric_references
 from xverse_studio.assertions.evaluator import evaluator_identity
 from xverse_studio.assertions.evidence import evidence_support, require_evidence_support, UNSUPPORTED
@@ -511,12 +512,12 @@ def install_advanced(app, store, projects, runs, adapter, *, lab_host=None, lab_
         base = row.get("baseSnapshot")
         try:
             if (not isinstance(base, dict) or base.get("snapshotId") != row["baseSnapshotId"]
-                    or digest(base) != row["baseSnapshotDigest"]):
+                    or campaign_identity(base) != row["baseSnapshotDigest"]):
                 raise Problem("SNAPSHOT_INTEGRITY", "The campaign base cannot be verified.")
             runs.verify_snapshot(base)
             provenance = {"status": "verified", **{key: base[key] for key in
                 ["snapshotId", "snapshotDigest", "projectId", "revision", "selection", "providerId"]}}
-        except (Problem, KeyError, TypeError):
+        except (Problem, CampaignError, KeyError, TypeError):
             provenance = {"status": "unavailable", "reason": "SNAPSHOT_INTEGRITY"}
         return {**{k: v for k, v in row.items() if k not in {"baseSnapshot", "principal"}},
                 "campaignVersion": "1.0", "baseInput": provenance}

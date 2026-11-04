@@ -39,3 +39,10 @@ children, cancellation and native restart/reconciliation still require live
 verification in the newly prepared isolated environment. T089/T090 and AC-028
 remain open until their complete clauses have evidence. Windows remains unverified
 under the latest supplied AGENTS instructions.
+
+Provenance correction: the existing planner base identity hashes the complete JSON
+object using its original escaped-Unicode encoding. The public projection now
+compares with that same identity helper. Using the separate UTF-8 snapshot digest
+encoder incorrectly marked valid Unicode descriptions unavailable. Stored child
+keys, base digests, canonical source and snapshots are not rewritten. Real enrolled
+Unicode preview/history and corrupt-file refusal cover the corrected projection.

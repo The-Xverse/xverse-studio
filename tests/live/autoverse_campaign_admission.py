@@ -281,3 +281,84 @@ def test_callable_mapping_without_frozen_contract_grants_no_authority(
     monkeypatch.setattr(provider, "campaign_documents", forbidden)
     with pytest.raises(Problem):
         InstalledCampaign(snapshot, provider, descriptor)
+
+
+def test_unicode_inert_metadata_keeps_actual_campaign_provenance_verifiable(
+    provider, tmp_path, monkeypatch
+):
+    from ruamel.yaml import YAML
+    from xverse_studio.xdl.examples import dump_yaml
+
+    app = application(tmp_path / "Unicode campaign provenance Ω", provider)
+    monkeypatch.setattr(app.state.studio, "campaign_tick", lambda: None)
+    with authenticated(app) as api:
+        p = api.post(
+            "/api/v1/projects",
+            json={
+                "name": "Unicode campaign source",
+                "blueprintRef": "autoverse-classic",
+            },
+        ).json()
+        key, doc = next(
+            (k, v)
+            for k, v in p["documents"].items()
+            if Path(v["path"]).name == "scenario.xdl.yaml"
+        )
+        scenario = YAML(typ="safe").load(doc["content"])
+        scenario["metadata"]["description"] = "Durée μ: inert text, no execution"
+        content = dump_yaml(scenario)
+        assert "Durée μ" in content
+        changed = api.put(
+            f"/api/v1/projects/{p['projectId']}/documents/{key}",
+            headers={"If-Match": str(p["revision"])},
+            json={"content": content},
+        )
+        assert changed.status_code == 200, changed.text
+        p = changed.json()
+        pf = api.post(
+            f"/api/v1/projects/{p['projectId']}/preflights",
+            json={"revision": p["revision"], "providerId": "autoverse.demo"},
+        ).json()
+        assert pf["status"] == "ready", pf["diagnostics"]
+        response = api.post(
+            "/api/v1/campaigns/preview",
+            json={
+                "snapshotId": pf["snapshotId"],
+                "matrix": {"durationSeconds": [30]},
+                "budget": {"maxRuns": 1, "maxTotalSeconds": 30},
+            },
+        )
+        assert response.status_code == 200, response.text
+        assert response.json()["baseInput"]["status"] == "verified"
+        assert (
+            app.state.studio.store.all("run")
+            == app.state.studio.store.all("campaign")
+            == app.state.studio.store.all("operation")
+            == []
+        )
+
+        body = {
+            "snapshotId": pf["snapshotId"],
+            "matrix": {"durationSeconds": [30]},
+            "budget": {"maxRuns": 1, "maxTotalSeconds": 30},
+        }
+        created = api.post(
+            "/api/v1/campaigns",
+            headers={"Idempotency-Key": "unicode-provenance"},
+            json=body,
+        )
+        assert created.status_code == 202, created.text
+        identity = created.json()["campaignId"]
+        detail = api.get("/api/v1/campaigns/" + identity).json()
+        assert detail["baseInput"]["status"] == "verified"
+        store = app.state.studio.store
+        frozen = store.root / "snapshots" / pf["snapshotId"] / "snapshot.json"
+        frozen.write_bytes(frozen.read_bytes() + b" ")
+        unavailable = api.get("/api/v1/campaigns/" + identity).json()
+        assert unavailable["baseInput"] == {
+            "status": "unavailable",
+            "reason": "SNAPSHOT_INTEGRITY",
+        }
+        assert unavailable["children"] == detail["children"]
+        assert store.all("run") == []
+        assert len(store.all("campaign")) == len(store.all("operation")) == 1
