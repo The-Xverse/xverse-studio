@@ -70,6 +70,7 @@ test("Autoverse authoring and synthetic retained history meet the declared nativ
       await expect(page.locator(".inspector-summary h3")).toHaveText(id);
       if (repeat < 0) { openWarmup = openElapsed; selectionWarmup = elapsed; }
       else { opens.push(openElapsed); selections.push(elapsed); }
+      writeFileSync(info.outputPath(`model-${width}.partial.json`), JSON.stringify({ viewport: page.viewportSize(), completedRepetitions: opens.length, warmups: 1, openWarmup, selectionWarmup, opens, selections, scope: "Actual prefix; final keyboard and threshold checks may still be pending" }, null, 2));
     }
     await activateByTab(page, page.getByRole("button", { name: "Table view", exact: true }));
     await expect(page.locator(".canvas-table tbody tr")).toHaveCount(200);
@@ -83,7 +84,7 @@ test("Autoverse authoring and synthetic retained history meet the declared nativ
     await noOverflow(page);
     const model = { scope: context.model.scope, platform: process.platform, browser: await page.context().browser()?.version(), viewport: page.viewportSize(),
       sourceProjectId: context.model.projectId, planDigest: context.model.planDigest, semanticDigest: context.model.semanticDigest,
-      elements: 200, connections: 400, warmups: 1, repetitions: 30,
+      elements: 200, logicalAssets: context.model.logicalAssets, standalonePlacementNodes: context.model.standalonePlacementNodes, connections: 400, warmups: 1, repetitions: 30,
       openAndValidationPresentation: { milliseconds: opens, warmupMilliseconds: openWarmup, p95: p95(opens), threshold: 3000, passed: p95(opens) <= 3000 },
       selectionAndInspector: { milliseconds: selections, warmupMilliseconds: selectionWarmup, p95: p95(selections), threshold: 150, passed: p95(selections) <= 150 },
       keyboardStructuredAlternative: true, visibleFocus: true, horizontalOverflow: false,
@@ -132,6 +133,7 @@ test("Autoverse authoring and synthetic retained history meet the declared nativ
       else samples.push(elapsed);
       const metrics = await cdp.send("Performance.getMetrics");
       heapBytes.push(metrics.metrics.find((m) => m.name === "JSHeapUsedSize")!.value);
+      writeFileSync(info.outputPath(`history-${width}.partial.json`), JSON.stringify({ viewport: page.viewportSize(), completedRepetitions: samples.length, warmups: 1, warmupMilliseconds: warmup, milliseconds: samples, heapBytes, scope: "Actual prefix; final keyboard and threshold checks may still be pending" }, null, 2));
     }
     await cdp.detach();
     await activateByTab(page, page.getByRole("button", { name: "Next retained page", exact: true }));

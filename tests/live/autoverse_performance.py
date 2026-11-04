@@ -33,7 +33,7 @@ def model_fixture(projects, portable):
     files = exchange.unpack(portable)
     manifest = json.loads(files["project.studio.json"])
     manifest["name"] = (
-        "Autoverse authoring benchmark · 200 elements and 400 connections"
+        "Autoverse load · 200 visible elements / 400 connections · " + uid("case-")[-8:]
     )
     files["project.studio.json"] = canonical(manifest).encode()
     project = projects.import_archive(exchange.archive(files))
@@ -45,6 +45,12 @@ def model_fixture(projects, portable):
     system = resources[system_id]
     spec = system["spec"]
     count = len(spec["componentInstances"]) + len(spec["devices"])
+    # A placement node without a component instance is also a visible Element
+    # projection. Retain the actual device/node separation instead of silently
+    # dropping those original Autoverse objects to fit a benchmark assertion.
+    occupied = {v.get("nodeId") for v in spec["componentInstances"]}
+    placements = sum(v["id"] not in occupied for v in spec["nodes"])
+    count += placements
     base = spec["componentInstances"][0]
     component = next(
         v
@@ -133,6 +139,8 @@ def model_fixture(projects, portable):
         "projectName": project["name"],
         "revision": project["revision"],
         "elements": 200,
+        "logicalAssets": 200 - placements,
+        "standalonePlacementNodes": placements,
         "connections": 400,
         "selectionIds": added[:31],
         "semanticDigest": compiled["semanticDigest"],
