@@ -1,0 +1,88 @@
+{
+  "kind": "new isolated native Linux classic Autoverse test environment",
+  "providerVersion": "0.3.0",
+  "hostOS": "Linux",
+  "architecture": "x86_64",
+  "rootlessKitVersion": "3.3.0",
+  "dockerServerVersion": "29.9.2",
+  "userAndNetworkNamespacesSeparatedFromHost": true,
+  "nativeUidAndGid": 1000,
+  "nativeTemporarySettingsAndCacheDirectoriesPrivate": true,
+  "nativeUsbNodesMasked": true,
+  "existingAdbConfigurationReadOnly": true,
+  "reused": [
+    "CARLA assets through a read-only lower layer and private write layer",
+    "existing AOSP build16102939 host tools and base images, independently staged",
+    "existing digital-cluster APK",
+    "existing vehicle and VCU sources",
+    "vendored Zenoh/vsomeip bridge libraries",
+    "existing S-CORE sources, module pins and SDK selection"
+  ],
+  "scoreBuild": {
+    "sourceGitCommit": "320508a47370192b62936fe6db078d338afb6f0f",
+    "vendorGitCommit": "78a50bddea03dfb95e3dd5d17b776af361d1d064",
+    "sdkVersion": "1.11.0",
+    "bazelVersion": "8.7.0",
+    "llvmVersion": "19.1.0",
+    "actions": 1379,
+    "seconds": 717.501,
+    "artifacts": {
+      "tests/integration/cruise_control_someip_config.bin": {
+        "sha256": "bf4fe27276814164ef1cda73f1fd023b320a90826f467219896bb680fc356ebe",
+        "bytes": 684
+      },
+      "tests/integration/gatewayd/gatewayd.exe": {
+        "sha256": "1f725f3f9593d9e10de3b869374d4f33ed506d1d42e3edcb9071754b39507755",
+        "bytes": 18321648
+      },
+      "tests/integration/someipd/someipd.exe": {
+        "sha256": "3ae887285c026e5f14e667cf966b80c71022009982654af995c40ecfb5dfc739",
+        "bytes": 8157504
+      },
+      "score/cruise_control/cruise_control_main": {
+        "sha256": "555c319bc5ae7d9af03531bb9768169b49a1f374d26ec0ab1602619dec1eda48",
+        "bytes": 15507136
+      }
+    },
+    "compilerTools": "byte-verified archived copy retained; runtime libraries and built artifacts remain available"
+  },
+  "selectedImages": {
+    "cuttlefish": {
+      "imageId": "sha256:6ae9b581fb6c9fbe7805b8c023e756a432f95f91f10c012ffbd9a047e7814da1",
+      "repositoryDigests": [
+        "us-docker.pkg.dev/android-cuttlefish-artifacts/cuttlefish-orchestration/cuttlefish-orchestration@sha256:4f12614049ae67e1959419f8af771d5d553082a11f70cfff916e7b927f9b5e44"
+      ]
+    },
+    "score-sdk": {
+      "imageId": "sha256:ff6e5ff3bd0bd178960ea7c759e2a2892eb248437610d9bc4843df848d06d454",
+      "repositoryDigests": [
+        "ghcr.io/eclipse-score/devcontainer@sha256:989cb4b09162094d41485720e003a61b7a1bd5ca490920a8aa23a03ced38767b"
+      ]
+    }
+  },
+  "router": {
+    "source": "https://github.com/eclipse-zenoh/zenoh/releases/download/1.3.4/zenoh-1.3.4-x86_64-unknown-linux-gnu-standalone.zip",
+    "archiveSha256": "67e6c2ec44ba2bf98456797181b7aa252e78c369ed5092f7ac9fff744c8073c4",
+    "binarySha256": "3f6faaa232dfa9b89e40633d609d2361b56e6fd1931e15fae34986435c2c9825",
+    "version": "2026-11-04T11:11:10.930811Z  INFO main ThreadId(01) zenohd: zenohd v1.3.4 built with rustc 1.85.0 (4d91de4e4 2025-02-17)\nzenohd v1.3.4 built with rustc 1.85.0 (4d91de4e4 2025-02-17)\n"
+  },
+  "componentPythonPackages": {
+    "carla": "0.9.15",
+    "zenoh": "1.3.4",
+    "pygame": "2.6.1",
+    "numpy": "2.2.6",
+    "psutil": "5.9.0"
+  },
+  "originalEnvironment": {
+    "systemDockerService": "inactive",
+    "hostCvdTapCreated": false,
+    "oldEnrollmentRewritten": false,
+    "reusedRegularPayloadHashMatches": 639,
+    "originalEnrolledHostFileMatches": 93,
+    "previouslyChangedHostRouterRetained": true,
+    "originalOpaqueDockerStoreReadOrStarted": false,
+    "companionRepositoriesChanged": false,
+    "oneGeneratedCrashReporterConfig": "retained and removed; subsequent settings/cache writes isolated",
+    "taskCreatedPrototypeAdbHelper": "stopped after checking only the task-owned emulator target was attached"
+  }
+}

@@ -122,7 +122,7 @@ After M0 owned contracts pass, guided operation (T015–T033), visual authoring 
 - [x] T085 [P] [US11] Refine the existing contracts/experiment-evaluation.md bounded typed/temporal JSON-AST contract into implementation schemas and detailed design, preserving its versioned operators, half-open run-relative windows, full-data coverage, resource caps, units/time rules and pass/fail/indeterminate outcomes. Record a versioned contract decision before any necessary semantic change; define the admitted XDL/profile mapping without inventing a competing language. Paths: `docs/architecture/assertion-language.md`, `packages/contracts/assertions/`. Depends on: T082. (FR-056; NFR-004; AC-026)
 - [x] T086 [US11] Add evaluator examples and adversarial negatives for missing/gapped/stale inputs, clock incompatibility, unit errors, unknown operators, nested limits and attempted arbitrary execution. Paths: `tests/contract/test_assertions.py`, `tests/fixtures/assertions/`. Depends on: T085. (FR-056; NFR-004; AC-026)
 - [x] T087 [US11] Implement or integrate the compatible bounded evaluator and explicit expression-to-contract mapping; preserve opaque unsupported expressions unevaluated and never call eval or execute arbitrary code. Implement the contract's evaluation create/result operations with separate evaluation-execution status and assertion verdict. Paths: `services/studio-api/src/xverse_studio/assertions/`. Depends on: T086, T083. (FR-056; AC-026)
-- [ ] T088 [US11] Display assertion definitions/results with input provenance, clock assumptions, indeterminate reasons and correlated scenario/fault markers. Paths: `apps/studio-web/src/features/experiments/assertions.tsx`, `apps/studio-web/src/features/results/`. Depends on: T087, T084. (FR-056; FR-057; AC-025; AC-026)
+- [x] T088 [US11] Display assertion definitions/results with input provenance, clock assumptions, indeterminate reasons and correlated scenario/fault markers. Paths: `apps/studio-web/src/features/experiments/assertions.tsx`, `apps/studio-web/src/features/results/`. Depends on: T087, T084. (FR-056; FR-057; AC-025; AC-026)
 - [ ] T089 [P] [US12] Specify bounded matrix/cardinality, per-run snapshots, reservations/concurrency, retry deduplication, cancellation and crash/reconciliation cases. Paths: `tests/integration/test_campaigns.py`. Depends on: T023, T027. (FR-058; AC-028)
 - [ ] T090 [US12] Implement finite campaign preview/scheduling/history with explicit budgets, immutable child identities and pending-only recovery under current admission limits. Paths: `services/studio-api/src/xverse_studio/campaigns/`, `apps/studio-web/src/features/campaigns/`. Depends on: T089, T083, T022, T023. (FR-058; AC-028)
 - [ ] T091 [US12] Add incompatible-quantity, gap, clock and replay/rerun regression cases first, then implement baseline comparison with configuration/clock/quantity compatibility and distinguish recorded observation playback from freshly admitted rerun. Paths: `tests/integration/test_comparison.py`, `services/studio-api/src/xverse_studio/comparison/`, `apps/studio-web/src/features/comparison/`. Depends on: T030, T059, T088. (FR-059; FR-060; AC-029)
@@ -1061,3 +1061,21 @@ copy records and no new ledger/idempotency entries. Actual Autoverse definition 
 measurement mapping remains unimplemented/unverified. Evidence:
 `evidence/studio/M4-assessment-evidence-admission/`. T088 remains unchecked; statuses
 and all original milestone/acceptance obligations are unchanged.
+
+
+T088 component closure 2026-11-04: source `dfe5f094280bed3f5a8fd1eefd945d8fbb0648a0`
+passes the complete native Linux Autoverse demo, three real browser journeys at both
+required viewports and 71 affected guards on 503 unchanged Git-matching inputs and
+six unchanged private UI files. Six actual frozen jobs display pass, intentional
+fail, incomplete coverage, numeric metric, incompatible unit and unavailable clock,
+with definition/evidence/evaluator/mapping provenance and correlated scenario/fault
+markers. Actual lost-ack retry and draft edit/reload/restore preserve frozen identity.
+The 93-record journal is valid; original run processes/backend/browser drivers exit,
+three exact containers stop and root lock releases. New isolated resources reuse
+existing Autoverse assets while preserving the original containers/network/sources.
+See `evidence/studio/M4-recorded-assessments/` and ADR-0057. Literal T088 display
+clauses complete: 67 completed / 23 in progress / 10 blocked; zero milestones accepted.
+Mapping scope is recorded bridge acknowledgements; continuous/physical-state
+coverage and broader AC025/AC026 remain open. Current supplied AGENTS requires
+Windows verification; this Linux result does not establish it. Earlier scope notes
+and all original failed attempts remain historical evidence.

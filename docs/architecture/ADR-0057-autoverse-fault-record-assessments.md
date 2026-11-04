@@ -1,6 +1,6 @@
 # ADR-0057 — Retrospective assessments of recorded bridge fault acknowledgements
 
-Date:2026-11-04. Status: implementation and verification in progress.
+Date:2026-11-04. Status: implemented; scoped Linux component verified.
 
 Admit the existing bounded assessment Profile/AST for an explicit classic Autoverse
 blueprint, through normal full XDL validation/compilation. Keep the original native
@@ -45,3 +45,9 @@ Verification must include exact source admission/refusals, actual complete demo,
 real pass/fail/indeterminate/error/metric results and provenance, retry/immutability,
 browser inspection at both sizes, original canonical/native ownership readback and
 affected regressions. Synthetic/partial checks do not close T088 or live acceptance.
+
+Verification: source `dfe5f09`, 503 unchanged Git-matching inputs, complete native
+Autoverse demo, three real browser journeys and 71 affected guards. Six actual
+frozen jobs exercise positive, negative, indeterminate, metric and unit-error
+results. See `evidence/studio/M4-recorded-assessments/`. This closes the T088 display
+component; broader acceptance and Windows verification remain open.

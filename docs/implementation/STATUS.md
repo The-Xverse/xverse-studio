@@ -1,3 +1,24 @@
+# T088 verified in a new isolated Autoverse environment — 2026-11-04
+
+**67 completed / 23 in progress / 10 blocked; zero accepted milestones.**
+The complete native Linux demo, three real browser journeys at both required
+viewports and 71 affected guards pass on candidate `dfe5f09`, with 503 unchanged
+Git-matching inputs. Six actual frozen evaluations show pass, intentional fail,
+indeterminate coverage/clock, a numeric metric and an incompatible-unit error.
+Definitions/results, provenance, clock assumptions and correlated fault markers
+satisfy the literal T088 display clauses. Run-owned cleanup is verified.
+
+The new isolated environment reuses existing CARLA/Android/APK/vehicle/bridge assets
+and separately rebuilds S-CORE. Original containers, network and source assets are
+preserved. Prepared private infrastructure remains available for reuse. The mapping
+covers recorded bridge acknowledgement events; continuous/physical effects remain
+unsupported. Full acceptance, fresh whole regression/package/performance, Windows,
+hardware, human, AT and independent milestone review remain open. Latest supplied
+AGENTS requires Windows verification; earlier Linux-only scope notes do not
+establish it. See [evidence and review](../../evidence/studio/M4-recorded-assessments/README.md).
+
+## Earlier checkpoints
+
 # Assessment evidence boundary verified — T088 remains open — 2026-11-04
 
 **66 completed /24 in progress /10 blocked; zero accepted milestones.**
