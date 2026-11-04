@@ -666,7 +666,7 @@ export function CampaignWorkspace({
                 "Snapshot digest": shownPreview.baseInput.snapshotDigest,
                 Project: shownPreview.baseInput.projectId,
                 "Frozen revision": shownPreview.baseInput.revision,
-                "Estimated total simulated seconds":
+                "Estimated total declared seconds":
                   shownPreview.estimatedTotalSeconds,
                 "Maximum total declared seconds":
                   shownPreview.budget.maxTotalSeconds,
