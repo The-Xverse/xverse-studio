@@ -40,12 +40,12 @@ def test_capabilities_advertise_the_admitted_xdl_api_versions(client):
     assert capabilities["xdl"] == {"apiVersions": XDLAdapter().identity["apiVersions"]}
 
 
-def test_studio_linux_delivery_scope_is_separate_from_provider_os_declarations(client):
+def test_studio_required_hosts_and_verified_hosts_are_separate_from_provider_declarations(client):
     capabilities = client.get("/api/v1/capabilities").json()
-    assert capabilities["studio"]["nativeTargets"] == ["Linux"]
+    assert capabilities["studio"]["nativeTargets"] == ["Linux", "Windows"]
     assert capabilities["studio"]["verifiedNativeOS"] == ["Linux"]
-    assert capabilities["studio"]["windowsAcceptance"] == "OUT_OF_SCOPE_ADR0036"
-    # Removing a Studio release gate does not rewrite installed provider contracts.
+    assert capabilities["studio"]["windowsAcceptance"] == "NOT_RUN"
+    # Required Studio targets do not rewrite installed provider OS contracts.
     assert capabilities["providers"] == client.get("/api/v1/providers").json()["items"]
     assert all("supportedHostOS" in p and "hostCompatible" in p for p in capabilities["providers"])
 

@@ -112,7 +112,9 @@ class NativeHost:
         if not self.register_provider:
             assert not self.host_arguments
             argv = [str(self.backend), '-I', '-m', 'xverse_studio.host.launcher',
-                    '--data-dir', str(self.data), '--static-dir', str(self.static), '--port', str(self.port)]
+                    '--data-dir', str(self.data), '--port', str(self.port)]
+            if self.static is not None:
+                argv += ['--static-dir', str(self.static)]
         self.log = (self.output / f'host-{self.number}.log').open('xb')
         self.child = subprocess.Popen(argv, cwd=ROOT, stdin=subprocess.DEVNULL, stdout=self.log, stderr=subprocess.STDOUT)
         p = psutil.Process(self.child.pid)

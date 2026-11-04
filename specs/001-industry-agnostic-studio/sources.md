@@ -1,5 +1,13 @@
 # Source register and baseline qualification
 
+Current host-requirement amendment (2026-11-04, ADR-0063): the supplied engineering
+rules require native Linux and Windows installation, start/stop, browser operation,
+persistence, paths and process ownership. This takes precedence over historical
+ADR-0036 Linux-only scope statements below. Preserve all original IDs/dependencies
+and recorded component evidence. Windows remains unverified; Linux-only evidence
+does not close Windows or milestone acceptance. Provider admission stays separate.
+
+
 Prepared 2026-10-25. This register separates user-authorized product intent, architectural source,
 historical release evidence, inspected repository identities, and proposed Studio implementation.
 

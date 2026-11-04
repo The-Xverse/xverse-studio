@@ -33,10 +33,11 @@ that host; do not redirect application data into another filesystem.
 
 ## Supported host scope
 
-The required native host is Linux. Windows delivery requirements were removed by
-the user under ADR-0036; no verified Windows installation procedure is advertised.
-Historical installation failures and NOT_RUN results remain in the evidence archive
-and do not block Linux delivery. Optional future support requires a separate scope.
+The recorded native installation lane is Linux. Current engineering requirements
+include native Windows, whose installation, secure file/process ownership and browser
+operation remain unverified. No verified Windows installation procedure is advertised.
+Historical ADR-0036 scope and failed installation evidence remain unchanged; see
+[the support matrix](../implementation/platform-support.md) for current gaps.
 
 ## Guided prepared example
 

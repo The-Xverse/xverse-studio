@@ -48,7 +48,7 @@ manifest = {
     ).strip(),
     "nativeVerification": {
         "Linux": "see candidate evidence",
-        "Windows": "OUT_OF_SCOPE_ADR0036",
+        "Windows": "NOT_RUN",
     },
     "files": {
         str(p.relative_to(root)).replace("\\", "/"): "sha256:"

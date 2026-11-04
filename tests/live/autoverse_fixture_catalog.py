@@ -46,7 +46,7 @@ def test_current_autoverse_host_discovery_does_not_advertise_unverified_referenc
         capabilities = api.get("/api/v1/capabilities")
         assert capabilities.status_code == 200
         value = capabilities.json()
-        assert value["studio"]["nativeTargets"] == ["Linux"]
+        assert value["studio"]["nativeTargets"] == ["Linux", "Windows"]
         reference = next(d for d in value["providers"] if d["providerId"] == "studio.reference")
         assert reference["supportedHostOS"] == ["Linux"]
         assert reference["architectures"] == ["x86_64"]

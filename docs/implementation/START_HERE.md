@@ -1,5 +1,13 @@
 # Implement X-Verse Studio with Codex or Claude
 
+Current host-requirement amendment (2026-11-04, ADR-0063): the supplied engineering
+rules require native Linux and Windows installation, start/stop, browser operation,
+persistence, paths and process ownership. This takes precedence over historical
+ADR-0036 Linux-only scope statements below. Preserve all original IDs/dependencies
+and recorded component evidence. Windows remains unverified; Linux-only evidence
+does not close Windows or milestone acceptance. Provider admission stays separate.
+
+
 The complete product plan is `specs/001-industry-agnostic-studio`. The original delivery contained planning
 and workflow assets. The current branch adds a runnable, explicitly scoped reference implementation;
 full milestone acceptance remains open. Both agents use the same plan and evidence.

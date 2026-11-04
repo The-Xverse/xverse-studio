@@ -1,5 +1,13 @@
 # Implementation Plan: Industry-agnostic X-Verse Studio
 
+Current host-requirement amendment (2026-11-04, ADR-0063): the supplied engineering
+rules require native Linux and Windows installation, start/stop, browser operation,
+persistence, paths and process ownership. This takes precedence over historical
+ADR-0036 Linux-only scope statements below. Preserve all original IDs/dependencies
+and recorded component evidence. Windows remains unverified; Linux-only evidence
+does not close Windows or milestone acceptance. Provider admission stays separate.
+
+
 **Feature**: `001-industry-agnostic-studio`\
 **Date**: 2026-10-25\
 **Status**: implementation plan; no application capability is delivered by this document.\

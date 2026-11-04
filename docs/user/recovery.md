@@ -37,13 +37,13 @@ Preserve it for diagnosis and restore into a different new destination. Never re
 promote a partial restore. Failed backups without a verified manifest are unusable.
 
 Full recovery is covered by native Linux subprocess tests, including a completed reference run,
-byte-identical evidence, unchanged compiled plan and absence of run replay. Native Windows delivery
-is outside current scope under ADR-0036; these Linux results make no Windows claim.
+byte-identical evidence, unchanged compiled plan and absence of run replay. Native Windows recovery
+remains unverified; these Linux results make no Windows claim.
 
 The secure acquisition successor requires admitted native directory/handle primitives. The current
 implementation supplies Linux descriptor traversal and fails explicitly on unsupported hosts; it
 does not silently fall back to path-only checks. Native Windows secure file acquisition remains an
-out-of-scope implementation/verification limitation. See the [support matrix](../implementation/platform-support.md).
+outstanding implementation/verification requirement. See the [support matrix](../implementation/platform-support.md).
 
 The launcher also retains the smaller metadata-only backup:
 
