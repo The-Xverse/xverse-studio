@@ -69,6 +69,7 @@ def main():
         "sourceRunId": result["sourceRunId"],
         "sourceSnapshotId": result["sourceSnapshotId"],
         "installationDigest": snapshot["providerIdentity"]["installationDigest"],
+        "compiledProfileDigest": snapshot["plan"]["profile"]["resourceDigest"]["value"],
     }
     (data / "exchange-recording.private.json").write_text(json.dumps(context))
     files["evidence/reference.jsonl"] += b"Damaged imported canonical evidence\n"

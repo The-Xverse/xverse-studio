@@ -195,8 +195,13 @@ def _inspect(files, adapter):
     dependencies = report.get("dependencies")
     if dependencies is None:
         diagnostics.append("DEPENDENCY_SUMMARY_UNAVAILABLE")
-    elif digest(dependencies) != digest(dependency_summary(snapshot)):
-        _invalid("The dependency summary does not match the original frozen references or its supported version.")
+    else:
+        version = dependencies.get("dependenciesVersion") if isinstance(dependencies, dict) else None
+        if (not isinstance(version, str) or version not in ("1.0", "1.1")
+                or digest(dependencies) != digest(dependency_summary(snapshot, version=version))):
+            _invalid("The dependency summary does not match the original frozen references or its supported version.")
+        if version == "1.0":
+            diagnostics.append("COMPILED_PROFILE_DEPENDENCY_SUMMARY_UNAVAILABLE")
     compilation = "unavailable"
     # Reuse the installed public compiler only when its immutable identity agrees.
     # A different compiler/profile leaves inspection available but unresolved.

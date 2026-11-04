@@ -60,3 +60,13 @@ limits, 8 MiB request/decoder safety limits and legacy bounded download access s
 unchanged. No truncation, automatic partitioning, weaker limit or larger implicit
 request is introduced. This corrects export/import interoperability; it does not
 claim arbitrary-size package support.
+
+Compiled-profile amendment: actual snapshots have an empty project profile-lock
+list but still select a compiled Profile with its own resource/schema pins.
+Dependency summary 1.1 includes that compiled profile and its contributing Profile
+resource identities separately from project profile locks. New exports use 1.1.
+The importer still verifies original 1.0 summaries using their original projection,
+retains their report bytes and adds
+`COMPILED_PROFILE_DEPENDENCY_SUMMARY_UNAVAILABLE`. It does not silently upgrade an
+old report to a complete inventory. The browser supports both versions and can
+inspect the compiled profile identity in 1.1. Unsupported versions remain refused.

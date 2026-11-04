@@ -176,3 +176,10 @@ the current 8 MiB request). Excess returns `413 LIMIT_EXCEEDED` before publishin
 an export operation. Original data remains intact. Legacy bounded captures and the
 16 MiB expanded limit are unchanged; imported archives must independently satisfy
 all existing request, decoded-byte, entry, document and compression-ratio limits.
+
+Dependency summary 1.1 (ADR-0062) additionally records the selected compiled Profile
+and contributing Profile resource identities even with no project profile locks.
+New exports use 1.1. Original 1.0 summaries remain verified with their original
+projection and preserved unchanged; inspection explicitly adds
+`COMPILED_PROFILE_DEPENDENCY_SUMMARY_UNAVAILABLE`. Report/evidence envelope versions
+remain 1.0, and neither summary version resolves or installs dependencies.

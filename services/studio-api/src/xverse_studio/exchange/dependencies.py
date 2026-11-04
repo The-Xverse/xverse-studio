@@ -5,7 +5,7 @@ from copy import deepcopy
 from xverse_studio.storage.core import Problem
 
 
-def dependency_summary(snapshot):
+def dependency_summary(snapshot, *, version="1.1"):
     """Summarize only recorded pins. Do not inspect paths, fetch or install.
 
     Runtime/compiler/profile/artifact payloads are outside an evidence bundle.
@@ -53,6 +53,23 @@ def dependency_summary(snapshot):
     else:
         add("profile", None)
     plan = snapshot.get("plan")
+    if version == "1.1":
+        compiled_profile = plan.get("profile") if isinstance(plan, dict) else None
+        provenance = plan.get("provenance") if isinstance(plan, dict) else None
+        resources = (
+            provenance.get("resources") if isinstance(provenance, dict) else None
+        )
+        profiles = (
+            [r for r in resources if isinstance(r, dict) and r.get("kind") == "Profile"]
+            if isinstance(resources, list)
+            else None
+        )
+        add(
+            "profile",
+            {"compiledProfile": compiled_profile, "resources": profiles}
+            if compiled_profile or profiles
+            else None,
+        )
     bindings = plan.get("bindings") if isinstance(plan, dict) else None
     if isinstance(bindings, list):
         for binding in bindings:
@@ -65,7 +82,7 @@ def dependency_summary(snapshot):
     else:
         add("artifact", None)
     return {
-        "dependenciesVersion": "1.0",
+        "dependenciesVersion": version,
         "snapshotDigest": snapshot.get("snapshotDigest"),
         "resolution": "not_attempted",
         "items": items,

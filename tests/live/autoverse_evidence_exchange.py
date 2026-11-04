@@ -179,7 +179,7 @@ def test_report_names_exact_external_dependencies_without_claiming_their_availab
     assert isinstance(dependencies, dict), (
         "The exchange report must name its unavailable runtime dependencies."
     )
-    assert dependencies["dependenciesVersion"] == "1.0"
+    assert dependencies["dependenciesVersion"] == "1.1"
     assert dependencies["snapshotDigest"] == snapshot["snapshotDigest"]
     assert dependencies["resolution"] == "not_attempted"
     (provider,) = [r for r in dependencies["items"] if r["kind"] == "provider"]
@@ -190,6 +190,14 @@ def test_report_names_exact_external_dependencies_without_claiming_their_availab
     )
     assert provider["availability"] == "not_included"
     assert all(r["contentIncluded"] is False for r in dependencies["items"])
+    assert any(
+        r["kind"] == "profile"
+        and isinstance(r["identity"], dict)
+        and r["identity"].get("compiledProfile") == snapshot["plan"]["profile"]
+        for r in dependencies["items"]
+    ), (
+        "The selected compiled profile is a dependency even when there are no project profile locks."
+    )
     imported = api.post(
         "/api/v1/evidence/imports", json={"archiveBase64": encode(files)}
     )
@@ -256,6 +264,32 @@ def test_legacy_report_without_dependency_summary_remains_inert_and_explicitly_u
     assert inspection["dependencies"] is None
     assert "DEPENDENCY_SUMMARY_UNAVAILABLE" in inspection["diagnostics"]
     assert inspection["executionAllowed"] is False
+
+
+def test_original_version_1_dependency_archive_remains_inert_without_rewriting_its_report(
+    recorded,
+):
+    api, store, _, _, _ = recorded
+    raw = Path(os.environ["STUDIO_AUTOVERSE_LEGACY_EVIDENCE_ARCHIVE"]).read_bytes()
+    files = unpack(raw)
+    original_report = json.loads(files["report.json"])
+    assert original_report["dependencies"]["dependenciesVersion"] == "1.0"
+    response = api.post(
+        "/api/v1/evidence/imports",
+        json={"archiveBase64": base64.b64encode(raw).decode()},
+    )
+    assert response.status_code == 201, response.text[:500]
+    body = response.json()
+    assert body["report"] == original_report
+    assert body["inspection"]["dependencies"] == original_report["dependencies"]
+    assert (
+        "COMPILED_PROFILE_DEPENDENCY_SUMMARY_UNAVAILABLE"
+        in body["inspection"]["diagnostics"]
+    )
+    assert body["inspection"]["executionAllowed"] is False
+    assert (
+        store.root / "evidence-imports" / body["bundleId"] / "report.json"
+    ).read_bytes() == files["report.json"]
 
 
 @pytest.mark.parametrize(

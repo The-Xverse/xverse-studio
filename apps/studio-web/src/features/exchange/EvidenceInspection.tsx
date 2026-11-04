@@ -8,6 +8,7 @@ const reasons: Record<string, string> = {
   ORIGINAL_JOURNAL_INVALID: "The recorded journal structure or hashes failed verification. Preserve the source archive.",
   DECLARED_AND_OBSERVED_INTEGRITY_DIFFER: "The original report and current inspection differ; both are shown separately.",
   DEPENDENCY_SUMMARY_UNAVAILABLE: "This older report has no supported dependency summary.",
+  COMPILED_PROFILE_DEPENDENCY_SUMMARY_UNAVAILABLE: "This older dependency summary omits the compiled profile. Preserve and inspect the original snapshot for those declarations.",
   IMPORTED_FILES_CHANGED_OR_UNAVAILABLE: "Stored imported files changed or cannot be safely read. The original report is retained.",
   EFFECTIVE_INPUT_IDENTITY_UNPROVEN: "Recorded effective inputs do not match the original frozen identities.",
 };
@@ -15,7 +16,7 @@ const reasons: Record<string, string> = {
 export function EvidenceInspection({ bundle }: { bundle: Data }) {
   const inspection = bundle.inspection || {}, report = bundle.report || {};
   const summary = inspection.dependencies;
-  const supported = summary?.dependenciesVersion === "1.0" && summary?.resolution === "not_attempted" &&
+  const supported = ["1.0", "1.1"].includes(summary?.dependenciesVersion) && summary?.resolution === "not_attempted" &&
     Array.isArray(summary.items) && summary.items.length <= 256 && summary.items.every((row: Data) => row &&
       ["provider", "compiler", "profile", "artifact"].includes(row.kind) && row.contentIncluded === false &&
       ["not_included", "unavailable"].includes(row.availability));

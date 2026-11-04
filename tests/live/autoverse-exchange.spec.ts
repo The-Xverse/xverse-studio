@@ -37,6 +37,10 @@ test("Actual Autoverse evidence imports preserve original claims and expose curr
       await identity.focus(); await page.keyboard.press("Enter");
       await expect(dependencies).toContainText(recorded.installationDigest);
       await expect(identity).toBeFocused();
+      const profile = dependencies.getByText("Inspect profile identity", { exact: true }).first();
+      await profile.focus(); await page.keyboard.press("Enter");
+      await expect(dependencies).toContainText(recorded.compiledProfileDigest);
+      await expect(profile).toBeFocused();
       if (currentIntegrity === "invalid") {
         await expect(dialog).toContainText("ORIGINAL_JOURNAL_INVALID");
         await dialog.screenshot({ path: info.outputPath(`actual-exchange-dependencies-${width}.png`) });
