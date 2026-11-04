@@ -3,7 +3,7 @@
 Open **Experiments → Campaigns**. Obtain a ready preflight for the current revision
 with **Preflight & run**, then return to the draft. This does not start a run.
 
-Enter numeric parameter arrays, maximum runs, maximum total simulated seconds,
+Enter numeric parameter arrays, maximum runs, maximum total declared seconds,
 concurrency and stop policy. **Preview campaign** asks the backend for exact frozen
 input identities, cardinality and the time estimate without creating a campaign.
 **Create campaign** rechecks admission and allocates a retained campaign. Each child
@@ -33,8 +33,8 @@ states and any cancellation outcomes. Refreshing never replays or restarts a chi
 If submission cannot be confirmed, refresh history before starting another request.
 While this form is mounted, retrying the unchanged request uses the original key.
 After reopening, inspect retained history rather than assuming that a lost response
-means nothing was created. Linux owned-reference evidence does not admit external,
-physical or native Windows provider execution.
+means nothing was created. Provider evidence is scoped separately. The verified classic Autoverse duration
+campaign does not establish physical-device or native Windows execution.
 
 **Stop on failure** cancels children that have not started after a child fails or
 is rejected. **Continue** considers the remaining children under current admission
@@ -44,3 +44,33 @@ A **complete** campaign means coordination has ended. Read each child's executio
 cleanup, evidence and assertion status separately in Results. A failed worker can
 leave unknown cleanup and partial, prefix-verified evidence; those observations
 remain distinct from a complete journal or a passing assertion.
+
+## Classic Autoverse duration campaigns
+
+Classic provider 0.4.0 admits integer `durationSeconds` from 30 through 1800, with
+one child at a time. Obtain a new ready preflight: older snapshots keep their
+original capabilities. The form shows the admitted range and **Use admitted
+parameter example** fills a one-value matrix without starting anything. For example:
+
+```json
+{"durationSeconds": [30, 31]}
+```
+
+A two-run budget of 62 declared seconds covers that matrix's conservative time
+estimate. For this provider, duration is elapsed host time after the complete
+runtime reaches running; component preparation, Android boot and cleanup add wall time.
+The owned reference provider's declared duration remains simulated time. A time
+budget is not a promise that external startup will finish within that interval.
+
+Each Autoverse child rechecks full source, profile, connection, deployment and
+installation admission. An active or unknown run keeps the installation occupied.
+The original frozen base supplies child inputs even after a newer draft is saved.
+Applied seeds remain unavailable; seed axes are rejected. External randomness and
+clock mappings retain their existing limitations. Platform mode has no campaign
+contract and is unavailable for campaigns.
+
+Actual native duration, cancellation and backend restart cases have Android/APK,
+vehicle speed, snapshot, retry and cleanup evidence. Current browser preview/history
+and child-input inspection are verified at both desktop sizes. Full campaign GUI
+submission and the broader live fault matrix remain acceptance work; consult the
+current implementation status for their results.

@@ -270,3 +270,27 @@ missing, malformed or unavailable interpretation leaves positions unsupported; n
 fallback clock conversion or lifecycle operation is allowed. Classic 0.2.0 reads
 only its existing admitted browser-input-loss contract and preserves ordinary
 telemetry with no source-time mapping.
+
+
+### Installed campaign source mapping (ADR-0059)
+
+An installed provider may declare a frozen `campaignContract` 1.0 with exactly
+`parameters`, `durationParameter`, `maxConcurrency` and `seedPolicy`, plus its version.
+Each numeric parameter has a closed type/minimum/maximum/unit rule. The duration
+parameter uses seconds within the provider duration limit. This implementation
+admits concurrency one and `seedPolicy: "unsupported"`; other semantics remain
+unavailable. Declarations alone grant no execution authority.
+
+The installed `campaign_documents(sources, parameters)` callback is pure, receives
+independent copies and preserves the document set. Projects, descriptions and logs
+cannot supply callbacks. Common code verifies current frozen identity, exact base
+configuration and matrix child keys; mapped configuration must apply each declared
+parameter. Children repeat full normal preflight and Start admission. A historical
+snapshot without this exact current mapping is not upgraded.
+
+Classic Autoverse 0.4.0 implements only `durationSeconds` (integer 30–1800), measured
+as active elapsed host seconds after running; startup is separate. Its seed policy
+remains unsupported, and platform mode declares no campaign contract. Historical
+assessment/timeline readers admit the new classic version explicitly without
+changing their clock or recorded-event coverage semantics. Native Windows and
+physical campaign authority remain unverified.

@@ -1,6 +1,6 @@
 # ADR-0059 — Installed-provider campaign parameter mapping
 
-Date: 2026-11-04. Status: implementation and verification in progress.
+Date: 2026-11-04. Status: implemented; scoped Linux component verified.
 
 Extend finite campaigns through an installed provider's closed, frozen parameter
 contract and pure source mapping. The common campaign service contains no industry
@@ -33,12 +33,12 @@ original identities before new mutable admission. Existing reference campaign
 behaviour remains separately scoped; no reference workload substitutes for the
 current Autoverse verification target.
 
-Verify unsupported historical sources/axes/seeds, strict bounds, immutable child
-snapshots, full re-admission and exact retry identity first. Actual complete-demo
-children, cancellation and native restart/reconciliation still require live
-verification in the newly prepared isolated environment. T089/T090 and AC-028
-remain open until their complete clauses have evidence. Windows remains unverified
-under the latest supplied AGENTS instructions.
+The verification matrix covers unsupported historical sources/axes/seeds, strict
+bounds, immutable child snapshots, full re-admission and exact retry identity.
+Actual complete-demo children, cancellation and native post-ack restart are now
+verified in the new isolated environment. The clause audit closes T089/T090;
+T095/AC-028 retain broader live acceptance. Windows remains unverified under the
+latest supplied AGENTS instructions.
 
 Provenance correction: the existing planner base identity hashes the complete JSON
 object using its original escaped-Unicode encoding. The public projection now
@@ -46,3 +46,9 @@ compares with that same identity helper. Using the separate UTF-8 snapshot diges
 encoder incorrectly marked valid Unicode descriptions unavailable. Stored child
 keys, base digests, canonical source and snapshots are not rewritten. Real enrolled
 Unicode preview/history and corrupt-file refusal cover the corrected projection.
+
+Component verification: final145affected guards, three actual native campaign cases
+with five complete-demo children, successful owned backend crash/restart and final
+browser preview/history/child inspection at both required viewports. Source lineage,
+failures and scope are retained in `evidence/studio/M4-installed-campaigns/`. T089/T090
+implementation components close; T095/full acceptance and Windows remain open.

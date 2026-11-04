@@ -123,8 +123,8 @@ After M0 owned contracts pass, guided operation (T015–T033), visual authoring 
 - [x] T086 [US11] Add evaluator examples and adversarial negatives for missing/gapped/stale inputs, clock incompatibility, unit errors, unknown operators, nested limits and attempted arbitrary execution. Paths: `tests/contract/test_assertions.py`, `tests/fixtures/assertions/`. Depends on: T085. (FR-056; NFR-004; AC-026)
 - [x] T087 [US11] Implement or integrate the compatible bounded evaluator and explicit expression-to-contract mapping; preserve opaque unsupported expressions unevaluated and never call eval or execute arbitrary code. Implement the contract's evaluation create/result operations with separate evaluation-execution status and assertion verdict. Paths: `services/studio-api/src/xverse_studio/assertions/`. Depends on: T086, T083. (FR-056; AC-026)
 - [x] T088 [US11] Display assertion definitions/results with input provenance, clock assumptions, indeterminate reasons and correlated scenario/fault markers. Paths: `apps/studio-web/src/features/experiments/assertions.tsx`, `apps/studio-web/src/features/results/`. Depends on: T087, T084. (FR-056; FR-057; AC-025; AC-026)
-- [ ] T089 [P] [US12] Specify bounded matrix/cardinality, per-run snapshots, reservations/concurrency, retry deduplication, cancellation and crash/reconciliation cases. Paths: `tests/integration/test_campaigns.py`. Depends on: T023, T027. (FR-058; AC-028)
-- [ ] T090 [US12] Implement finite campaign preview/scheduling/history with explicit budgets, immutable child identities and pending-only recovery under current admission limits. Paths: `services/studio-api/src/xverse_studio/campaigns/`, `apps/studio-web/src/features/campaigns/`. Depends on: T089, T083, T022, T023. (FR-058; AC-028)
+- [x] T089 [P] [US12] Specify bounded matrix/cardinality, per-run snapshots, reservations/concurrency, retry deduplication, cancellation and crash/reconciliation cases. Paths: `tests/integration/test_campaigns.py`. Depends on: T023, T027. (FR-058; AC-028)
+- [x] T090 [US12] Implement finite campaign preview/scheduling/history with explicit budgets, immutable child identities and pending-only recovery under current admission limits. Paths: `services/studio-api/src/xverse_studio/campaigns/`, `apps/studio-web/src/features/campaigns/`. Depends on: T089, T083, T022, T023. (FR-058; AC-028)
 - [ ] T091 [US12] Add incompatible-quantity, gap, clock and replay/rerun regression cases first, then implement baseline comparison with configuration/clock/quantity compatibility and distinguish recorded observation playback from freshly admitted rerun. Paths: `tests/integration/test_comparison.py`, `services/studio-api/src/xverse_studio/comparison/`, `apps/studio-web/src/features/comparison/`. Depends on: T030, T059, T088. (FR-059; FR-060; AC-029)
 - [x] T092 [P] [US12] Add export/import integrity, missing/restricted dependency, malicious archive, credentials, revisioned trace links, annotation separation and dependency-aware retention tests. Paths: `tests/integration/test_exchange_and_retention.py`, `tests/fixtures/bundles/`. Depends on: T068. (FR-061; FR-062; FR-063; NFR-004; AC-029; AC-032)
 - [ ] T093 [US12] Implement sanitized manifests and project/evidence/report exchange with exact identities, unavailable references and integrity status; imports remain inert and local by explicit selection. Test portable package import/export between isolated native Linux workspaces and refuse incompatible host-local bindings without rewriting portable model identity. Paths: `services/studio-api/src/xverse_studio/exchange/`, `apps/studio-web/src/features/exchange/`. Depends on: T092, T008, T029. (FR-061; NFR-004; NFR-009; AC-029)
@@ -1093,3 +1093,19 @@ See `evidence/studio/M4-campaign-contracts/` and ADR-0058. T089 remains unchecke
 child snapshots, provider parameter/seed admission, reservations and native
 crash/cancellation/retry remain incomplete. Counts 67/23/10 and zero accepted
 milestones stay unchanged. Latest supplied Windows verification remains unproven.
+
+
+T089/T090 implementation and test-definition closure 2026-11-04: source `22a306b`
+passes 145 affected guards and actual browser preview/history/frozen-child inspection
+at both required viewports on 513 unchanged Git-matching inputs. Three real native
+cases (natural, cancellation, post-ack backend restart) yield five complete-demo
+children with Android/APK, vehicle speed, exact retry identity, immutable snapshots,
+newer-draft preservation and owned cleanup. Original failures remain retained.
+Private enrollment recovery rechecks identity without weakening full readiness;
+Unicode provenance preserves the existing planner identity. The clause audit closes
+the literal implementation/test-definition scope under current admitted limits.
+Counts: 69 completed / 21 in progress / 10 blocked; zero accepted milestones.
+See `evidence/studio/M4-installed-campaigns/`. T095/full AC-028 retain the broader
+current-provider fault/pre-ack/failed-child/GUI-submission matrix and combined
+acceptance. Physical reservations, applied seeds, Windows, hardware/human/AT and
+other release gates are not established by these component closures.

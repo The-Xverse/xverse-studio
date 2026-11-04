@@ -595,3 +595,15 @@ owned reference evidence; external interface receipts sharing a canonical envelo
 are not reference samples. No provider mapping or unit/clock/coverage semantics are
 inferred from payload resemblance, timeline positions or receipt time. This
 endpoint grants no lifecycle operation and never changes original evidence.
+
+
+Installed campaign amendment (ADR-0059): an originally ready frozen base may use an
+explicit current installed-provider `campaignContract` 1.0 and native pure source
+mapping. Unsupported axes/seeds/values are refused before campaign allocation.
+Preview allocates no child snapshots. Creation retains stable matrix identities;
+each installed child subsequently receives a new canonical snapshot and a full
+ordinary preflight with actual diagnostics/readiness. No synthesized ready status
+admits it. Active or unknown runs retain the exclusive installation slot. The
+existing HTTP routes, campaign presentation 1.0 and reference branch remain. A
+newer project draft does not replace frozen base inputs; exact accepted retries
+continue to resolve their original receipts before fresh mutable admission.

@@ -1,3 +1,26 @@
+# T089/T090 closed — installed Autoverse campaigns verified — 2026-11-04
+
+**69 completed / 21 in progress / 10 blocked; zero accepted milestones.**
+The campaign test specification and implementation close under current admitted
+provider limits. Source `22a306b` passes145affected guards and real browser preview/
+history/frozen-child inspection at both required viewports on513unchanged inputs.
+Three actual native cases verify five complete-demo children, active/pending
+cancellation, same-key deduplication and backend crash/restart with the original
+worker. Immutable snapshots, newer drafts, Android/APK/vehicle speed and owned
+cleanup are verified. A private enrollment recovery bug and Unicode history
+provenance bug are repaired; original failures remain retained.
+
+The original environment is preserved:639resolved payloads/93host-file hashes,
+preexisting router mismatch unchanged, system Docker inactive and host TAP absent.
+Task-created ADB helper closed; new private daemon/overlay remain reusable.
+See [clause audit/evidence/review](../../evidence/studio/M4-installed-campaigns/README.md).
+T095/full AC-028 retain broader fault/pre-ack/failed-child/GUI-submission and combined
+acceptance. Applied seeds/physical reservations and whole regression/performance/
+package/Windows/hardware/human/AT/independent milestone gates remain unproven.
+Latest supplied AGENTS requires Windows verification; Linux results do not establish it.
+
+## Earlier checkpoints
+
 # T089 campaign validation repaired; contracts partially verified — 2026-11-04
 
 **67 completed / 23 in progress / 10 blocked; zero accepted milestones.**
