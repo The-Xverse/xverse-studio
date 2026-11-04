@@ -1079,3 +1079,17 @@ Mapping scope is recorded bridge acknowledgements; continuous/physical-state
 coverage and broader AC025/AC026 remain open. Current supplied AGENTS requires
 Windows verification; this Linux result does not establish it. Earlier scope notes
 and all original failed attempts remain historical evidence.
+
+
+T089 partial contracts 2026-11-04: source `89c973b` passes 46 checks on 504 unchanged
+Git-matching inputs. Decoded actual Autoverse snapshot planner/state contracts,
+separate real SQLite reopen and authenticated unsupported-provider refusal cover
+bounded matrix/cardinality, stable keys, slots, rollback, cancellation and semantic
+reconciliation. Four original numeric/stop-policy failures are repaired and retained.
+Actual ready Autoverse snapshots still cannot acquire reference campaign authority;
+refusals allocate no campaign/run/operation/idempotency and invoke no readiness or
+dispatch. No workload, native crash, reservation or applied-seed result is claimed.
+See `evidence/studio/M4-campaign-contracts/` and ADR-0058. T089 remains unchecked: live
+child snapshots, provider parameter/seed admission, reservations and native
+crash/cancellation/retry remain incomplete. Counts 67/23/10 and zero accepted
+milestones stay unchanged. Latest supplied Windows verification remains unproven.

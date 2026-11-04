@@ -1,3 +1,19 @@
+# T089 campaign validation repaired; contracts partially verified — 2026-11-04
+
+**67 completed / 23 in progress / 10 blocked; zero accepted milestones.**
+Source `89c973b` passes 46 focused checks on 504 unchanged Git-matching inputs.
+Oversized matrix/duration/budget integers and malformed stop policies now return
+declared errors. Decoded actual Autoverse snapshot/state tests, separate SQLite
+reopen and authenticated refusals verify scoped coordination contracts. No workload
+is launched; the actual ready Autoverse snapshot remains unavailable for campaigns.
+
+T089 stays in progress. Positive child snapshots, provider parameter/seed/resource
+admission, reservations and native crash/cancellation/retry require further work.
+T090/AC-028 and broader milestone/Windows gates remain open. Original recording and
+environment are preserved. See [evidence/review](../../evidence/studio/M4-campaign-contracts/README.md).
+
+## Earlier checkpoints
+
 # T088 verified in a new isolated Autoverse environment — 2026-11-04
 
 **67 completed / 23 in progress / 10 blocked; zero accepted milestones.**
