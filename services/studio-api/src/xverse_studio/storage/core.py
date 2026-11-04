@@ -34,7 +34,8 @@ def atomic(path: Path, data: bytes):
 
     # The caller owns the managed destination. Acquire each native ancestor
     # without following links rather than reopening a previously checked name.
-    atomic_write(Path("/"), path.absolute(), data)
+    destination = path.absolute()
+    atomic_write(Path(destination.anchor), destination, data)
 
 
 def contained(root: Path, path: Path):

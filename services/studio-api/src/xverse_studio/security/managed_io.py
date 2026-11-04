@@ -2,7 +2,9 @@
 
 Linux walks directory descriptors from the filesystem root with O_NOFOLLOW at
 EVERY component. Opening only the final filename with O_NOFOLLOW is insufficient.
-This module does not resolve paths through symlinks or execute imported content.
+Windows delegates to native single-component handle acquisition. Its native
+verification remains open (ADR-0067). No implementation resolves links or executes
+imported content, and unavailable native primitives never select a weaker fallback.
 """
 
 from contextlib import contextmanager
@@ -140,6 +142,12 @@ def _state(info):
 
 @contextmanager
 def open_directory(root, path):
+    if sys.platform == "win32":
+        from . import windows_io
+
+        with windows_io.open_directory(root, path) as descriptor:
+            yield descriptor
+        return
     descriptor = None
     caller_failed = False
     try:
@@ -172,6 +180,12 @@ def open_directory(root, path):
 @contextmanager
 def open_read(root, path):
     """Yield a binary stream bound to a regular, unchanged, named inode."""
+    if sys.platform == "win32":
+        from . import windows_io
+
+        with windows_io.open_read(root, path) as stream:
+            yield stream
+        return
     with _parent(root, path) as (parent, name):
         descriptor = None
         caller_failed = False
@@ -230,6 +244,12 @@ def read_bounded(root, path, maximum):
 @contextmanager
 def open_write(root, path, *, parents=False):
     """Exclusively create a private regular file through anchored directories."""
+    if sys.platform == "win32":
+        from . import windows_io
+
+        with windows_io.open_write(root, path, parents=parents) as stream:
+            yield stream
+        return
     with _parent(root, path, create=parents) as (parent, name):
         descriptor = None
         caller_failed = False
@@ -270,6 +290,10 @@ def open_write(root, path, *, parents=False):
 
 
 def make_directory(root, path, *, exclusive=False, parents=False):
+    if sys.platform == "win32":
+        from . import windows_io
+
+        return windows_io.make_directory(root, path, exclusive=exclusive, parents=parents)
     with _parent(root, path, create=parents) as (parent, name):
         try:
             os.mkdir(name, 0o700, dir_fd=parent)
@@ -288,11 +312,19 @@ def make_directory(root, path, *, exclusive=False, parents=False):
 
 
 def unlink(root, path):
+    if sys.platform == "win32":
+        from . import windows_io
+
+        return windows_io.unlink(root, path)
     with _parent(root, path) as (parent, name):
         os.unlink(name, dir_fd=parent)
 
 
 def stat_file(root, path):
+    if sys.platform == "win32":
+        from . import windows_io
+
+        return windows_io.stat_file(root, path)
     with _parent(root, path) as (parent, name):
         try:
             return os.stat(name, dir_fd=parent, follow_symlinks=False)
@@ -302,6 +334,10 @@ def stat_file(root, path):
 
 def atomic_write(root, path, data):
     """Replace a regular file through retained native directory descriptors."""
+    if sys.platform == "win32":
+        from . import windows_io
+
+        return windows_io.atomic_write(root, path, data)
     path = _absolute(path)
     with _parent(root, path, create=True) as (parent, name):
         temporary = "." + uuid.uuid4().hex + ".tmp"
@@ -368,6 +404,10 @@ def atomic_write(root, path, data):
 
 def publish_directory(root, source, target, *, expected_identity):
     """Publish the original prepared directory without replacing another entry."""
+    if sys.platform == "win32":
+        from . import windows_io
+
+        return windows_io.publish_directory(root, source, target, expected_identity=expected_identity)
     source, target = _absolute(source), _absolute(target)
     if source.parent != target.parent:
         raise SafeIOError("UNSAFE_PATH")
@@ -407,6 +447,10 @@ def publish_directory(root, source, target, *, expected_identity):
 
 
 def remove_tree(root, path, *, expected_identity=None):
+    if sys.platform == "win32":
+        from . import windows_io
+
+        return windows_io.remove_tree(root, path, expected_identity=expected_identity)
     if not getattr(shutil.rmtree, "avoids_symlink_attacks", False):
         raise SafeIOError("SECURE_IO_UNAVAILABLE")
     with _parent(root, path) as (parent, name):
@@ -423,6 +467,12 @@ def remove_tree(root, path, *, expected_identity=None):
 @contextmanager
 def create_directory(root, path, *, parents=False):
     """Reserve a new directory and retain the acquired identity until exit."""
+    if sys.platform == "win32":
+        from . import windows_io
+
+        with windows_io.create_directory(root, path, parents=parents) as anchor:
+            yield anchor
+        return
     with _parent(root, path, create=parents) as (parent, name):
         descriptor = None
         try:

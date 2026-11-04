@@ -7,6 +7,14 @@ ADR-0036 Linux-only scope statements below. Preserve all original IDs/dependenci
 and recorded component evidence. Windows remains unverified; Linux-only evidence
 does not close Windows or milestone acceptance. Provider admission stays separate.
 
+T002/T039 progress (2026-11-04, ADR-0067): a native Windows managed-file
+implementation candidate now acquires individual components through held directory
+handles and implements private creation, replacement/publication and checked
+deletion. Portable path/ABI checks and Linux regressions have separate evidence in
+`evidence/studio/M1-windows-managed-files-20261104/`. Windows execution is NOT_RUN;
+process/root ownership, recovery and complete installed/browser verification remain
+open. Counts remain71 completed/19 in_progress/10 blocked, zero accepted milestones.
+
 
 **Feature:** `001-industry-agnostic-studio`\
 **Status:** implementation in progress. Checked tasks have the component evidence recorded in traceability.json; milestone acceptance and unverified native/live lanes remain open.\

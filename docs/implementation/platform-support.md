@@ -2,8 +2,9 @@
 
 Current supplied engineering rules require native Linux and Windows. Only the
 recorded Linux lanes below have qualifying application evidence. Windows remains
-unverified: the historical dependency-checkout failure and missing native secure
-file/process primitives are unresolved. The earlier user-approved ADR-0036 Linux
+unverified: the historical dependency-checkout failure and native secure
+file/process obligations are unresolved. ADR-0067 adds a native managed-file
+implementation candidate; its Windows execution is NOT_RUN. The earlier user-approved ADR-0036 Linux
 scope and its receipts remain historical evidence; they cannot waive the current
 Windows requirement. See ADR-0063 for this precedence and verification correction.
 
@@ -17,9 +18,24 @@ Windows requirement. See ADR-0063 for this precedence and verification correctio
 Exact versions and source identities remain in the locks, environment records and
 candidate evidence. Linux support does not imply every distribution/kernel/browser
 combination. The secure-file implementation uses anchored native Linux descriptors
-and refuses unavailable primitives. Windows needs its own native implementation and verification; WSL or a container
+and refuses unavailable primitives. The Windows handle implementation still needs
+native verification; process/root ownership and recovery gaps remain. WSL or a container
 cannot establish that requirement.
 Foreign path/device-name attacks remain import-security cases on Linux.
+
+The owned Windows file suite can be run with native Python 3.13 and provisioned
+development dependencies, from the repository root in PowerShell or Command Prompt:
+
+```text
+python -m pytest -q tests/platform/test_windows_file_policy.py tests/platform/test_windows_managed_io_native.py
+```
+
+Use an owned temporary directory on a fixed local NTFS volume. The suite does not
+run an example/provider or require Bash, WSL, a container, `mklink`, device access
+or enabled privileges. A Windows fixture failure remains a failure; collection or
+skips on another host are not acceptance. Retain the exact OS/release, Python,
+filesystem, commands and source identity with native output. The Windows module
+does not extend the verified release envelope by itself.
 
 | Provider | Linux scope | Other hosts |
 |---|---|---|
