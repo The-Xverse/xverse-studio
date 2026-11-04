@@ -1,3 +1,23 @@
+# Native Windows managed-file candidate — 2026-11-04
+
+**71 completed / 19 in progress / 10 blocked; zero accepted milestones.**
+No additional task closes in this checkpoint. T067 remains the latest closure.
+
+Source `a43147a` implements the Windows managed-file interface using retained
+native directory handles, checked reparse/link boundaries, private creation ACLs,
+handle publication/deletion and destination-drive roots. The original Linux
+implementation remains. On548 stable Git-bound code inputs,63 selected portable/
+Linux checks and11 original recorded Autoverse checks pass; architecture, planning
+and descriptive-baseline checks pass. No new provider/workload executes.
+
+Eleven Windows-native cases are collected only: actual Windows execution remains
+NOT_RUN. Process/root ownership, recovery and native installed/browser/persistence
+acceptance remain open. T002/T039 stayin_progress. No full regression, browser,
+performance, package, hardware or milestone result is inferred.
+See [component evidence and review](../../evidence/studio/M1-windows-managed-files-20261104/README.md).
+
+## Earlier checkpoints
+
 # T089/T090 closed — installed Autoverse campaigns verified — 2026-11-04
 
 **69 completed / 21 in progress / 10 blocked; zero accepted milestones.**

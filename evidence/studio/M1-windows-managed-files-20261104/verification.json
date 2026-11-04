@@ -1,0 +1,126 @@
+{
+  "candidate": "a43147a9a57fad7300de9310c718d757212dc87a",
+  "sourceInputs": 548,
+  "sourceInputsUnchanged": true,
+  "sourceInputsMatchGit": true,
+  "environment": {
+    "os": "Linux",
+    "release": "6.8.0-138-generic",
+    "architecture": "x86_64",
+    "python": "3.13.13"
+  },
+  "phases": {
+    "linux-policy-and-acquisition": {
+      "exitCode": 0,
+      "seconds": 5.019,
+      "command": [
+        "$WORKTREE/.venv/bin/python",
+        "-I",
+        "-c",
+        "import sys,pytest; sys.path.insert(0,\"tests\"); raise SystemExit(pytest.main(['-q', 'tests/platform/test_windows_file_policy.py', 'tests/platform/test_recovery_safe_io.py', '--junitxml=$WORKTREE/.studio-local/windows-managed-files-20261104/linux-policy-and-acquisition.xml']))"
+      ],
+      "cases": 63,
+      "failure": 0,
+      "error": 0,
+      "skipped": 0
+    },
+    "actual-recorded-autoverse-read": {
+      "exitCode": 0,
+      "seconds": 0.499,
+      "command": [
+        "$WORKTREE/.venv/bin/python",
+        "-I",
+        "-c",
+        "import sys,pytest; sys.path.insert(0,\"tests\"); raise SystemExit(pytest.main(['-q', 'tests/live/autoverse_comparison_evidence.py', '--junitxml=$WORKTREE/.studio-local/windows-managed-files-20261104/actual-recorded-autoverse-read.xml']))"
+      ],
+      "cases": 11,
+      "failure": 0,
+      "error": 0,
+      "skipped": 0
+    },
+    "windows-native-collection-only": {
+      "exitCode": 0,
+      "seconds": 0.417,
+      "command": [
+        "$WORKTREE/.venv/bin/python",
+        "-I",
+        "-c",
+        "import sys,pytest; sys.path.insert(0,\"tests\"); raise SystemExit(pytest.main(['--collect-only', '-q', 'tests/platform/test_windows_managed_io_native.py']))"
+      ]
+    },
+    "new-file-lint": {
+      "exitCode": 0,
+      "seconds": 0.012,
+      "command": [
+        "$WORKTREE/.venv/bin/ruff",
+        "check",
+        "services/studio-api/src/xverse_studio/security/windows_paths.py",
+        "services/studio-api/src/xverse_studio/security/windows_native.py",
+        "services/studio-api/src/xverse_studio/security/windows_io.py",
+        "tests/platform/test_windows_file_policy.py",
+        "tests/platform/test_windows_managed_io_native.py"
+      ]
+    },
+    "legacy-file-name-checks": {
+      "exitCode": 0,
+      "seconds": 0.011,
+      "command": [
+        "$WORKTREE/.venv/bin/ruff",
+        "check",
+        "--select",
+        "F821,F401",
+        "services/studio-api/src/xverse_studio/security/managed_io.py",
+        "services/studio-api/src/xverse_studio/storage/core.py"
+      ]
+    },
+    "architecture": {
+      "exitCode": 0,
+      "seconds": 1.12,
+      "command": [
+        "$WORKTREE/.venv/bin/python",
+        "-I",
+        "scripts/check_architecture.py"
+      ]
+    },
+    "planning-package": {
+      "exitCode": 0,
+      "seconds": 0.051,
+      "command": [
+        "$WORKTREE/.venv/bin/python",
+        "-I",
+        "scripts/validate_spec_package.py"
+      ]
+    },
+    "descriptive-baseline": {
+      "exitCode": 0,
+      "seconds": 0.253,
+      "command": [
+        "$WORKTREE/.venv/bin/python",
+        "-I",
+        "scripts/check_platform_compatibility.py"
+      ]
+    },
+    "diff-whitespace": {
+      "exitCode": 0,
+      "seconds": 0.007,
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ]
+    }
+  },
+  "nativeWindows": {
+    "status": "NOT_RUN",
+    "collectedOnly": 11
+  },
+  "taskCounts": {
+    "completed": 71,
+    "in_progress": 19,
+    "blocked": 10
+  },
+  "taskStatusesChanged": 0,
+  "acceptedMilestones": 0,
+  "newProviderOrWorkloadExecution": false,
+  "newBrowserBuildOrPerformanceClaim": false
+}
