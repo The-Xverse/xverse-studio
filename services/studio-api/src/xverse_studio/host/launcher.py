@@ -125,12 +125,13 @@ def _owned_main(args, root, parser):
     installed = None
     if args.autoverse_root is not None:
         from xverse_studio.providers.autoverse.adapter import AutoverseProvider, PROVIDER_ID
-        from xverse_studio.providers.autoverse.installation import enroll, InstallationError
+        from xverse_studio.providers.autoverse.installation import InstallationError
+        from xverse_studio.providers.autoverse.enrollment import load_or_enroll
         from xverse_studio.providers.descriptors import UnavailableProvider
         installed = {}
         prerequisite = None
         try:
-            installed[PROVIDER_ID] = AutoverseProvider(enroll(args.autoverse_root))
+            installed[PROVIDER_ID] = AutoverseProvider(load_or_enroll(root, args.autoverse_root))
         except Exception as error:
             # Enrollment is read-only. A requested integration failure must not
             # disable native authoring or expose private probe/path diagnostics.

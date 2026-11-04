@@ -81,6 +81,42 @@ def container_file_digest(docker, identifier, name, *, timeout=60):
             return "sha256:" + hashlib.file_digest(source, "sha256").hexdigest()
 
 
+def sdk_observation():
+    return json.loads(command(["/usr/bin/python3", "-E", "-c", "import os; os.environ['PYGAME_HIDE_SUPPORT_PROMPT']='1'; import json,sys,importlib,importlib.metadata as m; names=['carla','zenoh','pygame','numpy','psutil']; print(json.dumps({'python':sys.version,'packages':{n:m.version('eclipse-zenoh' if n=='zenoh' else n) for n in names},'moduleFiles':{n:importlib.import_module(n).__file__ for n in names}}))"], timeout=30))
+
+
+def verify_identity(installation):
+    """Read immutable identity without granting readiness to an occupied runtime."""
+    if platform.system() != "Linux" or platform.machine() != "x86_64":
+        raise InstallationError("AUTOVERSE_LINUX_PROVIDER_REQUIRED")
+    if (installation.get("version") != "1.0" or installation.get("python") != "/usr/bin/python3"
+            or any(installation.get(name) != shutil.which(name) or installation.get(name) not in installation.get("files", {})
+                   for name in ("docker", "zenohd", "adb"))
+            or set(installation.get("containers", {})) != set(CONTAINERS)
+            or any(installation["containers"][role].get("name") != "/" + name for role, name in CONTAINERS.items())):
+        raise InstallationError("AUTOVERSE_ENROLLMENT_BINDING_CHANGED")
+    expected_identity = digest({key: installation[key] for key in ("files", "containers", "containerFiles")})
+    if expected_identity != installation["identityDigest"]:
+        raise InstallationError("AUTOVERSE_INSTALLATION_CHANGED")
+    for name, expected in installation["files"].items():
+        if file_digest(Path(name)) != expected:
+            raise InstallationError("AUTOVERSE_INSTALLATION_CHANGED")
+    for expected in installation["containers"].values():
+        if container_fact(inspect(installation["docker"], expected["id"])) != expected:
+            raise InstallationError("AUTOVERSE_CONTAINER_CHANGED")
+    for name, expected in installation["containerFiles"].items():
+        if container_file_digest(installation["docker"], installation["containers"]["score"]["id"], name) != expected:
+            raise InstallationError("AUTOVERSE_ARTIFACT_CHANGED")
+    current_sdk = sdk_observation()
+    if (current_sdk["packages"] != installation["sdk"] or current_sdk["python"] != installation["componentPythonVersion"]
+            or any(name not in installation["files"] for name in current_sdk["moduleFiles"].values())):
+        raise InstallationError("AUTOVERSE_SDK_CHANGED")
+    addresses = {item.address for item in psutil.net_if_addrs().get("cvd-mtap-01", []) if item.family == socket.AF_INET}
+    if installation["androidGateway"] not in addresses:
+        raise InstallationError("AUTOVERSE_EMULATOR_GATEWAY_CHANGED")
+    return True
+
+
 def enroll(root):
     """Read-only enrollment; never creates, downloads, starts or stops demo assets."""
     if platform.system() != "Linux" or platform.machine() != "x86_64":
@@ -99,7 +135,7 @@ def enroll(root):
     executables = {name: shutil.which(name) for name in ("docker", "zenohd", "adb")}
     if not all(executables.values()) or not Path("/usr/bin/python3").is_file():
         raise InstallationError("AUTOVERSE_DEPENDENCY_MISSING")
-    sdk = json.loads(command(["/usr/bin/python3", "-E", "-c", "import os; os.environ['PYGAME_HIDE_SUPPORT_PROMPT']='1'; import json,sys,importlib,importlib.metadata as m; names=['carla','zenoh','pygame','numpy','psutil']; print(json.dumps({'python':sys.version,'packages':{n:m.version('eclipse-zenoh' if n=='zenoh' else n) for n in names},'moduleFiles':{n:importlib.import_module(n).__file__ for n in names}}))"], timeout=30))
+    sdk = sdk_observation()
     for name in sdk["moduleFiles"].values():
         paths.add(name)
         paths.update(str(p) for p in Path(name).parent.glob("**/*.so"))
