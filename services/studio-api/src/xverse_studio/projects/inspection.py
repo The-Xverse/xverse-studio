@@ -68,8 +68,11 @@ def inspect_project(project, registry):
             namespace = resource["spec"].get("extensionNamespace")
             if isinstance(namespace, str):
                 authored_profiles.setdefault(namespace, []).append(document_id)
-    conflicts = {finding["elementRef"]: finding for finding in registry.authored_findings(
-        {document["path"]: document["content"] for document in project["documents"].values()})}
+    # All resources were decoded above. The registry checks Profile declarations;
+    # avoid decoding large Systems and Deployments a second time just to skip them.
+    profiles = {project["documents"][document_id]["path"]: project["documents"][document_id]["content"]
+                for document_id, resource in parsed.items() if resource.get("kind") == "Profile"}
+    conflicts = {finding["elementRef"]: finding for finding in registry.authored_findings(profiles)}
     unresolved = []
     for document_id, resource in parsed.items():
         for extensions, pointer in _extension_containers(resource):
