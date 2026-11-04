@@ -26,6 +26,10 @@ test("Actual Autoverse evidence imports preserve original claims and expose curr
       await expect(original).toContainText("external_demo");
       await expect(dialog).toContainText("Import creates no run and grants no execution authority");
       await expect(dialog).toContainText("6 recorded evaluations and 2 annotations");
+      if (currentIntegrity === "invalid") {
+        await dialog.evaluate((element) => { element.scrollTop = 0; });
+        await dialog.screenshot({ path: info.outputPath(`actual-exchange-state-${width}.png`) });
+      }
       const dependencies = dialog.getByRole("region", { name: "Referenced dependencies", exact: true });
       await expect(dependencies).toContainText("Not included");
       await expect(dependencies).toContainText("not included, fetched or installed");
@@ -35,7 +39,7 @@ test("Actual Autoverse evidence imports preserve original claims and expose curr
       await expect(identity).toBeFocused();
       if (currentIntegrity === "invalid") {
         await expect(dialog).toContainText("ORIGINAL_JOURNAL_INVALID");
-        await page.screenshot({ path: info.outputPath(`actual-exchange-${width}.png`), fullPage: true });
+        await dialog.screenshot({ path: info.outputPath(`actual-exchange-dependencies-${width}.png`) });
       }
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
       await dialog.getByRole("button", { name: "Close dialog", exact: true }).click();
