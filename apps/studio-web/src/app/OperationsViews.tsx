@@ -3,9 +3,8 @@ import { ScenarioAdmission } from "../features/experiments/ScenarioAdmission";
 import { ScenarioAuthoring } from "../features/experiments/ScenarioAuthoring";
 import { ScenarioTimeline } from "../features/experiments/ScenarioTimeline";
 import type { SourceTarget } from "../features/model/Views";
-import { useEffect, useState } from "react";
-import type { Evaluation } from "../../../../packages/contracts/api";
-import { api, items, mutationKey } from "../api/client";
+import { useState } from "react";
+import { FrozenAssessments } from "../features/experiments/FrozenAssessments";
 import type { Project, Data, Run, Preflight } from "../api/types";
 import type { Projection } from "../features/model/projection";
 import { textRef } from "../features/model/projection";
@@ -16,8 +15,6 @@ import {
   Empty,
   Json,
   KeyValues,
-  statusTone,
-  Diagnostics,
 } from "./ui";
 export function ExperimentsView({
   project,
@@ -52,10 +49,7 @@ export function ExperimentsView({
   campaignLimits: Data;
   campaignEnabled: boolean;
 }) {
-  const [tab, setTab] = useState("Scenario"),
-    [evaluations, setEvaluations] = useState<Data[]>([]),
-    [definition, setDefinition] = useState(""),
-    [definitions, setDefinitions] = useState<Data[]>([]);
+  const [tab, setTab] = useState("Scenario");
   const scenario = selection.scenarioRef
       ? projection.scenarios.find(
           (resource) =>
@@ -66,16 +60,6 @@ export function ExperimentsView({
         ? projection.scenarios[0]
         : undefined,
     spec = scenario?.spec || {};
-  useEffect(() => {
-    if (run?.runId) {
-      void api(`/runs/${run.runId}/evaluations`)
-        .then((r) => setEvaluations(items(r)))
-        .catch(() => {});
-      void api(`/runs/${run.runId}/definitions`)
-        .then((r) => setDefinitions(items(r)))
-        .catch(() => {});
-    }
-  }, [run?.runId]);
   return (
     <div className="view-page">
       <div className="section-heading">
@@ -242,105 +226,12 @@ export function ExperimentsView({
           run={run}
         />
       ) : tab === "Assertions" ? (
-        <div className="connection-layout">
-          <section className="panel">
-            <h3>Evaluation results</h3>
-            {evaluations.length ? (
-              evaluations.map((e) => (
-                <article className="evaluation-card" key={e.evaluationId}>
-                  <h4>{e.definitionRef || e.evaluationId}</h4>
-                  <Badge tone={statusTone(e.verdict || e.status)}>
-                    {e.verdict || "Not evaluated"}
-                  </Badge>
-                  <KeyValues
-                    values={{
-                      "Execution status": e.status || e.executionStatus,
-                      Coverage: e.coverage,
-                      Evaluator: e.evaluatorVersion || e.evaluatorId,
-                    }}
-                  />
-                  <Json value={e} />
-                </article>
-              ))
-            ) : (
-              <Empty title="No assertions evaluated" icon="check">
-                A completed run does not create a passing assertion. Definitions
-                must belong to an admitted, frozen XDL profile.
-              </Empty>
-            )}
-          </section>
-          <aside className="panel">
-            <h3>Evaluate a frozen definition</h3>
-            <p className="field-hint">
-              Select a definition that already exists in the run snapshot.
-              Opaque imported expressions remain unevaluated.
-            </p>
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                void doAction("Evaluating assertion", async () => {
-                  if (!run) throw new Error("Select a run in Results first.");
-                  const result = await api(`/runs/${run.runId}/evaluations`, {
-                    method: "POST",
-                    key: mutationKey(),
-                    body: {
-                      snapshotId: run.snapshotId,
-                      definitionRef: definition,
-                      definitionDigest:
-                        definitions.find((d) => d.definitionRef === definition)
-                          ?.definitionDigest || "",
-                      evidenceRefs: [run.runId + ":reference-journal"],
-                    } satisfies Evaluation,
-                  });
-                  setEvaluations(
-                    items(await api(`/runs/${run.runId}/evaluations`)),
-                  );
-                  return result;
-                });
-              }}
-            >
-              <label>
-                Snapshot definition reference
-                <select
-                  value={definition}
-                  onChange={(e) => setDefinition(e.target.value)}
-                  required
-                >
-                  <option value="">
-                    {definitions.length
-                      ? "Select a frozen definition"
-                      : "No admitted definitions in this snapshot"}
-                  </option>
-                  {definitions.map((d) => (
-                    <option key={d.definitionRef} value={d.definitionRef}>
-                      {d.definition?.name || d.definitionRef}
-                    </option>
-                  ))}
-                </select>
-              </label>
-              <button className="button primary" disabled={!run || !definition}>
-                Evaluate assertion
-              </button>
-            </form>
-            {!definitions.length && (
-              <p className="field-hint">
-                This snapshot has no compatible bounded-evaluator profile
-                definitions. Existing expression strings remain preserved and
-                not evaluated.
-              </p>
-            )}
-            <hr />
-            <h4>Verdict semantics</h4>
-            <ul className="limits-list">
-              <li>Pass: complete evidence establishes true.</li>
-              <li>Fail: complete evidence establishes false.</li>
-              <li>
-                Indeterminate: missing, invalid, or incompatible evidence.
-              </li>
-              <li>Not evaluated: capability or definition unavailable.</li>
-            </ul>
-          </aside>
-        </div>
+        <FrozenAssessments
+          key={JSON.stringify([project.projectId, run?.runId, run?.snapshotId])}
+          projectId={project.projectId}
+          run={run}
+          doAction={doAction}
+        />
       ) : (
         <CampaignWorkspace
           key={project.projectId}
