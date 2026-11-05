@@ -15,6 +15,7 @@ import threading
 from types import SimpleNamespace
 
 import pytest
+from fastapi.testclient import TestClient
 
 from xverse_studio.api.app import create_app
 from xverse_studio.runs import service
@@ -35,7 +36,7 @@ def copied(tmp_path, monkeypatch):
     journals = {p: hashlib.sha256(p.read_bytes()).hexdigest() for p in (source / "runs").glob("*/evidence.jsonl")}
     data = tmp_path / "copied-autoverse"
     tools.clone(source, data)
-    app = create_app(data, bootstrap_token="inert-contention-test")
+    app = create_app(data, bootstrap_token="inert-contention-test", allowed_hosts=["testserver"])
 
     def forbidden(*args, **kwargs):
         pytest.fail("Offline contention test attempted native contact")
@@ -43,6 +44,7 @@ def copied(tmp_path, monkeypatch):
     for name in ("Popen", "run", "check_output"):
         monkeypatch.setattr(subprocess, name, forbidden)
     studio = app.state.studio
+    studio._inert_contention_app = app
     left = report["sourceRunId"]
     right = report["runId"]
     assert all(studio.store.get("run", rid)["state"] == "stopped" for rid in (left, right))
@@ -238,3 +240,35 @@ def test_new_cleanup_observation_is_persisted_once(copied, monkeypatch):
     assert writes == [left]
     writes.clear()
     assert studio.runs.read(left) == current and not writes
+
+
+def test_waiting_session_lookup_does_not_block_the_http_event_loop(copied, monkeypatch):
+    studio, _, _ = copied
+    entered, public_done = threading.Event(), threading.Event()
+    get = studio.store.get
+
+    def observed_get(kind, identity, db=None):
+        if kind == "session":
+            entered.set()
+        return get(kind, identity, db)
+
+    with TestClient(studio._inert_contention_app) as api:
+        api.headers["Origin"] = "http://testserver"
+        assert api.post("/api/v1/session", json={"bootstrapToken": "inert-contention-test"}).status_code == 200
+        monkeypatch.setattr(studio.store, "get", observed_get)
+
+        def public_request():
+            try:
+                response = api.get("/inert-missing-static-resource.txt")
+                assert response.status_code == 404
+            finally:
+                public_done.set()
+
+        with ThreadPoolExecutor(max_workers=2) as pool:
+            with studio.store.lock:
+                authenticated = pool.submit(api.get, "/api/v1/session")
+                assert entered.wait(5)
+                public = pool.submit(public_request)
+                assert public_done.wait(1), "Synchronous authentication blocks the ASGI event loop"
+                public.result(timeout=1)
+            assert authenticated.result(timeout=5).status_code == 200

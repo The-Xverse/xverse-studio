@@ -16,6 +16,7 @@ from fastapi import FastAPI, Request, Response, Query
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse, StreamingResponse, FileResponse
 from starlette.exceptions import HTTPException
+from starlette.concurrency import run_in_threadpool
 from xverse_studio import __version__
 from xverse_studio.api.models import *
 from xverse_studio.providers.descriptors import ProviderPage
@@ -219,7 +220,8 @@ def create_app(
             if not (request.url.path == "/api/v1/session" and request.method == "POST"):
                 session_token = request.cookies.get("studio_session", "")
                 try:
-                    session = store.get(
+                    session = await run_in_threadpool(
+                        store.get,
                         "session", hashlib.sha256(session_token.encode()).hexdigest()
                     )
                 except (Problem, ValueError, TypeError, OverflowError):
