@@ -1,3 +1,25 @@
+# Fresh rerun component verified; work paused — 2026-11-05
+
+**71 completed /19 in progress /10 blocked; zero accepted milestones.**
+T067 remains the latest task closure. T091 gains a successful complete actual
+fresh-source frozen rerun on f96fe96, with full Android/speed/rendered sensor
+pipeline, immutable inputs, canonical integrity, idempotency/admission checks and
+owned cleanup. Its original quantity/gap/clock/playback/rerun clause audit remains
+pending; this component pass does not close the whole task. Unsupported numeric
+comparison remains explicit, and no deterministic replay is inferred.
+
+The source campaign and first late verifier failure remain separate records.
+ADR-0073 changes only contributor fixture expectations; the repaired full repeat
+passes. Original private ADB/display/overlay/rootless infrastructure is shut down,
+all eight test containers are stopped, and host Docker/network identities remain
+unchanged. Evidence: `evidence/studio/M4-fresh-autoverse-rerun-20261105/`.
+
+The user requested stop after the current task. This verification/evidence
+checkpoint is finished; all work is paused until explicit resume. The independent
+Windows freeze remains active until explicitly lifted. No next task is started.
+
+## Earlier checkpoints
+
 # Current dependency/closure review — 2026-11-05
 
 **71 completed /19 in progress /10 blocked; zero accepted milestones.**

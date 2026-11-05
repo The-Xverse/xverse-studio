@@ -1,0 +1,17 @@
+{
+  "originalAssertions": 31,
+  "unchangedAssertions": 29,
+  "removedCount": 2,
+  "addedCount": 4,
+  "removed": [
+    "Assert(test=BoolOp(op=And(), values=[Compare(left=Subscript(value=Subscript(value=Name(id='rows', ctx=Load()), slice=Constant(value='parameters'), ctx=Load()), slice=Constant(value='status'), ctx=Load()), ops=[Eq()], comparators=[Constant(value='same')]), Compare(left=Subscript(value=Subscript(value=Name(id='rows', ctx=Load()), slice=Constant(value='providerIdentity'), ctx=Load()), slice=Constant(value='status'), ctx=Load()), ops=[Eq()], comparators=[Constant(value='different')])]))",
+    "Assert(test=Compare(left=Constant(value='OBSERVATION_PAYLOAD_UNAVAILABLE'), ops=[In()], comparators=[Subscript(value=Name(id='comparison', ctx=Load()), slice=Constant(value='diagnostics'), ctx=Load())]))"
+  ],
+  "added": [
+    "Assert(test=BoolOp(op=And(), values=[Compare(left=Subscript(value=Subscript(value=Name(id='rows', ctx=Load()), slice=Constant(value='parameters'), ctx=Load()), slice=Constant(value='status'), ctx=Load()), ops=[Eq()], comparators=[Constant(value='same')]), Compare(left=Subscript(value=Subscript(value=Name(id='rows', ctx=Load()), slice=Constant(value='providerIdentity'), ctx=Load()), slice=Constant(value='status'), ctx=Load()), ops=[Eq()], comparators=[Name(id='expected_provider_relation', ctx=Load())])]))",
+    "Assert(test=Compare(left=Subscript(value=Subscript(value=Name(id='rows', ctx=Load()), slice=Constant(value='providerIdentity'), ctx=Load()), slice=Constant(value='left'), ctx=Load()), ops=[Eq()], comparators=[Subscript(value=Name(id='frozen', ctx=Load()), slice=Constant(value='providerIdentity'), ctx=Load())]))",
+    "Assert(test=Compare(left=Subscript(value=Subscript(value=Name(id='rows', ctx=Load()), slice=Constant(value='providerIdentity'), ctx=Load()), slice=Constant(value='right'), ctx=Load()), ops=[Eq()], comparators=[Subscript(value=Name(id='new', ctx=Load()), slice=Constant(value='providerIdentity'), ctx=Load())]))",
+    "Assert(test=Compare(left=Constant(value='COMPARISON_EVIDENCE_UNSUPPORTED'), ops=[In()], comparators=[Subscript(value=Name(id='comparison', ctx=Load()), slice=Constant(value='diagnostics'), ctx=Load())]))"
+  ],
+  "qualification": "Two fixture expectations updated; explicit left/right identity binding added; all execution/idempotency/input/cleanup assertions retained."
+}

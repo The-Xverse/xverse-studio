@@ -1,3 +1,11 @@
+**Current user instruction (2026-11-05): finish the current task, then stop until
+explicit resume.** The complete fresh Autoverse rerun verification/evidence
+checkpoint is finished, owned private test services are shut down, and work is
+paused. Do not follow historical resume instructions below until the user resumes.
+Windows remains separately frozen until explicitly lifted. Counts71/19/10,zero
+accepted milestones; T091's original full clause audit remains pending. See
+[latest status](STATUS.md) and [evidence](../../evidence/studio/M4-fresh-autoverse-rerun-20261105/README.md).
+
 # Implement X-Verse Studio with Codex or Claude
 
 **User resumed the goal on 2026-11-05 (ADR-0069).** Continue independently

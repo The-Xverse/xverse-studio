@@ -1,3 +1,34 @@
+# Fresh Autoverse rerun passed; user-requested work pause — 2026-11-05
+
+**71 completed /19 in progress /10 blocked; zero accepted milestones.**
+No additional task closes. T091 remains in progress pending its original clause
+audit. The current verification/evidence checkpoint is finished; work is paused
+until the user explicitly resumes it. Windows remains separately frozen.
+
+The full actual fresh-source frozen rerun passes on f96fe96 with the original
+rendered CARLA/sensors, Android/APK and simulated vehicle-speed pipeline. Its81
+valid canonical records include28 observations. Immutable input/current draft,
+retry deduplication, occupied admission refusal, original/copy recording preservation
+and owned cleanup assertions pass. All16 original runtime process instances and18
+captured driver descendant handles exit; three exact runtime containers stop.
+All555 Git-bound inputs and six UI assets remain unchanged during the run.
+
+A new exact enrollment preserves its actual identity; incompatible historical
+snapshots are not retargeted. A complete fresh two-child source campaign supplies
+compatible inputs. The first actual rerun's late verifier failure stays separate;
+ADR-0073 repairs two obsolete fixture expectations and adds exact identity bindings.
+The successful full repeat supplies new live evidence, without production changes.
+Unsupported numeric comparison remains explicit; there is no deterministic replay,
+physical, Windows, full regression, package, performance or milestone claim.
+
+The isolated ADB helpers and original private display, overlay and rootless daemon
+are shut down. All eight exact test containers were stopped before daemon shutdown,
+and the host overlay mount is gone. System Docker identity and host interfaces are
+unchanged. Cached assets, raw evidence and original failed observations are retained.
+See [verification and review](../../evidence/studio/M4-fresh-autoverse-rerun-20261105/README.md).
+
+## Earlier checkpoints
+
 # Private Autoverse namespace prepared after reboot — 2026-11-05
 
 **71 completed /19 in progress /10 blocked; zero accepted milestones.**
