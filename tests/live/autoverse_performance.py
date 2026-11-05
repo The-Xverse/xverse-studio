@@ -287,6 +287,7 @@ def main():
         "browser-cache",
     ):
         p.add_argument("--" + name, type=Path, required=True)
+    p.add_argument("--isolate-browser-devices", action="store_true")
     args = p.parse_args()
     args.output = args.output.absolute()
     args.output.mkdir(exist_ok=False)
@@ -368,6 +369,16 @@ def main():
             "--config",
             "tests/live/autoverse-performance.config.ts",
         ]
+        if args.isolate_browser_devices:
+            isolation_spec = importlib.util.spec_from_file_location(
+                "performance_browser_isolation", Path(__file__).with_name("autoverse_playback_browser.py")
+            )
+            isolation = importlib.util.module_from_spec(isolation_spec)
+            isolation_spec.loader.exec_module(isolation)
+            env["STUDIO_BROWSER_CPU_ONLY"] = "1"
+            env["STUDIO_BROWSER_DEVICE_PROOF"] = str(args.output / "browser-device-proof.private.json")
+            env["STUDIO_BROWSER_HOST_MOUNT_NS"] = os.readlink("/proc/self/ns/mnt")
+            argv = isolation.device_free_browser_command(argv)
         (args.output / "browser-command.private.json").write_text(
             json.dumps(argv, indent=2) + "\n"
         )

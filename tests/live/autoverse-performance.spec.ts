@@ -24,6 +24,16 @@ async function noOverflow(page: Page) {
 test("Autoverse authoring and synthetic retained history meet the declared native budgets", async ({ page }, info) => {
   const context = JSON.parse(readFileSync(path.join(process.env.STUDIO_BROWSER_DATA!, "performance-context.private.json"), "utf8"));
   await connectStudio(page, info);
+  const capabilityReply = await page.request.get("/api/v1/capabilities");
+  expect(capabilityReply.status()).toBe(200);
+  const capabilities = await capabilityReply.json();
+  for (const operation of ["campaign", "evaluate", "compare", "export", "annotate", "retention"]) {
+    expect(capabilities.supportedOperations).toContain(operation);
+  }
+  writeFileSync(info.outputPath("analysis-feature-context.json"), JSON.stringify({
+    supportedOperations: capabilities.supportedOperations,
+    scope: "Current backend campaign/analysis features available; inert benchmark, no campaign dispatch or concurrent live analysis execution.",
+  }, null, 2));
   const writes: string[] = [];
   page.on("request", (r) => { if (r.method() !== "GET") writes.push(new URL(r.url()).pathname); });
   for (const width of [1024, 1440]) {
