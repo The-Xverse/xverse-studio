@@ -1,3 +1,14 @@
+Latest checkpoint — 2026-11-05: source27faf83 passes12 new historical-assessment
+keyboard journeys +19 older browser/response cases on572 Git-bound inputs and6
+reproduced UI assets. Explicit read focus and selected disclosure contrast are
+repaired; original failures/test corrections remain retained. Six historical
+results are inspectable; current provider mapping is absent and evaluation stays
+unsupported. Counts72/18/10,zero milestones; T097 stays open. Continue remaining
+export/download, binding/substitution and genuine registered-mapping evaluation/
+fresh campaign keyboard work with current ownership/readiness. Actual AT/device/
+required-host gates remain; Windows separately FROZEN. Full original goal ACTIVE.
+See [status](STATUS.md) and [evidence](../../evidence/studio/M4-accessibility/assessments-20261105/README.md).
+
 Latest checkpoint — 2026-11-05: source48cee68 passes84 selected native Linux lab
 software-fixture checks on570 stable Git-bound inputs. All84 hosts serve6 selected
 UI assets (504 HTTP hash checks), matching reproducedcc459ab with unchanged product

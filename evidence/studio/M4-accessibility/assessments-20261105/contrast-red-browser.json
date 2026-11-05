@@ -1,0 +1,276 @@
+{
+  "config": {
+    "argv": [
+      "[WORKSPACE_VOLUME]/.xverse-studio-cache/node-v24.22.1-linux-x64/bin/node",
+      "[WORKSPACE_VOLUME]/xverse-studio/node_modules/@playwright/test/cli.js",
+      "test",
+      "--config",
+      "tests/live/autoverse-assessments-keyboard.config.ts",
+      "--grep",
+      "actual stored assessment"
+    ],
+    "configFile": "[WORKTREE]/tests/live/autoverse-assessments-keyboard.config.ts",
+    "rootDir": "[WORKTREE]/tests/live",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": "[WORKTREE]/tests/live/recorded-browser-device-setup.ts",
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "[WORKTREE]/.studio-local/t097-assessment-keyboard-20261105/disclosure-contrast-selected/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "[WORKTREE]/tests/live",
+        "testIgnore": [],
+        "testMatch": [
+          "autoverse-assessments-keyboard.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "[WORKTREE]/.studio-local/t097-assessment-keyboard-20261105/disclosure-contrast-selected/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "[WORKTREE]/tests/live",
+        "snapshotDir": "[WORKTREE]/tests/live",
+        "testIgnore": [],
+        "testMatch": "autoverse-assessments-keyboard.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "baseURL": "[LOOPBACK_ORIGIN]",
+          "browserName": "chromium",
+          "actionTimeout": 15000,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "trace": "off",
+          "screenshot": "only-on-failure",
+          "video": "off",
+          "launchOptions": {
+            "args": [
+              "--disable-gpu",
+              "--disable-gpu-rasterization"
+            ]
+          }
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "[WORKTREE]/.studio-local/t097-assessment-keyboard-20261105/disclosure-contrast-selected/browser.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "autoverse-assessments-keyboard.spec.ts",
+      "file": "autoverse-assessments-keyboard.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "actual stored assessment outcomes and keyboard refresh remain inspectable at 1024",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 4055,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: >= \u001b[32m4.5\u001b[39m\nReceived:    \u001b[31m3.385515277687404\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: >= \u001b[32m4.5\u001b[39m\nReceived:    \u001b[31m3.385515277687404\u001b[39m\n    at [WORKTREE]/tests/live/autoverse-assessments-keyboard.spec.ts:111:72",
+                    "location": {
+                      "file": "[WORKTREE]/tests/live/autoverse-assessments-keyboard.spec.ts",
+                      "column": 72,
+                      "line": 111
+                    },
+                    "snippet": "  109 |     await info.attach(\"exact-data-accessibility\", { body: JSON.stringify({ disclosureContrast, disclosureFocus }), contentType: \"application/json\" });\n  110 |     expect(disclosureContrast.supported).toBe(true);\n> 111 |     if (disclosureContrast.supported) expect(disclosureContrast.ratio).toBeGreaterThanOrEqual(4.5);\n      |                                                                        ^\n  112 |     await activate(page, exact);\n  113 |     await expect(exact.locator(\"..\")).toHaveAttribute(\"open\", \"\");\n  114 |     await report(page, info, width, writes, null);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "[WORKTREE]/tests/live/autoverse-assessments-keyboard.spec.ts",
+                        "column": 72,
+                        "line": 111
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: >= \u001b[32m4.5\u001b[39m\nReceived:    \u001b[31m3.385515277687404\u001b[39m\n\n  109 |     await info.attach(\"exact-data-accessibility\", { body: JSON.stringify({ disclosureContrast, disclosureFocus }), contentType: \"application/json\" });\n  110 |     expect(disclosureContrast.supported).toBe(true);\n> 111 |     if (disclosureContrast.supported) expect(disclosureContrast.ratio).toBeGreaterThanOrEqual(4.5);\n      |                                                                        ^\n  112 |     await activate(page, exact);\n  113 |     await expect(exact.locator(\"..\")).toHaveAttribute(\"open\", \"\");\n  114 |     await report(page, info, width, writes, null);\n    at [WORKTREE]/tests/live/autoverse-assessments-keyboard.spec.ts:111:72"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T16:53:13.059Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "exact-data-accessibility",
+                      "contentType": "application/json",
+                      "body": "eyJkaXNjbG9zdXJlQ29udHJhc3QiOnsibGFiZWwiOiJGcm96ZW4gZGVmaW5pdGlvbiBleGFjdC1kYXRhIGRpc2Nsb3N1cmUiLCJ0ZXh0IjoiSW5zcGVjdCBleGFjdCBkYXRhIiwiY29sb3IiOiJyZ2IoMTIyLCAxNDEsIDE2OCkiLCJmb250U2l6ZSI6IjEwcHgiLCJmb250V2VpZ2h0IjoiNDAwIiwidGhyZXNob2xkIjo0LjUsInNjb3BlIjoiU2VsZWN0ZWQgbm9ybWFsLXNpemUgcmVuZGVyZWQgdGV4dDsgbm8gb3ZlcmFsbCBhY2Nlc3NpYmlsaXR5IGNlcnRpZmljYXRpb24iLCJzdXBwb3J0ZWQiOnRydWUsImxheWVycyI6WyJyZ2JhKDAsIDAsIDAsIDApIiwicmdiYSgwLCAwLCAwLCAwKSIsInJnYmEoMCwgMCwgMCwgMCkiLCJyZ2IoMjU1LCAyNTUsIDI1NSkiXSwiYmFja2dyb3VuZCI6WzEsMSwxLDFdLCJjb21wb3NpdGVkRm9yZWdyb3VuZCI6WzAuNDc4NDMxMzcyNTQ5MDE5NjMsMC41NTI5NDExNzY0NzA1ODgzLDAuNjU4ODIzNTI5NDExNzY0NywxXSwicmF0aW8iOjMuMzg1NTE1Mjc3Njg3NDA0LCJwYXNzZWQiOmZhbHNlLCJhc3N1bXB0aW9ucyI6IkNTUyBzUkdCIGNvbG9yczsgYWxwaGEgY29tcG9zaXRlZCB0aHJvdWdoIGV4cGxpY2l0IGJhY2tncm91bmRzOyBubyBhbnRpLWFsaWFzaW5nIGFwcHJveGltYXRpb24ifSwiZGlzY2xvc3VyZUZvY3VzIjp7ImZvY3VzZWQiOnRydWUsIm91dGxpbmVTdHlsZSI6ImF1dG8iLCJvdXRsaW5lV2lkdGgiOiIxcHgiLCJyZWN0Ijp7IngiOjExNywieSI6Mzc2LjU2MjUsIndpZHRoIjo4NjgsImhlaWdodCI6MTUsInRvcCI6Mzc2LjU2MjUsInJpZ2h0Ijo5ODUsImJvdHRvbSI6MzkxLjU2MjUsImxlZnQiOjExN319fQ=="
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "[WORKTREE]/.studio-local/t097-assessment-keyboard-20261105/disclosure-contrast-selected/artifacts/autoverse-assessments-keyb-9f5a0--remain-inspectable-at-1024/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "[WORKTREE]/.studio-local/t097-assessment-keyboard-20261105/disclosure-contrast-selected/artifacts/autoverse-assessments-keyb-9f5a0--remain-inspectable-at-1024/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "[WORKTREE]/tests/live/autoverse-assessments-keyboard.spec.ts",
+                    "column": 72,
+                    "line": 111
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "d0fb33b7b84ada4def3f-3a7990c6b5102acd1f72",
+          "file": "autoverse-assessments-keyboard.spec.ts",
+          "line": 78,
+          "column": 7
+        },
+        {
+          "title": "actual stored assessment outcomes and keyboard refresh remain inspectable at 1440",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 3563,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: >= \u001b[32m4.5\u001b[39m\nReceived:    \u001b[31m3.385515277687404\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: >= \u001b[32m4.5\u001b[39m\nReceived:    \u001b[31m3.385515277687404\u001b[39m\n    at [WORKTREE]/tests/live/autoverse-assessments-keyboard.spec.ts:111:72",
+                    "location": {
+                      "file": "[WORKTREE]/tests/live/autoverse-assessments-keyboard.spec.ts",
+                      "column": 72,
+                      "line": 111
+                    },
+                    "snippet": "  109 |     await info.attach(\"exact-data-accessibility\", { body: JSON.stringify({ disclosureContrast, disclosureFocus }), contentType: \"application/json\" });\n  110 |     expect(disclosureContrast.supported).toBe(true);\n> 111 |     if (disclosureContrast.supported) expect(disclosureContrast.ratio).toBeGreaterThanOrEqual(4.5);\n      |                                                                        ^\n  112 |     await activate(page, exact);\n  113 |     await expect(exact.locator(\"..\")).toHaveAttribute(\"open\", \"\");\n  114 |     await report(page, info, width, writes, null);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "[WORKTREE]/tests/live/autoverse-assessments-keyboard.spec.ts",
+                        "column": 72,
+                        "line": 111
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: >= \u001b[32m4.5\u001b[39m\nReceived:    \u001b[31m3.385515277687404\u001b[39m\n\n  109 |     await info.attach(\"exact-data-accessibility\", { body: JSON.stringify({ disclosureContrast, disclosureFocus }), contentType: \"application/json\" });\n  110 |     expect(disclosureContrast.supported).toBe(true);\n> 111 |     if (disclosureContrast.supported) expect(disclosureContrast.ratio).toBeGreaterThanOrEqual(4.5);\n      |                                                                        ^\n  112 |     await activate(page, exact);\n  113 |     await expect(exact.locator(\"..\")).toHaveAttribute(\"open\", \"\");\n  114 |     await report(page, info, width, writes, null);\n    at [WORKTREE]/tests/live/autoverse-assessments-keyboard.spec.ts:111:72"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T16:53:17.498Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "exact-data-accessibility",
+                      "contentType": "application/json",
+                      "body": "eyJkaXNjbG9zdXJlQ29udHJhc3QiOnsibGFiZWwiOiJGcm96ZW4gZGVmaW5pdGlvbiBleGFjdC1kYXRhIGRpc2Nsb3N1cmUiLCJ0ZXh0IjoiSW5zcGVjdCBleGFjdCBkYXRhIiwiY29sb3IiOiJyZ2IoMTIyLCAxNDEsIDE2OCkiLCJmb250U2l6ZSI6IjEwcHgiLCJmb250V2VpZ2h0IjoiNDAwIiwidGhyZXNob2xkIjo0LjUsInNjb3BlIjoiU2VsZWN0ZWQgbm9ybWFsLXNpemUgcmVuZGVyZWQgdGV4dDsgbm8gb3ZlcmFsbCBhY2Nlc3NpYmlsaXR5IGNlcnRpZmljYXRpb24iLCJzdXBwb3J0ZWQiOnRydWUsImxheWVycyI6WyJyZ2JhKDAsIDAsIDAsIDApIiwicmdiYSgwLCAwLCAwLCAwKSIsInJnYmEoMCwgMCwgMCwgMCkiLCJyZ2IoMjU1LCAyNTUsIDI1NSkiXSwiYmFja2dyb3VuZCI6WzEsMSwxLDFdLCJjb21wb3NpdGVkRm9yZWdyb3VuZCI6WzAuNDc4NDMxMzcyNTQ5MDE5NjMsMC41NTI5NDExNzY0NzA1ODgzLDAuNjU4ODIzNTI5NDExNzY0NywxXSwicmF0aW8iOjMuMzg1NTE1Mjc3Njg3NDA0LCJwYXNzZWQiOmZhbHNlLCJhc3N1bXB0aW9ucyI6IkNTUyBzUkdCIGNvbG9yczsgYWxwaGEgY29tcG9zaXRlZCB0aHJvdWdoIGV4cGxpY2l0IGJhY2tncm91bmRzOyBubyBhbnRpLWFsaWFzaW5nIGFwcHJveGltYXRpb24ifSwiZGlzY2xvc3VyZUZvY3VzIjp7ImZvY3VzZWQiOnRydWUsIm91dGxpbmVTdHlsZSI6ImF1dG8iLCJvdXRsaW5lV2lkdGgiOiIxcHgiLCJyZWN0Ijp7IngiOjEyOSwieSI6NDQyLjc4MTI1LCJ3aWR0aCI6MTI2MCwiaGVpZ2h0IjoxNSwidG9wIjo0NDIuNzgxMjUsInJpZ2h0IjoxMzg5LCJib3R0b20iOjQ1Ny43ODEyNSwibGVmdCI6MTI5fX19"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "[WORKTREE]/.studio-local/t097-assessment-keyboard-20261105/disclosure-contrast-selected/artifacts/autoverse-assessments-keyb-8f4a6--remain-inspectable-at-1440/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "[WORKTREE]/.studio-local/t097-assessment-keyboard-20261105/disclosure-contrast-selected/artifacts/autoverse-assessments-keyb-8f4a6--remain-inspectable-at-1440/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "[WORKTREE]/tests/live/autoverse-assessments-keyboard.spec.ts",
+                    "column": 72,
+                    "line": 111
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "d0fb33b7b84ada4def3f-ff933a7d9eeff3a1b827",
+          "file": "autoverse-assessments-keyboard.spec.ts",
+          "line": 78,
+          "column": 7
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-05T16:53:12.711Z",
+    "duration": 8468.374,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  }
+}

@@ -1,0 +1,75 @@
+
+Running 12 tests using 1 worker
+
+(node:724824) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   1 tests/live/autoverse-assessments-keyboard.spec.ts:78:7 › actual stored assessment outcomes and keyboard refresh remain inspectable at 1024 (4.0s)
+(node:724950) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   2 tests/live/autoverse-assessments-keyboard.spec.ts:108:7 › assessment HTTP refusal has meaningful focus and native retry at 1024 (2.8s)
+  ✓   3 tests/live/autoverse-assessments-keyboard.spec.ts:123:7 › foreign assessment identity is refused with a keyboard recovery at 1024 (3.0s)
+  ✓   4 tests/live/autoverse-assessments-keyboard.spec.ts:140:7 › held actual assessment refresh preserves newer keyboard focus at 1024 (2.6s)
+  ✓   5 tests/live/autoverse-assessments-keyboard.spec.ts:153:7 › held assessment refresh preserves a newer native source dialog at 1024 (2.7s)
+  ✓   6 tests/live/autoverse-assessments-keyboard.spec.ts:169:7 › departed assessment read cannot restore its view or focus at 1024 (2.8s)
+  ✘   7 tests/live/autoverse-assessments-keyboard.spec.ts:78:7 › actual stored assessment outcomes and keyboard refresh remain inspectable at 1440 (3.4s)
+(node:725373) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   8 tests/live/autoverse-assessments-keyboard.spec.ts:108:7 › assessment HTTP refusal has meaningful focus and native retry at 1440 (2.8s)
+  ✓   9 tests/live/autoverse-assessments-keyboard.spec.ts:123:7 › foreign assessment identity is refused with a keyboard recovery at 1440 (3.1s)
+  ✓  10 tests/live/autoverse-assessments-keyboard.spec.ts:140:7 › held actual assessment refresh preserves newer keyboard focus at 1440 (2.7s)
+  ✓  11 tests/live/autoverse-assessments-keyboard.spec.ts:153:7 › held assessment refresh preserves a newer native source dialog at 1440 (3.0s)
+  ✓  12 tests/live/autoverse-assessments-keyboard.spec.ts:169:7 › departed assessment read cannot restore its view or focus at 1440 (2.7s)
+
+
+  1) tests/live/autoverse-assessments-keyboard.spec.ts:78:7 › actual stored assessment outcomes and keyboard refresh remain inspectable at 1024
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+      17 |         return r.left >= 0 && r.right <= innerWidth + 1 && r.top >= 0 && r.bottom <= innerHeight + 1 &&
+      18 |           s.outlineStyle !== "none" && parseFloat(s.outlineWidth) >= 2;
+    > 19 |       })).toBe(true);
+         |           ^
+      20 |       return;
+      21 |     }
+      22 |     await page.keyboard.press("Tab");
+        at tabTo ([WORKTREE]/tests/live/autoverse-assessments-keyboard.spec.ts:19:11)
+        at activate ([WORKTREE]/tests/live/autoverse-assessments-keyboard.spec.ts:27:3)
+        at [WORKTREE]/tests/live/autoverse-assessments-keyboard.spec.ts:103:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    .studio-local/t097-assessment-keyboard-20261105/final/native/artifacts/autoverse-assessments-keyb-9f5a0--remain-inspectable-at-1024/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: .studio-local/t097-assessment-keyboard-20261105/final/native/artifacts/autoverse-assessments-keyb-9f5a0--remain-inspectable-at-1024/error-context.md
+
+  2) tests/live/autoverse-assessments-keyboard.spec.ts:78:7 › actual stored assessment outcomes and keyboard refresh remain inspectable at 1440
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+      17 |         return r.left >= 0 && r.right <= innerWidth + 1 && r.top >= 0 && r.bottom <= innerHeight + 1 &&
+      18 |           s.outlineStyle !== "none" && parseFloat(s.outlineWidth) >= 2;
+    > 19 |       })).toBe(true);
+         |           ^
+      20 |       return;
+      21 |     }
+      22 |     await page.keyboard.press("Tab");
+        at tabTo ([WORKTREE]/tests/live/autoverse-assessments-keyboard.spec.ts:19:11)
+        at activate ([WORKTREE]/tests/live/autoverse-assessments-keyboard.spec.ts:27:3)
+        at [WORKTREE]/tests/live/autoverse-assessments-keyboard.spec.ts:103:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    .studio-local/t097-assessment-keyboard-20261105/final/native/artifacts/autoverse-assessments-keyb-8f4a6--remain-inspectable-at-1440/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: .studio-local/t097-assessment-keyboard-20261105/final/native/artifacts/autoverse-assessments-keyb-8f4a6--remain-inspectable-at-1440/error-context.md
+
+  2 failed
+    tests/live/autoverse-assessments-keyboard.spec.ts:78:7 › actual stored assessment outcomes and keyboard refresh remain inspectable at 1024
+    tests/live/autoverse-assessments-keyboard.spec.ts:78:7 › actual stored assessment outcomes and keyboard refresh remain inspectable at 1440
+  10 passed (37.0s)

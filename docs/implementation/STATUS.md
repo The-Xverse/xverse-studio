@@ -1,3 +1,22 @@
+# Assessment inspection focus/contrast repaired; full goal active — 2026-11-05
+
+**72 completed /18 in progress /10 blocked; zero accepted milestones.**
+T097 remains open. Source27faf83 passes12 new assessment keyboard journeys and19
+older browser/response checks on572 stable Git-bound inputs and6 reproduced UI
+assets. Explicit reads focus the report/error while preserving newer focus/dialogs;
+selected disclosure text contrast rises3.3855→5.9306, with its visible native1px ring
+unchanged. Original product failures and test/setup corrections stay distinct.
+Six actual historical definitions/results remain readable with immutable identities,
+clock uncertainty and distinct outcomes. Current evaluation remains unsupported
+without the registered Autoverse mapping; no provider, model or new evaluation
+starts. Both final cohorts preserve source/copy bytes and ledgers, release roots
+and verify all21/16 captured descendant handles exit. Full registered-mapping
+submission, other added flows, actual AT/device/required-host acceptance remain
+open; Windows stays separately frozen. The original full goal remains active.
+See [evidence/review and coverage](../../evidence/studio/M4-accessibility/assessments-20261105/README.md).
+
+## Earlier checkpoints
+
 # Lab software keyboard matrix verified; full goal active — 2026-11-05
 
 **72 completed /18 in progress /10 blocked; zero accepted milestones.**

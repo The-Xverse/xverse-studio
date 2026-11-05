@@ -1,0 +1,293 @@
+
+Running 12 tests using 1 worker
+
+(node:719950) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   1 tests/live/autoverse-assessments-keyboard.spec.ts:78:7 › actual stored assessment outcomes and keyboard refresh remain inspectable at 1024 (14.0s)
+(node:720143) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   2 tests/live/autoverse-assessments-keyboard.spec.ts:108:7 › assessment HTTP refusal has meaningful focus and native retry at 1024 (12.5s)
+(node:720291) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   3 tests/live/autoverse-assessments-keyboard.spec.ts:123:7 › foreign assessment identity is refused with a keyboard recovery at 1024 (12.7s)
+(node:720620) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   4 tests/live/autoverse-assessments-keyboard.spec.ts:140:7 › held actual assessment refresh preserves newer keyboard focus at 1024 (2.8s)
+  ✘   5 tests/live/autoverse-assessments-keyboard.spec.ts:153:7 › held assessment refresh preserves a newer native source dialog at 1024 (12.9s)
+(node:720839) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   6 tests/live/autoverse-assessments-keyboard.spec.ts:169:7 › departed assessment read cannot restore its view or focus at 1024 (2.9s)
+  ✘   7 tests/live/autoverse-assessments-keyboard.spec.ts:78:7 › actual stored assessment outcomes and keyboard refresh remain inspectable at 1440 (13.1s)
+(node:721010) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   8 tests/live/autoverse-assessments-keyboard.spec.ts:108:7 › assessment HTTP refusal has meaningful focus and native retry at 1440 (12.6s)
+(node:721316) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   9 tests/live/autoverse-assessments-keyboard.spec.ts:123:7 › foreign assessment identity is refused with a keyboard recovery at 1440 (12.7s)
+(node:721527) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  10 tests/live/autoverse-assessments-keyboard.spec.ts:140:7 › held actual assessment refresh preserves newer keyboard focus at 1440 (2.8s)
+  ✘  11 tests/live/autoverse-assessments-keyboard.spec.ts:153:7 › held assessment refresh preserves a newer native source dialog at 1440 (13.0s)
+(node:721750) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  12 tests/live/autoverse-assessments-keyboard.spec.ts:169:7 › departed assessment read cannot restore its view or focus at 1440 (2.9s)
+
+
+  1) tests/live/autoverse-assessments-keyboard.spec.ts:78:7 › actual stored assessment outcomes and keyboard refresh remain inspectable at 1024
+
+    Error: expect(locator).toBeFocused() failed
+
+    Locator:  getByRole('region', { name: 'Frozen assertions and metrics', exact: true }).getByRole('heading', { name: 'Frozen assertions and metrics', exact: true })
+    Expected: focused
+    Received: inactive
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toBeFocused" getByRole('region', { name: 'Frozen assertions and metrics', exact: true }).getByRole('heading', { name: 'Frozen assertions and metrics', exact: true }) with timeout 10000ms
+      - waiting for getByRole('region', { name: 'Frozen assertions and metrics', exact: true }).getByRole('heading', { name: 'Frozen assertions and metrics', exact: true })
+        24 × locator resolved to <h3>Frozen assertions and metrics</h3>
+           - unexpected value "inactive"
+
+
+       99 |     await activate(page, inspect(page));
+      100 |     await loaded(page);
+    > 101 |     await expect(heading(page)).toBeFocused();
+          |                                 ^
+      102 |     const exact = panel(page).getByText("Inspect exact data", { exact: true }).first();
+      103 |     await activate(page, exact);
+      104 |     await expect(exact.locator("..")).toHaveAttribute("open", "");
+        at [WORKTREE]/tests/live/autoverse-assessments-keyboard.spec.ts:101:33
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    .studio-local/t097-assessment-keyboard-20261105/red/artifacts/autoverse-assessments-keyb-9f5a0--remain-inspectable-at-1024/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: .studio-local/t097-assessment-keyboard-20261105/red/artifacts/autoverse-assessments-keyb-9f5a0--remain-inspectable-at-1024/error-context.md
+
+  2) tests/live/autoverse-assessments-keyboard.spec.ts:108:7 › assessment HTTP refusal has meaningful focus and native retry at 1024
+
+    Error: expect(locator).toBeFocused() failed
+
+    Locator:  getByRole('region', { name: 'Frozen assertions and metrics', exact: true }).getByRole('alert')
+    Expected: focused
+    Received: inactive
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toBeFocused" getByRole('region', { name: 'Frozen assertions and metrics', exact: true }).getByRole('alert') with timeout 10000ms
+      - waiting for getByRole('region', { name: 'Frozen assertions and metrics', exact: true }).getByRole('alert')
+        24 × locator resolved to <p role="alert">Assessment availability is unknown. Labelled defi…</p>
+           - unexpected value "inactive"
+
+
+      114 |     await activate(page, inspect(page));
+      115 |     await expect(panel(page).getByRole("alert")).toContainText("availability is unknown");
+    > 116 |     await expect(panel(page).getByRole("alert")).toBeFocused();
+          |                                                  ^
+      117 |     await activate(page, inspect(page));
+      118 |     await loaded(page);
+      119 |     await expect(heading(page)).toBeFocused();
+        at [WORKTREE]/tests/live/autoverse-assessments-keyboard.spec.ts:116:50
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    .studio-local/t097-assessment-keyboard-20261105/red/artifacts/autoverse-assessments-keyb-50650-us-and-native-retry-at-1024/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: .studio-local/t097-assessment-keyboard-20261105/red/artifacts/autoverse-assessments-keyb-50650-us-and-native-retry-at-1024/error-context.md
+
+  3) tests/live/autoverse-assessments-keyboard.spec.ts:123:7 › foreign assessment identity is refused with a keyboard recovery at 1024
+
+    Error: expect(locator).toBeFocused() failed
+
+    Locator:  getByRole('region', { name: 'Frozen assertions and metrics', exact: true }).getByRole('alert')
+    Expected: focused
+    Received: inactive
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toBeFocused" getByRole('region', { name: 'Frozen assertions and metrics', exact: true }).getByRole('alert') with timeout 10000ms
+      - waiting for getByRole('region', { name: 'Frozen assertions and metrics', exact: true }).getByRole('alert')
+        24 × locator resolved to <p role="alert">Assessment availability is unknown. Assessment in…</p>
+           - unexpected value "inactive"
+
+
+      131 |     await activate(page, inspect(page));
+      132 |     await expect(panel(page).getByRole("alert")).toContainText("another run or snapshot");
+    > 133 |     await expect(panel(page).getByRole("alert")).toBeFocused();
+          |                                                  ^
+      134 |     await expect(panel(page).locator("article.evaluation-card")).toHaveCount(0);
+      135 |     await activate(page, inspect(page)); await loaded(page);
+      136 |     await expect(heading(page)).toBeFocused();
+        at [WORKTREE]/tests/live/autoverse-assessments-keyboard.spec.ts:133:50
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    .studio-local/t097-assessment-keyboard-20261105/red/artifacts/autoverse-assessments-keyb-146d3-a-keyboard-recovery-at-1024/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: .studio-local/t097-assessment-keyboard-20261105/red/artifacts/autoverse-assessments-keyb-146d3-a-keyboard-recovery-at-1024/error-context.md
+
+  4) tests/live/autoverse-assessments-keyboard.spec.ts:153:7 › held assessment refresh preserves a newer native source dialog at 1024
+
+    Error: expect(locator).toBeFocused() failed
+
+    Locator:  getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('button', { name: 'Close dialog', exact: true })
+    Expected: focused
+    Received: inactive
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toBeFocused" getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('button', { name: 'Close dialog', exact: true }) with timeout 10000ms
+      - waiting for getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('button', { name: 'Close dialog', exact: true })
+        24 × locator resolved to <button class="icon-button" aria-label="Close dialog">…</button>
+           - unexpected value "inactive"
+
+
+      160 |       await activate(page, opener);
+      161 |       const dialog = page.getByRole("dialog", { name: "Authored XDL source", exact: true }), close = dialog.getByRole("button", { name: "Close dialog", exact: true });
+    > 162 |       await expect(close).toBeFocused(); held.release(); await loaded(page);
+          |                           ^
+      163 |       await expect(close).toBeFocused();
+      164 |       await page.keyboard.press("Escape"); await expect(dialog).toHaveCount(0); await expect(opener).toBeFocused();
+      165 |       await report(page, info, width, writes, "Actual definition reply held while a newer source dialog opens");
+        at [WORKTREE]/tests/live/autoverse-assessments-keyboard.spec.ts:162:27
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    .studio-local/t097-assessment-keyboard-20261105/red/artifacts/autoverse-assessments-keyb-c1ff5-ative-source-dialog-at-1024/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: .studio-local/t097-assessment-keyboard-20261105/red/artifacts/autoverse-assessments-keyb-c1ff5-ative-source-dialog-at-1024/error-context.md
+
+  5) tests/live/autoverse-assessments-keyboard.spec.ts:78:7 › actual stored assessment outcomes and keyboard refresh remain inspectable at 1440
+
+    Error: expect(locator).toBeFocused() failed
+
+    Locator:  getByRole('region', { name: 'Frozen assertions and metrics', exact: true }).getByRole('heading', { name: 'Frozen assertions and metrics', exact: true })
+    Expected: focused
+    Received: inactive
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toBeFocused" getByRole('region', { name: 'Frozen assertions and metrics', exact: true }).getByRole('heading', { name: 'Frozen assertions and metrics', exact: true }) with timeout 10000ms
+      - waiting for getByRole('region', { name: 'Frozen assertions and metrics', exact: true }).getByRole('heading', { name: 'Frozen assertions and metrics', exact: true })
+        24 × locator resolved to <h3>Frozen assertions and metrics</h3>
+           - unexpected value "inactive"
+
+
+       99 |     await activate(page, inspect(page));
+      100 |     await loaded(page);
+    > 101 |     await expect(heading(page)).toBeFocused();
+          |                                 ^
+      102 |     const exact = panel(page).getByText("Inspect exact data", { exact: true }).first();
+      103 |     await activate(page, exact);
+      104 |     await expect(exact.locator("..")).toHaveAttribute("open", "");
+        at [WORKTREE]/tests/live/autoverse-assessments-keyboard.spec.ts:101:33
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    .studio-local/t097-assessment-keyboard-20261105/red/artifacts/autoverse-assessments-keyb-8f4a6--remain-inspectable-at-1440/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: .studio-local/t097-assessment-keyboard-20261105/red/artifacts/autoverse-assessments-keyb-8f4a6--remain-inspectable-at-1440/error-context.md
+
+  6) tests/live/autoverse-assessments-keyboard.spec.ts:108:7 › assessment HTTP refusal has meaningful focus and native retry at 1440
+
+    Error: expect(locator).toBeFocused() failed
+
+    Locator:  getByRole('region', { name: 'Frozen assertions and metrics', exact: true }).getByRole('alert')
+    Expected: focused
+    Received: inactive
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toBeFocused" getByRole('region', { name: 'Frozen assertions and metrics', exact: true }).getByRole('alert') with timeout 10000ms
+      - waiting for getByRole('region', { name: 'Frozen assertions and metrics', exact: true }).getByRole('alert')
+        24 × locator resolved to <p role="alert">Assessment availability is unknown. Labelled defi…</p>
+           - unexpected value "inactive"
+
+
+      114 |     await activate(page, inspect(page));
+      115 |     await expect(panel(page).getByRole("alert")).toContainText("availability is unknown");
+    > 116 |     await expect(panel(page).getByRole("alert")).toBeFocused();
+          |                                                  ^
+      117 |     await activate(page, inspect(page));
+      118 |     await loaded(page);
+      119 |     await expect(heading(page)).toBeFocused();
+        at [WORKTREE]/tests/live/autoverse-assessments-keyboard.spec.ts:116:50
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    .studio-local/t097-assessment-keyboard-20261105/red/artifacts/autoverse-assessments-keyb-5e7e7-us-and-native-retry-at-1440/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: .studio-local/t097-assessment-keyboard-20261105/red/artifacts/autoverse-assessments-keyb-5e7e7-us-and-native-retry-at-1440/error-context.md
+
+  7) tests/live/autoverse-assessments-keyboard.spec.ts:123:7 › foreign assessment identity is refused with a keyboard recovery at 1440
+
+    Error: expect(locator).toBeFocused() failed
+
+    Locator:  getByRole('region', { name: 'Frozen assertions and metrics', exact: true }).getByRole('alert')
+    Expected: focused
+    Received: inactive
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toBeFocused" getByRole('region', { name: 'Frozen assertions and metrics', exact: true }).getByRole('alert') with timeout 10000ms
+      - waiting for getByRole('region', { name: 'Frozen assertions and metrics', exact: true }).getByRole('alert')
+        24 × locator resolved to <p role="alert">Assessment availability is unknown. Assessment in…</p>
+           - unexpected value "inactive"
+
+
+      131 |     await activate(page, inspect(page));
+      132 |     await expect(panel(page).getByRole("alert")).toContainText("another run or snapshot");
+    > 133 |     await expect(panel(page).getByRole("alert")).toBeFocused();
+          |                                                  ^
+      134 |     await expect(panel(page).locator("article.evaluation-card")).toHaveCount(0);
+      135 |     await activate(page, inspect(page)); await loaded(page);
+      136 |     await expect(heading(page)).toBeFocused();
+        at [WORKTREE]/tests/live/autoverse-assessments-keyboard.spec.ts:133:50
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    .studio-local/t097-assessment-keyboard-20261105/red/artifacts/autoverse-assessments-keyb-17ebd-a-keyboard-recovery-at-1440/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: .studio-local/t097-assessment-keyboard-20261105/red/artifacts/autoverse-assessments-keyb-17ebd-a-keyboard-recovery-at-1440/error-context.md
+
+  8) tests/live/autoverse-assessments-keyboard.spec.ts:153:7 › held assessment refresh preserves a newer native source dialog at 1440
+
+    Error: expect(locator).toBeFocused() failed
+
+    Locator:  getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('button', { name: 'Close dialog', exact: true })
+    Expected: focused
+    Received: inactive
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toBeFocused" getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('button', { name: 'Close dialog', exact: true }) with timeout 10000ms
+      - waiting for getByRole('dialog', { name: 'Authored XDL source', exact: true }).getByRole('button', { name: 'Close dialog', exact: true })
+        24 × locator resolved to <button class="icon-button" aria-label="Close dialog">…</button>
+           - unexpected value "inactive"
+
+
+      160 |       await activate(page, opener);
+      161 |       const dialog = page.getByRole("dialog", { name: "Authored XDL source", exact: true }), close = dialog.getByRole("button", { name: "Close dialog", exact: true });
+    > 162 |       await expect(close).toBeFocused(); held.release(); await loaded(page);
+          |                           ^
+      163 |       await expect(close).toBeFocused();
+      164 |       await page.keyboard.press("Escape"); await expect(dialog).toHaveCount(0); await expect(opener).toBeFocused();
+      165 |       await report(page, info, width, writes, "Actual definition reply held while a newer source dialog opens");
+        at [WORKTREE]/tests/live/autoverse-assessments-keyboard.spec.ts:162:27
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    .studio-local/t097-assessment-keyboard-20261105/red/artifacts/autoverse-assessments-keyb-f29cc-ative-source-dialog-at-1440/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: .studio-local/t097-assessment-keyboard-20261105/red/artifacts/autoverse-assessments-keyb-f29cc-ative-source-dialog-at-1440/error-context.md
+
+  8 failed
+    tests/live/autoverse-assessments-keyboard.spec.ts:78:7 › actual stored assessment outcomes and keyboard refresh remain inspectable at 1024
+    tests/live/autoverse-assessments-keyboard.spec.ts:108:7 › assessment HTTP refusal has meaningful focus and native retry at 1024
+    tests/live/autoverse-assessments-keyboard.spec.ts:123:7 › foreign assessment identity is refused with a keyboard recovery at 1024
+    tests/live/autoverse-assessments-keyboard.spec.ts:153:7 › held assessment refresh preserves a newer native source dialog at 1024
+    tests/live/autoverse-assessments-keyboard.spec.ts:78:7 › actual stored assessment outcomes and keyboard refresh remain inspectable at 1440
+    tests/live/autoverse-assessments-keyboard.spec.ts:108:7 › assessment HTTP refusal has meaningful focus and native retry at 1440
+    tests/live/autoverse-assessments-keyboard.spec.ts:123:7 › foreign assessment identity is refused with a keyboard recovery at 1440
+    tests/live/autoverse-assessments-keyboard.spec.ts:153:7 › held assessment refresh preserves a newer native source dialog at 1440
+  4 passed (2.0m)

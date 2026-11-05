@@ -1,0 +1,58 @@
+
+Running 2 tests using 1 worker
+
+(node:726839) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 tests/live/autoverse-assessments-keyboard.spec.ts:78:7 › actual stored assessment outcomes and keyboard refresh remain inspectable at 1024 (4.1s)
+(node:726954) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 tests/live/autoverse-assessments-keyboard.spec.ts:78:7 › actual stored assessment outcomes and keyboard refresh remain inspectable at 1440 (3.6s)
+
+
+  1) tests/live/autoverse-assessments-keyboard.spec.ts:78:7 › actual stored assessment outcomes and keyboard refresh remain inspectable at 1024
+
+    Error: expect(received).toBeGreaterThanOrEqual(expected)
+
+    Expected: >= 4.5
+    Received:    3.385515277687404
+
+      109 |     await info.attach("exact-data-accessibility", { body: JSON.stringify({ disclosureContrast, disclosureFocus }), contentType: "application/json" });
+      110 |     expect(disclosureContrast.supported).toBe(true);
+    > 111 |     if (disclosureContrast.supported) expect(disclosureContrast.ratio).toBeGreaterThanOrEqual(4.5);
+          |                                                                        ^
+      112 |     await activate(page, exact);
+      113 |     await expect(exact.locator("..")).toHaveAttribute("open", "");
+      114 |     await report(page, info, width, writes, null);
+        at [WORKTREE]/tests/live/autoverse-assessments-keyboard.spec.ts:111:72
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    .studio-local/t097-assessment-keyboard-20261105/disclosure-contrast-selected/artifacts/autoverse-assessments-keyb-9f5a0--remain-inspectable-at-1024/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: .studio-local/t097-assessment-keyboard-20261105/disclosure-contrast-selected/artifacts/autoverse-assessments-keyb-9f5a0--remain-inspectable-at-1024/error-context.md
+
+  2) tests/live/autoverse-assessments-keyboard.spec.ts:78:7 › actual stored assessment outcomes and keyboard refresh remain inspectable at 1440
+
+    Error: expect(received).toBeGreaterThanOrEqual(expected)
+
+    Expected: >= 4.5
+    Received:    3.385515277687404
+
+      109 |     await info.attach("exact-data-accessibility", { body: JSON.stringify({ disclosureContrast, disclosureFocus }), contentType: "application/json" });
+      110 |     expect(disclosureContrast.supported).toBe(true);
+    > 111 |     if (disclosureContrast.supported) expect(disclosureContrast.ratio).toBeGreaterThanOrEqual(4.5);
+          |                                                                        ^
+      112 |     await activate(page, exact);
+      113 |     await expect(exact.locator("..")).toHaveAttribute("open", "");
+      114 |     await report(page, info, width, writes, null);
+        at [WORKTREE]/tests/live/autoverse-assessments-keyboard.spec.ts:111:72
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    .studio-local/t097-assessment-keyboard-20261105/disclosure-contrast-selected/artifacts/autoverse-assessments-keyb-8f4a6--remain-inspectable-at-1440/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: .studio-local/t097-assessment-keyboard-20261105/disclosure-contrast-selected/artifacts/autoverse-assessments-keyb-8f4a6--remain-inspectable-at-1440/error-context.md
+
+  2 failed
+    tests/live/autoverse-assessments-keyboard.spec.ts:78:7 › actual stored assessment outcomes and keyboard refresh remain inspectable at 1024
+    tests/live/autoverse-assessments-keyboard.spec.ts:78:7 › actual stored assessment outcomes and keyboard refresh remain inspectable at 1440
