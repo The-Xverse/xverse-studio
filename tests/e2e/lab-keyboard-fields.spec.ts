@@ -69,7 +69,7 @@ for (const viewport of [{ width: 1024, height: 768 }, { width: 1440, height: 900
       expect((await (await page.request.get(labHost.origin + "/api/v1/runs")).json()).items).toEqual([]);
       expect((await (await page.request.get(labHost.origin + "/api/v1/projects")).json()).items).toEqual([]);
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
-      await info.attach("lab-native-fields", { body: JSON.stringify({ viewport, mutations, contrast,
+      await info.attach("lab-native-fields", { body: JSON.stringify({ viewport, mutations, contrast, browser: page.context().browser()?.version(),
         scope: "Native keyboard over owned in-memory lease callbacks only; no equipment, runtime admission or assistive-technology certification",
       }), contentType: "application/json" });
     });
