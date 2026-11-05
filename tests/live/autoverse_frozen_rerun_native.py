@@ -266,11 +266,18 @@ def main():
             and comparison["right"]["snapshotId"] == new["snapshotId"]
         )
         rows = {r["field"]: r for r in comparison["configuration"]}
+        expected_provider_relation = (
+            "same"
+            if frozen["providerIdentity"] == new["providerIdentity"]
+            else "different"
+        )
         assert (
             rows["parameters"]["status"] == "same"
-            and rows["providerIdentity"]["status"] == "different"
+            and rows["providerIdentity"]["status"] == expected_provider_relation
         )
-        assert "OBSERVATION_PAYLOAD_UNAVAILABLE" in comparison["diagnostics"]
+        assert rows["providerIdentity"]["left"] == frozen["providerIdentity"]
+        assert rows["providerIdentity"]["right"] == new["providerIdentity"]
+        assert "COMPARISON_EVIDENCE_UNSUPPORTED" in comparison["diagnostics"]
         (args.output / "comparison.json").write_text(
             json.dumps(comparison, indent=2) + "\n"
         )

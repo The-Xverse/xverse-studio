@@ -1299,3 +1299,18 @@ claimed. Fresh native wrapper, CARLA overlay/private display, enrollment/readine
 and complete actual rerun observations/cleanup remain required. T091 stays open;
 counts71/19/10,zero milestones; Windows remains frozen. Evidence:
 `evidence/studio/M4-autoverse-postboot-environment-20261105/`. Goal stays active.
+
+T091 fresh live verification progress (2026-11-05, ADR-0073): fresh native entry,
+private X11 framebuffer, unchanged pinned CARLA overlay and exact current enrollment
+are verified. Historical installation identity stays incompatible; no guard is
+weakened. A new original full two-child campaign passes Android/APK, vehicle speed,
+canonical integrity and cleanup. Its separately captured isolated ADB helper is
+closed after ownership/private-network/empty-device checks. An actual fresh-source
+rerun also reaches Android/speed and stops with complete cleanup, but its verifier
+then fails stale provider-identity/diagnostic expectations. Those two contributor
+expectations are repaired:29 original assertions remain unchanged and exact left/
+right identity assertions are added. Actual retained-record comparator cases pass
+both same/different provider relations. Full repaired rerun repeat and original
+clause audit remain pending; no task closure. Evidence being retained at
+`evidence/studio/M4-fresh-autoverse-rerun-20261105/`. Counts71/19/10,zero milestones;
+Windows remains frozen; the full goal stays active.
