@@ -43,6 +43,8 @@ for (const width of [1024, 1440]) {
         expectedId = "studio.reference";
         const descriptor = descriptors.find((p: any) => p.providerId === expectedId); expect(descriptor.available).toBe(true);
         expectedScope = descriptor.evidenceScope.replaceAll("_", " ");
+        // Refresh the listing after this explicit outside-UI fixture transaction.
+        await page.reload();
       }
       await activate(page, page.getByRole("button", { name: "X-Verse Studio home", exact: true }));
       await activate(page, page.locator(`.project-list-row[data-project-id="${project.projectId}"] .project-open`));
