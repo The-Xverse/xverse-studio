@@ -11,6 +11,7 @@ from contextlib import asynccontextmanager
 from functools import wraps
 import json
 from pathlib import Path
+import sys
 import threading
 import time
 
@@ -20,6 +21,7 @@ def main():
     parser.add_argument("--data-dir", required=True, type=Path)
     parser.add_argument("--port", required=True, type=int)
     parser.add_argument("--static-dir", required=True, type=Path)
+    parser.add_argument("--profile-bindings", action="store_true")
     args = parser.parse_args()
     data = args.data_dir.resolve()
     if data.parent.name != "browser-tests":
@@ -43,7 +45,7 @@ def main():
                 counts["writeErrors"] += 1
 
     def finish():
-        (target / "summary.json").write_text(json.dumps({"scope": "Instrumented contributor host only; no provider registration or runtime/device actions", "limits": {"records": 2048, "profiles": 64}, **counts}, indent=2) + "\n")
+        (target / "summary.json").write_text(json.dumps({"scope": "Instrumented contributor host only; no provider registration or runtime/device actions", "profilingEnabled": args.profile_bindings, "limits": {"records": 2048, "profiles": 64}, **counts}, indent=2) + "\n")
         (target / "summary.json").chmod(0o600)
 
     atexit.register(finish)
@@ -58,7 +60,9 @@ def main():
         if service.projects.store.root.resolve() != data:
             return original_update(service, *positional, **keywords)
         with lock:
-            if counts["profiles"] >= 64:
+            if not args.profile_bindings:
+                index = None
+            elif counts["profiles"] >= 64:
                 counts["droppedProfiles"] += 1
                 index = None
             else:
@@ -160,6 +164,7 @@ def main():
     # still owns startup, authentication, persistence, lifecycle and shutdown.
     from xverse_studio.host.launcher import main as launch
 
+    sys.argv = [sys.argv[0], "--data-dir", str(data), "--port", str(args.port), "--static-dir", str(args.static_dir)]
     launch()
 
 

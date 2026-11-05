@@ -69,6 +69,7 @@ def main():
     p = argparse.ArgumentParser()
     p.add_argument("--case-filter")
     p.add_argument("--trace-binding-timing", action="store_true", help="Bounded contributor diagnostics for the unregistered binding suite only.")
+    p.add_argument("--profile-binding-callbacks", action="store_true", help="Explicit CPU-heavy cProfile mode for the contributor binding diagnostics.")
     p.add_argument("--suite", choices=("playback", "diagnostics", "authoring", "lab-inventory", "assessments-keyboard", "exports-keyboard", "bindings-keyboard", "provider-scope", "evaluation-keyboard"), default="playback")
     p.add_argument("--receipt", type=Path, help="Trusted current installation locator for the fixed evaluation suite; the launcher still enrolls the actual installation.")
     p.add_argument(
@@ -88,6 +89,8 @@ def main():
     a = p.parse_args()
     if a.trace_binding_timing and a.suite != "bindings-keyboard":
         p.error("Binding timing diagnostics require the unregistered bindings-keyboard suite.")
+    if a.profile_binding_callbacks and not a.trace_binding_timing:
+        p.error("Binding callback profiling requires explicit binding timing diagnostics.")
     if a.suite == "exports-keyboard" and a.case_filter:
         p.error("The export suite requires its full matrix for exact operation/import accounting.")
     if (a.suite == "evaluation-keyboard") != (a.receipt is not None):
@@ -174,6 +177,7 @@ def main():
         a.static_dir.resolve(),
         register_provider=a.suite == "evaluation-keyboard",
         binding_timing=a.trace_binding_timing,
+        binding_profile=a.profile_binding_callbacks,
     )
     outcome = {
         "scope": ("Actual original Autoverse recording; genuine fresh installed mapping and derived evaluation submissions; no model or guest start"
