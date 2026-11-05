@@ -6,6 +6,7 @@ import json
 import os
 from pathlib import Path
 import shutil
+import sqlite3
 import subprocess
 import sys
 import uuid
@@ -63,7 +64,7 @@ def device_free_browser_command(argv):
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("--case-filter")
-    p.add_argument("--suite", choices=("playback", "diagnostics", "authoring", "lab-inventory", "assessments-keyboard"), default="playback")
+    p.add_argument("--suite", choices=("playback", "diagnostics", "authoring", "lab-inventory", "assessments-keyboard", "exports-keyboard"), default="playback")
     p.add_argument(
         "--isolate-browser-devices",
         action="store_true",
@@ -79,6 +80,8 @@ def main():
     ):
         p.add_argument("--" + name, type=Path, required=True)
     a = p.parse_args()
+    if a.suite == "exports-keyboard" and a.case_filter:
+        p.error("The export suite requires its full matrix for exact operation/import accounting.")
     for name in ("recording", "static_dir", "output", "node", "playwright_cli", "browser_cache"):
         setattr(a, name, getattr(a, name).resolve())
     a.output.mkdir(parents=True, exist_ok=False)
@@ -131,6 +134,10 @@ def main():
     }
     (data / "playback-recording.private.json").write_text(json.dumps(context))
     baseline = recorded.ledger(data)
+    def record_count(kind):
+        with sqlite3.connect((data / "studio.sqlite").as_uri() + "?mode=ro", uri=True) as db:
+            return db.execute("SELECT count(*) FROM records WHERE kind=?", (kind,)).fetchone()[0]
+    imported_before = {kind: record_count(kind) for kind in ("project", "importedEvidence")}
     host = native.NativeHost(
         data,
         a.output,
@@ -140,7 +147,7 @@ def main():
         register_provider=False,
     )
     outcome = {
-        "scope": "Actual original Autoverse recording; playback/diagnosis or copy-local draft authoring; separate labelled HTTP fixtures; no new execution",
+        "scope": "Actual original Autoverse recording; fixed playback/authoring/export suites on private copies; labelled HTTP fixtures; no model or evaluation start",
         "suite": a.suite,
         "sourceCandidate": subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=native.ROOT, text=True).strip(),
         "before": baseline,
@@ -151,6 +158,14 @@ def main():
         host.start()
         api = native.login(host)
         try:
+            if a.suite == "exports-keyboard":
+                binding = native.checked(api.get(f"/api/v1/projects/{context['projectId']}/local-bindings"))
+                assert binding["state"] == "empty"
+                declared = native.checked(api.put(f"/api/v1/projects/{context['projectId']}/local-bindings",
+                    headers={"If-Match": str(binding["bindingRevision"])}, json={"formatVersion": "1.0", "bindings": [{
+                        "bindingId": "keyboard-export-private", "kind": "credential", "reference": "urn:keyboard:local-only",
+                        "providerId": "autoverse.demo", "credentialRef": "urn:keyboard:private-export-exclusion"}]}))
+                assert declared["validation"] == "unverified" and declared["executionAllowed"] is False
             cookies = {
                 "cookies": [
                     {
@@ -187,6 +202,7 @@ def main():
                     "authoring": "tests/live/autoverse-authoring-keyboard.config.ts",
                     "lab-inventory": "tests/live/autoverse-lab-inventory-keyboard.config.ts",
                     "assessments-keyboard": "tests/live/autoverse-assessments-keyboard.config.ts",
+                    "exports-keyboard": "tests/live/autoverse-exports-keyboard.config.ts",
                 }[a.suite],
             ]
             if a.case_filter:
@@ -233,7 +249,19 @@ def main():
                         child.wait(timeout=30)
                 outcome["originalBrowserExited"] = child.poll() is not None
             outcome["after"] = recorded.ledger(data)
-            assert outcome["after"] == baseline
+            expected = ({**baseline, "operation": baseline["operation"] + 8, "idempotency": baseline["idempotency"] + 8}
+                        if a.suite == "exports-keyboard" else baseline)
+            outcome["expectedExecutionCounts"] = expected
+            assert outcome["after"] == expected
+            if a.suite == "exports-keyboard":
+                outcome["importsBefore"] = imported_before
+                outcome["importsAfter"] = {kind: record_count(kind) for kind in imported_before}
+                assert outcome["importsAfter"] == {kind: count + 2 for kind, count in imported_before.items()}
+                spec = importlib.util.spec_from_file_location("export_download_readback", Path(__file__).with_name("autoverse_export_downloads.py"))
+                readback = importlib.util.module_from_spec(spec)
+                spec.loader.exec_module(readback)
+                verified = readback.verify_downloads(a.output, data, context)
+                (a.output / "export-readback.json").write_text(json.dumps(verified, indent=2) + "\n")
         finally:
             api.close()
     finally:
