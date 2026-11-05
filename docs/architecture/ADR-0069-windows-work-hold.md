@@ -41,3 +41,8 @@ The current repair is now verified on source candidate a92f42e:59 selected Linux
 checks pass on551 stable Git-bound inputs, with targeted static checks passed.
 Evidence is retained in `evidence/studio/M3-probe-clock-overflow-20261105/`.
 No task closes. Stop all work and pause the goal until explicit user resume.
+
+The user subsequently reactivated the goal on 2026-11-05, after the clock repair
+checkpoint was saved. This explicit resume lifts that global pause for independently
+authorized Linux/Autoverse work. The Windows freeze remains active until separately
+lifted. Original task, milestone, hardware and provider admission gates remain.

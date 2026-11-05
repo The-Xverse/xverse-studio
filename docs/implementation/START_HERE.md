@@ -1,9 +1,8 @@
 # Implement X-Verse Studio with Codex or Claude
 
-**User work pause (2026-11-05, ADR-0069): the current probe-clock repair and
-verification are finished. Stop all work until the user explicitly resumes.**
-Evidence is retained at `evidence/studio/M3-probe-clock-overflow-20261105/`.
-The separate Windows freeze remains active until explicitly lifted.
+**User resumed the goal on 2026-11-05 (ADR-0069).** Continue independently
+authorized Linux/Autoverse work. The separate Windows freeze remains active until
+explicitly lifted; no Windows implementation or tests are resumed.
 
 **Active user hold (2026-11-04, ADR-0069): freeze all Windows-related work until the
 user explicitly lifts the hold.** Preserve the existing Windows code/evidence;

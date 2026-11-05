@@ -63,6 +63,7 @@ def device_free_browser_command(argv):
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("--case-filter")
+    p.add_argument("--suite", choices=("playback", "diagnostics"), default="playback")
     p.add_argument(
         "--isolate-browser-devices",
         action="store_true",
@@ -159,7 +160,10 @@ def main():
                 str(a.playwright_cli.resolve()),
                 "test",
                 "--config",
-                "tests/live/autoverse-recorded-payloads.config.ts",
+                {
+                    "playback": "tests/live/autoverse-recorded-payloads.config.ts",
+                    "diagnostics": "tests/live/autoverse-diagnostic-keyboard.config.ts",
+                }[a.suite],
             ]
             if a.case_filter:
                 argv.extend(["--grep", a.case_filter])

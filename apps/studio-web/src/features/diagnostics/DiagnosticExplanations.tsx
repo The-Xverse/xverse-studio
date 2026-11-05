@@ -127,7 +127,16 @@ export function DiagnosticExplanations({
         failure ? "unavailable" : explanation ? "loaded" : "loading"
       }
     >
-      <h3>{title}</h3>
+      <div className="section-heading">
+        <h3>{title}</h3>
+        <button
+          type="button"
+          className="small-button"
+          onClick={() => setNonce((value) => value + 1)}
+        >
+          {failure ? "Retry explanation" : "Refresh explanation"}
+        </button>
+      </div>
       <p className="hint">
         Facts cite retained evidence. Studio does not infer root causes;
         hypotheses are unconfirmed and unknowns stay unknown.

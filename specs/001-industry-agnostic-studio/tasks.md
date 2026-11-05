@@ -1,8 +1,8 @@
 # Implementation Tasks: Industry-Agnostic X-Verse Studio
 
-**User work pause (2026-11-05, ADR-0069): the current probe-clock repair and
-verification are finished. Stop all work until explicit user resume.** Windows
-remains independently frozen; counts remain71/19/10, with zero new closures.
+**User resumed the goal on 2026-11-05 (ADR-0069).** Continue independently
+authorized Linux/Autoverse work. The separate Windows freeze remains active until
+explicitly lifted; no Windows implementation or tests are resumed.
 
 **Active user hold (2026-11-04, ADR-0069): all Windows-related work is frozen until
 the user explicitly lifts it.** Preserve current code/evidence. Skip Windows
@@ -1259,3 +1259,13 @@ Final candidate a92f42e passes59 checks (18 new,41 unchanged), lint/format,
 architecture and planning-package checks on551 unchanged Git-bound inputs. The
 current task is finished; all work now stops. Windows remains independently
 frozen. Counts71/19/10; zero accepted milestones.
+
+T038 diagnostic recovery progress (2026-11-05, ADR-0071): the shared readiness/run
+explanation now offers an explicit refresh/retry read. Its stable button preserves
+keyboard focus through recovery and respects a newer focused action. Actual
+copied Autoverse facts, keyboard event navigation, selected contrast, a labelled
+HTTP503 followed by actual recovery, and delayed actual replies are verified at
+both desktop sizes by six initial browser cases. Exact-candidate verification
+and existing recorded-playback regression are being retained separately at
+`evidence/studio/M1-diagnostic-keyboard-20261105/`. No provider/model starts and no
+Windows work is resumed. T038/T097 stay open; counts71/19/10, zero milestones.
