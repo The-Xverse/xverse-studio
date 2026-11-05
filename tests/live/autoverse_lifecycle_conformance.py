@@ -91,11 +91,13 @@ class OriginalProcess:
 
 
 class NativeHost:
-    def __init__(self, data, output, receipt, backend, static, *, host_arguments=(), register_provider=True):
+    def __init__(self, data, output, receipt, backend, static, *, host_arguments=(), register_provider=True, binding_timing=False):
         self.data, self.output, self.receipt = data, output, receipt
         self.backend, self.static = backend, static
         self.host_arguments = tuple(host_arguments)
         self.register_provider = register_provider
+        assert not binding_timing or not register_provider
+        self.binding_timing = binding_timing
         self.child, self.log, self.number = None, None, 0
         with socket.socket() as s:
             s.bind(('127.0.0.1', 0))
@@ -113,6 +115,9 @@ class NativeHost:
             assert not self.host_arguments
             argv = [str(self.backend), '-I', '-m', 'xverse_studio.host.launcher',
                     '--data-dir', str(self.data), '--port', str(self.port)]
+            if self.binding_timing:
+                argv = [str(self.backend), '-I', str(ROOT / 'tests/live/autoverse_binding_timing_host.py'),
+                        '--data-dir', str(self.data), '--port', str(self.port)]
             if self.static is not None:
                 argv += ['--static-dir', str(self.static)]
         self.log = (self.output / f'host-{self.number}.log').open('xb')
