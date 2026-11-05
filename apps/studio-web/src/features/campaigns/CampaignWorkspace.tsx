@@ -548,6 +548,7 @@ export function CampaignWorkspace({
               rows={5}
               spellCheck={false}
               value={matrix}
+              onFocus={(e) => e.currentTarget.scrollIntoView({ block: "nearest", inline: "nearest" })}
               onChange={(e) => {
                 changed();
                 setMatrix(e.target.value);

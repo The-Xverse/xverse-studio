@@ -63,6 +63,7 @@ async function report(page: Page, info: TestInfo, width: number, facts: any) {
 async function diagnostic(page: Page, code: string) {
   const alert = page.getByRole("alert").filter({ hasText: code }); await expect(alert).toBeFocused();
   const contrast = await renderedContrast(alert, "Campaign diagnostic"); expect(contrast.supported).toBe(true);
+  await test.info().attach("campaign-diagnostic-contrast", { body: JSON.stringify(contrast), contentType: "application/json" });
   if (contrast.supported) expect(contrast.ratio).toBeGreaterThanOrEqual(4.5);
 }
 
