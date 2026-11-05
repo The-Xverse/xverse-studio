@@ -1,4 +1,4 @@
-"""Read-only original Autoverse observation playback on a native copied workspace."""
+"""Original Autoverse playback and draft-only journeys on a native copied workspace."""
 
 import argparse
 import importlib.util
@@ -63,7 +63,7 @@ def device_free_browser_command(argv):
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("--case-filter")
-    p.add_argument("--suite", choices=("playback", "diagnostics"), default="playback")
+    p.add_argument("--suite", choices=("playback", "diagnostics", "authoring"), default="playback")
     p.add_argument(
         "--isolate-browser-devices",
         action="store_true",
@@ -79,7 +79,26 @@ def main():
     ):
         p.add_argument("--" + name, type=Path, required=True)
     a = p.parse_args()
+    for name in ("recording", "static_dir", "output", "node", "playwright_cli", "browser_cache"):
+        setattr(a, name, getattr(a, name).resolve())
     a.output.mkdir(parents=True, exist_ok=False)
+    source_names = subprocess.check_output([
+        "git", "ls-files", "--cached", "--others", "--exclude-standard", "-z", "--",
+        "apps", "services", "packages", "tests", "config", "scripts", "package.json",
+        "package-lock.json", "pyproject.toml", "uv.lock",
+    ], cwd=native.ROOT).decode().split("\0")
+
+    def source_inputs():
+        return {name: digest((native.ROOT / name).read_bytes()) for name in sorted(set(source_names))
+                if name and (native.ROOT / name).is_file()}
+
+    def ui_inputs():
+        return {file.relative_to(a.static_dir).as_posix(): digest(file.read_bytes())
+                for file in a.static_dir.rglob("*") if file.is_file()}
+
+    source_before, ui_before = source_inputs(), ui_inputs()
+    (a.output / "source-inputs.json").write_text(json.dumps(source_before, indent=2) + "\n")
+    (a.output / "ui-inputs.json").write_text(json.dumps(ui_before, indent=2) + "\n")
     result = json.loads((a.recording / "native-result.json").read_bytes())
     assert result["outcome"] == "passed" and result["fullAndroidAndSpeedObserved"]
     original = Path(
@@ -121,7 +140,9 @@ def main():
         register_provider=False,
     )
     outcome = {
-        "scope": "Actual original Autoverse observation record playback; separate labelled transport/integrity/shape fixtures; no new execution",
+        "scope": "Actual original Autoverse recording; playback/diagnosis or copy-local draft authoring; separate labelled HTTP fixtures; no new execution",
+        "suite": a.suite,
+        "sourceCandidate": subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=native.ROOT, text=True).strip(),
         "before": baseline,
         "originalObservationRecords": len(observations),
     }
@@ -163,6 +184,7 @@ def main():
                 {
                     "playback": "tests/live/autoverse-recorded-payloads.config.ts",
                     "diagnostics": "tests/live/autoverse-diagnostic-keyboard.config.ts",
+                    "authoring": "tests/live/autoverse-authoring-keyboard.config.ts",
                 }[a.suite],
             ]
             if a.case_filter:
@@ -225,6 +247,8 @@ def main():
             copied.get(k) == v for k, v in before.items()
         )
         outcome["backendShutdown"] = host.observations
+        outcome["sourceInputsUnchanged"] = source_inputs() == source_before
+        outcome["uiInputsUnchanged"] = ui_inputs() == ui_before
         outcome["browserExit"] = exit_code
         (a.output / "data-root.private.json").write_text(
             json.dumps({"dataRoot": str(data)}) + "\n"
@@ -235,6 +259,8 @@ def main():
     assert (
         outcome["originalRecordingUnchanged"]
         and outcome["copiedOriginalCanonicalUnchanged"]
+        and outcome["sourceInputsUnchanged"]
+        and outcome["uiInputsUnchanged"]
     )
     raise SystemExit(exit_code)
 

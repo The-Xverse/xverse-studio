@@ -214,12 +214,14 @@ export function Modal({
   onClose,
   wide = false,
   restoreFocusSelector,
+  fallbackFocusSelector,
 }: {
   title: string;
   children: ReactNode;
   onClose: () => void;
   wide?: boolean;
   restoreFocusSelector?: string;
+  fallbackFocusSelector?: string;
 }) {
   const returnFocus = useRef(document.activeElement as HTMLElement | null),
     section = useRef<HTMLElement | null>(null),
@@ -266,7 +268,9 @@ export function Modal({
         const target = restoreFocusSelector
           ? document.querySelector<HTMLElement>(restoreFocusSelector)
           : returnFocus.current;
-        target?.focus();
+        if (target?.isConnected) target.focus();
+        else if (fallbackFocusSelector)
+          document.querySelector<HTMLElement>(fallbackFocusSelector)?.focus();
       });
     };
   }, []);

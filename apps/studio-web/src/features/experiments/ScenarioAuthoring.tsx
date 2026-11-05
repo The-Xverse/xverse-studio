@@ -190,6 +190,7 @@ export function ScenarioAuthoring({
                 </h4>
                 <button
                   className="small-button"
+                  data-scenario-add={kind}
                   disabled={!!limit && rows.length >= limit}
                   onClick={() => {
                     intent();
@@ -330,6 +331,7 @@ export function ScenarioAuthoring({
       {remove && (
         <Modal
           title="Remove authored scenario item"
+          fallbackFocusSelector={`.scenario-authoring [data-scenario-add="${remove.kind}"]`}
           onClose={() => {
             intent();
             setRemove(null);
