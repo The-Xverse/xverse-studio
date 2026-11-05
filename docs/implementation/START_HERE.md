@@ -1,3 +1,13 @@
+Latest checkpoint — 2026-11-05: goal explicitly reactivated; continue the full
+original Linux/Autoverse plan. Windows remains separately FROZEN. Current T097
+scenario-authoring keyboard component passes8 new +6 diagnosis +14 import checks
+on cc981c0/565 identical inputs/6 reproduced UI assets; original6 failures retained.
+Counts72/18/10,zero milestones. T097 remains open for full lab/campaign/export and
+actual AT/required-host acceptance. No external runtime is started; private live
+infrastructure stays shut down and stale ownership is not current authority.
+See [status](STATUS.md) and [evidence](../../evidence/studio/M4-accessibility/authoring-20261105/README.md).
+This latest instruction supersedes historical pause notes below.
+
 Latest checkpoint — 2026-11-05: current Linux full Autoverse Stop/Cancel pressure
 and all six finite performance series pass;210 affected and68 comparison checks
 pass. T096 remains open for required-host portability/full linked acceptance.

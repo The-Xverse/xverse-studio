@@ -1,3 +1,21 @@
+# Authoring keyboard focus repaired; full goal active — 2026-11-05
+
+**72 completed /18 in progress /10 blocked; zero accepted milestones.**
+T097 remains in progress. Source cc981c0 passes8 new native keyboard authoring
+journeys,6 existing diagnosis journeys and14 existing import journeys at both
+required viewports. Initial2pass/6fail deletion-focus results remain retained.
+The dialog now returns to the matching Add control when deletion removes its
+opener; Escape and rejected removals return to the original Remove button.
+All565 selected inputs match Git and all three final cohorts;6 UI assets reproduce
+exactly. Canonical original/copy evidence and execution counts stay unchanged.
+All original backend/browser handles exit and roots release. No external provider
+or model starts. T097's broader lab/campaign/export and actual AT/required-host
+acceptance remain open; Windows stays independently frozen. The full goal remains
+active after explicit user reactivation; earlier pause notes are historical.
+See [evidence and review](../../evidence/studio/M4-accessibility/authoring-20261105/README.md).
+
+## Earlier checkpoints
+
 # Linux control and performance component verified; full goal active — 2026-11-05
 
 **72 completed / 18 in progress / 10 blocked; zero accepted milestones.**
