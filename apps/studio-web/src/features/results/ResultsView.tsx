@@ -17,12 +17,14 @@ import { ObservationPlot, ObservationTable } from "./ObservationDisplay";
 import { RecordedObservationRecords } from "./RecordedObservationRecords";
 import { RetentionDialog } from "../retention/RetentionDialog";
 import { FrozenInputsControl } from "./FrozenInputsControl";
+import { RecordedRunPicker } from "./RecordedRunPicker";
 import { RunControls } from "../runs/RunControls";
 import { RunStartupStatus } from "../runs/RunStartupStatus";
 import { DiagnosticExplanations } from "../diagnostics/DiagnosticExplanations";
 import { projectDisplay } from "../model/projection";
 import type { Project } from "../../api/types";
 export function ResultsView({
+  projectId,
   run,
   events,
   omitted,
@@ -35,6 +37,7 @@ export function ResultsView({
   rerunEnabled,
   onSelectRun,
 }: {
+  projectId: string;
   run: Run | null;
   events: RunEvent[];
   omitted: number;
@@ -52,7 +55,6 @@ export function ResultsView({
     [filter, setFilter] = useState(""),
     [observationData, setObservations] = useState<Data>({}),
     [evidenceData, setEvidence] = useState<Data>({}),
-    [history, setHistory] = useState<Run[]>([]),
     [annotations, setAnnotations] = useState<Data[]>([]),
     [annotation, setAnnotation] = useState(""),
     [replay, setReplay] = useState(false),
@@ -404,11 +406,6 @@ export function ResultsView({
     queryIdentity,
   ]);
   useEffect(() => {
-    void api("/runs")
-      .then((r) => setHistory(items(r)))
-      .catch(() => {});
-  }, [run?.runId]);
-  useEffect(() => {
     setEditingTrace(null);
     setEditingAnnotation(null);
     setAnnotation("");
@@ -482,12 +479,22 @@ export function ResultsView({
     );
     return () => clearInterval(timer);
   }, [replay, samples.length]);
+  const recordedRunPicker = <RecordedRunPicker key={projectId} projectId={projectId} run={run}
+    onSelect={chosen => {
+      setReplay(false);
+      setReadFilters(emptyFilters());
+      onSelectRun(chosen);
+    }} />;
   if (!run)
     return (
-      <div className="view-page">
-        <Empty title="Your evidence starts with a run" icon="results">
-          Validate the draft and run preflight to create an immutable input
-          snapshot.
+      <div className="view-page results-view">
+        <div className="section-heading">
+          <div><h2>Run results</h2><p>Select retained results for this project.</p></div>
+          <div className="header-actions">{recordedRunPicker}</div>
+        </div>
+        <Empty title="Choose a recorded run" icon="results">
+          Select a retained run above to inspect its immutable inputs and results.
+          To create a new run, validate the draft and check readiness.
           <div className="form-actions">
             <button
               className="button primary"
@@ -523,40 +530,7 @@ export function ResultsView({
           </p>
         </div>
         <div className="header-actions">
-          <label>
-            Recorded run
-            <select
-              aria-label="Recorded run"
-              value={run.runId}
-              onChange={(event) => {
-                const chosen = history.find(
-                  (item) =>
-                    item.runId === event.target.value &&
-                    item.projectId === run.projectId,
-                );
-                if (chosen) {
-                  setReplay(false);
-                  setReadFilters(emptyFilters());
-                  onSelectRun(chosen);
-                }
-              }}
-            >
-              {[
-                ...new Map(
-                  [
-                    run,
-                    ...history.filter(
-                      (item) => item.projectId === run.projectId,
-                    ),
-                  ].map((item) => [item.runId, item]),
-                ).values(),
-              ].map((item) => (
-                <option key={item.runId} value={item.runId}>
-                  {item.runId} · {item.state}
-                </option>
-              ))}
-            </select>
-          </label>
+          {recordedRunPicker}
           <FrozenInputsControl
             key={JSON.stringify([
               run.runId,

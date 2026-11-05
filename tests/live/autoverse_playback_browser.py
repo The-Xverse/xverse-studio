@@ -70,7 +70,7 @@ def main():
     p.add_argument("--case-filter")
     p.add_argument("--trace-binding-timing", action="store_true", help="Bounded contributor diagnostics for the unregistered binding suite only.")
     p.add_argument("--profile-binding-callbacks", action="store_true", help="Explicit CPU-heavy cProfile mode for the contributor binding diagnostics.")
-    p.add_argument("--suite", choices=("playback", "diagnostics", "authoring", "lab-inventory", "assessments-keyboard", "exports-keyboard", "bindings-keyboard", "provider-scope", "evaluation-keyboard"), default="playback")
+    p.add_argument("--suite", choices=("playback", "diagnostics", "authoring", "lab-inventory", "assessments-keyboard", "exports-keyboard", "bindings-keyboard", "provider-scope", "evaluation-keyboard", "retained-run-selection"), default="playback")
     p.add_argument("--receipt", type=Path, help="Trusted current installation locator for the fixed evaluation suite; the launcher still enrolls the actual installation.")
     p.add_argument(
         "--isolate-browser-devices",
@@ -250,6 +250,7 @@ def main():
                     "bindings-keyboard": "tests/live/autoverse-bindings-keyboard.config.ts",
                     "provider-scope": "tests/live/autoverse-provider-scope.config.ts",
                     "evaluation-keyboard": "tests/live/autoverse-evaluation-keyboard.config.ts",
+                    "retained-run-selection": "tests/live/autoverse-retained-run-selection.config.ts",
                 }[a.suite],
             ]
             if a.case_filter:

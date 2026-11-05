@@ -1842,6 +1842,7 @@ export default function App() {
                   />
                 ) : (
                   <ResultsView
+                    projectId={project.projectId}
                     run={run}
                     events={events}
                     omitted={omitted}
