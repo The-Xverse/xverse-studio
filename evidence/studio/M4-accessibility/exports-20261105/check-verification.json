@@ -1,0 +1,50 @@
+{
+  "candidate": "ff524568b0e1d4ed81223f550f0bc1748955435a",
+  "checks": {
+    "ruff": {
+      "argv": [
+        "[WORKTREE]/.venv/bin/ruff",
+        "check",
+        "tests/live/autoverse_playback_browser.py",
+        "tests/live/autoverse_export_downloads.py"
+      ],
+      "exit": 0
+    },
+    "typecheck": {
+      "argv": [
+        "[WORKSPACE_VOLUME]/.xverse-studio-cache/node-v24.22.1-linux-x64/bin/node",
+        "[MAIN_CHECKOUT]/node_modules/typescript/bin/tsc",
+        "--noEmit",
+        "-p",
+        "apps/studio-web/tsconfig.json"
+      ],
+      "exit": 0
+    },
+    "architecture": {
+      "argv": [
+        "[WORKTREE]/.venv/bin/python",
+        "-I",
+        "scripts/check_architecture.py"
+      ],
+      "exit": 0
+    },
+    "planning": {
+      "argv": [
+        "[WORKTREE]/.venv/bin/python",
+        "-I",
+        "scripts/validate_spec_package.py"
+      ],
+      "exit": 0
+    }
+  },
+  "sourceInputs": 575,
+  "sourceMatchesGit": true,
+  "sourceMatchesPrecedingCohort": true,
+  "priorChangedPaths": [
+    "tests/live/autoverse_playback_browser.py"
+  ],
+  "productionBuildInputsMatchPrior572": true,
+  "uiFiles": 6,
+  "uiMatchesPriorReproducedBuild": true,
+  "newBuildRun": false
+}

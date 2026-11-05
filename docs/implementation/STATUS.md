@@ -1,3 +1,25 @@
+# Export keyboard checkpoint finished; work paused — 2026-11-05
+
+**72 completed /18 in progress /10 blocked; zero accepted milestones.**
+Sourceff52456 passes8 distinct export/download/import keyboard journeys at both
+required viewports and8 actual ZIP readbacks. Authored inputs/layout/compiler
+digests and frozen snapshot/journal/6 recorded evaluations survive inert imports;
+private bindings/session values are excluded. Copied ledger gains exactly8 export
+operations/8 idempotency receipts and2 project/2 importedEvidence records; original
+recordings/database/copied canonical bytes are preserved. All575 selected inputs
+match Git;6 UI assets match the previously reproduced unchanged production build.
+All17 captured descendant handles exit; original backend/browser handles exit and
+roots release. Harness preparation/accounting failures remain qualified separately.
+Lint/typecheck/architecture/planning pass. No provider/model/evaluation/campaign
+starts. T038/T097 stay open for full remaining flows, actual AT/browser/required-host
+acceptance. The current verification/evidence checkpoint is finished; work is
+paused until explicit user resume, per the stop-after-current-work instruction.
+Windows remains independently frozen until explicitly lifted. Full original scope
+is retained; no task or milestone is closed by this checkpoint.
+See [evidence/review and coverage](../../evidence/studio/M4-accessibility/exports-20261105/README.md).
+
+## Earlier checkpoints
+
 # Assessment inspection focus/contrast repaired; full goal active — 2026-11-05
 
 **72 completed /18 in progress /10 blocked; zero accepted milestones.**

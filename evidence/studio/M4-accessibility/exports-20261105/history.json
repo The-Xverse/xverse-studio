@@ -1,0 +1,15 @@
+{
+  "initial": {
+    "browser": "8 passed",
+    "readbackPreparation": "Initial verifier incorrectly assumed stored SQLite document descriptors contain content; its KeyError was observed in terminal output, not retained as a raw traceback. Fixed to anchored read_bounded with stored document SHA; all eight original ZIPs then passed. No ZIP/assertion threshold was weakened."
+  },
+  "readonlyAccountingFailure": {
+    "browser": "8 passed",
+    "native": "Exact export ledger deltas and integrated ZIP readback passed.",
+    "outer": "Reused private wrapper retained before==after from read-only suites. It reached the false postcondition after captured handles exited, so no outer verification file was written. Original wrapper terminal traceback was not retained; native results, captured-process list and exact false condition are retained.",
+    "falseCondition": "native.before == native.after",
+    "correctCondition": "native.after == native.expectedExecutionCounts, plus project/importedEvidence +2 each and eight ZIP readbacks"
+  },
+  "final": "Fresh eight-journey cohort passes corrected wrapper, ZIP verification and source/UI/ownership checks.",
+  "legacyConsoleLabel": "The final wrapper console labels canonicalAndLedgerUnchanged=true. That legacy label is inaccurate for the copied export ledger; retained native before/after and this verification record show the exact allowed +8 operations/+8 idempotency. Original recording and copied canonical evidence remain unchanged."
+}

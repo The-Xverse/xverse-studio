@@ -1,3 +1,16 @@
+Current instruction/checkpoint — 2026-11-05: **work is paused until explicit user
+resume**, after finishing the current native export keyboard verification/evidence
+checkpoint. Sourceff52456 passes8 distinct journeys/8 actual ZIP readbacks at both
+viewports on575 Git-bound inputs and6 unchanged previously reproduced UI assets.
+Original recordings/copied canonical bytes are preserved; exact export/import
+ledger deltas are verified; all current captured handles exit and roots release.
+Counts72completed/18in_progress/10blocked,zero accepted milestones. T038/T097 remain
+open; full original requirements/dependencies/remaining acceptance are retained.
+Windows is independently FROZEN until explicitly lifted. Older active/resume notes
+below are historical and do not override this hold. Private runtime infrastructure
+remains off; stale process/namespace records are not live authority. See
+[status](STATUS.md) and [evidence](../../evidence/studio/M4-accessibility/exports-20261105/README.md).
+
 Latest checkpoint — 2026-11-05: source27faf83 passes12 new historical-assessment
 keyboard journeys +19 older browser/response cases on572 Git-bound inputs and6
 reproduced UI assets. Explicit read focus and selected disclosure contrast are
