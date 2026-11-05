@@ -34,7 +34,9 @@ async function open(page: Page, info: TestInfo, width: number) {
   await page.setViewportSize({ width, height: width === 1024 ? 768 : 900 }); await connectStudio(page, info);
   const source = fixture()[String(width)];
   await page.evaluate(id => { localStorage.setItem("studio.projectId", id); }, source.projectId); await page.reload();
-  const preflightResponse = page.waitForResponse(r => /\/api\/v1\/projects\/[^/]+\/preflights$/.test(new URL(r.url()).pathname) && r.request().method() === "POST");
+  // Installed-provider preflight uses the same 30s bound as the native API helper.
+  // Focus expectations and the complete browser-workflow deadline stay unchanged.
+  const preflightResponse = page.waitForResponse(r => /\/api\/v1\/projects\/[^/]+\/preflights$/.test(new URL(r.url()).pathname) && r.request().method() === "POST", { timeout: 30000 });
   await activate(page, page.getByRole("button", { name: "Preflight & run", exact: true }));
   const preflight = await preflightResponse; expect(preflight.status()).toBe(200); expect((await preflight.json()).status).toBe("ready");
   await expect(page.getByRole("button", { name: "Start frozen snapshot", exact: true })).toBeEnabled();
