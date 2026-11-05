@@ -38,7 +38,10 @@ def test_canonical_source_selects_exactly_one_input_surface(mode, kind):
 def test_native_window_rejects_browser_input_even_when_provider_has_input_api(client):
     runs = client.app.state.studio.runs
     runs.installed_providers['autoverse.demo'] = SimpleNamespace(input_request=lambda *_: pytest.fail('Browser publisher reached'))
-    runs.read = lambda _: {'providerId':'autoverse.demo','state':'running','inputSurface':{'kind':'native-window'}}
+    def lifecycle_fixture(_, *, _lifecycle_only):
+        assert _lifecycle_only is True
+        return {'providerId':'autoverse.demo','state':'running','inputSurface':{'kind':'native-window'}}
+    runs.read = lifecycle_fixture
     with pytest.raises(Problem) as caught:
         Runs.input_request(runs, 'fixture', 'acquire', {}, 'fixture')
     assert caught.value.code == 'CAPABILITY_UNSUPPORTED'

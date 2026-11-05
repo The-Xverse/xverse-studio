@@ -213,14 +213,26 @@ def main():
         lease = native.checked(api.post(route + "/input/acquire", json={}))
         lease = {k: lease[k] for k in ["leaseToken", "generation"]}
         sequence = 0
+        driver_phase = "speed-prerequisite"
+        report["driverFrames"] = []
 
         def drive(throttle, brake):
             nonlocal sequence
             sequence += 1
-            native.checked(api.post(route + "/input/frame", json={
+            started = time.monotonic()
+            response = api.post(route + "/input/frame", json={
                 **lease, "frame": {"sequence": sequence, "throttle": throttle, "brake": brake, "steer": 0},
-            }))
-            return native.checked(api.get(route))
+            })
+            frame = {"phase": driver_phase, "sequence": sequence,
+                     "frameHttpSeconds": time.monotonic() - started, "statusCode": response.status_code}
+            report["driverFrames"].append(frame)
+            del report["driverFrames"][:-128]
+            native.checked(response)
+            started = time.monotonic()
+            response = api.get(route)
+            frame.update(observationHttpSeconds=time.monotonic() - started,
+                         observationStatusCode=response.status_code)
+            return native.checked(response)
 
         speed_seen = False
         while time.monotonic() < deadline:
@@ -232,6 +244,7 @@ def main():
                 break
             time.sleep(.1)
         assert speed_seen
+        report["fullAndroidAndVehicleSpeedObserved"] = True
         pressure = PresentationPressure(api, history, source["runId"], source_result["children"][1]["runId"], source_result["campaignId"], run_id)
         native.checked(api.post(route + "/input/release", json=lease))
         setup_started = time.monotonic()
@@ -245,6 +258,7 @@ def main():
         report["inputPreparation"] = {"leaseReleasedBeforeClientSetup": True,
                                       "setupSeconds": time.monotonic() - setup_started,
                                       "freshLeaseAcquiredAfterSetup": True, "unchangedLeaseSeconds": .75}
+        driver_phase = "presentation-pressure"
         journal = data / "runs" / run_id / "evidence.jsonl"
         initial = journal.read_bytes()
         ticks = [{"phase": "consumers_paused", "records": len(initial.splitlines())}]

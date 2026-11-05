@@ -57,6 +57,7 @@ ACTIVE = {
 }
 MAX_RUNTIME_REPORT_BYTES = 1024 * 1024
 MAX_RUNTIME_REPORT_ATTEMPTS = 4
+MAX_DERIVED_OBSERVATION_ATTEMPTS = 4
 
 
 def _unique_report_fields(pairs):
@@ -847,7 +848,7 @@ class Runs:
             return observed
         return None
 
-    def read(self, rid):
+    def read(self, rid, *, _lifecycle_only=False, _attempt=0):
         with self.store.lock:
             run = self.store.get("run", rid)
             _observation_version(run)
@@ -1010,26 +1011,52 @@ class Runs:
                     op["status"] = "unknown"
                     self.store.put("operation", op["operationId"], op)
             self._reconcile_command(run, observed)
-            _, integrity = read_journal(root, observed or run)
-            run["evidenceAvailability"] = (
-                "unavailable" if integrity == "unavailable" else "available"
-            )
-            if integrity == "invalid":
-                run["evidence"] = "invalid"
-            if integrity == "unavailable" and run["state"] in ("stopped", "failed"):
-                run.setdefault("originalEvidenceStatus", run["evidence"])
-                run["evidence"] = "unavailable"
-            assessment = getattr(self, "assessment_summary", None)
-            if assessment is not None:
-                run.update(assessment(run))
-            # Ownership, journal integrity and assessments are still observed on
-            # every read. Only an actual metadata change needs a durable write.
-            if canonical(run) != previous_run:
-                _advance_observation(run)
-                self.store.put("run", rid, run)
             if rid in self.children and self.children[rid].poll() is not None:
                 self.children.pop(rid)
-            return run
+            if _lifecycle_only:
+                # Input and owned lifecycle control reconcile the same original
+                # worker/report/command identities. Derived presentation is not
+                # an authority prerequisite for releasing or controlling a run.
+                if canonical(run) != previous_run:
+                    _advance_observation(run)
+                    self.store.put("run", rid, run)
+                return run
+            evidence_state = deepcopy(observed or run)
+
+        # Canonical acquisition and assessment admission may be expensive. They
+        # must not retain the metadata lock used by independent driver/control
+        # requests. Publication below is conditional on the exact stored row
+        # captured before reconciliation, including observation and command data.
+        _, integrity = read_journal(root, evidence_state)
+        run["evidenceAvailability"] = (
+            "unavailable" if integrity == "unavailable" else "available"
+        )
+        if integrity == "invalid":
+            run["evidence"] = "invalid"
+        if integrity == "unavailable" and run["state"] in ("stopped", "failed"):
+            run.setdefault("originalEvidenceStatus", run["evidence"])
+            run["evidence"] = "unavailable"
+        assessment = getattr(self, "assessment_summary", None)
+        if assessment is not None:
+            run.update(assessment(run))
+        with self.store.lock:
+            conflicted = canonical(self.store.get("run", rid)) != previous_run
+            if not conflicted:
+                # Unchanged observations still require every integrity check,
+                # but no durable write. Never publish a late derived result over
+                # a newer lifecycle, pending command or observation version.
+                if canonical(run) != previous_run:
+                    _advance_observation(run)
+                    self.store.put("run", rid, run)
+                return run
+        if _attempt + 1 >= MAX_DERIVED_OBSERVATION_ATTEMPTS:
+            raise Problem(
+                "RUN_OBSERVATION_UNAVAILABLE",
+                "The run changed during observation; retry against its current state.",
+                503,
+                retryable=True,
+            )
+        return self.read(rid, _attempt=_attempt + 1)
 
     def _valid_observed_commands(self, run, observed):
         results = observed.get("commandResults", {})
@@ -1148,7 +1175,7 @@ class Runs:
 
     def command(self, rid, principal, key, payload):
         # Reconciliation precedes state/authority enforcement; retries still resolve before a new mutation.
-        self.read(rid)
+        self.read(rid, _lifecycle_only=True)
 
         def accepted(db):
             run = self.store.get("run", rid, db)
@@ -1246,7 +1273,7 @@ class Runs:
 
     def input_request(self, rid, action, payload, session):
         with self.store.lock:
-            run = self.read(rid)
+            run = self.read(rid, _lifecycle_only=True)
             provider = self.installed_providers.get(run["providerId"])
             if provider is None or not hasattr(provider, "input_request") or (run.get("inputSurface") or {}).get("kind") != "normalized-driver":
                 raise Problem("CAPABILITY_UNSUPPORTED", "This run has no admitted browser input surface.")
@@ -1258,7 +1285,7 @@ class Runs:
     def shutdown(self):
         # Native foreground shutdown requests only admitted, ownership-confirmed cancellation.
         for r in self.store.all("run"):
-            run = self.read(r["runId"])
+            run = self.read(r["runId"], _lifecycle_only=True)
             if run["state"] in ("running", "paused", "preparing", "ready"):
                 try:
                     self.command(
@@ -1274,7 +1301,7 @@ class Runs:
         deadline = time.monotonic() + shutdown_budget
         while self.children and time.monotonic() < deadline:
             for rid in list(self.children):
-                self.read(rid)
+                self.read(rid, _lifecycle_only=True)
             time.sleep(0.05)
         # Installed long-lived services close only after their original tasks
         # have settled; they do not gain process-signalling authority here.

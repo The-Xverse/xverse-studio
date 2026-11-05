@@ -1,3 +1,5 @@
+Current instruction — 2026-11-05: user explicitly resumed with the active goal "keep going without interruption". Continue the full existing Linux/Autoverse plan; Windows remains separately frozen. Historical pause instructions below are superseded. Current T096 work starts with offline profiling of the retained live pressure failures; do not trust old infrastructure owners as live.
+
 Current instruction — 2026-11-05: **work is paused until explicit user resume.**
 The current T096 verification checkpoint is terminal with two retained live lease
 expiry failures; T096 remains open. All owned private test services are stopped.

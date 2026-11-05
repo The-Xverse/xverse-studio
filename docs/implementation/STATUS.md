@@ -1,3 +1,5 @@
+Current instruction — 2026-11-05: user explicitly resumed with the active goal "keep going without interruption". Continue the full existing Linux/Autoverse plan; Windows remains separately frozen. Historical pause instructions below are superseded. Current T096 work starts with offline profiling of the retained live pressure failures; do not trust old infrastructure owners as live.
+
 # Work paused; T096 pressure test remains open — 2026-11-05
 
 **72 completed / 18 in progress / 10 blocked; zero accepted milestones.**
