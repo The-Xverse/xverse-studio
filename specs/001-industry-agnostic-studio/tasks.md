@@ -1271,3 +1271,16 @@ six reproduced UI assets. Build/typecheck, lint, architecture and planning pass.
 Original two red failures and the initial six-case cohort are separately retained
 at `evidence/studio/M1-diagnostic-keyboard-20261105/`. No provider/model starts and
 no Windows work is resumed. T038/T097 stay open; counts71/19/10, zero milestones.
+
+T038/T097 evidence-import navigation progress (2026-11-05, ADR-0072): native
+keyboard file-choice handoff, actual valid/damaged Autoverse inspection, selected
+contrast and malformed-ZIP recovery extend the Linux critical-flow matrix. Late
+actual201/422 replies cannot replace Home/Catalog or a newer selection. The latest
+busy label survives an older completion; accepted imports remain retained without
+run authority. Initial14 browser checks pass with12 inert imports and unchanged
+execution ledger/canonical evidence. The first legacy1.0 archive had four missing-
+profile fixture failures, separate from eight actual UI-context counterexamples;
+current prepared1.1 passes normal keyboard inspection on the original product.
+Exact-candidate and existing affected regressions are being retained at
+`evidence/studio/M4-evidence-import-keyboard-20261105/`. T038/T097 remain open;
+Windows stays frozen; counts71/19/10 and zero accepted milestones are unchanged.

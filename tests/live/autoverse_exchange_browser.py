@@ -33,6 +33,9 @@ def imports(root):
 
 def main():
     p = argparse.ArgumentParser()
+    p.add_argument("--suite", choices=("inspection", "keyboard"), default="inspection")
+    p.add_argument("--case-filter")
+    p.add_argument("--isolate-browser-devices", action="store_true")
     for name in (
         "recording",
         "static-dir",
@@ -63,6 +66,7 @@ def main():
     valid = (a.recording / "evidence.zip").read_bytes()
     assert digest(valid) == result["evidenceArchiveDigest"]
     (data / "evidence-valid.zip").write_bytes(valid)
+    (data / "evidence-invalid.zip").write_bytes(b"Owned truncated ZIP fixture")
     files = exchange.unpack(valid)
     snapshot = json.loads(files["snapshot.json"])
     context = {
@@ -132,8 +136,26 @@ def main():
                 str(a.playwright_cli.resolve()),
                 "test",
                 "--config",
-                "tests/live/autoverse-exchange.config.ts",
+                {
+                    "inspection": "tests/live/autoverse-exchange.config.ts",
+                    "keyboard": "tests/live/autoverse-exchange-keyboard.config.ts",
+                }[a.suite],
             ]
+            if a.case_filter:
+                argv.extend(["--grep", a.case_filter])
+            if a.isolate_browser_devices:
+                spec = importlib.util.spec_from_file_location(
+                    "recorded_browser_isolation",
+                    Path(__file__).with_name("autoverse_playback_browser.py"),
+                )
+                isolation = importlib.util.module_from_spec(spec)
+                spec.loader.exec_module(isolation)
+                env["STUDIO_BROWSER_CPU_ONLY"] = "1"
+                env["STUDIO_BROWSER_DEVICE_PROOF"] = str(
+                    a.output.resolve() / "browser-device-proof.private.json"
+                )
+                env["STUDIO_BROWSER_HOST_MOUNT_NS"] = os.readlink("/proc/self/ns/mnt")
+                argv = isolation.device_free_browser_command(argv)
             (a.output / "command.private.json").write_text(
                 json.dumps({"argv": argv}, indent=2) + "\n"
             )
@@ -164,7 +186,12 @@ def main():
             )
             assert outcome["after"] == baseline
             if exit_code == 0:
-                assert outcome["importsAfter"] == import_count + 4
+                if a.case_filter:
+                    assert import_count <= outcome["importsAfter"] <= import_count + 12
+                elif a.suite == "keyboard":
+                    assert outcome["importsAfter"] == import_count + 12
+                else:
+                    assert outcome["importsAfter"] == import_count + 4
         finally:
             api.close()
     finally:

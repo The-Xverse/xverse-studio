@@ -172,6 +172,8 @@ export default function App() {
     }),
     [startSending, setStartSending] = useState(false);
   const startKey = useRef(mutationKey()),
+    actionSequence = useRef(0),
+    evidenceImportSequence = useRef(0),
     preflightRequestSequence = useRef(0),
     lastRun = useRef(localStorage.getItem("studio.lastRun") || ""),
     selectedProjectRef = useRef(""),
@@ -453,6 +455,7 @@ export default function App() {
     setSection(value);
   }
   const doAction: DoAction = useCallback(async (label, action) => {
+    const sequence = ++actionSequence.current;
     setBusy(label);
     setError(null);
     setNotice("");
@@ -462,7 +465,7 @@ export default function App() {
       setError(e instanceof Error ? e : new Error("The operation failed."));
       return undefined;
     } finally {
-      setBusy("");
+      if (sequence === actionSequence.current) setBusy("");
     }
   }, []);
   const runUpdated = useCallback(
@@ -1182,20 +1185,29 @@ export default function App() {
     );
   }
   async function importEvidence(file: File) {
-    if (file.size > 6 * 1024 * 1024)
-      throw new Error("Select an evidence archive smaller than 6 MiB.");
-    const bytes = new Uint8Array(await file.arrayBuffer());
-    let binary = "";
-    for (let i = 0; i < bytes.length; i += 8192)
-      binary += String.fromCharCode(...bytes.subarray(i, i + 8192));
-    setEvidenceImport(
-      await api("/evidence/imports", {
+    const context = projectIntent(),
+      sequence = ++evidenceImportSequence.current,
+      current = () =>
+        sequence === evidenceImportSequence.current && sameProjectIntent(context);
+    try {
+      if (file.size > 6 * 1024 * 1024)
+        throw new Error("Select an evidence archive smaller than 6 MiB.");
+      const bytes = new Uint8Array(await file.arrayBuffer());
+      let binary = "";
+      for (let i = 0; i < bytes.length; i += 8192)
+        binary += String.fromCharCode(...bytes.subarray(i, i + 8192));
+      if (!current()) return;
+      const imported = await api("/evidence/imports", {
         method: "POST",
         body: { archiveBase64: btoa(binary) },
         key: mutationKey(),
-      }),
-    );
-    setModal("evidence-import");
+      });
+      if (!current()) return;
+      setEvidenceImport(imported);
+      setModal("evidence-import");
+    } catch (error) {
+      if (current()) throw error;
+    }
   }
   // Domain terms for the shared workflows; the core terms apply until they load.
   const presentation = usePresentationData(
