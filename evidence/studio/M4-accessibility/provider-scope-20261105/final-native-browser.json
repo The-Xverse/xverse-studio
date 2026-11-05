@@ -1,0 +1,344 @@
+{
+  "config": {
+    "argv": [
+      "[WORKSPACE_VOLUME]/.xverse-studio-cache/node-v24.22.1-linux-x64/bin/node",
+      "[WORKSPACE_VOLUME]/xverse-studio/node_modules/@playwright/test/cli.js",
+      "test",
+      "--config",
+      "tests/live/autoverse-provider-scope.config.ts"
+    ],
+    "configFile": "[WORKTREE]/tests/live/autoverse-provider-scope.config.ts",
+    "rootDir": "[WORKTREE]/tests/live",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": "[WORKTREE]/tests/live/recorded-browser-device-setup.ts",
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "[WORKTREE]/.studio-local/t097-provider-scope-20261105/final/native/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "[WORKTREE]/tests/live",
+        "testIgnore": [],
+        "testMatch": [
+          "autoverse-provider-scope.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "[WORKTREE]/.studio-local/t097-provider-scope-20261105/final/native/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "[WORKTREE]/tests/live",
+        "snapshotDir": "[WORKTREE]/tests/live",
+        "testIgnore": [],
+        "testMatch": "autoverse-provider-scope.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "baseURL": "[LOOPBACK_ORIGIN]",
+          "browserName": "chromium",
+          "actionTimeout": 15000,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "trace": "off",
+          "screenshot": "only-on-failure",
+          "video": "off",
+          "launchOptions": {
+            "args": [
+              "--disable-gpu",
+              "--disable-gpu-rasterization"
+            ]
+          }
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "[WORKTREE]/.studio-local/t097-provider-scope-20261105/final/native/browser.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "autoverse-provider-scope.spec.ts",
+      "file": "autoverse-provider-scope.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "workspace scope uses absent recorded provider at 1024",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1097,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T18:40:30.842Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "actual-selected-provider-scope",
+                      "contentType": "application/json",
+                      "body": "eyJtb2RlIjogImFic2VudCByZWNvcmRlZCBwcm92aWRlciIsICJ3aWR0aCI6IDEwMjQsICJleHBlY3RlZElkIjogImF1dG92ZXJzZS5kZW1vIiwgImV4cGVjdGVkU2NvcGUiOiAiUHJvdmlkZXIgdW5hdmFpbGFibGUiLCAicHJvamVjdElkIjogInByai1mNGQxOTgwNS0xNjBlLTQ5NGUtODRjYi0yMTlkNjMyNzBiYjMiLCAiYWN0dWFsU3RhdHVzIjogIlByb3ZpZGVyXG5hdXRvdmVyc2UuZGVtb1xuUHJvdmlkZXIgdW5hdmFpbGFibGUiLCAibWVhc3VyZW1lbnRzIjogW3sibGFiZWwiOiAiUHJvdmlkZXIgbGFiZWwiLCAidGV4dCI6ICJQcm92aWRlciBhdXRvdmVyc2UuZGVtbyBQcm92aWRlciB1bmF2YWlsYWJsZSIsICJjb2xvciI6ICJyZ2IoODMsIDEwMSwgMTI4KSIsICJmb250U2l6ZSI6ICI4cHgiLCAiZm9udFdlaWdodCI6ICI0MDAiLCAidGhyZXNob2xkIjogNC41LCAic2NvcGUiOiAiU2VsZWN0ZWQgbm9ybWFsLXNpemUgcmVuZGVyZWQgdGV4dDsgbm8gb3ZlcmFsbCBhY2Nlc3NpYmlsaXR5IGNlcnRpZmljYXRpb24iLCAic3VwcG9ydGVkIjogdHJ1ZSwgImxheWVycyI6IFsicmdiYSgwLCAwLCAwLCAwKSIsICJyZ2JhKDAsIDAsIDAsIDApIiwgInJnYigyNDksIDI1MSwgMjUzKSJdLCAiYmFja2dyb3VuZCI6IFswLjk3NjQ3MDU4ODIzNTI5NDEsIDAuOTg0MzEzNzI1NDkwMTk2LCAwLjk5MjE1Njg2Mjc0NTA5ODEsIDFdLCAiY29tcG9zaXRlZEZvcmVncm91bmQiOiBbMC4zMjU0OTAxOTYwNzg0MzE0LCAwLjM5NjA3ODQzMTM3MjU0OSwgMC41MDE5NjA3ODQzMTM3MjU1LCAxXSwgInJhdGlvIjogNS43MTc0MDU4MTQ3ODg0LCAicGFzc2VkIjogdHJ1ZSwgImFzc3VtcHRpb25zIjogIkNTUyBzUkdCIGNvbG9yczsgYWxwaGEgY29tcG9zaXRlZCB0aHJvdWdoIGV4cGxpY2l0IGJhY2tncm91bmRzOyBubyBhbnRpLWFsaWFzaW5nIGFwcHJveGltYXRpb24ifSwgeyJsYWJlbCI6ICJTZWxlY3RlZCBwcm92aWRlciBpZGVudGl0eSIsICJ0ZXh0IjogImF1dG92ZXJzZS5kZW1vIiwgImNvbG9yIjogInJnYig4MywgMTAxLCAxMjgpIiwgImZvbnRTaXplIjogIjhweCIsICJmb250V2VpZ2h0IjogIjQwMCIsICJ0aHJlc2hvbGQiOiA0LjUsICJzY29wZSI6ICJTZWxlY3RlZCBub3JtYWwtc2l6ZSByZW5kZXJlZCB0ZXh0OyBubyBvdmVyYWxsIGFjY2Vzc2liaWxpdHkgY2VydGlmaWNhdGlvbiIsICJzdXBwb3J0ZWQiOiB0cnVlLCAibGF5ZXJzIjogWyJyZ2JhKDAsIDAsIDAsIDApIiwgInJnYmEoMCwgMCwgMCwgMCkiLCAicmdiYSgwLCAwLCAwLCAwKSIsICJyZ2IoMjQ5LCAyNTEsIDI1MykiXSwgImJhY2tncm91bmQiOiBbMC45NzY0NzA1ODgyMzUyOTQxLCAwLjk4NDMxMzcyNTQ5MDE5NiwgMC45OTIxNTY4NjI3NDUwOTgxLCAxXSwgImNvbXBvc2l0ZWRGb3JlZ3JvdW5kIjogWzAuMzI1NDkwMTk2MDc4NDMxNCwgMC4zOTYwNzg0MzEzNzI1NDksIDAuNTAxOTYwNzg0MzEzNzI1NSwgMV0sICJyYXRpbyI6IDUuNzE3NDA1ODE0Nzg4NCwgInBhc3NlZCI6IHRydWUsICJhc3N1bXB0aW9ucyI6ICJDU1Mgc1JHQiBjb2xvcnM7IGFscGhhIGNvbXBvc2l0ZWQgdGhyb3VnaCBleHBsaWNpdCBiYWNrZ3JvdW5kczsgbm8gYW50aS1hbGlhc2luZyBhcHByb3hpbWF0aW9uIn0sIHsibGFiZWwiOiAiUHJvdmlkZXIgYXZhaWxhYmlsaXR5IG9yIHNjb3BlIiwgInRleHQiOiAiUHJvdmlkZXIgdW5hdmFpbGFibGUiLCAiY29sb3IiOiAicmdiKDEyOCwgOTYsIDMxKSIsICJmb250U2l6ZSI6ICI4cHgiLCAiZm9udFdlaWdodCI6ICI2MDAiLCAidGhyZXNob2xkIjogNC41LCAic2NvcGUiOiAiU2VsZWN0ZWQgbm9ybWFsLXNpemUgcmVuZGVyZWQgdGV4dDsgbm8gb3ZlcmFsbCBhY2Nlc3NpYmlsaXR5IGNlcnRpZmljYXRpb24iLCAic3VwcG9ydGVkIjogdHJ1ZSwgImxheWVycyI6IFsicmdiKDI1NSwgMjQ3LCAyMzMpIl0sICJiYWNrZ3JvdW5kIjogWzEsIDAuOTY4NjI3NDUwOTgwMzkyMiwgMC45MTM3MjU0OTAxOTYwNzg0LCAxXSwgImNvbXBvc2l0ZWRGb3JlZ3JvdW5kIjogWzAuNTAxOTYwNzg0MzEzNzI1NSwgMC4zNzY0NzA1ODgyMzUyOTQxLCAwLjEyMTU2ODYyNzQ1MDk4MDM5LCAxXSwgInJhdGlvIjogNS40NjUwMTkxNzk2NTE2ODUsICJwYXNzZWQiOiB0cnVlLCAiYXNzdW1wdGlvbnMiOiAiQ1NTIHNSR0IgY29sb3JzOyBhbHBoYSBjb21wb3NpdGVkIHRocm91Z2ggZXhwbGljaXQgYmFja2dyb3VuZHM7IG5vIGFudGktYWxpYXNpbmcgYXBwcm94aW1hdGlvbiJ9XSwgImJyb3dzZXIiOiAiMTU2LjAuODA3OC40IiwgInNjb3BlIjogIkFjdHVhbCBhYnNlbnQgQXV0b3ZlcnNlIHByb3ZpZGVyIG9yIHJlYWwgY29yZSBkZXNjcmlwdG9yIHdpdGggaW5lcnQgc291cmNlLW9ubHkgYXV0aG9yaW5nOyBubyBwcm92aWRlci9tb2RlbC9ldmFsdWF0aW9uL2NhbXBhaWduIG9yIHBoeXNpY2FsIG9wZXJhdGlvbiJ9Cg=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "936f66bfb821d9757400-0eb3a6cd1da2bb682b0f",
+          "file": "autoverse-provider-scope.spec.ts",
+          "line": 23,
+          "column": 9
+        },
+        {
+          "title": "workspace scope uses known authoring descriptor at 1024",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 12326,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('.project-list-row[data-project-id=\"prj-60f260df-5689-4ca5-b956-2d205a39af10\"] .project-open')\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" locator('.project-list-row[data-project-id=\"prj-60f260df-5689-4ca5-b956-2d205a39af10\"] .project-open') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('.project-list-row[data-project-id=\"prj-60f260df-5689-4ca5-b956-2d205a39af10\"] .project-open')\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('.project-list-row[data-project-id=\"prj-60f260df-5689-4ca5-b956-2d205a39af10\"] .project-open')\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" locator('.project-list-row[data-project-id=\"prj-60f260df-5689-4ca5-b956-2d205a39af10\"] .project-open') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('.project-list-row[data-project-id=\"prj-60f260df-5689-4ca5-b956-2d205a39af10\"] .project-open')\u001b[22m\n\n    at activate ([WORKTREE]/tests/live/autoverse-provider-scope.spec.ts:8:25)\n    at [WORKTREE]/tests/live/autoverse-provider-scope.spec.ts:48:13",
+                    "location": {
+                      "file": "[WORKTREE]/tests/live/autoverse-provider-scope.spec.ts",
+                      "column": 25,
+                      "line": 8
+                    },
+                    "snippet": "   6 |\n   7 | async function activate(page: Page, control: Locator) {\n>  8 |   await expect(control).toBeVisible();\n     |                         ^\n   9 |   for (let i = 0; i < 600; i++) {\n  10 |     if (await control.evaluate(n => n === document.activeElement)) {\n  11 |       const focus = await control.evaluate(n => {"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "[WORKTREE]/tests/live/autoverse-provider-scope.spec.ts",
+                        "column": 25,
+                        "line": 8
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('.project-list-row[data-project-id=\"prj-60f260df-5689-4ca5-b956-2d205a39af10\"] .project-open')\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" locator('.project-list-row[data-project-id=\"prj-60f260df-5689-4ca5-b956-2d205a39af10\"] .project-open') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('.project-list-row[data-project-id=\"prj-60f260df-5689-4ca5-b956-2d205a39af10\"] .project-open')\u001b[22m\n\n\n   6 |\n   7 | async function activate(page: Page, control: Locator) {\n>  8 |   await expect(control).toBeVisible();\n     |                         ^\n   9 |   for (let i = 0; i < 600; i++) {\n  10 |     if (await control.evaluate(n => n === document.activeElement)) {\n  11 |       const focus = await control.evaluate(n => {\n    at activate ([WORKTREE]/tests/live/autoverse-provider-scope.spec.ts:8:25)\n    at [WORKTREE]/tests/live/autoverse-provider-scope.spec.ts:48:13"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T18:40:31.996Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "[WORKTREE]/.studio-local/t097-provider-scope-20261105/final/native/artifacts/autoverse-provider-scope-w-48d6e-uthoring-descriptor-at-1024/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "[WORKTREE]/.studio-local/t097-provider-scope-20261105/final/native/artifacts/autoverse-provider-scope-w-48d6e-uthoring-descriptor-at-1024/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "[WORKTREE]/tests/live/autoverse-provider-scope.spec.ts",
+                    "column": 25,
+                    "line": 8
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "936f66bfb821d9757400-ae780fdbee436676571e",
+          "file": "autoverse-provider-scope.spec.ts",
+          "line": 23,
+          "column": 9
+        },
+        {
+          "title": "workspace scope uses absent recorded provider at 1440",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1064,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T18:40:44.639Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "actual-selected-provider-scope",
+                      "contentType": "application/json",
+                      "body": "eyJtb2RlIjogImFic2VudCByZWNvcmRlZCBwcm92aWRlciIsICJ3aWR0aCI6IDE0NDAsICJleHBlY3RlZElkIjogImF1dG92ZXJzZS5kZW1vIiwgImV4cGVjdGVkU2NvcGUiOiAiUHJvdmlkZXIgdW5hdmFpbGFibGUiLCAicHJvamVjdElkIjogInByai1mNGQxOTgwNS0xNjBlLTQ5NGUtODRjYi0yMTlkNjMyNzBiYjMiLCAiYWN0dWFsU3RhdHVzIjogIlByb3ZpZGVyXG5hdXRvdmVyc2UuZGVtb1xuUHJvdmlkZXIgdW5hdmFpbGFibGUiLCAibWVhc3VyZW1lbnRzIjogW3sibGFiZWwiOiAiUHJvdmlkZXIgbGFiZWwiLCAidGV4dCI6ICJQcm92aWRlciBhdXRvdmVyc2UuZGVtbyBQcm92aWRlciB1bmF2YWlsYWJsZSIsICJjb2xvciI6ICJyZ2IoODMsIDEwMSwgMTI4KSIsICJmb250U2l6ZSI6ICI5cHgiLCAiZm9udFdlaWdodCI6ICI0MDAiLCAidGhyZXNob2xkIjogNC41LCAic2NvcGUiOiAiU2VsZWN0ZWQgbm9ybWFsLXNpemUgcmVuZGVyZWQgdGV4dDsgbm8gb3ZlcmFsbCBhY2Nlc3NpYmlsaXR5IGNlcnRpZmljYXRpb24iLCAic3VwcG9ydGVkIjogdHJ1ZSwgImxheWVycyI6IFsicmdiYSgwLCAwLCAwLCAwKSIsICJyZ2JhKDAsIDAsIDAsIDApIiwgInJnYigyNDksIDI1MSwgMjUzKSJdLCAiYmFja2dyb3VuZCI6IFswLjk3NjQ3MDU4ODIzNTI5NDEsIDAuOTg0MzEzNzI1NDkwMTk2LCAwLjk5MjE1Njg2Mjc0NTA5ODEsIDFdLCAiY29tcG9zaXRlZEZvcmVncm91bmQiOiBbMC4zMjU0OTAxOTYwNzg0MzE0LCAwLjM5NjA3ODQzMTM3MjU0OSwgMC41MDE5NjA3ODQzMTM3MjU1LCAxXSwgInJhdGlvIjogNS43MTc0MDU4MTQ3ODg0LCAicGFzc2VkIjogdHJ1ZSwgImFzc3VtcHRpb25zIjogIkNTUyBzUkdCIGNvbG9yczsgYWxwaGEgY29tcG9zaXRlZCB0aHJvdWdoIGV4cGxpY2l0IGJhY2tncm91bmRzOyBubyBhbnRpLWFsaWFzaW5nIGFwcHJveGltYXRpb24ifSwgeyJsYWJlbCI6ICJTZWxlY3RlZCBwcm92aWRlciBpZGVudGl0eSIsICJ0ZXh0IjogImF1dG92ZXJzZS5kZW1vIiwgImNvbG9yIjogInJnYig4MywgMTAxLCAxMjgpIiwgImZvbnRTaXplIjogIjhweCIsICJmb250V2VpZ2h0IjogIjQwMCIsICJ0aHJlc2hvbGQiOiA0LjUsICJzY29wZSI6ICJTZWxlY3RlZCBub3JtYWwtc2l6ZSByZW5kZXJlZCB0ZXh0OyBubyBvdmVyYWxsIGFjY2Vzc2liaWxpdHkgY2VydGlmaWNhdGlvbiIsICJzdXBwb3J0ZWQiOiB0cnVlLCAibGF5ZXJzIjogWyJyZ2JhKDAsIDAsIDAsIDApIiwgInJnYmEoMCwgMCwgMCwgMCkiLCAicmdiYSgwLCAwLCAwLCAwKSIsICJyZ2IoMjQ5LCAyNTEsIDI1MykiXSwgImJhY2tncm91bmQiOiBbMC45NzY0NzA1ODgyMzUyOTQxLCAwLjk4NDMxMzcyNTQ5MDE5NiwgMC45OTIxNTY4NjI3NDUwOTgxLCAxXSwgImNvbXBvc2l0ZWRGb3JlZ3JvdW5kIjogWzAuMzI1NDkwMTk2MDc4NDMxNCwgMC4zOTYwNzg0MzEzNzI1NDksIDAuNTAxOTYwNzg0MzEzNzI1NSwgMV0sICJyYXRpbyI6IDUuNzE3NDA1ODE0Nzg4NCwgInBhc3NlZCI6IHRydWUsICJhc3N1bXB0aW9ucyI6ICJDU1Mgc1JHQiBjb2xvcnM7IGFscGhhIGNvbXBvc2l0ZWQgdGhyb3VnaCBleHBsaWNpdCBiYWNrZ3JvdW5kczsgbm8gYW50aS1hbGlhc2luZyBhcHByb3hpbWF0aW9uIn0sIHsibGFiZWwiOiAiUHJvdmlkZXIgYXZhaWxhYmlsaXR5IG9yIHNjb3BlIiwgInRleHQiOiAiUHJvdmlkZXIgdW5hdmFpbGFibGUiLCAiY29sb3IiOiAicmdiKDEyOCwgOTYsIDMxKSIsICJmb250U2l6ZSI6ICI4cHgiLCAiZm9udFdlaWdodCI6ICI2MDAiLCAidGhyZXNob2xkIjogNC41LCAic2NvcGUiOiAiU2VsZWN0ZWQgbm9ybWFsLXNpemUgcmVuZGVyZWQgdGV4dDsgbm8gb3ZlcmFsbCBhY2Nlc3NpYmlsaXR5IGNlcnRpZmljYXRpb24iLCAic3VwcG9ydGVkIjogdHJ1ZSwgImxheWVycyI6IFsicmdiKDI1NSwgMjQ3LCAyMzMpIl0sICJiYWNrZ3JvdW5kIjogWzEsIDAuOTY4NjI3NDUwOTgwMzkyMiwgMC45MTM3MjU0OTAxOTYwNzg0LCAxXSwgImNvbXBvc2l0ZWRGb3JlZ3JvdW5kIjogWzAuNTAxOTYwNzg0MzEzNzI1NSwgMC4zNzY0NzA1ODgyMzUyOTQxLCAwLjEyMTU2ODYyNzQ1MDk4MDM5LCAxXSwgInJhdGlvIjogNS40NjUwMTkxNzk2NTE2ODUsICJwYXNzZWQiOiB0cnVlLCAiYXNzdW1wdGlvbnMiOiAiQ1NTIHNSR0IgY29sb3JzOyBhbHBoYSBjb21wb3NpdGVkIHRocm91Z2ggZXhwbGljaXQgYmFja2dyb3VuZHM7IG5vIGFudGktYWxpYXNpbmcgYXBwcm94aW1hdGlvbiJ9XSwgImJyb3dzZXIiOiAiMTU2LjAuODA3OC40IiwgInNjb3BlIjogIkFjdHVhbCBhYnNlbnQgQXV0b3ZlcnNlIHByb3ZpZGVyIG9yIHJlYWwgY29yZSBkZXNjcmlwdG9yIHdpdGggaW5lcnQgc291cmNlLW9ubHkgYXV0aG9yaW5nOyBubyBwcm92aWRlci9tb2RlbC9ldmFsdWF0aW9uL2NhbXBhaWduIG9yIHBoeXNpY2FsIG9wZXJhdGlvbiJ9Cg=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "936f66bfb821d9757400-eeaf6389e54290a1fa34",
+          "file": "autoverse-provider-scope.spec.ts",
+          "line": 23,
+          "column": 9
+        },
+        {
+          "title": "workspace scope uses known authoring descriptor at 1440",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 12209,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('.project-list-row[data-project-id=\"prj-9b00554d-a6b8-4abc-be86-53118ae80e66\"] .project-open')\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" locator('.project-list-row[data-project-id=\"prj-9b00554d-a6b8-4abc-be86-53118ae80e66\"] .project-open') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('.project-list-row[data-project-id=\"prj-9b00554d-a6b8-4abc-be86-53118ae80e66\"] .project-open')\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('.project-list-row[data-project-id=\"prj-9b00554d-a6b8-4abc-be86-53118ae80e66\"] .project-open')\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" locator('.project-list-row[data-project-id=\"prj-9b00554d-a6b8-4abc-be86-53118ae80e66\"] .project-open') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('.project-list-row[data-project-id=\"prj-9b00554d-a6b8-4abc-be86-53118ae80e66\"] .project-open')\u001b[22m\n\n    at activate ([WORKTREE]/tests/live/autoverse-provider-scope.spec.ts:8:25)\n    at [WORKTREE]/tests/live/autoverse-provider-scope.spec.ts:48:13",
+                    "location": {
+                      "file": "[WORKTREE]/tests/live/autoverse-provider-scope.spec.ts",
+                      "column": 25,
+                      "line": 8
+                    },
+                    "snippet": "   6 |\n   7 | async function activate(page: Page, control: Locator) {\n>  8 |   await expect(control).toBeVisible();\n     |                         ^\n   9 |   for (let i = 0; i < 600; i++) {\n  10 |     if (await control.evaluate(n => n === document.activeElement)) {\n  11 |       const focus = await control.evaluate(n => {"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "[WORKTREE]/tests/live/autoverse-provider-scope.spec.ts",
+                        "column": 25,
+                        "line": 8
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('.project-list-row[data-project-id=\"prj-9b00554d-a6b8-4abc-be86-53118ae80e66\"] .project-open')\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" locator('.project-list-row[data-project-id=\"prj-9b00554d-a6b8-4abc-be86-53118ae80e66\"] .project-open') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('.project-list-row[data-project-id=\"prj-9b00554d-a6b8-4abc-be86-53118ae80e66\"] .project-open')\u001b[22m\n\n\n   6 |\n   7 | async function activate(page: Page, control: Locator) {\n>  8 |   await expect(control).toBeVisible();\n     |                         ^\n   9 |   for (let i = 0; i < 600; i++) {\n  10 |     if (await control.evaluate(n => n === document.activeElement)) {\n  11 |       const focus = await control.evaluate(n => {\n    at activate ([WORKTREE]/tests/live/autoverse-provider-scope.spec.ts:8:25)\n    at [WORKTREE]/tests/live/autoverse-provider-scope.spec.ts:48:13"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T18:40:45.763Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "[WORKTREE]/.studio-local/t097-provider-scope-20261105/final/native/artifacts/autoverse-provider-scope-w-1cc02-uthoring-descriptor-at-1440/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "[WORKTREE]/.studio-local/t097-provider-scope-20261105/final/native/artifacts/autoverse-provider-scope-w-1cc02-uthoring-descriptor-at-1440/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "[WORKTREE]/tests/live/autoverse-provider-scope.spec.ts",
+                    "column": 25,
+                    "line": 8
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "936f66bfb821d9757400-ca9dac12d4417b4a88be",
+          "file": "autoverse-provider-scope.spec.ts",
+          "line": 23,
+          "column": 9
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-05T18:40:30.509Z",
+    "duration": 27526.006,
+    "expected": 2,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  }
+}

@@ -1,0 +1,402 @@
+{
+  "config": {
+    "argv": [
+      "[WORKSPACE_VOLUME]/.xverse-studio-cache/node-v24.22.1-linux-x64/bin/node",
+      "[WORKSPACE_VOLUME]/xverse-studio/node_modules/@playwright/test/cli.js",
+      "test",
+      "--config",
+      "tests/live/autoverse-provider-scope.config.ts"
+    ],
+    "configFile": "[WORKTREE]/tests/live/autoverse-provider-scope.config.ts",
+    "rootDir": "[WORKTREE]/tests/live",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": "[WORKTREE]/tests/live/recorded-browser-device-setup.ts",
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "[WORKTREE]/.studio-local/t097-provider-scope-20261105/original-ui-controls/native/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "[WORKTREE]/tests/live",
+        "testIgnore": [],
+        "testMatch": [
+          "autoverse-provider-scope.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "[WORKTREE]/.studio-local/t097-provider-scope-20261105/original-ui-controls/native/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "[WORKTREE]/tests/live",
+        "snapshotDir": "[WORKTREE]/tests/live",
+        "testIgnore": [],
+        "testMatch": "autoverse-provider-scope.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "baseURL": "[LOOPBACK_ORIGIN]",
+          "browserName": "chromium",
+          "actionTimeout": 15000,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "trace": "off",
+          "screenshot": "only-on-failure",
+          "video": "off",
+          "launchOptions": {
+            "args": [
+              "--disable-gpu",
+              "--disable-gpu-rasterization"
+            ]
+          }
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "[WORKTREE]/.studio-local/t097-provider-scope-20261105/original-ui-controls/native/browser.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "autoverse-provider-scope.spec.ts",
+      "file": "autoverse-provider-scope.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "workspace scope uses absent recorded provider at 1024",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 10960,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('status', { name: 'Selected provider scope', exact: true })\nExpected substring: \u001b[32m\"autoverse.demo\"\u001b[39m\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" getByRole('status', { name: 'Selected provider scope', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('status', { name: 'Selected provider scope', exact: true })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('status', { name: 'Selected provider scope', exact: true })\nExpected substring: \u001b[32m\"autoverse.demo\"\u001b[39m\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" getByRole('status', { name: 'Selected provider scope', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('status', { name: 'Selected provider scope', exact: true })\u001b[22m\n\n    at [WORKTREE]/tests/live/autoverse-provider-scope.spec.ts:53:28",
+                    "location": {
+                      "file": "[WORKTREE]/tests/live/autoverse-provider-scope.spec.ts",
+                      "column": 28,
+                      "line": 53
+                    },
+                    "snippet": "  51 |       await expect(page.locator(\".project-header h1\")).toHaveText(project.name);\n  52 |       const status = page.getByRole(\"status\", { name: \"Selected provider scope\", exact: true });\n> 53 |       await expect(status).toContainText(expectedId); await expect(status).toContainText(expectedScope);\n     |                            ^\n  54 |       await expect(status).not.toContainText(/ready to (run|execute)/i);\n  55 |       if (mode === \"absent recorded provider\") await expect(status).not.toContainText(/owned reference/i);\n  56 |       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "[WORKTREE]/tests/live/autoverse-provider-scope.spec.ts",
+                        "column": 28,
+                        "line": 53
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('status', { name: 'Selected provider scope', exact: true })\nExpected substring: \u001b[32m\"autoverse.demo\"\u001b[39m\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" getByRole('status', { name: 'Selected provider scope', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('status', { name: 'Selected provider scope', exact: true })\u001b[22m\n\n\n  51 |       await expect(page.locator(\".project-header h1\")).toHaveText(project.name);\n  52 |       const status = page.getByRole(\"status\", { name: \"Selected provider scope\", exact: true });\n> 53 |       await expect(status).toContainText(expectedId); await expect(status).toContainText(expectedScope);\n     |                            ^\n  54 |       await expect(status).not.toContainText(/ready to (run|execute)/i);\n  55 |       if (mode === \"absent recorded provider\") await expect(status).not.toContainText(/owned reference/i);\n  56 |       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);\n    at [WORKTREE]/tests/live/autoverse-provider-scope.spec.ts:53:28"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T18:41:46.940Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "[WORKTREE]/.studio-local/t097-provider-scope-20261105/original-ui-controls/native/artifacts/autoverse-provider-scope-w-f801b-t-recorded-provider-at-1024/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "[WORKTREE]/.studio-local/t097-provider-scope-20261105/original-ui-controls/native/artifacts/autoverse-provider-scope-w-f801b-t-recorded-provider-at-1024/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "[WORKTREE]/tests/live/autoverse-provider-scope.spec.ts",
+                    "column": 28,
+                    "line": 53
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "936f66bfb821d9757400-0eb3a6cd1da2bb682b0f",
+          "file": "autoverse-provider-scope.spec.ts",
+          "line": 23,
+          "column": 9
+        },
+        {
+          "title": "workspace scope uses known authoring descriptor at 1024",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 12340,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('status', { name: 'Selected provider scope', exact: true })\nExpected substring: \u001b[32m\"studio.reference\"\u001b[39m\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" getByRole('status', { name: 'Selected provider scope', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('status', { name: 'Selected provider scope', exact: true })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('status', { name: 'Selected provider scope', exact: true })\nExpected substring: \u001b[32m\"studio.reference\"\u001b[39m\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" getByRole('status', { name: 'Selected provider scope', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('status', { name: 'Selected provider scope', exact: true })\u001b[22m\n\n    at [WORKTREE]/tests/live/autoverse-provider-scope.spec.ts:53:28",
+                    "location": {
+                      "file": "[WORKTREE]/tests/live/autoverse-provider-scope.spec.ts",
+                      "column": 28,
+                      "line": 53
+                    },
+                    "snippet": "  51 |       await expect(page.locator(\".project-header h1\")).toHaveText(project.name);\n  52 |       const status = page.getByRole(\"status\", { name: \"Selected provider scope\", exact: true });\n> 53 |       await expect(status).toContainText(expectedId); await expect(status).toContainText(expectedScope);\n     |                            ^\n  54 |       await expect(status).not.toContainText(/ready to (run|execute)/i);\n  55 |       if (mode === \"absent recorded provider\") await expect(status).not.toContainText(/owned reference/i);\n  56 |       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "[WORKTREE]/tests/live/autoverse-provider-scope.spec.ts",
+                        "column": 28,
+                        "line": 53
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('status', { name: 'Selected provider scope', exact: true })\nExpected substring: \u001b[32m\"studio.reference\"\u001b[39m\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" getByRole('status', { name: 'Selected provider scope', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('status', { name: 'Selected provider scope', exact: true })\u001b[22m\n\n\n  51 |       await expect(page.locator(\".project-header h1\")).toHaveText(project.name);\n  52 |       const status = page.getByRole(\"status\", { name: \"Selected provider scope\", exact: true });\n> 53 |       await expect(status).toContainText(expectedId); await expect(status).toContainText(expectedScope);\n     |                            ^\n  54 |       await expect(status).not.toContainText(/ready to (run|execute)/i);\n  55 |       if (mode === \"absent recorded provider\") await expect(status).not.toContainText(/owned reference/i);\n  56 |       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);\n    at [WORKTREE]/tests/live/autoverse-provider-scope.spec.ts:53:28"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T18:41:58.286Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "[WORKTREE]/.studio-local/t097-provider-scope-20261105/original-ui-controls/native/artifacts/autoverse-provider-scope-w-48d6e-uthoring-descriptor-at-1024/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "[WORKTREE]/.studio-local/t097-provider-scope-20261105/original-ui-controls/native/artifacts/autoverse-provider-scope-w-48d6e-uthoring-descriptor-at-1024/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "[WORKTREE]/tests/live/autoverse-provider-scope.spec.ts",
+                    "column": 28,
+                    "line": 53
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "936f66bfb821d9757400-ae780fdbee436676571e",
+          "file": "autoverse-provider-scope.spec.ts",
+          "line": 23,
+          "column": 9
+        },
+        {
+          "title": "workspace scope uses absent recorded provider at 1440",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 11257,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('status', { name: 'Selected provider scope', exact: true })\nExpected substring: \u001b[32m\"autoverse.demo\"\u001b[39m\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" getByRole('status', { name: 'Selected provider scope', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('status', { name: 'Selected provider scope', exact: true })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('status', { name: 'Selected provider scope', exact: true })\nExpected substring: \u001b[32m\"autoverse.demo\"\u001b[39m\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" getByRole('status', { name: 'Selected provider scope', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('status', { name: 'Selected provider scope', exact: true })\u001b[22m\n\n    at [WORKTREE]/tests/live/autoverse-provider-scope.spec.ts:53:28",
+                    "location": {
+                      "file": "[WORKTREE]/tests/live/autoverse-provider-scope.spec.ts",
+                      "column": 28,
+                      "line": 53
+                    },
+                    "snippet": "  51 |       await expect(page.locator(\".project-header h1\")).toHaveText(project.name);\n  52 |       const status = page.getByRole(\"status\", { name: \"Selected provider scope\", exact: true });\n> 53 |       await expect(status).toContainText(expectedId); await expect(status).toContainText(expectedScope);\n     |                            ^\n  54 |       await expect(status).not.toContainText(/ready to (run|execute)/i);\n  55 |       if (mode === \"absent recorded provider\") await expect(status).not.toContainText(/owned reference/i);\n  56 |       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "[WORKTREE]/tests/live/autoverse-provider-scope.spec.ts",
+                        "column": 28,
+                        "line": 53
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('status', { name: 'Selected provider scope', exact: true })\nExpected substring: \u001b[32m\"autoverse.demo\"\u001b[39m\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" getByRole('status', { name: 'Selected provider scope', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('status', { name: 'Selected provider scope', exact: true })\u001b[22m\n\n\n  51 |       await expect(page.locator(\".project-header h1\")).toHaveText(project.name);\n  52 |       const status = page.getByRole(\"status\", { name: \"Selected provider scope\", exact: true });\n> 53 |       await expect(status).toContainText(expectedId); await expect(status).toContainText(expectedScope);\n     |                            ^\n  54 |       await expect(status).not.toContainText(/ready to (run|execute)/i);\n  55 |       if (mode === \"absent recorded provider\") await expect(status).not.toContainText(/owned reference/i);\n  56 |       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);\n    at [WORKTREE]/tests/live/autoverse-provider-scope.spec.ts:53:28"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T18:42:10.990Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "[WORKTREE]/.studio-local/t097-provider-scope-20261105/original-ui-controls/native/artifacts/autoverse-provider-scope-w-3d8e0-t-recorded-provider-at-1440/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "[WORKTREE]/.studio-local/t097-provider-scope-20261105/original-ui-controls/native/artifacts/autoverse-provider-scope-w-3d8e0-t-recorded-provider-at-1440/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "[WORKTREE]/tests/live/autoverse-provider-scope.spec.ts",
+                    "column": 28,
+                    "line": 53
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "936f66bfb821d9757400-eeaf6389e54290a1fa34",
+          "file": "autoverse-provider-scope.spec.ts",
+          "line": 23,
+          "column": 9
+        },
+        {
+          "title": "workspace scope uses known authoring descriptor at 1440",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 12591,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('status', { name: 'Selected provider scope', exact: true })\nExpected substring: \u001b[32m\"studio.reference\"\u001b[39m\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" getByRole('status', { name: 'Selected provider scope', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('status', { name: 'Selected provider scope', exact: true })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('status', { name: 'Selected provider scope', exact: true })\nExpected substring: \u001b[32m\"studio.reference\"\u001b[39m\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" getByRole('status', { name: 'Selected provider scope', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('status', { name: 'Selected provider scope', exact: true })\u001b[22m\n\n    at [WORKTREE]/tests/live/autoverse-provider-scope.spec.ts:53:28",
+                    "location": {
+                      "file": "[WORKTREE]/tests/live/autoverse-provider-scope.spec.ts",
+                      "column": 28,
+                      "line": 53
+                    },
+                    "snippet": "  51 |       await expect(page.locator(\".project-header h1\")).toHaveText(project.name);\n  52 |       const status = page.getByRole(\"status\", { name: \"Selected provider scope\", exact: true });\n> 53 |       await expect(status).toContainText(expectedId); await expect(status).toContainText(expectedScope);\n     |                            ^\n  54 |       await expect(status).not.toContainText(/ready to (run|execute)/i);\n  55 |       if (mode === \"absent recorded provider\") await expect(status).not.toContainText(/owned reference/i);\n  56 |       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "[WORKTREE]/tests/live/autoverse-provider-scope.spec.ts",
+                        "column": 28,
+                        "line": 53
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('status', { name: 'Selected provider scope', exact: true })\nExpected substring: \u001b[32m\"studio.reference\"\u001b[39m\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" getByRole('status', { name: 'Selected provider scope', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('status', { name: 'Selected provider scope', exact: true })\u001b[22m\n\n\n  51 |       await expect(page.locator(\".project-header h1\")).toHaveText(project.name);\n  52 |       const status = page.getByRole(\"status\", { name: \"Selected provider scope\", exact: true });\n> 53 |       await expect(status).toContainText(expectedId); await expect(status).toContainText(expectedScope);\n     |                            ^\n  54 |       await expect(status).not.toContainText(/ready to (run|execute)/i);\n  55 |       if (mode === \"absent recorded provider\") await expect(status).not.toContainText(/owned reference/i);\n  56 |       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);\n    at [WORKTREE]/tests/live/autoverse-provider-scope.spec.ts:53:28"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T18:42:22.621Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "[WORKTREE]/.studio-local/t097-provider-scope-20261105/original-ui-controls/native/artifacts/autoverse-provider-scope-w-1cc02-uthoring-descriptor-at-1440/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "[WORKTREE]/.studio-local/t097-provider-scope-20261105/original-ui-controls/native/artifacts/autoverse-provider-scope-w-1cc02-uthoring-descriptor-at-1440/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "[WORKTREE]/tests/live/autoverse-provider-scope.spec.ts",
+                    "column": 28,
+                    "line": 53
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "936f66bfb821d9757400-ca9dac12d4417b4a88be",
+          "file": "autoverse-provider-scope.spec.ts",
+          "line": 23,
+          "column": 9
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-05T18:41:46.609Z",
+    "duration": 48713.653,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 4,
+    "flaky": 0
+  }
+}

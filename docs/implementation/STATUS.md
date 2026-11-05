@@ -1,3 +1,23 @@
+# Provider scope is truthful; full original goal active — 2026-11-05
+
+**72 completed /18 in progress /10 blocked; zero accepted milestones.**
+Source06d8931 shows the selected provider identity and declared descriptor
+scope, or explicit unavailability, instead of hardcoded reference scope. Historical
+run metadata and backend admission are unchanged. Four actual selected-scope
+journeys and14 unchanged binding journeys pass at both viewports, on580 identical
+Git-bound inputs and6 reproduced UI assets;12 selected contrast measurements pass.
+Original UI counterexamples and fixture corrections remain distinct. All13/23
+captured descendant handles exit, roots release; originals/copycanonical/ledgers
+are preserved. No model/provider/device/evaluation/campaign starts. Backend32 is
+inherited through unchanged backend/test inputs; no fresh backend rerun. Earlier
+concurrent12/2 binding timing failures remain retained and unresolved.
+Continue fresh genuine registered-mapping evaluation/campaign keyboard and full
+remaining browser/AT/required-host acceptance. Goal ACTIVE without automatic
+checkpoint pauses; Windows independently FROZEN. See
+[evidence/review/coverage](../../evidence/studio/M4-accessibility/provider-scope-20261105/README.md).
+
+## Historical checkpoints
+
 # Offline binding authoring repaired; full goal active — 2026-11-05
 
 **72 completed /18 in progress /10 blocked; zero accepted milestones.**

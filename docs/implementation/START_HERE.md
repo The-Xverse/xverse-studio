@@ -1,3 +1,12 @@
+Latest active checkpoint — 2026-11-05: source06d8931 corrects selected
+provider scope (4 native cases +14 unchanged binding journeys/580 inputs/6 rebuilt
+and reproduced UI files). Scope is unavailable for the absent Autoverse descriptor;
+no fake admission. Backend32 inherited through unchanged backend/test bytes.
+Counts72/18/10,zero milestones. Earlier concurrent binding timing failures remain
+open. Continue full fresh mapping/evaluation/campaign and original acceptance work.
+Goal ACTIVE; checkpoints must not trigger pauses. Windows independently frozen.
+See STATUS.md and [scope evidence](../../evidence/studio/M4-accessibility/provider-scope-20261105/README.md).
+
 Latest active checkpoint — 2026-11-05: source5ebd81c repairs offline binding
 authoring with absent providers;32 affected backend/14 native keyboard journeys
 pass on578 Git-bound inputs and6 unchanged previously reproduced UI assets. All
