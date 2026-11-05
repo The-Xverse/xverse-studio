@@ -1,0 +1,202 @@
+{
+  "config": {
+    "argv": [
+      "[WORKSPACE_VOLUME]/.xverse-studio-cache/node-v24.22.1-linux-x64/bin/node",
+      "[WORKSPACE_VOLUME]/xverse-studio/node_modules/@playwright/test/cli.js",
+      "test",
+      "--config",
+      "tests/live/autoverse-campaign-create-keyboard.config.ts",
+      "--grep",
+      "live fresh campaign.*1024"
+    ],
+    "configFile": "[WORKTREE]/tests/live/autoverse-campaign-create-keyboard.config.ts",
+    "rootDir": "[WORKTREE]/tests/live",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": "[WORKTREE]/tests/live/recorded-browser-device-setup.ts",
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "[WORKTREE]/.studio-local/t097-campaign-create-20261105/campaign-live-red1024/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "[WORKTREE]/tests/live",
+        "testIgnore": [],
+        "testMatch": [
+          "autoverse-campaign-create-keyboard.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "[WORKTREE]/.studio-local/t097-campaign-create-20261105/campaign-live-red1024/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "[WORKTREE]/tests/live",
+        "snapshotDir": "[WORKTREE]/tests/live",
+        "testIgnore": [],
+        "testMatch": "autoverse-campaign-create-keyboard.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "baseURL": "[LOOPBACK_ORIGIN]",
+          "browserName": "chromium",
+          "actionTimeout": 15000,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "trace": "off",
+          "screenshot": "only-on-failure",
+          "video": "off",
+          "launchOptions": {
+            "args": [
+              "--disable-gpu",
+              "--disable-gpu-rasterization"
+            ]
+          }
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "[WORKTREE]/.studio-local/t097-campaign-create-20261105/campaign-live-red1024/browser.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "autoverse-campaign-create-keyboard.spec.ts",
+      "file": "autoverse-campaign-create-keyboard.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "live fresh campaign native creation retry child inputs and cancellation at 1024",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 720000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 93090,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('region', { name: 'Selected campaign', exact: true }).getByRole('heading', { name: 'Selected campaign', exact: true })\nExpected: focused\nReceived: inactive\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeFocused\" getByRole('region', { name: 'Selected campaign', exact: true }).getByRole('heading', { name: 'Selected campaign', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('region', { name: 'Selected campaign', exact: true }).getByRole('heading', { name: 'Selected campaign', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <h3 tabindex=\"-1\">Selected campaign</h3>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('region', { name: 'Selected campaign', exact: true }).getByRole('heading', { name: 'Selected campaign', exact: true })\nExpected: focused\nReceived: inactive\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeFocused\" getByRole('region', { name: 'Selected campaign', exact: true }).getByRole('heading', { name: 'Selected campaign', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('region', { name: 'Selected campaign', exact: true }).getByRole('heading', { name: 'Selected campaign', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <h3 tabindex=\"-1\">Selected campaign</h3>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n\n    at [WORKTREE]/tests/live/autoverse-campaign-create-keyboard.spec.ts:151:41",
+                    "location": {
+                      "file": "[WORKTREE]/tests/live/autoverse-campaign-create-keyboard.spec.ts",
+                      "column": 41,
+                      "line": 151
+                    },
+                    "snippet": "  149 |     const cancelResponse = page.waitForResponse(r => new URL(r.url()).pathname === `/api/v1/campaigns/${accepted.campaignId}/cancel` && r.request().method() === \"POST\");\n  150 |     await activate(page, stop); const cancel = await cancelResponse; expect(cancel.status()).toBe(202); const cancelReceipt = await cancel.json(); expect(cancelReceipt.operationStatus).toBe(\"completed\");\n> 151 |     await expect(selectedHeading(page)).toBeFocused();\n      |                                         ^\n  152 |     await expect.poll(async () => { campaign = await get(page, `/campaigns/${accepted.campaignId}`); return campaign.status; }, { timeout: 120000, intervals: [500] }).toBe(\"cancelled\");\n  153 |     expect(campaign.children.map((c: any) => c.state)).toEqual([\"stopped\", \"cancelled\"]);\n  154 |     run = await get(page, `/runs/${run.runId}`); expect(run.state).toBe(\"stopped\"); expect(run.cleanup).toBe(\"complete\");"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "[WORKTREE]/tests/live/autoverse-campaign-create-keyboard.spec.ts",
+                        "column": 41,
+                        "line": 151
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('region', { name: 'Selected campaign', exact: true }).getByRole('heading', { name: 'Selected campaign', exact: true })\nExpected: focused\nReceived: inactive\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeFocused\" getByRole('region', { name: 'Selected campaign', exact: true }).getByRole('heading', { name: 'Selected campaign', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('region', { name: 'Selected campaign', exact: true }).getByRole('heading', { name: 'Selected campaign', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <h3 tabindex=\"-1\">Selected campaign</h3>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n\n\n  149 |     const cancelResponse = page.waitForResponse(r => new URL(r.url()).pathname === `/api/v1/campaigns/${accepted.campaignId}/cancel` && r.request().method() === \"POST\");\n  150 |     await activate(page, stop); const cancel = await cancelResponse; expect(cancel.status()).toBe(202); const cancelReceipt = await cancel.json(); expect(cancelReceipt.operationStatus).toBe(\"completed\");\n> 151 |     await expect(selectedHeading(page)).toBeFocused();\n      |                                         ^\n  152 |     await expect.poll(async () => { campaign = await get(page, `/campaigns/${accepted.campaignId}`); return campaign.status; }, { timeout: 120000, intervals: [500] }).toBe(\"cancelled\");\n  153 |     expect(campaign.children.map((c: any) => c.state)).toEqual([\"stopped\", \"cancelled\"]);\n  154 |     run = await get(page, `/runs/${run.runId}`); expect(run.state).toBe(\"stopped\"); expect(run.cleanup).toBe(\"complete\");\n    at [WORKTREE]/tests/live/autoverse-campaign-create-keyboard.spec.ts:151:41"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T21:49:52.499Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "campaign-diagnostic-contrast",
+                      "contentType": "application/json",
+                      "body": "eyJsYWJlbCI6ICJDYW1wYWlnbiBkaWFnbm9zdGljIiwgInRleHQiOiAiQ0FNUEFJR05fQ1JFQVRFX0ZJWFRVUkU6IExhYmVsbGVkIHJlZnVzYWwgYmVmb3JlIG9yIGFmdGVyIGFjdHVhbCBhY2NlcHRhbmNlIFN1Ym1pc3Npb24gbWF5IGhhdmUgYmVlbiBhY2NlcHRlZDsgcmVmcmVzaCBoaXN0b3J5L3N0YXRlIG9yIHJldHJ5IHRoZSB1bmNoYW5nZWQgcmVxdWVzdCB3aXRoIHRoZSBzYW1lIGlkIiwgImNvbG9yIjogInJnYigxMzksIDQ2LCA1OCkiLCAiZm9udFNpemUiOiAiMTNweCIsICJmb250V2VpZ2h0IjogIjQwMCIsICJ0aHJlc2hvbGQiOiA0LjUsICJzY29wZSI6ICJTZWxlY3RlZCBub3JtYWwtc2l6ZSByZW5kZXJlZCB0ZXh0OyBubyBvdmVyYWxsIGFjY2Vzc2liaWxpdHkgY2VydGlmaWNhdGlvbiIsICJzdXBwb3J0ZWQiOiB0cnVlLCAibGF5ZXJzIjogWyJyZ2JhKDAsIDAsIDAsIDApIiwgInJnYmEoMCwgMCwgMCwgMCkiLCAicmdiYSgwLCAwLCAwLCAwKSIsICJyZ2IoMjQ1LCAyNDcsIDI1MSkiXSwgImJhY2tncm91bmQiOiBbMC45NjA3ODQzMTM3MjU0OTAyLCAwLjk2ODYyNzQ1MDk4MDM5MjIsIDAuOTg0MzEzNzI1NDkwMTk2LCAxXSwgImNvbXBvc2l0ZWRGb3JlZ3JvdW5kIjogWzAuNTQ1MDk4MDM5MjE1Njg2MiwgMC4xODAzOTIxNTY4NjI3NDUxLCAwLjIyNzQ1MDk4MDM5MjE1Njg2LCAxXSwgInJhdGlvIjogNy42NzkyOTIwOTM5NDM3NiwgInBhc3NlZCI6IHRydWUsICJhc3N1bXB0aW9ucyI6ICJDU1Mgc1JHQiBjb2xvcnM7IGFscGhhIGNvbXBvc2l0ZWQgdGhyb3VnaCBleHBsaWNpdCBiYWNrZ3JvdW5kczsgbm8gYW50aS1hbGlhc2luZyBhcHByb3hpbWF0aW9uIn0K"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "[WORKTREE]/.studio-local/t097-campaign-create-20261105/campaign-live-red1024/artifacts/autoverse-campaign-create--6daa9-ts-and-cancellation-at-1024/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "[WORKTREE]/.studio-local/t097-campaign-create-20261105/campaign-live-red1024/artifacts/autoverse-campaign-create--6daa9-ts-and-cancellation-at-1024/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "[WORKTREE]/tests/live/autoverse-campaign-create-keyboard.spec.ts",
+                    "column": 41,
+                    "line": 151
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "a40b2a2522d66f50b8fc-ec1ec7248d470f71a1ab",
+          "file": "autoverse-campaign-create-keyboard.spec.ts",
+          "line": 108,
+          "column": 7
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-05T21:49:52.136Z",
+    "duration": 93556.735,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

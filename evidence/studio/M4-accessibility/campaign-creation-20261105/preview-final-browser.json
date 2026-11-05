@@ -1,0 +1,499 @@
+{
+  "config": {
+    "argv": [
+      "[WORKSPACE_VOLUME]/.xverse-studio-cache/node-v24.22.1-linux-x64/bin/node",
+      "[WORKSPACE_VOLUME]/xverse-studio/node_modules/@playwright/test/cli.js",
+      "test",
+      "--config",
+      "tests/live/autoverse-campaign-create-keyboard.config.ts",
+      "--grep",
+      "fresh campaign preview",
+      "--grep-invert",
+      "live fresh campaign"
+    ],
+    "configFile": "[WORKTREE]/tests/live/autoverse-campaign-create-keyboard.config.ts",
+    "rootDir": "[WORKTREE]/tests/live",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": "[WORKTREE]/tests/live/recorded-browser-device-setup.ts",
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "[WORKTREE]/.studio-local/t097-campaign-create-20261105/campaign-preview-final/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "[WORKTREE]/tests/live",
+        "testIgnore": [],
+        "testMatch": [
+          "autoverse-campaign-create-keyboard.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "[WORKTREE]/.studio-local/t097-campaign-create-20261105/campaign-preview-final/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "[WORKTREE]/tests/live",
+        "snapshotDir": "[WORKTREE]/tests/live",
+        "testIgnore": [],
+        "testMatch": "autoverse-campaign-create-keyboard.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "baseURL": "[LOOPBACK_ORIGIN]",
+          "browserName": "chromium",
+          "actionTimeout": 15000,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "trace": "off",
+          "screenshot": "only-on-failure",
+          "video": "off",
+          "launchOptions": {
+            "args": [
+              "--disable-gpu",
+              "--disable-gpu-rasterization"
+            ]
+          }
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "[WORKTREE]/.studio-local/t097-campaign-create-20261105/campaign-preview-final/browser.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "autoverse-campaign-create-keyboard.spec.ts",
+      "file": "autoverse-campaign-create-keyboard.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "fresh campaign preview bounds and explicit transport retry at 1024",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 8282,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T21:58:26.723Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "campaign-diagnostic-contrast",
+                      "contentType": "application/json",
+                      "body": "eyJsYWJlbCI6ICJDYW1wYWlnbiBkaWFnbm9zdGljIiwgInRleHQiOiAiQ0FNUEFJR05fQlVER0VUOiBUaGUgb3BlcmF0aW9uIHdhcyByZWZ1c2VkIGJ5IGl0cyB2ZXJzaW9uZWQgYWRtaXNzaW9uLCBvd25lcnNoaXAsIHJldmlzaW9uIG9yIHJlc291cmNlIGNvbnRyYWN0LiBQcmV2aW91cyBkaXNwbGF5ZWQgb2JzZXJ2YXRpb25zIGhhdmUgbm90IGJlZW4gcmVmcmVzaGVkLiIsICJjb2xvciI6ICJyZ2IoMTM5LCA0NiwgNTgpIiwgImZvbnRTaXplIjogIjEzcHgiLCAiZm9udFdlaWdodCI6ICI0MDAiLCAidGhyZXNob2xkIjogNC41LCAic2NvcGUiOiAiU2VsZWN0ZWQgbm9ybWFsLXNpemUgcmVuZGVyZWQgdGV4dDsgbm8gb3ZlcmFsbCBhY2Nlc3NpYmlsaXR5IGNlcnRpZmljYXRpb24iLCAic3VwcG9ydGVkIjogdHJ1ZSwgImxheWVycyI6IFsicmdiYSgwLCAwLCAwLCAwKSIsICJyZ2JhKDAsIDAsIDAsIDApIiwgInJnYmEoMCwgMCwgMCwgMCkiLCAicmdiKDI0NSwgMjQ3LCAyNTEpIl0sICJiYWNrZ3JvdW5kIjogWzAuOTYwNzg0MzEzNzI1NDkwMiwgMC45Njg2Mjc0NTA5ODAzOTIyLCAwLjk4NDMxMzcyNTQ5MDE5NiwgMV0sICJjb21wb3NpdGVkRm9yZWdyb3VuZCI6IFswLjU0NTA5ODAzOTIxNTY4NjIsIDAuMTgwMzkyMTU2ODYyNzQ1MSwgMC4yMjc0NTA5ODAzOTIxNTY4NiwgMV0sICJyYXRpbyI6IDcuNjc5MjkyMDkzOTQzNzYsICJwYXNzZWQiOiB0cnVlLCAiYXNzdW1wdGlvbnMiOiAiQ1NTIHNSR0IgY29sb3JzOyBhbHBoYSBjb21wb3NpdGVkIHRocm91Z2ggZXhwbGljaXQgYmFja2dyb3VuZHM7IG5vIGFudGktYWxpYXNpbmcgYXBwcm94aW1hdGlvbiJ9Cg=="
+                    },
+                    {
+                      "name": "campaign-diagnostic-contrast",
+                      "contentType": "application/json",
+                      "body": "eyJsYWJlbCI6ICJDYW1wYWlnbiBkaWFnbm9zdGljIiwgInRleHQiOiAiQ0FNUEFJR05fUFJFVklFV19GSVhUVVJFOiBMYWJlbGxlZCB0cmFuc3BvcnQgcmVmdXNhbCBQcmV2aW91cyBkaXNwbGF5ZWQgb2JzZXJ2YXRpb25zIGhhdmUgbm90IGJlZW4gcmVmcmVzaGVkLiIsICJjb2xvciI6ICJyZ2IoMTM5LCA0NiwgNTgpIiwgImZvbnRTaXplIjogIjEzcHgiLCAiZm9udFdlaWdodCI6ICI0MDAiLCAidGhyZXNob2xkIjogNC41LCAic2NvcGUiOiAiU2VsZWN0ZWQgbm9ybWFsLXNpemUgcmVuZGVyZWQgdGV4dDsgbm8gb3ZlcmFsbCBhY2Nlc3NpYmlsaXR5IGNlcnRpZmljYXRpb24iLCAic3VwcG9ydGVkIjogdHJ1ZSwgImxheWVycyI6IFsicmdiYSgwLCAwLCAwLCAwKSIsICJyZ2JhKDAsIDAsIDAsIDApIiwgInJnYmEoMCwgMCwgMCwgMCkiLCAicmdiKDI0NSwgMjQ3LCAyNTEpIl0sICJiYWNrZ3JvdW5kIjogWzAuOTYwNzg0MzEzNzI1NDkwMiwgMC45Njg2Mjc0NTA5ODAzOTIyLCAwLjk4NDMxMzcyNTQ5MDE5NiwgMV0sICJjb21wb3NpdGVkRm9yZWdyb3VuZCI6IFswLjU0NTA5ODAzOTIxNTY4NjIsIDAuMTgwMzkyMTU2ODYyNzQ1MSwgMC4yMjc0NTA5ODAzOTIxNTY4NiwgMV0sICJyYXRpbyI6IDcuNjc5MjkyMDkzOTQzNzYsICJwYXNzZWQiOiB0cnVlLCAiYXNzdW1wdGlvbnMiOiAiQ1NTIHNSR0IgY29sb3JzOyBhbHBoYSBjb21wb3NpdGVkIHRocm91Z2ggZXhwbGljaXQgYmFja2dyb3VuZHM7IG5vIGFudGktYWxpYXNpbmcgYXBwcm94aW1hdGlvbiJ9Cg=="
+                    },
+                    {
+                      "name": "fresh-campaign-keyboard",
+                      "contentType": "application/json",
+                      "body": "eyJ3aWR0aCI6IDEwMjQsICJyZWFsQnVkZ2V0UmVmdXNhbCI6ICJDQU1QQUlHTl9CVURHRVQiLCAiY2FyZGluYWxpdHkiOiAyLCAiY3JlYXRlZENhbXBhaWducyI6IDAsICJmaXh0dXJlIjogIk9uZSBsYWJlbGxlZDUwMzsgYWN0dWFsIGJhY2tlbmQgYnVkZ2V0IHJlZnVzYWwgYW5kIHVuY2hhbmdlZCByZXRyeSIsICJicm93c2VyIjogIjE1Ni4wLjgwNzguNCIsICJzY29wZSI6ICJBY3R1YWwgYWRtaXR0ZWQgQXV0b3ZlcnNlIGNhbXBhaWduIFVJLiBPbmx5IGV4cGxpY2l0bHkgbmFtZWQgbGl2ZSBjYXNlIHN0YXJ0cyBhIGNvbXBsZXRlIHJlbmRlcmVyL3NlbnNvcnMvQW5kcm9pZCBjaGlsZDsgbm8gcGh5c2ljYWwgZWZmZWN0cyBvciBBVCBjZXJ0aWZpY2F0aW9uLiJ9Cg=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a40b2a2522d66f50b8fc-ede581a23984265f09cb",
+          "file": "autoverse-campaign-create-keyboard.spec.ts",
+          "line": 71,
+          "column": 7
+        },
+        {
+          "title": "held fresh campaign preview preserves newer Home at 1024",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 7024,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T21:58:35.109Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "fresh-campaign-keyboard",
+                      "contentType": "application/json",
+                      "body": "eyJ3aWR0aCI6IDEwMjQsICJpbnRlbnQiOiAiSG9tZSIsICJjcmVhdGVkQ2FtcGFpZ25zIjogMCwgImZpeHR1cmUiOiAiQWN0dWFsIHNpZGUtZWZmZWN0LWZyZWUgcHJldmlldyByZXNwb25zZSBoZWxkOyBpZGVudGl0eSBhbmQgcGF5bG9hZCB1bmNoYW5nZWQiLCAiYnJvd3NlciI6ICIxNTYuMC44MDc4LjQiLCAic2NvcGUiOiAiQWN0dWFsIGFkbWl0dGVkIEF1dG92ZXJzZSBjYW1wYWlnbiBVSS4gT25seSBleHBsaWNpdGx5IG5hbWVkIGxpdmUgY2FzZSBzdGFydHMgYSBjb21wbGV0ZSByZW5kZXJlci9zZW5zb3JzL0FuZHJvaWQgY2hpbGQ7IG5vIHBoeXNpY2FsIGVmZmVjdHMgb3IgQVQgY2VydGlmaWNhdGlvbi4ifQo="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a40b2a2522d66f50b8fc-d9be9450f21f6a5d76fc",
+          "file": "autoverse-campaign-create-keyboard.spec.ts",
+          "line": 89,
+          "column": 9
+        },
+        {
+          "title": "held fresh campaign preview preserves newer focus at 1024",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 7150,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T21:58:42.145Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "fresh-campaign-keyboard",
+                      "contentType": "application/json",
+                      "body": "eyJ3aWR0aCI6IDEwMjQsICJpbnRlbnQiOiAiZm9jdXMiLCAiY3JlYXRlZENhbXBhaWducyI6IDAsICJmaXh0dXJlIjogIkFjdHVhbCBzaWRlLWVmZmVjdC1mcmVlIHByZXZpZXcgcmVzcG9uc2UgaGVsZDsgaWRlbnRpdHkgYW5kIHBheWxvYWQgdW5jaGFuZ2VkIiwgImJyb3dzZXIiOiAiMTU2LjAuODA3OC40IiwgInNjb3BlIjogIkFjdHVhbCBhZG1pdHRlZCBBdXRvdmVyc2UgY2FtcGFpZ24gVUkuIE9ubHkgZXhwbGljaXRseSBuYW1lZCBsaXZlIGNhc2Ugc3RhcnRzIGEgY29tcGxldGUgcmVuZGVyZXIvc2Vuc29ycy9BbmRyb2lkIGNoaWxkOyBubyBwaHlzaWNhbCBlZmZlY3RzIG9yIEFUIGNlcnRpZmljYXRpb24uIn0K"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a40b2a2522d66f50b8fc-a05ddacfe73a8d0f7737",
+          "file": "autoverse-campaign-create-keyboard.spec.ts",
+          "line": 89,
+          "column": 9
+        },
+        {
+          "title": "held fresh campaign preview preserves newer source dialog at 1024",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 11461,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T21:58:49.303Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "fresh-campaign-keyboard",
+                      "contentType": "application/json",
+                      "body": "eyJ3aWR0aCI6IDEwMjQsICJpbnRlbnQiOiAic291cmNlIGRpYWxvZyIsICJjcmVhdGVkQ2FtcGFpZ25zIjogMCwgImZpeHR1cmUiOiAiQWN0dWFsIHNpZGUtZWZmZWN0LWZyZWUgcHJldmlldyByZXNwb25zZSBoZWxkOyBpZGVudGl0eSBhbmQgcGF5bG9hZCB1bmNoYW5nZWQiLCAiYnJvd3NlciI6ICIxNTYuMC44MDc4LjQiLCAic2NvcGUiOiAiQWN0dWFsIGFkbWl0dGVkIEF1dG92ZXJzZSBjYW1wYWlnbiBVSS4gT25seSBleHBsaWNpdGx5IG5hbWVkIGxpdmUgY2FzZSBzdGFydHMgYSBjb21wbGV0ZSByZW5kZXJlci9zZW5zb3JzL0FuZHJvaWQgY2hpbGQ7IG5vIHBoeXNpY2FsIGVmZmVjdHMgb3IgQVQgY2VydGlmaWNhdGlvbi4ifQo="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a40b2a2522d66f50b8fc-5deba526b0be24abb0a3",
+          "file": "autoverse-campaign-create-keyboard.spec.ts",
+          "line": 89,
+          "column": 9
+        },
+        {
+          "title": "fresh campaign preview bounds and explicit transport retry at 1440",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 11411,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T21:59:00.770Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "campaign-diagnostic-contrast",
+                      "contentType": "application/json",
+                      "body": "eyJsYWJlbCI6ICJDYW1wYWlnbiBkaWFnbm9zdGljIiwgInRleHQiOiAiQ0FNUEFJR05fQlVER0VUOiBUaGUgb3BlcmF0aW9uIHdhcyByZWZ1c2VkIGJ5IGl0cyB2ZXJzaW9uZWQgYWRtaXNzaW9uLCBvd25lcnNoaXAsIHJldmlzaW9uIG9yIHJlc291cmNlIGNvbnRyYWN0LiBQcmV2aW91cyBkaXNwbGF5ZWQgb2JzZXJ2YXRpb25zIGhhdmUgbm90IGJlZW4gcmVmcmVzaGVkLiIsICJjb2xvciI6ICJyZ2IoMTM5LCA0NiwgNTgpIiwgImZvbnRTaXplIjogIjEzcHgiLCAiZm9udFdlaWdodCI6ICI0MDAiLCAidGhyZXNob2xkIjogNC41LCAic2NvcGUiOiAiU2VsZWN0ZWQgbm9ybWFsLXNpemUgcmVuZGVyZWQgdGV4dDsgbm8gb3ZlcmFsbCBhY2Nlc3NpYmlsaXR5IGNlcnRpZmljYXRpb24iLCAic3VwcG9ydGVkIjogdHJ1ZSwgImxheWVycyI6IFsicmdiYSgwLCAwLCAwLCAwKSIsICJyZ2JhKDAsIDAsIDAsIDApIiwgInJnYmEoMCwgMCwgMCwgMCkiLCAicmdiKDI0NSwgMjQ3LCAyNTEpIl0sICJiYWNrZ3JvdW5kIjogWzAuOTYwNzg0MzEzNzI1NDkwMiwgMC45Njg2Mjc0NTA5ODAzOTIyLCAwLjk4NDMxMzcyNTQ5MDE5NiwgMV0sICJjb21wb3NpdGVkRm9yZWdyb3VuZCI6IFswLjU0NTA5ODAzOTIxNTY4NjIsIDAuMTgwMzkyMTU2ODYyNzQ1MSwgMC4yMjc0NTA5ODAzOTIxNTY4NiwgMV0sICJyYXRpbyI6IDcuNjc5MjkyMDkzOTQzNzYsICJwYXNzZWQiOiB0cnVlLCAiYXNzdW1wdGlvbnMiOiAiQ1NTIHNSR0IgY29sb3JzOyBhbHBoYSBjb21wb3NpdGVkIHRocm91Z2ggZXhwbGljaXQgYmFja2dyb3VuZHM7IG5vIGFudGktYWxpYXNpbmcgYXBwcm94aW1hdGlvbiJ9Cg=="
+                    },
+                    {
+                      "name": "campaign-diagnostic-contrast",
+                      "contentType": "application/json",
+                      "body": "eyJsYWJlbCI6ICJDYW1wYWlnbiBkaWFnbm9zdGljIiwgInRleHQiOiAiQ0FNUEFJR05fUFJFVklFV19GSVhUVVJFOiBMYWJlbGxlZCB0cmFuc3BvcnQgcmVmdXNhbCBQcmV2aW91cyBkaXNwbGF5ZWQgb2JzZXJ2YXRpb25zIGhhdmUgbm90IGJlZW4gcmVmcmVzaGVkLiIsICJjb2xvciI6ICJyZ2IoMTM5LCA0NiwgNTgpIiwgImZvbnRTaXplIjogIjEzcHgiLCAiZm9udFdlaWdodCI6ICI0MDAiLCAidGhyZXNob2xkIjogNC41LCAic2NvcGUiOiAiU2VsZWN0ZWQgbm9ybWFsLXNpemUgcmVuZGVyZWQgdGV4dDsgbm8gb3ZlcmFsbCBhY2Nlc3NpYmlsaXR5IGNlcnRpZmljYXRpb24iLCAic3VwcG9ydGVkIjogdHJ1ZSwgImxheWVycyI6IFsicmdiYSgwLCAwLCAwLCAwKSIsICJyZ2JhKDAsIDAsIDAsIDApIiwgInJnYmEoMCwgMCwgMCwgMCkiLCAicmdiKDI0NSwgMjQ3LCAyNTEpIl0sICJiYWNrZ3JvdW5kIjogWzAuOTYwNzg0MzEzNzI1NDkwMiwgMC45Njg2Mjc0NTA5ODAzOTIyLCAwLjk4NDMxMzcyNTQ5MDE5NiwgMV0sICJjb21wb3NpdGVkRm9yZWdyb3VuZCI6IFswLjU0NTA5ODAzOTIxNTY4NjIsIDAuMTgwMzkyMTU2ODYyNzQ1MSwgMC4yMjc0NTA5ODAzOTIxNTY4NiwgMV0sICJyYXRpbyI6IDcuNjc5MjkyMDkzOTQzNzYsICJwYXNzZWQiOiB0cnVlLCAiYXNzdW1wdGlvbnMiOiAiQ1NTIHNSR0IgY29sb3JzOyBhbHBoYSBjb21wb3NpdGVkIHRocm91Z2ggZXhwbGljaXQgYmFja2dyb3VuZHM7IG5vIGFudGktYWxpYXNpbmcgYXBwcm94aW1hdGlvbiJ9Cg=="
+                    },
+                    {
+                      "name": "fresh-campaign-keyboard",
+                      "contentType": "application/json",
+                      "body": "eyJ3aWR0aCI6IDE0NDAsICJyZWFsQnVkZ2V0UmVmdXNhbCI6ICJDQU1QQUlHTl9CVURHRVQiLCAiY2FyZGluYWxpdHkiOiAyLCAiY3JlYXRlZENhbXBhaWducyI6IDAsICJmaXh0dXJlIjogIk9uZSBsYWJlbGxlZDUwMzsgYWN0dWFsIGJhY2tlbmQgYnVkZ2V0IHJlZnVzYWwgYW5kIHVuY2hhbmdlZCByZXRyeSIsICJicm93c2VyIjogIjE1Ni4wLjgwNzguNCIsICJzY29wZSI6ICJBY3R1YWwgYWRtaXR0ZWQgQXV0b3ZlcnNlIGNhbXBhaWduIFVJLiBPbmx5IGV4cGxpY2l0bHkgbmFtZWQgbGl2ZSBjYXNlIHN0YXJ0cyBhIGNvbXBsZXRlIHJlbmRlcmVyL3NlbnNvcnMvQW5kcm9pZCBjaGlsZDsgbm8gcGh5c2ljYWwgZWZmZWN0cyBvciBBVCBjZXJ0aWZpY2F0aW9uLiJ9Cg=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a40b2a2522d66f50b8fc-eeab33692e7cfd198081",
+          "file": "autoverse-campaign-create-keyboard.spec.ts",
+          "line": 71,
+          "column": 7
+        },
+        {
+          "title": "held fresh campaign preview preserves newer Home at 1440",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 15312,
+                  "error": {
+                    "message": "TimeoutError: page.waitForResponse: Timeout 15000ms exceeded while waiting for event \"response\"",
+                    "stack": "TimeoutError: page.waitForResponse: Timeout 15000ms exceeded while waiting for event \"response\"\n    at open ([WORKTREE]/tests/live/autoverse-campaign-create-keyboard.spec.ts:37:34)\n    at [WORKTREE]/tests/live/autoverse-campaign-create-keyboard.spec.ts:90:7",
+                    "location": {
+                      "file": "[WORKTREE]/tests/live/autoverse-campaign-create-keyboard.spec.ts",
+                      "column": 34,
+                      "line": 37
+                    },
+                    "snippet": "  35 |   const source = fixture()[String(width)];\n  36 |   await page.evaluate(id => { localStorage.setItem(\"studio.projectId\", id); }, source.projectId); await page.reload();\n> 37 |   const preflightResponse = page.waitForResponse(r => /\\/api\\/v1\\/projects\\/[^/]+\\/preflights$/.test(new URL(r.url()).pathname) && r.request().method() === \"POST\");\n     |                                  ^\n  38 |   await activate(page, page.getByRole(\"button\", { name: \"Preflight & run\", exact: true }));\n  39 |   const preflight = await preflightResponse; expect(preflight.status()).toBe(200); expect((await preflight.json()).status).toBe(\"ready\");\n  40 |   await expect(page.getByRole(\"button\", { name: \"Start frozen snapshot\", exact: true })).toBeEnabled();"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "[WORKTREE]/tests/live/autoverse-campaign-create-keyboard.spec.ts",
+                        "column": 34,
+                        "line": 37
+                      },
+                      "message": "TimeoutError: page.waitForResponse: Timeout 15000ms exceeded while waiting for event \"response\"\n\n  35 |   const source = fixture()[String(width)];\n  36 |   await page.evaluate(id => { localStorage.setItem(\"studio.projectId\", id); }, source.projectId); await page.reload();\n> 37 |   const preflightResponse = page.waitForResponse(r => /\\/api\\/v1\\/projects\\/[^/]+\\/preflights$/.test(new URL(r.url()).pathname) && r.request().method() === \"POST\");\n     |                                  ^\n  38 |   await activate(page, page.getByRole(\"button\", { name: \"Preflight & run\", exact: true }));\n  39 |   const preflight = await preflightResponse; expect(preflight.status()).toBe(200); expect((await preflight.json()).status).toBe(\"ready\");\n  40 |   await expect(page.getByRole(\"button\", { name: \"Start frozen snapshot\", exact: true })).toBeEnabled();\n    at open ([WORKTREE]/tests/live/autoverse-campaign-create-keyboard.spec.ts:37:34)\n    at [WORKTREE]/tests/live/autoverse-campaign-create-keyboard.spec.ts:90:7"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T21:59:12.189Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "[WORKTREE]/.studio-local/t097-campaign-create-20261105/campaign-preview-final/artifacts/autoverse-campaign-create--2de05-reserves-newer-Home-at-1440/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "[WORKTREE]/.studio-local/t097-campaign-create-20261105/campaign-preview-final/artifacts/autoverse-campaign-create--2de05-reserves-newer-Home-at-1440/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "[WORKTREE]/tests/live/autoverse-campaign-create-keyboard.spec.ts",
+                    "column": 34,
+                    "line": 37
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "a40b2a2522d66f50b8fc-b1e5df6ce3ba849b6d6a",
+          "file": "autoverse-campaign-create-keyboard.spec.ts",
+          "line": 89,
+          "column": 9
+        },
+        {
+          "title": "held fresh campaign preview preserves newer focus at 1440",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 12157,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T21:59:27.858Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "fresh-campaign-keyboard",
+                      "contentType": "application/json",
+                      "body": "eyJ3aWR0aCI6IDE0NDAsICJpbnRlbnQiOiAiZm9jdXMiLCAiY3JlYXRlZENhbXBhaWducyI6IDAsICJmaXh0dXJlIjogIkFjdHVhbCBzaWRlLWVmZmVjdC1mcmVlIHByZXZpZXcgcmVzcG9uc2UgaGVsZDsgaWRlbnRpdHkgYW5kIHBheWxvYWQgdW5jaGFuZ2VkIiwgImJyb3dzZXIiOiAiMTU2LjAuODA3OC40IiwgInNjb3BlIjogIkFjdHVhbCBhZG1pdHRlZCBBdXRvdmVyc2UgY2FtcGFpZ24gVUkuIE9ubHkgZXhwbGljaXRseSBuYW1lZCBsaXZlIGNhc2Ugc3RhcnRzIGEgY29tcGxldGUgcmVuZGVyZXIvc2Vuc29ycy9BbmRyb2lkIGNoaWxkOyBubyBwaHlzaWNhbCBlZmZlY3RzIG9yIEFUIGNlcnRpZmljYXRpb24uIn0K"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a40b2a2522d66f50b8fc-10f8f9064d96d0e28077",
+          "file": "autoverse-campaign-create-keyboard.spec.ts",
+          "line": 89,
+          "column": 9
+        },
+        {
+          "title": "held fresh campaign preview preserves newer source dialog at 1440",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 7065,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T21:59:40.074Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "fresh-campaign-keyboard",
+                      "contentType": "application/json",
+                      "body": "eyJ3aWR0aCI6IDE0NDAsICJpbnRlbnQiOiAic291cmNlIGRpYWxvZyIsICJjcmVhdGVkQ2FtcGFpZ25zIjogMCwgImZpeHR1cmUiOiAiQWN0dWFsIHNpZGUtZWZmZWN0LWZyZWUgcHJldmlldyByZXNwb25zZSBoZWxkOyBpZGVudGl0eSBhbmQgcGF5bG9hZCB1bmNoYW5nZWQiLCAiYnJvd3NlciI6ICIxNTYuMC44MDc4LjQiLCAic2NvcGUiOiAiQWN0dWFsIGFkbWl0dGVkIEF1dG92ZXJzZSBjYW1wYWlnbiBVSS4gT25seSBleHBsaWNpdGx5IG5hbWVkIGxpdmUgY2FzZSBzdGFydHMgYSBjb21wbGV0ZSByZW5kZXJlci9zZW5zb3JzL0FuZHJvaWQgY2hpbGQ7IG5vIHBoeXNpY2FsIGVmZmVjdHMgb3IgQVQgY2VydGlmaWNhdGlvbi4ifQo="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a40b2a2522d66f50b8fc-eb992392ebbb69da20b6",
+          "file": "autoverse-campaign-create-keyboard.spec.ts",
+          "line": 89,
+          "column": 9
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-05T21:58:26.367Z",
+    "duration": 80819.874,
+    "expected": 7,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

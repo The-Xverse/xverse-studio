@@ -1,3 +1,20 @@
+Latest active checkpoint — 2026-11-05: source70b1982 passes8 new preview,
+2 full native campaign create/cancel and8 unchanged retained keyboard journeys,
+586 identical Git-bound inputs/6 reproduced UI assets. Three focus/contrast defects
+repaired with real counterexamples; Android/sensors/renderer/speed, immutable
+inputs, same-key retries and complete cleanup verified. All test/model/guest handles
+exit and roots release;8cachedcontainers stopped,4owned private infrastructure
+children remain live. Host service/interfaces/originalCARLA unchanged. Counts72/18/10,
+zero accepted milestones; no task closure. Continue full original plan and remaining
+browser/AT/required-host/timing gates; Windows independently FROZEN. Goal ACTIVE,
+no checkpoint pauses. See [campaign evidence](../../evidence/studio/M4-accessibility/campaign-creation-20261105/README.md).
+
+Current instruction — 2026-11-05: user explicitly reactivated the full goal,
+keep going without interruption. Continue fresh admitted campaign create/cancel
+keyboard verification and all remaining original acceptance. Windows independently
+FROZEN. Counts72/18/10, zero accepted milestones; older hold notes are historical.
+No old process/namespace receipt confers current ownership.
+
 Current instruction — 2026-11-05: evaluation keyboard component finished;
 work waits for explicit resume under the user instruction to finish current work
 then stop. Windows independently FROZEN. Counts72/18/10, zero accepted milestones;

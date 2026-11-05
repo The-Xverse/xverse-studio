@@ -1,0 +1,595 @@
+{
+  "config": {
+    "argv": [
+      "[WORKSPACE_VOLUME]/.xverse-studio-cache/node-v24.22.1-linux-x64/bin/node",
+      "[WORKSPACE_VOLUME]/xverse-studio/node_modules/@playwright/test/cli.js",
+      "test",
+      "--config",
+      "tests/live/autoverse-campaign-create-keyboard.config.ts",
+      "--grep",
+      "fresh campaign preview",
+      "--grep-invert",
+      "live fresh campaign"
+    ],
+    "configFile": "[WORKTREE]/tests/live/autoverse-campaign-create-keyboard.config.ts",
+    "rootDir": "[WORKTREE]/tests/live",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": "[WORKTREE]/tests/live/recorded-browser-device-setup.ts",
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "[WORKTREE]/.studio-local/t097-campaign-create-20261105/campaign-preview-red/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "[WORKTREE]/tests/live",
+        "testIgnore": [],
+        "testMatch": [
+          "autoverse-campaign-create-keyboard.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "[WORKTREE]/.studio-local/t097-campaign-create-20261105/campaign-preview-red/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "[WORKTREE]/tests/live",
+        "snapshotDir": "[WORKTREE]/tests/live",
+        "testIgnore": [],
+        "testMatch": "autoverse-campaign-create-keyboard.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "baseURL": "[LOOPBACK_ORIGIN]",
+          "browserName": "chromium",
+          "actionTimeout": 15000,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "trace": "off",
+          "screenshot": "only-on-failure",
+          "video": "off",
+          "launchOptions": {
+            "args": [
+              "--disable-gpu",
+              "--disable-gpu-rasterization"
+            ]
+          }
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "[WORKTREE]/.studio-local/t097-campaign-create-20261105/campaign-preview-red/browser.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "autoverse-campaign-create-keyboard.spec.ts",
+      "file": "autoverse-campaign-create-keyboard.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "fresh campaign preview bounds and explicit transport retry at 1024",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 5165,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n    at tabTo ([WORKTREE]/tests/live/autoverse-campaign-create-keyboard.spec.ts:18:11)\n    at enter ([WORKTREE]/tests/live/autoverse-campaign-create-keyboard.spec.ts:27:3)\n    at [WORKTREE]/tests/live/autoverse-campaign-create-keyboard.spec.ts:67:5",
+                    "location": {
+                      "file": "[WORKTREE]/tests/live/autoverse-campaign-create-keyboard.spec.ts",
+                      "column": 11,
+                      "line": 18
+                    },
+                    "snippet": "  16 |         const r = n.getBoundingClientRect(), s = getComputedStyle(n);\n  17 |         return s.outlineStyle !== \"none\" && parseFloat(s.outlineWidth) > 0 && r.left >= 0 && r.top >= 0 && r.right <= innerWidth + 1 && r.bottom <= innerHeight + 1;\n> 18 |       })).toBe(true);\n     |           ^\n  19 |       return;\n  20 |     }\n  21 |     await page.keyboard.press(\"Tab\");"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "[WORKTREE]/tests/live/autoverse-campaign-create-keyboard.spec.ts",
+                        "column": 11,
+                        "line": 18
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\n  16 |         const r = n.getBoundingClientRect(), s = getComputedStyle(n);\n  17 |         return s.outlineStyle !== \"none\" && parseFloat(s.outlineWidth) > 0 && r.left >= 0 && r.top >= 0 && r.right <= innerWidth + 1 && r.bottom <= innerHeight + 1;\n> 18 |       })).toBe(true);\n     |           ^\n  19 |       return;\n  20 |     }\n  21 |     await page.keyboard.press(\"Tab\");\n    at tabTo ([WORKTREE]/tests/live/autoverse-campaign-create-keyboard.spec.ts:18:11)\n    at enter ([WORKTREE]/tests/live/autoverse-campaign-create-keyboard.spec.ts:27:3)\n    at [WORKTREE]/tests/live/autoverse-campaign-create-keyboard.spec.ts:67:5"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T21:42:01.210Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "[WORKTREE]/.studio-local/t097-campaign-create-20261105/campaign-preview-red/artifacts/autoverse-campaign-create--a5715-cit-transport-retry-at-1024/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "[WORKTREE]/.studio-local/t097-campaign-create-20261105/campaign-preview-red/artifacts/autoverse-campaign-create--a5715-cit-transport-retry-at-1024/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "[WORKTREE]/tests/live/autoverse-campaign-create-keyboard.spec.ts",
+                    "column": 11,
+                    "line": 18
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "a40b2a2522d66f50b8fc-ede581a23984265f09cb",
+          "file": "autoverse-campaign-create-keyboard.spec.ts",
+          "line": 65,
+          "column": 7
+        },
+        {
+          "title": "held fresh campaign preview preserves newer Home at 1024",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 5090,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n    at tabTo ([WORKTREE]/tests/live/autoverse-campaign-create-keyboard.spec.ts:18:11)\n    at enter ([WORKTREE]/tests/live/autoverse-campaign-create-keyboard.spec.ts:27:3)\n    at configure ([WORKTREE]/tests/live/autoverse-campaign-create-keyboard.spec.ts:44:3)\n    at [WORKTREE]/tests/live/autoverse-campaign-create-keyboard.spec.ts:84:38",
+                    "location": {
+                      "file": "[WORKTREE]/tests/live/autoverse-campaign-create-keyboard.spec.ts",
+                      "column": 11,
+                      "line": 18
+                    },
+                    "snippet": "  16 |         const r = n.getBoundingClientRect(), s = getComputedStyle(n);\n  17 |         return s.outlineStyle !== \"none\" && parseFloat(s.outlineWidth) > 0 && r.left >= 0 && r.top >= 0 && r.right <= innerWidth + 1 && r.bottom <= innerHeight + 1;\n> 18 |       })).toBe(true);\n     |           ^\n  19 |       return;\n  20 |     }\n  21 |     await page.keyboard.press(\"Tab\");"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "[WORKTREE]/tests/live/autoverse-campaign-create-keyboard.spec.ts",
+                        "column": 11,
+                        "line": 18
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\n  16 |         const r = n.getBoundingClientRect(), s = getComputedStyle(n);\n  17 |         return s.outlineStyle !== \"none\" && parseFloat(s.outlineWidth) > 0 && r.left >= 0 && r.top >= 0 && r.right <= innerWidth + 1 && r.bottom <= innerHeight + 1;\n> 18 |       })).toBe(true);\n     |           ^\n  19 |       return;\n  20 |     }\n  21 |     await page.keyboard.press(\"Tab\");\n    at tabTo ([WORKTREE]/tests/live/autoverse-campaign-create-keyboard.spec.ts:18:11)\n    at enter ([WORKTREE]/tests/live/autoverse-campaign-create-keyboard.spec.ts:27:3)\n    at configure ([WORKTREE]/tests/live/autoverse-campaign-create-keyboard.spec.ts:44:3)\n    at [WORKTREE]/tests/live/autoverse-campaign-create-keyboard.spec.ts:84:38"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T21:42:06.774Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "[WORKTREE]/.studio-local/t097-campaign-create-20261105/campaign-preview-red/artifacts/autoverse-campaign-create--91aa4-reserves-newer-Home-at-1024/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "[WORKTREE]/.studio-local/t097-campaign-create-20261105/campaign-preview-red/artifacts/autoverse-campaign-create--91aa4-reserves-newer-Home-at-1024/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "[WORKTREE]/tests/live/autoverse-campaign-create-keyboard.spec.ts",
+                    "column": 11,
+                    "line": 18
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "a40b2a2522d66f50b8fc-d9be9450f21f6a5d76fc",
+          "file": "autoverse-campaign-create-keyboard.spec.ts",
+          "line": 83,
+          "column": 9
+        },
+        {
+          "title": "held fresh campaign preview preserves newer focus at 1024",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 4474,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n    at tabTo ([WORKTREE]/tests/live/autoverse-campaign-create-keyboard.spec.ts:18:11)\n    at enter ([WORKTREE]/tests/live/autoverse-campaign-create-keyboard.spec.ts:27:3)\n    at configure ([WORKTREE]/tests/live/autoverse-campaign-create-keyboard.spec.ts:44:3)\n    at [WORKTREE]/tests/live/autoverse-campaign-create-keyboard.spec.ts:84:38",
+                    "location": {
+                      "file": "[WORKTREE]/tests/live/autoverse-campaign-create-keyboard.spec.ts",
+                      "column": 11,
+                      "line": 18
+                    },
+                    "snippet": "  16 |         const r = n.getBoundingClientRect(), s = getComputedStyle(n);\n  17 |         return s.outlineStyle !== \"none\" && parseFloat(s.outlineWidth) > 0 && r.left >= 0 && r.top >= 0 && r.right <= innerWidth + 1 && r.bottom <= innerHeight + 1;\n> 18 |       })).toBe(true);\n     |           ^\n  19 |       return;\n  20 |     }\n  21 |     await page.keyboard.press(\"Tab\");"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "[WORKTREE]/tests/live/autoverse-campaign-create-keyboard.spec.ts",
+                        "column": 11,
+                        "line": 18
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\n  16 |         const r = n.getBoundingClientRect(), s = getComputedStyle(n);\n  17 |         return s.outlineStyle !== \"none\" && parseFloat(s.outlineWidth) > 0 && r.left >= 0 && r.top >= 0 && r.right <= innerWidth + 1 && r.bottom <= innerHeight + 1;\n> 18 |       })).toBe(true);\n     |           ^\n  19 |       return;\n  20 |     }\n  21 |     await page.keyboard.press(\"Tab\");\n    at tabTo ([WORKTREE]/tests/live/autoverse-campaign-create-keyboard.spec.ts:18:11)\n    at enter ([WORKTREE]/tests/live/autoverse-campaign-create-keyboard.spec.ts:27:3)\n    at configure ([WORKTREE]/tests/live/autoverse-campaign-create-keyboard.spec.ts:44:3)\n    at [WORKTREE]/tests/live/autoverse-campaign-create-keyboard.spec.ts:84:38"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T21:42:12.223Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "[WORKTREE]/.studio-local/t097-campaign-create-20261105/campaign-preview-red/artifacts/autoverse-campaign-create--ad22e-eserves-newer-focus-at-1024/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "[WORKTREE]/.studio-local/t097-campaign-create-20261105/campaign-preview-red/artifacts/autoverse-campaign-create--ad22e-eserves-newer-focus-at-1024/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "[WORKTREE]/tests/live/autoverse-campaign-create-keyboard.spec.ts",
+                    "column": 11,
+                    "line": 18
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "a40b2a2522d66f50b8fc-a05ddacfe73a8d0f7737",
+          "file": "autoverse-campaign-create-keyboard.spec.ts",
+          "line": 83,
+          "column": 9
+        },
+        {
+          "title": "held fresh campaign preview preserves newer source dialog at 1024",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 5035,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n    at tabTo ([WORKTREE]/tests/live/autoverse-campaign-create-keyboard.spec.ts:18:11)\n    at enter ([WORKTREE]/tests/live/autoverse-campaign-create-keyboard.spec.ts:27:3)\n    at configure ([WORKTREE]/tests/live/autoverse-campaign-create-keyboard.spec.ts:44:3)\n    at [WORKTREE]/tests/live/autoverse-campaign-create-keyboard.spec.ts:84:38",
+                    "location": {
+                      "file": "[WORKTREE]/tests/live/autoverse-campaign-create-keyboard.spec.ts",
+                      "column": 11,
+                      "line": 18
+                    },
+                    "snippet": "  16 |         const r = n.getBoundingClientRect(), s = getComputedStyle(n);\n  17 |         return s.outlineStyle !== \"none\" && parseFloat(s.outlineWidth) > 0 && r.left >= 0 && r.top >= 0 && r.right <= innerWidth + 1 && r.bottom <= innerHeight + 1;\n> 18 |       })).toBe(true);\n     |           ^\n  19 |       return;\n  20 |     }\n  21 |     await page.keyboard.press(\"Tab\");"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "[WORKTREE]/tests/live/autoverse-campaign-create-keyboard.spec.ts",
+                        "column": 11,
+                        "line": 18
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\n  16 |         const r = n.getBoundingClientRect(), s = getComputedStyle(n);\n  17 |         return s.outlineStyle !== \"none\" && parseFloat(s.outlineWidth) > 0 && r.left >= 0 && r.top >= 0 && r.right <= innerWidth + 1 && r.bottom <= innerHeight + 1;\n> 18 |       })).toBe(true);\n     |           ^\n  19 |       return;\n  20 |     }\n  21 |     await page.keyboard.press(\"Tab\");\n    at tabTo ([WORKTREE]/tests/live/autoverse-campaign-create-keyboard.spec.ts:18:11)\n    at enter ([WORKTREE]/tests/live/autoverse-campaign-create-keyboard.spec.ts:27:3)\n    at configure ([WORKTREE]/tests/live/autoverse-campaign-create-keyboard.spec.ts:44:3)\n    at [WORKTREE]/tests/live/autoverse-campaign-create-keyboard.spec.ts:84:38"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T21:42:17.086Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "[WORKTREE]/.studio-local/t097-campaign-create-20261105/campaign-preview-red/artifacts/autoverse-campaign-create--72d55-newer-source-dialog-at-1024/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "[WORKTREE]/.studio-local/t097-campaign-create-20261105/campaign-preview-red/artifacts/autoverse-campaign-create--72d55-newer-source-dialog-at-1024/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "[WORKTREE]/tests/live/autoverse-campaign-create-keyboard.spec.ts",
+                    "column": 11,
+                    "line": 18
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "a40b2a2522d66f50b8fc-5deba526b0be24abb0a3",
+          "file": "autoverse-campaign-create-keyboard.spec.ts",
+          "line": 83,
+          "column": 9
+        },
+        {
+          "title": "fresh campaign preview bounds and explicit transport retry at 1440",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 11750,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeEnabled\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('button', { name: 'Start frozen snapshot', exact: true })\nExpected: enabled\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeEnabled\" getByRole('button', { name: 'Start frozen snapshot', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: 'Start frozen snapshot', exact: true })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeEnabled\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('button', { name: 'Start frozen snapshot', exact: true })\nExpected: enabled\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeEnabled\" getByRole('button', { name: 'Start frozen snapshot', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: 'Start frozen snapshot', exact: true })\u001b[22m\n\n    at open ([WORKTREE]/tests/live/autoverse-campaign-create-keyboard.spec.ts:35:90)\n    at [WORKTREE]/tests/live/autoverse-campaign-create-keyboard.spec.ts:66:5",
+                    "location": {
+                      "file": "[WORKTREE]/tests/live/autoverse-campaign-create-keyboard.spec.ts",
+                      "column": 90,
+                      "line": 35
+                    },
+                    "snippet": "  33 |   await page.evaluate(id => { localStorage.setItem(\"studio.projectId\", id); }, source.projectId); await page.reload();\n  34 |   await activate(page, page.getByRole(\"button\", { name: \"Preflight & run\", exact: true }));\n> 35 |   await expect(page.getByRole(\"button\", { name: \"Start frozen snapshot\", exact: true })).toBeEnabled();\n     |                                                                                          ^\n  36 |   await activate(page, page.getByRole(\"button\", { name: \"Back to draft\", exact: true }));\n  37 |   await activate(page, page.getByRole(\"tab\", { name: \"Experiments\", exact: true }));\n  38 |   await activate(page, page.getByRole(\"tab\", { name: \"Campaigns\", exact: true }));"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "[WORKTREE]/tests/live/autoverse-campaign-create-keyboard.spec.ts",
+                        "column": 90,
+                        "line": 35
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeEnabled\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('button', { name: 'Start frozen snapshot', exact: true })\nExpected: enabled\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeEnabled\" getByRole('button', { name: 'Start frozen snapshot', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: 'Start frozen snapshot', exact: true })\u001b[22m\n\n\n  33 |   await page.evaluate(id => { localStorage.setItem(\"studio.projectId\", id); }, source.projectId); await page.reload();\n  34 |   await activate(page, page.getByRole(\"button\", { name: \"Preflight & run\", exact: true }));\n> 35 |   await expect(page.getByRole(\"button\", { name: \"Start frozen snapshot\", exact: true })).toBeEnabled();\n     |                                                                                          ^\n  36 |   await activate(page, page.getByRole(\"button\", { name: \"Back to draft\", exact: true }));\n  37 |   await activate(page, page.getByRole(\"tab\", { name: \"Experiments\", exact: true }));\n  38 |   await activate(page, page.getByRole(\"tab\", { name: \"Campaigns\", exact: true }));\n    at open ([WORKTREE]/tests/live/autoverse-campaign-create-keyboard.spec.ts:35:90)\n    at [WORKTREE]/tests/live/autoverse-campaign-create-keyboard.spec.ts:66:5"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T21:42:22.514Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "[WORKTREE]/.studio-local/t097-campaign-create-20261105/campaign-preview-red/artifacts/autoverse-campaign-create--d3d14-cit-transport-retry-at-1440/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "[WORKTREE]/.studio-local/t097-campaign-create-20261105/campaign-preview-red/artifacts/autoverse-campaign-create--d3d14-cit-transport-retry-at-1440/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "[WORKTREE]/tests/live/autoverse-campaign-create-keyboard.spec.ts",
+                    "column": 90,
+                    "line": 35
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "a40b2a2522d66f50b8fc-eeab33692e7cfd198081",
+          "file": "autoverse-campaign-create-keyboard.spec.ts",
+          "line": 65,
+          "column": 7
+        },
+        {
+          "title": "held fresh campaign preview preserves newer Home at 1440",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 6917,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T21:42:34.627Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "fresh-campaign-keyboard",
+                      "contentType": "application/json",
+                      "body": "eyJ3aWR0aCI6IDE0NDAsICJpbnRlbnQiOiAiSG9tZSIsICJjcmVhdGVkQ2FtcGFpZ25zIjogMCwgImZpeHR1cmUiOiAiQWN0dWFsIHNpZGUtZWZmZWN0LWZyZWUgcHJldmlldyByZXNwb25zZSBoZWxkOyBpZGVudGl0eSBhbmQgcGF5bG9hZCB1bmNoYW5nZWQiLCAiYnJvd3NlciI6ICIxNTYuMC44MDc4LjQiLCAic2NvcGUiOiAiQWN0dWFsIGFkbWl0dGVkIEF1dG92ZXJzZSBjYW1wYWlnbiBVSS4gT25seSBleHBsaWNpdGx5IG5hbWVkIGxpdmUgY2FzZSBzdGFydHMgYSBjb21wbGV0ZSByZW5kZXJlci9zZW5zb3JzL0FuZHJvaWQgY2hpbGQ7IG5vIHBoeXNpY2FsIGVmZmVjdHMgb3IgQVQgY2VydGlmaWNhdGlvbi4ifQo="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a40b2a2522d66f50b8fc-b1e5df6ce3ba849b6d6a",
+          "file": "autoverse-campaign-create-keyboard.spec.ts",
+          "line": 83,
+          "column": 9
+        },
+        {
+          "title": "held fresh campaign preview preserves newer focus at 1440",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 6667,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T21:42:41.603Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "fresh-campaign-keyboard",
+                      "contentType": "application/json",
+                      "body": "eyJ3aWR0aCI6IDE0NDAsICJpbnRlbnQiOiAiZm9jdXMiLCAiY3JlYXRlZENhbXBhaWducyI6IDAsICJmaXh0dXJlIjogIkFjdHVhbCBzaWRlLWVmZmVjdC1mcmVlIHByZXZpZXcgcmVzcG9uc2UgaGVsZDsgaWRlbnRpdHkgYW5kIHBheWxvYWQgdW5jaGFuZ2VkIiwgImJyb3dzZXIiOiAiMTU2LjAuODA3OC40IiwgInNjb3BlIjogIkFjdHVhbCBhZG1pdHRlZCBBdXRvdmVyc2UgY2FtcGFpZ24gVUkuIE9ubHkgZXhwbGljaXRseSBuYW1lZCBsaXZlIGNhc2Ugc3RhcnRzIGEgY29tcGxldGUgcmVuZGVyZXIvc2Vuc29ycy9BbmRyb2lkIGNoaWxkOyBubyBwaHlzaWNhbCBlZmZlY3RzIG9yIEFUIGNlcnRpZmljYXRpb24uIn0K"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a40b2a2522d66f50b8fc-10f8f9064d96d0e28077",
+          "file": "autoverse-campaign-create-keyboard.spec.ts",
+          "line": 83,
+          "column": 9
+        },
+        {
+          "title": "held fresh campaign preview preserves newer source dialog at 1440",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 6873,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T21:42:48.280Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "fresh-campaign-keyboard",
+                      "contentType": "application/json",
+                      "body": "eyJ3aWR0aCI6IDE0NDAsICJpbnRlbnQiOiAic291cmNlIGRpYWxvZyIsICJjcmVhdGVkQ2FtcGFpZ25zIjogMCwgImZpeHR1cmUiOiAiQWN0dWFsIHNpZGUtZWZmZWN0LWZyZWUgcHJldmlldyByZXNwb25zZSBoZWxkOyBpZGVudGl0eSBhbmQgcGF5bG9hZCB1bmNoYW5nZWQiLCAiYnJvd3NlciI6ICIxNTYuMC44MDc4LjQiLCAic2NvcGUiOiAiQWN0dWFsIGFkbWl0dGVkIEF1dG92ZXJzZSBjYW1wYWlnbiBVSS4gT25seSBleHBsaWNpdGx5IG5hbWVkIGxpdmUgY2FzZSBzdGFydHMgYSBjb21wbGV0ZSByZW5kZXJlci9zZW5zb3JzL0FuZHJvaWQgY2hpbGQ7IG5vIHBoeXNpY2FsIGVmZmVjdHMgb3IgQVQgY2VydGlmaWNhdGlvbi4ifQo="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a40b2a2522d66f50b8fc-eb992392ebbb69da20b6",
+          "file": "autoverse-campaign-create-keyboard.spec.ts",
+          "line": 83,
+          "column": 9
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-05T21:42:00.856Z",
+    "duration": 54341.722,
+    "expected": 3,
+    "skipped": 0,
+    "unexpected": 5,
+    "flaky": 0
+  }
+}
