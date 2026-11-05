@@ -36,5 +36,12 @@ body plus a browser frame. Final whole-suite execution requires12 accepted inert
 imports and unchanged run/operation/evaluation/snapshot/campaign/preflight/key counts.
 The existing inspection suite retains its original4-import expectation/assertions.
 
+Broaden the contributor helper's canonical-file protection to include existing
+`evidence-imports` files, alongside run/snapshot files and the original database.
+The clean target has imported evidence rather than local runs; run/snapshot-only
+hashes cannot prove preservation of those canonical imported files. Final checks
+protect every pre-existing imported file while permitting new accepted bundles.
+Earlier cohorts retain their original narrower hash scope.
+
 No Windows, provider/device, simulator, assistive-technology, full-regression,
 performance, package or milestone acceptance is implied. T038/T097 remain open.

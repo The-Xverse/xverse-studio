@@ -31,6 +31,14 @@ def imports(root):
         ).fetchone()[0]
 
 
+def protected_files(root):
+    files = recorded.hashes(root)
+    for item in (root / "evidence-imports").rglob("*"):
+        if item.is_file():
+            files[item.relative_to(root).as_posix()] = digest(item.read_bytes())
+    return files
+
+
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("--suite", choices=("inspection", "keyboard"), default="inspection")
@@ -55,7 +63,7 @@ def main():
     original = Path(
         json.loads((a.recording / "data-roots.private.json").read_bytes())["target"]
     )
-    before = recorded.hashes(original)
+    before = protected_files(original)
     database = digest((original / "studio.sqlite").read_bytes())
     data = (
         native.ROOT
@@ -199,10 +207,10 @@ def main():
         with own_root(data):
             outcome["originalRootReleased"] = True
         outcome["originalRecordingUnchanged"] = (
-            recorded.hashes(original) == before
+            protected_files(original) == before
             and digest((original / "studio.sqlite").read_bytes()) == database
         )
-        copied = recorded.hashes(data)
+        copied = protected_files(data)
         outcome["copiedOriginalCanonicalUnchanged"] = all(
             copied.get(k) == v for k, v in before.items()
         )
