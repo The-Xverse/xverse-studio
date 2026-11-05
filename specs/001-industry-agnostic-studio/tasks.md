@@ -1,9 +1,8 @@
 # Implementation Tasks: Industry-Agnostic X-Verse Studio
 
-**Global user pause (2026-11-04, ADR-0069): after saving the completed current Linux
-recorded-playback verification, stop all work until the user explicitly resumes.**
-The Windows freeze below remains independent. Task statuses retain their evidence
-scope; no task closes because work is paused. Current counts remain71/19/10.
+**User requested a stop after the current task (2026-11-05, ADR-0069).** Finish
+only the probe-clock repair's verification/evidence, then pause all work until
+explicit user resume. Windows remains frozen; counts remain71/19/10.
 
 **Active user hold (2026-11-04, ADR-0069): all Windows-related work is frozen until
 the user explicitly lifts it.** Preserve current code/evidence. Skip Windows
@@ -1247,3 +1246,13 @@ See `evidence/studio/M4-comparison-evidence-admission-20261104/` and ADR-0066.
 No new reference/simulator/device workload; original canonical bytes and execution
 counts stay unchanged. T091/T097/full rerun/Windows/acceptance remain open. Counts
 stay71 completed /19 in progress /10 blocked, zero accepted milestones.
+
+T075 observation clock repair (2026-11-05, ADR-0070): oversized backend/stored
+clock integers use the existing typed refusal; malformed provider uncertainty
+remains an invalid response and known clock unavailability survives delegation.
+Authenticated Linux ASGI fixtures preserve original receipts/corrupt bytes and
+refuse redelegation. No endpoint, physical command or runtime authority is added.
+T073/T074 integration prerequisites and T075 remain open; no task closes. Evidence:
+`evidence/studio/M3-probe-clock-overflow-20261105/`. Latest user instruction is to
+finish this current repair/verification, then pause all work until explicit resume.
+Windows remains independently frozen. Counts71/19/10; zero accepted milestones.

@@ -26,3 +26,13 @@ The global pause lasts until the user explicitly resumes. A later general resume
 does not automatically lift the independent Windows hold. No task/milestone is
 completed by either hold. Evidence:
 `evidence/studio/M4-recorded-playback-device-isolation-20261104/`.
+
+2026-11-05: the user reactivated the goal. This lifts the global pause for
+independently authorized Linux/Autoverse work. The independent Windows freeze
+remains active; no Windows work is resumed and no acceptance gate is waived.
+
+Latest user instruction on 2026-11-05: finish the current task, then stop until
+the user decides to resume. The current task is the scoped observation clock
+failure repair (ADR-0070). Finish its verification and evidence only, then pause
+the goal. Do not start another implementation or verification task. This later
+stop supersedes the general resume; Windows remains independently frozen.

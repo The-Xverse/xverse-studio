@@ -1,9 +1,8 @@
 # Implement X-Verse Studio with Codex or Claude
 
-**User pause after current task (2026-11-04, ADR-0069): current Linux recorded-playback
-verification is complete; all work stops after retaining its evidence until the
-user explicitly resumes.** A later general resume leaves the independent Windows
-freeze in effect unless the user explicitly changes it.
+**User requested a stop after the current task (2026-11-05, ADR-0069).** Finish
+only the probe-clock repair's verification and evidence, then pause all work until
+the user explicitly resumes. The separate Windows freeze remains active.
 
 **Active user hold (2026-11-04, ADR-0069): freeze all Windows-related work until the
 user explicitly lifts the hold.** Preserve the existing Windows code/evidence;

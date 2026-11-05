@@ -20,7 +20,12 @@ STATUSES = {"accepted", "delegated", "completed", "rejected", "unknown"}
 
 
 def finite(value):
-    return type(value) in (int, float) and math.isfinite(value)
+    if type(value) not in (int, float):
+        return False
+    try:
+        return math.isfinite(value)
+    except OverflowError:
+        return False
 
 
 def observation(value, identity, allowed_resources):
@@ -401,6 +406,7 @@ class LabProbes:
                     "PROBE_BINDING_CHANGED",
                     "PROBE_AUTHORITY_CHANGED",
                     "PROBE_DEADLINE_EXCEEDED",
+                    "PROBE_CLOCK_UNAVAILABLE",
                     "ASSET_IDENTITY_CHANGED",
                     "PROBE_RESPONSE_INVALID",
                 }
