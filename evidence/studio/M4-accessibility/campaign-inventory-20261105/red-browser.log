@@ -1,0 +1,216 @@
+
+Running 6 tests using 1 worker
+
+(node:691597) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 tests/live/autoverse-campaign-keyboard.spec.ts:60:7 › native keyboard retained campaign and verified child inputs at 1024 (13.1s)
+(node:691755) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 tests/live/autoverse-campaign-keyboard.spec.ts:81:7 › successful child inspection avoids an older history error at 1024 (12.3s)
+(node:691908) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  3 tests/live/autoverse-campaign-keyboard.spec.ts:100:7 › native keyboard child identity refusal and actual retry at 1024 (13.0s)
+(node:692106) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  4 tests/live/autoverse-campaign-keyboard.spec.ts:60:7 › native keyboard retained campaign and verified child inputs at 1440 (12.9s)
+(node:692317) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  5 tests/live/autoverse-campaign-keyboard.spec.ts:81:7 › successful child inspection avoids an older history error at 1440 (12.3s)
+(node:692473) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  6 tests/live/autoverse-campaign-keyboard.spec.ts:100:7 › native keyboard child identity refusal and actual retry at 1440 (12.5s)
+
+
+  1) tests/live/autoverse-campaign-keyboard.spec.ts:60:7 › native keyboard retained campaign and verified child inputs at 1024
+
+    Error: expect(locator).toBeFocused() failed
+
+    Locator:  getByRole('region', { name: 'Selected campaign', exact: true }).getByRole('heading', { name: 'Verified child inputs', exact: true })
+    Expected: focused
+    Received: inactive
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toBeFocused" getByRole('region', { name: 'Selected campaign', exact: true }).getByRole('heading', { name: 'Verified child inputs', exact: true }) with timeout 10000ms
+      - waiting for getByRole('region', { name: 'Selected campaign', exact: true }).getByRole('heading', { name: 'Verified child inputs', exact: true })
+        24 × locator resolved to <h4>Verified child inputs</h4>
+           - unexpected value "inactive"
+
+
+      71 |     for (const child of source.children) {
+      72 |       const heading = await inspect(page, child);
+    > 73 |       await expect(heading).toBeFocused();
+         |                             ^
+      74 |       const contrast = await renderedContrast(heading, "Verified frozen child inputs heading");
+      75 |       expect(contrast.supported).toBe(true);
+      76 |       if (contrast.supported) expect(contrast.ratio).toBeGreaterThanOrEqual(4.5);
+        at [WORKTREE]/tests/live/autoverse-campaign-keyboard.spec.ts:73:29
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    .studio-local/t097-campaign-keyboard-20261105/red/artifacts/autoverse-campaign-keyboar-e6e39-rified-child-inputs-at-1024/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: .studio-local/t097-campaign-keyboard-20261105/red/artifacts/autoverse-campaign-keyboar-e6e39-rified-child-inputs-at-1024/error-context.md
+
+  2) tests/live/autoverse-campaign-keyboard.spec.ts:81:7 › successful child inspection avoids an older history error at 1024
+
+    Error: expect(locator).toBeFocused() failed
+
+    Locator:  getByRole('region', { name: 'Selected campaign', exact: true }).getByRole('heading', { name: 'Verified child inputs', exact: true })
+    Expected: focused
+    Received: inactive
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toBeFocused" getByRole('region', { name: 'Selected campaign', exact: true }).getByRole('heading', { name: 'Verified child inputs', exact: true }) with timeout 10000ms
+      - waiting for getByRole('region', { name: 'Selected campaign', exact: true }).getByRole('heading', { name: 'Verified child inputs', exact: true })
+        24 × locator resolved to <h4>Verified child inputs</h4>
+           - unexpected value "inactive"
+
+
+      90 |     await expect(error).toBeFocused();
+      91 |     const heading = await inspect(page, source.children[0]);
+    > 92 |     await expect(heading).toBeFocused();
+         |                           ^
+      93 |     await expect(error).toContainText("Previous displayed observations have not been refreshed");
+      94 |     await activate(page, history(page).getByRole("button", { name: "Refresh campaign history", exact: true }));
+      95 |     await expect(history(page).getByRole("heading", { name: "Campaign history", exact: true })).toBeFocused();
+        at [WORKTREE]/tests/live/autoverse-campaign-keyboard.spec.ts:92:27
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    .studio-local/t097-campaign-keyboard-20261105/red/artifacts/autoverse-campaign-keyboar-9bd7f-older-history-error-at-1024/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: .studio-local/t097-campaign-keyboard-20261105/red/artifacts/autoverse-campaign-keyboar-9bd7f-older-history-error-at-1024/error-context.md
+
+  3) tests/live/autoverse-campaign-keyboard.spec.ts:100:7 › native keyboard child identity refusal and actual retry at 1024
+
+    Error: expect(locator).toBeFocused() failed
+
+    Locator:  getByRole('region', { name: 'Selected campaign', exact: true }).getByRole('heading', { name: 'Verified child inputs', exact: true })
+    Expected: focused
+    Received: inactive
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toBeFocused" getByRole('region', { name: 'Selected campaign', exact: true }).getByRole('heading', { name: 'Verified child inputs', exact: true }) with timeout 10000ms
+      - waiting for getByRole('region', { name: 'Selected campaign', exact: true }).getByRole('heading', { name: 'Verified child inputs', exact: true })
+        24 × locator resolved to <h4>Verified child inputs</h4>
+           - unexpected value "inactive"
+
+
+      112 |     await expect(selected(page).getByRole("heading", { name: "Verified child inputs", exact: true })).toHaveCount(0);
+      113 |     const heading = await inspect(page, child);
+    > 114 |     await expect(heading).toBeFocused();
+          |                           ^
+      115 |     await expect(page.getByRole("alert")).toHaveCount(0);
+      116 |     await report(page, info, width, writes, "One labelled post-read campaignChildKey mismatch; actual unmodified retry");
+      117 |   });
+        at [WORKTREE]/tests/live/autoverse-campaign-keyboard.spec.ts:114:27
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    .studio-local/t097-campaign-keyboard-20261105/red/artifacts/autoverse-campaign-keyboar-3e3ea-al-and-actual-retry-at-1024/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: .studio-local/t097-campaign-keyboard-20261105/red/artifacts/autoverse-campaign-keyboar-3e3ea-al-and-actual-retry-at-1024/error-context.md
+
+  4) tests/live/autoverse-campaign-keyboard.spec.ts:60:7 › native keyboard retained campaign and verified child inputs at 1440
+
+    Error: expect(locator).toBeFocused() failed
+
+    Locator:  getByRole('region', { name: 'Selected campaign', exact: true }).getByRole('heading', { name: 'Verified child inputs', exact: true })
+    Expected: focused
+    Received: inactive
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toBeFocused" getByRole('region', { name: 'Selected campaign', exact: true }).getByRole('heading', { name: 'Verified child inputs', exact: true }) with timeout 10000ms
+      - waiting for getByRole('region', { name: 'Selected campaign', exact: true }).getByRole('heading', { name: 'Verified child inputs', exact: true })
+        24 × locator resolved to <h4>Verified child inputs</h4>
+           - unexpected value "inactive"
+
+
+      71 |     for (const child of source.children) {
+      72 |       const heading = await inspect(page, child);
+    > 73 |       await expect(heading).toBeFocused();
+         |                             ^
+      74 |       const contrast = await renderedContrast(heading, "Verified frozen child inputs heading");
+      75 |       expect(contrast.supported).toBe(true);
+      76 |       if (contrast.supported) expect(contrast.ratio).toBeGreaterThanOrEqual(4.5);
+        at [WORKTREE]/tests/live/autoverse-campaign-keyboard.spec.ts:73:29
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    .studio-local/t097-campaign-keyboard-20261105/red/artifacts/autoverse-campaign-keyboar-9234c-rified-child-inputs-at-1440/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: .studio-local/t097-campaign-keyboard-20261105/red/artifacts/autoverse-campaign-keyboar-9234c-rified-child-inputs-at-1440/error-context.md
+
+  5) tests/live/autoverse-campaign-keyboard.spec.ts:81:7 › successful child inspection avoids an older history error at 1440
+
+    Error: expect(locator).toBeFocused() failed
+
+    Locator:  getByRole('region', { name: 'Selected campaign', exact: true }).getByRole('heading', { name: 'Verified child inputs', exact: true })
+    Expected: focused
+    Received: inactive
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toBeFocused" getByRole('region', { name: 'Selected campaign', exact: true }).getByRole('heading', { name: 'Verified child inputs', exact: true }) with timeout 10000ms
+      - waiting for getByRole('region', { name: 'Selected campaign', exact: true }).getByRole('heading', { name: 'Verified child inputs', exact: true })
+        24 × locator resolved to <h4>Verified child inputs</h4>
+           - unexpected value "inactive"
+
+
+      90 |     await expect(error).toBeFocused();
+      91 |     const heading = await inspect(page, source.children[0]);
+    > 92 |     await expect(heading).toBeFocused();
+         |                           ^
+      93 |     await expect(error).toContainText("Previous displayed observations have not been refreshed");
+      94 |     await activate(page, history(page).getByRole("button", { name: "Refresh campaign history", exact: true }));
+      95 |     await expect(history(page).getByRole("heading", { name: "Campaign history", exact: true })).toBeFocused();
+        at [WORKTREE]/tests/live/autoverse-campaign-keyboard.spec.ts:92:27
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    .studio-local/t097-campaign-keyboard-20261105/red/artifacts/autoverse-campaign-keyboar-77c59-older-history-error-at-1440/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: .studio-local/t097-campaign-keyboard-20261105/red/artifacts/autoverse-campaign-keyboar-77c59-older-history-error-at-1440/error-context.md
+
+  6) tests/live/autoverse-campaign-keyboard.spec.ts:100:7 › native keyboard child identity refusal and actual retry at 1440
+
+    Error: expect(locator).toBeFocused() failed
+
+    Locator:  getByRole('region', { name: 'Selected campaign', exact: true }).getByRole('heading', { name: 'Verified child inputs', exact: true })
+    Expected: focused
+    Received: inactive
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toBeFocused" getByRole('region', { name: 'Selected campaign', exact: true }).getByRole('heading', { name: 'Verified child inputs', exact: true }) with timeout 10000ms
+      - waiting for getByRole('region', { name: 'Selected campaign', exact: true }).getByRole('heading', { name: 'Verified child inputs', exact: true })
+        24 × locator resolved to <h4>Verified child inputs</h4>
+           - unexpected value "inactive"
+
+
+      112 |     await expect(selected(page).getByRole("heading", { name: "Verified child inputs", exact: true })).toHaveCount(0);
+      113 |     const heading = await inspect(page, child);
+    > 114 |     await expect(heading).toBeFocused();
+          |                           ^
+      115 |     await expect(page.getByRole("alert")).toHaveCount(0);
+      116 |     await report(page, info, width, writes, "One labelled post-read campaignChildKey mismatch; actual unmodified retry");
+      117 |   });
+        at [WORKTREE]/tests/live/autoverse-campaign-keyboard.spec.ts:114:27
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    .studio-local/t097-campaign-keyboard-20261105/red/artifacts/autoverse-campaign-keyboar-5241c-al-and-actual-retry-at-1440/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: .studio-local/t097-campaign-keyboard-20261105/red/artifacts/autoverse-campaign-keyboar-5241c-al-and-actual-retry-at-1440/error-context.md
+
+  6 failed
+    tests/live/autoverse-campaign-keyboard.spec.ts:60:7 › native keyboard retained campaign and verified child inputs at 1024
+    tests/live/autoverse-campaign-keyboard.spec.ts:81:7 › successful child inspection avoids an older history error at 1024
+    tests/live/autoverse-campaign-keyboard.spec.ts:100:7 › native keyboard child identity refusal and actual retry at 1024
+    tests/live/autoverse-campaign-keyboard.spec.ts:60:7 › native keyboard retained campaign and verified child inputs at 1440
+    tests/live/autoverse-campaign-keyboard.spec.ts:81:7 › successful child inspection avoids an older history error at 1440
+    tests/live/autoverse-campaign-keyboard.spec.ts:100:7 › native keyboard child identity refusal and actual retry at 1440

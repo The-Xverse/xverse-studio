@@ -1,3 +1,14 @@
+Latest checkpoint — 2026-11-05: cc459ab's campaign child-input focus repair passes
+8 campaign +36 inventory keyboard checks on568 identical Git-bound inputs and6
+reproduced UI assets. Six original failures/two old-product positive controls are
+retained. Counts72/18/10,zero milestones; T097 remains open. Continue the complete
+original plan and remaining lab reservation/probe, assessment/export and fresh
+campaign-operation keyboard matrix; actual AT/required-host gates remain explicit.
+Windows stays separately FROZEN. No external provider/runtime starts; stale saved
+runtime ownership is not current authority. See [status](STATUS.md) and
+[evidence](../../evidence/studio/M4-accessibility/campaign-inventory-20261105/README.md).
+Full goal remains ACTIVE; historical pause notes below are superseded.
+
 Latest checkpoint — 2026-11-05: goal explicitly reactivated; continue the full
 original Linux/Autoverse plan. Windows remains separately FROZEN. Current T097
 scenario-authoring keyboard component passes8 new +6 diagnosis +14 import checks

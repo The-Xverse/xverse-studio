@@ -1,3 +1,22 @@
+# Campaign child-input focus repaired; full goal active — 2026-11-05
+
+**72 completed /18 in progress /10 blocked; zero accepted milestones.**
+T097 remains open. Source cc459ab passes8 actual-retained-campaign/labelled-error
+and36 inventory keyboard journeys at both required viewports. All568 selected
+inputs match Git/both final cohorts;6 UI assets reproduce exactly. Six original
+campaign failures and two passing baseline focus controls remain retained. The
+repair focuses verified child inputs without diverting to an older error or
+stealing newer keyboard focus. Inventory results keep actual empty observations
+and display/transport fixtures distinct; no physical/provider authority is inferred.
+Original database/recordings, copied canonical bytes and execution counts stay
+unchanged. No external provider, preflight, workload or campaign starts; all original
+backend/browser handles exit and roots release. Private runtime infrastructure stays
+shut down. Full lab reservation/probe/binding, fresh campaign operations, assessment/
+export and actual AT/required-host acceptance remain open; Windows stays frozen.
+The full original goal remains active. See [evidence/review and coverage](../../evidence/studio/M4-accessibility/campaign-inventory-20261105/README.md).
+
+## Earlier checkpoints
+
 # Authoring keyboard focus repaired; full goal active — 2026-11-05
 
 **72 completed /18 in progress /10 blocked; zero accepted milestones.**
