@@ -572,6 +572,7 @@ export function ResultsView({
           <button
             className="button"
             disabled={!rerunEnabled || rerunBusy}
+            aria-describedby={!rerunEnabled ? "frozen-rerun-unavailable" : undefined}
             onClick={() =>
               void doAction(
                 "Freshly admitting frozen inputs",
@@ -594,6 +595,13 @@ export function ResultsView({
           </button>
         </div>
       </div>
+      {!rerunEnabled && (
+        <p id="frozen-rerun-unavailable" className="hint" role="status">
+          Frozen-input rerun is unavailable for {run.providerId} on this backend.
+          Enable an admitted compatible provider, then reload the workspace.
+          Recorded evidence remains available.
+        </p>
+      )}
       <RunControls run={run} onRunUpdated={onRunUpdated} />
       <RunStartupStatus run={run} />
       {rerunOperation && (

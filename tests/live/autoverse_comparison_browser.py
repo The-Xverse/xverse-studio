@@ -112,6 +112,9 @@ def main():
         assert result["fullAndroidAndSpeedObserved"] and selected["state"] == "stopped"
     context["selectedState"] = selected["state"]
     if a.recorded_only:
+        context["frozenProvider"] = json.loads(
+            (original / "snapshots" / result["snapshotId"] / "snapshot.json").read_bytes()
+        )["providerIdentity"]
         journal_records = [
             json.loads(line)
             for line in (original / "runs" / result["runId"] / "evidence.jsonl").read_bytes().splitlines()

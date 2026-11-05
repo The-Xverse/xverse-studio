@@ -44,6 +44,7 @@ test("Actual Autoverse frozen rerun comparison exposes configuration and blocks 
     const rerun = page.getByRole("button", { name: "Rerun frozen inputs", exact: true });
     if (process.env.STUDIO_BROWSER_RECORDED_ONLY === "1") {
       await expect(rerun).toBeDisabled();
+      await expect(rerun).toHaveAccessibleDescription(/Enable an admitted compatible provider/);
     } else {
       await expect(rerun).toBeEnabled();
     }
@@ -118,5 +119,65 @@ for (const width of process.env.STUDIO_BROWSER_RECORDED_ONLY === "1" ? [1024, 14
     expect(mutations).toEqual([]);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
     await page.screenshot({ path: info.outputPath(`successful-rerun-playback-${width}.png`), fullPage: true });
+  });
+}
+
+for (const width of process.env.STUDIO_BROWSER_RECORDED_ONLY === "1" ? [1024, 1440] : []) {
+  test(`labelled current-provider replies gate frozen rerun at ${width}`, async ({ page }, info) => {
+    const recording = JSON.parse(readFileSync(path.join(process.env.STUDIO_BROWSER_DATA!, "comparison-recording.private.json"), "utf8"));
+    await page.setViewportSize({ width, height: width === 1024 ? 768 : 900 });
+    await connectStudio(page, info);
+    await page.evaluate(r => {
+      localStorage.setItem("studio.projectId", r.projectId);
+      localStorage.setItem("studio.lastRun", r.runId);
+      localStorage.setItem("studio.lastRun." + r.projectId, r.runId);
+    }, recording);
+    const original = recording.frozenProvider;
+    // Labelled transport fixtures: frozen descriptor data is deliberately used
+    // as a current reply. No provider is registered or execution requested.
+    const cases = [
+      { label: "declared compatible provider", change: {}, enabled: true },
+      { label: "foreign provider", change: { providerId: "fixture.foreign" }, enabled: false },
+      { label: "foreign scope", change: { evidenceScope: "fixture.foreign" }, enabled: false },
+      { label: "unavailable provider", change: { available: false }, enabled: false },
+      { label: "unavailable fact absent", change: { available: undefined }, enabled: false },
+      { label: "incompatible host", change: { hostCompatible: false }, enabled: false },
+      { label: "no start operation", change: { operations: [] }, enabled: false },
+      { label: "rerun undeclared", change: { rerunContract: undefined }, enabled: false },
+      { label: "future rerun contract", change: { rerunContract: { contractVersion: "2.0", physicalEffects: false } }, enabled: false },
+      { label: "physical effects", change: { rerunContract: { contractVersion: "1.0", physicalEffects: true } }, enabled: false },
+      { label: "physical effects fact absent", change: { rerunContract: { contractVersion: "1.0" } }, enabled: false },
+    ];
+    const mutations: string[] = [];
+    page.on("request", request => {
+      if (request.method() !== "GET") mutations.push(new URL(request.url()).pathname);
+    });
+    for (const row of cases) {
+      await page.route("**/api/v1/providers", async route => {
+        const response = await route.fetch(), body = await response.json();
+        await route.fulfill({ response, json: { ...body, items: [...body.items, { ...original, ...row.change }] } });
+      });
+      await page.reload();
+      await page.getByRole("tab", { name: /^Results(?:\s+\d+)?$/ }).click();
+      await expect(page.getByLabel("Recorded run", { exact: true })).toHaveValue(recording.runId);
+      const rerun = page.getByRole("button", { name: "Rerun frozen inputs", exact: true });
+      if (row.enabled) {
+        await expect(rerun, row.label).toBeEnabled();
+      } else {
+        await expect(rerun, row.label).toBeDisabled();
+        await expect(rerun, row.label).toHaveAccessibleDescription(/Enable an admitted compatible provider/);
+      }
+      await page.unroute("**/api/v1/providers");
+    }
+    // The built-in provider has its separate existing reference rerun path.
+    // Only the response DTO is changed; immutable external evidence stays external.
+    await page.route(`**/api/v1/runs/${recording.runId}`, async route => {
+      const response = await route.fetch();
+      await route.fulfill({ response, json: { ...(await response.json()), providerId: "studio.reference", evidenceScope: "owned_reference" } });
+    });
+    await page.reload();
+    await page.getByRole("tab", { name: /^Results(?:\s+\d+)?$/ }).click();
+    await expect(page.getByRole("button", { name: "Rerun frozen inputs", exact: true })).toBeEnabled();
+    expect(mutations).toEqual([]);
   });
 }

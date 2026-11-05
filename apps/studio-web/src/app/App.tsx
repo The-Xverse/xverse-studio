@@ -1837,7 +1837,18 @@ export default function App() {
                     onRunUpdated={runUpdated}
                     onRun={checkPreflight}
                     rerunEnabled={Boolean(
-                      capabilities.supportedOperations?.includes("rerun"),
+                      capabilities.supportedOperations?.includes("rerun") &&
+                        providers.some((provider) =>
+                          provider.providerId === run?.providerId &&
+                          provider.evidenceScope === run?.evidenceScope &&
+                          provider.available === true &&
+                          provider.hostCompatible === true &&
+                          Array.isArray(provider.operations) &&
+                          provider.operations.includes("start") &&
+                          (provider.providerId === "studio.reference" ||
+                            (provider.rerunContract?.contractVersion === "1.0" &&
+                              provider.rerunContract.physicalEffects === false)),
+                        ),
                     )}
                     onSelectRun={(created) => {
                       if (created.projectId)
