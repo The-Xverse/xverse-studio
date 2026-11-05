@@ -1265,7 +1265,9 @@ explanation now offers an explicit refresh/retry read. Its stable button preserv
 keyboard focus through recovery and respects a newer focused action. Actual
 copied Autoverse facts, keyboard event navigation, selected contrast, a labelled
 HTTP503 followed by actual recovery, and delayed actual replies are verified at
-both desktop sizes by six initial browser cases. Exact-candidate verification
-and existing recorded-playback regression are being retained separately at
-`evidence/studio/M1-diagnostic-keyboard-20261105/`. No provider/model starts and no
-Windows work is resumed. T038/T097 stay open; counts71/19/10, zero milestones.
+both desktop sizes. Final committed source60afba9 passes six diagnostic checks
+and the original unchanged22 playback checks on553 stable Git-bound inputs and
+six reproduced UI assets. Build/typecheck, lint, architecture and planning pass.
+Original two red failures and the initial six-case cohort are separately retained
+at `evidence/studio/M1-diagnostic-keyboard-20261105/`. No provider/model starts and
+no Windows work is resumed. T038/T097 stay open; counts71/19/10, zero milestones.

@@ -1,6 +1,6 @@
 # ADR-0071 — Keyboard recovery for unavailable diagnostic reads
 
-Date: 2026-11-05. Status: implemented; scoped Linux verification pending.
+Date: 2026-11-05. Status: implemented; scoped Linux verification retained.
 Traces: T038, T097; NFR-006, NFR-011; existing ADR-0012 explanations.
 
 An initial failed diagnostic read displays an alert without any retry action in
@@ -31,3 +31,9 @@ Retain the original counterexamples and repeat the existing recorded playback
 suite against the resulting UI. No Windows work, actual assistive-technology,
 physical provider, native simulator, full regression or milestone pass is implied.
 T038/T097 and the complete M0–M4 acceptance remain open.
+
+Source60afba9 passes six diagnostic checks and the original unchanged22 playback
+checks on553 stable Git-bound inputs and six reproduced UI assets. Build/typecheck,
+contributor lint, architecture and planning checks pass. Original two missing-retry
+failures and the initial six-case cohort remain separate. Evidence and component
+review: `evidence/studio/M1-diagnostic-keyboard-20261105/`.

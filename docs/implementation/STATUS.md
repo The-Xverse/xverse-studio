@@ -1,3 +1,32 @@
+# Diagnostic keyboard recovery verified; work active — 2026-11-05
+
+**71 completed /19 in progress /10 blocked; zero accepted milestones.**
+No new task closes; T067 remains the latest closure. The user explicitly resumed
+the goal after the saved clock checkpoint. Independently authorized Linux/Autoverse
+work continues; the independent Windows freeze remains active until explicitly lifted.
+
+Source60afba9 fixes a reproduced diagnostic-read recovery gap with an explicit
+refresh/retry button. The same control keeps keyboard focus after recovery and
+respects a newer focused action. Final6 diagnostic checks and22 unchanged playback
+checks pass at both desktop sizes on553 stable Git-bound inputs and6 reproduced
+UI assets. Build/typecheck, targeted lint, architecture and planning checks pass.
+Two original missing-retry failures and the initial six-case cohort stay separate.
+
+Original saved Autoverse facts/event references, missing source time, selected text
+contrast, native keyboard evidence navigation and recovery are verified. HTTP503
+and delayed200 controls are labelled transport fixtures. The ordinary backend runs
+on disposable canonical copies; only browsers use optional contributor CPU/device
+isolation. All captured process handles exit, root locks release and original/copy
+canonical bytes plus execution-ledger counts remain unchanged. No model, simulator
+or workload starts; no live Autoverse provider is registered.
+
+T038/T097 keep their wider workflow/browser/AT gates. No new full backend/browser,
+package/performance/Windows/hardware/milestone acceptance is claimed. Evidence and
+component review: [diagnostic keyboard recovery](../../evidence/studio/M1-diagnostic-keyboard-20261105/README.md).
+The full M0–M4 objective remains unfinished and active.
+
+## Earlier checkpoints
+
 # Current clock repair finished; user work pause — 2026-11-05
 
 **71 completed /19 in progress /10 blocked; zero accepted milestones.**

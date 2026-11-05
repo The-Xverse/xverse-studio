@@ -1,0 +1,548 @@
+[
+  {
+    "phase": "red",
+    "sourceCandidate": "1b1395ec1e182483c3c75f267c7a406704d67a23",
+    "selectedInputs": 553,
+    "stats": {
+      "startTime": "2026-11-05T08:47:54.840Z",
+      "duration": 28307.593999999997,
+      "expected": 2,
+      "skipped": 0,
+      "unexpected": 2,
+      "flaky": 0
+    },
+    "cases": [
+      {
+        "title": "actual Autoverse diagnosis preserves facts and keyboard evidence navigation at 1024",
+        "outcome": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMilliseconds": 2721
+          }
+        ]
+      },
+      {
+        "title": "diagnostic read failure has a keyboard retry with stable focus at 1024",
+        "outcome": "unexpected",
+        "attempts": [
+          {
+            "status": "failed",
+            "durationMilliseconds": 11130
+          }
+        ],
+        "failure": "Error: expect(locator).toBeVisible() failed\n\nLocator: getByRole('region', { name: 'Run diagnosis', exact: true }).getByRole('button', { name: 'Retry explanation', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"toBeVisible\" getByRole('region', { name: 'Run diagnosis', exact: true }).getByRole('button', { name: 'Retry explanation', exact: true }) with timeout 10000ms\n  - waiting for getByRole('region', { name: 'Run diagnosis', exact: true }).getByRole('button', { name: 'Retry explanation', exact: true })\n"
+      },
+      {
+        "title": "actual Autoverse diagnosis preserves facts and keyboard evidence navigation at 1440",
+        "outcome": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMilliseconds": 2395
+          }
+        ]
+      },
+      {
+        "title": "diagnostic read failure has a keyboard retry with stable focus at 1440",
+        "outcome": "unexpected",
+        "attempts": [
+          {
+            "status": "failed",
+            "durationMilliseconds": 11189
+          }
+        ],
+        "failure": "Error: expect(locator).toBeVisible() failed\n\nLocator: getByRole('region', { name: 'Run diagnosis', exact: true }).getByRole('button', { name: 'Retry explanation', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"toBeVisible\" getByRole('region', { name: 'Run diagnosis', exact: true }).getByRole('button', { name: 'Retry explanation', exact: true }) with timeout 10000ms\n  - waiting for getByRole('region', { name: 'Run diagnosis', exact: true }).getByRole('button', { name: 'Retry explanation', exact: true })\n"
+      }
+    ],
+    "command": {
+      "argv": [
+        "<worktree>/.venv/bin/python",
+        "-I",
+        "tests/live/autoverse_playback_browser.py",
+        "--recording",
+        "<worktree>/.studio-local/t088-assessment-mapping/native-newenv-5/demo",
+        "--static-dir",
+        "<worktree>/.studio-local/t091-recorded-payloads/build-repro/ui",
+        "--output",
+        "<worktree>/.studio-local/diagnostic-keyboard-20261105/red/native",
+        "--node",
+        "<prepared-tool-cache>/node-v24.22.1-linux-x64/bin/node",
+        "--playwright-cli",
+        "<prepared-node-modules>/@playwright/test/cli.js",
+        "--browser-cache",
+        "<prepared-tool-cache>/playwright",
+        "--isolate-browser-devices",
+        "--suite",
+        "diagnostics"
+      ]
+    },
+    "rawPrivateReportSha256": "167a89ad570f186dd3e229b88550b7e486d63666367f729291745ad71e985d5c",
+    "qualifications": [
+      "Red uses original UI and uncommitted contributor tests/helper only. Two newer-focus cases and explicit HTTP200 response barriers were added after red."
+    ]
+  },
+  {
+    "phase": "initial",
+    "sourceCandidate": "1b1395ec1e182483c3c75f267c7a406704d67a23",
+    "selectedInputs": 553,
+    "stats": {
+      "startTime": "2026-11-05T08:49:43.219Z",
+      "duration": 19036.028,
+      "expected": 6,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "cases": [
+      {
+        "title": "actual Autoverse diagnosis preserves facts and keyboard evidence navigation at 1024",
+        "outcome": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMilliseconds": 2868
+          }
+        ]
+      },
+      {
+        "title": "diagnostic read failure has a keyboard retry with stable focus at 1024",
+        "outcome": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMilliseconds": 3241
+          }
+        ]
+      },
+      {
+        "title": "a delayed diagnostic refresh preserves newer keyboard focus at 1024",
+        "outcome": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMilliseconds": 3498
+          }
+        ]
+      },
+      {
+        "title": "actual Autoverse diagnosis preserves facts and keyboard evidence navigation at 1440",
+        "outcome": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMilliseconds": 2130
+          }
+        ]
+      },
+      {
+        "title": "diagnostic read failure has a keyboard retry with stable focus at 1440",
+        "outcome": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMilliseconds": 3192
+          }
+        ]
+      },
+      {
+        "title": "a delayed diagnostic refresh preserves newer keyboard focus at 1440",
+        "outcome": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMilliseconds": 3593
+          }
+        ]
+      }
+    ],
+    "command": {
+      "argv": [
+        "<worktree>/.venv/bin/python",
+        "-I",
+        "tests/live/autoverse_playback_browser.py",
+        "--recording",
+        "<worktree>/.studio-local/t088-assessment-mapping/native-newenv-5/demo",
+        "--static-dir",
+        "<worktree>/.studio-local/diagnostic-keyboard-20261105/ui",
+        "--output",
+        "<worktree>/.studio-local/diagnostic-keyboard-20261105/initial/native",
+        "--node",
+        "<prepared-tool-cache>/node-v24.22.1-linux-x64/bin/node",
+        "--playwright-cli",
+        "<prepared-node-modules>/@playwright/test/cli.js",
+        "--browser-cache",
+        "<prepared-tool-cache>/playwright",
+        "--isolate-browser-devices",
+        "--suite",
+        "diagnostics"
+      ]
+    },
+    "rawPrivateReportSha256": "b7604e0ad293a90dbe4591a62a5a3068a35bcf8a3d0b01ab6896c71d63a4cbaf",
+    "qualifications": [
+      "This cohort retains its own source/UI identities; final committed evidence is separate from initial verification."
+    ]
+  },
+  {
+    "phase": "final",
+    "sourceCandidate": "60afba9a58f913b1ed73d20848dd72fbbf830208",
+    "selectedInputs": 553,
+    "stats": {
+      "startTime": "2026-11-05T08:52:21.514Z",
+      "duration": 19016.25,
+      "expected": 6,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "cases": [
+      {
+        "title": "actual Autoverse diagnosis preserves facts and keyboard evidence navigation at 1024",
+        "outcome": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMilliseconds": 2825
+          }
+        ]
+      },
+      {
+        "title": "diagnostic read failure has a keyboard retry with stable focus at 1024",
+        "outcome": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMilliseconds": 3345
+          }
+        ]
+      },
+      {
+        "title": "a delayed diagnostic refresh preserves newer keyboard focus at 1024",
+        "outcome": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMilliseconds": 3487
+          }
+        ]
+      },
+      {
+        "title": "actual Autoverse diagnosis preserves facts and keyboard evidence navigation at 1440",
+        "outcome": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMilliseconds": 2319
+          }
+        ]
+      },
+      {
+        "title": "diagnostic read failure has a keyboard retry with stable focus at 1440",
+        "outcome": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMilliseconds": 3131
+          }
+        ]
+      },
+      {
+        "title": "a delayed diagnostic refresh preserves newer keyboard focus at 1440",
+        "outcome": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMilliseconds": 3399
+          }
+        ]
+      }
+    ],
+    "command": {
+      "argv": [
+        "<worktree>/.venv/bin/python",
+        "-I",
+        "tests/live/autoverse_playback_browser.py",
+        "--recording",
+        "<worktree>/.studio-local/t088-assessment-mapping/native-newenv-5/demo",
+        "--static-dir",
+        "<worktree>/.studio-local/diagnostic-keyboard-20261105/ui",
+        "--output",
+        "<worktree>/.studio-local/diagnostic-keyboard-20261105/final/native",
+        "--node",
+        "<prepared-tool-cache>/node-v24.22.1-linux-x64/bin/node",
+        "--playwright-cli",
+        "<prepared-node-modules>/@playwright/test/cli.js",
+        "--browser-cache",
+        "<prepared-tool-cache>/playwright",
+        "--isolate-browser-devices",
+        "--suite",
+        "diagnostics"
+      ]
+    },
+    "rawPrivateReportSha256": "d8c359615b4f73f9c0b090a0d36f67f07236ee88bd04454b02dd118312c4c803",
+    "qualifications": [
+      "This cohort retains its own source/UI identities; final committed evidence is separate from initial verification."
+    ]
+  },
+  {
+    "phase": "playback",
+    "sourceCandidate": "60afba9a58f913b1ed73d20848dd72fbbf830208",
+    "selectedInputs": 553,
+    "stats": {
+      "startTime": "2026-11-05T08:53:06.905Z",
+      "duration": 60166.839,
+      "expected": 22,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "cases": [
+      {
+        "title": "actual original records play and page through native keyboard at 1024",
+        "outcome": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMilliseconds": 6617
+          }
+        ]
+      },
+      {
+        "title": "failed read retries against the actual journal at 1024",
+        "outcome": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMilliseconds": 2556
+          }
+        ]
+      },
+      {
+        "title": "late original response preserves Home at 1024",
+        "outcome": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMilliseconds": 2532
+          }
+        ]
+      },
+      {
+        "title": "late original response preserves deliberate focus at 1024",
+        "outcome": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMilliseconds": 2489
+          }
+        ]
+      },
+      {
+        "title": "source-clock selection does not invent timestamps for receipt payloads at 1024",
+        "outcome": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMilliseconds": 2449
+          }
+        ]
+      },
+      {
+        "title": "labelled large payload has an explicit bounded display at 1024",
+        "outcome": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMilliseconds": 2302
+          }
+        ]
+      },
+      {
+        "title": "labelled invalid-integrity reply cannot enable misleading playback at 1024",
+        "outcome": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMilliseconds": 2469
+          }
+        ]
+      },
+      {
+        "title": "labelled wrong-event reply cannot enable misleading playback at 1024",
+        "outcome": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMilliseconds": 2266
+          }
+        ]
+      },
+      {
+        "title": "labelled wrong-snapshot reply cannot enable misleading playback at 1024",
+        "outcome": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMilliseconds": 2440
+          }
+        ]
+      },
+      {
+        "title": "labelled oversized reply cannot enable misleading playback at 1024",
+        "outcome": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMilliseconds": 2425
+          }
+        ]
+      },
+      {
+        "title": "labelled repeated-cursor reply cannot enable misleading playback at 1024",
+        "outcome": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMilliseconds": 1856
+          }
+        ]
+      },
+      {
+        "title": "actual original records play and page through native keyboard at 1440",
+        "outcome": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMilliseconds": 6234
+          }
+        ]
+      },
+      {
+        "title": "failed read retries against the actual journal at 1440",
+        "outcome": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMilliseconds": 2482
+          }
+        ]
+      },
+      {
+        "title": "late original response preserves Home at 1440",
+        "outcome": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMilliseconds": 1827
+          }
+        ]
+      },
+      {
+        "title": "late original response preserves deliberate focus at 1440",
+        "outcome": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMilliseconds": 1831
+          }
+        ]
+      },
+      {
+        "title": "source-clock selection does not invent timestamps for receipt payloads at 1440",
+        "outcome": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMilliseconds": 1922
+          }
+        ]
+      },
+      {
+        "title": "labelled large payload has an explicit bounded display at 1440",
+        "outcome": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMilliseconds": 2477
+          }
+        ]
+      },
+      {
+        "title": "labelled invalid-integrity reply cannot enable misleading playback at 1440",
+        "outcome": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMilliseconds": 2425
+          }
+        ]
+      },
+      {
+        "title": "labelled wrong-event reply cannot enable misleading playback at 1440",
+        "outcome": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMilliseconds": 2496
+          }
+        ]
+      },
+      {
+        "title": "labelled wrong-snapshot reply cannot enable misleading playback at 1440",
+        "outcome": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMilliseconds": 2502
+          }
+        ]
+      },
+      {
+        "title": "labelled oversized reply cannot enable misleading playback at 1440",
+        "outcome": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMilliseconds": 2428
+          }
+        ]
+      },
+      {
+        "title": "labelled repeated-cursor reply cannot enable misleading playback at 1440",
+        "outcome": "expected",
+        "attempts": [
+          {
+            "status": "passed",
+            "durationMilliseconds": 2481
+          }
+        ]
+      }
+    ],
+    "command": {
+      "argv": [
+        "<worktree>/.venv/bin/python",
+        "-I",
+        "tests/live/autoverse_playback_browser.py",
+        "--recording",
+        "<worktree>/.studio-local/t088-assessment-mapping/native-newenv-5/demo",
+        "--static-dir",
+        "<worktree>/.studio-local/diagnostic-keyboard-20261105/ui",
+        "--output",
+        "<worktree>/.studio-local/diagnostic-keyboard-20261105/playback/native",
+        "--node",
+        "<prepared-tool-cache>/node-v24.22.1-linux-x64/bin/node",
+        "--playwright-cli",
+        "<prepared-node-modules>/@playwright/test/cli.js",
+        "--browser-cache",
+        "<prepared-tool-cache>/playwright",
+        "--isolate-browser-devices",
+        "--suite",
+        "playback"
+      ]
+    },
+    "rawPrivateReportSha256": "a24f930d268e1feff57142da539ff587d0686c24dc05619a028ac2b1ec2cea75",
+    "qualifications": [
+      "This cohort retains its own source/UI identities; final committed evidence is separate from initial verification."
+    ]
+  }
+]
