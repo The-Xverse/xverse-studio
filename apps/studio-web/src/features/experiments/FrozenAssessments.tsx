@@ -17,6 +17,8 @@ type State = {
   report?: Report;
   error?: string;
 };
+type ReadFocus = { origin: Element; intent: number };
+type Completion = ReadFocus & { sequence: number; target: "report" | "error" };
 const hash = (v: unknown) =>
   typeof v === "string" && /^sha256:[a-f0-9]{64}$/.test(v);
 const text = (v: unknown, limit = 4096): v is string =>
@@ -187,12 +189,21 @@ export function FrozenAssessments({
     [cursor, setCursor] = useState<string | null>(null),
     [history, setHistory] = useState<(string | null)[]>([]),
     [refresh, setRefresh] = useState(0),
-    [submitting, setSubmitting] = useState(false);
+    [submitting, setSubmitting] = useState(false),
+    [completion, setCompletion] = useState<Completion | null>(null);
   const mounted = useRef(false),
     request = useRef(0),
+    intent = useRef(0),
+    readFocus = useRef<ReadFocus | null>(null),
+    reportHeading = useRef<HTMLHeadingElement>(null),
+    errorHeading = useRef<HTMLParagraphElement>(null),
     pending = useRef(false),
     retry = useRef<{ fingerprint: string; key: string } | null>(null);
   const enabled = !!run && run.projectId === projectId && !!run.snapshotId;
+  function requested(origin: Element) {
+    readFocus.current = { origin, intent: intent.current };
+    setCompletion(null);
+  }
   useEffect(() => {
     mounted.current = true;
     return () => {
@@ -203,7 +214,9 @@ export function FrozenAssessments({
   useEffect(() => {
     if (!enabled || !run) return;
     const sequence = ++request.current,
-      abort = new AbortController();
+      abort = new AbortController(),
+      focus = readFocus.current;
+    readFocus.current = null;
     setState({ status: "loading" });
     setDefinition("");
     let timedOut = false;
@@ -234,15 +247,17 @@ export function FrozenAssessments({
           mounted.current &&
           sequence === request.current &&
           !abort.signal.aborted
-        )
+        ) {
           setState({ status: "available", report });
+          if (focus) setCompletion({ ...focus, sequence, target: "report" });
+        }
       })
       .catch((error) => {
         if (
           mounted.current &&
           sequence === request.current &&
           (!abort.signal.aborted || timedOut)
-        )
+        ) {
           setState({
             status: "unavailable",
             error: timedOut
@@ -253,6 +268,8 @@ export function FrozenAssessments({
                     : "The assessment inputs could not be read.",
                 ).slice(0, 1000),
           });
+          if (focus) setCompletion({ ...focus, sequence, target: "error" });
+        }
       })
       .finally(() => {
         clearTimeout(timer);
@@ -264,6 +281,16 @@ export function FrozenAssessments({
       request.current++;
     };
   }, [enabled, run?.runId, run?.snapshotId, projectId, cursor, refresh]);
+  useEffect(() => {
+    if (!completion) return;
+    setCompletion(null);
+    if (
+      !mounted.current || completion.sequence !== request.current ||
+      completion.intent !== intent.current || document.querySelector('[role="dialog"]') ||
+      (document.activeElement !== document.body && document.activeElement !== completion.origin)
+    ) return;
+    (completion.target === "report" ? reportHeading : errorHeading).current?.focus();
+  }, [completion]);
   const report = state.status === "available" ? state.report : undefined,
     selected = report?.definitions.find((d) => d.definitionRef === definition);
   return (
@@ -271,13 +298,16 @@ export function FrozenAssessments({
       className="panel"
       aria-label="Frozen assertions and metrics"
       aria-busy={state.status === "loading" && enabled}
+      onKeyDownCapture={() => { intent.current++; }}
+      onPointerDownCapture={() => { intent.current++; }}
     >
       <div className="section-heading">
-        <h3>Frozen assertions and metrics</h3>
+        <h3 ref={reportHeading} tabIndex={-1}>Frozen assertions and metrics</h3>
         <button
           className="button"
           disabled={!enabled || state.status === "loading" || submitting}
-          onClick={() => {
+          onClick={(e) => {
+            requested(e.currentTarget);
             setCursor(null);
             setHistory([]);
             setRefresh((v) => v + 1);
@@ -303,7 +333,7 @@ export function FrozenAssessments({
             </p>
           )}
           {state.status === "unavailable" && (
-            <p role="alert">
+            <p role="alert" ref={errorHeading} tabIndex={-1}>
               Assessment availability is unknown. {state.error}
             </p>
           )}
@@ -428,7 +458,8 @@ export function FrozenAssessments({
                 <button
                   className="button"
                   disabled={!history.length || submitting}
-                  onClick={() => {
+                  onClick={(e) => {
+                    requested(e.currentTarget);
                     setCursor(history[history.length - 1]);
                     setHistory((v) => v.slice(0, -1));
                   }}
@@ -438,7 +469,8 @@ export function FrozenAssessments({
                 <button
                   className="button"
                   disabled={report.nextCursor === null || submitting}
-                  onClick={() => {
+                  onClick={(e) => {
+                    requested(e.currentTarget);
                     setHistory((v) => [...v, cursor]);
                     setCursor(report.nextCursor);
                   }}
