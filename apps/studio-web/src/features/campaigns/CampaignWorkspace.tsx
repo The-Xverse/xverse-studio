@@ -65,6 +65,7 @@ export function CampaignWorkspace({
     previewHeading = useRef<HTMLHeadingElement>(null),
     historyHeading = useRef<HTMLHeadingElement>(null),
     selectedHeading = useRef<HTMLHeadingElement>(null),
+    childHeading = useRef<HTMLHeadingElement>(null),
     errorHeading = useRef<HTMLParagraphElement>(null);
   current.current = context;
   useLayoutEffect(() => {
@@ -96,7 +97,9 @@ export function CampaignWorkspace({
         ? historyHeading
         : completion.target === "selected"
           ? selectedHeading
-          : errorHeading
+          : completion.target === "child"
+            ? childHeading
+            : errorHeading
     ).current?.focus();
   }, [completion]);
   function changed() {
@@ -915,7 +918,7 @@ export function CampaignWorkspace({
         {busy.child && <p role="status">Reading immutable child inputs…</p>}
         {childInputs && (
           <div>
-            <h4>Verified child inputs</h4>
+            <h4 ref={childHeading} tabIndex={-1}>Verified child inputs</h4>
             <KeyValues values={childInputs} />
           </div>
         )}

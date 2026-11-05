@@ -1,7 +1,8 @@
 """Actual campaign inspection and read-only preflight on an independent recording copy.
 
-No workload or campaign is created. Original recording and current installation
-remain unchanged. One new copy-local preflight freezes the current draft.
+No workload or campaign is created. The default planning suite registers the
+prepared provider and freezes one copy-local preflight. The separate keyboard
+suite reads retained history without registering a provider or creating inputs.
 """
 
 import argparse
@@ -63,7 +64,9 @@ def ledger(root):
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("--recording", required=True, type=Path)
-    p.add_argument("--receipt", required=True, type=Path)
+    p.add_argument("--receipt", type=Path)
+    p.add_argument("--suite", choices=("planning", "keyboard"), default="planning")
+    p.add_argument("--isolate-browser-devices", action="store_true")
     p.add_argument("--output", required=True, type=Path)
     p.add_argument("--static-dir", required=True, type=Path)
     p.add_argument("--node", required=True, type=Path)
@@ -71,6 +74,8 @@ def main():
     p.add_argument("--browser-cache", required=True, type=Path)
     p.add_argument("--grep")
     a = p.parse_args()
+    if a.suite == "planning" and a.receipt is None:
+        p.error("The planning suite requires an explicit provider enrollment receipt")
     for field in (
         "recording",
         "receipt",
@@ -80,7 +85,8 @@ def main():
         "playwright_cli",
         "browser_cache",
     ):
-        setattr(a, field, getattr(a, field).resolve())
+        if getattr(a, field) is not None:
+            setattr(a, field, getattr(a, field).resolve())
     a.output.mkdir(parents=True, exist_ok=False)
     result = json.loads((a.recording / "native-result.json").read_bytes())
     assert result["outcome"] == "passed"
@@ -88,6 +94,7 @@ def main():
         json.loads((a.recording / "data-root.private.json").read_bytes())["dataRoot"]
     )
     before = hashes(original)
+    database_before = hashlib.sha256((original / "studio.sqlite").read_bytes()).hexdigest()
     data = (
         native.ROOT
         / ".studio-local/browser-tests"
@@ -116,10 +123,13 @@ def main():
     assert hashes(data) == before
     baseline = ledger(data)
     host = native.NativeHost(
-        data, a.output, a.receipt, Path(sys.executable), a.static_dir
+        data, a.output, a.receipt, Path(sys.executable), a.static_dir,
+        register_provider=a.suite == "planning",
     )
     outcome = {
-        "scope": "actual campaign browser inspection and one new read-only copy-local preflight; no new workload",
+        "scope": ("actual campaign inspection and one copy-local preflight; no new workload"
+                  if a.suite == "planning" else "retained actual campaign keyboard inspection; no provider, preflight or workload"),
+        "suite": a.suite,
         "before": baseline,
     }
     paths = [
@@ -228,8 +238,18 @@ def main():
                 str(a.playwright_cli),
                 "test",
                 "--config",
-                "tests/live/autoverse-campaigns.config.ts",
+                {"planning": "tests/live/autoverse-campaigns.config.ts",
+                 "keyboard": "tests/live/autoverse-campaign-keyboard.config.ts"}[a.suite],
             ]
+            if a.isolate_browser_devices:
+                spec = importlib.util.spec_from_file_location(
+                    "campaign_browser_isolation", Path(__file__).with_name("autoverse_playback_browser.py"))
+                isolation = importlib.util.module_from_spec(spec)
+                spec.loader.exec_module(isolation)
+                env["STUDIO_BROWSER_CPU_ONLY"] = "1"
+                env["STUDIO_BROWSER_DEVICE_PROOF"] = str(a.output / "browser-device-proof.private.json")
+                env["STUDIO_BROWSER_HOST_MOUNT_NS"] = os.readlink("/proc/self/ns/mnt")
+                argv = isolation.device_free_browser_command(argv)
             if a.grep:
                 argv += ["--grep", a.grep]
             (a.output / "command.private.json").write_text(
@@ -262,7 +282,7 @@ def main():
                 outcome["originalBrowserExited"] = child.poll() is not None
                 outcome["browserExit"] = exit_code
             outcome["after"] = ledger(data)
-            expected = {
+            expected = baseline if a.suite == "keyboard" else {
                 **baseline,
                 "snapshot": baseline["snapshot"] + 1,
                 "preflight": baseline["preflight"] + 1,
@@ -282,12 +302,13 @@ def main():
             if v.is_file()
         } == ui_before
         outcome["originalRecordingUnchanged"] = hashes(original) == before
+        outcome["originalDatabaseUnchanged"] = hashlib.sha256((original / "studio.sqlite").read_bytes()).hexdigest() == database_before
         copied_after = hashes(data)
         outcome["copiedOriginalRecordingUnchanged"] = all(
             copied_after.get(k) == v for k, v in before.items()
         )
         outcome["copyLocalNewSnapshotCount"] = len(set(copied_after) - set(before))
-        assert outcome["copyLocalNewSnapshotCount"] == 1
+        assert outcome["copyLocalNewSnapshotCount"] == (0 if a.suite == "keyboard" else 1)
         (a.output / "verification.json").write_text(
             json.dumps(outcome, indent=2) + "\n"
         )
@@ -297,6 +318,7 @@ def main():
                 "sourceInputsUnchanged",
                 "uiInputsUnchanged",
                 "originalRecordingUnchanged",
+                "originalDatabaseUnchanged",
                 "copiedOriginalRecordingUnchanged",
             ]
         )
