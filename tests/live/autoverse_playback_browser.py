@@ -6,6 +6,7 @@ import json
 import os
 from pathlib import Path
 import shutil
+import signal
 import sqlite3
 import subprocess
 import sys
@@ -62,9 +63,13 @@ def device_free_browser_command(argv):
 
 
 def main():
+    def terminate_owned_test(signum, frame):
+        raise KeyboardInterrupt("Owned contributor verification interrupted")
+    signal.signal(signal.SIGTERM, terminate_owned_test)
     p = argparse.ArgumentParser()
     p.add_argument("--case-filter")
-    p.add_argument("--suite", choices=("playback", "diagnostics", "authoring", "lab-inventory", "assessments-keyboard", "exports-keyboard", "bindings-keyboard", "provider-scope"), default="playback")
+    p.add_argument("--suite", choices=("playback", "diagnostics", "authoring", "lab-inventory", "assessments-keyboard", "exports-keyboard", "bindings-keyboard", "provider-scope", "evaluation-keyboard"), default="playback")
+    p.add_argument("--receipt", type=Path, help="Trusted current installation locator for the fixed evaluation suite; the launcher still enrolls the actual installation.")
     p.add_argument(
         "--isolate-browser-devices",
         action="store_true",
@@ -82,6 +87,10 @@ def main():
     a = p.parse_args()
     if a.suite == "exports-keyboard" and a.case_filter:
         p.error("The export suite requires its full matrix for exact operation/import accounting.")
+    if (a.suite == "evaluation-keyboard") != (a.receipt is not None):
+        p.error("Only the evaluation-keyboard suite requires the explicitly selected installation receipt.")
+    if a.receipt is not None:
+        a.receipt = a.receipt.resolve(strict=True)
     for name in ("recording", "static_dir", "output", "node", "playwright_cli", "browser_cache"):
         setattr(a, name, getattr(a, name).resolve())
     a.output.mkdir(parents=True, exist_ok=False)
@@ -115,6 +124,22 @@ def main():
         / ("recorded-payloads-Ω-" + uuid.uuid4().hex)
     )
     exchange.clone(original, data)
+    if a.suite == "evaluation-keyboard":
+        # Only the copied private receipt is moved. The normal launcher must
+        # enroll current SDK/files/stopped containers rather than adopt old facts.
+        with own_root(data):
+            receipt = data / "autoverse-installation.private.json"
+            if receipt.exists():
+                receipt.rename(data / "autoverse-installation.previous.private.json")
+    protected_kinds = ("run", "operation", "evaluation", "snapshot", "campaign", "preflight", "project")
+    def protected_records():
+        with sqlite3.connect((data / "studio.sqlite").as_uri() + "?mode=ro", uri=True) as db:
+            return {(kind, key): json.loads(body) for kind, key, body in db.execute("SELECT kind,id,body FROM records") if kind in protected_kinds}
+    original_records = protected_records()
+    def idempotency_records():
+        with sqlite3.connect((data / "studio.sqlite").as_uri() + "?mode=ro", uri=True) as db:
+            return {(scope, key): (fingerprint, json.loads(result)) for scope, key, fingerprint, result in db.execute("SELECT scope,key,fingerprint,result FROM idempotency")}
+    original_receipts = idempotency_records()
     rows = [
         json.loads(line)
         for line in (original / "runs" / result["runId"] / "evidence.jsonl")
@@ -141,13 +166,15 @@ def main():
     host = native.NativeHost(
         data,
         a.output,
-        None,
+        a.receipt,
         Path(sys.executable),
         a.static_dir.resolve(),
-        register_provider=False,
+        register_provider=a.suite == "evaluation-keyboard",
     )
     outcome = {
-        "scope": "Actual original Autoverse recording; fixed playback/authoring/export suites on private copies; labelled HTTP fixtures; no model or evaluation start",
+        "scope": ("Actual original Autoverse recording; genuine fresh installed mapping and derived evaluation submissions; no model or guest start"
+                  if a.suite == "evaluation-keyboard" else
+                  "Actual original Autoverse recording; fixed playback/authoring/export suites on private copies; labelled HTTP fixtures; no model or evaluation start"),
         "suite": a.suite,
         "sourceCandidate": subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=native.ROOT, text=True).strip(),
         "before": baseline,
@@ -158,6 +185,15 @@ def main():
         host.start()
         api = native.login(host)
         try:
+            if a.suite == "evaluation-keyboard":
+                support = native.checked(api.get(f"/api/v1/runs/{context['runId']}/assessment-support"))
+                definitions = native.checked(api.get(f"/api/v1/runs/{context['runId']}/definitions"))["items"]
+                assert support["status"] == "supported" and len(definitions) == 6
+                context["historicalEvaluations"] = native.checked(api.get(f"/api/v1/runs/{context['runId']}/evaluations"))["items"]
+                assert len(context["historicalEvaluations"]) == 6
+                (data / "playback-recording.private.json").write_text(json.dumps(context))
+                assert (data / "autoverse-installation.private.json").is_file()
+                (a.output / "installed-evaluation-support.json").write_text(json.dumps(support, indent=2) + "\n")
             if a.suite == "exports-keyboard":
                 binding = native.checked(api.get(f"/api/v1/projects/{context['projectId']}/local-bindings"))
                 assert binding["state"] == "empty"
@@ -205,6 +241,7 @@ def main():
                     "exports-keyboard": "tests/live/autoverse-exports-keyboard.config.ts",
                     "bindings-keyboard": "tests/live/autoverse-bindings-keyboard.config.ts",
                     "provider-scope": "tests/live/autoverse-provider-scope.config.ts",
+                    "evaluation-keyboard": "tests/live/autoverse-evaluation-keyboard.config.ts",
                 }[a.suite],
             ]
             if a.case_filter:
@@ -253,6 +290,42 @@ def main():
             outcome["after"] = recorded.ledger(data)
             expected = ({**baseline, "operation": baseline["operation"] + 8, "idempotency": baseline["idempotency"] + 8}
                         if a.suite == "exports-keyboard" else baseline)
+            if a.suite == "evaluation-keyboard":
+                after_records = protected_records()
+                checker_spec = importlib.util.spec_from_file_location("evaluation_record_readback", Path(__file__).with_name("autoverse_evaluation_records.py"))
+                checker = importlib.util.module_from_spec(checker_spec)
+                checker_spec.loader.exec_module(checker)
+                outcome["protectedRecordReadback"] = checker.verify_protected_records(original_records, after_records, context["runId"], context["snapshotId"])
+                added = {key: value for key, value in after_records.items() if key not in original_records}
+                evaluations = {key[1]: value for key, value in added.items() if key[0] == "evaluation"}
+                operations = {key[1]: value for key, value in added.items() if key[0] == "operation"}
+                assert set(key[0] for key in added) <= {"evaluation", "operation"}
+                count = len(evaluations)
+                assert len(operations) == count <= 24
+                if exit_code == 0 and not a.case_filter:
+                    assert count == 24
+                for row in evaluations.values():
+                    definition = next(d for d in definitions if d["definitionRef"] == row["definitionRef"])
+                    assert row["runId"] == context["runId"] and row["snapshotId"] == context["snapshotId"]
+                    assert row["definitionDigest"] == definition["definitionDigest"] and row["status"] in {"complete", "error"}
+                    assert row["evidenceMapping"] == support and row["evidenceRefs"] == [support["evidenceId"]]
+                    operation = operations[row["operationId"]]
+                    assert operation["kind"] == "evaluation" and operation["evaluationId"] == row["evaluationId"]
+                    assert operation["status"] == ("completed" if row["status"] == "complete" else "failed")
+                    assert operation["result"] == {"evaluationId": row["evaluationId"], "status": row["status"], "verdict": row["verdict"]}
+                current_receipts = idempotency_records()
+                assert all(current_receipts.get(key) == value for key, value in original_receipts.items())
+                new_receipts = {key: value for key, value in current_receipts.items() if key not in original_receipts}
+                assert len(new_receipts) == count
+                for (scope, _), (fingerprint, result) in new_receipts.items():
+                    assert scope.endswith(f":POST /runs/{context['runId']}/evaluations")
+                    assert result["evaluationId"] in evaluations and result["operationId"] == evaluations[result["evaluationId"]]["operationId"]
+                    row = evaluations[result["evaluationId"]]
+                    assert fingerprint == digest({key: row[key] for key in ("snapshotId", "definitionRef", "definitionDigest", "evidenceRefs")})
+                expected = {**baseline, **{kind: baseline[kind] + count for kind in ("operation", "evaluation", "idempotency")}}
+                outcome["newDerivedEvaluations"] = count
+                outcome["oldProtectedRecordsAndDerivedIndexVerified"] = True
+                outcome["failedCohortMayStopBeforeFullMatrix"] = exit_code != 0
             outcome["expectedExecutionCounts"] = expected
             assert outcome["after"] == expected
             if a.suite == "exports-keyboard":

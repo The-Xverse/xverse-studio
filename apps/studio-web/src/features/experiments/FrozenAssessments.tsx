@@ -200,6 +200,9 @@ export function FrozenAssessments({
     pending = useRef(false),
     retry = useRef<{ fingerprint: string; key: string } | null>(null);
   const enabled = !!run && run.projectId === projectId && !!run.snapshotId;
+  const context = JSON.stringify([projectId, run?.runId, run?.snapshotId]),
+    currentContext = useRef(context);
+  currentContext.current = context;
   function requested(origin: Element) {
     readFocus.current = { origin, intent: intent.current };
     setCompletion(null);
@@ -504,6 +507,12 @@ export function FrozenAssessments({
                   if (retry.current?.fingerprint !== fingerprint)
                     retry.current = { fingerprint, key: mutationKey() };
                   const key = retry.current.key;
+                  const submitted = {
+                    context: currentContext.current,
+                    sequence: request.current,
+                    origin: (e.nativeEvent as SubmitEvent).submitter ?? document.activeElement ?? e.currentTarget,
+                    intent: intent.current,
+                  };
                   pending.current = true;
                   setSubmitting(true);
                   void doAction("Evaluating frozen definition", async () => {
@@ -513,10 +522,20 @@ export function FrozenAssessments({
                         { method: "POST", key, body },
                       );
                       if (mounted.current) {
-                        retry.current = null;
-                        setCursor(null);
-                        setHistory([]);
-                        setRefresh((v) => v + 1);
+                        if (retry.current?.key === key) retry.current = null;
+                        if (
+                          currentContext.current === submitted.context &&
+                          request.current === submitted.sequence
+                        ) {
+                          readFocus.current = {
+                            origin: submitted.origin,
+                            intent: submitted.intent,
+                          };
+                          setCompletion(null);
+                          setCursor(null);
+                          setHistory([]);
+                          setRefresh((v) => v + 1);
+                        }
                       }
                       return result;
                     } finally {
