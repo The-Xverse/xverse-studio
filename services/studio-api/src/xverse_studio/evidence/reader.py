@@ -83,13 +83,20 @@ def read_journal(root, state):
     if integrity == "invalid":
         return records, integrity
     with _CACHE_LOCK:
+        # Older captures of this canonical path cannot serve its new fingerprint.
+        for previous in list(_CACHE):
+            if previous[0] == key[0]:
+                del _CACHE[previous]
         # At most two source projections and 64MiB of contributing source bytes.
         _CACHE[key] = (records, integrity, len(data))
         while (
             len(_CACHE) > 2
             or sum(value[2] for value in _CACHE.values()) > MAX_JOURNAL_BYTES
         ):
-            _CACHE.popitem(last=False)
+            # Keep expensive large captures from being repeatedly decoded when
+            # small comparison sources alternate. Size ties retain LRU order.
+            smallest = min(_CACHE, key=lambda entry: _CACHE[entry][2])
+            del _CACHE[smallest]
     return records, integrity
 
 
