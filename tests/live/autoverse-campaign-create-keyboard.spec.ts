@@ -146,8 +146,26 @@ for (const width of [1024, 1440]) {
     await expect(selected(page).getByRole("heading", { name: "Verified child inputs", exact: true })).toBeFocused();
     const input = await get(page, `/runs/${run.runId}/snapshot`); expect(input.integrity).toBe("valid"); expect(input.snapshot.parentSnapshotId).toBe(frozen.baseSnapshotId); expect(input.snapshot.campaignId).toBe(accepted.campaignId); expect(input.snapshot.configuration.durationSeconds).toBe(60);
     const stop = selected(page).getByRole("button", { name: "Stop scheduling", exact: true });
+    const cancelSubmissions: any[] = [];
+    let release!: () => void, cancellationHeld = false; const gate = new Promise<void>(r => release = r);
+    await page.route(`**/api/v1/campaigns/${accepted.campaignId}/cancel`, async route => {
+      cancelSubmissions.push({ key: route.request().headers()["idempotency-key"], body: route.request().postDataJSON() });
+      cancellationHeld = true; await gate;
+      await route.fulfill({ status: 503, json: { code: "CAMPAIGN_CANCEL_FIXTURE", message: "Labelled cancellation refusal before acceptance", retryable: true } });
+    }, { times: 1 });
+    try {
+      await activate(page, stop); await expect.poll(() => cancellationHeld).toBe(true);
+      const home = page.getByRole("button", { name: "X-Verse Studio home", exact: true });
+      if (width === 1024) await tabTo(page, home);
+      else { await activate(page, page.getByRole("button", { name: "Edit scenario XDL", exact: true })); await expect(page.getByRole("dialog").getByRole("textbox", { name: "XDL source", exact: true })).toBeFocused(); }
+      release(); await page.unrouteAll({ behavior: "wait" });
+      await expect(page.getByRole("alert")).toContainText("CAMPAIGN_CANCEL_FIXTURE");
+      if (width === 1024) await expect(home).toBeFocused();
+      else { await expect(page.getByRole("dialog").getByRole("textbox", { name: "XDL source", exact: true })).toBeFocused(); await page.keyboard.press("Escape"); await expect(page.getByRole("dialog")).toHaveCount(0); }
+    } finally { release(); await page.unrouteAll({ behavior: "wait" }); }
     const cancelResponse = page.waitForResponse(r => new URL(r.url()).pathname === `/api/v1/campaigns/${accepted.campaignId}/cancel` && r.request().method() === "POST");
     await activate(page, stop); const cancel = await cancelResponse; expect(cancel.status()).toBe(202); const cancelReceipt = await cancel.json(); expect(cancelReceipt.operationStatus).toBe("completed");
+    expect(cancel.request().headers()["idempotency-key"]).toBe(cancelSubmissions[0].key); expect(cancel.request().postDataJSON()).toEqual(cancelSubmissions[0].body);
     await expect(selectedHeading(page)).toBeFocused();
     await expect.poll(async () => { campaign = await get(page, `/campaigns/${accepted.campaignId}`); return campaign.status; }, { timeout: 120000, intervals: [500] }).toBe("cancelled");
     expect(campaign.children.map((c: any) => c.state)).toEqual(["stopped", "cancelled"]);

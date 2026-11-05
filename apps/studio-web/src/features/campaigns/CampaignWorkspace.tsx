@@ -125,7 +125,7 @@ export function CampaignWorkspace({
     origin?: Element,
   ) {
     const previous = reads.current.get(channel);
-    if (previous?.tag === tag) return;
+    if (previous?.tag === tag && !origin) return;
     previous?.abort.abort();
     const slot = {
         abort: new AbortController(),
@@ -420,7 +420,8 @@ export function CampaignWorkspace({
         setNotice(
           `Scheduling cancellation acknowledged. Active children: ${outcomes.length ? outcomes.map((o: Data) => `${String(o.runId).slice(0, 80)}: ${String(o.status).slice(0, 64)}${o.reason ? " (" + String(o.reason).slice(0, 256) + ")" : ""}`).join("; ") : "none reported"}. This acknowledgement is not proof of terminal cleanup.`,
         );
-        if (selectedId.current === id) await detail(id);
+        if (selectedId.current === id)
+          await detail(id, submittedIntent === intent.current ? origin : undefined);
       }
     } catch (error) {
       if (

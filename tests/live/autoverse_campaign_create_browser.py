@@ -104,7 +104,8 @@ def main():
         runs = records("run")
         assert len(campaigns) <= (2 if a.live else 0) and len(runs) <= (2 if a.live else 0)
         if exit_code == 0 and a.live:
-            assert len(campaigns) == len(runs) == 2
+            selected_cases = json.loads((a.output / "browser.json").read_bytes())["stats"]["expected"]
+            assert selected_cases in {1, 2} and len(campaigns) == len(runs) == selected_cases
         for campaign in campaigns:
             value = native.checked(api.get("/api/v1/campaigns/" + campaign["campaignId"]))
             if exit_code == 0:
