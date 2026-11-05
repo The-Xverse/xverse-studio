@@ -49,6 +49,9 @@ for (const width of [1024, 1440]) {
       await activate(page, page.getByRole("button", { name: "X-Verse Studio home", exact: true }));
       await activate(page, page.locator(`.project-list-row[data-project-id="${project.projectId}"] .project-open`));
       await expect(page.locator(".project-header h1")).toHaveText(project.name);
+      // The global shell cannot assign reference evidence scope to every
+      // project, including an absent Autoverse provider. Scope belongs below.
+      await expect(page.getByRole("banner").getByText("REFERENCE PREVIEW", { exact: true })).toHaveCount(0);
       const status = page.getByRole("status", { name: "Selected provider scope", exact: true });
       await expect(status).toContainText(expectedId); await expect(status).toContainText(expectedScope);
       await expect(status).not.toContainText(/ready to (run|execute)/i);
