@@ -138,6 +138,14 @@ export default function App() {
     ),
     [addTemplate, setAddTemplate] = useState(""),
     [executionProvider, setExecutionProvider] = useState("studio.reference");
+  const selectedProvider = providers.find(
+      (provider) => provider.providerId === executionProvider,
+    ),
+    selectedProviderScope =
+      typeof selectedProvider?.evidenceScope === "string" &&
+      selectedProvider.evidenceScope.trim()
+        ? selectedProvider.evidenceScope.replaceAll("_", " ")
+        : "Scope not declared";
   const [sourceContext, setSourceContext] = useState<
       SourceTarget | undefined
     >(),
@@ -1704,9 +1712,20 @@ export default function App() {
                         />
                       </>
                     ) : (
-                      <>
-                        Execution scope <Badge>Owned reference</Badge>
-                      </>
+                      <span
+                        className="provider-scope"
+                        role="status"
+                        aria-label="Selected provider scope"
+                      >
+                        Provider <code>{executionProvider}</code>{" "}
+                        <Badge
+                          tone={selectedProvider?.available === true ? "info" : "warning"}
+                        >
+                          {selectedProvider?.available === true
+                            ? selectedProviderScope
+                            : "Provider unavailable"}
+                        </Badge>
+                      </span>
                     )}
                   </span>
                 </div>

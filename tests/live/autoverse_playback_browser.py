@@ -64,7 +64,7 @@ def device_free_browser_command(argv):
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("--case-filter")
-    p.add_argument("--suite", choices=("playback", "diagnostics", "authoring", "lab-inventory", "assessments-keyboard", "exports-keyboard", "bindings-keyboard"), default="playback")
+    p.add_argument("--suite", choices=("playback", "diagnostics", "authoring", "lab-inventory", "assessments-keyboard", "exports-keyboard", "bindings-keyboard", "provider-scope"), default="playback")
     p.add_argument(
         "--isolate-browser-devices",
         action="store_true",
@@ -204,6 +204,7 @@ def main():
                     "assessments-keyboard": "tests/live/autoverse-assessments-keyboard.config.ts",
                     "exports-keyboard": "tests/live/autoverse-exports-keyboard.config.ts",
                     "bindings-keyboard": "tests/live/autoverse-bindings-keyboard.config.ts",
+                    "provider-scope": "tests/live/autoverse-provider-scope.config.ts",
                 }[a.suite],
             ]
             if a.case_filter:
