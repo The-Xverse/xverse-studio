@@ -83,3 +83,14 @@ provider endpoint is added. Twelve source-backed checks pass, including eleven
 changed request/operation/fingerprint/mailbox/key/producer refusals. Repeat the
 whole cases to verify the remaining frozen-byte and ledger assertions, rather
 than reclassifying the old failure as a full pass.
+
+Later uninstrumented repeats still show intermittent lease expiry, including after
+the event-loop repair; one completed Stop is insufficient to claim reliability.
+An explicit contributor-host --trace-input-timing option now measures HTTP,
+lifecycle, provider admission/input and owner/mailbox atomic-write durations in a
+256-sample memory ring, written only at application shutdown. It delegates every
+original operation and records no payload, lease/session token, path or exception
+message. The existing valid-target host alone can select it; it cannot be combined
+with fault injection or enabled by imported project data. Its ASGI refusal/privacy/
+restoration check passes. These instrumented runs are diagnostic and require an
+uninstrumented repeat before acceptance; no production debug API is added.

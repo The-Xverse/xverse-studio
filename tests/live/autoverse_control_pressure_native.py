@@ -183,6 +183,7 @@ def main():
     for name in ["recording", "receipt", "static-dir", "output"]:
         parser.add_argument("--" + name, type=Path, required=True)
     parser.add_argument("--control", choices=["stop", "cancel"], required=True)
+    parser.add_argument("--trace-input-timing", action="store_true")
     args = parser.parse_args()
     args.output.mkdir(parents=True, exist_ok=False)
     source_result = json.loads((args.recording / "native-result.json").read_bytes())
@@ -208,7 +209,9 @@ def main():
     report = {"outcome": "failed", "control": args.control, "before": baseline,
               "scope": "Actual full rendered/sensor/Android Autoverse pipeline with accepted control under presentation pressure; no physical/deterministic/numeric mapping claim",
               "sourceRunId": source["runId"], "syntheticHistory": history}
-    host = native.NativeHost(data, args.output, args.receipt.resolve(), Path(sys.executable), args.static_dir.resolve())
+    host_arguments = ("--trace-input-timing",) if args.trace_input_timing else ()
+    report["inputTimingInstrumentation"] = {"enabled": args.trace_input_timing, "profiledResultsRequireUninstrumentedRepeat": args.trace_input_timing}
+    host = native.NativeHost(data, args.output, args.receipt.resolve(), Path(sys.executable), args.static_dir.resolve(), host_arguments=host_arguments)
     api, worker, run_id, pressure = None, None, None, None
     heartbeat_client, heartbeat_thread = None, None
     heartbeat_stop, heartbeat_errors = threading.Event(), []

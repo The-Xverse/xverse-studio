@@ -22,10 +22,28 @@ def main():
         default="none",
     )
     parser.add_argument("--journal-open-fault", choices=["none", "directory", "existing", "report-unavailable"], default="none")
+    parser.add_argument("--trace-input-timing", action="store_true")
     args = parser.parse_args()
     if not args.data_dir.parent.name == "browser-tests":
         parser.error("A dedicated Studio browser-tests root is required.")
     enrolled = json.loads(args.receipt.read_bytes())["classic"]
+    if args.trace_input_timing:
+        if args.fault != "valid" or args.cleanup_fault != "none" or args.journal_open_fault != "none":
+            parser.error("Input timing instrumentation requires the unchanged valid target.")
+        import importlib.util
+        from xverse_studio.api import app as api_module
+
+        spec = importlib.util.spec_from_file_location("contributor_input_timing", Path(__file__).with_name("autoverse_input_timing.py"))
+        timing = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(timing)
+        create_app = api_module.create_app
+
+        def instrumented_app(*positional, **keywords):
+            app = create_app(*positional, **keywords)
+            timing.install(app, args.data_dir)
+            return app
+
+        api_module.create_app = instrumented_app
     if args.journal_open_fault != "none":
         if args.cleanup_fault != "none" or args.fault != "valid":
             parser.error("Journal opening has its own single-fault native case.")

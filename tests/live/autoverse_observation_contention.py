@@ -272,3 +272,30 @@ def test_waiting_session_lookup_does_not_block_the_http_event_loop(copied, monke
                 assert public_done.wait(1), "Synchronous authentication blocks the ASGI event loop"
                 public.result(timeout=1)
             assert authenticated.result(timeout=5).status_code == 200
+
+
+def test_optional_input_timings_preserve_refusal_and_exclude_private_values(copied):
+    studio, _, right = copied
+    spec = importlib.util.spec_from_file_location("inert_input_timing", Path(__file__).with_name("autoverse_input_timing.py"))
+    timing = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(timing)
+    original_read = studio.runs.read
+    timing.install(studio._inert_contention_app, studio.store.root)
+    with TestClient(studio._inert_contention_app) as api:
+        api.headers["Origin"] = "http://testserver"
+        login = api.post("/api/v1/session", json={"bootstrapToken": "inert-contention-test"})
+        assert login.status_code == 200
+        csrf = login.json()["csrfToken"]
+        cookie = api.cookies.get("studio_session")
+        api.headers["X-CSRF-Token"] = csrf
+        response = api.post(f"/api/v1/runs/{right}/input/frame", json={"leaseToken": "owned-private-input-marker", "generation": 1, "frame": {}})
+        assert response.status_code == 409 and response.json()["code"] == "STATE_CONFLICT"
+    raw = (studio.store.root / "input-timing.private.json").read_text()
+    report = json.loads(raw)
+    assert len(report["samples"]) == 1 and report["maximumSamples"] == 256
+    sample, = report["samples"]
+    assert sample["failureCode"] == "STATE_CONFLICT" and sample["statusCode"] == 409
+    assert sample["inputRequestSeconds"] >= sample["lifecycleReadSeconds"] >= 0
+    assert "providerInputSeconds" not in sample
+    assert all(secret not in raw for secret in [csrf, cookie, "owned-private-input-marker"])
+    assert studio.runs.read == original_read
