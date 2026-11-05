@@ -531,7 +531,7 @@ def create_app(
             for c in commands:
                 if c.get("documentId") in p["documents"]:
                     c["documentId"] = p["documents"][c["documentId"]]["path"]
-            updated = semantic_edits(projects.sources(p), commands)
+            updated = semantic_edits(projects.sources(p), commands, adapter=projects.adapter)
             return {
                 by_path.get(path, uid("doc-")): {
                     "path": path,

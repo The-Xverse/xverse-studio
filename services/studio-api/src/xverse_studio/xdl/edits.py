@@ -61,7 +61,7 @@ def _check_asset_ports(spec, asset_kind, asset):
             raise XDLRejected("The selected endpoint direction is incompatible with this logical asset port.", "ENDPOINT_INCOMPATIBLE")
 
 
-def semantic_edits(documents: dict[str, str], edits: list[dict]) -> dict[str, str]:
+def semantic_edits(documents: dict[str, str], edits: list[dict], *, adapter: XDLAdapter | None = None) -> dict[str, str]:
     """Return a new complete source transaction, or refuse without altering the inputs.
 
     Semantic authoring requires an already valid set. Unknown/unresolved extensions remain
@@ -69,7 +69,8 @@ def semantic_edits(documents: dict[str, str], edits: list[dict]) -> dict[str, st
     """
     if not isinstance(edits, list) or not 0 < len(edits) <= 100:
         raise XDLRejected("A semantic transaction needs one to 100 edits.", "LIMIT_EXCEEDED")
-    adapter = XDLAdapter()
+    if adapter is None:
+        adapter = XDLAdapter()
     report = adapter.validate(documents)
     if not report["valid"]:
         raise XDLRejected("Resolve authoritative source diagnostics before applying semantic edits; original source is preserved.", "MODEL_INVALID")

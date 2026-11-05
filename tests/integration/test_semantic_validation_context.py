@@ -32,18 +32,25 @@ def test_changed_admitted_schema_refuses_semantic_rewrite_without_advancing_sour
     assert XDLAdapter().validate(sources)["valid"]
     before_revisions = client.app.state.studio.store.all("revision")
     if operation == "binding":
-        response = client.patch(
-            f"/api/v1/projects/{pid}/deployment-variants/{variant['documentId']}",
-            headers={"If-Match": str(revision)},
-            json={"baseRevision": revision, "bindingId": "plant-binding", "realizationClass": "virtual"},
-        )
+        try:
+            response = client.patch(
+                f"/api/v1/projects/{pid}/deployment-variants/{variant['documentId']}",
+                headers={"If-Match": str(revision)},
+                json={"baseRevision": revision, "bindingId": "plant-binding", "realizationClass": "virtual"},
+            )
+        except RuntimeError:
+            # Even a failed response must preserve the original source. The
+            # original defect committed before its incompatible list read failed.
+            current = client.get(f"/api/v1/projects/{pid}").json()
+            assert current["revision"] == revision and current["documents"] == project["documents"]
+            raise
     else:
         response = client.post(
             f"/api/v1/projects/{pid}/edits",
             headers={"If-Match": str(revision)},
             json={"baseRevision": revision, "edits": [{"kind": "set_parameter", "parameterId": "gain", "value": .4}]},
         )
-    assert response.status_code == 422, response.text
+    assert response.status_code == 422
     assert response.json()["code"] == "MODEL_INVALID"
     current = client.get(f"/api/v1/projects/{pid}").json()
     assert current["revision"] == revision and current["documents"] == project["documents"]

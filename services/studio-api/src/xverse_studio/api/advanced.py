@@ -443,7 +443,7 @@ def install_advanced(app, store, projects, runs, adapter, *, lab_host=None, lab_
         base = campaign["baseSnapshot"]
         if base["providerId"] in runs.installed_providers:
             return runs.prepare_campaign_child(campaign, child)
-        docs = semantic_edits(base["documents"], [{"kind": "set_parameter", "parameterId": key, "value": value} for key, value in child["parameters"].items()])
+        docs = semantic_edits(base["documents"], [{"kind": "set_parameter", "parameterId": key, "value": value} for key, value in child["parameters"].items()], adapter=adapter)
         compiled = adapter.compile(docs)
         configuration = reference_configuration(docs, compiled)
         snapshot_id, preflight_id = uid("snap-"), uid("pf-")

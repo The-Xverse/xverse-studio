@@ -243,7 +243,7 @@ class Deployments:
                 raise Problem("NOT_FOUND", "Deployment document not found.", 404)
             source = self.projects.sources(project)
             try:
-                updated = semantic_edits(source, [{"kind": "set_binding", "documentId": project["documents"][document_id]["path"], **{key: item for key, item in value.items() if key != "scenarioRef"}}])
+                updated = semantic_edits(source, [{"kind": "set_binding", "documentId": project["documents"][document_id]["path"], **{key: item for key, item in value.items() if key != "scenarioRef"}}], adapter=self.adapter)
             except XDLRejected as error:
                 raise Problem(error.code, str(error)) from None
             resource = YAML(typ="safe").load(updated[project["documents"][document_id]["path"]])
