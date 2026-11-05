@@ -5,6 +5,9 @@ import time
 
 from .installation import InstallationError, container_fact, inspect
 
+MAX_RELEASE_READBACKS = 280
+RELEASE_READBACK_INTERVAL_SECONDS = 0.25
+
 
 def cleanup_container(installation, role, claim, *, deadline=None):
     codes = []
@@ -37,6 +40,7 @@ def cleanup_container(installation, role, claim, *, deadline=None):
         return row
 
     status = "unknown"
+    stop_attempted = False
     try:
         row = owned()
         if row["State"]["Running"]:
@@ -70,6 +74,7 @@ def cleanup_container(installation, role, claim, *, deadline=None):
                 row = owned()
             if row["State"]["Running"]:
                 try:
+                    stop_attempted = True
                     subprocess.run(
                         [
                             installation["docker"],
@@ -89,8 +94,16 @@ def cleanup_container(installation, role, claim, *, deadline=None):
                 except (OSError, subprocess.SubprocessError):
                     code("AUTOVERSE_CONTAINER_STOP_UNAVAILABLE")
         # A missing command acknowledgement is not proof of release or failure.
-        # Inspect the original identity once; never repeat the mutation here.
+        # Docker may continue an already accepted Stop after the CLI times out.
+        # Reobserve only that original start within the existing resource budget;
+        # never replay Stop or treat a changed/reappearing start as ours.
         row = owned()
+        if row["State"]["Running"] and stop_attempted:
+            for _ in range(MAX_RELEASE_READBACKS):
+                time.sleep(budget(RELEASE_READBACK_INTERVAL_SECONDS))
+                row = owned()
+                if not row["State"]["Running"]:
+                    break
         if row["State"]["Running"]:
             raise InstallationError("AUTOVERSE_CONTAINER_STOP_UNCONFIRMED")
         status = "released"
