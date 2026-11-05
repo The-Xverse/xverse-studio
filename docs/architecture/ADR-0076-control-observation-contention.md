@@ -55,3 +55,15 @@ counting actual SQL writes retains the original one-write assertions. The affect
 contact forbidden and source bytes unchanged. No original pressure failure is
 reclassified. Live harness diagnostics retain at most128 recent input frame and
 following observation request durations/statuses, with no lease tokens or payloads.
+
+The first full repeat on06aadb3 still fails and is retained. Its first two pressure
+input responses succeed in0.066/0.046 seconds, but the following presentation GETs
+take0.528/0.604 seconds. The third input receives lease expiry after0.556 seconds.
+The contributor's serial frame/GET/sleep loop therefore does not maintain an
+independent driver heartbeat. This does not establish a complete product fix or
+justify any longer lease. Prepare a separate HTTP client while the lease is
+released, then use an independent brake-frame thread during the same six-second
+pressure/observation/prefix checks. Every failed heartbeat remains fatal; never
+silently reacquire or relax authority. Join that thread before the planned command
+and in finally cleanup. Retain its bounded timings/errors and original frame/GET
+failure. The complete live Stop/Cancel and finite repeats remain required.

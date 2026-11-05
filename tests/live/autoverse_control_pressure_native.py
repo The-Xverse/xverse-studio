@@ -178,6 +178,8 @@ def main():
               "sourceRunId": source["runId"], "syntheticHistory": history}
     host = native.NativeHost(data, args.output, args.receipt.resolve(), Path(sys.executable), args.static_dir.resolve())
     api, worker, run_id, pressure = None, None, None, None
+    heartbeat_client, heartbeat_thread = None, None
+    heartbeat_stop, heartbeat_errors = threading.Event(), []
     try:
         host.start()
         api = native.login(host)
@@ -216,11 +218,11 @@ def main():
         driver_phase = "speed-prerequisite"
         report["driverFrames"] = []
 
-        def drive(throttle, brake):
+        def publish(throttle, brake, client):
             nonlocal sequence
             sequence += 1
             started = time.monotonic()
-            response = api.post(route + "/input/frame", json={
+            response = client.post(route + "/input/frame", json={
                 **lease, "frame": {"sequence": sequence, "throttle": throttle, "brake": brake, "steer": 0},
             })
             frame = {"phase": driver_phase, "sequence": sequence,
@@ -228,6 +230,10 @@ def main():
             report["driverFrames"].append(frame)
             del report["driverFrames"][:-128]
             native.checked(response)
+            return frame
+
+        def drive(throttle, brake):
+            frame = publish(throttle, brake, api)
             started = time.monotonic()
             response = api.get(route)
             frame.update(observationHttpSeconds=time.monotonic() - started,
@@ -248,6 +254,7 @@ def main():
         pressure = PresentationPressure(api, history, source["runId"], source_result["children"][1]["runId"], source_result["campaignId"], run_id)
         native.checked(api.post(route + "/input/release", json=lease))
         setup_started = time.monotonic()
+        heartbeat_client = pressure.client()
         pressure.start()
         # Preparing independent HTTP clients/first captures is not a driver
         # heartbeat. Acquire a new public lease for the measured active phase;
@@ -259,13 +266,26 @@ def main():
                                       "setupSeconds": time.monotonic() - setup_started,
                                       "freshLeaseAcquiredAfterSetup": True, "unchangedLeaseSeconds": .75}
         driver_phase = "presentation-pressure"
+
+        def maintain_driver():
+            try:
+                while not heartbeat_stop.is_set():
+                    publish(0, 1, heartbeat_client)
+                    heartbeat_stop.wait(.1)
+            except BaseException as error:
+                heartbeat_errors.append({"error": type(error).__name__, "message": str(error)[:1000]})
+                heartbeat_stop.set()
+
+        heartbeat_thread = threading.Thread(target=maintain_driver, name="owned-pressure-driver")
+        heartbeat_thread.start()
         journal = data / "runs" / run_id / "evidence.jsonl"
         initial = journal.read_bytes()
         ticks = [{"phase": "consumers_paused", "records": len(initial.splitlines())}]
         started = time.monotonic()
         disconnected = False
         while time.monotonic() - started < 6:
-            run = drive(0, 1)
+            assert not heartbeat_errors, heartbeat_errors
+            run = native.checked(api.get(route))
             assert run["state"] == "running", run
             worker.verify()
             assert journal.read_bytes().startswith(initial)
@@ -274,6 +294,9 @@ def main():
                 disconnected = True
                 ticks.append({"phase": "live_consumer_disconnected", "records": len(journal.read_bytes().splitlines())})
             time.sleep(.1)
+        heartbeat_stop.set()
+        heartbeat_thread.join(timeout=35)
+        assert not heartbeat_thread.is_alive() and not heartbeat_errors, heartbeat_errors
         ticks.append({"phase": "before_control", "records": len(journal.read_bytes().splitlines())})
         assert len(ticks) == 3 and ticks[0]["records"] < ticks[1]["records"] < ticks[2]["records"], ticks
         assert not pressure.errors and all(pressure.requests.get(k, {}).get("count", 0) > 0 for k in ["history", "comparison", "campaign"])
@@ -320,6 +343,15 @@ def main():
                       syntheticCanonicalBytesUnchanged=True, frozenInputsUnchanged=True)
     finally:
         try:
+            heartbeat_stop.set()
+            if heartbeat_thread is not None:
+                heartbeat_thread.join(timeout=35)
+                report["driverHeartbeat"] = {"independentOfPresentationReads": True,
+                                             "unchangedLeaseSeconds": .75,
+                                             "allThreadsExited": not heartbeat_thread.is_alive(),
+                                             "errors": heartbeat_errors}
+            if heartbeat_client is not None:
+                heartbeat_client.close()
             if pressure is not None:
                 pressure.stop()
                 report["pressure"] = pressure.report()
