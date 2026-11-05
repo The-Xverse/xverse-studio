@@ -1,3 +1,30 @@
+# Current dependency/closure review — 2026-11-05
+
+**71 completed /19 in progress /10 blocked; zero accepted milestones.**
+T067 remains the latest closure. This review uses current task dependencies;
+older readiness/count snapshots below retain their dated historical scopes.
+
+The current uncompleted tasks whose declared dependencies are complete are T002,
+T033, T038, T039, T073 and T091. T002/T039 retain native Windows gaps under the
+independent user freeze. T033 retains the original lifecycle fault matrix and
+late-Stop discrepancy; new executable reference-workload authority is not inferred.
+T038 retains the broader critical-workflow/browser/AT matrix. Recent diagnostic/
+import repairs add actual Linux coverage and do not close those whole obligations.
+T073 still requires an admitted command contract beyond reservations/observations;
+an arbitrary new action endpoint would not satisfy that missing boundary.
+
+T091 is the next live-integration path. The reboot invalidated the old namespace
+owner. Fresh private daemon/network preparation now reuses3 cached image IDs,
+8 stopped test containers,4 owned virtual TAPs and KVM API12. This is preparatory,
+not live admission: native wrapper, CARLA/private display, enrollment/readiness,
+actual rendered sensor/Android/vehicle/rerun observations and cleanup remain open.
+System Docker/host interface identities are unchanged; no guest or model starts.
+The user-authorized separate asset environment is reused, without restoring the
+original host environment. Evidence: `evidence/studio/M4-autoverse-postboot-environment-20261105/`.
+The goal remains active and Windows work remains independently frozen.
+
+## Earlier checkpoints
+
 # T084 complete; user-requested pause — 2026-10-30
 
 **66 completed / 24 in progress / 10 blocked; zero accepted milestones.**

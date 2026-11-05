@@ -1,0 +1,62 @@
+{
+  "scope": "Contributor/private provider preparation, not application install instructions",
+  "commands": [
+    {
+      "argv": [
+        ".venv/bin/python",
+        "-I",
+        ".studio-local/autoverse-postboot-20261105/daemon.py"
+      ],
+      "state": "confirmed live session82097; ready; intentionally retained",
+      "sourceSha256": "593a7419424031703c5c86db5dba1d8e329290cdf783bfb90c178a1f9cc5dedd"
+    },
+    {
+      "argv": [
+        ".venv/bin/python",
+        "-I",
+        ".studio-local/autoverse-postboot-20261105/network.py"
+      ],
+      "exitCode": 0,
+      "sourceSha256": "43d170b14dae3762980fd0cef7d725b8362d71b606b28539a71c81f668844fca"
+    },
+    {
+      "argv": [
+        "docker",
+        "--config",
+        "<private-client-config>",
+        "--host",
+        "unix://<new-private-runtime>/docker.sock",
+        "info",
+        "--format",
+        "{{json .}}"
+      ],
+      "exitCode": 0
+    },
+    {
+      "argv": [
+        "docker",
+        "--config",
+        "<private-client-config>",
+        "--host",
+        "unix://<new-private-runtime>/docker.sock",
+        "inspect",
+        "<eight-preexisting-test-container-ids>"
+      ],
+      "exitCode": 0
+    },
+    {
+      "argv": [
+        "docker",
+        "--config",
+        "<private-client-config>",
+        "--host",
+        "unix://<new-private-runtime>/docker.sock",
+        "image",
+        "inspect",
+        "<three-original-image-ids>"
+      ],
+      "exitCode": 0
+    }
+  ],
+  "rawConfigurationAndOwnerBindings": "Retained only in private prepared/owner/native-binding/ready/postflight records; raw artifacts remain private"
+}

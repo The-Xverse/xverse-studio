@@ -1,3 +1,24 @@
+# Private Autoverse namespace prepared after reboot — 2026-11-05
+
+**71 completed /19 in progress /10 blocked; zero accepted milestones.**
+No new task closes. Windows remains frozen; the full goal stays active.
+
+The old test namespace owner is gone. A fresh private rootless namespace/endpoint
+now reuses the separate staged environment's3 cached image IDs, with8 test containers
+still stopped. Four approved virtual TAPs exist only inside that owned namespace;
+KVM API12 responds. System Docker identity and host interface names stay unchanged.
+No guest, simulator, model or workload starts. Product/tool source remains unchanged
+from00b592c on555 Git-bound inputs; no new product test pass is claimed.
+
+T091 is not live-admitted: native wrapper/endpoint binding, CARLA overlay/private
+display, fresh enrollment/readiness, actual rendered observations and complete
+rerun cleanup remain required. Old enrollment/namespace metadata stays historical.
+Private daemon supervisor82097 is intentionally retained; poll its actual handle
+and revalidate ownership before use. See [qualified preparation evidence](../../evidence/studio/M4-autoverse-postboot-environment-20261105/README.md).
+There is no Windows/performance/package/hardware/milestone acceptance claim.
+
+## Earlier checkpoints
+
 # Evidence-import navigation verified; work active — 2026-11-05
 
 **71 completed /19 in progress /10 blocked; zero accepted milestones.**

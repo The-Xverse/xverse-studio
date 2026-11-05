@@ -1288,3 +1288,14 @@ inputs and6 reproduced UI assets. Existing imported-file preservation is broaden
 lint, architecture and planning pass. Qualified evidence/review is retained at
 `evidence/studio/M4-evidence-import-keyboard-20261105/`. T038/T097 remain open;
 Windows stays frozen; counts71/19/10 and zero accepted milestones are unchanged.
+
+T091 post-reboot preparation (2026-11-05): the old namespace owner birth no longer
+matches, so old native wrappers/enrollment are historical. A fresh private rootless
+namespace/endpoint reuses the separate test environment's3 cached image IDs;8 test
+containers stay stopped. Four approved virtual TAPs are recreated only inside that
+namespace and KVM API12 is observed. System Docker identity/host interface names
+remain unchanged. No guest/simulator/workload starts and no live admission is
+claimed. Fresh native wrapper, CARLA overlay/private display, enrollment/readiness
+and complete actual rerun observations/cleanup remain required. T091 stays open;
+counts71/19/10,zero milestones; Windows remains frozen. Evidence:
+`evidence/studio/M4-autoverse-postboot-environment-20261105/`. Goal stays active.
