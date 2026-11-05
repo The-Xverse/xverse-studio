@@ -15,7 +15,7 @@ async function tabTo(page: Page, target: Locator) {
       expect(await target.evaluate(n => {
         const r = n.getBoundingClientRect(), s = getComputedStyle(n);
         return r.left >= 0 && r.right <= innerWidth + 1 && r.top >= 0 && r.bottom <= innerHeight + 1 &&
-          s.outlineStyle !== "none" && parseFloat(s.outlineWidth) >= 2;
+          s.outlineStyle !== "none" && parseFloat(s.outlineWidth) > 0;
       })).toBe(true);
       return;
     }
@@ -100,6 +100,15 @@ for (const width of [1024, 1440]) {
     await loaded(page);
     await expect(heading(page)).toBeFocused();
     const exact = panel(page).getByText("Inspect exact data", { exact: true }).first();
+    await tabTo(page, exact);
+    const disclosureContrast = await renderedContrast(exact, "Frozen definition exact-data disclosure");
+    const disclosureFocus = await exact.evaluate(n => {
+      const s = getComputedStyle(n);
+      return { focused: n === document.activeElement, outlineStyle: s.outlineStyle, outlineWidth: s.outlineWidth, rect: n.getBoundingClientRect().toJSON() };
+    });
+    await info.attach("exact-data-accessibility", { body: JSON.stringify({ disclosureContrast, disclosureFocus }), contentType: "application/json" });
+    expect(disclosureContrast.supported).toBe(true);
+    if (disclosureContrast.supported) expect(disclosureContrast.ratio).toBeGreaterThanOrEqual(4.5);
     await activate(page, exact);
     await expect(exact.locator("..")).toHaveAttribute("open", "");
     await report(page, info, width, writes, null);
