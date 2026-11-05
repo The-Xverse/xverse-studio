@@ -1275,7 +1275,6 @@ export default function App() {
             Local workspace
           </span>
           <span className="top-spacer" />
-          <Badge>REFERENCE PREVIEW</Badge>
           <button
             className="top-button"
             onClick={() => changeSection("settings")}
