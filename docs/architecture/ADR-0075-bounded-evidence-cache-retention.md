@@ -41,3 +41,14 @@ unchanged byte/entry bounds, then repeat affected reader/stream/admission checks
 the complete actual Stop/Cancel cases and original finite measurements. Retain cold
 setup and warm active-phase qualifications separately; no cold input-latency SLA,
 native Windows, physical or full milestone acceptance follows. Windows stays frozen.
+
+
+Checkpoint outcome (2026-11-05): source-backed regression passes3/3 after the
+retention change, affected nonexecuting reader/stream guards93/93 and comparison
+admission68/68 pass. The repeated actual full model case still fails with
+CONTROL_LEASE_EXPIRED after releasing/braking before client setup and acquiring
+a fresh0.75-second lease afterward. The change improves decode retention but does
+not establish resolved control responsiveness. Both original failures remain;
+current finite and successful Stop/Cancel repeats remain pending. Work is paused
+by user instruction and owned private services are shut down. See
+[evidence](../../evidence/studio/M4-control-pressure-20261105/README.md).

@@ -1,0 +1,181 @@
+{
+  "date": "2026-11-05",
+  "scope": "T096 Linux component checkpoint; actual full Autoverse model plus explicitly inert 50k history; no task closure",
+  "candidate": "f2d18ce5fe3a0b282d0beaf2a507380397159e20",
+  "environment": {
+    "os": "Linux",
+    "kernel": "6.8.0-138-generic",
+    "python": "3.13.13",
+    "installationDigest": "sha256:79c9513142781b83aafc710fffde7905f14a2d801d89e09de43bcb8fac8867cb",
+    "originalEnvironmentRestored": false,
+    "separatePreparedEnvironmentReused": true,
+    "fullRenderingSensorsAndroidRetained": true
+  },
+  "liveCases": [
+    {
+      "case": "stop",
+      "candidate": "524401429387facd0f7937eb23d15ea6bbf118ff",
+      "outcome": "failed",
+      "failure": "409 CONTROL_LEASE_EXPIRED during active pressure input frame",
+      "elapsedSeconds": 115.67,
+      "observedDescendantsExited": 20,
+      "completeProcessCoverageClaimed": false,
+      "sourceInputsUnchanged": true,
+      "uiInputsUnchanged": true,
+      "requests": {
+        "campaign": {
+          "count": 4,
+          "maximumSeconds": 4.051798170999973
+        },
+        "history": {
+          "count": 3,
+          "maximumSeconds": 5.162321122996218
+        },
+        "comparison": {
+          "count": 2,
+          "maximumSeconds": 5.470604752998042
+        }
+      },
+      "cleanup": {
+        "originalProcessInstancesExited": 16,
+        "exactStoppedContainers": 3,
+        "originalResourceRoles": [
+          "adb-connect",
+          "android-boot",
+          "android-density",
+          "android-install",
+          "android-launch",
+          "android-open",
+          "carla",
+          "carla-prepare",
+          "carla-probe",
+          "driver",
+          "router",
+          "start-android",
+          "start-score",
+          "start-someip-bridge",
+          "vcu",
+          "vehicle"
+        ],
+        "containerRoles": [
+          "android",
+          "score",
+          "someip-bridge"
+        ],
+        "journalIntegrity": "valid",
+        "journalDigest": "sha256:d7f8b15a5c58d8f9ef7519192c2c82865cce38f260bf9130ccf219195a994e7b",
+        "terminalCleanupFactsMatchCanonicalJournal": true,
+        "recordCount": 65,
+        "observations": 11
+      }
+    },
+    {
+      "case": "stop-repaired",
+      "candidate": "f2d18ce5fe3a0b282d0beaf2a507380397159e20",
+      "outcome": "failed",
+      "failure": "409 CONTROL_LEASE_EXPIRED during active pressure input frame",
+      "elapsedSeconds": 108.65,
+      "observedDescendantsExited": 15,
+      "completeProcessCoverageClaimed": false,
+      "sourceInputsUnchanged": true,
+      "uiInputsUnchanged": true,
+      "requests": {
+        "campaign": {
+          "count": 7,
+          "maximumSeconds": 2.752037083002506
+        },
+        "history": {
+          "count": 4,
+          "maximumSeconds": 2.908413301993278
+        },
+        "comparison": {
+          "count": 4,
+          "maximumSeconds": 4.051556257996708
+        }
+      },
+      "cleanup": {
+        "originalProcessInstancesExited": 16,
+        "exactStoppedContainers": 3,
+        "originalResourceRoles": [
+          "adb-connect",
+          "android-boot",
+          "android-density",
+          "android-install",
+          "android-launch",
+          "android-open",
+          "carla",
+          "carla-prepare",
+          "carla-probe",
+          "driver",
+          "router",
+          "start-android",
+          "start-score",
+          "start-someip-bridge",
+          "vcu",
+          "vehicle"
+        ],
+        "containerRoles": [
+          "android",
+          "score",
+          "someip-bridge"
+        ],
+        "journalIntegrity": "valid",
+        "journalDigest": "sha256:e5d4948c052f4b9acd7c483009547534b4f1b702d35084c01869da80d655c087",
+        "terminalCleanupFactsMatchCanonicalJournal": true,
+        "recordCount": 62,
+        "observations": 7
+      }
+    }
+  ],
+  "checks": [
+    {
+      "suite": "cache-red",
+      "tests": 3,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "cache-green",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "reader-guards",
+      "tests": 93,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "comparison-guards",
+      "tests": 68,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "candidateBinding": {
+    "selectedInputs": 557,
+    "currentInputsMatchFinalLiveCase": true,
+    "hashManifest": "stop-repaired/source-inputs.json",
+    "compiledUiManifest": "stop-repaired/ui-inputs.json"
+  },
+  "workStatus": "paused until explicit user resume; Windows separately frozen",
+  "taskCounts": {
+    "completed": 72,
+    "in_progress": 18,
+    "blocked": 10
+  },
+  "acceptedMilestones": 0,
+  "limitations": [
+    "Both live pressure cases failed; no accepted control-under-pressure or cancellation pass.",
+    "Cost-aware cache regression passes but did not resolve live lease expiry.",
+    "Paused application reads do not establish saturated TCP windows.",
+    "Earlier finite performance measurements precede the cache change; current finite repeat remains pending.",
+    "No native Windows, physical-device, cross-industry, complete acceptance or milestone claim.",
+    "No further model workload started for pause; future use requires fresh ownership and readiness."
+  ]
+}

@@ -1,3 +1,11 @@
+Current instruction — 2026-11-05: **work is paused until explicit user resume.**
+The current T096 verification checkpoint is terminal with two retained live lease
+expiry failures; T096 remains open. All owned private test services are stopped.
+Windows remains separately frozen until explicitly lifted. Counts72/18/10,zero
+accepted milestones. This instruction supersedes historical active/resume notes
+below. See [status](STATUS.md) and
+[evidence](../../evidence/studio/M4-control-pressure-20261105/README.md).
+
 Latest checkpoint: T096's current finite Autoverse-derived benchmarks and53
 stream/reader guards pass; full T096 live producer/control scope remains pending.
 Counts72 completed /18 in progress /10 blocked; zero accepted milestones. Work is

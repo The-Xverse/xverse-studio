@@ -1,3 +1,33 @@
+# Work paused; T096 pressure test remains open — 2026-11-05
+
+**72 completed / 18 in progress / 10 blocked; zero accepted milestones.**
+The current verification checkpoint is terminal. Per the user's instruction to
+finish current work then stop, all work is paused until explicit resume. Windows
+remains independently frozen. No new task closes in this checkpoint.
+
+Both actual full rendered/sensor/Android Autoverse pressure attempts fail with
+CONTROL_LEASE_EXPIRED during input maintenance. A fresh lease after client setup
+does not resolve the failure. The bounded cache improvement passes3 source-backed
+checks;93 nonexecuting reader/stream guards and68 comparison checks also pass.
+These results do not establish accepted live Stop/Cancel responsiveness. Current
+finite performance after the cache change remains unverified; earlier measurements
+retain their original candidate scope.
+
+Original failures and source/copy bytes are retained. Independent readback verifies
+16 original resource instances and3 exact runtime containers released per case;
+all captured descendants and pressure clients exit. The owned isolated ADB,
+private display, FUSE overlay and rootless daemon are stopped; all8 test containers
+were stopped before daemon shutdown. The overlay mount is gone. System Docker
+identity and host interfaces remain unchanged. Prepared assets are preserved.
+
+T096 remains in progress. On explicit resume, profile retained observation/control
+contention before another live attempt; preserve ownership/lease rules, workload
+and failure history. Fresh infrastructure ownership/readiness is required. No
+Windows, physical, full acceptance, release or milestone acceptance is inferred.
+See [evidence and review](../../evidence/studio/M4-control-pressure-20261105/README.md).
+
+## Earlier checkpoints
+
 # T096 finite benchmarks pass; full task remains open — 2026-11-05
 
 **72 completed /18 in progress /10 blocked; zero accepted milestones.**
