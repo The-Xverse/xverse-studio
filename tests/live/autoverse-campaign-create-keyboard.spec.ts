@@ -12,10 +12,12 @@ async function tabTo(page: Page, control: Locator) {
   await expect(control).toBeVisible();
   for (let i = 0; i < 600; i++) {
     if (await control.evaluate(n => n === document.activeElement)) {
-      expect(await control.evaluate(n => {
+      const observation = await control.evaluate(n => {
         const r = n.getBoundingClientRect(), s = getComputedStyle(n);
-        return s.outlineStyle !== "none" && parseFloat(s.outlineWidth) > 0 && r.left >= 0 && r.top >= 0 && r.right <= innerWidth + 1 && r.bottom <= innerHeight + 1;
-      })).toBe(true);
+        return { name: n.getAttribute("aria-label") || n.closest("label")?.textContent || n.textContent, rect: { left: r.left, right: r.right, top: r.top, bottom: r.bottom }, viewport: { width: innerWidth, height: innerHeight }, outlineStyle: s.outlineStyle, outlineWidth: s.outlineWidth,
+          visible: s.outlineStyle !== "none" && parseFloat(s.outlineWidth) > 0 && r.left >= 0 && r.top >= 0 && r.right <= innerWidth + 1 && r.bottom <= innerHeight + 1 };
+      });
+      expect(observation, "Native focused control geometry and visible outline").toMatchObject({ visible: true });
       return;
     }
     await page.keyboard.press("Tab");
@@ -31,7 +33,9 @@ async function open(page: Page, info: TestInfo, width: number) {
   await page.setViewportSize({ width, height: width === 1024 ? 768 : 900 }); await connectStudio(page, info);
   const source = fixture()[String(width)];
   await page.evaluate(id => { localStorage.setItem("studio.projectId", id); }, source.projectId); await page.reload();
+  const preflightResponse = page.waitForResponse(r => /\/api\/v1\/projects\/[^/]+\/preflights$/.test(new URL(r.url()).pathname) && r.request().method() === "POST");
   await activate(page, page.getByRole("button", { name: "Preflight & run", exact: true }));
+  const preflight = await preflightResponse; expect(preflight.status()).toBe(200); expect((await preflight.json()).status).toBe("ready");
   await expect(page.getByRole("button", { name: "Start frozen snapshot", exact: true })).toBeEnabled();
   await activate(page, page.getByRole("button", { name: "Back to draft", exact: true }));
   await activate(page, page.getByRole("tab", { name: "Experiments", exact: true }));
