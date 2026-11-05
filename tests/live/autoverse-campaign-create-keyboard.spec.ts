@@ -81,7 +81,7 @@ for (const width of [1024, 1440]) {
     await configure(page, [30, 31], 62);
     await page.route("**/api/v1/campaigns/preview", route => route.fulfill({ status: 503, json: { code: "CAMPAIGN_PREVIEW_FIXTURE", message: "Labelled transport refusal", retryable: true } }), { times: 1 });
     await activate(page, planning(page).getByRole("button", { name: "Preview campaign", exact: true })); await diagnostic(page, "CAMPAIGN_PREVIEW_FIXTURE");
-    const value = await preview(page); expect(value.cardinality).toBe(2); expect(value.estimatedTotalSeconds).toBe(61);
+    const value = await preview(page); expect(value.cardinality).toBe(2); expect(value.estimatedTotalSeconds, "Conservative maximum-duration budget for two children").toBe(62);
     await expect(page.getByRole("alert")).toHaveCount(0); await expect(planning(page).getByRole("button", { name: "Create campaign", exact: true })).toBeEnabled();
     await report(page, info, width, { realBudgetRefusal: refusalBody.code, cardinality: value.cardinality, createdCampaigns: 0, fixture: "One labelled503; actual backend budget refusal and unchanged retry" });
   });
