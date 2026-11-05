@@ -32,6 +32,7 @@ from xverse_studio.providers.registry import (
 )
 from xverse_studio.diagnostics import explain_preflight, explain_run
 from xverse_studio.evidence.reader import read_journal
+from xverse_studio.evidence.history_cache import HistoryCache
 from xverse_studio.events import EventStreams
 from xverse_studio.evidence.query import (
     HistoryQuery,
@@ -104,6 +105,7 @@ def create_app(
     projects = Projects(store, adapter)
     runs = Runs(store, projects, adapter, installed_providers)
     event_streams = EventStreams(store, runs)
+    history_cache = HistoryCache()
     hosts = allowed_hosts or ["127.0.0.1:8765", "localhost:8765"]
     token = bootstrap_token or secrets.token_urlsafe(32)
     bootstrap = {
@@ -749,14 +751,7 @@ def create_app(
             )
         r = runs.read(runId)
         records, integrity = read_journal(runs.directory(runId), r)
-        return project_evidence(
-            records,
-            integrity,
-            query,
-            runId,
-            "history",
-            evidence_scope=r.get("evidenceScope", "unknown"),
-        )
+        return history_cache.project(records, integrity, query, r, runId)
 
     @app.get("/api/v1/runs/{runId}/diagnostics")
     def run_diagnostics(runId: str):
