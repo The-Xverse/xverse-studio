@@ -1,3 +1,31 @@
+# T091 original clauses complete — 2026-11-05
+
+**72 completed /18 in progress /10 blocked; zero accepted milestones.**
+T091 closes after its literal quantity/gap/clock/replay/rerun regression and frozen
+configuration-comparison implementation audit. T030/T059/T088 are complete. Current
+68 comparison checks include all six named FR-059 configuration dimensions;42
+in-process frozen-source guards separate30 native-contact refusals from12 labelled
+verification-callback construction/publication cases. Five actual/labelled native
+comparison/provider cases plus22 existing original-record playback checks pass on
+the repaired product at both desktop sizes. The actual complete native fresh rerun
+supplies separate live evidence through unchanged backend/runtime inputs.
+
+The audit exposes and repairs global rerun availability leaking between providers;
+the three native UI failures remain retained. Original sources/copies, execution
+ledgers, independent result dimensions and unsupported numeric interpretation are
+preserved. No callback/fixture is promoted to live readiness, no deterministic
+or physical replay is admitted, and no new reference workload executes.
+See `evidence/studio/M4-comparison-rerun-closure-20261105/clause-audit.json` and
+`evidence/studio/M4-comparison-rerun-closure-20261105/review.md`.
+
+This closes the planned implementation task, not all combined AC-029 exchange/
+retention/platform acceptance or the Windows obligation. Windows remains frozen;
+T002/T039/T098/T100 and corresponding native acceptance remain open. The broader
+T095/T096/T097 gates now have T091 complete; other dependencies and original tests
+still apply. The user resumed Linux/Autoverse work; the full goal stays active.
+
+## Earlier checkpoints
+
 # Fresh rerun component verified; work paused — 2026-11-05
 
 **71 completed /19 in progress /10 blocked; zero accepted milestones.**

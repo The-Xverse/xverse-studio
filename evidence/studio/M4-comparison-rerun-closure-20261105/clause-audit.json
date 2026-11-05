@@ -1,0 +1,88 @@
+{
+  "task": "T091",
+  "originalDescription": "Add incompatible-quantity, gap, clock and replay/rerun regression cases first, then implement baseline comparison with configuration/clock/quantity compatibility and distinguish recorded observation playback from freshly admitted rerun.",
+  "requirements": [
+    "FR-059",
+    "FR-060"
+  ],
+  "dependencies": {
+    "T030": true,
+    "T059": true,
+    "T088": true
+  },
+  "clauses": [
+    {
+      "clause": "Add incompatible-quantity regression cases first",
+      "result": "proven",
+      "evidence": [
+        "comparison-guards/tests.junit.xml",
+        "../M4-recorded-comparison/history/api-red/summary.json"
+      ],
+      "detail": "Known-codec controls and quantity/unit-definition mismatches; unsupported source interpretations cannot opt in through equal payload shape. Pure fixtures and actual immutable/decoded-copy negatives remain labelled."
+    },
+    {
+      "clause": "Add gap regression cases first",
+      "result": "proven",
+      "evidence": [
+        "comparison-guards/tests.junit.xml",
+        "../M4-recorded-comparison/history/gap-count-red/summary.json"
+      ],
+      "detail": "Explicit gaps/counts, incomplete evidence, invalid integrity, missing/unequal windows and out-of-window samples block pairing. No physical/live gap-injection claim."
+    },
+    {
+      "clause": "Add clock regression cases first",
+      "result": "proven",
+      "evidence": [
+        "comparison-guards/tests.junit.xml",
+        "playback/browser.json"
+      ],
+      "detail": "Clock/domain/definition/resolution/uncertainty and exact signed-window controls; real receipt payloads retain unavailable source time. No inferred simulation alignment."
+    },
+    {
+      "clause": "Add replay/rerun regression cases",
+      "result": "proven",
+      "evidence": [
+        "comparison/browser.json",
+        "playback/browser.json",
+        "offline-refusals/tests.junit.xml",
+        "offline-publication-fixture/tests.junit.xml",
+        "../M4-fresh-autoverse-rerun-20261105/final-rerun/native-result.json"
+      ],
+      "detail": "Current read-only playback preserves canonical sources/copies and execution ledgers. Actual full newly admitted rerun preserves old source/draft, creates a new child and completes Android/vehicle/cleanup. Thirty refusal cases forbid native contact;12 publication/admission cases use a labelled verification callback."
+    },
+    {
+      "clause": "Implement baseline comparison with configuration/clock/quantity compatibility",
+      "result": "proven",
+      "evidence": [
+        "comparison-guards/tests.junit.xml",
+        "comparison/browser.json",
+        "source-binding.json"
+      ],
+      "detail": "All six FR-059 configuration dimensions have explicit differences beside unchanged recorded summaries. Twelve frozen configuration rows, exact provider sides and integrity/provenance/clock/quantity/coverage blockers are implemented. Actual Autoverse comparison stays unsupported for numeric overlay while configuration differences remain visible."
+    },
+    {
+      "clause": "Distinguish recorded observation playback from freshly admitted rerun",
+      "result": "proven",
+      "evidence": [
+        "comparison/native.json",
+        "playback/native.json",
+        "../M4-fresh-autoverse-rerun-20261105/final-rerun/native-result.json",
+        "../M4-fresh-autoverse-rerun-20261105/final-rerun/comparison-summary.json"
+      ],
+      "detail": "Original28 and21 payload playback is read-only. Actual complete fresh rerun is separate execution through current full admission, with uncontrolled/no-applied-seed limits. Current provider availability gates the control; backend authority and immutable inputs remain unchanged. No deterministic or physical replay claim."
+    }
+  ],
+  "decision": "complete planned implementation task; whole AC-029 and required-host/milestone acceptance remain open",
+  "scopeLimits": [
+    "No new numeric Autoverse evidence admission",
+    "No deterministic replay or physical operation",
+    "Windows remains required, unverified and frozen; no cross-host acceptance inferred",
+    "No full regression/package/performance/human/AT/independent milestone acceptance"
+  ],
+  "taskCountsAfterClosure": {
+    "completed": 72,
+    "in_progress": 18,
+    "blocked": 10
+  },
+  "acceptedMilestones": 0
+}

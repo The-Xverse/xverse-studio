@@ -1,3 +1,39 @@
+# T091 complete; Linux/Autoverse work active — 2026-11-05
+
+**72 completed /18 in progress /10 blocked; zero accepted milestones.**
+The user explicitly resumed after the fresh-rerun checkpoint. T091's original
+comparison/playback/fresh-admission clauses now have an audited evidence chain.
+Windows remains separately frozen and unverified; no cross-host or milestone
+acceptance is inferred. The full M0–M4 goal remains active and unfinished.
+
+The audit found and repaired a current UI counterexample: the global rerun feature
+incorrectly enabled a recorded provider's control when that provider was absent.
+ADR-0074 now binds availability to the current matching provider/scope/host/Start/
+rerun declaration and gives an accessible unavailable explanation. Backend admission
+remains unchanged and authoritative; current control availability is not readiness.
+
+Current68 comparison guards,30 contact-forbidden refusal cases and12 labelled
+verification-callback publication cases pass. Native comparison/original28-payload
+playback/provider-reply checks5 and the existing21-payload playback suite22 pass at
+both1024×768 and1440×900. No workload, external runtime registration or physical
+operation starts in this audit. Earlier full native rerun f96fe96 remains the
+actual Android/APK/speed/immutable-input/cleanup proof, through139 unchanged backend/
+contract/configuration/dependency inputs. Browser candidate546b59c and current
+d29b3b2 have identical product/six UI bytes; only a pure six-case test is added.
+All556 selected inputs are Git-bound, with a documented post-verification ADR
+status/evidence-only amendment. Canonical originals/copies and ledgers are unchanged;
+all captured process handles exit. Initial interruption/three UI failures and
+permission-limited FD observations remain qualified. See
+[clause audit and review](../../evidence/studio/M4-comparison-rerun-closure-20261105/README.md).
+
+T095/T096/T097 now have their T091 dependency satisfied; their broader original
+scope remains. T002/T033/T038/T039/T073, native Windows, physical/provider/human/AT,
+independent review and whole milestone gates remain open. Private test services
+from the earlier live environment remain shut down; old namespace/PID metadata
+cannot authorize another run without fresh ownership/readiness validation.
+
+## Earlier checkpoints
+
 # Fresh Autoverse rerun passed; user-requested work pause — 2026-11-05
 
 **71 completed /19 in progress /10 blocked; zero accepted milestones.**

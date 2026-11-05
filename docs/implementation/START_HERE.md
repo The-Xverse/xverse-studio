@@ -1,3 +1,17 @@
+Latest checkpoint: T091's original clause audit is complete. Counts72 completed /
+18 in progress /10 blocked; zero accepted milestones. Linux/Autoverse work remains
+active after explicit user resume; Windows remains separately frozen. See
+[status](STATUS.md) and [T091 evidence](../../evidence/studio/M4-comparison-rerun-closure-20261105/README.md).
+No new runtime should use stale process/namespace metadata from the shut-down
+private environment; current admission/ownership/readiness must be revalidated.
+
+Current instruction: the user explicitly reactivated the goal on 2026-11-05 after
+the saved fresh-rerun checkpoint. Resume independently authorized Linux/Autoverse
+work. Windows remains separately frozen. Previous pause records below are historical.
+Private test services were cleanly shut down; do not treat old PIDs or namespace
+bindings as live authority. Current work is the original T091 clause/evidence audit;
+no new model or reference workload is needed for its initial read-only checks.
+
 **Current user instruction (2026-11-05): finish the current task, then stop until
 explicit resume.** The complete fresh Autoverse rerun verification/evidence
 checkpoint is finished, owned private test services are shut down, and work is

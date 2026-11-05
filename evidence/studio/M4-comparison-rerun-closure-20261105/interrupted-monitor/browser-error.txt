@@ -1,0 +1,626 @@
+# Instructions
+
+- Following Playwright test failed.
+- Explain why, be concise, respect Playwright best practices.
+- Provide a snippet of code with the fix, if possible.
+
+# Test info
+
+- Name: autoverse-comparison.spec.ts >> Actual Autoverse frozen rerun comparison exposes configuration and blocks unsupported numeric playback
+- Location: tests/live/autoverse-comparison.spec.ts:6:5
+
+# Error details
+
+```
+TimeoutError: locator.click: Timeout 15000ms exceeded.
+Call log:
+  - waiting for getByRole('tab', { name: 'Results', exact: true })
+
+```
+
+# Page snapshot
+
+```yaml
+- generic [ref=f1e3]:
+  - link "Skip to workspace" [ref=f1e4] [cursor=pointer]:
+    - /url: "#main-content"
+  - banner [ref=f1e5]:
+    - button "X-Verse Studio home" [ref=f1e6] [cursor=pointer]:
+      - generic [ref=f1e7]: X
+      - generic [ref=f1e8]: X-VERSE STUDIO
+    - generic [ref=f1e10]: Local workspace
+    - generic [ref=f1e12]: REFERENCE PREVIEW
+    - button "Environment" [ref=f1e13] [cursor=pointer]
+    - generic "Local operator" [ref=f1e20]: LO
+  - generic [ref=f1e21]:
+    - navigation "Main navigation" [ref=f1e22]:
+      - button "Workspace" [ref=f1e23] [cursor=pointer]
+      - button "Catalog" [ref=f1e30] [cursor=pointer]
+      - button "Laboratory" [ref=f1e37] [cursor=pointer]:
+        - generic [ref=f1e41]: Lab
+      - button "Compatibility and environment" [ref=f1e42] [cursor=pointer]:
+        - generic [ref=f1e48]: Settings
+      - generic [ref=f1e49]: v0.1
+    - main [ref=f1e50]:
+      - generic [ref=f1e51]:
+        - generic [ref=f1e52]:
+          - generic [ref=f1e53]:
+            - button "Workspace" [ref=f1e54] [cursor=pointer]
+            - generic [ref=f1e57]: System
+          - generic [ref=f1e58]:
+            - heading "Owned Autoverse lifecycle" [level=1] [ref=f1e65]
+            - generic [ref=f1e66]: Draft
+            - generic [ref=f1e67]: rev 6
+        - generic [ref=f1e68]:
+          - 'button "Dependencies: none unresolved" [ref=f1e69] [cursor=pointer]': Dependencies
+          - button "Undo" [disabled] [ref=f1e70]
+          - button "Redo" [disabled] [ref=f1e71]
+          - button "Export" [ref=f1e72] [cursor=pointer]
+          - button "Validate" [ref=f1e75] [cursor=pointer]
+          - button "Preflight & run" [ref=f1e78] [cursor=pointer]
+      - tablist "System workflows" [ref=f1e81]:
+        - tab "Model" [selected] [ref=f1e82] [cursor=pointer]
+        - tab "Connections" [ref=f1e88] [cursor=pointer]
+        - tab "Deployment" [ref=f1e93] [cursor=pointer]
+        - tab "Experiments" [ref=f1e96] [cursor=pointer]
+        - tab "Results 1" [ref=f1e99] [cursor=pointer]:
+          - text: Results
+          - generic [ref=f1e102]: "1"
+        - button "XDL source" [ref=f1e104] [cursor=pointer]
+      - generic [ref=f1e107]:
+        - generic [ref=f1e108]:
+          - text: Draft revision
+          - code [ref=f1e110]: "6"
+        - generic [ref=f1e111]: 9 elements · 25 connections
+        - generic [ref=f1e112]:
+          - text: Run snapshot
+          - code [ref=f1e113]: snap-862974d
+          - generic [ref=f1e114]: stopped
+          - button "Draft differs from run inputs (1 document, 0 elements, 0 parameters)" [ref=f1e115] [cursor=pointer]
+      - generic [ref=f1e116]:
+        - complementary "Structured model navigation" [ref=f1e117]:
+          - generic [ref=f1e118]:
+            - heading "System explorer" [level=2] [ref=f1e119]
+            - button "View XDL source" [ref=f1e120] [cursor=pointer]
+          - textbox "Search elements" [ref=f1e127]:
+            - /placeholder: Find an element…
+          - generic [ref=f1e128]:
+            - strong [ref=f1e134]: autoverse-demo
+            - generic [ref=f1e135]: "9"
+            - button "Group by node" [ref=f1e136] [cursor=pointer]
+          - generic [ref=f1e137]:
+            - button "score Cruise controller" [ref=f1e138] [cursor=pointer]:
+              - generic [ref=f1e144]: score
+              - generic [ref=f1e145]: Cruise controller
+            - button "android Digital cluster" [ref=f1e146] [cursor=pointer]:
+              - generic [ref=f1e152]: android
+              - generic [ref=f1e153]: Digital cluster
+            - button "driver Browser driver controls" [ref=f1e154] [cursor=pointer]:
+              - generic [ref=f1e160]: driver
+              - generic [ref=f1e161]: Browser driver controls
+            - button "carla-node Vehicle" [ref=f1e162] [cursor=pointer]:
+              - generic [ref=f1e168]: carla-node
+              - generic [ref=f1e169]: Vehicle
+            - button "vcu-node Vehicle control unit" [ref=f1e170] [cursor=pointer]:
+              - generic [ref=f1e176]: vcu-node
+              - generic [ref=f1e177]: Vehicle control unit
+            - button "someip-bridge-node Communication bridge" [ref=f1e178] [cursor=pointer]:
+              - generic [ref=f1e184]: someip-bridge-node
+              - generic [ref=f1e185]: Communication bridge
+            - button "carla device" [ref=f1e186] [cursor=pointer]:
+              - generic [ref=f1e192]: carla
+              - generic [ref=f1e193]: device
+            - button "vcu device" [ref=f1e194] [cursor=pointer]:
+              - generic [ref=f1e200]: vcu
+              - generic [ref=f1e201]: device
+            - button "someip-bridge device" [ref=f1e202] [cursor=pointer]:
+              - generic [ref=f1e208]: someip-bridge
+              - generic [ref=f1e209]: device
+          - generic [ref=f1e210]:
+            - generic [ref=f1e211]: RESOURCES
+            - button "score Component" [ref=f1e212] [cursor=pointer]:
+              - generic [ref=f1e215]: score
+              - generic [ref=f1e216]: Component
+            - button "android Component" [ref=f1e217] [cursor=pointer]:
+              - generic [ref=f1e220]: android
+              - generic [ref=f1e221]: Component
+            - button "driver Component" [ref=f1e222] [cursor=pointer]:
+              - generic [ref=f1e225]: driver
+              - generic [ref=f1e226]: Component
+            - button "autoverse-demo System" [ref=f1e227] [cursor=pointer]:
+              - generic [ref=f1e230]: autoverse-demo
+              - generic [ref=f1e231]: System
+            - button "local-autoverse Deployment" [ref=f1e232] [cursor=pointer]:
+              - generic [ref=f1e235]: local-autoverse
+              - generic [ref=f1e236]: Deployment
+            - button "interactive-drive Scenario" [ref=f1e237] [cursor=pointer]:
+              - generic [ref=f1e240]: interactive-drive
+              - generic [ref=f1e241]: Scenario
+            - button "experiment-lite Profile" [ref=f1e242] [cursor=pointer]:
+              - generic [ref=f1e245]: experiment-lite
+              - generic [ref=f1e246]: Profile
+            - button "native-runtime Profile" [ref=f1e247] [cursor=pointer]:
+              - generic [ref=f1e250]: native-runtime
+              - generic [ref=f1e251]: Profile
+          - button "Add element" [ref=f1e253] [cursor=pointer]
+        - region "Model canvas" [ref=f1e256]:
+          - generic:
+            - generic [ref=f1e257]:
+              - generic [ref=f1e258]: LOGICAL MODEL
+              - generic [ref=f1e259]: 1.0.0
+            - generic [ref=f1e260]:
+              - button "Table view" [ref=f1e261] [cursor=pointer]
+              - button "Auto layout" [ref=f1e262] [cursor=pointer]
+              - button "Save layout" [ref=f1e263] [cursor=pointer]
+          - application "Logical System graph. Use the System explorer for keyboard selection." [ref=f1e264]:
+            - generic [ref=f1e266]:
+              - generic:
+                - generic:
+                  - img:
+                    - group "Edge from xdl://org.xverse.studio.autoverse/system/autoverse-demo#driver to xdl://org.xverse.studio.autoverse/system/autoverse-demo#vcu" [ref=f1e267] [cursor=pointer]:
+                      - generic [ref=f1e270]: driver-throttle-flow
+                  - img:
+                    - group "Edge from xdl://org.xverse.studio.autoverse/system/autoverse-demo#driver to xdl://org.xverse.studio.autoverse/system/autoverse-demo#vcu" [ref=f1e272] [cursor=pointer]:
+                      - generic [ref=f1e275]: driver-brake-flow
+                  - img:
+                    - group "Edge from xdl://org.xverse.studio.autoverse/system/autoverse-demo#driver to xdl://org.xverse.studio.autoverse/system/autoverse-demo#carla" [ref=f1e277] [cursor=pointer]:
+                      - generic [ref=f1e280]: driver-steering-flow
+                  - img:
+                    - group "Edge from xdl://org.xverse.studio.autoverse/system/autoverse-demo#driver to xdl://org.xverse.studio.autoverse/system/autoverse-demo#vcu" [ref=f1e282] [cursor=pointer]:
+                      - generic [ref=f1e285]: driver-cruise-flow
+                  - img:
+                    - group "Edge from xdl://org.xverse.studio.autoverse/system/autoverse-demo#driver to xdl://org.xverse.studio.autoverse/system/autoverse-demo#vcu" [ref=f1e287] [cursor=pointer]:
+                      - generic [ref=f1e290]: driver-reverse-flow
+                  - img:
+                    - group "Edge from xdl://org.xverse.studio.autoverse/system/autoverse-demo#driver to xdl://org.xverse.studio.autoverse/system/autoverse-demo#someip-bridge" [ref=f1e292] [cursor=pointer]:
+                      - generic [ref=f1e295]: driver-speed-change-flow
+                  - img:
+                    - group "Edge from xdl://org.xverse.studio.autoverse/system/autoverse-demo#carla to xdl://org.xverse.studio.autoverse/system/autoverse-demo#vcu" [ref=f1e297] [cursor=pointer]:
+                      - generic [ref=f1e298]: vehicle-speed-flow
+                  - img:
+                    - group "Edge from xdl://org.xverse.studio.autoverse/system/autoverse-demo#carla to xdl://org.xverse.studio.autoverse/system/autoverse-demo#someip-bridge" [ref=f1e300] [cursor=pointer]:
+                      - generic [ref=f1e301]: vehicle-speed-flow
+                  - img:
+                    - group "Edge from xdl://org.xverse.studio.autoverse/system/autoverse-demo#carla to xdl://org.xverse.studio.autoverse/system/autoverse-demo#android" [ref=f1e303] [cursor=pointer]:
+                      - generic [ref=f1e306]: vehicle-speed-flow
+                  - img:
+                    - group "Edge from xdl://org.xverse.studio.autoverse/system/autoverse-demo#carla to xdl://org.xverse.studio.autoverse/system/autoverse-demo#driver" [ref=f1e308] [cursor=pointer]:
+                      - generic [ref=f1e311]: vehicle-speed-flow
+                  - img:
+                    - group "Edge from xdl://org.xverse.studio.autoverse/system/autoverse-demo#vcu to xdl://org.xverse.studio.autoverse/system/autoverse-demo#someip-bridge" [ref=f1e313] [cursor=pointer]:
+                      - generic [ref=f1e314]: vcu-cruise-status-flow
+                  - img:
+                    - group "Edge from xdl://org.xverse.studio.autoverse/system/autoverse-demo#vcu to xdl://org.xverse.studio.autoverse/system/autoverse-demo#carla" [ref=f1e316] [cursor=pointer]:
+                      - generic [ref=f1e317]: vcu-cruise-status-flow
+                  - img:
+                    - group "Edge from xdl://org.xverse.studio.autoverse/system/autoverse-demo#vcu to xdl://org.xverse.studio.autoverse/system/autoverse-demo#android" [ref=f1e319] [cursor=pointer]:
+                      - generic [ref=f1e322]: vcu-cruise-status-flow
+                  - img:
+                    - group "Edge from xdl://org.xverse.studio.autoverse/system/autoverse-demo#vcu to xdl://org.xverse.studio.autoverse/system/autoverse-demo#driver" [ref=f1e324] [cursor=pointer]:
+                      - generic [ref=f1e327]: vcu-cruise-status-flow
+                  - img:
+                    - group "Edge from xdl://org.xverse.studio.autoverse/system/autoverse-demo#vcu to xdl://org.xverse.studio.autoverse/system/autoverse-demo#carla" [ref=f1e329] [cursor=pointer]:
+                      - generic [ref=f1e330]: vcu-throttle-flow
+                  - img:
+                    - group "Edge from xdl://org.xverse.studio.autoverse/system/autoverse-demo#vcu to xdl://org.xverse.studio.autoverse/system/autoverse-demo#driver" [ref=f1e332] [cursor=pointer]:
+                      - generic [ref=f1e335]: vcu-throttle-flow
+                  - img:
+                    - group "Edge from xdl://org.xverse.studio.autoverse/system/autoverse-demo#vcu to xdl://org.xverse.studio.autoverse/system/autoverse-demo#carla" [ref=f1e337] [cursor=pointer]:
+                      - generic [ref=f1e338]: vcu-brake-flow
+                  - img:
+                    - group "Edge from xdl://org.xverse.studio.autoverse/system/autoverse-demo#vcu to xdl://org.xverse.studio.autoverse/system/autoverse-demo#driver" [ref=f1e340] [cursor=pointer]:
+                      - generic [ref=f1e343]: vcu-brake-flow
+                  - img:
+                    - group "Edge from xdl://org.xverse.studio.autoverse/system/autoverse-demo#someip-bridge to xdl://org.xverse.studio.autoverse/system/autoverse-demo#score" [ref=f1e345] [cursor=pointer]:
+                      - generic [ref=f1e348]: cruise-input-flow
+                  - img:
+                    - group "Edge from xdl://org.xverse.studio.autoverse/system/autoverse-demo#score to xdl://org.xverse.studio.autoverse/system/autoverse-demo#someip-bridge" [ref=f1e350] [cursor=pointer]:
+                      - generic [ref=f1e353]: cruise-output-flow
+                  - img:
+                    - group "Edge from xdl://org.xverse.studio.autoverse/system/autoverse-demo#someip-bridge to xdl://org.xverse.studio.autoverse/system/autoverse-demo#vcu" [ref=f1e355] [cursor=pointer]:
+                      - generic [ref=f1e356]: cruise-throttle-flow
+                  - img:
+                    - group "Edge from xdl://org.xverse.studio.autoverse/system/autoverse-demo#someip-bridge to xdl://org.xverse.studio.autoverse/system/autoverse-demo#carla" [ref=f1e358] [cursor=pointer]:
+                      - generic [ref=f1e359]: cruise-target-flow
+                  - img:
+                    - group "Edge from xdl://org.xverse.studio.autoverse/system/autoverse-demo#someip-bridge to xdl://org.xverse.studio.autoverse/system/autoverse-demo#android" [ref=f1e361] [cursor=pointer]:
+                      - generic [ref=f1e364]: cruise-target-flow
+                  - img:
+                    - group "Edge from xdl://org.xverse.studio.autoverse/system/autoverse-demo#someip-bridge to xdl://org.xverse.studio.autoverse/system/autoverse-demo#driver" [ref=f1e366] [cursor=pointer]:
+                      - generic [ref=f1e369]: cruise-target-flow
+                  - img:
+                    - group "Edge from xdl://org.xverse.studio.autoverse/system/autoverse-demo#vcu to xdl://org.xverse.studio.autoverse/system/autoverse-demo#carla" [ref=f1e371] [cursor=pointer]:
+                      - generic [ref=f1e372]: vcu-reverse-status-flow
+                  - img:
+                    - group "Edge from xdl://org.xverse.studio.autoverse/system/autoverse-demo#vcu to xdl://org.xverse.studio.autoverse/system/autoverse-demo#android" [ref=f1e374] [cursor=pointer]:
+                      - generic [ref=f1e377]: vcu-reverse-status-flow
+                  - img:
+                    - group "Edge from xdl://org.xverse.studio.autoverse/system/autoverse-demo#vcu to xdl://org.xverse.studio.autoverse/system/autoverse-demo#driver" [ref=f1e379] [cursor=pointer]:
+                      - generic [ref=f1e382]: vcu-reverse-status-flow
+                  - img:
+                    - group "Edge from xdl://org.xverse.studio.autoverse/system/autoverse-demo#vcu to xdl://org.xverse.studio.autoverse/system/autoverse-demo#carla" [ref=f1e384] [cursor=pointer]:
+                      - generic [ref=f1e385]: vcu-brake-status-flow
+                  - img:
+                    - group "Edge from xdl://org.xverse.studio.autoverse/system/autoverse-demo#vcu to xdl://org.xverse.studio.autoverse/system/autoverse-demo#android" [ref=f1e387] [cursor=pointer]:
+                      - generic [ref=f1e390]: vcu-brake-status-flow
+                  - img:
+                    - group "Edge from xdl://org.xverse.studio.autoverse/system/autoverse-demo#vcu to xdl://org.xverse.studio.autoverse/system/autoverse-demo#driver" [ref=f1e392] [cursor=pointer]:
+                      - generic [ref=f1e395]: vcu-brake-status-flow
+                  - img:
+                    - group "Edge from xdl://org.xverse.studio.autoverse/system/autoverse-demo#carla to xdl://org.xverse.studio.autoverse/system/autoverse-demo#someip-bridge" [ref=f1e397] [cursor=pointer]:
+                      - generic [ref=f1e398]: vehicle-clock-seconds-flow
+                  - img:
+                    - group "Edge from xdl://org.xverse.studio.autoverse/system/autoverse-demo#carla to xdl://org.xverse.studio.autoverse/system/autoverse-demo#driver" [ref=f1e400] [cursor=pointer]:
+                      - generic [ref=f1e403]: vehicle-clock-seconds-flow
+                  - img:
+                    - group "Edge from xdl://org.xverse.studio.autoverse/system/autoverse-demo#someip-bridge to xdl://org.xverse.studio.autoverse/system/autoverse-demo#score" [ref=f1e405] [cursor=pointer]:
+                      - generic [ref=f1e408]: controller-clock-milliseconds-flow
+                  - img:
+                    - group "Edge from xdl://org.xverse.studio.autoverse/system/autoverse-demo#someip-bridge to xdl://org.xverse.studio.autoverse/system/autoverse-demo#score" [ref=f1e410] [cursor=pointer]:
+                      - generic [ref=f1e413]: controller-cruise-engagement-flow
+                  - img:
+                    - group "Edge from xdl://org.xverse.studio.autoverse/system/autoverse-demo#someip-bridge to xdl://org.xverse.studio.autoverse/system/autoverse-demo#score" [ref=f1e415] [cursor=pointer]:
+                      - generic [ref=f1e418]: controller-speed-increment-flow
+                  - img:
+                    - group "Edge from xdl://org.xverse.studio.autoverse/system/autoverse-demo#score to xdl://org.xverse.studio.autoverse/system/autoverse-demo#someip-bridge" [ref=f1e420] [cursor=pointer]:
+                      - generic [ref=f1e423]: controller-target-output-flow
+                  - img:
+                    - group "Edge from xdl://org.xverse.studio.autoverse/system/autoverse-demo#carla to xdl://org.xverse.studio.autoverse/system/autoverse-demo#someip-bridge" [ref=f1e425] [cursor=pointer]:
+                      - generic [ref=f1e426]: radar-distance-flow
+                  - img:
+                    - group "Edge from xdl://org.xverse.studio.autoverse/system/autoverse-demo#someip-bridge to xdl://org.xverse.studio.autoverse/system/autoverse-demo#score" [ref=f1e428] [cursor=pointer]:
+                      - generic [ref=f1e431]: controller-radar-distance-flow
+                  - img:
+                    - group "Edge from xdl://org.xverse.studio.autoverse/system/autoverse-demo#score to xdl://org.xverse.studio.autoverse/system/autoverse-demo#someip-bridge" [ref=f1e433] [cursor=pointer]:
+                      - generic [ref=f1e436]: controller-obstacle-level-flow
+                  - img:
+                    - group "Edge from xdl://org.xverse.studio.autoverse/system/autoverse-demo#someip-bridge to xdl://org.xverse.studio.autoverse/system/autoverse-demo#carla" [ref=f1e438] [cursor=pointer]:
+                      - generic [ref=f1e439]: obstacle-level-flow
+                  - img:
+                    - group "Edge from xdl://org.xverse.studio.autoverse/system/autoverse-demo#someip-bridge to xdl://org.xverse.studio.autoverse/system/autoverse-demo#android" [ref=f1e441] [cursor=pointer]:
+                      - generic [ref=f1e444]: obstacle-level-flow
+                - generic:
+                  - group [ref=f1e446]:
+                    - generic [ref=f1e447]:
+                      - generic [ref=f1e449]: Cruise controller
+                      - strong [ref=f1e458]: score
+                      - code [ref=f1e459]: score
+                      - list "Named ports" [ref=f1e460]:
+                        - listitem [ref=f1e461]:
+                          - generic [aria-hidden] [ref=f1e462]: →
+                          - code [ref=f1e463]: cruise-input-score-in
+                          - generic [ref=f1e464]: input
+                        - listitem [ref=f1e465]:
+                          - generic [aria-hidden] [ref=f1e466]: ←
+                          - code [ref=f1e467]: cruise-output-out
+                          - generic [ref=f1e468]: output
+                        - listitem [ref=f1e469]:
+                          - generic [aria-hidden] [ref=f1e470]: →
+                          - code [ref=f1e471]: controller-clock-milliseconds-score-in
+                          - generic [ref=f1e472]: input
+                        - listitem [ref=f1e473]:
+                          - generic [aria-hidden] [ref=f1e474]: →
+                          - code [ref=f1e475]: controller-cruise-engagement-score-in
+                          - generic [ref=f1e476]: input
+                        - listitem [ref=f1e477]: +4 more
+                      - generic [ref=f1e478]:
+                        - generic [ref=f1e479]: Logical element
+                        - generic [ref=f1e480]: 8 ports
+                  - group [ref=f1e482]:
+                    - generic [ref=f1e483]:
+                      - generic [ref=f1e485]: Digital cluster
+                      - strong [ref=f1e494]: android
+                      - code [ref=f1e495]: android
+                      - list "Named ports" [ref=f1e496]:
+                        - listitem [ref=f1e497]:
+                          - generic [aria-hidden] [ref=f1e498]: →
+                          - code [ref=f1e499]: vehicle-speed-android-in
+                          - generic [ref=f1e500]: input
+                        - listitem [ref=f1e501]:
+                          - generic [aria-hidden] [ref=f1e502]: →
+                          - code [ref=f1e503]: vcu-cruise-status-android-in
+                          - generic [ref=f1e504]: input
+                        - listitem [ref=f1e505]:
+                          - generic [aria-hidden] [ref=f1e506]: →
+                          - code [ref=f1e507]: cruise-target-android-in
+                          - generic [ref=f1e508]: input
+                        - listitem [ref=f1e509]:
+                          - generic [aria-hidden] [ref=f1e510]: →
+                          - code [ref=f1e511]: vcu-reverse-status-android-in
+                          - generic [ref=f1e512]: input
+                        - listitem [ref=f1e513]: +2 more
+                      - generic [ref=f1e514]:
+                        - generic [ref=f1e515]: Logical element
+                        - generic [ref=f1e516]: 6 ports
+                  - group [ref=f1e518]:
+                    - generic [ref=f1e519]:
+                      - generic [ref=f1e521]: Browser driver controls
+                      - strong [ref=f1e530]: driver
+                      - code [ref=f1e531]: driver
+                      - list "Named ports" [ref=f1e532]:
+                        - listitem [ref=f1e533]:
+                          - generic [aria-hidden] [ref=f1e534]: ←
+                          - code [ref=f1e535]: driver-throttle-out
+                          - generic [ref=f1e536]: output
+                        - listitem [ref=f1e537]:
+                          - generic [aria-hidden] [ref=f1e538]: ←
+                          - code [ref=f1e539]: driver-brake-out
+                          - generic [ref=f1e540]: output
+                        - listitem [ref=f1e541]:
+                          - generic [aria-hidden] [ref=f1e542]: ←
+                          - code [ref=f1e543]: driver-steering-out
+                          - generic [ref=f1e544]: output
+                        - listitem [ref=f1e545]:
+                          - generic [aria-hidden] [ref=f1e546]: ←
+                          - code [ref=f1e547]: driver-cruise-out
+                          - generic [ref=f1e548]: output
+                        - listitem [ref=f1e549]: +10 more
+                      - generic [ref=f1e550]:
+                        - generic [ref=f1e551]: Logical element
+                        - generic [ref=f1e552]: 14 ports
+                  - group [ref=f1e554]:
+                    - generic [ref=f1e555]:
+                      - generic [ref=f1e557]: Vehicle
+                      - strong [ref=f1e566]: carla-node
+                      - code [ref=f1e567]: carla-node
+                      - generic [ref=f1e568]:
+                        - generic [ref=f1e569]: Logical element
+                        - generic [ref=f1e570]: 0 ports
+                  - group [ref=f1e572]:
+                    - generic [ref=f1e573]:
+                      - generic [ref=f1e575]: Vehicle control unit
+                      - strong [ref=f1e584]: vcu-node
+                      - code [ref=f1e585]: vcu-node
+                      - generic [ref=f1e586]:
+                        - generic [ref=f1e587]: Logical element
+                        - generic [ref=f1e588]: 0 ports
+                  - group [ref=f1e590]:
+                    - generic [ref=f1e591]:
+                      - generic [ref=f1e593]: Communication bridge
+                      - strong [ref=f1e602]: someip-bridge-node
+                      - code [ref=f1e603]: someip-bridge-node
+                      - generic [ref=f1e604]:
+                        - generic [ref=f1e605]: Logical element
+                        - generic [ref=f1e606]: 0 ports
+                  - group [ref=f1e608]:
+                    - generic [ref=f1e609]:
+                      - generic [ref=f1e611]: device
+                      - strong [ref=f1e620]: carla
+                      - code [ref=f1e621]: carla
+                      - list "Named ports" [ref=f1e622]:
+                        - listitem [ref=f1e623]:
+                          - generic [aria-hidden] [ref=f1e624]: →
+                          - code [ref=f1e625]: driver-steering-carla-in
+                          - generic [ref=f1e626]: input
+                        - listitem [ref=f1e627]:
+                          - generic [aria-hidden] [ref=f1e628]: ←
+                          - code [ref=f1e629]: vehicle-speed-out
+                          - generic [ref=f1e630]: output
+                        - listitem [ref=f1e631]:
+                          - generic [aria-hidden] [ref=f1e632]: →
+                          - code [ref=f1e633]: vcu-cruise-status-carla-in
+                          - generic [ref=f1e634]: input
+                        - listitem [ref=f1e635]:
+                          - generic [aria-hidden] [ref=f1e636]: →
+                          - code [ref=f1e637]: vcu-throttle-carla-in
+                          - generic [ref=f1e638]: input
+                        - listitem [ref=f1e639]: +7 more
+                      - generic [ref=f1e640]:
+                        - generic [ref=f1e641]: Logical element
+                        - generic [ref=f1e642]: 11 ports
+                  - group [ref=f1e644]:
+                    - generic [ref=f1e645]:
+                      - generic [ref=f1e647]: device
+                      - strong [ref=f1e656]: vcu
+                      - code [ref=f1e657]: vcu
+                      - list "Named ports" [ref=f1e658]:
+                        - listitem [ref=f1e659]:
+                          - generic [aria-hidden] [ref=f1e660]: →
+                          - code [ref=f1e661]: driver-throttle-vcu-in
+                          - generic [ref=f1e662]: input
+                        - listitem [ref=f1e663]:
+                          - generic [aria-hidden] [ref=f1e664]: →
+                          - code [ref=f1e665]: driver-brake-vcu-in
+                          - generic [ref=f1e666]: input
+                        - listitem [ref=f1e667]:
+                          - generic [aria-hidden] [ref=f1e668]: →
+                          - code [ref=f1e669]: driver-cruise-vcu-in
+                          - generic [ref=f1e670]: input
+                        - listitem [ref=f1e671]:
+                          - generic [aria-hidden] [ref=f1e672]: →
+                          - code [ref=f1e673]: driver-reverse-vcu-in
+                          - generic [ref=f1e674]: input
+                        - listitem [ref=f1e675]: +7 more
+                      - generic [ref=f1e676]:
+                        - generic [ref=f1e677]: Logical element
+                        - generic [ref=f1e678]: 11 ports
+                  - group [ref=f1e680]:
+                    - generic [ref=f1e681]:
+                      - generic [ref=f1e683]: device
+                      - strong [ref=f1e692]: someip-bridge
+                      - code [ref=f1e693]: someip-bridge
+                      - list "Named ports" [ref=f1e694]:
+                        - listitem [ref=f1e695]:
+                          - generic [aria-hidden] [ref=f1e696]: →
+                          - code [ref=f1e697]: driver-speed-change-someip-bridge-in
+                          - generic [ref=f1e698]: input
+                        - listitem [ref=f1e699]:
+                          - generic [aria-hidden] [ref=f1e700]: →
+                          - code [ref=f1e701]: vehicle-speed-someip-bridge-in
+                          - generic [ref=f1e702]: input
+                        - listitem [ref=f1e703]:
+                          - generic [aria-hidden] [ref=f1e704]: →
+                          - code [ref=f1e705]: vcu-cruise-status-someip-bridge-in
+                          - generic [ref=f1e706]: input
+                        - listitem [ref=f1e707]:
+                          - generic [aria-hidden] [ref=f1e708]: ←
+                          - code [ref=f1e709]: cruise-input-out
+                          - generic [ref=f1e710]: output
+                        - listitem [ref=f1e711]: +12 more
+                      - generic [ref=f1e712]:
+                        - generic [ref=f1e713]: Logical element
+                        - generic [ref=f1e714]: 16 ports
+            - generic "Control Panel" [ref=f1e716]:
+              - button "Zoom In" [ref=f1e717] [cursor=pointer]
+              - button "Zoom Out" [ref=f1e720] [cursor=pointer]
+              - button "Fit View" [ref=f1e723] [cursor=pointer]
+            - img "Mini Map" [ref=f1e727]
+          - generic:
+            - generic: Declared communication
+            - generic: Logical element
+            - generic: Graph positions are presentation only
+        - complementary "Element inspector" [ref=f1e738]:
+          - heading "System inspector" [level=2] [ref=f1e740]
+          - generic [ref=f1e746]:
+            - heading "autoverse-demo" [level=3] [ref=f1e750]
+            - paragraph [ref=f1e751]: Authoritative XDL System
+            - generic [ref=f1e752]: Draft model
+          - navigation "Model location" [ref=f1e753]:
+            - button "autoverse-demo" [ref=f1e754] [cursor=pointer]
+          - generic [ref=f1e755]:
+            - button "Properties" [ref=f1e756] [cursor=pointer]
+            - button "Parameters" [ref=f1e757] [cursor=pointer]
+          - generic [ref=f1e758]:
+            - paragraph [ref=f1e759]: Select an element in the graph or explorer to inspect its stable identity, role, realization, and placement.
+            - generic [ref=f1e760]:
+              - generic [ref=f1e761]:
+                - term [ref=f1e762]: Namespace
+                - definition [ref=f1e763]: org.xverse.studio.autoverse
+              - generic [ref=f1e764]:
+                - term [ref=f1e765]: XDL version
+                - definition [ref=f1e766]: xverse.io/xdl/v1alpha1
+              - generic [ref=f1e767]:
+                - term [ref=f1e768]: Resources
+                - definition [ref=f1e769]: "8"
+              - generic [ref=f1e770]:
+                - term [ref=f1e771]: Evidence scope
+                - definition [ref=f1e772]: Owned reference only
+            - heading "Reference parameters" [level=4] [ref=f1e773]
+            - paragraph [ref=f1e774]: No admitted editable parameters are declared. Inspect the authored source.
+          - generic [ref=f1e775]: Backend validation determines semantic compatibility and execution readiness.
+      - generic [ref=f1e780]:
+        - generic [ref=f1e781]: Local project · Saved on backend
+        - generic [ref=f1e784]: Authoritative XDL · Layout stored separately
+        - generic [ref=f1e785]: 1 provider(s) available
+```
+
+# Test source
+
+```ts
+  1   | import { test, expect } from "@playwright/test";
+  2   | import { readFileSync } from "node:fs";
+  3   | import path from "node:path";
+  4   | import { connectStudio } from "../e2e/connect-studio";
+  5   |
+  6   | test("Actual Autoverse frozen rerun comparison exposes configuration and blocks unsupported numeric playback", async ({ page }, info) => {
+  7   |   const recording = JSON.parse(readFileSync(path.join(process.env.STUDIO_BROWSER_DATA!, "comparison-recording.private.json"), "utf8"));
+  8   |   await connectStudio(page, info);
+  9   |   await page.evaluate((r) => {
+  10  |     localStorage.setItem("studio.projectId", r.projectId);
+  11  |     localStorage.setItem("studio.lastRun", r.runId);
+  12  |     localStorage.setItem("studio.lastRun." + r.projectId, r.runId);
+  13  |   }, recording);
+  14  |   await page.reload();
+> 15  |   await page.getByRole("tab", { name: "Results", exact: true }).click();
+      |                                                                 ^ TimeoutError: locator.click: Timeout 15000ms exceeded.
+  16  |   await expect(page.getByLabel("Recorded run", { exact: true })).toHaveValue(recording.runId);
+  17  |   await expect(page.getByRole("heading", { name: new RegExp("Run results " + recording.selectedState) })).toBeVisible();
+  18  |   for (const width of [1024, 1440]) {
+  19  |     await page.setViewportSize({ width, height: width === 1024 ? 768 : 900 });
+  20  |     await page.getByRole("tab", { name: "Compare", exact: true }).click();
+  21  |     for (const [baseline, parameterStatus] of [[recording.sourceRunId, "same"], [recording.siblingRunId, "different"]]) {
+  22  |       await page.getByLabel("Baseline run", { exact: true }).selectOption(baseline);
+  23  |       await expect(page.getByRole("region", { name: "Recorded comparison report", exact: true })).toHaveCount(0);
+  24  |       const inspect = page.getByRole("button", { name: "Inspect compatibility", exact: true });
+  25  |       await inspect.focus(); await page.keyboard.press("Enter");
+  26  |       const report = page.getByRole("region", { name: "Recorded comparison report", exact: true });
+  27  |       await expect(report).toBeVisible();
+  28  |       await expect(report).toContainText("Pairing blocked");
+  29  |       await expect(report).toContainText(baseline);
+  30  |       await expect(report).toContainText(recording.runId);
+  31  |       await expect(report).toContainText(recording.snapshotId);
+  32  |       await expect(report.getByRole("row").filter({ has: page.getByRole("rowheader", { name: new RegExp("^Parameters") }) })).toContainText(parameterStatus);
+  33  |       await expect(report).toContainText("COMPARISON_EVIDENCE_UNSUPPORTED");
+  34  |       await expect(report).toContainText("Inspect the original observation records.");
+  35  |       await expect(report).not.toContainText("Compatible recorded windows");
+  36  |       await expect(report.getByRole("heading", { name: "Comparison report", exact: true })).toBeFocused();
+  37  |     }
+  38  |     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  39  |     await page.screenshot({ path: info.outputPath(`actual-comparison-${width}.png`), fullPage: true });
+  40  |     await page.getByRole("button", { name: "Open recorded playback", exact: true }).click();
+  41  |     await expect(page.getByRole("tab", { name: "Observations", exact: true })).toHaveAttribute("aria-selected", "true");
+  42  |     await expect(page.getByRole("button", { name: "Replay observations", exact: true })).toBeDisabled();
+  43  |     await expect(page.getByRole("heading", { name: "No plot samples available", exact: true })).toBeVisible();
+  44  |     const rerun = page.getByRole("button", { name: "Rerun frozen inputs", exact: true });
+  45  |     if (process.env.STUDIO_BROWSER_RECORDED_ONLY === "1") {
+  46  |       await expect(rerun).toBeDisabled();
+  47  |     } else {
+  48  |       await expect(rerun).toBeEnabled();
+  49  |     }
+  50  |   }
+  51  |   if (process.env.STUDIO_BROWSER_RECORDED_ONLY === "1") return;
+  52  |   // Labelled transport fixtures over the retained real operation and child.
+  53  |   // The POST never reaches admission. Real operation reads and the final child
+  54  |   // read retain their actual provider/scope and failed execution state.
+  55  |   await page.getByLabel("Recorded run", { exact: true }).selectOption(recording.sourceRunId);
+  56  |   const rerunUrl = `**/api/v1/runs/${recording.sourceRunId}/reruns`;
+  57  |   const childUrl = `**/api/v1/runs/${recording.runId}`;
+  58  |   const keys: string[] = [];
+  59  |   await page.route(rerunUrl, async (route) => {
+  60  |     keys.push(route.request().headers()["idempotency-key"]);
+  61  |     await route.fulfill({ status: 202, contentType: "application/json", body: JSON.stringify({ operationId: recording.rerunOperationId }) });
+  62  |   });
+  63  |   await page.route(childUrl, async (route) => {
+  64  |     const response = await route.fetch();
+  65  |     await route.fulfill({ response, json: { ...(await response.json()), providerId: "unadmitted-other-provider" } });
+  66  |   });
+  67  |   await page.getByRole("button", { name: "Rerun frozen inputs", exact: true }).click();
+  68  |   await expect(page.getByText("The acknowledged child does not match this rerun. Retry retains the same request key.", { exact: false })).toBeVisible();
+  69  |   await expect(page.getByLabel("Recorded run", { exact: true })).toHaveValue(recording.sourceRunId);
+  70  |   expect(await page.evaluate((id) => localStorage.getItem("studio.pendingRerun." + id), recording.sourceRunId)).toBe(keys[0]);
+  71  |   await page.unroute(childUrl);
+  72  |   await page.getByRole("button", { name: "Rerun frozen inputs", exact: true }).click();
+  73  |   await expect(page.getByLabel("Recorded run", { exact: true })).toHaveValue(recording.runId);
+  74  |   expect(keys).toHaveLength(2); expect(keys[0]).toBeTruthy(); expect(keys[1]).toBe(keys[0]);
+  75  |   expect(await page.evaluate((id) => localStorage.getItem("studio.pendingRerun." + id), recording.sourceRunId)).toBeNull();
+  76  |   await page.unroute(rerunUrl);
+  77  | });
+  78  |
+  79  | for (const width of process.env.STUDIO_BROWSER_RECORDED_ONLY === "1" ? [1024, 1440] : []) {
+  80  |   test(`successful frozen rerun original payload playback stays read-only at ${width}`, async ({ page }, info) => {
+  81  |     const recording = JSON.parse(readFileSync(path.join(process.env.STUDIO_BROWSER_DATA!, "comparison-recording.private.json"), "utf8"));
+  82  |     expect(recording.selectedState).toBe("stopped");
+  83  |     const records = recording.originalObservations;
+  84  |     expect(records.length).toBeGreaterThan(20);
+  85  |     await page.setViewportSize({ width, height: width === 1024 ? 768 : 900 });
+  86  |     await connectStudio(page, info);
+  87  |     await page.evaluate(r => {
+  88  |       localStorage.setItem("studio.projectId", r.projectId);
+  89  |       localStorage.setItem("studio.lastRun", r.runId);
+  90  |       localStorage.setItem("studio.lastRun." + r.projectId, r.runId);
+  91  |     }, recording);
+  92  |     await page.reload();
+  93  |     await page.getByRole("tab", { name: "Results", exact: true }).click();
+  94  |     await expect(page.getByLabel("Recorded run", { exact: true })).toHaveValue(recording.runId);
+  95  |     const mutations: string[] = [];
+  96  |     page.on("request", request => {
+  97  |       if (request.method() !== "GET") mutations.push(new URL(request.url()).pathname);
+  98  |     });
+  99  |     const load = page.getByRole("button", { name: "Load original observation records", exact: true });
+  100 |     await load.focus(); await page.keyboard.press("Enter");
+  101 |     const panel = page.getByRole("region", { name: "Original observation records", exact: true });
+  102 |     const current = async () => JSON.parse((await panel.locator("pre[data-original-record]").textContent())!);
+  103 |     await expect(panel).toContainText(`20 of ${records.length} matching records`);
+  104 |     expect(await current()).toEqual(records[0]);
+  105 |     await expect(panel).toContainText("Source time unavailable");
+  106 |     const play = panel.getByRole("button", { name: "Play recorded payloads", exact: true });
+  107 |     await play.focus(); await page.keyboard.press("Enter");
+  108 |     await expect.poll(async () => (await current()).eventId).not.toBe(records[0].eventId);
+  109 |     const pause = panel.getByRole("button", { name: "Pause payload playback", exact: true });
+  110 |     await pause.focus(); await page.keyboard.press("Enter");
+  111 |     await expect(play).toBeFocused();
+  112 |     const next = panel.getByRole("button", { name: "Next payload page", exact: true });
+  113 |     await next.focus(); await page.keyboard.press("Enter");
+  114 |     await expect(panel).toContainText(`${records.length - 20} of ${records.length} matching records`);
+  115 |     expect(await current()).toEqual(records[20]);
+```

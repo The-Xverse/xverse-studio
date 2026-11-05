@@ -1,0 +1,333 @@
+{
+  "config": {
+    "argv": [
+      "<prepared-tool-cache>/node-v24.22.1-linux-x64/bin/node",
+      "<prepared-node-modules>/@playwright/test/cli.js",
+      "test",
+      "--config",
+      "tests/live/autoverse-comparison.config.ts"
+    ],
+    "configFile": "<worktree>/tests/live/autoverse-comparison.config.ts",
+    "rootDir": "<worktree>/tests/live",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": "<worktree>/tests/live/recorded-browser-device-setup.ts",
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "<worktree>/.studio-local/t091-clause-audit-20261105/browser-final/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "<worktree>/tests/live",
+        "testIgnore": [],
+        "testMatch": [
+          "autoverse-comparison.spec.ts"
+        ],
+        "timeout": 180000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "<worktree>/.studio-local/t091-clause-audit-20261105/browser-final/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "<worktree>/tests/live",
+        "snapshotDir": "<worktree>/tests/live",
+        "testIgnore": [],
+        "testMatch": "autoverse-comparison.spec.ts",
+        "timeout": 180000,
+        "use": {
+          "baseURL": "http://127.0.0.1:40269",
+          "browserName": "chromium",
+          "actionTimeout": 15000,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "trace": "off",
+          "screenshot": "only-on-failure",
+          "video": "off",
+          "launchOptions": {
+            "args": [
+              "--disable-gpu",
+              "--disable-gpu-rasterization"
+            ]
+          }
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "<worktree>/.studio-local/t091-clause-audit-20261105/browser-final/browser.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "autoverse-comparison.spec.ts",
+      "file": "autoverse-comparison.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Actual Autoverse frozen rerun comparison exposes configuration and blocks unsupported numeric playback",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 14762,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeDisabled\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('button', { name: 'Rerun frozen inputs', exact: true })\nExpected: disabled\nReceived: enabled\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeDisabled\" getByRole('button', { name: 'Rerun frozen inputs', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: 'Rerun frozen inputs', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <button class=\"button\">\u2026</button>\u001b[22m\n\u001b[2m       - unexpected value \"enabled\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeDisabled\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('button', { name: 'Rerun frozen inputs', exact: true })\nExpected: disabled\nReceived: enabled\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeDisabled\" getByRole('button', { name: 'Rerun frozen inputs', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: 'Rerun frozen inputs', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <button class=\"button\">\u2026</button>\u001b[22m\n\u001b[2m       - unexpected value \"enabled\"\u001b[22m\n\n    at <worktree>/tests/live/autoverse-comparison.spec.ts:46:27",
+                    "location": {
+                      "file": "<worktree>/tests/live/autoverse-comparison.spec.ts",
+                      "column": 27,
+                      "line": 46
+                    },
+                    "snippet": "  44 |     const rerun = page.getByRole(\"button\", { name: \"Rerun frozen inputs\", exact: true });\n  45 |     if (process.env.STUDIO_BROWSER_RECORDED_ONLY === \"1\") {\n> 46 |       await expect(rerun).toBeDisabled();\n     |                           ^\n  47 |     } else {\n  48 |       await expect(rerun).toBeEnabled();\n  49 |     }"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<worktree>/tests/live/autoverse-comparison.spec.ts",
+                        "column": 27,
+                        "line": 46
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeDisabled\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('button', { name: 'Rerun frozen inputs', exact: true })\nExpected: disabled\nReceived: enabled\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeDisabled\" getByRole('button', { name: 'Rerun frozen inputs', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: 'Rerun frozen inputs', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <button class=\"button\">\u2026</button>\u001b[22m\n\u001b[2m       - unexpected value \"enabled\"\u001b[22m\n\n\n  44 |     const rerun = page.getByRole(\"button\", { name: \"Rerun frozen inputs\", exact: true });\n  45 |     if (process.env.STUDIO_BROWSER_RECORDED_ONLY === \"1\") {\n> 46 |       await expect(rerun).toBeDisabled();\n     |                           ^\n  47 |     } else {\n  48 |       await expect(rerun).toBeEnabled();\n  49 |     }\n    at <worktree>/tests/live/autoverse-comparison.spec.ts:46:27"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T11:22:03.875Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<worktree>/.studio-local/t091-clause-audit-20261105/browser-final/artifacts/autoverse-comparison-Actua-d3057-nsupported-numeric-playback/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<worktree>/.studio-local/t091-clause-audit-20261105/browser-final/artifacts/autoverse-comparison-Actua-d3057-nsupported-numeric-playback/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<worktree>/tests/live/autoverse-comparison.spec.ts",
+                    "column": 27,
+                    "line": 46
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "5bcdc413ad80d474cfd6-88f62673aff33d342b69",
+          "file": "autoverse-comparison.spec.ts",
+          "line": 6,
+          "column": 5
+        },
+        {
+          "title": "successful frozen rerun original payload playback stays read-only at 1024",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 13573,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeDisabled\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('button', { name: 'Rerun frozen inputs', exact: true })\nExpected: disabled\nReceived: enabled\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeDisabled\" getByRole('button', { name: 'Rerun frozen inputs', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: 'Rerun frozen inputs', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <button class=\"button\">\u2026</button>\u001b[22m\n\u001b[2m       - unexpected value \"enabled\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeDisabled\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('button', { name: 'Rerun frozen inputs', exact: true })\nExpected: disabled\nReceived: enabled\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeDisabled\" getByRole('button', { name: 'Rerun frozen inputs', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: 'Rerun frozen inputs', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <button class=\"button\">\u2026</button>\u001b[22m\n\u001b[2m       - unexpected value \"enabled\"\u001b[22m\n\n    at <worktree>/tests/live/autoverse-comparison.spec.ts:117:90",
+                    "location": {
+                      "file": "<worktree>/tests/live/autoverse-comparison.spec.ts",
+                      "column": 90,
+                      "line": 117
+                    },
+                    "snippet": "  115 |     expect(await current()).toEqual(records[20]);\n  116 |     await expect(next).toBeDisabled();\n> 117 |     await expect(page.getByRole(\"button\", { name: \"Rerun frozen inputs\", exact: true })).toBeDisabled();\n      |                                                                                          ^\n  118 |     expect(mutations).toEqual([]);\n  119 |     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);\n  120 |     await page.screenshot({ path: info.outputPath(`successful-rerun-playback-${width}.png`), fullPage: true });"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<worktree>/tests/live/autoverse-comparison.spec.ts",
+                        "column": 90,
+                        "line": 117
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeDisabled\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('button', { name: 'Rerun frozen inputs', exact: true })\nExpected: disabled\nReceived: enabled\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeDisabled\" getByRole('button', { name: 'Rerun frozen inputs', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: 'Rerun frozen inputs', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <button class=\"button\">\u2026</button>\u001b[22m\n\u001b[2m       - unexpected value \"enabled\"\u001b[22m\n\n\n  115 |     expect(await current()).toEqual(records[20]);\n  116 |     await expect(next).toBeDisabled();\n> 117 |     await expect(page.getByRole(\"button\", { name: \"Rerun frozen inputs\", exact: true })).toBeDisabled();\n      |                                                                                          ^\n  118 |     expect(mutations).toEqual([]);\n  119 |     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);\n  120 |     await page.screenshot({ path: info.outputPath(`successful-rerun-playback-${width}.png`), fullPage: true });\n    at <worktree>/tests/live/autoverse-comparison.spec.ts:117:90"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T11:22:19.011Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<worktree>/.studio-local/t091-clause-audit-20261105/browser-final/artifacts/autoverse-comparison-succe-fe489-ack-stays-read-only-at-1024/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<worktree>/.studio-local/t091-clause-audit-20261105/browser-final/artifacts/autoverse-comparison-succe-fe489-ack-stays-read-only-at-1024/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<worktree>/tests/live/autoverse-comparison.spec.ts",
+                    "column": 90,
+                    "line": 117
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "5bcdc413ad80d474cfd6-e4e75e9d366f6018f39a",
+          "file": "autoverse-comparison.spec.ts",
+          "line": 80,
+          "column": 7
+        },
+        {
+          "title": "successful frozen rerun original payload playback stays read-only at 1440",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 13718,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeDisabled\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('button', { name: 'Rerun frozen inputs', exact: true })\nExpected: disabled\nReceived: enabled\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeDisabled\" getByRole('button', { name: 'Rerun frozen inputs', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: 'Rerun frozen inputs', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <button class=\"button\">\u2026</button>\u001b[22m\n\u001b[2m       - unexpected value \"enabled\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeDisabled\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('button', { name: 'Rerun frozen inputs', exact: true })\nExpected: disabled\nReceived: enabled\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeDisabled\" getByRole('button', { name: 'Rerun frozen inputs', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: 'Rerun frozen inputs', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <button class=\"button\">\u2026</button>\u001b[22m\n\u001b[2m       - unexpected value \"enabled\"\u001b[22m\n\n    at <worktree>/tests/live/autoverse-comparison.spec.ts:117:90",
+                    "location": {
+                      "file": "<worktree>/tests/live/autoverse-comparison.spec.ts",
+                      "column": 90,
+                      "line": 117
+                    },
+                    "snippet": "  115 |     expect(await current()).toEqual(records[20]);\n  116 |     await expect(next).toBeDisabled();\n> 117 |     await expect(page.getByRole(\"button\", { name: \"Rerun frozen inputs\", exact: true })).toBeDisabled();\n      |                                                                                          ^\n  118 |     expect(mutations).toEqual([]);\n  119 |     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);\n  120 |     await page.screenshot({ path: info.outputPath(`successful-rerun-playback-${width}.png`), fullPage: true });"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<worktree>/tests/live/autoverse-comparison.spec.ts",
+                        "column": 90,
+                        "line": 117
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeDisabled\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('button', { name: 'Rerun frozen inputs', exact: true })\nExpected: disabled\nReceived: enabled\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeDisabled\" getByRole('button', { name: 'Rerun frozen inputs', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: 'Rerun frozen inputs', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <button class=\"button\">\u2026</button>\u001b[22m\n\u001b[2m       - unexpected value \"enabled\"\u001b[22m\n\n\n  115 |     expect(await current()).toEqual(records[20]);\n  116 |     await expect(next).toBeDisabled();\n> 117 |     await expect(page.getByRole(\"button\", { name: \"Rerun frozen inputs\", exact: true })).toBeDisabled();\n      |                                                                                          ^\n  118 |     expect(mutations).toEqual([]);\n  119 |     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);\n  120 |     await page.screenshot({ path: info.outputPath(`successful-rerun-playback-${width}.png`), fullPage: true });\n    at <worktree>/tests/live/autoverse-comparison.spec.ts:117:90"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T11:22:32.949Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "<worktree>/.studio-local/t091-clause-audit-20261105/browser-final/artifacts/autoverse-comparison-succe-79933-ack-stays-read-only-at-1440/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<worktree>/.studio-local/t091-clause-audit-20261105/browser-final/artifacts/autoverse-comparison-succe-79933-ack-stays-read-only-at-1440/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<worktree>/tests/live/autoverse-comparison.spec.ts",
+                    "column": 90,
+                    "line": 117
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "5bcdc413ad80d474cfd6-be751dc9bc6447ad85df",
+          "file": "autoverse-comparison.spec.ts",
+          "line": 80,
+          "column": 7
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-05T11:22:03.507Z",
+    "duration": 43236.848,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 3,
+    "flaky": 0
+  }
+}

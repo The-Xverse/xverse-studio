@@ -1,6 +1,6 @@
 # ADR-0074 — Recorded-run provider controls frozen rerun availability
 
-Date: 2026-11-05. Status: scoped presentation repair; verification pending.
+Date: 2026-11-05. Status: scoped presentation repair verified on546b59c.
 Traces: T091; FR-059/FR-060; AC-029. Backend admission remains authoritative.
 
 A current native browser check on a copy of the successful Autoverse frozen rerun
@@ -25,5 +25,10 @@ foreign, unavailable, host-incompatible and undeclared provider presentation plu
 declared external and existing reference controls using labelled descriptor replies,
 without sending execution requests. Repeat real recorded comparison and original
 payload playback at both desktop sizes with browser device isolation. Preserve the
-original three native browser failures separately. Windows remains frozen; broader
-T091 and milestone acceptance require their original evidence audit.
+original three native browser failures separately. Windows remains frozen; T091
+closure is recorded by the original clause audit; whole milestone acceptance remains open.
+
+Final evidence: `evidence/studio/M4-comparison-rerun-closure-20261105/`. Five current
+browser cases plus22 existing playback checks pass on the repaired product;68
+comparison checks and42 explicitly scoped in-process rerun guards pass. Backend
+admission is unchanged. Windows remains required, unverified and independently frozen.
