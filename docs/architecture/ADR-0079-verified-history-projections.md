@@ -1,6 +1,6 @@
 # ADR-0079 — Retain bounded projections of verified terminal history
 
-Date: 2026-11-05. Status: component verified; full live and finite repeats pending.
+Date: 2026-11-05. Status: current Linux component verified; full task/acceptance remains open.
 Traces: T096; NFR-007/008; AC-010/011/030. Windows remains frozen.
 
 The contributor instrumented full Stop case on760970d passes, but is diagnostic
@@ -55,3 +55,6 @@ is0.009 seconds and mean observed-run read work0.015 seconds; initial maxima aro
 0.26–0.29 seconds remain retained. Earlier pre-successor means were0.241/0.186
 seconds under that diagnostic workload. This is combined offline evidence, not an
 isolated causal attribution, actual input latency or a new live/cold-start SLA.
+
+
+Checkpoint retention (2026-11-05): Current combined Linux checkpoint:210 affected checks and68 comparison checks pass, actual uninstrumented Stop/Cancel pass with45/37 driver frames (maximum128.9/159.2ms), and six finite series pass. Initial cold1024 open3694.7ms remains outside measured series; sampled backend RSS537427968bytes exceeds the earlier332800000-byte observation. No universal cold/control/memory or cross-host claim follows. Windows remains separately frozen; no task or milestone closes. See [evidence](../../evidence/studio/M4-performance/control-20261105/README.md). This appended status/link note is documentation after verification; tested runtime/UI bytes are unchanged.

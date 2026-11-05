@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="5" skipped="0" tests="5" time="7.316" timestamp="2026-11-05T12:50:52.671026+00:00" hostname="recorded-linux-host"><testcase classname="tests.live.autoverse_observation_contention" name="test_slow_presentation_does_not_hold_metadata_lock_or_delay_control[journal]" time="1.770"><failure message="AssertionError: Presentation work holds the control metadata lock&#10;assert False&#10; +  where False = wait(1)&#10; +    where wait = &lt;threading.Event at 0x73a7d23995b0: unset&gt;.wait">tests/live/autoverse_observation_contention.py:92: in test_slow_presentation_does_not_hold_metadata_lock_or_delay_control
+    assert control_done.wait(1), "Presentation work holds the control metadata lock"
+E   AssertionError: Presentation work holds the control metadata lock
+E   assert False
+E    +  where False = wait(1)
+E    +    where wait = &lt;threading.Event at 0x73a7d23995b0: unset&gt;.wait</failure></testcase><testcase classname="tests.live.autoverse_observation_contention" name="test_slow_presentation_does_not_hold_metadata_lock_or_delay_control[assessment]" time="1.684"><failure message="AssertionError: Presentation work holds the control metadata lock&#10;assert False&#10; +  where False = wait(1)&#10; +    where wait = &lt;threading.Event at 0x73a7d22e5c50: unset&gt;.wait">tests/live/autoverse_observation_contention.py:92: in test_slow_presentation_does_not_hold_metadata_lock_or_delay_control
+    assert control_done.wait(1), "Presentation work holds the control metadata lock"
+E   AssertionError: Presentation work holds the control metadata lock
+E   assert False
+E    +  where False = wait(1)
+E    +    where wait = &lt;threading.Event at 0x73a7d22e5c50: unset&gt;.wait</failure></testcase><testcase classname="tests.live.autoverse_observation_contention" name="test_late_derived_read_cannot_overwrite_newer_persisted_observation[journal]" time="1.687"><failure message="TimeoutError">tests/live/autoverse_observation_contention.py:135: in test_late_derived_read_cannot_overwrite_newer_persisted_observation
+    writer.result(timeout=1)
+&lt;USER_HOME&gt;/.pyenv/versions/3.13.13/lib/python3.13/concurrent/futures/_base.py:458: in result
+    raise TimeoutError()
+E   TimeoutError</failure></testcase><testcase classname="tests.live.autoverse_observation_contention" name="test_late_derived_read_cannot_overwrite_newer_persisted_observation[assessment]" time="1.713"><failure message="TimeoutError">tests/live/autoverse_observation_contention.py:135: in test_late_derived_read_cannot_overwrite_newer_persisted_observation
+    writer.result(timeout=1)
+&lt;USER_HOME&gt;/.pyenv/versions/3.13.13/lib/python3.13/concurrent/futures/_base.py:458: in result
+    raise TimeoutError()
+E   TimeoutError</failure></testcase><testcase classname="tests.live.autoverse_observation_contention" name="test_terminal_input_refusal_never_runs_presentation_derivation" time="0.184"><failure message="Failed: Lifecycle control attempted presentation derivation">tests/live/autoverse_observation_contention.py:153: in test_terminal_input_refusal_never_runs_presentation_derivation
+    studio.runs.input_request(right, "acquire", {}, "inert-sentinel")
+services/studio-api/src/xverse_studio/runs/service.py:1249: in input_request
+    run = self.read(rid)
+          ^^^^^^^^^^^^^^
+services/studio-api/src/xverse_studio/runs/service.py:1013: in read
+    _, integrity = read_journal(root, observed or run)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/live/autoverse_observation_contention.py:148: in forbidden
+    pytest.fail("Lifecycle control attempted presentation derivation")
+E   Failed: Lifecycle control attempted presentation derivation</failure></testcase></testsuite></testsuites>

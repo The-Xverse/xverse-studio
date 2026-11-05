@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="5" skipped="0" tests="7" time="0.081" timestamp="2026-11-05T13:31:27.413959+00:00" hostname="recorded-linux-host"><testcase classname="tests.live.autoverse_cleanup_readback" name="test_late_original_release_is_observed_without_replaying_stop" time="0.002"><failure message="AssertionError: assert {'diagnostics...s': 'unknown'} == {'diagnostics...': 'released'}&#10;  &#10;  Omitting 2 identical items, use -vv to show&#10;  Differing items:&#10;  {'status': 'unknown'} != {'status': 'released'}&#10;  {'diagnostics': ['AUTOVERSE_CONTAINER_STOP_TIMEOUT', 'AUTOVERSE_CONTAINER_STOP_UNCONFIRMED']} != {'diagnostics': ['AUTOVERSE_CONTAINER_STOP_TIMEOUT']}&#10;  Use -v to get more diff">tests/live/autoverse_cleanup_readback.py:74: in test_late_original_release_is_observed_without_replaying_stop
+    assert result == {"resourceId": "score", "kind": "container", "status": "released", "diagnostics": ["AUTOVERSE_CONTAINER_STOP_TIMEOUT"]}
+E   AssertionError: assert {'diagnostics...s': 'unknown'} == {'diagnostics...': 'released'}
+E
+E     Omitting 2 identical items, use -vv to show
+E     Differing items:
+E     {'status': 'unknown'} != {'status': 'released'}
+E     {'diagnostics': ['AUTOVERSE_CONTAINER_STOP_TIMEOUT', 'AUTOVERSE_CONTAINER_STOP_UNCONFIRMED']} != {'diagnostics': ['AUTOVERSE_CONTAINER_STOP_TIMEOUT']}
+E     Use -v to get more diff</failure></testcase><testcase classname="tests.live.autoverse_cleanup_readback" name="test_later_changed_or_unavailable_identity_never_confirms_release[start]" time="0.002"><failure message="AssertionError: assert ('unknown' == 'unknown'&#10;  &#10;    unknown and 1 == 1 and 2 == 3)&#10; +  where 1 = len([20])&#10; +  and   2 = len([15, 15])">tests/live/autoverse_cleanup_readback.py:81: in test_later_changed_or_unavailable_identity_never_confirms_release
+    assert result["status"] == "unknown" and len(calls) == 1 and len(observations) == 3
+E   AssertionError: assert ('unknown' == 'unknown'
+E
+E       unknown and 1 == 1 and 2 == 3)
+E    +  where 1 = len([20])
+E    +  and   2 = len([15, 15])</failure></testcase><testcase classname="tests.live.autoverse_cleanup_readback" name="test_later_changed_or_unavailable_identity_never_confirms_release[configuration]" time="0.002"><failure message="AssertionError: assert ('unknown' == 'unknown'&#10;  &#10;    unknown and 1 == 1 and 2 == 3)&#10; +  where 1 = len([20])&#10; +  and   2 = len([15, 15])">tests/live/autoverse_cleanup_readback.py:81: in test_later_changed_or_unavailable_identity_never_confirms_release
+    assert result["status"] == "unknown" and len(calls) == 1 and len(observations) == 3
+E   AssertionError: assert ('unknown' == 'unknown'
+E
+E       unknown and 1 == 1 and 2 == 3)
+E    +  where 1 = len([20])
+E    +  and   2 = len([15, 15])</failure></testcase><testcase classname="tests.live.autoverse_cleanup_readback" name="test_later_changed_or_unavailable_identity_never_confirms_release[unavailable]" time="0.002"><failure message="AssertionError: assert ('unknown' == 'unknown'&#10;  &#10;    unknown and 1 == 1 and 2 == 3)&#10; +  where 1 = len([20])&#10; +  and   2 = len([15, 15])">tests/live/autoverse_cleanup_readback.py:81: in test_later_changed_or_unavailable_identity_never_confirms_release
+    assert result["status"] == "unknown" and len(calls) == 1 and len(observations) == 3
+E   AssertionError: assert ('unknown' == 'unknown'
+E
+E       unknown and 1 == 1 and 2 == 3)
+E    +  where 1 = len([20])
+E    +  and   2 = len([15, 15])</failure></testcase><testcase classname="tests.live.autoverse_cleanup_readback" name="test_still_running_source_exhausts_original_budget_without_another_stop" time="0.002"><failure message="assert (2 &lt; 2)&#10; +  where 2 = len([15, 15])">tests/live/autoverse_cleanup_readback.py:90: in test_still_running_source_exhausts_original_budget_without_another_stop
+    assert 2 &lt; len(observations) &lt;= 282 and seconds &lt;= 50
+E   assert (2 &lt; 2)
+E    +  where 2 = len([15, 15])</failure></testcase><testcase classname="tests.live.autoverse_cleanup_readback" name="test_shorter_caller_deadline_is_preserved" time="0.001" /><testcase classname="tests.live.autoverse_cleanup_readback" name="test_initially_stopped_target_that_reappears_is_never_stopped_or_polled" time="0.001" /></testsuite></testsuites>

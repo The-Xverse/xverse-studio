@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="3" skipped="0" tests="6" time="14.335" timestamp="2026-11-05T14:01:52.326233+00:00" hostname="recorded-linux-host"><testcase classname="tests.live.autoverse_history_cache" name="test_repeated_verified_terminal_history_does_not_repeat_full_source_scan" time="2.364"><failure message="assert [50000, 50000, 50000] == [50000]&#10;  &#10;  Left contains 2 more items, first extra item: 50000&#10;  Use -v to get more diff">tests/live/autoverse_history_cache.py:72: in test_repeated_verified_terminal_history_does_not_repeat_full_source_scan
+    assert calls == [50000]
+E   assert [50000, 50000, 50000] == [50000]
+E
+E     Left contains 2 more items, first extra item: 50000
+E     Use -v to get more diff</failure></testcase><testcase classname="tests.live.autoverse_history_cache" name="test_current_corruption_cannot_use_a_previously_valid_projection" time="4.110" /><testcase classname="tests.live.autoverse_history_cache" name="test_changed_valid_source_with_same_record_count_cannot_reuse_old_results" time="0.668" /><testcase classname="tests.live.autoverse_history_cache" name="test_filter_and_evidence_scope_stay_bound_to_each_projection" time="2.116"><failure message="assert 3 == 2&#10; +  where 3 = len([50000, 50000, 50000])">tests/live/autoverse_history_cache.py:102: in test_filter_and_evidence_scope_stay_bound_to_each_projection
+    assert len(calls) == 2
+E   assert 3 == 2
+E    +  where 3 = len([50000, 50000, 50000])</failure></testcase><testcase classname="tests.live.autoverse_history_cache" name="test_history_projection_retention_evicts_old_filters" time="4.107"><failure message="assert 11 == 10&#10; +  where 11 = len([50000, 50000, 50000, 50000, 50000, 50000, ...])">tests/live/autoverse_history_cache.py:116: in test_history_projection_retention_evicts_old_filters
+    assert len(calls) == 10
+E   assert 11 == 10
+E    +  where 11 = len([50000, 50000, 50000, 50000, 50000, 50000, ...])</failure></testcase><testcase classname="tests.live.autoverse_history_cache" name="test_oversized_projection_is_returned_without_retaining_it" time="0.752" /></testsuite></testsuites>

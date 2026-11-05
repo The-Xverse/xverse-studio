@@ -1,6 +1,6 @@
 # ADR-0076 — Derive presentation outside the lifecycle metadata lock
 
-Date: 2026-11-05. Status: source-backed component verified; full live verification pending.
+Date: 2026-11-05. Status: current Linux component verified; full task/acceptance remains open.
 Traces: T096; NFR-008; AC-010/011/030. Windows remains frozen.
 
 Two actual complete Autoverse pressure attempts fail with driver lease expiry.
@@ -94,3 +94,6 @@ message. The existing valid-target host alone can select it; it cannot be combin
 with fault injection or enabled by imported project data. Its ASGI refusal/privacy/
 restoration check passes. These instrumented runs are diagnostic and require an
 uninstrumented repeat before acceptance; no production debug API is added.
+
+
+Checkpoint retention (2026-11-05): Current combined Linux checkpoint: source-backed contention/write/corruption guards and full current uninstrumented actual Stop/Cancel pass after the session/history repairs as well. Original lifecycle/authority and exact-row publication guards remain. The diagnostic probe remains opt-in contributor-only; final acceptance cases do not enable it. Windows remains separately frozen; no task or milestone closes. See [evidence](../../evidence/studio/M4-performance/control-20261105/README.md). This appended status/link note is documentation after verification; tested runtime/UI bytes are unchanged.

@@ -1,6 +1,6 @@
 # ADR-0075 — Retain costly verified captures within existing cache bounds
 
-Date: 2026-11-05. Status: implementation; full live repeat pending.
+Date: 2026-11-05. Status: current Linux component verified; full task/acceptance remains open.
 Traces: T096; NFR-007/008; AC-010/011/030. No runtime authority change.
 
 The actual full Autoverse pressure case reaches Android/APK and vehicle speed but
@@ -52,3 +52,6 @@ not establish resolved control responsiveness. Both original failures remain;
 current finite and successful Stop/Cancel repeats remain pending. Work is paused
 by user instruction and owned private services are shut down. See
 [evidence](../../evidence/studio/M4-control-pressure-20261105/README.md).
+
+
+Checkpoint retention (2026-11-05): Current combined Linux checkpoint:210 affected nonexecuting checks,68 comparison checks, full uninstrumented actual Stop/Cancel and all six finite series pass on7c9589b. Later ADR-0076/77/78/79 repairs remain part of this candidate; the journal-retention policy alone did not resolve control contention. All original failures remain unchanged. Windows remains separately frozen; no task or milestone closes. See [evidence](../../evidence/studio/M4-performance/control-20261105/README.md). This appended status/link note is documentation after verification; tested runtime/UI bytes are unchanged.

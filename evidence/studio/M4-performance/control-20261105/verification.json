@@ -1,0 +1,180 @@
+{
+  "date": "2026-11-05",
+  "scope": "Current native Linux T096 control/presentation component; task and complete milestone acceptance remain open",
+  "candidate": "7c9589b616ddf3d5b025dfebe43f85a00a631338",
+  "liveCases": [
+    {
+      "control": "stop",
+      "candidate": "7c9589b616ddf3d5b025dfebe43f85a00a631338",
+      "controlResult": {
+        "operationId": "op-0f42c9b3-843e-4145-8346-901c5a2fadeb",
+        "status": "completed",
+        "acknowledgmentSeconds": 0.08588010799576296,
+        "acknowledgmentHarnessBudgetSeconds": 30,
+        "terminalCleanupSeconds": 36.58280870499584,
+        "terminalHarnessBudgetSeconds": 120,
+        "exactRetryCreatesNothing": true,
+        "producerProgress": [
+          {
+            "phase": "consumers_paused",
+            "records": 57
+          },
+          {
+            "phase": "live_consumer_disconnected",
+            "records": 61
+          },
+          {
+            "phase": "before_control",
+            "records": 64
+          }
+        ]
+      },
+      "cleanup": {
+        "originalProcessInstancesExited": 16,
+        "exactStoppedContainers": 3,
+        "originalResourceRoles": [
+          "adb-connect",
+          "android-boot",
+          "android-density",
+          "android-install",
+          "android-launch",
+          "android-open",
+          "carla",
+          "carla-prepare",
+          "carla-probe",
+          "driver",
+          "router",
+          "start-android",
+          "start-score",
+          "start-someip-bridge",
+          "vcu",
+          "vehicle"
+        ],
+        "containerRoles": [
+          "android",
+          "score",
+          "someip-bridge"
+        ],
+        "journalIntegrity": "valid",
+        "journalDigest": "sha256:5be3450938ef3b3b88dc7e77826911cd3620551d5f9489a39f29d953acb5a756",
+        "terminalCleanupFactsMatchCanonicalJournal": true,
+        "recordCount": 65,
+        "observations": 13
+      },
+      "frames": 45,
+      "maximumFrameRequestSeconds": 0.12889643900416559,
+      "heartbeatErrors": [],
+      "frozenAndCanonicalBytesPreserved": true,
+      "requestAndSignedReceiptBound": {
+        "publicOperationCompleted": true,
+        "requestFingerprintBound": true,
+        "expectedStateVersion": 2,
+        "exactIdempotentResult": true,
+        "signedMailboxBound": true,
+        "producerCompletedBound": true
+      },
+      "sourceAndCopyUnchanged": true,
+      "rootReleased": true
+    },
+    {
+      "control": "cancel",
+      "candidate": "7c9589b616ddf3d5b025dfebe43f85a00a631338",
+      "controlResult": {
+        "operationId": "op-372e8e7f-985b-4c2f-a3a2-a92f9be672b4",
+        "status": "completed",
+        "acknowledgmentSeconds": 0.04692166299355449,
+        "acknowledgmentHarnessBudgetSeconds": 30,
+        "terminalCleanupSeconds": 30.144736907997867,
+        "terminalHarnessBudgetSeconds": 120,
+        "exactRetryCreatesNothing": true,
+        "producerProgress": [
+          {
+            "phase": "consumers_paused",
+            "records": 60
+          },
+          {
+            "phase": "live_consumer_disconnected",
+            "records": 64
+          },
+          {
+            "phase": "before_control",
+            "records": 67
+          }
+        ]
+      },
+      "cleanup": {
+        "originalProcessInstancesExited": 16,
+        "exactStoppedContainers": 3,
+        "originalResourceRoles": [
+          "adb-connect",
+          "android-boot",
+          "android-density",
+          "android-install",
+          "android-launch",
+          "android-open",
+          "carla",
+          "carla-prepare",
+          "carla-probe",
+          "driver",
+          "router",
+          "start-android",
+          "start-score",
+          "start-someip-bridge",
+          "vcu",
+          "vehicle"
+        ],
+        "containerRoles": [
+          "android",
+          "score",
+          "someip-bridge"
+        ],
+        "journalIntegrity": "valid",
+        "journalDigest": "sha256:1307f0021ddc5249a43caa70202e198fc9466f5d9220c04edb62b13dad33bb61",
+        "terminalCleanupFactsMatchCanonicalJournal": true,
+        "recordCount": 68,
+        "observations": 13
+      },
+      "frames": 37,
+      "maximumFrameRequestSeconds": 0.15924687899678247,
+      "heartbeatErrors": [],
+      "frozenAndCanonicalBytesPreserved": true,
+      "requestAndSignedReceiptBound": {
+        "publicOperationCompleted": true,
+        "requestFingerprintBound": true,
+        "expectedStateVersion": 2,
+        "exactIdempotentResult": true,
+        "signedMailboxBound": true,
+        "producerCompletedBound": true
+      },
+      "sourceAndCopyUnchanged": true,
+      "rootReleased": true
+    }
+  ],
+  "finiteSeriesPassed": 6,
+  "metrics": "metrics.json",
+  "backendRssSampleCount": 716,
+  "maximumBackendRssBytes": 537427968,
+  "finiteCanonicalBytesAndLedgerPreserved": true,
+  "finiteOriginalAndPreparedPreserved": true,
+  "capturedFiniteHandlesExited": true,
+  "liveInfrastructureShutdown": true,
+  "goal": "active; full original plan continues",
+  "windows": "separately frozen; NOT_RUN",
+  "taskCounts": {
+    "completed": 72,
+    "in_progress": 18,
+    "blocked": 10
+  },
+  "acceptedMilestones": 0,
+  "limitations": [
+    "Actual50k history is explicitly inert generated load, not simulator throughput.",
+    "Paused application reads do not prove a saturated TCP sender window.",
+    "Single Stop/Cancel observations and existing30s/120s harness budgets are not a new product SLA or arbitrary-load guarantee.",
+    "Initial1024 open warmup3694.7ms is retained; no cold-open pass is claimed.",
+    "Sampled backend peak537427968bytes exceeds earlier332800000bytes; no general memory isolation, cold/acquisition capacity or GPU-health claim.",
+    "Current applicable classic authentication scope only;22 absent platform-receipt setup errors remain retained.",
+    "Original wrong81-record comparison fixture selection remains an11-error result; corrected93-record source passes68 without changing assertions.",
+    "Original seven whole live failures remain failures; earlier/instrumented passes do not replace final uninstrumented results.",
+    "Required-host Windows verification, full linked AC-010/011/030 and independent/hardware/human/milestone gates remain open."
+  ]
+}

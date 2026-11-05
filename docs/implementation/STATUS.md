@@ -1,3 +1,40 @@
+# Linux control and performance component verified; full goal active — 2026-11-05
+
+**72 completed / 18 in progress / 10 blocked; zero accepted milestones.**
+T096 remains in progress. The user requested continued work without interruption;
+Windows remains separately frozen. The full original plan remains active.
+
+Current7c9589b passes actual complete rendered/sensor/Android/speed Autoverse Stop
+and Cancel under presentation pressure. Acknowledgments are85.9/46.9ms and terminal
+cleanup36.58/30.14s, with unchanged0.75-second driver leases and no heartbeat errors.
+Canonical producer progress, exact retries, request/HMAC/producer receipts, frozen/
+source/copy/synthetic bytes, ledger deltas and16-resource/3-container release pass.
+All captured19/17 descendant handles exit; complete process coverage is not claimed.
+
+All six original finite30-sample series after one warm-up pass at1024×768/1440×900:
+open/validation1181.3/1220.0ms,selection46.4/45.9ms,history138.6/140.4ms p95 under
+unchanged3000/150/2000ms limits. The3694.7ms first1024open warm-up is retained;
+no cold-open pass. Peak sampled backend RSS537427968bytes exceeds the earlier
+332800000-byte observation; these are workload samples, not a complete memory or
+GPU-health guarantee. The device-isolated CPU browser and backend exit, roots
+release, all11 captured handles exit, and source/prepared/canonical/ledger checks pass.
+
+210 current affected nonexecuting checks and68 comparison checks pass. Source-backed
+counterexamples, seven original failed whole live cases, earlier diagnostic passes
+and fixture/setup failures remain retained. New derived caches retain current source
+verification and bounded memory; lifecycle/session/ownership/lease checks remain.
+All owned private live services are stopped;8 exact test containers were stopped
+before daemon shutdown, the overlay mount is gone, and host Docker/interfaces stay
+unchanged. Prepared assets remain available through fresh ownership/readiness only.
+
+The current Linux component does not close required-host portability or complete
+linked acceptance. No Windows, physical, human, independent, release or milestone
+acceptance is inferred. Next eligible work is T097's original added-flow keyboard,
+focus, diagnostics/status and desktop-matrix audit. See
+[evidence and review](../../evidence/studio/M4-performance/control-20261105/README.md).
+
+## Earlier checkpoints
+
 Current instruction — 2026-11-05: user explicitly resumed with the active goal "keep going without interruption". Continue the full existing Linux/Autoverse plan; Windows remains separately frozen. Historical pause instructions below are superseded. Current T096 work starts with offline profiling of the retained live pressure failures; do not trust old infrastructure owners as live.
 
 # Work paused; T096 pressure test remains open — 2026-11-05

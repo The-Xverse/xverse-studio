@@ -1,6 +1,6 @@
 # ADR-0078 — Observe an already requested container Stop within its existing budget
 
-Date: 2026-11-05. Status: component verified; full live repeats pending.
+Date: 2026-11-05. Status: current Linux component verified; full task/acceptance remains open.
 Traces: T096; FR-012/013/014; NFR-008/009; AC-010/030. Windows remains frozen.
 
 After the session event-loop repair, a full actual Stop pressure case passes. The
@@ -44,3 +44,6 @@ cleanup/classic-authentication cohort with native subprocess contact forbidden.
 That combined run preserves selected source inputs and records zero native contact
 attempts. These component results do not upgrade the earlier failed Cancel or
 establish live release timing on the changed provider.
+
+
+Checkpoint retention (2026-11-05): Current combined Linux checkpoint: seven timing/identity cases,12 actual stopped-target negatives and final complete uninstrumented Stop/Cancel pass with the unchanged budgets/authority. Final cases have no cleanup timing-fault injection and no retained cleanup diagnostics; do not relabel the earlier unknown Cancel or claim its timeout path was re-executed successfully. Windows remains separately frozen; no task or milestone closes. See [evidence](../../evidence/studio/M4-performance/control-20261105/README.md). This appended status/link note is documentation after verification; tested runtime/UI bytes are unchanged.

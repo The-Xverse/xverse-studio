@@ -1,3 +1,13 @@
+Latest checkpoint — 2026-11-05: current Linux full Autoverse Stop/Cancel pressure
+and all six finite performance series pass;210 affected and68 comparison checks
+pass. T096 remains open for required-host portability/full linked acceptance.
+Counts72/18/10,zero milestones. Full goal ACTIVE (user: keep going without
+interruption); Windows separately FROZEN. All owned live test services are stopped;
+old process/namespace metadata is not live authority. Continue the existing plan,
+next eligible T097 keyboard/diagnostics audit. See [status](STATUS.md) and
+[evidence](../../evidence/studio/M4-performance/control-20261105/README.md).
+This latest instruction/checkpoint supersedes historical active/pause notes below.
+
 Current instruction — 2026-11-05: user explicitly resumed with the active goal "keep going without interruption". Continue the full existing Linux/Autoverse plan; Windows remains separately frozen. Historical pause instructions below are superseded. Current T096 work starts with offline profiling of the retained live pressure failures; do not trust old infrastructure owners as live.
 
 Current instruction — 2026-11-05: **work is paused until explicit user resume.**

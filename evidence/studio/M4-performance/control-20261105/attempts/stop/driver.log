@@ -1,0 +1,21 @@
+AUTOVERSE_CONTROL_PRESSURE stop run-4e2d9bc7-3e82-4748-9d2d-51c96eddc559 ('preparing', None)
+AUTOVERSE_CONTROL_PRESSURE stop run-4e2d9bc7-3e82-4748-9d2d-51c96eddc559 ('preparing', 'verifying')
+AUTOVERSE_CONTROL_PRESSURE stop run-4e2d9bc7-3e82-4748-9d2d-51c96eddc559 ('preparing', 'router')
+AUTOVERSE_CONTROL_PRESSURE stop run-4e2d9bc7-3e82-4748-9d2d-51c96eddc559 ('preparing', 'simulator')
+AUTOVERSE_CONTROL_PRESSURE stop run-4e2d9bc7-3e82-4748-9d2d-51c96eddc559 ('preparing', 'vcu-and-communications')
+AUTOVERSE_CONTROL_PRESSURE stop run-4e2d9bc7-3e82-4748-9d2d-51c96eddc559 ('preparing', 'vehicle-and-driver')
+AUTOVERSE_CONTROL_PRESSURE stop run-4e2d9bc7-3e82-4748-9d2d-51c96eddc559 ('preparing', 'android')
+AUTOVERSE_CONTROL_PRESSURE stop run-4e2d9bc7-3e82-4748-9d2d-51c96eddc559 ('running', 'running')
+Traceback (most recent call last):
+  File "<WORKTREE>/tests/live/autoverse_control_pressure_native.py", line 354, in <module>
+    main()
+    ~~~~^^
+  File "<WORKTREE>/tests/live/autoverse_control_pressure_native.py", line 268, in main
+    run = drive(0, 1)
+  File "<WORKTREE>/tests/live/autoverse_control_pressure_native.py", line 230, in drive
+    native.checked(response)
+    ~~~~~~~~~~~~~~^^^^^^^^^^
+  File "<WORKTREE>/tests/live/autoverse_lifecycle_conformance.py", line 39, in checked
+    assert response.status_code == status, (response.status_code, response.text[:1600])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: (409, '{"code":"CONTROL_LEASE_EXPIRED","message":"The driver lease expired or belongs to another session; acquire a fresh lease.","requestId":"req-93dcaf82-4db7-4ce1-a3cb-d694c8077c74","retryable":false}')

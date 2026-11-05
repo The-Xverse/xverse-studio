@@ -1,6 +1,6 @@
 # ADR-0077 — Keep session metadata waits off the HTTP event loop
 
-Date: 2026-11-05. Status: affected component verified; full live repeat pending.
+Date: 2026-11-05. Status: current Linux component verified; full task/acceptance remains open.
 Traces: T096; NFR-005/008; AC-010/011/030. Windows remains frozen.
 
 The complete pressure repeat onb444243 again expires the driver lease, despite an
@@ -44,3 +44,6 @@ an enrollment or infer a platform pass; the22 actual classic bootstrap/session/
 CSRF/Origin/host/expiry refusal cases in this run pass. No native subprocess contact
 is attempted, and the original expanded failure remains retained. Together these
 results cover194 applicable current component cases; no full216-pass or live claim.
+
+
+Checkpoint retention (2026-11-05): Current combined Linux checkpoint: the event-loop counterexample,22 actual classic authentication refusals,210 affected checks and final uninstrumented Stop/Cancel pass. The original mixed216 selection and missing platform receipt errors remain retained; no platform or Windows pass is inferred. Windows remains separately frozen; no task or milestone closes. See [evidence](../../evidence/studio/M4-performance/control-20261105/README.md). This appended status/link note is documentation after verification; tested runtime/UI bytes are unchanged.

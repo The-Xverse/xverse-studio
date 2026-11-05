@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="2.826" timestamp="2026-11-05T13:15:01.928169+00:00" hostname="recorded-linux-host"><testcase classname="tests.live.autoverse_observation_contention" name="test_waiting_session_lookup_does_not_block_the_http_event_loop" time="2.600"><failure message="AssertionError: Synchronous authentication blocks the ASGI event loop&#10;assert False&#10; +  where False = wait(1)&#10; +    where wait = &lt;threading.Event at 0x7f1043929a90: unset&gt;.wait">tests/live/autoverse_observation_contention.py:273: in test_waiting_session_lookup_does_not_block_the_http_event_loop
+    assert public_done.wait(1), "Synchronous authentication blocks the ASGI event loop"
+E   AssertionError: Synchronous authentication blocks the ASGI event loop
+E   assert False
+E    +  where False = wait(1)
+E    +    where wait = &lt;threading.Event at 0x7f1043929a90: unset&gt;.wait</failure></testcase></testsuite></testsuites>
