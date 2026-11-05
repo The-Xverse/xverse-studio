@@ -233,6 +233,8 @@ def main():
             time.sleep(.1)
         assert speed_seen
         pressure = PresentationPressure(api, history, source["runId"], source_result["children"][1]["runId"], source_result["campaignId"], run_id)
+        native.checked(api.post(route + "/input/release", json=lease))
+        setup_started = time.monotonic()
         pressure.start()
         # Preparing independent HTTP clients/first captures is not a driver
         # heartbeat. Acquire a new public lease for the measured active phase;
@@ -240,6 +242,9 @@ def main():
         lease = native.checked(api.post(route + "/input/acquire", json={}))
         lease = {k: lease[k] for k in ["leaseToken", "generation"]}
         sequence = 0
+        report["inputPreparation"] = {"leaseReleasedBeforeClientSetup": True,
+                                      "setupSeconds": time.monotonic() - setup_started,
+                                      "freshLeaseAcquiredAfterSetup": True, "unchangedLeaseSeconds": .75}
         journal = data / "runs" / run_id / "evidence.jsonl"
         initial = journal.read_bytes()
         ticks = [{"phase": "consumers_paused", "records": len(initial.splitlines())}]
