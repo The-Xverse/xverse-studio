@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="31" time="75.400" timestamp="2026-11-05T18:21:02.970525+00:00" hostname="master"><testcase classname="tests.integration.test_uninstalled_binding_authoring" name="test_missing_descriptor_saves_only_authored_binding_and_stays_blocked[virtual]" time="2.465" /><testcase classname="tests.integration.test_uninstalled_binding_authoring" name="test_missing_descriptor_saves_only_authored_binding_and_stays_blocked[physical]" time="1.582"><failure message="xverse_studio.storage.core.Problem: The authoritative validator rejected this edit transaction: XDL-SEMANTIC-PHYSICAL-ASSET">tmp_path = PosixPath('/tmp/pytest-of-jefferson/pytest-138/test_missing_descriptor_saves_1')
+realization = 'physical'
+
+    @pytest.mark.parametrize("realization", ["virtual", "physical", "hybrid"])
+    def test_missing_descriptor_saves_only_authored_binding_and_stays_blocked(tmp_path, realization):
+        adapter = XDLAdapter()
+        projects = Projects(Store(tmp_path), adapter)
+        project = projects.create("Uninstalled binding authoring")
+        descriptor_reads = []
+
+        def descriptors():
+            descriptor_reads.append(True)
+            return []
+
+        def forbidden_configuration(*args):
+            pytest.fail("An absent descriptor must never use a fallback provider configuration")
+
+        deployments = Deployments(projects, adapter, descriptor_source=descriptors,
+                                  configuration_for=forbidden_configuration)
+        variant = deployments.list(project["projectId"])["items"][0]
+        before = projects.sources(project)
+&gt;       result = deployments.update_binding(project["projectId"], project["revision"], variant["documentId"],
+            {"bindingId": "plant-binding", "realizationClass": realization}, "not-installed")
+
+tests/integration/test_uninstalled_binding_authoring.py:31:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+services/studio-api/src/xverse_studio/deployments/__init__.py:280: in update_binding
+    project = self.projects.mutate(project_id, revision, change)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+services/studio-api/src/xverse_studio/projects/service.py:413: in mutate
+    return self.advance(p, transform(p), db, origin)
+                           ^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+project = {'createdAt': 1793902866.0554175, 'documents': {'doc-0': {'content': 'apiVersion: xverse.io/xdl/v1alpha1\nkind: Compon...: 'artifacts.lock.json', 'formatVersion': '1.0', 'layoutFiles': [], 'name': 'Uninstalled binding authoring', ...}, ...}
+
+    def change(project):
+        if document_id not in project["documents"]:
+            raise Problem("NOT_FOUND", "Deployment document not found.", 404)
+        source = self.projects.sources(project)
+        try:
+            updated = semantic_edits(source, [{"kind": "set_binding", "documentId": project["documents"][document_id]["path"], **{key: item for key, item in value.items() if key != "scenarioRef"}}])
+        except XDLRejected as error:
+&gt;           raise Problem(error.code, str(error)) from None
+E           xverse_studio.storage.core.Problem: The authoritative validator rejected this edit transaction: XDL-SEMANTIC-PHYSICAL-ASSET
+
+services/studio-api/src/xverse_studio/deployments/__init__.py:248: Problem</failure></testcase><testcase classname="tests.integration.test_uninstalled_binding_authoring" name="test_missing_descriptor_saves_only_authored_binding_and_stays_blocked[hybrid]" time="2.420" /><testcase classname="tests.integration.test_uninstalled_binding_authoring" name="test_missing_descriptor_does_not_relax_invalid_source_edit" time="1.573" /><testcase classname="tests.integration.test_uninstalled_binding_authoring" name="test_descriptor_discovery_failure_is_not_treated_as_absence" time="2.121" /><testcase classname="tests.integration.test_deployment_comparison" name="test_resolution_refuses_requested_stale_revision_instead_of_relabelling_new_source" time="2.045" /><testcase classname="tests.integration.test_deployment_comparison" name="test_comparison_uses_one_authored_revision_and_preserves_project_and_runs" time="2.165" /><testcase classname="tests.integration.test_deployment_comparison" name="test_comparison_invalid_revision_rejected_at_http_boundary[0]" time="1.964" /><testcase classname="tests.integration.test_deployment_comparison" name="test_comparison_invalid_revision_rejected_at_http_boundary[-1]" time="1.899" /><testcase classname="tests.integration.test_deployment_comparison" name="test_comparison_invalid_revision_rejected_at_http_boundary[unknown]" time="2.015" /><testcase classname="tests.integration.test_deployment_comparison" name="test_comparison_invalid_revision_rejected_at_http_boundary[9007199254740992]" time="1.957" /><testcase classname="tests.integration.test_deployment_comparison" name="test_comparison_missing_revision_and_stale_revision_are_distinct_refusals" time="1.922" /><testcase classname="tests.integration.test_deployment_comparison" name="test_comparison_rejects_missing_non_deployment_and_same_document" time="2.093" /><testcase classname="tests.integration.test_deployment_comparison" name="test_provider_absence_is_not_fabricated_as_available_controls" time="2.258" /><testcase classname="tests.integration.test_deployment_comparison" name="test_external_source_change_refuses_both_resolution_and_comparison_without_overwriting" time="1.938" /><testcase classname="tests.integration.test_deployment_comparison" name="test_invalid_source_draft_does_not_create_a_coherent_result" time="2.351" /><testcase classname="tests.integration.test_deployment_comparison" name="test_one_captured_project_read_and_one_provider_descriptor" time="2.149" /><testcase classname="tests.integration.test_deployment_comparison" name="test_concurrent_commit_between_resolutions_cannot_mix_revisions_or_bindings" time="2.464" /><testcase classname="tests.integration.test_deployment_comparison" name="test_different_system_sources_are_not_joined_by_matching_element_names" time="2.650" /><testcase classname="tests.integration.test_deployment_comparison" name="test_physical_declaration_remains_unsupported_and_preserves_system_source" time="3.168" /><testcase classname="tests.integration.test_deployment_comparison" name="test_target_capability_bounds_and_private_text_are_not_authority" time="3.396" /><testcase classname="tests.integration.test_deployment_comparison" name="test_declared_deployment_and_scenario_tolerances_keep_owner_and_are_not_measurements" time="3.949" /><testcase classname="tests.integration.test_deployment_comparison" name="test_comparison_requires_session_and_rejects_foreign_origin" time="1.892" /><testcase classname="tests.integration.test_deployment_variants" name="test_authored_variants_keep_logical_identity_and_compile_explicit_contributors" time="2.573" /><testcase classname="tests.integration.test_deployment_variants" name="test_ambiguous_or_mismatched_variant_selection_does_not_fall_back" time="1.835" /><testcase classname="tests.integration.test_deployment_variants" name="test_invalid_rebinding_preserves_prior_revision" time="1.620" /><testcase classname="tests.integration.test_deployment_variants" name="test_ambiguous_binding_admission_refuses_before_committing_and_explicit_scenario_works" time="3.062" /><testcase classname="tests.integration.test_deployment_variants" name="test_compatible_rebinding_preserves_logical_identity_and_meets_declared_requirements" time="6.672" /><testcase classname="tests.integration.test_deployment_variants" name="test_incompatible_requirements_are_identified_and_undecidable_ones_stay_unknown" time="0.898" /><testcase classname="tests.integration.test_deployment_variants" name="test_resource_time_and_network_constraints_are_revalidated" time="4.510" /><testcase classname="tests.integration.test_deployment_variants" name="test_resolution_reports_connection_compatibility_for_the_selected_provider" time="1.618" /></testsuite></testsuites>

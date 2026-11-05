@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="31" time="78.220" timestamp="2026-11-05T18:24:07.780061+00:00" hostname="master"><testcase classname="tests.integration.test_uninstalled_binding_authoring" name="test_missing_descriptor_saves_only_authored_binding_and_stays_blocked[virtual]" time="2.593" /><testcase classname="tests.integration.test_uninstalled_binding_authoring" name="test_missing_descriptor_saves_only_authored_binding_and_stays_blocked[physical]" time="2.660"><failure message="assert [] == [True]&#10;  &#10;  Right contains one more item: True&#10;  Use -v to get more diff">tmp_path = PosixPath('/tmp/pytest-of-jefferson/pytest-139/test_missing_descriptor_saves_1')
+realization = 'physical'
+
+    @pytest.mark.parametrize("realization", ["virtual", "physical", "hybrid"])
+    def test_missing_descriptor_saves_only_authored_binding_and_stays_blocked(tmp_path, realization):
+        adapter = XDLAdapter()
+        projects = Projects(Store(tmp_path), adapter)
+        documents = examples()[0]["documents"]
+        if realization == "physical":
+            declared = YAML(typ="safe").load(documents["deployment.xdl.yaml"])
+            declared["spec"]["targets"][0]["externalAssetRef"] = "urn:fixture:unresolved-physical-asset"
+            documents["deployment.xdl.yaml"] = dump_yaml(declared)
+        project = projects.create("Uninstalled binding authoring", documents=documents)
+        descriptor_reads = []
+
+        def descriptors():
+            descriptor_reads.append(True)
+            return []
+
+        def forbidden_configuration(*args):
+            pytest.fail("An absent descriptor must never use a fallback provider configuration")
+
+        deployments = Deployments(projects, adapter, descriptor_source=descriptors,
+                                  configuration_for=forbidden_configuration)
+        variant = deployments.list(project["projectId"])["items"][0]
+        before = projects.sources(project)
+        result = deployments.update_binding(project["projectId"], project["revision"], variant["documentId"],
+            {"bindingId": "plant-binding", "realizationClass": realization}, "not-installed")
+&gt;       assert descriptor_reads == [True]
+E       assert [] == [True]
+E
+E         Right contains one more item: True
+E         Use -v to get more diff
+
+tests/integration/test_uninstalled_binding_authoring.py:39: AssertionError</failure></testcase><testcase classname="tests.integration.test_uninstalled_binding_authoring" name="test_missing_descriptor_saves_only_authored_binding_and_stays_blocked[hybrid]" time="2.441" /><testcase classname="tests.integration.test_uninstalled_binding_authoring" name="test_missing_descriptor_does_not_relax_invalid_source_edit" time="1.577" /><testcase classname="tests.integration.test_uninstalled_binding_authoring" name="test_descriptor_discovery_failure_is_not_treated_as_absence" time="2.243" /><testcase classname="tests.integration.test_deployment_comparison" name="test_resolution_refuses_requested_stale_revision_instead_of_relabelling_new_source" time="2.180" /><testcase classname="tests.integration.test_deployment_comparison" name="test_comparison_uses_one_authored_revision_and_preserves_project_and_runs" time="2.349" /><testcase classname="tests.integration.test_deployment_comparison" name="test_comparison_invalid_revision_rejected_at_http_boundary[0]" time="2.003" /><testcase classname="tests.integration.test_deployment_comparison" name="test_comparison_invalid_revision_rejected_at_http_boundary[-1]" time="2.060" /><testcase classname="tests.integration.test_deployment_comparison" name="test_comparison_invalid_revision_rejected_at_http_boundary[unknown]" time="1.931" /><testcase classname="tests.integration.test_deployment_comparison" name="test_comparison_invalid_revision_rejected_at_http_boundary[9007199254740992]" time="2.054" /><testcase classname="tests.integration.test_deployment_comparison" name="test_comparison_missing_revision_and_stale_revision_are_distinct_refusals" time="2.239" /><testcase classname="tests.integration.test_deployment_comparison" name="test_comparison_rejects_missing_non_deployment_and_same_document" time="2.176" /><testcase classname="tests.integration.test_deployment_comparison" name="test_provider_absence_is_not_fabricated_as_available_controls" time="2.311" /><testcase classname="tests.integration.test_deployment_comparison" name="test_external_source_change_refuses_both_resolution_and_comparison_without_overwriting" time="2.049" /><testcase classname="tests.integration.test_deployment_comparison" name="test_invalid_source_draft_does_not_create_a_coherent_result" time="2.638" /><testcase classname="tests.integration.test_deployment_comparison" name="test_one_captured_project_read_and_one_provider_descriptor" time="2.351" /><testcase classname="tests.integration.test_deployment_comparison" name="test_concurrent_commit_between_resolutions_cannot_mix_revisions_or_bindings" time="2.662" /><testcase classname="tests.integration.test_deployment_comparison" name="test_different_system_sources_are_not_joined_by_matching_element_names" time="2.897" /><testcase classname="tests.integration.test_deployment_comparison" name="test_physical_declaration_remains_unsupported_and_preserves_system_source" time="3.501" /><testcase classname="tests.integration.test_deployment_comparison" name="test_target_capability_bounds_and_private_text_are_not_authority" time="3.584" /><testcase classname="tests.integration.test_deployment_comparison" name="test_declared_deployment_and_scenario_tolerances_keep_owner_and_are_not_measurements" time="4.036" /><testcase classname="tests.integration.test_deployment_comparison" name="test_comparison_requires_session_and_rejects_foreign_origin" time="1.897" /><testcase classname="tests.integration.test_deployment_variants" name="test_authored_variants_keep_logical_identity_and_compile_explicit_contributors" time="2.559" /><testcase classname="tests.integration.test_deployment_variants" name="test_ambiguous_or_mismatched_variant_selection_does_not_fall_back" time="1.803" /><testcase classname="tests.integration.test_deployment_variants" name="test_invalid_rebinding_preserves_prior_revision" time="1.619" /><testcase classname="tests.integration.test_deployment_variants" name="test_ambiguous_binding_admission_refuses_before_committing_and_explicit_scenario_works" time="3.016" /><testcase classname="tests.integration.test_deployment_variants" name="test_compatible_rebinding_preserves_logical_identity_and_meets_declared_requirements" time="6.564" /><testcase classname="tests.integration.test_deployment_variants" name="test_incompatible_requirements_are_identified_and_undecidable_ones_stay_unknown" time="0.759" /><testcase classname="tests.integration.test_deployment_variants" name="test_resource_time_and_network_constraints_are_revalidated" time="3.829" /><testcase classname="tests.integration.test_deployment_variants" name="test_resolution_reports_connection_compatibility_for_the_selected_provider" time="1.478" /></testsuite></testsuites>

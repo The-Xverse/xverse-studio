@@ -1,0 +1,38 @@
+{
+  "lint": {
+    "exit": 0,
+    "argv": [
+      "[WORKTREE]/.venv/bin/ruff",
+      "check",
+      "services/studio-api/src/xverse_studio/deployments/__init__.py",
+      "tests/integration/test_uninstalled_binding_authoring.py",
+      "tests/live/autoverse_playback_browser.py"
+    ]
+  },
+  "typecheck": {
+    "exit": 0,
+    "argv": [
+      "[WORKSPACE_VOLUME]/.xverse-studio-cache/node-v24.22.1-linux-x64/bin/node",
+      "[MAIN_CHECKOUT]/node_modules/typescript/bin/tsc",
+      "--noEmit",
+      "-p",
+      "apps/studio-web/tsconfig.json"
+    ]
+  },
+  "architecture": {
+    "exit": 0,
+    "argv": [
+      "[WORKTREE]/.venv/bin/python",
+      "-I",
+      "scripts/check_architecture.py"
+    ]
+  },
+  "planning": {
+    "exit": 0,
+    "argv": [
+      "[WORKTREE]/.venv/bin/python",
+      "-I",
+      "scripts/validate_spec_package.py"
+    ]
+  }
+}

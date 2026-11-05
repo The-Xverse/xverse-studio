@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="3" skipped="0" tests="5" time="9.873" timestamp="2026-11-05T18:19:48.048097+00:00" hostname="master"><testcase classname="tests.integration.test_uninstalled_binding_authoring" name="test_missing_descriptor_saves_only_authored_binding_and_stays_blocked[virtual]" time="2.166"><failure message="xverse_studio.storage.core.Problem: No provider descriptor has this identity.">tmp_path = PosixPath('/tmp/pytest-of-jefferson/pytest-137/test_missing_descriptor_saves_0')
+realization = 'virtual'
+
+    @pytest.mark.parametrize("realization", ["virtual", "physical", "hybrid"])
+    def test_missing_descriptor_saves_only_authored_binding_and_stays_blocked(tmp_path, realization):
+        adapter = XDLAdapter()
+        projects = Projects(Store(tmp_path), adapter)
+        project = projects.create("Uninstalled binding authoring")
+        descriptor_reads = []
+
+        def descriptors():
+            descriptor_reads.append(True)
+            return []
+
+        def forbidden_configuration(*args):
+            pytest.fail("An absent descriptor must never use a fallback provider configuration")
+
+        deployments = Deployments(projects, adapter, descriptor_source=descriptors,
+                                  configuration_for=forbidden_configuration)
+        variant = deployments.list(project["projectId"])["items"][0]
+        before = projects.sources(project)
+&gt;       result = deployments.update_binding(project["projectId"], project["revision"], variant["documentId"],
+            {"bindingId": "plant-binding", "realizationClass": realization}, "not-installed")
+
+tests/integration/test_uninstalled_binding_authoring.py:31:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+services/studio-api/src/xverse_studio/deployments/__init__.py:272: in update_binding
+    project = self.projects.mutate(project_id, revision, change)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+services/studio-api/src/xverse_studio/projects/service.py:413: in mutate
+    return self.advance(p, transform(p), db, origin)
+                           ^^^^^^^^^^^^
+services/studio-api/src/xverse_studio/deployments/__init__.py:258: in change
+    provider = self._provider(provider_id)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;xverse_studio.deployments.Deployments object at 0x7753c9e027b0&gt;
+provider_id = 'not-installed'
+
+    def _provider(self, provider_id):
+        from xverse_studio.providers.registry import descriptors
+
+        provider = next((deepcopy(value) for value in (self.descriptor_source or descriptors)() if value["providerId"] == provider_id), None)
+        if provider is None:
+&gt;           raise Problem("PROVIDER_UNAVAILABLE", "No provider descriptor has this identity.", 404)
+E           xverse_studio.storage.core.Problem: No provider descriptor has this identity.
+
+services/studio-api/src/xverse_studio/deployments/__init__.py:89: Problem</failure></testcase><testcase classname="tests.integration.test_uninstalled_binding_authoring" name="test_missing_descriptor_saves_only_authored_binding_and_stays_blocked[physical]" time="1.606"><failure message="xverse_studio.storage.core.Problem: The authoritative validator rejected this edit transaction: XDL-SEMANTIC-PHYSICAL-ASSET">tmp_path = PosixPath('/tmp/pytest-of-jefferson/pytest-137/test_missing_descriptor_saves_1')
+realization = 'physical'
+
+    @pytest.mark.parametrize("realization", ["virtual", "physical", "hybrid"])
+    def test_missing_descriptor_saves_only_authored_binding_and_stays_blocked(tmp_path, realization):
+        adapter = XDLAdapter()
+        projects = Projects(Store(tmp_path), adapter)
+        project = projects.create("Uninstalled binding authoring")
+        descriptor_reads = []
+
+        def descriptors():
+            descriptor_reads.append(True)
+            return []
+
+        def forbidden_configuration(*args):
+            pytest.fail("An absent descriptor must never use a fallback provider configuration")
+
+        deployments = Deployments(projects, adapter, descriptor_source=descriptors,
+                                  configuration_for=forbidden_configuration)
+        variant = deployments.list(project["projectId"])["items"][0]
+        before = projects.sources(project)
+&gt;       result = deployments.update_binding(project["projectId"], project["revision"], variant["documentId"],
+            {"bindingId": "plant-binding", "realizationClass": realization}, "not-installed")
+
+tests/integration/test_uninstalled_binding_authoring.py:31:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+services/studio-api/src/xverse_studio/deployments/__init__.py:272: in update_binding
+    project = self.projects.mutate(project_id, revision, change)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+services/studio-api/src/xverse_studio/projects/service.py:413: in mutate
+    return self.advance(p, transform(p), db, origin)
+                           ^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+project = {'createdAt': 1793902790.8691647, 'documents': {'doc-0': {'content': 'apiVersion: xverse.io/xdl/v1alpha1\nkind: Compon...: 'artifacts.lock.json', 'formatVersion': '1.0', 'layoutFiles': [], 'name': 'Uninstalled binding authoring', ...}, ...}
+
+    def change(project):
+        if document_id not in project["documents"]:
+            raise Problem("NOT_FOUND", "Deployment document not found.", 404)
+        source = self.projects.sources(project)
+        try:
+            updated = semantic_edits(source, [{"kind": "set_binding", "documentId": project["documents"][document_id]["path"], **{key: item for key, item in value.items() if key != "scenarioRef"}}])
+        except XDLRejected as error:
+&gt;           raise Problem(error.code, str(error)) from None
+E           xverse_studio.storage.core.Problem: The authoritative validator rejected this edit transaction: XDL-SEMANTIC-PHYSICAL-ASSET
+
+services/studio-api/src/xverse_studio/deployments/__init__.py:248: Problem</failure></testcase><testcase classname="tests.integration.test_uninstalled_binding_authoring" name="test_missing_descriptor_saves_only_authored_binding_and_stays_blocked[hybrid]" time="2.157"><failure message="xverse_studio.storage.core.Problem: No provider descriptor has this identity.">tmp_path = PosixPath('/tmp/pytest-of-jefferson/pytest-137/test_missing_descriptor_saves_2')
+realization = 'hybrid'
+
+    @pytest.mark.parametrize("realization", ["virtual", "physical", "hybrid"])
+    def test_missing_descriptor_saves_only_authored_binding_and_stays_blocked(tmp_path, realization):
+        adapter = XDLAdapter()
+        projects = Projects(Store(tmp_path), adapter)
+        project = projects.create("Uninstalled binding authoring")
+        descriptor_reads = []
+
+        def descriptors():
+            descriptor_reads.append(True)
+            return []
+
+        def forbidden_configuration(*args):
+            pytest.fail("An absent descriptor must never use a fallback provider configuration")
+
+        deployments = Deployments(projects, adapter, descriptor_source=descriptors,
+                                  configuration_for=forbidden_configuration)
+        variant = deployments.list(project["projectId"])["items"][0]
+        before = projects.sources(project)
+&gt;       result = deployments.update_binding(project["projectId"], project["revision"], variant["documentId"],
+            {"bindingId": "plant-binding", "realizationClass": realization}, "not-installed")
+
+tests/integration/test_uninstalled_binding_authoring.py:31:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+services/studio-api/src/xverse_studio/deployments/__init__.py:272: in update_binding
+    project = self.projects.mutate(project_id, revision, change)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+services/studio-api/src/xverse_studio/projects/service.py:413: in mutate
+    return self.advance(p, transform(p), db, origin)
+                           ^^^^^^^^^^^^
+services/studio-api/src/xverse_studio/deployments/__init__.py:258: in change
+    provider = self._provider(provider_id)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;xverse_studio.deployments.Deployments object at 0x7753c9afb4d0&gt;
+provider_id = 'not-installed'
+
+    def _provider(self, provider_id):
+        from xverse_studio.providers.registry import descriptors
+
+        provider = next((deepcopy(value) for value in (self.descriptor_source or descriptors)() if value["providerId"] == provider_id), None)
+        if provider is None:
+&gt;           raise Problem("PROVIDER_UNAVAILABLE", "No provider descriptor has this identity.", 404)
+E           xverse_studio.storage.core.Problem: No provider descriptor has this identity.
+
+services/studio-api/src/xverse_studio/deployments/__init__.py:89: Problem</failure></testcase><testcase classname="tests.integration.test_uninstalled_binding_authoring" name="test_missing_descriptor_does_not_relax_invalid_source_edit" time="1.606" /><testcase classname="tests.integration.test_uninstalled_binding_authoring" name="test_descriptor_discovery_failure_is_not_treated_as_absence" time="2.142" /></testsuite></testsuites>

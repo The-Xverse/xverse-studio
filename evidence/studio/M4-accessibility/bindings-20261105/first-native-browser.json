@@ -1,0 +1,1092 @@
+{
+  "config": {
+    "argv": [
+      "[WORKSPACE_VOLUME]/.xverse-studio-cache/node-v24.22.1-linux-x64/bin/node",
+      "[WORKSPACE_VOLUME]/xverse-studio/node_modules/@playwright/test/cli.js",
+      "test",
+      "--config",
+      "tests/live/autoverse-bindings-keyboard.config.ts"
+    ],
+    "configFile": "[WORKTREE]/tests/live/autoverse-bindings-keyboard.config.ts",
+    "rootDir": "[WORKTREE]/tests/live",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": "[WORKTREE]/tests/live/recorded-browser-device-setup.ts",
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "[WORKTREE]/.studio-local/t097-bindings-keyboard-20261105/first/native/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "[WORKTREE]/tests/live",
+        "testIgnore": [],
+        "testMatch": [
+          "autoverse-bindings-keyboard.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "[WORKTREE]/.studio-local/t097-bindings-keyboard-20261105/first/native/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "[WORKTREE]/tests/live",
+        "snapshotDir": "[WORKTREE]/tests/live",
+        "testIgnore": [],
+        "testMatch": "autoverse-bindings-keyboard.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "baseURL": "[LOOPBACK_ORIGIN]",
+          "browserName": "chromium",
+          "actionTimeout": 15000,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "trace": "off",
+          "screenshot": "only-on-failure",
+          "video": "off",
+          "launchOptions": {
+            "args": [
+              "--disable-gpu",
+              "--disable-gpu-rasterization"
+            ]
+          }
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "[WORKTREE]/.studio-local/t097-bindings-keyboard-20261105/first/native/browser.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "autoverse-bindings-keyboard.spec.ts",
+      "file": "autoverse-bindings-keyboard.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "native binding realization and target round trip preserves logical topology at 1024",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 11729,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('Logical binding', { exact: true })\nExpected: \u001b[32m\"carla-binding\"\u001b[39m\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('Logical binding', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Logical binding', { exact: true })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('Logical binding', { exact: true })\nExpected: \u001b[32m\"carla-binding\"\u001b[39m\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('Logical binding', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Logical binding', { exact: true })\u001b[22m\n\n    at open ([WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts:64:31)\n    at [WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts:103:32",
+                    "location": {
+                      "file": "[WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts",
+                      "column": 31,
+                      "line": 64
+                    },
+                    "snippet": "  62 |   await expect(page.locator(\".project-header h1\")).toHaveText(project.name);\n  63 |   await activate(page, page.getByRole(\"tab\", { name: /^Deployment(?:\\s+\\d+)?$/ }));\n> 64 |   await expect(logical(page)).toHaveValue(\"carla-binding\");\n     |                               ^\n  65 |   await expect(realization(page)).toHaveValue(\"simulated\");\n  66 |   await expect(target(page)).toHaveValue(\"carla-target\");\n  67 |   await page.waitForLoadState(\"networkidle\");"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "[WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts",
+                        "column": 31,
+                        "line": 64
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('Logical binding', { exact: true })\nExpected: \u001b[32m\"carla-binding\"\u001b[39m\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('Logical binding', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Logical binding', { exact: true })\u001b[22m\n\n\n  62 |   await expect(page.locator(\".project-header h1\")).toHaveText(project.name);\n  63 |   await activate(page, page.getByRole(\"tab\", { name: /^Deployment(?:\\s+\\d+)?$/ }));\n> 64 |   await expect(logical(page)).toHaveValue(\"carla-binding\");\n     |                               ^\n  65 |   await expect(realization(page)).toHaveValue(\"simulated\");\n  66 |   await expect(target(page)).toHaveValue(\"carla-target\");\n  67 |   await page.waitForLoadState(\"networkidle\");\n    at open ([WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts:64:31)\n    at [WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts:103:32"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T18:15:42.912Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "[WORKTREE]/.studio-local/t097-bindings-keyboard-20261105/first/native/artifacts/autoverse-bindings-keyboar-9b7a7-es-logical-topology-at-1024/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "[WORKTREE]/.studio-local/t097-bindings-keyboard-20261105/first/native/artifacts/autoverse-bindings-keyboar-9b7a7-es-logical-topology-at-1024/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "[WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts",
+                    "column": 31,
+                    "line": 64
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "f3328e242df2e27b3f65-af5fa4d231cf5bc8675b",
+          "file": "autoverse-bindings-keyboard.spec.ts",
+          "line": 102,
+          "column": 7
+        },
+        {
+          "title": "native unresolved physical substitution stays blocked and read only at 1024",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 11711,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('Logical binding', { exact: true })\nExpected: \u001b[32m\"carla-binding\"\u001b[39m\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('Logical binding', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Logical binding', { exact: true })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('Logical binding', { exact: true })\nExpected: \u001b[32m\"carla-binding\"\u001b[39m\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('Logical binding', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Logical binding', { exact: true })\u001b[22m\n\n    at open ([WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts:64:31)\n    at [WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts:115:44",
+                    "location": {
+                      "file": "[WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts",
+                      "column": 31,
+                      "line": 64
+                    },
+                    "snippet": "  62 |   await expect(page.locator(\".project-header h1\")).toHaveText(project.name);\n  63 |   await activate(page, page.getByRole(\"tab\", { name: /^Deployment(?:\\s+\\d+)?$/ }));\n> 64 |   await expect(logical(page)).toHaveValue(\"carla-binding\");\n     |                               ^\n  65 |   await expect(realization(page)).toHaveValue(\"simulated\");\n  66 |   await expect(target(page)).toHaveValue(\"carla-target\");\n  67 |   await page.waitForLoadState(\"networkidle\");"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "[WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts",
+                        "column": 31,
+                        "line": 64
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('Logical binding', { exact: true })\nExpected: \u001b[32m\"carla-binding\"\u001b[39m\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('Logical binding', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Logical binding', { exact: true })\u001b[22m\n\n\n  62 |   await expect(page.locator(\".project-header h1\")).toHaveText(project.name);\n  63 |   await activate(page, page.getByRole(\"tab\", { name: /^Deployment(?:\\s+\\d+)?$/ }));\n> 64 |   await expect(logical(page)).toHaveValue(\"carla-binding\");\n     |                               ^\n  65 |   await expect(realization(page)).toHaveValue(\"simulated\");\n  66 |   await expect(target(page)).toHaveValue(\"carla-target\");\n  67 |   await page.waitForLoadState(\"networkidle\");\n    at open ([WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts:64:31)\n    at [WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts:115:44"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T18:15:55.037Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "[WORKTREE]/.studio-local/t097-bindings-keyboard-20261105/first/native/artifacts/autoverse-bindings-keyboar-d725f-ocked-and-read-only-at-1024/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "[WORKTREE]/.studio-local/t097-bindings-keyboard-20261105/first/native/artifacts/autoverse-bindings-keyboar-d725f-ocked-and-read-only-at-1024/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "[WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts",
+                    "column": 31,
+                    "line": 64
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "f3328e242df2e27b3f65-a9585a3f0501eac337a0",
+          "file": "autoverse-bindings-keyboard.spec.ts",
+          "line": 114,
+          "column": 7
+        },
+        {
+          "title": "native stale binding refuses and explicit reopen recovers at 1024",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 11658,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('Logical binding', { exact: true })\nExpected: \u001b[32m\"carla-binding\"\u001b[39m\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('Logical binding', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Logical binding', { exact: true })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('Logical binding', { exact: true })\nExpected: \u001b[32m\"carla-binding\"\u001b[39m\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('Logical binding', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Logical binding', { exact: true })\u001b[22m\n\n    at open ([WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts:64:31)\n    at [WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts:131:44",
+                    "location": {
+                      "file": "[WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts",
+                      "column": 31,
+                      "line": 64
+                    },
+                    "snippet": "  62 |   await expect(page.locator(\".project-header h1\")).toHaveText(project.name);\n  63 |   await activate(page, page.getByRole(\"tab\", { name: /^Deployment(?:\\s+\\d+)?$/ }));\n> 64 |   await expect(logical(page)).toHaveValue(\"carla-binding\");\n     |                               ^\n  65 |   await expect(realization(page)).toHaveValue(\"simulated\");\n  66 |   await expect(target(page)).toHaveValue(\"carla-target\");\n  67 |   await page.waitForLoadState(\"networkidle\");"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "[WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts",
+                        "column": 31,
+                        "line": 64
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('Logical binding', { exact: true })\nExpected: \u001b[32m\"carla-binding\"\u001b[39m\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('Logical binding', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Logical binding', { exact: true })\u001b[22m\n\n\n  62 |   await expect(page.locator(\".project-header h1\")).toHaveText(project.name);\n  63 |   await activate(page, page.getByRole(\"tab\", { name: /^Deployment(?:\\s+\\d+)?$/ }));\n> 64 |   await expect(logical(page)).toHaveValue(\"carla-binding\");\n     |                               ^\n  65 |   await expect(realization(page)).toHaveValue(\"simulated\");\n  66 |   await expect(target(page)).toHaveValue(\"carla-target\");\n  67 |   await page.waitForLoadState(\"networkidle\");\n    at open ([WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts:64:31)\n    at [WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts:131:44"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T18:16:07.131Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "[WORKTREE]/.studio-local/t097-bindings-keyboard-20261105/first/native/artifacts/autoverse-bindings-keyboar-462ca-cit-reopen-recovers-at-1024/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "[WORKTREE]/.studio-local/t097-bindings-keyboard-20261105/first/native/artifacts/autoverse-bindings-keyboar-462ca-cit-reopen-recovers-at-1024/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "[WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts",
+                    "column": 31,
+                    "line": 64
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "f3328e242df2e27b3f65-2789166bcac112a3437f",
+          "file": "autoverse-bindings-keyboard.spec.ts",
+          "line": 130,
+          "column": 7
+        },
+        {
+          "title": "native held binding completion preserves newer Home at 1024",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 11683,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('Logical binding', { exact: true })\nExpected: \u001b[32m\"carla-binding\"\u001b[39m\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('Logical binding', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Logical binding', { exact: true })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('Logical binding', { exact: true })\nExpected: \u001b[32m\"carla-binding\"\u001b[39m\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('Logical binding', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Logical binding', { exact: true })\u001b[22m\n\n    at open ([WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts:64:31)\n    at [WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts:149:34",
+                    "location": {
+                      "file": "[WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts",
+                      "column": 31,
+                      "line": 64
+                    },
+                    "snippet": "  62 |   await expect(page.locator(\".project-header h1\")).toHaveText(project.name);\n  63 |   await activate(page, page.getByRole(\"tab\", { name: /^Deployment(?:\\s+\\d+)?$/ }));\n> 64 |   await expect(logical(page)).toHaveValue(\"carla-binding\");\n     |                               ^\n  65 |   await expect(realization(page)).toHaveValue(\"simulated\");\n  66 |   await expect(target(page)).toHaveValue(\"carla-target\");\n  67 |   await page.waitForLoadState(\"networkidle\");"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "[WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts",
+                        "column": 31,
+                        "line": 64
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('Logical binding', { exact: true })\nExpected: \u001b[32m\"carla-binding\"\u001b[39m\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('Logical binding', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Logical binding', { exact: true })\u001b[22m\n\n\n  62 |   await expect(page.locator(\".project-header h1\")).toHaveText(project.name);\n  63 |   await activate(page, page.getByRole(\"tab\", { name: /^Deployment(?:\\s+\\d+)?$/ }));\n> 64 |   await expect(logical(page)).toHaveValue(\"carla-binding\");\n     |                               ^\n  65 |   await expect(realization(page)).toHaveValue(\"simulated\");\n  66 |   await expect(target(page)).toHaveValue(\"carla-target\");\n  67 |   await page.waitForLoadState(\"networkidle\");\n    at open ([WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts:64:31)\n    at [WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts:149:34"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T18:16:19.191Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "[WORKTREE]/.studio-local/t097-bindings-keyboard-20261105/first/native/artifacts/autoverse-bindings-keyboar-1b68a-reserves-newer-Home-at-1024/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "[WORKTREE]/.studio-local/t097-bindings-keyboard-20261105/first/native/artifacts/autoverse-bindings-keyboar-1b68a-reserves-newer-Home-at-1024/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "[WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts",
+                    "column": 31,
+                    "line": 64
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "f3328e242df2e27b3f65-e48b05526dfb6d4bc1aa",
+          "file": "autoverse-bindings-keyboard.spec.ts",
+          "line": 148,
+          "column": 9
+        },
+        {
+          "title": "native held binding completion preserves newer focus at 1024",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 11724,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('Logical binding', { exact: true })\nExpected: \u001b[32m\"carla-binding\"\u001b[39m\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('Logical binding', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Logical binding', { exact: true })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('Logical binding', { exact: true })\nExpected: \u001b[32m\"carla-binding\"\u001b[39m\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('Logical binding', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Logical binding', { exact: true })\u001b[22m\n\n    at open ([WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts:64:31)\n    at [WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts:149:34",
+                    "location": {
+                      "file": "[WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts",
+                      "column": 31,
+                      "line": 64
+                    },
+                    "snippet": "  62 |   await expect(page.locator(\".project-header h1\")).toHaveText(project.name);\n  63 |   await activate(page, page.getByRole(\"tab\", { name: /^Deployment(?:\\s+\\d+)?$/ }));\n> 64 |   await expect(logical(page)).toHaveValue(\"carla-binding\");\n     |                               ^\n  65 |   await expect(realization(page)).toHaveValue(\"simulated\");\n  66 |   await expect(target(page)).toHaveValue(\"carla-target\");\n  67 |   await page.waitForLoadState(\"networkidle\");"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "[WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts",
+                        "column": 31,
+                        "line": 64
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('Logical binding', { exact: true })\nExpected: \u001b[32m\"carla-binding\"\u001b[39m\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('Logical binding', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Logical binding', { exact: true })\u001b[22m\n\n\n  62 |   await expect(page.locator(\".project-header h1\")).toHaveText(project.name);\n  63 |   await activate(page, page.getByRole(\"tab\", { name: /^Deployment(?:\\s+\\d+)?$/ }));\n> 64 |   await expect(logical(page)).toHaveValue(\"carla-binding\");\n     |                               ^\n  65 |   await expect(realization(page)).toHaveValue(\"simulated\");\n  66 |   await expect(target(page)).toHaveValue(\"carla-target\");\n  67 |   await page.waitForLoadState(\"networkidle\");\n    at open ([WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts:64:31)\n    at [WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts:149:34"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T18:16:31.283Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "[WORKTREE]/.studio-local/t097-bindings-keyboard-20261105/first/native/artifacts/autoverse-bindings-keyboar-9fc5f-eserves-newer-focus-at-1024/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "[WORKTREE]/.studio-local/t097-bindings-keyboard-20261105/first/native/artifacts/autoverse-bindings-keyboar-9fc5f-eserves-newer-focus-at-1024/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "[WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts",
+                    "column": 31,
+                    "line": 64
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "f3328e242df2e27b3f65-c28b4c9a514e676b67df",
+          "file": "autoverse-bindings-keyboard.spec.ts",
+          "line": 148,
+          "column": 9
+        },
+        {
+          "title": "native held binding completion preserves newer binding selection at 1024",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 11718,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('Logical binding', { exact: true })\nExpected: \u001b[32m\"carla-binding\"\u001b[39m\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('Logical binding', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Logical binding', { exact: true })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('Logical binding', { exact: true })\nExpected: \u001b[32m\"carla-binding\"\u001b[39m\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('Logical binding', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Logical binding', { exact: true })\u001b[22m\n\n    at open ([WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts:64:31)\n    at [WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts:149:34",
+                    "location": {
+                      "file": "[WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts",
+                      "column": 31,
+                      "line": 64
+                    },
+                    "snippet": "  62 |   await expect(page.locator(\".project-header h1\")).toHaveText(project.name);\n  63 |   await activate(page, page.getByRole(\"tab\", { name: /^Deployment(?:\\s+\\d+)?$/ }));\n> 64 |   await expect(logical(page)).toHaveValue(\"carla-binding\");\n     |                               ^\n  65 |   await expect(realization(page)).toHaveValue(\"simulated\");\n  66 |   await expect(target(page)).toHaveValue(\"carla-target\");\n  67 |   await page.waitForLoadState(\"networkidle\");"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "[WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts",
+                        "column": 31,
+                        "line": 64
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('Logical binding', { exact: true })\nExpected: \u001b[32m\"carla-binding\"\u001b[39m\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('Logical binding', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Logical binding', { exact: true })\u001b[22m\n\n\n  62 |   await expect(page.locator(\".project-header h1\")).toHaveText(project.name);\n  63 |   await activate(page, page.getByRole(\"tab\", { name: /^Deployment(?:\\s+\\d+)?$/ }));\n> 64 |   await expect(logical(page)).toHaveValue(\"carla-binding\");\n     |                               ^\n  65 |   await expect(realization(page)).toHaveValue(\"simulated\");\n  66 |   await expect(target(page)).toHaveValue(\"carla-target\");\n  67 |   await page.waitForLoadState(\"networkidle\");\n    at open ([WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts:64:31)\n    at [WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts:149:34"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T18:16:43.406Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "[WORKTREE]/.studio-local/t097-bindings-keyboard-20261105/first/native/artifacts/autoverse-bindings-keyboar-3de25-r-binding-selection-at-1024/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "[WORKTREE]/.studio-local/t097-bindings-keyboard-20261105/first/native/artifacts/autoverse-bindings-keyboar-3de25-r-binding-selection-at-1024/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "[WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts",
+                    "column": 31,
+                    "line": 64
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "f3328e242df2e27b3f65-752168e801143fa0cf63",
+          "file": "autoverse-bindings-keyboard.spec.ts",
+          "line": 148,
+          "column": 9
+        },
+        {
+          "title": "native held binding completion preserves newer source dialog at 1024",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 6,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 11689,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('Logical binding', { exact: true })\nExpected: \u001b[32m\"carla-binding\"\u001b[39m\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('Logical binding', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Logical binding', { exact: true })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('Logical binding', { exact: true })\nExpected: \u001b[32m\"carla-binding\"\u001b[39m\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('Logical binding', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Logical binding', { exact: true })\u001b[22m\n\n    at open ([WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts:64:31)\n    at [WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts:149:34",
+                    "location": {
+                      "file": "[WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts",
+                      "column": 31,
+                      "line": 64
+                    },
+                    "snippet": "  62 |   await expect(page.locator(\".project-header h1\")).toHaveText(project.name);\n  63 |   await activate(page, page.getByRole(\"tab\", { name: /^Deployment(?:\\s+\\d+)?$/ }));\n> 64 |   await expect(logical(page)).toHaveValue(\"carla-binding\");\n     |                               ^\n  65 |   await expect(realization(page)).toHaveValue(\"simulated\");\n  66 |   await expect(target(page)).toHaveValue(\"carla-target\");\n  67 |   await page.waitForLoadState(\"networkidle\");"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "[WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts",
+                        "column": 31,
+                        "line": 64
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('Logical binding', { exact: true })\nExpected: \u001b[32m\"carla-binding\"\u001b[39m\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('Logical binding', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Logical binding', { exact: true })\u001b[22m\n\n\n  62 |   await expect(page.locator(\".project-header h1\")).toHaveText(project.name);\n  63 |   await activate(page, page.getByRole(\"tab\", { name: /^Deployment(?:\\s+\\d+)?$/ }));\n> 64 |   await expect(logical(page)).toHaveValue(\"carla-binding\");\n     |                               ^\n  65 |   await expect(realization(page)).toHaveValue(\"simulated\");\n  66 |   await expect(target(page)).toHaveValue(\"carla-target\");\n  67 |   await page.waitForLoadState(\"networkidle\");\n    at open ([WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts:64:31)\n    at [WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts:149:34"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T18:16:55.534Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "[WORKTREE]/.studio-local/t097-bindings-keyboard-20261105/first/native/artifacts/autoverse-bindings-keyboar-1cc0c-newer-source-dialog-at-1024/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "[WORKTREE]/.studio-local/t097-bindings-keyboard-20261105/first/native/artifacts/autoverse-bindings-keyboar-1cc0c-newer-source-dialog-at-1024/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "[WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts",
+                    "column": 31,
+                    "line": 64
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "f3328e242df2e27b3f65-19ee541f237a0f8baa30",
+          "file": "autoverse-bindings-keyboard.spec.ts",
+          "line": 148,
+          "column": 9
+        },
+        {
+          "title": "native binding realization and target round trip preserves logical topology at 1440",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 7,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 11648,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('Logical binding', { exact: true })\nExpected: \u001b[32m\"carla-binding\"\u001b[39m\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('Logical binding', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Logical binding', { exact: true })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('Logical binding', { exact: true })\nExpected: \u001b[32m\"carla-binding\"\u001b[39m\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('Logical binding', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Logical binding', { exact: true })\u001b[22m\n\n    at open ([WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts:64:31)\n    at [WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts:103:32",
+                    "location": {
+                      "file": "[WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts",
+                      "column": 31,
+                      "line": 64
+                    },
+                    "snippet": "  62 |   await expect(page.locator(\".project-header h1\")).toHaveText(project.name);\n  63 |   await activate(page, page.getByRole(\"tab\", { name: /^Deployment(?:\\s+\\d+)?$/ }));\n> 64 |   await expect(logical(page)).toHaveValue(\"carla-binding\");\n     |                               ^\n  65 |   await expect(realization(page)).toHaveValue(\"simulated\");\n  66 |   await expect(target(page)).toHaveValue(\"carla-target\");\n  67 |   await page.waitForLoadState(\"networkidle\");"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "[WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts",
+                        "column": 31,
+                        "line": 64
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('Logical binding', { exact: true })\nExpected: \u001b[32m\"carla-binding\"\u001b[39m\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('Logical binding', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Logical binding', { exact: true })\u001b[22m\n\n\n  62 |   await expect(page.locator(\".project-header h1\")).toHaveText(project.name);\n  63 |   await activate(page, page.getByRole(\"tab\", { name: /^Deployment(?:\\s+\\d+)?$/ }));\n> 64 |   await expect(logical(page)).toHaveValue(\"carla-binding\");\n     |                               ^\n  65 |   await expect(realization(page)).toHaveValue(\"simulated\");\n  66 |   await expect(target(page)).toHaveValue(\"carla-target\");\n  67 |   await page.waitForLoadState(\"networkidle\");\n    at open ([WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts:64:31)\n    at [WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts:103:32"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T18:17:07.622Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "[WORKTREE]/.studio-local/t097-bindings-keyboard-20261105/first/native/artifacts/autoverse-bindings-keyboar-6aa1d-es-logical-topology-at-1440/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "[WORKTREE]/.studio-local/t097-bindings-keyboard-20261105/first/native/artifacts/autoverse-bindings-keyboar-6aa1d-es-logical-topology-at-1440/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "[WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts",
+                    "column": 31,
+                    "line": 64
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "f3328e242df2e27b3f65-3cc7ea36fbcc65b5ac93",
+          "file": "autoverse-bindings-keyboard.spec.ts",
+          "line": 102,
+          "column": 7
+        },
+        {
+          "title": "native unresolved physical substitution stays blocked and read only at 1440",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 8,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 11633,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('Logical binding', { exact: true })\nExpected: \u001b[32m\"carla-binding\"\u001b[39m\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('Logical binding', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Logical binding', { exact: true })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('Logical binding', { exact: true })\nExpected: \u001b[32m\"carla-binding\"\u001b[39m\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('Logical binding', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Logical binding', { exact: true })\u001b[22m\n\n    at open ([WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts:64:31)\n    at [WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts:115:44",
+                    "location": {
+                      "file": "[WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts",
+                      "column": 31,
+                      "line": 64
+                    },
+                    "snippet": "  62 |   await expect(page.locator(\".project-header h1\")).toHaveText(project.name);\n  63 |   await activate(page, page.getByRole(\"tab\", { name: /^Deployment(?:\\s+\\d+)?$/ }));\n> 64 |   await expect(logical(page)).toHaveValue(\"carla-binding\");\n     |                               ^\n  65 |   await expect(realization(page)).toHaveValue(\"simulated\");\n  66 |   await expect(target(page)).toHaveValue(\"carla-target\");\n  67 |   await page.waitForLoadState(\"networkidle\");"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "[WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts",
+                        "column": 31,
+                        "line": 64
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('Logical binding', { exact: true })\nExpected: \u001b[32m\"carla-binding\"\u001b[39m\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('Logical binding', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Logical binding', { exact: true })\u001b[22m\n\n\n  62 |   await expect(page.locator(\".project-header h1\")).toHaveText(project.name);\n  63 |   await activate(page, page.getByRole(\"tab\", { name: /^Deployment(?:\\s+\\d+)?$/ }));\n> 64 |   await expect(logical(page)).toHaveValue(\"carla-binding\");\n     |                               ^\n  65 |   await expect(realization(page)).toHaveValue(\"simulated\");\n  66 |   await expect(target(page)).toHaveValue(\"carla-target\");\n  67 |   await page.waitForLoadState(\"networkidle\");\n    at open ([WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts:64:31)\n    at [WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts:115:44"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T18:17:19.688Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "[WORKTREE]/.studio-local/t097-bindings-keyboard-20261105/first/native/artifacts/autoverse-bindings-keyboar-dfbd5-ocked-and-read-only-at-1440/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "[WORKTREE]/.studio-local/t097-bindings-keyboard-20261105/first/native/artifacts/autoverse-bindings-keyboar-dfbd5-ocked-and-read-only-at-1440/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "[WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts",
+                    "column": 31,
+                    "line": 64
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "f3328e242df2e27b3f65-0e0aa7ba28273ccf04f3",
+          "file": "autoverse-bindings-keyboard.spec.ts",
+          "line": 114,
+          "column": 7
+        },
+        {
+          "title": "native stale binding refuses and explicit reopen recovers at 1440",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 9,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 11703,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('Logical binding', { exact: true })\nExpected: \u001b[32m\"carla-binding\"\u001b[39m\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('Logical binding', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Logical binding', { exact: true })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('Logical binding', { exact: true })\nExpected: \u001b[32m\"carla-binding\"\u001b[39m\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('Logical binding', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Logical binding', { exact: true })\u001b[22m\n\n    at open ([WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts:64:31)\n    at [WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts:131:44",
+                    "location": {
+                      "file": "[WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts",
+                      "column": 31,
+                      "line": 64
+                    },
+                    "snippet": "  62 |   await expect(page.locator(\".project-header h1\")).toHaveText(project.name);\n  63 |   await activate(page, page.getByRole(\"tab\", { name: /^Deployment(?:\\s+\\d+)?$/ }));\n> 64 |   await expect(logical(page)).toHaveValue(\"carla-binding\");\n     |                               ^\n  65 |   await expect(realization(page)).toHaveValue(\"simulated\");\n  66 |   await expect(target(page)).toHaveValue(\"carla-target\");\n  67 |   await page.waitForLoadState(\"networkidle\");"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "[WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts",
+                        "column": 31,
+                        "line": 64
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('Logical binding', { exact: true })\nExpected: \u001b[32m\"carla-binding\"\u001b[39m\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('Logical binding', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Logical binding', { exact: true })\u001b[22m\n\n\n  62 |   await expect(page.locator(\".project-header h1\")).toHaveText(project.name);\n  63 |   await activate(page, page.getByRole(\"tab\", { name: /^Deployment(?:\\s+\\d+)?$/ }));\n> 64 |   await expect(logical(page)).toHaveValue(\"carla-binding\");\n     |                               ^\n  65 |   await expect(realization(page)).toHaveValue(\"simulated\");\n  66 |   await expect(target(page)).toHaveValue(\"carla-target\");\n  67 |   await page.waitForLoadState(\"networkidle\");\n    at open ([WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts:64:31)\n    at [WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts:131:44"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T18:17:31.710Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "[WORKTREE]/.studio-local/t097-bindings-keyboard-20261105/first/native/artifacts/autoverse-bindings-keyboar-2410a-cit-reopen-recovers-at-1440/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "[WORKTREE]/.studio-local/t097-bindings-keyboard-20261105/first/native/artifacts/autoverse-bindings-keyboar-2410a-cit-reopen-recovers-at-1440/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "[WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts",
+                    "column": 31,
+                    "line": 64
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "f3328e242df2e27b3f65-8b7601338c395526ef74",
+          "file": "autoverse-bindings-keyboard.spec.ts",
+          "line": 130,
+          "column": 7
+        },
+        {
+          "title": "native held binding completion preserves newer Home at 1440",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 10,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 11588,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('Logical binding', { exact: true })\nExpected: \u001b[32m\"carla-binding\"\u001b[39m\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('Logical binding', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Logical binding', { exact: true })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('Logical binding', { exact: true })\nExpected: \u001b[32m\"carla-binding\"\u001b[39m\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('Logical binding', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Logical binding', { exact: true })\u001b[22m\n\n    at open ([WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts:64:31)\n    at [WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts:149:34",
+                    "location": {
+                      "file": "[WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts",
+                      "column": 31,
+                      "line": 64
+                    },
+                    "snippet": "  62 |   await expect(page.locator(\".project-header h1\")).toHaveText(project.name);\n  63 |   await activate(page, page.getByRole(\"tab\", { name: /^Deployment(?:\\s+\\d+)?$/ }));\n> 64 |   await expect(logical(page)).toHaveValue(\"carla-binding\");\n     |                               ^\n  65 |   await expect(realization(page)).toHaveValue(\"simulated\");\n  66 |   await expect(target(page)).toHaveValue(\"carla-target\");\n  67 |   await page.waitForLoadState(\"networkidle\");"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "[WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts",
+                        "column": 31,
+                        "line": 64
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('Logical binding', { exact: true })\nExpected: \u001b[32m\"carla-binding\"\u001b[39m\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('Logical binding', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Logical binding', { exact: true })\u001b[22m\n\n\n  62 |   await expect(page.locator(\".project-header h1\")).toHaveText(project.name);\n  63 |   await activate(page, page.getByRole(\"tab\", { name: /^Deployment(?:\\s+\\d+)?$/ }));\n> 64 |   await expect(logical(page)).toHaveValue(\"carla-binding\");\n     |                               ^\n  65 |   await expect(realization(page)).toHaveValue(\"simulated\");\n  66 |   await expect(target(page)).toHaveValue(\"carla-target\");\n  67 |   await page.waitForLoadState(\"networkidle\");\n    at open ([WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts:64:31)\n    at [WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts:149:34"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T18:17:44.442Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "[WORKTREE]/.studio-local/t097-bindings-keyboard-20261105/first/native/artifacts/autoverse-bindings-keyboar-be413-reserves-newer-Home-at-1440/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "[WORKTREE]/.studio-local/t097-bindings-keyboard-20261105/first/native/artifacts/autoverse-bindings-keyboar-be413-reserves-newer-Home-at-1440/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "[WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts",
+                    "column": 31,
+                    "line": 64
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "f3328e242df2e27b3f65-fc505deab6b25b050b96",
+          "file": "autoverse-bindings-keyboard.spec.ts",
+          "line": 148,
+          "column": 9
+        },
+        {
+          "title": "native held binding completion preserves newer focus at 1440",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 11,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 11700,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('Logical binding', { exact: true })\nExpected: \u001b[32m\"carla-binding\"\u001b[39m\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('Logical binding', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Logical binding', { exact: true })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('Logical binding', { exact: true })\nExpected: \u001b[32m\"carla-binding\"\u001b[39m\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('Logical binding', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Logical binding', { exact: true })\u001b[22m\n\n    at open ([WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts:64:31)\n    at [WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts:149:34",
+                    "location": {
+                      "file": "[WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts",
+                      "column": 31,
+                      "line": 64
+                    },
+                    "snippet": "  62 |   await expect(page.locator(\".project-header h1\")).toHaveText(project.name);\n  63 |   await activate(page, page.getByRole(\"tab\", { name: /^Deployment(?:\\s+\\d+)?$/ }));\n> 64 |   await expect(logical(page)).toHaveValue(\"carla-binding\");\n     |                               ^\n  65 |   await expect(realization(page)).toHaveValue(\"simulated\");\n  66 |   await expect(target(page)).toHaveValue(\"carla-target\");\n  67 |   await page.waitForLoadState(\"networkidle\");"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "[WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts",
+                        "column": 31,
+                        "line": 64
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('Logical binding', { exact: true })\nExpected: \u001b[32m\"carla-binding\"\u001b[39m\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('Logical binding', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Logical binding', { exact: true })\u001b[22m\n\n\n  62 |   await expect(page.locator(\".project-header h1\")).toHaveText(project.name);\n  63 |   await activate(page, page.getByRole(\"tab\", { name: /^Deployment(?:\\s+\\d+)?$/ }));\n> 64 |   await expect(logical(page)).toHaveValue(\"carla-binding\");\n     |                               ^\n  65 |   await expect(realization(page)).toHaveValue(\"simulated\");\n  66 |   await expect(target(page)).toHaveValue(\"carla-target\");\n  67 |   await page.waitForLoadState(\"networkidle\");\n    at open ([WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts:64:31)\n    at [WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts:149:34"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T18:17:56.421Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "[WORKTREE]/.studio-local/t097-bindings-keyboard-20261105/first/native/artifacts/autoverse-bindings-keyboar-5e7eb-eserves-newer-focus-at-1440/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "[WORKTREE]/.studio-local/t097-bindings-keyboard-20261105/first/native/artifacts/autoverse-bindings-keyboar-5e7eb-eserves-newer-focus-at-1440/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "[WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts",
+                    "column": 31,
+                    "line": 64
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "f3328e242df2e27b3f65-d665f4cb246d497eabc8",
+          "file": "autoverse-bindings-keyboard.spec.ts",
+          "line": 148,
+          "column": 9
+        },
+        {
+          "title": "native held binding completion preserves newer binding selection at 1440",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 12,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 11651,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('Logical binding', { exact: true })\nExpected: \u001b[32m\"carla-binding\"\u001b[39m\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('Logical binding', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Logical binding', { exact: true })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('Logical binding', { exact: true })\nExpected: \u001b[32m\"carla-binding\"\u001b[39m\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('Logical binding', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Logical binding', { exact: true })\u001b[22m\n\n    at open ([WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts:64:31)\n    at [WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts:149:34",
+                    "location": {
+                      "file": "[WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts",
+                      "column": 31,
+                      "line": 64
+                    },
+                    "snippet": "  62 |   await expect(page.locator(\".project-header h1\")).toHaveText(project.name);\n  63 |   await activate(page, page.getByRole(\"tab\", { name: /^Deployment(?:\\s+\\d+)?$/ }));\n> 64 |   await expect(logical(page)).toHaveValue(\"carla-binding\");\n     |                               ^\n  65 |   await expect(realization(page)).toHaveValue(\"simulated\");\n  66 |   await expect(target(page)).toHaveValue(\"carla-target\");\n  67 |   await page.waitForLoadState(\"networkidle\");"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "[WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts",
+                        "column": 31,
+                        "line": 64
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('Logical binding', { exact: true })\nExpected: \u001b[32m\"carla-binding\"\u001b[39m\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('Logical binding', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Logical binding', { exact: true })\u001b[22m\n\n\n  62 |   await expect(page.locator(\".project-header h1\")).toHaveText(project.name);\n  63 |   await activate(page, page.getByRole(\"tab\", { name: /^Deployment(?:\\s+\\d+)?$/ }));\n> 64 |   await expect(logical(page)).toHaveValue(\"carla-binding\");\n     |                               ^\n  65 |   await expect(realization(page)).toHaveValue(\"simulated\");\n  66 |   await expect(target(page)).toHaveValue(\"carla-target\");\n  67 |   await page.waitForLoadState(\"networkidle\");\n    at open ([WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts:64:31)\n    at [WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts:149:34"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T18:18:08.529Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "[WORKTREE]/.studio-local/t097-bindings-keyboard-20261105/first/native/artifacts/autoverse-bindings-keyboar-f0ade-r-binding-selection-at-1440/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "[WORKTREE]/.studio-local/t097-bindings-keyboard-20261105/first/native/artifacts/autoverse-bindings-keyboar-f0ade-r-binding-selection-at-1440/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "[WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts",
+                    "column": 31,
+                    "line": 64
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "f3328e242df2e27b3f65-fd4da0d82c638142ed38",
+          "file": "autoverse-bindings-keyboard.spec.ts",
+          "line": 148,
+          "column": 9
+        },
+        {
+          "title": "native held binding completion preserves newer source dialog at 1440",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 13,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 11707,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('Logical binding', { exact: true })\nExpected: \u001b[32m\"carla-binding\"\u001b[39m\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('Logical binding', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Logical binding', { exact: true })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('Logical binding', { exact: true })\nExpected: \u001b[32m\"carla-binding\"\u001b[39m\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('Logical binding', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Logical binding', { exact: true })\u001b[22m\n\n    at open ([WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts:64:31)\n    at [WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts:149:34",
+                    "location": {
+                      "file": "[WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts",
+                      "column": 31,
+                      "line": 64
+                    },
+                    "snippet": "  62 |   await expect(page.locator(\".project-header h1\")).toHaveText(project.name);\n  63 |   await activate(page, page.getByRole(\"tab\", { name: /^Deployment(?:\\s+\\d+)?$/ }));\n> 64 |   await expect(logical(page)).toHaveValue(\"carla-binding\");\n     |                               ^\n  65 |   await expect(realization(page)).toHaveValue(\"simulated\");\n  66 |   await expect(target(page)).toHaveValue(\"carla-target\");\n  67 |   await page.waitForLoadState(\"networkidle\");"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "[WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts",
+                        "column": 31,
+                        "line": 64
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('Logical binding', { exact: true })\nExpected: \u001b[32m\"carla-binding\"\u001b[39m\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" getByLabel('Logical binding', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Logical binding', { exact: true })\u001b[22m\n\n\n  62 |   await expect(page.locator(\".project-header h1\")).toHaveText(project.name);\n  63 |   await activate(page, page.getByRole(\"tab\", { name: /^Deployment(?:\\s+\\d+)?$/ }));\n> 64 |   await expect(logical(page)).toHaveValue(\"carla-binding\");\n     |                               ^\n  65 |   await expect(realization(page)).toHaveValue(\"simulated\");\n  66 |   await expect(target(page)).toHaveValue(\"carla-target\");\n  67 |   await page.waitForLoadState(\"networkidle\");\n    at open ([WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts:64:31)\n    at [WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts:149:34"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T18:18:20.571Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "[WORKTREE]/.studio-local/t097-bindings-keyboard-20261105/first/native/artifacts/autoverse-bindings-keyboar-86d49-newer-source-dialog-at-1440/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "[WORKTREE]/.studio-local/t097-bindings-keyboard-20261105/first/native/artifacts/autoverse-bindings-keyboar-86d49-newer-source-dialog-at-1440/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "[WORKTREE]/tests/live/autoverse-bindings-keyboard.spec.ts",
+                    "column": 31,
+                    "line": 64
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "f3328e242df2e27b3f65-93c6292dc419e01f020f",
+          "file": "autoverse-bindings-keyboard.spec.ts",
+          "line": 148,
+          "column": 9
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-05T18:15:42.531Z",
+    "duration": 169846.553,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 14,
+    "flaky": 0
+  }
+}

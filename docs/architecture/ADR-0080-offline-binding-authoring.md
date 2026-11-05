@@ -1,6 +1,6 @@
 # ADR-0080 — Save authored bindings without installing their runtime
 
-Date: 2026-11-05. Status: implementation under verification.
+Date: 2026-11-05. Status: current Linux component verified; full task/acceptance remains open.
 Traces: T057/T058/T059, T038/T097; FR-039/040/042, NFR-006; AC-018/031.
 Windows remains independently frozen.
 
@@ -31,3 +31,5 @@ recorded Autoverse source, retain blocked compatibility and immutable historical
 evidence, and exercise late-response focus/navigation/selection/dialog boundaries.
 Live device substitution, fresh provider admission and full accessibility/milestone
 acceptance remain separate gates.
+
+Component verification: source5ebd81c passes32 affected backend checks and14 isolated native keyboard journeys at both sizes. Concurrent candidate12/2 timing failures and all earlier fixture failures remain retained; no contention-performance claim. Full task/acceptance gates remain open. See [evidence](../../evidence/studio/M4-accessibility/bindings-20261105/README.md).

@@ -1,0 +1,175 @@
+import { test, expect, type Page, type Locator, type TestInfo } from "@playwright/test";
+import { readFileSync } from "node:fs";
+import path from "node:path";
+import { parse } from "yaml";
+import { connectStudio } from "../e2e/connect-studio";
+import { renderedContrast } from "../e2e/contrast";
+
+const recording = () => JSON.parse(readFileSync(path.join(process.env.STUDIO_BROWSER_DATA!, "playback-recording.private.json"), "utf8"));
+const home = (page: Page) => page.getByRole("button", { name: "X-Verse Studio home", exact: true });
+const save = (page: Page) => page.getByRole("button", { name: "Save draft binding", exact: true });
+const logical = (page: Page) => page.getByRole("combobox", { name: "Logical binding", exact: true });
+const realization = (page: Page) => page.getByRole("combobox", { name: "Realization", exact: true });
+const target = (page: Page) => page.getByRole("combobox", { name: "Target placement", exact: true });
+async function tabTo(page: Page, control: Locator) {
+  await expect(control).toBeVisible();
+  for (let i = 0; i < 600; i++) {
+    if (await control.evaluate(n => n === document.activeElement)) {
+      expect(await control.evaluate(n => {
+        const r = n.getBoundingClientRect(), s = getComputedStyle(n);
+        return s.outlineStyle !== "none" && parseFloat(s.outlineWidth) > 0 &&
+          r.left >= 0 && r.right <= innerWidth + 1 && r.top >= 0 && r.bottom <= innerHeight + 1;
+      })).toBe(true);
+      return;
+    }
+    await page.keyboard.press("Tab");
+  }
+  throw Error("Binding control is unreachable through native Tab order");
+}
+async function activate(page: Page, control: Locator) { await tabTo(page, control); await page.keyboard.press("Enter"); }
+async function choose(page: Page, control: Locator, value: string) {
+  const options = await control.locator("option").evaluateAll(nodes => nodes.map(n => (n as HTMLOptionElement).value));
+  const index = options.indexOf(value); expect(index).toBeGreaterThanOrEqual(0);
+  await tabTo(page, control); await page.keyboard.press("Home");
+  for (let i = 0; i < index; i++) await page.keyboard.press("ArrowDown");
+  await page.keyboard.press("Tab"); await expect(control).toHaveValue(value);
+}
+async function read(page: Page) {
+  const reply = await page.request.get(`/api/v1/projects/${recording().projectId}`);
+  expect(reply.status()).toBe(200); return reply.json();
+}
+const deployment = (project: any) => Object.entries<any>(project.documents).find(([, d]) => parse(d.content).kind === "Deployment")!;
+async function write(page: Page, route: string, method: "PATCH" | "PUT", revision: number, data: any) {
+  const session = await page.request.get("/api/v1/session").then(r => r.json());
+  const reply = await page.request.fetch("/api/v1" + route, { method,
+    headers: { Origin: process.env.STUDIO_BASE_URL!, "X-CSRF-Token": session.csrfToken, "If-Match": String(revision) }, data });
+  expect(reply.status()).toBe(200); return reply.json();
+}
+async function open(page: Page, info: TestInfo, width: number) {
+  await page.setViewportSize({ width, height: width === 1024 ? 768 : 900 });
+  await connectStudio(page, info);
+  let project = await read(page);
+  const [documentId, doc] = deployment(project), d = parse(doc.content);
+  const first = d.spec.bindings.find((b: any) => b.id === "carla-binding");
+  // Copy-local setup restores the actual recorded binding; no provider callback or workload.
+  if (first.realizationClass !== "simulated" || first.targetId !== "carla-target") {
+    const result = await write(page, `/projects/${project.projectId}/deployment-variants/${documentId}`, "PATCH", project.revision,
+      { baseRevision: project.revision, bindingId: first.id, realizationClass: "simulated", targetId: "carla-target" });
+    project = result.project;
+  }
+  await page.evaluate(p => localStorage.setItem("studio.projectId", p), project.projectId);
+  await page.reload();
+  await expect(page.locator(".project-header h1")).toHaveText(project.name);
+  await activate(page, page.getByRole("tab", { name: /^Deployment(?:\s+\d+)?$/ }));
+  await expect(logical(page)).toHaveValue("carla-binding");
+  await expect(realization(page)).toHaveValue("simulated");
+  await expect(target(page)).toHaveValue("carla-target");
+  await page.waitForLoadState("networkidle");
+  return { project, documentId, route: `/api/v1/projects/${project.projectId}/deployment-variants/${documentId}` };
+}
+async function commit(page: Page, route: string) {
+  const reply = page.waitForResponse(r => new URL(r.url()).pathname === route && r.request().method() === "PATCH");
+  await activate(page, save(page));
+  const response = await reply; expect(response.status()).toBe(200); return response.json();
+}
+function preserved(before: any, after: any, realizationClass: string, targetId: string) {
+  const [id, doc] = deployment(before), old = parse(doc.content), expected = structuredClone(old);
+  Object.assign(expected.spec.bindings.find((b: any) => b.id === "carla-binding"), { realizationClass, targetId });
+  expect(parse(after.documents[id].content)).toEqual(expected);
+  for (const key of Object.keys(before.documents)) if (key !== id) expect(after.documents[key]).toEqual(before.documents[key]);
+  expect(after.projectId).toBe(before.projectId); expect(after.revision).toBe(before.revision + 1);
+}
+async function report(page: Page, info: TestInfo, width: number, details: any) {
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
+  await info.attach("actual-binding-keyboard", { body: JSON.stringify({ width, ...details, browser: page.context().browser()?.version(),
+    scope: "Actual copied Autoverse authored binding and native backend; held replies are actual server results. No provider/model/device operation or AT certification.",
+  }), contentType: "application/json" });
+}
+async function held(page: Page, routePath: string) {
+  let release!: () => void, ready = false, value: any, writes = 0;
+  const gate = new Promise<void>(r => release = r), pattern = "**" + routePath + "?*";
+  await page.route(pattern, async route => {
+    writes++;
+    const response = await route.fetch(); expect(response.status()).toBe(200);
+    const body = await response.body(); value = JSON.parse(body.toString()); ready = true;
+    await gate; await route.fulfill({ response, body });
+  });
+  return { async ready() { await expect.poll(() => ready).toBe(true); return value; },
+    async close() { release(); await page.unrouteAll({ behavior: "wait" }); }, count: () => writes };
+}
+
+for (const width of [1024, 1440]) {
+  test(`native binding realization and target round trip preserves logical topology at ${width}`, async ({ page }, info) => {
+    const { project, route } = await open(page, info, width);
+    await choose(page, realization(page), "virtual"); await choose(page, target(page), "vcu-target");
+    const changed = await commit(page, route); preserved(project, changed.project, "virtual", "vcu-target");
+    await expect(save(page)).toBeFocused();
+    const current = await read(page); expect(current).toEqual(changed.project);
+    await choose(page, realization(page), "simulated"); await choose(page, target(page), "carla-target");
+    const restored = await commit(page, route); preserved(current, restored.project, "simulated", "carla-target");
+    await expect(save(page)).toBeFocused();
+    await report(page, info, width, { forwardCompatibility: changed.compatibility, restoredCompatibility: restored.compatibility, logicalAndOpaqueSourcePreserved: true });
+  });
+
+  test(`native unresolved physical substitution stays blocked and read only at ${width}`, async ({ page }, info) => {
+    const { project, documentId, route } = await open(page, info, width);
+    await choose(page, realization(page), "physical");
+    const changed = await commit(page, route); preserved(project, changed.project, "physical", "carla-target");
+    expect(changed.compatibility.status).toBe("blocked"); expect(changed.compatibility.diagnostics.length).toBeGreaterThan(0);
+    const panel = page.getByRole("region", { name: "Physical placement observation", exact: true });
+    const reply = page.waitForResponse(r => new URL(r.url()).pathname === `${route}/physical-bindings`);
+    await activate(page, panel.getByRole("button", { name: "Inspect physical placements", exact: true }));
+    const response = await reply; expect(response.status()).toBe(200); const observed = await response.json();
+    expect(observed).toMatchObject({ documentId, revision: changed.project.revision, activeReady: false, runtimeAdmission: "unavailable" });
+    expect(observed.bindings).toHaveLength(1); expect(observed.bindings[0]).toMatchObject({ bindingId: "carla-binding", ready: false, activeReady: false });
+    await expect(panel.getByRole("heading", { name: "Physical placement observation", exact: true })).toBeFocused();
+    await expect(panel).toContainText("carla-binding"); expect(await read(page)).toEqual(changed.project);
+    await report(page, info, width, { compatibility: changed.compatibility, physicalObservation: observed, noAdmission: true });
+  });
+
+  test(`native stale binding refuses and explicit reopen recovers at ${width}`, async ({ page }, info) => {
+    const { project, documentId, route } = await open(page, info, width), doc = project.documents[documentId];
+    const newer = await write(page, `/projects/${project.projectId}/documents/${documentId}`, "PUT", project.revision,
+      { content: doc.content + "\n# explicit copy-local concurrent source writer\n", format: "yaml" });
+    await choose(page, realization(page), "virtual");
+    const reply = page.waitForResponse(r => new URL(r.url()).pathname === route && r.request().method() === "PATCH");
+    await activate(page, save(page)); const refused = await reply; expect(refused.status()).toBe(412);
+    const error = page.getByRole("alert").filter({ hasText: "REVISION_CONFLICT" }); await expect(error).toBeVisible();
+    const contrast = await renderedContrast(error, "Actual stale binding refusal"); expect(contrast.supported).toBe(true);
+    if (contrast.supported) expect(contrast.ratio).toBeGreaterThanOrEqual(4.5);
+    expect(await read(page)).toEqual(newer);
+    await page.reload(); await activate(page, page.getByRole("tab", { name: /^Deployment(?:\s+\d+)?$/ }));
+    await choose(page, realization(page), "virtual"); const changed = await commit(page, route);
+    preserved(newer, changed.project, "virtual", "carla-target");
+    await report(page, info, width, { actualRefusalStatus: refused.status(), recoveredRevision: changed.project.revision, contrast });
+  });
+
+  for (const intent of ["Home", "focus", "binding selection", "source dialog"] as const) {
+    test(`native held binding completion preserves newer ${intent} at ${width}`, async ({ page }, info) => {
+      const { project, route } = await open(page, info, width);
+      await choose(page, realization(page), "virtual");
+      const pending = await held(page, route);
+      try {
+        await activate(page, save(page)); const committed = await pending.ready(); preserved(project, committed.project, "virtual", "carla-target");
+        if (intent === "Home") await activate(page, home(page));
+        else if (intent === "focus") await tabTo(page, home(page));
+        else if (intent === "binding selection") await choose(page, logical(page), "vcu-binding");
+        else {
+          await activate(page, page.getByRole("button", { name: "XDL source", exact: true }));
+          await expect(page.getByRole("dialog").getByLabel("XDL source", { exact: true })).toBeFocused();
+        }
+        await pending.close(); await page.waitForLoadState("networkidle");
+        expect(pending.count()).toBe(1); expect(await read(page)).toEqual(committed.project);
+        if (intent === "Home") {
+          await expect(page.getByRole("heading", { name: "Start with an example", exact: true })).toBeVisible();
+          await expect(save(page)).toHaveCount(0);
+        } else if (intent === "focus") await expect(home(page)).toBeFocused();
+        else if (intent === "binding selection") {
+          await expect(logical(page)).toHaveValue("vcu-binding"); await expect(realization(page)).toHaveValue("virtual");
+          await expect(target(page)).toHaveValue("vcu-target");
+        } else await expect(page.getByRole("dialog").getByLabel("XDL source", { exact: true })).toBeFocused();
+        await report(page, info, width, { intent, actualPatchCount: pending.count(), committedRevision: committed.project.revision });
+      } finally { await pending.close(); }
+    });
+  }
+}

@@ -1,3 +1,35 @@
+# Offline binding authoring repaired; full goal active — 2026-11-05
+
+**72 completed /18 in progress /10 blocked; zero accepted milestones.**
+Source5ebd81c passes32 affected backend checks and14 native Autoverse
+binding keyboard journeys at both required viewports. Valid source edits survive
+an absent runtime descriptor with explicit blocked compatibility; strict execution
+admission, missing-asset refusal and physical compiler rejection remain enforced.
+Logical identity, opaque source, canonical historical evidence and copied execution
+ledgers are preserved. All578 inputs match Git;6 UI assets match the unchanged
+previously reproduced build. Final23 captured handles exit; roots release.
+Concurrent browser12/2 timing failures stay retained alongside the isolated14 pass;
+no general contention-performance claim. No model/device/provider operation starts.
+Full remaining T038/T097 browser/AT/required-host and fresh genuine mapping/campaign
+gates stay open. Next: repair the observed hardcoded workspace provider-scope label,
+then continue actual registered-mapping/evaluation and fresh campaign coverage.
+Goal ACTIVE without checkpoint pauses; Windows independently FROZEN.
+See [evidence/review/coverage](../../evidence/studio/M4-accessibility/bindings-20261105/README.md).
+
+## Historical checkpoints
+
+# Full original goal active; Windows independently frozen — 2026-11-05
+
+User explicitly reactivated **keep going without interruption** after the export
+checkpoint. Continue the full original M0–M4 plan; completing a checkpoint is not
+a pause instruction. Counts72completed/18in_progress/10blocked,zero milestones.
+T097 binding/substitution keyboard work is next; actual current provider/ownership
+prerequisites remain necessary for evaluation/campaign and live acceptance. All
+prior export verification evidence stays historical and unchanged. Windows remains
+independently FROZEN until explicitly lifted.
+
+## Historical checkpoints
+
 # Export keyboard checkpoint finished; work paused — 2026-11-05
 
 **72 completed /18 in progress /10 blocked; zero accepted milestones.**

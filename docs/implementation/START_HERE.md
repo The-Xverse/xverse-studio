@@ -1,3 +1,18 @@
+Latest active checkpoint — 2026-11-05: source5ebd81c repairs offline binding
+authoring with absent providers;32 affected backend/14 native keyboard journeys
+pass on578 Git-bound inputs and6 unchanged previously reproduced UI assets. All
+failures, including concurrent12/2 timing outcomes, remain qualified. Counts72/18/10,
+zero milestones. Continue truthful provider-scope header and remaining actual fresh
+mapping/evaluation/campaign keyboard and full acceptance. Goal ACTIVE; checkpoints
+must not trigger pauses. Windows independently frozen. See STATUS.md and
+[binding evidence](../../evidence/studio/M4-accessibility/bindings-20261105/README.md).
+
+Current instruction — 2026-11-05: user explicitly reactivated the full original
+goal, **keep going without interruption**. Checkpoints require progress reports,
+not automatic pauses. Continue original T097 binding/substitution and remaining
+acceptance work. Windows remains independently FROZEN; old pause notes below are
+historical. Counts72/18/10,zero milestones. See STATUS.md for current state.
+
 Current instruction/checkpoint — 2026-11-05: **work is paused until explicit user
 resume**, after finishing the current native export keyboard verification/evidence
 checkpoint. Sourceff52456 passes8 distinct journeys/8 actual ZIP readbacks at both
