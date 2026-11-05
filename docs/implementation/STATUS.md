@@ -1,3 +1,13 @@
+Latest active checkpoint — 2026-11-05: source808dc18 removes the global
+reference-scope claim.4extendedprovider-scope +6unchangeddiagnosticnative journeys
+pass on588Git-bound inputs/6reproducedUIassets. Onlyone JSXline removed; selected
+and historical provider scopes remain contextual. All originals/canonical/DB/
+executionledgers preserved, fixtures qualified, handlesexit/rootsrelease. Runtime
+infrastructure remains off. Prior65/32 backend checks inherited throughexact586
+unchangedotherinputs. Counts72/18/10,zero acceptedmilestones,no taskclosure.
+GoalACTIVE: continue fullremainingbrowser/AT/requiredhost/externalgates without
+checkpoint pauses. Windows independentlyFROZEN. See [shell scope evidence](../../evidence/studio/M4-accessibility/shell-scope-20261105/README.md).
+
 Latest active checkpoint — 2026-11-05: source2c92117 preserves the admitted
 validation context across semantic edits/rebinding. Actual changed-schema cases
 now refuse422 without source promotion.65 source contracts,32 deployment/backend
