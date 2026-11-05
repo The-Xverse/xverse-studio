@@ -1,3 +1,22 @@
+# Lab software keyboard matrix verified; full goal active — 2026-11-05
+
+**72 completed /18 in progress /10 blocked; zero accepted milestones.**
+T097 remains open. Source48cee68 passes84 selected native Linux browser checks:
+82 unchanged reservation/probe/recovery cases and2 new native field-entry journeys.
+All570 selected source inputs match Git;84 hosts verify6 current UI files through
+504 HTTP hashes. Production/build inputs and assets match reproducedcc459ab.
+All84 hosts retain witnesses;175 captured original process handles exit; no extra driver
+cleanup or GPU descriptor is observed. In-memory lease uncertainty stays explicit:
+66 witnesses retain0 leases and18 retain1; process exit does not prove release or
+physical safety. All84 run/snapshot/campaign/evaluation ledgers remain empty.
+No actual equipment, model or runtime integration is started. Current lint/typecheck,
+architecture/planning and privacy checks pass;252 credential values stay private.
+Full binding/substitution, recorded assessment/export and fresh campaign keyboard,
+actual AT/device/required-host gates remain open. Windows stays separately frozen.
+The full original goal remains active. See [evidence/review and coverage](../../evidence/studio/M4-accessibility/lab-operations-20261105/README.md).
+
+## Earlier checkpoints
+
 # Campaign child-input focus repaired; full goal active — 2026-11-05
 
 **72 completed /18 in progress /10 blocked; zero accepted milestones.**

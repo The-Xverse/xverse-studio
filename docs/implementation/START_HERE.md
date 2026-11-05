@@ -1,3 +1,13 @@
+Latest checkpoint — 2026-11-05: source48cee68 passes84 selected native Linux lab
+software-fixture checks on570 stable Git-bound inputs. All84 hosts serve6 selected
+UI assets (504 HTTP hash checks), matching reproducedcc459ab with unchanged product
+inputs. All84 witnesses/175 captured handles exit; retained uncertainty is explicit,
+no real hardware/runtime acceptance follows. Counts72/18/10,zero milestones;
+T097 remains open. Continue original recorded-assessment/export/binding/substitution
+and fresh campaign keyboard work with its genuine prerequisites. Actual AT/device/
+required-host gates remain; Windows stays separately FROZEN. The full goal remains
+ACTIVE. See [status](STATUS.md) and [evidence](../../evidence/studio/M4-accessibility/lab-operations-20261105/README.md).
+
 Latest checkpoint — 2026-11-05: cc459ab's campaign child-input focus repair passes
 8 campaign +36 inventory keyboard checks on568 identical Git-bound inputs and6
 reproduced UI assets. Six original failures/two old-product positive controls are
