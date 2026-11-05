@@ -1,3 +1,33 @@
+# Evidence-import navigation verified; work active — 2026-11-05
+
+**71 completed /19 in progress /10 blocked; zero accepted milestones.**
+No new task closes; T067 remains the latest closure. Windows work stays frozen.
+
+Source36861b2 keeps delayed evidence-import results/errors within their initiating
+navigation and latest selection. Accepted bundles stay retained; an older action
+cannot clear the newer action's busy label. Final14 keyboard import checks plus
+1 existing inspection,6 diagnostic and22 playback checks pass on555 stable Git-bound
+inputs/6 reproduced UI assets. Build/typecheck, helper lint, architecture and
+planning checks pass. Original eight UI counterexamples remain distinct from four
+legacy-archive precondition failures; current prepared1.1 normal inspection passes
+on the original product. No historical failure is rewritten as green.
+
+Native keyboard filechooser handoff, dependency inspection, source/current claims,
+malformed-archive recovery, modal/focus and selection order are verified using
+saved actual Autoverse archives. The final exchange cohorts retain12 and4 imports
+without changing run/operation/evaluation/snapshot/campaign/preflight/key counts.
+Existing imported-file protection is broadened;14 canonical files match originals.
+All captured process handles exit, root locks release and no GPU descriptor is
+observed under browser-only device/desktop isolation. The native backend stays
+outside that namespace. No provider/model/simulator/workload starts.
+
+T038/T097 and full M0–M4 acceptance remain open. There is no OS file-dialog/AT,
+full backend/browser, performance, package, Windows, hardware or milestone claim.
+See [qualified verification and review](../../evidence/studio/M4-evidence-import-keyboard-20261105/README.md).
+The goal remains active; no global pause is in force.
+
+## Earlier checkpoints
+
 # Diagnostic keyboard recovery verified; work active — 2026-11-05
 
 **71 completed /19 in progress /10 blocked; zero accepted milestones.**

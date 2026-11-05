@@ -1,0 +1,17 @@
+--- initial-new-keyboard-spec
++++ final-new-keyboard-spec
+@@ -156,8 +156,12 @@
+     try {
+       await choose(page, "evidence-valid.zip"); await ready[0];
+       await choose(page, "evidence-damaged.zip"); await ready[1];
+-      const first = imported(page); releases[0](); expect((await first).status()).toBe(201);
+-      await expect(page.locator(".notice.busy")).toHaveCount(0);
++      const first = imported(page); releases[0]();
++      const firstReply = await first;
++      expect(firstReply.status()).toBe(201);
++      await firstReply.finished();
++      await page.evaluate(() => new Promise<void>(resolve => requestAnimationFrame(() => resolve())));
++      await expect(page.locator(".notice.busy")).toHaveCount(1);
+       await expect(dialog(page)).toHaveCount(0);
+       const second = imported(page); releases[1](); expect((await second).status()).toBe(201);
+       await expect(dialog(page)).toContainText(bodies[1].bundleId);

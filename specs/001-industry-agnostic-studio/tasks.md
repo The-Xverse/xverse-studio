@@ -1281,6 +1281,10 @@ run authority. Initial14 browser checks pass with12 inert imports and unchanged
 execution ledger/canonical evidence. The first legacy1.0 archive had four missing-
 profile fixture failures, separate from eight actual UI-context counterexamples;
 current prepared1.1 passes normal keyboard inspection on the original product.
-Exact-candidate and existing affected regressions are being retained at
+Final source36861b2 passes14 new keyboard cases,1 original inspection case,
+6 existing diagnostic cases and22 existing playback cases, on555 stable Git-bound
+inputs and6 reproduced UI assets. Existing imported-file preservation is broadened;
+14 prior canonical files match after final verification. Build/typecheck, helper
+lint, architecture and planning pass. Qualified evidence/review is retained at
 `evidence/studio/M4-evidence-import-keyboard-20261105/`. T038/T097 remain open;
 Windows stays frozen; counts71/19/10 and zero accepted milestones are unchanged.

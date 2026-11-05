@@ -1,0 +1,429 @@
+
+Running 14 tests using 1 worker
+
+(node:393003) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   1 tests/live/autoverse-exchange-keyboard.spec.ts:52:9 › native keyboard imports and inspects unavailable Autoverse evidence at 1024 (11.4s)
+(node:393292) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   2 tests/live/autoverse-exchange-keyboard.spec.ts:52:9 › native keyboard imports and inspects invalid Autoverse evidence at 1024 (14.9s)
+(node:393456) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   3 tests/live/autoverse-exchange-keyboard.spec.ts:90:7 › native keyboard evidence rejection remains actionable at 1024 (681ms)
+  ✘   4 tests/live/autoverse-exchange-keyboard.spec.ts:104:9 › accepted evidence import cannot reopen a departed Home at 1024 (15.0s)
+(node:393785) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   5 tests/live/autoverse-exchange-keyboard.spec.ts:104:9 › accepted evidence import cannot reopen a departed Catalog at 1024 (11.6s)
+(node:393941) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   6 tests/live/autoverse-exchange-keyboard.spec.ts:126:7 › late evidence rejection cannot replace newer navigation at 1024 (10.6s)
+(node:394496) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   7 tests/live/autoverse-exchange-keyboard.spec.ts:145:7 › newer evidence selection wins even when the older reply arrives first at 1024 (14.1s)
+(node:394754) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   8 tests/live/autoverse-exchange-keyboard.spec.ts:52:9 › native keyboard imports and inspects unavailable Autoverse evidence at 1440 (15.1s)
+(node:394907) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   9 tests/live/autoverse-exchange-keyboard.spec.ts:52:9 › native keyboard imports and inspects invalid Autoverse evidence at 1440 (11.5s)
+(node:395062) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  10 tests/live/autoverse-exchange-keyboard.spec.ts:90:7 › native keyboard evidence rejection remains actionable at 1440 (694ms)
+  ✘  11 tests/live/autoverse-exchange-keyboard.spec.ts:104:9 › accepted evidence import cannot reopen a departed Home at 1440 (11.4s)
+(node:395330) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  12 tests/live/autoverse-exchange-keyboard.spec.ts:104:9 › accepted evidence import cannot reopen a departed Catalog at 1440 (11.6s)
+(node:395455) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  13 tests/live/autoverse-exchange-keyboard.spec.ts:126:7 › late evidence rejection cannot replace newer navigation at 1440 (10.9s)
+(node:395592) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  14 tests/live/autoverse-exchange-keyboard.spec.ts:145:7 › newer evidence selection wins even when the older reply arrives first at 1440 (12.1s)
+
+
+  1) tests/live/autoverse-exchange-keyboard.spec.ts:52:9 › native keyboard imports and inspects unavailable Autoverse evidence at 1024 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('dialog', { name: 'Imported evidence inspection', exact: true }).getByRole('region', { name: 'Referenced dependencies', exact: true }).getByText('Inspect profile identity', { exact: true }).first()
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('dialog', { name: 'Imported evidence inspection', exact: true }).getByRole('region', { name: 'Referenced dependencies', exact: true }).getByText('Inspect profile identity', { exact: true }).first() with timeout 10000ms
+      - waiting for getByRole('dialog', { name: 'Imported evidence inspection', exact: true }).getByRole('region', { name: 'Referenced dependencies', exact: true }).getByText('Inspect profile identity', { exact: true }).first()
+
+
+      10 |
+      11 | async function tabTo(page: Page, target: Locator) {
+    > 12 |   await expect(target).toBeVisible();
+         |                        ^
+      13 |   for (let step = 0; step < 600; step++) {
+      14 |     if (await target.evaluate(node => node === document.activeElement)) return;
+      15 |     await page.keyboard.press("Tab");
+        at tabTo (<worktree>/tests/live/autoverse-exchange-keyboard.spec.ts:12:24)
+        at activate (<worktree>/tests/live/autoverse-exchange-keyboard.spec.ts:20:9)
+        at <worktree>/tests/live/autoverse-exchange-keyboard.spec.ts:75:13
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    .studio-local/evidence-keyboard-20261105/red/native/artifacts/autoverse-exchange-keyboar-ea599--Autoverse-evidence-at-1024/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: .studio-local/evidence-keyboard-20261105/red/native/artifacts/autoverse-exchange-keyboar-ea599--Autoverse-evidence-at-1024/error-context.md
+
+  2) tests/live/autoverse-exchange-keyboard.spec.ts:52:9 › native keyboard imports and inspects invalid Autoverse evidence at 1024 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('dialog', { name: 'Imported evidence inspection', exact: true }).getByRole('region', { name: 'Referenced dependencies', exact: true }).getByText('Inspect profile identity', { exact: true }).first()
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('dialog', { name: 'Imported evidence inspection', exact: true }).getByRole('region', { name: 'Referenced dependencies', exact: true }).getByText('Inspect profile identity', { exact: true }).first() with timeout 10000ms
+      - waiting for getByRole('dialog', { name: 'Imported evidence inspection', exact: true }).getByRole('region', { name: 'Referenced dependencies', exact: true }).getByText('Inspect profile identity', { exact: true }).first()
+
+
+      10 |
+      11 | async function tabTo(page: Page, target: Locator) {
+    > 12 |   await expect(target).toBeVisible();
+         |                        ^
+      13 |   for (let step = 0; step < 600; step++) {
+      14 |     if (await target.evaluate(node => node === document.activeElement)) return;
+      15 |     await page.keyboard.press("Tab");
+        at tabTo (<worktree>/tests/live/autoverse-exchange-keyboard.spec.ts:12:24)
+        at activate (<worktree>/tests/live/autoverse-exchange-keyboard.spec.ts:20:9)
+        at <worktree>/tests/live/autoverse-exchange-keyboard.spec.ts:75:13
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    .studio-local/evidence-keyboard-20261105/red/native/artifacts/autoverse-exchange-keyboar-a9cb4--Autoverse-evidence-at-1024/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: .studio-local/evidence-keyboard-20261105/red/native/artifacts/autoverse-exchange-keyboar-a9cb4--Autoverse-evidence-at-1024/error-context.md
+
+  3) tests/live/autoverse-exchange-keyboard.spec.ts:104:9 › accepted evidence import cannot reopen a departed Home at 1024 
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  getByRole('dialog', { name: 'Imported evidence inspection', exact: true })
+    Expected: 0
+    Received: 1
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toHaveCount" getByRole('dialog', { name: 'Imported evidence inspection', exact: true }) with timeout 10000ms
+      - waiting for getByRole('dialog', { name: 'Imported evidence inspection', exact: true })
+        24 × locator resolved to 1 element
+           - unexpected value "1"
+
+
+      117 |         release(); expect((await reply).status()).toBe(201);
+      118 |         await expect(page.locator(".notice.busy")).toHaveCount(0);
+    > 119 |         await expect(dialog(page)).toHaveCount(0);
+          |                                    ^
+      120 |         await expect(target).toBeFocused();
+      121 |         expect((await read(page)).length).toBe(before.length + 1);
+      122 |         await info.attach("late-import.json", { body: JSON.stringify({ width, destination, acceptedAndRetained: true, lateModalSuppressed: true, focusPreserved: true, scope: "Delayed actual HTTP201; import persists without execution" }), contentType: "application/json" });
+        at <worktree>/tests/live/autoverse-exchange-keyboard.spec.ts:119:36
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    .studio-local/evidence-keyboard-20261105/red/native/artifacts/autoverse-exchange-keyboar-2f2b8-pen-a-departed-Home-at-1024/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: .studio-local/evidence-keyboard-20261105/red/native/artifacts/autoverse-exchange-keyboar-2f2b8-pen-a-departed-Home-at-1024/error-context.md
+
+  4) tests/live/autoverse-exchange-keyboard.spec.ts:104:9 › accepted evidence import cannot reopen a departed Catalog at 1024 
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  getByRole('dialog', { name: 'Imported evidence inspection', exact: true })
+    Expected: 0
+    Received: 1
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toHaveCount" getByRole('dialog', { name: 'Imported evidence inspection', exact: true }) with timeout 10000ms
+      - waiting for getByRole('dialog', { name: 'Imported evidence inspection', exact: true })
+        24 × locator resolved to 1 element
+           - unexpected value "1"
+
+
+      117 |         release(); expect((await reply).status()).toBe(201);
+      118 |         await expect(page.locator(".notice.busy")).toHaveCount(0);
+    > 119 |         await expect(dialog(page)).toHaveCount(0);
+          |                                    ^
+      120 |         await expect(target).toBeFocused();
+      121 |         expect((await read(page)).length).toBe(before.length + 1);
+      122 |         await info.attach("late-import.json", { body: JSON.stringify({ width, destination, acceptedAndRetained: true, lateModalSuppressed: true, focusPreserved: true, scope: "Delayed actual HTTP201; import persists without execution" }), contentType: "application/json" });
+        at <worktree>/tests/live/autoverse-exchange-keyboard.spec.ts:119:36
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    .studio-local/evidence-keyboard-20261105/red/native/artifacts/autoverse-exchange-keyboar-a1503--a-departed-Catalog-at-1024/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: .studio-local/evidence-keyboard-20261105/red/native/artifacts/autoverse-exchange-keyboar-a1503--a-departed-Catalog-at-1024/error-context.md
+
+  5) tests/live/autoverse-exchange-keyboard.spec.ts:126:7 › late evidence rejection cannot replace newer navigation at 1024 
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  getByRole('alert', { name: 'Operation error', exact: true })
+    Expected: 0
+    Received: 1
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toHaveCount" getByRole('alert', { name: 'Operation error', exact: true }) with timeout 10000ms
+      - waiting for getByRole('alert', { name: 'Operation error', exact: true })
+        24 × locator resolved to 1 element
+           - unexpected value "1"
+
+
+      138 |       release(); expect((await reply).status()).toBe(422);
+      139 |       await expect(page.locator(".notice.busy")).toHaveCount(0);
+    > 140 |       await expect(page.getByRole("alert", { name: "Operation error", exact: true })).toHaveCount(0);
+          |                                                                                       ^
+      141 |       await expect(dialog(page)).toHaveCount(0); await expect(target).toBeFocused();
+      142 |       expect((await read(page)).length).toBe(before.length);
+      143 |     } finally { release(); await page.unrouteAll({ behavior: "wait" }); }
+        at <worktree>/tests/live/autoverse-exchange-keyboard.spec.ts:140:87
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    .studio-local/evidence-keyboard-20261105/red/native/artifacts/autoverse-exchange-keyboar-11dcc-ce-newer-navigation-at-1024/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: .studio-local/evidence-keyboard-20261105/red/native/artifacts/autoverse-exchange-keyboar-11dcc-ce-newer-navigation-at-1024/error-context.md
+
+  6) tests/live/autoverse-exchange-keyboard.spec.ts:145:7 › newer evidence selection wins even when the older reply arrives first at 1024 
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  getByRole('dialog', { name: 'Imported evidence inspection', exact: true })
+    Expected: 0
+    Received: 1
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toHaveCount" getByRole('dialog', { name: 'Imported evidence inspection', exact: true }) with timeout 10000ms
+      - waiting for getByRole('dialog', { name: 'Imported evidence inspection', exact: true })
+        24 × locator resolved to 1 element
+           - unexpected value "1"
+
+
+      159 |       const first = imported(page); releases[0](); expect((await first).status()).toBe(201);
+      160 |       await expect(page.locator(".notice.busy")).toHaveCount(0);
+    > 161 |       await expect(dialog(page)).toHaveCount(0);
+          |                                  ^
+      162 |       const second = imported(page); releases[1](); expect((await second).status()).toBe(201);
+      163 |       await expect(dialog(page)).toContainText(bodies[1].bundleId);
+      164 |       await expect(dialog(page)).not.toContainText(bodies[0].bundleId);
+        at <worktree>/tests/live/autoverse-exchange-keyboard.spec.ts:161:34
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    .studio-local/evidence-keyboard-20261105/red/native/artifacts/autoverse-exchange-keyboar-58a3e-reply-arrives-first-at-1024/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: .studio-local/evidence-keyboard-20261105/red/native/artifacts/autoverse-exchange-keyboar-58a3e-reply-arrives-first-at-1024/error-context.md
+
+  7) tests/live/autoverse-exchange-keyboard.spec.ts:52:9 › native keyboard imports and inspects unavailable Autoverse evidence at 1440 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('dialog', { name: 'Imported evidence inspection', exact: true }).getByRole('region', { name: 'Referenced dependencies', exact: true }).getByText('Inspect profile identity', { exact: true }).first()
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('dialog', { name: 'Imported evidence inspection', exact: true }).getByRole('region', { name: 'Referenced dependencies', exact: true }).getByText('Inspect profile identity', { exact: true }).first() with timeout 10000ms
+      - waiting for getByRole('dialog', { name: 'Imported evidence inspection', exact: true }).getByRole('region', { name: 'Referenced dependencies', exact: true }).getByText('Inspect profile identity', { exact: true }).first()
+
+
+      10 |
+      11 | async function tabTo(page: Page, target: Locator) {
+    > 12 |   await expect(target).toBeVisible();
+         |                        ^
+      13 |   for (let step = 0; step < 600; step++) {
+      14 |     if (await target.evaluate(node => node === document.activeElement)) return;
+      15 |     await page.keyboard.press("Tab");
+        at tabTo (<worktree>/tests/live/autoverse-exchange-keyboard.spec.ts:12:24)
+        at activate (<worktree>/tests/live/autoverse-exchange-keyboard.spec.ts:20:9)
+        at <worktree>/tests/live/autoverse-exchange-keyboard.spec.ts:75:13
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    .studio-local/evidence-keyboard-20261105/red/native/artifacts/autoverse-exchange-keyboar-5fbf3--Autoverse-evidence-at-1440/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: .studio-local/evidence-keyboard-20261105/red/native/artifacts/autoverse-exchange-keyboar-5fbf3--Autoverse-evidence-at-1440/error-context.md
+
+  8) tests/live/autoverse-exchange-keyboard.spec.ts:52:9 › native keyboard imports and inspects invalid Autoverse evidence at 1440 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('dialog', { name: 'Imported evidence inspection', exact: true }).getByRole('region', { name: 'Referenced dependencies', exact: true }).getByText('Inspect profile identity', { exact: true }).first()
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('dialog', { name: 'Imported evidence inspection', exact: true }).getByRole('region', { name: 'Referenced dependencies', exact: true }).getByText('Inspect profile identity', { exact: true }).first() with timeout 10000ms
+      - waiting for getByRole('dialog', { name: 'Imported evidence inspection', exact: true }).getByRole('region', { name: 'Referenced dependencies', exact: true }).getByText('Inspect profile identity', { exact: true }).first()
+
+
+      10 |
+      11 | async function tabTo(page: Page, target: Locator) {
+    > 12 |   await expect(target).toBeVisible();
+         |                        ^
+      13 |   for (let step = 0; step < 600; step++) {
+      14 |     if (await target.evaluate(node => node === document.activeElement)) return;
+      15 |     await page.keyboard.press("Tab");
+        at tabTo (<worktree>/tests/live/autoverse-exchange-keyboard.spec.ts:12:24)
+        at activate (<worktree>/tests/live/autoverse-exchange-keyboard.spec.ts:20:9)
+        at <worktree>/tests/live/autoverse-exchange-keyboard.spec.ts:75:13
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    .studio-local/evidence-keyboard-20261105/red/native/artifacts/autoverse-exchange-keyboar-f78db--Autoverse-evidence-at-1440/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: .studio-local/evidence-keyboard-20261105/red/native/artifacts/autoverse-exchange-keyboar-f78db--Autoverse-evidence-at-1440/error-context.md
+
+  9) tests/live/autoverse-exchange-keyboard.spec.ts:104:9 › accepted evidence import cannot reopen a departed Home at 1440 
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  getByRole('dialog', { name: 'Imported evidence inspection', exact: true })
+    Expected: 0
+    Received: 1
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toHaveCount" getByRole('dialog', { name: 'Imported evidence inspection', exact: true }) with timeout 10000ms
+      - waiting for getByRole('dialog', { name: 'Imported evidence inspection', exact: true })
+        24 × locator resolved to 1 element
+           - unexpected value "1"
+
+
+      117 |         release(); expect((await reply).status()).toBe(201);
+      118 |         await expect(page.locator(".notice.busy")).toHaveCount(0);
+    > 119 |         await expect(dialog(page)).toHaveCount(0);
+          |                                    ^
+      120 |         await expect(target).toBeFocused();
+      121 |         expect((await read(page)).length).toBe(before.length + 1);
+      122 |         await info.attach("late-import.json", { body: JSON.stringify({ width, destination, acceptedAndRetained: true, lateModalSuppressed: true, focusPreserved: true, scope: "Delayed actual HTTP201; import persists without execution" }), contentType: "application/json" });
+        at <worktree>/tests/live/autoverse-exchange-keyboard.spec.ts:119:36
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    .studio-local/evidence-keyboard-20261105/red/native/artifacts/autoverse-exchange-keyboar-1ab87-pen-a-departed-Home-at-1440/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: .studio-local/evidence-keyboard-20261105/red/native/artifacts/autoverse-exchange-keyboar-1ab87-pen-a-departed-Home-at-1440/error-context.md
+
+  10) tests/live/autoverse-exchange-keyboard.spec.ts:104:9 › accepted evidence import cannot reopen a departed Catalog at 1440 
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  getByRole('dialog', { name: 'Imported evidence inspection', exact: true })
+    Expected: 0
+    Received: 1
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toHaveCount" getByRole('dialog', { name: 'Imported evidence inspection', exact: true }) with timeout 10000ms
+      - waiting for getByRole('dialog', { name: 'Imported evidence inspection', exact: true })
+        24 × locator resolved to 1 element
+           - unexpected value "1"
+
+
+      117 |         release(); expect((await reply).status()).toBe(201);
+      118 |         await expect(page.locator(".notice.busy")).toHaveCount(0);
+    > 119 |         await expect(dialog(page)).toHaveCount(0);
+          |                                    ^
+      120 |         await expect(target).toBeFocused();
+      121 |         expect((await read(page)).length).toBe(before.length + 1);
+      122 |         await info.attach("late-import.json", { body: JSON.stringify({ width, destination, acceptedAndRetained: true, lateModalSuppressed: true, focusPreserved: true, scope: "Delayed actual HTTP201; import persists without execution" }), contentType: "application/json" });
+        at <worktree>/tests/live/autoverse-exchange-keyboard.spec.ts:119:36
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    .studio-local/evidence-keyboard-20261105/red/native/artifacts/autoverse-exchange-keyboar-929a8--a-departed-Catalog-at-1440/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: .studio-local/evidence-keyboard-20261105/red/native/artifacts/autoverse-exchange-keyboar-929a8--a-departed-Catalog-at-1440/error-context.md
+
+  11) tests/live/autoverse-exchange-keyboard.spec.ts:126:7 › late evidence rejection cannot replace newer navigation at 1440 
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  getByRole('alert', { name: 'Operation error', exact: true })
+    Expected: 0
+    Received: 1
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toHaveCount" getByRole('alert', { name: 'Operation error', exact: true }) with timeout 10000ms
+      - waiting for getByRole('alert', { name: 'Operation error', exact: true })
+        24 × locator resolved to 1 element
+           - unexpected value "1"
+
+
+      138 |       release(); expect((await reply).status()).toBe(422);
+      139 |       await expect(page.locator(".notice.busy")).toHaveCount(0);
+    > 140 |       await expect(page.getByRole("alert", { name: "Operation error", exact: true })).toHaveCount(0);
+          |                                                                                       ^
+      141 |       await expect(dialog(page)).toHaveCount(0); await expect(target).toBeFocused();
+      142 |       expect((await read(page)).length).toBe(before.length);
+      143 |     } finally { release(); await page.unrouteAll({ behavior: "wait" }); }
+        at <worktree>/tests/live/autoverse-exchange-keyboard.spec.ts:140:87
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    .studio-local/evidence-keyboard-20261105/red/native/artifacts/autoverse-exchange-keyboar-5865c-ce-newer-navigation-at-1440/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: .studio-local/evidence-keyboard-20261105/red/native/artifacts/autoverse-exchange-keyboar-5865c-ce-newer-navigation-at-1440/error-context.md
+
+  12) tests/live/autoverse-exchange-keyboard.spec.ts:145:7 › newer evidence selection wins even when the older reply arrives first at 1440 
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  getByRole('dialog', { name: 'Imported evidence inspection', exact: true })
+    Expected: 0
+    Received: 1
+    Timeout:  10000ms
+
+    Call log:
+      - Expect "toHaveCount" getByRole('dialog', { name: 'Imported evidence inspection', exact: true }) with timeout 10000ms
+      - waiting for getByRole('dialog', { name: 'Imported evidence inspection', exact: true })
+        24 × locator resolved to 1 element
+           - unexpected value "1"
+
+
+      159 |       const first = imported(page); releases[0](); expect((await first).status()).toBe(201);
+      160 |       await expect(page.locator(".notice.busy")).toHaveCount(0);
+    > 161 |       await expect(dialog(page)).toHaveCount(0);
+          |                                  ^
+      162 |       const second = imported(page); releases[1](); expect((await second).status()).toBe(201);
+      163 |       await expect(dialog(page)).toContainText(bodies[1].bundleId);
+      164 |       await expect(dialog(page)).not.toContainText(bodies[0].bundleId);
+        at <worktree>/tests/live/autoverse-exchange-keyboard.spec.ts:161:34
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    .studio-local/evidence-keyboard-20261105/red/native/artifacts/autoverse-exchange-keyboar-b4bf9-reply-arrives-first-at-1440/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: .studio-local/evidence-keyboard-20261105/red/native/artifacts/autoverse-exchange-keyboar-b4bf9-reply-arrives-first-at-1440/error-context.md
+
+  12 failed
+    tests/live/autoverse-exchange-keyboard.spec.ts:52:9 › native keyboard imports and inspects unavailable Autoverse evidence at 1024 
+    tests/live/autoverse-exchange-keyboard.spec.ts:52:9 › native keyboard imports and inspects invalid Autoverse evidence at 1024 
+    tests/live/autoverse-exchange-keyboard.spec.ts:104:9 › accepted evidence import cannot reopen a departed Home at 1024 
+    tests/live/autoverse-exchange-keyboard.spec.ts:104:9 › accepted evidence import cannot reopen a departed Catalog at 1024 
+    tests/live/autoverse-exchange-keyboard.spec.ts:126:7 › late evidence rejection cannot replace newer navigation at 1024 
+    tests/live/autoverse-exchange-keyboard.spec.ts:145:7 › newer evidence selection wins even when the older reply arrives first at 1024 
+    tests/live/autoverse-exchange-keyboard.spec.ts:52:9 › native keyboard imports and inspects unavailable Autoverse evidence at 1440 
+    tests/live/autoverse-exchange-keyboard.spec.ts:52:9 › native keyboard imports and inspects invalid Autoverse evidence at 1440 
+    tests/live/autoverse-exchange-keyboard.spec.ts:104:9 › accepted evidence import cannot reopen a departed Home at 1440 
+    tests/live/autoverse-exchange-keyboard.spec.ts:104:9 › accepted evidence import cannot reopen a departed Catalog at 1440 
+    tests/live/autoverse-exchange-keyboard.spec.ts:126:7 › late evidence rejection cannot replace newer navigation at 1440 
+    tests/live/autoverse-exchange-keyboard.spec.ts:145:7 › newer evidence selection wins even when the older reply arrives first at 1440 
+  2 passed (2.6m)

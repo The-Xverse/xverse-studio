@@ -1,6 +1,6 @@
 # ADR-0072 — Evidence import respects current navigation and selection
 
-Date: 2026-11-05. Status: implemented; scoped Linux verification pending.
+Date: 2026-11-05. Status: implemented; scoped Linux verification retained.
 Traces: T038, T097; NFR-006, NFR-011; inert exchange contract unchanged.
 
 Actual evidence-import replies can arrive after leaving Home for Catalog or
@@ -45,3 +45,10 @@ Earlier cohorts retain their original narrower hash scope.
 
 No Windows, provider/device, simulator, assistive-technology, full-regression,
 performance, package or milestone acceptance is implied. T038/T097 remain open.
+
+Source36861b2 passes14 keyboard import checks, the original1 inspection case,
+6 existing diagnostic checks and22 existing playback checks on555 stable Git-bound
+inputs and six reproduced UI assets. Final imports add12 and4 retained bundles
+respectively without changing the execution ledger. Fourteen pre-existing imported
+canonical files also match the source after final verification. Qualified evidence
+and component review: `evidence/studio/M4-evidence-import-keyboard-20261105/`.
