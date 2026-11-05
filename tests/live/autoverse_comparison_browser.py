@@ -1,4 +1,4 @@
-"""Read-only comparison UI on an independent copy of actual completed sources and a failed native rerun."""
+"""Read-only comparison UI on independent copies of actual native recordings."""
 
 import argparse
 import importlib.util
@@ -25,7 +25,6 @@ def main():
     p = argparse.ArgumentParser()
     for name in (
         "recording",
-        "receipt",
         "static-dir",
         "output",
         "node",
@@ -33,7 +32,13 @@ def main():
         "browser-cache",
     ):
         p.add_argument("--" + name, type=Path, required=True)
+    p.add_argument("--receipt", type=Path)
+    p.add_argument("--recorded-only", action="store_true",
+                   help="Inspect without installing a runtime provider; rerun stays unavailable.")
+    p.add_argument("--isolate-browser-devices", action="store_true")
     a = p.parse_args()
+    if not a.recorded_only and a.receipt is None:
+        p.error("--receipt is required unless --recorded-only is selected")
     a.output.mkdir(parents=True, exist_ok=False)
     result = json.loads((a.recording / "native-result.json").read_bytes())
     assert result["outcome"] in {"passed", "failed"}
@@ -106,6 +111,13 @@ def main():
     else:
         assert result["fullAndroidAndSpeedObserved"] and selected["state"] == "stopped"
     context["selectedState"] = selected["state"]
+    if a.recorded_only:
+        journal_records = [
+            json.loads(line)
+            for line in (original / "runs" / result["runId"] / "evidence.jsonl").read_bytes().splitlines()
+        ]
+        context["originalObservations"] = [row for row in journal_records if row["type"] == "observation.available"]
+        assert context["originalObservations"]
     (data / "comparison-recording.private.json").write_text(json.dumps(context))
     (data / "comparison-recording.private.json").chmod(0o600)
     (a.output / "data-root.private.json").write_text(
@@ -114,9 +126,10 @@ def main():
     host = native.NativeHost(
         data,
         a.output,
-        a.receipt.resolve(),
+        a.receipt.resolve() if a.receipt else None,
         Path(sys.executable),
         a.static_dir.resolve(),
+        register_provider=not a.recorded_only,
     )
     outcome = {
         "scope": "Actual recorded comparison and disabled unsupported playback; no new preflight, workload, operation or evaluation",
@@ -125,7 +138,10 @@ def main():
         "selectedExecutionState": selected["state"],
         "fullRerunExecutionVerified": result["outcome"] == "passed",
         "acknowledgementFixture": "The initial POST acknowledgement uses the retained actual operation; child-provider corruption is a labelled transport fixture. No new admission or Start.",
+        "installedAutoverseProviderRegistered": not a.recorded_only,
     }
+    if a.recorded_only:
+        outcome["acknowledgementFixture"] = "NOT_RUN; no provider installed or acknowledgement fixture used."
     exit_code = 1
     try:
         host.start()
@@ -158,6 +174,7 @@ def main():
                 STUDIO_BROWSER_REPORT=str(a.output / "browser.json"),
                 STUDIO_BROWSER_OUTPUT=str(a.output / "artifacts"),
                 PLAYWRIGHT_BROWSERS_PATH=str(a.browser_cache.resolve()),
+                STUDIO_BROWSER_RECORDED_ONLY="1" if a.recorded_only else "0",
             )
             argv = [
                 str(a.node.resolve()),
@@ -166,6 +183,16 @@ def main():
                 "--config",
                 "tests/live/autoverse-comparison.config.ts",
             ]
+            if a.isolate_browser_devices:
+                isolation_spec = importlib.util.spec_from_file_location(
+                    "recorded_playback_isolation", Path(__file__).with_name("autoverse_playback_browser.py")
+                )
+                isolation = importlib.util.module_from_spec(isolation_spec)
+                isolation_spec.loader.exec_module(isolation)
+                env["STUDIO_BROWSER_CPU_ONLY"] = "1"
+                env["STUDIO_BROWSER_DEVICE_PROOF"] = str(a.output.resolve() / "browser-device-proof.private.json")
+                env["STUDIO_BROWSER_HOST_MOUNT_NS"] = os.readlink("/proc/self/ns/mnt")
+                argv = isolation.device_free_browser_command(argv)
             (a.output / "command.private.json").write_text(
                 json.dumps({"argv": argv, "context": context}, indent=2) + "\n"
             )

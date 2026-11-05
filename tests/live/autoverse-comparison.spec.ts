@@ -41,8 +41,14 @@ test("Actual Autoverse frozen rerun comparison exposes configuration and blocks 
     await expect(page.getByRole("tab", { name: "Observations", exact: true })).toHaveAttribute("aria-selected", "true");
     await expect(page.getByRole("button", { name: "Replay observations", exact: true })).toBeDisabled();
     await expect(page.getByRole("heading", { name: "No plot samples available", exact: true })).toBeVisible();
-    await expect(page.getByRole("button", { name: "Rerun frozen inputs", exact: true })).toBeEnabled();
+    const rerun = page.getByRole("button", { name: "Rerun frozen inputs", exact: true });
+    if (process.env.STUDIO_BROWSER_RECORDED_ONLY === "1") {
+      await expect(rerun).toBeDisabled();
+    } else {
+      await expect(rerun).toBeEnabled();
+    }
   }
+  if (process.env.STUDIO_BROWSER_RECORDED_ONLY === "1") return;
   // Labelled transport fixtures over the retained real operation and child.
   // The POST never reaches admission. Real operation reads and the final child
   // read retain their actual provider/scope and failed execution state.
@@ -69,3 +75,48 @@ test("Actual Autoverse frozen rerun comparison exposes configuration and blocks 
   expect(await page.evaluate((id) => localStorage.getItem("studio.pendingRerun." + id), recording.sourceRunId)).toBeNull();
   await page.unroute(rerunUrl);
 });
+
+for (const width of process.env.STUDIO_BROWSER_RECORDED_ONLY === "1" ? [1024, 1440] : []) {
+  test(`successful frozen rerun original payload playback stays read-only at ${width}`, async ({ page }, info) => {
+    const recording = JSON.parse(readFileSync(path.join(process.env.STUDIO_BROWSER_DATA!, "comparison-recording.private.json"), "utf8"));
+    expect(recording.selectedState).toBe("stopped");
+    const records = recording.originalObservations;
+    expect(records.length).toBeGreaterThan(20);
+    await page.setViewportSize({ width, height: width === 1024 ? 768 : 900 });
+    await connectStudio(page, info);
+    await page.evaluate(r => {
+      localStorage.setItem("studio.projectId", r.projectId);
+      localStorage.setItem("studio.lastRun", r.runId);
+      localStorage.setItem("studio.lastRun." + r.projectId, r.runId);
+    }, recording);
+    await page.reload();
+    await page.getByRole("tab", { name: "Results", exact: true }).click();
+    await expect(page.getByLabel("Recorded run", { exact: true })).toHaveValue(recording.runId);
+    const mutations: string[] = [];
+    page.on("request", request => {
+      if (request.method() !== "GET") mutations.push(new URL(request.url()).pathname);
+    });
+    const load = page.getByRole("button", { name: "Load original observation records", exact: true });
+    await load.focus(); await page.keyboard.press("Enter");
+    const panel = page.getByRole("region", { name: "Original observation records", exact: true });
+    const current = async () => JSON.parse((await panel.locator("pre[data-original-record]").textContent())!);
+    await expect(panel).toContainText(`20 of ${records.length} matching records`);
+    expect(await current()).toEqual(records[0]);
+    await expect(panel).toContainText("Source time unavailable");
+    const play = panel.getByRole("button", { name: "Play recorded payloads", exact: true });
+    await play.focus(); await page.keyboard.press("Enter");
+    await expect.poll(async () => (await current()).eventId).not.toBe(records[0].eventId);
+    const pause = panel.getByRole("button", { name: "Pause payload playback", exact: true });
+    await pause.focus(); await page.keyboard.press("Enter");
+    await expect(play).toBeFocused();
+    const next = panel.getByRole("button", { name: "Next payload page", exact: true });
+    await next.focus(); await page.keyboard.press("Enter");
+    await expect(panel).toContainText(`${records.length - 20} of ${records.length} matching records`);
+    expect(await current()).toEqual(records[20]);
+    await expect(next).toBeDisabled();
+    await expect(page.getByRole("button", { name: "Rerun frozen inputs", exact: true })).toBeDisabled();
+    expect(mutations).toEqual([]);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
+    await page.screenshot({ path: info.outputPath(`successful-rerun-playback-${width}.png`), fullPage: true });
+  });
+}
