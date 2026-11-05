@@ -12,7 +12,7 @@ test("Actual Autoverse frozen rerun comparison exposes configuration and blocks 
     localStorage.setItem("studio.lastRun." + r.projectId, r.runId);
   }, recording);
   await page.reload();
-  await page.getByRole("tab", { name: "Results", exact: true }).click();
+  await page.getByRole("tab", { name: /^Results(?:\s+\d+)?$/ }).click();
   await expect(page.getByLabel("Recorded run", { exact: true })).toHaveValue(recording.runId);
   await expect(page.getByRole("heading", { name: new RegExp("Run results " + recording.selectedState) })).toBeVisible();
   for (const width of [1024, 1440]) {
@@ -90,7 +90,7 @@ for (const width of process.env.STUDIO_BROWSER_RECORDED_ONLY === "1" ? [1024, 14
       localStorage.setItem("studio.lastRun." + r.projectId, r.runId);
     }, recording);
     await page.reload();
-    await page.getByRole("tab", { name: "Results", exact: true }).click();
+    await page.getByRole("tab", { name: /^Results(?:\s+\d+)?$/ }).click();
     await expect(page.getByLabel("Recorded run", { exact: true })).toHaveValue(recording.runId);
     const mutations: string[] = [];
     page.on("request", request => {
