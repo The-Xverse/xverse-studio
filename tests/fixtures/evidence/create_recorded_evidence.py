@@ -7,12 +7,13 @@ helper is not imported by application routes and is not a production injection A
 from __future__ import annotations
 
 import argparse
+from copy import deepcopy
 import hashlib
 import json
 from pathlib import Path
 import time
 
-from xverse_studio.storage.core import Store, canonical, uid
+from xverse_studio.storage.core import Store, atomic, canonical, digest, uid
 from xverse_studio.projects.service import Projects
 from xverse_studio.runs.service import Runs
 from xverse_studio.xdl import XDLAdapter
@@ -188,7 +189,28 @@ def create_recorded_evidence(store, projects, runs, project_id, *, noise=205):
     preflight = runs.preflight(project_id, {"revision": project["revision"]})
     if preflight["status"] != "ready":
         raise RuntimeError("Choose an authoritatively ready owned reference project.")
-    snapshot = store.get("snapshot", preflight["snapshotId"])
+    # The prepared reference inputs are provenance only. This new synthetic
+    # journal needs its own matching, non-executable producer identity, rather
+    # than claiming the protected reference-provider snapshot belongs to it.
+    snapshot = deepcopy(store.get("snapshot", preflight["snapshotId"]))
+    snapshot.update(
+        snapshotId=uid("snap-reader-fixture-"),
+        providerId="owned.recorded-fixture",
+        providerIdentity={
+            "providerId": "owned.recorded-fixture",
+            "providerVersion": "1.0.0",
+            "contractVersion": "1.0",
+            "evidenceScope": "recorded_fixture",
+            "available": False,
+            "operations": [],
+            "limitations": ["Synthetic reader fixture only; no provider execution authority."],
+        },
+    )
+    snapshot.pop("snapshotDigest", None)
+    snapshot["snapshotDigest"] = digest(snapshot)
+    snapshot_root = store.root / "snapshots" / snapshot["snapshotId"]
+    snapshot_root.mkdir(parents=True, exist_ok=False)
+    atomic(snapshot_root / "snapshot.json", canonical(snapshot).encode())
     run_id, operation_id = uid("run-reader-fixture-"), uid("op-reader-fixture-")
     records, ids = fixture_records(
         run_id,
@@ -227,6 +249,7 @@ def create_recorded_evidence(store, projects, runs, project_id, *, noise=205):
         ],
     }
     with store.tx() as db:
+        store.put("snapshot", snapshot["snapshotId"], snapshot, db)
         store.put(
             "operation",
             operation_id,

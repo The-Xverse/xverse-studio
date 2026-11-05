@@ -7,7 +7,10 @@ const selected = new URL(url);
 if (selected.protocol !== 'http:' || !['127.0.0.1', 'localhost'].includes(selected.hostname) || selected.username || selected.password) throw new Error('Select an explicit local native Studio origin');
 const context = JSON.parse(fs.readFileSync(data + '/performance-context.private.json', 'utf8'));
 const session = JSON.parse(fs.readFileSync(data + '/browser-session.private.json', 'utf8'));
-const browser = await chromium.launch({ headless: true });
+const browser = await chromium.launch({ headless: true,
+ ...(process.env.STUDIO_BROWSER_CPU_ONLY === '1'
+   ? { args: ['--disable-gpu', '--disable-gpu-rasterization'] } : {}),
+});
 const observations = [];
 try {
  const bc = await browser.newContext({ storageState: session });
