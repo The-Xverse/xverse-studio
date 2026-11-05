@@ -1,0 +1,14 @@
+{
+  "source": "services/studio-api/src/xverse_studio/events/__init__.py",
+  "observation": "Queue/stream core uses typed run/journal callbacks, bounded deque/frame budgets, threading lease accounting and asynchronous thread offload. It does not signal or infer authority from process IDs.",
+  "limits": {
+    "replayWindow": 1000,
+    "pendingEvents": 200,
+    "pendingBytes": 1048576,
+    "maxFrameBytes": 262144,
+    "globalSubscribers": 16,
+    "perRunSubscribers": 4
+  },
+  "dynamicEvidence": "53 Linux in-process tests include producer advancement, exact slow-consumer omissions, retained canonical bytes, quotas, large frames, resync byte caps and non-executing restart.",
+  "limitation": "This does not establish accepted live Stop/Cancel latency or native behavior on another OS."
+}

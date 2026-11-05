@@ -1,3 +1,22 @@
+# T096 finite/queue progress; no new closure — 2026-11-05
+
+**72 completed /18 in progress /10 blocked; zero accepted milestones.**
+All six current finite performance series meet original budgets;53 current
+in-process stream/reader cases and independent visible-workload readback pass.
+The initial slow warm-up and fixture identity failure remain retained. Current
+source/compiled UI, protected canonical bytes, ledger and ownership bindings are
+explicit in `evidence/studio/M4-performance/autoverse-20261105/`.
+
+T096 remains in progress. Finite generated load and synthetic queue proofs do not
+establish accepted live Stop/Cancel responsiveness or authoritative collection
+under concurrent M4/high-volume/slow presentation. The next live lane requires
+fresh ownership/readiness validation of the separate approved Autoverse test
+infrastructure. No Windows work is resumed; its independent hold remains active.
+No task, acceptance case or milestone closes from this component checkpoint.
+The full goal remains active; T091 is the latest task closure.
+
+## Earlier checkpoints
+
 # T091 original clauses complete — 2026-11-05
 
 **72 completed /18 in progress /10 blocked; zero accepted milestones.**

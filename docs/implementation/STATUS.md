@@ -1,3 +1,39 @@
+# T096 finite benchmarks pass; full task remains open — 2026-11-05
+
+**72 completed /18 in progress /10 blocked; zero accepted milestones.**
+No task closes in this checkpoint. Linux/Autoverse work remains active; Windows
+remains independently frozen and unverified. T091 remains the latest closure.
+
+Current native Linux Autoverse-derived200-element/400-connection and50000-event/
+200-row benchmarks pass all six original30-sample series after one documented
+warm-up. At1024×768/1440×900, open/validation p95 is1152.9/1249.7ms, selection
+46.3/46.3ms and history363.6/374.8ms against unchanged3000/150/2000ms thresholds.
+The3711.9ms initial1024 open warm-up is retained separately; no cold-start pass is
+inferred. Independent readback confirms200 actual visible nodes/400edges at each
+size. Current M4 global feature availability is checked; no live runtime provider,
+new campaign/evaluation or concurrent live analysis is exercised.
+
+The first stream suite retains24 passes/one correct source-identity refusal from
+an inconsistent synthetic fixture. New fixtures receive a matching unavailable/
+no-operation snapshot; the production export guard and private-stream assertions
+remain. Final53 nonexecuting stream/reader checks pass. No product source changes
+in this checkpoint. Two later contributor amendments are independently verified;
+all application/backend and six UI bytes stay unchanged from finite candidate
+db236b2. All556 selected inputs match88b7b12. Captured11/10 original handles exit,
+canonical originals/prepared/copies and execution ledgers remain intact, roots
+release and no GPU descriptor is observed in readable samples. Maximum sampled
+backend RSS is332800000 bytes; no whole-memory or GPU-health guarantee follows.
+
+T096 still needs actual accepted control/cancellation while the real admitted
+producer advances under slow/disconnected/high-volume presentation, plus its
+complete queue/control portability and linked acceptance. Fresh observed ownership,
+namespace and readiness are needed before reusing the separate approved test
+infrastructure; old PIDs/bindings are not authority. No Windows, physical, broader
+performance/release or milestone acceptance is inferred. See
+[qualified evidence and review](../../evidence/studio/M4-performance/autoverse-20261105/README.md).
+
+## Earlier checkpoints
+
 # T091 complete; Linux/Autoverse work active — 2026-11-05
 
 **72 completed /18 in progress /10 blocked; zero accepted milestones.**

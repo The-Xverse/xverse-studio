@@ -1,3 +1,9 @@
+Latest checkpoint: T096's current finite Autoverse-derived benchmarks and53
+stream/reader guards pass; full T096 live producer/control scope remains pending.
+Counts72 completed /18 in progress /10 blocked; zero accepted milestones. Work is
+active, Windows separately frozen. See [status](STATUS.md) and
+[evidence](../../evidence/studio/M4-performance/autoverse-20261105/README.md).
+
 Latest checkpoint: T091's original clause audit is complete. Counts72 completed /
 18 in progress /10 blocked; zero accepted milestones. Linux/Autoverse work remains
 active after explicit user resume; Windows remains separately frozen. See

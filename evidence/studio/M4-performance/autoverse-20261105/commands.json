@@ -1,0 +1,26 @@
+{
+  "finite": "finite/command.json",
+  "visibility": "visibility/command.json",
+  "streamGuards": {
+    "operatorArgv": [
+      "<worktree>/.venv/bin/python",
+      "-I",
+      "<worktree>/.studio-local/t096-performance-20261105/stream-guards-final.py"
+    ],
+    "environment": {
+      "PYTEST_DISABLE_PLUGIN_AUTOLOAD": "1",
+      "PYTHONPATH": ""
+    },
+    "pytestArgs": [
+      "tests/integration/test_stream_recovery.py",
+      "tests/integration/test_evidence_projection.py",
+      "-q",
+      "--tb=short",
+      "--basetemp=<private-output>/tmp",
+      "--junitxml=<private-output>/tests.junit.xml"
+    ],
+    "additionalPlugin": "All subprocess.Popen/run/check_output calls fail before native contact; attempts recorded as zero."
+  },
+  "initialStreamGuards": "Same prohibition plugin with test_stream_recovery.py only;24pass/1failure retained.",
+  "sourceScope": "No new external provider, reference executable, simulator or Windows activity."
+}
