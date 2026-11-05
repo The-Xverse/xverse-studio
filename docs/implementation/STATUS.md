@@ -1,3 +1,28 @@
+# Current clock repair finished; user work pause — 2026-11-05
+
+**71 completed /19 in progress /10 blocked; zero accepted milestones.**
+No additional task closes; T067 remains the latest closure. Source a92f42e repairs
+oversized observation clocks so existing typed failures survive the HTTP and
+callback boundaries. Original receipts/corrupt bytes remain intact and retries
+cannot replay callbacks. No endpoint, permission or physical authority is added.
+
+Final59 selected Linux ASGI cases pass (18 new,41 unchanged), with targeted
+lint/format, architecture and planning-package checks passed. All551 selected
+inputs stay Git-bound and unchanged; six previous UI assets also remain unchanged.
+Original counterexamples and initial repaired cohort are retained separately.
+These are owned in-process fixtures with no equipment, external provider, simulator,
+workload or native-server execution. No new browser/package/performance/full
+regression/Windows/hardware/milestone acceptance is claimed. T073/T074 physical
+contract and runtime/Maestro gaps, T075 integration and wider gates remain open.
+See [evidence and scoped review](../../evidence/studio/M3-probe-clock-overflow-20261105/README.md)
+and ADR-0070.
+
+**The current task is finished. Per the latest user instruction, stop all work
+until the user explicitly resumes. All Windows-related work remains separately
+frozen until the user explicitly lifts that hold.** ADR-0069 records both holds.
+
+## Earlier checkpoints
+
 # Current Linux verification finished; user work pause — 2026-11-04
 
 **71 completed /19 in progress /10 blocked; zero accepted milestones.**

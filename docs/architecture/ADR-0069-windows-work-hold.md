@@ -36,3 +36,8 @@ the user decides to resume. The current task is the scoped observation clock
 failure repair (ADR-0070). Finish its verification and evidence only, then pause
 the goal. Do not start another implementation or verification task. This later
 stop supersedes the general resume; Windows remains independently frozen.
+
+The current repair is now verified on source candidate a92f42e:59 selected Linux
+checks pass on551 stable Git-bound inputs, with targeted static checks passed.
+Evidence is retained in `evidence/studio/M3-probe-clock-overflow-20261105/`.
+No task closes. Stop all work and pause the goal until explicit user resume.

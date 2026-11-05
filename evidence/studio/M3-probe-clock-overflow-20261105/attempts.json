@@ -1,0 +1,745 @@
+{
+  "qualification": "All original failures retained separately; 12 HTTP500s and six generic diagnostics reproduced across two original cohorts. Reformatting new tests preserves assertion ASTs; existing41 tests remain byte-identical. Raw reports and controlled private store contents remain private.",
+  "attempts": [
+    {
+      "label": "original boundary counterexamples",
+      "candidate": "a61f7b7bdf6534aff9f3a451855806fffec96719",
+      "rawPrivateXmlSha256": "d701e831057c135e9ec92882e1a5c11ea7db92ac3203a80c94a9511e76f05166",
+      "counts": {
+        "tests": 14,
+        "failures": 14,
+        "errors": 0,
+        "skipped": 0
+      },
+      "seconds": 2.15,
+      "timestamp": "2026-11-05T05:44:08.763216+00:00",
+      "cases": [
+        {
+          "class": "tests.integration.test_lab_probe_oversized_clock",
+          "name": "test_oversized_backend_clock_refuses_before_receipt_or_provider_contact[options-positive-overflow]",
+          "outcome": "failed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_oversized_clock",
+          "name": "test_oversized_backend_clock_refuses_before_receipt_or_provider_contact[options-negative-overflow]",
+          "outcome": "failed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_oversized_clock",
+          "name": "test_oversized_backend_clock_refuses_before_receipt_or_provider_contact[request-positive-overflow]",
+          "outcome": "failed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_oversized_clock",
+          "name": "test_oversized_backend_clock_refuses_before_receipt_or_provider_contact[request-negative-overflow]",
+          "outcome": "failed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_oversized_clock",
+          "name": "test_oversized_stored_clock_remains_typed_unavailable_without_redelegation[createdAt-positive-overflow]",
+          "outcome": "failed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_oversized_clock",
+          "name": "test_oversized_stored_clock_remains_typed_unavailable_without_redelegation[createdAt-negative-overflow]",
+          "outcome": "failed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_oversized_clock",
+          "name": "test_oversized_stored_clock_remains_typed_unavailable_without_redelegation[deadline-positive-overflow]",
+          "outcome": "failed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_oversized_clock",
+          "name": "test_oversized_stored_clock_remains_typed_unavailable_without_redelegation[deadline-negative-overflow]",
+          "outcome": "failed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_oversized_clock",
+          "name": "test_oversized_stored_clock_remains_typed_unavailable_without_redelegation[receivedAt-positive-overflow]",
+          "outcome": "failed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_oversized_clock",
+          "name": "test_oversized_stored_clock_remains_typed_unavailable_without_redelegation[receivedAt-negative-overflow]",
+          "outcome": "failed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_oversized_clock",
+          "name": "test_oversized_stored_clock_remains_typed_unavailable_without_redelegation[uncertaintySeconds-positive-overflow]",
+          "outcome": "failed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_oversized_clock",
+          "name": "test_oversized_stored_clock_remains_typed_unavailable_without_redelegation[uncertaintySeconds-negative-overflow]",
+          "outcome": "failed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_oversized_clock",
+          "name": "test_oversized_provider_uncertainty_is_invalid_response_not_unknown_io[positive-overflow]",
+          "outcome": "failed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_oversized_clock",
+          "name": "test_oversized_provider_uncertainty_is_invalid_response_not_unknown_io[negative-overflow]",
+          "outcome": "failed"
+        }
+      ]
+    },
+    {
+      "label": "original delegation counterexamples",
+      "candidate": "a61f7b7bdf6534aff9f3a451855806fffec96719",
+      "rawPrivateXmlSha256": "95390432264cc08742d84844395e84e72de1fda483687c9d1f3563f724791815",
+      "counts": {
+        "tests": 4,
+        "failures": 4,
+        "errors": 0,
+        "skipped": 0
+      },
+      "seconds": 0.802,
+      "timestamp": "2026-11-05T05:45:43.315261+00:00",
+      "cases": [
+        {
+          "class": "tests.integration.test_lab_probe_oversized_clock",
+          "name": "test_clock_failure_during_delegation_retains_explicit_diagnostic[before-provider-positive-overflow]",
+          "outcome": "failed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_oversized_clock",
+          "name": "test_clock_failure_during_delegation_retains_explicit_diagnostic[before-provider-negative-overflow]",
+          "outcome": "failed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_oversized_clock",
+          "name": "test_clock_failure_during_delegation_retains_explicit_diagnostic[after-provider-positive-overflow]",
+          "outcome": "failed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_oversized_clock",
+          "name": "test_clock_failure_during_delegation_retains_explicit_diagnostic[after-provider-negative-overflow]",
+          "outcome": "failed"
+        }
+      ]
+    },
+    {
+      "label": "initial repaired cohort",
+      "candidate": "uncommitted repaired code; not final exact-candidate proof",
+      "rawPrivateXmlSha256": "cd0e6fd3e89d579695522b8b3cb224c2729797eeae169fe36c2703e9f5171487",
+      "counts": {
+        "tests": 59,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "seconds": 14.007,
+      "timestamp": "2026-11-05T05:46:14.705246+00:00",
+      "cases": [
+        {
+          "class": "tests.integration.test_lab_probe_oversized_clock",
+          "name": "test_oversized_backend_clock_refuses_before_receipt_or_provider_contact[options-positive-overflow]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_oversized_clock",
+          "name": "test_oversized_backend_clock_refuses_before_receipt_or_provider_contact[options-negative-overflow]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_oversized_clock",
+          "name": "test_oversized_backend_clock_refuses_before_receipt_or_provider_contact[request-positive-overflow]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_oversized_clock",
+          "name": "test_oversized_backend_clock_refuses_before_receipt_or_provider_contact[request-negative-overflow]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_oversized_clock",
+          "name": "test_oversized_stored_clock_remains_typed_unavailable_without_redelegation[createdAt-positive-overflow]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_oversized_clock",
+          "name": "test_oversized_stored_clock_remains_typed_unavailable_without_redelegation[createdAt-negative-overflow]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_oversized_clock",
+          "name": "test_oversized_stored_clock_remains_typed_unavailable_without_redelegation[deadline-positive-overflow]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_oversized_clock",
+          "name": "test_oversized_stored_clock_remains_typed_unavailable_without_redelegation[deadline-negative-overflow]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_oversized_clock",
+          "name": "test_oversized_stored_clock_remains_typed_unavailable_without_redelegation[receivedAt-positive-overflow]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_oversized_clock",
+          "name": "test_oversized_stored_clock_remains_typed_unavailable_without_redelegation[receivedAt-negative-overflow]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_oversized_clock",
+          "name": "test_oversized_stored_clock_remains_typed_unavailable_without_redelegation[uncertaintySeconds-positive-overflow]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_oversized_clock",
+          "name": "test_oversized_stored_clock_remains_typed_unavailable_without_redelegation[uncertaintySeconds-negative-overflow]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_oversized_clock",
+          "name": "test_oversized_provider_uncertainty_is_invalid_response_not_unknown_io[positive-overflow]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_oversized_clock",
+          "name": "test_oversized_provider_uncertainty_is_invalid_response_not_unknown_io[negative-overflow]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_oversized_clock",
+          "name": "test_clock_failure_during_delegation_retains_explicit_diagnostic[before-provider-positive-overflow]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_oversized_clock",
+          "name": "test_clock_failure_during_delegation_retains_explicit_diagnostic[before-provider-negative-overflow]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_oversized_clock",
+          "name": "test_clock_failure_during_delegation_retains_explicit_diagnostic[after-provider-positive-overflow]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_oversized_clock",
+          "name": "test_clock_failure_during_delegation_retains_explicit_diagnostic[after-provider-negative-overflow]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_stock_probe_discovery_does_not_install_a_provider",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_options_identifies_authenticated_principal_without_provider_contact",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_stock_explicit_probe_request_is_actionably_unavailable",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_explicit_observation_is_durable_private_bounded_and_has_no_execution_authority",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_old_lease_descriptor_and_grants_do_not_install_or_authorize_probes",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_stale_scope_or_browser_binding_fields_cannot_contact_provider[body0]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_stale_scope_or_browser_binding_fields_cannot_contact_provider[body1]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_stale_scope_or_browser_binding_fields_cannot_contact_provider[body2]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_stale_scope_or_browser_binding_fields_cannot_contact_provider[body3]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_request_key_is_required_and_changed_payload_conflicts",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_real_origin_csrf_and_session_checks_precede_probe",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_revocation_or_new_grant_generation_cannot_publish_an_observation[before]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_revocation_or_new_grant_generation_cannot_publish_an_observation[during]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_revocation_or_new_grant_generation_cannot_publish_an_observation[regranted]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_timed_out_callback_keeps_capacity_and_late_result_cannot_upgrade_unknown",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_invalid_identity_resources_clock_or_diagnostics_remain_unknown[<lambda>0]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_invalid_identity_resources_clock_or_diagnostics_remain_unknown[<lambda>1]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_invalid_identity_resources_clock_or_diagnostics_remain_unknown[<lambda>2]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_invalid_identity_resources_clock_or_diagnostics_remain_unknown[<lambda>3]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_invalid_identity_resources_clock_or_diagnostics_remain_unknown[<lambda>4]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_private_provider_exception_is_not_public_or_retried",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_persistence_failure_never_fabricates_an_observation_or_redelegates[accepted]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_persistence_failure_never_fabricates_an_observation_or_redelegates[delegated]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_persistence_failure_never_fabricates_an_observation_or_redelegates[completed]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_persistence_failure_never_fabricates_an_observation_or_redelegates[committed-completed]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_restart_and_missing_installation_preserve_original_unknown_receipt",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_operation_route_filters_private_fields_and_rejects_other_owner",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_operation_quota_refuses_before_callback_and_preserves_history",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_negative_observations_and_missing_clock_evidence_remain_distinct[unavailable]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_negative_observations_and_missing_clock_evidence_remain_distinct[unknown]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_changed_installed_binding_refuses_before_contact",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_callback_after_absolute_deadline_is_not_published",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_deadline_expires_during_admission_without_callback_or_inspection_replay",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_invalid_backend_deadline_refuses_before_recording_or_contact[nan]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_invalid_backend_deadline_refuses_before_recording_or_contact[inf]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_invalid_backend_deadline_refuses_before_recording_or_contact[1e+300]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_invalid_backend_deadline_refuses_before_recording_or_contact[True]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_contradictory_stored_observation_fails_closed[<lambda>0]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_contradictory_stored_observation_fails_closed[<lambda>1]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_contradictory_stored_observation_fails_closed[<lambda>2]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_contradictory_stored_observation_fails_closed[<lambda>3]",
+          "outcome": "passed"
+        }
+      ]
+    },
+    {
+      "label": "final exact-candidate cohort",
+      "candidate": "a92f42ed13a4eda4043b95dc1ce2405e50f722d6",
+      "rawPrivateXmlSha256": "5c133c7ca88c70ad3fef34ef8581284dbe56fbb38a5e25e49f2192a561cb1c4c",
+      "counts": {
+        "tests": 59,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "seconds": 7.264,
+      "timestamp": "2026-11-05T05:54:44.488393+00:00",
+      "cases": [
+        {
+          "class": "tests.integration.test_lab_probe_oversized_clock",
+          "name": "test_oversized_backend_clock_refuses_before_receipt_or_provider_contact[options-positive-overflow]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_oversized_clock",
+          "name": "test_oversized_backend_clock_refuses_before_receipt_or_provider_contact[options-negative-overflow]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_oversized_clock",
+          "name": "test_oversized_backend_clock_refuses_before_receipt_or_provider_contact[request-positive-overflow]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_oversized_clock",
+          "name": "test_oversized_backend_clock_refuses_before_receipt_or_provider_contact[request-negative-overflow]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_oversized_clock",
+          "name": "test_oversized_stored_clock_remains_typed_unavailable_without_redelegation[createdAt-positive-overflow]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_oversized_clock",
+          "name": "test_oversized_stored_clock_remains_typed_unavailable_without_redelegation[createdAt-negative-overflow]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_oversized_clock",
+          "name": "test_oversized_stored_clock_remains_typed_unavailable_without_redelegation[deadline-positive-overflow]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_oversized_clock",
+          "name": "test_oversized_stored_clock_remains_typed_unavailable_without_redelegation[deadline-negative-overflow]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_oversized_clock",
+          "name": "test_oversized_stored_clock_remains_typed_unavailable_without_redelegation[receivedAt-positive-overflow]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_oversized_clock",
+          "name": "test_oversized_stored_clock_remains_typed_unavailable_without_redelegation[receivedAt-negative-overflow]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_oversized_clock",
+          "name": "test_oversized_stored_clock_remains_typed_unavailable_without_redelegation[uncertaintySeconds-positive-overflow]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_oversized_clock",
+          "name": "test_oversized_stored_clock_remains_typed_unavailable_without_redelegation[uncertaintySeconds-negative-overflow]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_oversized_clock",
+          "name": "test_oversized_provider_uncertainty_is_invalid_response_not_unknown_io[positive-overflow]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_oversized_clock",
+          "name": "test_oversized_provider_uncertainty_is_invalid_response_not_unknown_io[negative-overflow]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_oversized_clock",
+          "name": "test_clock_failure_during_delegation_retains_explicit_diagnostic[before-provider-positive-overflow]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_oversized_clock",
+          "name": "test_clock_failure_during_delegation_retains_explicit_diagnostic[before-provider-negative-overflow]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_oversized_clock",
+          "name": "test_clock_failure_during_delegation_retains_explicit_diagnostic[after-provider-positive-overflow]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_oversized_clock",
+          "name": "test_clock_failure_during_delegation_retains_explicit_diagnostic[after-provider-negative-overflow]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_stock_probe_discovery_does_not_install_a_provider",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_options_identifies_authenticated_principal_without_provider_contact",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_stock_explicit_probe_request_is_actionably_unavailable",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_explicit_observation_is_durable_private_bounded_and_has_no_execution_authority",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_old_lease_descriptor_and_grants_do_not_install_or_authorize_probes",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_stale_scope_or_browser_binding_fields_cannot_contact_provider[body0]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_stale_scope_or_browser_binding_fields_cannot_contact_provider[body1]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_stale_scope_or_browser_binding_fields_cannot_contact_provider[body2]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_stale_scope_or_browser_binding_fields_cannot_contact_provider[body3]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_request_key_is_required_and_changed_payload_conflicts",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_real_origin_csrf_and_session_checks_precede_probe",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_revocation_or_new_grant_generation_cannot_publish_an_observation[before]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_revocation_or_new_grant_generation_cannot_publish_an_observation[during]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_revocation_or_new_grant_generation_cannot_publish_an_observation[regranted]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_timed_out_callback_keeps_capacity_and_late_result_cannot_upgrade_unknown",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_invalid_identity_resources_clock_or_diagnostics_remain_unknown[<lambda>0]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_invalid_identity_resources_clock_or_diagnostics_remain_unknown[<lambda>1]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_invalid_identity_resources_clock_or_diagnostics_remain_unknown[<lambda>2]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_invalid_identity_resources_clock_or_diagnostics_remain_unknown[<lambda>3]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_invalid_identity_resources_clock_or_diagnostics_remain_unknown[<lambda>4]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_private_provider_exception_is_not_public_or_retried",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_persistence_failure_never_fabricates_an_observation_or_redelegates[accepted]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_persistence_failure_never_fabricates_an_observation_or_redelegates[delegated]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_persistence_failure_never_fabricates_an_observation_or_redelegates[completed]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_persistence_failure_never_fabricates_an_observation_or_redelegates[committed-completed]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_restart_and_missing_installation_preserve_original_unknown_receipt",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_operation_route_filters_private_fields_and_rejects_other_owner",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_operation_quota_refuses_before_callback_and_preserves_history",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_negative_observations_and_missing_clock_evidence_remain_distinct[unavailable]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_negative_observations_and_missing_clock_evidence_remain_distinct[unknown]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_changed_installed_binding_refuses_before_contact",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_callback_after_absolute_deadline_is_not_published",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_deadline_expires_during_admission_without_callback_or_inspection_replay",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_invalid_backend_deadline_refuses_before_recording_or_contact[nan]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_invalid_backend_deadline_refuses_before_recording_or_contact[inf]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_invalid_backend_deadline_refuses_before_recording_or_contact[1e+300]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_invalid_backend_deadline_refuses_before_recording_or_contact[True]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_contradictory_stored_observation_fails_closed[<lambda>0]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_contradictory_stored_observation_fails_closed[<lambda>1]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_contradictory_stored_observation_fails_closed[<lambda>2]",
+          "outcome": "passed"
+        },
+        {
+          "class": "tests.integration.test_lab_probe_http",
+          "name": "test_contradictory_stored_observation_fails_closed[<lambda>3]",
+          "outcome": "passed"
+        }
+      ]
+    }
+  ]
+}
