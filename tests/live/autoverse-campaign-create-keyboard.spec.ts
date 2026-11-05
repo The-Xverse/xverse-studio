@@ -17,7 +17,8 @@ async function tabTo(page: Page, control: Locator) {
         return { name: n.getAttribute("aria-label") || n.closest("label")?.textContent || n.textContent, rect: { left: r.left, right: r.right, top: r.top, bottom: r.bottom }, viewport: { width: innerWidth, height: innerHeight }, outlineStyle: s.outlineStyle, outlineWidth: s.outlineWidth,
           visible: s.outlineStyle !== "none" && parseFloat(s.outlineWidth) > 0 && r.left >= 0 && r.top >= 0 && r.right <= innerWidth + 1 && r.bottom <= innerHeight + 1 };
       });
-      expect(observation, "Native focused control geometry and visible outline").toMatchObject({ visible: true });
+      if (!observation.visible) await test.info().attach("focused-control-geometry", { body: JSON.stringify(observation), contentType: "application/json" });
+      expect(observation.visible, JSON.stringify(observation)).toBe(true);
       return;
     }
     await page.keyboard.press("Tab");
