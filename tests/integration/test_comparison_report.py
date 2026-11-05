@@ -55,6 +55,39 @@ def test_report_preserves_frozen_provenance_and_distinct_result_dimensions():
     assert (left, right) == before
 
 
+@pytest.mark.parametrize('field', ['model', 'deployment', 'parameters', 'artifactIdentities', 'capabilityDigest', 'clockDefinitions'])
+def test_each_required_configuration_difference_keeps_both_recorded_results(field):
+    """Inert decoded fixtures cover the six dimensions explicitly named by FR-059."""
+    left = fixture_run(); right = deepcopy(left)
+    if field == 'model':
+        right['snapshot']['plan']['provenance']['resources'][0]['semanticDigest']['value'] = '9' * 64
+    elif field == 'deployment':
+        right['snapshot']['selection']['deploymentRef'] = 'xdl://fixture/deployment/other'
+        right['snapshot']['plan']['provenance']['resources'][1]['uri'] = 'xdl://fixture/deployment/other'
+    elif field == 'parameters':
+        right['snapshot']['configuration']['gain'] = 2
+    elif field == 'artifactIdentities':
+        right['snapshot']['plan']['bindings'][0]['artifactRefs'][0]['digest'] = 'sha256:' + '9' * 64
+    elif field == 'capabilityDigest':
+        right['snapshot']['capabilityDigest'] = 'sha256:' + '9' * 64
+    else:
+        right['snapshot']['plan']['timeDomains'][0]['rate'] = '2'
+    before = deepcopy((left, right))
+    report = compare_runs(left, right)
+    row = next(row for row in report['configuration'] if row['field'] == field)
+    assert row['status'] == 'different' and row['leftAvailable'] and row['rightAvailable']
+    assert row['left'] != row['right']
+    assert any(difference['field'] == field for difference in report['differences'])
+    assert report['fields'][0]['left']['summary'] == left['observations'][0]['summary']
+    assert report['fields'][0]['right']['summary'] == right['observations'][0]['summary']
+    if field == 'clockDefinitions':
+        assert report['compatible'] is False
+        assert 'CLOCK_DEFINITION_INCOMPATIBLE' in report['diagnostics']
+    else:
+        assert report['compatible'] is True
+    assert (left, right) == before
+
+
 @pytest.mark.parametrize('missing', ['providerIdentity', 'capabilityDigest', 'selection', 'compiler'])
 def test_missing_frozen_facts_are_unavailable_not_equal(missing):
     left = fixture_run(); del left['snapshot'][missing]
