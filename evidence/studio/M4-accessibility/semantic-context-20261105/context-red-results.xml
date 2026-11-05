@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="2" time="5.728" timestamp="2026-11-05T22:30:46.098108+00:00" hostname="master"><testcase classname="tests.integration.test_semantic_validation_context" name="test_changed_admitted_schema_refuses_semantic_rewrite_without_advancing_source[binding]" time="2.782"><failure message="RuntimeError: coroutine raised StopIteration">self = &lt;WorkerThread(AnyIO worker thread, started daemon 126096986973760)&gt;
+
+    def run(self) -&gt; None:
+        with claim_worker_thread(AsyncIOBackend, self.loop):
+            while True:
+                item = self.queue.get()
+                if item is None:
+                    # Shutdown command received
+                    return
+
+                context, func, args, future, cancel_scope = item
+                if not future.cancelled():
+                    result = None
+                    exception: BaseException | None = None
+                    threadlocals.current_cancel_scope = cancel_scope
+                    try:
+&gt;                       result = context.run(func, *args)
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^
+
+.venv/lib/python3.13/site-packages/anyio/_backends/_asyncio.py:1100:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+services/studio-api/src/xverse_studio/api/composition.py:143: in update_binding
+    result = deployments.update_binding(projectId, _expected(request, body.baseRevision), documentId,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;xverse_studio.deployments.Deployments object at 0x72af3f5027b0&gt;
+project_id = 'prj-f6615c63-2b90-4872-bdf8-e384054c56af', revision = 1
+document_id = 'doc-3'
+value = {'bindingId': 'plant-binding', 'realizationClass': 'virtual'}
+provider_id = 'studio.reference'
+
+    def update_binding(self, project_id, revision, document_id, value, provider_id="studio.reference"):
+        if not isinstance(value, dict) or set(value) - {"bindingId", "targetId", "realizationClass", "artifactIds", "resourceIds", "scenarioRef"}:
+            raise Problem("BINDING_INVALID", "Unsupported binding fields.")
+        readiness, resolution = {}, {}
+        def change(project):
+            if document_id not in project["documents"]:
+                raise Problem("NOT_FOUND", "Deployment document not found.", 404)
+            source = self.projects.sources(project)
+            try:
+                updated = semantic_edits(source, [{"kind": "set_binding", "documentId": project["documents"][document_id]["path"], **{key: item for key, item in value.items() if key != "scenarioRef"}}])
+            except XDLRejected as error:
+                raise Problem(error.code, str(error)) from None
+            resource = YAML(typ="safe").load(updated[project["documents"][document_id]["path"]])
+            selection = {"deploymentRef": resource_ref(resource)}
+            if value.get("scenarioRef"):
+                selection["scenarioRef"] = value["scenarioRef"]
+            # Resolve every fallible selection/admission operation before committing
+            # authored bytes. An ambiguous request never advances the revision.
+            compiled = compile_selection(updated, selection, self.adapter)
+            readiness.update(status="blocked", diagnostics=compiled["diagnostics"])
+            if compiled["valid"]:
+                provider = self._provider(provider_id, required=False)
+                if provider is None:
+                    # Draft authoring is independent of runtime installation. No
+                    # descriptor, resolution or fallback execution is invented.
+                    readiness["diagnostics"] = [{
+                        "code": "PROVIDER_UNAVAILABLE", "severity": "error",
+                        "message": "Draft saved. No provider descriptor has this identity; execution compatibility is unavailable.",
+                        "providerId": provider_id,
+                    }]
+                else:
+                    resolution.update(self._resolve(updated, selection["deploymentRef"], provider_id, provider=provider))
+                    try:
+                        if self.configuration_for is None:
+                            reference_configuration(compiled["contributingDocuments"], compiled)
+                        else:
+                            self.configuration_for(provider_id, provider, compiled["contributingDocuments"], compiled)
+                        readiness.update(status="preflight_required", diagnostics=[])
+                    except XDLRejected as error:
+                        readiness["diagnostics"] = [{"code": error.code, "severity": "error", "message": str(error)}]
+                    if resolution["diagnostics"]:
+                        readiness.update(status="blocked", diagnostics=[*readiness["diagnostics"], *resolution["diagnostics"]])
+            return {identifier: {**document, "content": updated[document["path"]]} for identifier, document in project["documents"].items()}
+        project = self.projects.mutate(project_id, revision, change)
+&gt;       variant = next(item for item in self.list(project_id)["items"] if item["documentId"] == document_id)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       StopIteration
+
+services/studio-api/src/xverse_studio/deployments/__init__.py:281: StopIteration
+
+The above exception was the direct cause of the following exception:
+
+client = &lt;starlette.testclient.TestClient object at 0x72af3f31dbe0&gt;
+tmp_path = PosixPath('/tmp/pytest-of-jefferson/pytest-169/test_changed_admitted_schema_r0')
+operation = 'binding'
+
+    @pytest.mark.parametrize("operation", ["binding", "semantic_edit"])
+    def test_changed_admitted_schema_refuses_semantic_rewrite_without_advancing_source(client, tmp_path, operation):
+        adapter = client.app.state.studio.adapter
+        schema = tmp_path / "admitted-experiment.schema.json"
+        original = Path(adapter.profile_schema_paths[0]).read_bytes()
+        schema.write_bytes(original)
+        adapter.profile_schema_paths = (str(schema), *adapter.profile_schema_paths[1:])
+        response = client.post("/api/v1/projects", json={"name": "Exact admitted validation context"})
+        assert response.status_code == 201
+        project = response.json()
+        pid, revision = project["projectId"], project["revision"]
+        sources = client.app.state.studio.projects.sources(project)
+        assert adapter.validate(sources)["valid"]
+        variants = client.get(f"/api/v1/projects/{pid}/deployment-variants").json()
+        variant = variants["items"][0]
+        changed_schema = json.loads(original)
+        changed_schema["not"] = {}
+        schema.write_text(json.dumps(changed_schema))
+        assert not adapter.validate(sources)["valid"]
+        # A fresh default adapter would accept the same bytes. It is the wrong
+        # authority for this application's already-admitted schema selection.
+        assert XDLAdapter().validate(sources)["valid"]
+        before_revisions = client.app.state.studio.store.all("revision")
+        if operation == "binding":
+&gt;           response = client.patch(
+                f"/api/v1/projects/{pid}/deployment-variants/{variant['documentId']}",
+                headers={"If-Match": str(revision)},
+                json={"baseRevision": revision, "bindingId": "plant-binding", "realizationClass": "virtual"},
+            )
+
+tests/integration/test_semantic_validation_context.py:35:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv/lib/python3.13/site-packages/httpx/_client.py:1218: in patch
+    return self.request(
+.venv/lib/python3.13/site-packages/starlette/testclient.py:518: in request
+    return super().request(
+.venv/lib/python3.13/site-packages/httpx/_client.py:825: in request
+    return self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/httpx/_client.py:928: in send
+    raise exc
+.venv/lib/python3.13/site-packages/httpx/_client.py:922: in send
+    response.read()
+.venv/lib/python3.13/site-packages/httpx/_models.py:881: in read
+    self._content = b"".join(self.iter_bytes())
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/httpx/_models.py:897: in iter_bytes
+    for raw_bytes in self.iter_raw():
+                     ^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/httpx/_models.py:951: in iter_raw
+    for raw_stream_bytes in self.stream:
+                            ^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/httpx/_client.py:153: in __iter__
+    for chunk in self._stream:
+                 ^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/starlette/testclient.py:384: in iter_body
+    exit_stack.close()
+[PYTHON_INSTALL]/lib/python3.13/contextlib.py:627: in close
+    self.__exit__(None, None, None)
+[PYTHON_INSTALL]/lib/python3.13/contextlib.py:619: in __exit__
+    raise exc
+[PYTHON_INSTALL]/lib/python3.13/contextlib.py:604: in __exit__
+    if cb(*exc_details):
+       ^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/starlette/testclient.py:399: in close_app
+    raise exception
+.venv/lib/python3.13/site-packages/anyio/from_thread.py:265: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/starlette/testclient.py:366: in run_app
+    await self.app(scope, receive, send)
+.venv/lib/python3.13/site-packages/fastapi/applications.py:1160: in __call__
+    await super().__call__(scope, receive, send)
+.venv/lib/python3.13/site-packages/starlette/applications.py:96: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv/lib/python3.13/site-packages/starlette/middleware/errors.py:186: in __call__
+    raise exc
+.venv/lib/python3.13/site-packages/starlette/middleware/errors.py:164: in __call__
+    await self.app(scope, receive, _send)
+.venv/lib/python3.13/site-packages/starlette/middleware/base.py:203: in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+services/studio-api/src/xverse_studio/api/app.py:262: in boundary
+    return secure_response(await call_next(request), request)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/starlette/middleware/base.py:179: in call_next
+    raise app_exc from app_exc.__cause__ or app_exc.__context__
+.venv/lib/python3.13/site-packages/starlette/middleware/base.py:149: in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+.venv/lib/python3.13/site-packages/starlette/middleware/exceptions.py:63: in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+.venv/lib/python3.13/site-packages/starlette/_exception_handler.py:53: in wrapped_app
+    raise exc
+.venv/lib/python3.13/site-packages/starlette/_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+.venv/lib/python3.13/site-packages/fastapi/middleware/asyncexitstack.py:18: in __call__
+    await self.app(scope, receive, send)
+.venv/lib/python3.13/site-packages/starlette/routing.py:683: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv/lib/python3.13/site-packages/starlette/routing.py:704: in app
+    await route.handle(scope, receive, send)
+.venv/lib/python3.13/site-packages/starlette/routing.py:289: in handle
+    await self.app(scope, receive, send)
+.venv/lib/python3.13/site-packages/fastapi/routing.py:130: in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+.venv/lib/python3.13/site-packages/starlette/_exception_handler.py:53: in wrapped_app
+    raise exc
+.venv/lib/python3.13/site-packages/starlette/_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+.venv/lib/python3.13/site-packages/fastapi/routing.py:116: in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/fastapi/routing.py:670: in app
+    raw_response = await run_endpoint_function(
+.venv/lib/python3.13/site-packages/fastapi/routing.py:326: in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/starlette/concurrency.py:34: in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/anyio/to_thread.py:65: in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+cls = &lt;class 'anyio._backends._asyncio.AsyncIOBackend'&gt;
+func = functools.partial(&lt;function install_composition.&lt;locals&gt;.update_binding at 0x72af3f459260&gt;, projectId='prj-f6615c63-2b...starlette.requests.Request object at 0x72af3f3bcc00&gt;, response=&lt;starlette.responses.Response object at 0x72af3f343100&gt;)
+args = (), abandon_on_cancel = False, limiter = None
+
+    @classmethod
+    async def run_sync_in_worker_thread(  # type: ignore[return]
+        cls,
+        func: Callable[[Unpack[PosArgsT]], T_Retval],
+        args: tuple[Unpack[PosArgsT]],
+        abandon_on_cancel: bool = False,
+        limiter: BaseCapacityLimiter | None = None,
+    ) -&gt; T_Retval:
+        await cls.checkpoint()
+
+        # If this is the first run in this event loop thread, set up the necessary
+        # variables
+        try:
+            idle_workers = _threadpool_idle_workers.get()
+            workers = _threadpool_workers.get()
+        except LookupError:
+            idle_workers = deque()
+            workers = set()
+            _threadpool_idle_workers.set(idle_workers)
+            _threadpool_workers.set(workers)
+
+        async with limiter or cls.current_default_thread_limiter():
+            with CancelScope(shield=not abandon_on_cancel) as scope:
+                future = asyncio.Future[T_Retval]()
+                root_task = find_root_task()
+                if not idle_workers:
+                    worker = WorkerThread(root_task, workers, idle_workers)
+                    worker.start()
+                    workers.add(worker)
+                    root_task.add_done_callback(worker.stop, context=Context())
+                else:
+                    worker = idle_workers.pop()
+
+                    # Prune any other workers that have been idle for MAX_IDLE_TIME
+                    # seconds or longer
+                    now = cls.current_time()
+                    while idle_workers:
+                        if (
+                            now - idle_workers[0].idle_since
+                            &lt; WorkerThread.MAX_IDLE_TIME
+                        ):
+                            break
+
+                        expired_worker = idle_workers.popleft()
+                        expired_worker.root_task.remove_done_callback(
+                            expired_worker.stop
+                        )
+                        expired_worker.stop()
+
+                context = copy_context()
+                context.run(set_current_async_library, None)
+                if abandon_on_cancel or scope._parent_scope is None:
+                    worker_scope = scope
+                else:
+                    worker_scope = scope._parent_scope
+
+                worker.queue.put_nowait((context, func, args, future, worker_scope))
+&gt;               return await future
+                       ^^^^^^^^^^^^
+E               RuntimeError: coroutine raised StopIteration
+
+.venv/lib/python3.13/site-packages/anyio/_backends/_asyncio.py:2706: RuntimeError</failure></testcase><testcase classname="tests.integration.test_semantic_validation_context" name="test_changed_admitted_schema_refuses_semantic_rewrite_without_advancing_source[semantic_edit]" time="2.498"><failure message="AssertionError: {&quot;createdAt&quot;:1793917849.9609334,&quot;documents&quot;:{&quot;doc-0&quot;:{&quot;digest&quot;:&quot;sha256:24431c6056ead9808ce4f0f1293224fccedeea35955060d716b55e0721630bf5&quot;,&quot;format&quot;:&quot;yaml&quot;,&quot;path&quot;:&quot;xdl/controller.xdl.yaml&quot;,&quot;content&quot;:&quot;apiVersion: xverse.io/xdl/v1alpha1\nkind: Component\nmetadata:\n  namespace: org.xverse.studio.process-control\n  name: reference-controller\n  version: 1.0.0\n  description: Studio-owned reference fixture.\n  provenance:\n    source: urn:xverse:studio:reference\n    revision: 1.0.0\n    maturity: prototype\n    limitations:\n    - Owned executable reference only; no external simulator, device or \n      scientific fidelity claim.\nspec:\n  capabilities:\n  - reference-control\n  interfaces:\n  - id: command\n    direction: bidirectional\n    payloadSchema: urn:xverse:studio:normalized-scalar:v1\n    unitSemantics: '1'\n    compatibility: exact\n  endpoints:\n  - id: command-out\n    ownerId: reference-controller\n    interfaceId: command\n    direction: output\n  parameters: []\n&quot;},&quot;doc-1&quot;:{&quot;digest&quot;:&quot;sha256:6d4803b24a7c637257caf0fa37c98787e5d8fd0c642f30019da16ed03f404082&quot;,&quot;format&quot;:&quot;yaml&quot;,&quot;path&quot;:&quot;xdl/plant.xdl.yaml&quot;,&quot;content&quot;:&quot;apiVersion: xverse.io/xdl/v1alpha1\nkind: Component\nmetadata:\n  namespace: org.xverse.studio.process-control\n  name: reference-plant\n  version: 1.0.0\n  description: Studio-owned reference fixture.\n  provenance:\n    source: urn:xverse:studio:reference\n    revision: 1.0.0\n    maturity: prototype\n    limitations:\n    - Owned executable reference only; no external simulator, device or \n      scientific fidelity claim.\nspec:\n  capabilities:\n  - reference-response\n  interfaces:\n  - id: state\n    direction: bidirectional\n    payloadSchema: urn:xverse:studio:normalized-scalar:v1\n    unitSemantics: '1'\n    compatibility: exact\n  endpoints:\n  - id: state-out\n    ownerId: reference-plant\n    interfaceId: state\n    direction: output\n  models:\n  - id: first-order\n    modelKind: behavioral\n    externalRef: urn:xverse:studio:reference:first-order:v1\n    inputs: []\n    outputs: []\n    maturity: prototype\n&quot;},&quot;doc-2&quot;:{&quot;digest&quot;:&quot;sha256:39ae143cd7d851bd6d4f18f7a70b0e0c4d2ebb37dd86f9aa8c17f6d863f48979&quot;,&quot;format&quot;:&quot;yaml&quot;,&quot;path&quot;:&quot;xdl/system.xdl.yaml&quot;,&quot;content&quot;:&quot;apiVersion: xverse.io/xdl/v1alpha1\nkind: System\nmetadata:\n  namespace: org.xverse.studio.process-control\n  name: reference-loop\n  version: 1.0.0\n  description: Explore a normalized process response, tune the setpoint and \n    compare measured reference observations.\n  provenance:\n    source: urn:xverse:studio:reference\n    revision: 1.0.0\n    maturity: prototype\n    limitations:\n    - Owned executable reference only; no external simulator, device or \n      scientific fidelity claim.\nspec:\n  nodes:\n  - id: controller-node\n    roles:\n    - controller\n  - id: plant-node\n    roles:\n    - plant\n  - id: observer-node\n    roles:\n    - observer\n  componentInstances:\n  - id: controller\n    componentRef:\n      apiVersion: xverse.io/xdl/v1alpha1\n      kind: Component\n      namespace: org.xverse.studio.process-control\n      name: reference-controller\n    nodeId: controller-node\n  - id: plant\n    componentRef:\n      apiVersion: xverse.io/xdl/v1alpha1\n      kind: Component\n      namespace: org.xverse.studio.process-control\n      name: reference-plant\n    nodeId: plant-node\n  interfaces:\n  - id: command\n    direction: bidirectional\n    payloadSchema: urn:xverse:studio:normalized-scalar:v1\n    unitSemantics: '1'\n    compatibility: exact\n  - id: state\n    direction: bidirectional\n    payloadSchema: urn:xverse:studio:normalized-scalar:v1\n    unitSemantics: '1'\n    compatibility: exact\n  endpoints:\n  - id: controller-out\n    ownerId: controller\n    interfaceId: command\n    direction: output\n  - id: plant-in\n    ownerId: plant\n    interfaceId: command\n    direction: input\n  - id: plant-out\n    ownerId: plant\n    interfaceId: state\n    direction: output\n  - id: observer-in\n    ownerId: observer-node\n    interfaceId: state\n    direction: input\n  flows:\n  - id: command-flow\n    sourceEndpointId: controller-out\n    destinationEndpointIds:\n    - plant-in\n    interfaceId: command\n    deliveryIntent: ordered\n    timeDomainId: simulation-time\n  - id: state-flow\n    sourceEndpointId: plant-out\n    destinationEndpointIds:\n    - observer-in\n    interfaceId: state\n    deliveryIntent: ordered\n    timeDomainId: simulation-time\n  timeDomains:\n  - id: simulation-time\n    clockClass: simulation\n    epoch: '0'\n    rate: '1'\n    monotonic: true\n  defaultTimeDomainId: simulation-time\n&quot;},&quot;doc-3&quot;:{&quot;digest&quot;:&quot;sha256:45b62e71f362721b13487f90d8fafdbbec53a6cfc7252afc4c639845a0508c45&quot;,&quot;format&quot;:&quot;yaml&quot;,&quot;path&quot;:&quot;xdl/deployment.xdl.yaml&quot;,&quot;content&quot;:&quot;apiVersion: xverse.io/xdl/v1alpha1\nkind: Deployment\nmetadata:\n  namespace: org.xverse.studio.process-control\n  name: local-reference\n  version: 1.0.0\n  description: Studio-owned reference fixture.\n  provenance:\n    source: urn:xverse:studio:reference\n    revision: 1.0.0\n    maturity: prototype\n    limitations:\n    - Owned executable reference only; no external simulator, device or \n      scientific fidelity claim.\nspec:\n  systemRef:\n    apiVersion: xverse.io/xdl/v1alpha1\n    kind: System\n    namespace: org.xverse.studio.process-control\n    name: reference-loop\n  targets:\n  - id: reference-target\n    targetClass: model-unit\n    capabilities:\n    - reference-response\n    lifecycle: &amp;id001\n      prepare: verify-owned-reference\n      ready: reference-ready\n      start: start-reference\n      stop: stop-reference\n      failure: record-reference-failure\n  artifacts:\n  - id: reference-model\n    artifactKind: model\n    version: 1.0.0\n    digest: \n      sha256:5e166063f7d506c139b9c3a9f2545ba2983c82b6035af67e68051e90feef0095\n    sourceRef: urn:xverse:studio:reference:first-order:v1\n    maturity: prototype\n  bindings:\n  - id: controller-binding\n    logicalRef:\n      apiVersion: xverse.io/xdl/v1alpha1\n      kind: System\n      namespace: org.xverse.studio.process-control\n      name: reference-loop\n      element: controller\n    realizationClass: simulated\n    targetId: reference-target\n    artifactIds:\n    - reference-model\n    lifecycle: *id001\n  - id: plant-binding\n    logicalRef:\n      apiVersion: xverse.io/xdl/v1alpha1\n      kind: System\n      namespace: org.xverse.studio.process-control\n      name: reference-loop\n      element: plant\n    realizationClass: simulated\n    targetId: reference-target\n    artifactIds:\n    - reference-model\n    lifecycle: *id001\n  readiness:\n    requiredConditions:\n    - owned-reference-provider-installed\n    - requested-input-equality\n    failurePolicy: fail-fast\n&quot;},&quot;doc-4&quot;:{&quot;digest&quot;:&quot;sha256:f20a37ddae840f8440af6c389a279e655cc5d7a0e065d5a951fd4cc2f3c258fe&quot;,&quot;format&quot;:&quot;yaml&quot;,&quot;path&quot;:&quot;xdl/scenario.xdl.yaml&quot;,&quot;content&quot;:&quot;apiVersion: xverse.io/xdl/v1alpha1\nkind: Scenario\nmetadata:\n  namespace: org.xverse.studio.process-control\n  name: reference-response\n  version: 1.0.0\n  description: Studio-owned reference fixture.\n  provenance:\n    source: urn:xverse:studio:reference\n    revision: 1.0.0\n    maturity: prototype\n    limitations:\n    - Owned executable reference only; no external simulator, device or \n      scientific fidelity claim.\nspec:\n  systemRef:\n    apiVersion: xverse.io/xdl/v1alpha1\n    kind: System\n    namespace: org.xverse.studio.process-control\n    name: reference-loop\n  deploymentRef:\n    apiVersion: xverse.io/xdl/v1alpha1\n    kind: Deployment\n    namespace: org.xverse.studio.process-control\n    name: local-reference\n  initialConditions:\n    stateParameterRef: initial\n  steps:\n  - id: start-reference\n    actionKind: start\n    targetRef:\n      apiVersion: xverse.io/xdl/v1alpha1\n      kind: System\n      namespace: org.xverse.studio.process-control\n      name: reference-loop\n      element: plant\n    timeDomainId: simulation-time\n    schedule:\n      at: 0\n      unit: s\n    action:\n      operation: reference-response\n  observers:\n  - id: state-observer\n    targetRef:\n      apiVersion: xverse.io/xdl/v1alpha1\n      kind: System\n      namespace: org.xverse.studio.process-control\n      name: reference-loop\n      element: state-flow\n    timeDomainId: simulation-time\n    samplingIntent: every fixed model step including initial state\n    payloadSchema: urn:xverse:studio:normalized-scalar:v1\n    unitSemantics: '1'\n    evidenceSinkRef: urn:xverse:studio:reference:evidence\n  metrics:\n  - id: final-state\n    observerIds:\n    - state-observer\n    calculationRef: urn:xverse:studio:metric:last\n    unitSemantics: '1'\n    acceptance: Opaque intent only; use an admitted bounded assertion definition\n      to assess evidence.\n  acceptanceIntent: Exercise the owned reference provider; completion alone is \n    not an assertion pass.\nextensions:\n  io.xverse.experiment:\n    schemaVersion: '0.1'\n    kind: scenario-intent\n    target:\n      apiVersion: xverse.io/xdl/v1alpha1\n      kind: Scenario\n      namespace: org.xverse.studio.process-control\n      name: reference-response\n    seed:\n      value: 7\n      unitSemantics: reference-seed\n    parameters:\n    - id: target\n      valueType: number\n      value: 1.0\n      unitSemantics: '1'\n      mutability: configuration\n    - id: gain\n      valueType: number\n      value: 0.4\n      unitSemantics: '1'\n      mutability: configuration\n    - id: initial\n      valueType: number\n      value: 0.0\n      unitSemantics: '1'\n      mutability: configuration\n    - id: duration\n      valueType: number\n      value: 5.0\n      unitSemantics: s\n      mutability: configuration\n    - id: timestep\n      valueType: number\n      value: 0.1\n      unitSemantics: s\n      mutability: configuration\n    - id: fault\n      valueType: string\n      value: none\n      unitSemantics: '1'\n      mutability: configuration\n    fidelityLimitations:\n    - Normalized first-order scalar response only; no automotive, industrial, \n      simulator or hardware fidelity.\n  io.xverse.studio.experiments:\n    version: '1.0'\n    definitions:\n    - evaluationId: state-within-bound\n      version: '1.0'\n      kind: assertion\n      name: Reference state within bound\n      systemRef: xdl://org.xverse.studio.process-control/system/reference-loop\n      scenarioRef: \n        xdl://org.xverse.studio.process-control/scenario/reference-response\n      coveragePolicy: complete\n      window:\n        clockDomainRef: simulation-time\n        startTick: '0'\n        endTick: '5000000'\n      expression:\n        kind: compare\n        operator: le\n        left:\n          kind: aggregate\n          operator: max\n          input:\n            kind: signal\n            observerRef: state-observer\n            field: value\n        right:\n          kind: literal\n          value: 1.2\n          unit: '1'\n      description: Owned model check only. Changing the time horizon can make \n        coverage indeterminate.\n&quot;},&quot;doc-5&quot;:{&quot;digest&quot;:&quot;sha256:200a94f08c4e98ca311da20cf70d1ff528cff4f4a9b719ea6d890554efb28996&quot;,&quot;format&quot;:&quot;yaml&quot;,&quot;path&quot;:&quot;xdl/profile.xdl.yaml&quot;,&quot;content&quot;:&quot;apiVersion: xverse.io/xdl/v1alpha1\nkind: Profile\nmetadata:\n  namespace: org.xverse.studio.process-control\n  name: experiment-lite\n  version: 0.1.0\n  description: Studio-owned reference fixture.\n  provenance:\n    source: urn:xverse:studio:reference\n    revision: 1.0.0\n    maturity: prototype\n    limitations:\n    - Owned executable reference only; no external simulator, device or \n      scientific fidelity claim.\nspec:\n  extensionNamespace: io.xverse.experiment\n  compatibleApiVersions:\n  - xverse.io/xdl/v1alpha1\n  schemaRef: https://xverse.io/profiles/experiment-lite/v0.1/schema.json\n  documentationRef: https://xverse.io/profiles/experiment-lite/v0.1/README.md\n  conflictPolicy: reject\n&quot;},&quot;doc-6&quot;:{&quot;digest&quot;:&quot;sha256:ec6389d9038a6e999262369d21b7d149d813c8b30310b37260fe84f2efac9fc4&quot;,&quot;format&quot;:&quot;yaml&quot;,&quot;path&quot;:&quot;xdl/evaluation-profile.xdl.yaml&quot;,&quot;content&quot;:&quot;apiVersion: xverse.io/xdl/v1alpha1\nkind: Profile\nmetadata:\n  namespace: org.xverse.studio.process-control\n  name: studio-experiments\n  version: 1.0.0\n  description: Studio-owned reference fixture.\n  provenance:\n    source: urn:xverse:studio:reference\n    revision: 1.0.0\n    maturity: prototype\n    limitations:\n    - Owned executable reference only; no external simulator, device or \n      scientific fidelity claim.\nspec:\n  extensionNamespace: io.xverse.studio.experiments\n  compatibleApiVersions:\n  - xverse.io/xdl/v1alpha1\n  schemaRef: \n    https://schemas.xverse.io/studio/experiments/1.0/evaluation.schema.json\n  documentationRef: urn:xverse:studio:experiments:1.0\n  conflictPolicy: reject\n&quot;}},&quot;layout&quot;:{&quot;positions&quot;:{}},&quot;manifest&quot;:{&quot;artifactLock&quot;:&quot;artifacts.lock.json&quot;,&quot;formatVersion&quot;:&quot;1.0&quot;,&quot;layoutFiles&quot;:[],&quot;name&quot;:&quot;Exact admitted validation context&quot;,&quot;profiles&quot;:[],&quot;projectId&quot;:&quot;prj-8a2fa318-ac9f-4242-ac1f-c475d797329a&quot;,&quot;provenance&quot;:{&quot;blueprintRef&quot;:&quot;reference-process-control&quot;,&quot;evidenceScope&quot;:&quot;owned_reference&quot;,&quot;maturity&quot;:&quot;fixture&quot;},&quot;resources&quot;:[{&quot;format&quot;:&quot;yaml&quot;,&quot;path&quot;:&quot;xdl/controller.xdl.yaml&quot;},{&quot;format&quot;:&quot;yaml&quot;,&quot;path&quot;:&quot;xdl/plant.xdl.yaml&quot;},{&quot;format&quot;:&quot;yaml&quot;,&quot;path&quot;:&quot;xdl/system.xdl.yaml&quot;},{&quot;format&quot;:&quot;yaml&quot;,&quot;path&quot;:&quot;xdl/deployment.xdl.yaml&quot;},{&quot;format&quot;:&quot;yaml&quot;,&quot;path&quot;:&quot;xdl/scenario.xdl.yaml&quot;},{&quot;format&quot;:&quot;yaml&quot;,&quot;path&quot;:&quot;xdl/profile.xdl.yaml&quot;},{&quot;format&quot;:&quot;yaml&quot;,&quot;path&quot;:&quot;xdl/evaluation-profile.xdl.yaml&quot;}]},&quot;name&quot;:&quot;Exact admitted validation context&quot;,&quot;presentationRevision&quot;:1,&quot;projectId&quot;:&quot;prj-8a2fa318-ac9f-4242-ac1f-c475d797329a&quot;,&quot;revision&quot;:2,&quot;supportingFiles&quot;:{},&quot;sourceIntegrity&quot;:&quot;intact&quot;,&quot;sourceDiagnostics&quot;:[]}&#10;assert 200 == 422&#10; +  where 200 = &lt;Response [200 OK]&gt;.status_code">client = &lt;starlette.testclient.TestClient object at 0x72af3ccac550&gt;
+tmp_path = PosixPath('/tmp/pytest-of-jefferson/pytest-169/test_changed_admitted_schema_r1')
+operation = 'semantic_edit'
+
+    @pytest.mark.parametrize("operation", ["binding", "semantic_edit"])
+    def test_changed_admitted_schema_refuses_semantic_rewrite_without_advancing_source(client, tmp_path, operation):
+        adapter = client.app.state.studio.adapter
+        schema = tmp_path / "admitted-experiment.schema.json"
+        original = Path(adapter.profile_schema_paths[0]).read_bytes()
+        schema.write_bytes(original)
+        adapter.profile_schema_paths = (str(schema), *adapter.profile_schema_paths[1:])
+        response = client.post("/api/v1/projects", json={"name": "Exact admitted validation context"})
+        assert response.status_code == 201
+        project = response.json()
+        pid, revision = project["projectId"], project["revision"]
+        sources = client.app.state.studio.projects.sources(project)
+        assert adapter.validate(sources)["valid"]
+        variants = client.get(f"/api/v1/projects/{pid}/deployment-variants").json()
+        variant = variants["items"][0]
+        changed_schema = json.loads(original)
+        changed_schema["not"] = {}
+        schema.write_text(json.dumps(changed_schema))
+        assert not adapter.validate(sources)["valid"]
+        # A fresh default adapter would accept the same bytes. It is the wrong
+        # authority for this application's already-admitted schema selection.
+        assert XDLAdapter().validate(sources)["valid"]
+        before_revisions = client.app.state.studio.store.all("revision")
+        if operation == "binding":
+            response = client.patch(
+                f"/api/v1/projects/{pid}/deployment-variants/{variant['documentId']}",
+                headers={"If-Match": str(revision)},
+                json={"baseRevision": revision, "bindingId": "plant-binding", "realizationClass": "virtual"},
+            )
+        else:
+            response = client.post(
+                f"/api/v1/projects/{pid}/edits",
+                headers={"If-Match": str(revision)},
+                json={"baseRevision": revision, "edits": [{"kind": "set_parameter", "parameterId": "gain", "value": .4}]},
+            )
+&gt;       assert response.status_code == 422, response.text
+E       AssertionError: {"createdAt":1793917849.9609334,"documents":{"doc-0":{"digest":"sha256:24431c6056ead9808ce4f0f1293224fccedeea35955060d716b55e0721630bf5","format":"yaml","path":"xdl/controller.xdl.yaml","content":"apiVersion: xverse.io/xdl/v1alpha1\nkind: Component\nmetadata:\n  namespace: org.xverse.studio.process-control\n  name: reference-controller\n  version: 1.0.0\n  description: Studio-owned reference fixture.\n  provenance:\n    source: urn:xverse:studio:reference\n    revision: 1.0.0\n    maturity: prototype\n    limitations:\n    - Owned executable reference only; no external simulator, device or \n      scientific fidelity claim.\nspec:\n  capabilities:\n  - reference-control\n  interfaces:\n  - id: command\n    direction: bidirectional\n    payloadSchema: urn:xverse:studio:normalized-scalar:v1\n    unitSemantics: '1'\n    compatibility: exact\n  endpoints:\n  - id: command-out\n    ownerId: reference-controller\n    interfaceId: command\n    direction: output\n  parameters: []\n"},"doc-1":{"digest":"sha256:6d4803b24a7c637257caf0fa37c98787e5d8fd0c642f30019da16ed03f404082","format":"yaml","path":"xdl/plant.xdl.yaml","content":"apiVersion: xverse.io/xdl/v1alpha1\nkind: Component\nmetadata:\n  namespace: org.xverse.studio.process-control\n  name: reference-plant\n  version: 1.0.0\n  description: Studio-owned reference fixture.\n  provenance:\n    source: urn:xverse:studio:reference\n    revision: 1.0.0\n    maturity: prototype\n    limitations:\n    - Owned executable reference only; no external simulator, device or \n      scientific fidelity claim.\nspec:\n  capabilities:\n  - reference-response\n  interfaces:\n  - id: state\n    direction: bidirectional\n    payloadSchema: urn:xverse:studio:normalized-scalar:v1\n    unitSemantics: '1'\n    compatibility: exact\n  endpoints:\n  - id: state-out\n    ownerId: reference-plant\n    interfaceId: state\n    direction: output\n  models:\n  - id: first-order\n    modelKind: behavioral\n    externalRef: urn:xverse:studio:reference:first-order:v1\n    inputs: []\n    outputs: []\n    maturity: prototype\n"},"doc-2":{"digest":"sha256:39ae143cd7d851bd6d4f18f7a70b0e0c4d2ebb37dd86f9aa8c17f6d863f48979","format":"yaml","path":"xdl/system.xdl.yaml","content":"apiVersion: xverse.io/xdl/v1alpha1\nkind: System\nmetadata:\n  namespace: org.xverse.studio.process-control\n  name: reference-loop\n  version: 1.0.0\n  description: Explore a normalized process response, tune the setpoint and \n    compare measured reference observations.\n  provenance:\n    source: urn:xverse:studio:reference\n    revision: 1.0.0\n    maturity: prototype\n    limitations:\n    - Owned executable reference only; no external simulator, device or \n      scientific fidelity claim.\nspec:\n  nodes:\n  - id: controller-node\n    roles:\n    - controller\n  - id: plant-node\n    roles:\n    - plant\n  - id: observer-node\n    roles:\n    - observer\n  componentInstances:\n  - id: controller\n    componentRef:\n      apiVersion: xverse.io/xdl/v1alpha1\n      kind: Component\n      namespace: org.xverse.studio.process-control\n      name: reference-controller\n    nodeId: controller-node\n  - id: plant\n    componentRef:\n      apiVersion: xverse.io/xdl/v1alpha1\n      kind: Component\n      namespace: org.xverse.studio.process-control\n      name: reference-plant\n    nodeId: plant-node\n  interfaces:\n  - id: command\n    direction: bidirectional\n    payloadSchema: urn:xverse:studio:normalized-scalar:v1\n    unitSemantics: '1'\n    compatibility: exact\n  - id: state\n    direction: bidirectional\n    payloadSchema: urn:xverse:studio:normalized-scalar:v1\n    unitSemantics: '1'\n    compatibility: exact\n  endpoints:\n  - id: controller-out\n    ownerId: controller\n    interfaceId: command\n    direction: output\n  - id: plant-in\n    ownerId: plant\n    interfaceId: command\n    direction: input\n  - id: plant-out\n    ownerId: plant\n    interfaceId: state\n    direction: output\n  - id: observer-in\n    ownerId: observer-node\n    interfaceId: state\n    direction: input\n  flows:\n  - id: command-flow\n    sourceEndpointId: controller-out\n    destinationEndpointIds:\n    - plant-in\n    interfaceId: command\n    deliveryIntent: ordered\n    timeDomainId: simulation-time\n  - id: state-flow\n    sourceEndpointId: plant-out\n    destinationEndpointIds:\n    - observer-in\n    interfaceId: state\n    deliveryIntent: ordered\n    timeDomainId: simulation-time\n  timeDomains:\n  - id: simulation-time\n    clockClass: simulation\n    epoch: '0'\n    rate: '1'\n    monotonic: true\n  defaultTimeDomainId: simulation-time\n"},"doc-3":{"digest":"sha256:45b62e71f362721b13487f90d8fafdbbec53a6cfc7252afc4c639845a0508c45","format":"yaml","path":"xdl/deployment.xdl.yaml","content":"apiVersion: xverse.io/xdl/v1alpha1\nkind: Deployment\nmetadata:\n  namespace: org.xverse.studio.process-control\n  name: local-reference\n  version: 1.0.0\n  description: Studio-owned reference fixture.\n  provenance:\n    source: urn:xverse:studio:reference\n    revision: 1.0.0\n    maturity: prototype\n    limitations:\n    - Owned executable reference only; no external simulator, device or \n      scientific fidelity claim.\nspec:\n  systemRef:\n    apiVersion: xverse.io/xdl/v1alpha1\n    kind: System\n    namespace: org.xverse.studio.process-control\n    name: reference-loop\n  targets:\n  - id: reference-target\n    targetClass: model-unit\n    capabilities:\n    - reference-response\n    lifecycle: &amp;id001\n      prepare: verify-owned-reference\n      ready: reference-ready\n      start: start-reference\n      stop: stop-reference\n      failure: record-reference-failure\n  artifacts:\n  - id: reference-model\n    artifactKind: model\n    version: 1.0.0\n    digest: \n      sha256:5e166063f7d506c139b9c3a9f2545ba2983c82b6035af67e68051e90feef0095\n    sourceRef: urn:xverse:studio:reference:first-order:v1\n    maturity: prototype\n  bindings:\n  - id: controller-binding\n    logicalRef:\n      apiVersion: xverse.io/xdl/v1alpha1\n      kind: System\n      namespace: org.xverse.studio.process-control\n      name: reference-loop\n      element: controller\n    realizationClass: simulated\n    targetId: reference-target\n    artifactIds:\n    - reference-model\n    lifecycle: *id001\n  - id: plant-binding\n    logicalRef:\n      apiVersion: xverse.io/xdl/v1alpha1\n      kind: System\n      namespace: org.xverse.studio.process-control\n      name: reference-loop\n      element: plant\n    realizationClass: simulated\n    targetId: reference-target\n    artifactIds:\n    - reference-model\n    lifecycle: *id001\n  readiness:\n    requiredConditions:\n    - owned-reference-provider-installed\n    - requested-input-equality\n    failurePolicy: fail-fast\n"},"doc-4":{"digest":"sha256:f20a37ddae840f8440af6c389a279e655cc5d7a0e065d5a951fd4cc2f3c258fe","format":"yaml","path":"xdl/scenario.xdl.yaml","content":"apiVersion: xverse.io/xdl/v1alpha1\nkind: Scenario\nmetadata:\n  namespace: org.xverse.studio.process-control\n  name: reference-response\n  version: 1.0.0\n  description: Studio-owned reference fixture.\n  provenance:\n    source: urn:xverse:studio:reference\n    revision: 1.0.0\n    maturity: prototype\n    limitations:\n    - Owned executable reference only; no external simulator, device or \n      scientific fidelity claim.\nspec:\n  systemRef:\n    apiVersion: xverse.io/xdl/v1alpha1\n    kind: System\n    namespace: org.xverse.studio.process-control\n    name: reference-loop\n  deploymentRef:\n    apiVersion: xverse.io/xdl/v1alpha1\n    kind: Deployment\n    namespace: org.xverse.studio.process-control\n    name: local-reference\n  initialConditions:\n    stateParameterRef: initial\n  steps:\n  - id: start-reference\n    actionKind: start\n    targetRef:\n      apiVersion: xverse.io/xdl/v1alpha1\n      kind: System\n      namespace: org.xverse.studio.process-control\n      name: reference-loop\n      element: plant\n    timeDomainId: simulation-time\n    schedule:\n      at: 0\n      unit: s\n    action:\n      operation: reference-response\n  observers:\n  - id: state-observer\n    targetRef:\n      apiVersion: xverse.io/xdl/v1alpha1\n      kind: System\n      namespace: org.xverse.studio.process-control\n      name: reference-loop\n      element: state-flow\n    timeDomainId: simulation-time\n    samplingIntent: every fixed model step including initial state\n    payloadSchema: urn:xverse:studio:normalized-scalar:v1\n    unitSemantics: '1'\n    evidenceSinkRef: urn:xverse:studio:reference:evidence\n  metrics:\n  - id: final-state\n    observerIds:\n    - state-observer\n    calculationRef: urn:xverse:studio:metric:last\n    unitSemantics: '1'\n    acceptance: Opaque intent only; use an admitted bounded assertion definition\n      to assess evidence.\n  acceptanceIntent: Exercise the owned reference provider; completion alone is \n    not an assertion pass.\nextensions:\n  io.xverse.experiment:\n    schemaVersion: '0.1'\n    kind: scenario-intent\n    target:\n      apiVersion: xverse.io/xdl/v1alpha1\n      kind: Scenario\n      namespace: org.xverse.studio.process-control\n      name: reference-response\n    seed:\n      value: 7\n      unitSemantics: reference-seed\n    parameters:\n    - id: target\n      valueType: number\n      value: 1.0\n      unitSemantics: '1'\n      mutability: configuration\n    - id: gain\n      valueType: number\n      value: 0.4\n      unitSemantics: '1'\n      mutability: configuration\n    - id: initial\n      valueType: number\n      value: 0.0\n      unitSemantics: '1'\n      mutability: configuration\n    - id: duration\n      valueType: number\n      value: 5.0\n      unitSemantics: s\n      mutability: configuration\n    - id: timestep\n      valueType: number\n      value: 0.1\n      unitSemantics: s\n      mutability: configuration\n    - id: fault\n      valueType: string\n      value: none\n      unitSemantics: '1'\n      mutability: configuration\n    fidelityLimitations:\n    - Normalized first-order scalar response only; no automotive, industrial, \n      simulator or hardware fidelity.\n  io.xverse.studio.experiments:\n    version: '1.0'\n    definitions:\n    - evaluationId: state-within-bound\n      version: '1.0'\n      kind: assertion\n      name: Reference state within bound\n      systemRef: xdl://org.xverse.studio.process-control/system/reference-loop\n      scenarioRef: \n        xdl://org.xverse.studio.process-control/scenario/reference-response\n      coveragePolicy: complete\n      window:\n        clockDomainRef: simulation-time\n        startTick: '0'\n        endTick: '5000000'\n      expression:\n        kind: compare\n        operator: le\n        left:\n          kind: aggregate\n          operator: max\n          input:\n            kind: signal\n            observerRef: state-observer\n            field: value\n        right:\n          kind: literal\n          value: 1.2\n          unit: '1'\n      description: Owned model check only. Changing the time horizon can make \n        coverage indeterminate.\n"},"doc-5":{"digest":"sha256:200a94f08c4e98ca311da20cf70d1ff528cff4f4a9b719ea6d890554efb28996","format":"yaml","path":"xdl/profile.xdl.yaml","content":"apiVersion: xverse.io/xdl/v1alpha1\nkind: Profile\nmetadata:\n  namespace: org.xverse.studio.process-control\n  name: experiment-lite\n  version: 0.1.0\n  description: Studio-owned reference fixture.\n  provenance:\n    source: urn:xverse:studio:reference\n    revision: 1.0.0\n    maturity: prototype\n    limitations:\n    - Owned executable reference only; no external simulator, device or \n      scientific fidelity claim.\nspec:\n  extensionNamespace: io.xverse.experiment\n  compatibleApiVersions:\n  - xverse.io/xdl/v1alpha1\n  schemaRef: https://xverse.io/profiles/experiment-lite/v0.1/schema.json\n  documentationRef: https://xverse.io/profiles/experiment-lite/v0.1/README.md\n  conflictPolicy: reject\n"},"doc-6":{"digest":"sha256:ec6389d9038a6e999262369d21b7d149d813c8b30310b37260fe84f2efac9fc4","format":"yaml","path":"xdl/evaluation-profile.xdl.yaml","content":"apiVersion: xverse.io/xdl/v1alpha1\nkind: Profile\nmetadata:\n  namespace: org.xverse.studio.process-control\n  name: studio-experiments\n  version: 1.0.0\n  description: Studio-owned reference fixture.\n  provenance:\n    source: urn:xverse:studio:reference\n    revision: 1.0.0\n    maturity: prototype\n    limitations:\n    - Owned executable reference only; no external simulator, device or \n      scientific fidelity claim.\nspec:\n  extensionNamespace: io.xverse.studio.experiments\n  compatibleApiVersions:\n  - xverse.io/xdl/v1alpha1\n  schemaRef: \n    https://schemas.xverse.io/studio/experiments/1.0/evaluation.schema.json\n  documentationRef: urn:xverse:studio:experiments:1.0\n  conflictPolicy: reject\n"}},"layout":{"positions":{}},"manifest":{"artifactLock":"artifacts.lock.json","formatVersion":"1.0","layoutFiles":[],"name":"Exact admitted validation context","profiles":[],"projectId":"prj-8a2fa318-ac9f-4242-ac1f-c475d797329a","provenance":{"blueprintRef":"reference-process-control","evidenceScope":"owned_reference","maturity":"fixture"},"resources":[{"format":"yaml","path":"xdl/controller.xdl.yaml"},{"format":"yaml","path":"xdl/plant.xdl.yaml"},{"format":"yaml","path":"xdl/system.xdl.yaml"},{"format":"yaml","path":"xdl/deployment.xdl.yaml"},{"format":"yaml","path":"xdl/scenario.xdl.yaml"},{"format":"yaml","path":"xdl/profile.xdl.yaml"},{"format":"yaml","path":"xdl/evaluation-profile.xdl.yaml"}]},"name":"Exact admitted validation context","presentationRevision":1,"projectId":"prj-8a2fa318-ac9f-4242-ac1f-c475d797329a","revision":2,"supportingFiles":{},"sourceIntegrity":"intact","sourceDiagnostics":[]}
+E       assert 200 == 422
+E        +  where 200 = &lt;Response [200 OK]&gt;.status_code
+
+tests/integration/test_semantic_validation_context.py:46: AssertionError</failure></testcase></testsuite></testsuites>

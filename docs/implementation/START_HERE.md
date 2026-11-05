@@ -1,3 +1,14 @@
+Latest active checkpoint — 2026-11-05: source2c92117 preserves the admitted
+validation context across semantic edits/rebinding. Actual changed-schema cases
+now refuse422 without source promotion.65 source contracts,32 deployment/backend
+cases and14 native binding journeys pass;588 Git-bound inputs,83 unchanged frontend
+inputs/6 reproduced assets. Earlier12/2 timeouts remain unexplained; differing
+diagnostic loads support no general latency claim. All current test/infrastructure/
+model/guest handles are terminal, private roots/lock released,8cachedcontainers
+stopped, original host/CARLA preserved. Counts72/18/10,zero accepted milestones;
+no task closure. GoalACTIVE; continue full original remaining plan without checkpoint
+pauses. Windows independentlyFROZEN. See [semantic-context evidence](../../evidence/studio/M4-accessibility/semantic-context-20261105/README.md).
+
 Latest active checkpoint — 2026-11-05: source70b1982 passes8 new preview,
 2 full native campaign create/cancel and8 unchanged retained keyboard journeys,
 586 identical Git-bound inputs/6 reproduced UI assets. Three focus/contrast defects

@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="2" time="5.737" timestamp="2026-11-05T22:32:25.631571+00:00" hostname="master"><testcase classname="tests.integration.test_semantic_validation_context" name="test_changed_admitted_schema_refuses_semantic_rewrite_without_advancing_source[binding]" time="2.825"><failure message="assert (2 == 1)">self = &lt;WorkerThread(AnyIO worker thread, started daemon 135729231275584)&gt;
+
+    def run(self) -&gt; None:
+        with claim_worker_thread(AsyncIOBackend, self.loop):
+            while True:
+                item = self.queue.get()
+                if item is None:
+                    # Shutdown command received
+                    return
+
+                context, func, args, future, cancel_scope = item
+                if not future.cancelled():
+                    result = None
+                    exception: BaseException | None = None
+                    threadlocals.current_cancel_scope = cancel_scope
+                    try:
+&gt;                       result = context.run(func, *args)
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^
+
+.venv/lib/python3.13/site-packages/anyio/_backends/_asyncio.py:1100:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+services/studio-api/src/xverse_studio/api/composition.py:143: in update_binding
+    result = deployments.update_binding(projectId, _expected(request, body.baseRevision), documentId,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;xverse_studio.deployments.Deployments object at 0x7b71edd0e7b0&gt;
+project_id = 'prj-95311610-3663-45b6-8907-9167bca4cac9', revision = 1
+document_id = 'doc-3'
+value = {'bindingId': 'plant-binding', 'realizationClass': 'virtual'}
+provider_id = 'studio.reference'
+
+    def update_binding(self, project_id, revision, document_id, value, provider_id="studio.reference"):
+        if not isinstance(value, dict) or set(value) - {"bindingId", "targetId", "realizationClass", "artifactIds", "resourceIds", "scenarioRef"}:
+            raise Problem("BINDING_INVALID", "Unsupported binding fields.")
+        readiness, resolution = {}, {}
+        def change(project):
+            if document_id not in project["documents"]:
+                raise Problem("NOT_FOUND", "Deployment document not found.", 404)
+            source = self.projects.sources(project)
+            try:
+                updated = semantic_edits(source, [{"kind": "set_binding", "documentId": project["documents"][document_id]["path"], **{key: item for key, item in value.items() if key != "scenarioRef"}}])
+            except XDLRejected as error:
+                raise Problem(error.code, str(error)) from None
+            resource = YAML(typ="safe").load(updated[project["documents"][document_id]["path"]])
+            selection = {"deploymentRef": resource_ref(resource)}
+            if value.get("scenarioRef"):
+                selection["scenarioRef"] = value["scenarioRef"]
+            # Resolve every fallible selection/admission operation before committing
+            # authored bytes. An ambiguous request never advances the revision.
+            compiled = compile_selection(updated, selection, self.adapter)
+            readiness.update(status="blocked", diagnostics=compiled["diagnostics"])
+            if compiled["valid"]:
+                provider = self._provider(provider_id, required=False)
+                if provider is None:
+                    # Draft authoring is independent of runtime installation. No
+                    # descriptor, resolution or fallback execution is invented.
+                    readiness["diagnostics"] = [{
+                        "code": "PROVIDER_UNAVAILABLE", "severity": "error",
+                        "message": "Draft saved. No provider descriptor has this identity; execution compatibility is unavailable.",
+                        "providerId": provider_id,
+                    }]
+                else:
+                    resolution.update(self._resolve(updated, selection["deploymentRef"], provider_id, provider=provider))
+                    try:
+                        if self.configuration_for is None:
+                            reference_configuration(compiled["contributingDocuments"], compiled)
+                        else:
+                            self.configuration_for(provider_id, provider, compiled["contributingDocuments"], compiled)
+                        readiness.update(status="preflight_required", diagnostics=[])
+                    except XDLRejected as error:
+                        readiness["diagnostics"] = [{"code": error.code, "severity": "error", "message": str(error)}]
+                    if resolution["diagnostics"]:
+                        readiness.update(status="blocked", diagnostics=[*readiness["diagnostics"], *resolution["diagnostics"]])
+            return {identifier: {**document, "content": updated[document["path"]]} for identifier, document in project["documents"].items()}
+        project = self.projects.mutate(project_id, revision, change)
+&gt;       variant = next(item for item in self.list(project_id)["items"] if item["documentId"] == document_id)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       StopIteration
+
+services/studio-api/src/xverse_studio/deployments/__init__.py:281: StopIteration
+
+The above exception was the direct cause of the following exception:
+
+client = &lt;starlette.testclient.TestClient object at 0x7b71edb25be0&gt;
+tmp_path = PosixPath('/tmp/pytest-of-jefferson/pytest-170/test_changed_admitted_schema_r0')
+operation = 'binding'
+
+    @pytest.mark.parametrize("operation", ["binding", "semantic_edit"])
+    def test_changed_admitted_schema_refuses_semantic_rewrite_without_advancing_source(client, tmp_path, operation):
+        adapter = client.app.state.studio.adapter
+        schema = tmp_path / "admitted-experiment.schema.json"
+        original = Path(adapter.profile_schema_paths[0]).read_bytes()
+        schema.write_bytes(original)
+        adapter.profile_schema_paths = (str(schema), *adapter.profile_schema_paths[1:])
+        response = client.post("/api/v1/projects", json={"name": "Exact admitted validation context"})
+        assert response.status_code == 201
+        project = response.json()
+        pid, revision = project["projectId"], project["revision"]
+        sources = client.app.state.studio.projects.sources(project)
+        assert adapter.validate(sources)["valid"]
+        variants = client.get(f"/api/v1/projects/{pid}/deployment-variants").json()
+        variant = variants["items"][0]
+        changed_schema = json.loads(original)
+        changed_schema["not"] = {}
+        schema.write_text(json.dumps(changed_schema))
+        assert not adapter.validate(sources)["valid"]
+        # A fresh default adapter would accept the same bytes. It is the wrong
+        # authority for this application's already-admitted schema selection.
+        assert XDLAdapter().validate(sources)["valid"]
+        before_revisions = client.app.state.studio.store.all("revision")
+        if operation == "binding":
+            try:
+&gt;               response = client.patch(
+                    f"/api/v1/projects/{pid}/deployment-variants/{variant['documentId']}",
+                    headers={"If-Match": str(revision)},
+                    json={"baseRevision": revision, "bindingId": "plant-binding", "realizationClass": "virtual"},
+                )
+
+tests/integration/test_semantic_validation_context.py:36:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv/lib/python3.13/site-packages/httpx/_client.py:1218: in patch
+    return self.request(
+.venv/lib/python3.13/site-packages/starlette/testclient.py:518: in request
+    return super().request(
+.venv/lib/python3.13/site-packages/httpx/_client.py:825: in request
+    return self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/httpx/_client.py:928: in send
+    raise exc
+.venv/lib/python3.13/site-packages/httpx/_client.py:922: in send
+    response.read()
+.venv/lib/python3.13/site-packages/httpx/_models.py:881: in read
+    self._content = b"".join(self.iter_bytes())
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/httpx/_models.py:897: in iter_bytes
+    for raw_bytes in self.iter_raw():
+                     ^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/httpx/_models.py:951: in iter_raw
+    for raw_stream_bytes in self.stream:
+                            ^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/httpx/_client.py:153: in __iter__
+    for chunk in self._stream:
+                 ^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/starlette/testclient.py:384: in iter_body
+    exit_stack.close()
+[PYTHON_INSTALL]/lib/python3.13/contextlib.py:627: in close
+    self.__exit__(None, None, None)
+[PYTHON_INSTALL]/lib/python3.13/contextlib.py:619: in __exit__
+    raise exc
+[PYTHON_INSTALL]/lib/python3.13/contextlib.py:604: in __exit__
+    if cb(*exc_details):
+       ^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/starlette/testclient.py:399: in close_app
+    raise exception
+.venv/lib/python3.13/site-packages/anyio/from_thread.py:265: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/starlette/testclient.py:366: in run_app
+    await self.app(scope, receive, send)
+.venv/lib/python3.13/site-packages/fastapi/applications.py:1160: in __call__
+    await super().__call__(scope, receive, send)
+.venv/lib/python3.13/site-packages/starlette/applications.py:96: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv/lib/python3.13/site-packages/starlette/middleware/errors.py:186: in __call__
+    raise exc
+.venv/lib/python3.13/site-packages/starlette/middleware/errors.py:164: in __call__
+    await self.app(scope, receive, _send)
+.venv/lib/python3.13/site-packages/starlette/middleware/base.py:203: in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+services/studio-api/src/xverse_studio/api/app.py:262: in boundary
+    return secure_response(await call_next(request), request)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/starlette/middleware/base.py:179: in call_next
+    raise app_exc from app_exc.__cause__ or app_exc.__context__
+.venv/lib/python3.13/site-packages/starlette/middleware/base.py:149: in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+.venv/lib/python3.13/site-packages/starlette/middleware/exceptions.py:63: in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+.venv/lib/python3.13/site-packages/starlette/_exception_handler.py:53: in wrapped_app
+    raise exc
+.venv/lib/python3.13/site-packages/starlette/_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+.venv/lib/python3.13/site-packages/fastapi/middleware/asyncexitstack.py:18: in __call__
+    await self.app(scope, receive, send)
+.venv/lib/python3.13/site-packages/starlette/routing.py:683: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv/lib/python3.13/site-packages/starlette/routing.py:704: in app
+    await route.handle(scope, receive, send)
+.venv/lib/python3.13/site-packages/starlette/routing.py:289: in handle
+    await self.app(scope, receive, send)
+.venv/lib/python3.13/site-packages/fastapi/routing.py:130: in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+.venv/lib/python3.13/site-packages/starlette/_exception_handler.py:53: in wrapped_app
+    raise exc
+.venv/lib/python3.13/site-packages/starlette/_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+.venv/lib/python3.13/site-packages/fastapi/routing.py:116: in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/fastapi/routing.py:670: in app
+    raw_response = await run_endpoint_function(
+.venv/lib/python3.13/site-packages/fastapi/routing.py:326: in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/starlette/concurrency.py:34: in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.13/site-packages/anyio/to_thread.py:65: in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+cls = &lt;class 'anyio._backends._asyncio.AsyncIOBackend'&gt;
+func = functools.partial(&lt;function install_composition.&lt;locals&gt;.update_binding at 0x7b71edc5d260&gt;, projectId='prj-95311610-36...starlette.requests.Request object at 0x7b71edbc4490&gt;, response=&lt;starlette.responses.Response object at 0x7b71edb4f100&gt;)
+args = (), abandon_on_cancel = False, limiter = None
+
+    @classmethod
+    async def run_sync_in_worker_thread(  # type: ignore[return]
+        cls,
+        func: Callable[[Unpack[PosArgsT]], T_Retval],
+        args: tuple[Unpack[PosArgsT]],
+        abandon_on_cancel: bool = False,
+        limiter: BaseCapacityLimiter | None = None,
+    ) -&gt; T_Retval:
+        await cls.checkpoint()
+
+        # If this is the first run in this event loop thread, set up the necessary
+        # variables
+        try:
+            idle_workers = _threadpool_idle_workers.get()
+            workers = _threadpool_workers.get()
+        except LookupError:
+            idle_workers = deque()
+            workers = set()
+            _threadpool_idle_workers.set(idle_workers)
+            _threadpool_workers.set(workers)
+
+        async with limiter or cls.current_default_thread_limiter():
+            with CancelScope(shield=not abandon_on_cancel) as scope:
+                future = asyncio.Future[T_Retval]()
+                root_task = find_root_task()
+                if not idle_workers:
+                    worker = WorkerThread(root_task, workers, idle_workers)
+                    worker.start()
+                    workers.add(worker)
+                    root_task.add_done_callback(worker.stop, context=Context())
+                else:
+                    worker = idle_workers.pop()
+
+                    # Prune any other workers that have been idle for MAX_IDLE_TIME
+                    # seconds or longer
+                    now = cls.current_time()
+                    while idle_workers:
+                        if (
+                            now - idle_workers[0].idle_since
+                            &lt; WorkerThread.MAX_IDLE_TIME
+                        ):
+                            break
+
+                        expired_worker = idle_workers.popleft()
+                        expired_worker.root_task.remove_done_callback(
+                            expired_worker.stop
+                        )
+                        expired_worker.stop()
+
+                context = copy_context()
+                context.run(set_current_async_library, None)
+                if abandon_on_cancel or scope._parent_scope is None:
+                    worker_scope = scope
+                else:
+                    worker_scope = scope._parent_scope
+
+                worker.queue.put_nowait((context, func, args, future, worker_scope))
+&gt;               return await future
+                       ^^^^^^^^^^^^
+E               RuntimeError: coroutine raised StopIteration
+
+.venv/lib/python3.13/site-packages/anyio/_backends/_asyncio.py:2706: RuntimeError
+
+During handling of the above exception, another exception occurred:
+
+client = &lt;starlette.testclient.TestClient object at 0x7b71edb25be0&gt;
+tmp_path = PosixPath('/tmp/pytest-of-jefferson/pytest-170/test_changed_admitted_schema_r0')
+operation = 'binding'
+
+    @pytest.mark.parametrize("operation", ["binding", "semantic_edit"])
+    def test_changed_admitted_schema_refuses_semantic_rewrite_without_advancing_source(client, tmp_path, operation):
+        adapter = client.app.state.studio.adapter
+        schema = tmp_path / "admitted-experiment.schema.json"
+        original = Path(adapter.profile_schema_paths[0]).read_bytes()
+        schema.write_bytes(original)
+        adapter.profile_schema_paths = (str(schema), *adapter.profile_schema_paths[1:])
+        response = client.post("/api/v1/projects", json={"name": "Exact admitted validation context"})
+        assert response.status_code == 201
+        project = response.json()
+        pid, revision = project["projectId"], project["revision"]
+        sources = client.app.state.studio.projects.sources(project)
+        assert adapter.validate(sources)["valid"]
+        variants = client.get(f"/api/v1/projects/{pid}/deployment-variants").json()
+        variant = variants["items"][0]
+        changed_schema = json.loads(original)
+        changed_schema["not"] = {}
+        schema.write_text(json.dumps(changed_schema))
+        assert not adapter.validate(sources)["valid"]
+        # A fresh default adapter would accept the same bytes. It is the wrong
+        # authority for this application's already-admitted schema selection.
+        assert XDLAdapter().validate(sources)["valid"]
+        before_revisions = client.app.state.studio.store.all("revision")
+        if operation == "binding":
+            try:
+                response = client.patch(
+                    f"/api/v1/projects/{pid}/deployment-variants/{variant['documentId']}",
+                    headers={"If-Match": str(revision)},
+                    json={"baseRevision": revision, "bindingId": "plant-binding", "realizationClass": "virtual"},
+                )
+            except RuntimeError:
+                # Even a failed response must preserve the original source. The
+                # original defect committed before its incompatible list read failed.
+                current = client.get(f"/api/v1/projects/{pid}").json()
+&gt;               assert current["revision"] == revision and current["documents"] == project["documents"]
+E               assert (2 == 1)
+
+tests/integration/test_semantic_validation_context.py:45: AssertionError</failure></testcase><testcase classname="tests.integration.test_semantic_validation_context" name="test_changed_admitted_schema_refuses_semantic_rewrite_without_advancing_source[semantic_edit]" time="2.507"><failure message="assert 200 == 422&#10; +  where 200 = &lt;Response [200 OK]&gt;.status_code">client = &lt;starlette.testclient.TestClient object at 0x7b71df8a8690&gt;
+tmp_path = PosixPath('/tmp/pytest-of-jefferson/pytest-170/test_changed_admitted_schema_r1')
+operation = 'semantic_edit'
+
+    @pytest.mark.parametrize("operation", ["binding", "semantic_edit"])
+    def test_changed_admitted_schema_refuses_semantic_rewrite_without_advancing_source(client, tmp_path, operation):
+        adapter = client.app.state.studio.adapter
+        schema = tmp_path / "admitted-experiment.schema.json"
+        original = Path(adapter.profile_schema_paths[0]).read_bytes()
+        schema.write_bytes(original)
+        adapter.profile_schema_paths = (str(schema), *adapter.profile_schema_paths[1:])
+        response = client.post("/api/v1/projects", json={"name": "Exact admitted validation context"})
+        assert response.status_code == 201
+        project = response.json()
+        pid, revision = project["projectId"], project["revision"]
+        sources = client.app.state.studio.projects.sources(project)
+        assert adapter.validate(sources)["valid"]
+        variants = client.get(f"/api/v1/projects/{pid}/deployment-variants").json()
+        variant = variants["items"][0]
+        changed_schema = json.loads(original)
+        changed_schema["not"] = {}
+        schema.write_text(json.dumps(changed_schema))
+        assert not adapter.validate(sources)["valid"]
+        # A fresh default adapter would accept the same bytes. It is the wrong
+        # authority for this application's already-admitted schema selection.
+        assert XDLAdapter().validate(sources)["valid"]
+        before_revisions = client.app.state.studio.store.all("revision")
+        if operation == "binding":
+            try:
+                response = client.patch(
+                    f"/api/v1/projects/{pid}/deployment-variants/{variant['documentId']}",
+                    headers={"If-Match": str(revision)},
+                    json={"baseRevision": revision, "bindingId": "plant-binding", "realizationClass": "virtual"},
+                )
+            except RuntimeError:
+                # Even a failed response must preserve the original source. The
+                # original defect committed before its incompatible list read failed.
+                current = client.get(f"/api/v1/projects/{pid}").json()
+                assert current["revision"] == revision and current["documents"] == project["documents"]
+                raise
+        else:
+            response = client.post(
+                f"/api/v1/projects/{pid}/edits",
+                headers={"If-Match": str(revision)},
+                json={"baseRevision": revision, "edits": [{"kind": "set_parameter", "parameterId": "gain", "value": .4}]},
+            )
+&gt;       assert response.status_code == 422
+E       assert 200 == 422
+E        +  where 200 = &lt;Response [200 OK]&gt;.status_code
+
+tests/integration/test_semantic_validation_context.py:53: AssertionError</failure></testcase></testsuite></testsuites>

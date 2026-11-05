@@ -1,0 +1,722 @@
+{
+  "scope": "Diagnostic cohorts, not latency SLO or old timeout root-cause proof",
+  "cohorts": {
+    "isolated": {
+      "mode": "function profiling",
+      "sourceCandidate": "f67913c9942aa3617a6bb078cd3a9cbdbb78e7ae",
+      "sourceInputs": 587,
+      "browserStats": {
+        "startTime": "2026-11-05T22:18:38.188Z",
+        "duration": 309627.076,
+        "expected": 14,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "callbackCount": 31,
+      "failedCallbackPattern": [
+        false,
+        false,
+        true,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        true,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "bindingWallSeconds": {
+        "median": 7.215532137,
+        "maximum": 10.964340821
+      },
+      "bindingThreadCpuSeconds": {
+        "median": 6.602849756,
+        "maximum": 10.747856179
+      },
+      "maximumSessionLookupSeconds": 0.485207776,
+      "requests": 429,
+      "capturedDescendantsExited": 23,
+      "unreadableFdSets": 0,
+      "summary": {
+        "scope": "Instrumented contributor host only; no provider registration or runtime/device actions",
+        "limits": {
+          "records": 2048,
+          "profiles": 64
+        },
+        "records": 888,
+        "profiles": 31,
+        "droppedRecords": 0,
+        "droppedProfiles": 0,
+        "writeErrors": 0
+      },
+      "timingSha256": "d694e4fd5be46098c32ab32ef613fc5bcc1e7297d96f7408e09a481781f921be",
+      "background": "No intentionally concurrent test cohort; full profiler overhead",
+      "slowestProfileFunctions": [
+        {
+          "file": "base_events.py",
+          "line": 1981,
+          "function": "_run_once",
+          "primitiveCalls": 222,
+          "calls": 222,
+          "selfSeconds": 0.0038515430000000002,
+          "cumulativeSeconds": 10.640684378000001
+        },
+        {
+          "file": "events.py",
+          "line": 87,
+          "function": "_run",
+          "primitiveCalls": 232,
+          "calls": 232,
+          "selfSeconds": 0.0005440260000000001,
+          "cumulativeSeconds": 10.464174162
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'run' of '_contextvars.Context' objects>",
+          "primitiveCalls": 232,
+          "calls": 232,
+          "selfSeconds": 0.000725267,
+          "cumulativeSeconds": 10.451276171
+        },
+        {
+          "file": "services/studio-api/src/xverse_studio/storage/core.py",
+          "line": 119,
+          "function": "get",
+          "primitiveCalls": 6,
+          "calls": 8,
+          "selfSeconds": 6.509300000000001e-05,
+          "cumulativeSeconds": 10.433737486
+        },
+        {
+          "file": "services/studio-api/src/xverse_studio/projects/service.py",
+          "line": 390,
+          "function": "mutate",
+          "primitiveCalls": 1,
+          "calls": 1,
+          "selfSeconds": 0.00012440700000000002,
+          "cumulativeSeconds": 10.415637435
+        },
+        {
+          "file": "services/studio-api/src/xverse_studio/deployments/__init__.py",
+          "line": 241,
+          "function": "change",
+          "primitiveCalls": 1,
+          "calls": 1,
+          "selfSeconds": 0.0012581010000000002,
+          "cumulativeSeconds": 10.071957233000001
+        },
+        {
+          "file": ".venv/lib/python3.13/site-packages/xverse_xdl/validate.py",
+          "line": 43,
+          "function": "validate_sources",
+          "primitiveCalls": 5,
+          "calls": 5,
+          "selfSeconds": 0.000536785,
+          "cumulativeSeconds": 7.001589551
+        },
+        {
+          "file": ".venv/lib/python3.13/site-packages/ruamel/yaml/parser.py",
+          "line": 137,
+          "function": "check_event",
+          "primitiveCalls": 118562,
+          "calls": 118562,
+          "selfSeconds": 0.07384864000000001,
+          "cumulativeSeconds": 5.964320769
+        },
+        {
+          "file": ".venv/lib/python3.13/site-packages/ruamel/yaml/composer.py",
+          "line": 94,
+          "function": "compose_document",
+          "primitiveCalls": 109,
+          "calls": 109,
+          "selfSeconds": 0.000224364,
+          "cumulativeSeconds": 5.317132145
+        },
+        {
+          "file": ".venv/lib/python3.13/site-packages/ruamel/yaml/composer.py",
+          "line": 110,
+          "function": "compose_node",
+          "primitiveCalls": 109,
+          "calls": 34954,
+          "selfSeconds": 0.113956493,
+          "cumulativeSeconds": 5.315293793
+        },
+        {
+          "file": ".venv/lib/python3.13/site-packages/ruamel/yaml/composer.py",
+          "line": 203,
+          "function": "compose_mapping_node",
+          "primitiveCalls": 109,
+          "calls": 3470,
+          "selfSeconds": 0.040534889000000004,
+          "cumulativeSeconds": 5.307127475000001
+        },
+        {
+          "file": "services/studio-api/src/xverse_studio/xdl/__init__.py",
+          "line": 136,
+          "function": "validate",
+          "primitiveCalls": 6,
+          "calls": 6,
+          "selfSeconds": 0.0018925360000000002,
+          "cumulativeSeconds": 4.491894317
+        },
+        {
+          "file": ".venv/lib/python3.13/site-packages/ruamel/yaml/composer.py",
+          "line": 169,
+          "function": "compose_sequence_node",
+          "primitiveCalls": 509,
+          "calls": 1134,
+          "selfSeconds": 0.009650691000000001,
+          "cumulativeSeconds": 4.445236126
+        },
+        {
+          "file": "services/studio-api/src/xverse_studio/xdl/__init__.py",
+          "line": 167,
+          "function": "_validate_public",
+          "primitiveCalls": 3,
+          "calls": 3,
+          "selfSeconds": 0.0006094560000000001,
+          "cumulativeSeconds": 4.293440276
+        },
+        {
+          "file": ".venv/lib/python3.13/site-packages/xverse_xdl/loader.py",
+          "line": 172,
+          "function": "_parse_one",
+          "primitiveCalls": 45,
+          "calls": 45,
+          "selfSeconds": 0.017553755,
+          "cumulativeSeconds": 3.933319377
+        },
+        {
+          "file": "services/studio-api/src/xverse_studio/deployments/__init__.py",
+          "line": 26,
+          "function": "compile_selection",
+          "primitiveCalls": 1,
+          "calls": 1,
+          "selfSeconds": 8.0864e-05,
+          "cumulativeSeconds": 3.866264503
+        },
+        {
+          "file": ".venv/lib/python3.13/site-packages/xverse_xdl/validate.py",
+          "line": 18,
+          "function": "_validate_documents",
+          "primitiveCalls": 5,
+          "calls": 5,
+          "selfSeconds": 0.000208681,
+          "cumulativeSeconds": 3.7193119300000004
+        },
+        {
+          "file": "services/studio-api/src/xverse_studio/xdl/__init__.py",
+          "line": 189,
+          "function": "compile",
+          "primitiveCalls": 2,
+          "calls": 2,
+          "selfSeconds": 0.001370233,
+          "cumulativeSeconds": 3.483934134
+        },
+        {
+          "file": "services/studio-api/src/xverse_studio/xdl/edits.py",
+          "line": 64,
+          "function": "semantic_edits",
+          "primitiveCalls": 1,
+          "calls": 1,
+          "selfSeconds": 6.2029e-05,
+          "cumulativeSeconds": 3.4283651030000004
+        },
+        {
+          "file": ".venv/lib/python3.13/site-packages/xverse_xdl/loader.py",
+          "line": 256,
+          "function": "load_sources",
+          "primitiveCalls": 5,
+          "calls": 5,
+          "selfSeconds": 0.00087482,
+          "cumulativeSeconds": 3.285011581
+        },
+        {
+          "file": ".venv/lib/python3.13/site-packages/xverse_xdl/experiment_plan.py",
+          "line": 1875,
+          "function": "compile_experiment_sources",
+          "primitiveCalls": 2,
+          "calls": 2,
+          "selfSeconds": 0.000225863,
+          "cumulativeSeconds": 3.060501647
+        },
+        {
+          "file": ".venv/lib/python3.13/site-packages/ruamel/yaml/parser.py",
+          "line": 627,
+          "function": "parse_block_mapping_value",
+          "primitiveCalls": 22244,
+          "calls": 22244,
+          "selfSeconds": 0.080923731,
+          "cumulativeSeconds": 2.9985802830000003
+        },
+        {
+          "file": ".venv/lib/python3.13/site-packages/ruamel/yaml/main.py",
+          "line": 438,
+          "function": "load",
+          "primitiveCalls": 64,
+          "calls": 64,
+          "selfSeconds": 0.003721906,
+          "cumulativeSeconds": 2.9045185
+        },
+        {
+          "file": ".venv/lib/python3.13/site-packages/ruamel/yaml/constructor.py",
+          "line": 115,
+          "function": "get_single_data",
+          "primitiveCalls": 64,
+          "calls": 64,
+          "selfSeconds": 0.000132179,
+          "cumulativeSeconds": 2.8988915360000003
+        },
+        {
+          "file": ".venv/lib/python3.13/site-packages/ruamel/yaml/scanner.py",
+          "line": 211,
+          "function": "fetch_more_tokens",
+          "primitiveCalls": 70306,
+          "calls": 70306,
+          "selfSeconds": 0.16850124000000002,
+          "cumulativeSeconds": 2.857661545
+        }
+      ]
+    },
+    "concurrent": {
+      "mode": "lightweight clocks only",
+      "sourceCandidate": "98c2c985f5339d2ca6c4f50c5be281360257b619",
+      "sourceInputs": 587,
+      "browserStats": {
+        "startTime": "2026-11-05T22:24:34.069Z",
+        "duration": 159936.61,
+        "expected": 14,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "callbackCount": 31,
+      "failedCallbackPattern": [
+        false,
+        false,
+        true,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        true,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "bindingWallSeconds": {
+        "median": 2.251404306,
+        "maximum": 10.042096107
+      },
+      "bindingThreadCpuSeconds": {
+        "median": 1.853740725,
+        "maximum": 2.929340037
+      },
+      "maximumSessionLookupSeconds": 0.342117638,
+      "requests": 426,
+      "capturedDescendantsExited": 23,
+      "unreadableFdSets": 0,
+      "summary": {
+        "scope": "Instrumented contributor host only; no provider registration or runtime/device actions",
+        "profilingEnabled": false,
+        "limits": {
+          "records": 2048,
+          "profiles": 64
+        },
+        "records": 882,
+        "profiles": 0,
+        "droppedRecords": 0,
+        "droppedProfiles": 0,
+        "writeErrors": 0
+      },
+      "timingSha256": "e9350e130c8b0827eaa75cd874083d9b77c7dce93b68a742292f3cd8b5480b37",
+      "background": "Reviewed32 source/contract/API checks overlap later native cases; started after first5 passed"
+    },
+    "fixed": {
+      "mode": "lightweight clocks only",
+      "sourceCandidate": "2c92117098c7b2ce43049a25cf9eda06316fa719",
+      "sourceInputs": 588,
+      "browserStats": {
+        "startTime": "2026-11-05T22:36:49.044Z",
+        "duration": 147054.292,
+        "expected": 14,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "callbackCount": 31,
+      "failedCallbackPattern": [
+        false,
+        false,
+        true,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        true,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "bindingWallSeconds": {
+        "median": 1.487310863,
+        "maximum": 5.642759966
+      },
+      "bindingThreadCpuSeconds": {
+        "median": 0.968939315,
+        "maximum": 2.047695558
+      },
+      "maximumSessionLookupSeconds": 0.697281617,
+      "requests": 424,
+      "capturedDescendantsExited": 23,
+      "unreadableFdSets": 0,
+      "summary": {
+        "scope": "Instrumented contributor host only; no provider registration or runtime/device actions",
+        "profilingEnabled": false,
+        "limits": {
+          "records": 2048,
+          "profiles": 64
+        },
+        "records": 878,
+        "profiles": 0,
+        "droppedRecords": 0,
+        "droppedProfiles": 0,
+        "writeErrors": 0
+      },
+      "timingSha256": "acfc143ccd2205823fd2ad638ccf2e4748751ebdeab760105620dd59099c39ba",
+      "background": "65 source/contract/cache/schema checks overlap earlier native cases; successor32 run separately"
+    }
+  },
+  "profileSources": [
+    {
+      "source": ".studio-local/browser-tests/recorded-payloads-\u03a9-fe6bbb01da5e434da870c09473449e0e/binding-timing/binding-0001.pstats",
+      "sha256": "c9c234a762661c7fa816078c37495d99a9e8f6bf8726250d977b9ea1b22548b0",
+      "bytes": 279718,
+      "retention": "Raw binary remains private; normalized representative function statistics retained separately"
+    },
+    {
+      "source": ".studio-local/browser-tests/recorded-payloads-\u03a9-fe6bbb01da5e434da870c09473449e0e/binding-timing/binding-0002.pstats",
+      "sha256": "77cefebe285f31bf22e5a6daca9c80ff8e10613faf18db41253295a2e8cbfcf2",
+      "bytes": 223362,
+      "retention": "Raw binary remains private; normalized representative function statistics retained separately"
+    },
+    {
+      "source": ".studio-local/browser-tests/recorded-payloads-\u03a9-fe6bbb01da5e434da870c09473449e0e/binding-timing/binding-0003.pstats",
+      "sha256": "a87618d54fb3ac3365fdb026da98335a22de4a2357e5428af6d0f96ac8f9276d",
+      "bytes": 175675,
+      "retention": "Raw binary remains private; normalized representative function statistics retained separately"
+    },
+    {
+      "source": ".studio-local/browser-tests/recorded-payloads-\u03a9-fe6bbb01da5e434da870c09473449e0e/binding-timing/binding-0004.pstats",
+      "sha256": "7de5a3b3024404c01db4df75ad1a88216684697282d78d1b8a0024ada64264a1",
+      "bytes": 222033,
+      "retention": "Raw binary remains private; normalized representative function statistics retained separately"
+    },
+    {
+      "source": ".studio-local/browser-tests/recorded-payloads-\u03a9-fe6bbb01da5e434da870c09473449e0e/binding-timing/binding-0005.pstats",
+      "sha256": "473ebf152ca674f81eb62c2fe346f38ad2ce89e3a5138371976d7b2b1eeb685a",
+      "bytes": 269523,
+      "retention": "Raw binary remains private; normalized representative function statistics retained separately"
+    },
+    {
+      "source": ".studio-local/browser-tests/recorded-payloads-\u03a9-fe6bbb01da5e434da870c09473449e0e/binding-timing/binding-0006.pstats",
+      "sha256": "950ef6d85c4a85ba1121ba3b4323bdd2ee140b01ac8c0eb44872abb2e217b49a",
+      "bytes": 18067,
+      "retention": "Raw binary remains private; normalized representative function statistics retained separately"
+    },
+    {
+      "source": ".studio-local/browser-tests/recorded-payloads-\u03a9-fe6bbb01da5e434da870c09473449e0e/binding-timing/binding-0007.pstats",
+      "sha256": "8f83a506feb8d8793e67efe7fa3e2cfc4de783cdb2f1ec41debf8a962b99ee82",
+      "bytes": 227168,
+      "retention": "Raw binary remains private; normalized representative function statistics retained separately"
+    },
+    {
+      "source": ".studio-local/browser-tests/recorded-payloads-\u03a9-fe6bbb01da5e434da870c09473449e0e/binding-timing/binding-0008.pstats",
+      "sha256": "701165d48ce763933be0e021d383c2ee606c5657b66e0e64ce5a26015bdd7202",
+      "bytes": 233389,
+      "retention": "Raw binary remains private; normalized representative function statistics retained separately"
+    },
+    {
+      "source": ".studio-local/browser-tests/recorded-payloads-\u03a9-fe6bbb01da5e434da870c09473449e0e/binding-timing/binding-0009.pstats",
+      "sha256": "4c715b656547d32997d9ffe529162c1275a2b449f09924233ca830422933f410",
+      "bytes": 225114,
+      "retention": "Raw binary remains private; normalized representative function statistics retained separately"
+    },
+    {
+      "source": ".studio-local/browser-tests/recorded-payloads-\u03a9-fe6bbb01da5e434da870c09473449e0e/binding-timing/binding-0010.pstats",
+      "sha256": "7573f573b7c771953afb77eed65e7e59938b439df23acbb7226a79c2ec48c669",
+      "bytes": 240308,
+      "retention": "Raw binary remains private; normalized representative function statistics retained separately"
+    },
+    {
+      "source": ".studio-local/browser-tests/recorded-payloads-\u03a9-fe6bbb01da5e434da870c09473449e0e/binding-timing/binding-0011.pstats",
+      "sha256": "738c7fb98b9d439db78b577edb0fd1855a8f162a85ad19dd6859337bd355f2aa",
+      "bytes": 225966,
+      "retention": "Raw binary remains private; normalized representative function statistics retained separately"
+    },
+    {
+      "source": ".studio-local/browser-tests/recorded-payloads-\u03a9-fe6bbb01da5e434da870c09473449e0e/binding-timing/binding-0012.pstats",
+      "sha256": "d6277366dd8a54afb6092b335a90c7c49384be0667f3ffdabca0ea44bf79d4be",
+      "bytes": 234288,
+      "retention": "Raw binary remains private; normalized representative function statistics retained separately"
+    },
+    {
+      "source": ".studio-local/browser-tests/recorded-payloads-\u03a9-fe6bbb01da5e434da870c09473449e0e/binding-timing/binding-0013.pstats",
+      "sha256": "7f6cd4cc554b7675058ddb963c5d35fec8776dbe19f8fb1761893cd0385b9bae",
+      "bytes": 224064,
+      "retention": "Raw binary remains private; normalized representative function statistics retained separately"
+    },
+    {
+      "source": ".studio-local/browser-tests/recorded-payloads-\u03a9-fe6bbb01da5e434da870c09473449e0e/binding-timing/binding-0014.pstats",
+      "sha256": "d6141bc6fe7acfc557246bcee6b687463d8030e2d453378b8a17adf78c6e8ef5",
+      "bytes": 278340,
+      "retention": "Raw binary remains private; normalized representative function statistics retained separately"
+    },
+    {
+      "source": ".studio-local/browser-tests/recorded-payloads-\u03a9-fe6bbb01da5e434da870c09473449e0e/binding-timing/binding-0015.pstats",
+      "sha256": "d14408b20d555a771e3b82938461c18aab61a3a505de59b48cd8504b553751be",
+      "bytes": 227716,
+      "retention": "Raw binary remains private; normalized representative function statistics retained separately"
+    },
+    {
+      "source": ".studio-local/browser-tests/recorded-payloads-\u03a9-fe6bbb01da5e434da870c09473449e0e/binding-timing/binding-0016.pstats",
+      "sha256": "a50b1b2565263d80b9011da2109dfa0eff002f5121b70d76bf1f7636642c693d",
+      "bytes": 302179,
+      "retention": "Raw binary remains private; normalized representative function statistics retained separately"
+    },
+    {
+      "source": ".studio-local/browser-tests/recorded-payloads-\u03a9-fe6bbb01da5e434da870c09473449e0e/binding-timing/binding-0017.pstats",
+      "sha256": "884b47d377328cece2727bcfe79d19a5fd598c23e4469dee20856cde52ba14c4",
+      "bytes": 228626,
+      "retention": "Raw binary remains private; normalized representative function statistics retained separately"
+    },
+    {
+      "source": ".studio-local/browser-tests/recorded-payloads-\u03a9-fe6bbb01da5e434da870c09473449e0e/binding-timing/binding-0018.pstats",
+      "sha256": "ea22b0e3f0089a8a04cb25e25069810523b063c09b03ec5f909119f50cf2af54",
+      "bytes": 286810,
+      "retention": "Raw binary remains private; normalized representative function statistics retained separately"
+    },
+    {
+      "source": ".studio-local/browser-tests/recorded-payloads-\u03a9-fe6bbb01da5e434da870c09473449e0e/binding-timing/binding-0019.pstats",
+      "sha256": "5e6f573c479d2efb2ab178ab6924bf731eb613b710fb42c0b9b01293d6ae278c",
+      "bytes": 176301,
+      "retention": "Raw binary remains private; normalized representative function statistics retained separately"
+    },
+    {
+      "source": ".studio-local/browser-tests/recorded-payloads-\u03a9-fe6bbb01da5e434da870c09473449e0e/binding-timing/binding-0020.pstats",
+      "sha256": "2a93593ad021b1ef4416a56ecf711015beec514af1780e1113f5b665f0dcbd9d",
+      "bytes": 222316,
+      "retention": "Raw binary remains private; normalized representative function statistics retained separately"
+    },
+    {
+      "source": ".studio-local/browser-tests/recorded-payloads-\u03a9-fe6bbb01da5e434da870c09473449e0e/binding-timing/binding-0021.pstats",
+      "sha256": "0e0eb544e0e8dbec4fef13af9243f04b4ce96b6c86908159d0a5ac241b26ab13",
+      "bytes": 234314,
+      "retention": "Raw binary remains private; normalized representative function statistics retained separately"
+    },
+    {
+      "source": ".studio-local/browser-tests/recorded-payloads-\u03a9-fe6bbb01da5e434da870c09473449e0e/binding-timing/binding-0022.pstats",
+      "sha256": "6b6f1975ff08e8efaf11b1445e084685e6d4a30e1fe09e200757e7ec3781b10c",
+      "bytes": 24168,
+      "retention": "Raw binary remains private; normalized representative function statistics retained separately"
+    },
+    {
+      "source": ".studio-local/browser-tests/recorded-payloads-\u03a9-fe6bbb01da5e434da870c09473449e0e/binding-timing/binding-0023.pstats",
+      "sha256": "4f66a9a8b270131014c96becd47e2613c152d17470a77fdc2638d674e53839ab",
+      "bytes": 221626,
+      "retention": "Raw binary remains private; normalized representative function statistics retained separately"
+    },
+    {
+      "source": ".studio-local/browser-tests/recorded-payloads-\u03a9-fe6bbb01da5e434da870c09473449e0e/binding-timing/binding-0024.pstats",
+      "sha256": "c84112fe6c5e0f5661bfed1d88138d7fe232d4552e73a0fd4ace5c454f52b82d",
+      "bytes": 235770,
+      "retention": "Raw binary remains private; normalized representative function statistics retained separately"
+    },
+    {
+      "source": ".studio-local/browser-tests/recorded-payloads-\u03a9-fe6bbb01da5e434da870c09473449e0e/binding-timing/binding-0025.pstats",
+      "sha256": "8663524ad91a2cfbf8bcb2e4d8664432a05a243491e733b2f9d9c7ef7262a0e3",
+      "bytes": 226083,
+      "retention": "Raw binary remains private; normalized representative function statistics retained separately"
+    },
+    {
+      "source": ".studio-local/browser-tests/recorded-payloads-\u03a9-fe6bbb01da5e434da870c09473449e0e/binding-timing/binding-0026.pstats",
+      "sha256": "403682480c46c8b3443f855afcf2f1de44b143539fcfb34af45ab1ffd917a3b9",
+      "bytes": 234778,
+      "retention": "Raw binary remains private; normalized representative function statistics retained separately"
+    },
+    {
+      "source": ".studio-local/browser-tests/recorded-payloads-\u03a9-fe6bbb01da5e434da870c09473449e0e/binding-timing/binding-0027.pstats",
+      "sha256": "16fa4d1fb1301ea90eb5c7784ca1d5333318b683f9a9480dd4e00f6f5e0f339c",
+      "bytes": 229268,
+      "retention": "Raw binary remains private; normalized representative function statistics retained separately"
+    },
+    {
+      "source": ".studio-local/browser-tests/recorded-payloads-\u03a9-fe6bbb01da5e434da870c09473449e0e/binding-timing/binding-0028.pstats",
+      "sha256": "84bafd580f2928cebe7dded41ccebe7eb9708ce2993a20f3425576acccf80f46",
+      "bytes": 235700,
+      "retention": "Raw binary remains private; normalized representative function statistics retained separately"
+    },
+    {
+      "source": ".studio-local/browser-tests/recorded-payloads-\u03a9-fe6bbb01da5e434da870c09473449e0e/binding-timing/binding-0029.pstats",
+      "sha256": "1930ffd69aa4f35be0347429a4c08bdc73ee76103a45e3c6d832a4ee79da39ee",
+      "bytes": 228696,
+      "retention": "Raw binary remains private; normalized representative function statistics retained separately"
+    },
+    {
+      "source": ".studio-local/browser-tests/recorded-payloads-\u03a9-fe6bbb01da5e434da870c09473449e0e/binding-timing/binding-0030.pstats",
+      "sha256": "7e4d7b418f71bf265b83507654a41894d7c9eab80a9ddd9596776fcc9ea1ae3d",
+      "bytes": 236773,
+      "retention": "Raw binary remains private; normalized representative function statistics retained separately"
+    },
+    {
+      "source": ".studio-local/browser-tests/recorded-payloads-\u03a9-fe6bbb01da5e434da870c09473449e0e/binding-timing/binding-0031.pstats",
+      "sha256": "34ee33257362a63d759241226f1589e40d2d0ea7f31ad6ad172d7fc356739271",
+      "bytes": 230201,
+      "retention": "Raw binary remains private; normalized representative function statistics retained separately"
+    }
+  ],
+  "limits": "Different background workloads and profiler modes prevent a controlled latency or causality claim. The previous12/2 failures are retained and unresolved.",
+  "sdkIdentity": {
+    "package": "xverse-xdl",
+    "version": "0.4.0",
+    "revision": "12615d402ba16cde3cd48c55b70aca464ea90261",
+    "apiVersions": [
+      "xverse.io/xdl/v1alpha1"
+    ],
+    "compilerPlanVersion": "1",
+    "scope": "offline_validation_and_declared_intent_compilation"
+  },
+  "validationCacheLimits": {
+    "entries": 8,
+    "resultBytes": 8388608,
+    "sourceBytes": 8388608,
+    "singleSourceBytes": 2097152
+  },
+  "python": "3.13.13",
+  "currentCandidate": "2c92117098c7b2ce43049a25cf9eda06316fa719",
+  "pytest": {
+    "context-red": [
+      {
+        "tests": "2",
+        "failures": "2",
+        "errors": "0",
+        "skipped": "0",
+        "time": "5.728",
+        "timestamp": "2026-11-05T22:30:46.098108+00:00"
+      }
+    ],
+    "context-red-observed": [
+      {
+        "tests": "2",
+        "failures": "2",
+        "errors": "0",
+        "skipped": "0",
+        "time": "5.737",
+        "timestamp": "2026-11-05T22:32:25.631571+00:00"
+      }
+    ],
+    "context-green": [
+      {
+        "tests": "8",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0",
+        "time": "11.407",
+        "timestamp": "2026-11-05T22:33:34.457374+00:00"
+      }
+    ],
+    "contracts": [
+      {
+        "tests": "65",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0",
+        "time": "58.931",
+        "timestamp": "2026-11-05T22:36:49.147261+00:00"
+      }
+    ],
+    "concurrent-backend": [
+      {
+        "tests": "32",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0",
+        "time": "76.326",
+        "timestamp": "2026-11-05T22:25:55.416060+00:00"
+      }
+    ],
+    "fixed-backend": [
+      {
+        "tests": "32",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0",
+        "time": "75.401",
+        "timestamp": "2026-11-05T22:39:46.839602+00:00"
+      }
+    ]
+  }
+}

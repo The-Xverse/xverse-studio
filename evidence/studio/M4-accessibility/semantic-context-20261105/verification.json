@@ -1,0 +1,514 @@
+{
+  "candidate": "2c92117098c7b2ce43049a25cf9eda06316fa719",
+  "sourceInputs": 588,
+  "sourceMatchesGitAndFinalNativeBackendCohorts": true,
+  "uiFiles": 6,
+  "uiMatchesEarlierExactReproduction": true,
+  "productionFrontendUnchanged": true,
+  "newSchemaRollbackCases": 2,
+  "schemaAndCacheCasesPassed": 8,
+  "broaderSourceContractsPassed": 65,
+  "successorBindingBackendCasesPassed": 32,
+  "nativeBindingJourneysPassed": 14,
+  "diagnosticCohorts": {
+    "isolated": {
+      "mode": "function profiling",
+      "sourceCandidate": "f67913c9942aa3617a6bb078cd3a9cbdbb78e7ae",
+      "sourceInputs": 587,
+      "browserStats": {
+        "startTime": "2026-11-05T22:18:38.188Z",
+        "duration": 309627.076,
+        "expected": 14,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "callbackCount": 31,
+      "failedCallbackPattern": [
+        false,
+        false,
+        true,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        true,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "bindingWallSeconds": {
+        "median": 7.215532137,
+        "maximum": 10.964340821
+      },
+      "bindingThreadCpuSeconds": {
+        "median": 6.602849756,
+        "maximum": 10.747856179
+      },
+      "maximumSessionLookupSeconds": 0.485207776,
+      "requests": 429,
+      "capturedDescendantsExited": 23,
+      "unreadableFdSets": 0,
+      "summary": {
+        "scope": "Instrumented contributor host only; no provider registration or runtime/device actions",
+        "limits": {
+          "records": 2048,
+          "profiles": 64
+        },
+        "records": 888,
+        "profiles": 31,
+        "droppedRecords": 0,
+        "droppedProfiles": 0,
+        "writeErrors": 0
+      },
+      "timingSha256": "d694e4fd5be46098c32ab32ef613fc5bcc1e7297d96f7408e09a481781f921be",
+      "background": "No intentionally concurrent test cohort; full profiler overhead",
+      "slowestProfileFunctions": [
+        {
+          "file": "base_events.py",
+          "line": 1981,
+          "function": "_run_once",
+          "primitiveCalls": 222,
+          "calls": 222,
+          "selfSeconds": 0.0038515430000000002,
+          "cumulativeSeconds": 10.640684378000001
+        },
+        {
+          "file": "events.py",
+          "line": 87,
+          "function": "_run",
+          "primitiveCalls": 232,
+          "calls": 232,
+          "selfSeconds": 0.0005440260000000001,
+          "cumulativeSeconds": 10.464174162
+        },
+        {
+          "file": "~",
+          "line": 0,
+          "function": "<method 'run' of '_contextvars.Context' objects>",
+          "primitiveCalls": 232,
+          "calls": 232,
+          "selfSeconds": 0.000725267,
+          "cumulativeSeconds": 10.451276171
+        },
+        {
+          "file": "services/studio-api/src/xverse_studio/storage/core.py",
+          "line": 119,
+          "function": "get",
+          "primitiveCalls": 6,
+          "calls": 8,
+          "selfSeconds": 6.509300000000001e-05,
+          "cumulativeSeconds": 10.433737486
+        },
+        {
+          "file": "services/studio-api/src/xverse_studio/projects/service.py",
+          "line": 390,
+          "function": "mutate",
+          "primitiveCalls": 1,
+          "calls": 1,
+          "selfSeconds": 0.00012440700000000002,
+          "cumulativeSeconds": 10.415637435
+        },
+        {
+          "file": "services/studio-api/src/xverse_studio/deployments/__init__.py",
+          "line": 241,
+          "function": "change",
+          "primitiveCalls": 1,
+          "calls": 1,
+          "selfSeconds": 0.0012581010000000002,
+          "cumulativeSeconds": 10.071957233000001
+        },
+        {
+          "file": ".venv/lib/python3.13/site-packages/xverse_xdl/validate.py",
+          "line": 43,
+          "function": "validate_sources",
+          "primitiveCalls": 5,
+          "calls": 5,
+          "selfSeconds": 0.000536785,
+          "cumulativeSeconds": 7.001589551
+        },
+        {
+          "file": ".venv/lib/python3.13/site-packages/ruamel/yaml/parser.py",
+          "line": 137,
+          "function": "check_event",
+          "primitiveCalls": 118562,
+          "calls": 118562,
+          "selfSeconds": 0.07384864000000001,
+          "cumulativeSeconds": 5.964320769
+        },
+        {
+          "file": ".venv/lib/python3.13/site-packages/ruamel/yaml/composer.py",
+          "line": 94,
+          "function": "compose_document",
+          "primitiveCalls": 109,
+          "calls": 109,
+          "selfSeconds": 0.000224364,
+          "cumulativeSeconds": 5.317132145
+        },
+        {
+          "file": ".venv/lib/python3.13/site-packages/ruamel/yaml/composer.py",
+          "line": 110,
+          "function": "compose_node",
+          "primitiveCalls": 109,
+          "calls": 34954,
+          "selfSeconds": 0.113956493,
+          "cumulativeSeconds": 5.315293793
+        },
+        {
+          "file": ".venv/lib/python3.13/site-packages/ruamel/yaml/composer.py",
+          "line": 203,
+          "function": "compose_mapping_node",
+          "primitiveCalls": 109,
+          "calls": 3470,
+          "selfSeconds": 0.040534889000000004,
+          "cumulativeSeconds": 5.307127475000001
+        },
+        {
+          "file": "services/studio-api/src/xverse_studio/xdl/__init__.py",
+          "line": 136,
+          "function": "validate",
+          "primitiveCalls": 6,
+          "calls": 6,
+          "selfSeconds": 0.0018925360000000002,
+          "cumulativeSeconds": 4.491894317
+        },
+        {
+          "file": ".venv/lib/python3.13/site-packages/ruamel/yaml/composer.py",
+          "line": 169,
+          "function": "compose_sequence_node",
+          "primitiveCalls": 509,
+          "calls": 1134,
+          "selfSeconds": 0.009650691000000001,
+          "cumulativeSeconds": 4.445236126
+        },
+        {
+          "file": "services/studio-api/src/xverse_studio/xdl/__init__.py",
+          "line": 167,
+          "function": "_validate_public",
+          "primitiveCalls": 3,
+          "calls": 3,
+          "selfSeconds": 0.0006094560000000001,
+          "cumulativeSeconds": 4.293440276
+        },
+        {
+          "file": ".venv/lib/python3.13/site-packages/xverse_xdl/loader.py",
+          "line": 172,
+          "function": "_parse_one",
+          "primitiveCalls": 45,
+          "calls": 45,
+          "selfSeconds": 0.017553755,
+          "cumulativeSeconds": 3.933319377
+        },
+        {
+          "file": "services/studio-api/src/xverse_studio/deployments/__init__.py",
+          "line": 26,
+          "function": "compile_selection",
+          "primitiveCalls": 1,
+          "calls": 1,
+          "selfSeconds": 8.0864e-05,
+          "cumulativeSeconds": 3.866264503
+        },
+        {
+          "file": ".venv/lib/python3.13/site-packages/xverse_xdl/validate.py",
+          "line": 18,
+          "function": "_validate_documents",
+          "primitiveCalls": 5,
+          "calls": 5,
+          "selfSeconds": 0.000208681,
+          "cumulativeSeconds": 3.7193119300000004
+        },
+        {
+          "file": "services/studio-api/src/xverse_studio/xdl/__init__.py",
+          "line": 189,
+          "function": "compile",
+          "primitiveCalls": 2,
+          "calls": 2,
+          "selfSeconds": 0.001370233,
+          "cumulativeSeconds": 3.483934134
+        },
+        {
+          "file": "services/studio-api/src/xverse_studio/xdl/edits.py",
+          "line": 64,
+          "function": "semantic_edits",
+          "primitiveCalls": 1,
+          "calls": 1,
+          "selfSeconds": 6.2029e-05,
+          "cumulativeSeconds": 3.4283651030000004
+        },
+        {
+          "file": ".venv/lib/python3.13/site-packages/xverse_xdl/loader.py",
+          "line": 256,
+          "function": "load_sources",
+          "primitiveCalls": 5,
+          "calls": 5,
+          "selfSeconds": 0.00087482,
+          "cumulativeSeconds": 3.285011581
+        },
+        {
+          "file": ".venv/lib/python3.13/site-packages/xverse_xdl/experiment_plan.py",
+          "line": 1875,
+          "function": "compile_experiment_sources",
+          "primitiveCalls": 2,
+          "calls": 2,
+          "selfSeconds": 0.000225863,
+          "cumulativeSeconds": 3.060501647
+        },
+        {
+          "file": ".venv/lib/python3.13/site-packages/ruamel/yaml/parser.py",
+          "line": 627,
+          "function": "parse_block_mapping_value",
+          "primitiveCalls": 22244,
+          "calls": 22244,
+          "selfSeconds": 0.080923731,
+          "cumulativeSeconds": 2.9985802830000003
+        },
+        {
+          "file": ".venv/lib/python3.13/site-packages/ruamel/yaml/main.py",
+          "line": 438,
+          "function": "load",
+          "primitiveCalls": 64,
+          "calls": 64,
+          "selfSeconds": 0.003721906,
+          "cumulativeSeconds": 2.9045185
+        },
+        {
+          "file": ".venv/lib/python3.13/site-packages/ruamel/yaml/constructor.py",
+          "line": 115,
+          "function": "get_single_data",
+          "primitiveCalls": 64,
+          "calls": 64,
+          "selfSeconds": 0.000132179,
+          "cumulativeSeconds": 2.8988915360000003
+        },
+        {
+          "file": ".venv/lib/python3.13/site-packages/ruamel/yaml/scanner.py",
+          "line": 211,
+          "function": "fetch_more_tokens",
+          "primitiveCalls": 70306,
+          "calls": 70306,
+          "selfSeconds": 0.16850124000000002,
+          "cumulativeSeconds": 2.857661545
+        }
+      ]
+    },
+    "concurrent": {
+      "mode": "lightweight clocks only",
+      "sourceCandidate": "98c2c985f5339d2ca6c4f50c5be281360257b619",
+      "sourceInputs": 587,
+      "browserStats": {
+        "startTime": "2026-11-05T22:24:34.069Z",
+        "duration": 159936.61,
+        "expected": 14,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "callbackCount": 31,
+      "failedCallbackPattern": [
+        false,
+        false,
+        true,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        true,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "bindingWallSeconds": {
+        "median": 2.251404306,
+        "maximum": 10.042096107
+      },
+      "bindingThreadCpuSeconds": {
+        "median": 1.853740725,
+        "maximum": 2.929340037
+      },
+      "maximumSessionLookupSeconds": 0.342117638,
+      "requests": 426,
+      "capturedDescendantsExited": 23,
+      "unreadableFdSets": 0,
+      "summary": {
+        "scope": "Instrumented contributor host only; no provider registration or runtime/device actions",
+        "profilingEnabled": false,
+        "limits": {
+          "records": 2048,
+          "profiles": 64
+        },
+        "records": 882,
+        "profiles": 0,
+        "droppedRecords": 0,
+        "droppedProfiles": 0,
+        "writeErrors": 0
+      },
+      "timingSha256": "e9350e130c8b0827eaa75cd874083d9b77c7dce93b68a742292f3cd8b5480b37",
+      "background": "Reviewed32 source/contract/API checks overlap later native cases; started after first5 passed"
+    },
+    "fixed": {
+      "mode": "lightweight clocks only",
+      "sourceCandidate": "2c92117098c7b2ce43049a25cf9eda06316fa719",
+      "sourceInputs": 588,
+      "browserStats": {
+        "startTime": "2026-11-05T22:36:49.044Z",
+        "duration": 147054.292,
+        "expected": 14,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "callbackCount": 31,
+      "failedCallbackPattern": [
+        false,
+        false,
+        true,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        true,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "bindingWallSeconds": {
+        "median": 1.487310863,
+        "maximum": 5.642759966
+      },
+      "bindingThreadCpuSeconds": {
+        "median": 0.968939315,
+        "maximum": 2.047695558
+      },
+      "maximumSessionLookupSeconds": 0.697281617,
+      "requests": 424,
+      "capturedDescendantsExited": 23,
+      "unreadableFdSets": 0,
+      "summary": {
+        "scope": "Instrumented contributor host only; no provider registration or runtime/device actions",
+        "profilingEnabled": false,
+        "limits": {
+          "records": 2048,
+          "profiles": 64
+        },
+        "records": 878,
+        "profiles": 0,
+        "droppedRecords": 0,
+        "droppedProfiles": 0,
+        "writeErrors": 0
+      },
+      "timingSha256": "acfc143ccd2205823fd2ad638ccf2e4748751ebdeab760105620dd59099c39ba",
+      "background": "65 source/contract/cache/schema checks overlap earlier native cases; successor32 run separately"
+    }
+  },
+  "originalCanonicalDatabaseAndExecutionLedgersPreserved": true,
+  "allCurrentTestHandlesAndRootsReleased": true,
+  "processCaptureComplete": false,
+  "privateSessionAndControlValuesExcluded": 9,
+  "rawProfileFileHashesVerified": 31,
+  "old12of14TimingFailures": "unresolved; not reproduced by current14+32",
+  "backgroundWorkloadsDiffer": "Lightweight before/after diagnostic timings are not a controlled performance or causality comparison",
+  "infrastructureShutdown": {
+    "reason": "Release unneeded private infrastructure while the full goal stays active; independent source work continues and Windows remains frozen",
+    "allEightContainersStoppedBeforeShutdown": true,
+    "originalSupervisorsRevalidated": true,
+    "services": {
+      "display": {
+        "originalChildExited": true,
+        "exitCode": 0
+      },
+      "overlay": {
+        "originalChildExited": true,
+        "exitCode": 1
+      },
+      "daemon": {
+        "originalChildExited": true,
+        "exitCode": 0
+      }
+    },
+    "originalCarlaMarkersUnchanged": true,
+    "environmentLockReleased": true,
+    "systemDockerUnchanged": true,
+    "hostInterfacesUnchanged": true,
+    "allThreeOwnedServicesStopped": true,
+    "noAdditionalRuntimeStartedForSemanticVerification": true
+  },
+  "privateAdbShutdown": {
+    "scope": "Only the original foreground isolated ADB helper created for reruns; no host/foreign server",
+    "originalPidBirthUidArgvAndNetworkVerified": true,
+    "noAttachedDevicesBeforeShutdown": true,
+    "privateFixedAdbPort": 5037,
+    "killServerExit": 0,
+    "originalPidfdExited": true,
+    "foregroundOwnerAcknowledgementSession": 35840
+  },
+  "counts": {
+    "completed": 72,
+    "in_progress": 18,
+    "blocked": 10
+  },
+  "taskStatusChanges": [],
+  "windows": "independently frozen; no Windows host verification",
+  "goal": "active; source work continues without checkpoint pauses",
+  "unchangedFrontendBuildInputFiles": 83,
+  "frontendInheritanceSourceCandidate": "70b1982c41a288e53e37672f11a2c0b8a5d80c76"
+}

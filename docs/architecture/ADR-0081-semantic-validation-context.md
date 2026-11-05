@@ -1,6 +1,6 @@
 # ADR-0081 — Preserve the admitted validator context in semantic edits
 
-Status: accepted for implementation; component verification required.
+Status: implemented with scoped native Linux component verification; full task/milestone gates remain open.
 Date: 2026-11-05.
 
 Semantic edits currently construct a default XDLAdapter even when their project
@@ -37,3 +37,5 @@ native binding journeys. Profiled CPU measurements and lightweight concurrent
 timing are distinct. The earlier12/2 timing failures remain unresolved unless
 stronger evidence establishes their cause. No task or milestone closes here;
 Windows remains independently frozen and the full original goal stays active.
+
+Component evidence: [schema context, contracts and native binding verification](../../evidence/studio/M4-accessibility/semantic-context-20261105/README.md).
