@@ -25,6 +25,11 @@ _spec = importlib.util.spec_from_file_location(
 )
 native = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(native)
+_release_spec = importlib.util.spec_from_file_location(
+    "fresh_campaign_recorded_release", Path(__file__).with_name("autoverse_campaign_native.py")
+)
+campaign_native = importlib.util.module_from_spec(_release_spec)
+_release_spec.loader.exec_module(campaign_native)
 
 
 def main():
@@ -57,6 +62,19 @@ def main():
     def records(kind):
         with sqlite3.connect((data / "studio.sqlite").as_uri() + "?mode=ro", uri=True) as db:
             return [json.loads(raw) for (raw,) in db.execute("SELECT body FROM records WHERE kind=?", (kind,))]
+
+    def settle_campaigns(api):
+        observations = []
+        for campaign in records("campaign"):
+            route = "/api/v1/campaigns/" + campaign["campaignId"]
+            current = native.checked(api.get(route))
+            if current["status"] not in {"complete", "cancelled"}:
+                requested = current["status"] != "cancelling"
+                if requested:
+                    native.checked(api.post(route + "/cancel", headers={"Idempotency-Key": "fresh-keyboard-cleanup-" + campaign["campaignId"]}, json={}), 202)
+                native.wait(lambda: native.checked(api.get(route)), lambda row: row["status"] in {"complete", "cancelled"}, timeout=150)
+                observations.append({"campaignId": campaign["campaignId"], "contributorCancellationRequested": requested, "terminalStateObserved": True})
+        return observations
 
     before, assets = sources(), ui()
     (a.output / "source-inputs.json").write_text(json.dumps(before, indent=2) + "\n")
@@ -100,8 +118,9 @@ def main():
                     child.terminate()
                     child.wait(timeout=30)
             outcome.update(originalBrowserExited=child.poll() is not None, browserExit=exit_code)
+        outcome["contributorCleanupAfterBrowser"] = settle_campaigns(api)
         campaigns = records("campaign")
-        runs = records("run")
+        runs = sorted(records("run"), key=lambda row: (row["createdAt"], row["runId"]))
         assert len(campaigns) <= (2 if a.live else 0) and len(runs) <= (2 if a.live else 0)
         if exit_code == 0 and a.live:
             selected_cases = json.loads((a.output / "browser.json").read_bytes())["stats"]["expected"]
@@ -116,7 +135,9 @@ def main():
             assert final["state"] == "stopped" and final["cleanup"] == "complete", final
             frozen = json.loads((data / "snapshots" / run["snapshotId"] / "snapshot.json").read_bytes())
             assert frozen["configuration"]["durationSeconds"] == 60 and frozen["campaignId"] in {c["campaignId"] for c in campaigns}
-            outcome["children"].append({"runId": rid, "snapshotId": run["snapshotId"], "cleanup": native.verify_released(data, rid)})
+            outcome["children"].append({"runId": rid, "snapshotId": run["snapshotId"], "cleanup": campaign_native.recorded_release(data, rid)})
+        if runs:
+            outcome["finalCurrentContainerShutdown"] = native.verify_released(data, runs[-1]["runId"])
         outcome.update(campaigns=len(campaigns), runs=len(runs), originalProjectsUnchanged=all(native.checked(api.get("/api/v1/projects/" + project["projectId"])) == project for project in projects.values()), originalBaseSnapshotsUnchanged=all((data / "snapshots" / sid / "snapshot.json").read_bytes() == raw for sid, raw in bases.items()))
         assert outcome["originalProjectsUnchanged"] and outcome["originalBaseSnapshotsUnchanged"]
         if exit_code == 0:
@@ -124,12 +145,7 @@ def main():
     finally:
         try:
             if api is not None:
-                for campaign in records("campaign"):
-                    route = "/api/v1/campaigns/" + campaign["campaignId"]
-                    current = native.checked(api.get(route))
-                    if current["status"] not in {"complete", "cancelled"}:
-                        native.checked(api.post(route + "/cancel", headers={"Idempotency-Key": "fresh-keyboard-cleanup-" + campaign["campaignId"]}, json={}), 202)
-                        native.wait(lambda: native.checked(api.get(route)), lambda row: row["status"] in {"complete", "cancelled"}, timeout=150)
+                outcome["contributorFinalCleanup"] = settle_campaigns(api)
                 api.close()
         finally:
             host.stop()
