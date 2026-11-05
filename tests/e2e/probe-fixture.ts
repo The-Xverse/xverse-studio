@@ -2,6 +2,7 @@ import { test as base, expect } from "@playwright/test";
 import { spawn } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
+import { selectedStaticArguments, verifySelectedUI } from "./lab-fixture";
 export { openLab, keyboard } from "./lab-fixture";
 
 type Host = { origin: string; data: string; count: () => number };
@@ -10,7 +11,7 @@ export const test = base.extend<{ probeScenario: string; probeHost: Host }>({
   probeHost: async ({ probeScenario }, use, info) => {
     const data = info.outputPath("owned-probe-fixture.private"),
       python = process.env.STUDIO_TEST_PYTHON || path.resolve(process.platform === "win32" ? ".venv/Scripts/python.exe" : ".venv/bin/python"),
-      child = spawn(python, ["-I", "tests/fixtures/providers/physical/probe_browser_host.py", "--data", data, "--scenario", probeScenario], { stdio: ["ignore", "pipe", "pipe"] });
+      child = spawn(python, ["-I", "tests/fixtures/providers/physical/probe_browser_host.py", "--data", data, "--scenario", probeScenario, ...selectedStaticArguments()], { stdio: ["ignore", "pipe", "pipe"] });
     let diagnostic = "", started = false;
     child.stderr.on("data", (chunk) => { diagnostic = (diagnostic + String(chunk)).slice(-4000); });
     try {
@@ -29,6 +30,7 @@ export const test = base.extend<{ probeScenario: string; probeHost: Host }>({
         });
       });
       await expect.poll(async () => { try { return (await fetch(origin + "/api/v1/session")).status; } catch { return 0; } }).toBe(401);
+      await verifySelectedUI(origin, info);
       started = true;
       await use({ origin, data, count: () => {
         const file = path.join(data, "probe-call-count.json");

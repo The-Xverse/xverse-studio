@@ -26,6 +26,7 @@ from xverse_studio.lab.configuration import (
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--data", type=Path, required=True)
+    parser.add_argument("--static-dir", type=Path)
     parser.add_argument(
         "--scenario",
         choices=(
@@ -83,7 +84,7 @@ def main():
         port = listener.getsockname()[1]
         options = dict(
             allowed_hosts=[f"127.0.0.1:{port}"],
-            static_dir=root / "apps/studio-web/dist",
+            static_dir=args.static_dir.resolve() if args.static_dir else root / "apps/studio-web/dist",
             lab_host=host,
         )
         preparation_started = time.monotonic()

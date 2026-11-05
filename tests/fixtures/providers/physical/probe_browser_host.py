@@ -29,6 +29,7 @@ from xverse_studio.storage.core import atomic, canonical, digest
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--data", type=Path, required=True)
+    parser.add_argument("--static-dir", type=Path)
     parser.add_argument(
         "--scenario",
         choices=[
@@ -138,7 +139,7 @@ def main():
         app = create_app(
             args.data,
             allowed_hosts=[f"127.0.0.1:{port}"],
-            static_dir=root / "apps/studio-web/dist",
+            static_dir=args.static_dir.resolve() if args.static_dir else root / "apps/studio-web/dist",
             lab_host=LabHostConfiguration(
                 (lease,),
                 LabAuthority({("local-operator", provider.asset_id): {"observe"}}),

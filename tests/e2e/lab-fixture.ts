@@ -1,6 +1,7 @@
-import { test as base, expect, type Locator, type Page } from "@playwright/test";
+import { test as base, expect, type Locator, type Page, type TestInfo } from "@playwright/test";
 import { spawn } from "node:child_process";
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
+import { createHash } from "node:crypto";
 import path from "node:path";
 
 type Host = { origin: string; data: string };
@@ -9,7 +10,7 @@ export const test = base.extend<{ scenario: string; labHost: Host }>({
   labHost: async ({ scenario }, use, info) => {
     const data = info.outputPath("owned-fixture.private"),
       python = process.env.STUDIO_TEST_PYTHON || path.resolve(process.platform === "win32" ? ".venv/Scripts/python.exe" : ".venv/bin/python"),
-      child = spawn(python, ["-I", "tests/fixtures/providers/physical/browser_host.py", "--data", data, "--scenario", scenario],
+      child = spawn(python, ["-I", "tests/fixtures/providers/physical/browser_host.py", "--data", data, "--scenario", scenario, ...selectedStaticArguments()],
         { stdio: ["ignore", "pipe", "pipe"] });
     let diagnostic = "", started = false;
     child.stderr.on("data", (chunk) => { diagnostic = (diagnostic + String(chunk)).slice(-4000); });
@@ -34,6 +35,7 @@ export const test = base.extend<{ scenario: string; labHost: Host }>({
       await expect.poll(async () => {
         try { return (await fetch(origin + "/api/v1/session")).status; } catch { return 0; }
       }).toBe(401);
+      await verifySelectedUI(origin, info);
       started = true;
       await use({ origin, data });
     } finally {
@@ -70,10 +72,38 @@ export async function openLab(page: Page, host: Host) {
     headers: { Origin: host.origin }, data: { bootstrapToken: bootstrap.bootstrapToken },
   });
   expect(response.status()).toBe(200);
+  writeFileSync(path.join(host.data, "browser-session.private.json"), JSON.stringify({
+    bootstrapToken: bootstrap.bootstrapToken, ...(await page.context().storageState()),
+  }), { mode: 0o600 });
   await page.goto(host.origin);
-  await page.getByRole("button", { name: "Laboratory", exact: true }).click();
+  await keyboard(page, page.getByRole("button", { name: "Laboratory", exact: true }));
   await expect(page.getByRole("heading", { name: "Physical assets", exact: true })).toBeVisible();
   await expect(page.getByRole("region", { name: "Reservation history", exact: true })).toContainText("Principal: local-operator");
+}
+
+/** Explicit contributor input; imported project/provider data cannot select this path. */
+export function selectedStaticArguments(): string[] {
+  return process.env.STUDIO_TEST_STATIC_DIR
+    ? ["--static-dir", path.resolve(process.env.STUDIO_TEST_STATIC_DIR)]
+    : [];
+}
+
+export async function verifySelectedUI(origin: string, info: TestInfo) {
+  const directory = process.env.STUDIO_TEST_STATIC_DIR;
+  if (!directory) return;
+  const files = ["index.html", ...readdirSync(path.join(directory, "assets")).map(name => "assets/" + name)];
+  expect(files.length).toBeGreaterThan(1);
+  expect(files.length).toBeLessThanOrEqual(64);
+  const hashes: Record<string, string> = {};
+  const sha = (data: Uint8Array) => createHash("sha256").update(data).digest("hex");
+  for (const name of files) {
+    const expected = readFileSync(path.join(directory, name));
+    const response = await fetch(origin + "/" + name);
+    expect(response.status, "Selected fixture UI asset must be served").toBe(200);
+    hashes[name] = sha(expected);
+    expect(sha(new Uint8Array(await response.arrayBuffer())), "Fixture must serve the selected UI bytes").toBe(hashes[name]);
+  }
+  await info.attach("fixture-ui-binding", { body: JSON.stringify({ scope: "Explicit software fixture UI only; no equipment", hashes }), contentType: "application/json" });
 }
 
 export async function keyboard(page: Page, target: Locator) {
