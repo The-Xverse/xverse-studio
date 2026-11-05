@@ -1,0 +1,266 @@
+{
+  "config": {
+    "argv": [
+      "[WORKSPACE_VOLUME]/.xverse-studio-cache/node-v24.22.1-linux-x64/bin/node",
+      "[WORKSPACE_VOLUME]/xverse-studio/node_modules/@playwright/test/cli.js",
+      "test",
+      "--config",
+      "tests/live/autoverse-evaluation-keyboard.config.ts",
+      "--grep",
+      "all six frozen outcomes"
+    ],
+    "configFile": "[WORKTREE]/tests/live/autoverse-evaluation-keyboard.config.ts",
+    "rootDir": "[WORKTREE]/tests/live",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": "[WORKTREE]/tests/live/recorded-browser-device-setup.ts",
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "[WORKTREE]/.studio-local/t097-evaluation-keyboard-20261105/positive-red-observed/native/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "[WORKTREE]/tests/live",
+        "testIgnore": [],
+        "testMatch": [
+          "autoverse-evaluation-keyboard.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "[WORKTREE]/.studio-local/t097-evaluation-keyboard-20261105/positive-red-observed/native/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "[WORKTREE]/tests/live",
+        "snapshotDir": "[WORKTREE]/tests/live",
+        "testIgnore": [],
+        "testMatch": "autoverse-evaluation-keyboard.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "baseURL": "[LOOPBACK_ORIGIN]",
+          "browserName": "chromium",
+          "actionTimeout": 15000,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "trace": "off",
+          "screenshot": "only-on-failure",
+          "video": "off",
+          "launchOptions": {
+            "args": [
+              "--disable-gpu",
+              "--disable-gpu-rasterization"
+            ]
+          }
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "[WORKTREE]/.studio-local/t097-evaluation-keyboard-20261105/positive-red-observed/native/browser.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "autoverse-evaluation-keyboard.spec.ts",
+      "file": "autoverse-evaluation-keyboard.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "all six frozen outcomes submit through native evaluation keys at 1024",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 21191,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('region', { name: 'Frozen assertions and metrics', exact: true }).getByRole('heading', { name: 'Frozen assertions and metrics', exact: true })\nExpected: focused\nReceived: inactive\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeFocused\" getByRole('region', { name: 'Frozen assertions and metrics', exact: true }).getByRole('heading', { name: 'Frozen assertions and metrics', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('region', { name: 'Frozen assertions and metrics', exact: true }).getByRole('heading', { name: 'Frozen assertions and metrics', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <h3 tabindex=\"-1\">Frozen assertions and metrics</h3>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('region', { name: 'Frozen assertions and metrics', exact: true }).getByRole('heading', { name: 'Frozen assertions and metrics', exact: true })\nExpected: focused\nReceived: inactive\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeFocused\" getByRole('region', { name: 'Frozen assertions and metrics', exact: true }).getByRole('heading', { name: 'Frozen assertions and metrics', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('region', { name: 'Frozen assertions and metrics', exact: true }).getByRole('heading', { name: 'Frozen assertions and metrics', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <h3 tabindex=\"-1\">Frozen assertions and metrics</h3>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n\n    at [WORKTREE]/tests/live/autoverse-evaluation-keyboard.spec.ts:80:35",
+                    "location": {
+                      "file": "[WORKTREE]/tests/live/autoverse-evaluation-keyboard.spec.ts",
+                      "column": 35,
+                      "line": 80
+                    },
+                    "snippet": "  78 |     for(const historical of source.historicalEvaluations) {\n  79 |       await choose(page,historical.definitionRef); const receipt=await submit(page); rows.push(await result(page,receipt,source));\n> 80 |       await expect(heading(page)).toBeFocused();\n     |                                   ^\n  81 |     }\n  82 |     await report(page,info,width,{rows:rows.map(signature),allSixOutcomeKindsPreserved:true});\n  83 |   });"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "[WORKTREE]/tests/live/autoverse-evaluation-keyboard.spec.ts",
+                        "column": 35,
+                        "line": 80
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('region', { name: 'Frozen assertions and metrics', exact: true }).getByRole('heading', { name: 'Frozen assertions and metrics', exact: true })\nExpected: focused\nReceived: inactive\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeFocused\" getByRole('region', { name: 'Frozen assertions and metrics', exact: true }).getByRole('heading', { name: 'Frozen assertions and metrics', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('region', { name: 'Frozen assertions and metrics', exact: true }).getByRole('heading', { name: 'Frozen assertions and metrics', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <h3 tabindex=\"-1\">Frozen assertions and metrics</h3>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n\n\n  78 |     for(const historical of source.historicalEvaluations) {\n  79 |       await choose(page,historical.definitionRef); const receipt=await submit(page); rows.push(await result(page,receipt,source));\n> 80 |       await expect(heading(page)).toBeFocused();\n     |                                   ^\n  81 |     }\n  82 |     await report(page,info,width,{rows:rows.map(signature),allSixOutcomeKindsPreserved:true});\n  83 |   });\n    at [WORKTREE]/tests/live/autoverse-evaluation-keyboard.spec.ts:80:35"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T19:23:36.354Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "[WORKTREE]/.studio-local/t097-evaluation-keyboard-20261105/positive-red-observed/native/artifacts/autoverse-evaluation-keybo-07021-ive-evaluation-keys-at-1024/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "[WORKTREE]/.studio-local/t097-evaluation-keyboard-20261105/positive-red-observed/native/artifacts/autoverse-evaluation-keybo-07021-ive-evaluation-keys-at-1024/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "[WORKTREE]/tests/live/autoverse-evaluation-keyboard.spec.ts",
+                    "column": 35,
+                    "line": 80
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "b448aaac59a4327bd374-2ca75b019b92d7444302",
+          "file": "autoverse-evaluation-keyboard.spec.ts",
+          "line": 76,
+          "column": 7
+        },
+        {
+          "title": "all six frozen outcomes submit through native evaluation keys at 1440",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 20659,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('region', { name: 'Frozen assertions and metrics', exact: true }).getByRole('heading', { name: 'Frozen assertions and metrics', exact: true })\nExpected: focused\nReceived: inactive\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeFocused\" getByRole('region', { name: 'Frozen assertions and metrics', exact: true }).getByRole('heading', { name: 'Frozen assertions and metrics', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('region', { name: 'Frozen assertions and metrics', exact: true }).getByRole('heading', { name: 'Frozen assertions and metrics', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <h3 tabindex=\"-1\">Frozen assertions and metrics</h3>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('region', { name: 'Frozen assertions and metrics', exact: true }).getByRole('heading', { name: 'Frozen assertions and metrics', exact: true })\nExpected: focused\nReceived: inactive\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeFocused\" getByRole('region', { name: 'Frozen assertions and metrics', exact: true }).getByRole('heading', { name: 'Frozen assertions and metrics', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('region', { name: 'Frozen assertions and metrics', exact: true }).getByRole('heading', { name: 'Frozen assertions and metrics', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <h3 tabindex=\"-1\">Frozen assertions and metrics</h3>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n\n    at [WORKTREE]/tests/live/autoverse-evaluation-keyboard.spec.ts:80:35",
+                    "location": {
+                      "file": "[WORKTREE]/tests/live/autoverse-evaluation-keyboard.spec.ts",
+                      "column": 35,
+                      "line": 80
+                    },
+                    "snippet": "  78 |     for(const historical of source.historicalEvaluations) {\n  79 |       await choose(page,historical.definitionRef); const receipt=await submit(page); rows.push(await result(page,receipt,source));\n> 80 |       await expect(heading(page)).toBeFocused();\n     |                                   ^\n  81 |     }\n  82 |     await report(page,info,width,{rows:rows.map(signature),allSixOutcomeKindsPreserved:true});\n  83 |   });"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "[WORKTREE]/tests/live/autoverse-evaluation-keyboard.spec.ts",
+                        "column": 35,
+                        "line": 80
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('region', { name: 'Frozen assertions and metrics', exact: true }).getByRole('heading', { name: 'Frozen assertions and metrics', exact: true })\nExpected: focused\nReceived: inactive\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeFocused\" getByRole('region', { name: 'Frozen assertions and metrics', exact: true }).getByRole('heading', { name: 'Frozen assertions and metrics', exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('region', { name: 'Frozen assertions and metrics', exact: true }).getByRole('heading', { name: 'Frozen assertions and metrics', exact: true })\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <h3 tabindex=\"-1\">Frozen assertions and metrics</h3>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n\n\n  78 |     for(const historical of source.historicalEvaluations) {\n  79 |       await choose(page,historical.definitionRef); const receipt=await submit(page); rows.push(await result(page,receipt,source));\n> 80 |       await expect(heading(page)).toBeFocused();\n     |                                   ^\n  81 |     }\n  82 |     await report(page,info,width,{rows:rows.map(signature),allSixOutcomeKindsPreserved:true});\n  83 |   });\n    at [WORKTREE]/tests/live/autoverse-evaluation-keyboard.spec.ts:80:35"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T19:23:58.111Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "[WORKTREE]/.studio-local/t097-evaluation-keyboard-20261105/positive-red-observed/native/artifacts/autoverse-evaluation-keybo-1b3a0-ive-evaluation-keys-at-1440/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "[WORKTREE]/.studio-local/t097-evaluation-keyboard-20261105/positive-red-observed/native/artifacts/autoverse-evaluation-keybo-1b3a0-ive-evaluation-keys-at-1440/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "[WORKTREE]/tests/live/autoverse-evaluation-keyboard.spec.ts",
+                    "column": 35,
+                    "line": 80
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "b448aaac59a4327bd374-ffbe04a0f181c8a81efa",
+          "file": "autoverse-evaluation-keyboard.spec.ts",
+          "line": 76,
+          "column": 7
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-05T19:23:36.007Z",
+    "duration": 42867.388,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  }
+}

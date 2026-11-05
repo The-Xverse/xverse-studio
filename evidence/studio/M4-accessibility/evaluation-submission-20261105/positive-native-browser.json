@@ -1,0 +1,686 @@
+{
+  "config": {
+    "argv": [
+      "[WORKSPACE_VOLUME]/.xverse-studio-cache/node-v24.22.1-linux-x64/bin/node",
+      "[WORKSPACE_VOLUME]/xverse-studio/node_modules/@playwright/test/cli.js",
+      "test",
+      "--config",
+      "tests/live/autoverse-evaluation-keyboard.config.ts"
+    ],
+    "configFile": "[WORKTREE]/tests/live/autoverse-evaluation-keyboard.config.ts",
+    "rootDir": "[WORKTREE]/tests/live",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": "[WORKTREE]/tests/live/recorded-browser-device-setup.ts",
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "[WORKTREE]/.studio-local/t097-evaluation-keyboard-20261105/focus-fix/native/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "[WORKTREE]/tests/live",
+        "testIgnore": [],
+        "testMatch": [
+          "autoverse-evaluation-keyboard.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "[WORKTREE]/.studio-local/t097-evaluation-keyboard-20261105/focus-fix/native/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "[WORKTREE]/tests/live",
+        "snapshotDir": "[WORKTREE]/tests/live",
+        "testIgnore": [],
+        "testMatch": "autoverse-evaluation-keyboard.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "baseURL": "[LOOPBACK_ORIGIN]",
+          "browserName": "chromium",
+          "actionTimeout": 15000,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "trace": "off",
+          "screenshot": "only-on-failure",
+          "video": "off",
+          "launchOptions": {
+            "args": [
+              "--disable-gpu",
+              "--disable-gpu-rasterization"
+            ]
+          }
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "[WORKTREE]/.studio-local/t097-evaluation-keyboard-20261105/focus-fix/native/browser.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "autoverse-evaluation-keyboard.spec.ts",
+      "file": "autoverse-evaluation-keyboard.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "all six frozen outcomes submit through native evaluation keys at 1024",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 33197,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T19:35:13.328Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "actual-evaluation-keyboard",
+                      "contentType": "application/json",
+                      "body": "eyJ3aWR0aCI6IDEwMjQsICJyb3dzIjogW3siZGVmaW5pdGlvblJlZiI6ICJ1bm1hcHBlZC1zaW11bGF0aW9uLWNsb2NrIiwgImRlZmluaXRpb25EaWdlc3QiOiAic2hhMjU2OmI0MWNiY2VlN2Y2NGU3MDhkNTEwZjE5MTMxZTNkNmFmMDFkNzQwN2VmZmVkNjc0YTQ3MTRjYTYyNGU1ZTRkZTQiLCAic3RhdHVzIjogImNvbXBsZXRlIiwgInZlcmRpY3QiOiAiaW5kZXRlcm1pbmF0ZSIsICJ2YWx1ZSI6IG51bGwsICJ1bml0IjogbnVsbCwgImNvdmVyYWdlIjogImluY29tcGxldGUiLCAicGFydGlhbCI6IGZhbHNlfSwgeyJkZWZpbml0aW9uUmVmIjogInVuYWRtaXR0ZWQtY291bnQtdW5pdCIsICJkZWZpbml0aW9uRGlnZXN0IjogInNoYTI1NjowNmY5MjlhMWU5NWVlZmIzYTA4YjA5NjViYzQ5YmRiNTdjYTkzODdhMzQxN2JkMjI4MjFmYThmOTA5ODIwMTE1IiwgInN0YXR1cyI6ICJlcnJvciIsICJ2ZXJkaWN0IjogbnVsbCwgInZhbHVlIjogbnVsbCwgInVuaXQiOiBudWxsLCAiY292ZXJhZ2UiOiAiaW5jb21wbGV0ZSIsICJwYXJ0aWFsIjogZmFsc2V9LCB7ImRlZmluaXRpb25SZWYiOiAicmVjb3JkZWQtYWN0aXZhdGlvbi1jb3VudCIsICJkZWZpbml0aW9uRGlnZXN0IjogInNoYTI1NjpmMmUyNTVkZTg2YzI2Y2UwZWRhYzY3YjBmODkzMGRhYjM4MGU2ZmZhMThmOTJjZTNlMTM1ZDRlN2YyNjRhOGI0IiwgInN0YXR1cyI6ICJjb21wbGV0ZSIsICJ2ZXJkaWN0IjogbnVsbCwgInZhbHVlIjogMSwgInVuaXQiOiAiMSIsICJjb3ZlcmFnZSI6ICJjb21wbGV0ZSIsICJwYXJ0aWFsIjogZmFsc2V9LCB7ImRlZmluaXRpb25SZWYiOiAicmVjb3ZlcnktdGhyb3VnaC10aGlydHktc2Vjb25kcyIsICJkZWZpbml0aW9uRGlnZXN0IjogInNoYTI1Njo0ZTA1NWFhMzc2NWJjM2I5ZDVhZmMwZWRlMDZkYzk0YTVkMzE4YzAyNzc2MTUzYzJkYTYxZDFkMzRkYTEyZGRmIiwgInN0YXR1cyI6ICJjb21wbGV0ZSIsICJ2ZXJkaWN0IjogImluZGV0ZXJtaW5hdGUiLCAidmFsdWUiOiBudWxsLCAidW5pdCI6IG51bGwsICJjb3ZlcmFnZSI6ICJpbmNvbXBsZXRlIiwgInBhcnRpYWwiOiBmYWxzZX0sIHsiZGVmaW5pdGlvblJlZiI6ICJ0d28tcmVjb3Zlcmllcy1iZWZvcmUtdGVuLXNlY29uZHMiLCAiZGVmaW5pdGlvbkRpZ2VzdCI6ICJzaGEyNTY6Zjk2N2JjYzM2OTkxZWIwZGJlZmI3ODY5OTA2ODg2ZjhlNGVhYjgxNzA1NmRhOGRmZWYyM2JiMTg5N2FjODkzMiIsICJzdGF0dXMiOiAiY29tcGxldGUiLCAidmVyZGljdCI6ICJmYWlsIiwgInZhbHVlIjogZmFsc2UsICJ1bml0IjogbnVsbCwgImNvdmVyYWdlIjogImNvbXBsZXRlIiwgInBhcnRpYWwiOiBmYWxzZX0sIHsiZGVmaW5pdGlvblJlZiI6ICJicmlkZ2UtbG9zcy1hY2tub3dsZWRnZWQiLCAiZGVmaW5pdGlvbkRpZ2VzdCI6ICJzaGEyNTY6MzkzNGE5NzE4Yjc0YTk2NzhmNDY1NTU5ZTQ5ZDU0YWNiZmU1NDk1MmJiNmRlYTU5OTgwODI4OGE2YTE2MzAzZiIsICJzdGF0dXMiOiAiY29tcGxldGUiLCAidmVyZGljdCI6ICJwYXNzIiwgInZhbHVlIjogdHJ1ZSwgInVuaXQiOiBudWxsLCAiY292ZXJhZ2UiOiAiY29tcGxldGUiLCAicGFydGlhbCI6IGZhbHNlfV0sICJhbGxTaXhPdXRjb21lS2luZHNQcmVzZXJ2ZWQiOiB0cnVlLCAiYnJvd3NlciI6ICIxNTYuMC44MDc4LjQiLCAic2NvcGUiOiAiRnJlc2ggYWN0dWFsIGluc3RhbGxlZCBBdXRvdmVyc2UgbWFwcGluZzsgbmV3IGRlcml2ZWQgZXZhbHVhdGlvbiBvZiBvcmlnaW5hbCBmcm96ZW4gZXZpZGVuY2Ugb25seS4gTm8gbW9kZWwvZ3Vlc3QvcHJvdmlkZXIgb3BlcmF0aW9uIG9yIEFUIGNlcnRpZmljYXRpb24uIn0K"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "b448aaac59a4327bd374-2ca75b019b92d7444302",
+          "file": "autoverse-evaluation-keyboard.spec.ts",
+          "line": 76,
+          "column": 7
+        },
+        {
+          "title": "evaluation native retry preserves identity before acceptance at 1024",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 11542,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T19:35:46.594Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "actual-evaluation-keyboard",
+                      "contentType": "application/json",
+                      "body": "eyJ3aWR0aCI6IDEwMjQsICJtb2RlIjogImJlZm9yZSBhY2NlcHRhbmNlIiwgImtleXMiOiBbIjMwYmMxMDFjLTBjNWQtNDA0NC1hZmU3LTI5M2M2NjYzN2NiNCIsICIzMGJjMTAxYy0wYzVkLTQwNDQtYWZlNy0yOTNjNjY2MzdjYjQiXSwgImJvZGllcyI6IFt7InNuYXBzaG90SWQiOiAic25hcC01YzhiY2ExMi0zZWNiLTRmNmMtYjAxOS0yNTljMzdhNjdmYzQiLCAiZGVmaW5pdGlvblJlZiI6ICJ1bm1hcHBlZC1zaW11bGF0aW9uLWNsb2NrIiwgImRlZmluaXRpb25EaWdlc3QiOiAic2hhMjU2OmI0MWNiY2VlN2Y2NGU3MDhkNTEwZjE5MTMxZTNkNmFmMDFkNzQwN2VmZmVkNjc0YTQ3MTRjYTYyNGU1ZTRkZTQiLCAiZXZpZGVuY2VSZWZzIjogWyJydW4tZTk2ZDAwYzYtZDBkNC00YzhlLWIwMjctMTNlYjNjMzc5NTFhOnByb3ZpZGVyLWpvdXJuYWwiXX0sIHsic25hcHNob3RJZCI6ICJzbmFwLTVjOGJjYTEyLTNlY2ItNGY2Yy1iMDE5LTI1OWMzN2E2N2ZjNCIsICJkZWZpbml0aW9uUmVmIjogInVubWFwcGVkLXNpbXVsYXRpb24tY2xvY2siLCAiZGVmaW5pdGlvbkRpZ2VzdCI6ICJzaGEyNTY6YjQxY2JjZWU3ZjY0ZTcwOGQ1MTBmMTkxMzFlM2Q2YWYwMWQ3NDA3ZWZmZWQ2NzRhNDcxNGNhNjI0ZTVlNGRlNCIsICJldmlkZW5jZVJlZnMiOiBbInJ1bi1lOTZkMDBjNi1kMGQ0LTRjOGUtYjAyNy0xM2ViM2MzNzk1MWE6cHJvdmlkZXItam91cm5hbCJdfV0sICJyb3ciOiB7ImRlZmluaXRpb25SZWYiOiAidW5tYXBwZWQtc2ltdWxhdGlvbi1jbG9jayIsICJkZWZpbml0aW9uRGlnZXN0IjogInNoYTI1NjpiNDFjYmNlZTdmNjRlNzA4ZDUxMGYxOTEzMWUzZDZhZjAxZDc0MDdlZmZlZDY3NGE0NzE0Y2E2MjRlNWU0ZGU0IiwgInN0YXR1cyI6ICJjb21wbGV0ZSIsICJ2ZXJkaWN0IjogImluZGV0ZXJtaW5hdGUiLCAidmFsdWUiOiBudWxsLCAidW5pdCI6IG51bGwsICJjb3ZlcmFnZSI6ICJpbmNvbXBsZXRlIiwgInBhcnRpYWwiOiBmYWxzZX0sICJjb250cmFzdCI6IHsibGFiZWwiOiAiRXZhbHVhdGlvbiBzdWJtaXNzaW9uIGRpYWdub3N0aWMiLCAidGV4dCI6ICJFVkFMVUFUSU9OX0tFWUJPQVJEX0ZJWFRVUkVMYWJlbGxlZCByZXNwb25zZSByZWZ1c2FsIGJlZm9yZSBhY2NlcHRhbmNlIiwgImNvbG9yIjogInJnYigxNjEsIDg5LCA4MSkiLCAiZm9udFNpemUiOiAiMTJweCIsICJmb250V2VpZ2h0IjogIjQwMCIsICJ0aHJlc2hvbGQiOiA0LjUsICJzY29wZSI6ICJTZWxlY3RlZCBub3JtYWwtc2l6ZSByZW5kZXJlZCB0ZXh0OyBubyBvdmVyYWxsIGFjY2Vzc2liaWxpdHkgY2VydGlmaWNhdGlvbiIsICJzdXBwb3J0ZWQiOiB0cnVlLCAibGF5ZXJzIjogWyJyZ2IoMjU1LCAyNDMsIDI0MikiXSwgImJhY2tncm91bmQiOiBbMSwgMC45NTI5NDExNzY0NzA1ODgyLCAwLjk0OTAxOTYwNzg0MzEzNzIsIDFdLCAiY29tcG9zaXRlZEZvcmVncm91bmQiOiBbMC42MzEzNzI1NDkwMTk2MDc4LCAwLjM0OTAxOTYwNzg0MzEzNzI0LCAwLjMxNzY0NzA1ODgyMzUyOTQsIDFdLCAicmF0aW8iOiA0Ljc2MzM2MDkxNjE1NTc3MiwgInBhc3NlZCI6IHRydWUsICJhc3N1bXB0aW9ucyI6ICJDU1Mgc1JHQiBjb2xvcnM7IGFscGhhIGNvbXBvc2l0ZWQgdGhyb3VnaCBleHBsaWNpdCBiYWNrZ3JvdW5kczsgbm8gYW50aS1hbGlhc2luZyBhcHByb3hpbWF0aW9uIn0sICJmaXh0dXJlIjogIk9uZSBsYWJlbGxlZDUwMzsgYWNjZXB0ZWQtcmVzcG9uc2UgY2FzZSBmaXJzdCBleGVjdXRlcyBhY3R1YWwgbmF0aXZlIFBPU1QiLCAiYnJvd3NlciI6ICIxNTYuMC44MDc4LjQiLCAic2NvcGUiOiAiRnJlc2ggYWN0dWFsIGluc3RhbGxlZCBBdXRvdmVyc2UgbWFwcGluZzsgbmV3IGRlcml2ZWQgZXZhbHVhdGlvbiBvZiBvcmlnaW5hbCBmcm96ZW4gZXZpZGVuY2Ugb25seS4gTm8gbW9kZWwvZ3Vlc3QvcHJvdmlkZXIgb3BlcmF0aW9uIG9yIEFUIGNlcnRpZmljYXRpb24uIn0K"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "b448aaac59a4327bd374-3619f86b638163ee55e3",
+          "file": "autoverse-evaluation-keyboard.spec.ts",
+          "line": 85,
+          "column": 9
+        },
+        {
+          "title": "evaluation native retry preserves identity after acceptance at 1024",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 11884,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T19:35:58.149Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "actual-evaluation-keyboard",
+                      "contentType": "application/json",
+                      "body": "eyJ3aWR0aCI6IDEwMjQsICJtb2RlIjogImFmdGVyIGFjY2VwdGFuY2UiLCAia2V5cyI6IFsiNmIwNzIzYmQtODcyNC00M2ZiLTg2ZWMtZTA5YjMxMGQzZWZjIiwgIjZiMDcyM2JkLTg3MjQtNDNmYi04NmVjLWUwOWIzMTBkM2VmYyJdLCAiYm9kaWVzIjogW3sic25hcHNob3RJZCI6ICJzbmFwLTVjOGJjYTEyLTNlY2ItNGY2Yy1iMDE5LTI1OWMzN2E2N2ZjNCIsICJkZWZpbml0aW9uUmVmIjogInVubWFwcGVkLXNpbXVsYXRpb24tY2xvY2siLCAiZGVmaW5pdGlvbkRpZ2VzdCI6ICJzaGEyNTY6YjQxY2JjZWU3ZjY0ZTcwOGQ1MTBmMTkxMzFlM2Q2YWYwMWQ3NDA3ZWZmZWQ2NzRhNDcxNGNhNjI0ZTVlNGRlNCIsICJldmlkZW5jZVJlZnMiOiBbInJ1bi1lOTZkMDBjNi1kMGQ0LTRjOGUtYjAyNy0xM2ViM2MzNzk1MWE6cHJvdmlkZXItam91cm5hbCJdfSwgeyJzbmFwc2hvdElkIjogInNuYXAtNWM4YmNhMTItM2VjYi00ZjZjLWIwMTktMjU5YzM3YTY3ZmM0IiwgImRlZmluaXRpb25SZWYiOiAidW5tYXBwZWQtc2ltdWxhdGlvbi1jbG9jayIsICJkZWZpbml0aW9uRGlnZXN0IjogInNoYTI1NjpiNDFjYmNlZTdmNjRlNzA4ZDUxMGYxOTEzMWUzZDZhZjAxZDc0MDdlZmZlZDY3NGE0NzE0Y2E2MjRlNWU0ZGU0IiwgImV2aWRlbmNlUmVmcyI6IFsicnVuLWU5NmQwMGM2LWQwZDQtNGM4ZS1iMDI3LTEzZWIzYzM3OTUxYTpwcm92aWRlci1qb3VybmFsIl19XSwgInJvdyI6IHsiZGVmaW5pdGlvblJlZiI6ICJ1bm1hcHBlZC1zaW11bGF0aW9uLWNsb2NrIiwgImRlZmluaXRpb25EaWdlc3QiOiAic2hhMjU2OmI0MWNiY2VlN2Y2NGU3MDhkNTEwZjE5MTMxZTNkNmFmMDFkNzQwN2VmZmVkNjc0YTQ3MTRjYTYyNGU1ZTRkZTQiLCAic3RhdHVzIjogImNvbXBsZXRlIiwgInZlcmRpY3QiOiAiaW5kZXRlcm1pbmF0ZSIsICJ2YWx1ZSI6IG51bGwsICJ1bml0IjogbnVsbCwgImNvdmVyYWdlIjogImluY29tcGxldGUiLCAicGFydGlhbCI6IGZhbHNlfSwgImNvbnRyYXN0IjogeyJsYWJlbCI6ICJFdmFsdWF0aW9uIHN1Ym1pc3Npb24gZGlhZ25vc3RpYyIsICJ0ZXh0IjogIkVWQUxVQVRJT05fS0VZQk9BUkRfRklYVFVSRUxhYmVsbGVkIHJlc3BvbnNlIHJlZnVzYWwgYWZ0ZXIgYWNjZXB0YW5jZSIsICJjb2xvciI6ICJyZ2IoMTYxLCA4OSwgODEpIiwgImZvbnRTaXplIjogIjEycHgiLCAiZm9udFdlaWdodCI6ICI0MDAiLCAidGhyZXNob2xkIjogNC41LCAic2NvcGUiOiAiU2VsZWN0ZWQgbm9ybWFsLXNpemUgcmVuZGVyZWQgdGV4dDsgbm8gb3ZlcmFsbCBhY2Nlc3NpYmlsaXR5IGNlcnRpZmljYXRpb24iLCAic3VwcG9ydGVkIjogdHJ1ZSwgImxheWVycyI6IFsicmdiKDI1NSwgMjQzLCAyNDIpIl0sICJiYWNrZ3JvdW5kIjogWzEsIDAuOTUyOTQxMTc2NDcwNTg4MiwgMC45NDkwMTk2MDc4NDMxMzcyLCAxXSwgImNvbXBvc2l0ZWRGb3JlZ3JvdW5kIjogWzAuNjMxMzcyNTQ5MDE5NjA3OCwgMC4zNDkwMTk2MDc4NDMxMzcyNCwgMC4zMTc2NDcwNTg4MjM1Mjk0LCAxXSwgInJhdGlvIjogNC43NjMzNjA5MTYxNTU3NzIsICJwYXNzZWQiOiB0cnVlLCAiYXNzdW1wdGlvbnMiOiAiQ1NTIHNSR0IgY29sb3JzOyBhbHBoYSBjb21wb3NpdGVkIHRocm91Z2ggZXhwbGljaXQgYmFja2dyb3VuZHM7IG5vIGFudGktYWxpYXNpbmcgYXBwcm94aW1hdGlvbiJ9LCAiZml4dHVyZSI6ICJPbmUgbGFiZWxsZWQ1MDM7IGFjY2VwdGVkLXJlc3BvbnNlIGNhc2UgZmlyc3QgZXhlY3V0ZXMgYWN0dWFsIG5hdGl2ZSBQT1NUIiwgImJyb3dzZXIiOiAiMTU2LjAuODA3OC40IiwgInNjb3BlIjogIkZyZXNoIGFjdHVhbCBpbnN0YWxsZWQgQXV0b3ZlcnNlIG1hcHBpbmc7IG5ldyBkZXJpdmVkIGV2YWx1YXRpb24gb2Ygb3JpZ2luYWwgZnJvemVuIGV2aWRlbmNlIG9ubHkuIE5vIG1vZGVsL2d1ZXN0L3Byb3ZpZGVyIG9wZXJhdGlvbiBvciBBVCBjZXJ0aWZpY2F0aW9uLiJ9Cg=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "b448aaac59a4327bd374-1b6b39712950161a4140",
+          "file": "autoverse-evaluation-keyboard.spec.ts",
+          "line": 85,
+          "column": 9
+        },
+        {
+          "title": "held actual evaluation preserves newer Home at 1024",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 8550,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T19:36:10.045Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "actual-evaluation-keyboard",
+                      "contentType": "application/json",
+                      "body": "eyJ3aWR0aCI6IDEwMjQsICJpbnRlbnQiOiAiSG9tZSIsICJyZWNlaXB0IjogeyJldmFsdWF0aW9uSWQiOiAiZXZhbC1iN2RmMzdjNC04MjQ4LTQwMDctOTZjNC1lNTU2OTU0OTg1NzgiLCAib3BlcmF0aW9uSWQiOiAib3AtZDYyMDI1ZWMtMGFkMC00YWZjLTliZTktYTNhNzk0MjkwZmRjIiwgInN0YXR1cyI6ICJjb21wbGV0ZSJ9LCAibmV3RGVyaXZlZFJlc3VsdE9ubHkiOiB0cnVlLCAiYnJvd3NlciI6ICIxNTYuMC44MDc4LjQiLCAic2NvcGUiOiAiRnJlc2ggYWN0dWFsIGluc3RhbGxlZCBBdXRvdmVyc2UgbWFwcGluZzsgbmV3IGRlcml2ZWQgZXZhbHVhdGlvbiBvZiBvcmlnaW5hbCBmcm96ZW4gZXZpZGVuY2Ugb25seS4gTm8gbW9kZWwvZ3Vlc3QvcHJvdmlkZXIgb3BlcmF0aW9uIG9yIEFUIGNlcnRpZmljYXRpb24uIn0K"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "b448aaac59a4327bd374-bbd3ff980ea5d2303736",
+          "file": "autoverse-evaluation-keyboard.spec.ts",
+          "line": 103,
+          "column": 9
+        },
+        {
+          "title": "held actual evaluation preserves newer focus at 1024",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 10989,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T19:36:18.605Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "actual-evaluation-keyboard",
+                      "contentType": "application/json",
+                      "body": "eyJ3aWR0aCI6IDEwMjQsICJpbnRlbnQiOiAiZm9jdXMiLCAicmVjZWlwdCI6IHsiZXZhbHVhdGlvbklkIjogImV2YWwtNTk5YmFkYTItNjFjMi00OTEyLTkzYjUtZDBkNGFjZmU1M2RkIiwgIm9wZXJhdGlvbklkIjogIm9wLTk2YjNjMWQ2LTg5MGUtNDhlOS04NjcwLTQwNzc0MTZhYTVkZCIsICJzdGF0dXMiOiAiY29tcGxldGUifSwgIm5ld0Rlcml2ZWRSZXN1bHRPbmx5IjogdHJ1ZSwgImJyb3dzZXIiOiAiMTU2LjAuODA3OC40IiwgInNjb3BlIjogIkZyZXNoIGFjdHVhbCBpbnN0YWxsZWQgQXV0b3ZlcnNlIG1hcHBpbmc7IG5ldyBkZXJpdmVkIGV2YWx1YXRpb24gb2Ygb3JpZ2luYWwgZnJvemVuIGV2aWRlbmNlIG9ubHkuIE5vIG1vZGVsL2d1ZXN0L3Byb3ZpZGVyIG9wZXJhdGlvbiBvciBBVCBjZXJ0aWZpY2F0aW9uLiJ9Cg=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "b448aaac59a4327bd374-7199f3e867477daf744c",
+          "file": "autoverse-evaluation-keyboard.spec.ts",
+          "line": 103,
+          "column": 9
+        },
+        {
+          "title": "held actual evaluation preserves newer source dialog at 1024",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 12132,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T19:36:29.610Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "actual-evaluation-keyboard",
+                      "contentType": "application/json",
+                      "body": "eyJ3aWR0aCI6IDEwMjQsICJpbnRlbnQiOiAic291cmNlIGRpYWxvZyIsICJyZWNlaXB0IjogeyJldmFsdWF0aW9uSWQiOiAiZXZhbC05OGZjZDJkZC05NDExLTQ3OTAtODc2YS1kOTBkOTQyNmZkNWIiLCAib3BlcmF0aW9uSWQiOiAib3AtMmQwM2I5YjAtY2NkMy00OGVmLWE3MDAtMTdjMjVlM2NhZTJlIiwgInN0YXR1cyI6ICJjb21wbGV0ZSJ9LCAibmV3RGVyaXZlZFJlc3VsdE9ubHkiOiB0cnVlLCAiYnJvd3NlciI6ICIxNTYuMC44MDc4LjQiLCAic2NvcGUiOiAiRnJlc2ggYWN0dWFsIGluc3RhbGxlZCBBdXRvdmVyc2UgbWFwcGluZzsgbmV3IGRlcml2ZWQgZXZhbHVhdGlvbiBvZiBvcmlnaW5hbCBmcm96ZW4gZXZpZGVuY2Ugb25seS4gTm8gbW9kZWwvZ3Vlc3QvcHJvdmlkZXIgb3BlcmF0aW9uIG9yIEFUIGNlcnRpZmljYXRpb24uIn0K"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "b448aaac59a4327bd374-101808f6eb2ac8e288f0",
+          "file": "autoverse-evaluation-keyboard.spec.ts",
+          "line": 103,
+          "column": 9
+        },
+        {
+          "title": "actual frozen digest refusal and native evaluation recovery at 1024",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 13323,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T19:36:41.754Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "actual-evaluation-keyboard",
+                      "contentType": "application/json",
+                      "body": "eyJ3aWR0aCI6IDEwMjQsICJhY3R1YWxCYWNrZW5kUmVmdXNhbCI6IHRydWUsICJyZWNlaXB0IjogeyJldmFsdWF0aW9uSWQiOiAiZXZhbC0wODgyYWQ0ZC1jYWY0LTQyNjYtYTA2NC1mZTE1Mjk2NTVlOTciLCAib3BlcmF0aW9uSWQiOiAib3AtZmIxZTg1MGItN2NlNS00YmM2LWIyOWQtY2U2NmI5ZWY2OGUwIiwgInN0YXR1cyI6ICJjb21wbGV0ZSJ9LCAicm93IjogeyJkZWZpbml0aW9uUmVmIjogInVubWFwcGVkLXNpbXVsYXRpb24tY2xvY2siLCAiZGVmaW5pdGlvbkRpZ2VzdCI6ICJzaGEyNTY6YjQxY2JjZWU3ZjY0ZTcwOGQ1MTBmMTkxMzFlM2Q2YWYwMWQ3NDA3ZWZmZWQ2NzRhNDcxNGNhNjI0ZTVlNGRlNCIsICJzdGF0dXMiOiAiY29tcGxldGUiLCAidmVyZGljdCI6ICJpbmRldGVybWluYXRlIiwgInZhbHVlIjogbnVsbCwgInVuaXQiOiBudWxsLCAiY292ZXJhZ2UiOiAiaW5jb21wbGV0ZSIsICJwYXJ0aWFsIjogZmFsc2V9LCAiY29udHJhc3QiOiB7ImxhYmVsIjogIkV2YWx1YXRpb24gc3VibWlzc2lvbiBkaWFnbm9zdGljIiwgInRleHQiOiAiREVGSU5JVElPTl9ESUdFU1RfTUlTTUFUQ0hUaGUgZGVmaW5pdGlvbiBkaWdlc3QgZGlmZmVycyBmcm9tIHRoZSBmcm96ZW4gcnVuIGlucHV0cy4iLCAiY29sb3IiOiAicmdiKDE2MSwgODksIDgxKSIsICJmb250U2l6ZSI6ICIxMnB4IiwgImZvbnRXZWlnaHQiOiAiNDAwIiwgInRocmVzaG9sZCI6IDQuNSwgInNjb3BlIjogIlNlbGVjdGVkIG5vcm1hbC1zaXplIHJlbmRlcmVkIHRleHQ7IG5vIG92ZXJhbGwgYWNjZXNzaWJpbGl0eSBjZXJ0aWZpY2F0aW9uIiwgInN1cHBvcnRlZCI6IHRydWUsICJsYXllcnMiOiBbInJnYigyNTUsIDI0MywgMjQyKSJdLCAiYmFja2dyb3VuZCI6IFsxLCAwLjk1Mjk0MTE3NjQ3MDU4ODIsIDAuOTQ5MDE5NjA3ODQzMTM3MiwgMV0sICJjb21wb3NpdGVkRm9yZWdyb3VuZCI6IFswLjYzMTM3MjU0OTAxOTYwNzgsIDAuMzQ5MDE5NjA3ODQzMTM3MjQsIDAuMzE3NjQ3MDU4ODIzNTI5NCwgMV0sICJyYXRpbyI6IDQuNzYzMzYwOTE2MTU1NzcyLCAicGFzc2VkIjogdHJ1ZSwgImFzc3VtcHRpb25zIjogIkNTUyBzUkdCIGNvbG9yczsgYWxwaGEgY29tcG9zaXRlZCB0aHJvdWdoIGV4cGxpY2l0IGJhY2tncm91bmRzOyBubyBhbnRpLWFsaWFzaW5nIGFwcHJveGltYXRpb24ifSwgImZpeHR1cmUiOiAiT25lIGV4cGxpY2l0bHkgbGFiZWxsZWQgb3V0Ym91bmQgZGlnZXN0IGNvcnJ1cHRpb247IGJhY2tlbmQgcmVmdXNlcyBiZWZvcmUgYWNjZXB0YW5jZSIsICJicm93c2VyIjogIjE1Ni4wLjgwNzguNCIsICJzY29wZSI6ICJGcmVzaCBhY3R1YWwgaW5zdGFsbGVkIEF1dG92ZXJzZSBtYXBwaW5nOyBuZXcgZGVyaXZlZCBldmFsdWF0aW9uIG9mIG9yaWdpbmFsIGZyb3plbiBldmlkZW5jZSBvbmx5LiBObyBtb2RlbC9ndWVzdC9wcm92aWRlciBvcGVyYXRpb24gb3IgQVQgY2VydGlmaWNhdGlvbi4ifQo="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "b448aaac59a4327bd374-6a5902f9790e4fcb0220",
+          "file": "autoverse-evaluation-keyboard.spec.ts",
+          "line": 125,
+          "column": 7
+        },
+        {
+          "title": "all six frozen outcomes submit through native evaluation keys at 1440",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 34326,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T19:36:55.085Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "actual-evaluation-keyboard",
+                      "contentType": "application/json",
+                      "body": "eyJ3aWR0aCI6IDE0NDAsICJyb3dzIjogW3siZGVmaW5pdGlvblJlZiI6ICJ1bm1hcHBlZC1zaW11bGF0aW9uLWNsb2NrIiwgImRlZmluaXRpb25EaWdlc3QiOiAic2hhMjU2OmI0MWNiY2VlN2Y2NGU3MDhkNTEwZjE5MTMxZTNkNmFmMDFkNzQwN2VmZmVkNjc0YTQ3MTRjYTYyNGU1ZTRkZTQiLCAic3RhdHVzIjogImNvbXBsZXRlIiwgInZlcmRpY3QiOiAiaW5kZXRlcm1pbmF0ZSIsICJ2YWx1ZSI6IG51bGwsICJ1bml0IjogbnVsbCwgImNvdmVyYWdlIjogImluY29tcGxldGUiLCAicGFydGlhbCI6IGZhbHNlfSwgeyJkZWZpbml0aW9uUmVmIjogInVuYWRtaXR0ZWQtY291bnQtdW5pdCIsICJkZWZpbml0aW9uRGlnZXN0IjogInNoYTI1NjowNmY5MjlhMWU5NWVlZmIzYTA4YjA5NjViYzQ5YmRiNTdjYTkzODdhMzQxN2JkMjI4MjFmYThmOTA5ODIwMTE1IiwgInN0YXR1cyI6ICJlcnJvciIsICJ2ZXJkaWN0IjogbnVsbCwgInZhbHVlIjogbnVsbCwgInVuaXQiOiBudWxsLCAiY292ZXJhZ2UiOiAiaW5jb21wbGV0ZSIsICJwYXJ0aWFsIjogZmFsc2V9LCB7ImRlZmluaXRpb25SZWYiOiAicmVjb3JkZWQtYWN0aXZhdGlvbi1jb3VudCIsICJkZWZpbml0aW9uRGlnZXN0IjogInNoYTI1NjpmMmUyNTVkZTg2YzI2Y2UwZWRhYzY3YjBmODkzMGRhYjM4MGU2ZmZhMThmOTJjZTNlMTM1ZDRlN2YyNjRhOGI0IiwgInN0YXR1cyI6ICJjb21wbGV0ZSIsICJ2ZXJkaWN0IjogbnVsbCwgInZhbHVlIjogMSwgInVuaXQiOiAiMSIsICJjb3ZlcmFnZSI6ICJjb21wbGV0ZSIsICJwYXJ0aWFsIjogZmFsc2V9LCB7ImRlZmluaXRpb25SZWYiOiAicmVjb3ZlcnktdGhyb3VnaC10aGlydHktc2Vjb25kcyIsICJkZWZpbml0aW9uRGlnZXN0IjogInNoYTI1Njo0ZTA1NWFhMzc2NWJjM2I5ZDVhZmMwZWRlMDZkYzk0YTVkMzE4YzAyNzc2MTUzYzJkYTYxZDFkMzRkYTEyZGRmIiwgInN0YXR1cyI6ICJjb21wbGV0ZSIsICJ2ZXJkaWN0IjogImluZGV0ZXJtaW5hdGUiLCAidmFsdWUiOiBudWxsLCAidW5pdCI6IG51bGwsICJjb3ZlcmFnZSI6ICJpbmNvbXBsZXRlIiwgInBhcnRpYWwiOiBmYWxzZX0sIHsiZGVmaW5pdGlvblJlZiI6ICJ0d28tcmVjb3Zlcmllcy1iZWZvcmUtdGVuLXNlY29uZHMiLCAiZGVmaW5pdGlvbkRpZ2VzdCI6ICJzaGEyNTY6Zjk2N2JjYzM2OTkxZWIwZGJlZmI3ODY5OTA2ODg2ZjhlNGVhYjgxNzA1NmRhOGRmZWYyM2JiMTg5N2FjODkzMiIsICJzdGF0dXMiOiAiY29tcGxldGUiLCAidmVyZGljdCI6ICJmYWlsIiwgInZhbHVlIjogZmFsc2UsICJ1bml0IjogbnVsbCwgImNvdmVyYWdlIjogImNvbXBsZXRlIiwgInBhcnRpYWwiOiBmYWxzZX0sIHsiZGVmaW5pdGlvblJlZiI6ICJicmlkZ2UtbG9zcy1hY2tub3dsZWRnZWQiLCAiZGVmaW5pdGlvbkRpZ2VzdCI6ICJzaGEyNTY6MzkzNGE5NzE4Yjc0YTk2NzhmNDY1NTU5ZTQ5ZDU0YWNiZmU1NDk1MmJiNmRlYTU5OTgwODI4OGE2YTE2MzAzZiIsICJzdGF0dXMiOiAiY29tcGxldGUiLCAidmVyZGljdCI6ICJwYXNzIiwgInZhbHVlIjogdHJ1ZSwgInVuaXQiOiBudWxsLCAiY292ZXJhZ2UiOiAiY29tcGxldGUiLCAicGFydGlhbCI6IGZhbHNlfV0sICJhbGxTaXhPdXRjb21lS2luZHNQcmVzZXJ2ZWQiOiB0cnVlLCAiYnJvd3NlciI6ICIxNTYuMC44MDc4LjQiLCAic2NvcGUiOiAiRnJlc2ggYWN0dWFsIGluc3RhbGxlZCBBdXRvdmVyc2UgbWFwcGluZzsgbmV3IGRlcml2ZWQgZXZhbHVhdGlvbiBvZiBvcmlnaW5hbCBmcm96ZW4gZXZpZGVuY2Ugb25seS4gTm8gbW9kZWwvZ3Vlc3QvcHJvdmlkZXIgb3BlcmF0aW9uIG9yIEFUIGNlcnRpZmljYXRpb24uIn0K"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "b448aaac59a4327bd374-ffbe04a0f181c8a81efa",
+          "file": "autoverse-evaluation-keyboard.spec.ts",
+          "line": 76,
+          "column": 7
+        },
+        {
+          "title": "evaluation native retry preserves identity before acceptance at 1440",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 11787,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T19:37:29.423Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "actual-evaluation-keyboard",
+                      "contentType": "application/json",
+                      "body": "eyJ3aWR0aCI6IDE0NDAsICJtb2RlIjogImJlZm9yZSBhY2NlcHRhbmNlIiwgImtleXMiOiBbImYzOTIzNjk3LTE2NjYtNGM4NS1hMWEzLTA5MTE2YWZhMmI3MCIsICJmMzkyMzY5Ny0xNjY2LTRjODUtYTFhMy0wOTExNmFmYTJiNzAiXSwgImJvZGllcyI6IFt7InNuYXBzaG90SWQiOiAic25hcC01YzhiY2ExMi0zZWNiLTRmNmMtYjAxOS0yNTljMzdhNjdmYzQiLCAiZGVmaW5pdGlvblJlZiI6ICJ1bm1hcHBlZC1zaW11bGF0aW9uLWNsb2NrIiwgImRlZmluaXRpb25EaWdlc3QiOiAic2hhMjU2OmI0MWNiY2VlN2Y2NGU3MDhkNTEwZjE5MTMxZTNkNmFmMDFkNzQwN2VmZmVkNjc0YTQ3MTRjYTYyNGU1ZTRkZTQiLCAiZXZpZGVuY2VSZWZzIjogWyJydW4tZTk2ZDAwYzYtZDBkNC00YzhlLWIwMjctMTNlYjNjMzc5NTFhOnByb3ZpZGVyLWpvdXJuYWwiXX0sIHsic25hcHNob3RJZCI6ICJzbmFwLTVjOGJjYTEyLTNlY2ItNGY2Yy1iMDE5LTI1OWMzN2E2N2ZjNCIsICJkZWZpbml0aW9uUmVmIjogInVubWFwcGVkLXNpbXVsYXRpb24tY2xvY2siLCAiZGVmaW5pdGlvbkRpZ2VzdCI6ICJzaGEyNTY6YjQxY2JjZWU3ZjY0ZTcwOGQ1MTBmMTkxMzFlM2Q2YWYwMWQ3NDA3ZWZmZWQ2NzRhNDcxNGNhNjI0ZTVlNGRlNCIsICJldmlkZW5jZVJlZnMiOiBbInJ1bi1lOTZkMDBjNi1kMGQ0LTRjOGUtYjAyNy0xM2ViM2MzNzk1MWE6cHJvdmlkZXItam91cm5hbCJdfV0sICJyb3ciOiB7ImRlZmluaXRpb25SZWYiOiAidW5tYXBwZWQtc2ltdWxhdGlvbi1jbG9jayIsICJkZWZpbml0aW9uRGlnZXN0IjogInNoYTI1NjpiNDFjYmNlZTdmNjRlNzA4ZDUxMGYxOTEzMWUzZDZhZjAxZDc0MDdlZmZlZDY3NGE0NzE0Y2E2MjRlNWU0ZGU0IiwgInN0YXR1cyI6ICJjb21wbGV0ZSIsICJ2ZXJkaWN0IjogImluZGV0ZXJtaW5hdGUiLCAidmFsdWUiOiBudWxsLCAidW5pdCI6IG51bGwsICJjb3ZlcmFnZSI6ICJpbmNvbXBsZXRlIiwgInBhcnRpYWwiOiBmYWxzZX0sICJjb250cmFzdCI6IHsibGFiZWwiOiAiRXZhbHVhdGlvbiBzdWJtaXNzaW9uIGRpYWdub3N0aWMiLCAidGV4dCI6ICJFVkFMVUFUSU9OX0tFWUJPQVJEX0ZJWFRVUkVMYWJlbGxlZCByZXNwb25zZSByZWZ1c2FsIGJlZm9yZSBhY2NlcHRhbmNlIiwgImNvbG9yIjogInJnYigxNjEsIDg5LCA4MSkiLCAiZm9udFNpemUiOiAiMTJweCIsICJmb250V2VpZ2h0IjogIjQwMCIsICJ0aHJlc2hvbGQiOiA0LjUsICJzY29wZSI6ICJTZWxlY3RlZCBub3JtYWwtc2l6ZSByZW5kZXJlZCB0ZXh0OyBubyBvdmVyYWxsIGFjY2Vzc2liaWxpdHkgY2VydGlmaWNhdGlvbiIsICJzdXBwb3J0ZWQiOiB0cnVlLCAibGF5ZXJzIjogWyJyZ2IoMjU1LCAyNDMsIDI0MikiXSwgImJhY2tncm91bmQiOiBbMSwgMC45NTI5NDExNzY0NzA1ODgyLCAwLjk0OTAxOTYwNzg0MzEzNzIsIDFdLCAiY29tcG9zaXRlZEZvcmVncm91bmQiOiBbMC42MzEzNzI1NDkwMTk2MDc4LCAwLjM0OTAxOTYwNzg0MzEzNzI0LCAwLjMxNzY0NzA1ODgyMzUyOTQsIDFdLCAicmF0aW8iOiA0Ljc2MzM2MDkxNjE1NTc3MiwgInBhc3NlZCI6IHRydWUsICJhc3N1bXB0aW9ucyI6ICJDU1Mgc1JHQiBjb2xvcnM7IGFscGhhIGNvbXBvc2l0ZWQgdGhyb3VnaCBleHBsaWNpdCBiYWNrZ3JvdW5kczsgbm8gYW50aS1hbGlhc2luZyBhcHByb3hpbWF0aW9uIn0sICJmaXh0dXJlIjogIk9uZSBsYWJlbGxlZDUwMzsgYWNjZXB0ZWQtcmVzcG9uc2UgY2FzZSBmaXJzdCBleGVjdXRlcyBhY3R1YWwgbmF0aXZlIFBPU1QiLCAiYnJvd3NlciI6ICIxNTYuMC44MDc4LjQiLCAic2NvcGUiOiAiRnJlc2ggYWN0dWFsIGluc3RhbGxlZCBBdXRvdmVyc2UgbWFwcGluZzsgbmV3IGRlcml2ZWQgZXZhbHVhdGlvbiBvZiBvcmlnaW5hbCBmcm96ZW4gZXZpZGVuY2Ugb25seS4gTm8gbW9kZWwvZ3Vlc3QvcHJvdmlkZXIgb3BlcmF0aW9uIG9yIEFUIGNlcnRpZmljYXRpb24uIn0K"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "b448aaac59a4327bd374-72d938442ce61bbe19ac",
+          "file": "autoverse-evaluation-keyboard.spec.ts",
+          "line": 85,
+          "column": 9
+        },
+        {
+          "title": "evaluation native retry preserves identity after acceptance at 1440",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 11824,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T19:37:41.221Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "actual-evaluation-keyboard",
+                      "contentType": "application/json",
+                      "body": "eyJ3aWR0aCI6IDE0NDAsICJtb2RlIjogImFmdGVyIGFjY2VwdGFuY2UiLCAia2V5cyI6IFsiYWQ4NDM4NzMtZmE5NS00ZWFlLTkxMzktMzBkZjhiODliOTJhIiwgImFkODQzODczLWZhOTUtNGVhZS05MTM5LTMwZGY4Yjg5YjkyYSJdLCAiYm9kaWVzIjogW3sic25hcHNob3RJZCI6ICJzbmFwLTVjOGJjYTEyLTNlY2ItNGY2Yy1iMDE5LTI1OWMzN2E2N2ZjNCIsICJkZWZpbml0aW9uUmVmIjogInVubWFwcGVkLXNpbXVsYXRpb24tY2xvY2siLCAiZGVmaW5pdGlvbkRpZ2VzdCI6ICJzaGEyNTY6YjQxY2JjZWU3ZjY0ZTcwOGQ1MTBmMTkxMzFlM2Q2YWYwMWQ3NDA3ZWZmZWQ2NzRhNDcxNGNhNjI0ZTVlNGRlNCIsICJldmlkZW5jZVJlZnMiOiBbInJ1bi1lOTZkMDBjNi1kMGQ0LTRjOGUtYjAyNy0xM2ViM2MzNzk1MWE6cHJvdmlkZXItam91cm5hbCJdfSwgeyJzbmFwc2hvdElkIjogInNuYXAtNWM4YmNhMTItM2VjYi00ZjZjLWIwMTktMjU5YzM3YTY3ZmM0IiwgImRlZmluaXRpb25SZWYiOiAidW5tYXBwZWQtc2ltdWxhdGlvbi1jbG9jayIsICJkZWZpbml0aW9uRGlnZXN0IjogInNoYTI1NjpiNDFjYmNlZTdmNjRlNzA4ZDUxMGYxOTEzMWUzZDZhZjAxZDc0MDdlZmZlZDY3NGE0NzE0Y2E2MjRlNWU0ZGU0IiwgImV2aWRlbmNlUmVmcyI6IFsicnVuLWU5NmQwMGM2LWQwZDQtNGM4ZS1iMDI3LTEzZWIzYzM3OTUxYTpwcm92aWRlci1qb3VybmFsIl19XSwgInJvdyI6IHsiZGVmaW5pdGlvblJlZiI6ICJ1bm1hcHBlZC1zaW11bGF0aW9uLWNsb2NrIiwgImRlZmluaXRpb25EaWdlc3QiOiAic2hhMjU2OmI0MWNiY2VlN2Y2NGU3MDhkNTEwZjE5MTMxZTNkNmFmMDFkNzQwN2VmZmVkNjc0YTQ3MTRjYTYyNGU1ZTRkZTQiLCAic3RhdHVzIjogImNvbXBsZXRlIiwgInZlcmRpY3QiOiAiaW5kZXRlcm1pbmF0ZSIsICJ2YWx1ZSI6IG51bGwsICJ1bml0IjogbnVsbCwgImNvdmVyYWdlIjogImluY29tcGxldGUiLCAicGFydGlhbCI6IGZhbHNlfSwgImNvbnRyYXN0IjogeyJsYWJlbCI6ICJFdmFsdWF0aW9uIHN1Ym1pc3Npb24gZGlhZ25vc3RpYyIsICJ0ZXh0IjogIkVWQUxVQVRJT05fS0VZQk9BUkRfRklYVFVSRUxhYmVsbGVkIHJlc3BvbnNlIHJlZnVzYWwgYWZ0ZXIgYWNjZXB0YW5jZSIsICJjb2xvciI6ICJyZ2IoMTYxLCA4OSwgODEpIiwgImZvbnRTaXplIjogIjEycHgiLCAiZm9udFdlaWdodCI6ICI0MDAiLCAidGhyZXNob2xkIjogNC41LCAic2NvcGUiOiAiU2VsZWN0ZWQgbm9ybWFsLXNpemUgcmVuZGVyZWQgdGV4dDsgbm8gb3ZlcmFsbCBhY2Nlc3NpYmlsaXR5IGNlcnRpZmljYXRpb24iLCAic3VwcG9ydGVkIjogdHJ1ZSwgImxheWVycyI6IFsicmdiKDI1NSwgMjQzLCAyNDIpIl0sICJiYWNrZ3JvdW5kIjogWzEsIDAuOTUyOTQxMTc2NDcwNTg4MiwgMC45NDkwMTk2MDc4NDMxMzcyLCAxXSwgImNvbXBvc2l0ZWRGb3JlZ3JvdW5kIjogWzAuNjMxMzcyNTQ5MDE5NjA3OCwgMC4zNDkwMTk2MDc4NDMxMzcyNCwgMC4zMTc2NDcwNTg4MjM1Mjk0LCAxXSwgInJhdGlvIjogNC43NjMzNjA5MTYxNTU3NzIsICJwYXNzZWQiOiB0cnVlLCAiYXNzdW1wdGlvbnMiOiAiQ1NTIHNSR0IgY29sb3JzOyBhbHBoYSBjb21wb3NpdGVkIHRocm91Z2ggZXhwbGljaXQgYmFja2dyb3VuZHM7IG5vIGFudGktYWxpYXNpbmcgYXBwcm94aW1hdGlvbiJ9LCAiZml4dHVyZSI6ICJPbmUgbGFiZWxsZWQ1MDM7IGFjY2VwdGVkLXJlc3BvbnNlIGNhc2UgZmlyc3QgZXhlY3V0ZXMgYWN0dWFsIG5hdGl2ZSBQT1NUIiwgImJyb3dzZXIiOiAiMTU2LjAuODA3OC40IiwgInNjb3BlIjogIkZyZXNoIGFjdHVhbCBpbnN0YWxsZWQgQXV0b3ZlcnNlIG1hcHBpbmc7IG5ldyBkZXJpdmVkIGV2YWx1YXRpb24gb2Ygb3JpZ2luYWwgZnJvemVuIGV2aWRlbmNlIG9ubHkuIE5vIG1vZGVsL2d1ZXN0L3Byb3ZpZGVyIG9wZXJhdGlvbiBvciBBVCBjZXJ0aWZpY2F0aW9uLiJ9Cg=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "b448aaac59a4327bd374-6545efad15e3b35fc764",
+          "file": "autoverse-evaluation-keyboard.spec.ts",
+          "line": 85,
+          "column": 9
+        },
+        {
+          "title": "held actual evaluation preserves newer Home at 1440",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 9178,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T19:37:53.057Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "actual-evaluation-keyboard",
+                      "contentType": "application/json",
+                      "body": "eyJ3aWR0aCI6IDE0NDAsICJpbnRlbnQiOiAiSG9tZSIsICJyZWNlaXB0IjogeyJldmFsdWF0aW9uSWQiOiAiZXZhbC01NzAyMWRiNi03NmViLTRlZWMtYTdmNi0wZjE5M2FhNGNjMmIiLCAib3BlcmF0aW9uSWQiOiAib3AtYWU4NzI1YTItYTQ4OC00ODhjLWIwYjYtZmI3YmViNjMyMjE5IiwgInN0YXR1cyI6ICJjb21wbGV0ZSJ9LCAibmV3RGVyaXZlZFJlc3VsdE9ubHkiOiB0cnVlLCAiYnJvd3NlciI6ICIxNTYuMC44MDc4LjQiLCAic2NvcGUiOiAiRnJlc2ggYWN0dWFsIGluc3RhbGxlZCBBdXRvdmVyc2UgbWFwcGluZzsgbmV3IGRlcml2ZWQgZXZhbHVhdGlvbiBvZiBvcmlnaW5hbCBmcm96ZW4gZXZpZGVuY2Ugb25seS4gTm8gbW9kZWwvZ3Vlc3QvcHJvdmlkZXIgb3BlcmF0aW9uIG9yIEFUIGNlcnRpZmljYXRpb24uIn0K"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "b448aaac59a4327bd374-cdde8c0c7d7a2138f73c",
+          "file": "autoverse-evaluation-keyboard.spec.ts",
+          "line": 103,
+          "column": 9
+        },
+        {
+          "title": "held actual evaluation preserves newer focus at 1440",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 12094,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T19:38:02.242Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "actual-evaluation-keyboard",
+                      "contentType": "application/json",
+                      "body": "eyJ3aWR0aCI6IDE0NDAsICJpbnRlbnQiOiAiZm9jdXMiLCAicmVjZWlwdCI6IHsiZXZhbHVhdGlvbklkIjogImV2YWwtYmExZTA3NTMtYzJjMy00Y2YxLTg0YTEtOWFhMWYyOTNmMzUzIiwgIm9wZXJhdGlvbklkIjogIm9wLTQ0YjE5YjRjLTBhYjUtNDUzOC04NjJjLWI3YjdjMjEzYmI2ZCIsICJzdGF0dXMiOiAiY29tcGxldGUifSwgIm5ld0Rlcml2ZWRSZXN1bHRPbmx5IjogdHJ1ZSwgImJyb3dzZXIiOiAiMTU2LjAuODA3OC40IiwgInNjb3BlIjogIkZyZXNoIGFjdHVhbCBpbnN0YWxsZWQgQXV0b3ZlcnNlIG1hcHBpbmc7IG5ldyBkZXJpdmVkIGV2YWx1YXRpb24gb2Ygb3JpZ2luYWwgZnJvemVuIGV2aWRlbmNlIG9ubHkuIE5vIG1vZGVsL2d1ZXN0L3Byb3ZpZGVyIG9wZXJhdGlvbiBvciBBVCBjZXJ0aWZpY2F0aW9uLiJ9Cg=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "b448aaac59a4327bd374-252cc3a57bb27e340640",
+          "file": "autoverse-evaluation-keyboard.spec.ts",
+          "line": 103,
+          "column": 9
+        },
+        {
+          "title": "held actual evaluation preserves newer source dialog at 1440",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 12247,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T19:38:14.344Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "actual-evaluation-keyboard",
+                      "contentType": "application/json",
+                      "body": "eyJ3aWR0aCI6IDE0NDAsICJpbnRlbnQiOiAic291cmNlIGRpYWxvZyIsICJyZWNlaXB0IjogeyJldmFsdWF0aW9uSWQiOiAiZXZhbC0yMzUwZTg0OC0wNzM1LTQ2OWYtOTBiMy0xYjZlN2ZkNjVmOTEiLCAib3BlcmF0aW9uSWQiOiAib3AtZjNkZDhhMzgtZmEyNi00OTExLWE1MDYtYzY5MTQ2NjFkY2VhIiwgInN0YXR1cyI6ICJjb21wbGV0ZSJ9LCAibmV3RGVyaXZlZFJlc3VsdE9ubHkiOiB0cnVlLCAiYnJvd3NlciI6ICIxNTYuMC44MDc4LjQiLCAic2NvcGUiOiAiRnJlc2ggYWN0dWFsIGluc3RhbGxlZCBBdXRvdmVyc2UgbWFwcGluZzsgbmV3IGRlcml2ZWQgZXZhbHVhdGlvbiBvZiBvcmlnaW5hbCBmcm96ZW4gZXZpZGVuY2Ugb25seS4gTm8gbW9kZWwvZ3Vlc3QvcHJvdmlkZXIgb3BlcmF0aW9uIG9yIEFUIGNlcnRpZmljYXRpb24uIn0K"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "b448aaac59a4327bd374-34053a0d492732261aae",
+          "file": "autoverse-evaluation-keyboard.spec.ts",
+          "line": 103,
+          "column": 9
+        },
+        {
+          "title": "actual frozen digest refusal and native evaluation recovery at 1440",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 13466,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T19:38:26.603Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "actual-evaluation-keyboard",
+                      "contentType": "application/json",
+                      "body": "eyJ3aWR0aCI6IDE0NDAsICJhY3R1YWxCYWNrZW5kUmVmdXNhbCI6IHRydWUsICJyZWNlaXB0IjogeyJldmFsdWF0aW9uSWQiOiAiZXZhbC0wZDk5ZjdmOS0xZGNmLTRhNDMtOTkzMC1kMzc5NjBlOTFmNGMiLCAib3BlcmF0aW9uSWQiOiAib3AtZWJhODI1NWItNWUzMC00OGUwLTgzZmEtNDcyNjNkNjRlMGEwIiwgInN0YXR1cyI6ICJjb21wbGV0ZSJ9LCAicm93IjogeyJkZWZpbml0aW9uUmVmIjogInVubWFwcGVkLXNpbXVsYXRpb24tY2xvY2siLCAiZGVmaW5pdGlvbkRpZ2VzdCI6ICJzaGEyNTY6YjQxY2JjZWU3ZjY0ZTcwOGQ1MTBmMTkxMzFlM2Q2YWYwMWQ3NDA3ZWZmZWQ2NzRhNDcxNGNhNjI0ZTVlNGRlNCIsICJzdGF0dXMiOiAiY29tcGxldGUiLCAidmVyZGljdCI6ICJpbmRldGVybWluYXRlIiwgInZhbHVlIjogbnVsbCwgInVuaXQiOiBudWxsLCAiY292ZXJhZ2UiOiAiaW5jb21wbGV0ZSIsICJwYXJ0aWFsIjogZmFsc2V9LCAiY29udHJhc3QiOiB7ImxhYmVsIjogIkV2YWx1YXRpb24gc3VibWlzc2lvbiBkaWFnbm9zdGljIiwgInRleHQiOiAiREVGSU5JVElPTl9ESUdFU1RfTUlTTUFUQ0hUaGUgZGVmaW5pdGlvbiBkaWdlc3QgZGlmZmVycyBmcm9tIHRoZSBmcm96ZW4gcnVuIGlucHV0cy4iLCAiY29sb3IiOiAicmdiKDE2MSwgODksIDgxKSIsICJmb250U2l6ZSI6ICIxMnB4IiwgImZvbnRXZWlnaHQiOiAiNDAwIiwgInRocmVzaG9sZCI6IDQuNSwgInNjb3BlIjogIlNlbGVjdGVkIG5vcm1hbC1zaXplIHJlbmRlcmVkIHRleHQ7IG5vIG92ZXJhbGwgYWNjZXNzaWJpbGl0eSBjZXJ0aWZpY2F0aW9uIiwgInN1cHBvcnRlZCI6IHRydWUsICJsYXllcnMiOiBbInJnYigyNTUsIDI0MywgMjQyKSJdLCAiYmFja2dyb3VuZCI6IFsxLCAwLjk1Mjk0MTE3NjQ3MDU4ODIsIDAuOTQ5MDE5NjA3ODQzMTM3MiwgMV0sICJjb21wb3NpdGVkRm9yZWdyb3VuZCI6IFswLjYzMTM3MjU0OTAxOTYwNzgsIDAuMzQ5MDE5NjA3ODQzMTM3MjQsIDAuMzE3NjQ3MDU4ODIzNTI5NCwgMV0sICJyYXRpbyI6IDQuNzYzMzYwOTE2MTU1NzcyLCAicGFzc2VkIjogdHJ1ZSwgImFzc3VtcHRpb25zIjogIkNTUyBzUkdCIGNvbG9yczsgYWxwaGEgY29tcG9zaXRlZCB0aHJvdWdoIGV4cGxpY2l0IGJhY2tncm91bmRzOyBubyBhbnRpLWFsaWFzaW5nIGFwcHJveGltYXRpb24ifSwgImZpeHR1cmUiOiAiT25lIGV4cGxpY2l0bHkgbGFiZWxsZWQgb3V0Ym91bmQgZGlnZXN0IGNvcnJ1cHRpb247IGJhY2tlbmQgcmVmdXNlcyBiZWZvcmUgYWNjZXB0YW5jZSIsICJicm93c2VyIjogIjE1Ni4wLjgwNzguNCIsICJzY29wZSI6ICJGcmVzaCBhY3R1YWwgaW5zdGFsbGVkIEF1dG92ZXJzZSBtYXBwaW5nOyBuZXcgZGVyaXZlZCBldmFsdWF0aW9uIG9mIG9yaWdpbmFsIGZyb3plbiBldmlkZW5jZSBvbmx5LiBObyBtb2RlbC9ndWVzdC9wcm92aWRlciBvcGVyYXRpb24gb3IgQVQgY2VydGlmaWNhdGlvbi4ifQo="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "b448aaac59a4327bd374-6f86c56bd9c975a26beb",
+          "file": "autoverse-evaluation-keyboard.spec.ts",
+          "line": 125,
+          "column": 7
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-05T19:35:12.981Z",
+    "duration": 207156.842,
+    "expected": 14,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

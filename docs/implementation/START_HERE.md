@@ -1,3 +1,22 @@
+Current instruction — 2026-11-05: evaluation keyboard component finished;
+work waits for explicit resume under the user instruction to finish current work
+then stop. Windows independently FROZEN. Counts72/18/10, zero accepted milestones;
+T038/T097 remain open. All three private infrastructure children exited through
+original supervisors, test backends/browsers exited, root lock released, eight
+containers were stopped; no next campaign started. Older active/live notes below
+are historical and do not override this hold. See STATUS.md and
+[evaluation evidence](../../evidence/studio/M4-accessibility/evaluation-submission-20261105/README.md).
+
+Latest active checkpoint — 2026-11-05: source3f81c46 passes genuine fresh-
+enrollment historical evaluation submission:14 new +12 unchanged native keyboard
+journeys,24 derived rows,583 inputs/6 reproduced assets; no model/guest start.
+Counts72/18/10,zero milestones. Test backends/browsers closed; freshly owned private
+daemon/overlay/display intentionally remain live for immediate campaign work, all8
+containers stopped. Revalidate live original handles; old metadata is not authority.
+Continue fresh campaign and full original remaining acceptance. Goal ACTIVE without
+checkpoint pauses; Windows independently frozen. See STATUS.md and
+[evaluation evidence](../../evidence/studio/M4-accessibility/evaluation-submission-20261105/README.md).
+
 Latest active checkpoint — 2026-11-05: source06d8931 corrects selected
 provider scope (4 native cases +14 unchanged binding journeys/580 inputs/6 rebuilt
 and reproduced UI files). Scope is unavailable for the absent Autoverse descriptor;

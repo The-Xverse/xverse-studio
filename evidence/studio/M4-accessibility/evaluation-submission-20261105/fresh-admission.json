@@ -1,0 +1,304 @@
+{
+  "scope": "Fresh actual launcher enrollment and historical mapping; no workload or evaluation submission",
+  "sourceCandidate": "4e20b9032b2f9ff0d1200513605736b6020e95d8",
+  "oldRecordUsedOnlyAsSelectedRootLocator": true,
+  "copiedOldEnrollmentMovedBeforeStart": null,
+  "before": {
+    "run": 1,
+    "operation": 8,
+    "evaluation": 6,
+    "snapshot": 1,
+    "campaign": 0,
+    "preflight": 1,
+    "idempotency": 8
+  },
+  "success": true,
+  "provider": {
+    "providerId": "autoverse.demo",
+    "providerVersion": "0.4.0",
+    "contractVersion": "1.0",
+    "implementationDigest": "sha256:2140064bc5b9c7e8f739ce53b67f5f1df700756913f3dc353ea33d2c41f46bc8",
+    "supportedHostOS": [
+      "Linux"
+    ],
+    "architectures": [
+      "x86_64"
+    ],
+    "operations": [
+      "start",
+      "stop",
+      "cancel"
+    ],
+    "capabilityRecords": [
+      {
+        "kind": "start",
+        "targetClass": "process",
+        "legalStates": [
+          "ready"
+        ],
+        "parametersSchema": {
+          "additionalProperties": false,
+          "type": "object"
+        },
+        "authorityRequirements": [
+          "native-backend-owned",
+          "exclusive-demo-installation"
+        ],
+        "physicalEffects": false
+      },
+      {
+        "kind": "stop",
+        "targetClass": "process",
+        "legalStates": [
+          "preparing",
+          "running",
+          "ready"
+        ],
+        "parametersSchema": {
+          "additionalProperties": false,
+          "type": "object"
+        },
+        "authorityRequirements": [
+          "native-backend-owned",
+          "exclusive-demo-installation"
+        ],
+        "physicalEffects": false
+      },
+      {
+        "kind": "cancel",
+        "targetClass": "process",
+        "legalStates": [
+          "preparing",
+          "running",
+          "ready"
+        ],
+        "parametersSchema": {
+          "additionalProperties": false,
+          "type": "object"
+        },
+        "authorityRequirements": [
+          "native-backend-owned",
+          "exclusive-demo-installation"
+        ],
+        "physicalEffects": false
+      }
+    ],
+    "limits": {
+      "maxConcurrentRuns": 1,
+      "maxConnections": 32,
+      "maxDurationSeconds": 1800,
+      "maxElements": 6,
+      "maxObservers": 2
+    },
+    "evidenceScope": "external_demo",
+    "available": true,
+    "hostCompatible": true,
+    "assessmentContract": {
+      "clockCodec": "autoverse.host-elapsed-microseconds.v1",
+      "clockDomain": "host-runtime",
+      "contractRef": "urn:xverse:studio:autoverse:fault-record-assessment:1.0",
+      "contractVersion": "1.0",
+      "coverage": "recorded-events-only",
+      "fields": {
+        "activationObserved": {
+          "eventKind": "fault.activation_observed",
+          "type": "boolean"
+        },
+        "recoveryObserved": {
+          "eventKind": "fault.recovery_observed",
+          "type": "boolean"
+        }
+      },
+      "maxSamples": 64,
+      "observerRef": "autoverse-fault-records",
+      "physicalEffects": false,
+      "tickUnit": "microsecond"
+    },
+    "campaignContract": {
+      "contractVersion": "1.0",
+      "durationParameter": "durationSeconds",
+      "maxConcurrency": 1,
+      "parameters": {
+        "durationSeconds": {
+          "maximum": 1800,
+          "minimum": 30,
+          "type": "integer",
+          "unit": "s"
+        }
+      },
+      "seedPolicy": "unsupported"
+    },
+    "clockDomains": [
+      "host-runtime"
+    ],
+    "connectionContracts": {
+      "externalRuntime": {
+        "contractRef": "urn:xverse:studio:autoverse:classic:1.0",
+        "feedback": "externally-managed-asynchronous-communication",
+        "kind": "communication",
+        "providerId": "autoverse.demo",
+        "version": "1.0"
+      }
+    },
+    "hostExecutionClass": "native-process-and-existing-containers",
+    "inputSurface": {
+      "companionLabel": "Android digital cluster",
+      "companionUrl": "https://localhost:8443",
+      "kind": "normalized-driver",
+      "leaseSeconds": 0.75,
+      "version": "1.0"
+    },
+    "installationDigest": "sha256:79c9513142781b83aafc710fffde7905f14a2d801d89e09de43bcb8fac8867cb",
+    "limitations": [
+      "Linux installation only; external simulation time and deterministic replay unavailable.",
+      "Input acceptance means publication, not vehicle acknowledgement. No native X-COM or physical vehicle."
+    ],
+    "maturity": "prototype",
+    "name": "Autoverse complete demo",
+    "observationContracts": {
+      "budgets": [
+        {
+          "maximum": 1,
+          "unit": "observer-slot"
+        }
+      ],
+      "contractVersion": "1.0",
+      "observers": [
+        {
+          "costs": [
+            {
+              "unit": "observer-slot",
+              "value": 1
+            }
+          ],
+          "intrusiveness": "Interface subscriptions; driving publication is separately controlled by the input lease.",
+          "observerId": "autoverse-telemetry"
+        },
+        {
+          "costs": [
+            {
+              "unit": "observer-slot",
+              "value": 0
+            }
+          ],
+          "intrusiveness": "Retrospective reads of existing recorded acknowledgement events; no new live subscription. CPU, storage and latency are not attested by subscription slots.",
+          "observerId": "autoverse-fault-records"
+        }
+      ]
+    },
+    "realizationClasses": [
+      "simulated",
+      "virtual"
+    ],
+    "rerunContract": {
+      "admissionPolicy": "current-full-preflight",
+      "contractVersion": "1.0",
+      "inputPolicy": "exact-frozen-sources",
+      "physicalEffects": false,
+      "reproducibility": "uncontrolled",
+      "sourceVersions": [
+        "0.3.0",
+        "0.4.0"
+      ]
+    },
+    "scenarioContracts": {
+      "clockCodec": "autoverse.host-elapsed-microseconds.v1",
+      "clockDomain": "host-runtime",
+      "contractRef": "urn:xverse:studio:autoverse:input-loss:1.0",
+      "contractVersion": "1.0",
+      "epoch": "actual-running-transition",
+      "faults": [
+        {
+          "activation": "urn:xverse:studio:autoverse:input-loss:1.0:activation",
+          "durationSeconds": {
+            "maximum": 30,
+            "minimum": 2
+          },
+          "effectScope": "driver-bridge-publication-lease",
+          "inputSurface": "studio-browser",
+          "kind": "driver-input-loss",
+          "maturity": "prototype",
+          "physicalEffects": false,
+          "recovery": "urn:xverse:studio:autoverse:input-loss:1.0:recovery",
+          "target": "driver"
+        }
+      ],
+      "limitations": [
+        "Suppression and bridge lease observations are separate from vehicle/controller effects.",
+        "No simulation clock, native X-COM fault or deterministic replay is admitted."
+      ],
+      "maxFaults": 8,
+      "minimumActivationSeconds": 2,
+      "minimumRecoveryGapSeconds": 2,
+      "recoveryMarginSeconds": 2,
+      "tickUnit": "microsecond",
+      "timingProfile": {
+        "namespace": "io.xverse.experiment",
+        "version": "0.1"
+      }
+    },
+    "supportedInputSurfaces": [
+      "native-pygame",
+      "studio-browser"
+    ],
+    "targetClasses": [
+      "process",
+      "container"
+    ]
+  },
+  "support": {
+    "formatVersion": "1.0",
+    "runId": "run-e96d00c6-d0d4-4c8e-b027-13eb3c37951a",
+    "snapshotId": "snap-5c8bca12-3ecb-4f6c-b019-259c37a67fc4",
+    "projectId": "prj-f4d19805-160e-494e-84cb-219d63270bb3",
+    "snapshotDigest": "sha256:d344584b8493ec170faa7e7deeaaca925dd0a18369ef8c8e7317d3867d6e590d",
+    "providerId": "autoverse.demo",
+    "evidenceScope": "external_demo",
+    "evidenceId": "run-e96d00c6-d0d4-4c8e-b027-13eb3c37951a:provider-journal",
+    "evidenceReader": "studio.hash-chain-v1",
+    "status": "supported",
+    "reasons": [],
+    "mapping": {
+      "contractVersion": "1.0",
+      "mappingId": "urn:xverse:studio:autoverse:fault-record-assessment:1.0",
+      "mappingDigest": "sha256:1d77d7a9271c7fa6e8f6e54a4f965496cb0ebf99a559985e47e464d4630326f2",
+      "sourceProviderId": "autoverse.demo",
+      "sourceVersion": "0.3.0",
+      "clockDomain": "host-runtime",
+      "clockCodec": "autoverse.host-elapsed-microseconds.v1",
+      "tickUnit": "microsecond",
+      "epoch": "actual-running-transition",
+      "observerRef": "autoverse-fault-records",
+      "coverageScope": "recorded-events-only"
+    }
+  },
+  "definitions": 6,
+  "historicalEvaluations": 6,
+  "freshReceiptCreated": true,
+  "freshReceiptSha256": "efc6e3e1fa269e8b0af48bdb269afcc62625f693cfb3a90e1f8502ec86315209",
+  "installationFiles": 94,
+  "installationContainers": 3,
+  "after": {
+    "run": 1,
+    "operation": 8,
+    "evaluation": 6,
+    "snapshot": 1,
+    "campaign": 0,
+    "preflight": 1,
+    "idempotency": 8
+  },
+  "rootReleased": true,
+  "backendShutdown": [
+    {
+      "launch": 1,
+      "originalIdentityVerified": true,
+      "termination": "original-handle SIGTERM",
+      "exit": -15
+    }
+  ],
+  "originalRecordingUnchanged": true,
+  "originalDatabaseUnchanged": true,
+  "copiedCanonicalUnchanged": true,
+  "sourceInputsUnchanged": true,
+  "selectedRootLocatorUnchanged": true
+}

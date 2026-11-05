@@ -1,3 +1,39 @@
+# Current evaluation component finished; user hold applies — 2026-11-05
+
+**72 completed /18 in progress /10 blocked; zero accepted milestones.**
+The evaluation focus fix and26 native keyboard journeys are verified. Larger
+T038/T097 tasks remain open. Final evidence and shutdown readback are retained;
+all three owned private services exited, all eight cached containers were stopped,
+and the environment lock is released. Host Docker/interfaces and original CARLA
+markers are unchanged. No next campaign started. Work waits for explicit resume
+under the user instruction to finish current work then stop; Windows independently
+FROZEN. Earlier active/live instructions below describe historical checkpoints.
+See [evaluation evidence](../../evidence/studio/M4-accessibility/evaluation-submission-20261105/README.md).
+
+## Historical checkpoints
+
+# Genuine evaluation submission verified; full goal active — 2026-11-05
+
+**72 completed /18 in progress /10 blocked; zero accepted milestones.**
+Source3f81c46 passes14 new positive evaluation and12 unchanged unregistered
+keyboard journeys on583 Git-bound inputs/6 reproduced UI assets. Fresh real launcher
+enrollment enables historical Autoverse mapping without starting a model or guest.
+All six outcomes remain distinct and match original input digests/evaluator identity.
+Submission refresh now restores report focus while preserving newer intent. Exact
+24 derived eval/operation/idempotency additions and legitimate latest-result index/
+observationVersion changes are verified; canonical/original records/lifecycle stay
+preserved. Direct unregistered API bypass is422 with no accepted operation. Earlier
+product/harness failures remain retained separately; prior binding12/2 timing
+failures remain open. All34/21 captured test handles exit and roots release.
+Private daemon/overlay/display stay freshly owned and live for the immediate next
+campaign verification, with all8 containers stopped and host service/interfaces
+unchanged. Revalidate current ownership before use. Continue full fresh campaign,
+AT/browser/required-host and original acceptance. Goal ACTIVE; no checkpoint pauses.
+Windows independently FROZEN. See
+[evidence/review/coverage](../../evidence/studio/M4-accessibility/evaluation-submission-20261105/README.md).
+
+## Historical checkpoints
+
 # Provider scope is truthful; full original goal active — 2026-11-05
 
 **72 completed /18 in progress /10 blocked; zero accepted milestones.**
