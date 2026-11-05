@@ -1,0 +1,117 @@
+"""Offline authored bindings must not depend on an installed runtime descriptor."""
+from copy import deepcopy
+
+import pytest
+from ruamel.yaml import YAML
+
+from xverse_studio.deployments import Deployments
+from xverse_studio.projects.service import Projects
+from xverse_studio.storage.core import Problem, Store
+from xverse_studio.xdl import XDLAdapter, examples
+from xverse_studio.xdl.examples import dump_yaml
+
+
+@pytest.mark.parametrize("realization", ["virtual", "physical", "hybrid"])
+def test_missing_descriptor_saves_only_authored_binding_and_stays_blocked(tmp_path, realization):
+    adapter = XDLAdapter()
+    projects = Projects(Store(tmp_path), adapter)
+    documents = examples()[0]["documents"]
+    if realization == "physical":
+        declared = YAML(typ="safe").load(documents["deployment.xdl.yaml"])
+        declared["spec"]["targets"][0]["externalAssetRef"] = "urn:fixture:unresolved-physical-asset"
+        documents["deployment.xdl.yaml"] = dump_yaml(declared)
+    project = projects.create("Uninstalled binding authoring", documents=documents)
+    descriptor_reads = []
+
+    def descriptors():
+        descriptor_reads.append(True)
+        return []
+
+    def forbidden_configuration(*args):
+        pytest.fail("An absent descriptor must never use a fallback provider configuration")
+
+    deployments = Deployments(projects, adapter, descriptor_source=descriptors,
+                              configuration_for=forbidden_configuration)
+    variant = deployments.list(project["projectId"])["items"][0]
+    before = projects.sources(project)
+    result = deployments.update_binding(project["projectId"], project["revision"], variant["documentId"],
+        {"bindingId": "plant-binding", "realizationClass": realization}, "not-installed")
+    assert descriptor_reads == ([] if realization == "physical" else [True])
+    assert result["project"]["revision"] == project["revision"] + 1
+    assert result["compatibility"]["status"] == "blocked"
+    if realization == "physical":
+        # The actual Phase1 compiler rejects physical execution before provider
+        # discovery; keep that authoritative diagnostic instead of replacing it.
+        assert [d["code"] for d in result["compatibility"]["diagnostics"]] == ["XDL1-PLAN-REALIZATION-UNSUPPORTED"]
+    else:
+        assert result["compatibility"]["diagnostics"] == [{
+            "code": "PROVIDER_UNAVAILABLE", "severity": "error",
+            "message": "Draft saved. No provider descriptor has this identity; execution compatibility is unavailable.",
+            "providerId": "not-installed",
+        }]
+    assert result["resolution"] is None
+    after = projects.sources(result["project"])
+    deployment_path = project["documents"][variant["documentId"]]["path"]
+    assert {k:v for k,v in before.items() if k != deployment_path} == {k:v for k,v in after.items() if k != deployment_path}
+    old = YAML(typ="safe").load(before[deployment_path])
+    expected = deepcopy(old)
+    next(b for b in expected["spec"]["bindings"] if b["id"] == "plant-binding")["realizationClass"] = realization
+    assert YAML(typ="safe").load(after[deployment_path]) == expected
+    # Explicit observation still cannot invent a descriptor/admission.
+    with pytest.raises(Problem) as strict:
+        deployments.resolution(project["projectId"], variant["documentId"], "not-installed")
+    assert strict.value.code == "PROVIDER_UNAVAILABLE" and strict.value.status == 404
+    with pytest.raises(Problem) as stale:
+        deployments.update_binding(project["projectId"], project["revision"], variant["documentId"],
+            {"bindingId": "plant-binding", "realizationClass": "simulated"}, "not-installed")
+    assert stale.value.code == "REVISION_CONFLICT"
+    assert projects.read(project["projectId"]) == result["project"]
+
+
+def test_missing_descriptor_does_not_relax_invalid_source_edit(tmp_path):
+    adapter = XDLAdapter()
+    projects = Projects(Store(tmp_path), adapter)
+    project = projects.create("Invalid offline target")
+
+    def forbidden_discovery():
+        pytest.fail("An invalid authored target must fail before provider lookup")
+
+    deployments = Deployments(projects, adapter, descriptor_source=forbidden_discovery)
+    variant = deployments.list(project["projectId"])["items"][0]
+    with pytest.raises(Problem):
+        deployments.update_binding(project["projectId"], project["revision"], variant["documentId"],
+            {"bindingId": "plant-binding", "targetId": "absent-target"}, "not-installed")
+    assert projects.read(project["projectId"]) == project
+
+
+def test_descriptor_discovery_failure_is_not_treated_as_absence(tmp_path):
+    adapter = XDLAdapter()
+    projects = Projects(Store(tmp_path), adapter)
+    project = projects.create("Failed descriptor lookup")
+
+    def failed_discovery():
+        raise RuntimeError("controlled descriptor failure")
+
+    deployments = Deployments(projects, adapter, descriptor_source=failed_discovery)
+    variant = deployments.list(project["projectId"])["items"][0]
+    with pytest.raises(RuntimeError, match="controlled descriptor failure"):
+        deployments.update_binding(project["projectId"], project["revision"], variant["documentId"],
+            {"bindingId": "plant-binding", "realizationClass": "virtual"}, "not-installed")
+    assert projects.read(project["projectId"]) == project
+
+
+def test_missing_physical_asset_still_refuses_before_discovery_or_commit(tmp_path):
+    adapter = XDLAdapter()
+    projects = Projects(Store(tmp_path), adapter)
+    project = projects.create("Physical declaration requires explicit asset")
+
+    def forbidden_discovery():
+        pytest.fail("Invalid physical source must fail before provider lookup")
+
+    deployments = Deployments(projects, adapter, descriptor_source=forbidden_discovery)
+    variant = deployments.list(project["projectId"])["items"][0]
+    with pytest.raises(Problem) as refused:
+        deployments.update_binding(project["projectId"], project["revision"], variant["documentId"],
+            {"bindingId": "plant-binding", "realizationClass": "physical"}, "not-installed")
+    assert refused.value.code == "MODEL_INVALID" and "XDL-SEMANTIC-PHYSICAL-ASSET" in str(refused.value)
+    assert projects.read(project["projectId"]) == project

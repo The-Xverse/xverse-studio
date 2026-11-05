@@ -81,11 +81,11 @@ class Deployments:
         self.projects, self.adapter = projects, adapter
         self.descriptor_source, self.configuration_for = descriptor_source, configuration_for
 
-    def _provider(self, provider_id):
+    def _provider(self, provider_id, *, required=True):
         from xverse_studio.providers.registry import descriptors
 
         provider = next((deepcopy(value) for value in (self.descriptor_source or descriptors)() if value["providerId"] == provider_id), None)
-        if provider is None:
+        if provider is None and required:
             raise Problem("PROVIDER_UNAVAILABLE", "No provider descriptor has this identity.", 404)
         return provider
 
@@ -255,19 +255,27 @@ class Deployments:
             compiled = compile_selection(updated, selection, self.adapter)
             readiness.update(status="blocked", diagnostics=compiled["diagnostics"])
             if compiled["valid"]:
-                provider = self._provider(provider_id)
-                resolution.update(self._resolve(updated, selection["deploymentRef"], provider_id, provider=provider))
-            if compiled["valid"]:
-                try:
-                    if self.configuration_for is None:
-                        reference_configuration(compiled["contributingDocuments"], compiled)
-                    else:
-                        self.configuration_for(provider_id, provider, compiled["contributingDocuments"], compiled)
-                    readiness.update(status="preflight_required", diagnostics=[])
-                except XDLRejected as error:
-                    readiness["diagnostics"] = [{"code": error.code, "severity": "error", "message": str(error)}]
-                if resolution["diagnostics"]:
-                    readiness.update(status="blocked", diagnostics=[*readiness["diagnostics"], *resolution["diagnostics"]])
+                provider = self._provider(provider_id, required=False)
+                if provider is None:
+                    # Draft authoring is independent of runtime installation. No
+                    # descriptor, resolution or fallback execution is invented.
+                    readiness["diagnostics"] = [{
+                        "code": "PROVIDER_UNAVAILABLE", "severity": "error",
+                        "message": "Draft saved. No provider descriptor has this identity; execution compatibility is unavailable.",
+                        "providerId": provider_id,
+                    }]
+                else:
+                    resolution.update(self._resolve(updated, selection["deploymentRef"], provider_id, provider=provider))
+                    try:
+                        if self.configuration_for is None:
+                            reference_configuration(compiled["contributingDocuments"], compiled)
+                        else:
+                            self.configuration_for(provider_id, provider, compiled["contributingDocuments"], compiled)
+                        readiness.update(status="preflight_required", diagnostics=[])
+                    except XDLRejected as error:
+                        readiness["diagnostics"] = [{"code": error.code, "severity": "error", "message": str(error)}]
+                    if resolution["diagnostics"]:
+                        readiness.update(status="blocked", diagnostics=[*readiness["diagnostics"], *resolution["diagnostics"]])
             return {identifier: {**document, "content": updated[document["path"]]} for identifier, document in project["documents"].items()}
         project = self.projects.mutate(project_id, revision, change)
         variant = next(item for item in self.list(project_id)["items"] if item["documentId"] == document_id)
