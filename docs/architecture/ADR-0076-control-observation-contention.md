@@ -67,3 +67,19 @@ pressure/observation/prefix checks. Every failed heartbeat remains fatal; never
 silently reacquire or relax authority. Join that thread before the planned command
 and in finally cleanup. Retain its bounded timings/errors and original frame/GET
 failure. The complete live Stop/Cancel and finite repeats remain required.
+
+The independent-heartbeat repeat oncf0ea89 reaches completed Stop,0.492-second
+acknowledgment,31.368-second terminal cleanup, advancing canonical counts60/65/67,
+no heartbeat errors and verified16-resource/3-container release. The whole verifier
+still fails: it incorrectly expects expectedStateVersion on the public Stop
+operation. That operation has never promised this field; its accepted request is
+bound in the durable idempotency fingerprint. Preserve the failed whole result.
+
+Verify the exact request digest (including expectedStateVersion), route/key and
+accepted result in retained read-only metadata, the public operation's run/kind/
+ID/completed state, and the original owner-digest-bound HMAC mailbox and producer
+completion for that ID. This uses the existing contract; no production field or
+provider endpoint is added. Twelve source-backed checks pass, including eleven
+changed request/operation/fingerprint/mailbox/key/producer refusals. Repeat the
+whole cases to verify the remaining frozen-byte and ledger assertions, rather
+than reclassifying the old failure as a full pass.

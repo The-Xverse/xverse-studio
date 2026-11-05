@@ -6,10 +6,14 @@ accepted controls and owned cleanup are verified separately through public APIs.
 """
 
 import argparse
+from contextlib import closing
+import hashlib
+import hmac
 import importlib.util
 import json
 from pathlib import Path
 import signal
+import sqlite3
 import sys
 import threading
 import time
@@ -19,7 +23,7 @@ import httpx
 
 from xverse_studio.evidence.reader import read_journal
 from xverse_studio.host.ownership import own_root
-from xverse_studio.storage.core import digest
+from xverse_studio.storage.core import canonical, digest
 
 
 _spec = importlib.util.spec_from_file_location(
@@ -40,6 +44,34 @@ def first_frame(lines):
         if separator and key:
             fields[key] = value.lstrip(" ")
     raise AssertionError("No complete initial SSE frame")
+
+
+def verify_control_receipt(data, run_id, request, key, command, settled):
+    """Bind the existing Stop/Cancel contract without inventing receipt fields."""
+    assert settled["operationId"] == command["operationId"]
+    assert command["runId"] == run_id
+    assert settled["status"] == "completed" and settled["runId"] == run_id
+    assert settled["kind"] == request["kind"]
+    with closing(sqlite3.connect((data / "studio.sqlite").as_uri() + "?mode=ro", uri=True)) as db:
+        rows = db.execute("SELECT scope,fingerprint,result FROM idempotency WHERE key=?", (key,)).fetchall()
+        run = json.loads(db.execute("SELECT body FROM records WHERE kind='run' AND id=?", (run_id,)).fetchone()[0])
+    scope, fingerprint, result = next(row for row in rows if row[0].endswith(":POST /runs/" + run_id + "/commands"))
+    assert sum(row[0].endswith(":POST /runs/" + run_id + "/commands") for row in rows) == 1
+    assert scope != ":POST /runs/" + run_id + "/commands"
+    assert fingerprint == digest(request) and json.loads(result) == command
+    root = data / "runs" / run_id
+    mailbox = json.loads((root / "command.json").read_bytes())
+    signature = mailbox.pop("signature")
+    secret = (root / "owner.key").read_bytes()
+    assert digest(secret) == run["ownerDigest"]
+    assert hmac.compare_digest(signature, hmac.new(secret, canonical(mailbox).encode(), hashlib.sha256).hexdigest())
+    assert mailbox == {"kind": request["kind"], "operationId": command["operationId"]}
+    producer = json.loads((root / "state.json").read_bytes())
+    assert producer["commandResults"][command["operationId"]]["status"] == "completed"
+    return {"publicOperationCompleted": True, "requestFingerprintBound": True,
+            "expectedStateVersion": request["expectedStateVersion"],
+            "exactIdempotentResult": True, "signedMailboxBound": True,
+            "producerCompletedBound": True}
 
 
 class PresentationPressure:
@@ -302,6 +334,7 @@ def main():
         assert not pressure.errors and all(pressure.requests.get(k, {}).get("count", 0) > 0 for k in ["history", "comparison", "campaign"])
         body = {"kind": args.control, "expectedStateVersion": run["stateVersion"], "parameters": {}}
         key = {"Idempotency-Key": "pressure-owned-" + args.control}
+        report["controlRequest"] = body
         begin = time.monotonic()
         command = native.checked(api.post(route + "/commands", headers=key, json=body), 202)
         acknowledgment_seconds = time.monotonic() - begin
@@ -328,10 +361,9 @@ def main():
         assert integrity == "valid"
         # This provider's authenticated state carries control receipts; its
         # canonical journal independently records terminal state/resource facts.
-        producer = json.loads((journal.parent / "state.json").read_bytes())
-        assert producer["commandResults"][command["operationId"]]["status"] == "completed"
-        assert settled["runId"] == run_id and settled["kind"] == args.control
-        assert settled["expectedStateVersion"] == body["expectedStateVersion"]
+        report["controlReceipt"] = verify_control_receipt(
+            data, run_id, body, key["Idempotency-Key"], command, settled,
+        )
         assert frozen_path.read_bytes() == frozen_bytes and digest(synthetic.read_bytes()) == synthetic_digest
         report["after"] = recorded.ledger(data)
         expected = {**baseline, "run": baseline["run"] + 1, "operation": baseline["operation"] + 3,
