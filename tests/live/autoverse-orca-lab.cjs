@@ -1,5 +1,5 @@
 const tools=require('./autoverse-orca-tools.cjs')(process.argv[2]);
-const {chromium,expect,fs,path,out,c,pause,key,snapshot,spoken,speechText,focus}=tools;
+const {chromium,expect,fs,path,out,c,pause,key,snapshot,observedSnapshot,spoken,speechText,focus}=tools;
 (async()=>{
  const browser=await chromium.launch({headless:false,args:['--disable-gpu','--disable-gpu-rasterization','--force-renderer-accessibility=complete','--password-store=basic']});
  try {
@@ -17,7 +17,7 @@ const {chromium,expect,fs,path,out,c,pause,key,snapshot,spoken,speechText,focus}
   await expect(lab.getByRole('heading',{name:'No physical provider admitted',exact:true})).toBeVisible();
   await expect(inventory.getByRole('status')).toHaveText('Provider inventory observation is complete.');
   await expect(inventory).toContainText('No assets were returned on this page.');
-  const tree=await snapshot('actual-empty-inventory');
+  const tree=await observedSnapshot('actual-empty-inventory',tree=>tree.rows.some(r=>r.name==='No physical provider admitted'&&r.role==='heading')&&tree.rows.some(r=>r.name.includes('No assets were returned on this page.')));
   expect(tree.rows.some(r=>r.name==='No physical provider admitted'&&r.role==='heading')).toBe(true);
   expect(tree.rows.some(r=>r.name.includes('No assets were returned on this page.'))).toBe(true);
   const refresh=lab.getByRole('button',{name:'Refresh inventory',exact:true});

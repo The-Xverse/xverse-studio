@@ -55,6 +55,15 @@ async function spoken(text,offset=0) {
  }
  throw Error('Actual Orca SSIP utterance deadline: '+text);
 }
+async function observedSnapshot(name,predicate) {
+ const deadline=Date.now()+10000;
+ for(let i=0;i<10&&Date.now()<deadline;i++) {
+  const tree=await snapshot(`${name}-observation-${i}`);
+  if(Date.now()<=deadline&&predicate(tree)) return tree;
+  await pause(100);
+ }
+ throw Error('Actual AT-SPI content readiness deadline: '+name);
+}
 const speechText=()=>fs.readFileSync(path.join(out,'speech-logs/speech-dispatcher.log'),'utf8');
 async function focus(page,target,name,checkpoint) {
  await expect(target).toBeVisible();
@@ -76,5 +85,5 @@ async function focus(page,target,name,checkpoint) {
  throw Error('Native keyboard target unreachable: '+name);
 }
 
-return {chromium,expect,fs,path,out,c,pause,key,replaceText,snapshot,spoken,speechText,focus,writeJSON,get keyCount(){return keyId;}};
+return {chromium,expect,fs,path,out,c,pause,key,replaceText,snapshot,observedSnapshot,spoken,speechText,focus,writeJSON,get keyCount(){return keyId;}};
 };

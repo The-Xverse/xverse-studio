@@ -1,5 +1,5 @@
 const tools=require('./autoverse-orca-tools.cjs')(process.argv[2]);
-const {chromium,expect,fs,path,out,c,pause,key,snapshot,spoken,speechText,focus}=tools;
+const {chromium,expect,fs,path,out,c,pause,key,snapshot,observedSnapshot,spoken,speechText,focus}=tools;
 (async()=>{
  const browser=await chromium.launch({headless:false,args:['--disable-gpu','--disable-gpu-rasterization','--force-renderer-accessibility=complete','--password-store=basic']});
  try {
@@ -41,7 +41,7 @@ const {chromium,expect,fs,path,out,c,pause,key,snapshot,spoken,speechText,focus}
   const panel=page.getByRole('region',{name:'Run diagnosis',exact:true});
   await expect(panel).toHaveAttribute('data-explanation-state','loaded');
   await expect(panel).toContainText('TIME_MAPPING_INCOMPATIBLE');
-  const diagnosisTree=await snapshot('diagnosis-loaded');
+  const diagnosisTree=await observedSnapshot('diagnosis-loaded',tree=>tree.rows.some(r=>r.name.includes('TIME_MAPPING_INCOMPATIBLE')));
   if(!diagnosisTree.rows.some(r=>r.name==='Run diagnosis'&&['section','landmark'].includes(r.role))) throw Error('Diagnosis missing from AT-SPI');
   if(!diagnosisTree.rows.some(r=>r.name.includes('TIME_MAPPING_INCOMPATIBLE'))) throw Error('Actual diagnostic code missing from AT-SPI');
   const actionName='Inspect the referenced retained events and logs.';
