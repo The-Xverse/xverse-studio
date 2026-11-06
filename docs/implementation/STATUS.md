@@ -1,3 +1,14 @@
+Latest active checkpoint — 2026-11-06: source 3ccd39a passes eight actual
+Orca journeys: stimulus authoring via keyboard Close, conditions, actual empty
+inventory and retained-results regression at both widths. Three semantic edits
+are independently verified; all prior project bytes and execution data remain
+intact. All600 inputs match Git, with six unchanged UI assets. Two direct-Escape
+source cases fail return-button speech despite correct DOM/AT focus; the Orca42
+context/suppression trace is retained as an open gap. No production fix or task
+closure is claimed. All current handles exit and roots release. Counts72 completed
+/18 in progress /10 blocked; zero milestones. Windows independently FROZEN;
+goal ACTIVE without checkpoint pauses. See [stimulus AT evidence](../../evidence/studio/M4-accessibility/orca-stimulus-20261106/README.md).
+
 Latest active checkpoint — 2026-11-06: source ee3b174 passes six real Orca
 journeys for conditions editing, actual empty inventory and retained results at
 both required sizes. Native typing/error speech/persisted AT text and independently
