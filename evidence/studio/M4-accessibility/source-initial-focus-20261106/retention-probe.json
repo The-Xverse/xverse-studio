@@ -1,0 +1,16 @@
+{
+  "exit": 1,
+  "stage": "pre-export native shutdown assertion",
+  "problem": "Initial retainer required backend exit0, although the existing native helper explicitly permits0 or original-handle SIGTERM -15. Both actual native cases recorded verified ownership, original-handle SIGTERM and -15, with root released.",
+  "initialRetainerSha256": "6a733823179352ec95456ee332e2c03788015880bd60be56795bcffdcfdd6cc0",
+  "correction": "Use the same existing helper shutdown contract, retain actual -15 unchanged; no product/test/lifecycle changes or reruns.",
+  "exportDirectoryCreated": false,
+  "secondFailure": {
+    "exit": 1,
+    "stage": "pre-export native source/UI hash representation comparison",
+    "problem": "Native receipts use sha256:-tagged hashes; AT/Git maps use bare SHA256. All601 source and6 asset hashes match after strict prefix/hex validation.",
+    "initialRetainerSha256": "7bb904763caee14e79a0f1139fb415c3791a35557b3f9b11fd614ddba701fa4b",
+    "correction": "Normalize tags only for comparisons; retain original receipts and raw hashes unchanged. No application/test/lifecycle rerun or changed outcomes.",
+    "exportDirectoryCreated": false
+  }
+}

@@ -1,6 +1,6 @@
 # ADR-0083: Apply initial source focus after the dialog renders
 
-Date: 2026-11-06. Status: implemented candidate; component verification in progress.
+Date: 2026-11-06. Status: implemented; component verification retained separately.
 
 Actual Chromium156/Orca42 journeys found that direct Escape from an automatically
 selected source declaration restored DOM and AT-SPI focus without announcing the
@@ -31,3 +31,5 @@ Chromium frames, explicitly labelling the instrumented countercheck input. Repea
 the existing source-only authoring journeys and bind final source/assets to the
 candidate. These checks contribute to T038/T097 under AC-031; they do not replace
 the full browser/AT, human, required-host or milestone gates. Windows stays frozen.
+
+Component evidence: [source initial-focus verification](../../evidence/studio/M4-accessibility/source-initial-focus-20261106/README.md). No task or milestone acceptance follows.

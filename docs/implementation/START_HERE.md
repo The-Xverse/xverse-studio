@@ -1,3 +1,14 @@
+Latest active checkpoint — 2026-11-06: source 2391af4 repairs the recorded
+Orca source-dialog Escape announcement gap at both sizes. Four actual AT journeys
+(Escape/Close) and14 final browser cases pass; the old UI still reproduces the
+missing utterance with current test tools/backend. Initial focus waits for render
+and respects newer Resource focus/caret/early closure. All601 inputs match Git,
+six new assets reproduce, and independent three-revision integrity guards pass.
+Native/AT ownership scopes and exporter corrections are explicit in the evidence.
+All current handles terminate/roots release. Counts72/18/10, zero milestones and
+no task closures; Windows frozen; full goal ACTIVE without checkpoint pauses.
+See [initial-source focus evidence](../../evidence/studio/M4-accessibility/source-initial-focus-20261106/README.md).
+
 Latest active checkpoint — 2026-11-06: source dfaef4e passes six actual
 Orca journeys for observer/metric references and stimulus/retained regressions at
 both widths. Native AT values/checked observer, real422 refusal speech, unchanged
