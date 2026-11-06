@@ -1,0 +1,264 @@
+{
+  "config": {
+    "argv": [
+      "[WORKSPACE_VOLUME]/.xverse-studio-cache/node-v24.22.1-linux-x64/bin/node",
+      "[WORKSPACE_VOLUME]/xverse-studio/node_modules/@playwright/test/cli.js",
+      "test",
+      "--config",
+      "tests/live/autoverse-retained-run-selection.config.ts"
+    ],
+    "configFile": "[WORKTREE]/tests/live/autoverse-retained-run-selection.config.ts",
+    "rootDir": "[WORKTREE]/tests/live",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": "[WORKTREE]/tests/live/recorded-browser-device-setup.ts",
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "[WORKTREE]/.studio-local/t097-shell-scope-20261105/retained-selection-red-2/native/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "[WORKTREE]/tests/live",
+        "testIgnore": [],
+        "testMatch": [
+          "autoverse-retained-run-selection.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "[WORKTREE]/.studio-local/t097-shell-scope-20261105/retained-selection-red-2/native/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "[WORKTREE]/tests/live",
+        "snapshotDir": "[WORKTREE]/tests/live",
+        "testIgnore": [],
+        "testMatch": "autoverse-retained-run-selection.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "baseURL": "[LOOPBACK_ORIGIN]",
+          "browserName": "chromium",
+          "actionTimeout": 15000,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "trace": "off",
+          "screenshot": "only-on-failure",
+          "video": "off",
+          "launchOptions": {
+            "args": [
+              "--disable-gpu",
+              "--disable-gpu-rasterization"
+            ]
+          }
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "[WORKTREE]/.studio-local/t097-shell-scope-20261105/retained-selection-red-2/native/browser.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "autoverse-retained-run-selection.spec.ts",
+      "file": "autoverse-retained-run-selection.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "fresh browser selects actual retained Autoverse results at 1024",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 11368,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('Recorded run', { exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByLabel('Recorded run', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Recorded run', { exact: true })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('Recorded run', { exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByLabel('Recorded run', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Recorded run', { exact: true })\u001b[22m\n\n    at [WORKTREE]/tests/live/autoverse-retained-run-selection.spec.ts:30:26",
+                    "location": {
+                      "file": "[WORKTREE]/tests/live/autoverse-retained-run-selection.spec.ts",
+                      "column": 26,
+                      "line": 30
+                    },
+                    "snippet": "  28 |     await activate(page, page.getByRole(\"tab\", { name: \"Results\", exact: true }));\n  29 |     const select = page.getByLabel(\"Recorded run\", { exact: true });\n> 30 |     await expect(select).toBeVisible();\n     |                          ^\n  31 |     await expect(select.locator(`option[value=\"${source.runId}\"]`)).toHaveCount(1);\n  32 |     await expect(select).toHaveValue(\"\");\n  33 |     await focus(page, select);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "[WORKTREE]/tests/live/autoverse-retained-run-selection.spec.ts",
+                        "column": 26,
+                        "line": 30
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('Recorded run', { exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByLabel('Recorded run', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Recorded run', { exact: true })\u001b[22m\n\n\n  28 |     await activate(page, page.getByRole(\"tab\", { name: \"Results\", exact: true }));\n  29 |     const select = page.getByLabel(\"Recorded run\", { exact: true });\n> 30 |     await expect(select).toBeVisible();\n     |                          ^\n  31 |     await expect(select.locator(`option[value=\"${source.runId}\"]`)).toHaveCount(1);\n  32 |     await expect(select).toHaveValue(\"\");\n  33 |     await focus(page, select);\n    at [WORKTREE]/tests/live/autoverse-retained-run-selection.spec.ts:30:26"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T23:34:40.444Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "[WORKTREE]/.studio-local/t097-shell-scope-20261105/retained-selection-red-2/native/artifacts/autoverse-retained-run-sel-72432-d-Autoverse-results-at-1024/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "[WORKTREE]/.studio-local/t097-shell-scope-20261105/retained-selection-red-2/native/artifacts/autoverse-retained-run-sel-72432-d-Autoverse-results-at-1024/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "[WORKTREE]/tests/live/autoverse-retained-run-selection.spec.ts",
+                    "column": 26,
+                    "line": 30
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "b24881b11568b9d355b5-ebfd0895831aa4dc5759",
+          "file": "autoverse-retained-run-selection.spec.ts",
+          "line": 19,
+          "column": 7
+        },
+        {
+          "title": "fresh browser selects actual retained Autoverse results at 1440",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 11424,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('Recorded run', { exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByLabel('Recorded run', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Recorded run', { exact: true })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('Recorded run', { exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByLabel('Recorded run', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Recorded run', { exact: true })\u001b[22m\n\n    at [WORKTREE]/tests/live/autoverse-retained-run-selection.spec.ts:30:26",
+                    "location": {
+                      "file": "[WORKTREE]/tests/live/autoverse-retained-run-selection.spec.ts",
+                      "column": 26,
+                      "line": 30
+                    },
+                    "snippet": "  28 |     await activate(page, page.getByRole(\"tab\", { name: \"Results\", exact: true }));\n  29 |     const select = page.getByLabel(\"Recorded run\", { exact: true });\n> 30 |     await expect(select).toBeVisible();\n     |                          ^\n  31 |     await expect(select.locator(`option[value=\"${source.runId}\"]`)).toHaveCount(1);\n  32 |     await expect(select).toHaveValue(\"\");\n  33 |     await focus(page, select);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "[WORKTREE]/tests/live/autoverse-retained-run-selection.spec.ts",
+                        "column": 26,
+                        "line": 30
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('Recorded run', { exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByLabel('Recorded run', { exact: true }) with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Recorded run', { exact: true })\u001b[22m\n\n\n  28 |     await activate(page, page.getByRole(\"tab\", { name: \"Results\", exact: true }));\n  29 |     const select = page.getByLabel(\"Recorded run\", { exact: true });\n> 30 |     await expect(select).toBeVisible();\n     |                          ^\n  31 |     await expect(select.locator(`option[value=\"${source.runId}\"]`)).toHaveCount(1);\n  32 |     await expect(select).toHaveValue(\"\");\n  33 |     await focus(page, select);\n    at [WORKTREE]/tests/live/autoverse-retained-run-selection.spec.ts:30:26"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T23:34:52.310Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "[WORKTREE]/.studio-local/t097-shell-scope-20261105/retained-selection-red-2/native/artifacts/autoverse-retained-run-sel-79418-d-Autoverse-results-at-1440/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "[WORKTREE]/.studio-local/t097-shell-scope-20261105/retained-selection-red-2/native/artifacts/autoverse-retained-run-sel-79418-d-Autoverse-results-at-1440/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "[WORKTREE]/tests/live/autoverse-retained-run-selection.spec.ts",
+                    "column": 26,
+                    "line": 30
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "b24881b11568b9d355b5-dfcf15aa9b192eaa1383",
+          "file": "autoverse-retained-run-selection.spec.ts",
+          "line": 19,
+          "column": 7
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-05T23:34:40.128Z",
+    "duration": 23716.002,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  }
+}

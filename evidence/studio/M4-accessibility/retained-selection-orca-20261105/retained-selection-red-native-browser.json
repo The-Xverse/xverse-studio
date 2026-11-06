@@ -1,0 +1,126 @@
+{
+  "config": {
+    "argv": [
+      "[WORKSPACE_VOLUME]/.xverse-studio-cache/node-v24.22.1-linux-x64/bin/node",
+      "[WORKSPACE_VOLUME]/xverse-studio/node_modules/@playwright/test/cli.js",
+      "test",
+      "--config",
+      "tests/live/autoverse-retained-run-selection.config.ts"
+    ],
+    "configFile": "[WORKTREE]/tests/live/autoverse-retained-run-selection.config.ts",
+    "rootDir": "[WORKTREE]/tests/live",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": "[WORKTREE]/tests/live/recorded-browser-device-setup.ts",
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {},
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "[WORKTREE]/.studio-local/t097-shell-scope-20261105/retained-selection-red/native/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {},
+        "id": "",
+        "name": "",
+        "testDir": "[WORKTREE]/tests/live",
+        "testIgnore": [],
+        "testMatch": [
+          "autoverse-retained-run-selection.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "[WORKTREE]/.studio-local/t097-shell-scope-20261105/retained-selection-red/native/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {},
+        "name": "",
+        "testDir": "[WORKTREE]/tests/live",
+        "snapshotDir": "[WORKTREE]/tests/live",
+        "testIgnore": [],
+        "testMatch": "autoverse-retained-run-selection.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "baseURL": "[LOOPBACK_ORIGIN]",
+          "browserName": "chromium",
+          "actionTimeout": 15000,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "trace": "off",
+          "screenshot": "only-on-failure",
+          "video": "off",
+          "launchOptions": {
+            "args": [
+              "--disable-gpu",
+              "--disable-gpu-rasterization"
+            ]
+          }
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "[WORKTREE]/.studio-local/t097-shell-scope-20261105/retained-selection-red/native/browser.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [],
+  "errors": [
+    {
+      "message": "SyntaxError: [WORKTREE]/tests/live/autoverse-retained-run-selection.spec.ts: Missing semicolon. (42:77)\n\n  40 |     await expect(diagnosis).toContainText(\"TIME_MAPPING_INCOMPATIBLE\");\n  41 |     expect(writes).toEqual([]);\n> 42 |     expect(await page.evaluate(() => localStorage.getItem(\"studio.lastRun\")))).toBe(source.runId);\n     |                                                                              ^\n  43 |     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);\n  44 |     await info.attach(\"fresh-retained-selection\", { body: JSON.stringify({ width, runId: source.runId, browser: page.context().browser()?.version(), writes,\n  45 |       scope: \"Actual retained Autoverse run selected with an initially empty browser preference; no provider/model/guest or evaluation operation\" }), contentType: \"application/json\" });",
+      "stack": "SyntaxError: [WORKTREE]/tests/live/autoverse-retained-run-selection.spec.ts: Missing semicolon. (42:77)\n\n  40 |     await expect(diagnosis).toContainText(\"TIME_MAPPING_INCOMPATIBLE\");\n  41 |     expect(writes).toEqual([]);\n> 42 |     expect(await page.evaluate(() => localStorage.getItem(\"studio.lastRun\")))).toBe(source.runId);\n     |                                                                              ^\n  43 |     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);\n  44 |     await info.attach(\"fresh-retained-selection\", { body: JSON.stringify({ width, runId: source.runId, browser: page.context().browser()?.version(), writes,\n  45 |       scope: \"Actual retained Autoverse run selected with an initially empty browser preference; no provider/model/guest or evaluation operation\" }), contentType: \"application/json\" });",
+      "location": {
+        "file": "[WORKTREE]/tests/live/autoverse-retained-run-selection.spec.ts",
+        "line": 42,
+        "column": 77
+      },
+      "snippet": "\u001b[90m   at \u001b[39mautoverse-retained-run-selection.spec.ts:42\n\n  40 |     await expect(diagnosis).toContainText(\"TIME_MAPPING_INCOMPATIBLE\");\n  41 |     expect(writes).toEqual([]);\n> 42 |     expect(await page.evaluate(() => localStorage.getItem(\"studio.lastRun\")))).toBe(source.runId);\n     |                                                                             ^\n  43 |     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);\n  44 |     await info.attach(\"fresh-retained-selection\", { body: JSON.stringify({ width, runId: source.runId, browser: page.context().browser()?.version(), writes,\n  45 |       scope: \"Actual retained Autoverse run selected with an initially empty browser preference; no provider/model/guest or evaluation operation\" }), contentType: \"application/json\" });"
+    },
+    {
+      "message": "Error: No tests found",
+      "stack": "Error: No tests found"
+    }
+  ],
+  "stats": {
+    "startTime": "2026-11-05T23:34:24.483Z",
+    "duration": 38.32600000000002,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

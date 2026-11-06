@@ -1,0 +1,266 @@
+{
+  "config": {
+    "argv": [
+      "[WORKSPACE_VOLUME]/.xverse-studio-cache/node-v24.22.1-linux-x64/bin/node",
+      "[WORKSPACE_VOLUME]/xverse-studio/node_modules/@playwright/test/cli.js",
+      "test",
+      "--config",
+      "tests/live/autoverse-retained-run-selection.config.ts",
+      "--grep",
+      "stale selected metadata"
+    ],
+    "configFile": "[WORKTREE]/tests/live/autoverse-retained-run-selection.config.ts",
+    "rootDir": "[WORKTREE]/tests/live",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": "[WORKTREE]/tests/live/recorded-browser-device-setup.ts",
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "[WORKTREE]/.studio-local/t097-shell-scope-20261105/retained-selection-state-red/native/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "[WORKTREE]/tests/live",
+        "testIgnore": [],
+        "testMatch": [
+          "autoverse-retained-run-selection.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "[WORKTREE]/.studio-local/t097-shell-scope-20261105/retained-selection-state-red/native/artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "[WORKTREE]/tests/live",
+        "snapshotDir": "[WORKTREE]/tests/live",
+        "testIgnore": [],
+        "testMatch": "autoverse-retained-run-selection.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "baseURL": "[LOOPBACK_ORIGIN]",
+          "browserName": "chromium",
+          "actionTimeout": 15000,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "trace": "off",
+          "screenshot": "only-on-failure",
+          "video": "off",
+          "launchOptions": {
+            "args": [
+              "--disable-gpu",
+              "--disable-gpu-rasterization"
+            ]
+          }
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "[WORKTREE]/.studio-local/t097-shell-scope-20261105/retained-selection-state-red/native/browser.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "autoverse-retained-run-selection.spec.ts",
+      "file": "autoverse-retained-run-selection.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "retained run picker handles stale selected metadata at 1024",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 11659,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('group', { name: 'Recorded runs', exact: true }).getByLabel('Recorded run', { exact: true }).locator('option:checked')\nExpected substring: \u001b[32m\"stopped\"\u001b[39m\nReceived string:    \u001b[31m\"run-e96d00c6-d0d4-4c8e-b027-13eb3c37951a \u00b7 running\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" getByRole('group', { name: 'Recorded runs', exact: true }).getByLabel('Recorded run', { exact: true }).locator('option:checked') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('group', { name: 'Recorded runs', exact: true }).getByLabel('Recorded run', { exact: true }).locator('option:checked')\u001b[22m\n\u001b[2m    23 \u00d7 locator resolved to <option value=\"run-e96d00c6-d0d4-4c8e-b027-13eb3c37951a\">run-e96d00c6-d0d4-4c8e-b027-13eb3c37951a \u00b7 running</option>\u001b[22m\n\u001b[2m       - unexpected value \"run-e96d00c6-d0d4-4c8e-b027-13eb3c37951a \u00b7 running\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('group', { name: 'Recorded runs', exact: true }).getByLabel('Recorded run', { exact: true }).locator('option:checked')\nExpected substring: \u001b[32m\"stopped\"\u001b[39m\nReceived string:    \u001b[31m\"run-e96d00c6-d0d4-4c8e-b027-13eb3c37951a \u00b7 running\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" getByRole('group', { name: 'Recorded runs', exact: true }).getByLabel('Recorded run', { exact: true }).locator('option:checked') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('group', { name: 'Recorded runs', exact: true }).getByLabel('Recorded run', { exact: true }).locator('option:checked')\u001b[22m\n\u001b[2m    23 \u00d7 locator resolved to <option value=\"run-e96d00c6-d0d4-4c8e-b027-13eb3c37951a\">run-e96d00c6-d0d4-4c8e-b027-13eb3c37951a \u00b7 running</option>\u001b[22m\n\u001b[2m       - unexpected value \"run-e96d00c6-d0d4-4c8e-b027-13eb3c37951a \u00b7 running\"\u001b[22m\n\n    at [WORKTREE]/tests/live/autoverse-retained-run-selection.spec.ts:95:56",
+                    "location": {
+                      "file": "[WORKTREE]/tests/live/autoverse-retained-run-selection.spec.ts",
+                      "column": 56,
+                      "line": 95
+                    },
+                    "snippet": "  93 |         const select = picker.getByLabel(\"Recorded run\", { exact: true });\n  94 |         await expect(select).toHaveValue(source.runId);\n> 95 |         await expect(select.locator(\"option:checked\")).toContainText(original.state);\n     |                                                        ^\n  96 |         await expect(select.locator(\"option:checked\")).not.toContainText(\"running\");\n  97 |       } else if (mode === \"late after Home\") {\n  98 |         await received;"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "[WORKTREE]/tests/live/autoverse-retained-run-selection.spec.ts",
+                        "column": 56,
+                        "line": 95
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('group', { name: 'Recorded runs', exact: true }).getByLabel('Recorded run', { exact: true }).locator('option:checked')\nExpected substring: \u001b[32m\"stopped\"\u001b[39m\nReceived string:    \u001b[31m\"run-e96d00c6-d0d4-4c8e-b027-13eb3c37951a \u00b7 running\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" getByRole('group', { name: 'Recorded runs', exact: true }).getByLabel('Recorded run', { exact: true }).locator('option:checked') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('group', { name: 'Recorded runs', exact: true }).getByLabel('Recorded run', { exact: true }).locator('option:checked')\u001b[22m\n\u001b[2m    23 \u00d7 locator resolved to <option value=\"run-e96d00c6-d0d4-4c8e-b027-13eb3c37951a\">run-e96d00c6-d0d4-4c8e-b027-13eb3c37951a \u00b7 running</option>\u001b[22m\n\u001b[2m       - unexpected value \"run-e96d00c6-d0d4-4c8e-b027-13eb3c37951a \u00b7 running\"\u001b[22m\n\n\n  93 |         const select = picker.getByLabel(\"Recorded run\", { exact: true });\n  94 |         await expect(select).toHaveValue(source.runId);\n> 95 |         await expect(select.locator(\"option:checked\")).toContainText(original.state);\n     |                                                        ^\n  96 |         await expect(select.locator(\"option:checked\")).not.toContainText(\"running\");\n  97 |       } else if (mode === \"late after Home\") {\n  98 |         await received;\n    at [WORKTREE]/tests/live/autoverse-retained-run-selection.spec.ts:95:56"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T23:52:10.050Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "[WORKTREE]/.studio-local/t097-shell-scope-20261105/retained-selection-state-red/native/artifacts/autoverse-retained-run-sel-220ac-e-selected-metadata-at-1024/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "[WORKTREE]/.studio-local/t097-shell-scope-20261105/retained-selection-state-red/native/artifacts/autoverse-retained-run-sel-220ac-e-selected-metadata-at-1024/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "[WORKTREE]/tests/live/autoverse-retained-run-selection.spec.ts",
+                    "column": 56,
+                    "line": 95
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "b24881b11568b9d355b5-db6454731b43e0e052d9",
+          "file": "autoverse-retained-run-selection.spec.ts",
+          "line": 48,
+          "column": 9
+        },
+        {
+          "title": "retained run picker handles stale selected metadata at 1440",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 11208,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('group', { name: 'Recorded runs', exact: true }).getByLabel('Recorded run', { exact: true }).locator('option:checked')\nExpected substring: \u001b[32m\"stopped\"\u001b[39m\nReceived string:    \u001b[31m\"run-e96d00c6-d0d4-4c8e-b027-13eb3c37951a \u00b7 running\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" getByRole('group', { name: 'Recorded runs', exact: true }).getByLabel('Recorded run', { exact: true }).locator('option:checked') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('group', { name: 'Recorded runs', exact: true }).getByLabel('Recorded run', { exact: true }).locator('option:checked')\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <option value=\"run-e96d00c6-d0d4-4c8e-b027-13eb3c37951a\">run-e96d00c6-d0d4-4c8e-b027-13eb3c37951a \u00b7 running</option>\u001b[22m\n\u001b[2m       - unexpected value \"run-e96d00c6-d0d4-4c8e-b027-13eb3c37951a \u00b7 running\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('group', { name: 'Recorded runs', exact: true }).getByLabel('Recorded run', { exact: true }).locator('option:checked')\nExpected substring: \u001b[32m\"stopped\"\u001b[39m\nReceived string:    \u001b[31m\"run-e96d00c6-d0d4-4c8e-b027-13eb3c37951a \u00b7 running\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" getByRole('group', { name: 'Recorded runs', exact: true }).getByLabel('Recorded run', { exact: true }).locator('option:checked') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('group', { name: 'Recorded runs', exact: true }).getByLabel('Recorded run', { exact: true }).locator('option:checked')\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <option value=\"run-e96d00c6-d0d4-4c8e-b027-13eb3c37951a\">run-e96d00c6-d0d4-4c8e-b027-13eb3c37951a \u00b7 running</option>\u001b[22m\n\u001b[2m       - unexpected value \"run-e96d00c6-d0d4-4c8e-b027-13eb3c37951a \u00b7 running\"\u001b[22m\n\n    at [WORKTREE]/tests/live/autoverse-retained-run-selection.spec.ts:95:56",
+                    "location": {
+                      "file": "[WORKTREE]/tests/live/autoverse-retained-run-selection.spec.ts",
+                      "column": 56,
+                      "line": 95
+                    },
+                    "snippet": "  93 |         const select = picker.getByLabel(\"Recorded run\", { exact: true });\n  94 |         await expect(select).toHaveValue(source.runId);\n> 95 |         await expect(select.locator(\"option:checked\")).toContainText(original.state);\n     |                                                        ^\n  96 |         await expect(select.locator(\"option:checked\")).not.toContainText(\"running\");\n  97 |       } else if (mode === \"late after Home\") {\n  98 |         await received;"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "[WORKTREE]/tests/live/autoverse-retained-run-selection.spec.ts",
+                        "column": 56,
+                        "line": 95
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('group', { name: 'Recorded runs', exact: true }).getByLabel('Recorded run', { exact: true }).locator('option:checked')\nExpected substring: \u001b[32m\"stopped\"\u001b[39m\nReceived string:    \u001b[31m\"run-e96d00c6-d0d4-4c8e-b027-13eb3c37951a \u00b7 running\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" getByRole('group', { name: 'Recorded runs', exact: true }).getByLabel('Recorded run', { exact: true }).locator('option:checked') with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('group', { name: 'Recorded runs', exact: true }).getByLabel('Recorded run', { exact: true }).locator('option:checked')\u001b[22m\n\u001b[2m    24 \u00d7 locator resolved to <option value=\"run-e96d00c6-d0d4-4c8e-b027-13eb3c37951a\">run-e96d00c6-d0d4-4c8e-b027-13eb3c37951a \u00b7 running</option>\u001b[22m\n\u001b[2m       - unexpected value \"run-e96d00c6-d0d4-4c8e-b027-13eb3c37951a \u00b7 running\"\u001b[22m\n\n\n  93 |         const select = picker.getByLabel(\"Recorded run\", { exact: true });\n  94 |         await expect(select).toHaveValue(source.runId);\n> 95 |         await expect(select.locator(\"option:checked\")).toContainText(original.state);\n     |                                                        ^\n  96 |         await expect(select.locator(\"option:checked\")).not.toContainText(\"running\");\n  97 |       } else if (mode === \"late after Home\") {\n  98 |         await received;\n    at [WORKTREE]/tests/live/autoverse-retained-run-selection.spec.ts:95:56"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T23:52:22.096Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "[WORKTREE]/.studio-local/t097-shell-scope-20261105/retained-selection-state-red/native/artifacts/autoverse-retained-run-sel-5eb39-e-selected-metadata-at-1440/test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "[WORKTREE]/.studio-local/t097-shell-scope-20261105/retained-selection-state-red/native/artifacts/autoverse-retained-run-sel-5eb39-e-selected-metadata-at-1440/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "[WORKTREE]/tests/live/autoverse-retained-run-selection.spec.ts",
+                    "column": 56,
+                    "line": 95
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "b24881b11568b9d355b5-72c0cf2564d4fdf036d0",
+          "file": "autoverse-retained-run-selection.spec.ts",
+          "line": 48,
+          "column": 9
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-05T23:52:09.720Z",
+    "duration": 23677.387000000002,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  }
+}

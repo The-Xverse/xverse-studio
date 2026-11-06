@@ -1,3 +1,14 @@
+Latest active checkpoint — 2026-11-06: source 240778b repairs fresh-browser
+retained-run selection and stale selected-status precedence. Final 16 picker,
+6 diagnosis and 22 original playback browser journeys pass; two real Orca/AT-SPI
+journeys pass at 1024×768 and 1440×900 with actual speech/focus and evidence
+navigation. All 595 source inputs match Git; six assets reproduce exactly.
+Original/copy data and execution ledgers are preserved, handles exit and roots
+release. Full critical-flow AT, required-host, human and external gates remain.
+Counts 72 completed /18 in progress /10 blocked; zero accepted milestones.
+Goal ACTIVE without checkpoint pauses. Windows independently FROZEN. See
+[retained-results and Orca evidence](../../evidence/studio/M4-accessibility/retained-selection-orca-20261105/README.md).
+
 Latest active checkpoint — 2026-11-05: source808dc18 removes the global
 reference-scope claim.4extendedprovider-scope +6unchangeddiagnosticnative journeys
 pass on588Git-bound inputs/6reproducedUIassets. Onlyone JSXline removed; selected
