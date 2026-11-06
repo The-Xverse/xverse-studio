@@ -1,3 +1,13 @@
+Paused at the user's request — 2026-11-06: current fault-accessibility work
+finished on source 5fd02bc. Six real AT journeys pass for fault editing,
+fault source and stimulus regression at both sizes. Actual timed fields/error
+speech/zero-write refusal and exact two-/three-revision integrity are verified.
+Audit rejects54 record/file and12 hash-consistent semantic corruptions. All602
+inputs match Git; six UI assets are unchanged. All current original handles exit
+and roots release. Counts72 completed /18 in progress /10 blocked; zero milestones,
+no task closures. Do not start another component until the user explicitly resumes.
+Windows work remains separately FROZEN. See [fault AT evidence](../../evidence/studio/M4-accessibility/orca-faults-20261106/README.md).
+
 Latest active checkpoint — 2026-11-06: source 2391af4 repairs the recorded
 Orca source-dialog Escape announcement gap at both sizes. Four actual AT journeys
 (Escape/Close) and14 final browser cases pass; the old UI still reproduces the

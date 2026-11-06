@@ -1,0 +1,177 @@
+{
+  "suite": "scenario-fault",
+  "width": 1440,
+  "version": "156.0.8078.4",
+  "commands": 154,
+  "writes": [
+    {
+      "method": "POST",
+      "path": "/api/v1/projects/prj-f4d19805-160e-494e-84cb-219d63270bb3/edits",
+      "body": {
+        "baseRevision": 16,
+        "edits": [
+          {
+            "kind": "add_scenario_item",
+            "documentId": "doc-5",
+            "elementRef": "xdl://org.xverse.studio.autoverse/scenario/interactive-drive",
+            "itemKind": "fault",
+            "itemId": "orca-fault-1440",
+            "properties": {
+              "targetRef": {
+                "apiVersion": "xverse.io/xdl/v1alpha1",
+                "kind": "System",
+                "namespace": "org.xverse.studio.autoverse",
+                "name": "autoverse-demo",
+                "element": "carla-node"
+              },
+              "faultKind": "provider-defined",
+              "activation": "Opaque activation 1440; no runtime permission.",
+              "recovery": "Opaque recovery 1440; no runtime permission.",
+              "maturity": "prototype",
+              "extensions": {
+                "io.xverse.experiment": {
+                  "schemaVersion": "0.1",
+                  "kind": "fault-intent",
+                  "target": {
+                    "apiVersion": "xverse.io/xdl/v1alpha1",
+                    "kind": "Scenario",
+                    "namespace": "org.xverse.studio.autoverse",
+                    "name": "interactive-drive",
+                    "element": "orca-fault-1440"
+                  },
+                  "trigger": {
+                    "kind": "time",
+                    "at": 2,
+                    "unit": "s"
+                  },
+                  "duration": {
+                    "value": 2,
+                    "unit": "s"
+                  },
+                  "timeDomainId": "host-runtime"
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/projects/prj-f4d19805-160e-494e-84cb-219d63270bb3/edits",
+      "body": {
+        "baseRevision": 17,
+        "edits": [
+          {
+            "kind": "update_scenario_item",
+            "documentId": "doc-5",
+            "elementRef": "xdl://org.xverse.studio.autoverse/scenario/interactive-drive#orca-fault-1440",
+            "itemKind": "fault",
+            "itemId": "orca-fault-1440",
+            "properties": {
+              "targetRef": {
+                "apiVersion": "xverse.io/xdl/v1alpha1",
+                "kind": "System",
+                "namespace": "org.xverse.studio.autoverse",
+                "name": "autoverse-demo",
+                "element": "carla-node"
+              },
+              "faultKind": "provider-defined",
+              "activation": "Opaque activation 1440; no runtime permission.",
+              "recovery": "Edited opaque recovery 1440; no runtime permission.",
+              "maturity": "prototype",
+              "extensions": {
+                "io.xverse.experiment": {
+                  "duration": {
+                    "unit": "s",
+                    "value": 2
+                  },
+                  "kind": "fault-intent",
+                  "schemaVersion": "0.1",
+                  "target": {
+                    "apiVersion": "xverse.io/xdl/v1alpha1",
+                    "element": "orca-fault-1440",
+                    "kind": "Scenario",
+                    "name": "interactive-drive",
+                    "namespace": "org.xverse.studio.autoverse"
+                  },
+                  "timeDomainId": "host-runtime",
+                  "trigger": {
+                    "at": 2,
+                    "kind": "time",
+                    "unit": "s"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/projects/prj-f4d19805-160e-494e-84cb-219d63270bb3/edits",
+      "body": {
+        "baseRevision": 18,
+        "edits": [
+          {
+            "kind": "remove_scenario_item",
+            "documentId": "doc-5",
+            "elementRef": "xdl://org.xverse.studio.autoverse/scenario/interactive-drive#orca-fault-1440",
+            "itemKind": "fault",
+            "itemId": "orca-fault-1440"
+          }
+        ]
+      }
+    }
+  ],
+  "expectedFault": {
+    "id": "orca-fault-1440",
+    "targetRef": {
+      "apiVersion": "xverse.io/xdl/v1alpha1",
+      "kind": "System",
+      "namespace": "org.xverse.studio.autoverse",
+      "name": "autoverse-demo",
+      "element": "carla-node"
+    },
+    "faultKind": "provider-defined",
+    "activation": "Opaque activation 1440; no runtime permission.",
+    "recovery": "Opaque recovery 1440; no runtime permission.",
+    "maturity": "prototype",
+    "extensions": {
+      "io.xverse.experiment": {
+        "schemaVersion": "0.1",
+        "kind": "fault-intent",
+        "target": {
+          "apiVersion": "xverse.io/xdl/v1alpha1",
+          "kind": "Scenario",
+          "namespace": "org.xverse.studio.autoverse",
+          "name": "interactive-drive",
+          "element": "orca-fault-1440"
+        },
+        "trigger": {
+          "kind": "time",
+          "at": 2,
+          "unit": "s"
+        },
+        "duration": {
+          "value": 2,
+          "unit": "s"
+        },
+        "timeDomainId": "host-runtime"
+      }
+    }
+  },
+  "actualTimedFieldsAndIntentTextVerified": true,
+  "providerChoicesUnavailableThroughAt": true,
+  "zeroDurationRefusalTested": true,
+  "zeroDurationRefusalAnnounced": true,
+  "zeroDurationRefusalProjectUnchanged": true,
+  "sourceInspectionTested": false,
+  "selectedSourceVerifiedThroughAtSpi": false,
+  "sourceDirectEscapeFocusAndSpeechVerified": false,
+  "removalCancelPreservesDraft": true,
+  "finalScenarioSemanticsRestored": true,
+  "fromRevision": 16,
+  "toRevision": 19
+}
