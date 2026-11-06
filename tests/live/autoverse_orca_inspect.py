@@ -111,6 +111,7 @@ pyatspi.Registry.registerEventListener(
     event,
     "object:state-changed:focused",
     "object:state-changed:selected",
+    "object:state-changed:checked",
     "object:text-changed",
     "object:property-change:accessible-name",
     "object:children-changed",
@@ -254,6 +255,7 @@ def tick():
                     "focused": state.contains(pyatspi.STATE_FOCUSED),
                     "editable": state.contains(pyatspi.STATE_EDITABLE),
                     "selected": state.contains(pyatspi.STATE_SELECTED),
+                    "checked": state.contains(pyatspi.STATE_CHECKED),
                     "showing": state.contains(pyatspi.STATE_SHOWING),
                     "attributes": node.getAttributes(),
                 }
@@ -265,6 +267,8 @@ def tick():
                 "Action payload (JSON object)",
                 "Scheduled at",
                 "XDL source",
+                "Sampling intent",
+                "Metric acceptance intent",
             ):
                 text = node.queryText()
                 length = text.characterCount

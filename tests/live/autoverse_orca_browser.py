@@ -26,13 +26,16 @@ parser = argparse.ArgumentParser()
 for name in ("recording", "static-dir", "output", "node", "browser-cache", "xvfb"):
     parser.add_argument("--" + name, type=Path, required=True)
 parser.add_argument("--width", type=int, choices=(1024, 1440), required=True)
-parser.add_argument("--source-exit", choices=("escape", "close-button"), default="escape")
+parser.add_argument(
+    "--source-exit", choices=("escape", "close-button"), default="escape"
+)
 parser.add_argument(
     "--suite",
     choices=(
         "retained-results",
         "scenario-conditions",
         "scenario-stimulus",
+        "scenario-observer-metric",
         "lab-inventory",
     ),
     default="retained-results",
@@ -343,7 +346,11 @@ finally:
         pass
     mutation = None
     mutation_error = None
-    if a.suite in ("scenario-conditions", "scenario-stimulus"):
+    if a.suite in (
+        "scenario-conditions",
+        "scenario-stimulus",
+        "scenario-observer-metric",
+    ):
         verifier_spec = importlib.util.spec_from_file_location(
             "orca_authoring_readback", STATE / "autoverse_orca_authoring_records.py"
         )
@@ -360,6 +367,7 @@ finally:
                 readback = {
                     "scenario-conditions": verifier.verify_conditions,
                     "scenario-stimulus": verifier.verify_stimulus,
+                    "scenario-observer-metric": verifier.verify_observer_metric,
                 }[a.suite]
                 mutation = readback(
                     records_before,

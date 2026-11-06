@@ -177,6 +177,68 @@ def verify_stimulus(
     )
 
 
+def verify_observer_metric(
+    before, after, files_before, files_after, baseline, data, width, passed
+):
+    """Admit one new observer/metric, reference refusal and ordered removal."""
+    yaml = YAML(typ="safe")
+    resources = [yaml.load(d["content"]) for d in baseline["documents"].values()]
+    scenario = next(r for r in resources if r.get("kind") == "Scenario")
+    reference = scenario["spec"]["systemRef"]
+    system = next(
+        r
+        for r in resources
+        if r.get("kind") == "System"
+        and r["metadata"]["name"] == reference["name"]
+        and r["metadata"]["namespace"] == reference["namespace"]
+    )
+    observer_id, metric_id = f"orca-observer-{width}", f"orca-metric-{width}"
+    assert all(o["id"] != observer_id for o in scenario["spec"]["observers"])
+    assert all(m["id"] != metric_id for m in scenario["spec"]["metrics"])
+    observer = {
+        "id": observer_id,
+        "targetRef": {
+            "apiVersion": system["apiVersion"],
+            "kind": "System",
+            "namespace": system["metadata"]["namespace"],
+            "name": system["metadata"]["name"],
+            "element": system["spec"]["nodes"][0]["id"],
+        },
+        "timeDomainId": system["spec"]["timeDomains"][0]["id"],
+        "samplingIntent": f"Opaque authored sampling {width}; no live observation.",
+        "payloadSchema": "urn:xverse:studio:normalized-scalar:v1",
+        "unitSemantics": "1",
+        "evidenceSinkRef": "urn:xverse:studio:reference:evidence",
+    }
+    metric = {
+        "id": metric_id,
+        "observerIds": [observer_id],
+        "calculationRef": "urn:example:metric:opaque",
+        "unitSemantics": "1",
+        "acceptance": f"Opaque authored acceptance {width}; no verdict.",
+    }
+    first = copy.deepcopy(scenario)
+    first["spec"]["observers"].append(observer)
+    second = copy.deepcopy(first)
+    second["spec"]["metrics"].append(metric)
+    return verify_scenario_history(
+        before,
+        after,
+        files_before,
+        files_after,
+        baseline,
+        data,
+        [first, second, first, scenario],
+        [
+            "add_scenario_item",
+            "add_scenario_item",
+            "remove_scenario_item",
+            "remove_scenario_item",
+        ],
+        passed,
+    )
+
+
 def verify_scenario_history(
     before, after, files_before, files_after, baseline, data, states, origins, passed
 ):
