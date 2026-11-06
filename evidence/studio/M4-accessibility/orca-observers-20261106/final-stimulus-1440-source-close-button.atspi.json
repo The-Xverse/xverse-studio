@@ -1,0 +1,140 @@
+{
+  "errors": 0,
+  "truncated": false,
+  "events": 352,
+  "droppedEvents": 0,
+  "eventErrors": 0,
+  "lastFocusEvent": {
+    "type": "object:state-changed:focused",
+    "name": "Close dialog",
+    "role": "push button",
+    "detail1": 1,
+    "detail2": 0,
+    "time": 96634.812437428
+  },
+  "eventWebRoots": 1,
+  "sourceRows": 1237,
+  "focusedRows": [
+    {
+      "name": "Close dialog",
+      "description": "",
+      "role": "push button",
+      "depth": 5,
+      "pid": 62,
+      "focused": true,
+      "editable": false,
+      "selected": false,
+      "checked": false,
+      "showing": true,
+      "attributes": [
+        "text-align:center",
+        "class:icon-button",
+        "explicit-name:true",
+        "name-from:attribute",
+        "tag:button",
+        "display:flex"
+      ]
+    },
+    {
+      "name": "",
+      "description": "",
+      "role": "document web",
+      "depth": 6,
+      "pid": 62,
+      "focused": true,
+      "editable": false,
+      "selected": false,
+      "checked": false,
+      "showing": true,
+      "attributes": []
+    },
+    {
+      "name": "",
+      "description": "",
+      "role": "document web",
+      "depth": 6,
+      "pid": 62,
+      "focused": true,
+      "editable": false,
+      "selected": false,
+      "checked": false,
+      "showing": true,
+      "attributes": []
+    },
+    {
+      "name": "Close dialog",
+      "description": "",
+      "role": "push button",
+      "depth": 13,
+      "pid": 62,
+      "focused": true,
+      "editable": false,
+      "selected": false,
+      "checked": false,
+      "showing": true,
+      "attributes": [
+        "text-align:center",
+        "class:icon-button",
+        "explicit-name:true",
+        "name-from:attribute",
+        "tag:button",
+        "display:flex"
+      ]
+    }
+  ],
+  "editableValues": [
+    {
+      "name": "XDL source",
+      "description": "Exact authored content is retained. Unknown extensions stay intact; platform validation decides whether the revision is executable. Saving changes only the draft.",
+      "role": "entry",
+      "depth": 4,
+      "pid": 62,
+      "focused": false,
+      "editable": true,
+      "selected": false,
+      "checked": false,
+      "showing": true,
+      "attributes": [
+        "text-model:a1",
+        "text-align:left",
+        "id:xdl-source",
+        "class:source-textarea",
+        "explicit-name:true",
+        "name-from:related-element",
+        "description-from:aria-describedby",
+        "tag:textarea",
+        "display:inline-block"
+      ],
+      "editableTextLength": 10564,
+      "editableTextPrefix": "apiVersion: xverse.io/xdl/v1alpha1\nkind: Scenario\nmetadata:\n  namespace: org.xverse.studio.autoverse\n  name: interactive-drive\n  version: 1.0.0\n  description: Interactive driving with immutable source and a bounded native \n    session.\n  provenance:\n    source: urn:xverse:studio:autoverse:classic:1.0\n    revision: 1.0.0\n    maturity: prototype\n    limitations:\n    - Requires separately installed and admitted native Autoverse services; \n      loading starts nothing.\n    - External communication is not native X-COM or a coupled solver; simulation\n      time remains unmapped.\nspec:\n  systemRef:\n    apiVersion: xverse.io/xdl/v1alpha1\n    kind: System\n    namespace: org.xverse.studio.autoverse\n    name: autoverse-demo\n  deploymentRef:\n    apiVersion: xverse.io/xdl/v1alpha1\n    kind: Deployment\n    namespace: org.xverse.studio.autoverse\n    name: local-autoverse\n  initialConditions:\n    driverSurface: studio-browser\n    initialBrakingRequest: 1\n    initialCruiseRequest: false\n    initialReverseRequest: false\n    simulatorAdvancement: public-vehicle-cli-synchronous\n    fixedDeltaSeconds: 0.05\n  steps:\n  - id: start-autoverse\n    actionKind: start\n    targetRef:\n      apiVersion: xverse.io/xdl/v1alpha1\n      kind: System\n      namespace: org.xverse.studio.autoverse\n      name: autoverse-demo\n      element: carla\n    timeDomainId: host-runtime\n    schedule:\n      at: 0\n      unit: s\n    action:\n      operation: run-autoverse-classic\n  - id: orca-step-1440\n    action:\n      opaque:\n        retained: 1440\n      parameter: target\n      value: 1\n    actionKind: set_parameter\n    schedule:\n      at: 0\n      unit: s\n    targetRef:\n      apiVersion: xverse.io/xdl/v1alpha1\n      element: carla-node\n      kind: System\n      name: autoverse-demo\n      namespace: org.xverse.studio.autoverse\n    timeDomainId: host-runtime\n  observers:\n  - id: autoverse-telemetry\n    targetRef:\n      apiVersion: xverse.io/xdl/v1alpha1\n      kind: System\n      namespace: org.xverse.studio.autoverse\n      name: autoverse-demo\n      element: vehicle-spee",
+      "editableTextTruncated": true
+    },
+    {
+      "name": "XDL source",
+      "description": "Exact authored content is retained. Unknown extensions stay intact; platform validation decides whether the revision is executable. Saving changes only the draft.",
+      "role": "entry",
+      "depth": 12,
+      "pid": 62,
+      "focused": false,
+      "editable": true,
+      "selected": false,
+      "checked": false,
+      "showing": true,
+      "attributes": [
+        "text-model:a1",
+        "text-align:left",
+        "id:xdl-source",
+        "class:source-textarea",
+        "explicit-name:true",
+        "name-from:related-element",
+        "description-from:aria-describedby",
+        "tag:textarea",
+        "display:inline-block"
+      ],
+      "editableTextLength": 10564,
+      "editableTextPrefix": "apiVersion: xverse.io/xdl/v1alpha1\nkind: Scenario\nmetadata:\n  namespace: org.xverse.studio.autoverse\n  name: interactive-drive\n  version: 1.0.0\n  description: Interactive driving with immutable source and a bounded native \n    session.\n  provenance:\n    source: urn:xverse:studio:autoverse:classic:1.0\n    revision: 1.0.0\n    maturity: prototype\n    limitations:\n    - Requires separately installed and admitted native Autoverse services; \n      loading starts nothing.\n    - External communication is not native X-COM or a coupled solver; simulation\n      time remains unmapped.\nspec:\n  systemRef:\n    apiVersion: xverse.io/xdl/v1alpha1\n    kind: System\n    namespace: org.xverse.studio.autoverse\n    name: autoverse-demo\n  deploymentRef:\n    apiVersion: xverse.io/xdl/v1alpha1\n    kind: Deployment\n    namespace: org.xverse.studio.autoverse\n    name: local-autoverse\n  initialConditions:\n    driverSurface: studio-browser\n    initialBrakingRequest: 1\n    initialCruiseRequest: false\n    initialReverseRequest: false\n    simulatorAdvancement: public-vehicle-cli-synchronous\n    fixedDeltaSeconds: 0.05\n  steps:\n  - id: start-autoverse\n    actionKind: start\n    targetRef:\n      apiVersion: xverse.io/xdl/v1alpha1\n      kind: System\n      namespace: org.xverse.studio.autoverse\n      name: autoverse-demo\n      element: carla\n    timeDomainId: host-runtime\n    schedule:\n      at: 0\n      unit: s\n    action:\n      operation: run-autoverse-classic\n  - id: orca-step-1440\n    action:\n      opaque:\n        retained: 1440\n      parameter: target\n      value: 1\n    actionKind: set_parameter\n    schedule:\n      at: 0\n      unit: s\n    targetRef:\n      apiVersion: xverse.io/xdl/v1alpha1\n      element: carla-node\n      kind: System\n      name: autoverse-demo\n      namespace: org.xverse.studio.autoverse\n    timeDomainId: host-runtime\n  observers:\n  - id: autoverse-telemetry\n    targetRef:\n      apiVersion: xverse.io/xdl/v1alpha1\n      kind: System\n      namespace: org.xverse.studio.autoverse\n      name: autoverse-demo\n      element: vehicle-spee",
+      "editableTextTruncated": true
+    }
+  ],
+  "fullSourceRetainedPrivately": true
+}

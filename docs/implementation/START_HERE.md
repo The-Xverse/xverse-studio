@@ -1,3 +1,13 @@
+Latest active checkpoint — 2026-11-06: source dfaef4e passes six actual
+Orca journeys for observer/metric references and stimulus/retained regressions at
+both widths. Native AT values/checked observer, real422 refusal speech, unchanged
+rejected project and dependency-ordered removal are verified. Four revisions and
+42 expected files preserve all original bytes and execution evidence;27 negative
+audit mutations are rejected. All601 inputs match Git/six unchanged UI assets.
+Prior direct-Escape source speech failures remain unresolved. No production file
+changes or task closures. All current handles exit/roots release. Counts72/18/10,
+zero accepted milestones; Windows frozen; full goal ACTIVE. See [observer/metric AT evidence](../../evidence/studio/M4-accessibility/orca-observers-20261106/README.md).
+
 Latest active checkpoint — 2026-11-06: source 3ccd39a passes eight actual
 Orca journeys: stimulus authoring via keyboard Close, conditions, actual empty
 inventory and retained-results regression at both widths. Three semantic edits

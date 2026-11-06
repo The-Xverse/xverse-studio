@@ -1,0 +1,130 @@
+{
+  "suite": "scenario-stimulus",
+  "sourceExit": "close-button",
+  "width": 1440,
+  "version": "156.0.8078.4",
+  "commands": 200,
+  "writes": [
+    {
+      "method": "POST",
+      "path": "/api/v1/projects/prj-f4d19805-160e-494e-84cb-219d63270bb3/edits",
+      "body": {
+        "baseRevision": 16,
+        "edits": [
+          {
+            "kind": "add_scenario_item",
+            "documentId": "doc-5",
+            "elementRef": "xdl://org.xverse.studio.autoverse/scenario/interactive-drive",
+            "itemKind": "step",
+            "itemId": "orca-step-1440",
+            "properties": {
+              "targetRef": {
+                "apiVersion": "xverse.io/xdl/v1alpha1",
+                "kind": "System",
+                "namespace": "org.xverse.studio.autoverse",
+                "name": "autoverse-demo",
+                "element": "carla-node"
+              },
+              "timeDomainId": "host-runtime",
+              "actionKind": "set_parameter",
+              "schedule": {
+                "at": 0,
+                "unit": "s"
+              },
+              "action": {
+                "parameter": "target",
+                "value": 1,
+                "opaque": {
+                  "retained": 1440
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/projects/prj-f4d19805-160e-494e-84cb-219d63270bb3/edits",
+      "body": {
+        "baseRevision": 17,
+        "edits": [
+          {
+            "kind": "update_scenario_item",
+            "documentId": "doc-5",
+            "elementRef": "xdl://org.xverse.studio.autoverse/scenario/interactive-drive#orca-step-1440",
+            "itemKind": "step",
+            "itemId": "orca-step-1440",
+            "properties": {
+              "targetRef": {
+                "apiVersion": "xverse.io/xdl/v1alpha1",
+                "kind": "System",
+                "namespace": "org.xverse.studio.autoverse",
+                "name": "autoverse-demo",
+                "element": "carla-node"
+              },
+              "timeDomainId": "host-runtime",
+              "actionKind": "set_parameter",
+              "schedule": {
+                "at": 0.5,
+                "unit": "s"
+              },
+              "action": {
+                "opaque": {
+                  "retained": 1440
+                },
+                "parameter": "target",
+                "value": 1
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/projects/prj-f4d19805-160e-494e-84cb-219d63270bb3/edits",
+      "body": {
+        "baseRevision": 18,
+        "edits": [
+          {
+            "kind": "remove_scenario_item",
+            "documentId": "doc-5",
+            "elementRef": "xdl://org.xverse.studio.autoverse/scenario/interactive-drive#orca-step-1440",
+            "itemKind": "step",
+            "itemId": "orca-step-1440"
+          }
+        ]
+      }
+    }
+  ],
+  "expectedStep": {
+    "id": "orca-step-1440",
+    "targetRef": {
+      "apiVersion": "xverse.io/xdl/v1alpha1",
+      "kind": "System",
+      "namespace": "org.xverse.studio.autoverse",
+      "name": "autoverse-demo",
+      "element": "carla-node"
+    },
+    "timeDomainId": "host-runtime",
+    "actionKind": "set_parameter",
+    "schedule": {
+      "at": 0,
+      "unit": "s"
+    },
+    "action": {
+      "parameter": "target",
+      "value": 1,
+      "opaque": {
+        "retained": 1440
+      }
+    }
+  },
+  "selectedSourceVerifiedThroughAtSpi": true,
+  "invalidJsonAnnounced": true,
+  "removalCancelPreservesDraft": true,
+  "finalScenarioSemanticsRestored": true,
+  "fromRevision": 16,
+  "toRevision": 19
+}
