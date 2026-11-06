@@ -261,6 +261,10 @@ def tick():
             if rows[-1]["editable"] and rows[-1]["name"] in (
                 "Initial conditions (JSON object)",
                 "Scenario acceptance intent",
+                "Scenario item identifier",
+                "Action payload (JSON object)",
+                "Scheduled at",
+                "XDL source",
             ):
                 text = node.queryText()
                 length = text.characterCount
@@ -269,6 +273,14 @@ def tick():
                     editableTextPrefix=text.getText(0, min(length, 2048)),
                     editableTextTruncated=length > 2048,
                 )
+                if rows[-1]["name"] == "XDL source" and text.getNSelections():
+                    start, end = text.getSelection(0)
+                    rows[-1].update(
+                        selectedTextStart=start,
+                        selectedTextEnd=end,
+                        selectedTextPrefix=text.getText(start, min(end, start + 2048)),
+                        selectedTextTruncated=end - start > 2048,
+                    )
             children = node.childCount
             if depth >= 35 and children:
                 limited += 1

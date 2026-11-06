@@ -183,7 +183,21 @@ try:
         )
     )
     orca_argv = [
-        "/usr/bin/orca",
+        "/usr/bin/python3",
+        "-I",
+        "-c",
+        "import faulthandler, runpy, signal, sys, threading, time\n"
+        "def configure_debug_log():\n"
+        "    from orca import debug\n"
+        "    for _ in range(1000):\n"
+        "        if debug.debugFile:\n"
+        "            debug.debugFile.reconfigure(line_buffering=True)\n"
+        "            return\n"
+        "        time.sleep(0.01)\n"
+        "threading.Thread(target=configure_debug_log, daemon=True).start()\n"
+        "faulthandler.register(signal.SIGUSR1, all_threads=True)\n"
+        "sys.argv[0] = '/usr/bin/orca'\n"
+        "runpy.run_path('/usr/bin/orca', run_name='__main__')",
         "--user-prefs",
         str(prefs),
         "--debug-file",
@@ -207,12 +221,19 @@ try:
     script = {
         "retained-results": "autoverse-orca.cjs",
         "scenario-conditions": "autoverse-orca-authoring.cjs",
+        "scenario-stimulus": "autoverse-orca-stimulus.cjs",
         "lab-inventory": "autoverse-orca-lab.cjs",
     }[C["suite"]]
     browser = spawn("browser", [node, str(STATE / script), str(OUT)])
     exit_code = browser.wait(timeout=115)
     assert orca.poll() is None and inspector.poll() is None and speech.poll() is None
     status["browserExit"] = exit_code
+    if exit_code:
+        # Ask only our original child for its Python stack before cleanup.
+        # This preserves evidence when an AT event handler stops responding.
+        orca_fd = next(fd for name, p, fd, log in children if p is orca)
+        signal.pidfd_send_signal(orca_fd, signal.SIGUSR1, None, 0)
+        time.sleep(0.1)
 finally:
     terminals = []
     for name, p, fd, log in reversed(children):

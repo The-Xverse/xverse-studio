@@ -26,12 +26,20 @@ parser = argparse.ArgumentParser()
 for name in ("recording", "static-dir", "output", "node", "browser-cache", "xvfb"):
     parser.add_argument("--" + name, type=Path, required=True)
 parser.add_argument("--width", type=int, choices=(1024, 1440), required=True)
+parser.add_argument("--source-exit", choices=("escape", "close-button"), default="escape")
 parser.add_argument(
     "--suite",
-    choices=("retained-results", "scenario-conditions", "lab-inventory"),
+    choices=(
+        "retained-results",
+        "scenario-conditions",
+        "scenario-stimulus",
+        "lab-inventory",
+    ),
     default="retained-results",
 )
 a = parser.parse_args()
+if a.source_exit != "escape" and a.suite != "scenario-stimulus":
+    parser.error("--source-exit applies only to the scenario-stimulus suite")
 for name in ("recording", "static_dir", "output", "node", "browser_cache", "xvfb"):
     setattr(a, name, getattr(a, name).resolve())
 
@@ -202,6 +210,7 @@ try:
         "xvfb": str(a.xvfb),
         "width": a.width,
         "suite": a.suite,
+        "sourceExit": a.source_exit,
         "hostMount": os.readlink("/proc/self/ns/mnt"),
         "hostPid": os.readlink("/proc/self/ns/pid"),
         "hostIpc": os.readlink("/proc/self/ns/ipc"),
@@ -334,7 +343,7 @@ finally:
         pass
     mutation = None
     mutation_error = None
-    if a.suite == "scenario-conditions":
+    if a.suite in ("scenario-conditions", "scenario-stimulus"):
         verifier_spec = importlib.util.spec_from_file_location(
             "orca_authoring_readback", STATE / "autoverse_orca_authoring_records.py"
         )
@@ -348,7 +357,11 @@ finally:
                 )
                 mutation = {"acceptedSemanticEdits": 0, "baselineReadNotReached": True}
             else:
-                mutation = verifier.verify_conditions(
+                readback = {
+                    "scenario-conditions": verifier.verify_conditions,
+                    "scenario-stimulus": verifier.verify_stimulus,
+                }[a.suite]
+                mutation = readback(
                     records_before,
                     protected_records(),
                     project_before,
@@ -365,6 +378,7 @@ finally:
             }
     run_result.update(
         suite=a.suite,
+        sourceExit=a.source_exit,
         copyMutationReadback=mutation,
         copyMutationReadbackError=mutation_error,
         copiedProjectsUnchanged=project_files() == project_before,
