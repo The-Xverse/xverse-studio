@@ -1776,8 +1776,29 @@ export function SourceEditor({
   }
   useEffect(() => {
     if (!anchored.current && content && (target?.elementId || target?.ref)) {
-      anchored.current = true;
-      goToDeclaration();
+      const origin = document.activeElement;
+      // Anchor after the modal's first painted frame. Its initial native select
+      // events must precede the source focus, and newer user focus takes priority.
+      let frame = requestAnimationFrame(() => {
+        frame = requestAnimationFrame(() => {
+          anchored.current = true;
+          const editor = textarea.current,
+            dialog = editor?.closest('[role="dialog"][aria-modal="true"]'),
+            dialogs = document.querySelectorAll(
+              '[role="dialog"][aria-modal="true"]',
+            );
+          if (
+            !editor?.isConnected ||
+            !dialog ||
+            dialogs[dialogs.length - 1] !== dialog ||
+            origin !== dialog.querySelector('button[aria-label="Close dialog"]') ||
+            document.activeElement !== origin
+          )
+            return;
+          goToDeclaration();
+        });
+      });
+      return () => cancelAnimationFrame(frame);
     }
   }, [content, id]);
   const externalSource = project.sourceIntegrity === "modified";

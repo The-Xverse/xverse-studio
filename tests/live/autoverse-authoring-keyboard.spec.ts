@@ -192,4 +192,58 @@ for (const width of [1024, 1440]) {
     await remove(page, "fault", id, "Add fault intent");
     await report(page, info, width, writes);
   });
+
+  for (const mode of ["resource", "caret", "escape"] as const) {
+    test(`source initial focus respects ${mode} at ${width}`, async ({ page }, info) => {
+      const before = await open(page, info, width), id = scenario(before).spec.steps[0].id;
+      const opener = button(page, `View source for step ${id}`), writes: string[] = [];
+      page.on("request", r => { if (r.method() !== "GET") writes.push(new URL(r.url()).pathname); });
+      await page.evaluate(mode => {
+        const state = { mode, fired: false, mounted: false, prevented: false };
+        (window as unknown as { initialSourceFocus: typeof state }).initialSourceFocus = state;
+        const observer = new MutationObserver(() => {
+          const dialog = document.querySelector('[role="dialog"][aria-label="Authored XDL source"]');
+          if (!dialog || state.fired) return;
+          observer.disconnect();
+          queueMicrotask(() => {
+            state.mounted = dialog.isConnected;
+            if (mode === "escape") {
+              const event = new KeyboardEvent("keydown", { key: "Escape", code: "Escape", bubbles: true, cancelable: true });
+              dialog.dispatchEvent(event);
+              state.prevented = event.defaultPrevented;
+            } else {
+              const target = dialog.querySelector<HTMLElement>(mode === "resource" ? 'select[aria-label="Resource"]' : 'textarea[aria-label="XDL source"],textarea#xdl-source');
+              if (!target) throw Error("Mounted source countercheck target is absent");
+              target.focus();
+              if (mode === "caret") (target as HTMLTextAreaElement).setSelectionRange(0, 0);
+            }
+            state.fired = true;
+          });
+        });
+        observer.observe(document.body, { childList: true, subtree: true });
+      }, mode);
+      await activate(page, opener);
+      await expect.poll(() => page.evaluate(() => (window as unknown as { initialSourceFocus: { fired: boolean } }).initialSourceFocus.fired)).toBe(true);
+      // Real browser frames let any pending initial anchor run; no scheduler,
+      // application listener, source response or animation clock is replaced.
+      await page.evaluate(() => new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => requestAnimationFrame(() => resolve())))));
+      const state = await page.evaluate(() => (window as unknown as { initialSourceFocus: { mode: string; fired: boolean; mounted: boolean; prevented: boolean } }).initialSourceFocus);
+      expect(state.mounted).toBe(true);
+      const sourceDialog = page.getByRole("dialog", { name: "Authored XDL source", exact: true });
+      if (mode === "escape") {
+        expect(state.prevented).toBe(true);
+        await expect(sourceDialog).toHaveCount(0);
+        await expect(opener).toBeFocused();
+      } else {
+        const target = sourceDialog.getByLabel(mode === "resource" ? "Resource" : "XDL source", { exact: true });
+        await expect(target).toBeFocused();
+        if (mode === "caret") expect(await target.evaluate(n => [(n as HTMLTextAreaElement).selectionStart, (n as HTMLTextAreaElement).selectionEnd])).toEqual([0, 0]);
+        await page.keyboard.press("Escape");
+        await saved(page, opener);
+      }
+      expect(await project(page)).toEqual(before);
+      expect(writes).toEqual([]);
+      await info.attach("source-initial-focus-countercheck.json", { body: JSON.stringify({ width, ...state, input: "Native opener; instrumented earliest post-mount DOM focus/caret or Escape countercheck; three real browser frames", projectUnchanged: true, writes }), contentType: "application/json" });
+    });
+  }
 }
