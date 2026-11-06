@@ -204,7 +204,12 @@ try:
     )
     until(lambda: (OUT / "atspi-ready.json").exists(), bool)
     node = C["node"]
-    browser = spawn("browser", [node, str(STATE / "autoverse-orca.cjs"), str(OUT)])
+    script = {
+        "retained-results": "autoverse-orca.cjs",
+        "scenario-conditions": "autoverse-orca-authoring.cjs",
+        "lab-inventory": "autoverse-orca-lab.cjs",
+    }[C["suite"]]
+    browser = spawn("browser", [node, str(STATE / script), str(OUT)])
     exit_code = browser.wait(timeout=115)
     assert orca.poll() is None and inspector.poll() is None and speech.poll() is None
     status["browserExit"] = exit_code

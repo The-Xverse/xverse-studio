@@ -26,6 +26,11 @@ parser = argparse.ArgumentParser()
 for name in ("recording", "static-dir", "output", "node", "browser-cache", "xvfb"):
     parser.add_argument("--" + name, type=Path, required=True)
 parser.add_argument("--width", type=int, choices=(1024, 1440), required=True)
+parser.add_argument(
+    "--suite",
+    choices=("retained-results", "scenario-conditions", "lab-inventory"),
+    default="retained-results",
+)
 a = parser.parse_args()
 for name in ("recording", "static_dir", "output", "node", "browser_cache", "xvfb"):
     setattr(a, name, getattr(a, name).resolve())
@@ -106,6 +111,9 @@ original = Path(
 original_hashes = recorded.hashes(original)
 database = sha((original / "studio.sqlite").read_bytes())
 data = out / "data"
+project_id = json.loads(
+    (original / "snapshots" / result["snapshotId"] / "snapshot.json").read_bytes()
+)["projectId"]
 exchange.clone(original, data)
 canonical = recorded.hashes(data)
 
@@ -132,6 +140,16 @@ def protected_records():
 
 project_before = project_files()
 records_before = protected_records()
+(out / "projects-before-hashes.json").write_text(
+    json.dumps(project_before, indent=2) + "\n"
+)
+(out / "protected-before.private.json").write_text(
+    json.dumps(
+        [[kind, key, body] for (kind, key), body in records_before.items()], indent=2
+    )
+    + "\n"
+)
+(out / "protected-before.private.json").chmod(0o600)
 ledger = recorded.ledger(data)
 host = native.NativeHost(
     data, out, None, Path(sys.executable), ui, register_provider=False
@@ -146,9 +164,14 @@ run_result = {
     "before": ledger,
 }
 exit_code = 1
+baseline = None
 try:
     host.start()
     with closing(native.login(host)) as api:
+        baseline = native.checked(api.get(f"/api/v1/projects/{project_id}"))
+        (out / "project-before.private.json").write_text(
+            json.dumps(baseline, indent=2) + "\n"
+        )
         cookies = {
             "cookies": [
                 {
@@ -178,6 +201,7 @@ try:
         "node": str(a.node),
         "xvfb": str(a.xvfb),
         "width": a.width,
+        "suite": a.suite,
         "hostMount": os.readlink("/proc/self/ns/mnt"),
         "hostPid": os.readlink("/proc/self/ns/pid"),
         "hostIpc": os.readlink("/proc/self/ns/ipc"),
@@ -308,7 +332,41 @@ finally:
     )
     with native.own_root(data):
         pass
+    mutation = None
+    mutation_error = None
+    if a.suite == "scenario-conditions":
+        verifier_spec = importlib.util.spec_from_file_location(
+            "orca_authoring_readback", STATE / "autoverse_orca_authoring_records.py"
+        )
+        verifier = importlib.util.module_from_spec(verifier_spec)
+        verifier_spec.loader.exec_module(verifier)
+        try:
+            if baseline is None:
+                assert (
+                    records_before == protected_records()
+                    and project_before == project_files()
+                )
+                mutation = {"acceptedSemanticEdits": 0, "baselineReadNotReached": True}
+            else:
+                mutation = verifier.verify_conditions(
+                    records_before,
+                    protected_records(),
+                    project_before,
+                    project_files(),
+                    baseline,
+                    data,
+                    a.width,
+                    exit_code == 0,
+                )
+        except AssertionError as problem:
+            mutation_error = {
+                "type": type(problem).__name__,
+                "message": str(problem)[:512],
+            }
     run_result.update(
+        suite=a.suite,
+        copyMutationReadback=mutation,
+        copyMutationReadbackError=mutation_error,
         copiedProjectsUnchanged=project_files() == project_before,
         copiedProtectedRecordsUnchanged=protected_records() == records_before,
         after=recorded.ledger(data),
@@ -329,14 +387,19 @@ finally:
     assert run_result["before"] == run_result["after"] and all(
         run_result[k]
         for k in (
-            "copiedProjectsUnchanged",
-            "copiedProtectedRecordsUnchanged",
             "originalRecordingUnchanged",
             "copiedCanonicalUnchanged",
             "sourceInputsUnchanged",
             "uiInputsUnchanged",
         )
     )
+    if a.suite in ("retained-results", "lab-inventory"):
+        assert (
+            run_result["copiedProjectsUnchanged"]
+            and run_result["copiedProtectedRecordsUnchanged"]
+        )
+    else:
+        assert mutation is not None
 print(
     json.dumps(
         {

@@ -3,6 +3,7 @@
 from collections import deque
 import faulthandler
 import ctypes
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -38,6 +39,13 @@ x11.XStringToKeysym.restype = ctypes.c_ulong
 x11.XKeysymToKeycode.argtypes = [ctypes.c_void_p, ctypes.c_ulong]
 x11.XKeysymToKeycode.restype = ctypes.c_uint
 x11.XFlush.argtypes = [ctypes.c_void_p]
+x11.XkbKeycodeToKeysym.argtypes = [
+    ctypes.c_void_p,
+    ctypes.c_ubyte,
+    ctypes.c_int,
+    ctypes.c_int,
+]
+x11.XkbKeycodeToKeysym.restype = ctypes.c_ulong
 xtst.XTestFakeKeyEvent.argtypes = [
     ctypes.c_void_p,
     ctypes.c_uint,
@@ -112,6 +120,56 @@ pyatspi.Registry.registerEventListener(
 )
 seen = set()
 last_key = None
+typed_characters = 0
+key_presses = 0
+key_releases = 0
+input_log = (out / "native-input.private.jsonl").open("x", buffering=1)
+
+
+def emit(code, pressed):
+    global key_presses, key_releases
+    assert xtst.XTestFakeKeyEvent(display, code, int(pressed), 0)
+    if pressed:
+        key_presses += 1
+    else:
+        key_releases += 1
+
+
+def named_code(name):
+    code = x11.XKeysymToKeycode(display, x11.XStringToKeysym(name.encode()))
+    assert code
+    return code
+
+
+def type_ascii(text):
+    global typed_characters
+    assert isinstance(text, str) and 1 <= len(text) <= 2048
+    assert typed_characters + len(text) <= 4096 and all(
+        32 <= ord(c) <= 126 for c in text
+    )
+    strokes = []
+    # Inspect only this private X server's existing map. Never remap a key or
+    # touch the host keymap; unsupported layouts fail before emitting text.
+    for char in text:
+        symbol = ord(char)
+        code = x11.XKeysymToKeycode(display, symbol)
+        assert code
+        levels = [x11.XkbKeycodeToKeysym(display, code, 0, n) for n in (0, 1)]
+        assert symbol in levels
+        strokes.append((code, levels.index(symbol) == 1))
+    shift = named_code("Shift_L")
+    for code, shifted in strokes:
+        if shifted:
+            emit(shift, True)
+        try:
+            emit(code, True)
+            emit(code, False)
+        finally:
+            if shifted:
+                emit(shift, False)
+        x11.XFlush(display)
+        time.sleep(0.002)
+    typed_characters += len(text)
 
 
 def tick():
@@ -122,14 +180,47 @@ def tick():
         if command["id"] != last_key:
             assert type(command["id"]) is int and 1 <= command["id"] <= 1000
             assert command["id"] == (last_key or 0) + 1
-            assert command["key"] in ("Tab", "Return", "Down", "Up", "Escape", "space")
-            sym = x11.XStringToKeysym(command["key"].encode())
-            code = x11.XKeysymToKeycode(display, sym)
-            assert code
-            assert xtst.XTestFakeKeyEvent(display, code, 1, 0)
-            assert xtst.XTestFakeKeyEvent(display, code, 0, 0)
+            assert set(command) in ({"id", "key"}, {"id", "text"}, {"id", "chord"})
+            observation = {"id": command["id"]}
+            if "key" in command:
+                assert command["key"] in (
+                    "Tab",
+                    "Return",
+                    "Down",
+                    "Up",
+                    "Escape",
+                    "space",
+                    "Home",
+                )
+                code = named_code(command["key"])
+                emit(code, True)
+                emit(code, False)
+                observation["key"] = command["key"]
+            elif "chord" in command:
+                assert command["chord"] == "Control+a"
+                control = named_code("Control_L")
+                letter = named_code("a")
+                emit(control, True)
+                try:
+                    emit(letter, True)
+                    emit(letter, False)
+                finally:
+                    emit(control, False)
+                observation["chord"] = "Control+a"
+            else:
+                type_ascii(command["text"])
+                observation.update(
+                    textCharacters=len(command["text"]),
+                    textSha256=hashlib.sha256(command["text"].encode()).hexdigest(),
+                )
             x11.XFlush(display)
             last_key = command["id"]
+            observation.update(
+                keyPresses=key_presses,
+                keyReleases=key_releases,
+                totalTextCharacters=typed_characters,
+            )
+            input_log.write(json.dumps(observation) + "\n")
             write_json(out / "key-ack.json", {"id": last_key})
     request = out / "snapshot-request.json"
     if not request.exists():
@@ -161,11 +252,23 @@ def tick():
                     "depth": depth,
                     "pid": node.get_process_id(),
                     "focused": state.contains(pyatspi.STATE_FOCUSED),
+                    "editable": state.contains(pyatspi.STATE_EDITABLE),
                     "selected": state.contains(pyatspi.STATE_SELECTED),
                     "showing": state.contains(pyatspi.STATE_SHOWING),
                     "attributes": node.getAttributes(),
                 }
             )
+            if rows[-1]["editable"] and rows[-1]["name"] in (
+                "Initial conditions (JSON object)",
+                "Scenario acceptance intent",
+            ):
+                text = node.queryText()
+                length = text.characterCount
+                rows[-1].update(
+                    editableTextLength=length,
+                    editableTextPrefix=text.getText(0, min(length, 2048)),
+                    editableTextTruncated=length > 2048,
+                )
             children = node.childCount
             if depth >= 35 and children:
                 limited += 1
