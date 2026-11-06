@@ -1,0 +1,41 @@
+ExpectError: expect(locator).toBeVisible() failed
+
+Locator: getByRole('region', { name: 'Run diagnosis', exact: true }).getByRole('button', { name: 'Inspect the referenced retained events and logs.', exact: true })
+Expected: visible
+Error: strict mode violation: getByRole('region', { name: 'Run diagnosis', exact: true }).getByRole('button', { name: 'Inspect the referenced retained events and logs.', exact: true }) resolved to 2 elements:
+    1) <button class="small-button">Inspect the referenced retained events and logs.</button> aka getByRole('button', { name: 'Inspect the referenced' }).first()
+    2) <button class="small-button">Inspect the referenced retained events and logs.</button> aka getByRole('button', { name: 'Inspect the referenced' }).nth(1)
+
+Call log:
+  - Expect "toBeVisible" getByRole('region', { name: 'Run diagnosis', exact: true }).getByRole('button', { name: 'Inspect the referenced retained events and logs.', exact: true }) with timeout 5000ms
+  - waiting for getByRole('region', { name: 'Run diagnosis', exact: true }).getByRole('button', { name: 'Inspect the referenced retained events and logs.', exact: true })
+
+    at captureRawStack ([WORKSPACE_VOLUME]/xverse-studio/node_modules/playwright-core/lib/coreBundle.js:9282:17)
+    at callMatcherAsStep ([WORKSPACE_VOLUME]/xverse-studio/node_modules/playwright/lib/matchers/expect.js:13316:57)
+    at Object.toBeVisible ([WORKSPACE_VOLUME]/xverse-studio/node_modules/playwright/lib/matchers/expect.js:13308:23)
+    at focus ([WORKTREE]/tests/live/autoverse-orca.cjs:50:23)
+    at [WORKTREE]/tests/live/autoverse-orca.cjs:113:9 {
+  matcherResult: {
+    message: 'expect(locator).toBeVisible() failed\n' +
+      '\n' +
+      "Locator: getByRole('region', { name: 'Run diagnosis', exact: true }).getByRole('button', { name: 'Inspect the referenced retained events and logs.', exact: true })\n" +
+      'Expected: visible\n' +
+      "Error: strict mode violation: getByRole('region', { name: 'Run diagnosis', exact: true }).getByRole('button', { name: 'Inspect the referenced retained events and logs.', exact: true }) resolved to 2 elements:\n" +
+      `    1) <button class="small-button">Inspect the referenced retained events and logs.</button> aka getByRole('button', { name: 'Inspect the referenced' }).first()\n` +
+      `    2) <button class="small-button">Inspect the referenced retained events and logs.</button> aka getByRole('button', { name: 'Inspect the referenced' }).nth(1)\n` +
+      '\n' +
+      'Call log:\n' +
+      `  - Expect "toBeVisible" getByRole('region', { name: 'Run diagnosis', exact: true }).getByRole('button', { name: 'Inspect the referenced retained events and logs.', exact: true }) with timeout 5000ms\n` +
+      "  - waiting for getByRole('region', { name: 'Run diagnosis', exact: true }).getByRole('button', { name: 'Inspect the referenced retained events and logs.', exact: true })\n",
+    pass: false,
+    actual: undefined,
+    name: 'toBeVisible',
+    expected: 'visible',
+    log: [
+      `  - Expect "toBeVisible" getByRole('region', { name: 'Run diagnosis', exact: true }).getByRole('button', { name: 'Inspect the referenced retained events and logs.', exact: true }) with timeout 5000ms`,
+      "  - waiting for getByRole('region', { name: 'Run diagnosis', exact: true }).getByRole('button', { name: 'Inspect the referenced retained events and logs.', exact: true })"
+    ],
+    timeout: undefined,
+    ariaSnapshot: undefined
+  }
+}

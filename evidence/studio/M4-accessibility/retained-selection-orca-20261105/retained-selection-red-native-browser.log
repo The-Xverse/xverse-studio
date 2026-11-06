@@ -1,0 +1,20 @@
+SyntaxError: [WORKTREE]/tests/live/autoverse-retained-run-selection.spec.ts: Missing semicolon. (42:77)
+
+  40 |     await expect(diagnosis).toContainText("TIME_MAPPING_INCOMPATIBLE");
+  41 |     expect(writes).toEqual([]);
+> 42 |     expect(await page.evaluate(() => localStorage.getItem("studio.lastRun")))).toBe(source.runId);
+     |                                                                              ^
+  43 |     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
+  44 |     await info.attach("fresh-retained-selection", { body: JSON.stringify({ width, runId: source.runId, browser: page.context().browser()?.version(), writes,
+  45 |       scope: "Actual retained Autoverse run selected with an initially empty browser preference; no provider/model/guest or evaluation operation" }), contentType: "application/json" });
+
+   at autoverse-retained-run-selection.spec.ts:42
+
+  40 |     await expect(diagnosis).toContainText("TIME_MAPPING_INCOMPATIBLE");
+  41 |     expect(writes).toEqual([]);
+> 42 |     expect(await page.evaluate(() => localStorage.getItem("studio.lastRun")))).toBe(source.runId);
+     |                                                                             ^
+  43 |     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
+  44 |     await info.attach("fresh-retained-selection", { body: JSON.stringify({ width, runId: source.runId, browser: page.context().browser()?.version(), writes,
+  45 |       scope: "Actual retained Autoverse run selected with an initially empty browser preference; no provider/model/guest or evaluation operation" }), contentType: "application/json" });
+Error: No tests found

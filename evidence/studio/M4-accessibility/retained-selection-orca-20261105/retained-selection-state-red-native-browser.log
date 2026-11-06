@@ -1,0 +1,76 @@
+
+Running 2 tests using 1 worker
+
+(node:1008573) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 tests/live/autoverse-retained-run-selection.spec.ts:48:9 › retained run picker handles stale selected metadata at 1024 (11.7s)
+(node:1008740) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  2 tests/live/autoverse-retained-run-selection.spec.ts:48:9 › retained run picker handles stale selected metadata at 1440 (11.2s)
+
+
+  1) tests/live/autoverse-retained-run-selection.spec.ts:48:9 › retained run picker handles stale selected metadata at 1024
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByRole('group', { name: 'Recorded runs', exact: true }).getByLabel('Recorded run', { exact: true }).locator('option:checked')
+    Expected substring: "stopped"
+    Received string:    "run-e96d00c6-d0d4-4c8e-b027-13eb3c37951a · running"
+    Timeout: 10000ms
+
+    Call log:
+      - Expect "toContainText" getByRole('group', { name: 'Recorded runs', exact: true }).getByLabel('Recorded run', { exact: true }).locator('option:checked') with timeout 10000ms
+      - waiting for getByRole('group', { name: 'Recorded runs', exact: true }).getByLabel('Recorded run', { exact: true }).locator('option:checked')
+        23 × locator resolved to <option value="run-e96d00c6-d0d4-4c8e-b027-13eb3c37951a">run-e96d00c6-d0d4-4c8e-b027-13eb3c37951a · running</option>
+           - unexpected value "run-e96d00c6-d0d4-4c8e-b027-13eb3c37951a · running"
+
+
+      93 |         const select = picker.getByLabel("Recorded run", { exact: true });
+      94 |         await expect(select).toHaveValue(source.runId);
+    > 95 |         await expect(select.locator("option:checked")).toContainText(original.state);
+         |                                                        ^
+      96 |         await expect(select.locator("option:checked")).not.toContainText("running");
+      97 |       } else if (mode === "late after Home") {
+      98 |         await received;
+        at [WORKTREE]/tests/live/autoverse-retained-run-selection.spec.ts:95:56
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    .studio-local/t097-shell-scope-20261105/retained-selection-state-red/native/artifacts/autoverse-retained-run-sel-220ac-e-selected-metadata-at-1024/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: .studio-local/t097-shell-scope-20261105/retained-selection-state-red/native/artifacts/autoverse-retained-run-sel-220ac-e-selected-metadata-at-1024/error-context.md
+
+  2) tests/live/autoverse-retained-run-selection.spec.ts:48:9 › retained run picker handles stale selected metadata at 1440
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByRole('group', { name: 'Recorded runs', exact: true }).getByLabel('Recorded run', { exact: true }).locator('option:checked')
+    Expected substring: "stopped"
+    Received string:    "run-e96d00c6-d0d4-4c8e-b027-13eb3c37951a · running"
+    Timeout: 10000ms
+
+    Call log:
+      - Expect "toContainText" getByRole('group', { name: 'Recorded runs', exact: true }).getByLabel('Recorded run', { exact: true }).locator('option:checked') with timeout 10000ms
+      - waiting for getByRole('group', { name: 'Recorded runs', exact: true }).getByLabel('Recorded run', { exact: true }).locator('option:checked')
+        24 × locator resolved to <option value="run-e96d00c6-d0d4-4c8e-b027-13eb3c37951a">run-e96d00c6-d0d4-4c8e-b027-13eb3c37951a · running</option>
+           - unexpected value "run-e96d00c6-d0d4-4c8e-b027-13eb3c37951a · running"
+
+
+      93 |         const select = picker.getByLabel("Recorded run", { exact: true });
+      94 |         await expect(select).toHaveValue(source.runId);
+    > 95 |         await expect(select.locator("option:checked")).toContainText(original.state);
+         |                                                        ^
+      96 |         await expect(select.locator("option:checked")).not.toContainText("running");
+      97 |       } else if (mode === "late after Home") {
+      98 |         await received;
+        at [WORKTREE]/tests/live/autoverse-retained-run-selection.spec.ts:95:56
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    .studio-local/t097-shell-scope-20261105/retained-selection-state-red/native/artifacts/autoverse-retained-run-sel-5eb39-e-selected-metadata-at-1440/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: .studio-local/t097-shell-scope-20261105/retained-selection-state-red/native/artifacts/autoverse-retained-run-sel-5eb39-e-selected-metadata-at-1440/error-context.md
+
+  2 failed
+    tests/live/autoverse-retained-run-selection.spec.ts:48:9 › retained run picker handles stale selected metadata at 1024
+    tests/live/autoverse-retained-run-selection.spec.ts:48:9 › retained run picker handles stale selected metadata at 1440
