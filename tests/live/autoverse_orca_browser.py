@@ -36,6 +36,8 @@ parser.add_argument(
         "scenario-conditions",
         "scenario-stimulus",
         "scenario-observer-metric",
+        "scenario-fault",
+        "scenario-fault-source",
         "lab-inventory",
     ),
     default="retained-results",
@@ -350,6 +352,8 @@ finally:
         "scenario-conditions",
         "scenario-stimulus",
         "scenario-observer-metric",
+        "scenario-fault",
+        "scenario-fault-source",
     ):
         verifier_spec = importlib.util.spec_from_file_location(
             "orca_authoring_readback", STATE / "autoverse_orca_authoring_records.py"
@@ -368,6 +372,8 @@ finally:
                     "scenario-conditions": verifier.verify_conditions,
                     "scenario-stimulus": verifier.verify_stimulus,
                     "scenario-observer-metric": verifier.verify_observer_metric,
+                    "scenario-fault": verifier.verify_fault,
+                    "scenario-fault-source": verifier.verify_fault_source,
                 }[a.suite]
                 mutation = readback(
                     records_before,

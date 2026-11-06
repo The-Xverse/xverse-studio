@@ -269,6 +269,10 @@ def tick():
                 "XDL source",
                 "Sampling intent",
                 "Metric acceptance intent",
+                "Activation intent",
+                "Recovery intent",
+                "Fault activation time",
+                "Fault duration",
             ):
                 text = node.queryText()
                 length = text.characterCount

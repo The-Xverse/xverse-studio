@@ -239,6 +239,100 @@ def verify_observer_metric(
     )
 
 
+def verify_fault(
+    before,
+    after,
+    files_before,
+    files_after,
+    baseline,
+    data,
+    width,
+    passed,
+    *,
+    source_only=False,
+):
+    """Admit only this prototype fault's exact authored timing/opaque intent."""
+    yaml = YAML(typ="safe")
+    resources = [yaml.load(d["content"]) for d in baseline["documents"].values()]
+    scenario = next(r for r in resources if r.get("kind") == "Scenario")
+    reference = scenario["spec"]["systemRef"]
+    system = next(
+        r
+        for r in resources
+        if r.get("kind") == "System"
+        and r["metadata"]["name"] == reference["name"]
+        and r["metadata"]["namespace"] == reference["namespace"]
+    )
+    identifier = f"orca-fault-{width}"
+    assert all(f["id"] != identifier for f in scenario["spec"]["faults"])
+    fault = {
+        "id": identifier,
+        "targetRef": {
+            "apiVersion": system["apiVersion"],
+            "kind": "System",
+            "namespace": system["metadata"]["namespace"],
+            "name": system["metadata"]["name"],
+            "element": system["spec"]["nodes"][0]["id"],
+        },
+        "faultKind": "provider-defined",
+        "activation": f"Opaque activation {width}; no runtime permission.",
+        "recovery": f"Opaque recovery {width}; no runtime permission.",
+        "maturity": "prototype",
+    }
+    if any(
+        r.get("kind") == "Profile"
+        and r.get("metadata", {}).get("version") == "0.1.0"
+        and r.get("spec", {}).get("extensionNamespace") == "io.xverse.experiment"
+        and r.get("spec", {}).get("schemaRef")
+        == "https://xverse.io/profiles/experiment-lite/v0.1/schema.json"
+        for r in resources
+    ):
+        fault["extensions"] = {
+            "io.xverse.experiment": {
+                "schemaVersion": "0.1",
+                "kind": "fault-intent",
+                "target": {
+                    "apiVersion": scenario["apiVersion"],
+                    "kind": "Scenario",
+                    "namespace": scenario["metadata"]["namespace"],
+                    "name": scenario["metadata"]["name"],
+                    "element": identifier,
+                },
+                "trigger": {"kind": "time", "at": 2, "unit": "s"},
+                "duration": {"value": 2, "unit": "s"},
+                "timeDomainId": system["spec"].get("defaultTimeDomainId")
+                or system["spec"]["timeDomains"][0]["id"],
+            }
+        }
+    first = copy.deepcopy(scenario)
+    first["spec"]["faults"].append(fault)
+    second = copy.deepcopy(first)
+    second["spec"]["faults"][-1]["recovery"] = (
+        f"Edited opaque recovery {width}; no runtime permission."
+    )
+    states = [first, scenario] if source_only else [first, second, scenario]
+    origins = (
+        ["add_scenario_item", "remove_scenario_item"]
+        if source_only
+        else ["add_scenario_item", "update_scenario_item", "remove_scenario_item"]
+    )
+    return verify_scenario_history(
+        before,
+        after,
+        files_before,
+        files_after,
+        baseline,
+        data,
+        states,
+        origins,
+        passed,
+    )
+
+
+def verify_fault_source(*args):
+    return verify_fault(*args, source_only=True)
+
+
 def verify_scenario_history(
     before, after, files_before, files_after, baseline, data, states, origins, passed
 ):

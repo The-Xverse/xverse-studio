@@ -223,6 +223,8 @@ try:
         "scenario-conditions": "autoverse-orca-authoring.cjs",
         "scenario-stimulus": "autoverse-orca-stimulus.cjs",
         "scenario-observer-metric": "autoverse-orca-observers.cjs",
+        "scenario-fault": "autoverse-orca-faults.cjs",
+        "scenario-fault-source": "autoverse-orca-faults.cjs",
         "lab-inventory": "autoverse-orca-lab.cjs",
     }[C["suite"]]
     browser = spawn("browser", [node, str(STATE / script), str(OUT)])
