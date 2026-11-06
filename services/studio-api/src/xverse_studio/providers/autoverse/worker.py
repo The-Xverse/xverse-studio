@@ -208,7 +208,17 @@ class Demo:
         self.processes[role] = record
         self.register_phase_resource("processes", role)
         owner = psutil.Process(process.pid)
-        record.update(createTime=owner.create_time(), argvDigest=digest(owner.cmdline()))
+        record["createTime"] = owner.create_time()
+        try:
+            observed_argv = owner.cmdline()
+        except psutil.ZombieProcess:
+            # A short command can exit before this read. Only the original
+            # Popen's observed exit permits using its submitted argv; this is
+            # not a live-process identity or permission to signal a PID.
+            if process.poll() is None:
+                raise
+            observed_argv = list(argv)
+        record["argvDigest"] = digest(observed_argv)
         os.set_blocking(process.stdout.fileno(), False)
         if interactive:
             os.set_blocking(process.stdin.fileno(), False)

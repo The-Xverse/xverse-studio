@@ -41,6 +41,7 @@ def workload(tmp_path):
         "runtimeStatus": {},
     }
     demo.stop_command = {"operationId": "op-stop"}
+    demo.input_loss = None
     demo.count = demo.journal_bytes = 0
     demo.previous = "0" * 64
     demo.journal = (tmp_path / "evidence.jsonl").open("xb", buffering=0)
@@ -141,6 +142,76 @@ def phase_demo(tmp_path):
     demo = Demo(tmp_path)
     demo.environment = lambda: {}
     return demo
+
+
+def test_original_child_exiting_before_cmdline_observation_is_retained(tmp_path, monkeypatch):
+    import os
+    import xverse_studio.providers.autoverse.worker as module
+
+    demo = phase_demo(tmp_path)
+    original_process = psutil.Process
+
+    class ExitedChild:
+        def __init__(self, pid):
+            self.owner = original_process(pid)
+            self.pid = pid
+
+        def create_time(self):
+            return self.owner.create_time()
+
+        def cmdline(self):
+            # Observe a real exited, unreaped child rather than synthesizing an
+            # exception. The original Popen still owns its exit status.
+            os.waitid(os.P_PID, self.pid, os.WEXITED | os.WNOWAIT)
+            return self.owner.cmdline()
+
+    argv = [sys.executable, "-I", "-c", "pass"]
+    try:
+        with monkeypatch.context() as patch:
+            patch.setattr(module.psutil, "Process", ExitedChild)
+            process = demo.launch("fast-command", argv)
+        assert process.poll() == 0
+        record = demo.processes["fast-command"]
+        assert record["createTime"] is not None
+        assert record["argvDigest"] == digest(argv)
+        demo.cleanup()
+        assert demo.state["cleanup"] == "complete"
+    finally:
+        demo.cleanup()
+        demo.journal.close()
+
+
+def test_zombie_observation_does_not_admit_a_still_running_child(tmp_path, monkeypatch):
+    import xverse_studio.providers.autoverse.worker as module
+
+    demo = phase_demo(tmp_path)
+    original_process = psutil.Process
+
+    class InconsistentObservation:
+        def __init__(self, pid):
+            self.owner = original_process(pid)
+            self.pid = pid
+
+        def create_time(self):
+            return self.owner.create_time()
+
+        def cmdline(self):
+            raise psutil.ZombieProcess(self.pid)
+
+    try:
+        with monkeypatch.context() as patch:
+            patch.setattr(module.psutil, "Process", InconsistentObservation)
+            with pytest.raises(psutil.ZombieProcess):
+                demo.launch("live-command", [sys.executable, "-I", "-c", "import time; time.sleep(120)"])
+        assert demo.processes["live-command"]["process"].poll() is None
+    finally:
+        # Use the retained original child directly: its command line was never
+        # admitted, so generic cleanup must not guess or signal an identity.
+        process = demo.processes["live-command"]["process"]
+        process.terminate()
+        process.wait(timeout=3)
+        demo.cleanup()
+        demo.journal.close()
 
 
 def test_phase_rollback_releases_only_its_actual_owned_children(tmp_path):
