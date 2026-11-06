@@ -1,3 +1,14 @@
+Latest active checkpoint — 2026-11-06: source ee3b174 passes six real Orca
+journeys for conditions editing, actual empty inventory and retained results at
+both required sizes. Native typing/error speech/persisted AT text and independently
+checked single-revision mutation are verified; read-only data and all frozen run
+inputs/ledgers remain unchanged. All599inputs match Git; earlier six UI assets and
+44native browser results inherited through unchanged production/test bytes.
+No production file changed. All current handles exit and roots release. Counts
+72completed/18in_progress/10blocked; zero milestones, no task closures. Windows
+independently FROZEN; goal ACTIVE without checkpoint pauses. Continue remaining
+original AT/required-host/human/external gates. See [conditions and inventory AT evidence](../../evidence/studio/M4-accessibility/orca-authoring-inventory-20261106/README.md).
+
 Latest active checkpoint — 2026-11-06: source 240778b repairs fresh-browser
 retained-run selection and stale selected-status precedence. Final 16 picker,
 6 diagnosis and 22 original playback browser journeys pass; two real Orca/AT-SPI
