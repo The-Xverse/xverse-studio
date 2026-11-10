@@ -1366,3 +1366,51 @@ T038/T097 observer/metric actual AT progress: 2026-11-06 observer/metric actual 
 T038/T097 initial-source focus repair: 2026-11-06 selected-source initial-focus repair (ADR0083): candidate2391af4 passes4 actual XTest/Orca/AT-SPI stimulus journeys (directEscape and keyboardClose,both widths) plus14 final native-browser cases (8 unchanged authoring+6 explicitlyinstrumented earlyResource/caret/Escape counters). Samecurrent601-input backend/testtools with old240778b UI reproduces missingSSIPutterance at1440; current6newUIassets reproduce exactly. OnlyViews initialeffect andauthoringTS change; other599inputs/backend/ATtools identical. Two browserframes, cleanupcancel, exactCloseorigin/currentfocus/connectededitor/topmodal guard coordinateinitialanchor without stealing newerintent; manualsource/ranges/bytes/persistence/authority unchanged. New counters exactprojectequal/zero writes. ActualAT independentlychecks3 revisions16->19/32newfiles, intermediateScenario states/unknownpayloads/allpreviousbytes/otherrecords/frozeninputs/originalDB/ledgers unchanged. AllcapturedATpidfdsexit withsamplegapsqualified; nativeoriginalhandlesSIGTERM-15/rootrelease retained, noalldescendantclaim. 295 pairs/22 knowncontrolstrings/8DBs includingnative locators; decodedJSONattachments sanitized. Exporterzeroexit/taggedhash assumptions correctedwithoutproduct/test changes. SpecificrecordedsourceEscape gapresolvedforthiscandidate; priorfailureshistorical. No workloads/guests/providerregistration/physicalaction/human/auditory/Windows/milestone acceptance. Counts72/18/10/no statuschanges, goalactive. Evidence evidence/studio/M4-accessibility/source-initial-focus-20261106/.
 
 T038/T097 fault intent actual AT progress: 2026-11-06 fault intent actual AT progress: candidate5fd02bc passes6 real XTest/Orca/AT-SPI journeys (fault edit, fault source and stimulus regression,both widths) on602 Git-identical inputs/6 unchanged2391af4 UI assets. Timed Profile controls/actualAT numeric+opaque values, unavailableproviderchoice text, zero-duration clienterror speech/zeroPOST/projectunchanged, correction, Recoveryedit and removalcancel/remove verified. Source pair reads fullselected fault extension mapping and directEscapefocus/speech. Independentmain3revisions16->19/32files andsource2revisions16->18/21files preserveallpreviousbytes/otherrecords/unknownpayloads/frozeninputs/originalDB/ledgers andrestoreScenariosemantics. FivepreviousverifierASTsidentical. Audit6actualpositives+54record/file+12hash-consistentsemanticcorruptionrefusals leavesfixturesreadonly. Main29/source25snapshotsstaywithin32/115s bounds;allobservationerrors/drops/truncation0. Allcapturedoriginalhandlesexit/rootsrelease,samplinggapsqualified. 358 pairs/24 controlstrings/8DBs; exporterClosevsEscapeassumptioncorrectedwithouttestchanges/reruns. No production/providerregistration/workload/guest/physical/human/auditory/milestoneclaim. Counts72/18/10/no statuschanges. Userrequestedfinishcurrentworkandstop; workPAUSEDaftercomponent,Windows separatelyFROZEN. Evidence evidence/studio/M4-accessibility/orca-faults-20261106/.
+
+
+Existing Autoverse blueprint reproduction progress (2026-11-10): user explicitly
+requires reuse of the existing development blueprint, not a new Lite-only variant.
+The unchanged autoverse-platform eight-file/six-binding System passes24 targeted
+contracts,12 actual cached-Release native bridge contracts and2 native Studio /
+Chromium journeys at1024x768/1440x900. Export/import preserves exact document
+objects and both compiled digests; absent enrollment blocks Start and zero runs
+are created. New from-scratch guide records actual host prerequisites, Android
+router setup, complete rendered/sensor/drive/Stop checks and recovery. Fresh npm
+install/build passes; fresh Python install fails because the configured remote
+does not supply pinned SDK12615d4. Full live verification remains NOT_RUN with
+8.7GiB available versus previous11GiB workload plus6GiB reserve; capacity question
+is pending. Lite flow execution/fault scheduling are not wired into the existing
+provider and are not claimed. No factory/provider/topology changes, original
+project/history preserved, no task closures; counts72/18/10,zero milestones.
+Original implementation hold and independent Windows freeze remain. Evidence:
+`evidence/studio/autoverse-reproduction-20261110/`.
+
+
+Existing Autoverse full local verification after capacity recovery (2026-11-10):
+The earlier RAM block is resolved by the user. Fresh ownership/enrollment of the
+separate prepared cache runs the unchanged default600-second autoverse-platform
+System on93ef1d9. Actual rendered camera/radar/GNSS, owned native Pygame throttle/
+brake, observed vehicle speed and Android APK/WebRTC/visible speed are verified.
+Orchestration/Communications/Evidence tabs and one shared identity-verified capture
+with426/1134/1560 records pass; requested/effective semantic and plan digests match.
+Public Stop reaches stopped/aggregate cleanup complete,22 provider components
+released;19 recorded process instances no longer live by exactPID/birth readback,
+8 cached containers stopped. Original supervisor/infrastructure children exit,
+overlay unmounted, host Docker/interfaces/originalCARLA markers unchanged. About
+26GiB RAM available afterwards;435MiB unreclaimable and233MiB vmalloc show no
+recurrence of earlier multi-GiB allocations. Two preparation-only helper failures
+and a contributor cleanup-enum assertion error are retained and qualified; no
+all-resource pidfd exit proof is claimed. Final recorded/assessed Argus verdict
+remains incomplete for known drops/degraded intervals; live-writer corruption
+diagnostics clear after sealing. Fresh Python source-distribution and missing
+Lite flow/fault integrations remain open. Full original implementation hold and
+Windows freeze preserved; no task closes,72/18/10,zero milestones. Evidence:
+`evidence/studio/autoverse-reproduction-20261110/live-verification.json`.
+
+Repository-based teammate handoff (2026-11-10): README links the existing guide
+and its branch checkout, independent PASS/FAIL/BLOCKED procedure, actual clean
+installation/live/Stop/memory observations and sanitized report requirements.
+No new blueprint or handoff ZIP is created. The Studio handoff branch is local;
+publication is not authorized and exact pinned platform SDK source distribution
+remains blocked. No runtime is restarted, no task closes and counts72/18/10 stay
+unchanged; original implementation hold and Windows freeze remain.

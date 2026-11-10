@@ -1,5 +1,10 @@
 # Run the Autoverse demo from Studio
 
+For a new workstation, follow [reproducing the existing development demo from
+scratch](autoverse-from-scratch.md), including its current source-distribution and
+Lite flow/fault integration limits. It uses the existing `autoverse-platform`
+blueprint and preserves the complete six-binding topology.
+
 Studio can load the complete Autoverse System, start its existing Linux components,
 and open the original Pygame **Vehicle Manual Control** window on the Studio host desktop. The installed provider is a
 prototype. Its Linux driving workflow has been exercised with real CARLA, Zenoh,
