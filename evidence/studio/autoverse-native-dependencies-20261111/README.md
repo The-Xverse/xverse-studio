@@ -11,7 +11,7 @@ native build verification; it does not replace prior full-demo evidence.
 - S-CORE [a4d610f](https://github.com/The-Xverse/adas_s-core/commit/a4d610f1de8353fb5f69095edb8c35489a758f1a), branch `studio/autoverse-library-check-fix`:
   the existing `readlink -f` launcher correction is committed with two regression
   tests. The manifest advances only this one of its twelve source pins.
-- [Studio guide](../../../docs/user/autoverse-from-scratch.md#4-build-and-admit-the-studio-native-x-com-bridge):
+- [Studio guide](../../../docs/user/autoverse-from-scratch.md#4-prepare-the-matching-native-x-com-bridge):
   selects the new SDK commit, all three environment inputs and an explicit
   `BUILD_TESTING=ON` native build. Studio lock, adapter and descriptive metadata
   agree with the installed SDK. Platform and S-CORE `main` remain unchanged.
