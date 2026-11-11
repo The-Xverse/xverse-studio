@@ -33,6 +33,14 @@ bridge still requires the admitted offline native dependencies and matching
 source/build identities described below. See the
 [dependency handoff verification](../../evidence/studio/autoverse-dependency-handoff-20261111/README.md).
 
+Subsequent native-build maintenance selects platform
+**`7e6f91e385f836f0f0e944b8c830aee930f5c771`**, with Ubuntu's available c-ares
+`1.18.1-1ubuntu0.22.04.4` pin and corrected thirteen-package/T025 instructions.
+The current Studio dependency and lock agree with that successor. Platform
+library code and CMake are unchanged from 12615d4. A teammate already running a
+12615d4 experiment can finish it using its frozen inputs; upgrading is a separate
+installation/admission, not a rewrite of that run.
+
 The existing blueprint does **not** yet execute every Lite subsystem:
 
 | Component | Existing development integration | Limit |
@@ -134,8 +142,9 @@ project exports and shared evidence.
 
 ## 2. Provision the existing Autoverse installation
 
-Use the checked-in **exact** multi-repository manifest, exported with
-`vcs export --exact --nested .` from the development source root. `--nested` is
+Use the checked-in **exact** multi-repository manifest. Its original export used
+`vcs export --exact --nested .` from the development source root; the current
+manifest advances only S-CORE to its published launcher-check fix. `--nested` is
 necessary: plain `vcs export --exact` stops at the enclosing Autoverse repository.
 Follow the first-installation section of the pinned Autoverse README. Current
 branch heads and the floating versions in `autoverse.repos` are not the handoff
@@ -172,11 +181,13 @@ The exported Git source root was independently matched to it: all 19 enrolled
 runtime source files, 92 copied S-CORE files, 10 VCU files, 10 CARLA example files
 and 159 SOME/IP build inputs match. This establishes the relevant source binding;
 it does not put generated images, native artifacts or Android userdata into Git.
-The source root has one uncommitted S-CORE `make.sh` library-check adjustment
-(`ldd` resolves launcher symlinks with `readlink -f`). The manifest represents its
-committed revision; that working-tree change is preserved and is not published
-or silently represented by a commit pin. The compared S-CORE runtime source
-files are unchanged. See the dependency evidence for this qualification.
+The S-CORE `make.sh` library-check adjustment is now published as
+**`a4d610f1de8353fb5f69095edb8c35489a758f1a`** in `The-Xverse/adas_s-core` and
+selected by the current manifest. It resolves launcher symlinks with `readlink -f`
+before `ldd`, avoiding a false missing-library report. Two owned-ELF regression
+tests verify correct resolution and refusal of a genuinely missing library.
+S-CORE runtime sources are unchanged. Original source working trees and the
+earlier export/evidence remain preserved.
 
 Arrange the directories as siblings:
 
@@ -291,19 +302,45 @@ Use platform source at the **same pinned commit** as the installed SDK. Its
 source can now be cloned explicitly:
 
 ```sh
-git clone --branch studio/autoverse-sdk-12615d4 --single-branch https://github.com/The-Xverse/xverse-platform.git /path/to/xverse-platform
-git -C /path/to/xverse-platform checkout --detach 12615d402ba16cde3cd48c55b70aca464ea90261
+git clone --branch studio/autoverse-sdk-build-fixes --single-branch https://github.com/The-Xverse/xverse-platform.git /path/to/xverse-platform
+git -C /path/to/xverse-platform checkout --detach 7e6f91e385f836f0f0e944b8c830aee930f5c771
 ```
 
-The platform's
-native SDK requires a verified offline prefix and package manifest supplied by
-the platform handoff, through `XVERSE_XCOM_TOOLCHAIN` and
-`XVERSE_XCOM_PACKAGE_MANIFEST`. CMake runs
-`scripts/xcom_dependency_preflight.py`; system headers or a random newer SDK
-are not substitutes. Follow that revision's native build instructions and build
-the `xverse_xcom_provider_loopback` target with Ninja. Retain its CMake cache,
-four static libraries and admitted `nlohmann` headers. Studio does not build or
-modify companion sources through its HTTP API.
+The platform's native SDK requires **thirteen** retained package archives plus
+their JSON manifest and a verified extracted prefix. Follow its
+`docs/engineering/xcom/dependency-lock.md` and `build-environment.md`; the
+reconstruction script and preflight both require thirteen records. The updated
+c-ares archive is 45180 bytes with SHA-256
+`f06ba6fa152f36efd393943dc7e80e229cac041b241e6281d20d60ee7dfc14c2`.
+
+Root CMake also requires `BUILD_TESTING=ON` and the **separate T025 test prefix**:
+`googletest`, `libgtest-dev` and `libgmock-dev`, each **1.11.0-3**. Prepare and
+verify it using the platform's
+`docs/engineering/xcom/t025/test-dependency-admission.md` and export
+`XVERSE_XCOM_T025_TEST_TOOLCHAIN`. Do this before both preflight and full CMake
+configuration. Put these test packages in their own prefix; adding them to the
+thirteen-package prefix invalidates its exact payload binding.
+
+From the Studio root, with both prefixes and the package manifest already provisioned:
+
+```sh
+export XVERSE_XCOM_TOOLCHAIN=/path/to/admitted-prefix
+export XVERSE_XCOM_PACKAGE_MANIFEST=/path/to/package-manifest.json
+export XVERSE_XCOM_T025_TEST_TOOLCHAIN=/path/to/admitted-gtest-prefix
+export LD_LIBRARY_PATH="$XVERSE_XCOM_TOOLCHAIN/usr/lib/x86_64-linux-gnu"
+uv run python /path/to/xverse-platform/scripts/check_xcom_t025_test_dependencies.py /path/to/gtest-packages "$XVERSE_XCOM_T025_TEST_TOOLCHAIN"
+uv run python /path/to/xverse-platform/scripts/xcom_dependency_preflight.py --verify-toolchain
+uv run python /path/to/xverse-platform/scripts/xcom_dependency_preflight.py --all
+cmake -S /path/to/xverse-platform -B /path/to/platform-native-build -G Ninja \
+  -DBUILD_TESTING=ON -DCMAKE_BUILD_TYPE=Release -DPython3_EXECUTABLE="$PWD/.venv/bin/python"
+cmake --build /path/to/platform-native-build --target xverse_xcom_provider_loopback -j2
+```
+
+Use the provisioned Python 3.11+ interpreter for platform checks; the Studio
+environment's Python 3.13.13 satisfies this. System headers or a random newer
+SDK are not substitutes for admission. Retain the CMake cache, four static
+libraries and admitted `nlohmann` headers. Studio does not build or modify
+companion sources through its HTTP API.
 
 Use a private, non-symlink output directory. For an optimized bridge, first
 configure the Studio-owned bridge in Release mode, then run its admission helper.

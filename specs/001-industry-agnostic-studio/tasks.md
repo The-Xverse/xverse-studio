@@ -1437,3 +1437,18 @@ Androidruntime link are preserved/excluded, not silently published as commits.
 No runtime/VM/GPU/Windows activity, no acceptance or task closure;72/18/10 remain.
 Full native/assets provisioning and missing Liteflow/fault integration remain
 open. Evidence: evidence/studio/autoverse-dependency-handoff-20261111/.
+
+Autoverse native dependency maintenance (2026-11-11): teammate-reported c-ares
+archive404, thirteen-package reconstruction count, missing T025 prefix and S-CORE
+Bazel launcher library check are repaired in scoped published companion branches.
+Studio selects metadata-only platform successor7e6f91e and S-COREa4d610f; runtime
+source trees are unchanged. Verified independent .4 archive/prefix reconstruction,
+39 preflight self-tests, missing-T025 negative control and positive offline
+admission, root Release native SDK/four-library build, fresh frozen Python sync,
+57 Studio contracts,12 actual native bridge contracts and2 S-CORE ELF regression
+tests; zero skips. Bridge receipt records companionSourceChanged:false.
+Compatibility/architecture pass; original source WIP preserved. No new full demo,
+VM/GPU or Windows activity, main merge, task closure or milestone acceptance.
+Teammate section5/6 remains pending; original work hold and Windows freeze stay.
+Counts72/18/10 unchanged. Evidence:
+`evidence/studio/autoverse-native-dependencies-20261111/`.

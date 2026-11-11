@@ -3,21 +3,27 @@
 Initial inspection: 2026-10-25, using repository contents and GitHub `commits/main`
 responses independently. Updated 2026-10-29 after the separately authorized public
 Maestro capability was accepted and integrated into local platform `main`.
+Maintenance update 2026-11-11 selects a metadata/documentation-only successor for
+the current Jammy c-ares package and complete native-build instructions. Platform
+library source, schemas, protocols and CMake are unchanged from 12615d4. Historical
+live evidence remains bound to its original revision; the successor is verified
+for fresh dependency admission and native bridge construction, not a new full-demo
+or milestone acceptance. See the [dated native dependency maintenance evidence](../../evidence/studio/autoverse-native-dependencies-20261111/README.md).
 
 | Input | Selected immutable revision | Admission scope |
 |---|---|---|
-| [xverse-platform](https://github.com/The-Xverse/xverse-platform/tree/12615d402ba16cde3cd48c55b70aca464ea90261) | `12615d402ba16cde3cd48c55b70aca464ea90261` | Installed `xverse-xdl`0.4.0 from accepted local main; matching public execution modules and offline XDL/Argus checks. Explicit Autoverse platform enrollment has actual complete Linux browser/native evidence; this does not admit unrelated Lite/compat/blueprint bindings. |
+| [xverse-platform](https://github.com/The-Xverse/xverse-platform/tree/7e6f91e385f836f0f0e944b8c830aee930f5c771) | `7e6f91e385f836f0f0e944b8c830aee930f5c771` | `xverse-xdl`0.4.0 maintenance successor to 12615d4 for c-ares `.4` and build documentation. Library/API/native source bytes are unchanged. Fresh installation, offline checks and bridge tests retain their own dated evidence; prior full Autoverse evidence is not promoted to this pin. No unrelated Lite/compat/blueprint admission. |
 | [xverse-compat](https://github.com/The-Xverse/xverse-compat/tree/f5b3957ca84cccfd98cddd9eb3ab95b0a4643eed) | `f5b3957ca84cccfd98cddd9eb3ab95b0a4643eed` | Source inspection only; no driver/simulator admission. |
 | [xverse-blueprints](https://github.com/The-Xverse/xverse-blueprints/tree/0741e01b9e86b9bb9360e2feb220807b36bcbdc4) | `0741e01b9e86b9bb9360e2feb220807b36bcbdc4` | Source inspection only; no live blueprint admission. |
 
 The initial source register retains platform `7fab6a290c3731533c2b88517158055c768b9d4e`
 as its historical inspection identity. ADR-0034 records this successor admission.
-The new commit is local and has not been published; its GitHub link is an identity
-reference, not a claim of remote availability. Provisioning used a temporary Git
-URL rewrite to the accepted local repository, with the canonical source URL and
-commit retained in the lock and installed distribution metadata. No global Git
-configuration was changed. A remote-only installation cannot fetch this commit
-until publication is separately authorized.
+The original 12615d4 provisioning used an explicitly recorded temporary local Git
+URL rewrite before publication. It was subsequently published at the user's
+request, and a fresh HTTPS-only dependency fetch was verified. The maintenance
+successor above is published on `studio/autoverse-sdk-build-fixes`; it does not
+rewrite the original commit or imply platform `main` acceptance. The Studio pin,
+lock, installed SDK and explicit native source checkout must agree.
 
 These revisions differ from the historical rc.1 compatibility set. Their selection
 does not establish a mutually admitted live runtime set. The selected XDL file

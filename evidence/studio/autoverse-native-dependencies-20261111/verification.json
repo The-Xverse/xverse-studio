@@ -1,0 +1,187 @@
+{
+  "date": "2026-11-11",
+  "scope": "User-requested native dependency and reproduction maintenance; no new full-demo acceptance",
+  "studioBaseCommit": "382c157a51a3f74d8fe4cb524b102cdf0c54c49c",
+  "platform": {
+    "base": "12615d402ba16cde3cd48c55b70aca464ea90261",
+    "commit": "7e6f91e385f836f0f0e944b8c830aee930f5c771",
+    "repository": "https://github.com/The-Xverse/xverse-platform",
+    "branch": "studio/autoverse-sdk-build-fixes",
+    "remoteRefReadbackVerified": true,
+    "mainUnchanged": true,
+    "changes": "Exact c-ares .4 admission metadata and documentation only"
+  },
+  "score": {
+    "base": "320508a47370192b62936fe6db078d338afb6f0f",
+    "commit": "a4d610f1de8353fb5f69095edb8c35489a758f1a",
+    "repository": "https://github.com/The-Xverse/adas_s-core",
+    "branch": "studio/autoverse-library-check-fix",
+    "remoteRefReadbackVerified": true,
+    "mainUnchanged": true,
+    "regressionTests": {
+      "passed": 2,
+      "skipped": 0,
+      "scope": "Actual check_libs body with owned ELF files, Bazel-like launcher symlinks and genuinely missing serializer library"
+    },
+    "originalWorkingTreePreserved": true
+  },
+  "package": {
+    "url": "https://archive.ubuntu.com/ubuntu/pool/main/c/c-ares/libc-ares2_1.18.1-1ubuntu0.22.04.4_amd64.deb",
+    "bytes": 45180,
+    "sha256": "f06ba6fa152f36efd393943dc7e80e229cac041b241e6281d20d60ee7dfc14c2",
+    "controlMetadata": "Package: libc-ares2\nVersion: 1.18.1-1ubuntu0.22.04.4\nArchitecture: amd64\nSource: c-ares\n"
+  },
+  "reconstruction": {
+    "literalUpdatedDocumentationShellExecuted": true,
+    "original13RecordReconstruction": "FAIL: original code incorrectly requires12",
+    "updated13RecordReconstruction": "PASS",
+    "archiveCount": 13,
+    "additionalManifestFiles": 1,
+    "libcaresSo2Target": "libcares.so.2.5.1",
+    "testPackagesInSeparatePrefix": true
+  },
+  "platformChecks": {
+    "selfTestsPassed": 39,
+    "missingT025NegativeControl": "XCOM-BLD-E061, exit11",
+    "t025PrefixAdmission": "XCOM-T025-DEP-I000",
+    "verifyToolchain": "XCOM-BLD-I000",
+    "all": "XCOM-BLD-I000",
+    "rootCMake": "PASS; Release, Ninja, BUILD_TESTING=ON",
+    "target": "xverse_xcom_provider_loopback",
+    "nativeStaticLibrariesBuilt": 4,
+    "parallelBuildJobs": 2,
+    "offlineEnforcement": "unshare --user --map-root-user --net; no network routes for admission/build/test checks"
+  },
+  "freshStudio": {
+    "uvSyncFrozen": "PASS",
+    "emptyUvCacheBefore": true,
+    "python": "3.13.13",
+    "lockDiff": "Only two SDK Git revision records changed; other dependency versions unchanged",
+    "admission": {
+      "sdkCommit": "7e6f91e385f836f0f0e944b8c830aee930f5c771",
+      "directGitProvenanceVerified": true,
+      "bindings": 6,
+      "valid": true,
+      "semanticDigest": "sha256:d938b685194e149cfe0cc1b31e6f3f0b37f5db4d096360fd0b143c5e15cf21c6",
+      "planDigest": "sha256:40f813c0adec313f855c3159484dc2293684bc79013291b1490b477bb35fdcd4"
+    },
+    "contractTests": {
+      "tests": 57,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "nativeBridgeContracts": {
+      "tests": 12,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "nativeBridgeBuild": "PASS at exact new SDK commit; companionSourceChanged=false",
+    "compatibility": "PASS after refreshing exact revision, lock hash and reference descriptor digest bound to XDL adapter source",
+    "architecture": "PASS",
+    "ruffUndefinedNames": "PASS",
+    "pytestWarnings": "One existing Starlette/httpx deprecation warning per suite",
+    "specStructure": "PASS; 100 tasks, 32 acceptance cases, 75 requirements; application acceptance not evaluated"
+  },
+  "sourcePreservation": {
+    "platformTreeIdentityAgainst12615d4": {
+      "src": true,
+      "cmake": true,
+      "CMakeLists.txt": true,
+      "proto": true,
+      "xdl": true
+    },
+    "scoreRuntimeTreeIdentityAgainst320508a": true,
+    "originalScoreMakePreserved": true,
+    "originalScoreHead": "320508a47370192b62936fe6db078d338afb6f0f",
+    "originalPlatformHead": "5c9523ca3f060598d776725612b934b65dbdbd88",
+    "originalPlatformStatus": ""
+  },
+  "manifest": {
+    "path": "config/autoverse-development.repos",
+    "sha256": "sha256:9b23861f60489efd5c0847c14c6a681f17d43bcf162acd0089d6265597fab122",
+    "repositories": 12,
+    "onlyChangedPin": "autoverse/vecu/s-core",
+    "other11PinsUnchanged": true,
+    "originalExportEvidence": "evidence/studio/autoverse-dependency-handoff-20261111/verification.json"
+  },
+  "review": {
+    "readOnlyFindingsRecordedBeforeRepair": true,
+    "followupDiffReview": "PASS: .4 version/bytes/hash and thirteen count agree; native platform and S-CORE runtime trees byte-identical; no relaxed admission checks; source WIP preserved",
+    "referenceDescriptorDigestReason": "Registry binds worker.py, XDL adapter, examples.py, reference_control.py and reference-controls schema; adapter revision constant changes its digest",
+    "finalStatus": "PASS: no unresolved finding in this four-fix scope; full-demo outcomes and original acceptance gaps remain separately qualified"
+  },
+  "privateLogSha256": {
+    "preflight-self-test.log": "sha256:ae0864c086d9cbbffcb3733690dc105560ee3ebb81bcfa665acd5ab8338f37c4",
+    "preflight-verify-with-t025.log": "sha256:e673adf7ed7176473650dfc7935fdd82917f91ee954fcacfe6aff04eb35e0aaa",
+    "preflight-all-final.log": "sha256:e673adf7ed7176473650dfc7935fdd82917f91ee954fcacfe6aff04eb35e0aaa",
+    "t025-admission.log": "sha256:291dfc832767c8b8c21097c7fa32d6d02e1edff31e0b776ae601844f5dfdc47f",
+    "reconstruct-red.log": "sha256:0744f67527bab43addfd7e34443acfa750ee819d6c714bd4e985d95badd9a414",
+    "reconstruct-green.log": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "preflight-verify.log": "sha256:af207bb5c7fe844c3b245805dec05f885e031d912c53a26a020339ddaeddca61",
+    "score-unit.log": "sha256:d38b6599acb669f0885be38325d46c3ec7b43bfc283ca1aa0ccea87946318460",
+    "studio-contracts.log": "sha256:271b9e514f0b7003b45dd1660bc7c7db086f044f6bde5b226e27b74079fb47d3",
+    "native-contracts.log": "sha256:8da205936705677bd4a5ec3afdfe41dbb3030508291764b38a55c4a66832ae62",
+    "studio-compatibility-final.log": "sha256:65e22030e7c84903932e3a04d643a5bccfe364dd2eb3165d9402bbae99392bf1",
+    "architecture.log": "sha256:3149369c7bdf32982e34a3ac816016a94f24b7be58dfff1751c7f47985dfc1cb",
+    "uv-sync.log": "sha256:e3070d4b6acb07eb8e4f09a1a4137786662ff7aee04ffe05354c40d475bf9c6f",
+    "native-configure-final.log": "sha256:ddf8f83a04523ea01f29ce1eaf63b914178dbb62365172851be99c8cd3459bca",
+    "native-build.log": "sha256:da637c7b67d6f6f38640bb48354ac354b6dd9db73700bb52cc277cda15d5c0f7",
+    "bridge-build.log": "sha256:2278b6c35ccbd5832cfe09d9981782e178dee8a67fead2ed0dc3117910e871be",
+    "ruff.log": "sha256:82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18",
+    "spec-structure.log": "sha256:da90e377a19d79dbf7d2f668265fd9c00c9f1545f82b70d05eeb3b6e61ff92a3"
+  },
+  "taskStatusChanges": [],
+  "taskCounts": {
+    "completed": 72,
+    "in_progress": 18,
+    "blocked": 10
+  },
+  "limits": [
+    "No new full Autoverse, Android, CARLA, S-CORE container or browser demo run in this maintenance task.",
+    "Teammate reported companion builds and guide checks through section4; their section5/6 outcome is pending.",
+    "Previous full-demo evidence remains bound to its original source/build/enrollment identities.",
+    "Missing Lite FlowRunHarness/FaultScheduler integration and incomplete full-demo Argus verdict are unchanged.",
+    "Original implementation work remains paused; Windows work remains frozen.",
+    "Companion branches are published review candidates; no main integration or milestone acceptance is claimed."
+  ],
+  "cleanup": {
+    "status": "complete",
+    "ownBuildOrTestProcessesRemaining": [],
+    "temporaryCompanionWorktreesRemoved": true,
+    "removedOwnDirectories": [
+      "uv-cache",
+      "prefix",
+      "native-bridge",
+      "packages",
+      "studio-venv",
+      "native-build",
+      "score-ldd-fixture"
+    ],
+    "privateLogsAndMetadataRetained": true,
+    "originalSourcesAndCachesPreserved": true,
+    "simulatorVmOrGpuWorkloadsStarted": 0,
+    "beforeRemovalMemoryKiB": {
+      "MemAvailable": 22428916,
+      "SUnreclaim": 1366744,
+      "VmallocUsed": 935228
+    },
+    "afterRemovalMemoryKiB": {
+      "MemAvailable": 22157524,
+      "SUnreclaim": 1333056,
+      "VmallocUsed": 937648
+    },
+    "availableMemoryGiB": 21.13,
+    "interpretation": "No new VM/GPU workload; memory is a host snapshot with other applications active, not attribution of global kernel allocations."
+  },
+  "selectedCandidateFilesSha256": {
+    "config/autoverse-development.repos": "sha256:9b23861f60489efd5c0847c14c6a681f17d43bcf162acd0089d6265597fab122",
+    "config/platform-compatibility.json": "sha256:ecd657c480339f3c0e1e699c57822fd2ba48c5e6f6e8352c42c828f7c8d44de0",
+    "docs/implementation/baseline.md": "sha256:0a0722c93534d51b9922341ecc689944ecd6eda1ad1473743c84a8debc599206",
+    "docs/user/autoverse-from-scratch.md": "sha256:89211a31bcc9a4e9b083407e91e7c12e5fb6daf5ab48564b9a666de9291c55e5",
+    "services/studio-api/pyproject.toml": "sha256:9b361b59c91fd335f1c49303ce90e485df0e8e6bfbaf530e65051d6b6d2c83ae",
+    "services/studio-api/src/xverse_studio/xdl/__init__.py": "sha256:bf1654445e01b2dee1c3a574568a3fe4699c3d314090b5e55d453cc4b50eaa11",
+    "uv.lock": "sha256:e088c1d19025ffbed2b35b77f70b5f0e74e07474abb021687ba180570bfb49ed"
+  }
+}
