@@ -13,8 +13,9 @@ Windows, actual hardware and first-time usability gates remain unverified or blo
 
 For an independent Linux Autoverse test, follow the
 [repository checkout and reproduction guide](docs/user/autoverse-from-scratch.md#repository-checkout-for-an-independent-tester).
-It uses the existing **Autoverse with X-Verse platform** blueprint and records
-the remaining SDK source-distribution and Lite flow/fault integration prerequisites.
+It uses the existing **Autoverse with X-Verse platform** blueprint, the
+[exact Autoverse source manifest](config/autoverse-development.repos), and records
+the remaining native-build/assets and Lite flow/fault integration prerequisites.
 
 After provisioning the pinned Python 3.13.13/uv 0.12.17 and Node 24.22.1 toolchain:
 

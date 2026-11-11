@@ -19,17 +19,19 @@ provisioned development SDK and cached real Autoverse assets: rendered CARLA,
 native Pygame driving, Android cluster speed, all three platform views and public
 Stop/cleanup were checked. All test-owned runtime and infrastructure processes
 were then shut down; approximately 26 GiB RAM was available afterwards. This
-live check does not remove the fresh-install prerequisite below or supply the
+live check does not qualify a fresh full Autoverse installation or supply the
 missing Lite flow/fault integrations.
 
 On 2026-11-10, `uv sync --frozen` failed because the configured platform Git remote
 did not supply commit `12615d402ba16cde3cd48c55b70aca464ea90261`
-(`upload-pack: not our ref`). A new machine needs a maintainer-provided, verified
-source handoff containing that exact commit, or a separately admitted dependency
-update. A working virtual environment on the development PC does not resolve
-this distribution prerequisite. Do not change the lockfile to a newer head just
-to get past this error. The native bridge also requires the admitted offline
-native dependencies and matching source/build identities described below.
+(`upload-pack: not our ref`). **Resolved on 2026-11-11:** the exact commit is now
+published on platform branch `studio/autoverse-sdk-12615d4`. A clean install of
+Studio **c8e05dd**, with an empty uv cache, passed `uv sync --frozen`; the installed
+`xverse.maestro.execution` API imports and the existing blueprint compiles with
+the recorded digests. No dependency or lockfile change is necessary. The native
+bridge still requires the admitted offline native dependencies and matching
+source/build identities described below. See the
+[dependency handoff verification](../../evidence/studio/autoverse-dependency-handoff-20261111/README.md).
 
 The existing blueprint does **not** yet execute every Lite subsystem:
 
@@ -50,8 +52,7 @@ running disconnected fixtures or relabelling provider logs does not establish it
 
 The handoff is the Studio repository branch **`feat/autoverse-reproduction-guide`**,
 including this guide, the existing blueprint factory, repeatable tests and dated
-development evidence. The branch must be published to the repository and the
-teammate must have repository access before these commands will work:
+development evidence. It is published; the teammate needs repository access:
 
 ```sh
 git clone --branch feat/autoverse-reproduction-guide https://github.com/The-Xverse/xverse-studio.git
@@ -66,11 +67,11 @@ recorded runtime candidate is 93ef1d9; later documentation/test-only commits ret
 those unchanged production inputs. Do not assume another branch or current
 companion heads identify the same tested candidate.
 
-Before requesting the test, arrange access to the exact platform SDK commit
-`12615d402ba16cde3cd48c55b70aca464ea90261`, its admitted native dependencies,
-and the pinned Autoverse sources/assets described below. Publishing this Studio
-branch does not make those separate dependencies available. The default fresh
-`uv sync --frozen` currently fails without that SDK source prerequisite.
+The exact platform SDK commit is published in `The-Xverse/xverse-platform`.
+The exact multi-repository Autoverse source pins are checked in as
+[`config/autoverse-development.repos`](../../config/autoverse-development.repos).
+Native dependency artifacts, CARLA/Cuttlefish system images and locally built
+container contents remain separate installation prerequisites.
 
 The teammate installs dependencies and builds the UI locally with section 3,
 prepares/enrolls their own environment with sections 2, 4 and 5, then performs
@@ -80,9 +81,9 @@ evidence is an optional exchange-test artifact.
 
 Record **PASS**, **FAIL** or **BLOCKED** independently for:
 
-1. Clean dependency installation and local UI build. Preserve the exact SDK fetch
-   failure as BLOCKED if its source has not been supplied; another machine's
-   virtual environment or `.studio-local` directory is not an installation.
+1. Clean dependency installation and local UI build. Report any fetch/install
+   failure with its exact command and source identity; another machine's virtual
+   environment or `.studio-local` directory is not an installation.
 2. Opening and validating the existing eight-file, six-binding blueprint. Compare
    its compiled digests with the dated evidence, and verify unavailable enrollment
    prevents Start rather than silently running the reference provider.
@@ -133,11 +134,49 @@ project exports and shared evidence.
 
 ## 2. Provision the existing Autoverse installation
 
-Obtain the known-working Autoverse source handoff and its **exact** multi-repository
-manifest from the development installation. Follow the first-installation section
-of that handoff's Autoverse README. Do not assume current companion repository
-heads match the admitted development build: newer OpenSOVD/openDuT campaigns are
-separate from this Studio demo.
+Use the checked-in **exact** multi-repository manifest, exported with
+`vcs export --exact --nested .` from the development source root. `--nested` is
+necessary: plain `vcs export --exact` stops at the enclosing Autoverse repository.
+Follow the first-installation section of the pinned Autoverse README. Current
+branch heads and the floating versions in `autoverse.repos` are not the handoff
+identity; newer OpenSOVD/openDuT campaigns are separate from this Studio demo.
+
+From a new parent workspace containing your Studio checkout, run:
+
+```sh
+# The manifest uses GitHub SSH URLs; configure repository access first.
+cd /path/to/workspace
+GIT_LFS_SKIP_SMUDGE=1 git clone --no-checkout git@github.com:The-Xverse/autoverse.git autoverse
+GIT_LFS_SKIP_SMUDGE=1 git -C autoverse checkout --detach 6000fa76f4434452bb8fe241c7117167deb2bcea
+GIT_LFS_SKIP_SMUDGE=1 vcs import --skip-existing --workers 1 . < xverse-studio/config/autoverse-development.repos
+vcs export --exact --nested autoverse > autoverse.actual.repos
+```
+
+Compare every URL/commit in `autoverse.actual.repos` with the supplied manifest.
+The root is selected before import because cloning the default branch and then
+switching can hit a legacy APK ZIP/Git LFS dirty-file refusal. `--skip-existing`
+preserves the root already checked out at the exact pin. Use a new workspace;
+it also preserves other existing custom checkouts rather than correcting them.
+These commands fetch source only. Fetch the selected providers' LFS payloads and
+prepare their images/builds in the steps below before enrollment.
+
+`aaos_digital_cluster/cuttlefish_emulator` is a clone of **`The-Xverse/aaos_cuttlefish`**
+at **`b86e0de01ec21fee5417ad396eb4c507f5f1c963`**. Its tracked
+`apk/digital-cluster-app-debug.zip` contains the APK used by the local demo:
+`digital-cluster-app-debug.apk`, SHA-256
+`daf9e86cf2f6e58536bca5cedbc695baadcbf39f0965ad22d65607ddd79827f9`.
+Extract that archive as instructed by the pinned Cuttlefish setup.
+
+The actual live test ran from a staged asset tree without `.git` directories.
+The exported Git source root was independently matched to it: all 19 enrolled
+runtime source files, 92 copied S-CORE files, 10 VCU files, 10 CARLA example files
+and 159 SOME/IP build inputs match. This establishes the relevant source binding;
+it does not put generated images, native artifacts or Android userdata into Git.
+The source root has one uncommitted S-CORE `make.sh` library-check adjustment
+(`ldd` resolves launcher symlinks with `readlink -f`). The manifest represents its
+committed revision; that working-tree change is preserved and is not published
+or silently represented by a commit pin. The compared S-CORE runtime source
+files are unchanged. See the dependency evidence for this qualification.
 
 Arrange the directories as siblings:
 
@@ -156,13 +195,25 @@ workspace/
   xverse-platform/
 ```
 
-In the fresh Autoverse checkout, import the supplied exact manifest with
-`vcs import . < autoverse.repos`, fetch the required Git LFS assets and use
-`vcs export --exact` to retain the resulting identities. Run `just check-host`
-and inspect `just --list` against that pinned handoff. Install its Zenoh router
-and component Python dependencies (`just install-zenoh` and `just install-client`
-where provided). Use CARLA **0.9.15** with its matching Python API for the recorded
-development baseline; a mismatched CARLA module/server is not interchangeable.
+In the fresh Autoverse checkout, run `just check-host` and inspect `just --list`
+against the pinned source. Its provisioning helpers are `just install-zenoh` and
+`just install-client` where provided; check their resulting versions against the
+actual tested component environment:
+
+| Dependency | Recorded version |
+|---|---|
+| Component interpreter (`/usr/bin/python3`) | 3.10.12 |
+| CARLA server/Python API | 0.9.15 |
+| Zenoh router and Python `eclipse-zenoh` | 1.3.4 |
+| Pygame | 2.6.1 |
+| NumPy | 2.2.6 |
+| psutil | 5.9.0 |
+
+Studio's Python 3.13 environment remains separate. Fetching the pinned
+`core/zenoh` repository does not select the router binary by itself. The recorded
+router was the upstream `zenoh-1.3.4-x86_64-unknown-linux-gnu-standalone.zip`,
+SHA-256 `67e6c2ec44ba2bf98456797181b7aa252e78c369ed5092f7ac9fff744c8073c4`.
+A mismatched CARLA API/server or another router version is not the tested baseline.
 
 Prepare the three existing companion services, one at a time, following their
 pinned READMEs. The development installation uses these commands:
@@ -227,8 +278,9 @@ npm ci
 npm run build
 ```
 
-If synchronization reports `not our ref` for the pinned platform revision, stop
-this installation step and obtain the source prerequisite described above.
+The previous `not our ref` failure was resolved by publishing the exact pinned
+platform commit. If synchronization still fails, record the fetch URL/error and
+check access to that published source.
 Do not copy another machine's `.venv`, invent Git provenance or edit installed
 package metadata. The checked-in dependency pin and lock remain authoritative.
 The browser assets should now exist in `apps/studio-web/dist`.
@@ -236,6 +288,14 @@ The browser assets should now exist in `apps/studio-web/dist`.
 ## 4. Prepare the matching native X-COM bridge
 
 Use platform source at the **same pinned commit** as the installed SDK. Its
+source can now be cloned explicitly:
+
+```sh
+git clone --branch studio/autoverse-sdk-12615d4 --single-branch https://github.com/The-Xverse/xverse-platform.git /path/to/xverse-platform
+git -C /path/to/xverse-platform checkout --detach 12615d402ba16cde3cd48c55b70aca464ea90261
+```
+
+The platform's
 native SDK requires a verified offline prefix and package manifest supplied by
 the platform handoff, through `XVERSE_XCOM_TOOLCHAIN` and
 `XVERSE_XCOM_PACKAGE_MANIFEST`. CMake runs

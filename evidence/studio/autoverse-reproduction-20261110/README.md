@@ -1,5 +1,10 @@
 # Existing Autoverse blueprint: local reproduction checks, 2026-11-10
 
+Update 2026-11-11: the exact SDK commit is now published, a clean c8e05dd frozen
+Python install passes, and an exact twelve-repository Autoverse manifest is
+available. See the [dependency resolution record](../autoverse-dependency-handoff-20261111/README.md).
+The original dated results below retain their historical scope.
+
 The user's correction is authoritative: reuse the existing development blueprint.
 This change adds a [from-scratch guide](../../../docs/user/autoverse-from-scratch.md)
 and a repeatable browser journey for **Autoverse with X-Verse platform**

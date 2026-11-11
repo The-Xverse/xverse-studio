@@ -1421,3 +1421,19 @@ verified initial handoff commit8bfab872d1d1615574827f06ee8d94b1f168b1eb.
 Publication scope is this Studio branch only; no companion publication, broader
 AGENTS authorization change, runtime restart or task closure. SDK source access
 and missing Lite flow/fault integration remain open; counts72/18/10 unchanged.
+
+Autoverse teammate dependency handoff (2026-11-11): user requested publication
+of exact missingSDK12615d4 and exact Autoverse source pins. Existing SDK commit
+is published unchanged on platform studio/autoverse-sdk-12615d4; remote readback
+matches. Fresh c8e05dd consumer/empty uv cache passes frozen sync, public Maestro
+imports and unchanged six-binding/digest compilation. Literal nested VCS export
+contains12 repositories; corrected fresh remote clones check out all12 exactpins,
+re-export identically and have clean tracked trees. Root no-checkout sequence
+avoids recorded first-import legacyAPK/LFS dirty checkout failure. Cuttlefish is
+aaos_cuttlefish b86e0de01ec21fee5417ad396eb4c507f5f1c963; trackedZIP contains
+actual testedAPK. 19 enrolled sourcefiles plus92 S-CORE/10VCU/10CARLA/159bridge
+inputs match; groups overlap. Existing S-CORE make.sh dirty check adjustment and
+Androidruntime link are preserved/excluded, not silently published as commits.
+No runtime/VM/GPU/Windows activity, no acceptance or task closure;72/18/10 remain.
+Full native/assets provisioning and missing Liteflow/fault integration remain
+open. Evidence: evidence/studio/autoverse-dependency-handoff-20261111/.
